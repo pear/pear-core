@@ -74,10 +74,10 @@ multi-line
 release notes</notes>
  <contents>
   <dir name="/">
-   <file baseinstalldir="freeb" md5sum="8332264d2e0e3c3091ebd6d8cee5d3a3" name="sunger/foo.dat" role="data">
+   <file baseinstalldir="freeb" md5sum="ed0384ad29e60110b310a02e95287ee6" name="sunger/foo.dat" role="data">
     <tasks:replace from="@pv@" to="version" type="package-info" />
    </file>
-   <file baseinstalldir="freeb" md5sum="8332264d2e0e3c3091ebd6d8cee5d3a3" name="foo.php" role="php">
+   <file baseinstalldir="freeb" md5sum="ed0384ad29e60110b310a02e95287ee6" name="foo.php" role="php">
     <tasks:replace from="@pv@" to="version" type="package-info" />
    </file>
   </dir>
