@@ -90,14 +90,18 @@ class PEAR_DependencyDB
      */
     function &singleton(&$config, $depdb = false)
     {
-        if (!isset($GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE'])) {
-            $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE'] = new PEAR_DependencyDB;
-            $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE']->setConfig($config, $depdb);
-            if (PEAR::isError($e = $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE']->assertDepsDB())) {
+        if (!isset($GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE']
+              [$config->get('php_dir', null, 'pear.php.net')])) {
+            $a = new PEAR_DependencyDB;
+            $a->setConfig($config, $depdb);
+            if (PEAR::isError($e = $a->assertDepsDB())) {
                 return $e;
             }
+            $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE']
+              [$config->get('php_dir', null, 'pear.php.net')] = &$a;
         }
-        return $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE'];
+        return $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE']
+              [$config->get('php_dir', null, 'pear.php.net')];
     }
 
     /**
