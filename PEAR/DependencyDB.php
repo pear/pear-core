@@ -102,7 +102,7 @@ class PEAR_DependencyDB
 
     /**
      * Set up the registry/location of dependency DB
-     * @param PEAR_Config
+     * @param PEAR_Config|false
      * @param string|false full path to the dependency database, or false to use default
      */
     function setConfig(&$config, $depdb = false)
@@ -112,9 +112,9 @@ class PEAR_DependencyDB
         } else {
             $this->_config = &$config;
         }
-        $this->_registry = &$config->getRegistry();
+        $this->_registry = &$this->_config->getRegistry();
         if (!$depdb) {
-            $this->_depdb = $config->get('php_dir', null, 'pear.php.net') .
+            $this->_depdb = $this->_config->get('php_dir', null, 'pear.php.net') .
                 DIRECTORY_SEPARATOR . '.depdb';
         } else {
             $this->_depdb = $depdb;
