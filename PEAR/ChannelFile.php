@@ -1032,7 +1032,7 @@ class PEAR_ChannelFile {
                 $this->_validateError(PEAR_CHANNELFILE_ERROR_NOVALIDATE_VERSION, array('package' => @$info['validatepackage']['name']));
             }
         }
-        if (!isset($info['protocols']['xmlrpc'])) {
+        if (!isset($info['protocols']['xmlrpc']) || !isset($info['protocols']['xmlrpc']['functions'])) {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_XMLRPC);
         } else {
             if (empty($info['protocols']['xmlrpc']['host'])) {
