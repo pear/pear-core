@@ -563,8 +563,23 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    function getUri()
+    {
+        if (isset($this->_packageInfo['uri'])) {
+            return $this->_packageInfo['uri'];
+        }
+        return false;
+    }
+
+    function setUri($uri)
+    {
+        unset($this->_packageInfo['channel']);
+        $this->_packageInfo['uri'] = $uri;
+    }
+
     function setChannel($channel)
     {
+        unset($this->_packageInfo['uri']);
         $this->_packageInfo['channel'] = $channel;
         $this->_isValid = 0;
     }
@@ -1750,8 +1765,13 @@ http://pear.php.net/dtd/package-2.0.xsd',
         if (empty($this->_packageInfo['name'])) {
             $this->_tagCannotBeEmpty('name');
         }
-        if (empty($this->_packageInfo['channel'])) {
-            $this->_tagCannotBeEmpty('channel');
+        if (isset($this->_packageInfo['uri'])) {
+            $test = 'uri';
+        } else {
+            $test = 'channel';
+        }
+        if (empty($this->_packageInfo[$test])) {
+            $this->_tagCannotBeEmpty($test);
         }
         if (is_array($this->_packageInfo['license']) &&
               !isset($this->_packageInfo['license']['_content'])) {

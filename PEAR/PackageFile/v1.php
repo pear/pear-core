@@ -384,6 +384,11 @@ class PEAR_PackageFile_v1
         return 'pear.php.net';
     }
 
+    function getUri()
+    {
+        return false;
+    }
+
     /**
      * @return array
      */
