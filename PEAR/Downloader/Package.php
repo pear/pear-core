@@ -1222,8 +1222,18 @@ class PEAR_Downloader_Package
                 }
                 if (str_replace(array("\n", "\r"), array('',''), $packagexml) !=
                       str_replace(array("\n", "\r"), array('',''), $this->_rawpackagefile)) {
-                    return PEAR::raiseError('CRITICAL ERROR: package.xml downloaded does ' .
-                        'not match value returned from xml-rpc');
+                    if ($this->getChannel() == 'pear.php.net') {
+                        // be more lax for the existing PEAR packages that have not-ok
+                        // characters in their package.xml
+                        $this->_downloader->_ui->outputData('CRITICAL WARNING: The "' .
+                            $this->getPackage() . '" package has invalid characters in its ' .
+                            'package.xml.  PEAR 1.4.0a2 and newer may not be able to install ' .
+                            'this package for security reasons.  Please open a bug report at ' .
+                            'http://pear.php.net/package/' . $this->getPackage() . '/bugs');
+                    } else {
+                        return PEAR::raiseError('CRITICAL ERROR: package.xml downloaded does ' .
+                            'not match value returned from xml-rpc');
+                    }
                 }
             }
             // whew, download worked!
