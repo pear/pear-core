@@ -18,7 +18,7 @@ if (defined('PATH_SEPARATOR')) {
     }
 }
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-include_once dirname(__FILE__) . '/test_readFTPConfigFile/FTP.php.inc';
+include_once dirname(__FILE__) . '/ftp_test_files/FTP.php.inc';
 $ftp = &Net_FTP::singleton();
 $ftp->addRemoteFile('remote.ini', dirname(__FILE__) . DIRECTORY_SEPARATOR .
     'ftp_test_files' . DIRECTORY_SEPARATOR . 'remote.ini');

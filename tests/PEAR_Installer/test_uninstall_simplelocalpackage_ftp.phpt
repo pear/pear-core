@@ -18,7 +18,7 @@ if (defined('PATH_SEPARATOR')) {
     }
 }
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-include_once dirname(__FILE__) . '/test_readFTPConfigFile/FTP.php.inc';
+include_once dirname(__FILE__) . '/ftp_test_files/FTP.php.inc';
 $ftp = &Net_FTP::singleton();
 $ftp->addRemoteFile('remote.ini', dirname(__FILE__) . DIRECTORY_SEPARATOR .
     'ftp_test_files' . DIRECTORY_SEPARATOR . 'remote.ini');
@@ -248,7 +248,8 @@ $installer->setUninstallPackages($result);
 $phpunit->assertNoErrors('before uninstall');
 $installer->uninstall($a, array());
 $phpunit->assertNoErrors('after uninstall');
-$installer->ftpUninstall($result[0]);
+$result = &$result[0]->getPackageFile();
+$installer->ftpUninstall($result);
 $phpunit->assertNoErrors('after ftp uninstall');
 $phpunit->assertEquals(array('/path/to/pear/pear/php/foo.php'), $ftp->_rmfiles, 'deleted files');
 echo 'tests done';
