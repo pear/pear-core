@@ -37,7 +37,14 @@ class PEAR_Command_Mirror extends PEAR_Command_Common
             'summary' => 'Downloads each available package from master_server',
             'function' => 'doDownloadAll',
             'shortcut' => 'da',
-            'options' => array(),
+            'options' => array(
+                'channel' =>
+                    array(
+                    'shortopt' => 'c',
+                    'doc' => 'specify a channel other than the default channel',
+                    'arg' => 'CHAN',
+                    )
+                ),
             'doc' => '
 	    Requests a list of available packages from the package server
 	    (master_server) and downloads them to current working directory'
@@ -76,7 +83,15 @@ class PEAR_Command_Mirror extends PEAR_Command_Common
     */
     function doDownloadAll($command, $options, $params)
     {
-        $this->config->set("php_dir", ".");
+        $savechannel = $this->config->get('default_channel');
+        $reg = &$this->config->getRegistry();
+        $channel = isset($options['channel']) ? $options['channel'] :
+            $this->config->get('default_channel');
+        if (!$reg->channelExists($channel)) {
+            $this->config->set('default_channel', $savechannel);
+            return $this->raiseError('Channel "' . $channel . '" does not exist');
+        }
+        $this->config->set('default_channel', $channel);
         $this->ui->outputData('Using Channel ' . $this->config->get('default_channel'));
         $remote = &new PEAR_Remote($this->config);
         $remoteInfo = $remote->call("package.listAll");
@@ -87,14 +102,17 @@ class PEAR_Command_Mirror extends PEAR_Command_Common
         if (PEAR::isError($cmd)) {
             return $cmd;
         }
-        foreach ($remoteInfo as $pkgn => $pkg) {
-            /**
-             * Error handling not neccesary, because already done by 
-             * the download command
-             */
-            $cmd->run("download", array(), array($pkgn));
+        /**
+         * Error handling not necessary, because already done by 
+         * the download command
+         */
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+        $err = $cmd->run('download', array(), array_keys($remoteInfo));
+        PEAR::staticPopErrorHandling();
+        $this->config->set('default_channel', $savechannel);
+        if (PEAR::isError($err)) {
+            $this->ui->outputData($err->getMessage());
         }
-
         return true;
     }
 
