@@ -28,7 +28,37 @@ $phpunit->assertEquals(array (
     'executable' => false,
     'phpextension' => false,
   ),
+  'PEAR_Installer_Role_Dataf' => 
+  array (
+    'releasetypes' => 
+    array (
+      0 => 'php',
+      1 => 'extsrc',
+      2 => 'extbin',
+    ),
+    'installable' => true,
+    'locationconfig' => 'data_dir',
+    'honorsbaseinstall' => false,
+    'phpfile' => false,
+    'executable' => false,
+    'phpextension' => false,
+  ),
   'PEAR_Installer_Role_Doc' => 
+  array (
+    'releasetypes' => 
+    array (
+      0 => 'php',
+      1 => 'extsrc',
+      2 => 'extbin',
+    ),
+    'installable' => true,
+    'locationconfig' => 'doc_dir',
+    'honorsbaseinstall' => false,
+    'phpfile' => false,
+    'executable' => false,
+    'phpextension' => false,
+  ),
+  'PEAR_Installer_Role_Docf' => 
   array (
     'releasetypes' => 
     array (
@@ -56,7 +86,33 @@ $phpunit->assertEquals(array (
     'executable' => false,
     'phpextension' => true,
   ),
+  'PEAR_Installer_Role_Extf' => 
+  array (
+    'releasetypes' => 
+    array (
+      0 => 'extbin',
+    ),
+    'installable' => true,
+    'locationconfig' => 'ext_dir',
+    'honorsbaseinstall' => true,
+    'phpfile' => false,
+    'executable' => false,
+    'phpextension' => true,
+  ),
   'PEAR_Installer_Role_Php' => 
+  array (
+    'releasetypes' => 
+    array (
+      0 => 'php',
+    ),
+    'installable' => true,
+    'locationconfig' => 'php_dir',
+    'honorsbaseinstall' => true,
+    'phpfile' => true,
+    'executable' => false,
+    'phpextension' => false,
+  ),
+  'PEAR_Installer_Role_Phpf' => 
   array (
     'releasetypes' => 
     array (
@@ -84,90 +140,6 @@ $phpunit->assertEquals(array (
     'executable' => true,
     'phpextension' => false,
   ),
-  'PEAR_Installer_Role_Src' => 
-  array (
-    'releasetypes' => 
-    array (
-      0 => 'extsrc',
-    ),
-    'installable' => false,
-    'locationconfig' => false,
-    'honorsbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => false,
-    'phpextension' => false,
-  ),
-  'PEAR_Installer_Role_Test' => 
-  array (
-    'releasetypes' => 
-    array (
-      0 => 'php',
-      1 => 'extsrc',
-      2 => 'extbin',
-    ),
-    'installable' => true,
-    'locationconfig' => 'test_dir',
-    'honorsbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => false,
-    'phpextension' => false,
-  ),
-  'PEAR_Installer_Role_Dataf' => 
-  array (
-    'releasetypes' => 
-    array (
-      0 => 'php',
-      1 => 'extsrc',
-      2 => 'extbin',
-    ),
-    'installable' => true,
-    'locationconfig' => 'data_dir',
-    'honorsbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => false,
-    'phpextension' => false,
-  ),
-  'PEAR_Installer_Role_Docf' => 
-  array (
-    'releasetypes' => 
-    array (
-      0 => 'php',
-      1 => 'extsrc',
-      2 => 'extbin',
-    ),
-    'installable' => true,
-    'locationconfig' => 'doc_dir',
-    'honorsbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => false,
-    'phpextension' => false,
-  ),
-  'PEAR_Installer_Role_Extf' => 
-  array (
-    'releasetypes' => 
-    array (
-      0 => 'extbin',
-    ),
-    'installable' => true,
-    'locationconfig' => 'ext_dir',
-    'honorsbaseinstall' => true,
-    'phpfile' => false,
-    'executable' => false,
-    'phpextension' => true,
-  ),
-  'PEAR_Installer_Role_Phpf' => 
-  array (
-    'releasetypes' => 
-    array (
-      0 => 'php',
-    ),
-    'installable' => true,
-    'locationconfig' => 'php_dir',
-    'honorsbaseinstall' => true,
-    'phpfile' => true,
-    'executable' => false,
-    'phpextension' => false,
-  ),
   'PEAR_Installer_Role_Scriptf' => 
   array (
     'releasetypes' => 
@@ -183,6 +155,19 @@ $phpunit->assertEquals(array (
     'executable' => true,
     'phpextension' => false,
   ),
+  'PEAR_Installer_Role_Src' => 
+  array (
+    'releasetypes' => 
+    array (
+      0 => 'extsrc',
+    ),
+    'installable' => false,
+    'locationconfig' => false,
+    'honorsbaseinstall' => false,
+    'phpfile' => false,
+    'executable' => false,
+    'phpextension' => false,
+  ),
   'PEAR_Installer_Role_Srcf' => 
   array (
     'releasetypes' => 
@@ -194,6 +179,21 @@ $phpunit->assertEquals(array (
     'honorsbaseinstall' => false,
     'phpfile' => false,
     'executable' => false,
+  ),
+  'PEAR_Installer_Role_Test' => 
+  array (
+    'releasetypes' => 
+    array (
+      0 => 'php',
+      1 => 'extsrc',
+      2 => 'extbin',
+    ),
+    'installable' => true,
+    'locationconfig' => 'test_dir',
+    'honorsbaseinstall' => false,
+    'phpfile' => false,
+    'executable' => false,
+    'phpextension' => false,
   ),
   'PEAR_Installer_Role_Testf' => 
   array (

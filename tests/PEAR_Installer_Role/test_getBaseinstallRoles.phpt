@@ -12,9 +12,9 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 PEAR_Installer_Role::registerRoles(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'sophisticated');
 $phpunit->assertEquals(array (
   0 => 'ext',
-  1 => 'php',
-  2 => 'script',
-  3 => 'honorsbaseinstall',
+  1 => 'honorsbaseinstall',
+  2 => 'php',
+  3 => 'script',
 ), PEAR_Installer_Role::getBaseinstallRoles(), 'test');
 echo 'tests done';
 ?>
