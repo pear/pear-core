@@ -481,7 +481,7 @@ class PEAR_Downloader_Package
             foreach ($newdeps as $dep) {
                 $obj = &new PEAR_Downloader_Package($params[$i]->_downloader);
                 $obj->fromDepURL($dep);
-                $obj->detectDependencies();
+                $obj->detectDependencies($params);
                 $j = &$obj;
                 $newparams[] = &$j;
             }

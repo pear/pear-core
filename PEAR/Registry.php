@@ -1162,8 +1162,8 @@ class PEAR_Registry extends PEAR
             return false;
         }
         if (is_object($info)) {
-            $info = $info->getDefaultGenerator();
-            $info = $info->toArray();
+            $arr = &$info->getDefaultGenerator();
+            $info = $arr->toArray();
         }
         $info['_lastmodified'] = time();
         $newinfo = $info;

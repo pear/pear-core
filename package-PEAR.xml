@@ -47,16 +47,28 @@
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.0dev11</version>
-  <date>2004-08-16</date>
+  <version>1.4.0dev12</version>
+  <date>2004-09-24</date>
   <license>PHP License</license>
   <state>devel</state>
   <notes>
+Installer Dependency Support:
+
+ * package.xml 2.0 has continued to improve and evolve
+ * Downloader/Package.php is now used to coordinate downloading.  Old code
+   has not yet been deleted, as error handling is crappy right now.  Uninstall
+   ordering is broken, and needs to be redone.
+ * Pre-download dependency resolution works, mostly.
+ * There is no way to disable dependency resolution at the moment, this will be done.
+ * Dependency2.php is used by the new PEAR_Downloader_Channel to resolve dependencies
+   and include downloaded files in the calculations.
+
 Installer Channel Support:
- * MAJOR BC break in 1.4.0dev11 - channel.xml format has changed, and as
-   a consequence, you must re-install all of the channel.xml
-   (delete all the .reg files from the .registry/.channels directory and
-   then re-add them using channel-add)
+
+ * MAJOR BC break in 1.4.0dev12 - default channel is named pear.php.net,
+   with alias pear.
+   As a consequence, after upgrade, delete the .registry/pear.reg file,
+   and run "pear list" to re-order the channel registry
  * channel XSD is available on pearweb
  * add channel.listAll and channel.update to default PEAR protocols
  * add ability to &quot;pear channel-update channelname&quot; to
@@ -88,11 +100,6 @@ PEAR_ErrorStack:
    <dep type="ext" rel="has">pcre</dep>
   </deps>
   <filelist>
-   <file role="data" name="package.dtd"/>
-   <file role="data" name="pearchannel.xml"/>
-   <file role="data" name="template.spec"/>
-   <file role="php" name="PEAR.php"/>
-   <file role="php" name="System.php"/>
    <dir name="PEAR">
     <file role="php" name="Autoloader.php"/>
     <file role="php" name="Command.php"/>
@@ -108,21 +115,14 @@ PEAR_ErrorStack:
      <file role="php" name="Remote.php"/>
      <file role="php" name="Mirror.php"/>
     </dir>
-    <file role="php" name="Common.php"/>
-    <file role="php" name="ChannelFile.php"/>
-    <file role="php" name="Config.php"/>
-    <file role="php" name="Dependency.php"/>
-    <file role="php" name="Downloader.php"/>
-    <file role="php" name="ErrorStack.php"/>
+    <dir name="Downloader">
+     <file role="php" name="Package.php">
+      <replace from="@PEAR-VER@" to="version" type="package-info"/>
+     </file>
+    </dir>
     <dir name="Frontend">
      <file role="php" name="CLI.php"/>
     </dir>
-    <file role="php" name="Builder.php"/>
-    <file role="php" name="Installer.php"/>
-    <file role="php" name="Packager.php"/>
-    <file role="php" name="PackageFile.php">
-     <replace from="@PEAR-VER@" to="version" type="package-info"/>
-    </file>
     <dir name="PackageFile">
      <dir name="Generator">
       <file role="php" name="v1.php">
@@ -137,6 +137,19 @@ PEAR_ErrorStack:
      <file role="php" name="v1.php"/>
      <file role="php" name="v2.php"/>
     </dir>
+    <file role="php" name="Common.php"/>
+    <file role="php" name="ChannelFile.php"/>
+    <file role="php" name="Config.php"/>
+    <file role="php" name="Dependency.php"/>
+    <file role="php" name="Dependency2.php"/>
+    <file role="php" name="Downloader.php"/>
+    <file role="php" name="ErrorStack.php"/>
+    <file role="php" name="Builder.php"/>
+    <file role="php" name="Installer.php"/>
+    <file role="php" name="Packager.php"/>
+    <file role="php" name="PackageFile.php">
+     <replace from="@PEAR-VER@" to="version" type="package-info"/>
+    </file>
     <file role="php" name="Registry.php"/>
     <file role="php" name="Remote.php"/>
     <file role="php" name="RunTest.php"/>
@@ -164,6 +177,11 @@ PEAR_ErrorStack:
      <replace from="@include_path@" to="php_dir" type="pear-config"/>
     </file>
    </dir>
+   <file role="data" name="package.dtd"/>
+   <file role="data" name="pearchannel.xml"/>
+   <file role="data" name="template.spec"/>
+   <file role="php" name="PEAR.php"/>
+   <file role="php" name="System.php"/>
   </filelist>
  </release>
  <changelog>
