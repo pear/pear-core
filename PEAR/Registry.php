@@ -650,9 +650,11 @@ class PEAR_Registry extends PEAR
 
     /**
      * @param PEAR_ChannelFile Channel object
+     * @param donotuse
+     * @param string Last-Modified HTTP tag from remote request
      * @return boolean|PEAR_Error True on creation, false if it already exists
      */
-    function _addChannel($channel, $update = false)
+    function _addChannel($channel, $update = false, $lastmodified = false)
     {
         if (!is_a($channel, 'PEAR_ChannelFile')) {
             return false;
@@ -698,7 +700,11 @@ class PEAR_Registry extends PEAR
             return false;
         }
         $info = $channel->toArray();
-        $info['_lastmodified'] = time();
+        if ($lastmodified) {
+            $info['_lastmodified'] = $lastmodified;
+        } else {
+            $info['_lastmodified'] = date('r');
+        }
         fwrite($fp, serialize($info));
         fclose($fp);
         return true;
@@ -1295,12 +1301,12 @@ class PEAR_Registry extends PEAR
      * For future expandibility purposes, separate this
      * @param PEAR_ChannelFile
      */
-    function updateChannel($channel)
+    function updateChannel($channel, $lastmodified = null)
     {
         if ($channel->getName() == '__uri') {
             return false;
         }
-        return $this->addChannel($channel, true);
+        return $this->addChannel($channel, $lastmodified, true);
     }
 
     // }}}
@@ -1329,9 +1335,10 @@ class PEAR_Registry extends PEAR
 
     /**
      * @param PEAR_ChannelFile Channel object
+     * @param string Last-Modified header from HTTP for caching
      * @return boolean|PEAR_Error True on creation, false if it already exists
      */
-    function addChannel($channel, $update = false)
+    function addChannel($channel, $lastmodified = false, $update = false)
     {
         if (!is_a($channel, 'PEAR_ChannelFile')) {
             return false;
@@ -1342,7 +1349,7 @@ class PEAR_Registry extends PEAR
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
-        $ret = $this->_addChannel($channel, $update);
+        $ret = $this->_addChannel($channel, $update, $lastmodified);
         $this->_unlock();
         if (!$update && $ret && is_a($this->_config, 'PEAR_Config')) {
             $this->_config->setChannels($this->listChannels());
