@@ -175,18 +175,15 @@ class PEAR_PackageFile_Generator_v1
             );
         $ret = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
         $ret .= "<!DOCTYPE package SYSTEM \"http://pear.php.net/dtd/package-1.0\">\n";
-        $ret .= "<package version=\"1.0\" packagerversion=\"@PEAR-VER@\">
- <name>$pkginfo[package]</name>";
+        $ret .= "<package version=\"1.0\" packagerversion=\"@PEAR-VER@\">\n" .
+" <name>$pkginfo[package]</name>";
         if (isset($pkginfo['extends'])) {
-            $ret .= "
-<extends>$pkginfo[extends]</extends>";
+            $ret .= "\n<extends>$pkginfo[extends]</extends>";
         }
         $ret .=
- "       
- <summary>".htmlspecialchars($pkginfo['summary'])."</summary>
- <description>".trim(htmlspecialchars($pkginfo['description']))."\n </description>
- <maintainers>
-";
+ "\n <summary>".htmlspecialchars($pkginfo['summary'])."</summary>\n" .
+" <description>".trim(htmlspecialchars($pkginfo['description']))."\n </description>\n" .
+" <maintainers>\n";
         foreach ($pkginfo['maintainers'] as $maint) {
             $ret .= "  <maintainer>\n";
             foreach ($maint_map as $idx => $elm) {
