@@ -156,16 +156,6 @@ class PEAR_Downloader_Package
         return $this->_packagefile;
     }
 
-    function isAnalyzed()
-    {
-        return $this->_analyzed;
-    }
-
-    function setAnalyzed()
-    {
-        return $this->_analyzed;
-    }
-
     function &getPackageFile()
     {
         return $this->_packagefile;
@@ -553,6 +543,51 @@ class PEAR_Downloader_Package
         } elseif (isset($this->_downloadURL)) {
             return $this->_downloadURL['version'];
         } else {
+            return false;
+        }
+    }
+
+    function isCompatible($pf)
+    {
+        if (isset($this->_packagefile)) {
+            return $this->_packagefile->isCompatible($pf);
+        } else {
+            if (!isset($this->_downloadURL['info']['compatible'])) {
+                return false;
+            }
+            if (!isset($this->_downloadURL['info']['channel'])) {
+                return false;
+            }
+            $me = $pf->getVersion();
+            $compatible = $this->_downloadURL['info']['compatible'];
+            if (!isset($compatible[0])) {
+                $compatible = array($compatible);
+            }
+            $found = false;
+            foreach ($compatible as $info) {
+                if (strtolower($info['name']) == strtolower($pf->getPackage())) {
+                    if (strtolower($info['channel']) == strtolower($pf->getChannel())) {
+                        $found = true;
+                        break;
+                    }
+                }
+            }
+            if (!$found) {
+                return false;
+            }
+            if (isset($info['exclude'])) {
+                if (!isset($info['exclude'][0])) {
+                    $info['exclude'] = array($info['exclude']);
+                }
+                foreach ($info['exclude'] as $exclude) {
+                    if (version_compare($me, $exclude, '==')) {
+                        return false;
+                    }
+                }
+            }
+            if (version_compare($me, $info['min'], '>=') && version_compare($me, $info['max'], '<=')) {
+                return true;
+            }
             return false;
         }
     }

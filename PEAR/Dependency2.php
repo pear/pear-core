@@ -702,6 +702,7 @@ class PEAR_Dependency2
                     $param = $this->_registry->getPackage($dep['name'], $dep['channel']);
                 }
                 if ($param) {
+                    $found = false;
                     foreach ($params as $parent) {
                         if ($parent->isEqual($this->_currentPackage)) {
                             $found = true;

@@ -123,4 +123,15 @@ $fakelog = new fake_log;
 require_once 'PEAR/Config.php';
 $config = &PEAR_Config::singleton();//($temp_path . '/pear.ini');
 test_PEAR_Dependency2::singleton($config);
+/**
+ * @param array
+ * @return test_PEAR_Downloader_Package
+ */
+function &newFakeDownloaderPackage($options)
+{
+    global $config, $fakelog;
+    $downloader = &new test_PEAR_Downloader($fakelog, $options, $config);
+    $p = &new test_PEAR_Downloader_Package($downloader);
+    return $p;
+}
 ?>
