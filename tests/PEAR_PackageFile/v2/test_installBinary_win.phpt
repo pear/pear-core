@@ -154,7 +154,7 @@ $phpunit->assertEquals(array (
   3 => 
   array (
     0 => 1,
-    1 => 'Starting to download foo_win-1.1.0.tgz (731 bytes)',
+    1 => 'Starting to download foo_win-1.1.0.tgz (725 bytes)',
   ),
   4 => 
   array (
@@ -164,7 +164,7 @@ $phpunit->assertEquals(array (
   5 => 
   array (
     0 => 1,
-    1 => '...done: 731 bytes',
+    1 => '...done: 725 bytes',
   ),
   6 => 
   array (
@@ -228,18 +228,18 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       0 => 'foo_win-1.1.0.tgz',
-      1 => '731',
+      1 => '725',
     ),
   ),
   3 => 
   array (
     0 => 'bytesread',
-    1 => 731,
+    1 => 725,
   ),
   4 => 
   array (
     0 => 'done',
-    1 => 731,
+    1 => 725,
   ),
 ), $fakelog->getDownload(), 'log');
 $phpunit->assertFileExists($ext_dir . DIRECTORY_SEPARATOR . 'foo.dll', 'not installed');
