@@ -161,7 +161,7 @@ class PEAR_PackageFile_v2
                 $installer->log(0, 'Attempting to download binary version of extension "' .
                     $this->_packageInfo['providesextension'] . '"');
                 $params = $this->_packageInfo['extsrcrelease']['binarypackage'];
-                if (!isset($params[0])) {
+                if (!is_array($params) || !isset($params[0])) {
                     $params = array($params);
                 }
                 if (isset($this->_packageInfo['channel'])) {
@@ -178,7 +178,7 @@ class PEAR_PackageFile_v2
                     PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                     $ret = $dl->download(array($param));
                     PEAR::popErrorHandling();
-                    if (is_array($ret)) {
+                    if (is_array($ret) && count($ret)) {
                         break;
                     }
                 }
@@ -194,7 +194,7 @@ class PEAR_PackageFile_v2
                                 $this->_registry->parsedPackageNameToString(
                                     array('channel' => $pf->getChannel(),
                                           'package' => $pf->getPackage()), true) . '" successful');
-                            return true;
+                            return $ret;
                         }
                         $installer->log(0, 'Download and install of binary extension "' .
                             $this->_registry->parsedPackageNameToString(
