@@ -363,7 +363,7 @@ class System
         if (!isset($tmpdir)) {
             $tmpdir = System::tmpdir();
         }
-        if (!System::mkDir("-p $tmpdir")) {
+        if (!System::mkDir(array('-p', $tmpdir))) {
             return false;
         }
         $tmp = tempnam($tmpdir, $prefix);
