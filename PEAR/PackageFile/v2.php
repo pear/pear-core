@@ -353,7 +353,7 @@ class PEAR_PackageFile_v2
      */
     function _getFlattenedFilelist(&$files, $dir, $baseinstall = false, $path = '')
     {
-        if (isset($dir['attribs']['baseinstalldir'])) {
+        if (isset($dir['attribs']) && isset($dir['attribs']['baseinstalldir'])) {
             $baseinstall = $dir['attribs']['baseinstalldir'];
         }
         if (isset($dir['dir'])) {
@@ -361,8 +361,13 @@ class PEAR_PackageFile_v2
                 $dir['dir'] = array($dir['dir']);
             }
             foreach ($dir['dir'] as $subdir) {
-                $newpath = empty($path) ? $subdir['attribs']['name'] :
-                    $path . '/' . $subdir['attribs']['name'];
+                if (!isset($subdir['attribs']) || !isset($subdir['attribs']['name'])) {
+                    $name = '*unknown*';
+                } else {
+                    $name = $subdir['attribs']['name'];
+                }
+                $newpath = empty($path) ? $name :
+                    $path . '/' . $name;
                 $this->_getFlattenedFilelist($files, $subdir,
                     $baseinstall, $newpath);
             }
