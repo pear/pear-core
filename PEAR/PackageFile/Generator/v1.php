@@ -362,7 +362,7 @@ class PEAR_PackageFile_Generator_v1
             }
         }
         // }}}
-        $packagexml = $this->toPackageFile($where, PEAR_VALIDATE_PACKAGING);
+        $packagexml = $this->toPackageFile($where, PEAR_VALIDATE_PACKAGING, 'package.xml', true);
         if ($packagexml) {
             $ext = $compress ? '.tgz' : '.tar';
             $dest_package = getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext;
