@@ -520,7 +520,7 @@ class PEAR_ChannelFile {
     function _handlePrimaryOpen1_0($attribs)
     {
         $this->_channelInfo['server'] = @$attribs['host'];
-        $this->_channelInfo['port'] = isset($attribs['port']) ? $attribs['port'] : '80';
+        $this->_channelInfo['port'] = (int) (isset($attribs['port']) ? $attribs['port'] : 80);
     }
 
     function _handleMirrorOpen1_0($attribs)
@@ -983,7 +983,7 @@ class PEAR_ChannelFile {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_HOST,
                 array('server' => $info['server'], 'type' => 'primary'));
         }
-        if (isset($info['port']) && !is_numeric($info['port'])) {
+        if (isset($info['port']) && !is_int($info['port'])) {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_PORT, array('port' => $info['port']));
         }
 
@@ -1139,7 +1139,7 @@ class PEAR_ChannelFile {
     }
 
     /**
-     * @return string|80 port number to connect to
+     * @return int|80 port number to connect to
      */
     function getPort($mirror = false)
     {
