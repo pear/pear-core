@@ -47,8 +47,8 @@ define('PEAR_COMMON_PACKAGE_DOWNLOAD_PREG', '/^' . _PEAR_COMMON_PACKAGE_DOWNLOAD
 define('_PEAR_CHANNELS_NAME_PREG', '[A-Za-z][a-zA-Z0-9_\.]+');
 define('PEAR_CHANNELS_NAME_PREG', '/^' . _PEAR_CHANNELS_NAME_PREG . '$/');
 
-// this should allow any dns or IP address
-define('_PEAR_CHANNELS_SERVER_PREG', '[a-zA-Z0-9_-]+(?:\.[a-zA-Z0-9_-]+)*');
+// this should allow any dns or IP address, plus a path - NO UNDERSCORES ALLOWED
+define('_PEAR_CHANNELS_SERVER_PREG', '[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(\/[a-zA-Z0-9-]+)*');
 define('PEAR_CHANNELS_SERVER_PREG', '/^' . _PEAR_CHANNELS_SERVER_PREG . '$/i');
 
 define('_PEAR_CHANNELS_PACKAGE_PREG',  '(' ._PEAR_CHANNELS_SERVER_PREG . ')\/('

@@ -181,7 +181,7 @@ List the files in an installed package.
         }
         include_once 'PEAR/ChannelFile.php';
         foreach ($channels as $info) {
-            $save = $channel = $info[0];
+            $channel = $info[0];
             $server = $info[1];
             if ($reg->channelExists($channel, true)) {
                 $this->ui->outputData("Updating channel '$channel'");
@@ -679,8 +679,8 @@ List the files in an installed package.
             return $this->raiseError("No channel server specified");
         }
         if ($reg->channelExists($params[0])) {
-            if ($reg->isChannelAlias($params[0])) {
-                return $this->raiseError("A Channel alias named \"$params[0]\" " .
+            if ($reg->isAlias($params[0])) {
+                return $this->raiseError("A channel alias named \"$params[0]\" " .
                     'already exists, aliasing channel "' . $reg->channelName($params[0])
                     . '"');
             } else {
@@ -688,7 +688,7 @@ List the files in an installed package.
             }
         }
         $this->pushErrorHandling(PEAR_ERROR_RETURN);
-        $err = $this->doAdd($command, $options, array($params[0] . '/channel.xml'));
+        $err = $this->doAdd($command, $options, array('http://' . $params[0] . '/channel.xml'));
         $this->popErrorHandling();
         if (PEAR::isError($err)) {
             return $this->raiseError("Discovery of channel \"$params[0]\" failed");
