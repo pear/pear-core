@@ -95,6 +95,69 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $this->_packagefile = &$packagefile;
     }
 
+    function toTgz(&$packager, $compress = true, $where = null)
+    {
+        include_once 'System.php';
+        if ($where === null) {
+            if (!($where = System::mktemp(array('-d')))) {
+                return $this->raiseError("PEAR_Packagefile: mktemp failed");
+            }
+        }
+        if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING)) {
+            return false;
+        }
+        if ($pkgfile = $this->_packagefile->getPackageFile()) {
+            $pkgdir = dirname(realpath($pkgfile));
+            $pkgfile = basename($pkgfile);
+        } else {
+            return false;
+        }
+        $pkgver = $this->_packagefile->getPackage() . '-' . $this->_packagefile->getVersion();
+        // {{{ Create the package file list
+        $filelist = array();
+        $i = 0;
+        $contents = $this->_packagefile->getContents();
+        $contents = $contents['dir']['file'];
+        if (isset($contents['attribs'])) {
+            $contents = array($contents);
+        }
+        
+        foreach ($contents as $i => $file) {
+            $fname = $file['attribs']['name'];
+            $atts = $file['attribs'];
+            $file = $pkgdir . DIRECTORY_SEPARATOR . $fname;
+            if (!file_exists($file)) {
+                return $packager->raiseError("File does not exist: $fname");
+            } else {
+                $filelist[$i++] = $file;
+                if (!isset($atts['md5sum'])) {
+                    $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($file), $i);
+                }
+                $packager->log(2, "Adding file $fname");
+            }
+        }
+        // }}}
+        $packagexml = $this->toPackageFile($where, PEAR_VALIDATE_PACKAGING);
+        if ($packagexml) {
+            $ext = $compress ? '.tgz' : '.tar';
+            $dest_package = getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext;
+            $tar =& new Archive_Tar($dest_package, $compress);
+            $tar->setErrorHandling(PEAR_ERROR_RETURN); // XXX Don't print errors
+            // ----- Creates with the package.xml file
+            $ok = $tar->createModify(array($packagexml), '', $where);
+            if (PEAR::isError($ok)) {
+                return $packager->raiseError($ok);
+            } elseif (!$ok) {
+                return $packager->raiseError('PEAR_Packagefile::toTgz(): tarball creation failed');
+            }
+            // ----- Add the content of the package
+            if (!$tar->addModify($filelist, $pkgver, $pkgdir)) {
+                return $packager->raiseError('PEAR_Packagefile::toTgz(): tarball creation failed');
+            }
+            return $dest_package;
+        }
+    }
+
     function toPackageFile($where = null, $state = PEAR_VALIDATE_NORMAL, $name = 'package.xml',
                            $beautify = false)
     {
@@ -131,7 +194,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
      */
     function toXml($state = PEAR_VALIDATE_NORMAL, $options = array())
     {
-        if (!$this->_packagefile->validate()) {
+        if (!$this->_packagefile->validate($state)) {
             return false;
         }
         if (is_array($options)) {
@@ -234,7 +297,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 $newdirs['dir'][] = $newdir;
             }
             if (count($newdirs['dir']) == 1) {
-                $newdirs['dir'] = $dirs['dir'][0];
+                $newdirs['dir'] = $newdirs['dir'][0];
             }
         }
         if (isset($dirs['file'])) {

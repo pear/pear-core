@@ -170,8 +170,7 @@ class PEAR_Validate
             $this->validateDeps();
             $this->validateMainFilelist();
             $this->validateReleaseFilelist();
-            $this->validateBundles();
-            $this->validateGlobalTasks();
+            //$this->validateGlobalTasks();
             $this->validateChangelog();
         }
         return (bool) count($this->_failures['errors']);
@@ -477,6 +476,14 @@ class PEAR_Validate
      * @access protected
      */
     function validateFilelist()
+    {
+        return true;
+    }
+
+    /**
+     * @access protected
+     */
+    function validateDeps()
     {
         return true;
     }

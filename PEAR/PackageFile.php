@@ -102,7 +102,11 @@ class PEAR_PackageFile
             $obj->fromArray($arr);
             return $obj;
         } else {
-            $obj = &PEAR_PackageFile::factory('1.0');
+            if (isset($arr['package']['attribs']['version'])) {
+                $obj = &PEAR_PackageFile::factory($arr['package']['attribs']['version']);
+            } else {
+                $obj = &PEAR_PackageFile::factory('1.0');
+            }
             $obj->fromArray($arr);
             return $obj;
         }

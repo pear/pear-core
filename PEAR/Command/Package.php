@@ -285,12 +285,6 @@ used for automated conversion or learning the format.
         if (isset($options['showname'])) {
             $this->output = $result;
         }
-        /* (cox) What is supposed to do that code?
-        $lines = explode("\n", $this->output);
-        foreach ($lines as $line) {
-            $this->output .= $line."n";
-        }
-        */
         if (PEAR::isError($result)) {
             $this->output .= "Package failed: ".$result->getMessage();
         }
