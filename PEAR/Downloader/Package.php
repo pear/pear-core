@@ -701,6 +701,11 @@ class PEAR_Downloader_Package
         $this->_downloadURL = $pkg;
     }
 
+    /**
+     * Set the package.xml object for this downloaded package
+     *
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2 $pkg
+     */
     function setPackageFile(&$pkg)
     {
         $this->_packagefile = &$pkg;
