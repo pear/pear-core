@@ -1268,6 +1268,9 @@ class PEAR_Downloader_Package
         }
         $info = $this->_downloader->_getPackageDownloadUrl($pname);
         $ret = $this->_analyzeDownloadURL($info, $param, $pname);
+        if (PEAR::isError($ret)) {
+            return $ret;
+        }
         if ($ret) {
             $this->_downloadURL = $ret;
             return $this->_valid = (bool) $ret;
