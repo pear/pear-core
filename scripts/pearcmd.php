@@ -29,7 +29,7 @@ if ('@include_path@' != '@'.'include_path'.'@') {
 }
 ini_set('allow_url_fopen', true);
 if (!ini_get('safe_mode')) {
-    set_time_limit(0);
+    @set_time_limit(0);
 }
 ob_implicit_flush(true);
 ini_set('track_errors', true);
@@ -75,6 +75,11 @@ if ($progname == 'gpear' || $progname == 'pear-gtk') {
 PEAR_Command::setFrontendType($fetype);
 $ui = &PEAR_Command::getFrontendObject();
 PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array($ui, "displayFatalError"));
+if (ini_get('safe_mode')) {
+    $ui->outputData('WARNING: running in safe mode requires that all files created ' .
+        'be the same uid as the current script.  PHP reports this script is uid: ' .
+        @getmyuid() . ', and current user is: ' . @get_current_user());
+}
 
 $pear_user_config = '';
 $pear_system_config = '';
