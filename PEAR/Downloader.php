@@ -281,9 +281,6 @@ class PEAR_Downloader extends PEAR_Common
     function analyzeDependencies(&$params)
     {
         foreach ($params as $i => $param) {
-            if ($param->isAnalyzed()) {
-                continue;
-            }
             $deps = $param->getDeps();
             if (count($deps)) {
                 $depchecker = &$params[$i]->getDependency2Object($this->config,
@@ -406,7 +403,6 @@ class PEAR_Downloader extends PEAR_Common
                     return PEAR::raiseError("Cannot install, dependencies failed");
                 }
             }
-            $params[$i]->setAnalyzed();
         }
     }
 
