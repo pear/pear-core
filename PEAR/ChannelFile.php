@@ -1623,12 +1623,14 @@ class PEAR_ChannelFile {
                       $this->_channelInfo['validatepackage']['name']) . '.php')) {
                     include_once str_replace('_', '/',
                         $this->_channelInfo['validatepackage']['name']) . '.php';
-                    $val = &new str_replace('.', '_', $this->_channelInfo['validatepackage']['name']);
+                    $vclass = str_replace('.', '_', $this->_channelInfo['validatepackage']['name']);
+                    $val = &new $vclass;
                 } else {
                     return false;
                 }
             } else {
-                $val = &new str_replace('.', '_', $this->_channelInfo['validatepackage']['name']);
+                $vclass = str_replace('.', '_', $this->_channelInfo['validatepackage']['name']);
+                $val = &new $vclass;
             }
         } else {
             include_once 'PEAR/Validate.php';
