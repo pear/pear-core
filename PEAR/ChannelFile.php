@@ -1518,51 +1518,6 @@ class PEAR_ChannelFile {
     }
 
     /**
-     * Get the regular expression needed to validate "channel::package[-version/state]"
-     * @deprecated will be switching all of this over to the validation object soon
-     * @return string
-     */
-    function getChannelPackageDownloadRegex()
-    {
-        $val = &$this->getValidationObject();
-        if ($val) {
-            return $val->getChannelPackageDownloadRegex();
-        } else {
-            return _PEAR_COMMON_CHANNEL_DOWNLOAD_PREG;
-        }
-    }
-
-    /**
-     * Get the regular expression needed to validate "package[-version/state]"
-     * @deprecated will be switching all of this over to the validation object soon
-     * @return string
-     */
-    function getPackageDownloadRegex()
-    {
-        $val = &$this->getValidationObject();
-        if ($val) {
-            return $val->getPackageDownloadRegex();
-        } else {
-            return _PEAR_COMMON_PACKAGE_DOWNLOAD_PREG;
-        }
-    }
-
-    /**
-     * validate a package name for this channel
-     * @deprecated will be switching all of this over to the validation object soon
-     * @return bool
-     */
-    function validPackageName($name)
-    {
-        $val = &$this->getValidationObject();
-        if ($val) {
-            return $val->validPackageName($name);
-        } else {
-            return (bool)preg_match(PEAR_COMMON_PACKAGE_NAME_PREG, $name);
-        }
-    }
-
-    /**
      * Add a protocol to the provides section
      * @param string protocol type
      * @param string protocol version
