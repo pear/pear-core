@@ -331,9 +331,11 @@ class PEAR_Downloader extends PEAR_Common
      */
     function analyzeDependencies(&$params)
     {
+        $failed = false;
         if (isset($this->_options['downloadonly'])) {
             return;
         }
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         foreach ($params as $i => $param) {
             $deps = $param->getDeps();
             if (!$deps) {
@@ -345,7 +347,6 @@ class PEAR_Downloader extends PEAR_Common
             if (count($deps)) {
                 $depchecker = &$this->getDependency2Object($this->config, $this->getOptions(),
                     $param->getParsedPackage(), PEAR_VALIDATE_DOWNLOADING);
-                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
                 if ($param->getType() == 'xmlrpc') {
                     $send = $param->getDownloadURL();
                 } else {
@@ -488,19 +489,19 @@ class PEAR_Downloader extends PEAR_Common
                         }
                     }
                 }
-                PEAR::staticPopErrorHandling();
                 $params[$i]->setValidated();
-                if ($failed) {
-                    if (isset($this->_options['ignore-errors']) || isset($this->_options['nodeps'])) {
-                        // this is probably not needed, but just in case
-                        if (!isset($this->_options['soft'])) {
-                            $this->log(0, 'WARNING: dependencies failed');
-                        }
-                        return;
-                    }
-                    return PEAR::raiseError("Cannot install, dependencies failed");
-                }
             }
+        }
+        PEAR::staticPopErrorHandling();
+        if ($failed) {
+            if (isset($this->_options['ignore-errors']) || isset($this->_options['nodeps'])) {
+                // this is probably not needed, but just in case
+                if (!isset($this->_options['soft'])) {
+                    $this->log(0, 'WARNING: dependencies failed');
+                }
+                return;
+            }
+            return PEAR::raiseError("Cannot install, dependencies failed");
         }
     }
 
