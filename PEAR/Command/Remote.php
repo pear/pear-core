@@ -41,8 +41,14 @@ Get details on a package from the server.',
             'summary' => 'List Available Upgrades',
             'function' => 'doListUpgrades',
             'shortcut' => 'lu',
-            'options' => array(),
-            'doc' => '[channel] [preferred_state]
+            'options' => array(
+                'channel' =>
+                    array(
+                    'shortopt' => 'c',
+                    'doc' => 'specify a channel other than the default channel',
+                    )
+                ),
+            'doc' => '[preferred_state]
 List releases on the server of packages you have installed where
 a newer version is available with the same release state (stable etc.)
 or the state passed as the second parameter.'
@@ -51,8 +57,14 @@ or the state passed as the second parameter.'
             'summary' => 'List Remote Packages',
             'function' => 'doRemoteList',
             'shortcut' => 'rl',
-            'options' => array(),
-            'doc' => '[channel]
+            'options' => array(
+                'channel' =>
+                    array(
+                    'shortopt' => 'c',
+                    'doc' => 'specify a channel other than the default channel',
+                    )
+                ),
+            'doc' => '
 Lists the packages available on the configured server along with the
 latest stable release of each package.',
             ),
@@ -71,8 +83,14 @@ will be used to match any portion of the summary/description',
             'summary' => 'List All Packages',
             'function' => 'doListAll',
             'shortcut' => 'la',
-            'options' => array(),
-            'doc' => '[channel]
+            'options' => array(
+                'channel' =>
+                    array(
+                    'shortopt' => 'c',
+                    'doc' => 'specify a channel other than the default channel',
+                    )
+                ),
+            'doc' => '
 Lists the packages available on the configured server along with the
 latest stable release of each package.',
             ),
@@ -86,7 +104,7 @@ latest stable release of each package.',
                     'doc' => 'download an uncompressed (.tar) file',
                     ),
                 ),
-            'doc' => '{package|package-version}
+            'doc' => '[channel::]{package|package-version}
 Download a package tarball.  The file will be named as suggested by the
 server, for example if you download the DB package and the latest stable
 version of DB is 1.2, the downloaded file will be DB-1.2.tgz.',
@@ -158,9 +176,9 @@ parameter.
     function doRemoteList($command, $options, $params)
     {
         $savechannel = $channel = $this->config->get('default_channel');
-        if (isset($params[0])) {
+        if (isset($options['channel'])) {
             $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
-            $channel = $params[0];
+            $channel = $options['channel'];
             if ($reg->channelExists($channel)) {
                 $this->config->set('default_channel', $channel);
             } else {
@@ -199,9 +217,9 @@ parameter.
     function doListAll($command, $options, $params)
     {
         $savechannel = $channel = $this->config->get('default_channel');
-        if (isset($params[0])) {
+        if (isset($options['channel'])) {
             $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
-            $channel = $params[0];
+            $channel = $options['channel'];
             if ($reg->channelExists($channel)) {
                 $this->config->set('default_channel', $channel);
             } else {
@@ -367,6 +385,13 @@ parameter.
         $downloader = &new PEAR_Downloader($this->ui, array('force' => 1), $this->config);
         $errors = array();
         $downloaded = array();
+        if (isset($options['nocompress'])) {
+            foreach ($params as $i => $param) {
+                if (!strpos($param, '.tar')) {
+                    $params[$i] .= '.tar';
+                }
+            }
+        }
         $downloader->download($params);
         $errors = $downloader->getErrorMsgs();
         if (count($errors)) {
@@ -397,9 +422,9 @@ parameter.
     {
         include_once "PEAR/Registry.php";
         $savechannel = $channel = $this->config->get('default_channel');
-        if (isset($params[0])) {
+        if (isset($options['channel'])) {
             $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
-            $channel = $params[0];
+            $channel = $options['channel'];
             if ($reg->channelExists($channel)) {
                 $this->config->set('default_channel', $channel);
             } else {
