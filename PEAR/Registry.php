@@ -318,12 +318,12 @@ class PEAR_Registry extends PEAR
         $channelDir = $this->_channelDirectoryName($channel);
         if (!is_dir($this->channelsdir) ||
               !file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
-            if (!@is_dir($channelDir)) {
-                if (!System::mkdir(array('-p', $channelDir))) {
-                    return $this->raiseError("could not create directory '" . $channelDir .
-                        "'");
-                }
-                $this->_initializeChannelDirs();
+            $this->_initializeChannelDirs();
+        }
+        if (!@is_dir($channelDir)) {
+            if (!System::mkdir(array('-p', $channelDir))) {
+                return $this->raiseError("could not create directory '" . $channelDir .
+                    "'");
             }
         }
         return true;
