@@ -183,7 +183,8 @@ class PEAR_Validate
     {
         if ($this->_state == PEAR_VALIDATE_PACKAGING ||
               $this->_state == PEAR_VALIDATE_NORMAL) {
-            if ($this->_packagexml->getExtends()) {
+            if ($this->_packagexml->getPackagexmlVersion() == '2.0' &&
+                  $this->_packagexml->getExtends()) {
                 $vlen = strlen($version = $this->_packagexml->getVersion() . '');
                 $name = $this->_packagexml->getPackage();
                 if ($name{strlen($name) - $vlen} != $version) {

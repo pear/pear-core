@@ -456,6 +456,12 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    function setChannel($channel)
+    {
+        $this->_packageInfo['channel'] = $channel;
+        $this->_isValid = 0;
+    }
+
     function getName()
     {
         return $this->getPackage();
@@ -468,13 +474,25 @@ class PEAR_PackageFile_v2
         }
         return false;
     }
-    
+
+    function setPackage($package)
+    {
+        $this->_packageInfo['package'] = $package;
+        $this->_isValid = 0;
+    }
+
     function getExtends()
     {
         if (isset($this->_packageInfo['extends'])) {
             return $this->_packageInfo['extends'];
         }
         return false;
+    }
+
+    function setExtends($extends)
+    {
+        $this->_packageInfo['extends'] = $extends;
+        $this->_isValid = 0;
     }
 
     /**
@@ -486,6 +504,16 @@ class PEAR_PackageFile_v2
             return $this->_packageInfo['version'][$key];
         }
         return false;
+    }
+
+    function setVersion($version, $key = 'release')
+    {
+        if (!in_array($key, array('release', 'api'))) {
+            return false;
+        }
+        $this->_packageInfo['version'][$key] = $version;
+        $this->_isValid = 0;
+        return true;
     }
 
     /**
@@ -687,13 +715,25 @@ class PEAR_PackageFile_v2
         }
         return false;
     }
-    
+
+    function setDate($date)
+    {
+        $this->_packageInfo['date'] = $date;
+        $this->_isValid = 0;
+    }
+
     function getTime()
     {
         if (isset($this->_packageInfo['time'])) {
             return $this->_packageInfo['time'];
         }
         return false;
+    }
+
+    function setTime($time)
+    {
+        $this->_packageInfo['time'] = $time;
+        $this->_isValid = 0;
     }
 
     function getLicense($raw = false)
@@ -707,6 +747,23 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    function setLicense($license, $uri = false, $filesource = false)
+    {
+        if ($uri || $filesource) {
+            $attribs = arary();
+            if ($uri) {
+                $attribs['uri'] = $uri;
+            }
+            $uri = true; // for test below
+            if ($filesource) {
+                $attribs['filesource'] = $filesource;
+            }
+        }
+        $license = $uri ? array('attribs' => $attribs, '_content' => $license) : $license;
+        $this->_packageInfo['time'] = $time;
+        $this->_isValid = 0;
+    }
+
     function getSummary()
     {
         if (isset($this->_packageInfo['summary'])) {
@@ -718,6 +775,7 @@ class PEAR_PackageFile_v2
     function setSummary($summary)
     {
         $this->_packageInfo['summary'] = $summary;
+        $this->_isValid = 0;
     }
 
     function getDescription()
@@ -731,6 +789,7 @@ class PEAR_PackageFile_v2
     function setDescription($desc)
     {
         $this->_packageInfo['description'] = $desc;
+        $this->_isValid = 0;
     }
 
     function getNotes()
@@ -744,6 +803,7 @@ class PEAR_PackageFile_v2
     function setNotes($notes)
     {
         $this->_packageInfo['notes'] = $notes;
+        $this->_isValid = 0;
     }
 
     function getCompatible()
