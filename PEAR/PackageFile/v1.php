@@ -920,7 +920,6 @@ class PEAR_PackageFile_v1
         if (($this->_isValid & $state) == $state) {
             return true;
         }
-        include_once 'PEAR/Common.php';
         $this->_isValid = true;
         $info = $this->_packageInfo;
         if (empty($info['package'])) {
@@ -1095,25 +1094,27 @@ class PEAR_PackageFile_v1
         }
         $this->_packageName = $pn = $this->getPackage();
         $pnl = strlen($pn);
-        foreach ((array)$this->_packageInfo['provides'] as $key => $what) {
-            if (isset($what['explicit'])) {
-                // skip conformance checks if the provides entry is
-                // specified in the package.xml file
-                continue;
-            }
-            extract($what);
-            if ($type == 'class') {
-                if (!strncasecmp($name, $pn, $pnl)) {
+        if (isset($this->_packageInfo['provides'])) {
+            foreach ((array) $this->_packageInfo['provides'] as $key => $what) {
+                if (isset($what['explicit'])) {
+                    // skip conformance checks if the provides entry is
+                    // specified in the package.xml file
                     continue;
                 }
-                $this->_validateWarning(PEAR_PACKAGEFILE_ERROR_NO_PNAME_PREFIX,
-                    array('file' => $file, 'type' => $type, 'name' => $name, 'package' => $pn));
-            } elseif ($type == 'function') {
-                if (strstr($name, '::') || !strncasecmp($name, $pn, $pnl)) {
-                    continue;
+                extract($what);
+                if ($type == 'class') {
+                    if (!strncasecmp($name, $pn, $pnl)) {
+                        continue;
+                    }
+                    $this->_validateWarning(PEAR_PACKAGEFILE_ERROR_NO_PNAME_PREFIX,
+                        array('file' => $file, 'type' => $type, 'name' => $name, 'package' => $pn));
+                } elseif ($type == 'function') {
+                    if (strstr($name, '::') || !strncasecmp($name, $pn, $pnl)) {
+                        continue;
+                    }
+                    $this->_validateWarning(PEAR_PACKAGEFILE_ERROR_NO_PNAME_PREFIX,
+                        array('file' => $file, 'type' => $type, 'name' => $name, 'package' => $pn));
                 }
-                $this->_validateWarning(PEAR_PACKAGEFILE_ERROR_NO_PNAME_PREFIX,
-                    array('file' => $file, 'type' => $type, 'name' => $name, 'package' => $pn));
             }
         }
         return $this->_isValid;
