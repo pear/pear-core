@@ -72,7 +72,7 @@ class PEAR_PackageFile_Parser_v2
         $this->_logger = &$l;
     }
 
-    function parse($data, $state, $file, $archive = false)
+    function parse($data, $file, $archive = false)
     {
         $this->_valStack = array();
         $this->_dataStack = array();
