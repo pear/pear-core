@@ -172,6 +172,11 @@ class PEAR_Downloader_Package
 
     function detectDependencies($params)
     {
+        $options = $this->_downloader->getOptions();
+        if (isset($options['offline'])) {
+            $this->_downloader->log(3, 'Skipping dependency download check, --offline specified');
+            return;
+        }
         $pname = $this->getParsedPackage();
         if (!$pname) {
             return;
@@ -179,105 +184,197 @@ class PEAR_Downloader_Package
         $deps = $this->getDeps();
         if (isset($deps['required']) || isset($deps['optional'])
               || isset($deps['group'])) { // package.xml 2.0
-            // get required dependency group
-            if (isset($deps['required']['package'])) {
-                if (isset($deps['required']['package'][0])) {
-                    foreach ($deps['required']['package'] as $dep) {
-                        $this->_downloadDeps[] =
-                            $this->_downloader->_getDepPackageDownloadUrl($dep, $pname);
+            return $this->_detect2($deps, $pname, $options, $params);
+        } else {
+            return $this->_detect1($deps, $pname, $options, $params);
+        }
+    }
+
+    function _detect2($deps, $pname, $options, $params)
+    {
+        // get required dependency group
+        if (isset($deps['required']['package'])) {
+            if (isset($deps['required']['package'][0])) {
+                foreach ($deps['required']['package'] as $dep) {
+                    if (isset($dep['conflicts'])) {
+                        // skip any package that this package conflicts with
+                        continue;
                     }
-                } else {
-                    $this->_downloadDeps[] =
-                        $this->_downloader->_getDepPackageDownloadUrl($deps['required']['package'],
-                            $pname);
+                    $this->_detect2Dep($dep, $pname, 'required', $params);
+                }
+            } else {
+                $dep = $deps['required']['package'];
+                if (!isset($dep['conflicts'])) {
+                    // skip any package that this package conflicts with
+                    $this->_detect2Dep($dep, $pname, 'required', $params);
                 }
             }
-            // get optional dependency group, if any
-            $groupname = $this->getGroup();
-            if ($groupname) {
-                if (isset($deps['group'])) {
-                    if (isset($deps['group']['attribs']) && $deps['group']['attribs']['name'] ==
-                          $groupname) {
-                        if (isset($deps['group']['package'])) {
-                            if (isset($deps['group']['package']['attribs'])) {
-                                $this->_downloadDeps[] =
-                                    $this->_downloader->_getDepPackageDownloadUrl(
-                                        $deps['group']['package'], $pname);
-                            } else {
-                                foreach ($deps['group']['package'] as $dep) {
-                                    $this->_downloader->_getDepPackageDownloadUrl(
-                                        $deps['group']['package'], $pname);
-                                }
-                            }
-                        }
-                    } else {
-                        foreach ($deps['group'] as $group) {
-                            if ($group['attribs']['name'] == $groupname) {
-                                if (isset($group['package'])) {
-                                    if (isset($group['package']['attribs'])) {
-                                        $this->_downloadDeps[] =
-                                            $this->_downloader->_getDepPackageDownloadUrl(
-                                                $group['package'], $pname);
-                                    } else {
-                                        foreach ($group['package'] as $dep) {
-                                            $this->_downloader->_getDepPackageDownloadUrl(
-                                                $group['package'], $pname);
-                                        }
-                                    }
-                                }
-                            }
-                        }
+        }
+        // get optional dependency group, if any
+        if (isset($deps['optional']['package'])) {
+            if (isset($deps['optional']['package'][0])) {
+                foreach ($deps['optional']['package'] as $dep) {
+                    if (!isset($options['alldeps'])) {
+                        $this->_downloader->log(1, 'Notice: package "pear.php.net/' .
+                            $this->getPackage() . '" optional dependency ' .
+                            '"pear.php.net/' . $dep['name'] .
+                            '" will not be automatically downloaded, ' .
+                            'use --alldeps to automatically download required ' .
+                            'and optional dependencies');
+                        return;
+                    }
+                    $this->_detect2Dep($dep, $pname, 'optional', $params);
+                }
+            } else {
+                if (!isset($options['alldeps'])) {
+                    $this->_downloader->log(1, 'Notice: package "pear.php.net/' .
+                        $this->getPackage() . '" optional dependency ' .
+                        '"pear.php.net/' . $deps['optional']['package']['name'] .
+                        '" will not be automatically downloaded, ' .
+                        'use --alldeps to automatically download ' .
+                        'optional dependencies');
+                    return;
+                }
+                $this->_detect2Dep($deps['optional']['package'], $pname, 'optional', $params);
+            }
+        }
+        // get requested dependency group, if any
+        $groupname = $this->getGroup();
+        if ($groupname) {
+            if (isset($deps['group'])) {
+                if (isset($deps['group']['attribs'])) {
+                    if (strtolower($deps['group']['attribs']['name']) == strtolower($groupname)) {
+                        $group = $deps['group'];
+                    }
+                }
+            } else {
+                $found = false;
+                foreach ($deps['group'] as $group) {
+                    if (strtolower($group['attribs']['name']) == strtolower($groupname)) {
+                        $found = true;
+                        break;
+                    }
+                }
+                if (!$found) {
+                    unset($group);
+                }
+            }
+            if (isset($group)) {
+                if (isset($group['package'])) {
+                    foreach ($group['package'] as $dep) {
+                        $this->_detect2Dep($dep, $pname, 'dependency group "' .
+                            $group['attribs']['name'] . '"', $params);
                     }
                 }
             }
-        } else { // package.xml 1.0
-            foreach ($deps as $dep) {
-                if (isset($dep['optional'])) {
-                    if (!isset($this->_downloader->_options['alldeps'])) {
-                        if ($dep['optional'] == 'yes' && $dep['type'] == 'pkg') {
-                            $this->_downloader->log(0, 'Notice: package "pear.php.net/' .
-                                $this->getPackage() . '" optional dependency ' .
-                                '"pear.php.net/' . $dep['name'] . '" will not be downloaded, ' .
-                                'use --alldeps to automatically download required ' .
-                                'and optional dependencies');
+        }
+    }
+
+    function _detect2Dep($dep, $pname, $group, $params)
+    {
+        $testdep = $dep;
+        $testdep['package'] = $dep['name'];
+        if (PEAR_Downloader_Package::willDownload($testdep, $params)) {
+            $this->_downloader->log(2, 'Skipping ' . $group . ' dependency "' .
+                $this->_registry->parsedPackageNameToString($dep) .
+                '", will be installed');
+            return;
+        }
+        $url =
+            $this->_downloader->_getDepPackageDownloadUrl($dep, $pname);
+        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+        $dep['package'] = $dep['name'];
+        $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params);
+        PEAR::popErrorHandling();
+        if (PEAR::isError($ret)) {
+            $this->_downloader->log(0, $ret->getMessage());
+            return;
+        } else {
+            // check to see if a dep is already installed and is the same or newer
+            if ($this->isInstalled($ret, '<')) {
+                $dep['package'] = $dep['name'];
+                $this->_downloader->log(2, 'Skipping ' . $group . ' dependency "' .
+                    $this->_registry->parsedPackageNameToString($dep) .
+                    '", already installed');
+                return;
+            }
+            $this->_downloadDeps[] = $ret;
+        }
+    }
+
+    function _detect1($deps, $pname, $options, $params)
+    {
+        foreach ($deps as $dep) {
+            if ($dep['type'] == 'pkg') {
+                $dep['channel'] = 'pear.php.net';
+                $dep['package'] = $dep['name'];
+                switch ($dep['rel']) {
+                    case 'ge' :
+                    case 'eq' :
+                    case 'gt' :
+                        if (PEAR_Downloader_Package::willDownload($dep, $params)) {
+                            $group = (!isset($dep['optional']) || $dep['optional'] == 'no') ?
+                                'required' :
+                                'optional';
+                            $this->_downloader->log(2, 'Skipping ' . $group . ' dependency "' .
+                                $this->_registry->parsedPackageNameToString($dep) .
+                                '", will be installed');
                             continue;
                         }
-                    }
                 }
-                if ($dep['type'] == 'pkg') {
-                    $dep['channel'] = 'pear.php.net';
+                // check to see if a dep is already installed
+                if ($this->isInstalled(
+                        array(
+                         'info' => array(
+                            'package' => $dep['name'],
+                            'channel' => $dep['channel'],
+                         ),
+                        'version' => $dep['version']
+                        ), $dep['rel'])) {
+                    $group = (!isset($dep['optional']) || $dep['optional'] == 'no') ?
+                        'required' :
+                        'optional';
                     $dep['package'] = $dep['name'];
-                    switch ($dep['rel']) {
-                        case 'ge' :
-                        case 'eq' :
-                        case 'gt' :
-                            if (PEAR_Downloader_Package::willDownload($dep, $params)) {
-                                continue;
-                            }
-                    }
-                    // check to see if a dep is already installed
-                    if ($this->isInstalled(
-                            array(
-                             'info' => array(
-                                'package' => $dep['name'],
-                                'channel' => $dep['channel'],
-                             ),
-                            'version' => $dep['version']
-                            ), $dep['rel'])) {
-                        continue;
-                    }
-                    if (!isset($this->_downloader->_options['onlyreqdeps']) &&
-                          !isset($this->_downloader->_options['alldeps'])) {
-                        $this->_downloader->log(0, 'Warning: package "pear.php.net/' .
-                            $this->getPackage() . '" required dependency "pear.php.net/'.
-                            $dep['name'] . '" will not be downloaded, use --onlyreqdeps' .
-                            ' to automatically download required dependencies');
-                        continue;
-                    }
-                    $this->_downloadDeps[] =
-                        $this->_downloader->_getDepPackageDownloadUrl($dep, $pname);
+                    unset($dep['version']);
+                    $this->_downloader->log(2, 'Skipping ' . $group . ' dependency "' .
+                        $this->_registry->parsedPackageNameToString($dep) .
+                        '", already installed');
                     continue;
                 }
+                if (!isset($options['alldeps'])) {
+                    if (isset($dep['optional']) && $dep['optional'] == 'yes') {
+                        $this->_downloader->log(0, 'Notice: package "pear.php.net/' .
+                            $this->getPackage() . '" optional dependency ' .
+                            '"channel://pear.php.net/' . $dep['name'] .
+                            '" will not be automatically downloaded, ' .
+                            'use --alldeps to automatically download required ' .
+                            'and optional dependencies');
+                        continue;
+                    }
+                }
+                if (!isset($options['alldeps']) && !isset($options['onlyreqdeps'])) {
+                    if (!isset($dep['optional']) || $dep['optional'] == 'no') {
+                        $this->_downloader->log(0, 'Notice: package "pear.php.net/' .
+                            $this->getPackage() . '" required dependency ' .
+                            '"channel://pear.php.net/' . $dep['name'] .
+                            '" will not be automatically downloaded, ' .
+                            'use --alldeps to automatically download required ' .
+                            'and optional dependencies, --onlyreqdeps to ' .
+                            'automatically download only required dependencies');
+                        continue;
+                    }
+                }
+                $url =
+                    $this->_downloader->_getDepPackageDownloadUrl($dep, $pname);
+                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                $dep['package'] = $dep['name'];
+                $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params);
+                PEAR::popErrorHandling();
+                if (PEAR::isError($ret)) {
+                    $this->_downloader->log(0, $ret->getMessage());
+                    continue;
+                }
+                $this->_downloadDeps[] = $ret;
             }
         }
     }
@@ -382,6 +479,21 @@ class PEAR_Downloader_Package
     }
 
     function isInstalled($dep, $oper = '==')
+    {
+        if ($this->_registry->packageExists($dep['info']['package'], $dep['info']['channel'])) {
+            if (version_compare($this->_registry->packageInfo($dep['info']['package'], 'version',
+                  $dep['info']['channel']), $dep['version'], $oper)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Take a package.xml 2.0 package dependency and match it to any installed packages
+     * @return boolean true if the package is installed and is older
+     */
+    function isInstalled2($dep)
     {
         if ($this->_registry->packageExists($dep['info']['package'], $dep['info']['channel'])) {
             if (version_compare($this->_registry->packageInfo($dep['info']['package'], 'version',
