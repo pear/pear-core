@@ -339,29 +339,24 @@ List the files in an installed package.
             $data['headline'] = array('Type', 'Version', 'Function Name', 'URI');
             $capabilities = $chan->getFunctions('xmlrpc');
             $soaps = $chan->getFunctions('soap');
-            $rests = $chan->getFunctions('rest');
-            $statics = $chan->getFunctions('static');
-            if ($capabilities || $soaps || $rests || $statics) {
+            if ($capabilities || $soaps) {
                 if ($capabilities) {
+                    if (!isset($capabilities[0])) {
+                        $capabilities = array($capabilities);
+                    }
                     foreach ($capabilities as $protocol) {
                         $data['data'][] = array('xmlrpc', $protocol['attribs']['version'],
                             $protocol['_content'], '');
                     }
                 }
                 if ($soaps) {
+                    if (!isset($soaps[0])) {
+                        $soaps = array($soaps);
+                    }
                     foreach ($soaps as $protocol) {
                         $data['data'][] = array('soap', $protocol['attribs']['version'],
                             $protocol['_content'], '');
                     }
-                }
-                if ($rests) {
-                    foreach ($rests as $protocol) {
-                        $data['data'][] = array('rest', $protocol['attribs']['version'],
-                            $protocol['_content'], $protocol['attribs']['uri']);
-                    }
-                }
-                if ($statics) {
-                    $data['data'][] = array('static', $protocol['attribs']['version'], '', '');
                 }
             } else {
                 $data['data'][] = array('No supported protocols');
@@ -382,30 +377,24 @@ List the files in an installed package.
                     $data['headline'] = array('Type', 'Version', 'Function Name', 'URI');
                     $capabilities = $chan->getFunctions('xmlrpc', $mirror['attribs']['host']);
                     $soaps = $chan->getFunctions('soap', $mirror['attribs']['host']);
-                    $rests = $chan->getFunctions('rest', $mirror['attribs']['host']);
-                    $statics = $chan->getFunctions('static', $mirror['attribs']['host']);
-                    if ($capabilities || $soaps || $rests || $statics) {
+                    if ($capabilities || $soaps) {
                         if ($capabilities) {
+                            if (!isset($capabilities[0])) {
+                                $capabilities = array($capabilities);
+                            }
                             foreach ($capabilities as $protocol) {
                                 $data['data'][] = array('xmlrpc', $protocol['attribs']['version'],
                                     $protocol['_content'], '');
                             }
                         }
                         if ($soaps) {
+                            if (!isset($soap[0])) {
+                                $soap = array($soap);
+                            }
                             foreach ($soaps as $protocol) {
                                 $data['data'][] = array('soap', $protocol['attribs']['version'],
                                     $protocol['_content'], '');
                             }
-                        }
-                        if ($rests) {
-                            foreach ($rests as $protocol) {
-                                $data['data'][] = array('rest', $protocol['attribs']['version'],
-                                    $protocol['_content'], $protocol['attribs']['uri']);
-                            }
-                        }
-                        if ($statics) {
-                            $data['data'][] = array('static', $protocol['attribs']['version'], '',
-                                '');
                         }
                     } else {
                         $data['data'][] = array('No supported protocols');
@@ -550,15 +539,15 @@ List the files in an installed package.
             $channel->fromXmlString($contents);
             if (!$channel->getErrors()) {
                 // security check: is the downloaded file for the channel we got it from?
-                if (strtolower($channel->getName()) != strtolower($params[0])) {
+                if (strtolower($channel->getName()) != strtolower($c->getName())) {
                     if (isset($options['force'])) {
                         $this->ui->log(0, 'WARNING: downloaded channel definition file' .
                             ' for channel "' . $channel->getName() . '" from channel "' .
-                            strtolower($params[0]) . '"');
+                            strtolower($c->getName()) . '"');
                     } else {
                         return $this->raiseError('ERROR: downloaded channel definition file' .
                             ' for channel "' . $channel->getName() . '" from channel "' .
-                            strtolower($params[0]) . '"');
+                            strtolower($c->getName()) . '"');
                     }
                 }
             }
