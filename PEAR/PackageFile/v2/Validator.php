@@ -104,6 +104,23 @@ class PEAR_PackageFile_v2_Validator
         if (is_array($this->_packageInfo['license']) &&
               !isset($this->_packageInfo['license']['_content'])) {
             $this->_tagCannotBeEmpty('license');
+        } elseif (empty($this->_packageInfo['license'])) {
+            $this->_tagCannotBeEmpty('license');
+        }
+        if (empty($this->_packageInfo['summary'])) {
+            $this->_tagCannotBeEmpty('summary');
+        }
+        if (empty($this->_packageInfo['summary'])) {
+            $this->_tagCannotBeEmpty('description');
+        }
+        if (empty($this->_packageInfo['date'])) {
+            $this->_tagCannotBeEmpty('date');
+        }
+        if (empty($this->_packageInfo['notes'])) {
+            $this->_tagCannotBeEmpty('notes');
+        }
+        if (isset($this->_packageInfo['time'])&& empty($this->_packageInfo['time'])) {
+            $this->_tagCannotBeEmpty('time');
         }
         if (isset($this->_packageInfo['dependencies'])) {
             $this->_validateDependencies();
