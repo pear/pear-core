@@ -35,8 +35,11 @@
  * 
  * Since version 0.3alpha, it is possible to specify the exception class
  * returned from {@link push()}
+ *
+ * Since version PEAR1.3.2, ErrorStack no longer instantiates an exception class.  This can
+ * still be done quite handily in an error callback or by manipulating the returned array
  * @author Greg Beaver <cellog@php.net>
- * @version 0.6alpha
+ * @version PEAR1.3.2 (beta)
  * @package PEAR_ErrorStack
  * @category Debugging
  * @license http://www.php.net/license/3_0.txt PHP License v3.0
@@ -221,13 +224,6 @@ class PEAR_ErrorStack {
     var $_logger = false;
     
     /**
-     * Class name to use for a PHP 5 exception that will be returned
-     * @var string
-     * @access protected
-     */
-    var $_exceptionClass = 'Exception';
-    
-    /**
      * Error messages - designed to be overridden
      * @var array
      * @abstract
@@ -242,20 +238,14 @@ class PEAR_ErrorStack {
      * @param callback $contextCallback callback used for context generation,
      *                 defaults to {@link getFileLine()}
      * @param boolean  $throwPEAR_Error
-     * @param string   $exceptionClass exception class to instantiate if
-     *                 in PHP 5
      */
     function PEAR_ErrorStack($package, $msgCallback = false, $contextCallback = false,
-                         $throwPEAR_Error = false, $exceptionClass = null)
+                         $throwPEAR_Error = false)
     {
         $this->_package = $package;
         $this->setMessageCallback($msgCallback);
         $this->setContextCallback($contextCallback);
         $this->_compat = $throwPEAR_Error;
-        // this allows child classes to simply redefine $this->_exceptionClass
-        if (!is_null($exceptionClass)) {
-            $this->_exceptionClass = $exceptionClass;
-        }
     }
     
     /**
@@ -268,15 +258,12 @@ class PEAR_ErrorStack {
      * @param callback $contextCallback callback used for context generation,
      *                 defaults to {@link getFileLine()}
      * @param boolean  $throwPEAR_Error
-     * @param string   $exceptionClass exception class to instantiate if
-     *                 in PHP 5
      * @param string   $stackClass class to instantiate
      * @static
      * @return PEAR_ErrorStack
      */
     function &singleton($package, $msgCallback = false, $contextCallback = false,
-                         $throwPEAR_Error = false, $exceptionClass = null,
-                         $stackClass = 'PEAR_ErrorStack')
+                         $throwPEAR_Error = false, $stackClass = 'PEAR_ErrorStack')
     {
         if (isset($GLOBALS['_PEAR_ERRORSTACK_SINGLETON'][$package])) {
             return $GLOBALS['_PEAR_ERRORSTACK_SINGLETON'][$package];
@@ -289,8 +276,7 @@ class PEAR_ErrorStack {
                 false, $trace);
         }
         return $GLOBALS['_PEAR_ERRORSTACK_SINGLETON'][$package] =
-            &new $stackClass($package, $msgCallback, $contextCallback, $throwPEAR_Error,
-                             $exceptionClass);
+            &new $stackClass($package, $msgCallback, $contextCallback, $throwPEAR_Error);
     }
 
     /**
@@ -508,7 +494,7 @@ class PEAR_ErrorStack {
      *    'time' => time(),
      *    'context' => $context,
      *    'message' => $msg,
-     * //['repackage' => $err] repackaged error array
+     * //['repackage' => $err] repackaged error array/Exception class
      * );
      * </code>
      */
@@ -542,8 +528,7 @@ class PEAR_ErrorStack {
             $msg = call_user_func_array($this->_msgCallback,
                                         array(&$this, $err));
             $err['message'] = $msg;
-        }
-        
+        }        
         
         if ($repackage) {
             $err['repackage'] = $repackage;
@@ -591,15 +576,6 @@ class PEAR_ErrorStack {
         }
         if ($this->_compat && $push) {
             return $this->raiseError($msg, $code, null, null, $err);
-        }
-        if (class_exists($this->_exceptionClass)) {
-            $exception = $this->_exceptionClass;
-            if (is_string($msg) && is_numeric($code)) {
-                $code = $code + 0;
-            }
-            $ret = new $exception($msg, (int) $code);
-            $ret->errorData = $err;
-            return $ret;
         }
         return $err;
     }

@@ -218,12 +218,6 @@ class PEAR_ErrorStack {
     protected $_logger = false;
     
     /**
-     * Class name to use for a PHP 5 exception that will be returned
-     * @var string
-     */
-    protected $_exceptionClass = 'PEAR_Exception';
-    
-    /**
      * Error messages - designed to be overridden
      * @var array
      * @abstract
@@ -238,20 +232,14 @@ class PEAR_ErrorStack {
      * @param callback $contextCallback callback used for context generation,
      *                 defaults to {@link getFileLine()}
      * @param boolean  $throwPEAR_Error (ignored)
-     * @param string   $exceptionClass exception class to instantiate if
-     *                 in PHP 5
      */
     public function PEAR_ErrorStack($package, $msgCallback = false, $contextCallback = false,
-                                    $throwPEAR_Error = false, $exceptionClass = null)
+                                    $throwPEAR_Error = false)
     {
         $this->_package = $package;
         $this->setMessageCallback($msgCallback);
         $this->setContextCallback($contextCallback);
         $this->_compat = false;
-        // this allows child classes to simply redefine $this->_exceptionClass
-        if (!is_null($exceptionClass)) {
-            $this->_exceptionClass = $exceptionClass;
-        }
     }
     
     /**
@@ -271,8 +259,7 @@ class PEAR_ErrorStack {
      * @return PEAR_ErrorStack
      */
     static public function singleton($package, $msgCallback = false, $contextCallback = false,
-                              $throwPEAR_Error = false, $exceptionClass = null,
-                              $stackClass = 'PEAR_ErrorStack')
+                              $throwPEAR_Error = false, $stackClass = 'PEAR_ErrorStack')
     {
         if (isset(self::$singleton[$package])) {
             return self::$singleton[$package];
@@ -284,8 +271,7 @@ class PEAR_ErrorStack {
                 false, $trace);
         }
         return self::$singleton[$package] =
-            new $stackClass($package, $msgCallback, $contextCallback, $throwPEAR_Error,
-                             $exceptionClass);
+            new $stackClass($package, $msgCallback, $contextCallback, $throwPEAR_Error);
     }
 
     
@@ -466,7 +452,7 @@ class PEAR_ErrorStack {
      */
     public function promoteWarning($warning, $exceptionclass = 'PEAR_Exception')
     {
-        return new PEAR_Exception($warning['message'],
+        return new $exceptionclass($warning['message'],
             array($warning), $warning['code']);
     }
 
@@ -597,15 +583,6 @@ class PEAR_ErrorStack {
             if ($this->_logger || self::$globallogger) {
                 $this->_log($err);
             }
-        }
-        if (class_exists($this->_exceptionClass)) {
-            $exception = $this->_exceptionClass;
-            if (is_string($msg) && is_numeric($code)) {
-                $code = $code + 0;
-            }
-            $ret = new $exception($msg, $code);
-            $ret->errorData = $err;
-            return $ret;
         }
         return $err;
     }
