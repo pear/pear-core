@@ -202,7 +202,6 @@ class PEAR_PackageFile_v2_Validator
         while ($key == 'attribs' || $key == '_contents') {
             $key = next($keys);
         }
-        $test = false;
         $unfoundtags = array();
         foreach ($structure as $struc) {
             if (!$key && @$struc['multiple'] == '*') {
