@@ -277,6 +277,7 @@ class PEAR_ChannelFile {
                 return false;
             }
             $this->_channelInfo = $parser->getData();
+            return true;
         } else {
             $this->_stack->push(PEAR_CHANNELFILE_ERROR_NO_VERSION, 'error', array('xml' => $data));
             return false;
@@ -772,8 +773,8 @@ class PEAR_ChannelFile {
      */
     function getServer()
     {
-        if (isset($this->_channelInfo['attribs']['host'])) {
-            return $this->_channelInfo['attribs']['host'];
+        if (isset($this->_channelInfo['servers']['primary']['attribs']['host'])) {
+            return $this->_channelInfo['servers']['primary']['attribs']['host'];
         } else {
             return false;
         }
