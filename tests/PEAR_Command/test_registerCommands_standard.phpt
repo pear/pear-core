@@ -47,7 +47,7 @@ $phpunit->assertEquals(array (
   'remote-info' => 'PEAR_Command_Remote',
   'remote-list' => 'PEAR_Command_Remote',
   'run-scripts' => 'PEAR_Command_Install',
-  'run-tests' => 'PEAR_Command_Package',
+  'run-tests' => 'PEAR_Command_Test',
   'search' => 'PEAR_Command_Remote',
   'shell-test' => 'PEAR_Command_Registry',
   'sign' => 'PEAR_Command_Package',
@@ -242,8 +242,8 @@ PEAR_Command::getGetoptArgs('remote-list', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short remote-list'); 
 $phpunit->assertEquals(array ('channel='), $l, 'long remote-list');
 PEAR_Command::getGetoptArgs('run-tests', $s, $l);
-$phpunit->assertEquals('ri:lqsp:', $s, 'short run-tests'); 
-$phpunit->assertEquals(array ('recur', 'ini=', 'realtimelog', 'quiet', 'simple', 'package='), $l, 'long run-tests');
+$phpunit->assertEquals('ri:lqsp', $s, 'short run-tests'); 
+$phpunit->assertEquals(array ('recur', 'ini=', 'realtimelog', 'quiet', 'simple', 'package'), $l, 'long run-tests');
 PEAR_Command::getGetoptArgs('search', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short search'); 
 $phpunit->assertEquals(array ('channel='), $l, 'long search');
