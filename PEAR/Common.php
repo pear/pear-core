@@ -1419,7 +1419,7 @@ class PEAR_Common extends PEAR
                     $interface = true;
                 case T_CLASS:
                     if (($current_class_level != -1) || ($current_function_level != -1)) {
-                        PEAR::raiseError("Parser error: Invalid PHP file $file",
+                        PEAR::raiseError("Parser error: invalid PHP found in file \"$file\"",
                             PEAR_COMMON_ERROR_INVALIDPHP);
                         return false;
                     }
@@ -1483,7 +1483,7 @@ class PEAR_Common extends PEAR
                     continue 2;
                 case T_DOUBLE_COLON:
                     if (!($tokens[$i - 1][0] == T_WHITESPACE || $tokens[$i - 1][0] == T_STRING)) {
-                        PEAR::raiseError("Parser error: Invalid PHP file $file",
+                        PEAR::raiseError("Parser error: invalid PHP found in file \"$file\"",
                             PEAR_COMMON_ERROR_INVALIDPHP);
                         return false;
                     }
