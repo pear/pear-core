@@ -35,13 +35,11 @@ $phpunit->assertNoErrors('after create');
 $result = $dp->initialize($pathtopackagexml);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'Missing Package Name'),
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "name" - package name  is invalid'),
     array('package' => 'PEAR_Error', 'message' =>
         "Cannot initialize '$pathtopackagexml', invalid or missing package file")),
         'after initialize');
 $phpunit->assertEquals(array(
     array(3, '+ tmp dir created at ' . $dp->_downloader->getDownloadDir()),
-    array(0, 'Channel validator error: field "name" - package name  is invalid'),
     array(0, 'Missing Package Name'),
     array(0, 'Parsing of package.xml from file "' . $pathtopackagexml .
         '" failed')), $fakelog->getLog(), 'after initialize log');
