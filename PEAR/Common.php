@@ -459,19 +459,22 @@ class PEAR_Common extends PEAR
      */
     function infoFromAny($info)
     {
-        include_once 'PEAR/PackageFile.php';
-        $packagefile = &new PEAR_PackageFile($this->config);
-        $pf = &$packagefile->fromAnyFile($info, PEAR_VALIDATE_NORMAL);
-        if (PEAR::isError($pf)) {
-            $errs = $pf->getUserinfo();
-            if (is_array($errs)) {
-                foreach ($errs as $error) {
-                    $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
+        if (is_string($info) && file_exists($info)) {
+            include_once 'PEAR/PackageFile.php';
+            $packagefile = &new PEAR_PackageFile($this->config);
+            $pf = &$packagefile->fromAnyFile($info, PEAR_VALIDATE_NORMAL);
+            if (PEAR::isError($pf)) {
+                $errs = $pf->getUserinfo();
+                if (is_array($errs)) {
+                    foreach ($errs as $error) {
+                        $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
+                    }
                 }
+                return $pf;
             }
-            return $pf;
+            return $this->_postProcessValidPackagexml($pf);
         }
-        return $this->_postProcessValidPackagexml($pf);
+        return $info;
     }
 
     // }}}
