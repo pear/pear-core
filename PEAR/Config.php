@@ -1066,7 +1066,7 @@ class PEAR_Config extends PEAR
             }
         } else {
             if ($key == 'default_channel') {
-                $value = $reg->channelName($channel);
+                $value = $reg->channelName($value);
                 if (!$value) {
                     return false;
                 }
