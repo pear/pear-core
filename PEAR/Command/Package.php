@@ -171,6 +171,10 @@ use the "slide" option to move the release tag.
                     'doc' => 'actual string of settings to pass to php in format " -d setting=blah"',
                     'arg' => 'SETTINGS'
                 ),
+                'realtimelog' => array(
+                    'shortopt' => 'l',
+                    'doc' => 'Log test runs/results as they are run',
+                ),
             ),
             'doc' => '[testfile|dir ...]
 Run regression tests with PHP\'s regression testing script (run-tests.php).',
@@ -551,10 +555,27 @@ used for automated conversion or learning the format.
             $this->ui->outputData('Using INI settings: "' . $ini_settings . '"');
         }
         $skipped = $passed = $failed = array();
-        $this->ui->outputData('Running ' . count($tests) . ' tests');
+        $this->ui->outputData('Running ' . count($tests) . ' tests', $command);
         $start = time();
+        if (isset($options['realtimelog'])) {
+            @unlink('run-tests.log');
+        }
         foreach ($tests as $t) {
+            if (isset($options['realtimelog'])) {
+                $fp = @fopen('run-tests.log', 'a');
+                if ($fp) {
+                    fwrite($fp, "Running test $t...");
+                    fclose($fp);
+                }
+            }
             $result = $run->run($t, $ini_settings);
+            if (isset($options['realtimelog'])) {
+                $fp = @fopen('run-tests.log', 'a');
+                if ($fp) {
+                    fwrite($fp, "$result\n");
+                    fclose($fp);
+                }
+            }
             if ($result == 'FAILED') {
             	$failed[] = $t;
             }
@@ -574,22 +595,26 @@ used for automated conversion or learning the format.
         	foreach ($failed as $failure) {
         		$output .= $failure . "\n";
         	}
-            $fp = @fopen('run-tests.log', 'w');
+            if (isset($options['realtimelog'])) {
+                $fp = @fopen('run-tests.log', 'a');
+            } else {
+                $fp = @fopen('run-tests.log', 'w');
+            }
             if ($fp) {
                 fwrite($fp, $output, strlen($output));
                 fclose($fp);
-                $this->ui->outputData('wrote log to "' . realpath('run-tests.log') . '"');
+                $this->ui->outputData('wrote log to "' . realpath('run-tests.log') . '"', $command);
             }
         } elseif (@file_exists('run-tests.log') && !@is_dir('run-tests.log')) {
             @unlink('run-tests.log');
         }
         $this->ui->outputData('TOTAL TIME: ' . $total);
-        $this->ui->outputData(count($passed) . ' PASSED TESTS');
-        $this->ui->outputData(count($skipped) . ' SKIPPED TESTS');
+        $this->ui->outputData(count($passed) . ' PASSED TESTS', $command);
+        $this->ui->outputData(count($skipped) . ' SKIPPED TESTS', $command);
         if (count($failed)) {
-    		$this->ui->outputData(count($failed) . ' FAILED TESTS:');
+    		$this->ui->outputData(count($failed) . ' FAILED TESTS:', $command);
         	foreach ($failed as $failure) {
-        		$this->ui->outputData($failure);
+        		$this->ui->outputData($failure, $command);
         	}
         }
 
