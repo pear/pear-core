@@ -1513,7 +1513,7 @@ class PEAR_PackageFile_v2
     function &getRW()
     {
         if (!class_exists('PEAR_PackageFile_v2_rw')) {
-            require_once 'PEAR/PackageFile/Generator/v2/rw.php';
+            require_once 'PEAR/PackageFile/v2/rw.php';
         }
         $a = new PEAR_PackageFile_v2_rw;
         foreach (get_object_vars($this) as $name => $unused) {
