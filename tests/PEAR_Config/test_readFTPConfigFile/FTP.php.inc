@@ -71,20 +71,13 @@ class Net_FTP extends PEAR
         if (isset($this->_cdErr[$path])) {
             return $this->raiseError($this->_cdErr[$path]);
         }
-        $this->_cdTo[] = $path;
+        $this->_cdTo = $path;
         return true;
     }
 
     function setCdError($err)
     {
         $this->_cdErr = $err;
-    }
-
-    function getCdTo()
-    {
-        $ret = $this->_cdTo;
-        $this->_cdTo = array();
-        return $ret;
     }
 
     function pwd()
@@ -112,13 +105,14 @@ class Net_FTP extends PEAR
 
     function get($remote, $local, $overwrite = false, $mode = null)
     {
+        $remote = $this->_cdTo . '/' . $remote;
         if (isset($this->_remoteFiles[$remote])) {
             if (!$overwrite && file_exists($local)) {
                 return $this->raiseError("Local file '$local_file' exists and may not be overwriten.", NET_FTP_ERR_OVERWRITELOCALFILE_FORBIDDEN);
             }
-            $remote = implode('', file($this->_remoteFiles[$remote]));
+            $contents = implode('', file($this->_remoteFiles[$remote]));
             $fp = fopen($local, 'wb');
-            fwrite($fp, $remote);
+            fwrite($fp, $contents);
             fclose($fp);
             return true;
         }
