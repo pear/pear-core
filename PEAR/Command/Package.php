@@ -155,7 +155,12 @@ use the "slide" option to move the release tag.
             'summary' => 'Run Regression Tests',
             'function' => 'doRunTests',
             'shortcut' => 'rt',
-            'options' => array(),
+            'options' => array(
+                'recur' => array(
+                    'shortopt' => 'r',
+                    'doc' => 'Run tests in child directories, recursively.  4 dirs deep maximum',
+                )
+            ),
             'doc' => '[testfile|dir ...]
 Run regression tests with PHP\'s regression testing script (run-tests.php).',
             ),
@@ -434,6 +439,31 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
 
     function doRunTests($command, $options, $params)
     {
+        include_once 'PEAR/RunTest.php';
+        $log = new PEAR_Common;
+        $run = new PEAR_RunTest($log);
+        $tests = array();
+        if (isset($options['recur'])) {
+            $depth = 4;
+        } else {
+            $depth = 1;
+        }
+        foreach ($params as $p) {
+            if (is_dir($p)) {
+                $dir = System::find(array($p, '-type', 'f',
+                                            '-maxdepth', $depth,
+                                            '-name', '*.phpt'));
+                $tests = array_merge($tests, $dir);
+            } else {
+                $tests[] = $p;
+            }
+        }
+        foreach ($tests as $t) {
+            $run->run($t);
+        }
+
+        return true;
+        /*
         $cwd = getcwd();
         $php = $this->config->get('php_bin');
         putenv("TEST_PHP_EXECUTABLE=$php");
@@ -463,6 +493,7 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
             system($cmd);
         }
         return true;
+        */
     }
 
     // }}}
