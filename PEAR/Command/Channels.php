@@ -216,6 +216,10 @@ List the files in an installed package.
                         $test->getName() . '"', $command);
                     continue;
                 }
+                if (!$contents) {
+                    $this->ui->outputData("Channel \"$channel\" is up-to-date", $command);
+                    continue;
+                }
                 list($contents, $lastmodified) = $contents;
                 $info = implode('', file($contents));
                 if (!$info) {
