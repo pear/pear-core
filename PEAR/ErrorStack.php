@@ -910,7 +910,7 @@ class PEAR_ErrorStack {
             $mainmsg = $stack->getErrorMessageTemplate($err['code']);
         }
         $mainmsg = str_replace('%__msg%', $err['message'], $mainmsg);
-        if (count($err['params'])) {
+        if (is_array($err['params']) && count($err['params'])) {
             foreach ($err['params'] as $name => $val) {
                 if (is_array($val)) {
                     // @ is needed in case $val is a multi-dimensional array
