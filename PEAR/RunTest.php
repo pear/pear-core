@@ -43,6 +43,16 @@ putenv("PHP_PEAR_RUNTESTS=1");
 
 class PEAR_RunTest
 {
+    var $_logger;
+
+    /**
+     * An object that supports the PEAR_Common->log() signature, or null
+     * @param PEAR_Common|null
+     */
+    function PEAR_RunTest($logger = null)
+    {
+        $this->_logger = $logger;
+    }
 
     //
     //  Run an individual test case.
@@ -153,6 +163,9 @@ class PEAR_RunTest
 
         $ini_settings='';
         $cmd = "$php$ini_settings -f $tmp_file$args 2>&1";
+        if (isset($this->_logger)) {
+            $this->_logger->log(2, 'Running command "' . $cmd . '"');
+        }
         $out = `$cmd`;
         @unlink($tmp_post);
 
