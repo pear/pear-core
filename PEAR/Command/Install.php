@@ -375,8 +375,8 @@ package if needed.
         $this->installer->setOptions($options);
         $this->installer->sortPackagesForInstall($downloaded);
         if (PEAR::isError($err = $this->installer->setDownloadedPackages($downloaded))) {
-            $this->ui->outputData($err->getMessage());
-            return;
+            $this->raiseError($err->getMessage());
+            return true;
         }
         $reg = &$this->config->getRegistry();
         foreach ($downloaded as $param) {
