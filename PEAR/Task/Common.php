@@ -60,7 +60,10 @@ class PEAR_Task_Common
         $this->registry = &$config->getRegistry();
         $this->installer = &$installer;
         if ($this->type == 'multiple') {
-            $GLOBALS['_PEAR_TASK_INSTANCES'][get_class($this)][] = &$this;
+            $GLOBALS['_PEAR_TASK_PREINSTANCES'][get_class($this)][] = &$this;
+        }
+        if ($this->type == 'postinstall-multiple') {
+            $GLOBALS['_PEAR_TASK_POSTINSTANCES'][get_class($this)][] = &$this;
         }
     }
 
@@ -126,24 +129,48 @@ class PEAR_Task_Common
      * @static
      * @final
      */
-    function hasTasks()
+    function hasPrecommitTasks()
     {
-        return isset($GLOBALS['_PEAR_TASK_INSTANCES']);
+        return isset($GLOBALS['_PEAR_TASK_PREINSTANCES']);
     }
 
     /**
      * @static
      * @final
      */
-    function runTasks()
+    function runPrecommitTasks()
     {
-        foreach ($GLOBALS['_PEAR_TASK_INSTANCES'] as $class => $tasks) {
+        foreach ($GLOBALS['_PEAR_TASK_PREINSTANCES'] as $class => $tasks) {
             $err = call_user_func(array($class, 'run'), $tasks);
             if ($err) {
                 return PEAR_Task_Common::throwError($err);
             }
         }
-        unset($GLOBALS['_PEAR_TASK_INSTANCES']);
+        unset($GLOBALS['_PEAR_TASK_PREINSTANCES']);
+    }
+
+    /**
+     * @static
+     * @final
+     */
+    function hasPostinstallTasks()
+    {
+        return isset($GLOBALS['_PEAR_TASK_POSTINSTANCES']);
+    }
+
+    /**
+     * @static
+     * @final
+     */
+    function runPostinstallTasks()
+    {
+        foreach ($GLOBALS['_PEAR_TASK_POSTINSTANCES'] as $class => $tasks) {
+            $err = call_user_func(array($class, 'run'), $tasks);
+            if ($err) {
+                return PEAR_Task_Common::throwError($err);
+            }
+        }
+        unset($GLOBALS['_PEAR_TASK_POSTINSTANCES']);
     }
 
     function throwError($msg, $code = -1)
