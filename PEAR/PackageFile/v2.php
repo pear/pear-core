@@ -2414,39 +2414,43 @@ http://pear.php.net/dtd/package-2.0.xsd',
             return;
         }
         if (isset($list[$filetag])) {
-            if (isset($list[$filetag]['attribs'])) {
+            if (!isset($list[$filetag][0])) {
                 // single file
-                if (!isset($list[$filetag]['attribs'])) {
+                $list[$filetag] = array($list[$filetag]);
+            }
+            foreach ($list[$filetag] as $i => $file)
+            {
+                if (!isset($file['attribs'])) {
                     return $this->_tagHasNoAttribs($filetag,
                         '<dir name="' . $list['attribs']['name'] . '">');
                 }
-                if (!isset($list[$filetag]['attribs']['name'])) {
+                if (!isset($file['attribs']['name'])) {
                     return $this->_tagMissingAttribute($filetag, 'name',
                         '<dir name="' . $list['attribs']['name'] . '">');
                 }
-                if (!$allowignore && !isset($list[$filetag]['attribs']['role'])) {
+                if (!$allowignore && !isset($file['attribs']['role'])) {
                     return $this->_tagMissingAttribute($filetag, 'role',
                         '<dir name="' . $list['attribs']['name'] . '"><file name="' .
                         $list[$filetag]['attribs']['name'] . '">');
                 }
-                if (!$allowignore && !$this->_validateRole($list[$filetag]['attribs']['role'])) {
-                    return $this->_invalidFileRole($list[$filetag]['attribs']['name'],
-                        $list['attribs']['name']);
+                if (!$allowignore && !$this->_validateRole($file['attribs']['role'])) {
+                    return $this->_invalidFileRole($file['attribs']['name'],
+                        $list['attribs']['name'], $file['attribs']['role']);
                 }
-                $file = $list[$filetag];
-                unset($list[$filetag]['attribs']);
-                if (count($list[$filetag])) { // has tasks
-                    foreach ($list[$filetag] as $task => $value) {
+                $save = $file['attribs'];
+                unset($file['attribs']);
+                if (count($file)) { // has tasks
+                    foreach ($file as $task => $value) {
                         if ($tagClass = $this->getTask($task)) {
                                 if (!isset($value[0])) {
                                     $value = array($value);
                                 }
                                 foreach ($value as $v) {
                                     $ret = call_user_func(array($tagClass, 'validateXml'),
-                                        $this, $v, $this->_config, $file);
+                                        $this, $v, $this->_config, $save);
                                     if (is_array($ret)) {
                                         return $this->_invalidTask($task, $ret,
-                                            $file['attribs']['name']);
+                                            $save['attribs']['name']);
                                     }
                                 }
                             if (!isset($value[0])) {
@@ -2454,59 +2458,14 @@ http://pear.php.net/dtd/package-2.0.xsd',
                             }
                             foreach ($value as $v) {
                                 $ret = call_user_func(array($tagClass, 'validateXml'),
-                                    $this, $v, $this->_config, $file);
+                                    $this, $v, $this->_config, $save);
                                 if (is_array($ret)) {
                                     return $this->_invalidTask($task, $ret,
-                                        $list[$filetag]['attribs']['name']);
+                                        $save['attribs']['name']);
                                 }
                             }
                         } else {
-                            $this->_unknownTask($task, $list[$filetag]['attribs']['name']);
-                        }
-                    }
-                }
-            } else {
-                if (!is_array($list[$filetag])) {
-                    return $this->_tagHasNoAttribs($filetag,
-                        '<dir name="' . $list['attribs']['name'] . '"><file>' .
-                        $list[$filetag] . '</file>');
-                }
-                foreach ($list[$filetag] as $i => $file) {
-                    if (!is_int($i)) {
-                        return $this->_tagHasNoAttribs($filetag,
-                            '<dir name="' . $list['attribs']['name'] . '">');
-                    }
-                    if (!isset($file['attribs'])) {
-                        return $this->_tagHasNoAttribs($filetag,
-                            '<dir name="' . $list['attribs']['name'] . '">');
-                    }
-                    if (!isset($file['attribs']['name'])) {
-                        return $this->_tagMissingAttribute($filetag, 'name',
-                            '<dir name="' . $list['attribs']['name'] . '">');
-                    }
-                    if (!$allowignore && !$this->_validateRole($file['attribs']['role'])) {
-                        return $this->_invalidFileRole($file['attribs']['name'],
-                            $list['attribs']['name'], $file['attribs']['role']);
-                    }
-                    $f = $file;
-                    unset($f['attribs']);
-                    if (count($f)) { // has tasks
-                        foreach ($f as $task => $value) {
-                            if ($tagClass = $this->getTask($task)) {
-                                if (!is_array($value) || !isset($value[0])) {
-                                    $value = array($value);
-                                }
-                                foreach ($value as $v) {
-                                    $ret = call_user_func(array($tagClass, 'validateXml'),
-                                        $this, $v, $this->_config, $file);
-                                    if (is_array($ret)) {
-                                        return $this->_invalidTask($task, $ret,
-                                            $file['attribs']['name']);
-                                    }
-                                }
-                            } else {
-                                $this->_unknownTask($task, $file['attribs']['name']);
-                            }
+                            $this->_unknownTask($task, $save['attribs']['name']);
                         }
                     }
                 }
@@ -2516,34 +2475,22 @@ http://pear.php.net/dtd/package-2.0.xsd',
             if (!$allowignore) {
                 $this->_ignoreNotAllowed();
             }
-            if (isset($list['ignore']['attribs'])) {
+            if (!isset($list['ignore'][0])) {
                 // single file
+                $list['ignore'] = array($list['ignore']);
+            }
+            foreach ($list['ignore'] as $i => $file) {
+                if (!isset($file['attribs'])) {
+                    return $this->_tagHasNoAttribs('ignore',
+                        '<dir name="' . $list['attribs']['name'] . '">');
+                }
                 if (!isset($list['ignore']['attribs'])) {
                     return $this->_tagHasNoAttribs('ignore',
                         '<dir name="' . $list['attribs']['name'] . '">');
                 }
-                if (!isset($list['ignore']['attribs']['name'])) {
+                if (!isset($file['attribs']['name'])) {
                     return $this->_tagMissingAttribute('ignore', 'name',
                         '<dir name="' . $list['attribs']['name'] . '">');
-                }
-            } else {
-                if (!is_array($list['ignore'])) {
-                    return $this->_tagHasNoAttribs('ignore',
-                        '<dir name="' . $list['attribs']['name'] . '">');
-                }
-                foreach ($list['ignore'] as $i => $file) {
-                    if (!is_int($i)) {
-                        return $this->_tagHasNoAttribs('ignore',
-                            '<dir name="' . $list['attribs']['name'] . '">');
-                    }
-                    if (!isset($file['attribs'])) {
-                        return $this->_tagHasNoAttribs('ignore',
-                            '<dir name="' . $list['attribs']['name'] . '">');
-                    }
-                    if (!isset($file['attribs']['name'])) {
-                        return $this->_tagMissingAttribute('ignore', 'name',
-                            '<dir name="' . $list['attribs']['name'] . '">');
-                    }
                 }
             }
         }
@@ -2726,7 +2673,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
     {
         $this->_stack->push(__FUNCTION__, 'error', array(
             'file' => $file, 'dir' => $dir, 'role' => $role,
-            'roles' => PEAR_Common::getFileRoles()),
+            'roles' => PEAR_Installer_Role::getValidRoles($this->getReleaseType())),
             'File "%file%" in directory "%dir%" has invalid role "%role%", should be one of %roles%');
     }
 
