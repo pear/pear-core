@@ -985,7 +985,7 @@ class PEAR_ChannelFile {
         }
 
         if (!isset($info['protocols']['xmlrpc']) || !isset($info['protocols']['xmlrpc']['functions'])) {
-            $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_XMLRPC);
+            $this->_validateWarning(PEAR_CHANNELFILE_ERROR_NO_XMLRPC);
         } else {
             $this->validateFunctions('xmlrpc', $info['protocols']['xmlrpc']['functions']);
         }
