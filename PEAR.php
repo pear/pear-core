@@ -812,7 +812,7 @@ class PEAR_Error
         $this->code      = $code;
         $this->mode      = $mode;
         $this->userinfo  = $userinfo;
-        if (function_exists("debug_backtrace")) {
+        if (function_exists("debug_backtrace") && !defined('PEAR_IGNORE_BACKTRACE')) {
             $this->backtrace = debug_backtrace();
         }
         if ($mode & PEAR_ERROR_CALLBACK) {
@@ -970,6 +970,9 @@ class PEAR_Error
      */
     function getBacktrace($frame = null)
     {
+        if (defined('PEAR_IGNORE_BACKTRACE')) {
+            return null;
+        }
         if ($frame === null) {
             return $this->backtrace;
         }

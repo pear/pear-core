@@ -98,6 +98,7 @@
   * upgrade suggested Archive_Tar version to 1.3.0
   * attempt to address memory issues
   * relax validation further
+  * disable debug_backtrace() in PEAR_Error constructor of PEAR installer
   * fix Bug #3808 channel packages with non-baseinstalldir files will conflict on upgrade
   * fix Bug #3801 [PATCH] analyzeSourceCode() reports PHP4 code as PHP5
   </notes>
