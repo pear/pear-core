@@ -77,6 +77,8 @@ class test_PEAR_Remote extends PEAR_Remote {
                 // check for channel.list, which is implicitly supported for the PEAR channel
                 return $this->raiseError("Channel $server_channel does not support xml-rpc method $method");
             }
+        } else {
+            return $this->raiseError("Unknown channel '$server_channel'");
         }
 
         array_unshift($_args, $channel); // cache by channel
@@ -208,8 +210,16 @@ class test_PEAR_Installer extends PEAR_Installer {
         if ($callback) {
             call_user_func($callback, 'setup', array(&$ui));
         }
-        if (preg_match('!^http://([^/:?#]*)(:(\d+))?(/.*)!', $url, $matches)) {
-            list(,$host,,$port,$path) = $matches;
+        $info = parse_url($url);
+        if (!isset($info['scheme']) || $info['scheme'] != 'http') {
+            return PEAR::raiseError('Cannot download non-http URL "' . $url . '"');
+        }
+        if (!isset($info['host'])) {
+            return PEAR::raiseError('Cannot download from non-URL "' . $url . '"');
+        } else {
+            $host = @$info['host'];
+            $port = @$info['port'];
+            $path = @$info['path'];
         }
         if (isset($this)) {
             $config = &$this->config;
@@ -324,8 +334,16 @@ class test_PEAR_Downloader extends PEAR_Downloader {
         if ($callback) {
             call_user_func($callback, 'setup', array(&$ui));
         }
-        if (preg_match('!^http://([^/:?#]*)(:(\d+))?(/.*)!', $url, $matches)) {
-            list(,$host,,$port,$path) = $matches;
+        $info = parse_url($url);
+        if (!isset($info['scheme']) || $info['scheme'] != 'http') {
+            return PEAR::raiseError('Cannot download non-http URL "' . $url . '"');
+        }
+        if (!isset($info['host'])) {
+            return PEAR::raiseError('Cannot download from non-URL "' . $url . '"');
+        } else {
+            $host = @$info['host'];
+            $port = @$info['port'];
+            $path = @$info['path'];
         }
         if (isset($this)) {
             $config = &$this->config;

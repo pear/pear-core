@@ -182,7 +182,7 @@ class PEAR_Downloader extends PEAR_Common
     function discover($channel)
     {
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-        $a = $this->downloadHttp($channel . '/channel.xml', $this->ui, System::mktemp());
+        $a = $this->downloadHttp('http://' . $channel . '/channel.xml', $this->ui, System::mktemp());
         PEAR::popErrorHandling();
         if (PEAR::isError($a)) {
             return false;
@@ -1264,8 +1264,16 @@ class PEAR_Downloader extends PEAR_Common
         if ($callback) {
             call_user_func($callback, 'setup', array(&$ui));
         }
-        if (preg_match('!^http://([^/:?#]*)(:(\d+))?(/.*)!', $url, $matches)) {
-            list(,$host,,$port,$path) = $matches;
+        $info = parse_url($url);
+        if (!isset($info['scheme']) || $info['scheme'] != 'http') {
+            return PEAR::raiseError('Cannot download non-http URL "' . $url . '"');
+        }
+        if (!isset($info['host'])) {
+            return PEAR::raiseError('Cannot download from non-URL "' . $url . '"');
+        } else {
+            $host = @$info['host'];
+            $port = @$info['port'];
+            $path = @$info['path'];
         }
         if (isset($this)) {
             $config = &$this->config;
