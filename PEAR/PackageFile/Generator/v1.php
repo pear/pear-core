@@ -386,7 +386,7 @@ class PEAR_PackageFile_Generator_v1
     function toPackageFile($where = null, $state = PEAR_VALIDATE_NORMAL, $name = 'package.xml',
                            $nofilechecking = false)
     {
-        if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING, $nofilechecking)) {
+        if (!$this->_packagefile->validate($state, $nofilechecking)) {
             return false;
         }
         include_once 'System.php';
