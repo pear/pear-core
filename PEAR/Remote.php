@@ -158,7 +158,7 @@ class PEAR_Remote extends PEAR
             return $this->raiseError("For this remote PEAR operation you need to install the XML_RPC package");
         }
         array_shift($args);
-        $server_host = $channel->getServer('xmlrpc');
+        $server_host = $channel->getServer();
         $username = $this->config->get('username');
         $password = $this->config->get('password');
         $eargs = array();
@@ -242,7 +242,7 @@ class PEAR_Remote extends PEAR
         array_shift($params);
         $method = str_replace("_", ".", $method);
         $request = xmlrpc_encode_request($method, $params);
-        $server_host = $channel->getServer('xmlrpc');
+        $server_host = $channel->getServer();
         if (empty($server_host)) {
             return $this->raiseError("PEAR_Remote::call: no master_server configured");
         }
