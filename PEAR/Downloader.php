@@ -1351,6 +1351,7 @@ class PEAR_Downloader extends PEAR_Common
         }
         $dest_file = $save_dir . DIRECTORY_SEPARATOR . $save_as;
         if (!$wp = @fopen($dest_file, 'wb')) {
+            fclose($fp);
             if ($callback) {
                 call_user_func($callback, 'writefailed', array($dest_file, $php_errormsg));
             }
