@@ -557,87 +557,66 @@ class PEAR_Dependency2
             } else {
                 if ($required) {
                     if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                        return $this->raiseError('%s requires package "' . $name . '"');
+                        return $this->raiseError('%s requires package "' . $name . '"' .
+                            $extra);
                     } else {
-                        return $this->warning('warning: %s requires package "' . $name . '"');
+                        return $this->warning('warning: %s requires package "' . $name . '"' .
+                            $extra);
                     }
                 } else {
-                    return $this->warning('%s can optionally use package "' . $name . '"');
-                }
-            }
-        }
-        if (isset($dep['min'])) {
-            if (!($installed || $downloaded) ||
-                  !version_compare($version, $dep['min'], '>=')) {
-                if ($required) {
-                    if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                        return $this->raiseError('%s requires package "' .
-                            $name . '" version ' . $dep['min'] .
-                            ' or greater');
-                    } else {
-                        return $this->warning('warning: %s requires package "' .
-                            $name . '" version ' . $dep['min'] .
-                            ' or greater');
-                    }
-                } else {
-                    return $this->warning('%s can optionally use package "' .
-                        $name . '" version ' . $dep['min'] .
-                        ' or greater');
-                }
-            }
-        }
-        if (isset($dep['max'])) {
-            if (!($installed || $downloaded) ||
-                  !version_compare($version, $dep['max'], '>=')) {
-                if ($required) {
-                    if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                        return $this->raiseError('%s requires package "' .
-                            $name . '" version ' . $dep['max'] .
-                            ' or less');
-                    } else {
-                        return $this->warning('%s requires package "' .
-                            $name . '" version ' . $dep['max'] .
-                            ' or less');
-                    }
-                } else {
-                    return $this->warning('warning: %s can optionally use package "' .
-                        $name . '" version ' . $dep['max'] .
-                        ' or less');
+                    return $this->warning('%s can optionally use package "' . $name . '"' .
+                        $extra);
                 }
             }
         }
         if (!$installed && !$downloaded) {
             if ($required) {
-                return $this->raiseError('%s dependency package ' . $name . ' is not installed, and was ' .
-                    'not downloaded');
+                if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
+                    return $this->raiseError('%s requires package "' . $name . '"' .
+                        $extra);
+                } else {
+                    return $this->warning('warning: %s requires package "' . $name . '"' .
+                        $extra);
+                }
+            } else {
+                return $this->warning('%s can optionally use package "' . $name . '"' .
+                    $extra);
+            }
+        }
+        if (isset($dep['min'])) {
+            if (version_compare($version, $dep['min'], '<')) {
+                if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
+                    return $this->raiseError('%s requires package "' . $name . '"' .
+                        $extra . ', installed version is ' . $version);
+                } else {
+                    return $this->warning('warning: %s requires package "' . $name . '"' .
+                        $extra . ', installed version is ' . $version);
+                }
+            }
+        }
+        if (isset($dep['max'])) {
+            if (version_compare($version, $dep['max'], '>')) {
+                if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
+                    return $this->raiseError('%s requires package "' . $name . '"' .
+                        $extra . ', installed version is ' . $version);
+                } else {
+                    return $this->warning('warning: %s requires package "' . $name . '"' .
+                        $extra . ', installed version is ' . $version);
+                }
             }
         }
         if (isset($dep['exclude'])) {
-            if (!is_array($dep['exclude'])) {
-                if (version_compare($version, $dep['exclude'], '==')) {
-                    if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
+            foreach ($dep['exclude'] as $exclude) {
+                if (version_compare($version, $exclude, '==')) {
+                    if (!isset($this->_options['nodeps']) &&
+                          !isset($this->_options['force'])) {
                         return $this->raiseError('%s is not compatible with package "' .
                             $name . '" version ' .
-                            $dep['exclude']);
+                            $exclude);
                     } else {
                         return $this->warning('warning: %s is not compatible with package "' .
                             $name . '" version ' .
-                            $dep['exclude']);
-                    }
-                }
-            } else {
-                foreach ($dep['exclude'] as $exclude) {
-                    if (version_compare($version, $exclude, '==')) {
-                        if (!isset($this->_options['nodeps']) &&
-                              !isset($this->_options['force'])) {
-                            return $this->raiseError('%s is not compatible with package "' .
-                                $name . '" version ' .
-                                $exclude);
-                        } else {
-                            return $this->warning('warning: %s is not compatible with package "' .
-                                $name . '" version ' .
-                                $exclude);
-                        }
+                            $exclude);
                     }
                 }
             }
