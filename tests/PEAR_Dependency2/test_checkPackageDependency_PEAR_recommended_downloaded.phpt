@@ -14,39 +14,59 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
     array(array('package' => 'foo', 'channel' => 'pear.php.net'), 'stable'),
     array('version' => '1.10',
           'info' =>
-          array(
-            'channel' => 'pear.php.net',
-            'package' => 'foo',
-            'license' => 'PHP License',
-            'summary' => 'Main Package',
-            'description' => 'Main Package',
-            'releasedate' => '2003-12-06 00:26:42',
-            'state' => 'stable',
-            'apiversion' => '1.0',
-            'xsdversion' => '2.0',
-            'compatible' =>
-            array(
-                'name' => 'mine',
-                'channel' => 'pear.php.net',
-                'min' => '0.9',
-                'max' => '2.0',
-            ),
-            'deps' =>
-            array(
-                'required' =>
-                array(
-                    'php' =>
-                    array(
-                        'min' => '4.2',
-                        'max' => '6.0.0',
-                        ),
-                    'pearinstaller' =>
-                    array(
-                        'min' => '1.4.0dev13',
-                        ),
-                ),
-            ),
-          ),
+          '<?xml version="1.0"?>
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+ <name>foo</name>
+ <channel>pear.php.net</channel>
+ <summary>PEAR Base System</summary>
+ <description>The PEAR package contains:
+ </description>
+ <lead>
+  <name>Greg Beaver</name>
+  <user>cellog</user>
+  <email>cellog@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2005-01-01</date>
+ <version>
+  <release>1.10</release>
+  <api>1.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+ <notes>
+  This is a major milestone release for PEAR.  In addition to several killer features,
+ </notes>
+ <contents>
+  <dir name="/">
+   <file name="template.spec" role="data" />
+  </dir> <!-- / -->
+ </contents>
+ <compatible>
+  <name>mine</name>
+  <channel>pear.php.net</channel>
+  <min>0.9</min>
+  <max>2.0</max>
+ </compatible>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.2</min>
+    <max>6.0.0</max>
+   </php>
+   <pearinstaller>
+    <min>1.4.0dev13</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease/>
+</package>',
           'url' => 'http://www.example.com/main-1.0'));
 $dep = &new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_DOWNLOADING);
@@ -133,7 +153,12 @@ $result = $dep->validatePackageDependency(
         'recommended' => '1.8'
     ), true, $params);
 $phpunit->assertNoErrors('compatible local works');
-$phpunit->assertEquals(array(), $fakelog->getLog(), 'compatible local works log');
+$phpunit->assertEquals(array(
+  array (
+    0 => 3,
+    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
+  ),
+), $fakelog->getLog(), 'compatible local works log');
 $phpunit->assertTrue($result, 'compatible local works');
 echo 'tests done';
 ?>
