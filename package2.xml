@@ -210,8 +210,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <file name="System.php" role="php" />
    <file name="template.spec" role="data" />
   </dir> <!-- / -->
- </contents>   <install as="pear" name="scripts/pear.sh" />
-
+ </contents>
  <dependencies>
   <required>
    <php>
