@@ -30,6 +30,9 @@ $pf->setDate('2004-11-17');
 $pf->setNotes('sum');
 $pf->addMaintainer('lead', 'cellog', 'Greg Beaver', 'cellog@php.net');
 $pf->addFile('', 'foo.php', array('role' => 'php'));
+$pf->resetFilelist();
+$pf->installedFile('foo.php', array('role' => 'php'));
+$pf->setInstalledAs('foo.php', $php_dir . DIRECTORY_SEPARATOR . 'foo.php');
 $ret = $reg->addPackage2($pf);
 $phpunit->assertErrors(array(
 array('package' => 'PEAR_PackageFile_v1', 'message' => 'Missing Package Name'),
@@ -64,6 +67,9 @@ $pf2->setLicense('PHP License');
 $pf2->setLogger($fakelog);
 $pf2->clearContents();
 $pf2->addFile('', 'foor.php', array('role' => 'php'));
+$pf2->resetFilelist();
+$pf2->installedFile('foor.php', array('attribs' => array('role' => 'php')));
+$pf2->setInstalledAs('foor.php', $php_dir . DIRECTORY_SEPARATOR . 'foor.php');
 $pf2->addMaintainer('lead', 'cellog', 'Greg Beaver', 'cellog@php.net');
 $pf2->setNotes('blah');
 $pf2->setPearinstallerDep('1.4.0a1');
