@@ -987,8 +987,10 @@ class PEAR_ChannelFile {
             } else {
                 return false;
             }
+            $server = $mirror;
         } else {
             $rest = $this->_channelInfo['servers']['primary']['rest'];
+            $server = $this->getServer();
         }
         if (!isset($rest['baseurl'][0])) {
             $rest['baseurl'] = array($rest['baseurl']);
@@ -1064,9 +1066,9 @@ class PEAR_ChannelFile {
                 $this->addFunction('xmlrpc', '1.1', 'package.getDepDownloadURL', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.search', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'channel.listAll', $mirror);
-//                $this->setBaseURL('package', 'http://' . $this->getName() . '/rest/1.0/package');
-//                $this->setBaseURL('category', 'http://' . $this->getName() . '/rest/1.0/category');
-//                $this->setBaseURL('maintainer', 'http://' . $this->getName() . '/rest/1.0/maintainer');
+//                $this->setBaseURL('package', 'rest/1.0/package');
+//                $this->setBaseURL('category', 'rest/1.0/category');
+//                $this->setBaseURL('maintainer', 'rest/1.0/maintainer');
                 return true;
             break;
             default :
