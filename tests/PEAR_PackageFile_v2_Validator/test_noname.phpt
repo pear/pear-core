@@ -17,6 +17,11 @@ $pf->validate();
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <package>, found <channel> expected one of "name"'),
 ), 'no name');
+$pf->setPackage('');
+$pf->validate();
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => '<name> cannot be empty (<name/>)'),
+), 'empty name');
 echo 'tests done';
 ?>
 --EXPECT--
