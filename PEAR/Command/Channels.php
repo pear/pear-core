@@ -388,8 +388,8 @@ List the files in an installed package.
                             }
                         }
                         if ($soaps) {
-                            if (!isset($soap[0])) {
-                                $soap = array($soap);
+                            if (!isset($soaps[0])) {
+                                $soaps = array($soaps);
                             }
                             foreach ($soaps as $protocol) {
                                 $data['data'][] = array('soap', $protocol['attribs']['version'],
