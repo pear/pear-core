@@ -138,6 +138,7 @@ class PEAR_Registry extends PEAR
     function setConfig(&$config)
     {
         $this->_config = &$config;
+        $config->setChannels($this->listChannels(), true);
     }
 
     function _initializeChannelDirs()

@@ -249,7 +249,7 @@ class PEAR_Config extends PEAR
      * @var array
      * @access private
      */
-    var $_channels = array('pear.php.net');
+    var $_channels = array('pear.php.net', '__uri');
 
     /**
      * This variable is used to control the directory values returned
@@ -1197,14 +1197,19 @@ class PEAR_Config extends PEAR
      *
      * This should be set via a call to {@link PEAR_Registry::listChannels()}
      * @param array
+     * @param bool
      * @return bool success of operation
      */
-    function setChannels($channels)
+    function setChannels($channels, $merge = false)
     {
         if (!is_array($channels)) {
             return false;
         }
-        $this->_channels = $channels;
+        if ($merge) {
+            $this->_channels = array_merge($this->_channels, $channels);
+        } else {
+            $this->_channels = $channels;
+        }
         foreach ($channels as $channel) {
             $channel = strtolower($channel);
             if ($channel == 'pear.php.net') {
