@@ -176,7 +176,7 @@ class PEAR_Remote extends PEAR
             $proxy_user = @urldecode(@$proxy['user']);
             $proxy_pass = @urldecode(@$proxy['pass']);
         }
-        $c = new XML_RPC_Client($channel->getPath() . $channel->getFileName()
+        $c = new XML_RPC_Client($channel->getPath('xmlrpc') . $channel->getFileName('xmlrpc')
             .$maxAge, $server_host, 80, $proxy_host, $proxy_port, $proxy_user, $proxy_pass);
         if ($username && $password) {
             $c->setCredentials($username, $password);
@@ -304,7 +304,7 @@ class PEAR_Remote extends PEAR
             $post_string = "POST ";
         }
 
-        $path = $channel->getPath() . $channel->getFileName();
+        $path = $channel->getPath('xmlrpc') . $channel->getFileName('xmlrpc');
         fwrite($fp, ($post_string . $path . "$maxAge HTTP/1.0\r\n$req_headers\r\n$request"));
         $response = '';
         $line1 = fgets($fp, 2048);
