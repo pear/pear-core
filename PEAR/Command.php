@@ -135,13 +135,16 @@ class PEAR_Command
     /**
      * Get instance of frontend object.
      *
-     * @return object
+     * @return object|PEAR_Error
      * @static
      */
     function &getFrontendObject()
     {
         if (empty($GLOBALS['_PEAR_Command_uiobject'])) {
-            $GLOBALS['_PEAR_Command_uiobject'] = &new $GLOBALS['_PEAR_Command_uiclass'];
+            $e = PEAR_Command::setFrontendClass($GLOBALS['_PEAR_Command_uiclass']);
+            if (PEAR::isError($e)) {
+                return $e;
+            }
         }
         return $GLOBALS['_PEAR_Command_uiobject'];
     }
