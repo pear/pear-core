@@ -304,7 +304,11 @@ class PEAR_Downloader_Package
             // get requested dependency group, if any
             $groupname = $this->getGroup();
             if (!$groupname) {
-                $groupname = 'default'; // try the default dependency group
+                if ($this->canDefault()) {
+                    $groupname = 'default'; // try the default dependency group
+                } else {
+                    return;
+                }
                 $explicit = false;
             } else {
                 $explicit = true;
@@ -405,6 +409,9 @@ class PEAR_Downloader_Package
                     $version);
                 return false;
             }
+        }
+        if (isset($dep['nodefault'])) {
+            $ret['nodefault'] = true;
         }
         return $ret;
     }
@@ -521,6 +528,16 @@ class PEAR_Downloader_Package
     function getDownloadURL()
     {
         return $this->_downloadURL;
+    }
+
+    function canDefault()
+    {
+        if (isset($this->_downloadURL)) {
+            if (isset($this->_downloadURL['nodefault'])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     function getPackage()
