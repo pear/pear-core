@@ -146,6 +146,7 @@ Installer:
       <file role="php" name="Ext.php"/>
       <file role="php" name="Php.php"/>
       <file role="php" name="Script.php"/>
+      <file role="php" name="Src.php"/>
       <file role="php" name="Test.php"/>
      </dir>
      <file role="php" name="Role.php"/>

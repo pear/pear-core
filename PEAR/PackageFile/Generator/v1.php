@@ -561,8 +561,11 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $temp = array();
         $arr['contents'] = $this->_convertFilelist2_0($temp);
         $this->_convertDependencies2_0($arr);
-        $release = $this->_packagefile->getConfigureOptions() ?
+        $release = ($this->_packagefile->getConfigureOptions() || $this->_isExtension) ?
             'extsrcrelease' : 'phprelease';
+        if ($release == 'extsrcrelease') {
+            $arr['providesextension'] = strtolower($arr['name']); // assumption
+        }
         $arr[$release] = array();
         $this->_convertRelease2_0($arr[$release], $temp);
         if ($cl = $this->_packagefile->getChangelog()) {
@@ -718,8 +721,12 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $package['osmap'] =
         $package['notosmap'] =
         $package['install-as'] = array();
+        $this->_isExtension = false;
         foreach ($this->_packagefile->getFilelist() as $name => $file) {
             $file['name'] = $name;
+            if ($file['role'] == 'src') {
+                $this->_isExtension = true;
+            }
             if (isset($file['replacements'])) {
                 $repl = $file['replacements'];
                 unset($file['replacements']);

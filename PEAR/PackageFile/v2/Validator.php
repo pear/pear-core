@@ -114,7 +114,7 @@ class PEAR_PackageFile_v2_Validator
         if (empty($this->_packageInfo['summary'])) {
             $this->_tagCannotBeEmpty('summary');
         }
-        if (empty($this->_packageInfo['summary'])) {
+        if (empty($this->_packageInfo['description'])) {
             $this->_tagCannotBeEmpty('description');
         }
         if (empty($this->_packageInfo['date'])) {
