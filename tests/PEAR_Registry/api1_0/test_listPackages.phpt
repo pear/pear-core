@@ -5,23 +5,19 @@ PEAR_Registry->listPackages() v1.0
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
-$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'registry_tester';
-if (file_exists($statedir)) {
-    // don't delete existing directories!
-    echo 'skip';
-}
 ?>
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $phpunit->assertRegEquals('dumping registry...
 channel pear.php.net:
+channel __uri:
 dump done
 ', $reg, 'Initial dump is incorrect');
 $phpunit->assertEquals(array (
 ), $reg->listPackages(), 'list packages initial');
 
-$phpunit->assertTrue($reg->addPackage("pkg1", array("name" => "pkg1", "version" => "1.0", "filelist" => $files1)), 'add pkg1 return');
+$phpunit->assertTrue($reg->addPackage("pkg1", array("name" => "pkg1", "version" => "1.0", "filelist" => $files1, 'maintainers' => array())), 'add pkg1 return');
 
 $subreg = new PEAR_Registry($statedir);
 $phpunit->assertEquals(array (
@@ -31,8 +27,8 @@ $phpunit->assertEquals(array (
   0 => 'pkg1',
 ), $subreg->listPackages(), 'list packages after adding pkg1, new object');
 
-$phpunit->assertTrue($reg->addPackage("pkg2", array("name" => "pkg2", "version" => "2.0", "filelist" => $files2)), 'add pkg2 return');
-$phpunit->assertTrue($reg->addPackage("pkg3", array("name" => "pkg3", "version" => "3.0", "filelist" => $files3)), 'add pkg3 return');
+$phpunit->assertTrue($reg->addPackage("pkg2", array("name" => "pkg2", "version" => "2.0", "filelist" => $files2, 'maintainers' => array())), 'add pkg2 return');
+$phpunit->assertTrue($reg->addPackage("pkg3", array("name" => "pkg3", "version" => "3.0", "filelist" => $files3, 'maintainers' => array())), 'add pkg3 return');
 
 $phpunit->assertEquals(array (
   0 => 'pkg1',
