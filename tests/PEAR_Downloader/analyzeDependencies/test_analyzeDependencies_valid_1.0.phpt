@@ -9,10 +9,14 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$mainpackage = dirname(dirname(__FILE__))  . DIRECTORY_SEPARATOR .
-    'test_mergeDependencies'. DIRECTORY_SEPARATOR . 'mainold-1.1.tgz';
-$requiredpackage = dirname(dirname(__FILE__))  . DIRECTORY_SEPARATOR .
-    'test_mergeDependencies'. DIRECTORY_SEPARATOR . 'required-1.1.tgz';
+
+$_test_dep->setPhpversion('4.3');
+$_test_dep->setPEARVersion('1.4.0dev13');
+
+$mainpackage = dirname(__FILE__) . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'mainold-1.1.tgz';
+$requiredpackage = dirname(__FILE__) . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'required-1.1.tgz';
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/mainold-1.1.tgz', $mainpackage);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/required-1.1.tgz', $requiredpackage);
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
@@ -117,7 +121,7 @@ $dp->detectDependencies($params);
 PEAR_Downloader_Package::mergeDependencies($params);
 $phpunit->assertNoErrors('setup');
 
-$err = test_PEAR_Downloader_Package::analyzeDependencies($params);
+$err = $dp->_downloader->analyzeDependencies($params);
 $phpunit->assertNoErrors('end');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'end log');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');

@@ -77,6 +77,10 @@ class PEAR_Downloader_Package
      */
     var $_valid = false;
     /**
+     * @var boolean
+     */
+    var $_analyzed = false;
+    /**
      * Package type local|url|xmlrpc
      * @var string
      */
@@ -90,7 +94,7 @@ class PEAR_Downloader_Package
         $this->_downloader = &$downloader;
         $this->_config = &$this->_downloader->config;
         $this->_registry = &$this->_config->getRegistry();
-        $this->_valid = false;
+        $this->_valid = $this->_analyzed = false;
     }
 
     function initialize($param)
@@ -148,7 +152,18 @@ class PEAR_Downloader_Package
                 return $err;
             }
         }
+        $this->_type = 'local';
         return $this->_packagefile;
+    }
+
+    function isAnalyzed()
+    {
+        return $this->_analyzed;
+    }
+
+    function setAnalyzed()
+    {
+        return $this->_analyzed;
     }
 
     function &getPackageFile()
@@ -263,6 +278,7 @@ class PEAR_Downloader_Package
                         unset($dep['package']);
                     }
                     if (!($ret = $this->_detect2Dep($dep, $pname, 'optional', $params))) {
+                        $dep['package'] = $dep['name'];
                         if (@$skipnames[count($skipnames) - 1] ==
                               $this->_registry->parsedPackageNameToString($dep)) {
                             array_pop($skipnames);
@@ -631,138 +647,6 @@ class PEAR_Downloader_Package
     {
         $z = &new PEAR_Dependency2($c, $i, $p, $s);
         return $z;
-    }
-
-    /**
-     * @param array all packages to be installed
-     * @static
-     */
-    function analyzeDependencies($params)
-    {
-        foreach ($params as $param) {
-            $deps = $param->getDeps();
-            if (count($deps)) {
-                $depchecker = &$param->getDependency2Object($param->_config,
-                    $param->_downloader->getOptions(), $param->getParsedPackage(),
-                    PEAR_VALIDATE_DOWNLOADING);
-                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-                if ($param->getType() == 'xmlrpc') {
-                    $send = $param->getDownloadURL();
-                } else {
-                    $send = $param->getPackageFile();
-                }
-                $installcheck = $depchecker->validatePackage($send,
-                    $param->_downloader);
-                if (PEAR::isError($installcheck)) {
-                    $failed = true;
-                    $param->_downloader->log(0, $installcheck->getMessage());
-                    continue;
-                }
-                $failed = false;
-                if (isset($deps['required'])) {
-                    foreach ($deps['required'] as $type => $dep) {
-                        if (!isset($dep[0])) {
-                            if (PEAR::isError($e =
-                                  $depchecker->{"validate{$type}Dependency"}($dep,
-                                  true, $params))) {
-                                $failed = true;
-                                $param->_downloader->log(0, $e->getMessage());
-                            } elseif (is_array($e)) {
-                                $param->_downloader->log(0, $e[0]);
-                            }
-                        } else {
-                            foreach ($dep as $d) {
-                                if (PEAR::isError($e =
-                                      $depchecker->{"validate{$type}Dependency"}($d,
-                                      true, $params))) {
-                                    $failed = true;
-                                    $param->_downloader->log(0, $e->getMessage());
-                                } elseif (is_array($e)) {
-                                    $param->_downloader->log(0, $e[0]);
-                                }
-                            }
-                        }
-                    }
-                    if (isset($deps['optional'])) {
-                        foreach ($deps['optional'] as $type => $dep) {
-                            if (!isset($dep[0])) {
-                                if (PEAR::isError($e =
-                                      $depchecker->{"validate{$type}Dependency"}($dep,
-                                      false, $params))) {
-                                    $failed = true;
-                                    $param->_downloader->log(0, $e->getMessage());
-                                } elseif (is_array($e)) {
-                                    $param->_downloader->log(0, $e[0]);
-                                }
-                            } else {
-                                foreach ($dep as $d) {
-                                    if (PEAR::isError($e =
-                                          $depchecker->{"validate{$type}Dependency"}($d,
-                                          false, $params))) {
-                                        $failed = true;
-                                        $param->_downloader->log(0, $e->getMessage());
-                                    } elseif (is_array($e)) {
-                                        $param->_downloader->log(0, $e[0]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    $groupname = $param->getGroup();
-                    if (isset($deps['group']) && $groupname) {
-                        if (!isset($deps['group'][0])) {
-                            $deps['group'] = array($deps['group']);
-                        }
-                        $found = false;
-                        foreach ($deps['group'] as $group) {
-                            if ($group['attribs']['name'] == $groupname) {
-                                $found = true;
-                                break;
-                            }
-                        }
-                        if ($found) {
-                            unset($group['attribs']);
-                            foreach ($group as $type => $dep) {
-                                if (!isset($dep[0])) {
-                                    if (PEAR::isError($e =
-                                          $depchecker->{"validate{$type}Dependency"}($dep,
-                                          false, $params))) {
-                                        $failed = true;
-                                        $param->_downloader->log(0, $e->getMessage());
-                                    } elseif (is_array($e)) {
-                                        $param->_downloader->log(0, $e[0]);
-                                    }
-                                } else {
-                                    foreach ($dep as $d) {
-                                        if (PEAR::isError($e =
-                                              $depchecker->{"validate{$type}Dependency"}($d,
-                                              false, $params))) {
-                                            $failed = true;
-                                            $param->_downloader->log(0, $e->getMessage());
-                                        } elseif (is_array($e)) {
-                                            $param->_downloader->log(0, $e[0]);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    foreach ($deps as $dep) {
-                        if (PEAR::isError($e = $depchecker->validateDependency1($dep, $params))) {
-                            $failed = true;
-                            $param->_downloader->log(0, $e->getMessage());
-                        } elseif (is_array($e)) {
-                            $param->_downloader->log(0, $e[0]);
-                        }
-                    }
-                }
-                PEAR::staticPopErrorHandling();
-                if ($failed) {
-                    return PEAR::raiseError("Cannot install, dependencies failed");
-                }
-            }
-        }
     }
 
     /**

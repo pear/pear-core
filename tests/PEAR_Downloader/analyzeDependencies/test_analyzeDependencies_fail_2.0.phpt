@@ -9,14 +9,18 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$mainpackage = dirname(dirname(__FILE__))  . DIRECTORY_SEPARATOR .
-    'test_mergeDependencies'. DIRECTORY_SEPARATOR . 'main-1.0.tgz';
-$requiredpackage = dirname(dirname(__FILE__))  . DIRECTORY_SEPARATOR .
-    'test_mergeDependencies'. DIRECTORY_SEPARATOR . 'required-1.1.tgz';
-$sub1package = dirname(dirname(__FILE__))  . DIRECTORY_SEPARATOR .
-    'test_mergeDependencies'. DIRECTORY_SEPARATOR . 'sub1-1.1.tgz';
-$sub2package = dirname(dirname(__FILE__))  . DIRECTORY_SEPARATOR .
-    'test_mergeDependencies'. DIRECTORY_SEPARATOR . 'sub2-1.1.tgz';
+
+$_test_dep->setPhpversion('4.0');
+$_test_dep->setPEARVersion('1.4.0dev13');
+
+$mainpackage = dirname(__FILE__) . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'main-1.0.tgz';
+$requiredpackage = dirname(__FILE__) . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'required-1.1.tgz';
+$sub1package = dirname(__FILE__) . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'sub1-1.1.tgz';
+$sub2package = dirname(__FILE__) . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'sub2-1.1.tgz';
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/main-1.0.tgz', $mainpackage);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/required-1.1.tgz', $requiredpackage);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/sub1-1.0.tgz', $sub1package);
@@ -89,6 +93,10 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
           ),
           'url' => 'http://www.example.com/main-1.0'));
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
+    array('2.0', array('name' => 'optional', 'channel' => 'pear.php.net', 'min' => '1.1'),
+        array('channel' => 'pear.php.net', 'package' => 'main', 'version' => '1.0'), 'stable'),
+    false);
+$GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
     array('2.0', array('name' => 'required', 'channel' => 'pear.php.net', 'min' => '1.1'),
         array('channel' => 'pear.php.net', 'package' => 'main', 'version' => '1.0'), 'stable'),
     false);
@@ -120,6 +128,7 @@ $phpunit->assertNoErrors('after create 1');
 $params = array(&$dp);
 $dp->detectDependencies($params);
 $phpunit->assertNoErrors('after detect');
+$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -128,10 +137,15 @@ $phpunit->assertEquals(array (
   ),
   1 => 
   array (
-    0 => 1,
-    1 => 'Notice: package "pear.php.net/main" optional dependency "pear.php.net/optional" will not be automatically downloaded, use --alldeps to automatically download optional dependencies',
+    0 => 3,
+    1 => 'Notice: package "pear.php.net/main" optional dependency "pear.php.net/optional" will not be automatically downloaded',
   ),
   2 => 
+  array (
+    0 => 0,
+    1 => 'No releases for package "channel://pear.php.net/optional" exist, cannot download "dependency"',
+  ),
+  3 => 
   array (
     0 => 0,
     1 => 'No releases for package "channel://pear.php.net/sub2" exist, cannot download "dependency"',
@@ -142,28 +156,31 @@ $phpunit->assertEquals(1, count($params), 'detectDependencies');
 $result = PEAR_Downloader_Package::mergeDependencies($params);
 $phpunit->assertNoErrors('after merge 1');
 
-$err = test_PEAR_Downloader_Package::analyzeDependencies($params);
-$phpunit->assertNoErrors('end');
+$err = $dp->_downloader->analyzeDependencies($params);
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' =>
+        'Cannot install, dependencies failed')
+), 'end');
 $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/main-1.0 requires PHP version 4.2 or greater',
+    1 => 'channel://pear.php.net/main-1.0 requires PHP (version >= 4.2, version <= 6.0.0), installed version is 4.0',
   ),
   1 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/main-1.0 requires package "channel://pear.php.net/required" version 1.1 or greater',
+    1 => 'channel://pear.php.net/main-1.0 requires package "channel://pear.php.net/required" (version >= 1.1)',
   ),
   2 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/main-1.0 can optionally use package "channel://pear.php.net/optional" version 1.1 or greater',
+    1 => 'channel://pear.php.net/main-1.0 can optionally use package "channel://pear.php.net/optional" (version >= 1.1)',
   ),
   3 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/main-1.0 can optionally use package "channel://pear.php.net/sub2" version 1.1 or greater',
+    1 => 'channel://pear.php.net/main-1.0 can optionally use package "channel://pear.php.net/sub2" (version >= 1.1)',
   ),
 ), $fakelog->getLog(), 'end log');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');

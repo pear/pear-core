@@ -9,10 +9,14 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$mainpackage = dirname(dirname(__FILE__))  . DIRECTORY_SEPARATOR .
-    'test_mergeDependencies'. DIRECTORY_SEPARATOR . 'mainold-1.1.tgz';
-$requiredpackage = dirname(dirname(__FILE__))  . DIRECTORY_SEPARATOR .
-    'test_mergeDependencies'. DIRECTORY_SEPARATOR . 'required-1.1.tgz';
+
+$_test_dep->setPhpversion('4.0');
+$_test_dep->setPEARVersion('1.4.0dev13');
+
+$mainpackage = dirname(__FILE__) . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'mainold-1.1.tgz';
+$requiredpackage = dirname(__FILE__) . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'required-1.1.tgz';
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/mainold-1.1.tgz', $mainpackage);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/required-1.1.tgz', $requiredpackage);
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
@@ -122,33 +126,40 @@ $dp->detectDependencies($params);
 PEAR_Downloader_Package::mergeDependencies($params);
 $phpunit->assertNoErrors('setup');
 
-$checker = &test_PEAR_Dependency2::singleton();
-$checker->setExtensions(array('bar' => '1.0'));
-$err = test_PEAR_Downloader_Package::analyzeDependencies($params);
-$phpunit->assertNoErrors('end');
+$_test_dep->setExtensions(array('bar' => '1.0'));
+$err = $dp->_downloader->analyzeDependencies($params);
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' =>
+        'Cannot install, dependencies failed')
+), 'end');
 $phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
-    0 => 0,
-    1 => 'Notice: package "pear.php.net/mainold" optional dependency "channel://pear.php.net/optional" will not be automatically downloaded, use --alldeps to automatically download required and optional dependencies',
+    0 => 3,
+    1 => 'Notice: package "pear.php.net/mainold" optional dependency "channel://pear.php.net/optional" will not be automatically downloaded',
   ),
   1 => 
   array (
-    0 => 0,
-    1 => 'Notice: package "pear.php.net/mainold" required dependency "channel://pear.php.net/required" will not be automatically downloaded, use --alldeps to automatically download required and optional dependencies, --onlyreqdeps to automatically download only required dependencies',
+    0 => 3,
+    1 => 'Notice: package "pear.php.net/mainold" required dependency "channel://pear.php.net/required" will not be automatically downloaded',
   ),
   2 => 
   array (
-    0 => 0,
-    1 => 'channel://pear.php.net/mainold-1.1 can optionally use package "channel://pear.php.net/optional" version 1.1 or greater',
+    0 => 1,
+    1 => 'Did not download dependencies: channel://pear.php.net/optional, channel://pear.php.net/required, use --alldeps or --onlyreqdeps to download automatically',
   ),
   3 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/mainold-1.1 requires package "channel://pear.php.net/required" version 1.1 or greater',
+    1 => 'channel://pear.php.net/mainold-1.1 can optionally use package "channel://pear.php.net/optional" (version >= 1.1)',
   ),
   4 => 
+  array (
+    0 => 0,
+    1 => 'channel://pear.php.net/mainold-1.1 requires package "channel://pear.php.net/required" (version >= 1.1)',
+  ),
+  5 => 
   array (
     0 => 0,
     1 => 'channel://pear.php.net/mainold-1.1 requires PHP extension "foo"',
@@ -159,17 +170,17 @@ $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');
 $dp = newFakeDownloaderPackage(array('nodeps' => true));
 $result = $dp->initialize('mainold');
 $phpunit->assertNoErrors('after create 2');
-$err = test_PEAR_Downloader_Package::analyzeDependencies($params);
+$err = $dp->_downloader->analyzeDependencies($params);
 $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/mainold-1.1 can optionally use package "channel://pear.php.net/optional" version 1.1 or greater',
+    1 => 'channel://pear.php.net/mainold-1.1 can optionally use package "channel://pear.php.net/optional" (version >= 1.1)',
   ),
   1 => 
   array (
     0 => 0,
-    1 => 'warning: channel://pear.php.net/mainold-1.1 requires package "channel://pear.php.net/required" version 1.1 or greater',
+    1 => 'warning: channel://pear.php.net/mainold-1.1 requires package "channel://pear.php.net/required" (version >= 1.1)',
   ),
   2 => 
   array (
