@@ -1383,18 +1383,7 @@ class PEAR_Registry extends PEAR
         $saveparam = $param;
         if (is_array($param)) {
             // convert to string for error messages
-            $saveparam = '';
-            if (isset($param['channel'])) {
-                $saveparam = $param['channel'] . '/';
-            }
-            $saveparam .= $param['package'];
-            if (isset($param['state']) || isset($param['version'])) {
-                $saveparam .= '-'. (isset($param['state']) ? $param['state'] :
-                    $param['version']);
-            }
-            if (isset($param['group'])) {
-                $saveparam .= '#' . $param['group'];
-            }
+            $saveparam = $this->parsedPackageNameToString($param);
             // process the array
             if (!isset($param['package'])) {
                 return PEAR::raiseError('parsePackageName(): array $param ' .
@@ -1433,6 +1422,9 @@ class PEAR_Registry extends PEAR
                 );
             if (isset($components['host'])) {
                 $param['channel'] = $components['host'];
+            }
+            if (isset($components['fragment'])) {
+                $param['group'] = $components['fragment'];
             }
             if (isset($components['user'])) {
                 $param['user'] = $components['user'];

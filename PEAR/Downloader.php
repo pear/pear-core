@@ -301,6 +301,13 @@ class PEAR_Downloader extends PEAR_Common
     }
 
     // }}}
+    // {{{ setOptions()
+    function getOptions()
+    {
+        return $this->_options;
+    }
+
+    // }}}
     // {{{ _downloadFile()
     /**
      * @param string filename to download
