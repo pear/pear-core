@@ -1091,12 +1091,29 @@ class PEAR_PackageFile_v2
     }
 
     /**
+     * @param string relative path of the bundled package.
+     */
+    function addBundledPackage($path)
+    {
+        if ($this->getPackageType() != 'bundle') {
+            return false;
+        }
+        $this->_mergeTag($this->_packageInfo, $path, array(
+                'contents' => array('compatible', 'dependencies', 'phprelease', 'extsrcrelease',
+                    'extbinrelease', 'bundle', 'changelog'),
+                'bundledpackage' => array()));
+    }
+
+    /**
      * @param string path to the file
      * @param string filename
      * @param array extra attributes
      */
     function addFile($dir, $file, $attrs)
     {
+        if ($this->getPackageType() == 'bundle') {
+            return false;
+        }
         $this->_isValid = 0;
         $dir = preg_replace(array('!\\\\+!', '!/!'), '/', $dir);
         if ($dir == '/' || $dir == '') {
