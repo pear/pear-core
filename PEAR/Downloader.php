@@ -72,6 +72,7 @@ class PEAR_Downloader extends PEAR_Common
      *  - alldeps       : install all dependencies, including optional
      *  - installroot   : base relative path to install files in
      *  - force         : force a download even if warnings would prevent it
+     *  - nocompress    : download uncompressed tarballs
      * @see PEAR_Command_Install
      * @access private
      * @var array
@@ -463,6 +464,11 @@ class PEAR_Downloader extends PEAR_Common
         return $this->_downloadDir = $downloaddir;
     }
 
+    function setDownloadDir($dir)
+    {
+        $this->_downloadDir = $dir;
+    }
+
     // }}}
     // {{{ configSet()
     function configSet($key, $value, $layer = 'user', $channel = false)
@@ -511,7 +517,7 @@ class PEAR_Downloader extends PEAR_Common
         if (isset($url['__PEAR_ERROR_CLASS__'])) {
             return PEAR::raiseError($url['message']);
         }
-        if (!extension_loaded("zlib")) {
+        if (!extension_loaded("zlib") || isset($this->_options['nocompress'])) {
             $ext = '.tar';
         } else {
             $ext = '.tgz';
