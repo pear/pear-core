@@ -385,10 +385,11 @@ package if needed.
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($info)) {
                 $pkg = &$param->getPackageFile();
-                if ($info->getCode() != PEAR_INSTALLER_NOBINARY &&
-                      !$pkg->installBinary($this->installer)) {
-                    $this->ui->outputData('ERROR: ' .$info->getMessage());
-                    continue;
+                if ($info->getCode() != PEAR_INSTALLER_NOBINARY) {
+                    if (!($info = $pkg->installBinary($this->installer))) {
+                        $this->ui->outputData('ERROR: ' .$info->getMessage());
+                        continue;
+                    }
                 }
             }
             if (is_array($info)) {
