@@ -119,7 +119,9 @@ class PEAR_Downloader_Package
                                 $this->_downloader->log(0, $err);
                             }
                         }
-                        return PEAR::raiseError($origErr);
+                        $this->_downloader->log(0, $origErr->getMessage());
+                        return PEAR::raiseError(
+                            "Cannot initialize '$param', invalid or missing package file");
                     } else {
                         return PEAR::raiseError($err);
                     }
