@@ -77,12 +77,12 @@ class PEAR_Command_Install extends PEAR_Command_Common
                     'doc' => 'install all required dependencies',
                     ),
                 'remoteconfig' => array(
-                    'shortopt' => 'rc',
+                    'shortopt' => 'F',
                     'arg' => 'URL',
                     'doc' => 'also install to ftp site using remote config file (ftp://host.com/pear.conf)'
                     ),
                 'offline' => array(
-                    'shortopt' => 'ol',
+                    'shortopt' => 'O',
                     'doc' => 'do not attempt to download any urls or contact channels',
                     ),
                 ),
@@ -155,12 +155,12 @@ four ways of specifying packages.
                     'doc' => 'install all required dependencies',
                     ),
                 'remoteconfig' => array(
-                    'shortopt' => 'rc',
+                    'shortopt' => 'F',
                     'arg' => 'URL',
                     'doc' => 'also upgrade on ftp site using remote config file (ftp://host.com/pear.conf)'
                     ),
                 'offline' => array(
-                    'shortopt' => 'ol',
+                    'shortopt' => 'O',
                     'doc' => 'do not attempt to download any urls or contact channels',
                     ),
                 ),
@@ -204,7 +204,7 @@ More than one package may be specified at once.
                     'doc' => 'force install even if there were errors',
                     ),
                 'remoteconfig' => array(
-                    'shortopt' => 'rc',
+                    'shortopt' => 'F',
                     'arg' => 'URL',
                     'doc' => 'also upgrade on ftp site using remote config file (ftp://host.com/pear.conf)'
                     ),
@@ -237,9 +237,13 @@ more stable.
                     'doc' => 'force install even if there were errors',
                     ),
                 'remoteconfig' => array(
-                    'shortopt' => 'rc',
+                    'shortopt' => 'F',
                     'arg' => 'URL',
                     'doc' => 'also uninstall on ftp site using remote config file (ftp://host.com/pear.conf)'
+                    ),
+                'offline' => array(
+                    'shortopt' => 'O',
+                    'doc' => 'do not attempt to uninstall remotely',
                     ),
                 ),
             'doc' => '[channel/]<package> ...
@@ -368,8 +372,8 @@ package if needed.
             $this->ui->outputData($err);
             return $this->raiseError("$command failed");
         }
-        $this->installer->sortPackagesForInstall($downloaded);
         $this->installer->setOptions($options);
+        $this->installer->sortPackagesForInstall($downloaded);
         if (PEAR::isError($err = $this->installer->setDownloadedPackages($downloaded))) {
             $this->ui->outputData($err->getMessage());
             return;
@@ -401,15 +405,17 @@ package if needed.
                         $out['release_warnings'] = $info['release_warnings'];
                     }
                     $this->ui->outputData($out, $command);
-                    if (isset($options['remoteconfig'])) {
-                        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-                        $info = $this->installer->ftpInstall($param);
-                        PEAR::staticPopErrorHandling();
-                        if (PEAR::isError($info)) {
-                            $this->ui->outputData($info->getMessage());
-                            $this->ui->outputData("remote install failed: $label");
-                        } else {
-                            $this->ui->outputData("remote install ok: $label");
+                    if (!isset($options['register-only']) && !isset($options['offline'])) {
+                        if ($this->config->isDefinedLayer('ftp')) {
+                            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                            $info = $this->installer->ftpInstall($param);
+                            PEAR::staticPopErrorHandling();
+                            if (PEAR::isError($info)) {
+                                $this->ui->outputData($info->getMessage());
+                                $this->ui->outputData("remote install failed: $label");
+                            } else {
+                                $this->ui->outputData("remote install ok: $label");
+                            }
                         }
                     }
                 }
@@ -495,7 +501,7 @@ package if needed.
                     }
                     $this->ui->outputData("uninstall ok: $pkg", $command);
                 }
-                if (is_object($savepkg)) {
+                if (!isset($options['offline']) && is_object($savepkg)) {
                     if ($this->config->isDefinedLayer('ftp')) {
                         $this->installer->pushErrorHandling(PEAR_ERROR_RETURN);
                         $info = $this->installer->ftpUninstall($savepkg);
