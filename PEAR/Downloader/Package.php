@@ -657,7 +657,7 @@ class PEAR_Downloader_Package
             }
             // no releases exist
             $ret = PEAR::raiseError('No releases for package "' .
-                $param['package'] . '" exist' . $saveparam);
+                $this->_registry->parsedPackageNameToString($pname) . '" exist' . $saveparam);
             return $ret;
         }
         if (!isset($info['url'])) {
