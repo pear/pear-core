@@ -724,7 +724,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $this->_isExtension = false;
         foreach ($this->_packagefile->getFilelist() as $name => $file) {
             $file['name'] = $name;
-            if ($file['role'] == 'src') {
+            if (isset($file['role']) && $file['role'] == 'src') {
                 $this->_isExtension = true;
             }
             if (isset($file['replacements'])) {
