@@ -949,9 +949,6 @@ class PEAR_PackageFile_v2_Validator
                             if (!is_array($value) || !isset($value[0])) {
                                 $value = array($value);
                             }
-                            if (!is_array($value)) {
-                                var_dump($value);
-                            }
                             foreach ($value as $v) {
                                 $ret = call_user_func(array($tagClass, 'validateXml'),
                                     $this->_pf, $v, $this->_pf->_config, $save);
