@@ -424,8 +424,8 @@ class PEAR_ChannelFile {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID);
             return false;
         }
-        if (!isset($this->_channelInfo['version'])) {
-            $this->_channelInfo['version'] = '1.0';
+        if (!isset($this->_channelInfo['attribs']['version'])) {
+            $this->_channelInfo['attribs']['version'] = '1.0';
         }
         $channelInfo = $this->_channelInfo;
         $ret = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
