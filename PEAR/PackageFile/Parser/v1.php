@@ -59,8 +59,7 @@ class PEAR_PackageFile_Parser_v1
      */
     function parse($data, $file, $archive = false)
     {
-        require_once('PEAR/Dependency.php');
-        if (PEAR_Dependency::checkExtension($error, 'xml')) {
+        if (!extension_loaded('xml')) {
             $this->_stack->push(PEAR_PACKAGEFILE_ERROR_NO_XML_EXT, 'exception', array('error' => $error));
             return $this->_isValid = false;
         }
