@@ -16,7 +16,7 @@ REM ----------------------------------------------------------------------
 REM  Authors:     Alexander Merz (alexmerz@php.net)
 REM ----------------------------------------------------------------------
 REM
-REM  Last updated 12/29/2004 ($Id$ is not replaced if the file is binary)
+REM  Last updated 02/08/2004 ($Id$ is not replaced if the file is binary)
 
 REM change this lines to match the paths of your system
 REM -------------------
