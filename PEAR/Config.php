@@ -1747,17 +1747,21 @@ class PEAR_Config extends PEAR
     /**
      * @return PEAR_Registry
      */
-    function &getRegistry($layer = 'user')
+    function &getRegistry($use = null)
     {
+        if ($use === null) {
+            $layer = 'user';
+        } else {
+            $layer = $use;
+        }
         if (isset($this->_registry[$layer])) {
             return $this->_registry[$layer];
-        } elseif ($layer == 'user' && isset($this->_registry['system'])) {
+        } elseif ($use === null && isset($this->_registry['system'])) {
             return $this->_registry['system'];
-        } elseif ($layer == 'user' && isset($this->_registry['default'])) {
+        } elseif ($use === null && isset($this->_registry['default'])) {
             return $this->_registry['default'];
         } else {
-            $a = false;
-            return $a;
+            die("CRITICAL ERROR: Registry could not be initialized from any value");
         }
     }
     /**
