@@ -1087,13 +1087,13 @@ class PEAR_Installer extends PEAR_Downloader
             if (!empty($options['force']) && $this->_registry->packageExists($pkgname, $channel)) {
                 $this->_registry->deletePackage($pkgname, $channel);
             }
-            $ret = $this->_registry->addPackage($pkgname, $pkg, $channel);
+            $ret = $this->_registry->addPackage2($pkg);
         } else {
             // new: upgrade installs a package if it isn't installed
             if (!$this->_registry->packageExists($pkgname, $channel)) {
-                $ret = $this->_registry->addPackage($pkgname, $pkg, $channel);
+                $ret = $this->_registry->addPackage2($pkg);
             } else {
-                $ret = $this->_registry->updatePackage($pkgname, $pkg, false, $channel);
+                $ret = $this->_registry->updatePackage2($pkg);
             }
         }
         if (!$ret) {
