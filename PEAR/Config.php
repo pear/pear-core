@@ -556,10 +556,10 @@ class PEAR_Config extends PEAR
      */
     function readConfigFile($file = null, $layer = 'user')
     {
+        if (empty($this->files[$layer])) {
+            return $this->raiseError("unknown config layer `$layer'");
+        }
         if ($file === null) {
-            if (empty($this->files[$layer])) {
-                return $this->raiseError("unknown config file type `$layer'");
-            }
             $file = $this->files[$layer];
         }
         $data = $this->_readConfigDataFrom($file);
@@ -749,17 +749,11 @@ class PEAR_Config extends PEAR
     /**
      * Writes data into a config layer from a file.
      *
-     * @param string file to read from
-     *
-     * @param bool (optional) whether to overwrite existing data
-     * (default TRUE)
-     *
+     * @param string|null file to read from, or null for default
      * @param string config layer to insert data into ('user' or
-     * 'system')
-     *
+     *               'system')
+     * @param string|null data to write to config file or null for internal data [DEPRECATED]
      * @return bool TRUE on success or a PEAR error on failure
-     *
-     * @access public.
      */
     function writeConfigFile($file = null, $layer = 'user', $data = null)
     {
