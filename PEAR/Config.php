@@ -532,10 +532,10 @@ class PEAR_Config extends PEAR
         $this->layers = array_keys($this->configuration);
         $this->files['user'] = $user_file;
         $this->files['system'] = $system_file;
-        if ($user_file && file_exists($user_file)) {
+        if ($user_file && @file_exists($user_file)) {
             $this->readConfigFile($user_file);
         }
-        if ($system_file && file_exists($system_file)) {
+        if ($system_file && @file_exists($system_file)) {
             $this->mergeConfigFile($system_file, false, 'system');
         }
         if (!$ftp_file) {
