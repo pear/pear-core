@@ -989,9 +989,10 @@ class PEAR_Installer extends PEAR_Downloader
                     $longest = max(array_map("strlen", array_keys($test)));
                     $fmt = "%${longest}s (%s)\n";
                     foreach ($test as $file => $info) {
-                        if (is_array($info)) {
-                            $info = $info[0] . '/' . $info[1];
+                        if (!is_array($info)) {
+                            $info = array('pear.php.net', $info);
                         }
+                        $info = $info[0] . '/' . $info[1];
                         $msg .= sprintf($fmt, $file, $info);
                     }
                     if (!isset($options['ignore-errors'])) {
