@@ -215,6 +215,7 @@ class PEAR_Installer_Role
             }
         }
         @closedir($dp);
+        ksort($GLOBALS['_PEAR_INSTALLER_ROLES']);
         PEAR_Installer_Role::getBaseinstallRoles(true);
         PEAR_Installer_Role::getInstallableRoles(true);
         PEAR_Installer_Role::getPhpRoles(true);
