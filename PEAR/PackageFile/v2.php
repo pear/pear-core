@@ -996,6 +996,132 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    /**
+     * Reset dependencies prior to adding new ones
+     */
+    function clearDeps()
+    {
+        $this->_packageInfo['dependencies'] = array();
+    }
+
+    /**
+     * @param string $min
+     * @param string $max
+     * @param string $exclude... optional excluded versions
+     */
+    function addPhpDep($min, $max)
+    {
+        $args = func_get_args();
+        array_shift($args);
+        array_shift($args);
+        if (count($args)) {
+            $exclude = $args;
+            if (count($exclude) == 1) {
+                $exclude = $exclude[0];
+            }
+        }
+        $dep =
+            array(
+                'min' => $min,
+                'max' => $max
+            );
+        if (isset($exclude)) {
+            $dep['exclude'] = $exclude;
+        }
+        if (!isset($this->_packageInfo['dependencies']['php'])) {
+            $this->_packageInfo['dependencies']['php'] = $dep;
+        } else {
+            $this->_packageInfo['dependencies']['php'][] = $dep;
+        }
+    }
+
+    /**
+     * @param string $min
+     * @param string $max
+     * @param string $recommended
+     * @param string $exclude... optional excluded versions
+     */
+    function addPearinstallerDep($min, $max = false, $recommended = false)
+    {
+        $args = func_get_args();
+        if (count($args) > 3) {
+            $exclude = array_slice($args, 3);
+            if (count($exclude) == 1) {
+                $exclude = $exclude[0];
+            }
+        }
+        $dep =
+            array(
+                'min' => $min,
+            );
+        if ($max) {
+            $dep['max'] = $max;
+        }
+        if ($recommended) {
+            $dep['recommended'] = $recommended;
+        }
+        if (isset($exclude)) {
+            $dep['exclude'] = $exclude;
+        }
+        if (!isset($this->_packageInfo['dependencies']['pearinstaller'])) {
+            $this->_packageInfo['dependencies']['pearinstaller'] = $dep;
+        } else {
+            $this->_packageInfo['dependencies']['pearinstaller'][] = $dep;
+        }
+    }
+
+    /**
+     * @param optional|required|string optional, required, or group name
+     * @param string package name
+     * @param string package channel
+     * @param string minimum version
+     * @param string maximum version
+     * @param string recommended version
+     * @param string $exclude... optional excluded versions
+     */
+    function addPackageDepWithChannel($type, $name, $channel, $min = false, $max = false,
+                                      $recommended = false)
+    {
+        if (count($args) > 6) {
+            $exclude = array_slice($args, 6);
+            if (count($exclude) == 1) {
+                $exclude = $exclude[0];
+            }
+        }
+        $dep =
+            array(
+                'min' => $min,
+            );
+        if ($max) {
+            $dep['max'] = $max;
+        }
+        if ($recommended) {
+            $dep['recommended'] = $recommended;
+        }
+        if (isset($exclude)) {
+            $dep['exclude'] = $exclude;
+        }
+        if (!isset($this->_packageInfo['dependencies']['pearinstaller'])) {
+            $this->_packageInfo['dependencies']['pearinstaller'] = $dep;
+        } else {
+            $this->_packageInfo['dependencies']['pearinstaller'][] = $dep;
+        }
+    }
+
+    function addPackageDepWithUri($type, $name, $uri)
+    {
+        $dep = array('name' => $name, 'uri' => $uri);
+        if (!isset($this->_packageInfo['dependencies'][$type]['package'])) {
+            $this->_packageInfo['dependencies'][$type]['package'] = $dep;
+        } else {
+            $this->_packageInfo['dependencies'][$type]['package'][] = $dep;
+        }
+    }
+
+    function addExtensionDep($name, $version, $rel, $optional = 'no')
+    {
+    }
+
     function getPackageType()
     {
         if (isset($this->_packageInfo['php'])) {
