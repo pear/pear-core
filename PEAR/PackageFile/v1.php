@@ -378,8 +378,16 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function getTime()
+    {
+        return false;
+    }
+
     function getExtends()
     {
+        if (isset($this->_packageInfo['extends'])) {
+            return $this->_packageInfo['extends'];
+        }
         return false;
     }
 
