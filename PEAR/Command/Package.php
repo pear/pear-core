@@ -589,6 +589,9 @@ used for automated conversion or learning the format.
             $pname = $reg->parsePackageName($options['package'],
                 $this->config->get('default_channel'));
             $package = &$reg->getPackage($pname['package'], $pname['channel']);
+            if (!$package) {
+                return PEAR::raiseError('Unknown package "' . $options['package'] . '"');
+            }
             $filelist = $package->getFilelist();
             foreach ($filelist as $name => $atts) {
                 if ($atts['role'] != 'test') {
