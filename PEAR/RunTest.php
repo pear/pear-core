@@ -14,6 +14,7 @@
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
 // | Authors: Tomas V.V.Cox <cox@idecnet.com>                             |
+// |          Greg Beaver <cellog@php.net>                                |
 // |                                                                      |
 // +----------------------------------------------------------------------+
 //
@@ -128,13 +129,12 @@ class PEAR_RunTest
                 $output = `$php $info_params -f $tmp_skipif`;
                 unlink($tmp_skipif);
                 if (eregi("^skip", trim($output))) {
-                    echo "SKIP $tested";
+                    $skipreason = "SKIP $tested";
                     $reason = (eregi("^skip[[:space:]]*(.+)\$", trim($output))) ? eregi_replace("^skip[[:space:]]*(.+)\$", "\\1", trim($output)) : FALSE;
                     if ($reason) {
-                        echo " (reason: $reason)\n";
-                    } else {
-                        echo "\n";
+                        $skipreason .= " (reason: $reason)";
                     }
+                    $this->_logger->log(0, $skipreason);
                     if (isset($old_php)) {
                         $php = $old_php;
                     }
@@ -198,7 +198,7 @@ class PEAR_RunTest
     */
             if (preg_match("/^$wanted_re\$/s", $output)) {
                 @unlink($tmp_file);
-                echo "PASS $tested$info\n";
+                $this->_logger->log(0, "PASS $tested$info");
                 if (isset($old_php)) {
                     $php = $old_php;
                 }
@@ -212,7 +212,7 @@ class PEAR_RunTest
             $ok = (0 == strcmp($output,$wanted));
             if ($ok) {
                 @unlink($tmp_file);
-                echo "PASS $tested$info\n";
+                $this->_logger->log(0, "PASS $tested$info");
                 if (isset($old_php)) {
                     $php = $old_php;
                 }
@@ -222,9 +222,9 @@ class PEAR_RunTest
 
         // Test failed so we need to report details.
         if ($warn) {
-            echo "WARN $tested$info\n";
+            $this->_logger->log(0, "WARN $tested$info");
         } else {
-            echo "FAIL $tested$info\n";
+            $this->_logger->log(0, "FAIL $tested$info");
         }
 
         $GLOBALS['__PHP_FAILED_TESTS__'][] = array(
