@@ -326,7 +326,6 @@ $phpunit->assertTrue($res, '$val->validate');
 $pf->setReleaseVersion('1');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertFalse($res, 'attempt 1 generic');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
@@ -344,7 +343,6 @@ $phpunit->assertEquals(array (
 $pf->setReleaseVersion('1.2.3.4.5');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertFalse($res, 'attempt 1.2.3.4.5 generic');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (

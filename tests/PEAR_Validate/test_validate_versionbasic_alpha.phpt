@@ -327,7 +327,6 @@ $pf->setReleaseStability('alpha');
 $pf->setReleaseVersion('1.4.0a1');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 1.4.0a1 alpha');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
@@ -340,7 +339,6 @@ $phpunit->assertEquals(array (
 $pf->setReleaseVersion('0.2.5');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 0.2.5 alpha');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
@@ -352,67 +350,60 @@ $phpunit->assertEquals(array (
 
 $pf->setReleaseVersion('1.4.2a1');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 1.4.2a1 alpha');
-$phpunit->showall();
+$phpunit->assertTrue($res, 'attempt 1.4.2a1 alpha');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
       'field' => 'version',
-      'reason' => 'bugfix versions (1.3.x where x > 0) cannot be alpha or beta',
+      'reason' => 'bugfix versions (1.3.x where x > 0) probably should not be alpha or beta',
     ),
+  ),
+  'errors' => 
+  array (
   ),
 ), $val->getFailures(), 'failures attempt 1.4.2a1 alpha');
 
 $pf->setReleaseVersion('1.4.0');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 1.4.0 alpha');
-$phpunit->showall();
+$phpunit->assertTrue($res, 'attempt 1.4.0 alpha');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
       'field' => 'version',
-      'reason' => 'version 1.4.0 cannot be alpha or beta',
+      'reason' => 'version 1.4.0 probably should not be alpha or beta',
     ),
+  ),
+  'errors' => 
+  array (
   ),
 ), $val->getFailures(), 'failures attempt 1.4.0 alpha');
 
 $pf->setReleaseVersion('1.4.00000');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 1.4.00000 alpha');
-$phpunit->showall();
+$phpunit->assertTrue($res, 'attempt 1.4.00000 alpha');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
       'field' => 'version',
-      'reason' => 'version 1.4.0 cannot be alpha or beta',
+      'reason' => 'version 1.4.0 probably should not be alpha or beta',
     ),
+  ),
+  'errors' => 
+  array (
   ),
 ), $val->getFailures(), 'failures attempt 1.4.00000 alpha');
 
 $pf->setReleaseVersion('000.2.5');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 000.2.5 alpha');
-$phpunit->showall();
+$phpunit->assertTrue($res, 'attempt 000.2.5 alpha');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
@@ -420,17 +411,16 @@ $phpunit->assertEquals(array (
       'reason' => 'version "000.2.5" should be "0.2.5"',
     ),
   ),
+  'errors' => 
+  array (
+  ),
 ), $val->getFailures(), 'failures attempt 000.2.5 alpha');
 
 $pf->setReleaseVersion('2.5.0');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 2.5.0 alpha');
-$phpunit->showall();
+$phpunit->assertTrue($res, 'attempt 2.5.0 alpha');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
@@ -438,6 +428,9 @@ $phpunit->assertEquals(array (
       'reason' => 'major versions greater than 1 are not allowed for packages ' .
                   'without an <extends> tag or an identical postfix (foo2 v2.0.0)',
     ),
+  ),
+  'errors' => 
+  array (
   ),
 ), $val->getFailures(), 'failures attempt 2.5.0 alpha');
 echo 'tests done';

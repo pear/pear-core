@@ -327,7 +327,6 @@ $pf->setReleaseVersion('1.0.4');
 $pf->setReleaseStability('devel');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertFalse($res, 'attempt 1.0.4 devel');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
@@ -345,13 +344,9 @@ $phpunit->assertEquals(array (
 $pf->setReleaseVersion('000.4.3');
 $pf->setReleaseStability('devel');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 000.4.3 devel');
-$phpunit->showall();
+$phpunit->assertTrue($res, 'attempt 000.4.3 devel');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
@@ -359,13 +354,15 @@ $phpunit->assertEquals(array (
       'reason' => 'version "000.4.3" should be "0.4.3"',
     ),
   ),
+  'errors' => 
+  array (
+  ),
 ), $val->getFailures(), 'failures attempt 000.4.3 devel');
 
 $pf->setReleaseVersion('0.4.5');
 $pf->setReleaseStability('devel');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 0.4.5 devel');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
