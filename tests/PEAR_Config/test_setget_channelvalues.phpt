@@ -34,6 +34,23 @@ $phpunit->assertEquals('yay', $config->get('bin_dir', 'system'), 'default __uri 
 $phpunit->assertEquals('yay', $config->get('bin_dir'), 'default __uri default');
 $phpunit->assertTrue($config->set('default_channel', 'pear'), 'set pear');
 $phpunit->assertEquals('pear.php.net', $config->get('default_channel'), 'pear default');
+
+$reg = &$config->getRegistry();
+$ch = &$reg->getChannel('__uri');
+// this is laziness - no require_once/new needed
+$ch->setName('foo');
+$ch->addMirror('foo.example.com');
+$ch->setDefaultPEARProtocols();
+$ch->setDefaultPEARProtocols('1.0', 'foo.example.com');
+$reg->addChannel($ch);
+$config->setChannels($reg->listChannels());
+
+$phpunit->assertTrue($config->set('default_channel', 'foo'), 'set default channel to foo');
+$phpunit->assertEquals('pear.php.net', $config->get('preferred_mirror', null, 'foo'), 'before set to foo.example.com');
+$phpunit->assertTrue($config->set('preferred_mirror', 'foo.example.com', 'user', 'foo'), 'set to foo.example.com');
+$phpunit->assertEquals('pear.php.net', $config->get('preferred_mirror', null, 'pear.php.net'), 'after set to foo.example.com, pear');
+$phpunit->assertEquals('foo.example.com', $config->get('preferred_mirror', null, 'foo'), 'after set to foo.example.com, foo');
+$phpunit->assertFalse($config->set('preferred_mirror', 'foor.example.com', 'user', 'foo'), 'set to foor.example.com');
 echo 'tests done';
 ?>
 --EXPECT--

@@ -12,6 +12,7 @@ error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini');
 $phpunit->assertEquals('string', $config->getType('default_channel'), 'default_channel');
+$phpunit->assertEquals('string', $config->getType('preferred_mirror'), 'preferred_mirror');
 $phpunit->assertEquals('password', $config->getType('remote_config'), 'remote_config');
 $phpunit->assertEquals('integer', $config->getType('auto_discover'), 'auto_discover');
 $phpunit->assertEquals('string', $config->getType('master_server'), 'master_server');
