@@ -1826,6 +1826,7 @@ class PEAR_Registry extends PEAR
                 "retrieve channel " . $param['channel'] . " information",
                 'registry', null, null, $param);
         }
+        $param['channel'] = $chan->getName();
         $validate = $chan->getValidationObject();
         $vpackage = $chan->getValidationPackage();
         // validate package name
