@@ -300,8 +300,8 @@ class PEAR_Config extends PEAR
         'master_server' => array(
             'type' => 'string',
             'default' => 'pear.php.net',
-            'doc' => 'name of the main PEAR server',
-            'prompt' => 'PEAR server',
+            'doc' => 'name of the main PEAR server [NOT USED IN THIS VERSION]',
+            'prompt' => 'PEAR server [DEPRECATED]',
             'group' => 'Internet Access',
             ),
         'http_proxy' => array(
@@ -867,9 +867,11 @@ class PEAR_Config extends PEAR
             if (!isset($var['type'])) {
                 return $this->raiseError('Configuration information must contain a type');
             } else {
-                if (!in_array($var['type'], array('string', 'mask', 'password'))) {
+                if (!in_array($var['type'],
+                      array('string', 'mask', 'password', 'directory', 'file', 'set'))) {
                     return $this->raiseError(
-                        'Configuration type must be one of string, mask, or password');
+                        'Configuration type must be one of directory, file, string, ' .
+                        'mask, set, or password');
                 }
             }
             if (!isset($var['default'])) {
@@ -1360,7 +1362,7 @@ class PEAR_Config extends PEAR
             }
             return array_keys($valid_set);
         }
-        return false;
+        return null;
     }
 
     // }}}
