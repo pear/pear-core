@@ -934,6 +934,9 @@ class PEAR_Config extends PEAR
     function _addConfigVars($role)
     {
         $vars = call_user_func(array($role, 'getSupportingConfigVars'));
+        if (count($vars) > 3) {
+            return $this->raiseError('Roles can only define 3 new config variables or less');
+        }
         foreach ($vars as $name => $var) {
             if (!is_array($var)) {
                 return $this->raiseError('Configuration information must be an array');
