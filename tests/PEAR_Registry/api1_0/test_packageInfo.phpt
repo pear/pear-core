@@ -5,11 +5,6 @@ PEAR_Registry->packageInfo() v1.0
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
-$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'registry_tester';
-if (file_exists($statedir)) {
-    // don't delete existing directories!
-    echo 'skip';
-}
 ?>
 --FILE--
 <?php
@@ -17,7 +12,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $subreg = new PEAR_Registry($statedir);
 $phpunit->assertEquals(array(), $reg->packageInfo(), 'initial packageinfo generic');
 $phpunit->assertNull($reg->packageInfo('foo'), 'non-existent package');
-$phpunit->assertTrue($reg->addPackage("pkg1", array("name" => "pkg1", "version" => "1.0", "filelist" => $files1)), 'add pkg1 return');
+$phpunit->assertTrue($reg->addPackage("pkg1", array("name" => "pkg1", "version" => "1.0", "filelist" => $files1, 'maintainers' => array())), 'add pkg1 return');
 $phpunit->assertPackageinfoEquals(array (
   0 => 
   array (
@@ -35,6 +30,7 @@ $phpunit->assertPackageinfoEquals(array (
         'baseinstalldir' => 'pkg1',
       ),
     ),
+    'maintainers' => array(),
     '_lastmodified' => 1097585674,
   ),
 ), $reg->packageInfo(), 'packageinfo pkg1 generic');
@@ -53,10 +49,11 @@ $phpunit->assertPackageinfoEquals(array (
         'baseinstalldir' => 'pkg1',
       ),
     ),
+    'maintainers' => array(),
     '_lastmodified' => 1097585674,
   ), $reg->packageInfo('pkg1'), 'packageinfo pkg1 specific');
 
-$phpunit->assertTrue($reg->addPackage("pkg2", array("name" => "pkg2", "version" => "2.0", "filelist" => $files2)), 'add pkg2 return');
+$phpunit->assertTrue($reg->addPackage("pkg2", array("name" => "pkg2", "version" => "2.0", "filelist" => $files2, 'maintainers' => array())), 'add pkg2 return');
 $phpunit->assertPackageinfoEquals(array (
   0 => 
   array (
@@ -74,6 +71,7 @@ $phpunit->assertPackageinfoEquals(array (
         'baseinstalldir' => 'pkg1',
       ),
     ),
+    'maintainers' => array(),
     '_lastmodified' => 1097585674,
   ),
   1 => 
@@ -92,6 +90,7 @@ $phpunit->assertPackageinfoEquals(array (
         'baseinstalldir' => 'pkg2',
       ),
     ),
+    'maintainers' => array(),
     '_lastmodified' => 1097586528,
   ),
 ), $reg->packageInfo(), 'packageinfo pkg1+2 generic');
@@ -110,9 +109,10 @@ $phpunit->assertPackageinfoEquals(array (
         'baseinstalldir' => 'pkg2',
       ),
     ),
+    'maintainers' => array(),
     '_lastmodified' => 1097585674,
   ), $reg->packageInfo('pkg2'), 'packageinfo pkg2 specific');
-$phpunit->assertTrue($reg->addPackage("pkg3", array("name" => "pkg3", "version" => "3.0", "filelist" => $files3)), 'add pkg3 return');
+$phpunit->assertTrue($reg->addPackage("pkg3", array("name" => "pkg3", "version" => "3.0", "filelist" => $files3, 'maintainers' => array())), 'add pkg3 return');
 $phpunit->assertPackageinfoEquals(array (
   0 => 
   array (
@@ -130,6 +130,7 @@ $phpunit->assertPackageinfoEquals(array (
         'baseinstalldir' => 'pkg1',
       ),
     ),
+    'maintainers' => array(),
     '_lastmodified' => 1097585674,
   ),
   1 => 
@@ -148,6 +149,7 @@ $phpunit->assertPackageinfoEquals(array (
         'baseinstalldir' => 'pkg2',
       ),
     ),
+    'maintainers' => array(),
     '_lastmodified' => 1097586528,
   ),
   2 =>
@@ -166,6 +168,7 @@ $phpunit->assertPackageinfoEquals(array (
         'baseinstalldir' => 'pkg3',
       ),
     ),
+    'maintainers' => array(),
     '_lastmodified' => 1097585674,
   ),
 ), $reg->packageInfo(), 'packageinfo pkg1+2+3 generic');
@@ -184,6 +187,7 @@ $phpunit->assertPackageinfoEquals(array (
         'baseinstalldir' => 'pkg3',
       ),
     ),
+    'maintainers' => array(),
     '_lastmodified' => 1097585674,
   ), $reg->packageInfo('pkg3'), 'packageinfo pkg3 specific');
 
@@ -204,6 +208,7 @@ $phpunit->assertPackageinfoEquals(array (
         'baseinstalldir' => 'pkg1',
       ),
     ),
+    'maintainers' => array(),
     '_lastmodified' => 1097585674,
   ),
   1 => 
@@ -222,6 +227,7 @@ $phpunit->assertPackageinfoEquals(array (
         'baseinstalldir' => 'pkg2',
       ),
     ),
+    'maintainers' => array(),
     '_lastmodified' => 1097586528,
   ),
   2 =>
@@ -240,6 +246,7 @@ $phpunit->assertPackageinfoEquals(array (
         'baseinstalldir' => 'pkg3',
       ),
     ),
+    'maintainers' => array(),
     '_lastmodified' => 1097585674,
   ),
 ), $subreg->packageInfo(), 'packageinfo pkg1+2+3 generic, another object');
@@ -258,6 +265,7 @@ $phpunit->assertPackageinfoEquals(array (
         'baseinstalldir' => 'pkg3',
       ),
     ),
+    'maintainers' => array(),
     '_lastmodified' => 1097585674,
   ), $subreg->packageInfo('pkg3'), 'packageinfo pkg3 specific, another object');
 echo 'tests done';
