@@ -1317,8 +1317,8 @@ class PEAR_ChannelFile {
     {
         switch ($version) {
             case '1.0' :
-                unset($this->_channelInfo['protocols']['soap']);
                 $this->resetFunctions('xmlrpc', $mirror);
+                $this->resetFunctions('soap', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'logintest', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.listLatestReleases', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.listAll', $mirror);
