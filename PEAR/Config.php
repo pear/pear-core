@@ -1168,8 +1168,9 @@ class PEAR_Config extends PEAR
             }
         }
         $this->configuration[$layer][$key] = $value;
-        if (isset($this->_registry[$layer]) && $key == 'php_dir') {
-            if ($value != $this->_registry[$layer]->install_dir) {
+        if ($key == 'php_dir') {
+            if (!isset($this->_registry[$layer]) ||
+                  $value != $this->_registry[$layer]->install_dir) {
                 $this->_registry[$layer] = &new PEAR_Registry($value);
                 $this->_registry[$layer]->setConfig($this);
             }
