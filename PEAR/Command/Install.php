@@ -21,6 +21,7 @@
 require_once "PEAR/Command/Common.php";
 require_once "PEAR/Installer.php";
 require_once 'PEAR/Downloader.php';
+require_once 'PEAR/PackageFile/v2.php';
 
 /**
  * PEAR commands for installation or deinstallation/upgrading of
@@ -278,6 +279,15 @@ channel not in your default channel ({config default_channel})
             'doc' => '<package>
 Unpacks a Pecl Package into the selected location. It will download the
 package if needed.
+'),
+        'run-scripts' => array(
+            'summary' => 'Run Post-Install Scripts bundled with a package',
+            'function' => 'doRunScripts',
+            'shortcut' => 'rs',
+            'options' => array(
+            ),
+            'doc' => '<package>
+Run post-installation scripts in package <package>, if any exist.
 '),
     );
 
@@ -601,5 +611,27 @@ package if needed.
 
     // }}}
 
+    function doRunScripts($command, $options, $params)
+    {
+        if (!isset($params[0])) {
+            return $this->raiseError('run-scripts expects 1 parameter: a package name');
+        }
+        $reg = &$this->config->getRegistry();
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+        $parsed = $reg->parsePackageName($params[0]);
+        PEAR::staticPopErrorHandling();
+        if (PEAR::isError($parsed)) {
+            return $this->raiseError($parsed);
+        }
+        $package = &$reg->getPackage($parsed['package'], $parsed['channel']);
+        $package->setConfig($this->config);
+        if (is_object($package)) {
+            $package->runPostinstallScripts();
+        } else {
+            return $this->raiseError('Could not retrieve package "' . $params[0] . '" from registry');
+        }
+        $this->ui->outputData('Install scripts complete', $command);
+        return true;
+    }
 }
 ?>

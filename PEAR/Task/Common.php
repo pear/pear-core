@@ -64,18 +64,15 @@ class PEAR_Task_Common
     var $installphase;
     /**
      * @param PEAR_Config
-     * @param PEAR_Installer
+     * @param PEAR_Common
      */
-    function PEAR_Task_Common(&$config, &$installer, $phase)
+    function PEAR_Task_Common(&$config, &$logger, $phase)
     {
         $this->config = &$config;
         $this->registry = &$config->getRegistry();
-        $this->installer = &$installer;
+        $this->logger = &$logger;
         $this->installphase = $phase;
         if ($this->type == 'multiple') {
-            $GLOBALS['_PEAR_TASK_PREINSTANCES'][get_class($this)][] = &$this;
-        }
-        if ($this->type == 'postinstall-multiple') {
             $GLOBALS['_PEAR_TASK_POSTINSTANCES'][get_class($this)][] = &$this;
         }
     }
@@ -142,51 +139,18 @@ class PEAR_Task_Common
      * @static
      * @final
      */
-    function hasPrecommitTasks()
-    {
-        return isset($GLOBALS['_PEAR_TASK_PREINSTANCES']);
-    }
-
-    /**
-     * @static
-     * @final
-     */
-    function runPrecommitTasks()
-    {
-        foreach ($GLOBALS['_PEAR_TASK_PREINSTANCES'] as $class => $tasks) {
-            $err = call_user_func(array($class, 'run'),
-                $GLOBALS['_PEAR_TASK_PREINSTANCES'][$class]);
-            if ($err) {
-                return PEAR_Task_Common::throwError($err);
-            }
-        }
-        unset($GLOBALS['_PEAR_TASK_PREINSTANCES']);
-    }
-
-    /**
-     * @static
-     * @final
-     */
     function hasPostinstallTasks()
     {
         return isset($GLOBALS['_PEAR_TASK_POSTINSTANCES']);
     }
 
     /**
-     * @param string install or upgrade
-     * @static
-     * @final
+     * Determines whether a role is a script
+     * @return bool
      */
-    function runPostinstallTasks($installphase)
+    function isScript()
     {
-        foreach ($GLOBALS['_PEAR_TASK_POSTINSTANCES'] as $class => $tasks) {
-            $err = call_user_func(array($class, 'run'),
-                $GLOBALS['_PEAR_TASK_POSTINSTANCES'][$class], $installphase);
-            if ($err) {
-                return PEAR_Task_Common::throwError($err);
-            }
-        }
-        unset($GLOBALS['_PEAR_TASK_POSTINSTANCES']);
+        return $this->type == 'script';
     }
 
     function throwError($msg, $code = -1)
