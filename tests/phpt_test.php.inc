@@ -245,6 +245,16 @@ class PEAR_PHPTest
         return true;
     }
 
+    function assertFileExists($fname, $message)
+    {
+        if (!@file_exists($fname)) {
+            $this->_failTest(debug_backtrace(), $message);
+            echo "File '$fname' does not exist, and should\n";
+            return false;
+        }
+        return true;
+    }
+
     function assertRegEquals($dump, &$reg, $message)
     {
         $actualdump = var_export(trim($this->dumpReg($reg)), true);

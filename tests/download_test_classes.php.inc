@@ -448,7 +448,7 @@ class test_PEAR_Downloader extends PEAR_Downloader {
      */
     function &getDependency2Object(&$c, $i, $p, $s)
     {
-        $z = &new PEAR_Dependency2($c, $i, $p, $s);
+        $z = &test_PEAR_Dependency2::singleton($c, $i, $p, $s);
         return $z;
     }
 
