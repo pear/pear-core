@@ -63,7 +63,8 @@ http://pear.php.net/dtd/package-2.0
 http://pear.php.net/dtd/package-2.0.xsd',
                          ),               // attributes of the root tag
                          'attributesArray'    => 'attribs',                  // all values in this key will be treated as attributes
-                         'contentName'        => '_content'                   // this value will be used directly as content, instead of creating a new tag, may only be used in conjuction with attributesArray
+                         'contentName'        => '_content',                   // this value will be used directly as content, instead of creating a new tag, may only be used in conjuction with attributesArray
+                         'beautifyFilelist'   => false,
                         );
 
    /**
@@ -93,9 +94,10 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $this->_packagefile = &$packagefile;
     }
 
-    function toPackageFile($where = null, $state = PEAR_VALIDATE_NORMAL, $name = 'package.xml')
+    function toPackageFile($where = null, $state = PEAR_VALIDATE_NORMAL, $name = 'package.xml',
+                           $beautify = false)
     {
-        if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING)) {
+        if (!$this->_packagefile->validate($state)) {
             return PEAR::raiseError('PEAR_Packagefile::toPackageFile: invalid package.xml',
                 null, null, null, $this->_packagefile->getValidationWarnings());
         }
@@ -126,7 +128,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
      *
      * @return string XML data
      */
-    function toXml($options = array())
+    function toXml($state = PEAR_VALIDATE_NORMAL, $options = array())
     {
         if (!$this->_packagefile->validate()) {
             return false;
@@ -136,13 +138,116 @@ http://pear.php.net/dtd/package-2.0.xsd',
         } else {
             $this->options = $this->_defaultOptions;
         }
-        if ($this->serialize($this->_packagefile->getArray(), $options)) {
+        $arr = $this->_packagefile->getArray();
+        if ($state ^ PEAR_VALIDATE_PACKAGING) {
+            $use = $this->_recursiveXmlFilelist($arr['contents']['dir']['file']);
+            unset($arr['contents']['dir']['file']);
+            if (isset($use['dir'])) {
+                $arr['contents']['dir']['dir'] = $use['dir'];
+            }
+            if (isset($use['file'])) {
+                $arr['contents']['dir']['file'] = $use['file'];
+            }
+            $this->options['beautifyFilelist'] = true;
+        }
+        if ($this->serialize($arr, $options)) {
             return $this->_serializedData;
         }
         return false;
     }
 
-   /**
+
+    function _recursiveXmlFilelist($list)
+    {
+        $dirs = array();
+        if (isset($list['attribs'])) {
+            $file = $list['attribs']['name'];
+            unset($list['attribs']['name']);
+            $attributes = $list['attribs'];
+            $this->_addDir($dirs, explode('/', dirname($file)), $file, $attributes);
+        } else {
+            foreach ($list as $a) {
+                $file = $a['attribs']['name'];
+                unset($a['attribs']['name']);
+                $attributes = $a['attribs'];
+                $this->_addDir($dirs, explode('/', dirname($file)), $file, $attributes);
+            }
+        }
+        $this->_formatDir($dirs);
+        $this->_deFormat($dirs);
+        return $dirs;
+    }
+
+    function _addDir(&$dirs, $dir, $file = null, $attributes = null)
+    {
+        if ($dir == array() || $dir == array('.')) {
+            $attributes['name'] = basename($file);
+            $dirs['file'][basename($file)]['attribs'] = $attributes;
+            return;
+        }
+        $curdir = array_shift($dir);
+        if (!isset($dirs['dir'][$curdir])) {
+            $dirs['dir'][$curdir] = array();
+        }
+        $this->_addDir($dirs['dir'][$curdir], $dir, $file, $attributes);
+    }
+
+    function _formatDir(&$dirs)
+    {
+        if (!count($dirs)) {
+            return array();
+        }
+        $newdirs = array();
+        if (isset($dirs['dir'])) {
+            $newdirs['dir'] = $dirs['dir'];
+        }
+        if (isset($dirs['file'])) {
+            $newdirs['file'] = $dirs['file'];
+        }
+        $dirs = $newdirs;
+        if (isset($dirs['dir'])) {
+            uksort($dirs['dir'], 'strnatcasecmp');
+            foreach ($dirs['dir'] as $dir => $contents) {
+                $this->_formatDir($dirs['dir'][$dir]);
+            }
+        }
+        if (isset($dirs['file'])) {
+            uksort($dirs['file'], 'strnatcasecmp');
+        };
+    }
+
+    function _deFormat(&$dirs)
+    {
+        if (!count($dirs)) {
+            return array();
+        }
+        $newdirs = array();
+        if (isset($dirs['dir'])) {
+            foreach ($dirs['dir'] as $dir => $contents) {
+                $newdir = array();
+                $newdir['attribs']['name'] = $dir;
+                $this->_deFormat($contents);
+                foreach ($contents as $tag => $val) {
+                    $newdir[$tag] = $val;
+                }
+                $newdirs['dir'][] = $newdir;
+            }
+            if (count($newdirs['dir']) == 1) {
+                $newdirs['dir'] = $dirs['dir'][0];
+            }
+        }
+        if (isset($dirs['file'])) {
+            foreach ($dirs['file'] as $name => $file) {
+                $newdirs['file'][] = $file;
+            }
+            if (count($newdirs['file']) == 1) {
+                $newdirs['file'] = $newdirs['file'][0];
+            }
+        }
+        $dirs = $newdirs;
+    }
+
+    /**
     * reset all options to default options
     *
     * @access   public
@@ -339,7 +444,31 @@ http://pear.php.net/dtd/package-2.0.xsd',
             if ($indexed && $this->options['mode'] == 'simplexml') {
                 $string = '';
                 foreach ($array as $key => $val) {
+                    if ($this->options['beautifyFilelist'] && $tagName == 'dir') {
+                        if (!isset($this->_curdir)) {
+                            $this->_curdir = '';
+                        }
+                        $savedir = $this->_curdir;
+                        if (isset($val['attribs'])) {
+                            if ($val['attribs']['name'] == '/') {
+                                $this->_curdir = '/';
+                            } else {
+                                if ($this->_curdir == '/') {
+                                    $this->_curdir = '';
+                                }
+                                $this->_curdir .= '/' . $val['attribs']['name'];
+                            }
+                        }
+                    }
                     $string .= $this->_serializeValue( $val, $tagName, $attributes);
+                    if ($this->options['beautifyFilelist'] && $tagName == 'dir') {
+                        $string .= ' <!-- ' . $this->_curdir . ' -->';
+                        if (empty($savedir)) {
+                            unset($this->_curdir);
+                        } else {
+                            $this->_curdir = $savedir;
+                        }
+                    }
                     
                     $string .= $this->options['linebreak'];
         			//	do indentation
@@ -396,12 +525,35 @@ http://pear.php.net/dtd/package-2.0.xsd',
     				}
     
                 }
-    			
+                if ($this->options['beautifyFilelist'] && $key == 'dir') {
+                    if (!isset($this->_curdir)) {
+                        $this->_curdir = '';
+                    }
+                    $savedir = $this->_curdir;
+                    if (isset($value['attribs'])) {
+                        if ($value['attribs']['name'] == '/') {
+                            $this->_curdir = '/';
+                        } else {
+                            $this->_curdir .= '/' . $value['attribs']['name'];
+                        }
+                    }
+                }
+
                 $tmp .= $this->_createXMLTag(array(
                                                     'qname'      => $key,
                                                     'attributes' => $atts,
                                                     'content'    => $value )
                                             );
+                if ($this->options['beautifyFilelist'] && $key == 'dir') {
+                    if (isset($value['attribs'])) {
+                        $tmp .= ' <!-- ' . $this->_curdir . ' -->';
+                        if (empty($savedir)) {
+                            unset($this->_curdir);
+                        } else {
+                            $this->_curdir = $savedir;
+                        }
+                    }
+                }
                 $tmp .= $this->options['linebreak'];
             }
             
