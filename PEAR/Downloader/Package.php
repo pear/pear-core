@@ -1368,9 +1368,23 @@ class PEAR_Downloader_Package
                 $saveparam = '';
             }
             // no releases exist
-            $ret = PEAR::raiseError('No releases for package "' .
+            return PEAR::raiseError('No releases for package "' .
                 $this->_registry->parsedPackageNameToString($pname, true) . '" exist' . $saveparam);
-            return $ret;
+        }
+        if (strtolower($info['info']->getChannel()) != strtolower($pname['channel'])) {
+            $err = false;
+            if ($pname['channel'] == 'pear.php.net') {
+                if ($info['info']->getChannel() != 'pecl.php.net') {
+                    $err = true;
+                }
+            } else {
+                $err = true;
+            }
+            if ($err) {
+                return PEAR::raiseError('SECURITY ERROR: package in channel "' . $pname['channel'] .
+                    '" retrieved another channel\'s name for download! ("' .
+                    $info['info']->getChannel() . '")');
+            }
         }
         if (!isset($info['url'])) {
             // releases exist, but we failed to get any
@@ -1390,11 +1404,10 @@ class PEAR_Downloader_Package
                         ', stability "' . $info['info']->getState() . '"');
                 }
                 // download the latest release
-                $info = $this->_downloader->_getPackageDownloadUrl(
+                return $this->_downloader->_getPackageDownloadUrl(
                     array('package' => $pname['package'],
                           'channel' => $pname['channel'],
                           'version' => $info['version']));
-                return $info;
             } else {
                 // construct helpful error message
                 if (isset($pname['version'])) {
