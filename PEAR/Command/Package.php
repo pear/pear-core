@@ -780,7 +780,7 @@ used for automated conversion or learning the format.
             return $this->raiseError("file does not exist: $params[0]");
         }
         $obj = $this->getPackageFile($this->config, $this->_debug);
-        $info = $obj->fromTgzFile($params[0]);
+        $info = $obj->fromTgzFile($params[0], PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
