@@ -154,7 +154,7 @@ class PEAR_Frontend_CLI extends PEAR
                 if ($default && trim($line) == "") {
                     $result[$key] = $default;
                 } else {
-                    $result[$key] = $line;
+                    $result[$key] = trim($line);
                 }
             }
             fclose($fp);
