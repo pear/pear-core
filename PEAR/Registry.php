@@ -1447,31 +1447,34 @@ class PEAR_Registry extends PEAR
         $ret = array();
         if (isset($group['package'])) {
             if (!isset($group['package'][0])) {
-                $group['$package'] = array($group['package']);
+                $group['package'] = array($group['package']);
             }
             foreach ($group['package'] as $package) {
                 $depchannel = isset($package['channel']) ? $package['channel'] : '__uri';
-                $p = $this->getPackage($package['name'], $depchannel);
+                $p = &$this->getPackage($package['name'], $depchannel);
                 if ($p) {
-                    $ret[] = &$p;
+                    $save = &$p;
+                    $ret[] = &$save;
                 }
             }
         }
         if (isset($group['subpackage'])) {
             if (!isset($group['subpackage'][0])) {
-                $group['$subpackage'] = array($group['subpackage']);
+                $group['subpackage'] = array($group['subpackage']);
             }
             foreach ($group['subpackage'] as $package) {
                 $depchannel = isset($package['channel']) ? $package['channel'] : '__uri';
-                $p = $this->getPackage($package['name'], $depchannel);
+                $p = &$this->getPackage($package['name'], $depchannel);
                 if ($p) {
-                    $ret[] = &$p;
+                    $save = &$p;
+                    $ret[] = &$save;
                 }
             }
         }
         if (!count($ret)) {
             return false;
         }
+        return $ret;
     }
 
     // {{{ getChannelValidator()
