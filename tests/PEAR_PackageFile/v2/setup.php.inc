@@ -39,7 +39,13 @@ array(
 $fp = fopen($statedir . DIRECTORY_SEPARATOR . 'pear.ini', 'wb');
 fwrite($fp, $config, strlen($config));
 fclose($fp);
-$config = &new PEAR_Config($statedir . DIRECTORY_SEPARATOR . 'pear.ini');
+putenv('PHP_PEAR_SYSCONF_DIR='.$statedir);
+$home = getenv('HOME');
+if (!empty($home)) {
+    // for PEAR_Config initialization
+    putenv('HOME="'.$statedir);
+}
+$config = &PEAR_Config::singleton($statedir . DIRECTORY_SEPARATOR . 'pear.ini');
 $parser = new PEAR_PackageFile_Parser_v2;
 $parser->setConfig($config);
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
@@ -48,4 +54,15 @@ $phpunit = &new PEAR_PHPTest(true);
 $fakelog = new fake_log;
 $parser->setLogger($fakelog);
 test_PEAR_Dependency2::singleton($config);
+/**
+ * @param array
+ * @return test_PEAR_Downloader_Package
+ */
+function &newFakeDownloaderPackage($options)
+{
+    global $config, $fakelog;
+    $downloader = &new test_PEAR_Downloader($fakelog, $options, $config);
+    $p = &new test_PEAR_Downloader_Package($downloader);
+    return $p;
+}
 ?>
