@@ -129,6 +129,13 @@ class PEAR_Downloader extends PEAR_Common
      */
     var $_internalDownload = false;
 
+    /**
+     * Temporary variable used in sorting packages by dependency in {@link sortPkgDeps()}
+     * @var array
+     * @access private
+     */
+    var $_packageSortTree;
+
     // {{{ PEAR_Downloader()
 
     function PEAR_Downloader(&$ui, $options, &$config)
@@ -1048,6 +1055,173 @@ class PEAR_Downloader extends PEAR_Common
             }
         }
         return $ret;
+    }
+
+    // }}}
+
+    // {{{ downloadHttp()
+
+    /**
+     * Download a file through HTTP.  Considers suggested file name in
+     * Content-disposition: header and can run a callback function for
+     * different events.  The callback will be called with two
+     * parameters: the callback type, and parameters.  The implemented
+     * callback types are:
+     *
+     *  'setup'       called at the very beginning, parameter is a UI object
+     *                that should be used for all output
+     *  'message'     the parameter is a string with an informational message
+     *  'saveas'      may be used to save with a different file name, the
+     *                parameter is the filename that is about to be used.
+     *                If a 'saveas' callback returns a non-empty string,
+     *                that file name will be used as the filename instead.
+     *                Note that $save_dir will not be affected by this, only
+     *                the basename of the file.
+     *  'start'       download is starting, parameter is number of bytes
+     *                that are expected, or -1 if unknown
+     *  'bytesread'   parameter is the number of bytes read so far
+     *  'done'        download is complete, parameter is the total number
+     *                of bytes read
+     *  'connfailed'  if the TCP connection fails, this callback is called
+     *                with array(host,port,errno,errmsg)
+     *  'writefailed' if writing to disk fails, this callback is called
+     *                with array(destfile,errmsg)
+     *
+     * If an HTTP proxy has been configured (http_proxy PEAR_Config
+     * setting), the proxy will be used.
+     *
+     * @param string  $url       the URL to download
+     * @param object  $ui        PEAR_Frontend_* instance
+     * @param object  $config    PEAR_Config instance
+     * @param string  $save_dir  (optional) directory to save file in
+     * @param mixed   $callback  (optional) function/method to call for status
+     *                           updates
+     *
+     * @return string  Returns the full path of the downloaded file or a PEAR
+     *                 error on failure.  If the error is caused by
+     *                 socket-related errors, the error object will
+     *                 have the fsockopen error code available through
+     *                 getCode().
+     *
+     * @access public
+     */
+    function downloadHttp($url, &$ui, $save_dir = '.', $callback = null)
+    {
+        if ($callback) {
+            call_user_func($callback, 'setup', array(&$ui));
+        }
+        if (preg_match('!^http://([^/:?#]*)(:(\d+))?(/.*)!', $url, $matches)) {
+            list(,$host,,$port,$path) = $matches;
+        }
+        if (isset($this)) {
+            $config = &$this->config;
+        } else {
+            $config = &PEAR_Config::singleton();
+        }
+        $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
+        if ($proxy = parse_url($config->get('http_proxy'))) {
+            $proxy_host = @$proxy['host'];
+            $proxy_port = @$proxy['port'];
+            $proxy_user = @$proxy['user'];
+            $proxy_pass = @$proxy['pass'];
+
+            if ($proxy_port == '') {
+                $proxy_port = 8080;
+            }
+            if ($callback) {
+                call_user_func($callback, 'message', "Using HTTP proxy $host:$port");
+            }
+        }
+        if (empty($port)) {
+            $port = 80;
+        }
+        if ($proxy_host != '') {
+            $fp = @fsockopen($proxy_host, $proxy_port, $errno, $errstr);
+            if (!$fp) {
+                if ($callback) {
+                    call_user_func($callback, 'connfailed', array($proxy_host, $proxy_port,
+                                                                  $errno, $errstr));
+                }
+                return PEAR::raiseError("Connection to `$proxy_host:$proxy_port' failed: $errstr", $errno);
+            }
+            $request = "GET $url HTTP/1.0\r\n";
+        } else {
+            $fp = @fsockopen($host, $port, $errno, $errstr);
+            if (!$fp) {
+                if ($callback) {
+                    call_user_func($callback, 'connfailed', array($host, $port,
+                                                                  $errno, $errstr));
+                }
+                return PEAR::raiseError("Connection to `$host:$port' failed: $errstr", $errno);
+            }
+            $request = "GET $path HTTP/1.0\r\n";
+        }
+        $request .= "Host: $host:$port\r\n".
+            "User-Agent: PHP/".PHP_VERSION."\r\n";
+        if ($proxy_host != '' && $proxy_user != '') {
+            $request .= 'Proxy-Authorization: Basic ' .
+                base64_encode($proxy_user . ':' . $proxy_pass) . "\r\n";
+        }
+        $request .= "\r\n";
+        fwrite($fp, $request);
+        $headers = array();
+        while (trim($line = fgets($fp, 1024))) {
+            if (preg_match('/^([^:]+):\s+(.*)\s*$/', $line, $matches)) {
+                $headers[strtolower($matches[1])] = trim($matches[2]);
+            } elseif (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
+                if ($matches[1] != 200) {
+                    return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)");
+                }
+            }
+        }
+        if (isset($headers['content-disposition']) &&
+            preg_match('/\sfilename=\"([^;]*\S)\"\s*(;|$)/', $headers['content-disposition'], $matches)) {
+            $save_as = basename($matches[1]);
+        } else {
+            $save_as = basename($url);
+        }
+        if ($callback) {
+            $tmp = call_user_func($callback, 'saveas', $save_as);
+            if ($tmp) {
+                $save_as = $tmp;
+            }
+        }
+        $dest_file = $save_dir . DIRECTORY_SEPARATOR . $save_as;
+        if (!$wp = @fopen($dest_file, 'wb')) {
+            fclose($fp);
+            if ($callback) {
+                call_user_func($callback, 'writefailed', array($dest_file, $php_errormsg));
+            }
+            return PEAR::raiseError("could not open $dest_file for writing");
+        }
+        if (isset($headers['content-length'])) {
+            $length = $headers['content-length'];
+        } else {
+            $length = -1;
+        }
+        $bytes = 0;
+        if ($callback) {
+            call_user_func($callback, 'start', array(basename($dest_file), $length));
+        }
+        while ($data = @fread($fp, 1024)) {
+            $bytes += strlen($data);
+            if ($callback) {
+                call_user_func($callback, 'bytesread', $bytes);
+            }
+            if (!@fwrite($wp, $data)) {
+                fclose($fp);
+                if ($callback) {
+                    call_user_func($callback, 'writefailed', array($dest_file, $php_errormsg));
+                }
+                return PEAR::raiseError("$dest_file: write failed ($php_errormsg)");
+            }
+        }
+        fclose($fp);
+        fclose($wp);
+        if ($callback) {
+            call_user_func($callback, 'done', $bytes);
+        }
+        return $dest_file;
     }
 
     // }}}

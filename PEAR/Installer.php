@@ -898,7 +898,7 @@ class PEAR_Installer extends PEAR_Downloader
         } else {
             $pkg = false;
             if ($this->validChannelPackage($package, $this->_registry)) {
-                list($channel, $package) = $this->splitChannelPackage($package);
+                list($channel, $package) = explode('::', $package);
             } else {
                 $channel = $this->config->get('default_channel');
             }
