@@ -53,11 +53,14 @@
     <state>stable</state>
     <license>PHP License</license>
     <notes>
+ * fix a serious problem caused by a bug in all versions of PHP that caused multiple registration
+   of the shutdown function of PEAR.php
  * fix Bug #2861: package.dtd does not define NUMBER
  * fix Bug #2946: ini_set warning errors
  * fix Bug #3026: Dependency type &quot;ne&quot; is needed, &quot;not&quot; is not handled
    properly
  * fix Bug #3061: potential warnings in PEAR_Exception
+ * implement Request #2848: PEAR_ErrorStack logger extends, PEAR_ERRORSTACK_DIE
  * implement Request #2914: Dynamic Include Path for run-tests command
  * make pear help listing more useful (put how-to-use info at the bottom of the listing)
     </notes>
