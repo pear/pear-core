@@ -10,7 +10,8 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(E_ALL);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$e = $command->run('config-create', array('windows' => true), array('C:\\path\\to\\pear', $temp_path . DIRECTORY_SEPARATOR
+$temp_path2 = str_replace(DIRECTORY_SEPARATOR, '\\', $temp_path);
+$e = $command->run('config-create', array('windows' => true), array($temp_path2 . DIRECTORY_SEPARATOR . 'nomake', $temp_path . DIRECTORY_SEPARATOR
     . 'remote.ini'));
 $phpunit->assertEquals(array (
   0 => 
@@ -59,25 +60,25 @@ $phpunit->assertEquals(array (
           array (
             0 => 'PEAR executables directory',
             1 => 'bin_dir',
-            2 => 'C:\\path\\to\\pear\\pear',
+            2 => '' . $temp_path2 . '\\nomake\\pear',
           ),
           1 => 
           array (
             0 => 'PEAR documentation directory',
             1 => 'doc_dir',
-            2 => 'C:\\path\\to\\pear\\pear\\docs',
+            2 => '' . $temp_path2 . '\\nomake\\pear\\docs',
           ),
           2 => 
           array (
             0 => 'PHP extension directory',
             1 => 'ext_dir',
-            2 => 'C:\\path\\to\\pear\\pear\\ext',
+            2 => '' . $temp_path2 . '\\nomake\\pear\\ext',
           ),
           3 => 
           array (
             0 => 'PEAR directory',
             1 => 'php_dir',
-            2 => 'C:\\path\\to\\pear\\pear\\php',
+            2 => '' . $temp_path2 . '\\nomake\\pear\\php',
           ),
         ),
         'File Locations (Advanced)' => 
@@ -86,13 +87,13 @@ $phpunit->assertEquals(array (
           array (
             0 => 'PEAR Installer cache directory',
             1 => 'cache_dir',
-            2 => 'C:\\path\\to\\pear\\pear\\cache',
+            2 => '' . $temp_path2 . '\\nomake\\pear\\cache',
           ),
           1 => 
           array (
             0 => 'PEAR data directory',
             1 => 'data_dir',
-            2 => 'C:\\path\\to\\pear\\pear\\data',
+            2 => '' . $temp_path2 . '\\nomake\\pear\\data',
           ),
           2 => 
           array (
@@ -104,7 +105,7 @@ $phpunit->assertEquals(array (
           array (
             0 => 'PEAR test directory',
             1 => 'test_dir',
-            2 => 'C:\\path\\to\\pear\\pear\\tests',
+            2 => '' . $temp_path2 . '\\nomake\\pear\\tests',
           ),
         ),
         'Advanced' => 
@@ -185,7 +186,7 @@ $phpunit->assertEquals(array (
           array (
             0 => 'System Configuration File',
             1 => 'Filename',
-            2 => $temp_path . DIRECTORY_SEPARATOR . 'pearsys.ini',
+            2 => '#no#system#config#',
           ),
         ),
       ),
