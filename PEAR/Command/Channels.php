@@ -183,9 +183,9 @@ List the files in an installed package.
         foreach ($channels as $info) {
             $save = $channel = $info[0];
             $server = $info[1];
-            if ($reg->channelExists($channel)) {
+            if ($reg->channelExists($channel, true)) {
                 $this->ui->outputData("Updating channel '$channel'");
-                $test = $reg->getChannel($channel);
+                $test = $reg->getChannel($channel, true);
                 if (!$test) {
                     $this->ui->outputData("Channel '$channel' is corrupt in registry!");
                     $lastmodified = null;
@@ -222,6 +222,18 @@ List the files in an installed package.
                 $reg->updateChannel($channel);
             } else {
                 $this->ui->outputData("Adding new channel '$channel'");
+                if ($reg->isAlias($channel)) {
+                    $temp = &$reg->getChannel($channel);
+                    $temp->setAlias($temp->getName(), true); // set the alias to the channel name
+                    if ($reg->channelExists($temp->getName())) {
+                        $this->ui->outputData('ERROR: existing channel "' . $temp->getName() .
+                            '" is aliased to "' . $channel . '" already and cannot be ' .
+                            're-aliased to "' . $temp->getName() . '" because a channel with ' .
+                            'that name or alias already exists!  Please rename manually and try ' .
+                            'again.');
+                        continue;
+                    }
+                }
                 $test = new PEAR_ChannelFile;
                 $test->setName($channel);
                 $test->setServer($server);
