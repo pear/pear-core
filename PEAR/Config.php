@@ -527,7 +527,29 @@ class PEAR_Config extends PEAR
         }
         $this->_decodeInput($data);
         $this->configuration[$layer] = $data;
+        $this->_setupChannels();
         return true;
+    }
+
+    // }}}
+    // {{{ _setupChannels()
+    
+    /**
+     * Reads the existing configurations and creates the _channels array from it
+     */
+    function _setupChannels()
+    {
+        $set = array_flip(array_values($this->_channels));
+        foreach ($this->configuration as $layer => $data) {
+            $i = 1000;
+            if (isset($data['__channels'])) {
+                foreach ($data['__channels'] as $channel => $info) {
+                    $set[$channel] = $i++;
+                }
+            }
+        }
+        $this->_channels = array_values(array_flip($set));
+        $this->setChannels($this->_channels);
     }
 
     // }}}
@@ -568,6 +590,7 @@ class PEAR_Config extends PEAR
         } else {
             $this->configuration[$layer] = PEAR_Config::arrayMergeRecursive($data, $this->configuration[$layer]);
         }
+        $this->_setupChannels();
         return true;
     }
 
@@ -732,7 +755,7 @@ class PEAR_Config extends PEAR
         foreach ($data as $key => $value) {
             if ($key == '__channels') {
                 foreach ($data['__channels'] as $channel => $blah) {
-                    $data['__channels'][$channel] = $this->_encodeOutput($data['__channels'][$channel]);
+                    $this->_encodeOutput($data['__channels'][$channel]);
                 }
             }
             if (!isset($this->configuration_info[$key])) {
@@ -977,7 +1000,8 @@ class PEAR_Config extends PEAR
         foreach ($channels as $channel) {
             $channel = strtolower($channel);
             foreach ($this->layers as $layer) {
-                if (!isset($this->configuration[$layer]['__channels'][$channel])) {
+                if (!isset($this->configuration[$layer]['__channels'][$channel])
+                      || !is_array($this->configuration[$layer]['__channels'][$channel])) {
                     $this->configuration[$layer]['__channels'][$channel] = array();
                 }
             }
