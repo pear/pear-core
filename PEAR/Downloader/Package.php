@@ -215,7 +215,7 @@ class PEAR_Downloader_Package
                             ), $dep['rel'])) {
                         continue;
                     }
-                    if (!isset($this->_options['onlyreqdeps'])) {
+                    if (!isset($this->_downloader->_options['onlyreqdeps'])) {
                         $this->_downloader->log(0, 'Warning: package "pear.php.net/' .
                             $this->getPackage() . '" required dependency "pear.php.net/'.
                             $dep['name'] . '" will not be downloaded, use --onlyreqdeps' .
