@@ -133,12 +133,13 @@ http://pear.php.net/dtd/package-2.0.xsd">
 
   Specific changes from 1.4.0a8:
   * add --package option to run-tests command, to run installed .phpt tests
-  * significantly drop pear's memory footprint for all commands except powerhouse commands like
-    &quot;pear package&quot;
+  * significantly drop pear's memory footprint for all commands
   * fix fatal errors when installing pecl packages
   * make download command work for non-root in a shared environment
   * make sure that if 1.4.0a8 (alpha) is installed, and 1.3.6 (newer) exists, pear will not
     attempt to &quot;upgrade&quot; to 1.3.6
+  * split PEAR_PackageFile_v2 into two classes, read-only PEAR_PackageFile_v2, and read-write
+    PEAR_PackageFile_v2_rw
  </notes>
  <contents>
   <dir name="/">
@@ -240,7 +241,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
       </file>
      </dir> <!-- /PEAR/PackageFile/Parser -->
      <dir name="v2">
-      <file role="php" name="Validator.php"/>
+      <file role="php" name="rw.php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file role="php" name="Validator.php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /PEAR/PackageFile/v2 -->
      <file name="v1.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
