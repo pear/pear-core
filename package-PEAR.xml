@@ -101,6 +101,7 @@
   * disable debug_backtrace() in PEAR_Error constructor of PEAR installer
   * fix Bug #3808 channel packages with non-baseinstalldir files will conflict on upgrade
   * fix Bug #3801 [PATCH] analyzeSourceCode() reports PHP4 code as PHP5
+  * implement Request #3717 [Patch] Implement Simple run-tests output
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

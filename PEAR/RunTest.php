@@ -109,7 +109,11 @@ class PEAR_RunTest
         fclose($fp);
 
         $shortname = str_replace($cwd.'/', '', $file);
-        $tested = trim($section_text['TEST'])." [$shortname]";
+        if (!isset($this->_options['simple'])) {
+            $tested = trim($section_text['TEST']) . "[$shortname]";
+        } else {
+            $tested = trim($section_text['TEST']) . ' ';
+        }
 
         $tmp = realpath(dirname($file));
         $tmp_skipif = $tmp . uniqid('/phpt.');
