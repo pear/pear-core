@@ -1604,6 +1604,13 @@ class PEAR_Registry extends PEAR
                 $param['package'] . '" in "' . $saveparam . '"',
                 'package', null, null, $param);
         }
+        if (isset($param['group'])) {
+            if (!PEAR_Validate::validGroupName($param['group'])) {
+                return PEAR::raiseError('parsePackageName(): dependency group "' . $param['group'] .
+                    '" is not a valid group name in "' . $saveparam . '"', 'group', null, null,
+                    $param);
+            }
+        }
         if (isset($param['state'])) {
             if (!in_array(strtolower($param['state']), $validate->getValidStates())) {
                 return PEAR::raiseError('parsePackageName(): state "' . $param['state']
