@@ -427,7 +427,31 @@ class PEAR_ErrorStack {
             self::$overridecallback = array();
         }
     }
-    
+
+    /**
+     * demote an exception to a non-fatal error (default is warning)
+     * @param Exception
+     * @param string
+     */
+    public function demoteException($e, $level = 'warning')
+    {
+        $this->push(get_class($e), $level, array(),
+            $e->getMessage(), $e, $e->getTrace());
+    }
+
+    /**
+     * promote a warning into a PEAR_Exception
+     *
+     * It is probably best to do this manually, to take advantage of the
+     * use of exception classnames to categorize errors
+     * @return PEAR_Exception
+     */
+    public function promoteWarning($warning, $exceptionclass = 'PEAR_Exception')
+    {
+        return new PEAR_Exception($warning['message'],
+            array($warning), $warning['code']);
+    }
+
     /**
      * Add an error to the stack
      * 

@@ -32,7 +32,9 @@ define('PEAR_OBSERVER_DIE',        -8);
  * - Nestable exceptions (throw new PEAR_Exception($msg, $prev_exception))
  * - Definable triggers, shot when exceptions occur
  * - Pretty and informative error messages
- * - Added more context info avaible (like class, method or cause)
+ * - Added more context info available (like class, method or cause)
+ * - cause can be a PEAR_Exception or an array of mixed
+ *   PEAR_Exceptions/PEAR_ErrorStack warnings
  *
  * 2) Ideas:
  *
@@ -103,13 +105,15 @@ class PEAR_Exception extends Exception
      * PEAR_Exception(string $message, int $code);
      * PEAR_Exception(string $message, Exception $cause);
      * PEAR_Exception(string $message, Exception $cause, int $code);
+     * PEAR_Exception(string $message, array $causes);
+     * PEAR_Exception(string $message, array $causes, int $code);
      */
     public function __construct($message, $p2 = null, $p3 = null)
     {
         if (is_int($p2)) {
             $code = $p2;
             $this->cause = null;
-        } elseif ($p2 instanceof Exception) {
+        } elseif ($p2 instanceof Exception || is_array($p2)) {
             $code = $p3;
             $this->cause = $p2;
         } else {
@@ -168,14 +172,18 @@ class PEAR_Exception extends Exception
     /**
      * Returns the exception that caused this exception to be thrown
      * @access public
-     * @return Exception_object The context of the exception
+     * @return Exception|array The context of the exception
      */
     public function getCause()
     {
         return $this->cause;
     }
 
-    private function _getCauseMessage(&$causes)
+    /**
+     * Function must be public to call on caused exceptions
+     * @param array
+     */
+    public function getCauseMessage(&$causes)
     {
         $trace = $this->getTraceSafe();
         $causes[] = array('class'   => get_class($this),
@@ -183,7 +191,26 @@ class PEAR_Exception extends Exception
                           'file'    => $trace[0]['file'],
                           'line'    => $trace[0]['line']);
         if ($this->cause instanceof PEAR_Exception) {
-            $this->cause->_getCauseMessage($causes);
+            $this->cause->getCauseMessage($causes);
+        }
+        if (is_array($this->cause)) {
+            foreach ($this->cause as $cause) {
+                if ($cause instanceof PEAR_Exception) {
+                    $cause->getCauseMessage($causes);
+                } elseif (is_array($cause) && isset($cause['message'])) {
+                    // PEAR_ErrorStack warning
+                    $causes[] = array(
+                        'class' => $cause['package'],
+                        'message' => $cause['message'],
+                        'file' => isset($cause['context']['file']) ?
+                                            $cause['context']['file'] :
+                                            'unknown',
+                        'line' => isset($cause['context']['line']) ?
+                                            $cause['context']['line'] :
+                                            'unknown',
+                    );
+                }
+            }
         }
     }
 
@@ -223,7 +250,7 @@ class PEAR_Exception extends Exception
     {
         $trace = $this->getTraceSafe();
         $causes = array();
-        $this->_getCauseMessage($causes);
+        $this->getCauseMessage($causes);
         $html =  '<table border="1" cellspacing="0">' . "\n";
         foreach ($causes as $i => $cause) {
             $html .= '<tr><td colspan="3" bgcolor="#ff9999">'
@@ -274,7 +301,7 @@ class PEAR_Exception extends Exception
     public function toText()
     {
         $causes = array();
-        $this->_getCauseMessage($causes);
+        $this->getCauseMessage($causes);
         $causeMsg = '';
         foreach ($causes as $i => $cause) {
             $causeMsg .= str_repeat(' ', $i) . $cause['class'] . ': '
