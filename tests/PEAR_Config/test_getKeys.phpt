@@ -13,6 +13,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'zoo.ini', $temp_path . DIRECTORY_SEPARATOR . 'zoo.ini');
 $phpunit->assertEquals(array (
   'default_channel',
+  'preferred_mirror',
   'remote_config',
   'auto_discover',
   'master_server',

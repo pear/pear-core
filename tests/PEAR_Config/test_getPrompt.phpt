@@ -12,6 +12,7 @@ error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini');
 $phpunit->assertEquals('Default Channel', $config->getPrompt('default_channel'), 'default_channel');
+$phpunit->assertEquals('Default Channel Mirror', $config->getPrompt('preferred_mirror'), 'preferred_mirror');
 $phpunit->assertEquals('Remote Configuration File', $config->getPrompt('remote_config'), 'remote_config');
 $phpunit->assertEquals('Auto-discover new Channels', $config->getPrompt('auto_discover'), 'auto_discover');
 $phpunit->assertEquals('PEAR server [DEPRECATED]', $config->getPrompt('master_server'), 'master_server');

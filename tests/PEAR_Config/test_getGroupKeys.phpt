@@ -13,10 +13,11 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini');
 $phpunit->assertEquals(array (
   0 => 'default_channel',
-  1 => 'remote_config',
-  2 => 'auto_discover',
-  3 => 'master_server',
-  4 => 'http_proxy',
+  1 => 'preferred_mirror',
+  2 => 'remote_config',
+  3 => 'auto_discover',
+  4 => 'master_server',
+  5 => 'http_proxy',
 ), $config->getGroupKeys('Internet Access'), 'Internet Access');
 $phpunit->assertEquals(array (
   0 => 'php_dir',

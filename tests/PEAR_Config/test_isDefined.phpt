@@ -11,6 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini');
+$phpunit->assertEquals(true, $config->isDefined('preferred_mirror'), 'preferred_mirror');
 $phpunit->assertEquals(true, $config->isDefined('default_channel'), 'default_channel');
 $phpunit->assertEquals(true, $config->isDefined('remote_config'), 'remote_config');
 $phpunit->assertEquals(true, $config->isDefined('auto_discover'), 'auto_discover');
