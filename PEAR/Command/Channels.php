@@ -638,13 +638,38 @@ List the files in an installed package.
     {
         $reg = &$this->config->getRegistry();
         if (sizeof($params) == 1) {
-            return $this->raiseError("No channel alias specified");
+            return $this->raiseError('No channel alias specified');
         }
         if (sizeof($params) != 2) {
             return $this->raiseError(
-                "Invalid format, correct is: channel-alias channel alias");
+                'Invalid format, correct is: channel-alias channel alias');
         }
-        
+        if (!$reg->channelExists($params[0], true)) {
+            if ($reg->isAlias($params[0])) {
+                $extra = ' (use "channel-alias ' . $reg->channelName($params[0]) . ' ' .
+                    strtolower($params[1]) . '")';
+            } else {
+                $extra = '';
+            }
+            return $this->raiseError('"' . $params[0] . '" is not a valid channel' . $extra);
+        }
+        if ($reg->isAlias($params[1])) {
+            return $this->raiseError('Channel "' . $reg->channelName($params[1]) . '" is ' .
+                'already aliased to "' . strtolower($params[1]) . '", cannot re-alias');
+        }
+        $chan = &$reg->getChannel($params[0]);
+        if (!$chan) {
+            return $this->raiseError('Corrupt registry?  Error retrieving channel "' . $params[0] .
+                '" information');
+        }
+        // make it a local alias
+        if (!$chan->setAlias(strtolower($params[1]), true)) {
+            return $this->raiseError('Alias "' . strtolower($params[1]) .
+                '" is not a valid channel alias');
+        }
+        $reg->updateChannel($chan);
+        $this->ui->outputData('Channel "' . $chan->getName() . '" aliased successfully to "' .
+            strtolower($params[1]) . '"');
     }
 
     function doDiscover($command, $options, $params)
