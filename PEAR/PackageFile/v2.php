@@ -2057,7 +2057,7 @@ class PEAR_PackageFile_v2
      * - a php package is a PEAR-style package
      * - an extbin package is a PECL-style extension binary
      * - an extsrc package is a PECL-style source for a binary
-     * - a bundle package is a collection of other pre-compiled packages
+     * - a bundle package is a collection of other pre-packaged packages
      * @param php|extbin|extsrc|bundle
      * @return bool success
      */
@@ -2087,9 +2087,27 @@ class PEAR_PackageFile_v2
     function addRelease()
     {
         if ($type = $this->getPackageType()) {
+            if ($type != 'bundle') {
+                $type .= 'release';
+            }
             $this->_mergeTag($this->_packageInfo, array(),
-                array($this->getPackageType() => array('changelog')));
+                array($type => array('changelog')));
             return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return array|false
+     */
+    function getReleases()
+    {
+        $type = $this->getPackageType();
+        if ($type != 'bundle') {
+            $type .= 'release';
+        }
+        if ($this->getPackageType() && isset($this->_packageInfo[$type])) {
+            return $this->_packageInfo[$type];
         }
         return false;
     }
@@ -2103,12 +2121,14 @@ class PEAR_PackageFile_v2
     {
         if ($p = $this->getPackageType()) {
             if ($strict) {
-                if ($p == 'extsrc' || $p == 'bundle') {
+                if ($p == 'extsrc') {
                     $a = null;
                     return $a;
                 }
             }
-            $p .= 'release';
+            if ($p != 'bundle') {
+                $p .= 'release';
+            }
             if (isset($this->_packageInfo[$p][0])) {
                 return $this->_packageInfo[$p][count($this->_packageInfo[$p]) - 1];
             } else {
@@ -2118,6 +2138,92 @@ class PEAR_PackageFile_v2
             $a = null;
             return $a;
         }
+    }
+
+    /**
+     * Add a file to the current release that should be installed under a different name
+     * @param string <contents> path to file
+     * @param string name the file should be installed as
+     */
+    function addInstallAs($path, $as)
+    {
+        $r = &$this->_getCurrentRelease();
+        if ($r === null) {
+            return false;
+        }
+        $this->_isValid = 0;
+        $this->_mergeTag($r, array('attribs' => array('name' => $path, 'as' => $as)),
+            array(
+                'filelist' => array(),
+                'install' => array('ignore')
+            ));
+    }
+
+    /**
+     * Add a file to the current release that should be ignored
+     * @param string <contents> path to file
+     * @return bool success of operation
+     */
+    function addIgnore($path)
+    {
+        $r = &$this->_getCurrentRelease();
+        if ($r === null) {
+            return false;
+        }
+        $this->_isValid = 0;
+        $this->_mergeTag($r, array('attribs' => array('name' => $path)),
+            array(
+                'filelist' => array(),
+                'ignore' => array()
+            ));
+    }
+
+    /**
+     * Add an extension binary package for this extension source code release
+     *
+     * Note that the package must be from the same channel as the extension source package
+     * @param string
+     */
+    function addBinarypackage($package)
+    {
+        if ($this->getPackageType() != 'extsrc') {
+            return false;
+        }
+        $r = &$this->_getCurrentRelease(false);
+        if ($r === null) {
+            return false;
+        }
+        $this->_isValid = 0;
+        $this->_mergeTag($r, $package,
+            array(
+                'binarypackage' => array(),
+            ));
+    }
+
+    /**
+     * Add a configureoption to an extension source package
+     * @param string
+     * @param string
+     * @param string
+     */
+    function addConfigureOption($name, $prompt, $default = null)
+    {
+        if ($this->getPackageType() != 'extsrc') {
+            return false;
+        }
+        $r = &$this->_getCurrentRelease(false);
+        if ($r === null) {
+            return false;
+        }
+        $opt = array('name' => $name, 'prompt' => $prompt);
+        if ($default !== null) {
+            $opt['default'] = $default;
+        }
+        $this->_isValid = 0;
+        $this->_mergeTag($r, $opt,
+            array(
+                'configureoption' => array('binarypackage'),
+            ));
     }
 
     /**
@@ -2141,7 +2247,7 @@ class PEAR_PackageFile_v2
             }
             $dep['exclude'] = $exclude;
         }
-        $this->_mergeTag($r['installconditions'], $dep,
+        $this->_mergeTag($r, $dep,
             array(
                 'installconditions' => array('filelist'),
                 'php' => array('extension', 'os', 'arch')
@@ -2165,7 +2271,7 @@ class PEAR_PackageFile_v2
         }
         $this->_isValid = 0;
         $dep = $this->_constructDep($name, false, false, $min, $max, $recommended, $exclude);
-        $this->_mergeTag($r['installconditions'], $dep,
+        $this->_mergeTag($r, $dep,
             array(
                 'installconditions' => array('filelist'),
                 'extension' => array('os', 'arch')
@@ -2189,7 +2295,7 @@ class PEAR_PackageFile_v2
         if ($conflicts) {
             $dep['conflicts'] = 'yes';
         }
-        $this->_mergeTag($r['installconditions'], $dep,
+        $this->_mergeTag($r, $dep,
             array(
                 'installconditions' => array('filelist'),
                 'os' => array('arch')
@@ -2213,7 +2319,7 @@ class PEAR_PackageFile_v2
         if ($conflicts) {
             $dep['conflicts'] = 'yes';
         }
-        $this->_mergeTag($r['installconditions'], $dep,
+        $this->_mergeTag($r, $dep,
             array(
                 'installconditions' => array('filelist'),
                 'arch' => array()
