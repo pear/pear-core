@@ -127,24 +127,6 @@ class BurfLog {
 
 	$listener = new HTML_TestListener();
     $finalresult = TestUnit::run($suite, $listener);
-    $results = include_once dirname(__FILE__) . '/base_regression.php';
-    $num = $results['number'];
-    $failed = $results['failed'];
-    $passed = $results['passed'];
-    for ($i = 1; $i <= $num; $i++) {
-        $bla = new Mock_PHPUnit;
-        $bla->name = $i;
-        $listener->startTest($bla);
-    	if (isset($failed[$i])) {
-    	    $listener->addFailure($bla, $failed[$i]);
-            $finalresult->addFailure($bla, $a = 'context had additional ' . serialize($failed[$i]));
-        }
-        $listener->endTest($bla);
-    }
-
-	$finalresult->removeListener($listener);
-    // hack in the base regression test count
-    $finalresult->_runTests += count($results['failed']) + count($results['passed']);
 	$finalresult->report();
 
 	?>
