@@ -150,7 +150,7 @@ parameter.
         $savechannel = $channel = $this->config->get('default_channel');
         $reg = &$this->config->getRegistry();
         $package = $params[0];
-        $parsed = $reg->parsePackageName($package);
+        $parsed = $reg->parsePackageName($package, $channel);
         if (PEAR::isError($parsed)) {
             return $this->raiseError('Invalid package name "' . $package . '"');
         }

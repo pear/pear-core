@@ -509,7 +509,7 @@ Run post-installation scripts in package <package>, if any exist.
         foreach ($params as $pkg) {
             $channel = $this->config->get('default_channel');
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-            $parsed = $reg->parsePackageName($pkg);
+            $parsed = $reg->parsePackageName($pkg, $channel);
             PEAR::staticPopErrorHandling();
             if (!$parsed || PEAR::isError($parsed)) {
                 $badparams[] = $pkg;

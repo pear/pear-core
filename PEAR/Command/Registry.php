@@ -193,7 +193,7 @@ installed package.'
             $installed = false;
         } else {
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-            $parsed = $reg->parsePackageName($params[0]);
+            $parsed = $reg->parsePackageName($params[0], $this->config->get('default_channel'));
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($parsed)) {
                 return $this->raiseError($parsed);
@@ -288,8 +288,8 @@ installed package.'
     function doShellTest($command, $options, $params)
     {
         $this->pushErrorHandling(PEAR_ERROR_RETURN);
-        $reg = &new PEAR_Registry($this->config->get('php_dir'));
-        $info = $reg->parsePackageName($params[0]);
+        $reg = &$this->config->getRegistry();
+        $info = $reg->parsePackageName($params[0], $this->config->get('default_channel'));
         if (PEAR::isError($info)) {
             exit(1); // invalid package name
         }
@@ -353,7 +353,7 @@ installed package.'
                 return $this->_doList2($command, $options, $params, $obj);
             }
         } else {
-            $parsed = $reg->parsePackageName($params[0]);
+            $parsed = $reg->parsePackageName($params[0], $this->config->get('default_channel'));
             if (PEAR::isError($parsed)) {
                 return $this->raiseError($parsed);
             }
