@@ -29,68 +29,74 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
     array(array('package' => 'main', 'channel' => 'pear.php.net', 'group' => 'foo'), 'stable'),
     array('version' => '1.0',
           'info' =>
-          array(
-            'channel' => 'pear.php.net',
-            'package' => 'main',
-            'license' => 'PHP License',
-            'summary' => 'Main Package',
-            'description' => 'Main Package',
-            'releasedate' => '2003-12-06 00:26:42',
-            'state' => 'stable',
-            'apiversion' => '1.0',
-            'xsdversion' => '2.0',
-            'deps' =>
-            array(
-                'required' =>
-                array(
-                    'php' =>
-                    array(
-                        'min' => '4.2',
-                        'max' => '6.0.0',
-                        ),
-                    'pearinstaller' =>
-                    array(
-                        'min' => '1.4.0dev13',
-                        ),
-                    'package' =>
-                        array(
-                            'name' => 'required',
-                            'channel' => 'pear.php.net',
-                            'min' => '1.1',
-                        ),
-                ),
-                'optional' =>
-                array(
-                    'package' =>
-                        array(
-                            'name' => 'optional',
-                            'channel' => 'pear.php.net',
-                            'min' => '1.1',
-                        ),
-                ),
-                'group' =>
-                array(
-                    'attribs' => 
-                    array(
-                        'name' => 'foo',
-                        'hint' => 'testing group',
-                    ),
-                    'package' =>
-                        array(
-                            array(
-                                'name' => 'sub1',
-                                'channel' => 'pear.php.net',
-                                'min' => '1.1',
-                            ),
-                            array(
-                                'name' => 'sub2',
-                                'channel' => 'pear.php.net',
-                                'min' => '1.1',
-                            ),
-                        )
-                ),
-            ),
-          ),
+'<?xml version="1.0"?>
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+ <name>main</name>
+ <channel>pear.php.net</channel>
+ <summary>Main Package</summary>
+ <description>Main Package</description>
+ <lead>
+  <name>Greg Beaver</name>
+  <user>cellog</user>
+  <email>cellog@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2004-09-30</date>
+ <version>
+  <release>1.0</release>
+  <api>1.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+ <notes>test</notes>
+ <contents>
+  <dir name="/">
+   <file baseinstalldir="/" name="main.php" role="php" />
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.2</min>
+    <max>6.0.0</max>
+   </php>
+   <pearinstaller>
+    <min>1.4.0dev13</min>
+   </pearinstaller>
+   <package>
+    <name>required</name>
+    <channel>pear.php.net</channel>
+    <min>1.1</min>
+   </package>
+  </required>
+  <optional>
+   <package>
+    <name>optional</name>
+    <channel>pear.php.net</channel>
+    <min>1.1</min>
+   </package>
+  </optional>
+  <group name="foo" hint="testing group">
+   <package>
+    <name>sub1</name>
+    <channel>pear.php.net</channel>
+    <min>1.1</min>
+   </package>
+   <package>
+    <name>sub2</name>
+    <channel>pear.php.net</channel>
+    <min>1.1</min>
+   </package>
+  </group>
+ </dependencies>
+ <phprelease/>
+</package>',
           'url' => 'http://www.example.com/main-1.0'));
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
     array('2.0', array('name' => 'optional', 'channel' => 'pear.php.net', 'min' => '1.1'),
@@ -105,17 +111,50 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
         array('channel' => 'pear.php.net', 'package' => 'main', 'version' => '1.0'), 'stable'),
     array('version' => '1.1',
           'info' =>
-          array(
-            'channel' => 'pear.php.net',
-            'package' => 'sub1',
-            'license' => 'PHP License',
-            'summary' => 'Subgroup Package 1',
-            'description' => 'Subgroup Package 1',
-            'releasedate' => '2003-12-06 00:26:42',
-            'state' => 'stable',
-            'apiversion' => '1.1',
-            'xsdversion' => '2.0',
-          ),
+          '<?xml version="1.0"?>
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+ <name>sub1</name>
+ <channel>pear.php.net</channel>
+ <summary>Subgroup Package 1</summary>
+ <description>Subgroup Package 2</description>
+ <lead>
+  <name>Greg Beaver</name>
+  <user>cellog</user>
+  <email>cellog@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2004-09-30</date>
+ <version>
+  <release>1.1</release>
+  <api>1.1</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+ <notes>test</notes>
+ <contents>
+  <dir name="/">
+   <file baseinstalldir="/" name="sub1.php" role="php" />
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.0</min>
+    <max>6.0.0</max>
+   </php>
+   <pearinstaller>
+    <min>1.4.0dev13</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease/>
+</package>',
           'url' => 'http://www.example.com/sub1-1.1'));
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
     array('2.0', array('name' => 'sub2', 'channel' => 'pear.php.net', 'min' => '1.1'),
@@ -129,22 +168,22 @@ $params = array(&$dp);
 $dp->detectDependencies($params);
 $phpunit->assertNoErrors('after detect');
 $phpunit->assertEquals(array (
-  0 => 
+  array (
+    0 => 3,
+    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
+  ),
   array (
     0 => 0,
     1 => 'No releases for package "pear/required" exist',
   ),
-  1 => 
   array (
     0 => 3,
     1 => 'Notice: package "pear/main" optional dependency "pear/optional" will not be automatically downloaded',
   ),
-  2 => 
   array (
     0 => 0,
     1 => 'No releases for package "pear/optional" exist',
   ),
-  3 => 
   array (
     0 => 0,
     1 => 'No releases for package "pear/sub2" exist',
