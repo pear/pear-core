@@ -125,7 +125,9 @@ Installer:
      <file role="php" name="Common.php"/>
      <file role="php" name="Config.php"/>
      <file role="php" name="Install.php"/>
-     <file role="php" name="Package.php"/>
+     <file role="php" name="Package.php">
+      <replace from="@DATA-DIR@" to="data_dir" type="pear-config" />
+     </file>
      <file role="php" name="Registry.php"/>
      <file role="php" name="Remote.php"/>
      <file role="php" name="Mirror.php"/>
