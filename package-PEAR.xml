@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "package.dtd">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0">
  <name>PEAR</name>
  <summary>PEAR Base System</summary>
@@ -14,7 +14,6 @@
  * the System class for quick handling common operations
    with files and directories
  </description>
- <license>PHP License</license>
  <maintainers>
   <maintainer>
    <user>ssb</user>
@@ -50,6 +49,7 @@
  <release>
   <version>1.4.0dev11</version>
   <date>2004-08-16</date>
+  <license>PHP License</license>
   <state>devel</state>
   <notes>
 Installer Channel Support:
@@ -57,11 +57,11 @@ Installer Channel Support:
    a consequence, you must re-install all of the channel.xml
    (delete all the .reg files from the .registry/.channels directory and
    then re-add them using channel-add)
- * channel DTD is available on pearweb
+ * channel XSD is available on pearweb
  * add channel.listAll and channel.update to default PEAR protocols
  * add ability to &quot;pear channel-update channelname&quot; to
    retrieve updates manually for individual channels
- * fix channel.xml generation to use a valid DOCTYPE declaration
+ * fix channel.xml generation to use a valid schema declaration
 
 Installer:
 
@@ -76,9 +76,9 @@ PEAR_ErrorStack:
  * add optional parameter to staticHasErrors() to allow error
    determination for single packages
   </notes>
-  <provides type="class" name="OS_Guess" />
-  <provides type="class" name="System" />
-  <provides type="function" name="md5_file" />
+  <provides type="class" name="OS_Guess"/>
+  <provides type="class" name="System"/>
+  <provides type="function" name="md5_file"/>
   <filelist>
    <file role="data" name="package.dtd"/>
    <file role="data" name="pearchannel.xml"/>
@@ -156,6 +156,7 @@ PEAR_ErrorStack:
   <release>
    <version>1.3</version>
    <date>2004-02-20</date>
+   <license>PHP License</license>
    <state>stable</state>
    <notes>
 PEAR Installer:
