@@ -234,7 +234,12 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 $file = $a['attribs']['name'];
                 unset($a['attribs']['name']);
                 $attributes = $a['attribs'];
-                $this->_addDir($dirs, explode('/', dirname($file)), $file, $attributes);
+                if (isset($a[$this->_packagefile->getTasksNs() . ':replace'])) {
+                    $repl = $a[$this->_packagefile->getTasksNs() . ':replace'];
+                } else {
+                    $repl = null;
+                }
+                $this->_addDir($dirs, explode('/', dirname($file)), $file, $attributes, $repl);
             }
         }
         $this->_formatDir($dirs);
@@ -242,18 +247,22 @@ http://pear.php.net/dtd/package-2.0.xsd',
         return $dirs;
     }
 
-    function _addDir(&$dirs, $dir, $file = null, $attributes = null)
+    function _addDir(&$dirs, $dir, $file = null, $attributes = null, $replacements = null)
     {
         if ($dir == array() || $dir == array('.')) {
             $attributes['name'] = basename($file);
             $dirs['file'][basename($file)]['attribs'] = $attributes;
+            if (isset($replacements)) {
+                $dirs['file'][basename($file)][$this->_packagefile->getTasksNs() . ':replace']
+                    = $replacements;
+            }
             return;
         }
         $curdir = array_shift($dir);
         if (!isset($dirs['dir'][$curdir])) {
             $dirs['dir'][$curdir] = array();
         }
-        $this->_addDir($dirs['dir'][$curdir], $dir, $file, $attributes);
+        $this->_addDir($dirs['dir'][$curdir], $dir, $file, $attributes, $replacements);
     }
 
     function _formatDir(&$dirs)
