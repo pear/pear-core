@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Validate->validate(), version tests (basic stable)
+PEAR_Validate->validate(), version tests (extends stable)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
