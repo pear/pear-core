@@ -67,8 +67,9 @@ params are interpreted as php values and evaled - be careful',
         $remote = &$this->config->getRemote();
         $method = array_shift($params);
         if (count($params)) {
-            $params = 'array(' . implode(', ', $params) . ')';
-            $params = eval($params);
+            $params = '$params=array(' . implode(', ', $params) . ');';
+            $this->ui->outputData('Evaling "' . $params . '"');
+            eval($params);
         }
         $remote->clearCache($method, $params);
         array_unshift($params, $method);
