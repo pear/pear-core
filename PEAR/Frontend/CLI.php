@@ -151,6 +151,20 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
 
     // }}}
 
+    /**
+     * Instruct the runInstallScript method to skip a paramgroup that matches the
+     * id value passed in.
+     *
+     * This method is useful for dynamically configuring which sections of a post-install script
+     * will be run based on the user's setup, which is very useful for making flexible
+     * post-install scripts without losing the cross-Frontend ability to retrieve user input
+     * @param string
+     */
+    function skipParamgroup($id)
+    {
+        $this->_skipSections[$sectionName] = true;
+    }
+
     function runPostinstallScripts(&$scripts)
     {
         foreach ($scripts as $i => $script) {
@@ -165,6 +179,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
      */
     function runInstallScript($xml, &$script)
     {
+        $this->_skipSections = array();
         if (!is_array($xml) || !isset($xml['paramgroup'])) {
             $script->run(array(), '_default');
         } else {
@@ -173,6 +188,10 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 $xml['paramgroup'] = array($xml['paramgroup']);
             }
             foreach ($xml['paramgroup'] as $group) {
+                if (isset($this->_skipSections[$group['id']])) {
+                    // the post-install script chose to skip this section dynamically
+                    continue;
+                }
                 if (isset($group['name'])) {
                     $paramname = explode('::', $group['name']);
                     if ($lastgroup['id'] != $paramname[0]) {
@@ -210,7 +229,9 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 if (!isset($group['param'][0])) {
                     $group['param'] = array($group['param']);
                 }
-                $answers = $this->confirmDialog($group['param']);
+                if (isset($group['param'])) {
+                    $answers = $this->confirmDialog($group['param']);
+                }
                 if ($answers) {
                     array_unshift($completedPhases, $group['id']);
                     if (!$script->run($answers, $group['id'])) {
