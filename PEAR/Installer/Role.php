@@ -36,7 +36,7 @@ class PEAR_Installer_Role
         if (!isset($GLOBALS['_PEAR_INSTALLER_ROLES'])) {
             PEAR_Installer_Role::registerRoles();
         }
-        if (!in_array($role, PEAR_Installer_Role::getValidRoles($pkg->getReleaseType()))) {
+        if (!in_array($role, PEAR_Installer_Role::getValidRoles($pkg->getPackageType()))) {
             $a = false;
             return $a;
         }
