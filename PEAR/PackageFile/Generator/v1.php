@@ -433,6 +433,8 @@ class PEAR_PackageFile_Generator_v1
             if (!($where = System::mktemp(array('-d')))) {
                 return PEAR::raiseError("PEAR_Packagefile_v1::toPackageFile: mktemp failed");
             }
+        } elseif (PEAR::isError($e = System::mkDir(array('-p', $where)))) {
+            return $e;
         }
         $newpkgfile = $where . DIRECTORY_SEPARATOR . $name;
         $np = @fopen($newpkgfile, 'wb');
