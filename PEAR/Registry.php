@@ -716,8 +716,12 @@ class PEAR_Registry extends PEAR
                 // XXX does not check type of lock (LOCK_SH/LOCK_EX)
                 return true;
             }
-            if (PEAR::isError($err = $this->_assertStateDir())) {
-                return $err;
+            if (!$this->_assertStateDir()) {
+                if ($mode == LOCK_EX) {
+                    return $this->raiseError('Registry directory is not writeable by the current user');
+                } else {
+                    return true;
+                }
             }
             $open_mode = 'w';
             // XXX People reported problems with LOCK_SH and 'w'
@@ -1968,11 +1972,18 @@ class PEAR_Registry extends PEAR
             }
         }
         // validation
-        if (!$this->channelExists($param['channel'])) {
+        $info = $this->channelExists($param['channel']);
+        if (PEAR::isError($info)) {
+            return $info;
+        }
+        if (!$info) {
             return PEAR::raiseError('unknown channel "' . $param['channel'] .
                 '" in "' . $saveparam . '"', 'channel', null, null, $param);
         }
         $chan = $this->getChannel($param['channel']);
+        if (PEAR::isError($chan)) {
+            return $chan;
+        }
         if (!$chan) {
             return PEAR::raiseError("Exception: corrupt registry, could not " .
                 "retrieve channel " . $param['channel'] . " information",

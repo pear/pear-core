@@ -268,6 +268,19 @@ class PEAR_Downloader extends PEAR_Common
                 $this->pushError('Package "' . $param . '" is not valid',
                     PEAR_INSTALLER_SKIPPED);
             }
+            if ($params[$i]) {
+                $checkdir = $this->config->get('php_dir', null, $params[$i]->getChannel());
+                while ($checkdir && $checkdir != '/' && !file_exists($checkdir)) {
+                    $checkdir = dirname($checkdir);
+                }
+                if ($checkdir == '.') {
+                    $checkdir = '/';
+                }
+                if (!@is_writeable($checkdir)) {
+                    return PEAR::raiseError('Cannot install, php_dir for channel "' .
+                        $params[$i]->getChannel() . '" is not writeable by the current user');
+                }
+            }
         }
         PEAR_Downloader_Package::removeDuplicates($params);
         if (!count($params)) {
