@@ -37,7 +37,7 @@ $phpunit->assertIsa('PEAR_Error', $e, 'error');
 $pf = &$parser->parse('<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="' . $generator->getPackagerVersion() . '">
- <name>foo</name>       
+ <name>foo</name>
  <summary>foo</summary>
  <description>foo
 hi there
