@@ -240,7 +240,8 @@ class PEAR_Dependency2
 
     function validatePhpDependency($dep)
     {
-        if ($this->_state != PEAR_VALIDATE_INSTALLING) {
+        if ($this->_state != PEAR_VALIDATE_INSTALLING &&
+              $this->_state != PEAR_VALIDATE_DOWNLOADING) {
             return true;
         }
         $version = phpversion();
@@ -569,10 +570,10 @@ class PEAR_Dependency2
         }
         if ($type == 'Php') {
             if (!isset($newdep['attribs']['min'])) {
-                $newdep['min'] = '4.1.0';
+                $newdep['attribs']['min'] = '4.1.0';
             }
             if (!isset($newdep['attribs']['max'])) {
-                $newdep['max'] = '6.0.0';
+                $newdep['attribs']['max'] = '6.0.0';
             }
         }
         return array($newdep, $type);
