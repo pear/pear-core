@@ -736,7 +736,7 @@ class test_PEAR_PackageFile_v2 extends PEAR_PackageFile_v2
 
     function &getPEARDependency2(&$c, $o, $p, $s = PEAR_VALIDATE_INSTALLING)
     {
-        $z = &test_PEAR_Dependency2::singleton(&$c, $o, $p, $s);
+        $z = &test_PEAR_Dependency2::singleton($c, $o, $p, $s);
         return $z;
     }
 }
@@ -752,7 +752,7 @@ class test_PEAR_PackageFile_v1 extends PEAR_PackageFile_v1
 
     function &getPEARDependency2(&$c, $o, $p, $s = PEAR_VALIDATE_INSTALLING)
     {
-        $z = &test_PEAR_Dependency2::singleton(&$c, $o, $p, $s);
+        $z = &test_PEAR_Dependency2::singleton($c, $o, $p, $s);
         return $z;
     }
 }
