@@ -2,33 +2,12 @@
 error_reporting(E_ALL);
 include_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'pear_registry_inc.php.inc';
 include_once "PEAR/Registry.php";
+include_once "PEAR/ChannelFile.php";
+include_once "PEAR/PackageFile/v1.php";
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 
 // ------------------------------------------------------------------------- //
-
-function cleanall($dir = null)
-{
-    if ($dir !== null) {
-        $statedir = $dir;
-    } else {
-        $statedir = $GLOBALS['statedir'];
-    }
-    if (file_exists($statedir)) {
-        $dp = opendir($statedir);
-        while ($ent = readdir($dp)) {
-            if (in_array($ent, array('.', '..'))) {
-                continue;
-            }
-            if (is_dir($statedir . DIRECTORY_SEPARATOR . $ent)) {
-                cleanall($statedir . DIRECTORY_SEPARATOR . $ent);
-                continue;
-            }
-            unlink($statedir . DIRECTORY_SEPARATOR . $ent);
-        }
-        closedir($dp);
-        rmdir($statedir);
-    }
-}
 
 register_shutdown_function('cleanall');
 $statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'registry_tester';
@@ -88,8 +67,7 @@ $files3_new = array(
         "role" => "php",
         ),
     );
-
-print "creating registry object\n";
-$reg = new PEAR_Registry($statedir);
+mkdir($statedir);
+$reg = &new PEAR_Registry($statedir);
 $phpunit = &new PEAR_PHPTest(true);
 ?>

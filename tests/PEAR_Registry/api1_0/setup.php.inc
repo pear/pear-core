@@ -6,29 +6,8 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'phpt_t
 
 // ------------------------------------------------------------------------- //
 
-function cleanall($dir = null)
-{
-    if ($dir !== null) {
-        $statedir = $dir;
-    } else {
-        $statedir = $GLOBALS['statedir'];
-    }
-    if (file_exists($statedir)) {
-        $dp = opendir($statedir);
-        while ($ent = readdir($dp)) {
-            if (in_array($ent, array('.', '..'))) {
-                continue;
-            }
-            if (is_dir($statedir . DIRECTORY_SEPARATOR . $ent)) {
-                cleanall($statedir . DIRECTORY_SEPARATOR . $ent);
-                continue;
-            }
-            unlink($statedir . DIRECTORY_SEPARATOR . $ent);
-        }
-        closedir($dp);
-        rmdir($statedir);
-    }
-}
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
+
 
 register_shutdown_function('cleanall');
 $statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'registry_tester';

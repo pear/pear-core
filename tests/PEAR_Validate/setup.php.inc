@@ -3,33 +3,11 @@
 $server = 'pear.Chiara';
 //$server = 'test.pear.php.net';
 $temp_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
-
-function cleanall($dir = null)
-{
-    if ($dir !== null) {
-        $statedir = $dir;
-    } else {
-        $statedir = $GLOBALS['temp_path'];
-    }
-    if (file_exists($statedir)) {
-        $dp = opendir($statedir);
-        while ($ent = readdir($dp)) {
-            if (in_array($ent, array('.', '..'))) {
-                continue;
-            }
-            if (is_dir($statedir . DIRECTORY_SEPARATOR . $ent)) {
-                cleanall($statedir . DIRECTORY_SEPARATOR . $ent);
-                continue;
-            }
-            unlink($statedir . DIRECTORY_SEPARATOR . $ent);
-        }
-        closedir($dp);
-        rmdir($statedir);
-    }
-}
+require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 
 register_shutdown_function('cleanall');
 cleanall($temp_path);
+$statedir = $temp_path;
 if (!is_dir($temp_path)) {
     mkdir($temp_path);
 }
@@ -86,7 +64,6 @@ if (!empty($home)) {
     putenv('HOME="'.$temp_path);
 }
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 $phpunit = &new PEAR_PHPTest(true);
 $fakelog = new fake_log;
 require_once 'PEAR/Config.php';
