@@ -24,6 +24,8 @@
 require_once 'PEAR/Common.php';
 require_once 'PEAR/Registry.php';
 require_once 'PEAR/Dependency.php';
+require_once 'PEAR/Dependency2.php';
+require_once 'PEAR/DependencyDB.php';
 require_once 'PEAR/Remote.php';
 require_once 'PEAR/PackageFile.php';
 require_once 'PEAR/Downloader/Package.php';
@@ -539,248 +541,217 @@ class PEAR_Downloader extends PEAR_Common
     }
 
     // }}}
-    // {{{ sortPkgDeps()
+
+    /**
+     * for BC
+     */
+    function sortPkgDeps(&$packages, $uninstall = false)
+    {
+        $uninstall ? 
+            $this->sortPackagesForUninstall($packages) :
+            $this->sortPackagesForInstall($packages);
+    }
+
+    function _getDepTreeDP($package, $packages, &$deps, &$checked)
+    {
+        $pf = $package->getPackageFile();
+        $checked[strtolower($package->getChannel())][strtolower($package->getPackage())]
+            = true;
+        $pdeps = $pf->getDeps(true);
+        if (!$pdeps) {
+            return;
+        }
+        if ($pf->getPackagexmlVersion() == '1.0') {
+            foreach ($pdeps as $dep) {
+                if ($dep['type'] != 'pkg') {
+                    continue;
+                }
+                $deps['pear.php.net'][strtolower($dep['name'])] = true;
+                foreach ($packages as $p) {
+                    $dep['channel'] = 'pear.php.net';
+                    $dep['package'] = $dep['name'];
+                    unset($dep['version']);
+                    if ($p->isEqual($dep)) {
+                        if (!isset($checked[strtolower($p->getChannel())]
+                              [strtolower($p->getPackage())])) {
+                            // add the dependency's dependencies to the tree
+                            $this->_getDepTreeDP($p, $packages, $deps, $checked);
+                        }
+                    }
+                }
+            }
+        } else {
+            $tdeps = array();
+            if (isset($pdeps['required']['package'])) {
+                $t = $pdeps['required']['package'];
+                if (!isset($t[0])) {
+                    $t = array($t);
+                }
+                $tdeps = array_merge($tdeps, $t);
+            }
+            if (isset($pdeps['required']['subpackage'])) {
+                $t = $pdeps['required']['subpackage'];
+                if (!isset($t[0])) {
+                    $t = array($t);
+                }
+                $tdeps = array_merge($tdeps, $t);
+            }
+            if (isset($pdeps['optional']['package'])) {
+                $t = $pdeps['optional']['package'];
+                if (!isset($t[0])) {
+                    $t = array($t);
+                }
+                $tdeps = array_merge($tdeps, $t);
+            }
+            if (isset($pdeps['optional']['subpackage'])) {
+                $t = $pdeps['optional']['subpackage'];
+                if (!isset($t[0])) {
+                    $t = array($t);
+                }
+                $tdeps = array_merge($tdeps, $t);
+            }
+            if (isset($pdeps['group'])) {
+                if (!isset($pdeps['group'][0])) {
+                    $pdeps['group'] = array($pdeps['group']);
+                }
+                foreach ($pdeps['group'] as $group) {
+                    if (isset($group['package'])) {
+                        $t = $group['package'];
+                        if (!isset($t[0])) {
+                            $t = array($t);
+                        }
+                        $tdeps = array_merge($tdeps, $t);
+                    }
+                    if (isset($group['subpackage'])) {
+                        $t = $group['subpackage'];
+                        if (!isset($t[0])) {
+                            $t = array($t);
+                        }
+                        $tdeps = array_merge($tdeps, $t);
+                    }
+                }
+            }
+            foreach ($tdeps as $dep) {
+                if (!isset($dep['channel'])) {
+                    $depchannel = '__private';
+                } else {
+                    $depchannel = $dep['channel'];
+                }
+                $deps[$depchannel][strtolower($dep['name'])] = true;
+                foreach ($packages as $p) {
+                    $dep['channel'] = $depchannel;
+                    $dep['package'] = $dep['name'];
+                    if ($p->isEqual($dep)) {
+                        if (!isset($checked[strtolower($p->getChannel())]
+                              [strtolower($p->getPackage())])) {
+                            // add the dependency's dependencies to the tree
+                            $this->_getDepTreeDP($p, $packages, $deps, $checked);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Sort a list of arrays of array(downloaded packagefilename) by dependency.
      *
      * It also removes duplicate dependencies
-     * @param array
-     * @param boolean Sort packages in reverse order if true
+     * @param array an array of downloaded PEAR_Downloader_Packages
      * @return array array of array(packagefilename, package.xml contents)
      */
-    function sortPkgDeps(&$packages, $uninstall = false)
+    function sortPackagesForInstall(&$packages)
     {
-        $ret = array();
-        if ($uninstall) {
-            foreach($packages as $packageinfo) {
-                $ret[] = array('info' => $packageinfo);
-            }
-        } else {
-            foreach($packages as $packagefile) {
-                if (!is_array($packagefile)) {
-                    $a = new PEAR_PackageFile($this->config, $this->_debug);
-                    $a = &$a->fromAnyFile($packagefile, PEAR_VALIDATE_INSTALLING);
-                    $ret[] = array('file' => $packagefile,
-                                   'info' => $a,
-                                   'pkg' => $a->getPackage());
-                } else {
-                    $ret[] = $packagefile;
-                }
-            }
+        foreach ($packages as $i => $package) {
+            $checked = $deps = array();
+            $this->_getDepTreeDP($packages[$i], $packages, $deps, $checked);
+            $this->_depTree[$package->getChannel()][$package->getPackage()] = $deps;
         }
-        $checkdupes = array();
-        $newret = array();
-        foreach($ret as $i => $p) {
-            $channel = $p['info']->getChannel();
-            if (!isset($checkdupes[$channel . '/' . $p['info']->getPackage()])) {
-                $checkdupes[$channel . '/' . $p['info']->getPackage()][] = $i;
-                $newret[] = $p;
-            }
-        }
-        $this->_packageSortTree = $this->_getPkgDepTree($newret);
-
-        $func = $uninstall ? '_sortPkgDepsRev' : '_sortPkgDeps';
-        usort($newret, array(&$this, $func));
-        $this->_packageSortTree = null;
-        $packages = $newret;
+        usort($packages, array(&$this, '_sortInstall'));
     }
 
-    // }}}
-    // {{{ _sortPkgDeps()
-
-    /**
-     * Compare two package's package.xml, and sort
-     * so that dependencies are installed first
-     *
-     * This is a crude compare, real dependency checking is done on install.
-     * The only purpose this serves is to make the command-line
-     * order-independent (you can list a dependent package first, and
-     * installation occurs in the order required)
-     * @access private
-     */
-    function _sortPkgDeps($p1, $p2)
+    function _dependsOn($a, $b)
     {
-        $c1 = $p1['info']->getChannel();
-        $c2 = $p2['info']->getChannel();
-        $p1name = $c1 . '/' . $p1['info']->getPackage();
-        $p2name = $c2 . '/' . $p2['info']->getPackage();
-        $p1deps = $this->_getPkgDeps($p1);
-        $p2deps = $this->_getPkgDeps($p2);
-        if (!count($p1deps) && !count($p2deps)) {
-            return 0; // order makes no difference
-        }
-        if (!count($p1deps)) {
-            return -1; // package 2 has dependencies, package 1 doesn't
-        }
-        if (!count($p2deps)) {
-            return 1; // package 1 has dependencies, package 2 doesn't
-        }
-        // both have dependencies
-        if (in_array($p1name, $p2deps)) {
-            return -1; // put package 1 first: package 2 depends on package 1
-        }
-        if (in_array($p2name, $p1deps)) {
-            return 1; // put package 2 first: package 1 depends on package 2
-        }
-        if ($this->_removedDependency($p1name, $p2name)) {
-            return -1; // put package 1 first: package 2 depends on packages that depend on package 1
-        }
-        if ($this->_removedDependency($p2name, $p1name)) {
-            return 1; // put package 2 first: package 1 depends on packages that depend on package 2
-        }
-        // doesn't really matter if neither depends on the other
-        return 0;
+        return $this->_checkDepTree(strtolower($a->getChannel()), strtolower($a->getPackage()),
+            $b);
     }
 
-    // }}}
-    // {{{ _sortPkgDepsRev()
-
-    /**
-     * Compare two package's package.xml, and sort
-     * so that dependencies are uninstalled last
-     *
-     * This is a crude compare, real dependency checking is done on uninstall.
-     * The only purpose this serves is to make the command-line
-     * order-independent (you can list a dependency first, and
-     * uninstallation occurs in the order required)
-     * @access private
-     */
-    function _sortPkgDepsRev($p1, $p2)
+    function _checkDepTree($channel, $package, $b, $checked = array())
     {
-        $c1 = $p1['info']->getChannel();
-        $c2 = $p2['info']->getChannel();
-        $p1name = $c1 . '/' . $p1['info']->getPackage();
-        $p2name = $c2 . '/' . $p2['info']->getPackage();
-        $p1deps = $this->_getRevPkgDeps($p1);
-        $p2deps = $this->_getRevPkgDeps($p2);
-        if (!count($p1deps) && !count($p2deps)) {
-            return 0; // order makes no difference
-        }
-        if (!count($p1deps)) {
-            return 1; // package 2 has dependencies, package 1 doesn't
-        }
-        if (!count($p2deps)) {
-            return -1; // package 2 has dependencies, package 1 doesn't
-        }
-        // both have dependencies
-        if (in_array($p1name, $p2deps)) {
-            return 1; // put package 1 last
-        }
-        if (in_array($p2name, $p1deps)) {
-            return -1; // put package 2 last
-        }
-        if ($this->_removedDependency($p1name, $p2name)) {
-            return 1; // put package 1 last: package 2 depends on packages that depend on package 1
-        }
-        if ($this->_removedDependency($p2name, $p1name)) {
-            return -1; // put package 2 last: package 1 depends on packages that depend on package 2
-        }
-        // doesn't really matter if neither depends on the other
-        return 0;
-    }
-
-    // }}}
-    // {{{ _getPkgDeps()
-
-    /**
-     * get an array of package dependency names
-     * @param array
-     * @return array
-     * @access private
-     */
-    function _getPkgDeps($p)
-    {
-        if (!is_array($p['info'])) {
-            return $this->_getRevPkgDeps($p);
-        }
-        $rel = array_shift($p['info']['releases']);
-        if (!isset($rel['deps'])) {
-            return array();
-        }
-        $ret = array();
-        foreach($rel['deps'] as $dep) {
-            if ($dep['type'] == 'pkg') {
-                $channel = isset($dep['channel']) ? $dep['channel'] : 'pear.php.net';
-                $ret[] = $channel . '/' . $dep['name'];
-            }
-        }
-        return $ret;
-    }
-
-    // }}}
-    // {{{ _getPkgDeps()
-
-    /**
-     * get an array representation of the package dependency tree
-     * @return array
-     * @access private
-     */
-    function _getPkgDepTree($packages)
-    {
-        $tree = array();
-        foreach ($packages as $p) {
-            $channel = $p['info']->getChannel();
-            $package = $channel . '/' . $p['info']->getPackage();
-            $deps = $this->_getPkgDeps($p);
-            $tree[$package] = $deps;
-        }
-        return $tree;
-    }
-
-    // }}}
-    // {{{ _removedDependency($p1, $p2)
-
-    /**
-     * get an array of package dependency names for uninstall
-     * @param string package 1 name
-     * @param string package 2 name
-     * @return bool
-     * @access private
-     */
-    function _removedDependency($p1, $p2)
-    {
-        if (empty($this->_packageSortTree[$p2])) {
+        $checked[$channel][$package] = true;
+        if (!isset($this->_depTree[$channel][$package])) {
             return false;
         }
-        if (!in_array($p1, $this->_packageSortTree[$p2])) {
-            foreach ($this->_packageSortTree[$p2] as $potential) {
-                if ($this->_removedDependency($p1, $potential)) {
+        if (isset($this->_depTree[$channel][$package][strtolower($b->getChannel())]
+              [strtolower($b->getPackage())])) {
+            return true;
+        }
+        foreach ($this->_depTree[$channel][$package] as $ch => $packages) {
+            foreach ($packages as $pa => $true) {
+                if ($this->_checkDepTree($ch, $pa, $b, $checked)) {
                     return true;
                 }
             }
-            return false;
         }
-        return true;
+        return false;
     }
 
-    // }}}
-    // {{{ _getRevPkgDeps()
+    function _sortInstall($a, $b)
+    {
+        if (!$a->getDeps() && !$b->getDeps()) {
+            return 0; // neither package has dependencies, order is insignificant
+        }
+        if ($a->getDeps() && !$b->getDeps()) {
+            return 1; // $a must be installed after $b because $a has dependencies
+        }
+        if (!$a->getDeps() && $b->getDeps()) {
+            return -1; // $b must be installed after $a because $b has dependencies
+        }
+        // both packages have dependencies
+        if ($this->_dependsOn($a, $b)) {
+            return 1;
+        }
+        if ($this->_dependsOn($b, $a)) {
+            return -1;
+        }
+        return 0;
+    }
 
     /**
-     * get an array of package dependency names for uninstall
-     * @param array
-     * @return array
-     * @access private
+     * Sort a list of arrays of array(downloaded packagefilename) by dependency.
+     *
+     * It also removes duplicate dependencies
+     * @param array an array of PEAR_PackageFile_v[1/2] objects
+     * @return array array of array(packagefilename, package.xml contents)
      */
-    function _getRevPkgDeps($p)
+    function sortPackagesForUninstall(&$packages)
     {
-        if (!$deps = $p['info']->getDeps()) {
-            return array();
-        }
-        $ret = array();
-        foreach($deps as $dep) {
-            if ($dep['type'] == 'pkg') {
-                $channel = isset($dep['channel']) ? $dep['channel'] : 'pear.php.net';
-                $ret[] = $channel . '/' . $dep['name'];
-            }
-        }
-        return $ret;
     }
 
-    // }}}
+    function _uninstallDependsOn($a, $b)
+    {
+    }
 
-    // {{{ downloadHttp()
+    function _sortUninstall($a, $b)
+    {
+        if (!$a->getDeps() && !$b->getDeps()) {
+            return 0; // neither package has dependencies, order is insignificant
+        }
+        if ($a->getDeps() && !$b->getDeps()) {
+            return 1; // $a must be installed after $b because $a has dependencies
+        }
+        if (!$a->getDeps() && $b->getDeps()) {
+            return -1; // $b must be installed after $a because $b has dependencies
+        }
+        // both packages have dependencies
+        if ($this->_dependsOn($a, $b)) {
+            return 1;
+        }
+        if ($this->_dependsOn($b, $a)) {
+            return -1;
+        }
+        return 0;
+    }
 
     /**
      * Download a file through HTTP.  Considers suggested file name in
@@ -953,8 +924,6 @@ class PEAR_Downloader extends PEAR_Common
         }
         return $dest_file;
     }
-
-    // }}}
 }
 // }}}
 

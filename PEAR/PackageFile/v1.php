@@ -578,6 +578,25 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function dependsOn($package, $channel)
+    {
+        if (strtolower($channel) != 'pear.php.net') {
+            return false;
+        }
+        if (!($deps = $this->getDeps())) {
+            return false;
+        }
+        foreach ($deps as $dep) {
+            if ($dep['type'] != 'pkg') {
+                continue;
+            }
+            if (strtolower($dep['name']) == strtolower($package)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Reset dependencies prior to adding new ones
      */

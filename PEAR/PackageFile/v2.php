@@ -483,7 +483,7 @@ class PEAR_PackageFile_v2
             return '__private';
         }
         if (isset($this->_packageInfo['channel'])) {
-            return $this->_packageInfo['channel'];
+            return strtolower($this->_packageInfo['channel']);
         }
         return false;
     }
@@ -882,6 +882,93 @@ http://pear.php.net/dtd/package-2.0.xsd',
         return false;
     }
 
+    function dependsOn($package, $channel)
+    {
+        if (!($deps = $this->getDeps(true))) {
+            return false;
+        }
+        if (isset($deps['required']['package'])) {
+            if (!isset($deps['required']['package'][0])) {
+                $deps['required']['package'] = array($deps['required']['package']);
+            }
+            foreach ($deps['required']['package'] as $dep) {
+                $depchannel = isset($dep['channel']) ? $dep['channel'] : '__private';
+                if (strtolower($dep['name']) == strtolower($package) &&
+                      $depchannel == $channel) {
+                    return true;
+                }  
+            }
+        }
+        if (isset($deps['required']['subpackage'])) {
+            if (!isset($deps['required']['subpackage'][0])) {
+                $deps['required']['subpackage'] = array($deps['required']['subpackage']);
+            }
+            foreach ($deps['required']['subpackage'] as $dep) {
+                $depchannel = isset($dep['channel']) ? $dep['channel'] : '__private';
+                if (strtolower($dep['name']) == strtolower($package) &&
+                      $depchannel == $channel) {
+                    return true;
+                }  
+            }
+        }
+        if (isset($deps['optional']['package'])) {
+            if (!isset($deps['optional']['package'][0])) {
+                $deps['optional']['package'] = array($deps['optional']['package']);
+            }
+            foreach ($deps['optional']['package'] as $dep) {
+                $depchannel = isset($dep['channel']) ? $dep['channel'] : '__private';
+                if (strtolower($dep['name']) == strtolower($package) &&
+                      $depchannel == $channel) {
+                    return true;
+                }  
+            }
+        }
+        if (isset($deps['optional']['subpackage'])) {
+            if (!isset($deps['optional']['subpackage'][0])) {
+                $deps['optional']['subpackage'] = array($deps['optional']['subpackage']);
+            }
+            foreach ($deps['optional']['subpackage'] as $dep) {
+                $depchannel = isset($dep['channel']) ? $dep['channel'] : '__private';
+                if (strtolower($dep['name']) == strtolower($package) &&
+                      $depchannel == $channel) {
+                    return true;
+                }  
+            }
+        }
+        if (isset($deps['group'])) {
+            if (!isset($deps['group'][0])) {
+                $dep['group'] = array($deps['group']);
+            }
+            foreach ($deps['group'] as $group) {
+                if (isset($group['package'])) {
+                    if (!is_array($group['package'])) {
+                        $group['package'] = array($group['package']);
+                    }
+                    foreach ($group['package'] as $dep) {
+                        $depchannel = isset($dep['channel']) ? $dep['channel'] : '__private';
+                        if (strtolower($dep['name']) == strtolower($package) &&
+                              $depchannel == $channel) {
+                            return true;
+                        }  
+                    }
+                }
+                if (isset($group['subpackage'])) {
+                    if (!is_array($group['subpackage'])) {
+                        $group['subpackage'] = array($group['subpackage']);
+                    }
+                    foreach ($group['subpackage'] as $dep) {
+                        $depchannel = isset($dep['channel']) ? $dep['channel'] : '__private';
+                        if (strtolower($dep['name']) == strtolower($package) &&
+                              $depchannel == $channel) {
+                            return true;
+                        }  
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * @todo handle <exclude>
      */
@@ -1179,6 +1266,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
     function addPackageDepWithChannel($type, $name, $channel, $min = false, $max = false,
                                       $recommended = false)
     {
+        $args = func_get_args();
         if (count($args) > 6) {
             $exclude = array_slice($args, 6);
             if (count($exclude) == 1) {
@@ -1205,6 +1293,10 @@ http://pear.php.net/dtd/package-2.0.xsd',
         if (!isset($this->_packageInfo['dependencies'][$type]['package'])) {
             $this->_packageInfo['dependencies'][$type]['package'] = $dep;
         } else {
+            if (!isset($this->_packageInfo['dependencies'][$type]['package'][0])) {
+                $this->_packageInfo['dependencies'][$type]['package'] =
+                    array($this->_packageInfo['dependencies'][$type]['package']);
+            }
             $this->_packageInfo['dependencies'][$type]['package'][] = $dep;
         }
     }
@@ -1231,6 +1323,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
     function addSubpackageDepWithChannel($type, $name, $channel, $min = false, $max = false,
                                       $recommended = false)
     {
+        $args = func_get_args();
         if (count($args) > 6) {
             $exclude = array_slice($args, 6);
             if (count($exclude) == 1) {
