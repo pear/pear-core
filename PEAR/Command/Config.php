@@ -36,7 +36,13 @@ class PEAR_Command_Config extends PEAR_Command_Common
             'summary' => 'Show All Settings',
             'function' => 'doConfigShow',
             'shortcut' => 'csh',
-            'options' => array(),
+            'options' => array(
+                'channel' => array(
+                    'shortopt' => 'c',
+                    'doc' => 'show configuration variables for another channel',
+                    'arg' => 'CHAN',
+                    ),
+),
             'doc' => '[layer]
 Displays all configuration values.  An optional argument
 may be used to tell which configuration layer to display.  Valid
@@ -49,7 +55,13 @@ configuration variable and run config-show again.
             'summary' => 'Show One Setting',
             'function' => 'doConfigGet',
             'shortcut' => 'cg',
-            'options' => array(),
+            'options' => array(
+                'channel' => array(
+                    'shortopt' => 'c',
+                    'doc' => 'show configuration variables for another channel',
+                    'arg' => 'CHAN',
+                    ),
+),
             'doc' => '<parameter> [layer]
 Displays the value of one configuration parameter.  The
 first argument is the name of the parameter, an optional second argument
@@ -64,7 +76,13 @@ specified by the default_channel configuration variable.
             'summary' => 'Change Setting',
             'function' => 'doConfigSet',
             'shortcut' => 'cs',
-            'options' => array(),
+            'options' => array(
+                'channel' => array(
+                    'shortopt' => 'c',
+                    'doc' => 'show configuration variables for another channel',
+                    'arg' => 'CHAN',
+                    ),
+),
             'doc' => '<parameter> <value> [layer]
 Sets the value of one configuration parameter.  The first argument is
 the name of the parameter, the second argument is the new value.  Some
@@ -126,10 +144,16 @@ and uninstall).
         }
         $keys = $this->config->getKeys();
         sort($keys);
-        $data = array('caption' => 'Configuration (channel ' . $this->config->get('default_channel') . '):');
+        $channel = isset($options['channel']) ? $options['channel'] :
+            $this->config->get('default_channel');
+        $reg = &$this->config->getRegistry();
+        if (!$reg->channelExists($channel)) {
+            return $this->raiseError('Channel "' . $channel . '" does not exist');
+        }
+        $data = array('caption' => 'Configuration (channel ' . $channel . '):');
         foreach ($keys as $key) {
             $type = $this->config->getType($key);
-            $value = $this->config->get($key, @$params[0]);
+            $value = $this->config->get($key, @$params[0], $channel);
             if ($type == 'password' && $value) {
                 $value = '********';
             }
@@ -158,12 +182,18 @@ and uninstall).
         if ($error = $this->_checkLayer(@$params[1])) {
             return $this->raiseError($error);
         }
+        $channel = isset($options['channel']) ? $options['channel'] :
+            $this->config->get('default_channel');
+        $reg = &$this->config->getRegistry();
+        if (!$reg->channelExists($channel)) {
+            return $this->raiseError('Channel "' . $channel . '" does not exist');
+        }
         if (sizeof($params) < 1 || sizeof($params) > 2) {
             return $this->raiseError("config-get expects 1 or 2 parameters");
         } elseif (sizeof($params) == 1) {
-            $this->ui->outputData($this->config->get($params[0]), $command);
+            $this->ui->outputData($this->config->get($params[0]), $command, $channel);
         } else {
-            $data = $this->config->get($params[0], $params[1]);
+            $data = $this->config->get($params[0], $params[1], $channel);
             $this->ui->outputData($data, $command);
         }
         return true;
@@ -186,9 +216,17 @@ and uninstall).
             $failmsg .= $error;
             return PEAR::raiseError($failmsg);
         }
+        $channel = isset($options['channel']) ? $options['channel'] :
+            $this->config->get('default_channel');
+        $reg = &$this->config->getRegistry();
+        if (!$reg->channelExists($channel)) {
+            return $this->raiseError('Channel "' . $channel . '" does not exist');
+        }
+        array_push($params, $channel);
         if (!call_user_func_array(array(&$this->config, 'set'), $params))
         {
-            $failmsg = "config-set (" . implode(", ", $params) . ") failed";
+            array_pop($params);
+            $failmsg = "config-set (" . implode(", ", $params) . ") failed, channel $channel";
         } else {
             $this->config->store();
         }
