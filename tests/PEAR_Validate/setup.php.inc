@@ -141,5 +141,7 @@ require_once 'PEAR/PackageFile/v2.php';
 require_once 'PEAR/Validate.php';
 $v1parser = &new PEAR_PackageFile_Parser_v1;
 $v2parser = &new PEAR_PackageFile_Parser_v2;
+$v1parser->setConfig($config);
+$v2parser->setConfig($config);
 $val = new PEAR_Validate;
 ?>
