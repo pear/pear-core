@@ -767,8 +767,10 @@ class PEAR_Downloader_Package
     {
         if (isset($this->_packagefile)) {
             return $this->_packagefile->isCompatible($pf);
-        } else {
+        } elseif (isset($this->_downloadURL['info'])) {
             return $this->_downloadURL['info']->isCompatible($pf);
+        } else {
+            return true;
         }
     }
 
