@@ -1092,18 +1092,24 @@ class PEAR_Installer extends PEAR_Downloader
         }
         if (!$pkg) {
             $this->configSet('default_channel', $savechannel);
-            return $this->raiseError("$channel/$package not installed");
+            return $this->raiseError($this->_registry->parsedPackageNameToString(
+                array(
+                    'channel' => $channel,
+                    'package' => $package
+                )) . ' not installed');
         }
         $filelist = $pkg->getFilelist();
-        if (empty($options['nodeps'])) {
-            $depchecker = &new PEAR_Dependency($this->_registry);
-            $error = $depchecker->checkPackageUninstall($errors, $warning, $package, $channel);
-            if ($error) {
-                $this->configSet('default_channel', $savechannel);
-                return $this->raiseError($errors . 'uninstall failed');
-            }
-            if ($warning) {
-                $this->log(0, $warning);
+        if (is_object($pkg)) {
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+            $depchecker = &new PEAR_Dependency2($this->config, $options, 
+                array('channel' => $channel, 'package' => $package),
+                PEAR_VALIDATE_UNINSTALLING);
+            $e = $depchecker->validatePackageUninstall($this);
+            PEAR::staticPopErrorHandling();
+            if (PEAR::isError($e)) {
+                return $this->raiseError($e);
+            } elseif (is_array($e)) {
+                $this->log(0, $e[0]);
             }
         }
         // {{{ Delete the files

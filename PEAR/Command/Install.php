@@ -396,10 +396,10 @@ package if needed.
             }
         }
         $this->installer->sortPackagesForUninstall($newparams);
-        $params = array();
-        foreach($newparams as $info) {
-            $params[] = $info['info'];
-        }
+        $params = $newparams;
+        // twist this to use it to check on whether dependent packages are also being uninstalled
+        // for circular dependencies like subpackages
+        $this->installer->setDownloadedPackages($newparams);
         $params = array_merge($params, $badparams);
         foreach ($params as $pkg) {
             $this->installer->pushErrorHandling(PEAR_ERROR_RETURN);

@@ -142,6 +142,14 @@ class PEAR_Registry extends PEAR
 
     function _initializeDirs()
     {
+        if (!isset($this->_dependencyDB)) {
+            static $initializing = false;
+            if (!$initializing) {
+                $initializing = true;
+                $this->_dependencyDB = &PEAR_DependencyDB::singleton($this->_config);
+                $initializing = false;
+            }
+        }
         static $called = false;
         if ($called) {
             return;
@@ -180,7 +188,6 @@ class PEAR_Registry extends PEAR
         } elseif (!file_exists($this->filemap)) {
             $this->rebuildFileMap();
         }
-        $this->_dependencyDB = &PEAR_DependencyDB::singleton($this->_config);
     }
     // }}}
     // {{{ destructor
@@ -1088,7 +1095,7 @@ class PEAR_Registry extends PEAR
     // }}}
     // {{{ deletePackage()
 
-    function deletePackage($package, $channel = false)
+    function deletePackage($package, $channel = 'pear.php.net')
     {
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
@@ -1097,6 +1104,8 @@ class PEAR_Registry extends PEAR
         $ret = @unlink($file);
         $this->rebuildFileMap();
         $this->_unlock();
+        $p = array('channel' => $channel, 'package' => $package);
+        $this->_dependencyDB->uninstallPackage($p);
         return $ret;
     }
 

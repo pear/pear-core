@@ -69,7 +69,7 @@ class PEAR_DependencyDB
         } else {
             $this->_depdb = $depdb;
         }
-        $this->lockfile = dirname($this->_depdb) . '.depdblock';
+        $this->lockfile = dirname($this->_depdb) . DIRECTORY_SEPARATOR . '.depdblock';
     }
     // }}}
     // {{{ assertDepsDB()

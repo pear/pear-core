@@ -666,18 +666,28 @@ class PEAR_Dependency2
         return $this->_validatePackageDownload($dep, $required, array());
     }
 
-    function _validatePackageUninstall($pkg, &$dl)
+    function validatePackageUninstall(&$dl)
     {
-        $deps = $this->_dependencydb->getDependentPackageDependencies($pkg);
+        $params = array();
+        // construct an array of "downloaded" packages to fool the package dependency checker
+        // into using these to validate uninstalls of circular dependencies
+        $downloaded = &$dl->getDownloadedPackages();
+        foreach ($downloaded as $i => $pf) {
+            $dp = &new PEAR_Downloader_Package($dl);
+            $dp->setPackageFile($downloaded[$i]);
+            $params[$i] = &$dp;
+        }
+        $deps = $this->_dependencydb->getDependentPackageDependencies($this->_currentPackage);
         $fail = false;
-        $checker = &new PEAR_Dependency2($this->_config, $this->_options,
-            $pkg, $this->_state);
         if ($deps) {
             foreach ($deps as $channel => $info) {
                 foreach ($info as $package => $d) {
+                    $d['dep']['package'] = $d['dep']['name'];
+                    $checker = &new PEAR_Dependency2($this->_config, $this->_options,
+                        array('channel' => $channel, 'package' => $package), $this->_state);
                     $dep = $d['dep'];
                     $required = $d['type'] == 'required';
-                    $ret = $checker->_validatePackageInstall($dep, $required);
+                    $ret = $checker->_validatePackageUninstall($dep, $required, $params);
                     if (is_array($ret)) {
                         $dl->log(0, $ret[0]);
                     } elseif (PEAR::isError($ret)) {
@@ -688,8 +698,77 @@ class PEAR_Dependency2
             }
         }
         if ($fail) {
-            return $this->raiseError(
-                '%s cannot be uninstalled, other packages depend on this package');
+            if (isset($this->_options['nodeps']) || isset($this->_options['force'])) {
+                return $this->warning(
+                    'warning: %s should not be uninstalled, other installed packages depend ' .
+                    'on this package');
+            } else {
+                return $this->raiseError(
+                    '%s cannot be uninstalled, other installed packages depend on this package');
+            }
+        }
+        return true;
+    }
+
+    function _validatePackageUninstall($dep, $required, $params)
+    {
+        $dep['package'] = $dep['name'];
+        $depname = $this->_registry->parsedPackageNameToString($dep);
+        $found = false;
+        foreach ($params as $param) {
+            if ($param->isEqual($this->_currentPackage)) {
+                $found = true;
+                break;
+            }
+        }
+        $version = $this->_registry->packageinfo($dep['name'], 'version',
+            $dep['channel']);
+        if (!$version) {
+            return true;
+        }
+        $extra = $this->_getExtraString($dep);
+        if (isset($dep['exclude'])) {
+            if (!is_array($dep['exclude'])) {
+                $dep['exclude'] = array($dep['exclude']);
+            }
+        }
+        if (isset($dep['conflicts'])) {
+            return true; // uninstall OK - these packages conflict (probably installed with --force)
+        }
+        if (!isset($dep['min']) && !isset($dep['max'])) {
+            if ($required) {
+                if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
+                    return $this->raiseError('%s' . $extra . ' is required by installed package "' .
+                        $depname . '"');
+                } else {
+                    return $this->warning('warning: %s' . $extra .
+                        ' is required by installed package "' . $depname . '"');
+                }
+            } else {
+                return $this->warning('%s' . $extra .
+                    ' can be optionally used by installed package "' . $depname . '"');
+            }
+        }
+        $fail = false;
+        if (isset($dep['min'])) {
+            if (version_compare($version, $dep['min'], '>=')) {
+                $fail = true;
+            }
+        }
+        if (isset($dep['max'])) {
+            if (version_compare($version, $dep['max'], '<=')) {
+                $fail = true;
+            }
+        }
+        if ($fail) {
+            $dep = $this->_registry->parsedPackageNameToString($dep);
+            if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
+                return $this->raiseError($depname . $extra . ' is required by package "%s"' .
+                    ', installed version is ' . $version);
+            } else {
+                return $this->warning('warning: ' . $depname . $extra . ' is required by package "' .
+                    '%s", installed version is ' . $version);
+            }
         }
         return true;
     }
