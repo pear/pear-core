@@ -982,7 +982,6 @@ class PEAR_Registry extends PEAR
             $pear_channel->setServer('pear.php.net');
             $pear_channel->setSummary('PHP Extension and Application Repository');
             $pear_channel->setDefaultPEARProtocols();
-            $this->addChannel($pear_channel);
             return $pear_channel;
         }
         return false;
