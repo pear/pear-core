@@ -839,6 +839,7 @@ class PEAR_PackageFile_v2
             $map = array(
                 'php' => 'php',
                 'package' => 'pkg',
+                'subpackage' => 'pkg',
                 'extension' => 'ext',
                 'os' => 'os',
                 'pearinstaller' => 'pkg',
@@ -1101,10 +1102,10 @@ class PEAR_PackageFile_v2
         if (isset($exclude)) {
             $dep['exclude'] = $exclude;
         }
-        if (!isset($this->_packageInfo['dependencies']['pearinstaller'])) {
-            $this->_packageInfo['dependencies']['pearinstaller'] = $dep;
+        if (!isset($this->_packageInfo['dependencies']['package'])) {
+            $this->_packageInfo['dependencies']['package'] = $dep;
         } else {
-            $this->_packageInfo['dependencies']['pearinstaller'][] = $dep;
+            $this->_packageInfo['dependencies']['package'][] = $dep;
         }
     }
 
@@ -1115,6 +1116,54 @@ class PEAR_PackageFile_v2
             $this->_packageInfo['dependencies'][$type]['package'] = $dep;
         } else {
             $this->_packageInfo['dependencies'][$type]['package'][] = $dep;
+        }
+    }
+
+    /**
+     * @param optional|required|string optional, required, or group name
+     * @param string package name
+     * @param string package channel
+     * @param string minimum version
+     * @param string maximum version
+     * @param string recommended version
+     * @param string $exclude... optional excluded versions
+     */
+    function addSubpackageDepWithChannel($type, $name, $channel, $min = false, $max = false,
+                                      $recommended = false)
+    {
+        if (count($args) > 6) {
+            $exclude = array_slice($args, 6);
+            if (count($exclude) == 1) {
+                $exclude = $exclude[0];
+            }
+        }
+        $dep =
+            array(
+                'min' => $min,
+            );
+        if ($max) {
+            $dep['max'] = $max;
+        }
+        if ($recommended) {
+            $dep['recommended'] = $recommended;
+        }
+        if (isset($exclude)) {
+            $dep['exclude'] = $exclude;
+        }
+        if (!isset($this->_packageInfo['dependencies']['subpackage'])) {
+            $this->_packageInfo['dependencies']['subpackage'] = $dep;
+        } else {
+            $this->_packageInfo['dependencies']['subpackage'][] = $dep;
+        }
+    }
+
+    function addSubpackageDepWithUri($type, $name, $uri)
+    {
+        $dep = array('name' => $name, 'uri' => $uri);
+        if (!isset($this->_packageInfo['dependencies'][$type]['subpackage'])) {
+            $this->_packageInfo['dependencies'][$type]['subpackage'] = $dep;
+        } else {
+            $this->_packageInfo['dependencies'][$type]['subpackage'][] = $dep;
         }
     }
 
@@ -1540,7 +1589,7 @@ class PEAR_PackageFile_v2
         }
     }
 
-    function _validatePackageDep($dep)
+    function _validatePackageDep($dep, $type = '<package>')
     {
         if (isset($dep['uri'])) {
             $structure = array(
@@ -1559,23 +1608,23 @@ class PEAR_PackageFile_v2
                 '*conflicts',
             );
         }
-        $this->_stupidSchemaValidate($structure, $dep, '<dependencies><package>');
+        $this->_stupidSchemaValidate($structure, $dep, '<dependencies>' . $type);
         if (isset($dep['min'])) {
             if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
                   $dep['min'])) {
-                $this->_invalidVersion('<package><min>', $dep['min']);
+                $this->_invalidVersion($type . '<min>', $dep['min']);
             }
         }
         if (isset($dep['max'])) {
             if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
                   $dep['max'])) {
-                $this->_invalidVersion('<package><max>', $dep['max']);
+                $this->_invalidVersion($type . '<max>', $dep['max']);
             }
         }
         if (isset($dep['recommended'])) {
             if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
                   $dep['recommended'])) {
-                $this->_invalidVersion('<package><recommended>', $dep['recommended']);
+                $this->_invalidVersion($type . '<recommended>', $dep['recommended']);
             }
         }
         if (isset($dep['exclude'])) {
@@ -1585,10 +1634,15 @@ class PEAR_PackageFile_v2
             foreach ($dep['exclude'] as $exclude) {
                 if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
                       $exclude)) {
-                    $this->_invalidVersion('<package><exclude>', $exclude);
+                    $this->_invalidVersion($type . '<exclude>', $exclude);
                 }
             }
         }
+    }
+
+    function _validateSubpackageDep($dep)
+    {
+        return $this->_validatePackageDep($dep, '<supackage>');
     }
 
     function _validateExtensionDep($dep)
@@ -1694,6 +1748,7 @@ class PEAR_PackageFile_v2
                 if ($simpledep == 'optional') {
                     $structure = array(
                         '*package',
+                        '*subpackage',
                         '*extension',
                     );
                 } else {
@@ -1701,6 +1756,7 @@ class PEAR_PackageFile_v2
                         'php',
                         'pearinstaller',
                         '*package',
+                        '*subpackage',
                         '*extension',
                         '*os',
                         '*arch',
@@ -1708,7 +1764,7 @@ class PEAR_PackageFile_v2
                 }
                 if ($this->_stupidSchemaValidate($structure,
                       $this->_packageInfo['dependencies'][$simpledep], "<$simpledep>")) {
-                    foreach (array('package', 'extension') as $type) {
+                    foreach (array('package', 'subpackage', 'extension') as $type) {
                         if (isset($this->_packageInfo['dependencies'][$simpledep][$type])) {
                             $iter = $this->_packageInfo['dependencies'][$simpledep][$type];
                             if (!isset($iter[0])) {
@@ -1752,6 +1808,7 @@ class PEAR_PackageFile_v2
         if (isset($this->_packageInfo['dependencies']['group'])) {
             $structure = array(
                 '*package',
+                '*subpackage',
                 '*extension',
             );
             if ($this->_stupidSchemaValidate($structure,
@@ -1761,7 +1818,7 @@ class PEAR_PackageFile_v2
                     $groups = array($groups);
                 }
                 foreach ($groups as $group) {
-                    foreach (array('package', 'extension') as $type) {
+                    foreach (array('package', 'subpackage', 'extension') as $type) {
                         if (isset($group[$type])) {
                             $iter = $group[$type];
                             if (!isset($iter[0])) {
