@@ -538,16 +538,16 @@ class PEAR_ErrorStack {
                 'message' => $msg,
                );
 
+        if ($repackage) {
+            $err['repackage'] = $repackage;
+        }
+
         // set up the error message, if necessary
         if ($this->_msgCallback) {
             $msg = call_user_func_array($this->_msgCallback,
                                         array(&$this, $err));
             $err['message'] = $msg;
         }        
-        
-        if ($repackage) {
-            $err['repackage'] = $repackage;
-        }
         $push = $log = true;
         $die = false;
         // try the overriding callback first
