@@ -94,7 +94,7 @@ class PEAR_PackageFile_Parser_v2
         $ret = new PEAR_PackageFile_v2;
         $ret->setConfig($this->_config);
         if (isset($this->_logger)) {
-            $pf->setLogger($this->_logger);
+            $ret->setLogger($this->_logger);
         }
         $ret->fromArray($this->_unserializedData);
         // make sure the filelist is in the easy to read format needed
