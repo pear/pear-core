@@ -15,7 +15,6 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'required' => 
   array (
@@ -250,6 +249,81 @@ $phpunit->assertEquals(array (
 
 $result = $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('after validation');
+$a = $pf->addGroupPackageDepWithChannel('subpackage', 'blah', 'groo', 'test', false, false, false, false, 'bloba');
+$phpunit->assertFalse($a, 'subpackage fake did not work');
+$a = $pf->addGroupPackageDepWithChannel('package', 'blah', 'groooorg', 'test', false, false, false, false, 'bloba');
+$phpunit->assertTrue($a, 'package provides did not work');
+$phpunit->assertEquals(array (
+  'required' => 
+  array (
+    'php' => 
+    array (
+      'min' => '4.3.6',
+      'max' => '6.0.0',
+    ),
+    'pearinstaller' => 
+    array (
+      'min' => '1.4.0a1',
+    ),
+  ),
+  'group' => 
+  array (
+    0 => 
+    array (
+      'attribs' => 
+      array (
+        'name' => 'frong',
+        'hint' => 'frong group',
+      ),
+      'package' => 
+      array (
+        'name' => 'gronk',
+        'channel' => 'foo',
+        'min' => '1.0',
+        'max' => '2.0',
+        'recommended' => '1.3',
+        'exclude' => 
+        array (
+          0 => '1.5',
+          1 => '2.4',
+        ),
+      ),
+      'subpackage' => 
+      array (
+        0 => 
+        array (
+          'name' => 'first',
+          'channel' => 'test',
+        ),
+        1 => 
+        array (
+          'name' => 'groo',
+          'channel' => 'test',
+        ),
+      ),
+    ),
+    1 => 
+    array (
+      'attribs' => 
+      array (
+        'name' => 'blah',
+        'hint' => 'blah',
+      ),
+      'package' =>
+      array (
+        'name' => 'groooorg',
+        'channel' => 'test',
+        'providesextension' => 'bloba',
+      ),
+      'subpackage' => 
+      array (
+        'name' => 'groo',
+        'channel' => 'test',
+      ),
+    ),
+  ),
+), $pf->getDependencies(), 'provides');
+
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log');
 $result = $pf->validate(PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('after validation');
@@ -258,7 +332,6 @@ $result = $pf->validate(PEAR_VALIDATE_DOWNLOADING);
 $phpunit->assertNoErrors('after validation');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'downloading validate empty log');
 $result = $pf->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
