@@ -487,6 +487,7 @@ used for automated conversion or learning the format.
     {
         include_once 'PEAR/RunTest.php';
         $log = new PEAR_Common;
+        $log->ui = &$this->ui; // slightly hacky, but it will work
         $run = new PEAR_RunTest($log);
         $tests = array();
         if (isset($options['recur'])) {
@@ -504,8 +505,17 @@ used for automated conversion or learning the format.
                 $tests[] = $p;
             }
         }
+        $failed = array();
         foreach ($tests as $t) {
-            $run->run($t);
+            if ($run->run($t) == 'FAILED') {
+            	$failed[] = $t;
+            }
+        }
+        if (count($failed)) {
+    		$this->ui->outputData('FAILED TESTS:');
+        	foreach ($failed as $failure) {
+        		$this->ui->outputData($failure);
+        	}
         }
 
         return true;
