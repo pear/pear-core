@@ -19,12 +19,14 @@ $ch->setSummary('sum');
 $ch->setDefaultPEARProtocols();
 $reg->addChannel($ch);
 $config = &new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'zoo.ini', $temp_path . DIRECTORY_SEPARATOR . 'zoo.ini');
-$phpunit->assertFalse($config->getRegistry(), 'initial user');
+$phpunit->assertIsa('PEAR_Registry', $config->getRegistry(), 'initial blank');
+$phpunit->assertIsa('PEAR_Registry', $config->getRegistry('default'), 'initial default');
+$phpunit->assertFalse($config->getRegistry('user'), 'initial user');
 $phpunit->assertFalse($config->getRegistry('system'), 'initial system');
 
 $config->setChannels(array('pear.php.net', '__uri'));
 $config->set('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'whoo', 'user', '__uri');
-$phpunit->assertFalse($config->getRegistry(), 'set channel php_dir user');
+$phpunit->assertFalse($config->getRegistry('user'), 'set channel php_dir user');
 $phpunit->assertFalse($config->getRegistry('system'), 'set channel php_dir system');
 
 $config->set('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'whoo');
@@ -34,7 +36,7 @@ $phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'whoo' . DIRECTORY_SEP
 $phpunit->assertFalse($config->getRegistry('system'), 'set php_dir system');
 
 $config->set('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'whoop', 'system');
-$phpunit->assertIsa('PEAR_Registry', $config->getRegistry(), 'set php_dir user');
+$phpunit->assertIsa('PEAR_Registry', $config->getRegistry('user'), 'set php_dir user');
 $r1 = &$config->getRegistry('user');
 $phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'whoo' . DIRECTORY_SEPARATOR . '.registry', $r1->statedir, 'whoo statedir 2');
 $phpunit->assertIsa('PEAR_Registry', $config->getRegistry('system'), 'set php_dir system');
