@@ -42,11 +42,12 @@ $phpunit->assertEquals(array (
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
 ), $fakelog->getDownload(), 'download callback messages');
+
+$installer->setOptions($dp->getOptions());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
-$installer->setOptions($dp->getOptions());
-$ret = &$installer->install($result[0]);
+$ret = &$installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
   'attribs' => 
