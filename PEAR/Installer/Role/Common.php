@@ -53,6 +53,7 @@ class PEAR_Installer_Role_Common
             'installable' => true,
             'locationconfig' => false,
             'honorsbaseinstall' => true,
+            'unusualbaseinstall' => false,
             'phpfile' => false,
             'executable' => false,
             'phpextension' => false,
@@ -71,6 +72,7 @@ class PEAR_Installer_Role_Common
             'installable' => true,
             'locationconfig' => false,
             'honorsbaseinstall' => true,
+            'unusualbaseinstall' => false,
             'phpfile' => false,
             'executable' => false,
             'phpextension' => false,
@@ -97,6 +99,12 @@ class PEAR_Installer_Role_Common
         if ($this->_setup['honorsbaseinstall']) {
             $dest_dir = $save_destdir = $this->config->get($this->_setup['locationconfig'], $layer,
                 $pkg->getChannel());
+            if (!empty($atts['baseinstalldir'])) {
+                $dest_dir .= DIRECTORY_SEPARATOR . $atts['baseinstalldir'];
+            }
+        } elseif ($this->_setup['unusualbaseinstall']) {
+            $dest_dir = $save_destdir = $this->config->get($this->_setup['locationconfig'],
+                    null, $pkg->getChannel()) . DIRECTORY_SEPARATOR . $pkg->getPackage();
             if (!empty($atts['baseinstalldir'])) {
                 $dest_dir .= DIRECTORY_SEPARATOR . $atts['baseinstalldir'];
             }
