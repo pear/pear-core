@@ -127,7 +127,7 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
          * the download command
          */
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        $err = $cmd->run('download', array(), array_keys($remoteInfo));
+        $err = $cmd->run('download', array('downloadonly' => true), array_keys($remoteInfo));
         PEAR::staticPopErrorHandling();
         $this->config->set('default_channel', $savechannel);
         if (PEAR::isError($err)) {
