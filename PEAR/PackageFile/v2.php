@@ -2206,11 +2206,15 @@ class PEAR_PackageFile_v2
             include_once 'Archive/Tar.php';
             $tar = &new Archive_Tar($this->_archiveFile);
             $tar->pushErrorHandling(PEAR_ERROR_RETURN);
+            if ($file != 'package.xml' && $file != 'package2.xml') {
+                $file = $this->getPackage() . '-' . $this->getVersion() . '/' . $file;
+            }
             $file = $tar->extractInString($file);
             $tar->popErrorHandling();
             if (PEAR::isError($file)) {
                 return PEAR::raiseError("Cannot locate file '$file' in archive");
             }
+            return $file;
         }
     }
 
