@@ -253,11 +253,11 @@ class PEAR_Validate
                 }
                 if ($versioncomponents[0] == 0) {
                     $versioncomponents[0] = '0';
-                    $this->_addFailure('version',
+                    $this->_addWarning('version',
                         'version "' . $version . '" should be "' .
                         implode('.' ,$versioncomponents) . '"');
                 } else {
-                    $this->_addWarning('version',
+                    $this->_addFailure('version',
                         'packages with devel stability must be < version 1.0.0');
                 }
                 return true;
@@ -273,7 +273,7 @@ class PEAR_Validate
                                 // version 1.*.0000
                                 $this->_addWarning('version',
                                     'version 1.' . $versioncomponents[1] .
-                                        '.0 cannot be alpha or beta');
+                                        '.0 probably should not be alpha or beta');
                                 return true;
                             } elseif (strlen($versioncomponents[2]) > 1) {
                                 // version 1.*.0RC1 or 1.*.0beta24 etc.
@@ -282,12 +282,13 @@ class PEAR_Validate
                                 // version 1.*.0
                                 $this->_addWarning('version',
                                     'version 1.' . $versioncomponents[1] .
-                                        '.0 cannot be alpha or beta');
+                                        '.0 probably should not be alpha or beta');
                                 return true;
                             }
                         } else {
                             $this->_addWarning('version',
-                                'bugfix versions (1.3.x where x > 0) cannot be alpha or beta');
+                                'bugfix versions (1.3.x where x > 0) probably should ' .
+                                'not be alpha or beta');
                             return true;
                         }
                     } elseif ($versioncomponents[0] != '0') {
@@ -301,7 +302,7 @@ class PEAR_Validate
                     }
                     if ($versioncomponents[0] == 0) {
                         $versioncomponents[0] = '0';
-                        $this->_addFailure('version',
+                        $this->_addWarning('version',
                             'version "' . $version . '" should be "' .
                             implode('.' ,$versioncomponents) . '"');
                     }
@@ -322,9 +323,9 @@ class PEAR_Validate
                         if ($versioncomponents[2]{0} == '0') {
                             if ($versioncomponents[2] == '0') {
                                 // version 2.*.0000
-                                $this->_addFailure('version',
+                                $this->_addWarning('version',
                                     "version $majver." . $versioncomponents[1] .
-                                        '.0 cannot be alpha or beta');
+                                        '.0 probably should not be alpha or beta');
                                 return false;
                             } elseif (strlen($versioncomponents[2]) > 1) {
                                 // version 2.*.0RC1 or 2.*.0beta24 etc.
@@ -337,13 +338,14 @@ class PEAR_Validate
                                 return true;
                             }
                         } else {
-                            $this->_addFailure('version',
-                                "bugfix versions ($majver.x.y where y > 0) cannot be alpha or beta");
+                            $this->_addWarning('version',
+                                "bugfix versions ($majver.x.y where y > 0) should " .
+                                'not be alpha or beta');
                             return true;
                         }
                     } elseif ($versioncomponents[0] != '0') {
                         $this->_addWarning('version',
-                            "only versions 0.x.y and $majver.x.y");
+                            "only versions 0.x.y and $majver.x.y are allowed for alpha/beta releases");
                         return true;
                     }
                     if ($versioncomponents[0] . 'a' == '0a') {
