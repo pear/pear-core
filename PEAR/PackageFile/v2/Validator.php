@@ -440,13 +440,13 @@ class PEAR_PackageFile_v2_Validator
         $type = $installcondition ? '<installcondition><php>' : '<dependencies><required><php>';
         $this->_stupidSchemaValidate($structure, $dep, $type);
         if (isset($dep['min'])) {
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?(?:-[a-zA-Z0-9]+)?$/',
                   $dep['min'])) {
                 $this->_invalidVersion($type . '<min>', $dep['min']);
             }
         }
         if (isset($dep['max'])) {
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?(?:-[a-zA-Z0-9]+)?$/',
                   $dep['max'])) {
                 $this->_invalidVersion($type . '<max>', $dep['max']);
             }
