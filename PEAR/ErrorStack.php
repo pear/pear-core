@@ -369,7 +369,7 @@ class PEAR_ErrorStack {
     }
     
     /**
-     * Set an error code => error message mapping callback
+     * Set a callback that generates context information (location of error) for an error stack
      * 
      * This method sets the callback that can be used to generate context
      * information for an error.  Passing in NULL will disable context generation
