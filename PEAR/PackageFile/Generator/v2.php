@@ -229,10 +229,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
                             fwrite($wp, $contents);
                             fclose($wp);
                         }
-                    } else {
-                        System::mkdir(array('-p', dirname($tfile)));
-                        copy($file, $tfile);
                     }
+                    System::mkdir(array('-p', dirname($tfile)));
+                    copy($file, $tfile);
                     $filelist[$i++] = $tfile;
                     if (!isset($atts['md5sum'])) {
                         $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($file), $i);
