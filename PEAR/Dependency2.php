@@ -21,7 +21,6 @@
 require_once 'OS/Guess.php';
 require_once 'PEAR/Validate.php';
 
-define('PEAR_DEPENDENCY2_OS', 1);
 /**
  * Dependency check for PEAR packages
  *
@@ -503,6 +502,14 @@ class PEAR_Dependency2
                         'channel' => $dep['channel']))) {
                 $found = true;
                 break;
+            }
+        }
+        if (!$found && isset($dep['providesextension'])) {
+            foreach ($params as $param) {
+                if ($param->isExtension($dep['providesextension'])) {
+                    $found = true;
+                    break;
+                }
             }
         }
         if ($found) {

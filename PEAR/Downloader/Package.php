@@ -463,6 +463,17 @@ class PEAR_Downloader_Package
         }
     }
 
+    function isExtension($name)
+    {
+        if (isset($this->_packagefile)) {
+            return $this->_packagefile->isExtension($name);
+        } elseif (isset($this->_downloadURL)) {
+            return @$this->_downloadURL['providesextension'] == $name;
+        } else {
+            return false;
+        }
+    }
+
     function getDeps()
     {
         if (isset($this->_packagefile)) {
