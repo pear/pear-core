@@ -128,7 +128,7 @@ class PEAR_Validate
      */
     function _addFailure($field, $reason)
     {
-        $this->_failures['error'] = array('field' => $field, 'reason' => $reason);
+        $this->_failures['errors'][] = array('field' => $field, 'reason' => $reason);
     }
 
     /**
@@ -136,7 +136,7 @@ class PEAR_Validate
      */
     function _addWarning($field, $reason)
     {
-        $this->_failures['warning'] = array('field' => $field, 'reason' => $reason);
+        $this->_failures['warnings'][] = array('field' => $field, 'reason' => $reason);
     }
 
     function getFailures()
@@ -178,7 +178,7 @@ class PEAR_Validate
             //$this->validateGlobalTasks();
             $this->validateChangelog();
         }
-        return (bool) count($this->_failures['errors']);
+        return !((bool) count($this->_failures['errors']));
     }
 
     /**
@@ -190,14 +190,19 @@ class PEAR_Validate
               $this->_state == PEAR_VALIDATE_NORMAL) {
             if ($this->_packagexml->getPackagexmlVersion() == '2.0' &&
                   $this->_packagexml->getExtends()) {
-                $vlen = strlen($version = $this->_packagexml->getVersion() . '');
+                $version = $this->_packagexml->getVersion() . '';
                 $name = $this->_packagexml->getPackage();
-                if ($name{strlen($name) - $vlen} != $version) {
-                    $this->_addFailure('name', "package $name extends package " .
+                if ($name{strlen($name) - 1} != $version{0}) {
+                    $this->_addFailure('package', "package $name extends package " .
                         $this->_packagexml->getExtends() . ' and so the name must ' .
-                        'have a postfix equal to the major version like "' . $name .
-                        $version . '"');
+                        'have a postfix equal to the major version like "' .
+                        $this->_packagexml->getExtends() . $version{0} . '"');
                     return false;
+                } elseif (substr($name, 0, strlen($name) - 1) != $this->_packagexml->getExtends()) {
+                    $this->_addFailure('package', "package $name extends package " .
+                        $this->_packagexml->getExtends() . ' and so the name must ' .
+                        'be an extension like "' . $this->_packagexml->getExtends() .
+                        $version{0} . '"');
                 }
             }
         }
@@ -214,7 +219,11 @@ class PEAR_Validate
     function validateVersion()
     {
         if ($this->_state != PEAR_VALIDATE_PACKAGING) {
-            return $this->validVersion($this->_packagexml->getVersion());
+            if (!$this->validVersion($this->_packagexml->getVersion())) {
+                $this->_addFailure('version',
+                    'Invalid version number "' . $this->_packagexml->getVersion() . '"');
+            }
+            return;
         }
         $version = $this->_packagexml->getVersion();
         $versioncomponents = explode('.', $version);
