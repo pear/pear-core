@@ -319,10 +319,8 @@ installed package.'
 
     function doInfo($command, $options, $params)
     {
-        // $params[0] The package for showing info
-        if (sizeof($params) != 1) {
-            return $this->raiseError("This command only accepts one param: ".
-                                     "a package name");
+        if (count($params) != 1) {
+            return $this->raiseError('pear info expects 1 parameter');
         }
         $info = false;
         $reg = &$this->config->getRegistry();
@@ -333,14 +331,16 @@ installed package.'
             $obj = &$pkg->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($obj)) {
-                foreach ($obj->getUserInfo() as $message) {
-                    if (is_array($message)) {
-                        $message = $message['message'];
+                $uinfo = $obj->getUserInfo();
+                if (is_array($uinfo)) {
+                    foreach ($uinfo as $message) {
+                        if (is_array($message)) {
+                            $message = $message['message'];
+                        }
+                        $this->ui->outputData($message);
                     }
-                    $this->ui->outputData($message);
                 }
-                $this->ui->outputData($obj->getMessage());
-                return true;
+                return $this->raiseError($obj);
             }
             if ($obj->getPackagexmlVersion() == '1.0') {
                 $info = $obj->toArray();
