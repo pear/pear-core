@@ -761,7 +761,7 @@ class PEAR_ErrorStack {
     /**
      * Get a list of all errors since last purge, organized by package
      * @since PEAR 1.4.0dev BC break! $level is now in the place $merge used to be
-     * @param boolean $clearStack Set to purge the error stack of existing errors
+     * @param boolean $purge Set to purge the error stack of existing errors
      * @param string  $level Set to a level name in order to retrieve only errors of a particular level
      * @param boolean $merge Set to return a flat array, not organized by package
      * @param array   $sortfunc Function used to sort a merged array - default
