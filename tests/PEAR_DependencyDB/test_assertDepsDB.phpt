@@ -10,13 +10,14 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 copyItem('registry'); //setup for nice clean rebuild
+unlink($php_dir . DIRECTORY_SEPARATOR . '.depdb');
 $phpunit->assertFileNotExists($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb');
 $db = new PEAR_DependencyDB;
 $db->setConfig($config);
 $phpunit->assertNoErrors('initial');
 $db->assertDepsDB();
 $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb');
-$contents = implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb'));
+$contents = implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb'));
 $phpunit->assertEquals(array (
   '_version' => '1.0',
   'dependencies' => 
@@ -1251,7 +1252,7 @@ fclose($fp);
 unset($db->_cache); // hack, but it does the job
 $err = $db->assertDepsDB();
 $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb');
-$contents = implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb'));
+$contents = implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb'));
 $phpunit->assertEquals(array (
   '_version' => '1.1',
   'dependencies' => 
