@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="1.4.0a9">
+<package version="1.0" packagerversion="1.4.0a10">
  <name>PEARtests</name>
  <summary>PEAR Base System tests</summary>
  <description>This package contains all tests for the PEAR base system
@@ -14,14 +14,14 @@
   </maintainer>
   </maintainers>
  <release>
-  <version>1.4.0a9</version>
-  <date>2005-03-21</date>
+  <version>1.4.0a10</version>
+  <date>2005-04-05</date>
   <license>PHP License</license>
   <state>alpha</state>
-  <notes>Tests for PEAR 1.4.0a9
+  <notes>Tests for PEAR 1.4.0a10
   </notes>
   <deps>
-   <dep type="pkg" rel="ge" version="1.4.0a9" optional="no">PEAR</dep>
+   <dep type="pkg" rel="ge" version="1.4.0a10" optional="no">PEAR</dep>
    <dep type="pkg" rel="has" optional="yes">Text_Diff</dep>
   </deps>
   <filelist>
@@ -50,7 +50,9 @@
     </dir> <!-- /PEAR_Channelfile -->
     <dir name="PEAR_Command">
      <dir name="fakecommands">
+      <file role="test" name="Foo-init.php"/>
       <file role="test" name="Foo.php"/>
+      <file role="test" name="Grunk-init.php"/>
       <file role="test" name="Grunk.php"/>
      </dir> <!-- /PEAR_Command/fakecommands -->
      <file role="test" name="setup.php.inc"/>
@@ -191,6 +193,14 @@
       </dir> <!-- /PEAR_Command_Install/uninstall/packages -->
       <file role="test" name="test_uninstallSOAP.phpt"/>
      </dir> <!-- /PEAR_Command_Install/uninstall -->
+     <dir name="upgrade">
+      <dir name="packages">
+       <file role="test" name="Auth-1.3.0r3.tgz"/>
+       <file role="test" name="Auth_HTTP-2.1.4.tgz"/>
+       <file role="test" name="Auth_HTTP-2.1.6RC1.tgz"/>
+      </dir> <!-- /PEAR_Command_Install/upgrade/packages -->
+      <file role="test" name="test_bug4060.phpt"/>
+     </dir> <!-- /PEAR_Command_Install/upgrade -->
      <dir name="upgrade-all">
       <dir name="packages">
        <file role="test" name="Archive_Tar-1.2.tgz"/>
@@ -377,6 +387,7 @@
      </dir> <!-- /PEAR_Command_Remote/download -->
      <dir name="list-all">
       <file role="test" name="test.phpt"/>
+      <file role="test" name="test_bug4072.phpt"/>
       <file role="test" name="test_fail.phpt"/>
      </dir> <!-- /PEAR_Command_Remote/list-all -->
      <dir name="list-upgrades">
@@ -469,6 +480,7 @@
      <file role="test" name="test_setInstallRoot.phpt"/>
      <file role="test" name="test_setInstallRoot_win.phpt"/>
      <file role="test" name="test_setRegistry.phpt"/>
+     <file role="test" name="test_set_defaultchannel_alias.phpt"/>
      <file role="test" name="test_singleton.phpt"/>
      <file role="test" name="test_writeConfigFile.phpt"/>
     </dir> <!-- /PEAR_Config -->
@@ -1613,6 +1625,14 @@
     <license>PHP License</license>
     <state>alpha</state>
     <notes>Tests for PEAR 1.4.0a9
+    </notes>
+   </release>
+   <release>
+    <version>1.4.0a10</version>
+    <date>2005-04-05</date>
+    <license>PHP License</license>
+    <state>alpha</state>
+    <notes>Tests for PEAR 1.4.0a10
     </notes>
    </release>
  </changelog>
