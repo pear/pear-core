@@ -108,6 +108,22 @@ class PEAR_Remote extends PEAR
     }
 
     // }}}
+
+    // {{{ clearCache()
+
+    function clearCache($method, $args)
+    {
+        array_unshift($args, $method);
+        array_unshift($args, $this->config->get('default_channel')); // cache by channel
+        $id       = md5(serialize($args));
+        $cachedir = $this->config->get('cache_dir');
+        $filename = $cachedir.'/xmlrpc_cache_'.$id;
+        if (file_exists($filename)) {
+            @unlink($filename);
+        }
+    }
+
+    // }}}
     // {{{ call(method, [args...])
 
     function call($method)
@@ -140,7 +156,7 @@ class PEAR_Remote extends PEAR
             return $this->raiseError("Unknown channel '$server_channel'");
         }
 
-        array_unshift($_args, $channel); // cache by channel
+        array_unshift($_args, $server_channel); // cache by channel
         $this->cache = $this->getCache($_args);
         $cachettl = $this->config->get('cache_ttl');
         // If cache is newer than $cachettl seconds, we use the cache!
