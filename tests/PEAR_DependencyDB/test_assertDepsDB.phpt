@@ -10,7 +10,6 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 copyItem('registry'); //setup for nice clean rebuild
-unlink($php_dir . DIRECTORY_SEPARATOR . '.depdb');
 $phpunit->assertFileNotExists($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb');
 $db = new PEAR_DependencyDB;
 $db->setConfig($config);
