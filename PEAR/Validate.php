@@ -163,6 +163,13 @@ class PEAR_Validate
                     'be stable');
                     return false;
                 }
+                if (!is_numeric($versioncomponents[2])) {
+                    if (preg_match('/\n+(RC|rc|a|alpha|A|ALPHA|b|beta|B|BETA)\n*/',
+                          $versioncomponents[2])) {
+                        $this->_addFailure('version', 'RC/beta/alpha cannot be stable');
+                        return false;
+                    }
+                }
                 return true;
             break;
             default :
