@@ -75,7 +75,8 @@ $phpunit->assertEquals(array (
   4 =>
   array (
     0 => 0,
-    1 => 'could not extract the package.xml file',
+    1 => 'could not extract the package.xml file from "' . $dp->_downloader->getDownloadDir() .
+        DIRECTORY_SEPARATOR . 'test-1.0.tgz"',
   ),
   5 =>
   array (

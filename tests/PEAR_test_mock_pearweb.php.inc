@@ -15,9 +15,9 @@ class PEAR_test_mock_pearweb {
         $this->_config['html'][$address] = array(basename($filename), file_get_contents($filename));
     }
     
-    function addXmlrpcConfig($method, $params, $return)
+    function addXmlrpcConfig($server, $method, $params, $return)
     {
-        $this->_config['xmlrpc'][$method][serialize($params)] = $return;
+        $this->_config['xmlrpc'][$server][$method][serialize($params)] = $return;
     }
     
     function _encode($val)
@@ -41,23 +41,24 @@ class PEAR_test_mock_pearweb {
         }
     }
     
-    function receiveXmlrpc($postpayload)
+    function receiveXmlrpc($postpayload, $server)
     {
         $info = $this->parseRequest($postpayload);
-        if (!isset($this->_config['xmlrpc'][$info['method']])) {
+        if (!isset($this->_config['xmlrpc'][$server][$info['method']])) {
             return $this->doXmlrpcFault($info);
         }
-        if (!isset($this->_config['xmlrpc'][serialize($info['params'])])) {
+        if (!isset($this->_config['xmlrpc'][$server][serialize($info['params'])])) {
             var_dump($info['param']);
             die("Error - parameters not configured properly for $info[method]");
         }
         return $this->do200() .
-            $this->_encode($this->_config['xmlrpc'][$info['method']][serialize($info['params'])]);
+            $this->_encode(
+                $this->_config['xmlrpc'][$server][$info['method']][serialize($info['params'])]);
     }
     
-    function call($method, $params)
+    function call($server, $method, $params)
     {
-        if (!isset($this->_config['xmlrpc'][$method])) {
+        if (!isset($this->_config['xmlrpc'][$server][$method])) {
             include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'php_dump.php.inc';
             $args = $params;
             switch (count($args)) {
@@ -85,19 +86,20 @@ class PEAR_test_mock_pearweb {
             }
             $dump = new PHP_Dump($result);
             $args = new PHP_Dump($args);
-            if (!isset($this->_pearweb->_config['xmlrpc'][$method][serialize($args)]))
+            if (!isset($this->_pearweb->_config['xmlrpc'][$server][$method][serialize($args)]))
             $GLOBALS['totalPHP'][$method . serialize($args)] = '$pearweb->addXmlrpcConfig("' .
+                $server . '", ' .
                 $method . '", ' .
                 $args->toPHP() . ', ' .
                 $dump->toPHP() .");";
             foreach($GLOBALS['totalPHP'] as $php) {
                 echo $php . "\n";
             }
-            var_dump(array_keys($this->_config['xmlrpc'][$method]), $params);
+            var_dump(array_keys($this->_config['xmlrpc'][$server][$method]), $params);
             die("Error - parameters not configured properly for $method");
             return false;
         }
-        if (!isset($this->_config['xmlrpc'][$method][serialize($params)])) {
+        if (!isset($this->_config['xmlrpc'][$server][$method][serialize($params)])) {
             include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'php_dump.php.inc';
             $args = $params;
             switch (count($args)) {
@@ -125,18 +127,19 @@ class PEAR_test_mock_pearweb {
             }
             $dump = new PHP_Dump($result);
             $args = new PHP_Dump($args);
-            if (!isset($this->_pearweb->_config['xmlrpc'][$method][serialize($args)]))
+            if (!isset($this->_pearweb->_config['xmlrpc'][$server][$method][serialize($args)]))
             $GLOBALS['totalPHP'][$method . serialize($args)] = '$pearweb->addXmlrpcConfig("' .
+                $server . '", ' .
                 $method . '", ' .
                 $args->toPHP() . ', ' .
                 $dump->toPHP() .");";
             foreach($GLOBALS['totalPHP'] as $php) {
                 echo $php . "\n";
             }
-            var_dump(array_keys($this->_config['xmlrpc'][$method]), $params);
+            var_dump(array_keys($this->_config['xmlrpc'][$server][$method]), $params);
             die("Error - parameters not configured properly for $method");
         }
-        return $this->_config['xmlrpc'][$method][serialize($params)];
+        return $this->_config['xmlrpc'][$server][$method][serialize($params)];
     }
     
     function doXmlrpcFault($info)

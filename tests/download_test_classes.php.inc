@@ -3,9 +3,10 @@ require_once 'XML/RPC.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'PEAR_test_mock_pearweb.php.inc';
 $GLOBALS['pearweb'] = new PEAR_test_mock_pearweb;
 class test_XML_RPC_Client extends XML_RPC_Client {
-    function test_XML_RPC_Client()
+    function test_XML_RPC_Client($path, $server)
     {
         $this->_fakepearweb = &$GLOBALS['pearweb'];
+        parent::XML_RPC_Client($path, $server);
     }
 
     function sendPayloadHTTP10($msg, $server, $port, $timeout=0,
@@ -14,7 +15,7 @@ class test_XML_RPC_Client extends XML_RPC_Client {
         // Only create the payload if it was not created previously
         if(empty($msg->payload)) $msg->createPayload();
 
-        $resp = $this->_fakepearweb->receiveXmlrpc($msg->payload);
+        $resp = $this->_fakepearweb->receiveXmlrpc($msg->payload, $server);
         
         $resp=$msg->parseResponse($resp);
         return $resp;
@@ -29,7 +30,7 @@ class test_PEAR_Remote extends PEAR_Remote {
     function test_PEAR_Remote($config)
     {
         $pearweb = &$GLOBALS['pearweb'];
-        include dirname(__FILE__) . DIRECTORY_SEPARATOR . 'download_test.config.inc';
+//        include dirname(__FILE__) . DIRECTORY_SEPARATOR . 'download_test.config.inc';
         $this->_pearweb = $pearweb;
         parent::PEAR_Remote($config);
         $this->_pearweb->setRemote($this);
@@ -146,10 +147,12 @@ class test_PEAR_Remote extends PEAR_Remote {
         $args = func_get_args();
         array_shift($args);
         if ($this->_fakepearweb) {
+            $server_channel = $this->config->get('default_channel');
+            $channel = $this->_registry->getChannel($server_channel);
             if (count($args)) {
-                $result = $this->_pearweb->call($method, $args);
+                $result = $this->_pearweb->call($channel->getServer(), $method, $args);
             } else {
-                $result = $this->_pearweb->call($method);
+                $result = $this->_pearweb->call($channel->getServer(), $method);
             }
         }/* else {
             switch (count($args)) {
