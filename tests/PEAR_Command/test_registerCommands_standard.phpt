@@ -169,8 +169,8 @@ $phpunit->assertEquals(array (
   4 => 'dry-run',
 ), $l, 'long cvstag');
 PEAR_Command::getGetoptArgs('download', $s, $l);
-$phpunit->assertEquals('Z', $s, 'short download'); 
-$phpunit->assertEquals(array('nocompress'), $l, 'long download');
+$phpunit->assertEquals('Zf', $s, 'short download'); 
+$phpunit->assertEquals(array('nocompress', 'force'), $l, 'long download');
 PEAR_Command::getGetoptArgs('download-all', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short download-all'); 
 $phpunit->assertEquals(array('channel='), $l, 'long download-all');
@@ -239,8 +239,8 @@ PEAR_Command::getGetoptArgs('remote-list', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short remote-list'); 
 $phpunit->assertEquals(array ('channel='), $l, 'long remote-list');
 PEAR_Command::getGetoptArgs('run-tests', $s, $l);
-$phpunit->assertEquals('r', $s, 'short run-tests'); 
-$phpunit->assertEquals(array ('recur'), $l, 'long run-tests');
+$phpunit->assertEquals('ri:', $s, 'short run-tests'); 
+$phpunit->assertEquals(array ('recur', 'ini='), $l, 'long run-tests');
 PEAR_Command::getGetoptArgs('search', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short search'); 
 $phpunit->assertEquals(array ('channel='), $l, 'long search');
@@ -325,7 +325,7 @@ $phpunit->assertEquals('Set CVS Release Tag'
     , PEAR_Command::getDescription('cvstag'), 'cvstag');
 $phpunit->assertEquals('Download Package'
     , PEAR_Command::getDescription('download'), 'download');
-$phpunit->assertEquals('Downloads each available package from master_server'
+$phpunit->assertEquals('Downloads each available package from the default channel'
     , PEAR_Command::getDescription('download-all'), 'download-all');
 $phpunit->assertEquals('Display information about a package'
     , PEAR_Command::getDescription('info'), 'info');
