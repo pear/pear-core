@@ -189,12 +189,19 @@ class PEAR_Remote extends PEAR
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
         if ($proxy = parse_url($this->config->get('http_proxy'))) {
             $proxy_host = @$proxy['host'];
+            if (isset($proxy['scheme']) && $proxy['scheme'] == 'https') {
+                $proxy_host = 'https://' . $proxy_host;
+            }
             $proxy_port = @$proxy['port'];
             $proxy_user = @urldecode(@$proxy['user']);
             $proxy_pass = @urldecode(@$proxy['pass']);
         }
-        $c = new XML_RPC_Client($channel->getPath('xmlrpc') . $channel->getFileName('xmlrpc')
-            . $maxAge, $server_host, $server_port, $proxy_host, $proxy_port,
+        $shost = $server_host;
+        if ($channel->getSSL()) {
+            $shost = "https://$shost";
+        }
+        $c = new XML_RPC_Client('/' . $channel->getPath('xmlrpc')
+            . $maxAge, $shost, $server_port, $proxy_host, $proxy_port,
             $proxy_user, $proxy_pass);
         if ($username && $password) {
             $c->setCredentials($username, $password);
@@ -282,14 +289,24 @@ class PEAR_Remote extends PEAR
             $proxy = parse_url($http_proxy);
             $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
             $proxy_host = @$proxy['host'];
+            if (isset($proxy['scheme']) && $proxy['scheme'] == 'https') {
+                $proxy_host = 'ssl://' . $proxy_host;
+            }
             $proxy_port = @$proxy['port'];
             $proxy_user = @urldecode(@$proxy['user']);
             $proxy_pass = @urldecode(@$proxy['pass']);
             $fp = @fsockopen($proxy_host, $proxy_port);
             $use_proxy = true;
+            if ($channel->getSSL()) {
+                $server_host = "https://$server_host";
+            }
         } else {
             $use_proxy = false;
-            $fp = @fsockopen($server_host, $server_port);
+            $ssl = $channel->getSSL();
+            $fp = @fsockopen(($ssl ? 'ssl://' : '') . $server_host, $server_port);
+            if (!$fp) {
+                $server_host = "ssl://$server_host"; // for error-reporting
+            }
         }
         if (!$fp && $http_proxy) {
             return $this->raiseError("PEAR_Remote::call: fsockopen(`$proxy_host', $proxy_port) failed");
@@ -335,7 +352,7 @@ class PEAR_Remote extends PEAR
             $post_string = "POST ";
         }
 
-        $path = $channel->getPath('xmlrpc') . $channel->getFileName('xmlrpc');
+        $path = '/' . $channel->getPath('xmlrpc');
         fwrite($fp, ($post_string . $path . "$maxAge HTTP/1.0\r\n$req_headers\r\n$request"));
         $response = '';
         $line1 = fgets($fp, 2048);

@@ -125,6 +125,10 @@ define('PEAR_CHANNELFILE_ERROR_NORESTURI', 35);
  * Error code when a mirror is defined and the channel.xml represents the __uri pseudo-channel
  */
 define('PEAR_CHANNELFILE_URI_CANT_MIRROR', 36);
+/** 
+ * Error code when ssl attribute is present and is not "yes"
+ */
+define('PEAR_CHANNELFILE_ERROR_INVALID_SSL', 37);
 /**@#-*/
 
 /**
@@ -246,6 +250,8 @@ class PEAR_ChannelFile {
                     '<static> tag must contain version attribute',
                 PEAR_CHANNELFILE_URI_CANT_MIRROR =>
                     'The __uri pseudo-channel cannot have mirrors',
+                PEAR_CHANNELFILE_ERROR_INVALID_SSL =>
+                    '%server% has invalid ssl attribute "%ssl%" can only be yes or not present',
             );
     }
     
@@ -455,6 +461,9 @@ class PEAR_ChannelFile {
         }
         $ret .= " <servers>\n";
         $ret .= '  <primary';
+        if (isset($channelInfo['servers']['primary']['attribs']['ssl'])) {
+            $ret .= ' ssl="' . $channelInfo['servers']['primary']['attribs']['ssl'] . '"';
+        }
         if (isset($channelInfo['servers']['primary']['attribs']['port'])) {
             $ret .= ' port="' . $channelInfo['servers']['primary']['attribs']['port'] . '"';
         }
@@ -535,6 +544,9 @@ class PEAR_ChannelFile {
             $ret .= '  <mirror host="' . $mirror['attribs']['host'] . '"';
             if (isset($mirror['attribs']['port'])) {
                 $ret .= ' port="' . $mirror['attribs']['port'] . '"';
+            }
+            if (isset($mirror['attribs']['ssl'])) {
+                $ret .= ' ssl="' . $mirror['attribs']['ssl'] . '"';
             }
             $ret .= ">\n";
             if (isset($mirror['xmlrpc']) || isset($mirror['soap'])) {
@@ -648,6 +660,11 @@ class PEAR_ChannelFile {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_PORT,
                 array('port' => $info['port']));
         }
+        if (isset($info['servers']['primary']['attribs']['ssl']) &&
+              $info['servers']['primary']['attribs']['ssl'] != 'yes') {
+            $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_SSL,
+                array('ssl' => $info['ssl'], 'server' => $info['name']));
+        }
 
         if (isset($info['servers']['primary']['xmlrpc']) &&
               isset($info['servers']['primary']['xmlrpc']['function'])) {
@@ -676,6 +693,10 @@ class PEAR_ChannelFile {
                 } elseif (!$this->validChannelServer($mirror['attribs']['host'])) {
                     $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_HOST,
                         array('server' => $mirror['attribs']['host'], 'type' => 'mirror'));
+                }
+                if (isset($mirror['attribs']['ssl']) && $mirror['attribs']['ssl'] != 'yes') {
+                    $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_SSL,
+                        array('ssl' => $info['ssl'], 'server' => $mirror['attribs']['host']));
                 }
                 if (isset($mirror['xmlrpc'])) {
                     $this->validateFunctions('xmlrpc',
@@ -781,6 +802,9 @@ class PEAR_ChannelFile {
                 if (isset($mir['attribs']['port'])) {
                     return $mir['attribs']['port'];
                 } else {
+                    if ($this->getSSL($mirror)) {
+                        return 443;
+                    }
                     return 80;
                 }
             }
@@ -789,51 +813,31 @@ class PEAR_ChannelFile {
         if (isset($this->_channelInfo['servers']['primary']['attribs']['port'])) {
             return $this->_channelInfo['servers']['primary']['attribs']['port'];
         }
+        if ($this->getSSL()) {
+            return 443;
+        }
         return 80;
     }
 
     /**
-     * @return string|false
+     * @return bool Determines whether secure sockets layer (SSL) is used to connect to this channel
      */
-    function getPath($protocol, $mirror = false)
+    function getSSL($mirror = false)
     {
         if ($mirror) {
             if ($mir = $this->getMirror($mirror)) {
-                if (isset($mir[$protocol]['attribs']['path'])) {
-                    return $mir[$protocol]['attribs']['path'];
+                if (isset($mir['attribs']['ssl'])) {
+                    return true;
                 } else {
-                    return '/';
+                    return false;
                 }
             }
             return false;
         }
-        if (isset($this->_channelInfo['servers']['primary'][$protocol]['attribs']['path'])) {
-            return $this->_channelInfo['servers']['primary'][$protocol]['attribs']['path'];
-        } else {
-            return '/';
+        if (isset($this->_channelInfo['servers']['primary']['attribs']['ssl'])) {
+            return true;
         }
-    }
-
-    /**
-     * @return string|false
-     */
-    function getFilename($protocol, $mirror = false)
-    {
-        if ($mirror) {
-            if ($mir = $this->getMirror($mirror)) {
-                if (isset($mir[$protocol]['attribs']['filename'])) {
-                    return $mir[$protocol]['attribs']['filename'];
-                } else {
-                    return $protocol . '.php';
-                }
-            }
-            return false;
-        }
-        if (isset($this->_channelInfo['servers']['primary'][$protocol]['attribs']['filename'])) {
-            return $this->_channelInfo['servers']['primary'][$protocol]['attribs']['filename'];
-        } else {
-            return $protocol . '.php';
-        }
+        return false;
     }
 
     /**
@@ -846,6 +850,28 @@ class PEAR_ChannelFile {
         } else {
             return false;
         }
+    }
+
+    /**
+     * @param string xmlrpc or soap
+     * @param string|false mirror name or false for primary server
+     */
+    function getPath($protocol, $mirror = false)
+    {   
+        if (!in_array($protocol, array('xmlrpc', 'soap'))) {
+            return false;
+        }
+        if ($mirror) {
+            if (!($mir = $this->getMirror($mirror))) {
+                return false;
+            }
+            if (isset($mir[$protocol]['attribs']['path'])) {
+                return $mir[$protocol]['attribs']['path'];
+            } else {
+                return $protocol . '.php';
+            }
+        }
+        return $protocol . '.php';
     }
 
     /**
@@ -1082,6 +1108,128 @@ class PEAR_ChannelFile {
     }
 
     /**
+     * Set the socket number (port) that is used to connect to this channel
+     * @param integer
+     * @param string|false name of the mirror server, or false for the primary
+     */
+    function setPort($port, $mirror = false)
+    {
+        if ($mirror) {
+            if (!isset($this->_channelInfo['servers']['mirror'])) {
+                $this->_validateError(PEAR_CHANNELFILE_ERROR_MIRROR_NOT_FOUND,
+                    array('mirror' => $mirror));
+                return false;
+            }
+            $setmirror = false;
+            if (isset($this->_channelInfo['servers']['mirror'][0])) {
+                foreach ($this->_channelInfo['servers']['mirror'] as $i => $mir) {
+                    if ($mirror == $mir['attribs']['host']) {
+                        $this->_channelInfo['servers']['mirror'][$i]['attribs']['port'] = $port;
+                        return true;
+                    }
+                }
+                return false;
+            } elseif ($this->_channelInfo['servers']['mirror']['attribs']['host'] == $mirror) {
+                $this->_channelInfo['servers']['mirror']['attribs']['port'] = $port;
+                $this->_isValid = false;
+                return true;
+            }
+        }
+        $this->_channelInfo['servers']['primary']['attribs']['port'] = $port;
+        $this->_isValid = false;
+        return true;
+    }
+
+    /**
+     * Set the socket number (port) that is used to connect to this channel
+     * @param bool Determines whether to turn on SSL support or turn it off
+     * @param string|false name of the mirror server, or false for the primary
+     */
+    function setSSL($ssl = true, $mirror = false)
+    {
+        if ($mirror) {
+            if (!isset($this->_channelInfo['servers']['mirror'])) {
+                $this->_validateError(PEAR_CHANNELFILE_ERROR_MIRROR_NOT_FOUND,
+                    array('mirror' => $mirror));
+                return false;
+            }
+            $setmirror = false;
+            if (isset($this->_channelInfo['servers']['mirror'][0])) {
+                foreach ($this->_channelInfo['servers']['mirror'] as $i => $mir) {
+                    if ($mirror == $mir['attribs']['host']) {
+                        if (!$ssl) {
+                            if (isset($this->_channelInfo['servers']['mirror'][$i]
+                                  ['attribs']['ssl'])) {
+                                unset($this->_channelInfo['servers']['mirror'][$i]['attribs']['ssl']);
+                            }
+                        } else {
+                            $this->_channelInfo['servers']['mirror'][$i]['attribs']['ssl'] = 'yes';
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            } elseif ($this->_channelInfo['servers']['mirror']['attribs']['host'] == $mirror) {
+                if (!$ssl) {
+                    if (isset($this->_channelInfo['servers']['mirror']['attribs']['ssl'])) {
+                        unset($this->_channelInfo['servers']['mirror']['attribs']['ssl']);
+                    }
+                } else {
+                    $this->_channelInfo['servers']['mirror']['attribs']['ssl'] = 'yes';
+                }
+                $this->_isValid = false;
+                return true;
+            }
+        }
+        if ($ssl) {
+            $this->_channelInfo['servers']['primary']['attribs']['ssl'] = 'yes';
+        } else {
+            if (isset($this->_channelInfo['servers']['primary']['attribs']['ssl'])) {
+                unset($this->_channelInfo['servers']['primary']['attribs']['ssl']);
+            }
+        }
+        $this->_isValid = false;
+        return true;
+    }
+
+    /**
+     * Set the socket number (port) that is used to connect to this channel
+     * @param integer
+     * @param string|false name of the mirror server, or false for the primary
+     */
+    function setPath($protocol, $path, $mirror = false)
+    {
+        if (!in_array($protocol, array('xmlrpc', 'soap'))) {
+            return false;
+        }
+        if ($mirror) {
+            if (!isset($this->_channelInfo['servers']['mirror'])) {
+                $this->_validateError(PEAR_CHANNELFILE_ERROR_MIRROR_NOT_FOUND,
+                    array('mirror' => $mirror));
+                return false;
+            }
+            $setmirror = false;
+            if (isset($this->_channelInfo['servers']['mirror'][0])) {
+                foreach ($this->_channelInfo['servers']['mirror'] as $i => $mir) {
+                    if ($mirror == $mir['attribs']['host']) {
+                        $this->_channelInfo['servers']['mirror'][$i][$protocol]['attribs']['path'] =
+                            $path;
+                        return true;
+                    }
+                }
+                return false;
+            } elseif ($this->_channelInfo['servers']['mirror']['attribs']['host'] == $mirror) {
+                $this->_channelInfo['servers']['mirror'][$protocol]['attribs']['path'] = $path;
+                $this->_isValid = false;
+                return true;
+            }
+        }
+        $this->_channelInfo['servers']['primary'][$protocol]['attribs']['path'] = $path;
+        $this->_isValid = false;
+        return true;
+    }
+
+    /**
      * @param string
      * @return string|false
      * @error PEAR_CHANNELFILE_ERROR_NO_SERVER
@@ -1303,7 +1451,6 @@ class PEAR_ChannelFile {
     /**
      * @param string mirror server
      * @param int mirror http port
-     * @param string path to protocols
      * @return boolean
      */
     function addMirror($server, $port = null, $path = null)
