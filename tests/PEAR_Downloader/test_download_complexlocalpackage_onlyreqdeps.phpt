@@ -24,42 +24,39 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
          array('channel' => 'pear.php.net', 'package' => 'PEAR1', 'version' => '1.4.0a1'), 'alpha'),
     array('version' => '1.5.1',
           'info' =>
-'<?xml version="1.0" encoding="ISO-8859-1"?>
-<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
-<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
- <name>Bar</name>
+'<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0" packagerversion="1.4.0a1">
+ <name>Bar</name>       
  <summary>PEAR Base System</summary>
  <description>small
  </description>
  <maintainers>
   <maintainer>
    <user>cellog</user>
-   <role>lead</role>
    <name>Greg Beaver</name>
    <email>cellog@php.net</email>
+   <role>lead</role>
   </maintainer>
- </maintainers>
+  </maintainers>
  <release>
   <version>1.5.1</version>
-  <date>2004-10-21</date>
+  <date>2004-12-28</date>
   <license>PHP License</license>
   <state>stable</state>
   <notes>hi
   </notes>
-  <provides type="class" name="OS_Guess"/>
-  <provides type="class" name="System"/>
-  <provides type="function" name="md5_file"/>
   <deps>
    <dep type="pkg" rel="has" optional="yes">Foobar</dep>
   </deps>
+  <provides type="class" name="OS_Guess" />
+  <provides type="class" name="System" />
+  <provides type="function" name="md5_file" />
   <filelist>
-   <dir name="/">
-    <file name="foo1.php" role="php"/>
-   </dir>
+   <file role="php" md5sum="ed0384ad29e60110b310a02e95287ee6" name="foo1.php"/>
   </filelist>
  </release>
-</package>
-',
+</package>',
           'url' => 'http://www.example.com/Bar-1.5.1'));
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
     array('1.0',
