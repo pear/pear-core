@@ -52,7 +52,9 @@
     <date>2004-11-08</date>
     <state>stable</state>
     <license>PHP License</license>
-    <notes>add RunTest.php to package.xml</notes>
+    <notes>
+     add RunTest.php to package.xml, make run-tests display failed tests, and use ui
+    </notes>
     <provides type="class" name="OS_Guess" />
     <provides type="class" name="System" />
     <provides type="function" name="md5_file" />
