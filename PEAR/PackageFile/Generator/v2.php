@@ -239,8 +239,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
         }
     }
 
-    function toPackageFile($where = null, $state = PEAR_VALIDATE_NORMAL, $name = 'package.xml',
-                           $beautify = false)
+    function toPackageFile($where = null, $state = PEAR_VALIDATE_NORMAL, $name = 'package.xml')
     {
         if (!$this->_packagefile->validate($state)) {
             return PEAR::raiseError('PEAR_Packagefile::toPackageFile: invalid package.xml',
