@@ -99,13 +99,6 @@ installed package.'
 
     // {{{ doList()
 
-    function _sortinfo($a, $b)
-    {
-        $apackage = isset($a['package']) ? $a['package'] : $a['name'];
-        $bpackage = isset($b['package']) ? $b['package'] : $b['name'];
-        return strcmp($apackage, $bpackage);
-    }
-
     function doList($command, $options, $params)
     {
         if (isset($options['allchannels'])) {
@@ -124,21 +117,22 @@ installed package.'
         } else {
             $channel = $this->config->get('default_channel');
         }
-        $installed = $reg->packageInfo(null, null, $channel);
-        usort($installed, array(&$this, '_sortinfo'));
+        $names = $reg->listPackages($channel);
+        usort($names, 'strnatcmp');
+        $installed = array();
+        foreach ($names as $name) {
+            $installed[] = array('package' => $name,
+                'version' => $reg->packageInfo($name, 'version', $channel),
+                'state' => $reg->packageInfo($name, 'state', $channel));
+        }
         $i = $j = 0;
         $data = array(
             'caption' => 'Installed packages, channel ' .
                 $channel . ':',
             'border' => true,
-            'headline' => array('Package', 'Version', 'State')
+            'headline' => array('Package', 'Version', 'State'),
+            'data' => $installed
             );
-        foreach ($installed as $package) {
-            $pobj = $reg->getPackage(isset($package['package']) ?
-                                        $package['package'] : $package['name'], $channel);
-            $data['data'][] = array($pobj->getPackage(), $pobj->getVersion(),
-                                    $pobj->getState() ? $pobj->getState() : null);
-        }
         if (count($installed)==0) {
             $data = '(no packages installed from channel ' . $channel . ')';
         }
