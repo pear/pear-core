@@ -68,6 +68,11 @@
 // SparcStation 20 Solaris 8:
 // SunOS host.example.com 5.8 Generic_108528-12 sun4m sparc SUNW,SPARCstation-20
 //
+// Mac OS X (Darwin)
+// Darwin home-eden.local 7.5.0 Darwin Kernel Version 7.5.0: Thu Aug  5 19:26:16 PDT 2004; root:xnu/xnu-517.7.21.obj~3/RELEASE_PPC  Power Macintosh
+//
+// Mac OS X early versions
+// 
 
 // }}}
 
