@@ -78,7 +78,7 @@ class PEAR_Dependency2
     {
         $extra = ' (';
         if (isset($dep['uri'])) {
-            return ' (' . $dep['uri'] . ')';
+            return '';
         }
         if (isset($dep['recommended'])) {
             $extra .= 'recommended version ' . $dep['recommended'];
