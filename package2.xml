@@ -168,6 +168,8 @@ Installer:
      <file name="Preinstallscript.php" role="php" />
      <file name="Postinstallscript.php" role="php" />
      <file name="Replace.php" role="php" />
+     <file name="Unixeol.php" role="php" />
+     <file name="Windowseol.php" role="php" />
     </dir> <!-- /PEAR/Task -->
     <file name="Autoloader.php" role="php" />
     <file name="Builder.php" role="php" />

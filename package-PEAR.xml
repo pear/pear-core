@@ -177,6 +177,8 @@ Installer:
      <file role="php" name="Preinstallscript.php"/>
      <file role="php" name="Postinstallscript.php"/>
      <file role="php" name="Replace.php"/>
+     <file role="php" name="Unixeol.php"/>
+     <file role="php" name="Windowseol.php"/>
     </dir>
     <file role="php" name="ChannelFile.php"/>
     <file role="php" name="Common.php"/>
