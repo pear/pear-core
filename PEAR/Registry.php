@@ -1749,7 +1749,12 @@ class PEAR_Registry extends PEAR
                 $components['path'] = substr($components['path'], 1);
             }
             if (!isset($components['scheme'])) {
-                if (strpos($components['path'], '/')) {
+                if (strpos($components['path'], '/') !== false) {
+                    if ($components['path']{0} == '/') {
+                        return PEAR::raiseError('parsePackageName(): this is not ' .
+                            'a package name, it begins with "/" in "' . $param . '"',
+                            'invalid', null, null, $param);
+                    }
                     $parts = explode('/', $components['path']);
                     $components['host'] = array_shift($parts);
                     if (count($parts) > 1) {
