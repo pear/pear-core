@@ -191,7 +191,6 @@ Test conflicting files:
 Caught error: groob::pkg6conflict: conflicting files found:
 groob\goompness\oggbrzitzkee.php (frob::pkg6)
      groob\goompness\Mopreeb.php (frob::pkg6)
-        groob\goompness\test.dat (frob::pkg6)
 
 Test unknown channel:
 Error: Unknown channel, "gorp"

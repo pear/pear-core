@@ -11,6 +11,8 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 
 require_once "PEAR/Installer.php";
 require_once 'PEAR/ChannelFile.php';
+// fake channel validator - sidestep having to install this package
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . '_test_validate.php.inc';
 
 $temp_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
 if (!is_dir($temp_path)) {
@@ -26,7 +28,7 @@ $chan = new PEAR_ChannelFile;
 $chan->setName('oddball');
 $chan->setServer('example.com');
 $chan->setSummary('oddball');
-$chan->setPackageNameRegex('[a-z][a-z0-9]*(?:\.[a-z0-9]+)*');
+$chan->setValidationPackage('test_Validate', '1.0');
 $reg->addChannel($chan);
 $installer = new PEAR_Installer($ui);
 $installer->config = &$config;
