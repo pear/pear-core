@@ -97,7 +97,9 @@ class PEAR_Downloader_Package
                 $err = $this->_fromString($param);
                 if (PEAR::isError($err) || !$this->_valid) {
                     if (PEAR::isError($origErr)) {
-                        $this->_downloader->log(0, $err->getMessage());
+                        if (PEAR::isError($err)) {
+                            $this->_downloader->log(0, $err->getMessage());
+                        }
                         if (is_array($origErr->getUserInfo())) {
                             foreach ($origErr->getUserInfo() as $err) {
                                 if (is_array($err)) {
@@ -106,9 +108,9 @@ class PEAR_Downloader_Package
                                 $this->_downloader->log(0, $err);
                             }
                         }
-                        return $origErr;
+                        return PEAR::raiseError($origErr);
                     } else {
-                        return $err;
+                        return PEAR::raiseError($err);
                     }
                 }
             }
@@ -559,7 +561,7 @@ class PEAR_Downloader_Package
             $pkg = new PEAR_PackageFile($this->_config, $this->_downloader->debug,
                 $this->_downloader->getDownloadDir());
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-            $pf = &$pkg->fromAnyFile($param, PEAR_VALIDATE_INSTALLING);
+            $pf = &$pkg->fromAnyFile($file, PEAR_VALIDATE_INSTALLING);
             PEAR::popErrorHandling();
             if (PEAR::isError($pf)) {
                 foreach ($pf->getUserInfo as $err) {
@@ -594,6 +596,10 @@ class PEAR_Downloader_Package
             $this->_config->get('default_channel'));
         PEAR::popErrorHandling();
         if (PEAR::isError($pname)) {
+            if ($pname->getCode() == 'invalid') {
+                $this->_valid = false;
+                return false;
+            }
             if ($pname->getCode() == 'channel') {
                 $parsed = $pname->getUserInfo();
                 if ($this->_downloader->discover($parsed['channel'])) {
