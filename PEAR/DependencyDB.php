@@ -93,12 +93,12 @@ class PEAR_DependencyDB
         if (!isset($GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE']
               [$config->get('php_dir', null, 'pear.php.net')])) {
             $a = new PEAR_DependencyDB;
+            $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE']
+              [$config->get('php_dir', null, 'pear.php.net')] = &$a;
             $a->setConfig($config, $depdb);
             if (PEAR::isError($e = $a->assertDepsDB())) {
                 return $e;
             }
-            $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE']
-              [$config->get('php_dir', null, 'pear.php.net')] = &$a;
         }
         return $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE']
               [$config->get('php_dir', null, 'pear.php.net')];
