@@ -34,7 +34,7 @@ class PEAR_Command_Mirror extends PEAR_Command_Common
 
     var $commands = array(
         'download-all' => array(
-            'summary' => 'Downloads each available package from master_server',
+            'summary' => 'Downloads each available package from the default channel',
             'function' => 'doDownloadAll',
             'shortcut' => 'da',
             'options' => array(
@@ -43,11 +43,12 @@ class PEAR_Command_Mirror extends PEAR_Command_Common
                     'shortopt' => 'c',
                     'doc' => 'specify a channel other than the default channel',
                     'arg' => 'CHAN',
-                    )
+                    ),
                 ),
             'doc' => '
-	    Requests a list of available packages from the package server
-	    (master_server) and downloads them to current working directory'
+Requests a list of available packages from the default channel ({config default_channel})
+and downloads them to current working directory.  Note: only
+packages within preferred_state ({config preferred_state}) will be downloaded'
             ),
         );
 
@@ -68,6 +69,15 @@ class PEAR_Command_Mirror extends PEAR_Command_Common
     }
 
     // }}}
+
+    /**
+     * For unit-testing
+     */
+    function &factory($a)
+    {
+        $a = &PEAR_Command::factory($a, $this->config);
+        return $a;
+    }
 
     // {{{ doDownloadAll()
     /**
@@ -94,11 +104,12 @@ class PEAR_Command_Mirror extends PEAR_Command_Common
         $this->config->set('default_channel', $channel);
         $this->ui->outputData('Using Channel ' . $this->config->get('default_channel'));
         $remote = &$this->config->getRemote();
-        $remoteInfo = $remote->call("package.listAll");
+        $stable = ($this->config->get('preferred_state') == 'stable');
+        $remoteInfo = $remote->call("package.listAll", true, $stable, true);
         if (PEAR::isError($remoteInfo)) {
             return $remoteInfo;
         }
-        $cmd = &PEAR_Command::factory("download", $this->config);
+        $cmd = &$this->factory("download");
         if (PEAR::isError($cmd)) {
             return $cmd;
         }

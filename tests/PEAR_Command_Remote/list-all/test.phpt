@@ -26,15 +26,11 @@ $pf->addFile('', 'foo.dat', array('role' => 'data'));
 $pf->validate();
 $phpunit->assertNoErrors('setup');
 $reg->addPackage2($pf);
-$pearweb->addXmlrpcConfig("empty", "package.listAll",     array(
-    0 =>
-        true,
-    ),     array(
+$pearweb->addXmlrpcConfig("empty", "package.listAll",     array(true, true, true),
+     array(
     ));
-$pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(
-    0 =>
-        true,
-    ),     array(
+$pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true, true, true),
+     array(
     'APC' =>
         array(
         'packageid' =>
@@ -62,10 +58,7 @@ $pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(
             ),
         ),
     ));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.listAll",     array(
-    0 =>
-        true,
-    ),     array(
+$pearweb->addXmlrpcConfig("pear.php.net", "package.listAll",     array(true, true, true),     array(
     'APC' =>
         array(
         'packageid' =>
