@@ -45,10 +45,10 @@ class PEAR_PackageFile_Generator_v1
      *
      * @return string XML data
      */
-    function toXml($state = PEAR_VALIDATE_NORMAL)
+    function toXml($state = PEAR_VALIDATE_NORMAL, $nofilevalidation = false)
     {
         $this->_packagefile->setDate(date('Y-m-d'));
-        if (!$this->_packagefile->validate($state)) {
+        if (!$this->_packagefile->validate($state, $nofilevalidation)) {
             return false;
         }
         $pkginfo = $this->_packagefile->getArray();
@@ -377,9 +377,10 @@ class PEAR_PackageFile_Generator_v1
         }
     }
 
-    function toPackageFile($where = null, $state = PEAR_VALIDATE_NORMAL, $name = 'package.xml')
+    function toPackageFile($where = null, $state = PEAR_VALIDATE_NORMAL, $name = 'package.xml',
+                           $nofilechecking = false)
     {
-        if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING)) {
+        if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING, $nofilechecking)) {
             return false;
         }
         include_once 'System.php';
@@ -393,7 +394,7 @@ class PEAR_PackageFile_Generator_v1
         if (!$np) {
             return PEAR::raiseError("PEAR_Packagefile::toPackageFile: unable to save $name as $newpkgfile");
         }
-        fwrite($np, $this->toXml($state));
+        fwrite($np, $this->toXml($state, $nofilechecking));
         fclose($np);
         return $newpkgfile;
     }

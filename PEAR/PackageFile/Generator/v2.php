@@ -103,6 +103,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
     function toTgz2(&$packager, &$pf1, $compress = true, $where = null)
     {
+        if (!$this->_packagefile->isEquivalent($pf1)) {
+            return false;
+        }
         include_once 'System.php';
         if ($where === null) {
             if (!($where = System::mktemp(array('-d')))) {
@@ -127,15 +130,48 @@ http://pear.php.net/dtd/package-2.0.xsd',
         if (isset($contents['attribs'])) {
             $contents = array($contents);
         }
-        
+
+        $packageDir = $where;
         foreach ($contents as $i => $file) {
             $fname = $file['attribs']['name'];
             $atts = $file['attribs'];
+            $orig = $file;
             $file = $pkgdir . DIRECTORY_SEPARATOR . $fname;
             if (!file_exists($file)) {
                 return $packager->raiseError("File does not exist: $fname");
             } else {
-                $filelist[$i++] = $file;
+                $tfile = $packageDir . DIRECTORY_SEPARATOR . $fname;
+                unset($orig['attribs']);
+                if (count($orig)) { // file with tasks
+                    // run any package-time tasks
+                    $fp = fopen($file, "r");
+                    $contents = fread($fp, filesize($file));
+                    fclose($fp);
+                    foreach ($orig as $tag => $raw) {
+                        $tag = str_replace($this->_packagefile->getTasksNs() . ':', '', $tag);
+                        $task = "PEAR_Task_$tag";
+                        $task = &new $task($this->_packagefile->_config,
+                            $this->_packagefile->_logger,
+                            PEAR_TASK_PACKAGE);
+                        $task->init($raw, $atts);
+                        $res = $task->startSession($this->_packagefile, $contents, $tfile);
+                        if (!$res) {
+                            continue; // skip this task
+                        }
+                        if (PEAR::isError($res)) {
+                            return $res;
+                        }
+                        $contents = $res; // save changes
+                        System::mkdir(array('-p', dirname($tfile)));
+                        $wp = fopen($tfile, "wb");
+                        fwrite($wp, $contents);
+                        fclose($wp);
+                    }
+                } else {
+                    System::mkdir(array('-p', dirname($tfile)));
+                    copy($file, $tfile);
+                }
+                $filelist[$i++] = $tfile;
                 if (!isset($atts['md5sum'])) {
                     $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($file), $i);
                 }
@@ -163,13 +199,14 @@ http://pear.php.net/dtd/package-2.0.xsd',
                     ' failed');
             }
             // ----- Add the content of the package
-            if (!$tar->addModify($filelist, $pkgver, $pkgdir)) {
+            if (!$tar->addModify($filelist, $pkgver, $where)) {
                 return $packager->raiseError('PEAR_Packagefile::toTgz(): tarball creation failed');
             }
             // add the package.xml version 1.0
             if ($pf1 !== null) {
                 $pfgen = &$pf1->getDefaultGenerator();
-                $packagexml1 = $pfgen->toPackageFile($where, PEAR_VALIDATE_PACKAGING);
+                $packagexml1 = $pfgen->toPackageFile($where, PEAR_VALIDATE_PACKAGING,
+                    'package.xml', true);
                 if (!$tar->addModify(array($packagexml1), '', $where)) {
                     return $packager->raiseError('PEAR_Packagefile::toTgz(): adding package.xml ' .
                         'failed');
@@ -226,6 +263,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
             $this->options = $this->_defaultOptions;
         }
         $arr = $this->_packagefile->getArray();
+        if (isset($arr['filelist'])) {
+            unset($arr['filelist']);
+        }
         if ($state ^ PEAR_VALIDATE_PACKAGING) {
             $use = $this->_recursiveXmlFilelist($arr['contents']['dir']['file']);
             unset($arr['contents']['dir']['file']);

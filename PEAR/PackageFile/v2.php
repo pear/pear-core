@@ -72,6 +72,12 @@ class PEAR_PackageFile_v2
     var $_isValid = 0;
 
     /**
+     * True if the filelist has been validated
+     * @param bool
+     */
+    var $_filesValid = false;
+
+    /**
      * @var PEAR_Registry
      * @access protected
      */
@@ -236,6 +242,71 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    /**
+     * Tests whether every part of the package.xml 1.0 is represented in
+     * this package.xml 2.0
+     * @param PEAR_PackageFile_v1
+     * @return bool
+     */
+    function isEquivalent($pf1)
+    {
+        if (!$pf1) {
+            return true;
+        }
+        $this->_stack->getErrors(true);
+        if (!$pf1->validate(PEAR_VALIDATE_NORMAL)) {
+            return true;
+        }
+        $pass = true;
+        if ($pf1->getPackage() != $this->getPackage()) {
+            $this->_differentPackage($pf1->getPackage());
+            $pass = false;
+        }
+        if ($pf1->getVersion() != $this->getVersion()) {
+            $this->_differentVersion($pf1->getVersion());
+            $pass = false;
+        }
+        if ($pf1->getState() != $this->getState()) {
+            $this->_differentState($pf1->getState());
+            $pass = false;
+        }
+        $filelist = $this->getFilelist();
+        foreach ($pf1->getFilelist() as $file => $atts) {
+            if (!isset($filelist[$file])) {
+                $this->_missingFile($file);
+                $pass = false;
+            }
+        }
+        return $pass;
+    }
+
+    function _differentPackage($package)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('package' => $package,
+            'self' => $this->getPackage()),
+            'package.xml 1.0 Package "%package%" does not match "%self$"');
+    }
+
+    function _differentVersion($version)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('version' => $version,
+            'self' => $this->getVersion()),
+            'package.xml 1.0 version "%version%" does not match "%self$"');
+    }
+
+    function _differentState($state)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('state' => $state,
+            'self' => $this->getState()),
+            'package.xml 1.0 state "%state%" does not match "%state$"');
+    }
+
+    function _missingFile($file)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('file' => $file),
+            'package.xml 1.0 file "%file%" is not present in <contents>');
+    }
+
     function setRequestedGroup($group)
     {
         $this->_requestedGroup = $group;
@@ -393,6 +464,27 @@ class PEAR_PackageFile_v2
             unset($info['dirtree']);
             return $info;
         }
+    }
+
+    function packageInfo($field)
+    {
+        static $arr = false;
+        if (!$arr) {
+            $arr = $this->getArray(true);
+        }
+        if (isset($arr['old'][$field])) {
+            if (!is_string($arr['old'][$field])) {
+                return null;
+            }
+            return $arr['old'][$field];
+        }
+        if (isset($arr[$field])) {
+            if (!is_string($arr[$field])) {
+                return null;
+            }
+            return $arr[$field];
+        }
+        return null;
     }
 
     function getName()
@@ -1135,6 +1227,8 @@ class PEAR_PackageFile_v2
      */
     function clearContents($baseinstall = false)
     {
+        $this->_filesValid = false;
+        $this->_isValid = 0;
         if (!isset($this->_packageInfo['contents'])) {
             $this->_insertBefore($this->_packageInfo,
                 array('compatible',
@@ -1158,6 +1252,8 @@ class PEAR_PackageFile_v2
         if ($this->getPackageType() != 'bundle') {
             return false;
         }
+        $this->_filesValid = false;
+        $this->_isValid = 0;
         $this->_mergeTag($this->_packageInfo, $path, array(
                 'contents' => array('compatible', 'dependencies', 'phprelease', 'extsrcrelease',
                     'extbinrelease', 'bundle', 'changelog'),
@@ -1174,6 +1270,7 @@ class PEAR_PackageFile_v2
         if ($this->getPackageType() == 'bundle') {
             return false;
         }
+        $this->_filesValid = false;
         $this->_isValid = 0;
         $dir = preg_replace(array('!\\\\+!', '!/+!'), array('/', '/'), $dir);
         if ($dir == '/' || $dir == '') {
@@ -1210,6 +1307,9 @@ class PEAR_PackageFile_v2
     function setFileAttribute($filename, $attr, $value, $index = false)
     {
         $this->_isValid = 0;
+        if (in_array($attr, array('role', 'name', 'baseinstalldir'))) {
+            $this->_filesValid = false;
+        }
         if ($index !== false &&
               isset($this->_packageInfo['contents']['dir']['file'][$index]['attribs'])) {
             $this->_packageInfo['contents']['dir']['file'][$index]['attribs'][$attr] = $value;

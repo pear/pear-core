@@ -472,7 +472,7 @@ class PEAR_Installer extends PEAR_Downloader
             foreach ($atts as $tag => $raw) {
                 $tag = str_replace($pkg->getTasksNs() . ':', '', $tag);
                 $task = "PEAR_Task_$tag";
-                $task = &new $task($this->config, $this);
+                $task = &new $task($this->config, $this, PEAR_TASK_INSTALL);
                 $task->init($raw, $attribs);
                 $res = $task->startSession($pkg, $contents, $final_dest_file);
                 if (!$res) {

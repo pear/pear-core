@@ -8,6 +8,7 @@ require_once 'PEAR/Task/Common.php';
 class PEAR_Task_Replace extends PEAR_Task_Common
 {
     var $type = 'simple';
+    var $phase = PEAR_TASK_PACKAGEANDINSTALL;
     var $_replacements;
 
     /**
@@ -83,6 +84,9 @@ class PEAR_Task_Replace extends PEAR_Task_Common
             $a = $a['attribs'];
             $to = '';
             if ($a['type'] == 'pear-config') {
+                if ($this->installphase == PEAR_TASK_PACKAGE) {
+                    return false;
+                }
                 if ($a['to'] == 'master_server') {
                     $chan = $this->registry->getChannel($pkg->getChannel());
                     if ($chan) {
