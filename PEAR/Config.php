@@ -1184,7 +1184,7 @@ class PEAR_Config extends PEAR
             $reg = &$this->getRegistry($layer);
             if (is_object($reg)) {
                 $chan = &$reg->getChannel($channel ? $channel : 'pear.php.net');
-                if (!$chan->getMirror($value)) {
+                if (!$chan->getMirror($value) && $chan->getName() != $value) {
                     return false; // mirror does not exist
                 }
             }
