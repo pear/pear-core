@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Dependency2->checkPackageDependency() exclude failure
+PEAR_Dependency2->checkPackageDependency() exclude failure (installed package)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -40,22 +40,12 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
           'message' => 'channel://pear.php.net/mine is not compatible with installed package "channel://pear.php.net/foo" version 1.0')
 ), 'exclude 1');
+$phpunit->assertEquals(array(), $fakelog->getLog(), 'exclude 1 log');
 $phpunit->assertIsa('PEAR_Error', $result, 'exclude 1');
 
-$reg->deletePackage('foo');
-
-$dep = &new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
-    'package' => 'mine'), PEAR_VALIDATE_DOWNLOADING);
-$phpunit->assertNoErrors('create 1');
-
-
-require_once 'PEAR/Downloader/Package.php';
-require_once 'PEAR/Downloader.php';
-$down = new PEAR_Downloader($fakelog, array(), $config);
-$dp = &new PEAR_Downloader_Package($down);
-$dp->initialize(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR .
-    'package.xml');
-$params = array(&$dp);
+// nodeps
+$dep = &new test_PEAR_Dependency2($config, array('nodeps' => true), array('channel' => 'pear.php.net',
+    'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 
 $result = $dep->validatePackageDependency(
     array(
@@ -64,12 +54,28 @@ $result = $dep->validatePackageDependency(
         'min' => '0.9',
         'max' => '1.9',
         'exclude' => '1.0',
-    ), true, $params);
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine is not compatible with downloaded package "channel://pear.php.net/foo" version 1.0')
-), 'exclude 2');
-$phpunit->assertIsa('PEAR_Error', $result, 'exclude 2');
+    ), true, array());
+$phpunit->showall();
+$phpunit->assertNoErrors('exclude 2 nodeps');
+$phpunit->assertEquals(array(), $fakelog->getLog(), 'exclude 2 log nodeps');
+$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with installed package "channel://pear.php.net/foo" version 1.0'), $result, 'exclude 2 nodeps');
+
+// force
+$dep = &new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
+    'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
+
+$result = $dep->validatePackageDependency(
+    array(
+        'name' => 'foo',
+        'channel' => 'pear.php.net',
+        'min' => '0.9',
+        'max' => '1.9',
+        'exclude' => '1.0',
+    ), true, array());
+$phpunit->showall();
+$phpunit->assertNoErrors('exclude 2 force');
+$phpunit->assertEquals(array(), $fakelog->getLog(), 'exclude 2 log force');
+$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with installed package "channel://pear.php.net/foo" version 1.0'), $result, 'exclude 2 force');
 
 echo 'tests done';
 ?>
