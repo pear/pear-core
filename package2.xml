@@ -163,6 +163,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     </file>
     <file name="Downloader.php" role="php" />
     <file name="ErrorStack.php" role="php" />
+    <file name="Exception.php" role="php" />
     <file name="Frontend.php" role="php" />
     <file name="FTP.php" role="php" />
     <file name="Installer.php" role="php" />
