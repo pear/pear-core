@@ -385,7 +385,6 @@ class PEAR_PackageFile_v2
             $this->_packageInfo['old']['release_notes'] = $this->getNotes();
             $this->_packageInfo['old']['release_deps'] = $this->getDeps();
             $this->_packageInfo['old']['maintainers'] = $this->getMaintainers();
-            $this->_packageInfo['old']['filelist'] = $this->getInstallationFilelist();
             $this->_packageInfo['xsdversion'] = '2.0';
             return $this->_packageInfo;
         } else {
