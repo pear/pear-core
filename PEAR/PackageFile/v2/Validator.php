@@ -1028,7 +1028,8 @@ class PEAR_PackageFile_v2_Validator
             if (isset($this->_packageInfo['srcpackage']) || isset($this->_packageInfo['srcuri'])) {
                 $this->_cannotHaveSrcpackage($release);
             }
-            if (isset($this->_packageInfo['extsrcrelease'][0])) {
+            if (is_array($this->_packageInfo['extsrcrelease']) &&
+                  isset($this->_packageInfo['extsrcrelease'][0])) {
                 return $this->_extsrcCanOnlyHaveOneRelease();
             }
             $releases = $this->_packageInfo['extsrcrelease'];
