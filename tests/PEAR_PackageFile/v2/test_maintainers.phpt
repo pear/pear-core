@@ -1,5 +1,5 @@
 --TEST--
-PEAR_PackageFile_Parser_v1 maintainer management
+PEAR_PackageFile_Parser_v2 maintainer management
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -11,7 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'Parser'. DIRECTORY_SEPARATOR .
-    'test_basicparse'. DIRECTORY_SEPARATOR . 'package.xml';
+    'test_basicparse'. DIRECTORY_SEPARATOR . 'package2.xml';
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 function assertValidation(&$pf)
 {
@@ -47,65 +47,100 @@ function assertValidation(&$pf)
     $phpunit->assertNoErrors('after validation');
 }
 $phpunit->assertNoErrors('valid xml parse');
-$phpunit->assertIsa('PEAR_PackageFile_v1', $pf, 'return of valid parse');
+$phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
 $phpunit->assertEquals(array (
   0 => 
   array (
+    'name' => 'Greg Beaver',
+    'email' => 'cellog@php.net',
+    'active' => 'yes',
     'handle' => 'cellog',
     'role' => 'lead',
-    'email' => 'cellog@php.net',
-    'name' => 'Greg Beaver',
   ),
 ), $pf->getMaintainers(), 'wrong maintainers');
+$pf->addMaintainer('lead', 'fake', 'Fake Faker', 'fake@example.com');
+$pf->validate();
+$phpunit->assertNoErrors('first');
 $pf->updateMaintainer('developer', 'cellog', 'Greg Beaver', 'cellog@php.net');
+$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
+    'name' => 'Fake Faker',
+    'email' => 'fake@example.com',
+    'active' => 'yes',
+    'handle' => 'fake',
+    'role' => 'lead',
+  ),
+  1 => 
+  array (
+    'name' => 'Greg Beaver',
+    'email' => 'cellog@php.net',
+    'active' => 'yes',
     'handle' => 'cellog',
     'role' => 'developer',
-    'email' => 'cellog@php.net',
-    'name' => 'Greg Beaver',
   ),
 ), $pf->getMaintainers(), 'wrong maintainers, after update');
 $pf->updateMaintainer('lead', 'test', 'Greg Beaver', 'cellog@php.net');
 $phpunit->assertEquals(array (
   0 => 
   array (
-    'handle' => 'cellog',
-    'role' => 'developer',
-    'email' => 'cellog@php.net',
-    'name' => 'Greg Beaver',
+    'name' => 'Fake Faker',
+    'email' => 'fake@example.com',
+    'active' => 'yes',
+    'handle' => 'fake',
+    'role' => 'lead',
   ),
   1 => 
   array (
+    'name' => 'Greg Beaver',
+    'email' => 'cellog@php.net',
+    'active' => 'yes',
     'handle' => 'test',
     'role' => 'lead',
-    'email' => 'cellog@php.net',
+  ),
+  2 => 
+  array (
     'name' => 'Greg Beaver',
+    'email' => 'cellog@php.net',
+    'active' => 'yes',
+    'handle' => 'cellog',
+    'role' => 'developer',
   ),
 ), $pf->getMaintainers(), 'wrong maintainers, after update as add');
 $pf->addMaintainer('contributor', 'test2', 'Greg Beaver', 'cellog@php.net');
 $phpunit->assertEquals(array (
   0 => 
   array (
-    'handle' => 'cellog',
-    'role' => 'developer',
-    'email' => 'cellog@php.net',
-    'name' => 'Greg Beaver',
+    'name' => 'Fake Faker',
+    'email' => 'fake@example.com',
+    'active' => 'yes',
+    'handle' => 'fake',
+    'role' => 'lead',
   ),
   1 => 
   array (
+    'name' => 'Greg Beaver',
+    'email' => 'cellog@php.net',
+    'active' => 'yes',
     'handle' => 'test',
     'role' => 'lead',
-    'email' => 'cellog@php.net',
-    'name' => 'Greg Beaver',
   ),
   2 => 
   array (
+    'name' => 'Greg Beaver',
+    'email' => 'cellog@php.net',
+    'active' => 'yes',
+    'handle' => 'cellog',
+    'role' => 'developer',
+  ),
+  3 => 
+  array (
+    'name' => 'Greg Beaver',
+    'email' => 'cellog@php.net',
+    'active' => 'yes',
     'handle' => 'test2',
     'role' => 'contributor',
-    'email' => 'cellog@php.net',
-    'name' => 'Greg Beaver',
   ),
 ), $pf->getMaintainers(), 'wrong maintainers, after add');
 $phpunit->assertFalse($pf->deleteMaintainer('scrooge'), 'invalid delete');
@@ -113,17 +148,27 @@ $phpunit->assertTrue($pf->deleteMaintainer('cellog'), 'valid delete');
 $phpunit->assertEquals(array (
   0 => 
   array (
-    'handle' => 'test',
+    'name' => 'Fake Faker',
+    'email' => 'fake@example.com',
+    'active' => 'yes',
+    'handle' => 'fake',
     'role' => 'lead',
-    'email' => 'cellog@php.net',
-    'name' => 'Greg Beaver',
   ),
   1 => 
   array (
+    'name' => 'Greg Beaver',
+    'email' => 'cellog@php.net',
+    'active' => 'yes',
+    'handle' => 'test',
+    'role' => 'lead',
+  ),
+  2 => 
+  array (
+    'name' => 'Greg Beaver',
+    'email' => 'cellog@php.net',
+    'active' => 'yes',
     'handle' => 'test2',
     'role' => 'contributor',
-    'email' => 'cellog@php.net',
-    'name' => 'Greg Beaver',
   ),
 ), $pf->getMaintainers(), 'wrong maintainers, after delete');
 assertValidation($pf);
