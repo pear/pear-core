@@ -61,8 +61,22 @@ class PEAR_PackageFile_Generator_v1
             return PEAR::raiseError('PEAR_Packagefile_v1::toTgz: "' . $where . '" could' .
                 ' not be created');
         }
+        if (file_exists($where . DIRECTORY_SEPARATOR . 'package.xml') &&
+              !is_file($where . DIRECTORY_SEPARATOR . 'package.xml')) {
+            return PEAR::raiseError('PEAR_Packagefile_v1::toTgz: unable to save package.xml as' .
+                ' "' . $where . DIRECTORY_SEPARATOR . 'package.xml"');
+        }
         if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING)) {
             return PEAR::raiseError('PEAR_Packagefile_v1::toTgz: invalid package file');
+        }
+        $pkginfo = $this->_packagefile->getArray();
+        $ext = $compress ? '.tgz' : '.tar';
+        $pkgver = $pkginfo['package'] . '-' . $pkginfo['version'];
+        $dest_package = getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext;
+        if (file_exists(getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext) &&
+              !is_file(getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext)) {
+            return PEAR::raiseError('PEAR_Packagefile_v1::toTgz: cannot create tgz file "' .
+                getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext . '"');
         }
         if ($pkgfile = $this->_packagefile->getPackageFile()) {
             $pkgdir = dirname(realpath($pkgfile));
@@ -71,8 +85,6 @@ class PEAR_PackageFile_Generator_v1
             return PEAR::raiseError('PEAR_Packagefile_v1::toTgz: package file object must ' .
                 'be created from a real file');
         }
-        $pkginfo = $this->_packagefile->getArray();
-        $pkgver = $pkginfo['package'] . '-' . $pkginfo['version'];
         // {{{ Create the package file list
         $filelist = array();
         $i = 0;
@@ -92,8 +104,6 @@ class PEAR_PackageFile_Generator_v1
         // }}}
         $packagexml = $this->toPackageFile($where, PEAR_VALIDATE_PACKAGING, 'package.xml', true);
         if ($packagexml) {
-            $ext = $compress ? '.tgz' : '.tar';
-            $dest_package = getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext;
             $tar =& new Archive_Tar($dest_package, $compress);
             $tar->setErrorHandling(PEAR_ERROR_RETURN); // XXX Don't print errors
             // ----- Creates with the package.xml file
