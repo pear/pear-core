@@ -23,6 +23,7 @@ require_once 'PEAR/Command/Common.php';
 require_once 'PEAR/Common.php';
 require_once 'PEAR/Remote.php';
 require_once 'PEAR/Registry.php';
+require_once 'PEAR/Downloader.php';
 
 class PEAR_Command_Remote extends PEAR_Command_Common
 {
@@ -390,7 +391,6 @@ parameter.
 
     function doDownload($command, $options, $params)
     {
-        include_once 'PEAR/Downloader.php';
         // make certain that dependencies are ignored
         $options['nodeps'] = 1;
         $downloader = &$this->getDownloader($options);

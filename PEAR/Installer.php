@@ -21,6 +21,7 @@
 //
 // $Id$
 
+require_once "OS/Guess.php";
 require_once 'PEAR/Downloader.php';
 require_once 'PEAR/Task/Common.php';
 
@@ -207,7 +208,6 @@ class PEAR_Installer extends PEAR_Downloader
         }
         if (isset($atts['platform'])) {
             if (empty($os)) {
-                include_once "OS/Guess.php";
                 $os = new OS_Guess();
             }
             if (strlen($atts['platform']) && $atts['platform']{0} == '!') {

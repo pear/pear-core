@@ -21,6 +21,7 @@
 // $Id$
 
 require_once "PEAR.php";
+require_once "OS/Guess.php";
 
 define('PEAR_DEPENDENCY_MISSING',        -1);
 define('PEAR_DEPENDENCY_CONFLICT',       -2);
@@ -302,7 +303,6 @@ class PEAR_Dependency
         // comma separated values or something similar to PEAR_OS
         static $myos;
         if (empty($myos)) {
-            include_once "OS/Guess.php";
             $myos = new OS_Guess();
         }
         // only 'has' relation is currently supported

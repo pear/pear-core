@@ -22,6 +22,7 @@
 // $Id$
 
 require_once 'PEAR/Common.php';
+require_once 'PEAR/ChannelFile.php';
 require_once 'PEAR/Registry.php';
 require_once 'PEAR/Dependency2.php';
 require_once 'PEAR/DependencyDB.php';
@@ -192,7 +193,6 @@ class PEAR_Downloader extends PEAR_Common
             return false;
         }
         list($a, $lastmodified) = $a;
-        include_once 'PEAR/ChannelFile.php';
         $b = new PEAR_ChannelFile;
         if ($b->fromXmlFile($a)) {
             @unlink($a);

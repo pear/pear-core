@@ -21,6 +21,7 @@
 require_once 'OS/Guess.php';
 require_once 'PEAR/Validate.php';
 require_once 'PEAR/DependencyDB.php';
+require_once 'PEAR/Downloader/Package.php';
 
 /**
  * Dependency check for PEAR packages
@@ -908,7 +909,6 @@ class PEAR_Dependency2
         }
         $fail = false;
         if ($deps) {
-            include_once 'PEAR/Downloader/Package.php';
             $dp = &new PEAR_Downloader_Package($dl);
             if (is_object($pkg)) {
                 $dp->setPackageFile($pkg);

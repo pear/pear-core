@@ -19,6 +19,7 @@
 //
 // $Id$
 require_once 'PEAR/XMLParser.php';
+require_once 'PEAR/ChannelFile.php';
 /**
  * Parser for package.xml version 2.0
  * @author Greg Beaver <cellog@php.net>
@@ -47,7 +48,6 @@ class PEAR_ChannelFile_Parser extends PEAR_XMLParser
         if (PEAR::isError($err = parent::parse($data, $file))) {
             return $err;
         }
-        include_once 'PEAR/ChannelFile.php';
         $ret = new PEAR_ChannelFile;
         $ret->setConfig($this->_config);
         if (isset($this->_logger)) {

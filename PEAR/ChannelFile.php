@@ -18,6 +18,9 @@
 //
 // $Id$
 
+require_once 'PEAR/ErrorStack.php';
+require_once 'PEAR/Validate.php';
+require_once 'PEAR/XMLParser.php';
 require_once 'PEAR/Common.php';
 
 /**
@@ -186,9 +189,6 @@ class PEAR_ChannelFile {
 
     function PEAR_ChannelFile()
     {
-        if (!class_exists('PEAR_ErrorStack')) {
-            include_once 'PEAR/ErrorStack.php';
-        }
         $this->_stack = &new PEAR_ErrorStack('PEAR_ChannelFile');
         $this->_stack->setErrorMessageTemplate($this->_getErrorMessage());
         $this->_isValid = false;
@@ -267,7 +267,6 @@ class PEAR_ChannelFile {
                     array('version' => $channelversion[1]));
                 return false;
             }
-            include_once 'PEAR/XMLParser.php';
             $parser = new PEAR_XMLParser;
             $result = $parser->parse($data);
             if ($result !== true) {
@@ -1495,7 +1494,6 @@ class PEAR_ChannelFile {
         if (isset($this->_channelInfo['validatepackage'])) {
             if ($package == $this->_channelInfo['validatepackage']) {
                 // channel validation packages are always validated by PEAR_Validate
-                include_once 'PEAR/Validate.php';
                 $val = &new PEAR_Validate;
                 return $val;
             }
@@ -1517,7 +1515,6 @@ class PEAR_ChannelFile {
                 $val = &new $vclass;
             }
         } else {
-            include_once 'PEAR/Validate.php';
             $val = &new PEAR_Validate;
         }
         return $val;

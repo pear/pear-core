@@ -23,6 +23,12 @@
 require_once 'PEAR/Common.php';
 require_once 'PEAR/Packager.php';
 require_once 'PEAR/Command/Common.php';
+require_once 'PEAR/RunTest.php';
+require_once "Archive/Tar.php";
+require_once "System.php";
+require_once "PEAR/Installer.php";
+require_once "OS/Guess.php";
+require_once 'PEAR/Dependency2.php';
 
 class PEAR_Command_Package extends PEAR_Command_Common
 {
@@ -511,7 +517,6 @@ used for automated conversion or learning the format.
 
     function doRunTests($command, $options, $params)
     {
-        include_once 'PEAR/RunTest.php';
         $log = new PEAR_Common;
         $log->ui = &$this->ui; // slightly hacky, but it will work
         $run = new PEAR_RunTest($log);
@@ -684,7 +689,6 @@ used for automated conversion or learning the format.
                 $deps = $info->getDependencies();
                 $reg = &$this->config->getRegistry();
                 if (is_array($deps)) {
-                    require_once 'PEAR/Dependency2.php';
                     $d = new PEAR_Dependency2($this->config, array(), '');
                     $data = array(
                         'caption' => 'Dependencies for ' . $info->getPackage(),
@@ -771,8 +775,6 @@ used for automated conversion or learning the format.
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
-        include_once "Archive/Tar.php";
-        include_once "System.php";
         $tar = new Archive_Tar($params[0]);
         $tmpdir = System::mktemp('-d pearsign');
         if (!$tar->extractList('package2.xml package.sig', $tmpdir)) {
@@ -825,9 +827,6 @@ used for automated conversion or learning the format.
         if (!file_exists($params[0])) {
             return $this->raiseError("file does not exist: $params[0]");
         }
-        include_once "Archive/Tar.php";
-        include_once "PEAR/Installer.php";
-        include_once "System.php";
         $reg = &$this->config->getRegistry();
         $pkg = &$this->getPackageFile($this->config, $this->_debug);
         $pf = &$pkg->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
@@ -917,7 +916,6 @@ used for automated conversion or learning the format.
             }
         }
         if ($srcfiles > 0) {
-            include_once "OS/Guess.php";
             $os = new OS_Guess;
             $arch = $os->getCpu();
         } else {

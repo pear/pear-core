@@ -22,6 +22,7 @@ require_once 'PEAR/ErrorStack.php';
 require_once 'PEAR/Validate.php';
 require_once 'PEAR/Dependency2.php';
 require_once 'PEAR/PackageFile/Generator/v2.php';
+require_once 'PEAR/PackageFile/v2/Validator.php';
 /**
  * @author Greg Beaver <cellog@php.net>
  * @package PEAR
@@ -2619,7 +2620,6 @@ class PEAR_PackageFile_v2
                 return implode('', file($file));
             }
         } else { // tgz
-            include_once 'Archive/Tar.php';
             $tar = &new Archive_Tar($this->_archiveFile);
             $tar->pushErrorHandling(PEAR_ERROR_RETURN);
             if ($file != 'package.xml' && $file != 'package2.xml') {
@@ -2718,7 +2718,6 @@ class PEAR_PackageFile_v2
     function analyzeSourceCode($file, $string = false)
     {
         if (!isset($this->_v2Validator)) {
-            include_once 'PEAR/PackageFile/v2/Validator.php';
             $this->_v2Validator = new PEAR_PackageFile_v2_Validator;
         }
         return $this->_v2Validator->analyzeSourceCode($file, $string);
@@ -2730,7 +2729,6 @@ class PEAR_PackageFile_v2
             return false;
         }
         if (!isset($this->_v2Validator)) {
-            include_once 'PEAR/PackageFile/v2/Validator.php';
             $this->_v2Validator = new PEAR_PackageFile_v2_Validator;
         }
         if (isset($this->_packageInfo['xsdversion'])) {
