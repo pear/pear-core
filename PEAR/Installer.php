@@ -669,7 +669,9 @@ class PEAR_Installer extends PEAR_Downloader
                     $this->log(1, $error);
                 }
             }
-            return false;
+            if (!isset($this->_options['ignore-errors'])) {
+                return false;
+            }
         }
         $this->_dirtree = array();
         // {{{ really commit the transaction
@@ -697,7 +699,9 @@ class PEAR_Installer extends PEAR_Downloader
                             $this->log(1, 'Could not delete ' . $data[1] . ', cannot rename ' .
                                 $data[0] . $extra);
                         }
-                        return false;
+                        if (!isset($this->_options['ignore-errors'])) {
+                            return false;
+                        }
                     }
                     @rename($data[0], $data[1]);
                     $this->log(3, "+ mv $data[0] $data[1]");
