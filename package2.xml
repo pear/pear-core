@@ -129,6 +129,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * slight improvement to speed and possibly memory use of Installer when a lot of
     package.xml version 1.0 packages are installed
   * add &quot;peardev&quot; command for those with memory_limit issue
+  * make package-validate command work on packaged .tgz files
  </notes>
  <contents>
   <dir name="/">

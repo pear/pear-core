@@ -373,7 +373,19 @@ used for automated conversion or learning the format.
         }
         $obj = &$this->getPackageFile($this->config, $this->_debug);
         $obj->rawReturn();
-        $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+        $info = $obj->fromTgzFile($params[0], PEAR_VALIDATE_NORMAL);
+        if (PEAR::isError($info)) {
+            $info = $obj->fromPackageFile($params[0], PEAR_VALIDATE_NORMAL);
+        } else {
+            $archive = $info->getArchiveFile();
+            $tar = &new Archive_Tar($archive);
+            $tar->extract(dirname($info->getPackageFile()));
+            $info->setPackageFile(dirname($info->getPackageFile()) . DIRECTORY_SEPARATOR .
+                $info->getPackage() . '-' . $info->getVersion() . DIRECTORY_SEPARATOR .
+                basename($info->getPackageFile()));
+        }
+        PEAR::staticPopErrorHandling();
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
