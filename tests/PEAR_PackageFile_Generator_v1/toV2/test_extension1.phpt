@@ -162,7 +162,7 @@ this case is to use the new sqlite_exec() function instead. (Stas)
  <dependencies>
   <required>
    <php>
-    <min>5.0.0</min>
+    <min>' . phpversion() . '</min>
     <max>6.0.0</max>
    </php>
    <pearinstaller>
