@@ -105,6 +105,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * attempt to address memory issues
   * relax validation further
   * disable debug_backtrace() in PEAR_Error constructor of PEAR installer
+  * fix a strange version number condition when two packages were upgraded at the same time.
   * fix Bug #3808 channel packages with non-baseinstalldir files will conflict on upgrade
   * fix Bug #3801 [PATCH] analyzeSourceCode() reports PHP4 code as PHP5
   * fix Bug #3671 Installing package features doesn't work as expected
