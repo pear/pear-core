@@ -172,7 +172,7 @@ function echoPEARVars($name1, $mode, $name2, $options, $indent = '')
         if (is_string($options[0])) {
             print '(static) ' . $options[0] . '::';
         } else {
-            print get_class($options[0]) . '->';
+            print strtolower(get_class($options[0])) . '->';
         }
         print $options[1] . "()\n";
     } else {

@@ -13,8 +13,8 @@
     </maintainer>
   </maintainers>
   <release>
-    <version>2.3</version>
-    <date>2004-07-03</date>
+    <version>2.4.0</version>
+    <date>2004-08-23</date>
     <license>PHP License</license>
     <state>stable</state>
     <notes>Installation package.xml for PEAR package tests</notes>
