@@ -31,6 +31,9 @@ $pf->setNotes('sum');
 $pf->addMaintainer('lead', 'cellog', 'Greg Beaver', 'cellog@php.net');
 $pf->addPackageDep('Floop', '1.0', 'ge');
 $pf->addFile('', 'foo.php', array('role' => 'php'));
+$pf->resetFilelist();
+$pf->installedFile('foo.php', array('role' => 'php'));
+$pf->setInstalledAs('foo.php', $php_dir . DIRECTORY_SEPARATOR . 'foo.php');
 $pf->setPackage('foop');
 $ret = $reg->addPackage($pf->getPackage(), $pf->getArray());
 $phpunit->assertTrue($ret, 'install of valid package');
@@ -38,6 +41,11 @@ $phpunit->assertTrue($ret, 'install of valid package');
 $pf->clearDeps();
 $pf->addPackageDep('gloomy', '6.50', 'le', 'yes');
 $pf->addFile('', 'foor.php', array('role' => 'php'));
+$pf->resetFilelist();
+$pf->installedFile('foo.php', array('role' => 'php'));
+$pf->setInstalledAs('foo.php', $php_dir . DIRECTORY_SEPARATOR . 'foo.php');
+$pf->installedFile('foor.php', array('role' => 'php'));
+$pf->setInstalledAs('foor.php', $php_dir . DIRECTORY_SEPARATOR . 'foor.php');
 $ret = $reg->updatePackage($pf->getPackage(), $pf->getArray(), false);
 // we are not going to test the merge option because merging in the values is
 // just plain stupid for the pear installer
