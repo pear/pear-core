@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Registry->getChannelValidator() (API v1.1)
+PEAR_Registry->addChannel() (API v1.1)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
