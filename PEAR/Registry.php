@@ -1445,7 +1445,7 @@ class PEAR_Registry extends PEAR
             }
             // check for extension
             $pathinfo = pathinfo($param['package']);
-            if (isset($pathinfo['extension'])) {
+            if (isset($pathinfo['extension']) && $pathinfo['extension']) {
                 $param['extension'] = $pathinfo['extension'];
                 $param['package'] = $pathinfo['basename'];
             }
