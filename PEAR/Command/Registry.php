@@ -461,8 +461,16 @@ installed package.'
                         $info[$key] = $pstr;
                         break;
                     }
+                    case 'configure_options' : {
+                        foreach ($info[$key] as $i => $p) {
+                            $info[$key][$i] = array_map(null, array_keys($p), array_values($p));
+                            $info[$key][$i] = array_map(create_function('$a',
+                                'return join(" = ",$a);'), $info[$key][$i]);
+                            $info[$key][$i] = implode(', ', $info[$key][$i]);
+                        }
+                    }
                     default: {
-                        $info[$key] = implode(", ", $info[$key]);
+                        $info[$key] = implode("\n", $info[$key]);
                         break;
                     }
                 }
