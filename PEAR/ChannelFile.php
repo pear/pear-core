@@ -260,7 +260,7 @@ class PEAR_ChannelFile {
                 PEAR_CHANNELFILE_ERROR_NO_NAME =>
                     'Missing channel name',
                 PEAR_CHANNELFILE_ERROR_INVALID_NAME =>
-                    'Invalid channel name "%name%"',
+                    'Invalid channel %tag% "%name%"',
                 PEAR_CHANNELFILE_ERROR_NO_SUMMARY =>
                     'Missing channel summary',
                 PEAR_CHANNELFILE_ERROR_MULTILINE_SUMMARY =>
@@ -655,6 +655,11 @@ class PEAR_ChannelFile {
         unset($this->_protocol);
     }
 
+    function _handleSuggestedaliasClose1_0($data)
+    {
+        $this->_channelInfo['suggestedalias'] = trim($data);
+    }
+
     // {{{ _channelInfoCdata_1_0()
 
     /**
@@ -766,6 +771,9 @@ class PEAR_ChannelFile {
  <name>$channelInfo[name]</name>
  <summary>" . htmlspecialchars($channelInfo['summary'])."</summary>
 ";
+        if (isset($channelInfo['suggestedalias'])) {
+            $ret .= ' <suggestedalias>' . $channelInfo['suggestedalias'] . "</suggestedalias>\n";
+        }
         if (isset($channelInfo['validatepackage'])) {
             $ret .= ' <validatepackage version="' . $channelInfo['validatepackage']['version']. '">' . htmlspecialchars($channelInfo['validatepackage']['name']) .
                 "</validatepackage>\n";
@@ -941,12 +949,18 @@ class PEAR_ChannelFile {
         if (empty($info['name'])) {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_NAME);
         } elseif (!$this->validChannelName($info['name'])) {
-            $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME, array('name' => $info['name']));
+            $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME, array('tag' => 'name', 'name' => $info['name']));
         }
         if (empty($info['summary'])) {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_SUMMARY);
         } elseif (strpos(trim($info['summary']), "\n") !== false) {
             $this->_validateWarning(PEAR_CHANNELFILE_ERROR_MULTILINE_SUMMARY, array('summary' => $info['summary']));
+        }
+        if (isset($info['suggestedalias'])) {
+            if (!$this->validChannelName($info['suggestedalias'])) {
+                $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME, array('tag' => 'suggestedalias',
+                    'name' =>$info['suggestedalias']));
+            }
         }
         if (isset($info['validatepackage'])) {
             if (!isset($info['validatepackage']['name'])) {
@@ -1362,7 +1376,7 @@ class PEAR_ChannelFile {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_NAME);
             return false;
         } elseif (!$this->validChannelName($name)) {
-            $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME, array('name' => $name));
+            $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME, array('tag' => 'name', 'name' => $name));
             return false;
         }
         $this->_channelInfo['name'] = $name;
