@@ -120,9 +120,7 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
                     }
                 }
                 if (!isset($param['param'])) {
-                    return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
-                        $fileXml['name'] . '" <paramgroup> id "' . $param['id'] .
-                        '" must contain one or more <param> tags');
+                    continue; // <param> is no longer required
                 }
                 $subparams = $param['param'];
                 if (!is_array($subparams) || !isset($subparams[0])) {
