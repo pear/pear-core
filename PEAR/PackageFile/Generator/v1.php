@@ -468,6 +468,16 @@ class PEAR_PackageFile_Generator_v1
     }
 
     /**
+     * @return array
+     */
+    function dependenciesToV2()
+    {
+        $arr = array();
+        $this->_convertDependencies2_0($arr);
+        return $arr;
+    }
+
+    /**
      * Convert a package.xml version 1.0 into version 2.0
      *
      * Note that this does a basic conversion, to allow more advanced
