@@ -57,8 +57,9 @@ class PEAR_PackageFile_Generator_v1
             if (!($where = System::mktemp(array('-d')))) {
                 return PEAR::raiseError('PEAR_Packagefile_v1::toTgz mktemp failed');
             }
-        } elseif (PEAR::isError($e = System::mkDir(array('-p', $where)))) {
-            return $e;
+        } elseif (!@System::mkDir(array('-p', $where))) {
+            return PEAR::raiseError('PEAR_Packagefile_v1::toTgz: "' . $where . '" could' .
+                ' not be created');
         }
         if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING)) {
             return PEAR::raiseError('PEAR_Packagefile_v1::toTgz invalid package file');
@@ -126,10 +127,11 @@ class PEAR_PackageFile_Generator_v1
         include_once 'System.php';
         if ($where === null) {
             if (!($where = System::mktemp(array('-d')))) {
-                return PEAR::raiseError("PEAR_Packagefile_v1::toPackageFile: mktemp failed");
+                return PEAR::raiseError('PEAR_Packagefile_v1::toPackageFile: mktemp failed');
             }
-        } elseif (PEAR::isError($e = System::mkDir(array('-p', $where)))) {
-            return $e;
+        } elseif (!@System::mkDir(array('-p', $where))) {
+            return PEAR::raiseError('PEAR_Packagefile_v1::toPackageFile: "' . $where . '" could' .
+                ' not be created');
         }
         $newpkgfile = $where . DIRECTORY_SEPARATOR . $name;
         $np = @fopen($newpkgfile, 'wb');
