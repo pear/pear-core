@@ -313,6 +313,11 @@ used for automated conversion or learning the format.
         $this->output = '';
         $pkginfofile = isset($params[0]) ? $params[0] : 'package.xml';
         $pkg2 = isset($params[1]) ? $params[1] : null;
+        if (!$pkg2 && !isset($params[0])) {
+            if (@file_exists('package2.xml')) {
+                $pkg2 = 'package2.xml';
+            }
+        }
         $packager = &$this->getPackager();
         $reg = &$this->config->getRegistry();
         $dir = dirname($pkginfofile);
