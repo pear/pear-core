@@ -12,7 +12,6 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 error_reporting(E_ALL);
 chdir(dirname(__FILE__));
 require_once './setup.php.inc';
-$phpt->showall();
 $chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
