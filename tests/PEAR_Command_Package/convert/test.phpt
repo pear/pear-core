@@ -121,7 +121,7 @@ release notes
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>' . date ('Y-m-d') . '</date>
+   <date>2004-10-28</date>
    <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
    <notes>Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
@@ -149,7 +149,7 @@ Other:
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>' . date('Y-m-d') . '</date>
+   <date>2004-10-28</date>
    <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
    <notes>Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
@@ -275,7 +275,7 @@ release notes
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>' . date('Y-m-d') . '</date>
+   <date>2004-10-28</date>
    <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
    <notes>Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
@@ -303,7 +303,7 @@ Other:
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>' . date('Y-m-d') . '</date>
+   <date>2004-10-28</date>
    <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
    <notes>Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
