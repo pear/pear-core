@@ -411,6 +411,7 @@ Run post-installation scripts in package <package>, if any exist.
             $this->raiseError($err->getMessage());
             return true;
         }
+        $extrainfo = array();
         foreach ($downloaded as $param) {
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $info = $this->installer->install($param, $options);
@@ -465,22 +466,27 @@ Run post-installation scripts in package <package>, if any exist.
                                 $group['attribs']['name'] . ' available (' .
                                 $group['attribs']['hint'] . ')');
                         }
-                        $this->ui->outputData('To install use "pear install ' .
-                            $param->getPackage() . '#featurename"');
+                        $extrainfo[] = 'To install use "pear install ' .
+                            $param->getPackage() . '#featurename"';
                     }
                 }
                 $pkg = &$reg->getPackage($param->getPackage(), $param->getChannel());
                 $pkg->setConfig($this->config);
                 if ($list = $pkg->listPostinstallScripts()) {
-                    $this->ui->outputData('This package has post-install scripts:');
+                    $extrainfo[] = 'This package has post-install scripts:';
                     foreach ($list as $file) {
-                        $this->ui->outputData($file);
+                        $extrainfo[] = $file;
                     }
-                    $this->ui->outputData('Use "pear run-scripts ' . $pkg->getPackage() . '" to run');
-                    $this->ui->outputData('DO NOT RUN SCRIPTS FROM UNTRUSTED SOURCES');
+                    $extrainfo[] = 'Use "pear run-scripts ' . $pkg->getPackage() . '" to run';
+                    $extrainfo[] = 'DO NOT RUN SCRIPTS FROM UNTRUSTED SOURCES';
                 }
             } else {
                 return $this->raiseError("$command failed");
+            }
+        }
+        if (count($extrainfo)) {
+            foreach ($extrainfo as $info) {
+                $this->ui->outputData($info);
             }
         }
         return true;
