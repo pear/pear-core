@@ -380,7 +380,8 @@ List the files in an installed package.
         if (sizeof($params) != 1) {
             return $this->raiseError("No channel file specified");
         }
-        if (!file_exists($params[0]) && $reg->channelExists(strtolower($params[0]))) {
+        if ((!file_exists($params[0]) || is_dir($params[0]))
+              && $reg->channelExists(strtolower($params[0]))) {
             $c = $reg->getChannel(strtolower($params[0]));
             $this->ui->outputData('Retrieving channel.xml from remote server');
             $chan = $this->config->get('default_channel');
