@@ -76,6 +76,11 @@ class PEAR_Downloader_Package
      * @var boolean
      */
     var $_valid = false;
+    /**
+     * Package type local|url|xmlrpc
+     * @var string
+     */
+    var $_type;
 
     /**
      * @param PEAR_Config
@@ -94,6 +99,12 @@ class PEAR_Downloader_Package
         if (!$this->_valid) {
             $err = $this->_fromUrl($param);
             if (PEAR::isError($err) || !$this->_valid) {
+                if ($this->_type == 'url') {
+                    if (PEAR::isError($err)) {
+                        $this->_downloader->log(0, $err->getMessage());
+                    }
+                    return PEAR::raiseError("Invalid package file");
+                }
                 $err = $this->_fromString($param);
                 if (PEAR::isError($err) || !$this->_valid) {
                     if (PEAR::isError($origErr)) {
@@ -525,6 +536,7 @@ class PEAR_Downloader_Package
     function _fromFile($param)
     {
         if (@is_file($param)) {
+            $this->_type = 'local';
             $pkg = new PEAR_PackageFile($this->_config, $this->_downloader->_debug,
                 $this->_downloader->getDownloadDir());
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
@@ -544,6 +556,7 @@ class PEAR_Downloader_Package
     {
         if (!is_array($param) &&
               (preg_match('#^(http|ftp)://#', $param))) {
+            $this->_type = 'url';
             $callback = $this->_downloader->ui ?
                 array(&$this->_downloader, '_downloadCallback') : null;
             $this->_downloader->pushErrorHandling(PEAR_ERROR_RETURN);
@@ -556,6 +569,7 @@ class PEAR_Downloader_Package
                 }
                 $err = PEAR::raiseError('Could not download from "' . $param .
                     '"' . $saveparam);
+                    return $err;
             }
             // whew, download worked!
             $pkg = new PEAR_PackageFile($this->_config, $this->_downloader->debug,
@@ -564,10 +578,12 @@ class PEAR_Downloader_Package
             $pf = &$pkg->fromAnyFile($file, PEAR_VALIDATE_INSTALLING);
             PEAR::popErrorHandling();
             if (PEAR::isError($pf)) {
-                foreach ($pf->getUserInfo as $err) {
-                    $this->log(0, "Validation Error: $err");
+                if (is_array($pf->getUserInfo())) {
+                    foreach ($pf->getUserInfo() as $err) {
+                        $this->log(0, "Validation Error: $err");
+                    }
                 }
-                $this->log(0, $pf->getMessage());
+                $this->_downloader->log(0, $pf->getMessage());
                 $err = PEAR::raiseError('Download of "' . ($saveparam ? $saveparam :
                     $param) . '" succeeded, but it is not a valid package archive');
                 $this->_valid = false;
@@ -613,6 +629,9 @@ class PEAR_Downloader_Package
                 $param . '"');
             $this->_valid = false;
             return $err;
+        }
+        if (!isset($this->_type)) {
+            $this->_type = 'xmlrpc';
         }
         $this->_parsedname = $pname;
         $info = $this->_downloader->_getPackageDownloadUrl($pname);
