@@ -84,13 +84,13 @@ $ch->setName('empty');
 $reg->addChannel($ch);
 $e = $command->run('list-upgrades', array(), array());
 $phpunit->assertNoErrors('pear.php.net');
-$phpunit->assertEquals(array (
-  0 => 
+$workingcopy = array (
+  'empty' => 
   array (
     'info' => 'Channel empty: No upgrades available',
     'cmd' => 'no command',
   ),
-  1 => 
+  'pear.php.net' => 
   array (
     'info' => 
     array (
@@ -118,12 +118,22 @@ $phpunit->assertEquals(array (
     ),
     'cmd' => 'list-upgrades',
   ),
-  2 => 
+  'smoog' => 
   array (
     'info' => 'Channel smoog: No upgrades available',
     'cmd' => 'no command',
   ),
-)
+);
+$actual = array();
+// this is because channels are queried in the order returned from listChannels(),
+// which differs between windows and linux
+foreach ($reg->listChannels() as $chan) {
+    if ($chan == '__uri') {
+        continue;
+    }
+    $actual[] = $workingcopy[$chan];
+}
+$phpunit->assertEquals($actual
 , $fakelog->getLog(), 'pear log');
 echo 'tests done';
 ?>
