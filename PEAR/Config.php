@@ -1066,13 +1066,16 @@ class PEAR_Config extends PEAR
         } elseif (isset($this->configuration[$layer]['default_channel'])) {
             $ret = $this->configuration[$layer]['default_channel'];
         }
+        if ($ret == 'pear.php.net' && defined('PEAR_RUNTYPE') && PEAR_RUNTYPE == 'pecl') {
+            $ret = 'pecl.php.net';
+        }
         if ($ret) {
             if ($ret != 'pear.php.net') {
                 $this->_lazyChannelSetup();
             }
             return $ret;
         }
-        return 'pear.php.net';
+        return PEAR_CONFIG_DEFAULT_CHANNEL;
     }
 
     /**
