@@ -217,7 +217,6 @@ Installer:
    </dir> <!-- /scripts -->
    <file name="package.dtd" role="data" />
    <file name="PEAR.php" role="php" />
-   <file name="pearchannel.xml" role="data" />
    <file name="System.php" role="php" />
    <file name="template.spec" role="data" />
   </dir> <!-- / -->
