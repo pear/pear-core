@@ -489,7 +489,7 @@ class PEAR_PackageFile_v2
 
     function setPackage($package)
     {
-        $this->_packageInfo['package'] = $package;
+        $this->_packageInfo['name'] = $package;
         $this->_isValid = 0;
     }
 
