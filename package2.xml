@@ -191,6 +191,7 @@ Installer:
     <file name="Packager.php" role="php" />
     <file name="Registry.php" role="php" />
     <file name="Remote.php" role="php" />
+    <file name="REST.php" role="php" />
     <file name="RunTest.php" role="php" />
     <file name="Validate.php" role="php" />
     <file name="XMLParser.php" role="php" />
