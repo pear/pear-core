@@ -1585,9 +1585,6 @@ class PEAR_Registry extends PEAR
             if (empty($notempty)) {
                 $notempty = create_function('$a','return !empty($a);');
             }
-            if (is_array($package) && !isset($package[1])) {
-                var_dump($package);
-            }
             $package = is_array($package) ? array(strtolower($package[0]), strtolower($package[1]))
                 : strtolower($package);
             $pkgs = array();
