@@ -49,6 +49,9 @@ class PEAR_test_mock_pearweb {
         }
         if (!isset($this->_config['xmlrpc'][$server][serialize($info['params'])])) {
             var_dump($info['param']);
+            foreach (debug_backtrace() as $i => $trace) {
+                echo "#$i $trace[class]$trace[type]$trace[method] from line $trace[line]\n";
+            }
             die("Error - parameters not configured properly for $info[method]");
         }
         return $this->do200() .
@@ -98,6 +101,9 @@ class PEAR_test_mock_pearweb {
             foreach($GLOBALS['totalPHP'] as $php) {
                 echo $php . "\n";
             }
+            foreach (debug_backtrace() as $i => $trace) {
+                echo "#$i $trace[class]$trace[type]$trace[method] from line $trace[line]\n";
+            }
             var_dump(array_keys($this->_config['xmlrpc'][$server][$method]), $params);
             die("Error - parameters not configured properly for $method");
             return false;
@@ -143,6 +149,9 @@ class PEAR_test_mock_pearweb {
                 echo $php . "\n";
             }
             var_dump(array_keys($this->_config['xmlrpc'][$server][$method]), $params);
+            foreach (debug_backtrace() as $i => $trace) {
+                echo "#$i $trace[class]$trace[type]$trace[method] from line $trace[line]\n";
+            }
             die("Error - parameters not configured properly for $method");
         }
         return $this->_config['xmlrpc'][$server][$method][serialize($params)];
