@@ -6,28 +6,22 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <name>PEAR</name>
  <channel>pear.php.net</channel>
  <summary>PEAR Base System</summary>
+ <description>The PEAR package contains:
+ * the PEAR installer, for creating, distributing
+   and installing packages
+ * the alpha-quality PEAR_Exception PHP5 error handling mechanism
+ * the beta-quality PEAR_ErrorStack advanced error handling mechanism
+ * the PEAR_Error error handling mechanism
+ * the OS_Guess class for retrieving info about the OS
+   where PHP is running on
+ * the System class for quick handling of common operations
+   with files and directories
+ * the PEAR base class
+ </description>
  <lead>
   <name>Stig Bakken</name>
   <user>ssb</user>
   <email>stig@php.net</email>
-  <active>yes</active>
- </lead>
- <lead>
-  <name>Tomas V.V.Cox</name>
-  <user>cox</user>
-  <email>cox@idecnet.com</email>
-  <active>yes</active>
- </lead>
- <lead>
-  <name>Pierre-Alain Joye</name>
-  <user>pajoye</user>
-  <email>pajoye@pearfr.org</email>
-  <active>yes</active>
- </lead>
- <lead>
-  <name>Greg Beaver</name>
-  <user>cellog</user>
-  <email>cellog@php.net</email>
   <active>yes</active>
  </lead>
  <developer>
@@ -39,7 +33,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <date>2004-09-30</date>
  <version>
   <release>1.4.0a1</release>
-  <api>1.4.0</api>
+  <api>1.4.0a1</api>
  </version>
  <stability>
   <release>alpha</release>
@@ -210,61 +204,213 @@ Installer:
  <dependencies>
   <required>
    <php>
-    <min>4.2</min>
+    <min>4.2.0</min>
     <max>6.0.0</max>
+    <exclude>1.0</exclude>
+    <moo/>
    </php>
    <pearinstaller>
-    <min>1.4.0dev13</min>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <moo/>
    </pearinstaller>
    <package>
-    <name>Archive_Tar</name>
+    <name>blh</name>
     <channel>pear.php.net</channel>
-    <min>1.1</min>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <moo/>
    </package>
    <package>
-    <name>Console_Getopt</name>
-    <channel>pear.php.net</channel>
-    <min>1.2</min>
+    <name>blh2</name>
+    <uri>http://pear.php.net/get/blh2</uri>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
    </package>
-   <package>
-    <name>XML_RPC</name>
+   <subpackage>
+    <name>blh</name>
     <channel>pear.php.net</channel>
-    <min>1.0.4</min>
-   </package>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <moo/>
+   </subpackage>
+   <subpackage>
+    <name>blh3</name>
+    <channel>pear.php.net</channel>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <conflicts/>
+   </subpackage>
+   <subpackage>
+    <name>blh2</name>
+    <uri>http://pear.php.net/get/blh2</uri>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <moo/>
+   </subpackage>
    <extension>
-    <name>xml</name>
+    <name>blh</name>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <moo/>
    </extension>
    <extension>
-    <name>pcre</name>
+    <name>blh2</name>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <conflicts/>
    </extension>
-  </required>
-  <group name="remoteinstall" hint="adds the ability to install packages to a remote ftp server">
-   <package>
-    <name>Net_FTP</name>
-    <channel>pear.php.net</channel>
-    <min>1.3.0RC1</min>
-   </package>
-  </group>
- </dependencies>
- <phprelease>
-  <installconditions>
    <os>
     <name>windows</name>
+    <moo/>
    </os>
-  </installconditions>
-  <filelist>
-   <install as="pear.bat" name="scripts/pear.bat" />
-   <install as="pearcmd.php" name="scripts/pearcmd.php" />
-   <ignore name="scripts/pear.sh" />
-  </filelist>
- </phprelease>
- <phprelease>
-  <filelist>
-   <install as="pear" name="scripts/pear.sh" />
-   <install as="pearcmd.php" name="scripts/pearcmd.php" />
-   <ignore name="scripts/pear.bat" />
-  </filelist>
- </phprelease>
+   <arch>
+    <pattern>windows</pattern>
+    <moo/>
+   </arch>
+  </required>
+  <optional>
+   <package>
+    <name>blh</name>
+    <channel>pear.php.net</channel>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <moo/>
+   </package>
+   <package>
+    <name>blh2</name>
+    <uri>http://pear.php.net/get/blh2</uri>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+   </package>
+   <subpackage>
+    <name>blh</name>
+    <channel>pear.php.net</channel>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <moo/>
+   </subpackage>
+   <subpackage>
+    <name>blh3</name>
+    <channel>pear.php.net</channel>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <conflicts/>
+   </subpackage>
+   <subpackage>
+    <name>blh2</name>
+    <uri>http://pear.php.net/get/blh2</uri>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <moo/>
+   </subpackage>
+   <extension>
+    <name>blh</name>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <moo/>
+   </extension>
+   <extension>
+    <name>blh2</name>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <conflicts/>
+   </extension>
+  </optional>
+  <group name="remoteinstall" hint="adds the ability to install packages to a remote ftp server">
+   <package>
+    <name>blh</name>
+    <channel>pear.php.net</channel>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <moo/>
+   </package>
+   <package>
+    <name>blh2</name>
+    <uri>http://pear.php.net/get/blh2</uri>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+   </package>
+   <subpackage>
+    <name>blh</name>
+    <channel>pear.php.net</channel>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <moo/>
+   </subpackage>
+   <subpackage>
+    <name>blh3</name>
+    <channel>pear.php.net</channel>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <conflicts/>
+   </subpackage>
+   <subpackage>
+    <name>blh2</name>
+    <uri>http://pear.php.net/get/blh2</uri>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <moo/>
+   </subpackage>
+   <extension>
+    <name>blh</name>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <moo/>
+   </extension>
+   <extension>
+    <name>blh2</name>
+    <min>1.4.0a1</min>
+    <max>1.5</max>
+    <recommended>1.5</recommended>
+    <exclude>1.6</exclude>
+    <conflicts/>
+   </extension>
+  </group>
+ </dependencies>
+ <phprelease/>
  <changelog>
   <release>
    <version>

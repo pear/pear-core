@@ -15,7 +15,7 @@ $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
 $pf->validate();
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <optional>, found <package> expected one of "subpackage, extension"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional>, found <package> expected one of "subpackage, extension"'),
 ), 'after subpackage');
 
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
@@ -24,7 +24,7 @@ $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
 $pf->validate();
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <optional>, found <os> expected one of "subpackage, extension"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional>, found <os> expected one of "subpackage, extension"'),
 ), 'after subpackage');
 
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
@@ -33,7 +33,7 @@ $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
 $pf->validate();
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <optional>, found <os> expected one of "extension"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional>, found <os> expected one of "extension"'),
 ), 'os after extension');
 
 
@@ -43,7 +43,7 @@ $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
 $pf->validate();
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <optional>, found <arch> expected one of "extension"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional>, found <arch> expected one of "extension"'),
 ), 'arch after extension');
 echo 'tests done';
 ?>
