@@ -178,7 +178,7 @@ PEAR_Command::getGetoptArgs('info', $s, $l);
 $phpunit->assertEquals('', $s, 'short info'); 
 $phpunit->assertEquals(array(), $l, 'long info');
 PEAR_Command::getGetoptArgs('install', $s, $l);
-$phpunit->assertEquals('fnrsBZR:aorc:ol', $s, 'short install'); 
+$phpunit->assertEquals('fnrsBZR:aoF:O', $s, 'short install'); 
 $phpunit->assertEquals(array (
   0 => 'force',
   1 => 'nodeps',
@@ -251,19 +251,20 @@ PEAR_Command::getGetoptArgs('sign', $s, $l);
 $phpunit->assertEquals('', $s, 'short sign'); 
 $phpunit->assertEquals(array (), $l, 'long sign');
 PEAR_Command::getGetoptArgs('uninstall', $s, $l);
-$phpunit->assertEquals('nrR:rc:', $s, 'short uninstall'); 
+$phpunit->assertEquals('nrR:F:O', $s, 'short uninstall'); 
 $phpunit->assertEquals(array (
   0 => 'nodeps',
   1 => 'register-only',
   2 => 'installroot=',
   3 => 'ignore-errors',
   4 => 'remoteconfig=',
+  5 => 'offline',
 ), $l, 'long uninstall');
 PEAR_Command::getGetoptArgs('update-channels', $s, $l);
 $phpunit->assertEquals('', $s, 'short update-channels'); 
 $phpunit->assertEquals(array (), $l, 'long update-channels');
 PEAR_Command::getGetoptArgs('upgrade', $s, $l);
-$phpunit->assertEquals('fnrBZR:aorc:ol', $s, 'short upgrade'); 
+$phpunit->assertEquals('fnrBZR:aoF:O', $s, 'short upgrade'); 
 $phpunit->assertEquals(array (
   0 => 'force',
   1 => 'nodeps',
@@ -278,7 +279,7 @@ $phpunit->assertEquals(array (
   10 => 'offline',
 ), $l, 'long upgrade');
 PEAR_Command::getGetoptArgs('upgrade-all', $s, $l);
-$phpunit->assertEquals('nrBZR:rc:', $s, 'short upgrade-all'); 
+$phpunit->assertEquals('nrBZR:F:', $s, 'short upgrade-all'); 
 $phpunit->assertEquals(array (
   0 => 'nodeps',
   1 => 'register-only',
