@@ -314,6 +314,7 @@ parameter.
         $savechannel = $channel = $this->config->get('default_channel');
         $reg = &$this->config->getRegistry();
         $package = $params[0];
+        $summary = isset($params[1]) ? $params[1] : false;
         if (isset($options['channel'])) {
             $reg = &$this->config->getRegistry();
             $channel = $options['channel'];
@@ -324,7 +325,7 @@ parameter.
             }
         }
         $r = &$this->config->getRemote();
-        $available = $r->call('package.listAll', true, true);
+        $available = $r->call('package.search', $package, $summary, true, true, true);
         if (PEAR::isError($available)) {
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($available);
@@ -339,14 +340,6 @@ parameter.
             );
 
         foreach ($available as $name => $info) {
-            $found = (!empty($package) && stristr($name, $package) !== false);
-            if (!$found && !(isset($params[1]) && !empty($params[1])
-                && (stristr($info['summary'], $params[1]) !== false
-                    || stristr($info['description'], $params[1]) !== false)))
-            {
-                continue;
-            };
-
             $installed = $reg->packageInfo($name, null, $channel);
             $desc = $info['summary'];
             if (isset($params[$name]))
