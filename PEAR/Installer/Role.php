@@ -26,7 +26,6 @@
 require_once 'PEAR/Installer/Role/Common.php';
 //$GLOBALS['_PEAR_INSTALLER_ROLES'] = array();
 /**
- * FTP class used for PEAR's remote installation feature
  * @category   pear
  * @package    PEAR
  * @author     Greg Beaver <cellog@php.net>
