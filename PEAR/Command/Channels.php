@@ -280,10 +280,41 @@ List the files in an installed package.
         }
         $reg = &$this->config->getRegistry();
         $channel = strtolower($params[0]);
-        if (!$reg->channelExists($channel)) {
-            return $this->raiseError("Channel `$channel' does not exist");
+        if ($reg->channelExists($channel)) {
+            $chan = $reg->getChannel($channel);
+        } else {
+            if (strpos($channel, '://')) {
+                $downloader = &$this->getDownloader();
+                require_once 'System.php';
+                $tmpdir = System::mktemp(array('-d'));
+                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                $loc = $downloader->downloadHttp($channel, $this->ui, $tmpdir);
+                PEAR::staticPopErrorHandling();
+                if (PEAR::isError($loc)) {
+                    return $this->raiseError('Cannot open ' . $channel);
+                } else {
+                    $contents = implode('', file($loc));
+                }
+            } else {
+                $fp = @fopen($params[0], 'r');
+                if (!$fp) {
+                    return $this->raiseError('Cannot open ' . $channel);
+                }
+                $contents = '';
+                while (!feof($fp)) {
+                    $contents .= fread($fp, 1024);
+                }
+                fclose($fp);
+            }
+            $chan = new PEAR_ChannelFile;
+            $chan->fromXmlString($contents);
+            if ($errs = $chan->getErrors(true)) {
+                foreach ($errs as $err) {
+                    $this->ui->outputData($err['level'] . ': ' . $err['message']);
+                }
+                return $this->raiseError('Channel file "' . $channel . '" is not valid');
+            }
         }
-        $chan = $reg->getChannel($channel);
         if ($chan) {
             $caption = 'Channel ' . $channel . ' Information:';
             $data = array(
@@ -294,30 +325,40 @@ List the files in an installed package.
                 $data['data'][] = array('Alias', $chan->getAlias());
             }
             $data['data'][] = array('Summary', $chan->getSummary());
-            $data['data'][] = array('Xmlrpc Server', $chan->getServer('xmlrpc'));
-            $data['data'][] = array('SOAP Server', ($a = $chan->getServer('soap')) ? $a : '(none)');
+            $data['data'][] = array('Primary Server', $chan->getServer());
             $validate = $chan->getValidationPackage();
-            $data['data'][] = array('Validation Package Name', $validate['name']);
-            $data['data'][] = array('Validation Package Version', $validate['version']);
+            $data['data'][] = array('Validation Package Name', $validate['_content']);
+            $data['data'][] = array('Validation Package Version', $validate['attribs']['version']);
             $this->ui->outputData($data, 'channel-info');
-            
+
             $data['data'] = array();
             $data['caption'] = 'Server Capabilities';
-            $data['headline'] = array('Type', 'Version', 'Function Name');
+            $data['headline'] = array('Type', 'Version', 'Function Name', 'URI');
             $capabilities = $chan->getFunctions('xmlrpc');
             $soaps = $chan->getFunctions('soap');
-            if ($capabilities || $soaps) {
+            $rests = $chan->getFunctions('rest');
+            $statics = $chan->getFunctions('static');
+            if ($capabilities || $soaps || $rests || $statics) {
                 if ($capabilities) {
                     foreach ($capabilities as $protocol) {
                         $data['data'][] = array('xmlrpc', $protocol['attribs']['version'],
-                            $protocol['_content']);
+                            $protocol['_content'], '');
                     }
                 }
                 if ($soaps) {
                     foreach ($soaps as $protocol) {
                         $data['data'][] = array('soap', $protocol['attribs']['version'],
-                            $protocol['_content']);
+                            $protocol['_content'], '');
                     }
+                }
+                if ($rests) {
+                    foreach ($rests as $protocol) {
+                        $data['data'][] = array('rest', $protocol['attribs']['version'],
+                            $protocol['_content'], $protocol['attribs']['uri']);
+                    }
+                }
+                if ($statics) {
+                    $data['data'][] = array('static', $protocol['attribs']['version'], '', '');
                 }
             } else {
                 $data['data'][] = array('No supported protocols');
@@ -326,41 +367,52 @@ List the files in an installed package.
             $data['data'] = array();
             $mirrors = $chan->getMirrors();
             if ($mirrors) {
-                foreach ($mirrors as $type => $info) {
-                    $data['caption'] = 'Channel ' . $channel . ' ' . $type . ' Mirrors:';
-                    unset($data['headline']);
-                    foreach ($info as $mirror) {
-                        $data['data'][] = array($mirror['name']);
-                        $this->ui->outputData($data);
-                    }
-                    foreach ($info as $mirror) {
-                        if (isset($mirror['protocols']['xmlrpc'])) {
-                            $data['data'] = array();
-                            $data['caption'] = $mirror['name'] . ' Xml-rpc Functions';
-                            $data['headline'] = array('Version', 'Name');
-                            foreach ($mirror['protocols']['xmlrpc']['functions'] as $protocol) {
-                                $data['data'][] = array($protocol['version'], $protocol['name']);
+                $data['caption'] = 'Channel ' . $channel . ' Mirrors:';
+                unset($data['headline']);
+                foreach ($mirrors as $mirror) {
+                    $data['data'][] = array($mirror['attribs']['host']);
+                    $this->ui->outputData($data);
+                }
+                foreach ($mirrors as $mirror) {
+                    $data['data'] = array();
+                    $data['caption'] = 'Mirror ' . $mirror['attribs']['host'] . ' Capabilities';
+                    $data['headline'] = array('Type', 'Version', 'Function Name', 'URI');
+                    $capabilities = $chan->getFunctions('xmlrpc', $mirror['attribs']['host']);
+                    $soaps = $chan->getFunctions('soap', $mirror['attribs']['host']);
+                    $rests = $chan->getFunctions('rest', $mirror['attribs']['host']);
+                    $statics = $chan->getFunctions('static', $mirror['attribs']['host']);
+                    if ($capabilities || $soaps || $rests || $statics) {
+                        if ($capabilities) {
+                            foreach ($capabilities as $protocol) {
+                                $data['data'][] = array('xmlrpc', $protocol['attribs']['version'],
+                                    $protocol['_content'], '');
                             }
-                            $this->ui->outputData($data);
                         }
-                        if (isset($mirror['protocols']['soap'])) {
-                            $data['data'] = array();
-                            $data['caption'] = $mirror['name'] . ' SOAP Functions';
-                            $data['headline'] = array('Version', 'Name');
-                            foreach ($mirror['protocols']['soap']['functions'] as $protocol) {
-                                $data['data'][] = array($protocol['version'], $protocol['name']);
+                        if ($soaps) {
+                            foreach ($soaps as $protocol) {
+                                $data['data'][] = array('soap', $protocol['attribs']['version'],
+                                    $protocol['_content'], '');
                             }
-                            $this->ui->outputData($data);
                         }
-                        if (!isset($mirror['protocols']['xmlrpc']) && !isset($mirror['protocols']['soap'])) {
-                            $data['data'][] = array('Mirror Capabilities', 'No supported protocols');
-                            $this->ui->outputData($data);
+                        if ($rests) {
+                            foreach ($rests as $protocol) {
+                                $data['data'][] = array('rest', $protocol['attribs']['version'],
+                                    $protocol['_content'], $protocol['attribs']['uri']);
+                            }
                         }
+                        if ($statics) {
+                            $data['data'][] = array('static', $protocol['attribs']['version'], '',
+                                '');
+                        }
+                    } else {
+                        $data['data'][] = array('No supported protocols');
                     }
+                    $this->ui->outputData($data);
                 }
             }
         } else {
-            return $this->raiseError("Serious error: Channel `$params[0]' has a corrupted registry entry");
+            return $this->raiseError('Serious error: Channel "' . $params[0] .
+                '" has a corrupted registry entry');
         }
     }
 
