@@ -25,6 +25,11 @@ $pf->validate();
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <package>, found <description> expected one of "extends, summary"'),
 ), 'no summary 2');
+$pf->setSummary('');
+$pf->validate();
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => '<summary> cannot be empty (<summary/>)'),
+), 'empty summary');
 echo 'tests done';
 ?>
 --EXPECT--
