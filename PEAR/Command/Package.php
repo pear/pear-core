@@ -505,7 +505,17 @@ used for automated conversion or learning the format.
                                             '-name', '*.phpt'));
                 $tests = array_merge($tests, $dir);
             } else {
-                $tests[] = $p;
+                if (!@file_exists($p)) {
+                    if (!preg_match('/\.phpt$/', $p)) {
+                        $p .= '.phpt';
+                    }
+                    $dir = System::find(array(getcwd(), '-type', 'f',
+                                                '-maxdepth', $depth,
+                                                '-name', $p));
+                    $tests = array_merge($tests, $dir);
+                } else {
+                    $tests[] = $p;
+                }
             }
         }
         $failed = array();
