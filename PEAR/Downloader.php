@@ -217,15 +217,20 @@ class PEAR_Downloader extends PEAR_Common
             }
         }
         PEAR_Downloader_Package::removeDuplicates($params);
-        foreach ($params as $i => $param) {
-            $params[$i]->detectDependencies();
+        if (!isset($this->_options['nodeps'])) {
+            foreach ($params as $i => $param) {
+                $params[$i]->detectDependencies($params);
+            }
         }
         do {
             $err = PEAR_Downloader_Package::mergeDependencies($params);
         } while ($err && !PEAR::isError($err));
+        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         $err = PEAR_Downloader_Package::analyzeDependencies($params);
+        PEAR::popErrorHandling();
         if (PEAR::isError($err)) {
-            return $err;
+            $this->pushError($err->getMessage());
+            return;
         }
         $ret = array();
         foreach ($params as $package) {
