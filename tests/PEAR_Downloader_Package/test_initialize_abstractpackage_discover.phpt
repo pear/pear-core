@@ -1,4 +1,4 @@
---TEST
+--TEST--
 PEAR_Downloader_Package->initialize() with unknown channel, auto_discover on
 --SKIPIF--
 <?php

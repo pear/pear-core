@@ -97,6 +97,13 @@ class PEAR_Downloader_Package
     {
         $origErr = $this->_fromFile($param);
         if (!$this->_valid) {
+            $options = $this->_downloader->getOptions();
+            if (isset($options['offline'])) {
+                if (PEAR::isError($origErr)) {
+                    $this->log(0, $origErr->getMessage());
+                }
+                return PEAR::raiseError('Cannot download non-local package "' . $param . '"');
+            }
             $err = $this->_fromUrl($param);
             if (PEAR::isError($err) || !$this->_valid) {
                 if ($this->_type == 'url') {
@@ -449,6 +456,7 @@ class PEAR_Downloader_Package
     }
 
     /**
+     * @param array
      * @static
      */
     function removeDuplicates(&$params)
@@ -464,7 +472,7 @@ class PEAR_Downloader_Package
             }
         }
         $pnames = array_unique($pnames);
-        for ($i = 0, $count = count($param); $i < $count; $i++) {
+        for ($i = 0, $count = count($params); $i < $count; $i++) {
             if (!isset($pnames[$i])) {
                 unset($params[$i]);
             }
