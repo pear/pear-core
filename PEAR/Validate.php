@@ -39,7 +39,7 @@ class PEAR_Validate
      * @var array
      * @access private
      */
-    var $_validStates = array('alpha','beta','stable','snapshot','devel');
+    var $_validStates = array('alpha', 'beta', 'stable', 'snapshot', 'devel');
     /**
      * Format: ('error' => array('field' => name, 'reason' => reason), 'warning' => same)
      * @var array
