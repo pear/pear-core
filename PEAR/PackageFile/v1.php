@@ -403,6 +403,11 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function setPackage($package)
+    {
+        $this->_packageInfo['package'] = $package;
+    }
+
     function getExtends()
     {
         if (isset($this->_packageInfo['extends'])) {
@@ -423,6 +428,55 @@ class PEAR_PackageFile_v1
     {
         if (isset($this->_packageInfo['maintainers'])) {
             return $this->_packageInfo['maintainers'];
+        }
+        return false;
+    }
+
+    /**
+     * Adds a new maintainer - no checking of duplicates is performed, use
+     * updatemaintainer for that purpose.
+     */
+    function addMaintainer($role, $handle, $name, $email)
+    {
+        $this->_packageInfo['maintainers'][] =
+            array('handle' => $handle, 'role' => $role, 'email' => $email, 'name' => $name);
+    }
+
+    function updateMaintainer($role, $handle, $name, $email)
+    {
+        $found = false;
+        if (!isset($this->_packageInfo['maintainers']) ||
+              !is_array($this->_packageInfo['maintainers'])) {
+            return $this->addMaintainer($role, $handle, $name, $email);
+        }
+        foreach ($this->_packageInfo['maintainers'] as $i => $maintainer) {
+            if ($maintainer['handle'] == $handle) {
+                $found = $i;
+                break;
+            }
+        }
+        if ($found !== false) {
+            unset($this->_packageInfo['maintainers'][$found]);
+            $this->_packageInfo['maintainers'] =
+                array_values($this->_packageInfo['maintainers']);
+        }
+        $this->addMaintainer($role, $handle, $name, $email);
+    }
+
+    function deleteMaintainer($handle)
+    {
+        $found = false;
+        foreach ($this->_packageInfo['maintainers'] as $i => $maintainer) {
+            if ($maintainer['handle'] == $handle) {
+                $found = $i;
+                break;
+            }
+        }
+        if ($found !== false) {
+            unset($this->_packageInfo['maintainers'][$found]);
+            $this->_packageInfo['maintainers'] =
+                array_values($this->_packageInfo['maintainers']);
+            return true;
         }
         return false;
     }
@@ -459,6 +513,11 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function setSummary($summary)
+    {
+        $this->_packageInfo['summary'] = $summary;
+    }
+
     function getDescription()
     {
         if (isset($this->_packageInfo['description'])) {
@@ -467,12 +526,22 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function setDescription($desc)
+    {
+        $this->_packageInfo['description'] = $desc;
+    }
+
     function getNotes()
     {
         if (isset($this->_packageInfo['release_notes'])) {
             return $this->_packageInfo['release_notes'];
         }
         return false;
+    }
+
+    function setNotes($notes)
+    {
+        $this->_packageInfo['release_notes'] = $notes;
     }
 
     function getDeps()
