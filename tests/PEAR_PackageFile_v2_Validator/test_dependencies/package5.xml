@@ -222,11 +222,9 @@ Installer:
    </package>
    <extension>
     <name>xml</name>
-    <channel>pear.php.net</channel>
    </extension>
    <extension>
     <name>pcre</name>
-    <channel>pear.php.net</channel>
    </extension>
    <subpackage>
     <name>Archive_Tar</name>

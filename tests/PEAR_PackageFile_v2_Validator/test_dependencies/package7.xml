@@ -227,7 +227,6 @@ Installer:
    </subpackage>
    <extension>
     <name>xml</name>
-    <channel>pear.php.net</channel>
    </extension>
    <os>
     <name>linux</name>
