@@ -334,8 +334,11 @@ class test_PEAR_Downloader extends PEAR_Downloader {
         $this->_remote = &new test_PEAR_Remote($config);
     }
     
-    function downloadHttp($url, &$ui, $save_dir = '.', $callback = null)
+    function downloadHttp($url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null)
     {
+        if (isset($GLOBALS['return304'])) {
+            return false;
+        }
 //        return parent::downloadHttp($url, $ui, $save_dir, $callback);
         if ($callback) {
             call_user_func($callback, 'setup', array(&$ui));
@@ -435,6 +438,9 @@ class test_PEAR_Downloader extends PEAR_Downloader {
         fclose($wp);
         if ($callback) {
             call_user_func($callback, 'done', $bytes);
+        }
+        if ($lastmodified === false || $lastmodified) {
+            return array($dest_file, array('ETag' => 'blahbnlhablah', 'Last-Modified' => 'Hi'));
         }
         return $dest_file;
     }
