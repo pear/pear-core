@@ -343,9 +343,25 @@ class PEAR_Dependency2
 
     function validatePearinstallerDependency($dep, $required, $params)
     {
-        $dep['channel'] = 'pear.php.net';
-        $dep['name'] = 'PEAR';
-        return $this->validatePackageDependency($dep, $required, $params, true);
+        $pearversion = '@PEAR-VER@';
+        if (version_compare($dep['min'], $pearversion, '<')) {
+            return $this->raiseError('%s requires PEAR Installer version >= ' . $dep['min']);
+        }
+        if (isset($dep['max'])) {
+            if (version_compare($dep['max'], $pearversion, '>')) {
+                return $this->raiseError('%s requires PEAR Installer version <= ' . $dep['max']);
+            }
+        }
+        if (isset($dep['exclude'])) {
+            if (!isset($dep['exclude'][0])) {
+                $dep['exclude'] = array($dep['exclude']);
+            }
+            foreach ($dep['exclude'] as $exclude) {
+                if (version_compare($exclude, $pearversion, '==')) {
+                    return $this->raiseError('%s requires PEAR Installer version != ' . $exclude);
+                }
+            }
+        }
     }
 
     function validateSubpackageDependency($dep, $required, $params, $mustbeinstalled = false)
