@@ -393,6 +393,7 @@ class System
             $delete = $GLOBALS['_System_temp_files'];
             array_unshift($delete, '-r');
             System::rm($delete);
+            $GLOBALS['_System_temp_files'] = array();
         }
     }
 
