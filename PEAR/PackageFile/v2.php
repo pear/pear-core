@@ -2484,10 +2484,6 @@ http://pear.php.net/dtd/package-2.0.xsd',
                     return $this->_tagHasNoAttribs('ignore',
                         '<dir name="' . $list['attribs']['name'] . '">');
                 }
-                if (!isset($list['ignore']['attribs'])) {
-                    return $this->_tagHasNoAttribs('ignore',
-                        '<dir name="' . $list['attribs']['name'] . '">');
-                }
                 if (!isset($file['attribs']['name'])) {
                     return $this->_tagMissingAttribute('ignore', 'name',
                         '<dir name="' . $list['attribs']['name'] . '">');
