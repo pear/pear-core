@@ -887,7 +887,7 @@ class PEAR_PackageFile_v1
      * @access public
      * @return boolean
      */
-    function validate($state)
+    function validate($state = PEAR_VALIDATE_NORMAL)
     {
         if (($this->_isValid & $state) == $state) {
             return true;
