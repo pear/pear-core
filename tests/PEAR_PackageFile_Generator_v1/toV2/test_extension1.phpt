@@ -18,7 +18,6 @@ $e = &$generator->toV2();
 $phpunit->assertNoErrors('errors');
 $egen = &$e->getDefaultGenerator();
 $xml = $egen->toXml();
-$phpunit->showall();
 $phpunit->assertEquals('<?xml version="1.0"?>
 <package packagerversion="' . $egen->getPackagerVersion() . '" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
 http://pear.php.net/dtd/tasks-1.0.xsd
