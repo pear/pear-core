@@ -48,11 +48,16 @@
     </maintainer>
   </maintainers>
   <release>
-    <version>1.4.0dev10</version>
-    <date>2004-08-13</date>
+    <version>1.4.0dev11</version>
+    <date>2004-08-16</date>
     <state>devel</state>
     <notes>
 Installer Channel Support:
+ * MAJOR BC break in 1.4.0dev11 - channel.xml format has changed, and as
+   a consequence, you must re-install all of the channel.xml
+   (delete all the .reg files from the .registry/.channels directory and
+   then re-add them using channel-add)
+ * channel DTD is available on pearweb
  * add channel.listAll and channel.update to default PEAR protocols
  * add ability to &quot;pear channel-update channelname&quot; to
    retrieve updates manually for individual channels
