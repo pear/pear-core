@@ -810,7 +810,6 @@ class PEAR_Downloader extends PEAR_Common
                 foreach ($packages as $p) {
                     $dep['channel'] = 'pear.php.net';
                     $dep['package'] = $dep['name'];
-                    unset($dep['version']);
                     if ($p->isEqual($dep)) {
                         if (!isset($checked[strtolower($p->getChannel())]
                               [strtolower($p->getPackage())])) {

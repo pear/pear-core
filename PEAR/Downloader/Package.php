@@ -541,6 +541,7 @@ class PEAR_Downloader_Package
                     case 'ge' :
                     case 'eq' :
                     case 'gt' :
+                    case 'has' :
                         if (PEAR_Downloader_Package::willDownload($dep, $params)) {
                             $group = (!isset($dep['optional']) || $dep['optional'] == 'no') ?
                                 'required' :
@@ -548,7 +549,7 @@ class PEAR_Downloader_Package
                             $this->_downloader->log(2, 'Skipping ' . $group . ' dependency "' .
                                 $this->_registry->parsedPackageNameToString($dep, true) .
                                 '", will be installed');
-                            continue;
+                            continue 2;
                         }
                 }
                 if (!isset($options['alldeps'])) {
@@ -854,8 +855,28 @@ class PEAR_Downloader_Package
                 $param['channel'] = '__uri';
                 $param['package'] = $param['dep']['name'];
             }
-            $package = isset($param['package']) ? $param['package'] : $param['info']->getPackage();
-            $channel = isset($param['channel']) ? $param['channel'] : $param['info']->getChannel();
+            $package = isset($param['package']) ? $param['package'] :
+                $param['info']->getPackage();
+            $channel = isset($param['channel']) ? $param['channel'] :
+                $param['info']->getChannel();
+            if (isset($param['rel'])) {
+                $newdep = PEAR_Dependency2::normalizeDep($param);
+                $newdep = $newdep[0];
+            } elseif (isset($param['min'])) {
+                $newdep = $param;
+            }
+        }
+        if (isset($newdep)) {
+            if (!isset($newdep['min'])) {
+                $newdep['min'] = '0';
+            }
+            if (!isset($newdep['max'])) {
+                $newdep['max'] = '100000000000000000000';
+            }
+            return ($package == $this->getPackage() &&
+                $channel == $this->getChannel() &&
+                version_compare($newdep['min'], $this->getVersion(), '<=') &&
+                version_compare($newdep['max'], $this->getVersion(), '>='));
         }
         if (isset($param['version'])) {
             return ($package == $this->getPackage() &&
