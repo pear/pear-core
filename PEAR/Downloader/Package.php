@@ -143,12 +143,8 @@ class PEAR_Downloader_Package
                 }
                 $err = $this->_fromString($param);
                 if (PEAR::isError($err) || !$this->_valid) {
-                    if (PEAR::isError($err)) {
-                        if (!isset($options['soft'])) {
-                            $this->_downloader->log(0, $err->getMessage());
-                        }
-                    }
-                    if (PEAR::isError($origErr)) {
+                    if (isset($this->_type) && $this->_type == 'local' &&
+                          PEAR::isError($origErr)) {
                         if (is_array($origErr->getUserInfo())) {
                             foreach ($origErr->getUserInfo() as $err) {
                                 if (is_array($err)) {
@@ -161,6 +157,17 @@ class PEAR_Downloader_Package
                         }
                         if (!isset($options['soft'])) {
                             $this->_downloader->log(0, $origErr->getMessage());
+                        }
+                        if (is_array($param)) {
+                            $param = $this->_registry->parsedPackageNameToString($param,
+                                true);
+                        }
+                        return PEAR::raiseError(
+                            "Cannot initialize '$param', invalid or missing package file");
+                    }
+                    if (PEAR::isError($err)) {
+                        if (!isset($options['soft'])) {
+                            $this->_downloader->log(0, $err->getMessage());
                         }
                     }
                     if (is_array($param)) {
