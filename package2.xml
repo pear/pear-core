@@ -191,6 +191,13 @@ http://pear.php.net/dtd/package-2.0.xsd">
      <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
      <tasks:unixeol/>
     </file>
+    <file name="pecl.sh" role="script">
+     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+     <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
+     <tasks:replace from="@pear_version@" to="version" type="package-info" />
+     <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
+     <tasks:unixeol/>
+    </file>
     <file name="pearcmd.php" role="php">
      <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
      <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
@@ -203,7 +210,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <file name="System.php" role="php" />
    <file name="template.spec" role="data" />
   </dir> <!-- / -->
- </contents>
+ </contents>   <install as="pear" name="scripts/pear.sh" />
+
  <dependencies>
   <required>
    <php>
@@ -283,11 +291,13 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <install as="pear.bat" name="scripts/pear.bat" />
    <install as="pearcmd.php" name="scripts/pearcmd.php" />
    <ignore name="scripts/pear.sh" />
+   <ignore name="scripts/pecl.sh" />
   </filelist>
  </phprelease>
  <phprelease>
   <filelist>
    <install as="pear" name="scripts/pear.sh" />
+   <install as="pecl" name="scripts/pecl.sh" />
    <install as="pearcmd.php" name="scripts/pearcmd.php" />
    <ignore name="scripts/pear.bat" />
   </filelist>
