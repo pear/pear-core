@@ -81,7 +81,7 @@ dumpall($reg);
 $reg->updatePackage("pkg3", array("version" => "3.1b1", "status" => "beta"));
 dumpall($reg);
 
-$testing = $reg->checkFilemap(array_merge($files3, $files2));
+$testing = $reg->checkFilemap(array_merge($files3, $files2), 'pkg3');
 $ok = ($testing == array('pkg3-1.php' => 'pkg3', 'pkg3' . DIRECTORY_SEPARATOR . 'pkg3-2.php' => 'pkg3'));
 echo 'filemap OK? ' . ($ok ? "yes\n" : "no\n");
 if (!$ok) {
