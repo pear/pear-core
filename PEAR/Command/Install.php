@@ -85,6 +85,10 @@ class PEAR_Command_Install extends PEAR_Command_Common
                     'shortopt' => 'O',
                     'doc' => 'do not attempt to download any urls or contact channels',
                     ),
+                'pretend' => array(
+                    'shortopt' => 'p',
+                    'doc' => 'Only list the packages that would be downloaded',
+                    ),
                 ),
             'doc' => '[channel/]<package> ...
 Installs one or more PEAR packages.  You can specify a package to
@@ -162,6 +166,10 @@ four ways of specifying packages.
                 'offline' => array(
                     'shortopt' => 'O',
                     'doc' => 'do not attempt to download any urls or contact channels',
+                    ),
+                'pretend' => array(
+                    'shortopt' => 'p',
+                    'doc' => 'Only list the packages that would be downloaded',
                     ),
                 ),
             'doc' => '<package> ...
@@ -372,13 +380,23 @@ package if needed.
             $this->ui->outputData($err);
             return $this->raiseError("$command failed");
         }
+        $data = array(
+            'headline' => 'Packages that would be Installed'
+        );
+        $reg = &$this->config->getRegistry();
+        if (isset($options['pretend'])) {
+            foreach ($downloaded as $package) {
+                $data['data'][] = array($reg->parsedPackageNameToString($package->getParsedPackage()));
+            }
+            $this->ui->outputData($data, 'pretend');
+            return true;
+        }
         $this->installer->setOptions($options);
         $this->installer->sortPackagesForInstall($downloaded);
         if (PEAR::isError($err = $this->installer->setDownloadedPackages($downloaded))) {
             $this->raiseError($err->getMessage());
             return true;
         }
-        $reg = &$this->config->getRegistry();
         foreach ($downloaded as $param) {
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $info = $this->installer->install($param, $options);
