@@ -345,7 +345,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
         }
         $arr['attribs']['packagerversion'] = '@PEAR-VER@';
         if ($this->serialize($arr, $options)) {
-            return $this->_serializedData;
+            return $this->_serializedData . "\n";
         }
         return false;
     }
