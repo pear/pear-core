@@ -629,7 +629,7 @@ class PEAR_Dependency2
         }
         if ($type == 'Php') {
             if (!isset($newdep['attribs']['min'])) {
-                $newdep['attribs']['min'] = '4.1.0';
+                $newdep['attribs']['min'] = '4.2.0';
             }
             if (!isset($newdep['attribs']['max'])) {
                 $newdep['attribs']['max'] = '6.0.0';
