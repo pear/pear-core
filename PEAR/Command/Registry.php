@@ -181,15 +181,20 @@ installed package.'
             return $this->raiseError('list-files expects 1 parameter');
         }
         $reg = &$this->config->getRegistry();
-        if ((file_exists($params[0]) && !is_dir($params[0])) || $fp = @fopen($params[0], 'r')) {
+        if (!is_dir($params[0]) && (file_exists($params[0]) || $fp = @fopen($params[0],
+              'r'))) {
             @fclose($fp);
             include_once 'PEAR/PackageFile.php';
             $pkg = &new PEAR_PackageFile($this->config, $this->_debug);
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $info = &$pkg->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
+            PEAR::staticPopErrorHandling();
             $headings = array('Package File', 'Install Path');
             $installed = false;
         } else {
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $parsed = $reg->parsePackageName($params[0]);
+            PEAR::staticPopErrorHandling();
             if (PEAR::isError($parsed)) {
                 return $this->raiseError($parsed);
             }
