@@ -1619,7 +1619,7 @@ class PEAR_PackageFile_v2_Validator
                 $data = '';
             }
             if ($inquote) {
-                if ($token != '"') {
+                if ($token != '"' && $token != T_END_HEREDOC) {
                     continue;
                 } else {
                     $inquote = false;
@@ -1635,6 +1635,7 @@ class PEAR_PackageFile_v2_Validator
                     }
                     break;
                 case '"':
+                case T_START_HEREDOC:
                     $inquote = true;
                     break;
                 case T_CURLY_OPEN:

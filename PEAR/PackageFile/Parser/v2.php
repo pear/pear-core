@@ -42,12 +42,20 @@ class PEAR_PackageFile_Parser_v2 extends PEAR_XMLParser
         $this->_logger = &$l;
     }
 
-    function parse($data, $file, $archive = false)
+    /**
+     * @param string
+     * @param string file name of the package.xml
+     * @param string|false name of the archive this package.xml came from, if any
+     * @param string class name to instantiate and return.  This must be PEAR_PackageFile_v2 or
+     *               a subclass
+     * @return PEAR_PackageFile_v2
+     */
+    function parse($data, $file, $archive = false, $class = 'PEAR_PackageFile_v2')
     {
         if (PEAR::isError($err = parent::parse($data, $file))) {
             return $err;
         }
-        $ret = new PEAR_PackageFile_v2;
+        $ret = new $class;
         $ret->setConfig($this->_config);
         if (isset($this->_logger)) {
             $ret->setLogger($this->_logger);
