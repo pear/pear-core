@@ -15,7 +15,6 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'required' => 
   array (
@@ -114,7 +113,7 @@ $phpunit->assertEquals(array (
     ),
   ),
 ), $pf->getDeps(true), 'add 2nd required');
-$pf->addPackageDepWithURI('optional', 'gronko', 'http://www.example.com/ho.tgz');
+$pf->addPackageDepWithURI('optional', 'gronko', 'http://www.example.com/ho.tgz', 'bloba');
 $phpunit->assertEquals(array (
   'required' => 
   array (
@@ -150,6 +149,7 @@ $phpunit->assertEquals(array (
       array (
         'name' => 'gronko',
         'uri' => 'http://www.example.com/ho.tgz',
+        'providesextension' => 'bloba',
       ),
     ),
   ),
@@ -165,7 +165,6 @@ $result = $pf->validate(PEAR_VALIDATE_DOWNLOADING);
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'downloading validate empty log');
 $phpunit->assertNoErrors('after validation');
 $result = $pf->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
