@@ -397,6 +397,9 @@ class PEAR_Registry extends PEAR
             if ($channel == 'pear.php.net') {
                 return 'pear.php.net';
             }
+            if ($channel == '__uri') {
+                return '__uri';
+            }
             return false;
         }
         $channel = strtolower($channel);
@@ -1116,10 +1119,17 @@ class PEAR_Registry extends PEAR
             $pear_channel = new PEAR_ChannelFile;
             $pear_channel->setName('pear.php.net');
             $pear_channel->setAlias('pear');
-            $pear_channel->setServer('pear.php.net');
             $pear_channel->setSummary('PHP Extension and Application Repository');
             $pear_channel->setDefaultPEARProtocols();
             return $pear_channel;
+        }
+        if ($this->_getChannelFromAlias($channel) == '__uri') {
+            // the registry is not properly set up, so use defaults
+            $private = new PEAR_ChannelFile;
+            $private->setName('__uri');
+            $private->addFunction('xmlrpc', '1.0', '****');
+            $private->setSummary('Pseudo-channel for static packages');
+            return $private;
         }
         return $ch;
     }
