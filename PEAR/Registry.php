@@ -103,6 +103,11 @@ class PEAR_Registry extends PEAR
     var $_pearChannel;
 
     /**
+     * @var false|PEAR_ChannelFile
+     */
+    var $_peclChannel;
+
+    /**
      * @var PEAR_DependencyDB
      */
     var $_dependencyDB;
@@ -122,10 +127,14 @@ class PEAR_Registry extends PEAR
      * @param PEAR_ChannelFile PEAR_ChannelFile object representing the PEAR channel, if
      *        default values are not desired.  Only used the very first time a PEAR
      *        repository is initialized
+     * @param PEAR_ChannelFile PEAR_ChannelFile object representing the PECL channel, if
+     *        default values are not desired.  Only used the very first time a PEAR
+     *        repository is initialized
      *
      * @access public
      */
-    function PEAR_Registry($pear_install_dir = PEAR_INSTALL_DIR, $pear_channel = false)
+    function PEAR_Registry($pear_install_dir = PEAR_INSTALL_DIR, $pear_channel = false,
+                           $pecl_channel = false)
     {
         parent::PEAR();
         $ds = DIRECTORY_SEPARATOR;
@@ -135,6 +144,7 @@ class PEAR_Registry extends PEAR
         $this->filemap  = $pear_install_dir.$ds.'.filemap';
         $this->lockfile = $pear_install_dir.$ds.'.lock';
         $this->_pearChannel = $pear_channel;
+        $this->_peclChannel = $pecl_channel;
         $this->_config = false;
     }
 
@@ -151,6 +161,7 @@ class PEAR_Registry extends PEAR
             $ds = DIRECTORY_SEPARATOR;
             if (!is_dir($this->channelsdir) ||
                   !file_exists($this->channelsdir . $ds . 'pear.php.net.reg') ||
+                  !file_exists($this->channelsdir . $ds . 'pecl.php.net.reg') ||
                   !file_exists($this->channelsdir . $ds . '__uri.reg')) {
                 if (!file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
                     $pear_channel = $this->_pearChannel;
@@ -167,6 +178,22 @@ class PEAR_Registry extends PEAR
                     }
                     $pear_channel->validate();
                     $this->_addChannel($pear_channel);
+                }
+                if (!file_exists($this->channelsdir . $ds . 'pecl.php.net.reg')) {
+                    $pecl_channel = $this->_peclChannel;
+                    if (!is_a($pecl_channel, 'PEAR_ChannelFile') || !$pecl_channel->validate()) {
+                        $pecl_channel = new PEAR_ChannelFile;
+                        $pecl_channel->setName('pecl.php.net');
+                        $pecl_channel->setAlias('pecl');
+                        $pecl_channel->setServer('pecl.php.net');
+                        $pecl_channel->setSummary('PHP Extension Community Library');
+                        $pecl_channel->setDefaultPEARProtocols();
+                    } else {
+                        $pecl_channel->setName('pecl.php.net');
+                        $pecl_channel->setAlias('pecl');
+                    }
+                    $pecl_channel->validate();
+                    $this->_addChannel($pecl_channel);
                 }
                 if (!file_exists($this->channelsdir . $ds . '__uri.reg')) {
                     $private = new PEAR_ChannelFile;
@@ -277,6 +304,7 @@ class PEAR_Registry extends PEAR
         $ds = DIRECTORY_SEPARATOR;
         if (!@is_dir($this->channelsdir) ||
               !file_exists($this->channelsdir . $ds . 'pear.php.net.reg') ||
+              !file_exists($this->channelsdir . $ds . 'pecl.php.net.reg') ||
               !file_exists($this->channelsdir . $ds . '__uri.reg')) {
             $init = true;
         }
@@ -421,6 +449,9 @@ class PEAR_Registry extends PEAR
             if ($channel == 'pear.php.net') {
                 return 'pear.php.net';
             }
+            if ($channel == 'pecl.php.net') {
+                return 'pecl.php.net';
+            }
             if ($channel == '__uri') {
                 return '__uri';
             }
@@ -445,6 +476,9 @@ class PEAR_Registry extends PEAR
         if (!$this->_channelExists($channel)) {
             if ($channel == 'pear.php.net') {
                 return 'pear';
+            }
+            if ($channel == 'pecl.php.net') {
+                return 'pecl';
             }
             return false;
         }
@@ -692,6 +726,9 @@ class PEAR_Registry extends PEAR
         if (!$a && $channel == 'pear.php.net') {
             return true;
         }
+        if (!$a && $channel == 'pecl.php.net') {
+            return true;
+        }
         return $a;
     }
 
@@ -721,7 +758,7 @@ class PEAR_Registry extends PEAR
                 @unlink($this->_getChannelAliasFileName($checker->getAlias()));
             }
         } else {
-            if ($update && $channel->getName() != 'pear.php.net') {
+            if ($update && !in_array($channel->getName(), array('pear.php.net', 'pecl.php.net'))) {
                 return false;
             }
         }
@@ -783,6 +820,9 @@ class PEAR_Registry extends PEAR
         if ($this->_getChannelFromAlias($channel) == '__uri') {
             return false;
         }
+        if ($this->_getChannelFromAlias($channel) == 'pecl.php.net') {
+            return false;
+        }
         if (!$this->_channelExists($channel)) {
             return false;
         }
@@ -802,9 +842,11 @@ class PEAR_Registry extends PEAR
             return false;
         }
         $file = $this->_getChannelAliasFileName($this->_getAlias($channel));
-        $test = @unlink($file);
-        if (!$test) {
-            return false;
+        if (@file_exists($file)) {
+            $test = @unlink($file);
+            if (!$test) {
+                return false;
+            }
         }
         $file = $this->_channelFileName($channel);
         $ret = @unlink($file);
@@ -917,7 +959,7 @@ class PEAR_Registry extends PEAR
         $channellist = array();
         $dp = @opendir($this->channelsdir);
         if (!$dp  || !@is_dir($this->channelsdir)) {
-            return array('pear.php.net', '__uri');
+            return array('pear.php.net', 'pecl.php.net', '__uri');
         }
         while ($ent = readdir($dp)) {
             if ($ent{0} == '.' || substr($ent, -4) != '.reg') {
@@ -928,6 +970,9 @@ class PEAR_Registry extends PEAR
         closedir($dp);
         if (!in_array('pear.php.net', $channellist)) {
             $channellist[] = 'pear.php.net';
+        }
+        if (!in_array('pecl.php.net', $channellist)) {
+            $channellist[] = 'pecl.php.net';
         }
         if (!in_array('__uri', $channellist)) {
             $channellist[] = '__uri';
@@ -1156,6 +1201,15 @@ class PEAR_Registry extends PEAR
             $pear_channel->setName('pear.php.net');
             $pear_channel->setAlias('pear');
             $pear_channel->setSummary('PHP Extension and Application Repository');
+            $pear_channel->setDefaultPEARProtocols();
+            return $pear_channel;
+        }
+        if ($this->_getChannelFromAlias($channel) == 'pecl.php.net') {
+            // the registry is not properly set up, so use defaults
+            $pear_channel = new PEAR_ChannelFile;
+            $pear_channel->setName('pecl.php.net');
+            $pear_channel->setAlias('pecl');
+            $pear_channel->setSummary('PHP Extension Community Library');
             $pear_channel->setDefaultPEARProtocols();
             return $pear_channel;
         }

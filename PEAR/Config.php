@@ -43,6 +43,15 @@ if (!defined('PEAR_INSTALL_DIR') || !PEAR_INSTALL_DIR) {
 // PHP_ prefix is for some security, PHP protects environment
 // variables starting with PHP_*.
 
+// default channel and preferred mirror is based on whether we are invoked through
+// the "pear" or the "pecl" command
+
+if (!defined('PEAR_RUNTYPE') || PEAR_RUNTYPE == 'pear') {
+    define('PEAR_CONFIG_DEFAULT_CHANNEL', 'pear.php.net');
+} else {
+    define('PEAR_CONFIG_DEFAULT_CHANNEL', 'pecl.php.net');
+}
+
 if (getenv('PHP_PEAR_SYSCONF_DIR')) {
     define('PEAR_CONFIG_SYSCONFDIR', getenv('PHP_PEAR_SYSCONF_DIR'));
 } elseif (getenv('SystemRoot')) {
@@ -251,7 +260,7 @@ class PEAR_Config extends PEAR
      * @var array
      * @access private
      */
-    var $_channels = array('pear.php.net', '__uri');
+    var $_channels = array('pear.php.net', 'pecl.php.net', '__uri');
 
     /**
      * This variable is used to control the directory values returned
@@ -291,14 +300,14 @@ class PEAR_Config extends PEAR
         // Channels/Internet Access
         'default_channel' => array(
             'type' => 'string',
-            'default' => 'pear.php.net',
+            'default' => PEAR_CONFIG_DEFAULT_CHANNEL,
             'doc' => 'the default channel to use for all non explicit commands',
             'prompt' => 'Default Channel',
             'group' => 'Internet Access',
             ),
         'preferred_mirror' => array(
             'type' => 'string',
-            'default' => 'pear.php.net',
+            'default' => PEAR_CONFIG_DEFAULT_CHANNEL,
             'doc' => 'the default server or mirror to use for channel actions',
             'prompt' => 'Default Channel Mirror',
             'group' => 'Internet Access',

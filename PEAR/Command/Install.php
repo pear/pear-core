@@ -346,6 +346,7 @@ Run post-installation scripts in package <package>, if any exist.
             $remote = &$this->config->getRemote($this->config);
             $reg = &$this->config->getRegistry();
             $savechannel = $this->config->get('default_channel');
+            $params = array();
             foreach ($reg->listChannels() as $channel) {
                 if ($channel == '__uri') {
                     continue;
@@ -363,7 +364,6 @@ Run post-installation scripts in package <package>, if any exist.
                     continue;
                 }
                 $installed = array_flip($reg->listPackages($channel));
-                $params = array();
                 foreach ($latest as $package => $info) {
                     $package = strtolower($package);
                     if (!isset($installed[$package])) {

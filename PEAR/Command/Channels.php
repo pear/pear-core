@@ -444,6 +444,9 @@ List the files in an installed package.
         if ($channel == 'pear.php.net') {
             return $this->raiseError('Cannot delete the pear.php.net channel');
         }
+        if ($channel == 'pecl.php.net') {
+            return $this->raiseError('Cannot delete the pecl.php.net channel');
+        }
         if ($channel == '__uri') {
             return $this->raiseError('Cannot delete the __uri pseudo-channel');
         }
@@ -455,7 +458,7 @@ List the files in an installed package.
                 '" has installed packages, cannot delete');
         }
         if (!$reg->deleteChannel($channel)) {
-            return $this->raiseError('Channel "' . $channel . '"deletion failed');
+            return $this->raiseError('Channel "' . $channel . '" deletion failed');
         } else {
             $this->config->deleteChannel($channel);
             $this->ui->outputData('Channel "' . $channel . '" deleted', $command);

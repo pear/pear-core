@@ -594,7 +594,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                         'release' => $release['release_state'],
                         'api' => $release['release_state'],
                     );
-                if (isset($rel['date'])) {
+                if (isset($release['release_date'])) {
                     $rel['date'] = $release['release_date'];
                 } else {
                     $rel['date'] = date('Y-m-d');

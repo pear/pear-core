@@ -598,16 +598,23 @@ class PEAR_Dependency2
             $installed = false;
             $downloaded = true;
         } else {
-            if ($this->_registry->packageExists($dep['name'],
-                  $dep['channel'])) {
+            if ($this->_registry->packageExists($dep['name'], $dep['channel'])) {
                 $installed = true;
                 $downloaded = false;
                 $version = $this->_registry->packageinfo($dep['name'], 'version',
                     $dep['channel']);
             } else {
-                $version = 'not installed or downloaded';
-                $installed = false;
-                $downloaded = false;
+                if ($dep['channel'] == 'pecl.php.net' && $this->_registry->packageExists($dep['name'],
+                      'pear.php.net')) {
+                    $installed = true;
+                    $downloaded = false;
+                    $version = $this->_registry->packageinfo($dep['name'], 'version',
+                        'pear.php.net');
+                } else {
+                    $version = 'not installed or downloaded';
+                    $installed = false;
+                    $downloaded = false;
+                }
             }
         }
         $extra = $this->_getExtraString($dep);
