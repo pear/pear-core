@@ -816,13 +816,7 @@ class PEAR_Registry extends PEAR
         set_magic_quotes_runtime($rt);
         $this->_closeChannelFile($fp);
         $data = unserialize($data);
-        if ($key === null) {
-            return $data;
-        }
-        if (isset($data[$key])) {
-            return $data[$key];
-        }
-        return null;
+        return $data;
     }
 
     // }}}
@@ -1038,7 +1032,10 @@ class PEAR_Registry extends PEAR
         if (!class_exists('PEAR_ChannelFile')) {
             include_once 'PEAR/ChannelFile.php';
         }
-        $ch = &PEAR_ChannelFile::fromArray($this->_channelInfo($channel, $noaliases));
+        $ch = false;
+        if ($this->_channelExists($channel, $noaliases)) {
+            $ch = &PEAR_ChannelFile::fromArray($this->_channelInfo($channel, $noaliases));
+        }
         if ($ch) {
             return $ch;
         }
@@ -1052,8 +1049,7 @@ class PEAR_Registry extends PEAR
             $pear_channel->setDefaultPEARProtocols();
             return $pear_channel;
         }
-        $a = false;
-        return $a;
+        return $ch;
     }
 
     // {{{ packageExists()
@@ -1251,7 +1247,7 @@ class PEAR_Registry extends PEAR
      */
     function updateChannel($channel)
     {
-        if (strtolower($channel) == '__uri') {
+        if ($channel->getName() == '__uri') {
             return false;
         }
         return $this->addChannel($channel, true);
@@ -1361,14 +1357,15 @@ class PEAR_Registry extends PEAR
     // {{{ getChannel()
     /**
      * @param string channel name
+     * @param bool whether to strictly return raw channels (no aliases)
      * @return PEAR_ChannelFile|false
      */
-    function &getChannel($channel)
+    function &getChannel($channel, $noaliases = false)
     {
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
-        $ret = &$this->_getChannel($channel);
+        $ret = &$this->_getChannel($channel, $noaliases);
         $this->_unlock();
         return $ret;
     }
