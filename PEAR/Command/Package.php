@@ -577,7 +577,13 @@ used for automated conversion or learning the format.
                     fclose($fp);
                 }
             }
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $result = $run->run($t, $ini_settings);
+            PEAR::staticPopErrorHandling();
+            if (PEAR::isError($result)) {
+                $this->log(0, $result->getMessage());
+                continue;
+            }
             if (OS_WINDOWS) {
                 for($i=0;$i<2000;$i++) {
                     $i = $i; // delay - race conditions on windows
