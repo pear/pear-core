@@ -690,6 +690,20 @@ used for automated conversion or learning the format.
         include_once "Archive/Tar.php";
         include_once "PEAR/Installer.php";
         include_once "System.php";
+        $pkg = &new PEAR_PackageFile($this->config, $this->_debug);
+        $pf = &$pkg->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
+        if (PEAR::isError($pf)) {
+            $u = $pf->getUserinfo();
+            if (is_array($u)) {
+                foreach ($u as $err) {
+                    if (is_array($err)) {
+                        $err = $err['message'];
+                    }
+                    $this->ui->outputData($err);
+                }
+            }
+            return $this->raiseError("$params[0] is not a valid package");
+        }
         $tar = new Archive_Tar($params[0]);
         $tmpdir = System::mktemp('-d pear2rpm');
         $instroot = System::mktemp('-d pear2rpm');
@@ -726,51 +740,40 @@ used for automated conversion or learning the format.
         $info['rpm_package'] = sprintf($rpm_pkgname_format, $info['package']);
         $srcfiles = 0;
         foreach ($info['filelist'] as $name => $attr) {
-
             if (!isset($attr['role'])) {
                 continue;
             }
+            $name = preg_replace('![/:\\\\]!', '/', $name);
             if ($attr['role'] == 'doc') {
                 $info['doc_files'] .= " $name";
-
             // Map role to the rpm vars
             } else {
-
                 $c_prefix = '%{_libdir}/php/pear';
-
                 switch ($attr['role']) {
-
                     case 'php':
-
-                        $prefix = $c_prefix; break;
-
+                        $prefix = $c_prefix;
+                    break;
                     case 'ext':
-
-                        $prefix = '%{_libdir}/php'; break; // XXX good place?
-
+                        $prefix = '%{_libdir}/php';
+                    break; // XXX good place?
                     case 'src':
-
                         $srcfiles++;
-
-                        $prefix = '%{_includedir}/php'; break; // XXX good place?
-
+                        $prefix = '%{_includedir}/php';
+                    break; // XXX good place?
                     case 'test':
-
-                        $prefix = "$c_prefix/tests/" . $info['package']; break;
-
+                        $prefix = "$c_prefix/tests/" . $info['package'];
+                    break;
                     case 'data':
-
-                        $prefix = "$c_prefix/data/" . $info['package']; break;
-
+                        $prefix = "$c_prefix/data/" . $info['package'];
+                    break;
                     case 'script':
-
-                        $prefix = '%{_bindir}'; break;
-
+                        $prefix = '%{_bindir}';
+                    break;
+                    default: // non-standard roles will not be installed at all
+                    continue;
                 }
-
                 $name = str_replace('\\', '/', $name);
                 $info['files'] .= "$prefix/$name\n";
-
             }
         }
         if ($srcfiles > 0) {
@@ -783,6 +786,11 @@ used for automated conversion or learning the format.
         $cfg = array('master_server', 'php_dir', 'ext_dir', 'doc_dir',
                      'bin_dir', 'data_dir', 'test_dir');
         foreach ($cfg as $k) {
+            if ($k == 'master_server') {
+                $chan = $reg->getChannel($pf->getChannel());
+                $info[$k] = $chan->getServer();
+                continue;
+            }
             $info[$k] = $this->config->get($k);
         }
         $info['arch'] = $arch;
