@@ -143,6 +143,7 @@
   * fix Bug #4021: PEAR_Config file_exists can cause warnings
   * fix Bug #1870: pear makerpm dependancies
   * fix Bug #4038: Array to string conversion in PEAR/Frontend/CLI.php
+  * fix Bug #4060: pear upgrade Auth_HTTP fails
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

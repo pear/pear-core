@@ -1125,6 +1125,9 @@ class PEAR_Installer extends PEAR_Downloader
             } else {
                 $filelist = $pkg->getFileList();
             }
+            if (PEAR::isError($filelist)) {
+                return $filelist;
+            }
             $pkg->resetFilelist();
             $pkg->setLastInstalledVersion($this->_registry->packageInfo($pkg->getPackage(),
                 'version', $pkg->getChannel()));
