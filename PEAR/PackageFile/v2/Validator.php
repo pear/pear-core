@@ -203,7 +203,9 @@ class PEAR_PackageFile_v2_Validator
             if (!$key && @$struc['multiple'] == '*') {
                 continue;
             }
-            $tag = $xml[$key];
+            if ($key) {
+                $tag = $xml[$key];
+            }
             if (isset($test['choices'])) {
                 $loose = true;
                 foreach ($test['choices'] as $choice) {
