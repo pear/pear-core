@@ -553,6 +553,23 @@ class PEAR_Config extends PEAR
     }
 
     // }}}
+    // {{{ deleteChannel(channel)
+
+    function deleteChannel($channel)
+    {
+        foreach ($this->configuration as $layer => $data) {
+            if (isset($data['__channels'])) {
+                if (isset($data['__channels'][strtolower($channel)])) {
+                    unset($data['__channels'][strtolower($channel)]);
+                }
+            }
+        }
+        $this->_channels = array_flip($this->_channels);
+        unset($this->_channels[strtolower($channel)]);
+        $this->_channels = array_flip($this->_channels);
+    }
+
+    // }}}
     // {{{ mergeConfigFile(file, [override], [layer])
 
     /**
