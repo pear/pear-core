@@ -83,11 +83,13 @@ class PEAR_PackageFile_v2
         unset($this->_packageInfo['dirtree']);
     }
 
-    function getPackagefile()
-    {
-        return $this->_packageFile;
-    }
-
+    /**
+     * Directly set the array that defines this packagefile
+     *
+     * WARNING: no validation.  This should only be performed by internal methods
+     * inside PEAR or by inputting an array saved from an existing PEAR_PackageFile_v2
+     * @param array
+     */
     function fromArray($pinfo)
     {
         unset($pinfo['old']);
@@ -108,10 +110,14 @@ class PEAR_PackageFile_v2
             $this->_packageInfo['old']['release_notes'] = $this->getNotes();
             $this->_packageInfo['old']['release_deps'] = $this->getDeps();
             $this->_packageInfo['old']['maintainers'] = $this->getMaintainers();
+            if ($this->getExtends()) {
+                $this->_packageInfo['old']['extends'] = $this->getExtends();
+            }
             return $this->_packageInfo;
         } else {
             $info = $this->_packageInfo;
             unset($info['dirtree']);
+            return $info;
         }
     }
 
@@ -362,7 +368,7 @@ class PEAR_PackageFile_v2
         $structure =
         array(
             'name->channel',
-            'extends?',
+            '*extends', // can't be multiple, but this works fine
             'summary',
             'description',
             '+lead->user->email->name->active',
@@ -376,14 +382,16 @@ class PEAR_PackageFile_v2
             'filelist', //special validation needed
             '+php|+extsrc|+extbin' //special validation needed
         );
-        unset($keys[0]);
-        foreach ($keys as $key) {
+        reset($keys);
+        $key = current($keys);
+        foreach ($structure as $struc) {
             $tag = $this->_packageInfo[$key];
-            $test = $this->_processStructure(array_shift($structure));
+            $test = $this->_processStructure($struc);
             if (isset($test['choices'])) {
                 foreach ($test['choices'] as $choice) {
                     if ($key == $choice['tag']) {
                         if ($this->_processAttribs($choice, $tag, '<package>')) {
+                            $key = next($keys);
                             continue 2;
                         }
                         return false;
@@ -397,9 +405,14 @@ class PEAR_PackageFile_v2
                         $this->_invalidTagOrder($test['tag'], $key);
                         return false;
                     }
+                    if (!isset($test['multiple'])) {
+                        $this->_invalidTagOrder($test['tag'], $key);
+                        return false;
+                    }
                     continue;
                 }
                 if ($this->_processAttribs($test, $tag, '<package>')) {
+                    $key = next($keys);
                     continue;
                 }
                 return false;
@@ -425,7 +438,7 @@ class PEAR_PackageFile_v2
         }
         $this->_validateFilelist();
         $this->_validateRelease();
-        return $this->_stack->hasErrors();
+        return !$this->_stack->hasErrors();
     }
 
     function _processAttribs($choice, $tag, $context)
@@ -584,9 +597,11 @@ class PEAR_PackageFile_v2
         }
         if (isset($list['dir'])) {
             if ($this->_processDir($list['dir'])) {
-                foreach ($list['dir'] as $dir) {
-                    $this->_validateFilelist($dir);
-                    return;
+                if (!isset($list['dir']['attribs'])) {
+                    foreach ($list['dir'] as $dir) {
+                        $this->_validateFilelist($dir);
+                        return;
+                    }
                 }
             }
             return $this->_validateFilelist($list['dir'], $allowignorefile);
@@ -609,6 +624,7 @@ class PEAR_PackageFile_v2
                     'unknown');
             }
         }
+        return true;
     }
 
     function _validateRelease()
@@ -624,10 +640,14 @@ class PEAR_PackageFile_v2
         }
         if (isset($this->_packageInfo[$release][0])) {
             foreach ($this->_packageInfo[$release] as $rel) {
-                $this->_validateFilelist($rel['filelist'], true);
+                if (isset($rel['filelist'])) {
+                    $this->_validateFilelist($rel['filelist'], true);
+                }
             }
         } else {
-            $this->_validateFilelist($this->_packageInfo[$release]['filelist'], true);
+            if (isset($this->_packageInfo[$release]['filelist'])) {
+                $this->_validateFilelist($this->_packageInfo[$release]['filelist'], true);
+            }
         }
     }
 
@@ -644,6 +664,13 @@ class PEAR_PackageFile_v2
     function _detectFilelist()
     {
         $this->_flatFilelist = isset($this->_filelist);
+    }
+
+    function _invalidTagOrder($oktags, $actual)
+    {
+        $this->_stack->push(__FUNCTION__, 'error',
+            array('oktags' => $oktags, 'actual' => $actual),
+            'Invalid tag order, found <%actual%> expected one of "%oktags%"');
     }
 
     function _ignorefileNotAllowed()

@@ -211,6 +211,392 @@ class PEAR_PackageFile_Generator_v1
     }
 
     /**
+     * Convert a package.xml version 1.0 into version 2.0
+     *
+     * Note that this does a basic conversion, to allow more advanced
+     * features like bundles and multiple releases
+     * @return PEAR_PackageFile_v2
+     */
+    function &toV2()
+    {
+        $arr = array(
+            'name' => array(
+                'attribs' => array(
+                        'channel' => 'pear',
+                    ),
+                '_content' => $this->_packagefile->getPackage(),
+            )
+        );
+        if ($extends = $this->_packagefile->getExtends()) {
+            $arr['extends'] = $extends;
+        }
+        $arr['summary'] = $this->_packagefile->getSummary();
+        $arr['description'] = $this->_packagefile->getDescription();
+        $maintainers = $this->_packagefile->getMaintainers();
+        foreach ($maintainers as $maintainer) {
+            if ($maintainer['role'] != 'lead') {
+                continue;
+            }
+            unset($maintainer['role']);
+            $maintainer['active'] = 'yes';
+            $maintainer['user'] = $maintainer['handle'];
+            unset($maintainer['handle']);
+            $arr['lead'][] = array('attribs' => $maintainer);
+        }
+        if (count($arr['lead']) == 1) {
+            $arr['lead'] = $arr['lead'][0];
+        }
+        foreach ($maintainers as $maintainer) {
+            if ($maintainer['role'] == 'lead') {
+                continue;
+            }
+            $maintainer['active'] = 'yes';
+            $maintainer['user'] = $maintainer['handle'];
+            unset($maintainer['handle']);
+            $arr['maintainer'][] = array('attribs' => $maintainer);
+        }
+        if (count($arr['maintainer']) == 1) {
+            $arr['maintainer'] = $arr['maintainer'][0];
+        }
+        $arr['date'] = $this->_packagefile->getDate();
+        $arr['version'] = array(
+                'attribs' =>
+                    array('api' => $this->_packagefile->getVersion(),
+                          'package' => $this->_packagefile->getVersion()
+                         )
+            );
+        $licensemap =
+            array(
+                'php license' => 'http://www.php.net/license/3_0.txt',
+                'lgpl' => 'http://www.gnu.org/copyleft/lesser.html',
+                'bsd' => 'http://www.opensource.org/licenses/bsd-license.php',
+                'mit' => 'http://www.opensource.org/licenses/mit-license.php',
+                'gpl' => 'http://www.gnu.org/copyleft/gpl.html',
+                'apache' => 'http://www.opensource.org/licenses/apache2.0.php'
+            );
+        if (isset($licensemap[strtolower($this->_packagefile->getLicense())])) {
+            $uri = $licensemap[strtolower($this->_packagefile->getLicense())];
+        } else {
+            $uri = 'http://www.example.com';
+        }
+        $arr['license'] = array(
+            'attribs' => array('uri' => $uri),
+            '_content' => $this->_packagefile->getLicense()
+            );
+        $arr['stability'] = array(
+                'attribs' =>
+                    array('api' => $this->_packagefile->getState(),
+                          'package' => $this->_packagefile->getState()
+                         )
+            );
+        $arr['notes'] = $this->_packagefile->getNotes();
+        $arr['filelist'] = $this->_convertFilelist2_0();
+        $release = $this->_packagefile->getConfigureOptions() ? 'extsrc' : 'php';
+        $arr[$release] = array();
+        $this->_convertRelease2_0($arr[$release]);
+        if ($cl = $this->_packagefile->getChangelog()) {
+            foreach ($cl as $release) {
+                $rel = array();
+                $rel['version'] = array(
+                        'attribs' =>
+                            array('api' => $release['version'],
+                                  'package' => $release['version']
+                                 )
+                    );
+                $rel['date'] = $release['release_date'];
+                if (isset($release['release_license'])) {
+                    if (isset($licensemap[strtolower($release['release_license'])])) {
+                        $uri = $licensemap[strtolower($release['release_license'])];
+                    } else {
+                        $uri = 'http://www.example.com';
+                    }
+                    $rel['license'] = array(
+                            'attribs' => array('uri' => $uri),
+                            '_content' => $release['release_license']
+                        );
+                } else {
+                    $rel['license'] = $arr['license'];
+                }
+                $rel['stability'] = array(
+                        'attribs' =>
+                            array('api' => $release['release_state'],
+                                  'package' => $release['release_state']
+                                 )
+                    );
+                $rel['notes'] = $release['release_notes'];
+                $arr['changelog']['release'][] = $rel;
+            }
+        }
+        include_once 'PEAR/PackageFile/v2.php';
+        $ret = new PEAR_PackageFile_v2;
+        $ret->fromArray($arr);
+        return $ret;
+    }
+
+    function _convertFilelist2_0()
+    {
+        $ret = array('dir' =>
+                    array(
+                        'attribs' => array('name' => '/'),
+                        'file' => array()
+                        )
+                    );
+        foreach ($this->_packagefile->getFilelist() as $name => $file) {
+            $file['name'] = $name;
+            if (isset($file['replacements'])) {
+                $repl = $file['replacements'];
+                unset($file['replacements']);
+            } else {
+                unset($repl);
+            }
+            $file = array('attribs' => $file);
+            if (isset($repl)) {
+                foreach ($repl as $replace ) {
+                    $file['tasks:replace'][] = array('attribs' => $replace);
+                }
+                if (count($repl) == 1) {
+                    $file['tasks:replace'] = $file['tasks:replace'][0];
+                }
+            }
+            $ret['dir']['file'][] = $file;
+        }
+        return $ret;
+    }
+
+    function _convertRelease2_0(&$release)
+    {
+        $release['dependencies'] = array();
+        $release['dependencies']['pearinstaller'] =
+            array('attribs' =>
+                array('min' => '@PEAR-VER@'));
+        if ($this->_packagefile->hasDeps()) {
+            $deps = array();
+            foreach ($this->_packagefile->getDeps() as $dep) {
+                // organize deps by dependency type and name
+                if (!isset($deps[$dep['type']])) {
+                    $deps[$dep['type']] = array();
+                }
+                if (isset($dep['name'])) {
+                    $deps[$dep['type']][$dep['name']][] = $dep;
+                } else {
+                    $deps[$dep['type']][] = $dep;
+                }
+            }
+            do {
+                if (isset($deps['php'])) {
+                    $php = array();
+                    if (count($deps['php']) > 1) {
+                        $php = $this->_processMultipleDeps($deps['php']);
+                    } else {
+                        $php = $this->_processDep($deps['php'][0]);
+                        if (!$php) {
+                            break; // poor mans throw
+                        }
+                    }
+                    $release['dependencies']['php'] = $php;
+                }
+            } while (false);
+            do {
+                if (isset($deps['pkg'])) {
+                    $pkg = array();
+                    if (count($deps['pkg']) > 1) {
+                        $pkg = $this->_processMultipleDepsName($deps['pkg']);
+                    } else {
+                        $pkg = $this->_processDep($deps['pkg'][0]);
+                        if (!$pkg) {
+                            break; // poor mans throw
+                        }
+                    }
+                    $release['dependencies']['package'] = $pkg;
+                }
+            } while (false);
+            do {
+                if (isset($deps['ext'])) {
+                    $pkg = array();
+                    if (count($deps['ext']) > 1) {
+                        $pkg = $this->_processMultipleDepsName($deps['ext']);
+                    } else {
+                        $pkg = $this->_processDep($deps['ext'][0]);
+                        if (!$pkg) {
+                            break; // poor mans throw
+                        }
+                    }
+                    $release['dependencies']['extension'] = $pkg;
+                }
+            } while (false);
+            // skip sapi - it's not supported so nobody will have used it
+            // skip os - it's not supported in 1.0
+        }
+    }
+
+    function _processDep($dep)
+    {
+        if ($dep['type'] == 'php') {
+            if ($dep['rel'] == 'has') {
+                // come on - everyone has php!
+                return false;
+            }
+        }
+        $php = array();
+        if ($dep['type'] != 'php') {
+            $php['attribs']['name'] = $dep['name'];
+            if ($dep['type'] == 'pkg') {
+                // no way to guess for extensions, so we'll assume they
+                // are NOT pecl
+                $php['attribs']['channel'] = 'pear';
+            }
+        }
+        if (isset($dep['optional'])) {
+            $php['attribs']['optional'] = $dep['optional'];
+        }
+        switch ($dep['rel']) {
+            case 'gt' :
+                $php['exclude']['attribs']['version'] = $dep['version'];
+            case 'ge' :
+                $php['attribs']['min'] = $dep['version'];
+            break;
+            case 'lt' :
+                $php['exclude']['attribs']['version'] = $dep['version'];
+            case 'le' :
+                $php['attribs']['max'] = $dep['version'];
+            break;
+            case 'eq' :
+                $php['attribs']['max'] = $dep['version'];
+                $php['attribs']['min'] = $dep['version'];
+            break;
+            case 'not' :
+                $php['exclude']['attribs']['version'] = $dep['version'];
+            break;
+        }
+        return $php;
+    }
+
+    function _processMultipleDeps($deps)
+    {
+        $test = array();
+        foreach ($deps as $dep) {
+            $test[] = $this->_processDep($dep);
+        }
+        $min = array();
+        $max = array();
+        foreach ($test as $dep) {
+            if (!dep) {
+                continue;
+            }
+            if (isset($dep['attribs']['min'])) {
+                $min[$dep['attribs']['min']] = count($min);
+            }
+            if (isset($dep['attribs']['max'])) {
+                $max[$dep['attribs']['max']] = count($max);
+            }
+        }
+        if (count($min) > 0) {
+            uksort($min, 'version_compare');
+        }
+        if (count($max) > 0) {
+            uksort($max, 'version_compare');
+        }
+        if (count($min)) {
+            // get the highest minimum
+            $min = array_pop(array_flip($min));
+        } else {
+            $min = false;
+        }
+        if (count($max)) {
+            // get the lowest maximum
+            $max = array_shift(array_flip($max));
+        } else {
+            $max = false;
+        }
+        if ($min) {
+            $php['attribs']['min'] = $min;
+        }
+        if ($max) {
+            $php['attribs']['max'] = $max;
+        }
+        $exclude = array();
+        foreach ($test as $dep) {
+            if (!isset($dep['exclude'])) {
+                continue;
+            }
+            $exclude[] = $dep['exclude'];
+        }
+        if (count($exclude)) {
+            $php['exclude'] = $exclude;
+        }
+        return $php;
+    }
+
+    function _processMultipleDepsName($deps)
+    {
+        $test = array();
+        foreach ($deps as $name => $dep) {
+            foreach ($dep as $d) {
+                $tests[$name][] = $this->_processDep($d);
+            }
+        }
+        foreach ($tests as $name => $test) {
+            $php = array();
+            $min = array();
+            $max = array();
+            foreach ($test as $dep) {
+                if (!$dep) {
+                    continue;
+                }
+                if (isset($dep['attribs']['min'])) {
+                    $min[$dep['attribs']['min']] = count($min);
+                }
+                if (isset($dep['attribs']['max'])) {
+                    $max[$dep['attribs']['max']] = count($max);
+                }
+            }
+            if (isset($dep['attribs']['channel'])) {
+                $php['attribs']['channel'] = $dep['attribs']['channel'];
+            }
+            if (isset($dep['attribs']['optional'])) {
+                $php['attribs']['optional'] = $dep['attribs']['optional'];
+            }
+            $php['attribs']['name'] = $name;
+            if (count($min) > 0) {
+                uksort($min, 'version_compare');
+            }
+            if (count($max) > 0) {
+                uksort($max, 'version_compare');
+            }
+            if (count($min)) {
+                // get the highest minimum
+                $min = array_pop(array_flip($min));
+            } else {
+                $min = false;
+            }
+            if (count($max)) {
+                // get the lowest maximum
+                $max = array_shift(array_flip($max));
+            } else {
+                $max = false;
+            }
+            if ($min) {
+                $php['attribs']['min'] = $min;
+            }
+            if ($max) {
+                $php['attribs']['max'] = $max;
+            }
+            $exclude = array();
+            foreach ($test as $dep) {
+                if (!isset($dep['exclude'])) {
+                    continue;
+                }
+                $exclude[] = $dep['exclude'];
+            }
+            if (count($exclude)) {
+                $php['exclude'] = $exclude;
+            }
+            $ret[] = $php;
+        }
+        return $ret;
+    }
+
+    /**
      * Build a "provides" array from data returned by
      * analyzeSourceCode().  The format of the built array is like
      * this:
@@ -277,4 +663,16 @@ class PEAR_PackageFile_Generator_v1
 
     // }}}
 }
+//set_include_path('C:/devel/pear_with_channels');
+//require_once 'PEAR/PackageFile/Parser/v1.php';
+//require_once 'PEAR/Registry.php';
+//$a = new PEAR_PackageFile_Parser_v1;
+//$r = new PEAR_Registry('C:\Program Files\php\pear');
+//$a->setRegistry($r);
+//$p = &$a->parse(file_get_contents('C:\devel\pear_with_channels\package-PEAR.xml'), PEAR_VALIDATE_NORMAL,
+//    'C:\devel\pear_with_channels\package-PEAR.xml');
+//$g = &$p->getDefaultGenerator();
+//$v2 = &$g->toV2();
+//$g = &$v2->getDefaultGenerator();
+//echo $g->toXml();
 ?>
