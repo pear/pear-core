@@ -459,7 +459,7 @@ class PEAR_DependencyDB
         if (isset($dep['channel'])) {
             $depchannel = $dep['channel'];
         } else {
-            $depchannel = '__private';
+            $depchannel = '__uri';
         }
         $data['dependencies'][strtolower($pkg->getChannel())][strtolower($pkg->getPackage())][]
             = $info;

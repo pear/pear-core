@@ -185,7 +185,7 @@ class PEAR_Registry extends PEAR
             $pear_channel->validate();
             $this->addChannel($pear_channel);
             $private = new PEAR_ChannelFile;
-            $private->setName('__private');
+            $private->setName('__uri');
             $private->setServer('www.example.com');
             $private->addFunction('xmlrpc', '1.0', '****');
             $private->setSummary('Pseudo-channel for static packages');
@@ -983,7 +983,7 @@ class PEAR_Registry extends PEAR
      */
     function updateChannel($channel)
     {
-        if (strtolower($channel) == '__private') {
+        if (strtolower($channel) == '__uri') {
             return false;
         }
         return $this->addChannel($channel, true);
@@ -999,7 +999,7 @@ class PEAR_Registry extends PEAR
      */
     function deleteChannel($channel)
     {
-        if (strtolower($channel) == '__private') {
+        if (strtolower($channel) == '__uri') {
             return false;
         }
         if (!is_string($channel)) {
@@ -1326,7 +1326,7 @@ class PEAR_Registry extends PEAR
                 $group['$package'] = array($group['package']);
             }
             foreach ($group['package'] as $package) {
-                $depchannel = isset($package['channel']) ? $package['channel'] : '__private';
+                $depchannel = isset($package['channel']) ? $package['channel'] : '__uri';
                 $p = $this->getPackage($package['name'], $depchannel);
                 if ($p) {
                     $ret[] = &$p;
@@ -1338,7 +1338,7 @@ class PEAR_Registry extends PEAR
                 $group['$subpackage'] = array($group['subpackage']);
             }
             foreach ($group['subpackage'] as $package) {
-                $depchannel = isset($package['channel']) ? $package['channel'] : '__private';
+                $depchannel = isset($package['channel']) ? $package['channel'] : '__uri';
                 $p = $this->getPackage($package['name'], $depchannel);
                 if ($p) {
                     $ret[] = &$p;
@@ -1486,14 +1486,14 @@ class PEAR_Registry extends PEAR
                     $param['channel'] = $defaultchannel;
                 }
             } else {
-                $param['channel'] = '__private';
+                $param['channel'] = '__uri';
             }
         } else {
             $components = parse_url($param);
             if (isset($components['scheme'])) {
                 if ($components['scheme'] == 'http') {
                     // uri package
-                    $param = array('uri' => $param, 'channel' => '__private');
+                    $param = array('uri' => $param, 'channel' => '__uri');
                 } elseif($components['scheme'] != 'channel') {
                     return PEAR::raiseError('parsePackageName(): only channel:// uris may ' .
                         'be downloaded, not "' . $param . '"', 'invalid', null, null, $param);

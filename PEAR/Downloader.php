@@ -765,7 +765,7 @@ class PEAR_Downloader extends PEAR_Common
             }
             foreach ($tdeps as $dep) {
                 if (!isset($dep['channel'])) {
-                    $depchannel = '__private';
+                    $depchannel = '__uri';
                 } else {
                     $depchannel = $dep['channel'];
                 }
