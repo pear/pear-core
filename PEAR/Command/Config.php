@@ -279,16 +279,9 @@ and uninstall).
     function doConfigCreate($command, $options, $params)
     {
         if (count($params) != 2) {
-            return PEAR::raiseError('There must be two parameters, root path and filename, for ' .
-                'config-create');
+            return PEAR::raiseError('config-create: must have 2 parameters, root path and ' .
+                'filename to save as');
         }
-        if (!file_exists($params[1])) {
-            if (!@touch($params[1])) {
-                return PEAR::raiseError('Could not create "' . $params[1] . '"');
-            }
-        }
-        $params[1] = realpath($params[1]);
-        $config = &new PEAR_Config($params[1]);
         $root = $params[0];
         // Clean up the DIRECTORY_SEPARATOR mess
         $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
@@ -299,6 +292,13 @@ and uninstall).
             return PEAR::raiseError('Root directory must be an absolute path beginning with "/", ' .
                 'was: "' . $root . '"');
         }
+        if (!file_exists($params[1])) {
+            if (!@touch($params[1])) {
+                return PEAR::raiseError('Could not create "' . $params[1] . '"');
+            }
+        }
+        $params[1] = realpath($params[1]);
+        $config = &new PEAR_Config($params[1]);
         if ($root{strlen($root) - 1} == '/') {
             $root = substr($root, 0, strlen($root) - 1);
         }
