@@ -193,10 +193,18 @@ class PEAR_PackageFile_v2_Validator
         }
         $this->_pf->_isValid = $this->_isValid = !$this->_stack->hasErrors('error');
         if ($this->_isValid && $state == PEAR_VALIDATE_PACKAGING && !$this->_filesValid) {
-            if (!$this->_analyzePhpFiles()) {
-                $this->_pf->_isValid = $this->_isValid = 0;
+            if ($this->_pf->getPackageType() == 'bundle') {
+                if ($this->_analyzeBundledPackages()) {
+                    $this->_filesValid = $this->_pf->_filesValid = true;
+                } else {
+                    $this->_pf->_isValid = $this->_isValid = 0;
+                }
             } else {
-                $this->_filesValid = $this->_pf->_filesValid = true;
+                if (!$this->_analyzePhpFiles()) {
+                    $this->_pf->_isValid = $this->_isValid = 0;
+                } else {
+                    $this->_filesValid = $this->_pf->_filesValid = true;
+                }
             }
         }
         if ($this->_isValid) {
@@ -1395,6 +1403,47 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array('file' => $file, 'tag' => $tag),
             '<%tag% name="%file%"> is invalid, file is not in <contents>');
+    }
+
+    function _analyzeBundledPackages()
+    {
+        if (!$this->_isValid) {
+            return false;
+        }
+        if (!$this->_pf->getPackageType() == 'bundle') {
+            return false;
+        }
+        if (!isset($this->_pf->_packageFile)) {
+            return false;
+        }
+        $dir_prefix = dirname($this->_pf->_packageFile);
+        $log = isset($this->_pf->_logger) ? array(&$this->_pf->_logger, 'log') :
+            array('PEAR_Common', 'log');
+        $info = $this->_pf->getContents();
+        $info = $info['bundledpackage'];
+        if (!is_array($info)) {
+            $info = array($info);
+        }
+        $pkg = &new PEAR_PackageFile($this->_pf->_config);
+        foreach ($info as $package) {
+            call_user_func_array($log, array(1, "Analyzing bundled package $package"));
+            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+            $ret = $pkg->fromAnyFile($dir_prefix . DIRECTORY_SEPARATOR . $package,
+                PEAR_VALIDATE_NORMAL);
+            PEAR::popErrorHandling();
+            if (PEAR::isError($ret)) {
+                call_user_func_array($log, array(0, "ERROR: package $package is not a valid " .
+                    'package'));
+                $inf = $ret->getUserInfo();
+                if (is_array($inf)) {
+                    foreach ($inf as $err) {
+                        call_user_func_array($log, array(1, $err['message']));
+                    }
+                }
+                return false;
+            }
+        }
+        return true;
     }
 
     function _analyzePhpFiles()

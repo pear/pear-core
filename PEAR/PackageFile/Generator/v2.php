@@ -166,59 +166,79 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $i = 0;
         $this->_packagefile->flattenFilelist();
         $contents = $this->_packagefile->getContents();
-        $contents = $contents['dir']['file'];
-        if (isset($contents['attribs'])) {
-            $contents = array($contents);
-        }
-
-        $packageDir = $where;
-        foreach ($contents as $i => $file) {
-            $fname = $file['attribs']['name'];
-            $atts = $file['attribs'];
-            $orig = $file;
-            $file = $pkgdir . DIRECTORY_SEPARATOR . $fname;
-            if (!file_exists($file)) {
-                return $packager->raiseError("File does not exist: $fname");
-            } else {
+        if (isset($contents['bundledpackage'])) { // bundles of packages
+            $contents = $contents['bundledpackage'];
+            if (!isset($contents[0])) {
+                $contents = array($contents);
+            }
+            $packageDir = $where;
+            foreach ($contents as $i => $package) {
+                $fname = $package;
+                $file = $pkgdir . DIRECTORY_SEPARATOR . $fname;
+                if (!file_exists($file)) {
+                    return $packager->raiseError("File does not exist: $fname");
+                }
                 $tfile = $packageDir . DIRECTORY_SEPARATOR . $fname;
-                unset($orig['attribs']);
-                if (count($orig)) { // file with tasks
-                    // run any package-time tasks
-                    $fp = fopen($file, "r");
-                    $contents = fread($fp, filesize($file));
-                    fclose($fp);
-                    foreach ($orig as $tag => $raw) {
-                        $tag = str_replace($this->_packagefile->getTasksNs() . ':', '', $tag);
-                        $task = "PEAR_Task_$tag";
-                        $task = &new $task($this->_packagefile->_config,
-                            $this->_packagefile->_logger,
-                            PEAR_TASK_PACKAGE);
-                        $task->init($raw, $atts);
-                        $res = $task->startSession($this->_packagefile, $contents, $tfile);
-                        if (!$res) {
-                            continue; // skip this task
-                        }
-                        if (PEAR::isError($res)) {
-                            return $res;
-                        }
-                        $contents = $res; // save changes
-                        System::mkdir(array('-p', dirname($tfile)));
-                        $wp = fopen($tfile, "wb");
-                        fwrite($wp, $contents);
-                        fclose($wp);
-                    }
-                } else {
-                    System::mkdir(array('-p', dirname($tfile)));
-                    copy($file, $tfile);
-                }
+                System::mkdir(array('-p', dirname($tfile)));
+                copy($file, $tfile);
                 $filelist[$i++] = $tfile;
-                if (!isset($atts['md5sum'])) {
-                    $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($file), $i);
+                $packager->log(2, "Adding package $fname");
+            }
+        } else { // normal packages
+            $contents = $contents['dir']['file'];
+            if (!isset($contents[0])) {
+                $contents = array($contents);
+            }
+    
+            $packageDir = $where;
+            foreach ($contents as $i => $file) {
+                $fname = $file['attribs']['name'];
+                $atts = $file['attribs'];
+                $orig = $file;
+                $file = $pkgdir . DIRECTORY_SEPARATOR . $fname;
+                if (!file_exists($file)) {
+                    return $packager->raiseError("File does not exist: $fname");
+                } else {
+                    $tfile = $packageDir . DIRECTORY_SEPARATOR . $fname;
+                    unset($orig['attribs']);
+                    if (count($orig)) { // file with tasks
+                        // run any package-time tasks
+                        $fp = fopen($file, "r");
+                        $contents = fread($fp, filesize($file));
+                        fclose($fp);
+                        foreach ($orig as $tag => $raw) {
+                            $tag = str_replace($this->_packagefile->getTasksNs() . ':', '', $tag);
+                            $task = "PEAR_Task_$tag";
+                            $task = &new $task($this->_packagefile->_config,
+                                $this->_packagefile->_logger,
+                                PEAR_TASK_PACKAGE);
+                            $task->init($raw, $atts);
+                            $res = $task->startSession($this->_packagefile, $contents, $tfile);
+                            if (!$res) {
+                                continue; // skip this task
+                            }
+                            if (PEAR::isError($res)) {
+                                return $res;
+                            }
+                            $contents = $res; // save changes
+                            System::mkdir(array('-p', dirname($tfile)));
+                            $wp = fopen($tfile, "wb");
+                            fwrite($wp, $contents);
+                            fclose($wp);
+                        }
+                    } else {
+                        System::mkdir(array('-p', dirname($tfile)));
+                        copy($file, $tfile);
+                    }
+                    $filelist[$i++] = $tfile;
+                    if (!isset($atts['md5sum'])) {
+                        $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($file), $i);
+                    }
+                    $packager->log(2, "Adding file $fname");
                 }
-                $packager->log(2, "Adding file $fname");
             }
         }
-        // }}}
+            // }}}
         if ($pf1 !== null) {
             $name = 'package2.xml';
         } else {
