@@ -39,7 +39,6 @@ require_once 'System.php';
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
- */
 class PEAR_PackageFile_Generator_v2
 {
    /**
