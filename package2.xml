@@ -137,6 +137,7 @@ Installer:
       <file name="Ext.php" role="php" />
       <file name="Php.php" role="php" />
       <file name="Script.php" role="php" />
+      <file name="Src.php" role="php" />
       <file name="Test.php" role="php" />
      </dir> <!-- /PEAR/Installer/Role -->
      <file name="Role.php" role="php" />
