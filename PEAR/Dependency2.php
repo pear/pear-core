@@ -671,7 +671,7 @@ class PEAR_Dependency2
         $params = array();
         // construct an array of "downloaded" packages to fool the package dependency checker
         // into using these to validate uninstalls of circular dependencies
-        $downloaded = &$dl->getDownloadedPackages();
+        $downloaded = &$dl->getUninstallPackages();
         foreach ($downloaded as $i => $pf) {
             $dp = &new PEAR_Downloader_Package($dl);
             $dp->setPackageFile($downloaded[$i]);
@@ -687,7 +687,7 @@ class PEAR_Dependency2
                         array('channel' => $channel, 'package' => $package), $this->_state);
                     $dep = $d['dep'];
                     $required = $d['type'] == 'required';
-                    $ret = $checker->_validatePackageUninstall($dep, $required, $params);
+                    $ret = $checker->_validatePackageUninstall($dep, $required, $params, $dl);
                     if (is_array($ret)) {
                         $dl->log(0, $ret[0]);
                     } elseif (PEAR::isError($ret)) {
@@ -710,7 +710,7 @@ class PEAR_Dependency2
         return true;
     }
 
-    function _validatePackageUninstall($dep, $required, $params)
+    function _validatePackageUninstall($dep, $required, $params, &$dl)
     {
         $dep['package'] = $dep['name'];
         $depname = $this->_registry->parsedPackageNameToString($dep);
@@ -761,13 +761,44 @@ class PEAR_Dependency2
             }
         }
         if ($fail) {
-            $dep = $this->_registry->parsedPackageNameToString($dep);
+            if ($found) {
+                if (!isset($dl->___checked[$this->_currentPackage['channel']]
+                      [$this->_currentPackage['package']])) {
+                    $dl->___checked[$this->_currentPackage['channel']]
+                      [$this->_currentPackage['package']] = true;
+                    $deps = $this->_dependencydb->getDependentPackageDependencies(
+                        $this->_currentPackage);
+                    if ($deps) {
+                        foreach ($deps as $channel => $info) {
+                            foreach ($info as $package => $d) {
+                                $d['dep']['package'] = $d['dep']['name'];
+                                $checker = &new PEAR_Dependency2($this->_config, $this->_options,
+                                    array('channel' => $channel, 'package' => $package),
+                                    $this->_state);
+                                $dep = $d['dep'];
+                                $required = $d['type'] == 'required';
+                                $ret = $checker->_validatePackageUninstall($dep, $required, $params,
+                                    $dl);
+                                if (PEAR::isError($ret)) {
+                                    $fail = true;
+                                    break 2;
+                                }
+                            }
+                            $fail = false;
+                        }
+                    }
+                } else {
+                    return true;
+                }
+            }
+            if (!$fail) {
+                return true;
+            }
             if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                return $this->raiseError($depname . $extra . ' is required by package "%s"' .
-                    ', installed version is ' . $version);
+                return $this->raiseError($depname . $extra . ' is required by package "%s"');
             } else {
                 return $this->warning('warning: ' . $depname . $extra . ' is required by package "' .
-                    '%s", installed version is ' . $version);
+                    '%s"');
             }
         }
         return true;
