@@ -518,6 +518,7 @@ class PEAR_PackageFile_Generator_v1
         }
         include_once 'PEAR/PackageFile/v2.php';
         $ret = new PEAR_PackageFile_v2;
+        $ret->setRegistry($this->_packagefile->_registry);
         $ret->fromArray($arr);
         return $ret;
     }
