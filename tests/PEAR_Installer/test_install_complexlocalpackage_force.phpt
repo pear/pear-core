@@ -84,7 +84,6 @@ $phpunit->assertEquals('PEAR1',
     $dlpackages[0]['pkg'], 'PEAR1');
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -110,11 +109,11 @@ $phpunit->assertEquals(array (
 $phpunit->assertEquals(array (
 ), $fakelog->getDownload(), 'download callback messages');
 
+$installer->setOptions($dp->getOptions());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
-$installer->setOptions($dp->getOptions());
-$ret = &$installer->install($result[0]);
+$ret = &$installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
   'provides' => 
@@ -305,12 +304,11 @@ $info = $reg->packageInfo('PEAR1');
 $phpunit->assertTrue(isset($info['_lastmodified']), 'lastmodified is set?');
 unset($info['_lastmodified']);
 $phpunit->assertEquals($ret, $info, 'test installation, PEAR1');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 0,
-    1 => 'pear/PEAR1 requires package "pear/Bar" (version >= 1.0.0)',
+    1 => 'warning: pear/PEAR1 requires package "pear/Bar" (version >= 1.0.0)',
   ),
   1 => 
   array (

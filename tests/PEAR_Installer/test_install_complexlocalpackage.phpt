@@ -236,7 +236,7 @@ $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
 $installer->setOptions($dp->getOptions());
-$ret = &$installer->install($result[0]);
+$ret = &$installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
   'provides' => 
@@ -409,7 +409,7 @@ $phpunit->assertTrue(isset($info['_lastmodified']), 'lastmodified is set?');
 unset($info['_lastmodified']);
 $phpunit->assertEquals($ret, $info, 'test installation, Foobar');
 
-$ret = &$installer->install($result[1]);
+$ret = &$installer->install($result[1], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
   'provides' => 
@@ -592,7 +592,7 @@ unset($info['_lastmodified']);
 $phpunit->assertEquals($ret, $info, 'test installation, Bar');
 
 
-$ret = &$installer->install($result[2]);
+$ret = &$installer->install($result[2], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
   'provides' => 
