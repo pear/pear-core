@@ -213,10 +213,19 @@ class PEAR_Downloader_Package
                 $newinfo[$i] = strtolower($p);
             }
             if ($info != $newinfo) {
-                return PEAR::raiseError('CRITICAL ERROR: We are ' .
-                    $this->_registry->parsedPackageNameToString($info) . ', but the file ' .
-                    'downloaded claims to be ' .
-                    $this->_registry->parsedPackageNameToString($this->getParsedPackage()));
+                do {
+                    if ($info['package'] == 'pecl.php.net' && $newinfo['package'] == 'pear.php.net') {
+                        $info['package'] = 'pear.php.net';
+                        if ($info == $newinfo) {
+                            // skip the channel check if a pecl package says it's a PEAR package
+                            break;
+                        }
+                    }
+                    return PEAR::raiseError('CRITICAL ERROR: We are ' .
+                        $this->_registry->parsedPackageNameToString($info) . ', but the file ' .
+                        'downloaded claims to be ' .
+                        $this->_registry->parsedPackageNameToString($this->getParsedPackage()));
+                } while (false);
             }
             if (PEAR::isError($err) || !$this->_valid) {
                 return $err;
@@ -323,6 +332,7 @@ class PEAR_Downloader_Package
         if (!isset($options['downloadonly'])) {
             foreach ($params as $i => $param) {
                 // remove self if already installed with this version
+                // this does not need any pecl magic - we only remove exact matches
                 if ($param->_registry->packageExists($param->getPackage(), $param->getChannel())) {
                     if (version_compare($param->_registry->packageInfo($param->getPackage(), 'version',
                           $param->getChannel()), $param->getVersion(), '==')) {
@@ -906,6 +916,12 @@ class PEAR_Downloader_Package
                 version_compare($newdep['min'], $this->getVersion(), '<=') &&
                 version_compare($newdep['max'], $this->getVersion(), '>='));
         }
+        // use magic to support pecl packages suddenly jumping to the pecl channel
+        if ($channel == 'pecl.php.net' && $this->getChannel() == 'pear.php.net') {
+            if ($package == $this->getPackage()) {
+                $channel = 'pear.php.net';
+            }
+        }
         if (isset($param['version'])) {
             return ($package == $this->getPackage() &&
                 $channel == $this->getChannel() &&
@@ -947,7 +963,13 @@ class PEAR_Downloader_Package
             }
         }
         $options = $this->_downloader->getOptions();
-        if ($this->_registry->packageExists($package, $channel)) {
+        $test = $this->_registry->packageExists($package, $channel);
+        if (!$test && $channel == 'pecl.php.net') {
+            // do magic to allow upgrading from old pecl packages to new ones
+            $test = $this->_registry->packageExists($package, 'pear.php.net');
+            $channel = 'pear.php.net';
+        }
+        if ($test) {
             if (isset($dep['uri'])) {
                 if ($this->_registry->packageInfo($package, 'uri', '__uri') == $dep['uri']) {
                     return true;
@@ -1198,8 +1220,9 @@ class PEAR_Downloader_Package
                 if (!$packagexml) {
                     $packagexml = $tar->extractInString('package.xml');
                 }
-                if (trim($packagexml) != trim($this->_rawpackagefile)) {
-                    return $this->raiseError('CRITICAL ERROR: package.xml downloaded does ' .
+                if (str_replace(array("\n", "\r"), array('',''), $packagexml) !=
+                      str_replace(array("\n", "\r"), array('',''), $this->_rawpackagefile)) {
+                    return PEAR::raiseError('CRITICAL ERROR: package.xml downloaded does ' .
                         'not match value returned from xml-rpc');
                 }
             }

@@ -1017,12 +1017,30 @@ class PEAR_Installer extends PEAR_Downloader
 
         if (empty($options['upgrade']) && empty($options['soft'])) {
             // checks to do only when installing new packages
-            if (empty($options['force']) && $this->_registry->packageExists($pkgname, $channel)) {
+            if ($channel == 'pecl.php.net') {
+                $test = $this->_registry->packageExists($pkgname, $channel);
+                if (!$test) {
+                    $test = $this->_registry->packageExists($pkgname, 'pear.php.net');
+                }
+            } else {
+                $test = $this->_registry->packageExists($pkgname, $channel);
+            }
+            if (empty($options['force']) && $test) {
                 return $this->raiseError("$channel/$pkgname is already installed");
             }
         } else {
-            if ($this->_registry->packageExists($pkgname, $channel)) {
-                $v1 = $this->_registry->packageInfo($pkgname, 'version', $channel);
+            $usechannel = $channel;
+            if ($channel == 'pecl.php.net') {
+                $test = $this->_registry->packageExists($pkgname, $channel);
+                if (!$test) {
+                    $test = $this->_registry->packageExists($pkgname, 'pear.php.net');
+                    $usechannel = 'pear.php.net';
+                }
+            } else {
+                $test = $this->_registry->packageExists($pkgname, $channel);
+            }
+            if ($test) {
+                $v1 = $this->_registry->packageInfo($pkgname, 'version', $usechannel);
                 $v2 = $pkg->getVersion();
                 $cmp = version_compare("$v1", "$v2", 'gt');
                 if (empty($options['force']) && !version_compare("$v2", "$v1", 'gt')) {
@@ -1030,7 +1048,7 @@ class PEAR_Installer extends PEAR_Downloader
                 }
                 if (empty($options['register-only'])) {
                     // when upgrading, remove old release's files first:
-                    if (PEAR::isError($err = $this->_deletePackageFiles($pkgname, $channel,
+                    if (PEAR::isError($err = $this->_deletePackageFiles($pkgname, $usechannel,
                           true))) {
                         if (!isset($options['ignore-errors'])) {
                             return $this->raiseError($err);
@@ -1133,17 +1151,42 @@ class PEAR_Installer extends PEAR_Downloader
         // {{{ Register that the package is installed -----------------------
         if (empty($options['upgrade'])) {
             // if 'force' is used, replace the info in registry
-            if (!empty($options['force']) && $this->_registry->packageExists($pkgname, $channel)) {
-                $oldversion = $this->_registry->packageInfo($pkgname, 'version', $channel);
-                $this->_registry->deletePackage($pkgname, $channel);
+            $usechannel = $channel;
+            if ($channel == 'pecl.php.net') {
+                $test = $this->_registry->packageExists($pkgname, $channel);
+                if (!$test) {
+                    $test = $this->_registry->packageExists($pkgname, 'pear.php.net');
+                    $usechannel = 'pear.php.net';
+                }
+            } else {
+                $test = $this->_registry->packageExists($pkgname, $channel);
+            }
+            if (!empty($options['force']) && $test) {
+                $oldversion = $this->_registry->packageInfo($pkgname, 'version', $usechannel);
+                $this->_registry->deletePackage($pkgname, $usechannel);
             }
             $ret = $this->_registry->addPackage2($pkg);
         } else {
+            $usechannel = $channel;
+            if ($channel == 'pecl.php.net') {
+                $test = $this->_registry->packageExists($pkgname, $channel);
+                if (!$test) {
+                    $test = $this->_registry->packageExists($pkgname, 'pear.php.net');
+                    $usechannel = 'pear.php.net';
+                }
+            } else {
+                $test = $this->_registry->packageExists($pkgname, $channel);
+            }
             // new: upgrade installs a package if it isn't installed
-            if (!$this->_registry->packageExists($pkgname, $channel)) {
+            if (!$test) {
                 $ret = $this->_registry->addPackage2($pkg);
             } else {
-                $ret = $this->_registry->updatePackage2($pkg);
+                if ($usechannel != $channel) {
+                    $this->_registry->deletePackage($pkgname, $usechannel);
+                    $ret = $this->_registry->addPackage2($pkg);
+                } else {
+                    $ret = $this->_registry->updatePackage2($pkg);
+                }
                 $installphase = 'upgrade';
             }
         }

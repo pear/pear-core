@@ -296,6 +296,13 @@ installed package.'
         $package = $info['package'];
         $channel = $info['channel'];
         // "pear shell-test Foo"
+        if (!$reg->packageExists($package, $channel)) {
+            if ($channel == 'pecl.php.net') {
+                if (!$reg->packageExists($package, 'pear.php.net')) {
+                    $channel = 'pear.php.net'; // magically change channels for extensions
+                }
+            }
+        }
         if (sizeof($params) == 1) {
             if (!$reg->packageExists($package, $channel)) {
                 exit(1);
@@ -350,7 +357,7 @@ installed package.'
             if ($obj->getPackagexmlVersion() == '1.0') {
                 $info = $obj->toArray();
             } else {
-                return $this->_doList2($command, $options, $params, $obj);
+                return $this->_doList2($command, $options, $params, $obj, false);
             }
         } else {
             $parsed = $reg->parsePackageName($params[0], $this->config->get('default_channel'));
@@ -362,7 +369,7 @@ installed package.'
             $info = $reg->packageInfo($package, null, $channel);
             if (isset($info['old'])) {
                 $obj = $reg->getPackage($package, $channel);
-                return $this->_doList2($command, $options, $params, $obj);
+                return $this->_doList2($command, $options, $params, $obj, true);
             }
         }
         if (PEAR::isError($info)) {
@@ -486,6 +493,9 @@ installed package.'
                 $hdate = date('Y-m-d', $info[$key]);
                 unset($info[$key]);
                 $info['Last Modified'] = $hdate;
+            } elseif ($key == '_lastversion') {
+                $info['Last Installed Version'] = $info[$key] ? $info[$key] : '- None -';
+                unset($info[$key]);
             } else {
                 $info[$key] = trim($info[$key]);
                 if (in_array($key, $longtext)) {
@@ -508,7 +518,10 @@ installed package.'
 
     // }}}
 
-    function _doList2($command, $options, $params, &$obj)
+    /**
+     * @access private
+     */
+    function _doList2($command, $options, $params, &$obj, $installed)
     {
         $caption = 'About ' . $obj->getChannel() . '/' .$obj->getPackage() . '-' .
             $obj->getVersion();
@@ -891,8 +904,12 @@ installed package.'
             }
         }
         $info['package.xml version'] = '2.0';
-        if ($obj->getLastModified()) {
-            $info['Last Modified'] = date('Y-m-d H:m', $obj->getLastModified());
+        if ($installed) {
+            if ($obj->getLastModified()) {
+                $info['Last Modified'] = date('Y-m-d H:m', $obj->getLastModified());
+            }
+            $v = $obj->getLastInstalledVersion();
+            $info['Last Installed Version'] = $v ? $v : '- None -';
         }
         foreach ($info as $key => $value) {
             $data['data'][] = array($key, $value);
