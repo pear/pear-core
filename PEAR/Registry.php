@@ -150,7 +150,7 @@ class PEAR_Registry extends PEAR
 
     function hasWriteAccess()
     {
-        return @is_writeable($this->statedir);
+        return @is_writeable($this->install_dir);
     }
 
     function setConfig(&$config)
@@ -1107,7 +1107,7 @@ class PEAR_Registry extends PEAR
                 $ui = PEAR_Frontend::singleton();
                 if ($ui) {
                     foreach ($info->getValidationWarnings() as $err) {
-                        $ui->log($err['message']);
+                        $ui->log(2, $err['message']);
                     }
                 }
             }
