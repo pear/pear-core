@@ -35,6 +35,9 @@ $pf2->setLicense('PHP License');
 $pf2->setLogger($fakelog);
 $pf2->clearContents();
 $pf2->addFile('', 'foor.php', array('role' => 'php'));
+$pf2->resetFilelist();
+$pf2->installedFile('foor.php', array('attribs' => array('role' => 'php')));
+$pf2->setInstalledAs('foor.php', $php_dir . DIRECTORY_SEPARATOR . 'foor.php');
 $pf2->addMaintainer('lead', 'cellog', 'Greg Beaver', 'cellog@php.net');
 $pf2->setNotes('blah');
 $pf2->setPearinstallerDep('1.4.0a1');
@@ -54,6 +57,11 @@ $phpunit->assertTrue($ret, 'valid pf2');
 
 $pf2->addPackageDepWithUri('optional', 'boop', 'http://www.example.com/boomp.tgz');
 $pf2->addFile('', 'flong.php', array('role' => 'php'));
+$pf2->resetFilelist();
+$pf2->installedFile('foor.php', array('attribs' => array('role' => 'php')));
+$pf2->setInstalledAs('foor.php', $php_dir . DIRECTORY_SEPARATOR . 'foor.php');
+$pf2->installedFile('flong.php', array('attribs' => array('role' => 'php')));
+$pf2->setInstalledAs('flong.php', $php_dir . DIRECTORY_SEPARATOR . 'flong.php');
 $ret = $reg->updatePackage2($pf2);
 $phpunit->assertTrue($ret, 'update pf2');
 
