@@ -95,6 +95,11 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $this->_packagefile = &$packagefile;
     }
 
+    function getPackagerVersion()
+    {
+        return '@PEAR-VER@';
+    }
+
     function toTgz(&$packager, $compress = true, $where = null)
     {
         $a = null;
@@ -276,6 +281,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 $arr['contents']['dir']['file'] = $use['file'];
             }
             $this->options['beautifyFilelist'] = true;
+            $arr['attribs']['packagerversion'] = '@PEAR-VER@';
         }
         if ($this->serialize($arr, $options)) {
             return $this->_serializedData;
