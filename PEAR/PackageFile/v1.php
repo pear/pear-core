@@ -1,4 +1,5 @@
 <?php
+require_once 'PEAR/PackageFile/Generator/v1.php';
 /**
  * Error code if the package.xml <package> tag does not contain a valid version
  */
@@ -605,6 +606,7 @@ class PEAR_PackageFile_v1
      */
     function validate($state)
     {
+        include_once 'PEAR/Common.php';
         $this->_isValid = true;
         $info = $this->_packageInfo;
         $this->_packageName = $pn = $info['package'];
@@ -657,9 +659,9 @@ class PEAR_PackageFile_v1
                 $i++;
             }
         }
-        if (!empty($info['deps'])) {
+        if (!empty($info['release_deps'])) {
             $i = 1;
-            foreach ($info['deps'] as $d) {
+            foreach ($info['release_deps'] as $d) {
                 if (empty($d['type'])) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_DEPTYPE,
                         array('index' => $i, 'types' => PEAR_Common::getDependencyTypes()));
@@ -773,7 +775,6 @@ class PEAR_PackageFile_v1
 
     function &getDefaultGenerator()
     {
-        include_once 'PEAR/PackageFile/Generator/v1.php';
         $a = &new PEAR_PackageFile_Generator_v1($this);
         return $a;
     }

@@ -1,4 +1,5 @@
 <?php
+require_once 'PEAR/PackageFile/v1.php';
 /**
  * Parser for package.xml version 1.0
  */
@@ -7,11 +8,14 @@ class PEAR_PackageFile_Parser_v1
     var $_registry;
     /**
      * BC hack to allow PEAR_Common::infoFromString() to sort of
-     * work with the version 2.0 format
+     * work with the version 2.0 format - there's no filelist though
      * @param PEAR_PackageFile_v2
      */
     function fromV2($packagefile)
     {
+        $info = $packagefile->getArray(true);
+        $ret = new PEAR_PackageFile_v1;
+        $ret->fromArray($info['old']);
     }
 
     function setRegistry($r)
@@ -65,7 +69,6 @@ class PEAR_PackageFile_Parser_v1
 
         xml_parser_free($xp);
 
-        include_once 'PEAR/PackageFile/v1.php';
         $pf = new PEAR_PackageFile_v1;
         $pf->setRegistry($this->_registry);
         $pf->setPackagefile($file, $archive);
@@ -126,7 +129,7 @@ class PEAR_PackageFile_Parser_v1
                     break;
                 }
                 if ($attribs['name'] != '/') {
-                    $this->dir_names[] = $attribs['name'];
+                    $this->dir_names[] = str_replace('\\', '/', $attribs['name']);
                 }
                 if (isset($attribs['baseinstalldir'])) {
                     $this->dir_install = $attribs['baseinstalldir'];
@@ -143,10 +146,10 @@ class PEAR_PackageFile_Parser_v1
                     $path = '';
                     if (count($this->dir_names)) {
                         foreach ($this->dir_names as $dir) {
-                            $path .= $dir . DIRECTORY_SEPARATOR;
+                            $path .= $dir . '/';
                         }
                     }
-                    $path .= $attribs['name'];
+                    $path .= str_replace('\\', '/', $attribs['name']);
                     unset($attribs['name']);
                     $this->current_path = $path;
                     $this->filelist[$path] = $attribs;
