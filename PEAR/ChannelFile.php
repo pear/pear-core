@@ -478,7 +478,7 @@ class PEAR_ChannelFile {
             $ret .= $this->_makeSoapXml($channelInfo['servers']['primary']['soap'], '   ');
         }
         $ret .= "  </primary>\n";
-        if (isset($channelInfo['mirror'])) {
+        if (isset($channelInfo['servers']['mirror'])) {
             $ret .= $this->_makeMirrorsXml($channelInfo);
         }
         $ret .= " </servers>\n";
@@ -537,10 +537,10 @@ class PEAR_ChannelFile {
     function _makeMirrorsXml($channelInfo)
     {
         $ret = "";
-        if (!isset($channelInfo['mirror'][0])) {
-            $channelInfo['mirror'] = array($channelInfo['mirror']);
+        if (!isset($channelInfo['servers']['mirror'][0])) {
+            $channelInfo['servers']['mirror'] = array($channelInfo['servers']['mirror']);
         }
-        foreach ($channelInfo['mirror'] as $mirror) {
+        foreach ($channelInfo['servers']['mirror'] as $mirror) {
             $ret .= '  <mirror host="' . $mirror['attribs']['host'] . '"';
             if (isset($mirror['attribs']['port'])) {
                 $ret .= ' port="' . $mirror['attribs']['port'] . '"';
