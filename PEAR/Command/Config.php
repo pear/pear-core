@@ -227,6 +227,9 @@ and uninstall).
                 return $this->raiseError('Channel "' . $params[1] . '" does not exist');
             }
         }
+        if (count($params) == 2) {
+            array_push($params, 'user');
+        }
         array_push($params, $channel);
         if (!call_user_func_array(array(&$this->config, 'set'), $params))
         {
@@ -238,6 +241,7 @@ and uninstall).
         if ($failmsg) {
             return $this->raiseError($failmsg);
         }
+        $this->ui->outputData('config-set succeeded', $command);
         return true;
     }
 
