@@ -1129,7 +1129,7 @@ class PEAR_PackageFile_v1
 
     function &getDefaultGenerator()
     {
-        $a = new PEAR_PackageFile_Generator_v1($this);
+        $a = &new PEAR_PackageFile_Generator_v1($this);
         return $a;
     }
 
