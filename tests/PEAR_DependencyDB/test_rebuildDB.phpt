@@ -859,17 +859,17 @@ $phpunit->assertEquals(array (
         0 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'php_compatinfo',
+          'package' => 'pear',
         ),
         1 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'pear',
+          'package' => 'peartests',
         ),
         2 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'peartests',
+          'package' => 'php_compatinfo',
         ),
       ),
       'console_table' => 
@@ -901,17 +901,17 @@ $phpunit->assertEquals(array (
         0 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'liveuser',
+          'package' => 'db_dataobject',
         ),
         1 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'log',
+          'package' => 'liveuser',
         ),
         2 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'db_dataobject',
+          'package' => 'log',
         ),
       ),
       'db_dataobject' => 
@@ -919,7 +919,7 @@ $phpunit->assertEquals(array (
         0 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'pear_server',
+          'package' => 'chiara',
         ),
         1 => 
         array (
@@ -929,7 +929,7 @@ $phpunit->assertEquals(array (
         2 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'chiara',
+          'package' => 'pear_server',
         ),
       ),
       'error_raise' => 
@@ -953,17 +953,17 @@ $phpunit->assertEquals(array (
         0 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'html_table',
+          'package' => 'html_css',
         ),
         1 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'html_css',
+          'package' => 'html_quickform',
         ),
         2 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'html_quickform',
+          'package' => 'html_table',
         ),
       ),
       'html_javascript' => 
@@ -979,17 +979,17 @@ $phpunit->assertEquals(array (
         0 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'pear_server',
+          'package' => 'db_dataobject_formbuilder',
         ),
         1 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'db_dataobject_formbuilder',
+          'package' => 'html_quickform_controller',
         ),
         2 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'html_quickform_controller',
+          'package' => 'pear_server',
         ),
       ),
       'html_template_it' => 
@@ -1113,57 +1113,57 @@ $phpunit->assertEquals(array (
         0 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'xml_util',
+          'package' => 'db',
         ),
         1 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'pear_info',
+          'package' => 'liveuser',
         ),
         2 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'liveuser',
+          'package' => 'mdb2',
         ),
         3 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'php_parser',
+          'package' => 'pear',
         ),
         4 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'db',
+          'package' => 'peartests',
         ),
         5 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'xml_parser',
+          'package' => 'pear_info',
         ),
         6 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'mdb2',
+          'package' => 'pear_packagefilemanager',
         ),
         7 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'pear',
+          'package' => 'php_parser',
         ),
         8 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'xml_serializer',
+          'package' => 'xml_parser',
         ),
         9 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'peartests',
+          'package' => 'xml_serializer',
         ),
         10 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'pear_packagefilemanager',
+          'package' => 'xml_util',
         ),
       ),
       'php_compatinfo' => 
@@ -1208,17 +1208,17 @@ $phpunit->assertEquals(array (
         0 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'xml_tree',
+          'package' => 'mdb2',
         ),
         1 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'mdb2',
+          'package' => 'xml_serializer',
         ),
         2 => 
         array (
           'channel' => 'pear.php.net',
-          'package' => 'xml_serializer',
+          'package' => 'xml_tree',
         ),
       ),
       'xml_rpc' => 
