@@ -10,10 +10,9 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(E_ALL);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$e = $command->run('list', array('allchannels' => true), array());
-$phpunit->showall();
-$phpunit->assertEquals(array (
-  0 => 
+$reg = &$config->getRegistry();
+$workingcopy = array (
+  'pear.php.net' => 
   array (
     'info' => 
     array (
@@ -29,7 +28,7 @@ $phpunit->assertEquals(array (
     ),
     'cmd' => 'list',
   ),
-  1 => 
+  '__uri' => 
   array (
     'info' => 
     array (
@@ -45,7 +44,13 @@ $phpunit->assertEquals(array (
     ),
     'cmd' => 'list',
   ),
-), $fakelog->getLog(), 'no packages installed');
+);
+$actual = array();
+foreach ($reg->listChannels() as $chan) {
+    $actual[] = $workingcopy[$chan];
+}
+$e = $command->run('list', array('allchannels' => true), array());
+$phpunit->assertEquals($actual, $fakelog->getLog(), 'no packages installed');
 
 $reg = &$config->getRegistry();
 $pkg = &new PEAR_PackageFile($config);
@@ -65,9 +70,8 @@ $info = $pkg->fromPackageFile(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     DIRECTORY_SEPARATOR . 'packagefiles' . DIRECTORY_SEPARATOR . 'package-Console_Getopt.xml',
     PEAR_VALIDATE_NORMAL);
 $reg->addPackage2($info);
-$e = $command->run('list', array('allchannels' => true), array());
-$phpunit->assertEquals(array (
-  0 => 
+$workingcopy = array (
+  'gronk' => 
   array (
     'info' => 
     array (
@@ -91,7 +95,7 @@ $phpunit->assertEquals(array (
     ),
     'cmd' => 'list',
   ),
-  1 => 
+  'pear.php.net' => 
   array (
     'info' => 
     array (
@@ -121,7 +125,7 @@ $phpunit->assertEquals(array (
     ),
     'cmd' => 'list',
   ),
-  2 => 
+  '__uri' => 
   array (
     'info' => 
     array (
@@ -137,7 +141,13 @@ $phpunit->assertEquals(array (
     ),
     'cmd' => 'list',
   ),
-), $fakelog->getLog(), 'installed');
+);
+$actual = array();
+foreach ($reg->listChannels() as $chan) {
+    $actual[] = $workingcopy[$chan];
+}
+$e = $command->run('list', array('allchannels' => true), array());
+$phpunit->assertEquals($actual, $fakelog->getLog(), 'installed');
 echo 'tests done';
 ?>
 --EXPECT--
