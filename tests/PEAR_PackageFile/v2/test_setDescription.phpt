@@ -16,6 +16,8 @@ $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $pf->flattenFilelist();
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
+$pfa = &$pf->getRW();
+$pf = &$pfa;
 $phpunit->assertEquals('test', $pf->getDescription(), 'pre-set');
 $pf->setDescription('hello');
 $phpunit->assertEquals('hello', $pf->getDescription(), 'set failed');

@@ -11,7 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 require_once 'PEAR/PackageFile/v1.php';
 require_once 'PEAR/PackageFile/v2.php';
-$pf1 = new PEAR_PackageFile_v2;
+$pf1 = new PEAR_PackageFile_v2_rw;
 $pf1->setPackage('uberparent');
 $pf1->setChannel('pear.php.net');
 $pf1->addPackageDepWithChannel('required', 'indirect', 'pear.php.net');

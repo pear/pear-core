@@ -13,7 +13,7 @@ require_once 'PEAR/PackageFile/v1.php';
 $dep = &new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_DOWNLOADING);
 $phpunit->assertNoErrors('create 1');
-$package = new PEAR_PackageFile_v2;
+$package = new PEAR_PackageFile_v2_rw;
 $package->setPackage('foo');
 $package->setChannel('pear.php.net');
 $package->setSummary('foo');
@@ -66,7 +66,7 @@ $phpunit->assertNoErrors('recommended works');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'recommended works log');
 $phpunit->assertTrue($result, 'recommended works');
 
-$package = new PEAR_PackageFile_v2;
+$package = new PEAR_PackageFile_v2_rw;
 $package->setPackage('foo');
 $package->setChannel('pear.php.net');
 $package->setSummary('foo');

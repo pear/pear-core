@@ -51,7 +51,7 @@ $phpunit->assertTrue(isset($contents['_lastmodified']), '_lastmodified not set p
 unset($contents['_lastmodified']);
 $phpunit->assertEquals($pf->getArray(), $contents, 'pf1 file saved');
 
-$pf2 = new PEAR_PackageFile_v2;
+$pf2 = new PEAR_PackageFile_v2_rw;
 $pf2->setConfig($config);
 $pf2->setPackageType('php');
 $pf2->setPackage('foo');
@@ -154,7 +154,7 @@ $phpunit->assertEquals(array (
   ),
 ), $contents, 'filemap');
 
-$pf2 = new PEAR_PackageFile_v2;
+$pf2 = new PEAR_PackageFile_v2_rw;
 $pf2->addDependencyGroup('flong', 'flong');
 $pf2->addGroupPackageDepWithChannel('package', 'flong', 'foop', 'pear.php.net');
 $pf2->addGroupPackageDepWithChannel('subpackage', 'flong', 'foo', 'grob');
@@ -166,7 +166,7 @@ $phpunit->assertEquals('foop', $ret[0]->getPackage(), 'package foop');
 $phpunit->assertEquals('foo', $ret[1]->getPackage(), 'package foo');
 
 
-$pf2 = new PEAR_PackageFile_v2;
+$pf2 = new PEAR_PackageFile_v2_rw;
 $pf2->addDependencyGroup('flong', 'flong');
 $pf2->addGroupPackageDepWithChannel('package', 'flong', 'foop', 'pear.php.net');
 $pf2->addGroupPackageDepWithURI('subpackage', 'flong', 'meme', 'http://example.com');
@@ -175,7 +175,7 @@ $phpunit->assertEquals(1, count($ret), 'count($ret) 2');
 $phpunit->assertIsa('PEAR_PackageFile_v1', $ret[0], '$ret[0]');
 $phpunit->assertEquals('foop', $ret[0]->getPackage(), 'package foop');
 
-$pf2 = new PEAR_PackageFile_v2;
+$pf2 = new PEAR_PackageFile_v2_rw;
 $pf2->addDependencyGroup('flong', 'flong');
 $pf2->addGroupPackageDepWithChannel('package', 'flong', 'jorp', 'pear.php.net');
 $pf2->addGroupPackageDepWithURI('subpackage', 'flong', 'meme', 'http://example.com');

@@ -13,6 +13,8 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'Parser'. DIRECTORY_SEPARATOR .
     'test_basicparse'. DIRECTORY_SEPARATOR . 'package2.xml';
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
+$pfa = &$pf->getRW();
+$pf = &$pfa;
 $pf->flattenFilelist();
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
@@ -49,7 +51,7 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'packaging validate full log');
 $phpunit->assertNoErrors('after validation');
-$pf2 = new PEAR_PackageFile_v2;
+$pf2 = new PEAR_PackageFile_v2_rw;
 $pf2->setPackage('bye');
 $phpunit->assertEquals('bye', $pf2->getName(), 'set alias failed 2');
 $phpunit->assertEquals('bye', $pf2->getPackage(), 'set failed 2');

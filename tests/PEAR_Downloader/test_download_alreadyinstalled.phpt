@@ -13,7 +13,7 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'test-1.0.tgz';
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.0.tgz', $pathtopackagexml);
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
-    array(array('package' => 'test', 'channel' => 'pear.php.net'), 'stable'),
+    array(array('package' => 'test', 'channel' => 'pear.php.net'), 'stable', '1.0'),
     array('version' => '1.0',
           'info' =>
           '<?xml version="1.0" encoding="ISO-8859-1" ?>

@@ -49,6 +49,8 @@ function assertValidation(&$pf)
 }
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
+$pfa = &$pf->getRW();
+$pf = &$pfa;
 $phpunit->assertEquals(array (
   0 => 
   array (

@@ -56,7 +56,7 @@ $phpunit->assertTrue(isset($contents['_lastmodified']), '_lastmodified not set p
 unset($contents['_lastmodified']);
 $phpunit->assertEquals($pf->getArray(), $contents, 'pf1 file saved');
 
-$pf2 = new PEAR_PackageFile_v2;
+$pf2 = new PEAR_PackageFile_v2_rw;
 $pf2->setConfig($config);
 $pf2->setPackageType('php');
 $pf2->setPackage('foo');
@@ -108,7 +108,7 @@ $phpunit->assertTrue($ret, 'delete');
 $ret = $reg->addPackage2($pf2);
 $phpunit->assertTrue($ret, 'add pf2');
 
-$pf3 = new PEAR_PackageFile_v2;
+$pf3 = new PEAR_PackageFile_v2_rw;
 $pf3->setConfig($config);
 $pf3->setPackageType('php');
 $pf3->setPackage('foo');

@@ -95,9 +95,9 @@ $phpunit->assertEquals(array (
           array (
             'attribs' => 
             array (
-              'version' => '1.0',
+              'version' => '1.1',
             ),
-            '_content' => 'package.getDepDownloadURL',
+            '_content' => 'package.getDownloadURL',
           ),
           6 => 
           array (
@@ -105,9 +105,25 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.search',
+            '_content' => 'package.getDepDownloadURL',
           ),
           7 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.1',
+            ),
+            '_content' => 'package.getDepDownloadURL',
+          ),
+          8 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.search',
+          ),
+          9 => 
           array (
             'attribs' => 
             array (
@@ -176,9 +192,9 @@ $phpunit->assertEquals(array (
           array (
             'attribs' => 
             array (
-              'version' => '1.0',
+              'version' => '1.1',
             ),
-            '_content' => 'package.getDepDownloadURL',
+            '_content' => 'package.getDownloadURL',
           ),
           6 => 
           array (
@@ -186,9 +202,25 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.search',
+            '_content' => 'package.getDepDownloadURL',
           ),
           7 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.1',
+            ),
+            '_content' => 'package.getDepDownloadURL',
+          ),
+          8 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.search',
+          ),
+          9 => 
           array (
             'attribs' => 
             array (
@@ -257,9 +289,9 @@ $phpunit->assertEquals(array (
           array (
             'attribs' => 
             array (
-              'version' => '1.0',
+              'version' => '1.1',
             ),
-            '_content' => 'package.getDepDownloadURL',
+            '_content' => 'package.getDownloadURL',
           ),
           6 => 
           array (
@@ -267,9 +299,25 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.search',
+            '_content' => 'package.getDepDownloadURL',
           ),
           7 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.1',
+            ),
+            '_content' => 'package.getDepDownloadURL',
+          ),
+          8 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.search',
+          ),
+          9 => 
           array (
             'attribs' => 
             array (

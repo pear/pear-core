@@ -14,10 +14,12 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_basicparse'. DIRECTORY_SEPARATOR . 'package2.xml';
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $pf->flattenFilelist();
+$pfa = &$pf->getRW();
+$pf = &$pfa;
 
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
-$pf2 = new PEAR_PackageFile_v2;
+$pf2 = new PEAR_PackageFile_v2_rw;
 $pf2->setConfig($config);
 $pf2->setPackage('frong');
 $pf2->setChannel('glook');

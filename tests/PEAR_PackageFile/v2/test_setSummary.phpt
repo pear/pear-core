@@ -13,6 +13,8 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'Parser'. DIRECTORY_SEPARATOR .
     'test_basicparse'. DIRECTORY_SEPARATOR . 'package2.xml';
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
+$pfa = &$pf->getRW();
+$pf = &$pfa;
 $pf->flattenFilelist();
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');

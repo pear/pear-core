@@ -9,7 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pf2 = new PEAR_PackageFile_v2;
+$pf2 = new PEAR_PackageFile_v2_rw;
 $a = $pf2->setPackageType('php');
 $phpunit->assertTrue($a, 'first try');
 $phpunit->assertFalse($pf2->isExtension('blah'), 'php type');

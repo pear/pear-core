@@ -24,6 +24,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
     'channel' => 'pear.php.net',
   ),
   1 => 'stable',
+  2 => '1.0.3',
 ), array(
     'version' => '1.0.4',
     'info' =>

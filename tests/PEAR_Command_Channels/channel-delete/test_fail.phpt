@@ -45,7 +45,7 @@ $ch->setName('fake');
 $ch->setSummary('fake');
 $ch->setDefaultPEARProtocols();
 $reg->addChannel($ch);
-$pf = new PEAR_PackageFile_v2;
+$pf = new PEAR_PackageFile_v2_rw;
 $pf->setConfig($config);
 $pf->setPackage('foo');
 $pf->setChannel('fake');

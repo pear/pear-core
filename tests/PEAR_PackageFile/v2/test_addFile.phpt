@@ -15,6 +15,8 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
+$pfa = &$pf->getRW();
+$pf = &$pfa;
 $pf->clearContents();
 $pf->setPackageType('php');
 $pf->addFile('foo\\test/me', 'file.php', array('role' => 'php'));

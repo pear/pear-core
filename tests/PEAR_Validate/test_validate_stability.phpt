@@ -310,6 +310,8 @@ Other:
   </release>
  </changelog>
 </package>', 'package2.xml');
+$a = &$pf->getRW();
+$pf = &$a;
 $phpunit->assertNoErrors('parse');
 $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('validate');

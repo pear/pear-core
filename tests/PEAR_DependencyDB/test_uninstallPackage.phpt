@@ -53,7 +53,7 @@ $ch->setDefaultPEARProtocols();
 $reg = &$config->getRegistry();
 $reg->addChannel($ch);
 
-$pf2 = new PEAR_PackageFile_v2;
+$pf2 = new PEAR_PackageFile_v2_rw;
 $pf2->setConfig($config);
 $pf2->setAPIStability('stable');
 $pf2->setAPIVersion('1.0.0');

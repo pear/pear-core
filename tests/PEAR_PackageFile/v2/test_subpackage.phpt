@@ -13,11 +13,13 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'Parser'. DIRECTORY_SEPARATOR .
     'test_basicparse'. DIRECTORY_SEPARATOR . 'package2.xml';
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
+$pfa = &$pf->getRW();
+$pf = &$pfa;
 $pf->flattenFilelist();
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
 $phpunit->assertEquals('pear.php.net', $pf->getChannel(), 'pre-set');
-$pf2 = new PEAR_PackageFile_v2;
+$pf2 = new PEAR_PackageFile_v2_rw;
 $pf2->setConfig($config);
 $pf2->addSubpackageDepWithChannel('required', 'foo', 'blah');
 $phpunit->assertFalse($pf2->isSubpackage($pf), 'blah/foo -> pear.php.net/PEAR');
