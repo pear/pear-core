@@ -140,7 +140,7 @@ List the files in an installed package.
 
     function doList($command, $options, $params)
     {
-        $reg = new PEAR_Registry($this->config->get('php_dir'));
+        $reg = &$this->config->getRegistry();
         $registered = $reg->getChannels();
         usort($registered, array(&$this, '_sortchannels'));
         $i = $j = 0;
@@ -163,12 +163,12 @@ List the files in an installed package.
     
     function doUpdateAll($command, $options, $params)
     {
-        $reg = new PEAR_Registry($this->config->get('php_dir'));
+        $reg = &$this->config->getRegistry();
         $chan = $this->config->get('default_channel');
         if ($chan != 'pear.php.net') {
             $this->ui->outputData('WARNING: default channel is not pear.php.net');
         }
-        $remote = &new PEAR_Remote($this->config, $reg);
+        $remote = &$this->config->getRemote();
         $channels = $remote->call('channel.listAll');
         if (PEAR::isError($channels)) {
             return $channels;
@@ -351,7 +351,7 @@ List the files in an installed package.
         if (sizeof($params) != 1) {
             return $this->raiseError('No Channel Specified');
         }
-        $reg = new PEAR_Registry($this->config->get('php_dir'));
+        $reg = &$this->config->getRegistry();
         if (($channel = $reg->channelName($params[0])) == 'pear.php.net') {
             return $this->raiseError('Cannot delete the pear.php.net channel');
         }
@@ -402,16 +402,18 @@ List the files in an installed package.
                 return $this->raiseError('Invalid channel.xml file');
             }
         }
-        $reg = new PEAR_Registry($this->config->get('php_dir'));
+        $reg = &$this->config->getRegistry();
         if ($reg->channelExists($channel->getName())) {
-            return $this->raiseError('Error: Channel `' . $channel->getName() . "' exists, use channel-update to update entry");
+            return $this->raiseError('Error: Channel `' . $channel->getName() .
+                "' exists, use channel-update to update entry");
         }
         $ret = $reg->addChannel($channel);
         if (PEAR::isError($ret)) {
             return $ret;
         }
         if (!$ret) {
-            return $this->raiseError("Adding Channel `" . $channel->getName() . "' to registry failed");
+            return $this->raiseError("Adding Channel `" . $channel->getName() .
+                "' to registry failed");
         }
         $this->config->setChannels($reg->listChannels());
         $this->config->writeConfigFile();
@@ -420,7 +422,7 @@ List the files in an installed package.
 
     function doUpdate($command, $options, $params)
     {
-        $reg = &new PEAR_Registry($this->config->get('php_dir'));
+        $reg = &$this->config->getRegistry();
         if (sizeof($params) != 1) {
             return $this->raiseError("No channel file specified");
         }
@@ -430,7 +432,7 @@ List the files in an installed package.
             $this->ui->outputData('Retrieving channel.xml from remote server');
             $chan = $this->config->get('default_channel');
             $this->config->set('default_channel', strtolower($params[0]));
-            $remote = &new PEAR_Remote($this->config);
+            $remote = &$this->config->getRemote();
             // if force is specified, use a timestamp of "1" to force retrieval
             $lastmodified = isset($options['force']) ? 1 : $c->lastModified();
             $contents = $remote->call('channel.update', $lastmodified);
@@ -499,7 +501,7 @@ List the files in an installed package.
 
     function doAlias($command, $options, $params)
     {
-        $reg = &new PEAR_Registry($this->config->get('php_dir'));
+        $reg = &$this->config->getRegistry();
         if (sizeof($params) == 1) {
             return $this->raiseError("No channel alias specified");
         }
@@ -512,7 +514,7 @@ List the files in an installed package.
 
     function doDiscover($command, $options, $params)
     {
-        $reg = &new PEAR_Registry($this->config->get('php_dir'));
+        $reg = &$this->config->getRegistry();
         if (sizeof($params) != 1) {
             return $this->raiseError("No channel server specified");
         }
