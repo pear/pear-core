@@ -340,7 +340,7 @@ $phpunit->assertNoErrors('parse');
 $re = $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v1',
-        'message' => 'Dependency 1 is not a rel="has" dependency, and has no version'),
+        'message' => 'Dependency 1 is not a rel="has" or rel="not" dependency, and has no version'),
 ), 'fourth test');
 $phpunit->assertNotTrue($re, 'result 4');
 

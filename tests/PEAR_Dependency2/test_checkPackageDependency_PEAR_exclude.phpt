@@ -38,7 +38,7 @@ $result = $dep->validatePackageDependency(
     ), true, array());
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine is not compatible with installed package "channel://pear.php.net/foo" version 1.0')
+          'message' => 'pear/mine is not compatible with installed package "pear/foo" version 1.0')
 ), 'exclude 1');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'exclude 1 log');
 $phpunit->assertIsa('PEAR_Error', $result, 'exclude 1');
@@ -53,7 +53,7 @@ $result = $dep->validatePackageDependency(
     ), true, array());
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine is not compatible with installed package "channel://pear.php.net/foo" version 1.0')
+          'message' => 'pear/mine is not compatible with installed package "pear/foo" version 1.0')
 ), 'exclude 1 multi');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'exclude 1 log multi');
 $phpunit->assertIsa('PEAR_Error', $result, 'exclude 1 multi');
@@ -73,7 +73,7 @@ $result = $dep->validatePackageDependency(
 $phpunit->showall();
 $phpunit->assertNoErrors('exclude 2 nodeps');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'exclude 2 log nodeps');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with installed package "channel://pear.php.net/foo" version 1.0'), $result, 'exclude 2 nodeps');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with installed package "pear/foo" version 1.0'), $result, 'exclude 2 nodeps');
 
 // force
 $dep = &new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
@@ -90,7 +90,7 @@ $result = $dep->validatePackageDependency(
 $phpunit->showall();
 $phpunit->assertNoErrors('exclude 2 force');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'exclude 2 log force');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with installed package "channel://pear.php.net/foo" version 1.0'), $result, 'exclude 2 force');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with installed package "pear/foo" version 1.0'), $result, 'exclude 2 force');
 
 echo 'tests done';
 ?>

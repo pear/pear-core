@@ -21,7 +21,7 @@ $result = $dep->validatePearinstallerDependency(
     ));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine requires PEAR Installer (version >= 1.3.0), installed version is 1.2.0')
+          'message' => 'pear/mine requires PEAR Installer (version >= 1.3.0), installed version is 1.2.0')
 ), 'min');
 $phpunit->assertIsa('PEAR_Error', $result, 'min');
 
@@ -36,7 +36,7 @@ $result = $dep->validatePearinstallerDependency(
         'min' => '1.3.0',
     ));
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires PEAR Installer (version >= 1.3.0), installed version is 1.2.0'), $result, 'min nodeps');
+  0 => 'warning: pear/mine requires PEAR Installer (version >= 1.3.0), installed version is 1.2.0'), $result, 'min nodeps');
 
 /****************************** force *************************************/
 $dep = &new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
@@ -49,7 +49,7 @@ $result = $dep->validatePearinstallerDependency(
         'min' => '1.3.0',
     ));
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires PEAR Installer (version >= 1.3.0), installed version is 1.2.0'), $result, 'min force');
+  0 => 'warning: pear/mine requires PEAR Installer (version >= 1.3.0), installed version is 1.2.0'), $result, 'min force');
 echo 'tests done';
 ?>
 --EXPECT--

@@ -19,7 +19,7 @@ $dp = &newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('test');
 $phpunit->assertErrors(array('package' => 'PEAR_Error', 'message' =>
-    'No releases for package "channel://pear.php.net/test" exist, cannot download "test"'),
+    'No releases for package "pear/test" exist, cannot download "test"'),
     'after initialize');
 $phpunit->assertEquals(array (
   0 => 

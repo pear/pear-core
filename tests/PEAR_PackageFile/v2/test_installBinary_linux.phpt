@@ -144,7 +144,7 @@ $phpunit->assertEquals(array (
   1 =>
   array (
     0 => 0,
-    1 => 'Can only install channel://grob/foo_win-1.1.0 on Windows',
+    1 => 'Can only install grob/foo_win on Windows',
   ),
   2 => 
   array (
@@ -213,7 +213,7 @@ $phpunit->assertEquals(array (
   14 => 
   array (
     0 => 0,
-    1 => 'Download and install of binary extension "channel://grob/foo_linux" successful',
+    1 => 'Download and install of binary extension "grob/foo_linux" successful',
   ),
 ), $fakelog->getLog(), 'log linux');
 $phpunit->assertEquals(array (

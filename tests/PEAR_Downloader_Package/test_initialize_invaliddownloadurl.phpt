@@ -19,7 +19,7 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
           'message' => 'Could not download from "http://www.example.com/test-1.1.tgz"'),
     array('package' => 'PEAR_Error',
-          'message' => 'Invalid package file'),
+          'message' => 'Invalid or missing remote package file'),
 ), 'expected errors');
 $phpunit->assertEquals(array (
   0 => 
@@ -49,7 +49,7 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
           'message' => 'Download of "http://www.example.com/test-1.0.tgz" succeeded, but it is not a valid package archive'),
     array('package' => 'PEAR_Error',
-          'message' => 'Invalid package file'),
+          'message' => 'Invalid or missing remote package file'),
 ), 'expected errors');
 $phpunit->assertEquals(array (
   0 => 

@@ -20,7 +20,7 @@ $result = $dep->validatePackageDependency(
     ), true, array());
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine requires package "http://www.example.com/foo-1.0.tgz"')
+          'message' => 'pear/mine requires package "http://www.example.com/foo-1.0.tgz"')
 ), 'min');
 $phpunit->assertIsa('PEAR_Error', $result, 'required');
 
@@ -30,7 +30,7 @@ $result = $dep->validatePackageDependency(
         'name' => 'foo',
         'uri' => 'http://www.example.com/foo-1.0.tgz',
     ), false, array());
-$phpunit->assertEquals(array('channel://pear.php.net/mine can optionally use package "http://www.example.com/foo-1.0.tgz"'), $result, 'optional');
+$phpunit->assertEquals(array('pear/mine can optionally use package "http://www.example.com/foo-1.0.tgz"'), $result, 'optional');
 
 /****************************** nodeps *************************************/
 $dep = &new test_PEAR_Dependency2($config, array('nodeps' => true), array('channel' => 'pear.php.net',
@@ -43,7 +43,7 @@ $result = $dep->validatePackageDependency(
     ), true, array());
 $phpunit->assertNoErrors('min nodeps');
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires package "http://www.example.com/foo-1.0.tgz"',
+  0 => 'warning: pear/mine requires package "http://www.example.com/foo-1.0.tgz"',
 ), $result, 'nodeps required');
 
 // optional
@@ -52,7 +52,7 @@ $result = $dep->validatePackageDependency(
         'name' => 'foo',
         'uri' => 'http://www.example.com/foo-1.0.tgz',
     ), false, array());
-$phpunit->assertEquals(array('channel://pear.php.net/mine can optionally use package "http://www.example.com/foo-1.0.tgz"'), $result, 'nodeps optional');
+$phpunit->assertEquals(array('pear/mine can optionally use package "http://www.example.com/foo-1.0.tgz"'), $result, 'nodeps optional');
 
 /****************************** force *************************************/
 $dep = &new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
@@ -65,7 +65,7 @@ $result = $dep->validatePackageDependency(
         'name' => 'foo',
         'uri' => 'http://www.example.com/foo-1.0.tgz',
     ), true, array());
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine requires package "http://www.example.com/foo-1.0.tgz"'), $result, 'force required');
+$phpunit->assertEquals(array('warning: pear/mine requires package "http://www.example.com/foo-1.0.tgz"'), $result, 'force required');
 
 // optional
 $result = $dep->validatePackageDependency(
@@ -73,7 +73,7 @@ $result = $dep->validatePackageDependency(
         'name' => 'foo',
         'uri' => 'http://www.example.com/foo-1.0.tgz',
     ), false, array());
-$phpunit->assertEquals(array('channel://pear.php.net/mine can optionally use package "http://www.example.com/foo-1.0.tgz"'), $result, 'force optional');
+$phpunit->assertEquals(array('pear/mine can optionally use package "http://www.example.com/foo-1.0.tgz"'), $result, 'force optional');
 echo 'tests done';
 ?>
 --EXPECT--

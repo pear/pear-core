@@ -46,7 +46,7 @@ $result = $dep->validatePackageDependency(
     ), true, array());
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine dependency package "channel://pear.php.net/foo" installed version 1.10 is not the recommended version 1.9, but may be compatible, use --force to install')
+          'message' => 'pear/mine dependency package "pear/foo" installed version 1.10 is not the recommended version 1.9, but may be compatible, use --force to install')
 ), 'recommended 1');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'recommended 1 log');
 $phpunit->assertIsa('PEAR_Error', $result, 'recommended 1');

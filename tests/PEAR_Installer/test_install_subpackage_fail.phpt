@@ -20,6 +20,8 @@ $subpackage = $pf->fromPackageFile(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     'test_install_subpackage' . DIRECTORY_SEPARATOR . 'subpackage.xml', PEAR_VALIDATE_INSTALLING);
 
 $oldpackage = new PEAR_PackageFile_v1;
+$oldpackage->setConfig($config);
+$oldpackage->setLogger($fakelog);
 $oldpackage->setPackage('foo');
 $oldpackage->setSummary('foo');
 $oldpackage->setDescription('foo');

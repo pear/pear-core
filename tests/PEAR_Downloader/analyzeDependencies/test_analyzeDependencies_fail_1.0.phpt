@@ -132,37 +132,36 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' =>
         'Cannot install, dependencies failed')
 ), 'end');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 3,
-    1 => 'Notice: package "pear.php.net/mainold" optional dependency "channel://pear.php.net/optional" will not be automatically downloaded',
+    1 => 'Notice: package "pear/mainold" optional dependency "pear/optional" will not be automatically downloaded',
   ),
   1 => 
   array (
     0 => 3,
-    1 => 'Notice: package "pear.php.net/mainold" required dependency "channel://pear.php.net/required" will not be automatically downloaded',
+    1 => 'Notice: package "pear/mainold" required dependency "pear/required" will not be automatically downloaded',
   ),
   2 => 
   array (
     0 => 1,
-    1 => 'Did not download dependencies: channel://pear.php.net/optional, channel://pear.php.net/required, use --alldeps or --onlyreqdeps to download automatically',
+    1 => 'Did not download dependencies: pear/optional, pear/required, use --alldeps or --onlyreqdeps to download automatically',
   ),
   3 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/mainold-1.1 can optionally use package "channel://pear.php.net/optional" (version >= 1.1)',
+    1 => 'pear/mainold can optionally use package "pear/optional" (version >= 1.1)',
   ),
   4 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/mainold-1.1 requires package "channel://pear.php.net/required" (version >= 1.1)',
+    1 => 'pear/mainold requires package "pear/required" (version >= 1.1)',
   ),
   5 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/mainold-1.1 requires PHP extension "foo"',
+    1 => 'pear/mainold requires PHP extension "foo"',
   ),
 ), $fakelog->getLog(), 'end log');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');
@@ -175,17 +174,17 @@ $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/mainold-1.1 can optionally use package "channel://pear.php.net/optional" (version >= 1.1)',
+    1 => 'pear/mainold can optionally use package "pear/optional" (version >= 1.1)',
   ),
   1 => 
   array (
     0 => 0,
-    1 => 'warning: channel://pear.php.net/mainold-1.1 requires package "channel://pear.php.net/required" (version >= 1.1)',
+    1 => 'warning: pear/mainold requires package "pear/required" (version >= 1.1)',
   ),
   2 => 
   array (
     0 => 0,
-    1 => 'warning: channel://pear.php.net/mainold-1.1 requires PHP extension "foo"',
+    1 => 'warning: pear/mainold requires PHP extension "foo"',
   ),
 ), $fakelog->getLog(), 'end log 2');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download 2');

@@ -23,7 +23,7 @@ $result = $dep->validateExtensionDependency(
     ));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine requires PHP extension "foo" (version >= 0.1, version <= 0.9), installed version is 1.0')
+          'message' => 'pear/mine requires PHP extension "foo" (version >= 0.1, version <= 0.9), installed version is 1.0')
 ), 'max');
 $phpunit->assertIsa('PEAR_Error', $result, 'max');
 
@@ -36,7 +36,7 @@ $result = $dep->validateExtensionDependency(
     ), false);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine requires PHP extension "foo" (version >= 0.1, version <= 0.9), installed version is 1.0')
+          'message' => 'pear/mine requires PHP extension "foo" (version >= 0.1, version <= 0.9), installed version is 1.0')
 ), 'max optional');
 $phpunit->assertIsa('PEAR_Error', $result, 'max optional');
 
@@ -53,7 +53,7 @@ $result = $dep->validateExtensionDependency(
         'max' => '0.9',
     ));
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires PHP extension "foo" (version >= 0.1, version <= 0.9), installed version is 1.0',
+  0 => 'warning: pear/mine requires PHP extension "foo" (version >= 0.1, version <= 0.9), installed version is 1.0',
 ), $result, 'max nodeps');
 
 // optional
@@ -64,7 +64,7 @@ $result = $dep->validateExtensionDependency(
         'max' => '0.9',
     ), false);
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires PHP extension "foo" (version >= 0.1, version <= 0.9), installed version is 1.0',
+  0 => 'warning: pear/mine requires PHP extension "foo" (version >= 0.1, version <= 0.9), installed version is 1.0',
 ), $result, 'max nodeps optional');
 
 /****************************** force *************************************/
@@ -80,7 +80,7 @@ $result = $dep->validateExtensionDependency(
         'max' => '0.9',
     ));
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires PHP extension "foo" (version >= 0.1, version <= 0.9), installed version is 1.0',
+  0 => 'warning: pear/mine requires PHP extension "foo" (version >= 0.1, version <= 0.9), installed version is 1.0',
 ), $result, 'max force');
 
 // optional
@@ -91,7 +91,7 @@ $result = $dep->validateExtensionDependency(
         'max' => '0.9',
     ), false);
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires PHP extension "foo" (version >= 0.1, version <= 0.9), installed version is 1.0',
+  0 => 'warning: pear/mine requires PHP extension "foo" (version >= 0.1, version <= 0.9), installed version is 1.0',
 ), $result, 'max force optional');
 echo 'tests done';
 ?>

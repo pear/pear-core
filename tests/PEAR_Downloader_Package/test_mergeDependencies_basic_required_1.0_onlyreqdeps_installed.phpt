@@ -60,6 +60,8 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
 
 require_once 'PEAR/PackageFile/v1.php';
 $v1 = new PEAR_PackageFile_v1;
+$v1->setConfig($config);
+$v1->setLogger($fakelog);
 $v1->setPackage('required');
 $v1->setSummary('required');
 $v1->setDescription('required');
@@ -83,7 +85,7 @@ $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 3,
-    1 => 'Skipping required dependency "channel://pear.php.net/required-1.1", already installed as version 1.0',
+    1 => 'Skipping required dependency "pear/required", already installed as version 1.0',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');

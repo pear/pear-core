@@ -37,7 +37,7 @@ $result = $dep->validatePackageDependency(
     ), true, array());
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine requires package "channel://pear.php.net/foo" (version >= 1.1, version <= 1.9), installed version is 1.0')
+          'message' => 'pear/mine requires package "pear/foo" (version >= 1.1, version <= 1.9), installed version is 1.0')
 ), 'min');
 $phpunit->assertIsa('PEAR_Error', $result, 'min');
 
@@ -51,7 +51,7 @@ $result = $dep->validatePackageDependency(
     ), false, array());
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine requires package "channel://pear.php.net/foo" (version >= 1.1, version <= 1.9), installed version is 1.0')
+          'message' => 'pear/mine requires package "pear/foo" (version >= 1.1, version <= 1.9), installed version is 1.0')
 ), 'min optional');
 $phpunit->assertIsa('PEAR_Error', $result, 'min optional');
 
@@ -68,7 +68,7 @@ $result = $dep->validatePackageDependency(
     ), true, array());
 $phpunit->assertNoErrors('min nodeps');
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires package "channel://pear.php.net/foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
+  0 => 'warning: pear/mine requires package "pear/foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
 ), $result, 'min nodeps');
 
 // optional
@@ -81,7 +81,7 @@ $result = $dep->validatePackageDependency(
     ), false, array());
 $phpunit->assertNoErrors('min force');
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires package "channel://pear.php.net/foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
+  0 => 'warning: pear/mine requires package "pear/foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
 ), $result, 'min nodeps optional');
 
 /****************************** force *************************************/
@@ -98,7 +98,7 @@ $result = $dep->validatePackageDependency(
         'max' => '1.9',
     ), true, array());
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires package "channel://pear.php.net/foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
+  0 => 'warning: pear/mine requires package "pear/foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
 ), $result, 'min force');
 
 // optional
@@ -110,7 +110,7 @@ $result = $dep->validatePackageDependency(
         'max' => '1.9',
     ), false, array());
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires package "channel://pear.php.net/foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
+  0 => 'warning: pear/mine requires package "pear/foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
 ), $result, 'min force optional');
 echo 'tests done';
 ?>

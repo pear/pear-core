@@ -117,7 +117,7 @@ $phpunit->assertEquals(array (
   1 => 
   array (
     0 => 0,
-    1 => 'Cannot install channel://pear.php.net/fail-1.0 on windows operating system, can only install on linux',
+    1 => 'Cannot install pear/fail on windows operating system, can only install on linux',
   ),
   2 => 
   array (
@@ -186,7 +186,7 @@ $phpunit->assertEquals(array (
   14 => 
   array (
     0 => 0,
-    1 => 'Download and install of binary extension "channel://pear.php.net/test" successful',
+    1 => 'Download and install of binary extension "pear/test" successful',
   ),
 ), $tampered, 'install');
 $phpunit->assertEquals(array (

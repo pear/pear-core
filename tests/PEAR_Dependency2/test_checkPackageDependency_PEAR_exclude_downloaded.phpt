@@ -33,7 +33,7 @@ $result = $dep->validatePackageDependency(
     ), true, $params);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine is not compatible with downloaded package "channel://pear.php.net/foo" version 1.0')
+          'message' => 'pear/mine is not compatible with downloaded package "pear/foo" version 1.0')
 ), 'exclude 1');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'exclude 1');
 $phpunit->assertIsa('PEAR_Error', $result, 'exclude 1');
@@ -52,7 +52,7 @@ $result = $dep->validatePackageDependency(
     ), true, $params);
 $phpunit->assertNoErrors('nodeps');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'nodeps log');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with downloaded package "channel://pear.php.net/foo" version 1.0'), $result, 'nodeps ret');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with downloaded package "pear/foo" version 1.0'), $result, 'nodeps ret');
 
 // force
 $dep = &new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
@@ -68,7 +68,7 @@ $result = $dep->validatePackageDependency(
     ), true, $params);
 $phpunit->assertNoErrors('force');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'force log');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with downloaded package "channel://pear.php.net/foo" version 1.0'), $result, 'force ret');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with downloaded package "pear/foo" version 1.0'), $result, 'force ret');
 
 echo 'tests done';
 ?>

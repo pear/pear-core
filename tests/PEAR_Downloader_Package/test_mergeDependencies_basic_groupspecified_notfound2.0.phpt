@@ -115,7 +115,7 @@ $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 0,
-    1 => 'Warning: package "channel://pear.php.net/main-1.0" has no dependency group named "foo"',
+    1 => 'Warning: package "pear/main" has no dependency group named "foo"',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');

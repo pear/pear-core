@@ -27,8 +27,8 @@ $dp = &newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('test-1.0');
 $phpunit->assertErrors(array('package' => 'PEAR_Error', 'message' =>
-    'Failed to download pear.php.net::test, version "1.0", ' .
-    'latest release is version 0.2.0, stability "beta", use "pear.php.net/test-0.2.0" to install'),
+    'Failed to download pear/test, version "1.0", ' .
+    'latest release is version 0.2.0, stability "beta", use "channel://pear.php.net/test-0.2.0" to install'),
     'after initialize');
 $phpunit->assertEquals(array (
   0 => 

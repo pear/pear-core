@@ -23,7 +23,7 @@ $result = $dep->validateExtensionDependency(
     ));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine requires PHP extension "foo" (version >= 1.1, version <= 1.9), installed version is 1.0')
+          'message' => 'pear/mine requires PHP extension "foo" (version >= 1.1, version <= 1.9), installed version is 1.0')
 ), 'min');
 $phpunit->assertIsa('PEAR_Error', $result, 'min');
 
@@ -36,7 +36,7 @@ $result = $dep->validateExtensionDependency(
     ), false);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine requires PHP extension "foo" (version >= 1.1, version <= 1.9), installed version is 1.0')
+          'message' => 'pear/mine requires PHP extension "foo" (version >= 1.1, version <= 1.9), installed version is 1.0')
 ), 'min optional');
 $phpunit->assertIsa('PEAR_Error', $result, 'min optional');
 
@@ -54,7 +54,7 @@ $result = $dep->validateExtensionDependency(
     ));
 $phpunit->assertNoErrors('min nodeps');
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires PHP extension "foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
+  0 => 'warning: pear/mine requires PHP extension "foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
 ), $result, 'min nodeps');
 
 // optional
@@ -66,7 +66,7 @@ $result = $dep->validateExtensionDependency(
     ), false);
 $phpunit->assertNoErrors('min force');
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires PHP extension "foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
+  0 => 'warning: pear/mine requires PHP extension "foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
 ), $result, 'min nodeps optional');
 
 /****************************** force *************************************/
@@ -82,7 +82,7 @@ $result = $dep->validateExtensionDependency(
         'max' => '1.9',
     ));
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires PHP extension "foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
+  0 => 'warning: pear/mine requires PHP extension "foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
 ), $result, 'min force');
 
 // optional
@@ -93,7 +93,7 @@ $result = $dep->validateExtensionDependency(
         'max' => '1.9',
     ), false);
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires PHP extension "foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
+  0 => 'warning: pear/mine requires PHP extension "foo" (version >= 1.1, version <= 1.9), installed version is 1.0',
 ), $result, 'min force optional');
 echo 'tests done';
 ?>

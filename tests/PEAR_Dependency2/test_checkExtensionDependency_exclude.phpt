@@ -24,7 +24,7 @@ $result = $dep->validateExtensionDependency(
     ));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine is not compatible with PHP extension "foo" version 1.0')
+          'message' => 'pear/mine is not compatible with PHP extension "foo" version 1.0')
 ), 'exclude 1');
 $phpunit->assertIsa('PEAR_Error', $result, 'exclude 1');
 
@@ -37,7 +37,7 @@ $result = $dep->validateExtensionDependency(
     ));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine is not compatible with PHP extension "foo" version 1.0')
+          'message' => 'pear/mine is not compatible with PHP extension "foo" version 1.0')
 ), 'exclude 1');
 $phpunit->assertIsa('PEAR_Error', $result, 'exclude 1');
 
@@ -51,7 +51,7 @@ $result = $dep->validateExtensionDependency(
     ), false);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine is not compatible with PHP extension "foo" version 1.0')
+          'message' => 'pear/mine is not compatible with PHP extension "foo" version 1.0')
 ), 'exclude 1');
 $phpunit->assertIsa('PEAR_Error', $result, 'exclude 1');
 
@@ -64,7 +64,7 @@ $result = $dep->validateExtensionDependency(
     ), false);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine is not compatible with PHP extension "foo" version 1.0')
+          'message' => 'pear/mine is not compatible with PHP extension "foo" version 1.0')
 ), 'exclude 1');
 $phpunit->assertIsa('PEAR_Error', $result, 'exclude 1');
 
@@ -83,7 +83,7 @@ $result = $dep->validateExtensionDependency(
         'exclude' => '1.0'
     ));
 $phpunit->assertNoErrors('nodeps exclude 1');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 1 nodeps');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 1 nodeps');
 
 $result = $dep->validateExtensionDependency(
     array(
@@ -93,7 +93,7 @@ $result = $dep->validateExtensionDependency(
         'exclude' => array('0.9', '1.0')
     ));
 $phpunit->assertNoErrors('nodeps exclude 2');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 2 nodeps');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 2 nodeps');
 
 // optional
 $result = $dep->validateExtensionDependency(
@@ -104,7 +104,7 @@ $result = $dep->validateExtensionDependency(
         'exclude' => '1.0'
     ), false);
 $phpunit->assertNoErrors('nodeps exclude 1 optional');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 1 nodeps optional');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 1 nodeps optional');
 
 $result = $dep->validateExtensionDependency(
     array(
@@ -114,7 +114,7 @@ $result = $dep->validateExtensionDependency(
         'exclude' => array('0.9', '1.0')
     ), false);
 $phpunit->assertNoErrors('nodeps exclude 2 optional');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 2 nodeps optional');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 2 nodeps optional');
 
 /************************************* force ******************************************/
 $dep = &new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
@@ -131,7 +131,7 @@ $result = $dep->validateExtensionDependency(
         'exclude' => '1.0'
     ));
 $phpunit->assertNoErrors('nodeps exclude 1');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 1 nodeps');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 1 nodeps');
 
 $result = $dep->validateExtensionDependency(
     array(
@@ -141,7 +141,7 @@ $result = $dep->validateExtensionDependency(
         'exclude' => array('0.9', '1.0')
     ));
 $phpunit->assertNoErrors('nodeps exclude 2');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 2 nodeps');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 2 nodeps');
 
 // optional
 $result = $dep->validateExtensionDependency(
@@ -152,7 +152,7 @@ $result = $dep->validateExtensionDependency(
         'exclude' => '1.0'
     ), false);
 $phpunit->assertNoErrors('nodeps exclude 1 optional');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 1 nodeps optional');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 1 nodeps optional');
 
 $result = $dep->validateExtensionDependency(
     array(
@@ -162,7 +162,7 @@ $result = $dep->validateExtensionDependency(
         'exclude' => array('0.9', '1.0')
     ), false);
 $phpunit->assertNoErrors('nodeps exclude 2 optional');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 2 nodeps optional');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 2 nodeps optional');
 echo 'tests done';
 ?>
 --EXPECT--

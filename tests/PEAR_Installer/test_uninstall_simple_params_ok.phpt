@@ -11,6 +11,8 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 require_once 'PEAR/PackageFile/v1.php';
 $package = new PEAR_PackageFile_v1;
+$package->setConfig($config);
+$package->setLogger($fakelog);
 $package->setPackage('foo');
 $package->setSummary('foo');
 $package->setDescription('foo');
