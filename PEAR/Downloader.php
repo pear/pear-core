@@ -1,26 +1,31 @@
 <?php
-//
-// +----------------------------------------------------------------------+
-// | PHP Version 5                                                        |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2004 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 3.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available through the world-wide-web at the following url:           |
-// | http://www.php.net/license/3_0.txt.                                  |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Greg Beaver <cellog@php.net>                                |
-// |          Stig Bakken <ssb@php.net>                                   |
-// |          Tomas V.V.Cox <cox@idecnet.com>                             |
-// |          Martin Jansen <mj@php.net>                                  |
-// +----------------------------------------------------------------------+
-//
-// $Id$
+/**
+ * PEAR_Downloader, the PEAR Installer's download utility class
+ *
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.0 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_0.txt.  If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category   pear
+ * @package    PEAR
+ * @author     Greg Beaver <cellog@php.net>
+ * @author     Stig Bakken <ssb@php.net>
+ * @author     Tomas V. V. Cox <cox@idecnet.com>
+ * @author     Martin Jansen <mj@php.net>
+ * @copyright  1997-2005 The PHP Group
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @version    CVS: $Id$
+ * @link       http://pear.php.net/package/PEAR
+ * @since      File available since Release 1.3.0
+ */
 
+/**
+ * Needed for constants, extending
+ */
 require_once 'PEAR/Common.php';
 
 define('PEAR_INSTALLER_OK',       1);
@@ -29,11 +34,20 @@ define('PEAR_INSTALLER_SKIPPED', -1);
 define('PEAR_INSTALLER_ERROR_NO_PREF_STATE', 2);
 
 /**
- * Administration class used to download PEAR packages and maintain the
- * installed package database.
+ * Administration class used to download anything from the internet (PEAR Packages,
+ * static URLs, xml files)
  *
- * @since PEAR 1.4
- * @author Greg Beaver <cellog@php.net>
+ * @category   pear
+ * @package    PEAR
+ * @author     Greg Beaver <cellog@php.net>
+ * @author     Stig Bakken <ssb@php.net>
+ * @author     Tomas V. V. Cox <cox@idecnet.com>
+ * @author     Martin Jansen <mj@php.net>
+ * @copyright  1997-2005 The PHP Group
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @version    Release: @package_version@
+ * @link       http://pear.php.net/package/PEAR
+ * @since      Class available since Release 1.3.0
  */
 class PEAR_Downloader extends PEAR_Common
 {
