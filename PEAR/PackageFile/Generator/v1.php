@@ -632,7 +632,7 @@ class PEAR_PackageFile_Generator_v1
     function _convertDependencies2_0(&$release, $internal = false)
     {
         $peardep = array('pearinstaller' =>
-            array('min' => '@PEAR-VER@'));
+            array('min' => '1.4.0a1')); // this is a lot safer
         $required = $optional = array();
         $release['dependencies'] = array();
         if ($this->_packagefile->hasDeps()) {
@@ -703,7 +703,7 @@ class PEAR_PackageFile_Generator_v1
         }
         if (!isset($release['dependencies']['required']['php'])) {
             $release['dependencies']['required']['php'] =
-                array('min' => phpversion(), 'max' => '6.0.0');
+                array('min' => '4.0.0', 'max' => '6.0.0');
         }
         if (!isset($release['dependencies']['required']['php']['max'])) {
             $release['dependencies']['required']['php']['max'] = '6.0.0';
