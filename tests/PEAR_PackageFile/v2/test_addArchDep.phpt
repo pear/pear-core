@@ -1,5 +1,5 @@
 --TEST--
-PEAR_PackageFile_Parser_v2->setPackage()
+PEAR_PackageFile_Parser_v2->addArchDep
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -15,12 +15,56 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
-$phpunit->assertEquals('test', $pf->getName(), 'pre-set alias');
-$phpunit->assertEquals('test', $pf->getPackage(), 'pre-set');
-$pf->setPackage('hello');
-$phpunit->assertEquals('hello', $pf->getName(), 'set alias failed');
-$phpunit->assertEquals('hello', $pf->getPackage(), 'set failed');
+$phpunit->assertEquals('pear.php.net', $pf->getChannel(), 'pre-set');
+$pf->addArchDep('windows-*');
+$phpunit->assertEquals(array (
+  'required' => 
+  array (
+    'php' => 
+    array (
+      'min' => '4.3.6',
+      'max' => '6.0.0',
+    ),
+    'pearinstaller' => 
+    array (
+      'min' => '1.4.0a1',
+    ),
+    'arch' => 
+    array (
+      'pattern' => 'windows-*',
+    ),
+  ),
+), $pf->getDeps(true), 'first');
 $result = $pf->validate(PEAR_VALIDATE_NORMAL);
+$phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log');
+$phpunit->assertNoErrors('after validation');
+$pf->addArchDep('linux|darwin', true);
+$phpunit->assertEquals(array (
+  'required' => 
+  array (
+    'php' => 
+    array (
+      'min' => '4.3.6',
+      'max' => '6.0.0',
+    ),
+    'pearinstaller' => 
+    array (
+      'min' => '1.4.0a1',
+    ),
+    'arch' => 
+    array (
+      0 => 
+      array (
+        'pattern' => 'windows-*',
+      ),
+      1 => 
+      array (
+        'pattern' => 'linux|darwin',
+        'conflicts' => 'yes',
+      ),
+    ),
+  ),
+), $pf->getDeps(true), 'second');
 $result = $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log');
 $phpunit->assertNoErrors('after validation');
@@ -50,10 +94,6 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'packaging validate full log');
 $phpunit->assertNoErrors('after validation');
-$pf2 = new PEAR_PackageFile_v2;
-$pf2->setPackage('bye');
-$phpunit->assertEquals('bye', $pf2->getName(), 'set alias failed 2');
-$phpunit->assertEquals('bye', $pf2->getPackage(), 'set failed 2');
 echo 'tests done';
 ?>
 --EXPECT--
