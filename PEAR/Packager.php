@@ -38,23 +38,6 @@ class PEAR_Packager extends PEAR_Common
      * @var PEAR_Registry
      */
     var $_registry;
-    // {{{ constructor
-
-    function PEAR_Packager()
-    {
-        parent::PEAR_Common();
-    }
-
-    // }}}
-    // {{{ destructor
-
-    function _PEAR_Packager()
-    {
-        parent::_PEAR_Common();
-    }
-
-    // }}}
-
     // {{{ package()
 
     function package($pkgfile = null, $compress = true, $pkg2 = null)
@@ -69,8 +52,10 @@ class PEAR_Packager extends PEAR_Common
         $main = &$pf;
         PEAR::staticPopErrorHandling();
         if (PEAR::isError($pf)) {
-            foreach ($pf->getUserInfo() as $error) {
-                $this->log(0, 'Error: ' . $error['message']);
+            if (is_array($pf->getUserInfo())) {
+                foreach ($pf->getUserInfo() as $error) {
+                    $this->log(0, 'Error: ' . $error['message']);
+                }
             }
             $this->log(0, $pf->getMessage());
             return $this->raiseError("Cannot package, errors in package file");
@@ -87,8 +72,10 @@ class PEAR_Packager extends PEAR_Common
             $pf2 = &$pkg->fromPackageFile($pkg2, PEAR_VALIDATE_NORMAL);
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($pf2)) {
-                foreach ($pf2->getUserInfo() as $error) {
-                    $this->log(0, 'Error: ' . $error['message']);
+                if (is_array($pf2->getUserInfo())) {
+                    foreach ($pf2->getUserInfo() as $error) {
+                        $this->log(0, 'Error: ' . $error['message']);
+                    }
                 }
                 $this->log(0, $pf2->getMessage());
                 return $this->raiseError("Cannot package, errors in second package file");
@@ -126,6 +113,7 @@ class PEAR_Packager extends PEAR_Common
         }
         if ($pkg2) {
             $other->setLogger($this);
+            $a = false;
             if (!$other->validate(PEAR_VALIDATE_NORMAL) || $a = !$main->isEquivalent($other)) {
                 foreach ($other->getValidationWarnings() as $warning) {
                     $this->log(0, 'Error: ' . $warning['message']);
@@ -142,9 +130,6 @@ class PEAR_Packager extends PEAR_Common
                     $this->log(1, 'Warning: ' . $warning['message']);
                 }
             }
-        }
-
-        if ($pkg2) {
             $gen = &$main->getDefaultGenerator();
             $tgzfile = $gen->toTgz2($this, $other, $compress);
             if (PEAR::isError($tgzfile)) {
@@ -161,11 +146,12 @@ class PEAR_Packager extends PEAR_Common
                 $this->log(1, "Tag the released code with `pear cvstag $pkgfile'");
                 $this->log(1, "(or set the CVS tag $cvstag by hand)");
             }
-        } else {
+        } else { // this branch is executed for single packagefile packaging
             $gen = &$pf->getDefaultGenerator();
             $tgzfile = $gen->toTgz($this, $compress);
             if (PEAR::isError($tgzfile)) {
-                return $tgzfile;
+                $this->log(0, $tgzfile->getMessage());
+                return $this->raiseError("Cannot package, errors in package");
             }
             $dest_package = basename($tgzfile);
             $pkgdir = dirname($pkgfile);
