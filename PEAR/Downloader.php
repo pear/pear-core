@@ -541,53 +541,6 @@ class PEAR_Downloader extends PEAR_Common
     }
 
     // }}}
-    // {{{ extractDownloadFileName($pkgfile, &$version)
-
-    function extractDownloadFileName($pkgfile, &$version)
-    {
-        if (!isset($this->_registry)) {
-            $this->_registry = &new PEAR_Registry($this->config->get('php_dir'));
-        }
-        if (@is_file($pkgfile)) {
-            return $pkgfile;
-        }
-        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-        $parsed = $this->_registry->parsePackageName($pkgfile);
-        PEAR::popErrorHandling();
-        if (!$parsed) {
-            // this is a url
-            return $pkgfile;
-        }
-        $package = $parsed['package'];
-        
-        $chan = $this->_registry->getChannel($channel);
-        if (!$chan) {
-            // regexes defined in Common.php
-            if (preg_match(PEAR_COMMON_CHANNEL_DOWNLOAD_PREG, $pkgfile, $m)) {
-                $version = (isset($m[4])) ? $m[4] : null;
-                return array('channel' => $m[1], 'package' => $m[2]);
-            }
-            if (preg_match(PEAR_COMMON_PACKAGE_DOWNLOAD_PREG, $pkgfile, $m)) {
-                $version = (isset($m[3])) ? $m[3] : null;
-                return $m[1];
-            }
-        } else {
-            if (preg_match('/^' . $chan->getChannelPackageDownloadRegex() . '$/', $pkgfile, $m)) {
-                $version = (isset($m[4])) ? $m[4] : null;
-                return array('channel' => $m[1], 'package' => $m[2]);
-            }
-            if (preg_match('/^' . $chan->getPackageDownloadRegex() . '$/', $pkgfile, $m)) {
-                $version = (isset($m[3])) ? $m[3] : null;
-                return $m[1];
-            }
-        }
-        $version = null;
-        return $pkgfile;
-    }
-
-    // }}}
-
-    // }}}
     // {{{ getDownloadedPackages()
 
     /**
