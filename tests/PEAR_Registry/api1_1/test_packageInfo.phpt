@@ -156,7 +156,8 @@ ksort($ret);
 $phpunit->assertEquals(array(
 '__uri' => array(),
 'grob' => array($pf2->getArray(true)),
-'pear.php.net' => array($pf->getArray()),), $ret, 'default whole shebang');
+'pear.php.net' => array($pf->getArray()),
+'pecl.php.net' => array()), $ret, 'default whole shebang');
 echo 'tests done';
 ?>
 --EXPECT--
