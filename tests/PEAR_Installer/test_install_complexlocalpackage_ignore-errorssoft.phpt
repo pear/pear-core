@@ -289,38 +289,83 @@ $info = $reg->packageInfo('PEAR1');
 $phpunit->assertTrue(isset($info['_lastmodified']), 'lastmodified is set?');
 unset($info['_lastmodified']);
 $phpunit->assertEquals($ret, $info, 'test installation, PEAR1');
-$phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ cp ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php',
-  ),
-  1 => 
-  array (
-    0 => 3,
-    1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php ',
-  ),
-  2 => 
-  array (
-    0 => 3,
-    1 => 'adding to transaction: installed_as foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php ' . DIRECTORY_SEPARATOR,
-  ),
-  3 => 
-  array (
-    0 => 2,
-    1 => 'about to commit 2 file operations',
-  ),
-  4 => 
-  array (
-    0 => 3,
-    1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
-  ),
-  5 => 
-  array (
-    0 => 2,
-    1 => 'successfully committed 2 file operations',
-  ),
-), $fakelog->getLog(), 'log');
+if (OS_WINDOWS) {
+    $phpunit->assertEquals(array (
+      0 => 
+      array (
+        0 => 3,
+        1 => '+ cp ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php',
+      ),
+      1 => 
+      array (
+        0 => 3,
+        1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php ',
+      ),
+      2 => 
+      array (
+        0 => 3,
+        1 => 'adding to transaction: installed_as foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php ' . DIRECTORY_SEPARATOR,
+      ),
+      3 => 
+      array (
+        0 => 2,
+        1 => 'about to commit 2 file operations',
+      ),
+      4 => 
+      array (
+        0 => 3,
+        1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
+      ),
+      5 => 
+      array (
+        0 => 2,
+        1 => 'successfully committed 2 file operations',
+      ),
+    ), $fakelog->getLog(), 'log');
+} else {
+    $phpunit->assertEquals(array (
+      0 => 
+      array (
+        0 => 3,
+        1 => '+ cp ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php',
+      ),
+      1 => 
+      array (
+        0 => 3,
+        1 => 'adding to transaction: chmod 644 ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php',
+      ),
+      2 => 
+      array (
+        0 => 3,
+        1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php ',
+      ),
+      3 => 
+      array (
+        0 => 3,
+        1 => 'adding to transaction: installed_as foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php ' . DIRECTORY_SEPARATOR,
+      ),
+      4 => 
+      array (
+        0 => 2,
+        1 => 'about to commit 3 file operations',
+      ),
+      5 => 
+      array (
+        0 => 3,
+        1 => '+ chmod 644 ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php',
+      ),
+      6 => 
+      array (
+        0 => 3,
+        1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
+      ),
+      7 => 
+      array (
+        0 => 2,
+        1 => 'successfully committed 3 file operations',
+      ),
+    ), $fakelog->getLog(), 'log');
+}
 echo 'tests done';
 ?>
 --EXPECT--
