@@ -1,4 +1,4 @@
-5--TEST--
+--TEST--
 config-create command --windows
 --SKIPIF--
 <?php
