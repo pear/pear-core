@@ -182,7 +182,7 @@ array(3) {
     ["gid"]=>
     int(0)
     ["size"]=>
-    int(817)
+    int(929)
     ["typeflag"]=>
     string(0) ""
   }
@@ -276,7 +276,7 @@ array(4) {
     ["gid"]=>
     int(0)
     ["size"]=>
-    int(921)
+    int(1075)
     ["typeflag"]=>
     string(0) ""
   }

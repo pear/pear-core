@@ -13,8 +13,8 @@
     </maintainer>
   </maintainers>
   <release>
-    <version>2.2</version>
-    <date>2004-06-10</date>
+    <version>2.3</version>
+    <date>2004-07-03</date>
     <license>PHP License</license>
     <state>stable</state>
     <notes>Installation package.xml for PEAR package tests</notes>
@@ -83,6 +83,7 @@
          <file role="test" name="test.dat"/>
         </dir> <!-- test-pkg6/goompness -->
        </dir> <!-- test-pkg6 -->
+       <file role="test" name="_test_validate.php.inc"/>
        <file role="test" name="common_sortPkgDeps1_package.xml"/>
        <file role="test" name="common_sortPkgDeps2_package.xml"/>
        <file role="test" name="common_sortPkgDeps3_package.xml"/>
