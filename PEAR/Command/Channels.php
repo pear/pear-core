@@ -298,7 +298,11 @@ List the files in an installed package.
             } else {
                 $fp = @fopen($params[0], 'r');
                 if (!$fp) {
-                    return $this->raiseError('Cannot open "' . $channel . '"');
+                    if (@file_exists($params[0])) {
+                        return $this->raiseError('Cannot open "' . $params[0] . '"');
+                    } else {
+                        return $this->raiseError('Unknown channel "' . $channel . '"');
+                    }
                 }
                 $contents = '';
                 while (!feof($fp)) {
@@ -428,6 +432,9 @@ List the files in an installed package.
         $reg = &$this->config->getRegistry();
         if (($channel = $reg->channelName($params[0])) == 'pear.php.net') {
             return $this->raiseError('Cannot delete the pear.php.net channel');
+        }
+        if (($channel = $reg->channelName($params[0])) == '__uri') {
+            return $this->raiseError('Cannot delete the __uri pseudo-channel');
         }
         if (!$reg->channelExists($channel)) {
             return $this->raiseError('Channel `' . $channel . '\' does not exist');
