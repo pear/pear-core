@@ -1,4 +1,7 @@
 <?php
+
+define('NET_FTP_ERR_OVERWRITELOCALFILE_FAILED', -14);
+define('NET_FTP_ERR_DIRCHANGE_FAILED', 2); // Compatibillity reasons!
 define('NET_FTP_ERR_CREATEDIR_FAILED', 1);
 define('NET_FTP_ERR_OVERWRITELOCALFILE_FORBIDDEN', 2);
 function Net_FTP_setup(&$t)
@@ -17,6 +20,7 @@ class Net_FTP extends PEAR
     var $_loginErr = false;
     var $_cdErr = false;
     var $_cdTo = array();
+    var $_dirsExisting = array();
     var $_host;
     var $_port;
     var $_handle;
@@ -68,11 +72,15 @@ class Net_FTP extends PEAR
 
     function cd($path)
     {
+        $f = &Net_FTP::singleton();
         if (isset($this->_cdErr[$path])) {
             return $this->raiseError($this->_cdErr[$path]);
         }
         if ($path == '/' || $path == '\\') {
            $path = '';
+        }
+        if ($path != '' && !isset($f->_dirsExisting[$path])) {
+            return $this->raiseError("Directory change failed", NET_FTP_ERR_DIRCHANGE_FAILED);
         }
         $this->_cdTo = $path;
         return true;
@@ -83,9 +91,16 @@ class Net_FTP extends PEAR
         $this->_cdErr = $err;
     }
 
+    function put($local, $remote)
+    {
+        $f = &Net_FTP::singleton();
+        $f->_putfiles[$local] = $remote;
+        return true;
+    }
+
     function pwd()
     {
-        return 'save';
+        return $this->_cdTo;
     }
 
     function _construct_path($path)
@@ -95,9 +110,13 @@ class Net_FTP extends PEAR
 
     function _testftp_mkdir($handle, $dir)
     {
-        if ($this->_failMkdir[$dir]) {
+        $f = &Net_FTP::singleton();
+        if ($this->_failMkdir[$dir] || (dirname($dir) != '.' &&
+              $isset($f->_dirsExisting[dirname($dir)]))) {
             return false;
         }
+        $f->_dirsMade[$dir] = true;
+        $f->_dirsExisting[$dir] = true;
         return true;
     }
 
@@ -121,7 +140,7 @@ class Net_FTP extends PEAR
             fclose($fp);
             return true;
         }
-        return $this->raiseError('file not found');
+        return $this->raiseError("File '$remote' could not be downloaded to 'local'.", NET_FTP_ERR_OVERWRITELOCALFILE_FAILED);
     }
 
     function addRemoteFile($path, $loc)
@@ -131,6 +150,12 @@ class Net_FTP extends PEAR
 
     function disconnect()
     {
+    }
+
+    function setDirsExisting($dirs)
+    {
+        $f = &Net_FTP::singleton();
+        $f->_dirsExisting = array_flip($dirs);
     }
 }
 ?>

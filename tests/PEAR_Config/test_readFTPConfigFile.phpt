@@ -15,6 +15,7 @@ include_once dirname(__FILE__) . '/test_readFTPConfigFile/FTP.php.inc';
 $ftp = &Net_FTP::singleton();
 $ftp->addRemoteFile('/path/to/pear/config.ini', dirname(__FILE__) . DIRECTORY_SEPARATOR .
     'test_readFTPConfigFile' . DIRECTORY_SEPARATOR . 'remote.ini');
+$ftp->setDirsExisting(array('/path/to/pear'));
 $e = $config->readFTPConfigFile('ftp://example.com/path/to/pear/config.ini');
 $phpunit->assertNoErrors('test');
 $phpunit->assertTrue($e, 'test');
