@@ -52,6 +52,35 @@ $phpunit->assertEquals(array (
   ),
 ), $pf->getDeps(true), 'clear failed');
 
+$pf->addConflictingPackageDepWithURI('fakeo2', 'http://www.foozample.com/fakeo.tgz');
+$phpunit->assertEquals(array (
+  'required' => 
+  array (
+    'php' => 
+    array (
+      'min' => '4.3.6',
+      'max' => '6.0.0',
+    ),
+    'pearinstaller' => 
+    array (
+      'min' => '1.4.0a1',
+    ),
+    'package' => 
+    array (
+      array (
+        'name' => 'fakeo',
+        'uri' => 'http://www.example.com/package.tgz',
+        'conflicts' => 'yes',
+      ),
+      array (
+        'name' => 'fakeo2',
+        'uri' => 'http://www.foozample.com/fakeo.tgz',
+        'conflicts' => 'yes',
+      ),
+    ),
+  ),
+), $pf->getDeps(true), 'clear failed');
+
 $result = $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log');
 $phpunit->assertNoErrors('after validation');
