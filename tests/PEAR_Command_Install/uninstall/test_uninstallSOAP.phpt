@@ -774,192 +774,192 @@ $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Base.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Base.php',
   ),
   1 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Client.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Client.php',
   ),
   2 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Disco.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Disco.php',
   ),
   3 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Fault.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Fault.php',
   ),
   4 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Parser.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Parser.php',
   ),
   5 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Server.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Server.php',
   ),
   6 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Transport.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Transport.php',
   ),
   7 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Value.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Value.php',
   ),
   8 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/WSDL.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'WSDL.php',
   ),
   9 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/attachment.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'attachment.php',
   ),
   10 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/client.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'client.php',
   ),
   11 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/com_client.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'com_client.php',
   ),
   12 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/disco_server.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'disco_server.php',
   ),
   13 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/email_client.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'email_client.php',
   ),
   14 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/email_gateway.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'email_gateway.php',
   ),
   15 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/email_pop_gateway.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'email_pop_gateway.php',
   ),
   16 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/email_pop_server.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'email_pop_server.php',
   ),
   17 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/email_server.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'email_server.php',
   ),
   18 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/example_server.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'example_server.php',
   ),
   19 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/example_types.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'example_types.php',
   ),
   20 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/server.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'server.php',
   ),
   21 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/server2.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'server2.php',
   ),
   22 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/smtp.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'smtp.php',
   ),
   23 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/stockquote.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'stockquote.php',
   ),
   24 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/tcp_client.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'tcp_client.php',
   ),
   25 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/tcp_daemon.pl',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'tcp_daemon.pl',
   ),
   26 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/tcp_server.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'tcp_server.php',
   ),
   27 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/SOAP/example/wsdl_client.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'wsdl_client.php',
   ),
   28 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/tools/genproxy.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'genproxy.php',
   ),
   29 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Transport/HTTP.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Transport' . DIRECTORY_SEPARATOR . 'HTTP.php',
   ),
   30 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Transport/SMTP.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Transport' . DIRECTORY_SEPARATOR . 'SMTP.php',
   ),
   31 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Transport/TCP.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Transport' . DIRECTORY_SEPARATOR . 'TCP.php',
   ),
   32 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Server/Email.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Server' . DIRECTORY_SEPARATOR . 'Email.php',
   ),
   33 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Server/Email_Gateway.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Server' . DIRECTORY_SEPARATOR . 'Email_Gateway.php',
   ),
   34 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Server/TCP.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Server' . DIRECTORY_SEPARATOR . 'TCP.php',
   ),
   35 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Type/dateTime.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Type' . DIRECTORY_SEPARATOR . 'dateTime.php',
   ),
   36 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Type/duration.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Type' . DIRECTORY_SEPARATOR . 'duration.php',
   ),
   37 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/SOAP/Type/hexBinary.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Type' . DIRECTORY_SEPARATOR . 'hexBinary.php',
   ),
   38 => 
   array (
@@ -969,192 +969,192 @@ $phpunit->assertEquals(array (
   39 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Base.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Base.php',
   ),
   40 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Client.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Client.php',
   ),
   41 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Disco.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Disco.php',
   ),
   42 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Fault.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Fault.php',
   ),
   43 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Parser.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Parser.php',
   ),
   44 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Server.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Server.php',
   ),
   45 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Transport.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Transport.php',
   ),
   46 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Value.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Value.php',
   ),
   47 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/WSDL.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'WSDL.php',
   ),
   48 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/attachment.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'attachment.php',
   ),
   49 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/client.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'client.php',
   ),
   50 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/com_client.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'com_client.php',
   ),
   51 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/disco_server.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'disco_server.php',
   ),
   52 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/email_client.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'email_client.php',
   ),
   53 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/email_gateway.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'email_gateway.php',
   ),
   54 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/email_pop_gateway.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'email_pop_gateway.php',
   ),
   55 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/email_pop_server.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'email_pop_server.php',
   ),
   56 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/email_server.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'email_server.php',
   ),
   57 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/example_server.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'example_server.php',
   ),
   58 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/example_types.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'example_types.php',
   ),
   59 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/server.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'server.php',
   ),
   60 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/server2.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'server2.php',
   ),
   61 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/smtp.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'smtp.php',
   ),
   62 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/stockquote.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'stockquote.php',
   ),
   63 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/tcp_client.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'tcp_client.php',
   ),
   64 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/tcp_daemon.pl',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'tcp_daemon.pl',
   ),
   65 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/tcp_server.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'tcp_server.php',
   ),
   66 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/SOAP/example/wsdl_client.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example' . DIRECTORY_SEPARATOR . 'wsdl_client.php',
   ),
   67 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/tools/genproxy.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'tools' . DIRECTORY_SEPARATOR . 'genproxy.php',
   ),
   68 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Transport/HTTP.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Transport' . DIRECTORY_SEPARATOR . 'HTTP.php',
   ),
   69 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Transport/SMTP.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Transport' . DIRECTORY_SEPARATOR . 'SMTP.php',
   ),
   70 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Transport/TCP.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Transport' . DIRECTORY_SEPARATOR . 'TCP.php',
   ),
   71 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Server/Email.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Server' . DIRECTORY_SEPARATOR . 'Email.php',
   ),
   72 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Server/Email_Gateway.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Server' . DIRECTORY_SEPARATOR . 'Email_Gateway.php',
   ),
   73 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Server/TCP.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Server' . DIRECTORY_SEPARATOR . 'TCP.php',
   ),
   74 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Type/dateTime.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Type' . DIRECTORY_SEPARATOR . 'dateTime.php',
   ),
   75 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Type/duration.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Type' . DIRECTORY_SEPARATOR . 'duration.php',
   ),
   76 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/SOAP/Type/hexBinary.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Type' . DIRECTORY_SEPARATOR . 'hexBinary.php',
   ),
   77 => 
   array (
@@ -1164,32 +1164,32 @@ $phpunit->assertEquals(array (
   78 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/php/SOAP/tools',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'tools',
   ),
   79 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/php/SOAP/Type',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Type',
   ),
   80 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/php/SOAP/Transport',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Transport',
   ),
   81 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/php/SOAP/Server',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Server',
   ),
   82 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/php/SOAP',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP',
   ),
   83 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/doc/SOAP/example',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example',
   ),
   84 => 
   array (
@@ -1199,32 +1199,32 @@ $phpunit->assertEquals(array (
   85 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/php/SOAP/tools',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'tools',
   ),
   86 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/php/SOAP/Type',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Type',
   ),
   87 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/php/SOAP/Transport',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Transport',
   ),
   88 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/php/SOAP/Server',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'Server',
   ),
   89 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/php/SOAP',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'SOAP',
   ),
   90 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/doc/SOAP/example',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'SOAP' . DIRECTORY_SEPARATOR . 'example',
   ),
   91 => 
   array (
@@ -1239,22 +1239,22 @@ $phpunit->assertEquals(array (
   93 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/HTTP/Request.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'HTTP' . DIRECTORY_SEPARATOR . 'Request.php',
   ),
   94 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/HTTP/Request/Listener.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'HTTP' . DIRECTORY_SEPARATOR . 'Request' . DIRECTORY_SEPARATOR . 'Listener.php',
   ),
   95 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/HTTP_Request/docs/example.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'HTTP_Request' . DIRECTORY_SEPARATOR . 'docs' . DIRECTORY_SEPARATOR . 'example.php',
   ),
   96 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/HTTP_Request/docs/download-progress.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'HTTP_Request' . DIRECTORY_SEPARATOR . 'docs' . DIRECTORY_SEPARATOR . 'download-progress.php',
   ),
   97 => 
   array (
@@ -1264,22 +1264,22 @@ $phpunit->assertEquals(array (
   98 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/HTTP/Request.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'HTTP' . DIRECTORY_SEPARATOR . 'Request.php',
   ),
   99 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/HTTP/Request/Listener.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'HTTP' . DIRECTORY_SEPARATOR . 'Request' . DIRECTORY_SEPARATOR . 'Listener.php',
   ),
   100 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/HTTP_Request/docs/example.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'HTTP_Request' . DIRECTORY_SEPARATOR . 'docs' . DIRECTORY_SEPARATOR . 'example.php',
   ),
   101 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/HTTP_Request/docs/download-progress.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'HTTP_Request' . DIRECTORY_SEPARATOR . 'docs' . DIRECTORY_SEPARATOR . 'download-progress.php',
   ),
   102 => 
   array (
@@ -1289,17 +1289,17 @@ $phpunit->assertEquals(array (
   103 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/php/HTTP/Request',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'HTTP' . DIRECTORY_SEPARATOR . 'Request',
   ),
   104 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/php/HTTP',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'HTTP',
   ),
   105 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/doc/HTTP_Request/docs',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'HTTP_Request' . DIRECTORY_SEPARATOR . 'docs',
   ),
   106 => 
   array (
@@ -1309,17 +1309,17 @@ $phpunit->assertEquals(array (
   107 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/php/HTTP/Request',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'HTTP' . DIRECTORY_SEPARATOR . 'Request',
   ),
   108 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/php/HTTP',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'HTTP',
   ),
   109 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/doc/HTTP_Request/docs',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'HTTP_Request' . DIRECTORY_SEPARATOR . 'docs',
   ),
   110 => 
   array (
@@ -1334,7 +1334,7 @@ $phpunit->assertEquals(array (
   112 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/Net/Socket.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net' . DIRECTORY_SEPARATOR . 'Socket.php',
   ),
   113 => 
   array (
@@ -1344,7 +1344,7 @@ $phpunit->assertEquals(array (
   114 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/Net/Socket.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net' . DIRECTORY_SEPARATOR . 'Socket.php',
   ),
   115 => 
   array (
@@ -1354,7 +1354,7 @@ $phpunit->assertEquals(array (
   116 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/php/Net',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net',
   ),
   117 => 
   array (
@@ -1364,7 +1364,7 @@ $phpunit->assertEquals(array (
   118 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/php/Net',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net',
   ),
   119 => 
   array (
@@ -1379,12 +1379,12 @@ $phpunit->assertEquals(array (
   121 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/Net/URL.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net' . DIRECTORY_SEPARATOR . 'URL.php',
   ),
   122 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/doc/Net_URL/docs/example.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'Net_URL' . DIRECTORY_SEPARATOR . 'docs' . DIRECTORY_SEPARATOR . 'example.php',
   ),
   123 => 
   array (
@@ -1394,12 +1394,12 @@ $phpunit->assertEquals(array (
   124 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/Net/URL.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net' . DIRECTORY_SEPARATOR . 'URL.php',
   ),
   125 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/doc/Net_URL/docs/example.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'Net_URL' . DIRECTORY_SEPARATOR . 'docs' . DIRECTORY_SEPARATOR . 'example.php',
   ),
   126 => 
   array (
@@ -1409,12 +1409,12 @@ $phpunit->assertEquals(array (
   127 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/php/Net',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net',
   ),
   128 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/doc/Net_URL/docs',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'Net_URL' . DIRECTORY_SEPARATOR . 'docs',
   ),
   129 => 
   array (
@@ -1424,12 +1424,12 @@ $phpunit->assertEquals(array (
   130 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/php/Net',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net',
   ),
   131 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/doc/Net_URL/docs',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'Net_URL' . DIRECTORY_SEPARATOR . 'docs',
   ),
   132 => 
   array (
@@ -1444,17 +1444,17 @@ $phpunit->assertEquals(array (
   134 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/Net/DIME.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net' . DIRECTORY_SEPARATOR . 'DIME.php',
   ),
   135 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/test/Net_DIME/test/dime_message_test.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Net_DIME' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'dime_message_test.php',
   ),
   136 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/test/Net_DIME/test/dime_record_test.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Net_DIME' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'dime_record_test.php',
   ),
   137 => 
   array (
@@ -1464,17 +1464,17 @@ $phpunit->assertEquals(array (
   138 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/Net/DIME.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net' . DIRECTORY_SEPARATOR . 'DIME.php',
   ),
   139 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/test/Net_DIME/test/dime_message_test.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Net_DIME' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'dime_message_test.php',
   ),
   140 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/test/Net_DIME/test/dime_record_test.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Net_DIME' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'dime_record_test.php',
   ),
   141 => 
   array (
@@ -1484,12 +1484,12 @@ $phpunit->assertEquals(array (
   142 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/test/Net_DIME/test',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Net_DIME' . DIRECTORY_SEPARATOR . 'test',
   ),
   143 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/php/Net',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net',
   ),
   144 => 
   array (
@@ -1499,12 +1499,12 @@ $phpunit->assertEquals(array (
   145 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/test/Net_DIME/test',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Net_DIME' . DIRECTORY_SEPARATOR . 'test',
   ),
   146 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/php/Net',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net',
   ),
   147 => 
   array (
@@ -1519,27 +1519,27 @@ $phpunit->assertEquals(array (
   149 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/Mail/mime.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail' . DIRECTORY_SEPARATOR . 'mime.php',
   ),
   150 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/Mail/mimeDecode.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail' . DIRECTORY_SEPARATOR . 'mimeDecode.php',
   ),
   151 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/Mail/mimePart.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail' . DIRECTORY_SEPARATOR . 'mimePart.php',
   ),
   152 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/data/Mail_Mime/xmail.dtd',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Mail_Mime' . DIRECTORY_SEPARATOR . 'xmail.dtd',
   ),
   153 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/data/Mail_Mime/xmail.xsl',
+    1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Mail_Mime' . DIRECTORY_SEPARATOR . 'xmail.xsl',
   ),
   154 => 
   array (
@@ -1549,27 +1549,27 @@ $phpunit->assertEquals(array (
   155 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/Mail/mime.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail' . DIRECTORY_SEPARATOR . 'mime.php',
   ),
   156 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/Mail/mimeDecode.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail' . DIRECTORY_SEPARATOR . 'mimeDecode.php',
   ),
   157 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/php/Mail/mimePart.php',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail' . DIRECTORY_SEPARATOR . 'mimePart.php',
   ),
   158 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/data/Mail_Mime/xmail.dtd',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Mail_Mime' . DIRECTORY_SEPARATOR . 'xmail.dtd',
   ),
   159 => 
   array (
     0 => 3,
-    1 => '+ rm ' . $temp_path . '/data/Mail_Mime/xmail.xsl',
+    1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Mail_Mime' . DIRECTORY_SEPARATOR . 'xmail.xsl',
   ),
   160 => 
   array (
@@ -1579,12 +1579,12 @@ $phpunit->assertEquals(array (
   161 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/php/Mail',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail',
   ),
   162 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '/data/Mail_Mime',
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Mail_Mime',
   ),
   163 => 
   array (
@@ -1594,12 +1594,12 @@ $phpunit->assertEquals(array (
   164 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/php/Mail',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail',
   ),
   165 => 
   array (
     0 => 3,
-    1 => '+ rmdir ' . $temp_path . '/data/Mail_Mime',
+    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Mail_Mime',
   ),
   166 => 
   array (
