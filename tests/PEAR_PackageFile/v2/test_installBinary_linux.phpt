@@ -135,13 +135,96 @@ $pf->installBinary($a);
 $phpunit->assertNoErrors('post-install linux');
 $dld = $last_dl->getDownloadDir();
 $cleandld = str_replace('\\\\', '\\', $last_dl->getDownloadDir());
-$phpunit->assertEquals(array (
+if (OS_WINDOWS) {
+    $phpunit->assertEquals(array (
+      0 => 
+      array (
+        0 => 0,
+        1 => 'Attempting to download binary version of extension "foo"',
+      ),
+      1 =>
+      array (
+        0 => 0,
+        1 => 'Can only install grob/foo_win on Windows',
+      ),
+      2 => 
+      array (
+        0 => 3,
+        1 => '+ tmp dir created at ' . $dld,
+      ),
+      3 => 
+      array (
+        0 => 1,
+        1 => 'downloading foo_linux-1.1.0.tgz ...',
+      ),
+      4 => 
+      array (
+        0 => 1,
+        1 => 'Starting to download foo_linux-1.1.0.tgz (723 bytes)',
+      ),
+      5 => 
+      array (
+        0 => 1,
+        1 => '.',
+      ),
+      6 => 
+      array (
+        0 => 1,
+        1 => '...done: 723 bytes',
+      ),
+      7 => 
+      array (
+        0 => 3,
+        1 => '+ cp ' . $cleandld . DIRECTORY_SEPARATOR . 'foo_linux-1.1.0' . DIRECTORY_SEPARATOR .
+            'foo.so ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.so',
+      ),
+      8 => 
+      array (
+        0 => 2,
+        1 => 'md5sum ok: ' . $ext_dir . DIRECTORY_SEPARATOR . 'foo.so',
+      ),
+      9 => 
+      array (
+        0 => 3,
+        1 => 'adding to transaction: rename ' . $ext_dir . DIRECTORY_SEPARATOR .
+            '.tmpfoo.so ' . $ext_dir . DIRECTORY_SEPARATOR . 'foo.so 1',
+      ),
+      10 => 
+      array (
+        0 => 3,
+        1 => 'adding to transaction: installed_as foo.so ' . $ext_dir . DIRECTORY_SEPARATOR .
+            'foo.so ' . $ext_dir . ' ' . DIRECTORY_SEPARATOR
+      ),
+      11 => 
+      array (
+        0 => 2,
+        1 => 'about to commit 2 file operations',
+      ),
+      12 => 
+      array (
+        0 => 3,
+        1 => '+ mv ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.so ' .
+            $ext_dir . DIRECTORY_SEPARATOR . 'foo.so',
+      ),
+      13 => 
+      array (
+        0 => 2,
+        1 => 'successfully committed 2 file operations',
+      ),
+      14 => 
+      array (
+        0 => 0,
+        1 => 'Download and install of binary extension "grob/foo_linux" successful',
+      ),
+    ), $fakelog->getLog(), 'log linux');
+} else {
+    $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 0,
     1 => 'Attempting to download binary version of extension "foo"',
   ),
-  1 =>
+  1 => 
   array (
     0 => 0,
     1 => 'Can only install grob/foo_win on Windows',
@@ -175,7 +258,7 @@ $phpunit->assertEquals(array (
   array (
     0 => 3,
     1 => '+ cp ' . $cleandld . DIRECTORY_SEPARATOR . 'foo_linux-1.1.0' . DIRECTORY_SEPARATOR .
-        'foo.so ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.so',
+            'foo.so ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.so',
   ),
   8 => 
   array (
@@ -185,37 +268,48 @@ $phpunit->assertEquals(array (
   9 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rename ' . $ext_dir . DIRECTORY_SEPARATOR .
-        '.tmpfoo.so ' . $ext_dir . DIRECTORY_SEPARATOR . 'foo.so 1',
+    1 => 'adding to transaction: chmod 644 ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.so',
   ),
   10 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: installed_as foo.so ' . $ext_dir . DIRECTORY_SEPARATOR .
-        'foo.so ' . $ext_dir . ' ' . DIRECTORY_SEPARATOR
+    1 => 'adding to transaction: rename ' . $ext_dir . DIRECTORY_SEPARATOR .
+            '.tmpfoo.so ' . $ext_dir . DIRECTORY_SEPARATOR . 'foo.so 1',
   ),
   11 => 
   array (
-    0 => 2,
-    1 => 'about to commit 2 file operations',
+    0 => 3,
+    1 => 'adding to transaction: installed_as foo.so ' . $ext_dir . DIRECTORY_SEPARATOR .
+            'foo.so ' . $ext_dir . ' ' . DIRECTORY_SEPARATOR
   ),
   12 => 
   array (
-    0 => 3,
-    1 => '+ mv ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.so ' .
-        $ext_dir . DIRECTORY_SEPARATOR . 'foo.so',
+    0 => 2,
+    1 => 'about to commit 3 file operations',
   ),
   13 => 
   array (
-    0 => 2,
-    1 => 'successfully committed 2 file operations',
+    0 => 3,
+    1 => '+ chmod 644 ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.so',
   ),
   14 => 
+  array (
+    0 => 3,
+    1 => '+ mv ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.so ' .
+            $ext_dir . DIRECTORY_SEPARATOR . 'foo.so',
+  ),
+  15 => 
+  array (
+    0 => 2,
+    1 => 'successfully committed 3 file operations',
+  ),
+  16 => 
   array (
     0 => 0,
     1 => 'Download and install of binary extension "grob/foo_linux" successful',
   ),
-), $fakelog->getLog(), 'log linux');
+ ), $fakelog->getLog(), 'log linux');
+}
 $phpunit->assertEquals(array (
   0 => 
   array (

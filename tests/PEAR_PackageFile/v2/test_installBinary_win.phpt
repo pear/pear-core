@@ -135,82 +135,171 @@ $pf->installBinary($a);
 $phpunit->assertNoErrors('post-install');
 $dld = $last_dl->getDownloadDir();
 $cleandld = str_replace('\\\\', '\\', $last_dl->getDownloadDir());
-$phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 0,
-    1 => 'Attempting to download binary version of extension "foo"',
-  ),
-  1 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dld,
-  ),
-  2 => 
-  array (
-    0 => 1,
-    1 => 'downloading foo_win-1.1.0.tgz ...',
-  ),
-  3 => 
-  array (
-    0 => 1,
-    1 => 'Starting to download foo_win-1.1.0.tgz (725 bytes)',
-  ),
-  4 => 
-  array (
-    0 => 1,
-    1 => '.',
-  ),
-  5 => 
-  array (
-    0 => 1,
-    1 => '...done: 725 bytes',
-  ),
-  6 => 
-  array (
-    0 => 3,
-    1 => '+ cp ' . $cleandld . DIRECTORY_SEPARATOR . 'foo_win-1.1.0' . DIRECTORY_SEPARATOR .
-        'foo.dll ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll',
-  ),
-  7 => 
-  array (
-    0 => 2,
-    1 => 'md5sum ok: ' . $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll',
-  ),
-  8 => 
-  array (
-    0 => 3,
-    1 => 'adding to transaction: rename ' . $ext_dir . DIRECTORY_SEPARATOR .
-        '.tmpfoo.dll ' . $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll 1',
-  ),
-  9 => 
-  array (
-    0 => 3,
-    1 => 'adding to transaction: installed_as foo.dll ' . $ext_dir . DIRECTORY_SEPARATOR .
-        'foo.dll ' . $ext_dir . ' ' . DIRECTORY_SEPARATOR
-  ),
-  10 => 
-  array (
-    0 => 2,
-    1 => 'about to commit 2 file operations',
-  ),
-  11 => 
-  array (
-    0 => 3,
-    1 => '+ mv ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll ' .
-        $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll',
-  ),
-  12 => 
-  array (
-    0 => 2,
-    1 => 'successfully committed 2 file operations',
-  ),
-  13 => 
-  array (
-    0 => 0,
-    1 => 'Download and install of binary extension "grob/foo_win" successful',
-  ),
-), $fakelog->getLog(), 'log');
+if (OS_WINDOWS) {
+    $phpunit->assertEquals(array (
+      0 => 
+      array (
+        0 => 0,
+        1 => 'Attempting to download binary version of extension "foo"',
+      ),
+      1 => 
+      array (
+        0 => 3,
+        1 => '+ tmp dir created at ' . $dld,
+      ),
+      2 => 
+      array (
+        0 => 1,
+        1 => 'downloading foo_win-1.1.0.tgz ...',
+      ),
+      3 => 
+      array (
+        0 => 1,
+        1 => 'Starting to download foo_win-1.1.0.tgz (725 bytes)',
+      ),
+      4 => 
+      array (
+        0 => 1,
+        1 => '.',
+      ),
+      5 => 
+      array (
+        0 => 1,
+        1 => '...done: 725 bytes',
+      ),
+      6 => 
+      array (
+        0 => 3,
+        1 => '+ cp ' . $cleandld . DIRECTORY_SEPARATOR . 'foo_win-1.1.0' . DIRECTORY_SEPARATOR .
+            'foo.dll ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll',
+      ),
+      7 => 
+      array (
+        0 => 2,
+        1 => 'md5sum ok: ' . $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll',
+      ),
+      8 => 
+      array (
+        0 => 3,
+        1 => 'adding to transaction: rename ' . $ext_dir . DIRECTORY_SEPARATOR .
+            '.tmpfoo.dll ' . $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll 1',
+      ),
+      9 => 
+      array (
+        0 => 3,
+        1 => 'adding to transaction: installed_as foo.dll ' . $ext_dir . DIRECTORY_SEPARATOR .
+            'foo.dll ' . $ext_dir . ' ' . DIRECTORY_SEPARATOR
+      ),
+      10 => 
+      array (
+        0 => 2,
+        1 => 'about to commit 2 file operations',
+      ),
+      11 => 
+      array (
+        0 => 3,
+        1 => '+ mv ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll ' .
+            $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll',
+      ),
+      12 => 
+      array (
+        0 => 2,
+        1 => 'successfully committed 2 file operations',
+      ),
+      13 => 
+      array (
+        0 => 0,
+        1 => 'Download and install of binary extension "grob/foo_win" successful',
+      ),
+    ), $fakelog->getLog(), 'log');
+} else {
+    $phpunit->assertEquals(array (
+      0 => 
+      array (
+        0 => 0,
+        1 => 'Attempting to download binary version of extension "foo"',
+      ),
+      1 => 
+      array (
+        0 => 3,
+        1 => '+ tmp dir created at ' . $dld,
+      ),
+      2 => 
+      array (
+        0 => 1,
+        1 => 'downloading foo_win-1.1.0.tgz ...',
+      ),
+      3 => 
+      array (
+        0 => 1,
+        1 => 'Starting to download foo_win-1.1.0.tgz (725 bytes)',
+      ),
+      4 => 
+      array (
+        0 => 1,
+        1 => '.',
+      ),
+      5 => 
+      array (
+        0 => 1,
+        1 => '...done: 725 bytes',
+      ),
+      6 => 
+      array (
+        0 => 3,
+        1 => '+ cp ' . $cleandld . DIRECTORY_SEPARATOR . 'foo_win-1.1.0' . DIRECTORY_SEPARATOR .
+            'foo.dll ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll',
+      ),
+      7 => 
+      array (
+        0 => 2,
+        1 => 'md5sum ok: ' . $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll',
+      ),
+      8 =>
+      array (
+        0 => 3,
+        1 => 'adding to transaction: chmod 644 ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll',
+      ),
+      9 => 
+      array (
+        0 => 3,
+        1 => 'adding to transaction: rename ' . $ext_dir . DIRECTORY_SEPARATOR .
+            '.tmpfoo.dll ' . $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll 1',
+      ),
+      10 => 
+      array (
+        0 => 3,
+        1 => 'adding to transaction: installed_as foo.dll ' . $ext_dir . DIRECTORY_SEPARATOR .
+            'foo.dll ' . $ext_dir . ' ' . DIRECTORY_SEPARATOR
+      ),
+      11 => 
+      array (
+        0 => 2,
+        1 => 'about to commit 3 file operations',
+      ),
+      12 =>
+      array (
+        0 => 3,
+        1 => '+ chmod 644 ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll',
+      ),
+      13 => 
+      array (
+        0 => 3,
+        1 => '+ mv ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll ' .
+            $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll',
+      ),
+      14 => 
+      array (
+        0 => 2,
+        1 => 'successfully committed 3 file operations',
+      ),
+      15 => 
+      array (
+        0 => 0,
+        1 => 'Download and install of binary extension "grob/foo_win" successful',
+      ),
+    ), $fakelog->getLog(), 'log');
+}
 $phpunit->assertEquals(array (
   0 => 
   array (
