@@ -6,11 +6,11 @@ $stack = &PEAR_ErrorStack::singleton('test');
 class Burflog
 {
     var $info;
-    function log($code, $message)
+    function log($err)
     {
         global $wasLogged;
         $wasLogged = true;
-        $this->info = array($code, $message);
+        $this->info = array($err);
     }
 }
 ?>

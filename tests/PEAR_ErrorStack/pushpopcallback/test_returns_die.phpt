@@ -17,14 +17,15 @@ function returnsdie($err)
 class Dielog
 {
     var $info;
-    function log($code, $message)
+    function log($err)
     {
         echo 'logged';
     }
 }
 $stack->pushCallback('returnsdie');
 $log = new Dielog;
-$stack->setLogger($log);
+$a = array(&$log, 'log');
+$stack->setLogger($a);
 $stack->push(1);
 echo 'should not see this!';
 ?>
