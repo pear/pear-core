@@ -88,37 +88,6 @@ if (!empty($home)) {
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 $phpunit = &new PEAR_PHPTest(true);
-class fake_log
-{
-    var $_log = array();
-    var $_download = array();
-    function log($level, $message)
-    {
-        $this->_log[] = array($level, $message);
-    }
-
-    function _downloadCallback($msg, $params)
-    {
-        if ($msg == 'setup') {
-            $params = 'self';
-        }
-        $this->_download[] = array($msg, $params);
-    }
-
-    function getLog()
-    {
-        $log = $this->_log;
-        $this->_log = array();
-        return $log;
-    }
-
-    function getDownload()
-    {
-        $log = $this->_download;
-        $this->_download = array();
-        return $log;
-    }
-}
 $fakelog = new fake_log;
 require_once 'PEAR/Config.php';
 $config = &PEAR_Config::singleton();//($temp_path . '/pear.ini');

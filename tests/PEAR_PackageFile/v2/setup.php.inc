@@ -45,21 +45,6 @@ $parser->setConfig($config);
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 $phpunit = &new PEAR_PHPTest(true);
-class fake_log
-{
-    var $_log = array();
-    function log($level, $message)
-    {
-        $this->_log[] = array($level, $message);
-    }
-
-    function getLog()
-    {
-        $log = $this->_log;
-        $this->_log = array();
-        return $log;
-    }
-}
 $fakelog = new fake_log;
 $parser->setLogger($fakelog);
 test_PEAR_Dependency2::singleton($config);
