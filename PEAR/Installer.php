@@ -701,9 +701,11 @@ class PEAR_Installer extends PEAR_Downloader
             $test = $this->_registry->checkFileMap($pkginfo['filelist'], $pkginfo['package']);
             if (sizeof($test)) {
                 $tmp = $test;
+                $channel = isset($pkginfo['channel']) ? $pkginfo['channel'] : 'pear';
                 foreach ($tmp as $file => $pkg) {
                     if (is_array($pkg)) {
-                        if (strtolower($pkg[0]) == strtolower($pkgname)) {
+                        if (strtolower($pkg[1]) == strtolower($pkgname) &&
+                              strtolower($pkg[0]) == strtolower($channel)) {
                             unset($test[$file]);
                         }
                     } else {
@@ -712,7 +714,6 @@ class PEAR_Installer extends PEAR_Downloader
                         }
                     }
                 }
-                $channel = isset($pkginfo['channel']) ? $pkginfo['channel'] : 'pear';
                 if (sizeof($test)) {
                     $msg = "$channel::$pkgname: conflicting files found:\n";
                     $longest = max(array_map("strlen", array_keys($test)));
