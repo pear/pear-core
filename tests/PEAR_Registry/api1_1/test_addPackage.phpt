@@ -48,7 +48,7 @@ unset($contents['_lastmodified']);
 $phpunit->assertEquals($pf->getArray(), $contents, 'pf1 file saved');
 
 $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb');
-$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb')));
+$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb')));
 $phpunit->assertEquals(array (
   '_version' => '1.0',
   'dependencies' => 
@@ -87,7 +87,7 @@ $phpunit->assertEquals(array (
   ),
 ), $contents, 'depdb');
 $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.filemap', 'filemap');
-$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.filemap', 'filemap')));
+$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.filemap')));
 $phpunit->assertEquals(array (
   'php' =>
   array (
