@@ -283,7 +283,7 @@ class PEAR_RunTest
                 return PEAR::raiseError("Cannot create test log - $logname");
             }
             fwrite($log, $this->generate_diff($wanted, $output,
-                strlen(trim($section_text['RETURNS'])) ? array(trim($section_text['RETURNS']),
+                isset($section_text['RETURNS']) ? array(trim($section_text['RETURNS']),
                     $return_value) : null));
             fclose($log);
         }
@@ -334,6 +334,8 @@ $return_value
         ksort($diff);
         if ($return_value) {
             $extra = "##EXPECTED: $return_value[0]\r\n##RETURNED: $return_value[1]";
+        } else {
+            $extra = '';
         }
         return implode("\r\n", $diff) . $extra;
     }
