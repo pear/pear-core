@@ -274,7 +274,7 @@ class PEAR_PackageFile
 
         // read the whole thing so we only get one cdata callback
         // for each block of cdata
-        $data = fread($fp, filesize($descfile));
+        $data = @fread($fp, filesize($descfile));
         $ret = &PEAR_PackageFile::fromXmlString($data, $state, $descfile, $archive);
         return $ret;
     }

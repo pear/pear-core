@@ -385,8 +385,7 @@ package if needed.
         $reg = &$this->config->getRegistry();
         foreach ($downloaded as $param) {
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-            $info = $this->installer->install($param, $options,
-                $this->config);
+            $info = $this->installer->install($param, $options);
             PEAR::popErrorHandling();
             if (PEAR::isError($info)) {
                 if ($info->getCode() != PEAR_INSTALLER_NOBINARY &&

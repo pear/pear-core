@@ -39,6 +39,11 @@ class PEAR_PackageFile_Generator_v1
         $this->_packagefile = &$packagefile;
     }
 
+    function getPackagerVersion()
+    {
+        return '@PEAR-VER@';
+    }
+
     /**
      * Return an XML document based on the package info (as returned
      * by the PEAR_Common::infoFrom* methods).
@@ -83,7 +88,7 @@ class PEAR_PackageFile_Generator_v1
         }
         $ret .= "  </maintainers>\n";
         $ret .= $this->_makeReleaseXml($pkginfo, false, $state);
-        if (@sizeof($pkginfo['changelog']) > 0) {
+        if (isset($pkginfo['changelog']) && count($pkginfo['changelog']) > 0) {
             $ret .= " <changelog>\n";
             foreach ($pkginfo['changelog'] as $oldrelease) {
                 $ret .= $this->_makeReleaseXml($oldrelease, true);
