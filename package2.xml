@@ -210,9 +210,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <php>
     <min>4.2</min>
     <max>6.0.0</max>
-    <exclude>5.0.0</exclude>
-    <exclude>5.0.1</exclude>
-    <exclude>5.0.2</exclude>
    </php>
    <pearinstaller>
     <min>1.4.0dev13</min>
