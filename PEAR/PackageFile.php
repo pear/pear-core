@@ -150,6 +150,9 @@ class PEAR_PackageFile
                 return $pf;
             }
             if ($pf->validate($state)) {
+                if (method_exists($pf, 'flattenFilelist')) {
+                    $pf->flattenFilelist(); // for v2
+                }
                 return $pf;
             } else {
                 $a = PEAR::raiseError('Parsing of package.xml from file "' . $file . '" failed',

@@ -53,8 +53,6 @@ class PEAR_PackageFile_Parser_v2 extends PEAR_XMLParser
             $ret->setLogger($this->_logger);
         }
         $ret->fromArray($this->_unserializedData);
-        // make sure the filelist is in the easy to read format needed
-        $ret->flattenFilelist();
         $ret->setPackagefile($file, $archive);
         return $ret;
     }
