@@ -480,6 +480,11 @@ Run post-installation scripts in package <package>, if any exist.
                             $groups = array($groups);
                         }
                         foreach ($groups as $group) {
+                            if ($group['attribs']['name'] == 'default') {
+                                // default group is always installed, unless the user
+                                // explicitly chooses to install another group
+                                continue;
+                            }
                             $this->ui->outputData($param->getPackage() . ': Optional feature ' .
                                 $group['attribs']['name'] . ' available (' .
                                 $group['attribs']['hint'] . ')');
