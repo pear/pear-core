@@ -73,7 +73,7 @@ require_once dirname(dirname(__FILE__)) . '/download_test_classes.php.inc';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
 $phpunit = &new PEAR_PHPTest(true);
 $fakelog = new fake_log;
-$config = &new test_PEAR_Config($temp_path . '/pear.ini', $temp_path . '/pear.conf');
+$config = &test_PEAR_Config::singleton($temp_path . '/pear.ini', $temp_path . '/pear.conf');
 require_once 'PEAR/Command/Remote.php';
 class test_PEAR_Command_Remote extends PEAR_Command_Remote
 {
@@ -81,6 +81,14 @@ class test_PEAR_Command_Remote extends PEAR_Command_Remote
     {
         $a = &new test_PEAR_Downloader($this->ui, $options, $this->config);
         return $a;
+    }
+
+    function &getInstaller()
+    {
+        if (!isset($GLOBALS['__Stupid_php4_b'])) {
+            $GLOBALS['__Stupid_php4_b'] = &new test_PEAR_Installer($this->ui, array(), $this->config);
+        }
+        return $GLOBALS['__Stupid_php4_b'];
     }
 }
 $command = &new test_PEAR_Command_Remote($fakelog, $config);
