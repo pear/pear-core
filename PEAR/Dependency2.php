@@ -348,6 +348,11 @@ class PEAR_Dependency2
         return $this->validatePackageDependency($dep, $required, $params, true);
     }
 
+    function validateSubpackageDependency($dep, $required, $params, $mustbeinstalled = false)
+    {
+        return $this->validatePackageDependency($dep, $required, $params, $mustbeinstalled);
+    }
+
     /**
      * @param array dependency information (2.0 format)
      * @param boolean whether this is a required dependency
