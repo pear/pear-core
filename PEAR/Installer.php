@@ -24,6 +24,7 @@
 require_once 'PEAR/Downloader.php';
 require_once 'PEAR/Task/Common.php';
 
+define('PEAR_INSTALLER_NOBINARY', -240);
 /**
  * Administration class used to install PEAR packages and maintain the
  * installed package database.
@@ -1056,7 +1057,7 @@ class PEAR_Installer extends PEAR_Downloader
             // {{{ compile and install source files
             if ($this->source_files > 0 && empty($options['nobuild'])) {
                 if (PEAR::isError($err =
-                      $this->_compileSourceFiles($savechannel, $pkg->getFilelist()))) {
+                      $this->_compileSourceFiles($savechannel, $pkg))) {
                     return $err;
                 }
             }
@@ -1103,12 +1104,16 @@ class PEAR_Installer extends PEAR_Downloader
 
     // }}}
     // {{{ _compileSourceFiles()
+    /**
+     * @param string
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     */
     function _compileSourceFiles($savechannel, &$filelist)
     {
         $this->log(1, "$this->source_files source files, building");
         $bob = &new PEAR_Builder($this->ui);
         $bob->debug = $this->debug;
-        $built = $bob->build($this->pkginfo, array(&$this, '_buildCallback'));
+        $built = $bob->build($filelist, array(&$this, '_buildCallback'));
         if (PEAR::isError($built)) {
             $this->rollbackFileTransaction();
             $this->configSet('default_channel', $savechannel);
@@ -1118,33 +1123,50 @@ class PEAR_Installer extends PEAR_Downloader
         foreach ($built as $ext) {
             $bn = basename($ext['file']);
             list($_ext_name, ) = explode('.', $bn);
-            if (extension_loaded($_ext_name)) {
-                return $this->raiseError("Extension '$_ext_name' already loaded. Please unload it ".
-                                  "in your php.ini file prior to install or upgrade it.");
-            }
             // extension dir must be created if it doesn't exist
-            // patch by Tomas Cox (modified by Greg Beaver)
+            // all errors after this point must fail the install without attempting
+            // to install the binary package
             $ext_dir = $this->config->get('ext_dir');
             if (!@is_dir($ext_dir) && !System::mkdir(array('-p', $ext_dir))) {
                 $this->log(3, "+ mkdir -p $ext_dir");
-                return $this->raiseError("failed to create extension dir '$ext_dir'");
+                return $this->raiseError("failed to create extension dir '$ext_dir'",
+                    PEAR_INSTALLER_NOBINARY);
             }
-            $dest = $ext_dir . DIRECTORY_SEPARATOR . $bn;
+            $dest = $ext_dir . DIRECTORY_SEPARATOR . '.tmp' . $bn;
+            $finaldest = $ext_dir . DIRECTORY_SEPARATOR . $bn;
             $this->log(1, "Installing '$bn' at ext_dir ($dest)");
             $this->log(3, "+ cp $ext[file] ext_dir ($dest)");
             $copyto = $this->_prependPath($dest, $this->installroot);
             if (!@copy($ext['file'], $copyto)) {
                 $this->rollbackFileTransaction();
                 $this->configSet('default_channel', $savechannel);
-                return $this->raiseError("failed to copy $bn to $copyto");
+                return $this->raiseError("failed to copy $bn to $copyto", PEAR_INSTALLER_NOBINARY);
             }
-            $filelist[$bn] = array(
+            if (extension_loaded($_ext_name)) {
+                return $this->raiseError("Extension '$_ext_name' already loaded. Please unload it ".
+                                  "in your php.ini file prior to install/upgrade, or use the " .
+                                  "pecl command instead of the pear command.",
+                                  PEAR_INSTALLER_NOBINARY);
+            }
+            $this->log(3, "+ rm $finaldest");
+            @unlink($finaldest);
+            if (file_exists($finaldest)) {
+                return $this->raiseError("extension '$_ext_name' cannot be installed, filename " .
+                                  "'$finaldest' cannot be removed.  Please delete" .
+                                  "it and rename '$dest' manually", PEAR_INSTALLER_NOBINARY);
+            }
+            $this->log(3, "+ rename $dest to $finaldest");
+            if (!@rename($dest, $finaldest)) {
+                return $this->raiseError("extension '$_ext_name' file '$dest' could not be renamed" .
+                                  "to '$finaldest'", PEAR_INSTALLER_NOBINARY);
+            }
+            $filelist->installedFile($bn, array(
                 'role' => 'ext',
-                'installed_as' => $dest,
+                'installed_as' => $ext_dir . DIRECTORY_SEPARATOR . $bn,
                 'php_api' => $ext['php_api'],
                 'zend_mod_api' => $ext['zend_mod_api'],
                 'zend_ext_api' => $ext['zend_ext_api'],
-                );
+                ));
         }
     }
 

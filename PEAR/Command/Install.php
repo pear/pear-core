@@ -355,7 +355,8 @@ package if needed.
                 $this->config);
             PEAR::popErrorHandling();
             if (PEAR::isError($info)) {
-                if (!$param->installBinary($this->installer)) {
+                if ($info->getCode() != PEAR_INSTALLER_NOBINARY &&
+                      !$param->installBinary($this->installer)) {
                     $this->ui->outputData('ERROR: ' .$info->getMessage());
                     continue;
                 }
