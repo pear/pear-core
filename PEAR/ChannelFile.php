@@ -271,10 +271,10 @@ class PEAR_ChannelFile {
             $result = $parser->parse($data);
             if ($result !== true) {
                 if ($result->getCode() == 1) {
-                    $this->_stack->push(PEAR_CHANNELFILE_ERROR_NO_XML_EXT, 'exception',
+                    $this->_stack->push(PEAR_CHANNELFILE_ERROR_NO_XML_EXT, 'error',
                         array('error' => $error));
                 } else {
-                    $this->_stack->push(PEAR_CHANNELFILE_ERROR_CANT_MAKE_PARSER, 'exception');
+                    $this->_stack->push(PEAR_CHANNELFILE_ERROR_CANT_MAKE_PARSER, 'error');
                 }
                 return false;
             }
