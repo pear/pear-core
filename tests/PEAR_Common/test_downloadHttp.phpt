@@ -5,9 +5,9 @@ PEAR_Common::downloadHttp test
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
-$fp = @fsockopen('pear.php.net', 80);
+$fp = @fsockopen('test.pear.php.net', 80);
 if (!$fp) {
-    echo 'skip';
+    echo 'skip test.pear.php.net is down';
 } else {
     fclose($fp);
 }
