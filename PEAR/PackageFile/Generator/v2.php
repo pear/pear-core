@@ -215,7 +215,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                             $task = &new $task($this->_packagefile->_config,
                                 $this->_packagefile->_logger,
                                 PEAR_TASK_PACKAGE);
-                            $task->init($raw, $atts);
+                            $task->init($raw, $atts, null);
                             $res = $task->startSession($this->_packagefile, $contents, $tfile);
                             if (!$res) {
                                 continue; // skip this task
@@ -230,11 +230,13 @@ http://pear.php.net/dtd/package-2.0.xsd',
                             fclose($wp);
                         }
                     }
-                    System::mkdir(array('-p', dirname($tfile)));
-                    copy($file, $tfile);
+                    if (!file_exists($tfile)) {
+                        System::mkdir(array('-p', dirname($tfile)));
+                        copy($file, $tfile);
+                    }
                     $filelist[$i++] = $tfile;
                     if (!isset($atts['md5sum'])) {
-                        $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($file), $i);
+                        $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($tfile), $i);
                     }
                     $packager->log(2, "Adding file $fname");
                 }
