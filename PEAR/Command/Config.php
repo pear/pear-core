@@ -37,10 +37,12 @@ class PEAR_Command_Config extends PEAR_Command_Common
             'function' => 'doConfigShow',
             'shortcut' => 'csh',
             'options' => array(),
-            'doc' => '
+            'doc' => '[layer]
 Displays all configuration values.  An optional argument
 may be used to tell which configuration layer to display.  Valid
-configuration layers are "user", "system" and "default".
+configuration layers are "user", "system" and "default". To display
+configurations for different channels, set the default_channel
+configuration variable and run config-show again.
 ',
             ),
         'config-get' => array(
@@ -54,7 +56,8 @@ first argument is the name of the parameter, an optional second argument
 may be used to tell which configuration layer to look in.  Valid configuration
 layers are "user", "system" and "default".  If no layer is specified, a value
 will be picked from the first layer that defines the parameter, in the order
-just specified.
+just specified.  The configuration value will be retrieved for the channel
+specified by the default_channel configuration variable.
 ',
             ),
         'config-set' => array(
@@ -68,7 +71,9 @@ the name of the parameter, the second argument is the new value.  Some
 parameters are subject to validation, and the command will fail with
 an error message if the new value does not make sense.  An optional
 third argument may be used to specify in which layer to set the
-configuration parameter.  The default layer is "user".
+configuration parameter.  The default layer is "user".  The
+configuration value will be set for the current channel, which
+is controlled by the default_channel configuration variable.
 ',
             ),
         'config-help' => array(
@@ -108,7 +113,7 @@ displays help for all configuration parameters.
         }
         $keys = $this->config->getKeys();
         sort($keys);
-        $data = array('caption' => 'Configuration:');
+        $data = array('caption' => 'Configuration (channel ' . $this->config->get('default_channel') . '):');
         foreach ($keys as $key) {
             $type = $this->config->getType($key);
             $value = $this->config->get($key, @$params[0]);
