@@ -25,72 +25,72 @@ define('PEAR_OBSERVER_TRIGGER',    -4);
 define('PEAR_OBSERVER_DIE',        -8);
 
 /**
-* Base PEAR_Exception Class
-*
-* 1) Features:
-*
-* - Nestable exceptions (throw new PEAR_Exception($msg, $prev_exception))
-* - Definable triggers, shot when exceptions occur
-* - Pretty and informative error messages
-* - Added more context info avaible (like class, method or cause)
-*
-* 2) Ideas:
-*
-* - Maybe a way to define a 'template' for the output
-*
-* 3) Inherited properties from PHP Exception Class:
-*
-* protected $message
-* protected $code
-* protected $line
-* protected $file
-* private   $trace
-*
-* 4) Inherited methods from PHP Exception Class:
-*
-* __clone
-* __construct
-* getMessage
-* getCode
-* getFile
-* getLine
-* getTraceSafe
-* getTraceSafeAsString
-* __toString
-*
-* 5) Usage example
-*
-* <code>
-*  require_once 'PEAR/Exception.php';
-*
-*  class Test {
-*     function foo() {
-*         throw new PEAR_Exception('Error Message', ERROR_CODE);
-*     }
-*  }
-*
-*  function myLogger($pear_exception) {
-*     echo $pear_exception->getMessage();
-*  }
-*  // each time a exception is thrown the 'myLogger' will be called
-*  // (its use is completely optional)
-*  PEAR_Exception::addObserver('myLogger');
-*  $test = new Test;
-*  try {
-*     $test->foo();
-*  } catch (PEAR_Exception $e) {
-*     print $e;
-*  }
-* </code>
-*
-* @since PHP 5
-* @package PEAR
-* @version $Revision$
-* @author Tomas V.V.Cox <cox@idecnet.com>
-* @author Hans Lellelid <hans@velum.net>
-* @author Bertrand Mansion <bmansion@mamasam.com>
-*
-*/
+ * Base PEAR_Exception Class
+ *
+ * 1) Features:
+ *
+ * - Nestable exceptions (throw new PEAR_Exception($msg, $prev_exception))
+ * - Definable triggers, shot when exceptions occur
+ * - Pretty and informative error messages
+ * - Added more context info avaible (like class, method or cause)
+ *
+ * 2) Ideas:
+ *
+ * - Maybe a way to define a 'template' for the output
+ *
+ * 3) Inherited properties from PHP Exception Class:
+ *
+ * protected $message
+ * protected $code
+ * protected $line
+ * protected $file
+ * private   $trace
+ *
+ * 4) Inherited methods from PHP Exception Class:
+ *
+ * __clone
+ * __construct
+ * getMessage
+ * getCode
+ * getFile
+ * getLine
+ * getTraceSafe
+ * getTraceSafeAsString
+ * __toString
+ *
+ * 5) Usage example
+ *
+ * <code>
+ *  require_once 'PEAR/Exception.php';
+ *
+ *  class Test {
+ *     function foo() {
+ *         throw new PEAR_Exception('Error Message', ERROR_CODE);
+ *     }
+ *  }
+ *
+ *  function myLogger($pear_exception) {
+ *     echo $pear_exception->getMessage();
+ *  }
+ *  // each time a exception is thrown the 'myLogger' will be called
+ *  // (its use is completely optional)
+ *  PEAR_Exception::addObserver('myLogger');
+ *  $test = new Test;
+ *  try {
+ *     $test->foo();
+ *  } catch (PEAR_Exception $e) {
+ *     print $e;
+ *  }
+ * </code>
+ *
+ * @since PHP 5
+ * @package PEAR
+ * @version $Revision$
+ * @author Tomas V.V.Cox <cox@idecnet.com>
+ * @author Hans Lellelid <hans@velum.net>
+ * @author Bertrand Mansion <bmansion@mamasam.com>
+ *
+ */
 class PEAR_Exception extends Exception
 {
     protected $cause;
