@@ -209,11 +209,12 @@ parameter.
             'border' => true,
             'headline' => array('Package', 'Version'),
             );
-        foreach ($available as $name => $info) {
-            $data['data'][] = array($name, isset($info['stable']) ? $info['stable'] : '-n/a-');
-        }
         if (count($available)==0) {
-            $data = '(no packages installed yet)';
+            $data = '(no packages available yet)';
+        } else {
+            foreach ($available as $name => $info) {
+                $data['data'][] = array($name, isset($info['stable']) ? $info['stable'] : '-n/a-');
+            }
         }
         $this->ui->outputData($data, $command);
         $this->config->set('default_channel', $savechannel);
