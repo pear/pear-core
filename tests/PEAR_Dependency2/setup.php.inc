@@ -127,6 +127,7 @@ class test_PEAR_Dependency2 extends PEAR_Dependency2
     var $_fakeOS;
     var $_phpVersion;
     var $_extensions;
+    var $_installerVer;
 
     function &singleton($configOrRegistry = null, $installoptions = null, $package = null,
                               $state = PEAR_VALIDATE_INSTALLING)
@@ -159,6 +160,11 @@ class test_PEAR_Dependency2 extends PEAR_Dependency2
     function setPHPversion($version)
     {
         $this->_phpVersion = $version;
+    }
+
+    function setPEARversion($version)
+    {
+        $this->_installerVer = $version;
     }
 
     function setExtensions($exts)
@@ -469,6 +475,55 @@ class test_PEAR_Dependency2 extends PEAR_Dependency2
                 }
             }
         }
+        return true;
+    }
+
+    function validatePearinstallerDependency($dep)
+    {
+        $pearversion = $this->_installerVer;
+        $extra = $this->_getExtraString($dep);
+        if (isset($dep['exclude'])) {
+            if (!is_array($dep['exclude'])) {
+                $dep['exclude'] = array($dep['exclude']);
+            }
+        }
+        if (version_compare($pearversion, $dep['min'], '<')) {
+            if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
+                return $this->raiseError('%s requires PEAR Installer' . $extra .
+                    ', installed version is ' . $pearversion);
+            } else {
+                return $this->warning('warning: %s requires PEAR Installer' . $extra .
+                    ', installed version is ' . $pearversion);
+            }
+        }
+        if (isset($dep['max'])) {
+            if (version_compare($pearversion, $dep['max'], '>')) {
+                if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
+                    return $this->raiseError('%s requires PEAR Installer' . $extra .
+                        ', installed version is ' . $pearversion);
+                } else {
+                    return $this->warning('warning: %s requires PEAR Installer' . $extra .
+                        ', installed version is ' . $pearversion);
+                }
+            }
+        }
+        if (isset($dep['exclude'])) {
+            if (!isset($dep['exclude'][0])) {
+                $dep['exclude'] = array($dep['exclude']);
+            }
+            foreach ($dep['exclude'] as $exclude) {
+                if (version_compare($exclude, $pearversion, '==')) {
+                    if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
+                        return $this->raiseError('%s is not compatible with PEAR Installer ' .
+                            'version ' . $exclude);
+                    } else {
+                        return $this->warning('warning: %s is not compatible with PEAR ' .
+                            'Installer version ' . $exclude);
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     function validatePackageDependency($dep, $required, $params, $mustbeinstalled = false)
