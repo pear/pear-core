@@ -55,6 +55,7 @@
     <notes>
  * fix Bug #3026: Dependency type &quot;ne&quot; is needed, &quot;not&quot; is not handled
    properly
+ * fix Bug #2861: package.dtd does not define NUMBER
  * make pear help listing more useful (put how-to-use info at the bottom of the listing)
     </notes>
     <provides type="class" name="OS_Guess" />
