@@ -242,8 +242,13 @@ class PEAR_DependencyDB
         }
         foreach ($data['dependencies'][$channel][$package] as $dep) {
             $found = false;
-            foreach ($data['packages'][strtolower($dep['dep']['channel'])]
-                  [strtolower($dep['dep']['name'])] as $i => $info) {
+            if (isset($dep['dep']['uri'])) {
+                $depchannel = '__uri';
+            } else {
+                $depchannel = strtolower($dep['dep']['channel']);
+            }
+            foreach ($data['packages'][$depchannel][strtolower($dep['dep']['name'])] as
+                  $i => $info) {
                 if ($info['channel'] == $channel &&
                       $info['package'] == $package) {
                     $found = true;
@@ -251,26 +256,28 @@ class PEAR_DependencyDB
                 }
             }
             if ($found) {
-                unset($data['packages'][strtolower($dep['dep']['channel'])]
-                    [strtolower($dep['dep']['name'])][$i]);
-                if (!count($data['packages'][strtolower($dep['dep']['channel'])]
-                      [strtolower($dep['dep']['name'])])) {
-                    unset($data['packages'][strtolower($dep['dep']['channel'])]
-                        [strtolower($dep['dep']['name'])]);
-                    if (!count($data['packages'][strtolower($dep['dep']['channel'])])) {
-                        unset($data['packages'][strtolower($dep['dep']['channel'])]);
+                unset($data['packages'][$depchannel][strtolower($dep['dep']['name'])][$i]);
+                if (!count($data['packages'][$depchannel][strtolower($dep['dep']['name'])])) {
+                    unset($data['packages'][$depchannel][strtolower($dep['dep']['name'])]);
+                    if (!count($data['packages'][$depchannel])) {
+                        unset($data['packages'][$depchannel]);
                     }
                 } else {
-                    $data['packages'][strtolower($dep['dep']['channel'])]
-                        [strtolower($dep['dep']['name'])] =
-                        array_values($data['packages'][strtolower($dep['dep']['channel'])]
-                            [strtolower($dep['dep']['name'])]);
+                    $data['packages'][$depchannel][strtolower($dep['dep']['name'])] =
+                        array_values(
+                            $data['packages'][$depchannel][strtolower($dep['dep']['name'])]);
                 }
             }
         }
         unset($data['dependencies'][$channel][$package]);
         if (!count($data['dependencies'][$channel])) {
             unset($data['dependencies'][$channel]);
+        }
+        if (!count($data['dependencies'])) {
+            unset($data['dependencies']);
+        }
+        if (!count($data['packages'])) {
+            unset($data['packages']);
         }
         $this->_writeDepDB($data);
     }
