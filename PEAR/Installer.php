@@ -990,6 +990,18 @@ class PEAR_Installer extends PEAR_Downloader
                     $parentpkg = &$pfk->fromArray($parentreg);
                     $this->_registry->updatePackage2($parentpkg);
                 }
+                if ($param->getChannel() == 'pecl.php.net' && isset($options['upgrade'])) {
+                    $tmp = $test;
+                    foreach ($tmp as $file => $info) {
+                        if (is_string($info)) {
+                            // pear.php.net packages are always stored as strings
+                            if (strtolower($info) == strtolower($param->getPackage())) {
+                                // upgrading existing package
+                                unset($test[$file]);
+                            }
+                        }
+                    }
+                }
                 if (sizeof($test)) {
                     $msg = "$channel/$pkgname: conflicting files found:\n";
                     $longest = max(array_map("strlen", array_keys($test)));
