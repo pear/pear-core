@@ -425,12 +425,12 @@ class PEAR_Validate
             if (!preg_match('/\d\d\d\d\-\d\d\-\d\d/',
                   $this->_packagexml->getDate())) {
                 $this->_addFailure('date', 'invalid release date "' .
-                    $this->_packagexml->getDate());
+                    $this->_packagexml->getDate() . '"');
                 return false;
             }
             if (strtotime($this->_packagexml->getDate()) == -1) {
                 $this->_addFailure('date', 'invalid release date "' .
-                    $this->_packagexml->getDate());
+                    $this->_packagexml->getDate() . '"');
                 return false;
             }
         }
@@ -450,14 +450,14 @@ class PEAR_Validate
         // pear validate is called
         if ($this->_state = PEAR_VALIDATE_NORMAL) {
             if (!preg_match('/\d\d:\d\d:\d\d/',
-                  $this->_packagexml->getDate())) {
+                  $this->_packagexml->getTime())) {
                 $this->_addFailure('time', 'invalid release time "' .
-                    $this->_packagexml->getDate());
+                    $this->_packagexml->getTime() . '"');
                 return false;
             }
-            if (strtotime($this->_packagexml->getDate()) == -1) {
+            if (strtotime($this->_packagexml->getTime()) == -1) {
                 $this->_addFailure('time', 'invalid release time "' .
-                    $this->_packagexml->getDate());
+                    $this->_packagexml->getTime() . '"');
                 return false;
             }
         }
