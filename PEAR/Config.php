@@ -542,17 +542,10 @@ class PEAR_Config extends PEAR
      * Reads configuration data from a file.  All existing values in
      * the config layer are discarded and replaced with data from the
      * file.
-     *
-     * @param string (optional) file to read from, if NULL or not
-     * specified, the last-used file for the same layer (second param)
-     * is used
-     *
-     * @param string (optional) config layer to insert data into
-     * ('user' or 'system')
-     *
+     * @param string file to read from, if NULL or not specified, the
+     *               last-used file for the same layer (second param) is used
+     * @param string config layer to insert data into ('user' or 'system')
      * @return bool TRUE on success or a PEAR error on failure
-     *
-     * @access public
      */
     function readConfigFile($file = null, $layer = 'user')
     {
@@ -681,23 +674,15 @@ class PEAR_Config extends PEAR
      * Merges data into a config layer from a file.  Does the same
      * thing as readConfigFile, except it does not replace all
      * existing values in the config layer.
-     *
      * @param string file to read from
-     *
-     * @param bool (optional) whether to overwrite existing data
-     * (default TRUE)
-     *
-     * @param string config layer to insert data into ('user' or
-     * 'system')
-     *
+     * @param bool whether to overwrite existing data (default TRUE)
+     * @param string config layer to insert data into ('user' or 'system')
      * @return bool TRUE on success or a PEAR error on failure
-     *
-     * @access public.
      */
     function mergeConfigFile($file, $override = true, $layer = 'user')
     {
         if (empty($this->files[$layer])) {
-            return $this->raiseError("unknown config file type `$layer'");
+            return $this->raiseError("unknown config layer `$layer'");
         }
         if ($file === null) {
             $file = $this->files[$layer];
@@ -708,9 +693,11 @@ class PEAR_Config extends PEAR
         }
         $this->_decodeInput($data);
         if ($override) {
-            $this->configuration[$layer] = PEAR_Config::arrayMergeRecursive($this->configuration[$layer], $data);
+            $this->configuration[$layer] =
+                PEAR_Config::arrayMergeRecursive($this->configuration[$layer], $data);
         } else {
-            $this->configuration[$layer] = PEAR_Config::arrayMergeRecursive($data, $this->configuration[$layer]);
+            $this->configuration[$layer] =
+                PEAR_Config::arrayMergeRecursive($data, $this->configuration[$layer]);
         }
         $this->_setupChannels();
         $this->_registry[$layer]
