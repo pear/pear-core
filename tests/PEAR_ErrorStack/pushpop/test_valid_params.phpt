@@ -1,5 +1,5 @@
 --TEST--
-PEAR_ErrorStack->getErrorMessage() basic, with params
+PEAR_ErrorStack->push() basic, with params
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
