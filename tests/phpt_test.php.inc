@@ -356,8 +356,10 @@ class PEAR_PHPTest
         ob_start();
         print "dumping registry...\n";
         $infos = $reg->packageInfo(null, null, null);
+        ksort($infos);
         foreach ($infos as $channel => $info) {
             echo "channel $channel:\n";
+            ksort($info);
             foreach ($info as $pkg) {
                 print $pkg["name"] . ":";
                 unset($pkg["name"]);
