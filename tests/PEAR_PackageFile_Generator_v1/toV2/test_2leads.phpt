@@ -75,7 +75,7 @@ release notes
     <max>6.0.0</max>
    </php>
    <pearinstaller>
-    <min>' . $generator->getPackagerVersion() . '</min>
+    <min>1.4.0a1</min>
    </pearinstaller>
    <package>
     <name>Console_Getopt</name>
@@ -159,7 +159,8 @@ Other:
    </notes>
   </release>
  </changelog>
-</package>', $xml, 'xml');
+</package>
+', $xml, 'xml');
 echo 'tests done';
 ?>
 --EXPECT--

@@ -46,7 +46,7 @@ hi there
   <release>alpha</release>
   <api>alpha</api>
  </stability>
- <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+ <license uri="http://www.php.net/license">PHP License</license>
  <notes>here are the
 multi-line
 release notes
@@ -71,7 +71,7 @@ release notes
     <exclude>6.0.0</exclude>
    </php>
    <pearinstaller>
-    <min>' . $generator->getPackagerVersion() . '</min>
+    <min>1.4.0a1</min>
    </pearinstaller>
    <package>
     <name>xmlrpc1</name>
@@ -191,7 +191,7 @@ release notes
     <api>stable</api>
    </stability>
    <date>2004-10-28</date>
-   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <license uri="http://www.php.net/license">PHP License</license>
    <notes>Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
  * fix Bug #1249 display the right state when using --force option
@@ -219,7 +219,7 @@ Other:
     <api>stable</api>
    </stability>
    <date>2004-10-28</date>
-   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <license uri="http://www.php.net/license">PHP License</license>
    <notes>Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
  * fix Bug #1249 display the right state when using --force option
@@ -238,7 +238,8 @@ Other:
    </notes>
   </release>
  </changelog>
-</package>', $xml, 'xml');
+</package>
+', $xml, 'xml');
 echo 'tests done';
 ?>
 --EXPECT--
