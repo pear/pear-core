@@ -744,5 +744,11 @@ class test_PEAR_PackageFile_v2 extends PEAR_PackageFile_v2
         $GLOBALS['last_dl'] = &$z;
         return $z;
     }
+
+    function &getPEARDependency2(&$c, $o, $p, $s = PEAR_VALIDATE_INSTALLING)
+    {
+        $z = &test_PEAR_Dependency2::singleton(&$c, $o, $p, $s);
+        return $z;
+    }
 }
 ?>
