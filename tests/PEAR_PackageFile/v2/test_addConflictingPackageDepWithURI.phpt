@@ -46,7 +46,7 @@ $phpunit->assertEquals(array (
     array (
       'name' => 'fakeo',
       'uri' => 'http://www.example.com/package.tgz',
-      'conflicts' => 'yes',
+      'conflicts' => '',
     ),
   ),
 ), $pf->getDeps(true), 'clear failed');
@@ -69,12 +69,12 @@ $phpunit->assertEquals(array (
       array (
         'name' => 'fakeo',
         'uri' => 'http://www.example.com/package.tgz',
-        'conflicts' => 'yes',
+        'conflicts' => '',
       ),
       array (
         'name' => 'fakeo2',
         'uri' => 'http://www.foozample.com/fakeo.tgz',
-        'conflicts' => 'yes',
+        'conflicts' => '',
       ),
     ),
   ),
@@ -101,17 +101,17 @@ $phpunit->assertEquals(array (
       array (
         'name' => 'fakeo',
         'uri' => 'http://www.example.com/package.tgz',
-        'conflicts' => 'yes',
+        'conflicts' => '',
       ),
       array (
         'name' => 'fakeo2',
         'uri' => 'http://www.foozample.com/fakeo.tgz',
-        'conflicts' => 'yes',
+        'conflicts' => '',
       ),
       array (
         'name' => 'fakeo22',
         'uri' => 'http://www.foozample.com/fakeo.tgz',
-        'conflicts' => 'yes',
+        'conflicts' => '',
         'providesextension' => 'bloba',
       ),
     ),

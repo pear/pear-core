@@ -124,7 +124,7 @@ $phpunit->assertEquals(array (
       'arch' => 
       array (
         'pattern' => 'linux|darwin',
-        'conflicts' => 'yes',
+        'conflicts' => '',
       ),
     ),
     'filelist' => 
