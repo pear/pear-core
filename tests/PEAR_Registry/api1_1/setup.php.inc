@@ -3,7 +3,6 @@ error_reporting(E_ALL);
 include_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'pear_registry_inc.php.inc';
 include_once "PEAR/Registry.php";
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
-PEAR::setErrorHandling(PEAR_ERROR_DIE, "%s\n");
 
 // ------------------------------------------------------------------------- //
 
@@ -31,14 +30,6 @@ function cleanall($dir = null)
     }
 }
 
-require_once 'PEAR/ErrorStack.php';
-function dump_error($err)
-{
-    echo "caught ErrorStack error:\n";
-    echo "message: ". $err['message'] . "\n";
-    echo "code: ". $err['code'] . "\n";
-}
-PEAR_ErrorStack::setDefaultCallback('dump_error');
 register_shutdown_function('cleanall');
 $statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'registry_tester';
 cleanall();
@@ -100,5 +91,5 @@ $files3_new = array(
 
 print "creating registry object\n";
 $reg = new PEAR_Registry($statedir);
-$phpunit = new PEAR_PHPTest(true);
+$phpunit = &new PEAR_PHPTest(true);
 ?>
