@@ -187,11 +187,13 @@ List the files in an installed package.
                     $this->ui->outputData("Channel '$channel' is up-to-date");
                     continue;
                 }
-                $channel = PEAR_Channelfile::fromArray($info);
-                if (!$channel) {
+                $channelinfo = new PEAR_ChannelFile;
+                $channelinfo->fromXmlString($info);
+                if ($channelinfo->getErrors()) {
                     $this->ui->outputData("Downloaded channel data from channel '$channel' is corrupt, skipping");
                     continue;
                 }
+                $channel = $channelinfo;
                 if ($channel->getName() != $save) {
                     $this->ui->outputData('ERROR: Security risk - downloaded channel definition file for channel "'
                         . $channel->getName() . ' from channel "' . $save . '".  To use anyway, use channel-update');
@@ -214,11 +216,13 @@ List the files in an installed package.
                     $this->ui->outputData(array('data' => $info->getMessage()), $command);
                     continue;
                 }
-                $channel = PEAR_Channelfile::fromArray($info);
-                if (!$channel) {
+                $channelinfo = new PEAR_Channelfile;
+                $channelinfo->fromXmlString($info);
+                if ($channelinfo->getErrors()) {
                     $this->ui->outputData("Downloaded channel data from channel '$channel' is corrupt, skipping");
                     continue;
                 }
+                $channel = $channelinfo;
                 if ($channel->getName() != $save) {
                     $this->ui->outputData('ERROR: Security risk - downloaded channel definition file for channel "'
                         . $channel->getName() . ' from channel "' . $save . '".  To use anyway, use channel-update');
