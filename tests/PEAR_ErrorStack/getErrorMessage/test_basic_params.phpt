@@ -26,23 +26,43 @@ $errs = PEAR_ErrorStack::staticGetErrors();
 unset($errs['PEAR_ErrorStack'][0]['time']);
 unset($errs['PEAR_ErrorStack'][0]['context']['file']);
 unset($errs['PEAR_ErrorStack'][0]['context']['line']);
-$phpunit->assertEquals(
-array('PEAR_ErrorStack' =>
-    array(
+if (version_compare(phpversion(), '5.0.0', '<')) {
+    $phpunit->assertEquals(
+    array('PEAR_ErrorStack' =>
         array(
-            'code' => PEAR_ERRORSTACK_ERR_OBJTOSTRING,
-            'params' => array('obj' => 'testgemessage1'),
-            'package' => 'PEAR_ErrorStack',
-            'level' => 'warning',
-            'context' =>
-            array (
-                'function' => 'getErrorMessage',
-                'class' => 'PEAR_ErrorStack',
-            ),
-            'message' => 'object testgemessage1 passed into getErrorMessage, but has no __toString() method',
-        )
-    ),
-), $errs, 'warning not raised');
+            array(
+                'code' => PEAR_ERRORSTACK_ERR_OBJTOSTRING,
+                'params' => array('obj' => 'testgemessage1'),
+                'package' => 'PEAR_ErrorStack',
+                'level' => 'warning',
+                'context' =>
+                array (
+                    'function' => 'geterrormessage',
+                    'class' => 'pear_errorstack',
+                ),
+                'message' => 'object testgemessage1 passed into getErrorMessage, but has no __toString() method',
+            )
+        ),
+    ), $errs, 'warning not raised');
+} else {
+    $phpunit->assertEquals(
+    array('PEAR_ErrorStack' =>
+        array(
+            array(
+                'code' => PEAR_ERRORSTACK_ERR_OBJTOSTRING,
+                'params' => array('obj' => 'testgemessage1'),
+                'package' => 'PEAR_ErrorStack',
+                'level' => 'warning',
+                'context' =>
+                array (
+                    'function' => 'getErrorMessage',
+                    'class' => 'PEAR_ErrorStack',
+                ),
+                'message' => 'object testgemessage1 passed into getErrorMessage, but has no __toString() method',
+            )
+        ),
+    ), $errs, 'warning not raised');
+}
 echo 'tests done';
 ?>
 --EXPECT--
