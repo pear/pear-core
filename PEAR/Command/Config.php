@@ -108,7 +108,12 @@ displays help for all configuration parameters.
             'summary' => 'Create a Default configuration file',
             'function' => 'doConfigCreate',
             'shortcut' => 'coc',
-            'options' => array(),
+            'options' => array(
+                'windows' => array(
+                    'shortopt' => 'w',
+                    'doc' => 'create a config file for a windows install',
+                    ),
+            ),
             'doc' => '<root path> <filename>
 Create a default configuration file with all directory configuration
 variables set to subdirectories of <root path>, and save it as <filename>.
@@ -289,8 +294,19 @@ and uninstall).
                              array('/', '/', '/'),
                             $root);
         if ($root{0} != '/') {
-            return PEAR::raiseError('Root directory must be an absolute path beginning with "/", ' .
-                'was: "' . $root . '"');
+            if (isset($options['windows'])) {
+                if (!preg_match('/^[A-Za-z]:/', $root)) {
+                    return PEAR::raiseError('Root directory must be an absolute path beginning ' .
+                        'with "\\" or "C:\\", was: "' . $root . '"');
+                }
+            } else {
+                return PEAR::raiseError('Root directory must be an absolute path beginning ' .
+                    'with "/", was: "' . $root . '"');
+            }
+        }
+        $windows = isset($options['windows']);
+        if ($windows) {
+            $root = str_replace('/', '\\', $root);
         }
         if (!file_exists($params[1])) {
             if (!@touch($params[1])) {
@@ -302,13 +318,13 @@ and uninstall).
         if ($root{strlen($root) - 1} == '/') {
             $root = substr($root, 0, strlen($root) - 1);
         }
-        $config->set('php_dir', "$root/pear/php");
-        $config->set('data_dir', "$root/pear/data");
-        $config->set('ext_dir', "$root/pear/ext");
-        $config->set('doc_dir', "$root/pear/docs");
-        $config->set('test_dir', "$root/pear/tests");
-        $config->set('cache_dir', "$root/pear/cache");
-        $config->set('bin_dir', "$root/pear");
+        $config->set('php_dir', $windows ? "$root\\pear\\php" : "$root/pear/php");
+        $config->set('data_dir', $windows ? "$root\\pear\\data" : "$root/pear/data");
+        $config->set('ext_dir', $windows ? "$root\\pear\\ext" : "$root/pear/ext");
+        $config->set('doc_dir', $windows ? "$root\\pear\\docs" : "$root/pear/docs");
+        $config->set('test_dir', $windows ? "$root\\pear\\tests" : "$root/pear/tests");
+        $config->set('cache_dir', $windows ? "$root\\pear\\cache" : "$root/pear/cache");
+        $config->set('bin_dir', $windows ? "$root\\pear" : "$root/pear");
         $config->writeConfigFile();
         $save = $this->config;
         $this->config = $config;
