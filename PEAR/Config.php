@@ -550,6 +550,7 @@ class PEAR_Config extends PEAR
         $this->_setupChannels();
         $this->_registry[$layer]
             = &new PEAR_Registry($this->get('php_dir', $layer, 'pear.php.net'));
+        $this->_registry[$layer]->setConfig($this);
         return true;
     }
 
@@ -632,6 +633,7 @@ class PEAR_Config extends PEAR
         $this->_setupChannels();
         $this->_registry[$layer]
             = &new PEAR_Registry($this->get('php_dir', $layer, 'pear.php.net'));
+        $this->_registry[$layer]->setConfig($this);
         return true;
     }
 
@@ -1076,6 +1078,7 @@ class PEAR_Config extends PEAR
         if (isset($this->_registry) && $key == 'php_dir') {
             if ($value != $this->_registry->install_dir) {
                 $this->_registry = &new PEAR_Registry($value);
+                $this->_registry->setConfig($this);
             }
         }
         return true;
@@ -1527,6 +1530,7 @@ class PEAR_Config extends PEAR
         }
         if (isset($this->_registry[$layer])) {
             $this->_registry[$layer] = &$reg;
+            $this->_registry[$layer]->setConfig($this);
             return true;
         } else {
             return false;

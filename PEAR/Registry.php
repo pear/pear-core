@@ -29,6 +29,7 @@ TODO:
 require_once 'System.php';
 require_once 'PEAR.php';
 require_once 'PEAR/Installer/Role.php';
+require_once 'PEAR/DependencyDB.php';
 
 define('PEAR_REGISTRY_ERROR_LOCK',   -2);
 define('PEAR_REGISTRY_ERROR_FORMAT', -3);
@@ -97,6 +98,16 @@ class PEAR_Registry extends PEAR
      * @var false|PEAR_ChannelFile
      */
     var $_pearChannel;
+
+    /**
+     * @var PEAR_DependencyDB
+     */
+    var $_dependencyDB;
+
+    /**
+     * @var PEAR_Config
+     */
+    var $_config;
     // }}}
 
     // {{{ constructor
@@ -121,6 +132,12 @@ class PEAR_Registry extends PEAR
         $this->filemap  = $pear_install_dir.$ds.'.filemap';
         $this->lockfile = $pear_install_dir.$ds.'.lock';
         $this->_pearChannel = $pear_channel;
+        $this->_config = false;
+    }
+
+    function setConfig(&$config)
+    {
+        $this->_config = &$config;
     }
 
     function _initializeDirs()
@@ -163,6 +180,7 @@ class PEAR_Registry extends PEAR
         } elseif (!file_exists($this->filemap)) {
             $this->rebuildFileMap();
         }
+        $this->_dependencyDB = &PEAR_DependencyDB::singleton($this->_config);
     }
     // }}}
     // {{{ destructor
@@ -473,6 +491,7 @@ class PEAR_Registry extends PEAR
         if (!$fp) {
             return $this->raiseError('PEAR_Registry: could not open filemap', PEAR_REGISTRY_ERROR_FILE, null, null, $php_errormsg);
         }
+        clearstatcache();
         $fsize = filesize($this->filemap);
         $rt = get_magic_quotes_runtime();
         set_magic_quotes_runtime(0);
@@ -616,6 +635,7 @@ class PEAR_Registry extends PEAR
         }
         $rt = get_magic_quotes_runtime();
         set_magic_quotes_runtime(0);
+        clearstatcache();
         $data = fread($fp, filesize($this->_packageFileName($package, $channel)));
         set_magic_quotes_runtime($rt);
         $this->_closePackageFile($fp);
@@ -648,6 +668,7 @@ class PEAR_Registry extends PEAR
         }
         $rt = get_magic_quotes_runtime();
         set_magic_quotes_runtime(0);
+        clearstatcache();
         $data = fread($fp, filesize($this->_channelFileName($channel)));
         set_magic_quotes_runtime($rt);
         $this->_closeChannelFile($fp);
@@ -911,10 +932,15 @@ class PEAR_Registry extends PEAR
         }
         $channel = $info->getChannel();
         $package = $info->getPackage();
+        $save = $info;
         if ($this->packageExists($package, $channel)) {
             return false;
         }
         if (!$this->channelExists($channel)) {
+            return false;
+        }
+        $info = $info->toArray(true);
+        if (!$info) {
             return false;
         }
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
@@ -925,14 +951,13 @@ class PEAR_Registry extends PEAR
             $this->_unlock();
             return false;
         }
-        $info = $info->toArray(true);
         $info['_lastmodified'] = time();
         fwrite($fp, serialize($info));
         $this->_closePackageFile($fp);
-        if (isset($info['filelist'])) {
-            $this->rebuildFileMap();
-        }
+        $this->rebuildFileMap();
         $this->_unlock();
+        $this->_dependencyDB->uninstallPackage($save);
+        $this->_dependencyDB->installPackage($save);
         return true;
     }
 
@@ -1166,6 +1191,7 @@ class PEAR_Registry extends PEAR
             return false;
         }
         if (is_object($info)) {
+            $save = $info;
             $info = $info->toArray(true);
         }
         $info['_lastmodified'] = time();
@@ -1207,6 +1233,9 @@ class PEAR_Registry extends PEAR
             $this->rebuildFileMap();
         }
         $this->_unlock();
+        $save = $this->getPackage($save->getPackage(), $save->getChannel());
+        $this->_dependencyDB->uninstallPackage($save);
+        $this->_dependencyDB->installPackage($save);
         return true;
     }
 

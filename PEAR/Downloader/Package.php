@@ -467,6 +467,16 @@ class PEAR_Downloader_Package
         }
     }
 
+    function setDownloadURL($pkg)
+    {
+        $this->_downloadURL = $pkg;
+    }
+
+    function setPackageFile(&$pkg)
+    {
+        $this->_packagefile = &$pkg;
+    }
+
     function getParsedPackage()
     {   
         if (isset($this->_packagefile) || isset($this->_parsedname)) {
@@ -475,6 +485,11 @@ class PEAR_Downloader_Package
                 'version' => $this->getVersion());
         }
         return false;
+    }
+
+    function getDownloadURL()
+    {
+        return $this->_downloadURL;
     }
 
     function getPackage()
@@ -620,6 +635,13 @@ class PEAR_Downloader_Package
                     $param->_downloader->getOptions(), $param->getParsedPackage(),
                     PEAR_VALIDATE_DOWNLOADING);
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                $installcheck = $depchecker->validatePackage($param->getDownloadURL(),
+                    $param->_downloader);
+                if (PEAR::isError($installcheck)) {
+                    $failed = true;
+                    $param->_downloader->log(0, $installcheck->getMessage());
+                    continue;
+                }
                 $failed = false;
                 if (isset($deps['required'])) {
                     foreach ($deps['required'] as $type => $dep) {
