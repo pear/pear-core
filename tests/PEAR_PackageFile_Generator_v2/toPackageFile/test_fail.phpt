@@ -89,6 +89,29 @@ $phpunit->assertErrors(array(
 ), 'bad 2');
 $phpunit->assertIsa('PEAR_Error', $e, 'error 2');
 
+$pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
+    DIRECTORY_SEPARATOR . 'bundlefail1.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
+    DIRECTORY_SEPARATOR . 'bundlefail1.xml');
+$generator = &$pf->getDefaultGenerator();
+$e = $generator->toPackageFile($temp_path, PEAR_VALIDATE_PACKAGING, 'tub.xml');
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'cannot analyze file "' .
+    dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
+    DIRECTORY_SEPARATOR . 'nosuchpackage-1.9.0.tgz", file not found'),
+), 'bad bundle 1');
+$phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 1,
+    1 => 'Analyzing bundled package fakefoo-1.9.0.tgz',
+  ),
+  1 => 
+  array (
+    0 => 1,
+    1 => 'Analyzing bundled package fakebar-1.9.0.tgz',
+  ),
+), $fakelog->getLog(), 'bad bundle 1 log');
+
 echo 'tests done';
 ?>
 --EXPECT--
