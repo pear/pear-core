@@ -271,7 +271,7 @@ parameter.
         $local_pkgs = $reg->listPackages($channel);
 
         foreach ($available as $name => $info) {
-            $installed = $reg->packageInfo($name);
+            $installed = $reg->packageInfo($name, null, $channel);
             if (is_array($installed['version'])) {
                 $installed['version'] = $installed['version']['release'];
             }
