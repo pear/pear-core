@@ -167,6 +167,7 @@ class PEAR_RunTest
             $this->_logger->log(2, 'Running command "' . $cmd . '"');
         }
 
+        $savedir = getcwd(); // in case the test moves us around
         if (isset($section_text['RETURNS'])) {
             ob_start();
             system($cmd, $return_value);
@@ -179,6 +180,7 @@ class PEAR_RunTest
             $out = `$cmd`;
             $returnfail = false;
         }
+        chdir($savedir);
         // Does the output match what is expected?
         $output = trim($out);
         $output = preg_replace('/\r\n/', "\n", $output);
