@@ -217,6 +217,10 @@ Installer:
     <moo/>
    </pearinstaller>
    <package>
+    <name>nouri</name>
+    <channel>__uri</channel>
+   </package>
+   <package>
     <name>blh</name>
     <channel>pear.php.net</channel>
     <min>1.4.0a1</min>

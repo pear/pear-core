@@ -196,6 +196,9 @@ class PEAR_PackageFile_v2_Validator
 
     function _stupidSchemaValidate($structure, $xml, $root)
     {
+        if (!is_array($xml)) {
+            $xml = array();
+        }
         $keys = array_keys($xml);
         reset($keys);
         $key = current($keys);
@@ -509,6 +512,9 @@ class PEAR_PackageFile_v2_Validator
         if (isset($dep['conflicts']) && (isset($dep['min']) || isset($dep['max']) ||
               isset($dep['recommended']) || isset($dep['exclude']))) {
             $this->_conflictingDepsCannotHaveVersioning('<dependencies>' . $group . $type);
+        }
+        if (isset($dep['channel']) && strtolower($dep['channel']) == '__uri') {
+            $this->_DepchannelCannotBeUri('<dependencies>' . $group . $type);
         }
         if (isset($dep['min'])) {
             if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
@@ -1288,6 +1294,13 @@ class PEAR_PackageFile_v2_Validator
         $this->_stack->push(__FUNCTION__, 'error', array('type' => $type),
             '%type%: conflicting dependencies cannot have versioning info, use <exclude> to ' .
             'exclude specific versions of a dependency');
+    }
+
+    function _DepchannelCannotBeUri($type)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('type' => $type),
+            '%type%: channel cannot be __uri, this is a pseudo-channel reserved for uri ' .
+            'dependencies only');
     }
 
     function _analyzePhpFiles()

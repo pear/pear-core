@@ -20,6 +20,7 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><package><name>blh</name>, found <moo> expected one of "exclude, providesextension"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><package><name>blh2</name>, found <min> expected one of "providesextension"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><required><package><name>blh2</name>: dependencies with a <uri> tag cannot have any versioning information'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><required><package><name>nouri</name>: channel cannot be __uri, this is a pseudo-channel reserved for uri dependencies only'),
 
 // subpackage
 
