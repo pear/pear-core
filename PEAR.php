@@ -97,7 +97,7 @@ $GLOBALS['_PEAR_error_handler_stack']    = array();
  * @link       http://pear.php.net/package/PEAR
  * @see        PEAR_Error
  * @since      Class available since PHP 4.0.2
- * @see        http://pear.php.net/manual/en/core.pear.php#core.pear.pear
+ * @link        http://pear.php.net/manual/en/core.pear.php#core.pear.pear
  */
 class PEAR
 {
