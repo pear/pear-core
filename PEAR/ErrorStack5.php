@@ -426,10 +426,11 @@ class PEAR_ErrorStack {
      */
     static public function staticPopCallback()
     {
-        array_pop(self::$overridecallback);
+        $ret = array_pop(self::$overridecallback);
         if (!is_array(self::$overridecallback)) {
             self::$overridecallback = array();
         }
+        return $ret;
     }
 
     /**
