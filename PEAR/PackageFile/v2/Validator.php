@@ -203,7 +203,6 @@ class PEAR_PackageFile_v2_Validator
             $key = next($keys);
         }
         $test = false;
-        $possiblemismatch = true;
         $unfoundtags = array();
         foreach ($structure as $struc) {
             if (!$key && @$struc['multiple'] == '*') {
