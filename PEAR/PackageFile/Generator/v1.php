@@ -618,6 +618,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
         include_once 'PEAR/PackageFile/v2.php';
         $ret = new PEAR_PackageFile_v2;
         $ret->setConfig($this->_packagefile->_config);
+        $ret->setLogger($this->_packagefile->_logger);
         $ret->fromArray($arr);
         return $ret;
     }
