@@ -145,17 +145,32 @@ class PEAR_PackageFile_v2_Validator
             if (!$chan) {
                 $this->_unknownChannel($this->_pf->getChannel());
             } else {
+                $valpack = $chan->getValidationPackage();
                 $validator = $chan->getValidationObject();
-                $validator->setPackageFile($this->_pf);
-                $validator->validate($state);
-                $failures = $validator->getFailures();
-                foreach ($failures['errors'] as $error) {
-                    $this->_stack->push(__FUNCTION__, 'error', $error,
-                        'Channel validator error: field "%field%" - %reason%');
-                }
-                foreach ($failures['warnings'] as $warning) {
-                    $this->_stack->push(__FUNCTION__, 'warning', $warning,
-                        'Channel validator warning: field "%field%" - %reason%');
+                if ($this->_pf->getPackage() != $valpack['name']) {
+                    // only run these tests if we are not installing the validation package
+                    if (!$validator) {
+                        $this->_stack->push(__FUNCTION__, 'error',
+                            array_merge(
+                                array('channel' => $chan->getName(),
+                                      'package' => $this->_pf->getPackage()),
+                                  $valpack
+                                ),
+                            'package "%channel%/%package%" cannot be properly validated without ' .
+                            'validation package "%channel%/%name%-%version%"');
+                        return $this->_isValid = 0;
+                    }
+                    $validator->setPackageFile($this->_pf);
+                    $validator->validate($state);
+                    $failures = $validator->getFailures();
+                    foreach ($failures['errors'] as $error) {
+                        $this->_stack->push(__FUNCTION__, 'error', $error,
+                            'Channel validator error: field "%field%" - %reason%');
+                    }
+                    foreach ($failures['warnings'] as $warning) {
+                        $this->_stack->push(__FUNCTION__, 'warning', $warning,
+                            'Channel validator warning: field "%field%" - %reason%');
+                    }
                 }
             }
         }

@@ -48,11 +48,27 @@ class PEAR_Validate
     var $_failures = array('error' => array(), 'warning' => array());
 
     /**
+     * Override this method to handle validation of normal package names
+     * @param string
+     * @return bool
+     * @access protected
+     */
+    function _validPackageName($name)
+    {
+        return (bool) preg_match('/^' . $this->packageregex . '$/', $name);
+    }
+
+    /**
      * @param string
      */
-    function validPackageName($name)
+    function validPackageName($name, $validatepackagename = false)
     {
-        return (bool)preg_match('/^' . $this->packageregex . '$/', $name);
+        if ($validatepackagename) {
+            if (strtolower($name) == strtolower($validatepackagename)) {
+                return (bool) preg_match('/^[a-zA-Z0-9_-]+(?:\.[a-zA-Z0-9_]+)*$/', $name);
+            }
+        }
+        return $this->_validPackageName($name);
     }
 
     /**
@@ -64,7 +80,7 @@ class PEAR_Validate
      */
     function validGroupName($name)
     {
-        return (bool)preg_match('/^' . _PEAR_COMMON_PACKAGE_NAME_PREG . '$/', $name);
+        return (bool) preg_match('/^' . _PEAR_COMMON_PACKAGE_NAME_PREG . '$/', $name);
     }
 
     function validState($state)

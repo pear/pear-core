@@ -1617,17 +1617,18 @@ class PEAR_ChannelFile {
             return $a;
         }
         if (isset($this->_channelInfo['validatepackage'])) {
-            if (!class_exists($this->_channelInfo['validatepackage']['name'])) {
+            if (!class_exists(str_replace('.', '_',
+                  $this->_channelInfo['validatepackage']['name']))) {
                 if ($this->isIncludeable(str_replace('_', '/',
                       $this->_channelInfo['validatepackage']['name']) . '.php')) {
                     include_once str_replace('_', '/',
                         $this->_channelInfo['validatepackage']['name']) . '.php';
-                    $val = &new $this->_channelInfo['validatepackage']['name'];
+                    $val = &new str_replace('.', '_', $this->_channelInfo['validatepackage']['name']);
                 } else {
                     return false;
                 }
             } else {
-                $val = &new $this->_channelInfo['validatepackage']['name'];
+                $val = &new str_replace('.', '_', $this->_channelInfo['validatepackage']['name']);
             }
         } else {
             include_once 'PEAR/Validate.php';
