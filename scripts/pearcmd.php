@@ -25,6 +25,7 @@ if (!defined('PEAR_RUNTYPE')) {
     // this is defined in peclcmd.php as 'pecl'
     define('PEAR_RUNTYPE', 'pear');
 }
+define('PEAR_IGNORE_BACKTRACE', 1);
 /**
  * @nodep Gtk
  */
