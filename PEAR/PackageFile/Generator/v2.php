@@ -215,6 +215,8 @@ http://pear.php.net/dtd/package-2.0.xsd',
      */
     function toXml($state = PEAR_VALIDATE_NORMAL, $options = array())
     {
+        $this->_packagefile->setDate(date('Y-m-d'));
+        $this->_packagefile->setTime(date('H:i:s'));
         if (!$this->_packagefile->validate($state)) {
             return false;
         }
