@@ -331,17 +331,20 @@ class PEAR_PackageFile_Generator_v1
         include_once 'System.php';
         if ($where === null) {
             if (!($where = System::mktemp(array('-d')))) {
-                return $this->raiseError("PEAR_Packagefile: mktemp failed");
+                return PEAR::raiseError('PEAR_Packagefile_v1::toTgz mktemp failed');
             }
+        } elseif (PEAR::isError($e = System::mkDir(array('-p', $where)))) {
+            return $e;
         }
         if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING)) {
-            return false;
+            return PEAR::raiseError('PEAR_Packagefile_v1::toTgz invalid package file');
         }
         if ($pkgfile = $this->_packagefile->getPackageFile()) {
             $pkgdir = dirname(realpath($pkgfile));
             $pkgfile = basename($pkgfile);
         } else {
-            return false;
+            return PEAR::raiseError('PEAR_Packagefile_v1::toTgz package file object must ' .
+                'be created from a real file');
         }
         $pkginfo = $this->_packagefile->getArray();
         $pkgver = $pkginfo['package'] . '-' . $pkginfo['version'];
@@ -352,7 +355,7 @@ class PEAR_PackageFile_Generator_v1
         foreach ($this->_packagefile->getFilelist() as $fname => $atts) {
             $file = $pkgdir . DIRECTORY_SEPARATOR . $fname;
             if (!file_exists($file)) {
-                return $packager->raiseError("File does not exist: $fname");
+                return PEAR::raiseError("File does not exist: $fname");
             } else {
                 $filelist[$i++] = $file;
                 if (!isset($atts['md5sum'])) {
@@ -371,13 +374,13 @@ class PEAR_PackageFile_Generator_v1
             // ----- Creates with the package.xml file
             $ok = $tar->createModify(array($packagexml), '', $where);
             if (PEAR::isError($ok)) {
-                return $packager->raiseError($ok);
+                return $ok;
             } elseif (!$ok) {
-                return $packager->raiseError('PEAR_Packagefile::toTgz(): tarball creation failed');
+                return PEAR::raiseError('PEAR_Packagefile_v1::toTgz(): tarball creation failed');
             }
             // ----- Add the content of the package
             if (!$tar->addModify($filelist, $pkgver, $pkgdir)) {
-                return $packager->raiseError('PEAR_Packagefile::toTgz(): tarball creation failed');
+                return PEAR::raiseError('PEAR_Packagefile::toTgz(): tarball creation failed');
             }
             return $dest_package;
         }
