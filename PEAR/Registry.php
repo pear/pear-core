@@ -119,7 +119,7 @@ class PEAR_Registry extends PEAR
         // XXX Compatibility code should be removed in the future
         // rename all registry files if any to lowercase
         if (!OS_WINDOWS && $handle = @opendir($this->statedir)) {
-            $dest = $this->statedir . DIRECTORY_SEPARATOR;
+            $dest = $this->statedir . $ds;
             while (false !== ($file = readdir($handle))) {
                 if (preg_match('/^.*[A-Z].*\.reg$/', $file)) {
                     rename($dest . $file, $dest . strtolower($file));
@@ -127,7 +127,8 @@ class PEAR_Registry extends PEAR
             }
             closedir($handle);
         }
-        if (!is_dir($this->channelsdir)) {
+        if (!is_dir($this->channelsdir) ||
+              !file_exists($this->channelsdir . $ds . 'pear.reg')) {
             if (!is_a($pear_channel, 'PEAR_ChannelFile') || !$pear_channel->validate()) {
                 include_once 'PEAR/ChannelFile.php';
                 $pear_channel = new PEAR_ChannelFile;
