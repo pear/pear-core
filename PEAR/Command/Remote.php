@@ -438,9 +438,21 @@ parameter.
             }
             $caption = $channel . ' Available Upgrades';
             if (empty($state) || $state == 'any') {
+                $remote->pushErrorHandling(PEAR_ERROR_RETURN);
                 $latest = $remote->call("package.listLatestReleases");
+                $remote->popErrorHandling();
+                if (PEAR::isError($latest)) {
+                    $this->ui->outputData($latest->getMessage());
+                    continue;
+                }
             } else {
+                $remote->pushErrorHandling(PEAR_ERROR_RETURN);
                 $latest = $remote->call("package.listLatestReleases", $state);
+                $remote->popErrorHandling();
+                if (PEAR::isError($latest)) {
+                    $this->ui->outputData($latest->getMessage());
+                    continue;
+                }
                 $caption .= ' (' . implode(', ', PEAR_Common::betterStates($state, true)) . ')';
             }
             $caption .= ':';
