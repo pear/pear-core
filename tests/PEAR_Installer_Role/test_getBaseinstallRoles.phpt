@@ -9,7 +9,6 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 'ext',
   1 => 'php',
