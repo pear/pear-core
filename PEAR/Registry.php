@@ -738,7 +738,14 @@ class PEAR_Registry extends PEAR
     // }}}
     // {{{ _packageInfo()
 
-    function _packageInfo($package = null, $key = null, $channel = false)
+    /**
+     * @param string|null
+     * @param string|null
+     * @param string|null
+     * @return array|null
+     * @access private
+     */
+    function _packageInfo($package = null, $key = null, $channel = 'pear.php.net')
     {
         if ($package === null) {
             if ($channel === null) {
@@ -941,13 +948,19 @@ class PEAR_Registry extends PEAR
         return true;
     }
 
-    function _updatePackage($package, $info, $merge = true, $channel = false)
+    /**
+     * @param string Package name
+     * @param array parsed package.xml 1.0
+     * @param bool this parameter is only here for BC.  Don't use it.
+     * @access private
+     */
+    function _updatePackage($package, $info, $merge = true)
     {
-        $oldinfo = $this->_packageInfo($package, null, $channel);
+        $oldinfo = $this->_packageInfo($package);
         if (empty($oldinfo)) {
             return false;
         }
-        $fp = $this->_openPackageFile($package, 'w', $channel);
+        $fp = $this->_openPackageFile($package, 'w');
         if ($fp === null) {
             return false;
         }
@@ -969,37 +982,37 @@ class PEAR_Registry extends PEAR
         return true;
     }
 
-    function _updatePackage2($info, $merge = true)
+    /**
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     * @return bool
+     * @access private
+     */
+    function _updatePackage2($info)
     {
-        $package = $info->getPackage();
-        $channel = $info->getChannel();
-        $oldinfo = $this->_packageInfo($package, null, $channel);
-        if (empty($oldinfo)) {
+        if (!$this->_packageExists($info->getPackage(), $info->getChannel())) {
             return false;
         }
-        $fp = $this->_openPackageFile($package, 'w', $channel);
+        $fp = $this->_openPackageFile($info->getPackage(), 'w', $info->getChannel());
         if ($fp === null) {
             return false;
         }
-        if (is_object($info)) {
-            $save = $info;
-            $info = $info->toArray(true);
-        }
+        $save = $info;
+        $info = $save->toArray(true);
         $info['_lastmodified'] = time();
-        $newinfo = $info;
-        if ($merge) {
-            $info = array_merge($oldinfo, $info);
-        } else {
-            $diff = $info;
-        }
         fwrite($fp, serialize($info));
         $this->_closePackageFile($fp);
-        if (isset($newinfo['filelist'])) {
+        if (isset($info['filelist'])) {
             $this->_rebuildFileMap();
         }
         return true;
     }
 
+    /**
+     * @param string Package name
+     * @param string Channel name
+     * @return PEAR_PackageFile_v1|PEAR_PackageFile_v2|null
+     * @access private
+     */
     function &_getPackage($package, $channel = 'pear.php.net')
     {
         if (!class_exists('PEAR_PackageFile')) {
@@ -1052,7 +1065,12 @@ class PEAR_Registry extends PEAR
 
     // {{{ packageExists()
 
-    function packageExists($package, $channel = false)
+    /**
+     * @param string Package name
+     * @param string Channel name
+     * @return bool
+     */
+    function packageExists($package, $channel = 'pear.php.net')
     {
         if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
             return $e;
@@ -1069,6 +1087,7 @@ class PEAR_Registry extends PEAR
     /**
      * @param string channel name
      * @param bool if true, then aliases will be ignored
+     * @return bool
      */
     function channelExists($channel, $noaliases = false)
     {
@@ -1084,6 +1103,10 @@ class PEAR_Registry extends PEAR
 
     // {{{ isAlias()
 
+    /**
+     * @param string
+     * @return bool
+     */
     function isAlias($alias)
     {
         if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
@@ -1097,7 +1120,13 @@ class PEAR_Registry extends PEAR
     // }}}
     // {{{ packageInfo()
 
-    function packageInfo($package = null, $key = null, $channel = false)
+    /**
+     * @param string|null
+     * @param string|null
+     * @param string
+     * @return array|null
+     */
+    function packageInfo($package = null, $key = null, $channel = 'pear.php.net')
     {
         if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
             return $e;
@@ -1108,7 +1137,7 @@ class PEAR_Registry extends PEAR
     }
 
     // }}}
-    // {{{ packageInfo()
+    // {{{ channelInfo()
 
     /**
      * Retrieve a raw array of channel data.
@@ -1138,19 +1167,6 @@ class PEAR_Registry extends PEAR
             return $e;
         }
         $ret = $this->_getChannelFromAlias($channel);
-        $this->_unlock();
-        return $ret;
-    }
-
-    // }}}
-    // {{{ allPackageInfo()
-
-    function allPackageInfo()
-    {
-        if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
-            return $e;
-        }
-        $ret = $this->_packageInfo(null, null, null);
         $this->_unlock();
         return $ret;
     }
@@ -1321,7 +1337,7 @@ class PEAR_Registry extends PEAR
     // }}}
     // {{{ updatePackage()
 
-    function updatePackage($package, $info, $merge = true, $channel = false)
+    function updatePackage($package, $info, $merge = true)
     {
         if (is_object($info)) {
             return $this->updatePackage2($info, $merge);
@@ -1329,13 +1345,13 @@ class PEAR_Registry extends PEAR
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
-        $ret = $this->_updatePackage($package, $info, $merge, $channel);
+        $ret = $this->_updatePackage($package, $info, $merge);
         $this->_unlock();
         if ($ret) {
             include_once 'PEAR/PackageFile/v1.php';
             $pf = new PEAR_PackageFile_v1;
             $pf->setConfig($this->_config);
-            $pf->fromArray($this->packageInfo($package, null, $channel));
+            $pf->fromArray($this->packageInfo($package));
             $this->_dependencyDB->uninstallPackage($pf);
             $this->_dependencyDB->installPackage($pf);
         }
@@ -1345,7 +1361,7 @@ class PEAR_Registry extends PEAR
     // }}}
     // {{{ updatePackage2()
 
-    function updatePackage2($info, $merge = true)
+    function updatePackage2($info)
     {
         if (!is_object($info)) {
             return $this->updatePackage($info['package'], $info, $merge);
@@ -1353,10 +1369,12 @@ class PEAR_Registry extends PEAR
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
-        $ret = $this->_getPackage($info->getPackage(), $info->getChannel());
+        $ret = $this->_updatePackage2($info);
         $this->_unlock();
-        $this->_dependencyDB->uninstallPackage($info);
-        $this->_dependencyDB->installPackage($info);
+        if ($ret) {
+            $this->_dependencyDB->uninstallPackage($info);
+            $this->_dependencyDB->installPackage($info);
+        }
         return $ret;
     }
 

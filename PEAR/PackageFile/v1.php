@@ -639,12 +639,15 @@ class PEAR_PackageFile_v1
     function addPackageDep($name, $version, $rel, $optional = 'no')
     {
         $this->_isValid = false;
-        $this->_packageInfo['release_deps'][] =
+        $dep =
             array('type' => 'pkg',
                   'name' => $name,
                   'rel' => $rel,
-                  'version' => $version,
                   'optional' => $optional);
+        if ($rel != 'has' && $rel != 'not') {
+            $dep['version'] = $version;
+        }
+        $this->_packageInfo['release_deps'][] = $dep;
     }
 
     function addExtensionDep($name, $version, $rel, $optional = 'no')
