@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Config->readFTPConfigFile()
+PEAR_Config->readFTPConfigFile() (failure)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -18,6 +18,7 @@ $phpunit->assertErrors(array(
 ), 'no net_ftp');
 
 include_once dirname(__FILE__) . '/test_readFTPConfigFile/FTP.php.inc';
+ini_restore('include_path');
 $ftp = &Net_FTP::singleton();
 $ftp->setConnectError('connect error');
 $e = $config->readFTPConfigFile('ftp://example.com');

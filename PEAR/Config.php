@@ -283,7 +283,7 @@ class PEAR_Config extends PEAR
             'group' => 'Internet Access',
             ),
         'remote_config' => array(
-            'type' => 'string',
+            'type' => 'password',
             'default' => '',
             'doc' => 'ftp url of remote configuration file to use for synchronized install',
             'prompt' => 'Remote Configuration File',

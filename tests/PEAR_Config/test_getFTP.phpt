@@ -18,6 +18,7 @@ $phpunit->assertErrors(array(
 
 $phpunit->assertFalse($config->getFTP(), 'getFTP() false');
 include_once dirname(__FILE__) . '/test_readFTPConfigFile/FTP.php.inc';
+ini_restore('include_path');
 $ftp = &Net_FTP::singleton();
 $ftp->addRemoteFile('config.ini', dirname(__FILE__) . DIRECTORY_SEPARATOR .
     'test_readFTPConfigFile' . DIRECTORY_SEPARATOR . 'remote.ini');
