@@ -61,7 +61,6 @@ class PEAR_Remote extends PEAR
         $this->_registry = &$reg;
     }
     // }}}
-
     // {{{ getCache()
 
 
@@ -109,23 +108,6 @@ class PEAR_Remote extends PEAR
     }
 
     // }}}
-
-    function callWithVersion($version, $method)
-    {
-        $_args = $args = func_get_args();
-        $server_channel = $this->config->get('default_channel');
-        $channel = $this->_registry->getChannel($server_channel);
-        if ($channel) {
-            if (!$channel->supports('xmlrpc', $method, $version)) {
-                // check for channel.list, which is implicitly supported for the PEAR channel
-                if (!(strtolower($server_channel) == 'pear.php.net' && $method == 'channel.list')) {
-                    return $this->raiseError("Channel $server_channel does not support xml-rpc method $method");
-                }
-            }
-        }
-        array_shift($_args);
-        return call_user_func_array(array(&$this, 'call'), $_args);
-    }
     // {{{ call(method, [args...])
 
     function call($method)
@@ -135,8 +117,21 @@ class PEAR_Remote extends PEAR
         $server_channel = $this->config->get('default_channel');
         $channel = $this->_registry->getChannel($server_channel);
         if ($channel) {
-            if (!$channel->supports('xmlrpc', $method)) {
-                return $this->raiseError("Channel $server_channel does not support xml-rpc method $method");
+            $mirror = $this->config->get('preferred_mirror');
+            if ($mirror = $channel->getMirror($mirror)) {
+                if ($channel->supports('xmlrpc', $method, $mirror)) {
+                    $server_channel = $server_host = $mirror; // use the preferred mirror
+                    $server_port = $channel->getPort($mirror);
+                } elseif (!$channel->supports('xmlrpc', $method)) {
+                    return $this->raiseError("Channel $server_channel does not " .
+                        "support xml-rpc method $method");
+                }
+            } elseif (!$channel->supports('xmlrpc', $method)) {
+                return $this->raiseError("Channel $server_channel does not support " .
+                    "xml-rpc method $method");
+            } else {
+                $server_host = $server_channel;
+                $server_port = $channel->getPort();
             }
         } else {
             return $this->raiseError("Unknown channel '$server_channel'");
@@ -160,7 +155,6 @@ class PEAR_Remote extends PEAR
             return $this->raiseError("For this remote PEAR operation you need to install the XML_RPC package");
         }
         array_shift($args);
-        $server_host = $channel->getServer();
         $username = $this->config->get('username');
         $password = $this->config->get('password');
         $eargs = array();
@@ -181,7 +175,8 @@ class PEAR_Remote extends PEAR
             $proxy_pass = @urldecode(@$proxy['pass']);
         }
         $c = new XML_RPC_Client($channel->getPath('xmlrpc') . $channel->getFileName('xmlrpc')
-            .$maxAge, $server_host, $channel->getPort(), $proxy_host, $proxy_port, $proxy_user, $proxy_pass);
+            . $maxAge, $server_host, $server_port, $proxy_host, $proxy_port,
+            $proxy_user, $proxy_pass);
         if ($username && $password) {
             $c->setCredentials($username, $password);
         }
@@ -238,19 +233,29 @@ class PEAR_Remote extends PEAR
         $server_channel = $this->config->get('default_channel');
         $channel = $this->_registry->getChannel($server_channel);
         if ($channel) {
-            if (!$channel->supports('xmlrpc', $method)) {
-                return $this->raiseError("Channel $server_channel does not support xml-rpc method $method");
+            $mirror = $this->config->get('preferred_mirror');
+            if ($mirror = $channel->getMirror($mirror)) {
+                if ($channel->supports('xmlrpc', $method, $mirror)) {
+                    $server_channel = $server_host = $mirror; // use the preferred mirror
+                    $server_port = $channel->getPort($mirror);
+                } elseif (!$channel->supports('xmlrpc', $method)) {
+                    return $this->raiseError("Channel $server_channel does not " .
+                        "support xml-rpc method $method");
+                }
+            } elseif (!$channel->supports('xmlrpc', $method)) {
+                return $this->raiseError("Channel $server_channel does not support " .
+                    "xml-rpc method $method");
+            } else {
+                $server_host = $server_channel;
+                $server_port = $channel->getPort();
             }
+        } else {
+            return $this->raiseError("Unknown channel '$server_channel'");
         }
         $params = func_get_args();
         array_shift($params);
         $method = str_replace("_", ".", $method);
         $request = xmlrpc_encode_request($method, $params);
-        $server_host = $channel->getServer();
-        if (empty($server_host)) {
-            return $this->raiseError("PEAR_Remote::call: no master_server configured");
-        }
-        $server_port = $channel->getPort();
         if ($http_proxy = $this->config->get('http_proxy')) {
             $proxy = parse_url($http_proxy);
             $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
