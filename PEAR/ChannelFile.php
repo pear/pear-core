@@ -868,20 +868,20 @@ class PEAR_ChannelFile {
             if ($mir = $this->getMirror($mirror)) {
                 if ($protocol == 'static') {
                     if (isset($mir['static'])) {
-                        return $mir['static']['attribs'];
+                        return $mir['static'];
                     } else {
                         return false;
                     }
                 }
                 if (isset($mir[$protocol]['function'])) {
-                    return $mir[$protocol];
+                    return $mir[$protocol]['function'];
                 }
             }
             return false;
         }
         if ($protocol == 'static') {
             if (isset($this->_channelInfo['servers']['primary']['static'])) {
-                return $this->_channelInfo['servers']['primary']['static']['attribs'];
+                return $this->_channelInfo['servers']['primary']['static'];
             } else {
                 return false;
             }
@@ -1008,8 +1008,8 @@ class PEAR_ChannelFile {
      */
     function getMirrors()
     {
-        if (isset($this->_channelInfo['mirror'])) {
-            $mirrors = $this->_channelInfo['mirror'];
+        if (isset($this->_channelInfo['servers']['mirror'])) {
+            $mirrors = $this->_channelInfo['servers']['mirror'];
             if (!isset($mirrors[0])) {
                 $mirrors = array($mirrors);
             }
