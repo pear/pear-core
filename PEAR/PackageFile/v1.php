@@ -1,14 +1,5 @@
 <?php
 require_once 'PEAR/PackageFile/Generator/v1.php';
-/**
- * Error code if the package.xml <package> tag does not contain a valid version
- */
-define('PEAR_PACKAGEFILE_ERROR_NO_PACKAGEVERSION', 1);
-/**
- * Error code if the package.xml <package> tag version is not supported (version 1.0 and 1.1 are the only supported versions,
- * currently
- */
-define('PEAR_PACKAGEFILE_ERROR_INVALID_PACKAGEVERSION', 2);
 
 /**
  * Error code if parsing is attempted with no xml extension
