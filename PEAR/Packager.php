@@ -147,6 +147,9 @@ class PEAR_Packager extends PEAR_Common
         if ($pkg2) {
             $gen = &$main->getDefaultGenerator();
             $tgzfile = $gen->toTgz2($this, $other, $compress);
+            if (PEAR::isError($tgzfile)) {
+                return $tgzfile;
+            }
             $dest_package = basename($tgzfile);
             $pkgdir = dirname($pkgfile);
     
@@ -161,6 +164,9 @@ class PEAR_Packager extends PEAR_Common
         } else {
             $gen = &$pf->getDefaultGenerator();
             $tgzfile = $gen->toTgz($this, $compress);
+            if (PEAR::isError($tgzfile)) {
+                return $tgzfile;
+            }
             $dest_package = basename($tgzfile);
             $pkgdir = dirname($pkgfile);
     
