@@ -48,7 +48,7 @@
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.0a8</version>
+  <version>1.4.0a9</version>
   <date>2005-03-21</date>
   <license>PHP License</license>
   <state>alpha</state>
@@ -124,6 +124,9 @@
     package.xml version 1.0 packages are installed
   * add &quot;peardev&quot; command for those with memory_limit issue
   * make package-validate command work on packaged .tgz files
+
+  Specific changes from 1.4.0a8:
+  * add --package option to run-tests command, to run installed .phpt tests
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -513,6 +516,24 @@
   * REALLY fix the debug_backtrace() issue (modified wrong pearcmd.php)
   * fix Bug #3864 Invalid dependency relation
   * fix Bug #3863 illogical warning about PEAR_Frontend_Gtk 0.4.0 with PEAR 1.4.0a6
+   </notes>
+  </release>
+  <release>
+   <version>1.4.0a8</version>
+   <date>2005-03-21</date>
+   <state>alpha</state>
+   <notes>
+  Specific changes from 1.4.0a7:
+  * greatly improve the flexibility of post-install scripts
+    - &lt;param&gt; is no longer required
+    - skipParamgroup() method in Frontends allows dynamic manipulation of what input is
+      requested from users
+  * make error message when a user has no write access absolutely clear and unmistakable
+  * update to new header comment block standard
+  * slight improvement to speed and possibly memory use of Installer when a lot of
+    package.xml version 1.0 packages are installed
+  * add &quot;peardev&quot; command for those with memory_limit issue
+  * make package-validate command work on packaged .tgz files
    </notes>
   </release>
  </changelog>
