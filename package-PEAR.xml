@@ -48,8 +48,8 @@
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.0a7</version>
-  <date>2005-03-17</date>
+  <version>1.4.0a8</version>
+  <date>2005-03-20</date>
   <license>PHP License</license>
   <state>alpha</state>
   <notes>
@@ -104,14 +104,22 @@
   * fix Bug #3671 Installing package features doesn't work as expected
   * implement Request #3717 [Patch] Implement Simple run-tests output
 
-  Specific changes from 1.4.0a5
+  Specific changes from 1.4.0a5:
   * fix Bug #3860 PEAR_Dependency2 not included in 1 case
 
-  Specific changes from 1.4.0a6
+  Specific changes from 1.4.0a6:
   * implement &lt;usesrole&gt;/&lt;usestask&gt; for custom role/task graceful failure
   * REALLY fix the debug_backtrace() issue (modified wrong pearcmd.php)
   * fix Bug #3864 Invalid dependency relation
   * fix Bug #3863 illogical warning about PEAR_Frontend_Gtk 0.4.0 with PEAR 1.4.0a6
+
+  Specific changes from 1.4.0a7:
+  * greatly improve the flexibility of post-install scripts
+    - &lt;param&gt; is no longer required
+    - skipParamgroup() method in Frontends allows dynamic manipulation of what input is
+      requested from users
+  * make error message when a user has no write access absolutely clear and unmistakable
+  * update to new header comment block standard
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -130,27 +138,48 @@
   </deps>
   <filelist>
    <dir name="OS">
-    <file role="php" name="Guess.php"/>
+    <file role="php" name="Guess.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
    </dir>
    <dir name="PEAR">
-    <file role="php" name="Autoloader.php"/>
-    <file role="php" name="Command.php"/>
     <dir name="ChannelFile">
-     <file name="Parser.php" role="php" />
+     <file name="Parser.php" role="php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
     </dir>
     <dir name="Command">
-     <file role="php" name="Auth.php"/>
-     <file role="php" name="Build.php"/>
-     <file role="php" name="Channels.php"/>
-     <file role="php" name="Common.php"/>
-     <file role="php" name="Config.php"/>
-     <file role="php" name="Install.php"/>
+     <file role="php" name="Auth.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file role="php" name="Build.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file role="php" name="Channels.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file role="php" name="Common.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file role="php" name="Config.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file role="php" name="Install.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
      <file role="php" name="Package.php">
       <replace from="@DATA-DIR@" to="data_dir" type="pear-config" />
+      <replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file role="php" name="Registry.php"/>
-     <file role="php" name="Remote.php"/>
-     <file role="php" name="Mirror.php"/>
+     <file role="php" name="Registry.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file role="php" name="Remote.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file role="php" name="Mirror.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
     </dir>
     <dir name="Downloader">
      <file role="php" name="Package.php">
@@ -158,20 +187,40 @@
      </file>
     </dir>
     <dir name="Frontend">
-     <file role="php" name="CLI.php"/>
+     <file role="php" name="CLI.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
     </dir>
     <dir name="Installer">
      <dir name="Role">
-      <file role="php" name="Common.php"/>
-      <file role="php" name="Data.php"/>
-      <file role="php" name="Doc.php"/>
-      <file role="php" name="Ext.php"/>
-      <file role="php" name="Php.php"/>
-      <file role="php" name="Script.php"/>
-      <file role="php" name="Src.php"/>
-      <file role="php" name="Test.php"/>
+      <file role="php" name="Common.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file role="php" name="Data.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file role="php" name="Doc.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file role="php" name="Ext.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file role="php" name="Php.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file role="php" name="Script.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file role="php" name="Src.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file role="php" name="Test.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir>
-     <file role="php" name="Role.php"/>
+     <file role="php" name="Role.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
     </dir>
     <dir name="PackageFile">
      <dir name="Generator">
@@ -183,52 +232,114 @@
       </file>
      </dir>
      <dir name="Parser">
-      <file role="php" name="v1.php"/>
-      <file role="php" name="v2.php"/>
+      <file role="php" name="v1.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file role="php" name="v2.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir>
      <dir name="v2">
-      <file role="php" name="Validator.php"/>
+      <file role="php" name="Validator.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir>
-     <file role="php" name="v1.php"/>
-     <file role="php" name="v2.php"/>
+     <file role="php" name="v1.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file role="php" name="v2.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
     </dir>
     <dir name="Task">
-     <file role="php" name="Common.php"/>
-     <file role="php" name="Postinstallscript.php"/>
-     <file role="php" name="Replace.php"/>
-     <file role="php" name="Unixeol.php"/>
-     <file role="php" name="Windowseol.php"/>
+     <file role="php" name="Common.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file role="php" name="Postinstallscript.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file role="php" name="Replace.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file role="php" name="Unixeol.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file role="php" name="Windowseol.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
     </dir>
     <dir name="Validator">
-     <file role="php" name="PECL.php"/>
+     <file role="php" name="PECL.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
     </dir>
-    <file role="php" name="ChannelFile.php"/>
-    <file role="php" name="Common.php"/>
-    <file role="php" name="Config.php"/>
-    <file role="php" name="Dependency.php"/>
-    <file role="php" name="DependencyDB.php"/>
-    <file role="php" name="Dependency2.php">
-     <replace from="@PEAR-VER@" to="version" type="package-info"/>
+    <file role="php" name="Autoloader.php">
+     <replace from="@package_version@" to="version" type="package-info" />
     </file>
-    <file role="php" name="Downloader.php"/>
-    <file role="php" name="ErrorStack.php"/>
-    <file role="php" name="Exception.php"/>
     <file role="php" name="Builder.php">
      <replace from="@PEAR-VER@" to="version" type="package-info"/>
     </file>
-    <file role="php" name="Frontend.php" />
-    <file role="php" name="FTP.php" />
-    <file role="php" name="Installer.php"/>
-    <file role="php" name="Packager.php"/>
+    <file role="php" name="ChannelFile.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="Command.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="Common.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="Config.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="Dependency.php"/>
+    <file role="php" name="DependencyDB.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="Dependency2.php">
+     <replace from="@PEAR-VER@" to="version" type="package-info"/>
+    </file>
+    <file role="php" name="Downloader.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="ErrorStack.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="Exception.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="Frontend.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="FTP.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="Installer.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="Packager.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
     <file role="php" name="PackageFile.php">
      <replace from="@PEAR-VER@" to="version" type="package-info"/>
     </file>
-    <file role="php" name="Registry.php"/>
-    <file role="php" name="Remote.php"/>
-    <file role="php" name="REST.php"/>
-    <file role="php" name="RunTest.php"/>
-    <file role="php" name="Validate.php"/>
-    <file role="php" name="XMLParser.php"/>
+    <file role="php" name="Registry.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="Remote.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="REST.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="RunTest.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="Validate.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file role="php" name="XMLParser.php">
+     <replace from="@package_version@" to="version" type="package-info" />
+    </file>
    </dir>
    <dir name="scripts" baseinstalldir="/">
     <file role="script" install-as="pear" name="pear.sh" platform="!windows">
@@ -268,8 +379,12 @@
    </dir>
    <file role="data" name="package.dtd"/>
    <file role="data" name="template.spec"/>
-   <file role="php" name="PEAR.php"/>
-   <file role="php" name="System.php"/>
+   <file role="php" name="PEAR.php">
+    <replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file role="php" name="System.php">
+    <replace from="@package_version@" to="version" type="package-info" />
+   </file>
   </filelist>
  </release>
  <changelog>
@@ -371,6 +486,18 @@
    <notes>
   Specific changes from 1.4.0a5:
   * fix Bug #3860 PEAR_Dependency2 not included in 1 case
+   </notes>
+  </release>
+  <release>
+   <version>1.4.0a7</version>
+   <date>2005-03-17</date>
+   <state>alpha</state>
+   <notes>
+  Specific changes from 1.4.0a6:
+  * implement &lt;usesrole&gt;/&lt;usestask&gt; for custom role/task graceful failure
+  * REALLY fix the debug_backtrace() issue (modified wrong pearcmd.php)
+  * fix Bug #3864 Invalid dependency relation
+  * fix Bug #3863 illogical warning about PEAR_Frontend_Gtk 0.4.0 with PEAR 1.4.0a6
    </notes>
   </release>
  </changelog>
