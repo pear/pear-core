@@ -488,6 +488,89 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    /**
+     * Adds a new maintainer - no checking of duplicates is performed, use
+     * updatemaintainer for that purpose.
+     */
+    function addMaintainer($role, $handle, $name, $email)
+    {
+        if (isset($this->_packageInfo[$role])) {
+            if (!isset($this->_packageInfo[$role][0])) {
+                $this->_packageInfo[$role] = array($this->_packageInfo[$role]);
+            }
+            $this->_packageInfo[$role][] =
+                array(
+                    'name' => $name,
+                    'user' => $handle,
+                    'email' => $email,
+                    'active' => $active,
+                );
+        } else {
+            $this->_packageInfo[$role] =
+                array(
+                    'name' => $name,
+                    'user' => $handle,
+                    'email' => $email,
+                    'active' => $active,
+                );
+        }
+    }
+
+    function updateMaintainer($role, $handle, $name, $email)
+    {
+        $found = false;
+        if (!isset($this->_packageInfo[$role]) ||
+              !is_array($this->_packageInfo[$role])) {
+            return $this->addMaintainer($role, $handle, $name, $email);
+        }
+        if (!isset($this->_packageInfo[$role][0])) {
+            $this->_packageInfo[$role] = array($this->_packageInfo[$role]);
+        }
+        foreach ($this->_packageInfo[$role] as $i => $maintainer) {
+            if ($maintainer['user'] == $handle) {
+                $found = $i;
+                break;
+            }
+        }
+        if ($found !== false) {
+            unset($this->_packageInfo[$role][$found]);
+            $this->_packageInfo[$role] = array_values($this->_packageInfo[$role]);
+        }
+        $this->addMaintainer($role, $handle, $name, $email);
+    }
+
+    function deleteMaintainer($handle)
+    {
+        $found = false;
+        foreach (array('lead', 'developer', 'contributor', 'helper') as $role) {
+            if (!isset($this->_packageInfo[$role])) {
+                continue;
+            }
+            if (!isset($this->_packageInfo[$role][0])) {
+                $this->_packageInfo[$role] = array($this->_packageInfo[$role]);
+            }
+            foreach ($this->_packageInfo[$role] as $i => $maintainer) {
+                if ($maintainer['handle'] == $handle) {
+                    $found = $i;
+                    break;
+                }
+            }
+            if ($found !== false) {
+                unset($this->_packageInfo[$role][$found]);
+                $this->_packageInfo[$role] =
+                    array_values($this->_packageInfo[$role]);
+                if (count($this->_packageInfo[$role]) == 1) {
+                    $this->_packageInfo[$role] = $this->_packageInfo[$role][0];
+                }
+                return true;
+            }
+            if (count($this->_packageInfo[$role]) == 1) {
+                $this->_packageInfo[$role] = $this->_packageInfo[$role][0];
+            }
+        }
+        return false;
+    }
+
     function getMaintainers($raw = false)
     {
         
@@ -506,6 +589,8 @@ class PEAR_PackageFile_v2
                 array($this->_packageInfo['lead']);
             foreach ($leads as $lead) {
                 $s = $lead;
+                $s['handle'] = $s['user'];
+                unset($s['user']);
                 $s['role'] = 'lead';
                 $ret[] = $s;
             }
@@ -515,6 +600,8 @@ class PEAR_PackageFile_v2
                     array($this->_packageInfo['developer']);
                 foreach ($leads as $maintainer) {
                     $s = $maintainer;
+                    $s['handle'] = $s['user'];
+                    unset($s['user']);
                     $ret[] = $s;
                 }
             }
@@ -524,6 +611,8 @@ class PEAR_PackageFile_v2
                     array($this->_packageInfo['contributor']);
                 foreach ($leads as $maintainer) {
                     $s = $maintainer;
+                    $s['handle'] = $s['user'];
+                    unset($s['user']);
                     $ret[] = $s;
                 }
             }
@@ -533,6 +622,8 @@ class PEAR_PackageFile_v2
                     array($this->_packageInfo['helper']);
                 foreach ($leads as $maintainer) {
                     $s = $maintainer;
+                    $s['handle'] = $s['user'];
+                    unset($s['user']);
                     $ret[] = $s;
                 }
             }
@@ -624,6 +715,11 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    function setSummary($summary)
+    {
+        $this->_packageInfo['summary'] = $summary;
+    }
+
     function getDescription()
     {
         if (isset($this->_packageInfo['description'])) {
@@ -632,12 +728,22 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    function setDescription($desc)
+    {
+        $this->_packageInfo['description'] = $desc;
+    }
+
     function getNotes()
     {
         if (isset($this->_packageInfo['notes'])) {
             return $this->_packageInfo['notes'];
         }
         return false;
+    }
+
+    function setNotes($notes)
+    {
+        $this->_packageInfo['notes'] = $notes;
     }
 
     function getCompatible()
