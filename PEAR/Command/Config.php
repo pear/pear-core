@@ -122,6 +122,10 @@ displays help for all configuration parameters.
             }
             $data['data'][$this->config->getGroup($key)][] = array($this->config->getPrompt($key) , $key, $value);
         }
+        foreach ($this->config->getLayers() as $layer) {
+            $data['data']['Config Files'][] = array(ucfirst($layer) . ' Configuration File', 'Filename' , $this->config->getConfFile($layer));
+        }
+        
         $this->ui->outputData($data, $command);
         return true;
     }

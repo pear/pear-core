@@ -82,12 +82,13 @@ class PEAR_Dependency
         $rel = isset($opts['rel']) ? $opts['rel'] : 'has';
         $req = isset($opts['version']) ? $opts['version'] : null;
         $name = isset($opts['name']) ? $opts['name'] : null;
+        $channel = isset($opts['channel']) ? $opts['channel'] : 'pear';
         $opt = (isset($opts['optional']) && $opts['optional'] == 'yes') ?
             $opts['optional'] : null;
         $errmsg = '';
         switch ($opts['type']) {
             case 'pkg':
-                return $this->checkPackage($errmsg, $name, $req, $rel, $opt);
+                return $this->checkPackage($errmsg, $name, $req, $rel, $opt, $channel);
                 break;
             case 'ext':
                 return $this->checkExtension($errmsg, $name, $req, $rel, $opt);
@@ -123,29 +124,30 @@ class PEAR_Dependency
      * @param string $req       The package version required
      * @param string $relation  How to compare versions with each other
      * @param bool   $opt       Whether the relationship is optional
+     * @param string $channel   Channel name
      *
      * @return mixed bool false if no error or the error string
      */
     function checkPackage(&$errmsg, $name, $req = null, $relation = 'has',
-                          $opt = false)
+                          $opt = false, $channel = 'pear')
     {
         if (is_string($req) && substr($req, 0, 2) == 'v.') {
             $req = substr($req, 2);
         }
         switch ($relation) {
             case 'has':
-                if (!$this->registry->packageExists($name)) {
+                if (!$this->registry->packageExists($name, $channel)) {
                     if ($opt) {
-                        $errmsg = "package `$name' is recommended to utilize some features.";
+                        $errmsg = "package `$channel::$name' is recommended to utilize some features.";
                         return PEAR_DEPENDENCY_MISSING_OPTIONAL;
                     }
-                    $errmsg = "requires package `$name'";
+                    $errmsg = "requires package `$channel::$name'";
                     return PEAR_DEPENDENCY_MISSING;
                 }
                 return false;
             case 'not':
-                if ($this->registry->packageExists($name)) {
-                    $errmsg = "conflicts with package `$name'";
+                if ($this->registry->packageExists($name, $channel)) {
+                    $errmsg = "conflicts with package `$channel::$name'";
                     return PEAR_DEPENDENCY_CONFLICT;
                 }
                 return false;
@@ -155,26 +157,26 @@ class PEAR_Dependency
             case 'ne':
             case 'ge':
             case 'gt':
-                $version = $this->registry->packageInfo($name, 'version');
-                if (!$this->registry->packageExists($name)
+                $version = $this->registry->packageInfo($name, 'version', $channel);
+                if (!$this->registry->packageExists($name, $channel)
                     || !version_compare("$version", "$req", $relation))
                 {
                     $code = $this->codeFromRelation($relation, $version, $req, $opt);
                     if ($opt) {
-                        $errmsg = "package `$name' version " . $this->signOperator($relation) .
+                        $errmsg = "package `$channel::$name' version " . $this->signOperator($relation) .
                             " $req is recommended to utilize some features.";
                         if ($version) {
                             $errmsg .= "  Installed version is $version";
                         }
                         return $code;
                     }
-                    $errmsg = "requires package `$name' " .
+                    $errmsg = "requires package `$channel::$name' " .
                         $this->signOperator($relation) . " $req";
                     return $code;
                 }
                 return false;
         }
-        $errmsg = "relation '$relation' with requirement '$req' is not supported (name=$name)";
+        $errmsg = "relation '$relation' with requirement '$req' is not supported (name=$channel::$name)";
         return PEAR_DEPENDENCY_BAD_DEPENDENCY;
     }
 
@@ -187,30 +189,36 @@ class PEAR_Dependency
      * @param string $error     The resultant error string
      * @param string $warning   The resultant warning string
      * @param string $name      Name of the package to test
+     * @param string $channel   Channel name of the package
      *
      * @return bool true if there were errors
      */
-    function checkPackageUninstall(&$error, &$warning, $package)
+    function checkPackageUninstall(&$error, &$warning, $package, $channel = 'pear')
     {
+        $channel = strtolower($channel);
         $error = null;
-        $packages = $this->registry->listPackages();
-        foreach ($packages as $pkg) {
-            if ($pkg == $package) {
-                continue;
-            }
-            $deps = $this->registry->packageInfo($pkg, 'release_deps');
-            if (empty($deps)) {
-                continue;
-            }
-            foreach ($deps as $dep) {
-                if ($dep['type'] == 'pkg' && strcasecmp($dep['name'], $package) == 0) {
-                    if ($dep['rel'] == 'ne') {
-                        continue;
-                    }
-                    if (isset($dep['optional']) && $dep['optional'] == 'yes') {
-                        $warning .= "\nWarning: Package '$pkg' optionally depends on '$package'";
-                    } else {
-                        $error .= "Package '$pkg' depends on '$package'\n";
+        $channels = $this->registry->listAllPackages();
+        foreach ($channels as $channelname => $packages) {
+            foreach ($packages as $pkg) {
+                if ($pkg == $package && $channel == $channelname) {
+                    continue;
+                }
+                $deps = $this->registry->packageInfo($pkg, 'release_deps', $channel);
+                if (empty($deps)) {
+                    continue;
+                }
+                foreach ($deps as $dep) {
+                    $depchannel = isset($dep['channel']) ? $dep['channel'] : 'pear';
+                    if ($dep['type'] == 'pkg' && (strcasecmp($dep['name'], $package) == 0) &&
+                          ($depchannel == $channel)) {
+                        if ($dep['rel'] == 'ne') {
+                            continue;
+                        }
+                        if (isset($dep['optional']) && $dep['optional'] == 'yes') {
+                            $warning .= "\nWarning: Package '$depchannel::$pkg' optionally depends on '$channel::$package'";
+                        } else {
+                            $error .= "Package '$depchannel::$pkg' depends on '$channel::$package'\n";
+                        }
                     }
                 }
             }
