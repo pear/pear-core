@@ -1385,6 +1385,7 @@ class PEAR_Installer extends PEAR_Downloader
      */
     function _compileSourceFiles($savechannel, &$filelist)
     {
+        require_once 'PEAR/Builder.php';
         $this->log(1, "$this->source_files source files, building");
         $bob = &new PEAR_Builder($this->ui);
         $bob->debug = $this->debug;
