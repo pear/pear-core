@@ -12,7 +12,7 @@ error_reporting(E_ALL);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'test_multipledeps.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
-    DIRECTORY_SEPARATOR . 'test_muktipledeps.xml');
+    DIRECTORY_SEPARATOR . 'test_multipledeps.xml');
 $generator = &$pf->getDefaultGenerator();
 $e = &$generator->toV2();
 $phpunit->assertNoErrors('errors');
