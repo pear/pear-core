@@ -207,7 +207,22 @@ $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'remote.ini', 'not
 $contents = explode("\n", implode('', file($temp_path . DIRECTORY_SEPARATOR . 'remote.ini')));
 $contents = unserialize($contents[1]);
 $config->readConfigFile($temp_path . DIRECTORY_SEPARATOR . 'remote.ini');
-$phpunit->assertEquals($config->configuration['user'], $contents, 'ok');
+$phpunit->showall();
+$phpunit->assertEquals(array (
+  '__channels' => 
+  array (
+    '__uri' => 
+    array (
+    ),
+  ),
+  'php_dir' => $temp_path2 . '/nomake/pear/php',
+  'data_dir' => $temp_path2 . '/nomake/pear/data',
+  'ext_dir' => $temp_path2 . '/nomake/pear/ext',
+  'doc_dir' => $temp_path2 . '/nomake/pear/docs',
+  'test_dir' => $temp_path2 . '/nomake/pear/tests',
+  'cache_dir' => $temp_path2 . '/nomake/pear/cache',
+  'bin_dir' => $temp_path2 . '/nomake/pear',
+), $contents, 'ok');
 echo 'tests done';
 ?>
 --EXPECT--
