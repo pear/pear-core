@@ -145,7 +145,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
     </dir> <!-- /PEAR/PackageFile -->
     <dir name="Task">
      <file name="Common.php" role="php" />
-     <file name="Preinstallscript.php" role="php" />
      <file name="Postinstallscript.php" role="php" />
      <file name="Replace.php" role="php" />
      <file name="Unixeol.php" role="php" />
@@ -218,7 +217,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>Archive_Tar</name>
     <channel>pear.php.net</channel>
     <min>1.1</min>
-    <recommended>1.1</recommended>
+    <recommended>1.2</recommended>
    </package>
    <package>
     <name>Console_Getopt</name>
@@ -230,7 +229,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>XML_RPC</name>
     <channel>pear.php.net</channel>
     <min>1.2.0RC1</min>
-    <recommended>1.2.0RC1</recommended>
+    <recommended>1.2.0RC6</recommended>
    </package>
    <extension>
     <name>xml</name>
@@ -265,6 +264,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <channel>pear.php.net</channel>
     <min>0.5.0</min>
    </package>
+  </group>
   <group name="gtkinstaller" hint="PEAR's PHP-GTK-based installer">
    <package>
     <name>PEAR_Frontend_Gtk</name>
