@@ -785,6 +785,7 @@ class PEAR_Installer extends PEAR_Downloader
 
     function install($pkgfile, $options = array())
     {
+        $this->_options = $options;
         $this->_registry = &$this->config->getRegistry();
         if (is_object($pkgfile)) {
             $pkg = $pkgfile;
@@ -1321,11 +1322,17 @@ class PEAR_Installer extends PEAR_Downloader
 
     // }}}
 
-    function checkDeps2($pkginfo, $options, $state = PEAR_VALIDATE_INSTALLING)
+    function &getDependency2(&$c, $o, $p, $s)
     {
         include_once 'PEAR/Dependency2.php';
-        $depchecker = &new PEAR_Dependency2($this->config, $options,
-            $pkginfo->getChannel() . '/' . $pkginfo->getPackage(),
+        $a = &new PEAR_Dependency2($c, $o, $p, $s);
+        return $a;
+    }
+
+    function checkDeps2($pkginfo, $options, $state = PEAR_VALIDATE_INSTALLING)
+    {
+        $depchecker = &$this->getDependency2($this->config, $options,
+            array('channel' => $pkginfo->getChannel(), 'package' => $pkginfo->getPackage()),
             PEAR_VALIDATE_INSTALLING);
         $deps = $pkginfo->getDeps(true);
         $params = array();

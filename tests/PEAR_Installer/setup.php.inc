@@ -47,6 +47,7 @@ if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'test')) {
 }
 if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'ext')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'ext');
+    $ext_dir = $temp_path . DIRECTORY_SEPARATOR . 'ext';
 }
 if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'script')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'script');
@@ -92,9 +93,18 @@ $phpunit = &new PEAR_PHPTest(true);
 class fake_log
 {
     var $_log = array();
+    var $_download = array();
     function log($level, $message)
     {
         $this->_log[] = array($level, $message);
+    }
+
+    function _downloadCallback($msg, $params)
+    {
+        if ($msg == 'setup') {
+            $params = 'self';
+        }
+        $this->_download[] = array($msg, $params);
     }
 
     function getLog()
@@ -103,14 +113,23 @@ class fake_log
         $this->_log = array();
         return $log;
     }
+
+    function getDownload()
+    {
+        $log = $this->_download;
+        $this->_download = array();
+        return $log;
+    }
 }
 $fakelog = new fake_log;
 $config = &PEAR_Config::singleton($temp_path . '/pear.ini');
+test_PEAR_Dependency2::singleton($config);
 function &newDownloader($options)
 {
     global $config;
     $downloader = &new test_PEAR_Downloader($fakelog, $options, $config);
     return $downloader;
 }
+
 $installer = &new test_PEAR_Installer($fakelog);
 ?>

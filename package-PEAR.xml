@@ -140,7 +140,7 @@ PEAR_ErrorStack:
       <file role="php" name="Common.php"/>
       <file role="php" name="Data.php"/>
       <file role="php" name="Doc.php"/>
-      <file role="php" name="Package.php"/>
+      <file role="php" name="Ext.php"/>
       <file role="php" name="Php.php"/>
       <file role="php" name="Script.php"/>
       <file role="php" name="Test.php"/>

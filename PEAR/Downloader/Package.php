@@ -156,6 +156,11 @@ class PEAR_Downloader_Package
         return $this->_packagefile;
     }
 
+    function getType() 
+    {
+        return $this->_type;
+    }
+
     function fromDepURL($dep)
     {
         $this->_downloadURL = $dep;
@@ -622,6 +627,12 @@ class PEAR_Downloader_Package
         return false;
     }
 
+    function &getDependency2Object($c, $i, $p, $s)
+    {
+        $z = &new PEAR_Dependency2($c, $i, $p, $s);
+        return $z;
+    }
+
     /**
      * @param array all packages to be installed
      * @static
@@ -631,11 +642,16 @@ class PEAR_Downloader_Package
         foreach ($params as $param) {
             $deps = $param->getDeps();
             if (count($deps)) {
-                $depchecker = &new PEAR_Dependency2($param->_config,
+                $depchecker = &$param->getDependency2Object($param->_config,
                     $param->_downloader->getOptions(), $param->getParsedPackage(),
                     PEAR_VALIDATE_DOWNLOADING);
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-                $installcheck = $depchecker->validatePackage($param->getDownloadURL(),
+                if ($param->getType() == 'xmlrpc') {
+                    $send = $param->getDownloadURL();
+                } else {
+                    $send = $param->getPackageFile();
+                }
+                $installcheck = $depchecker->validatePackage($send,
                     $param->_downloader);
                 if (PEAR::isError($installcheck)) {
                     $failed = true;
@@ -882,7 +898,10 @@ class PEAR_Downloader_Package
             if (PEAR::isError($pf)) {
                 if (is_array($pf->getUserInfo())) {
                     foreach ($pf->getUserInfo() as $err) {
-                        $this->log(0, "Validation Error: $err");
+                        if (is_array($err)) {
+                            $err = $err['message'];
+                        }
+                        $this->_downloader->log(0, "Validation Error: $err");
                     }
                 }
                 $this->_downloader->log(0, $pf->getMessage());

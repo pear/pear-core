@@ -326,8 +326,10 @@ package if needed.
                 $this->config);
             PEAR::popErrorHandling();
             if (PEAR::isError($info)) {
-                $this->ui->outputData('ERROR: ' .$info->getMessage());
-                continue;
+                if (!$param->installBinary($this->installer)) {
+                    $this->ui->outputData('ERROR: ' .$info->getMessage());
+                    continue;
+                }
             }
             if (is_array($info)) {
                 if ($this->config->get('verbose') > 0) {
