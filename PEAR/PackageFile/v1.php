@@ -711,7 +711,9 @@ class PEAR_PackageFile_v1
 
     function addFile($dir, $file, $attrs)
     {
-        $this->_packageInfo['filelist'][$dir . '/' . $file] = $attrs;
+        $file = $dir . '/' . $file;
+        $file = preg_replace('![\\/]+!', '/', $file);
+        $this->_packageInfo['filelist'][$file] = $attrs;
     }
 
     function getFilelist()
