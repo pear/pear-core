@@ -947,7 +947,7 @@ class PEAR_PackageFile_v2_Validator
                                         $this->_pf, $v, $this->_pf->_config, $save);
                                     if (is_array($ret)) {
                                         $this->_invalidTask($task, $ret,
-                                            $save['attribs']['name']);
+                                            @$save['name']);
                                     }
                                 }
                             if (!isset($value[0])) {
@@ -957,7 +957,7 @@ class PEAR_PackageFile_v2_Validator
                                 $ret = call_user_func(array($tagClass, 'validateXml'),
                                     $this->_pf, $v, $this->_pf->_config, $save);
                                 if (is_array($ret)) {
-                                    $this->_invalidTask($task, $ret, @$save['attribs']['name']);
+                                    $this->_invalidTask($task, $ret, @$save['name']);
                                 }
                             }
                         } else {
