@@ -766,6 +766,11 @@ class fake_log
         $this->_log[] = array($level, $message);
     }
 
+    function outputData($info, $cmd)
+    {
+        $this->_log[] = array('info' => $info, 'cmd' => $cmd);
+    }
+
     function _downloadCallback($msg, $params)
     {
         if ($msg == 'setup') {
