@@ -488,15 +488,17 @@ class PEAR_Validate
         $packagestability = $this->_packagexml->getState();
         $apistability = $this->_packagexml->getState('api');
         if (!PEAR_Validate::validState($packagestability)) {
-            $this->_addFailure('state', 'package stability "' .
-                $this->_packagexml->getState() . '" is not valid, must be one of: ' .
+            $this->_addFailure('state', 'invalid release stability "' .
+                $this->_packagexml->getState() . '", must be one of: ' .
                 implode(', ', PEAR_Validate::getValidStates()));
             $ret = false;
         }
-        if (!PEAR_Validate::validState($apistability)) {
-            $this->_addFailure('state', 'API stability "' .
-                $this->_packagexml->getState() . '" is not valid, must be one of: ' .
-                implode(', ', PEAR_Validate::getValidStates()));
+        $apistates = PEAR_Validate::getValidStates();
+        array_shift($apistates); // snapshot is not allowed
+        if (!in_array($apistability, $apistates)) {
+            $this->_addFailure('state', 'invalid API stability "' .
+                $this->_packagexml->getState('api') . '", must be one of: ' .
+                implode(', ', $apistates));
             $ret = false;
         }
         return $ret;
