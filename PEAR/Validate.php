@@ -468,6 +468,10 @@ class PEAR_Validate
     {
         // this is the closest to "final" php4 can get
         if (!PEAR_Validate::validState($this->_packagexml->getState())) {
+            if (strtolower($this->_packagexml->getState() == 'rc')) {
+                $this->_addFailure('state', 'RC is not a state, it is a version ' .
+                    'postfix, use ' . $this->_packagexml->getVersion() . 'RC1, state beta');
+            }
             $this->_addFailure('state', 'invalid release state "' .
                 $this->_packagexml->getState() . '", must be one of: ' .
                 implode(', ', PEAR_Validate::getValidStates()));

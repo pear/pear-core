@@ -1293,6 +1293,11 @@ class PEAR_PackageFile_v2_Validator
         if ($type != 'api') {
             $states[] = 'snapshot';
         }
+        if (strtolower($value) == 'rc') {
+            $this->_stack->push(__FUNCTION__, 'error',
+                array('version' => $this->_packageInfo['version']['release']),
+                'RC is not a state, it is a version postfix, try %version%RC1, stability beta');
+        }
         $this->_stack->push(__FUNCTION__, 'error', array('type' => $type, 'value' => $value,
             'types' => $states),
             'Stability type <%type%> is not a valid stability (%value%), must be one of ' .
