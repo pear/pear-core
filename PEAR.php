@@ -790,7 +790,7 @@ function _PEAR_call_destructors()
  *
  * @category   pear
  * @package    PEAR
- * @author     Stig Bakken <stig@php.net>
+ * @author     Stig Bakken <ssb@php.net>
  * @author     Tomas V.V. Cox <cox@idecnet.com>
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  1997-2005 The PHP Group
