@@ -20,6 +20,7 @@
 // $Id$
 require_once 'PEAR/ErrorStack.php';
 require_once 'PEAR/Validate.php';
+require_once 'PEAR/Dependency2.php';
 require_once 'PEAR/PackageFile/Generator/v2.php';
 /**
  * @author Greg Beaver <cellog@php.net>
@@ -77,6 +78,12 @@ class PEAR_PackageFile_v2
     function &getPEARDownloader(&$i, $o, &$c)
     {
         $z = &new PEAR_Downloader($i, $o, $c);
+        return $z;
+    }
+
+    function &getPEARDependency2(&$c, $o, $p, $s = PEAR_VALIDATE_INSTALLING)
+    {
+        $z = &new PEAR_Dependency2(&$c, $o, $p, $s);
         return $z;
     }
 
@@ -944,6 +951,7 @@ class PEAR_PackageFile_v2
 
     /**
      * Retrieve a list of files that should be installed on this computer
+     * @return array
      */
     function getInstallationFilelist()
     {
@@ -951,17 +959,11 @@ class PEAR_PackageFile_v2
         if (isset($contents['dir']['attribs']['baseinstalldir'])) {
             $base = $contents['dir']['attribs']['baseinstalldir'];
         }
-        if (isset($this->_packageInfo['phprelease'])) {
-            $release = $this->_packageInfo['phprelease'];
-        } elseif (isset($this->_packageInfo['extsrcrelease'])) {
-            $release = $this->_packageInfo['extsrcrelease'];
-        } elseif (isset($this->_packageInfo['extbinrelease'])) {
-            $release = $this->_packageInfo['extbinrelease'];
-        } // bundles should never reach this point
         if (isset($this->_packageInfo['bundle'])) {
             return PEAR::raiseError(
                 'Exception: bundles should be handled in download code only');
         }
+        $release = $this->getReleases();
         if ($release) {
             if (!isset($release[0])) {
                 if (!isset($release['installconditions']) && !isset($release['filelist'])) {
@@ -969,8 +971,7 @@ class PEAR_PackageFile_v2
                 }
                 $release = array($release);
             }
-            include_once 'PEAR/Dependency2.php';
-            $depchecker = &new PEAR_Dependency2($this->_config, array(),
+            $depchecker = &$this->getPEARDependency2($this->_config, array(),
                 array('channel' => $this->getChannel(), 'package' => $this->getPackage()),
                 PEAR_VALIDATE_INSTALLING);
             foreach ($release as $instance) {
