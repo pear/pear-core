@@ -19,14 +19,14 @@ $config->setRegistry($reg, 'system');
 $phpunit->assertFalse($config->getRegistry(), 'after system user');
 $phpunit->assertIsa('PEAR_Registry', $config->getRegistry('system'), 'after system system');
 
-$reg1 = &new PEAR_Registry($temp_path . 'php');
+$reg1 = &new PEAR_Registry($temp_path . DIRECTORY_SEPARATOR . 'php');
 $config->setRegistry($reg1, 'user');
 $phpunit->assertIsa('PEAR_Registry', $config->getRegistry('user'), 'after user user');
 $phpunit->assertIsa('PEAR_Registry', $config->getRegistry('system'), 'after user system');
 
 $test1 = &$config->getRegistry();
 $test2 = &$config->getRegistry('system');
-$phpunit->assertEquals($temp_path . 'php' . DIRECTORY_SEPARATOR . '.registry',
+$phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.registry',
     $test1->statedir, 'user statedir');
 $phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . '.registry',
     $test2->statedir, 'system statedir');

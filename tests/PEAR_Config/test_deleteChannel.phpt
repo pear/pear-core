@@ -16,7 +16,7 @@ $ch->setName('mychannel');
 $ch->setSummary('mychannel');
 $ch->setServer('mychannel');
 $ch->setDefaultPEARProtocols();
-$config = new PEAR_Config;
+$config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini');
 $reg = &$config->getRegistry();
 $reg->addChannel($ch);
 $config->removeLayer('user');
