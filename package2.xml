@@ -93,7 +93,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
  a pecl release.
   * Fix package.xml version 2.0 generation from package.xml 1.0
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
-  * Implement Request #3647 "pear package" only includes one package.xml
+  * Implement Request #3647: "pear package" only includes one package.xml
+  * Fix Bug #3677: Post-Install script message needs to display channel name
  </notes>
  <contents>
   <dir name="/">

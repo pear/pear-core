@@ -473,11 +473,13 @@ Run post-installation scripts in package <package>, if any exist.
                 $pkg = &$reg->getPackage($param->getPackage(), $param->getChannel());
                 $pkg->setConfig($this->config);
                 if ($list = $pkg->listPostinstallScripts()) {
-                    $extrainfo[] = $param->getPackage() . ' has post-install scripts:';
+                    $pn = $reg->parsedPackageNameToString(array('channel' =>
+                        $param->getChannel(), 'package' => $param->getPackage()), true);
+                    $extrainfo[] = $pn . ' has post-install scripts:';
                     foreach ($list as $file) {
                         $extrainfo[] = $file;
                     }
-                    $extrainfo[] = 'Use "pear run-scripts ' . $pkg->getPackage() . '" to run';
+                    $extrainfo[] = 'Use "pear run-scripts ' . $pn . '" to run';
                     $extrainfo[] = 'DO NOT RUN SCRIPTS FROM UNTRUSTED SOURCES';
                 }
             } else {
