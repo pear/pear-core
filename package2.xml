@@ -48,16 +48,16 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>yes</active>
  </developer>
- <date>2005-03-02</date>
+ <date>2005-03-12</date>
  <version>
-  <release>1.4.0a4</release>
+  <release>1.4.0a5</release>
   <api>1.4.0</api>
  </version>
  <stability>
   <release>alpha</release>
   <api>alpha</api>
  </stability>
- <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+ <license uri="http://www.php.net/license">PHP License</license>
  <notes>
   This is a major milestone release for PEAR.  In addition to several killer features,
   every single element of PEAR has a regression test, and so stability is much higher
@@ -98,6 +98,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
   
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
+
+  Specific changes from 1.4.0a4:
+  * upgrade suggested XML_RPC version to 1.2.2
+  * attempt to address memory issues
+  * relax validation further
  </notes>
  <contents>
   <dir name="/">
@@ -273,7 +278,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>XML_RPC</name>
     <channel>pear.php.net</channel>
     <min>1.2.0RC1</min>
-    <recommended>1.2.1</recommended>
+    <recommended>1.2.2</recommended>
    </package>
    <extension>
     <name>xml</name>
@@ -435,6 +440,22 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: "pear package" only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.0a4</release>
+    <api>1.4.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2005-03-02</date>
+   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <notes>
+  Specific changes from 1.4.0a3:
+  * upgrade suggested XML_RPC version to 1.2.1
    </notes>
   </release>
  </changelog>
