@@ -43,12 +43,17 @@ class PEAR_PackageFile_v2_Validator
      */
     var $_isValid = 0;
     /**
+     * @var int
+     */
+    var $_curState = 0;
+    /**
      * @param PEAR_PackageFile_v2
      * @param int
      */
     function validate(&$pf, $state = PEAR_VALIDATE_NORMAL)
     {
         $this->_pf = &$pf;
+        $this->_curState = $state;
         $this->_packageInfo = $this->_pf->getArray();
         $this->_isValid = $this->_pf->_isValid;
         $this->_filesValid = $this->_pf->_filesValid;
@@ -949,7 +954,7 @@ class PEAR_PackageFile_v2_Validator
                     $save['name'] = $dirs . '/' . $save['name'];
                 }
                 unset($file['attribs']);
-                if (count($file)) { // has tasks
+                if (count($file) && $this->_curState != PEAR_VALIDATE_DOWNLOADING) { // has tasks
                     foreach ($file as $task => $value) {
                         if ($tagClass = $this->_pf->getTask($task)) {
                             if (!is_array($value) || !isset($value[0])) {
