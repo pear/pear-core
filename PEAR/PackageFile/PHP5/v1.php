@@ -4,7 +4,7 @@ class PEAR_PackageFile_PHP5_v1
     /**
      * @var DOMDocument
      */
-    protected $dom;
+    public $dom;
     private $_schemaValidateWarnings = array();
     /**
      * Never call this function directly - its only purpose
@@ -18,8 +18,185 @@ class PEAR_PackageFile_PHP5_v1
 
     public function validate()
     {
+        static $attempt = false;
+        $this->_schemaValidateWarnings = array();
         set_error_handler(array($this, '_catchWarnings'));
+        $this->dom->schemaValidate(dirname(__FILE__) . DIRECTORY_SEPARATOR .
+            'package-1.0.xsd');
         restore_error_handler();
+        $ret = false;
+        if (count($this->_schemaValidateWarnings)) {
+            if (!$attempt) {
+                $attempt = true;
+                $this->_salvageCrappySyntax();
+                $ret = $this->validate();
+            }
+            $attempt = false;
+            return $ret;
+        }
+        return true;
+    }
+
+    public function getValidationWarnings()
+    {
+        return $this->_schemaValidateWarnings;
+    }
+
+    /**
+     * for older, mal-formed package.xml, try to force it to be conformant first
+     */
+    private function _salvageCrappySyntax()
+    {
+        $working = $this->dom->cloneNode(true);
+        $sx = simplexml_import_dom($working);
+        $rel = $this->dom->documentElement->getElementsByTagname('release')->item(0);
+        $fields = array_keys((array) $sx);
+        if (!in_array('name', $fields) || !in_array('summary', $fields) ||
+              !in_array('description', $fields) || !in_array('maintainers', $fields) ||
+              !in_array('release', $fields)) {
+            // if any of these are missing, it's hopeless
+            return;
+        }
+        $releasefields = array_keys((array) $sx->release);
+        if (!in_array('version', $releasefields) || !in_array('date', $releasefields) ||
+              !in_array('state', $releasefields) || !in_array('notes', $releasefields) ||
+              !in_array('filelist', $releasefields)) {
+            // if any of these are missing, it's hopeless
+            return;
+        }
+        if (!isset($sx->release->license) && isset($sx->license)) {
+            // fix those package.xml that only set global license
+            // by moving it into the release tag
+            $license = $this->dom->documentElement->removeChild(
+                $this->dom->documentElement->getElementsByTagname('license')->item(0));
+            $this->dom->documentElement->
+                getElementsByTagname('release')->item(0)->
+                insertBefore(
+                  $license,
+                  $this->dom->documentElement->getElementsByTagname('state')->item(0));
+            $this->_reorderBasic();
+            return $this->_reorderRelease($sx);
+        }
+        $test = array('name', 'summary', 'description', '?license', 'maintainers', 'release','?changelog');
+        $skip = false;
+        foreach ($test as $next) {
+            if (!$skip) {
+                $tag = array_shift($fields);
+            }
+            $skip = false;
+            if ($next{0} == '?') {
+                $opt = true;
+                $next = substr($next, 1);
+            } else {
+                $opt = false;
+            }
+            if ($next != $tag) {
+                if (!$opt) {
+                    $this->_reorderBasic();
+                } else {
+                    // skip missing optional tags
+                    $skip = true;
+                }
+            }
+        }
+        if (is_array($fields) && count($fields)) {
+            $this->_reorderBasic();
+        }
+        $test = array('version', 'date', 'license', 'state', 'notes', '?warnings', '?provides', '?deps', '?configureoptions', 'filelist');
+        $skip = false;
+        foreach ($test as $next) {
+            if (!$skip) {
+                $tag = array_shift($releasefields);
+            }
+            $skip = false;
+            if ($next{0} == '?') {
+                $opt = true;
+                $next = substr($next, 1);
+            } else {
+                $opt = false;
+            }
+            if ($next != $tag) {
+                if (!$opt) {
+                    $this->_reorderRelease($sx);
+                } else {
+                    // skip missing optional tags
+                    $skip = true;
+                }
+            }
+        }
+        if (is_array($releasefields) && count($releasefields)) {
+            $this->_reorderRelease($sx, $rel, $this->dom->documentElement);
+        }
+    }
+
+    private function _reorderBasic()
+    {
+        $package = $this->dom->createElement('package');
+        $package->appendChild($this->dom->createTextNode("\n "));
+        $package->appendChild($this->dom->documentElement->
+            getElementsByTagname('name')->item(0));
+        $package->appendChild($this->dom->createTextNode("\n "));
+        $package->appendChild($this->dom->documentElement->
+            getElementsByTagname('summary')->item(0));
+        $package->appendChild($this->dom->createTextNode("\n "));
+        $package->appendChild($this->dom->documentElement->
+            getElementsByTagname('description')->item(0));
+        $package->appendChild($this->dom->createTextNode("\n "));
+        $package->appendChild($this->dom->documentElement->
+            getElementsByTagname('maintainers')->item(0));
+        $package->appendChild($this->dom->createTextNode("\n "));
+        $package->appendChild($this->dom->documentElement->
+            getElementsByTagname('release')->item(0));
+        $package->appendChild($this->dom->createTextNode("\n"));
+        $this->dom->replaceChild($this->dom->documentElement, $package);
+    }
+
+    private function _reorderRelease($sx, $rel, $par)
+    {
+        $release = $this->dom->createElement('release');
+        $release->appendChild($this->dom->createTextNode("\n  "));
+        $release->appendChild($rel->
+            getElementsByTagname('version')->item(0));
+        $release->appendChild($this->dom->createTextNode("\n  "));
+        $release->appendChild($rel->
+            getElementsByTagname('date')->item(0));
+        $release->appendChild($this->dom->createTextNode("\n  "));
+        $release->appendChild($rel->
+            getElementsByTagname('license')->item(0));
+        $release->appendChild($this->dom->createTextNode("\n  "));
+        $release->appendChild($rel->
+            getElementsByTagname('state')->item(0));
+        $release->appendChild($this->dom->createTextNode("\n  "));
+        $release->appendChild($rel->
+            getElementsByTagname('notes')->item(0));
+        if (isset($sx->release->warnings)) {
+            $release->appendChild($this->dom->createTextNode("\n  "));
+            $release->appendChild($rel->
+                getElementsByTagname('warnings')->item(0));
+        }
+        if (isset($sx->release->provides)) {
+            foreach ($rel->getElementsByTagname('provides') as $provide) {
+                $release->appendChild($this->dom->createTextNode("\n  "));
+                $release->appendChild($provide);
+            }
+        }
+        if (isset($sx->release->deps)) {
+            $release->appendChild($this->dom->createTextNode("\n  "));
+            $release->appendChild($rel->
+                getElementsByTagname('deps')->item(0));
+        }
+        if (isset($sx->release->configureoptions)) {
+            $release->appendChild($this->dom->createTextNode("\n  "));
+            $release->appendChild($rel->
+                getElementsByTagname('configureoptions')->item(0));
+        }
+        $release->appendChild($this->dom->createTextNode("\n  "));
+        $release->appendChild($rel->
+            getElementsByTagname('filelist')->item(0));
+        $release->appendChild($this->dom->createTextNode("\n "));
+        $par->replaceChild(
+            $release,
+            $rel);
     }
 
     public function fromDom($dom)
@@ -35,6 +212,158 @@ class PEAR_PackageFile_PHP5_v1
      */
     public function fromV2($packagefile)
     {
+    }
+
+    private function _getRole($node)
+    {
+        if ($node->hasAttribute('role')) {
+            return $node->getAttribute('role');
+        }
+        $node = $node->parentNode;
+        while($node->nodeName == 'dir') {
+            if ($node->hasAttribute('role')) {
+                return $node->getAttribute('role');
+            }
+        }        
+    }
+
+    private function _getFullPath($node)
+    {
+        $i = 0;
+        $path = $node->getAttribute('name');
+        $node = $node->parentNode;
+        while($node->nodeName == 'dir' && $node->getAttribute('name') != '/') {
+            $path = $node->getAttribute('name') . '/' . $path;
+            $node = $node->parentNode;
+        }
+        return str_replace('//', '/', $path);
+    }
+
+    private function _getParentFilelist($node)
+    {
+        while ($node->nodeName != 'filelist' && $node->nodeName != 'package') {
+            $node = $node->parentNode;
+        }
+        if ($node->nodeName == 'package') {
+            throw new Exception('node is not a child of filelist');
+        }
+        return $node;
+    }
+
+    function sortdomfiles($a, $b)
+    {
+        $z = strnatcmp($a->getAttribute('name'), $b->getAttribute('name'));
+        if ($z == 1) return -1;
+        if ($z == -1) return 1;
+        return 0;
+    }
+
+    public function flattenFilelist($cmp = null, $depth = '  ')
+    {
+        $d = $this->dom;
+        if ($cmp === null) {
+            $cmp = $d->documentElement->getElementsByTagname('filelist')->item(0);
+        }
+        $sx = $d->createElement('filelist');
+        $cmp->parentNode->replaceChild($sx, $cmp);
+        $sx->appendChild($d->createTextNode("\n$depth"));
+        $sx->appendChild($dir = $d->createElement('dir'));
+        $sx->appendChild($d->createTextNode("\n "));
+        $dir->setAttribute('name', '/');
+        $files = array();
+        foreach ($cmp->getElementsByTagname('file') as $node) {
+            if ($this->_getParentFilelist($node) === $cmp) {
+                $el = $node->cloneNode();
+                $el->setAttribute('role', $this->_getRole($node));
+                $el->setAttribute('name', $this->_getFullPath($node));
+                $files[] = $el;
+            }
+        }
+        usort($files, array($this, 'sortdomfiles'));
+        foreach ($files as $node) {
+            $dir->appendChild($d->createTextNode("\n$depth "));
+            $dir->appendChild($node);
+        }
+        $dir->appendChild($d->createTextNode("\n  "));
+        return $files;
+    }
+
+    public function recursiveFilelist($cmp = null, $depth = '  ')
+    {
+        $files = array_reverse($this->flattenFilelist());
+        $d = $this->dom;
+        if ($cmp === null) {
+            $cmp = $d->documentElement->getElementsByTagname('filelist')->item(0);
+        }
+        $sx = $d->createElement('filelist');
+        $cmp->parentNode->replaceChild($sx, $cmp);
+        $sx->appendChild($d->createTextNode("\n$depth"));
+        $sx->appendChild($dirnode = $d->createElement('dir'));
+        $dirnode->setAttribute('name', '/');
+        $sx->appendChild($d->createTextNode("\n$depth"));
+        $dirs = $mainfiles = array();
+        foreach ($files as $file) {
+            $name = explode('/', $file->getAttribute('name'));
+            $filename = array_pop($name);
+            $path = '';
+            if (count($name)) {
+                foreach ($name as $i => $dir) {
+                    if ($path != '') {
+                        $path .= '/';
+                    }
+                    $path .= $dir;
+                    if (!isset($dirs[$path])) {
+                        $dirs[$path] = $this->dom->createElement('dir');
+                        $dirs[$path]->setAttribute('name', $dir);
+                    }
+                    if ($i == count($name) - 1) {
+                        $newfile = $file->cloneNode();
+                        $dirs[$path]->appendChild($this->dom->createTextNode("\n  $depth" .
+                            str_repeat(' ', count($name))));
+                        $dirs[$path]->appendChild($newfile);
+                        $newfile->setAttribute('name', $filename);
+                    }
+                }
+            } else {
+                $mainfiles[$file->getAttribute('name')] = $file->cloneNode();
+            }
+        }
+        uksort($dirs, 'strnatcmp');
+        $dirs = array_reverse($dirs);
+        $maindirs = array();
+        foreach ($dirs as $path => $cdir) {
+            if (basename($path) != $path && isset($dirs[dirname($path)])) {
+                $cdir->appendChild($this->dom->createTextNode("\n  $depth" .
+                        str_repeat(' ', count(explode('/', dirname($path))))));
+                $parent = $dirs[dirname($path)];
+                $parent->insertBefore($cdir, $parent->firstChild);
+                $parent->insertBefore(
+                    $this->dom->createTextNode("\n  $depth" .
+                        str_repeat(' ', count(explode('/', dirname($path))))),
+                    $parent->firstChild);
+                $parent->insertBefore(
+                    $co = $this->dom->createTextNode(' '),
+                    $cdir->nextSibling);
+                $parent->insertBefore(
+                    $this->dom->createComment($path),
+                    $co->nextSibling);
+            } else {
+                $cdir->appendChild($this->dom->createTextNode("\n  $depth"));
+                array_unshift($maindirs, array($path, $cdir));
+            }
+        }
+        foreach ($maindirs as $cdir) {
+            $dirnode->appendChild($this->dom->createTextNode("\n  $depth"));
+            $dirnode->appendChild($cdir[1]);
+            $dirnode->appendChild($this->dom->createTextNode(" "));
+            $dirnode->appendChild($this->dom->createComment(" $cdir[0] "));
+        }
+        uksort($mainfiles, 'strnatcmp');
+        foreach ($mainfiles as $file) {
+            $dirnode->appendChild($this->dom->createTextNode("\n  $depth"));
+            $dirnode->appendChild($file);
+        }
+        $dirnode->appendChild($this->dom->createTextNode("\n $depth"));
     }
 
     /**
