@@ -866,13 +866,25 @@ class PEAR_ChannelFile {
     {
         if ($mirror) {
             if ($mir = $this->getMirror($mirror)) {
+                if ($protocol == 'static') {
+                    if (isset($mir['static'])) {
+                        return $mir['static']['attribs'];
+                    } else {
+                        return false;
+                    }
+                }
                 if (isset($mir[$protocol]['function'])) {
                     return $mir[$protocol];
-                } else {
-                    return 80;
                 }
             }
             return false;
+        }
+        if ($protocol == 'static') {
+            if (isset($this->_channelInfo['servers']['primary']['static'])) {
+                return $this->_channelInfo['servers']['primary']['static']['attribs'];
+            } else {
+                return false;
+            }
         }
         if (isset($this->_channelInfo['servers']['primary'][$protocol]['function'])) {
             return $this->_channelInfo['servers']['primary'][$protocol]['function'];
@@ -933,7 +945,7 @@ class PEAR_ChannelFile {
         }
         return false;
     }
-    
+
     /**
      * Empty all protocol definitions
      */
@@ -1160,6 +1172,11 @@ class PEAR_ChannelFile {
         if ($mirror) {
             return $this->addMirrorFunction($mirror, $type, $version, $name);
         }
+        if ($type == 'static') {
+            $this->_channelInfo['servers']['primary']['static'] = array('attribs' => $version);
+            $this->_isValid = false;
+            return;
+        }
         $set = array('attribs' => array('version' => $version), '_content' => $name);
         if (!isset($this->_channelInfo['servers']['primary'][$type]['function'])) {
             $this->_channelInfo['servers']['primary'][$type]['function'] = $set;
@@ -1203,6 +1220,10 @@ class PEAR_ChannelFile {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_MIRROR_NOT_FOUND,
                 array('mirror' => $mirror));
             return false;
+        }
+        if ($type == 'static') {
+            $setmirror['static']['attribs']['version'] = $version;
+            return true;
         }
         $set = array('attribs' => array('version' => $version), '_content' => $name);
         if (!isset($setmirror[$type]['function'])) {
