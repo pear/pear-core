@@ -45,7 +45,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </dependencies>
  <providesextension>foo</providesextension>
  <srcpackage>foo</srcpackage>
- <srcchannel>pear.php.net</srcchannel>
  <extbinrelease>
   <installconditions/>
   <filelist/>
