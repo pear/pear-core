@@ -1928,8 +1928,8 @@ class PEAR_PackageFile_v2
             foreach (array('required', 'optional', 'group') as $possible) {
                 if ($type == $possible) {
                     $new[$type] = array();
-                } elseif (isset($save[$type])) {
-                    $new[$type] = $save[$type];
+                } elseif (isset($save[$possible])) {
+                    $new[$possible] = $save[$possible];
                 }
             }
             $this->_packageInfo['dependencies'] = $new;
@@ -2000,18 +2000,18 @@ class PEAR_PackageFile_v2
             foreach (array('required', 'optional', 'group') as $possible) {
                 if ($type == $possible) {
                     $new[$type] = array();
-                } elseif (isset($save[$type])) {
-                    $new[$type] = $save[$type];
+                } elseif (isset($save[$possible])) {
+                    $new[$possible] = $save[$possible];
                 }
             }
             $this->_packageInfo['dependencies'] = $new;
         }
-        if (!isset($this->_packageInfo['dependencies'][$type]['package'])) {
+        if (!isset($this->_packageInfo['dependencies'][$type]['subpackage'])) {
             $this->_packageInfo['dependencies'][$type]['subpackage'] =
                 $this->_constructPackageDep(array(), $name, false, $uri, false,
                     false, false, false);
         } else {
-            $this->_packageInfo['dependencies'][$type]['package'] =
+            $this->_packageInfo['dependencies'][$type]['subpackage'] =
                 $this->_constructPackageDep($this->_packageInfo['dependencies'][$type]['subpackage'],
                     $name, false, $uri, false, false, false, false);
         }
