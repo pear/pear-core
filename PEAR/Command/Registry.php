@@ -109,7 +109,9 @@ installed package.'
 
     function _sortinfo($a, $b)
     {
-        return strcmp($a['package'], $b['package']);
+        $apackage = isset($a['package']) ? $a['package'] : $a['name'];
+        $bpackage = isset($b['package']) ? $b['package'] : $b['name'];
+        return strcmp($apackage, $bpackage);
     }
 
     function doList($command, $options, $params)
@@ -137,9 +139,10 @@ installed package.'
             'headline' => array('Package', 'Version', 'State')
             );
         foreach ($installed as $package) {
-            $data['data'][] = array($package['package'],
-                                      $package['version'],
-                                      @$package['release_state']);
+            $pobj = $reg->getPackage(isset($package['package']) ?
+                                        $package['package'] : $package['name'], $channel);
+            $data['data'][] = array($pobj->getPackage(), $pobj->getVersion(),
+                                    $pobj->getState() ? $pobj->getState() : null);
         }
         if (count($installed)==0) {
             $data = '(no packages installed)';
