@@ -67,7 +67,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.i
 $phpunit = &new PEAR_PHPTest(true);
 $fakelog = new fake_log;
 require_once 'PEAR/Config.php';
-$config = &PEAR_Config::singleton();//($temp_path . '/pear.ini');
+$config = &PEAR_Config::singleton($temp_path . '/pear.ini');
 test_PEAR_Dependency2::singleton($config);
 /**
  * @param array
