@@ -215,6 +215,12 @@
      <replace from="@pear_version@" to="version" type="package-info"/>
      <replace from="@include_path@" to="php_dir" type="pear-config"/>
     </file>
+    <file role="php" install-as="pearcmd.php" name="peclcmd.php">
+     <replace from="@php_bin@" to="php_bin" type="pear-config"/>
+     <replace from="@php_dir@" to="php_dir" type="pear-config"/>
+     <replace from="@pear_version@" to="version" type="package-info"/>
+     <replace from="@include_path@" to="php_dir" type="pear-config"/>
+    </file>
    </dir>
    <file role="data" name="package.dtd"/>
    <file role="data" name="template.spec"/>
