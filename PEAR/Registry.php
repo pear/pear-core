@@ -797,10 +797,14 @@ class PEAR_Registry extends PEAR
 
     /**
      * @param string Channel name
-     * @return array|false
+     * @param bool whether to strictly retrieve info of channels, not just aliases
+     * @return array|null
      */
-    function _channelInfo($channel, $key = null)
+    function _channelInfo($channel, $noaliases = false)
     {
+        if (!$this->_channelExists($channel, $noaliases)) {
+            return null;
+        }
         $fp = $this->_openChannelFile($channel, 'r');
         if ($fp === null) {
             return null;
@@ -1023,12 +1027,18 @@ class PEAR_Registry extends PEAR
         return $pf;
     }
 
-    function &_getChannel($channel)
+    /**
+     * @param string channel name
+     * @param bool whether to strictly retrieve channel names
+     * @return PEAR_ChannelFile|false
+     * @access private
+     */
+    function &_getChannel($channel, $noaliases = false)
     {
         if (!class_exists('PEAR_ChannelFile')) {
             include_once 'PEAR/ChannelFile.php';
         }
-        $ch = &PEAR_ChannelFile::fromArray($this->_channelInfo($channel));
+        $ch = &PEAR_ChannelFile::fromArray($this->_channelInfo($channel, $noaliases));
         if ($ch) {
             return $ch;
         }
@@ -1106,12 +1116,21 @@ class PEAR_Registry extends PEAR
     // }}}
     // {{{ packageInfo()
 
-    function channelInfo($channel = null, $key = null)
+    /**
+     * Retrieve a raw array of channel data.
+     *
+     * Do not use this, instead use {@link getChannel()} for normal
+     * operations.  Array structure is undefined in this method
+     * @param string channel name
+     * @param bool whether to strictly retrieve information only on non-aliases
+     * @return array|null|PEAR_Error
+     */
+    function channelInfo($channel = null, $noaliases = false)
     {
         if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
             return $e;
         }
-        $ret = $this->_channelInfo($channel, $key);
+        $ret = $this->_channelInfo($channel, $noaliases);
         $this->_unlock();
         return $ret;
     }
