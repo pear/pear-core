@@ -474,7 +474,7 @@ class PEAR_PackageFile_Generator_v1
     {
         $arr = array();
         $this->_convertDependencies2_0($arr);
-        return $arr;
+        return $arr['dependencies'];
     }
 
     /**
