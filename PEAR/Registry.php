@@ -529,9 +529,10 @@ class PEAR_Registry extends PEAR
                     }
                     $file = preg_replace(',^/+,', '', $file);
                     if ($channel != 'pear.php.net') {
-                        $files[$attrs['role']][$file] = array(strtolower($channel), $package);
+                        $files[$attrs['role']][$file] = array(strtolower($channel),
+                            strtolower($package));
                     } else {
-                        $files[$attrs['role']][$file] = $package;
+                        $files[$attrs['role']][$file] = strtolower($package);
                     }
                 }
             }
@@ -1584,6 +1585,11 @@ class PEAR_Registry extends PEAR
             if (empty($notempty)) {
                 $notempty = create_function('$a','return !empty($a);');
             }
+            if (is_array($package) && !isset($package[1])) {
+                var_dump($package);
+            }
+            $package = is_array($package) ? array(strtolower($package[0]), strtolower($package[1]))
+                : strtolower($package);
             $pkgs = array();
             foreach ($path as $name => $attrs) {
                 if (is_array($attrs)) {
@@ -1820,7 +1826,7 @@ class PEAR_Registry extends PEAR
      * @param array
      * @return string
      */
-    function parsedPackageNameToString($parsed)
+    function parsedPackageNameToString($parsed, $brief = false)
     {
         if (is_string($parsed)) {
             return $parsed;
@@ -1835,6 +1841,11 @@ class PEAR_Registry extends PEAR
         }
         if (isset($parsed['uri'])) {
             return $parsed['uri'];
+        }
+        if ($brief) {
+            if ($channel = $this->channelAlias($parsed['channel'])) {
+                return $channel . '/' . $parsed['package'];
+            }
         }
         $upass = '';
         if (isset($parsed['user'])) {
