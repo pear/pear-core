@@ -13,7 +13,8 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Authors: Stig Sæther Bakken <ssb@php.net>                            |
+// | Authors: Stig Bakken <ssb@php.net>                                   |
+// |          Greg Beaver <cellog@php.net>                                |
 // +----------------------------------------------------------------------+
 //
 // $Id$
