@@ -25,7 +25,6 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile', 'message' => 'package.xml "' .
         $temp_path . DIRECTORY_SEPARATOR . 'bloob.xml" has no package.xml <package> version'),
     array('package' => 'PEAR_Error', 'message' => $errmsg),
-    array('package' => 'PEAR_Error', 'message' => $errmsg),
 ), 'ret 1');
 $phpunit->assertIsa('PEAR_Error', $ret, 'bloob.xml');
 $phpunit->assertEquals(array (
