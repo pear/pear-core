@@ -78,7 +78,7 @@ $phpunit->assertEquals(array (
       array (
         0 => 
         array (
-          0 => 'Name',
+          0 => 'Name and Server',
           1 => 'froo',
         ),
         1 => 
@@ -88,15 +88,10 @@ $phpunit->assertEquals(array (
         ),
         2 => 
         array (
-          0 => 'Primary Server',
-          1 => 'froo',
-        ),
-        3 => 
-        array (
           0 => 'Validation Package Name',
           1 => 'PEAR_Validate',
         ),
-        4 => 
+        3 => 
         array (
           0 => 'Validation Package Version',
           1 => '1.0',
