@@ -49,6 +49,12 @@ $phpunit->assertEquals(array (
           ),
           4 => 
           array (
+            0 => 'Default Channel Mirror',
+            1 => 'preferred_mirror',
+            2 => NULL,
+          ),
+          5 => 
+          array (
             0 => 'Remote Configuration File',
             1 => 'remote_config',
             2 => NULL,
