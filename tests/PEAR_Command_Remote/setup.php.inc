@@ -75,5 +75,13 @@ $phpunit = &new PEAR_PHPTest(true);
 $fakelog = new fake_log;
 $config = &new test_PEAR_Config($temp_path . '/pear.ini', $temp_path . '/pear.conf');
 require_once 'PEAR/Command/Remote.php';
-$command = &new PEAR_Command_Remote($fakelog, $config);
+class test_PEAR_Command_Remote extends PEAR_Command_Remote
+{
+    function &getDownloader($options)
+    {
+        $a = &new test_PEAR_Downloader($this->ui, $options, $this->config);
+        return $a;
+    }
+}
+$command = &new test_PEAR_Command_Remote($fakelog, $config);
 ?>
