@@ -1343,8 +1343,8 @@ class PEAR_ChannelFile {
     {
         if ($mirror) {
             if (isset($this->_channelInfo['mirrors'])) {
-                foreach ($this->_channelInfo['mirrors'] as $i => $mirror) {
-                    if ($mirror['server'] == $mirror) {
+                foreach ($this->_channelInfo['mirrors'] as $i => $mir) {
+                    if ($mir['server'] == $mirror) {
                         $this->_channelInfo['mirrors'][$i]['protocols'][$type]['functions'] = array();
                         return true;
                     }
