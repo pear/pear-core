@@ -1615,18 +1615,14 @@ class PEAR_Config extends PEAR
      * @param PEAR_Registry
      * @return bool
      */
-    function setRegistry(&$reg, $layer = user)
+    function setRegistry(&$reg, $layer = 'user')
     {
         if (!in_array($layer, array('user', 'system'))) {
             return false;
         }
-        if (isset($this->_registry[$layer])) {
-            $this->_registry[$layer] = &$reg;
-            $this->_registry[$layer]->setConfig($this);
-            return true;
-        } else {
-            return false;
-        }
+        $this->_registry[$layer] = &$reg;
+        $this->_registry[$layer]->setConfig($this);
+        return true;
     }
 
     /**

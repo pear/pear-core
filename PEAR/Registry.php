@@ -190,6 +190,16 @@ class PEAR_Registry extends PEAR
             static $initializing = false;
             if (!$initializing) {
                 $initializing = true;
+                if (!$this->_config) { // never used?
+                    if (OS_WINDOWS) {
+                        $file = 'pear.ini';
+                    } else {
+                        $file = '.pearrc';
+                    }
+                    $this->_config = &new PEAR_Config($this->statedir . DIRECTORY_SEPARATOR .
+                        $file);
+                    $this->_config->setRegistry($this);
+                }
                 $this->_dependencyDB = &PEAR_DependencyDB::singleton($this->_config);
                 if (PEAR::isError($this->_dependencyDB)) {
                     // attempt to recover by removing the dep db
@@ -1180,9 +1190,14 @@ class PEAR_Registry extends PEAR
         }
         $ret = $this->_addPackage($package, $info, $channel);
         $this->_unlock();
-        $info['channel'] = 'pear.php.net';
-        $this->_dependencyDB->uninstallPackage($info);
-        $this->_dependencyDB->installPackage($info);
+        if ($ret) {
+            include_once 'PEAR/PackageFile/v1.php';
+            $pf = new PEAR_PackageFile_v1;
+            $pf->setConfig($this->_config);
+            $pf->fromArray($info);
+            $this->_dependencyDB->uninstallPackage($pf);
+            $this->_dependencyDB->installPackage($pf);
+        }
         return $ret;
     }
 
