@@ -2239,7 +2239,9 @@ class PEAR_PackageFile_v2
             return false;
         }
         $this->_isValid = 0;
-        unset($r['installconditions']['php']);
+        if (isset($r['installconditions']['php'])) {
+            unset($r['installconditions']['php']);
+        }
         $dep = array('min' => $min, 'max' => $max);
         if ($exclude) {
             if (is_array($exclude) && count($exclude) == 1) {
@@ -2290,7 +2292,9 @@ class PEAR_PackageFile_v2
             return false;
         }
         $this->_isValid = 0;
-        unset($r['installconditions']['os']);
+        if (isset($r['installconditions']['os'])) {
+            unset($r['installconditions']['os']);
+        }
         $dep = array('name' => $name);
         if ($conflicts) {
             $dep['conflicts'] = 'yes';
@@ -2314,7 +2318,9 @@ class PEAR_PackageFile_v2
             return false;
         }
         $this->_isValid = 0;
-        unset($r['installconditions']['arch']);
+        if (isset($r['installconditions']['arch'])) {
+            unset($r['installconditions']['arch']);
+        }
         $dep = array('pattern' => $pattern);
         if ($conflicts) {
             $dep['conflicts'] = 'yes';
