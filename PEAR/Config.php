@@ -1300,6 +1300,11 @@ class PEAR_Config extends PEAR
                 continue;
             }
             if (!$this->_regInitialized[$layer]) {
+                if ($layer == 'default' && isset($this->_registry['user']) ||
+                      isset($this->_registry['system'])) {
+                    // only use the default registry if there are no alternatives
+                    continue;
+                }
                 if (!is_object($this->_registry[$layer])) {
                     if ($phpdir = $this->get('php_dir', $layer, 'pear.php.net')) {
                         $this->_registry[$layer] = &new PEAR_Registry($phpdir);
