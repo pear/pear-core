@@ -53,7 +53,8 @@
     <state>stable</state>
     <license>PHP License</license>
     <notes>
-     add RunTest.php to package.xml, make run-tests display failed tests, and use ui
+     * fix Bug #3026: Dependency type &quot;ne&quot; is needed, &quot;not&quot; is not handled
+       properly
     </notes>
     <provides type="class" name="OS_Guess" />
     <provides type="class" name="System" />
@@ -166,6 +167,14 @@ Other:
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
+    </notes>
+   </release>
+  <release>
+    <version>1.3.3.1</version>
+    <date>2004-11-08</date>
+    <state>stable</state>
+    <notes>
+     add RunTest.php to package.xml, make run-tests display failed tests, and use ui
     </notes>
    </release>
   </changelog>
