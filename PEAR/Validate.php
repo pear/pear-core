@@ -59,7 +59,9 @@ class PEAR_Validate
     }
 
     /**
-     * @param string
+     * @param string package name to validate
+     * @param string name of channel-specific validation package
+     * @final
      */
     function validPackageName($name, $validatepackagename = false)
     {
