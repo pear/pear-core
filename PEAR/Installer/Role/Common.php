@@ -100,7 +100,7 @@ class PEAR_Installer_Role_Common
     /**
      * This method is called upon instantiating a PEAR_Config object.
      *
-     * This method MUST call $config->addConfigVar() for all new configuration
+     * This method MUST an array of information for all new configuration
      * variables required by the file role.  addConfigVar() expects an array of
      * configuration information that is identical to what is used internally in PEAR_Config
      * @access protected
