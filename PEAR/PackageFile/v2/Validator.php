@@ -82,6 +82,9 @@ class PEAR_PackageFile_v2_Validator
             'contents', //special validation needed
             '*compatible',
             'dependencies', //special validation needed
+            '*providesextension',
+            '*srcpackage',
+            '*srcchannel|*srcuri',
             '+phprelease|extsrcrelease|+extbinrelease|bundle' //special validation needed
         );
         $test = $this->_packageInfo;
@@ -853,9 +856,18 @@ class PEAR_PackageFile_v2_Validator
     {
         if (isset($this->_packageInfo['phprelease'])) {
             $release = 'phprelease';
+            if (isset($this->_packageInfo['providesextension'])) {
+                $this->_cannotProvideExtension($release);
+            }
+            if (isset($this->_packageInfo['srcpackage'])) {
+                $this->_cannotHaveSrcpackage($release);
+            }
         }
         if (isset($this->_packageInfo['extsrcrelease'])) {
             $release = 'extsrcrelease';
+            if (!isset($this->_packageInfo['providesextension'])) {
+                $this->_mustProvideExtension($release);
+            }
             if (isset($this->_packageInfo['extsrcrelease'][0])) {
                 return $this->_extsrcCanOnlyHaveOneRelease();
             }
@@ -884,33 +896,23 @@ class PEAR_PackageFile_v2_Validator
         }
         if (isset($this->_packageInfo['extbinrelease'])) {
             $release = 'extbinrelease';
+            if (!isset($this->_packageInfo['providesextension'])) {
+                $this->_mustProvideExtension($release);
+            }
+            if (!isset($this->_packageInfo['srcpackage'])) {
+                $this->_mustSrcPackage();
+            }
+            if (!isset($this->_packageInfo['srcchannel']) && !isset($this->_packageInfo['srcuri'])) {
+                $this->_mustSrcChannelOrUri();
+            }
+            if (isset($this->_packageInfo['srcchannel']) && isset($this->_packageInfo['srcuri'])) {
+                $this->_mustSrcChannelXorUri();
+            }
             $r = $this->_packageInfo['extbinrelease'];
             if (!isset($r[0])) {
                 $r = array($r);
             }
             foreach ($r as $rel) {
-                if (isset($rel['srcuri'])) {
-                    if (isset($rel['srcpackage'])) {
-                        return $this->_invalidTagOrder(array('providesextension'), 'srcpackage',
-                            '<extbinrelease>');
-                    }
-                    if (isset($rel['srcchannel'])) {
-                        return $this->_invalidTagOrder(array('providesextension'), 'srcchannel',
-                            '<extbinrelease>');
-                    }
-                } else {
-                    if (!isset($rel['srcpackage'])) {
-                        return $this->_invalidTagOrder(array('srcpackage', 'srcuri'), '',
-                            '<extbinrelease>');
-                    }
-                    if (!isset($rel['srcchannel'])) {
-                        return $this->_invalidTagOrder(array('srcchannel'), '',
-                            '<extbinrelease>');
-                    }
-                }
-                if (!isset($rel['providesextension'])) {
-                    return $this->_invalidTagOrder(array('providesextension'), '', '<extbinrelease>');
-                }
                 if (!isset($rel['installconditions'])) {
                     return $this->_invalidTagOrder(array('installconditions'), '', '<extbinrelease>');
                 }
@@ -921,6 +923,12 @@ class PEAR_PackageFile_v2_Validator
         }
         if (isset($this->_packageInfo['bundle'])) {
             $release = 'bundle';
+            if (isset($this->_packageInfo['providesextension'])) {
+                $this->_cannotProvideExtension($release);
+            }
+            if (isset($this->_packageInfo['srcpackage'])) {
+                $this->_cannotHaveSrcpackage($release);
+            }
         }
         if (is_array($this->_packageInfo[$release]) &&
               isset($this->_packageInfo[$release][0])) { 
@@ -1136,6 +1144,42 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array(),
             'Only one <extsrcrelease> tag may exist in a package.xml');
+    }
+
+    function _cannotProvideExtension($release)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('release' => $release),
+            '<%release%> packages cannot use <providesextension>, only extbinrelease and extsrcrelease can provide a PHP extension');
+    }
+
+    function _mustProvideExtension($release)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('release' => $release),
+            '<%release%> packages must use <providesextension> to indicate which PHP extension is provided');
+    }
+
+    function _cannotHaveSrcpackage($release)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('release' => $release),
+            '<%release%> packages cannot specify a source code package, only extension binaries may use the <srcpackage> tag');
+    }
+
+    function _mustSrcPackage()
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('release' => $release),
+            '<extbinrelease> packages must specify a source code package');
+    }
+
+    function _mustSrcChannelOrUri()
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('release' => $release),
+            '<srcpackage> must be accompanied by <srcchannel> or <srcuri>');
+    }
+
+    function _mustSrcChannelXorUri()
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('release' => $release),
+            '<srcpackage> must be accompanied by <srcchannel> or <srcuri>, and not both');
     }
 
     function _analyzePhpFiles()
