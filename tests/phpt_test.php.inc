@@ -8,12 +8,14 @@ class PEAR_PHPTest
 {
     var $_diffonly;
     var $_errors;
-    function PEAR_PHPTest($diffonly = false)
+    function PEAR_PHPTest($diffonly = false, $noStackCatch = false)
     {
         $this->_diffonly = $diffonly;
         $this->_errors = array();
         PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array(&$this, 'pearerrorCallback'));
-        PEAR_ErrorStack::setDefaultCallback(array(&$this, 'pearerrorstackCallback'));
+        if (!$noStackCatch) {
+            PEAR_ErrorStack::setDefaultCallback(array(&$this, 'pearerrorstackCallback'));
+        }
     }
 
     function pearerrorCallback($err)
