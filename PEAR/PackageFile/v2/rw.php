@@ -457,6 +457,70 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
     }
 
     /**
+     * @param string file name
+     * @param PEAR_Task_Common a read/write task
+     */
+    function addTaskToFile($file, $task)
+    {
+        if (!method_exists($task, 'getXml')) {
+            return false;
+        }
+        if (!method_exists($task, 'getName')) {
+            return false;
+        }
+        if (!method_exists($task, 'validate')) {
+            return false;
+        }
+        if (!$task->validate()) {
+            return false;
+        }
+        if (!isset($this->_packageInfo['contents']['dir']['file'])) {
+            return false;
+        }
+        $files = $this->_packageInfo['contents']['dir']['file'];
+        if (!isset($files[0])) {
+            $files = array($files);
+            $ind = false;
+        } else {
+            $ind = true;
+        }
+        foreach ($files as $i => $file) {
+            if (isset($file['attribs'])) {
+                if ($file['attribs']['name'] == $filename) {
+                    if ($ind) {
+                        $t = isset($this->_packageInfo['contents']['dir']['file'][$i]
+                              ['attribs'][$this->_tasksNs .
+                              ':' . $task->getName()]) ?
+                              $this->_packageInfo['contents']['dir']['file'][$i]
+                              ['attribs'][$this->_tasksNs .
+                              ':' . $task->getName()] : false;
+                        if ($t && !isset($t[0])) {
+                            $this->_packageInfo['contents']['dir']['file'][$i]
+                                [$this->_tasksNs . ':' . $task->getName()] = array($t);
+                        }
+                        $this->_packageInfo['contents']['dir']['file'][$i][$this->_tasksNs .
+                            ':' . $task->getName()][] = $task->getXml();
+                    } else {
+                        $t = isset($this->_packageInfo['contents']['dir']['file']
+                              ['attribs'][$this->_tasksNs .
+                              ':' . $task->getName()]) ? $this->_packageInfo['contents']['dir']['file']
+                              ['attribs'][$this->_tasksNs .
+                              ':' . $task->getName()] : false;
+                        if ($t && !isset($t[0])) {
+                            $this->_packageInfo['contents']['dir']['file']
+                                [$this->_tasksNs . ':' . $task->getName()] = array($t);
+                        }
+                        $this->_packageInfo['contents']['dir']['file'][$this->_tasksNs .
+                            ':' . $task->getName()][] = $task->getXml();
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * @param string path to the file
      * @param string filename
      * @param array extra attributes
