@@ -132,7 +132,7 @@ class PEAR_Registry extends PEAR
                 include_once 'PEAR/ChannelFile.php';
                 $pear_channel = new PEAR_ChannelFile;
                 $pear_channel->setName('pear');
-                $pear_channel->setServer('pear.php.net');
+                $pear_channel->setServer('pear.php.net', 'xmlrpc');
                 $pear_channel->setSummary('PHP Extension and Application Repository');
                 $pear_channel->setDefaultPEARProtocols();
             } else {
@@ -981,7 +981,7 @@ class PEAR_Registry extends PEAR
             // the registry is not properly set up, so use defaults
             $pear_channel = new PEAR_ChannelFile;
             $pear_channel->setName('pear');
-            $pear_channel->setServer('pear.php.net');
+            $pear_channel->setServer('pear.php.net', 'xmlrpc');
             $pear_channel->setSummary('PHP Extension and Application Repository');
             $pear_channel->setDefaultPEARProtocols();
             return $pear_channel;

@@ -125,8 +125,9 @@ require_once 'PEAR/ChannelFile.php';
 $chan = new PEAR_ChannelFile;
 
 $chan->setName('test');
-$chan->setServer('pear.php.net');
+$chan->setServer('pear.php.net', 'xmlrpc');
 $chan->setSummary('hello');
+$chan->setDefaultPEARProtocols();
 $reg->addChannel($chan);
 
 dumpall($reg);
@@ -134,7 +135,7 @@ dumpall($reg);
 echo "test add bad channel\n";
 $chan = new PEAR_ChannelFile;
 
-$chan->setServer('pear.php.net');
+$chan->setServer('pear.php.net', 'xmlrpc');
 $chan->setSummary('hello');
 $reg->addChannel($chan);
 
@@ -236,6 +237,9 @@ test add bad channel
 caught ErrorStack error:
 message: Missing channel name
 code: 6
+caught ErrorStack error:
+message: No <xmlrpc> tag is defined
+code: 29
 dumping registry...
 channel pear:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1])
