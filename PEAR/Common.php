@@ -88,7 +88,7 @@ $GLOBALS['_PEAR_Common_dependency_types'] = array('pkg','ext','php','prog','ldli
  * Valid dependency relations
  * @var array
  */
-$GLOBALS['_PEAR_Common_dependency_relations'] = array('has','eq','lt','le','gt','ge','not');
+$GLOBALS['_PEAR_Common_dependency_relations'] = array('has','eq','lt','le','gt','ge','not', 'ne');
 
 /**
  * Valid file roles
