@@ -151,6 +151,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #1870: pear makerpm dependancies
   * fix Bug #4038: Array to string conversion in PEAR/Frontend/CLI.php
   * fix Bug #4060: pear upgrade Auth_HTTP fails
+  * fix Bug #4072: pear list-all -c channel does not list installed packages
  </notes>
  <contents>
   <dir name="/">
