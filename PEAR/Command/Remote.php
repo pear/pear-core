@@ -272,6 +272,9 @@ parameter.
 
         foreach ($available as $name => $info) {
             $installed = $reg->packageInfo($name);
+            if (is_array($installed['version'])) {
+                $installed['version'] = $installed['version']['release'];
+            }
             $desc = $info['summary'];
             if (isset($params[$name]))
                 $desc .= "\n\n".$info['description'];
@@ -294,9 +297,6 @@ parameter.
                 unset($local_pkgs[$pos]);
             }
 
-            if (is_array($installed['version'])) {
-                $installed['version'] = $installed['version']['release'];
-            }
             $data['data'][$info['category']][] = array(
                 $reg->channelAlias($channel) . '/' . $name,
                 @$info['stable'],
