@@ -148,6 +148,11 @@ class PEAR_Registry extends PEAR
         $this->_config = false;
     }
 
+    function hasWriteAccess()
+    {
+        return @is_writeable($this->statedir);
+    }
+
     function setConfig(&$config)
     {
         $this->_config = &$config;
@@ -296,6 +301,9 @@ class PEAR_Registry extends PEAR
         }
         static $init = false;
         if (!@is_dir($this->statedir)) {
+            if (!$this->hasWriteAccess()) {
+                return false;
+            }
             if (!System::mkdir(array('-p', $this->statedir))) {
                 return $this->raiseError("could not create directory '{$this->statedir}'");
             }
@@ -349,6 +357,9 @@ class PEAR_Registry extends PEAR
             $this->_initializeChannelDirs();
         }
         if (!@is_dir($channelDir)) {
+            if (!$this->hasWriteAccess()) {
+                return false;
+            }
             if (!System::mkdir(array('-p', $channelDir))) {
                 return $this->raiseError("could not create directory '" . $channelDir .
                     "'");
@@ -371,11 +382,17 @@ class PEAR_Registry extends PEAR
     function _assertChannelDir()
     {
         if (!@is_dir($this->channelsdir)) {
+            if (!$this->hasWriteAccess()) {
+                return false;
+            }
             if (!System::mkdir(array('-p', $this->channelsdir))) {
                 return $this->raiseError("could not create directory '{$this->channelsdir}'");
             }
         }
         if (!@is_dir($this->channelsdir . DIRECTORY_SEPARATOR . '.alias')) {
+            if (!$this->hasWriteAccess()) {
+                return false;
+            }
             if (!System::mkdir(array('-p', $this->channelsdir . DIRECTORY_SEPARATOR . '.alias'))) {
                 return $this->raiseError("could not create directory '{$this->channelsdir}/.alias'");
             }
@@ -513,7 +530,12 @@ class PEAR_Registry extends PEAR
 
     function _openPackageFile($package, $mode, $channel = false)
     {
-        $this->_assertStateDir($channel);
+        if (!$this->_assertStateDir($channel)) {
+            return null;
+        }
+        if (!in_array($mode, array('r', 'rb')) && !$this->hasWriteAccess()) {
+            return null;
+        }
         $file = $this->_packageFileName($package, $channel);
         $fp = @fopen($file, $mode);
         if (!$fp) {
@@ -535,7 +557,12 @@ class PEAR_Registry extends PEAR
 
     function _openChannelFile($channel, $mode)
     {
-        $this->_assertChannelDir();
+        if (!$this->_assertChannelDir()) {
+            return null;
+        }
+        if (!in_array($mode, array('r', 'rb')) && !$this->hasWriteAccess()) {
+            return null;
+        }
         $file = $this->_channelFileName($channel);
         $fp = @fopen($file, $mode);
         if (!$fp) {
@@ -600,6 +627,9 @@ class PEAR_Registry extends PEAR
             }
         }
         $this->_assertStateDir();
+        if (!$this->hasWriteAccess()) {
+            return false;
+        }
         $fp = @fopen($this->filemap, 'wb');
         if (!$fp) {
             return false;
@@ -775,12 +805,18 @@ class PEAR_Registry extends PEAR
                   $this->_getChannelFromAlias($channel->getAlias()) != $channel->getName()) {
                 $channel->setAlias($channel->getName());
             }
+            if (!$this->hasWriteAccess()) {
+                return false;
+            }
             $fp = @fopen($this->_getChannelAliasFileName($channel->getAlias()), 'w');
             if (!$fp) {
                 return false;
             }
             fwrite($fp, $channel->getName());
             fclose($fp);
+        }
+        if (!$this->hasWriteAccess()) {
+            return false;
         }
         $fp = @fopen($this->_channelFileName($channel->getName()), 'wb');
         if (!$fp) {
