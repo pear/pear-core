@@ -138,7 +138,6 @@ class PEAR_Registry extends PEAR
     function setConfig(&$config)
     {
         $this->_config = &$config;
-        $config->setChannels($this->listChannels(), true);
     }
 
     function _initializeChannelDirs()
@@ -148,7 +147,9 @@ class PEAR_Registry extends PEAR
               !file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
             $pear_channel = $this->_pearChannel;
             if (!is_a($pear_channel, 'PEAR_ChannelFile') || !$pear_channel->validate()) {
-                include_once 'PEAR/ChannelFile.php';
+                if (!class_exists('PEAR_ChannelFile')) {
+                    include_once 'PEAR/ChannelFile.php';
+                }
                 $pear_channel = new PEAR_ChannelFile;
                 $pear_channel->setName('pear.php.net');
                 $pear_channel->setAlias('pear');
@@ -256,7 +257,7 @@ class PEAR_Registry extends PEAR
         if ($channel && $this->_getChannelFromAlias($channel) != 'pear.php.net') {
             return $this->_assertChannelStateDir($channel);
         }
-        $init = false;
+        static $init = false;
         if (!@is_dir($this->statedir)) {
             if (!System::mkdir(array('-p', $this->statedir))) {
                 return $this->raiseError("could not create directory '{$this->statedir}'");
@@ -264,7 +265,13 @@ class PEAR_Registry extends PEAR
             $init = true;
         }
         if ($init) {
-            $this->_initializeDirs();
+            static $running = false;
+            if (!$running) {
+                $running = true;
+                $this->_initializeDirs();
+                $running = false;
+                $init = false;
+            }
         } else {
             $this->_initializeDepDB();
         }
