@@ -13,6 +13,12 @@ copyItem('registry'); //setup for nice clean rebuild
 $db = &PEAR_DependencyDB::singleton($config);
 $db->rebuildDB();
 $p = array('package' => 'PEAR', 'channel' => 'pear.php.net');
+$at = $db->getDependentPackages($p);
+function atsort($a, $b)
+{
+    return strcasecmp($a['package'], $b['package']);
+}
+usort($at, 'atsort');
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -37,17 +43,17 @@ $phpunit->assertEquals(array (
   4 => 
   array (
     'channel' => 'pear.php.net',
-    'package' => 'peartests',
+    'package' => 'pear_info',
   ),
   5 => 
   array (
     'channel' => 'pear.php.net',
-    'package' => 'pear_info',
+    'package' => 'pear_packagefilemanager',
   ),
   6 => 
   array (
     'channel' => 'pear.php.net',
-    'package' => 'pear_packagefilemanager',
+    'package' => 'peartests',
   ),
   7 => 
   array (
@@ -69,7 +75,7 @@ $phpunit->assertEquals(array (
     'channel' => 'pear.php.net',
     'package' => 'xml_util',
   ),
-), $db->getDependentPackages($p), 'PEAR');
+), $at, 'PEAR');
 $p = array('package' => 'LiveUser', 'channel' => 'pear.php.net');
 $phpunit->assertEquals(false, $db->getDependentPackages($p), 'LiveUser');
 $p = array('package' => 'Slonk', 'channel' => 'pear.php.net');
