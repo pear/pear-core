@@ -169,12 +169,29 @@ class PEAR_Downloader_Package
     function fromDepURL($dep)
     {
         $this->_downloadURL = $dep;
-        $this->_parsedname =
-            array(
-                'package' => $dep['info']['package'],
-                'channel' => $dep['info']['channel'],
-                'version' => $dep['version']
-            );
+        if (isset($dep['uri'])) {
+            $options = $this->_downloader->getOptions();
+            if (!extension_loaded("zlib") || isset($options['nocompress'])) {
+                $ext = '.tar';
+            } else {
+                $ext = '.tgz';
+            }
+            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+            $err = $this->_fromUrl($dep['uri'] . $ext);
+            PEAR::popErrorHandling();
+            if (PEAR::isError($err)) {
+                $this->_downloader->log(0, $err->getMessage());
+                return PEAR::raiseError('Invalid uri dependency "' . $dep['uri'] . $ext . '", ' .
+                    'cannot download');
+            }
+        } else {
+            $this->_parsedname =
+                array(
+                    'package' => $dep['info']['package'],
+                    'channel' => $dep['info']['channel'],
+                    'version' => $dep['version']
+                );
+        }
         if (isset($dep['group'])) {
             $this->_parsedname['group'] = $dep['group'];
         }
@@ -345,6 +362,9 @@ class PEAR_Downloader_Package
 
     function _detect2Dep($dep, $pname, $group, $params)
     {
+        if (isset($dep['uri'])) {
+            return array('uri' => $dep['uri'], 'dep' => $dep);;
+        }
         $testdep = $dep;
         $testdep['package'] = $dep['name'];
         if (PEAR_Downloader_Package::willDownload($testdep, $params)) {
@@ -636,6 +656,10 @@ class PEAR_Downloader_Package
      */
     function isEqual($param)
     {
+        if (isset($param['uri'])) {
+            $param['channel'] = '__uri';
+            $param['package'] = $param['dep']['name'];
+        }
         $package = isset($param['package']) ? $param['package'] : $param['info']['package'];
         $channel = isset($param['channel']) ? $param['channel'] : $param['info']['channel'];
         if (isset($param['version'])) {
@@ -650,15 +674,27 @@ class PEAR_Downloader_Package
 
     function isInstalled($dep, $oper = '==')
     {
-        if ($oper != 'ge' && $oper != 'gt' && $oper != 'has') {
+        if ($oper != 'ge' && $oper != 'gt' && $oper != 'has' && $oper != '==') {
             return false;
         }
         $options = $this->_downloader->getOptions();
-        if ($this->_registry->packageExists($dep['info']['package'], $dep['info']['channel'])) {
+        if (isset($dep['uri'])) {
+            $channel = '__uri';
+            $package = $dep['dep']['name'];
+        } else {
+            $channel = $dep['info']['channel'];
+            $package = $dep['info']['package'];
+        }
+        if ($this->_registry->packageExists($package, $channel)) {
+            if (isset($dep['uri'])) {
+                if ($this->_registry->packageInfo($package, 'uri', '__uri') == $dep['uri']) {
+                    return true;
+                }
+            }
             if (isset($options['upgrade'])) {
                 if ($oper == 'has') {
                     if (version_compare($this->_registry->packageInfo(
-                          $dep['info']['package'], 'version', $dep['info']['channel']),
+                          $package, 'version', $channel),
                           $dep['version'], '>=')) {
                         return true;
                     } else {
@@ -737,7 +773,13 @@ class PEAR_Downloader_Package
             $params[$i]->_downloadDeps = array();
             foreach ($newdeps as $dep) {
                 $obj = &new PEAR_Downloader_Package($params[$i]->_downloader);
-                $obj->fromDepURL($dep);
+                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                $e = $obj->fromDepURL($dep);
+                PEAR::popErrorHandling();
+                if (PEAR::isError($e)) {
+                    $param->_downloader->log(0, $e->getMessage());
+                    continue;
+                }
                 $obj->detectDependencies($params);
                 $j = &$obj;
                 $newparams[] = &$j;
