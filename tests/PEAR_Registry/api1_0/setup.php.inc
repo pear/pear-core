@@ -89,7 +89,6 @@ $files3_new = array(
         ),
     );
 
-print "creating registry object\n";
 $reg = new PEAR_Registry($statedir);
 $phpunit = &new PEAR_PHPTest(true);
 ?>

@@ -263,5 +263,4 @@ $phpunit->assertPackageinfoEquals(array (
 echo 'tests done';
 ?>
 --EXPECT--
-creating registry object
 tests done
