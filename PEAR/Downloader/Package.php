@@ -209,6 +209,9 @@ class PEAR_Downloader_Package
             return;
         }
         $deps = $this->getDeps();
+        if (!$deps) {
+            return;
+        }
         if (isset($deps['required'])) { // package.xml 2.0
             return $this->_detect2($deps, $pname, $options, $params);
         } else {

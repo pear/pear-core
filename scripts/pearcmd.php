@@ -130,6 +130,9 @@ foreach ($opts as $opt) {
             break;
         case 'V':
             usage(null, 'version');
+        case 'c':
+        case 'C':
+            break;
         default:
             // all non pear params goes to the command
             $cmdopts[$opt[0]] = $param;

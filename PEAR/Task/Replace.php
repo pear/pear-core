@@ -92,7 +92,16 @@ class PEAR_Task_Replace extends PEAR_Task_Common
                         return false;
                     }
                 } else {
-                    $to = $this->config->get($a['to'], null, $pkg->getChannel());
+                    if ($this->config->isDefinedLayer('ftp')) {
+                        // try the remote config file first
+                        $to = $this->config->get($a['to'], 'ftp', $pkg->getChannel());
+                        if (is_null($to)) {
+                            // then default to local
+                            $to = $this->config->get($a['to'], null, $pkg->getChannel());
+                        }
+                    } else {
+                        $to = $this->config->get($a['to'], null, $pkg->getChannel());
+                    }
                 }
                 if (is_null($to)) {
                     $this->installer->log(0, "invalid pear-config replacement: $a[to]");

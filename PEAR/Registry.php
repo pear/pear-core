@@ -142,14 +142,6 @@ class PEAR_Registry extends PEAR
 
     function _initializeDirs()
     {
-        if (!isset($this->_dependencyDB)) {
-            static $initializing = false;
-            if (!$initializing) {
-                $initializing = true;
-                $this->_dependencyDB = &PEAR_DependencyDB::singleton($this->_config);
-                $initializing = false;
-            }
-        }
         static $called = false;
         if ($called) {
             return;
@@ -183,16 +175,24 @@ class PEAR_Registry extends PEAR
                 $pear_channel->setAlias('pear');
             }
             $pear_channel->validate();
-            $this->addChannel($pear_channel);
+            $this->_addChannel($pear_channel);
             $private = new PEAR_ChannelFile;
             $private->setName('__uri');
             $private->setServer('www.example.com');
             $private->addFunction('xmlrpc', '1.0', '****');
             $private->setSummary('Pseudo-channel for static packages');
-            $this->addChannel($private);
-            $this->rebuildFileMap();
+            $this->_addChannel($private);
+            $this->_rebuildFileMap();
         } elseif (!file_exists($this->filemap)) {
-            $this->rebuildFileMap();
+            $this->_rebuildFileMap();
+        }
+        if (!isset($this->_dependencyDB)) {
+            static $initializing = false;
+            if (!$initializing) {
+                $initializing = true;
+                $this->_dependencyDB = &PEAR_DependencyDB::singleton($this->_config);
+                $initializing = false;
+            }
         }
     }
     // }}}
@@ -441,16 +441,16 @@ class PEAR_Registry extends PEAR
     }
 
     // }}}
-    // {{{ rebuildFileMap()
+    // {{{ _rebuildFileMap()
 
-    function rebuildFileMap()
+    function _rebuildFileMap()
     {
-        $channels = $this->listAllPackages();
+        $channels = $this->_listAllPackages();
         $files = array();
         foreach ($channels as $channel => $packages) {
             foreach ($packages as $package) {
-                $version = $this->packageInfo($package, 'version', $channel);
-                $filelist = $this->packageInfo($package, 'filelist', $channel);
+                $version = $this->_packageInfo($package, 'version', $channel);
+                $filelist = $this->_packageInfo($package, 'filelist', $channel);
                 if (!is_array($filelist)) {
                     continue;
                 }
@@ -495,9 +495,9 @@ class PEAR_Registry extends PEAR
     }
 
     // }}}
-    // {{{ readFileMap()
+    // {{{ _readFileMap()
 
-    function readFileMap()
+    function _readFileMap()
     {
         $this->_initializeDirs();
         $fp = @fopen($this->filemap, 'r');
@@ -581,10 +581,10 @@ class PEAR_Registry extends PEAR
     function _unlock()
     {
         $ret = $this->_lock(LOCK_UN);
-        $this->lock_fp = null;
         if (is_resource($this->lock_fp)) {
             fclose($this->lock_fp);
         }
+        $this->lock_fp = null;
         return $ret;
     }
 
@@ -609,6 +609,107 @@ class PEAR_Registry extends PEAR
         $this->_initializeDirs();
         return file_exists($this->_getChannelAliasFileName($channel)) ||
             file_exists($this->_channelFileName($channel));
+    }
+
+    // }}}
+    // {{{ _addChannel()
+
+    /**
+     * @param PEAR_ChannelFile Channel object
+     * @return boolean|PEAR_Error True on creation, false if it already exists
+     */
+    function _addChannel($channel, $update = false)
+    {
+        if (!is_a($channel, 'PEAR_ChannelFile')) {
+            return false;
+        }
+        if (!$channel->validate()) {
+            return false;
+        }
+        if ($this->_channelExists($channel->getName())) {
+            if (!$update) {
+                return false;
+            }
+        } else {
+            if ($update) {
+                return false;
+            }
+        }
+        $ret = $this->_assertChannelDir();
+        if (PEAR::isError($ret)) {
+            return $ret;
+        }
+        $ret = $this->_assertChannelStateDir($channel->getName());
+        if (PEAR::isError($ret)) {
+            return $ret;
+        }
+        if ($channel->getAlias() != $channel->getName()) {
+            if (file_exists($this->_getChannelAliasFileName($channel->getAlias())) &&
+                  $this->_getChannelFromAlias($channel->getAlias()) != $channel->getName()) {
+                $channel->setAlias($channel->getName());
+            }
+            $fp = @fopen($this->_getChannelAliasFileName($channel->getAlias()), 'w');
+            if (!$fp) {
+                return false;
+            }
+            fwrite($fp, $channel->getName());
+            fclose($fp);
+        }
+        $fp = @fopen($this->_channelFileName($channel->getName()), 'wb');
+        if (!$fp) {
+            return false;
+        }
+        $info = $channel->toArray();
+        $info['_lastmodified'] = time();
+        fwrite($fp, serialize($info));
+        fclose($fp);
+        return true;
+    }
+
+    // }}}
+    // {{{ _deleteChannel()
+
+    /**
+     * Deletion fails if there are any packages installed from the channel
+     * @param string|PEAR_ChannelFile channel name
+     * @return boolean|PEAR_Error True on deletion, false if it doesn't exist
+     */
+    function _deleteChannel($channel)
+    {
+        if (strtolower($channel) == '__uri') {
+            return false;
+        }
+        if (!is_string($channel)) {
+            if (is_a($channel, 'PEAR_ChannelFile')) {
+                if (!$channel->validate()) {
+                    return false;
+                }
+                $channel = $channel->getName();
+            } else {
+                return false;
+            }
+        }
+        if (!$channel || $this->_getChannelFromAlias($channel) == 'pear.php.net') {
+            return false;
+        }
+        $channel = $this->_getChannelFromAlias($channel);
+        if ($channel == 'pear.php.net') {
+            return false;
+        }
+        if (!$this->_channelExists($channel)) {
+            return false;
+        }
+        $test = $this->_listChannelPackages($channel);
+        if (count($test)) {
+            return false;
+        }
+        $test = @rmdir($this->_channelDirectoryName($channel));
+        if (!$test) {
+            return false;
+        }
+        $file = $this->_channelFileName($channel);
+        $ret = @unlink($file);
+        return true;
     }
 
     // }}}
@@ -777,6 +878,148 @@ class PEAR_Registry extends PEAR
         return $ret;
     }
 
+    function _addPackage($package, $info, $channel = false)
+    {
+        if ($this->_packageExists($package, $channel)) {
+            return false;
+        }
+        if (!$this->_channelExists($channel)) {
+            return false;
+        }
+        $fp = $this->_openPackageFile($package, 'wb', $channel);
+        if ($fp === null) {
+            return false;
+        }
+        $info['_lastmodified'] = time();
+        fwrite($fp, serialize($info));
+        $this->_closePackageFile($fp);
+        if (isset($info['filelist'])) {
+            $this->_rebuildFileMap();
+        }
+        return true;
+    }
+
+    function _addPackage2($info)
+    {
+        $channel = $info->getChannel();
+        $package = $info->getPackage();
+        $save = $info;
+        if ($this->_packageExists($package, $channel)) {
+            return false;
+        }
+        if (!$this->_channelExists($channel)) {
+            return false;
+        }
+        $info = $info->toArray(true);
+        if (!$info) {
+            return false;
+        }
+        $fp = $this->_openPackageFile($package, 'wb', $channel);
+        if ($fp === null) {
+            return false;
+        }
+        $info['_lastmodified'] = time();
+        fwrite($fp, serialize($info));
+        $this->_closePackageFile($fp);
+        $this->_rebuildFileMap();
+        return true;
+    }
+
+    function _updatePackage($package, $info, $merge = true, $channel = false)
+    {
+        $oldinfo = $this->_packageInfo($package, null, $channel);
+        if (empty($oldinfo)) {
+            return false;
+        }
+        $fp = $this->_openPackageFile($package, 'w', $channel);
+        if ($fp === null) {
+            return false;
+        }
+        if (is_object($info)) {
+            $info = $info->toArray();
+        }
+        $info['_lastmodified'] = time();
+        $newinfo = $info;
+        if ($merge) {
+            $info = array_merge($oldinfo, $info);
+        } else {
+            $diff = $info;
+        }
+        fwrite($fp, serialize($info));
+        $this->_closePackageFile($fp);
+        if (isset($newinfo['filelist'])) {
+            $this->_rebuildFileMap();
+        }
+        return true;
+    }
+
+    function _updatePackage2($info, $merge = true)
+    {
+        $package = $info->getPackage();
+        $channel = $info->getChannel();
+        $oldinfo = $this->_packageInfo($package, null, $channel);
+        if (empty($oldinfo)) {
+            return false;
+        }
+        $fp = $this->_openPackageFile($package, 'w', $channel);
+        if ($fp === null) {
+            return false;
+        }
+        if (is_object($info)) {
+            $save = $info;
+            $info = $info->toArray(true);
+        }
+        $info['_lastmodified'] = time();
+        $newinfo = $info;
+        if ($merge) {
+            $info = array_merge($oldinfo, $info);
+        } else {
+            $diff = $info;
+        }
+        fwrite($fp, serialize($info));
+        $this->_closePackageFile($fp);
+        if (isset($newinfo['filelist'])) {
+            $this->_rebuildFileMap();
+        }
+        return true;
+    }
+
+    function &_getPackage($package, $channel = 'pear.php.net')
+    {
+        if (!class_exists('PEAR_PackageFile')) {
+            include_once 'PEAR/PackageFile.php';
+        }
+        $info = $this->_packageInfo($package, null, $channel);
+        if ($info === null) {
+            return $info;
+        }
+        $pf = &PEAR_PackageFile::fromArray($info);
+        return $pf;
+    }
+
+    function &_getChannel($channel)
+    {
+        if (!class_exists('PEAR_ChannelFile')) {
+            include_once 'PEAR/ChannelFile.php';
+        }
+        $ch = &PEAR_ChannelFile::fromArray($this->_channelInfo($channel));
+        if ($ch) {
+            return $ch;
+        }
+        if ($this->_getChannelFromAlias($channel) == 'pear.php.net') {
+            // the registry is not properly set up, so use defaults
+            $pear_channel = new PEAR_ChannelFile;
+            $pear_channel->setName('pear.php.net');
+            $pear_channel->setAlias('pear');
+            $pear_channel->setServer('pear.php.net');
+            $pear_channel->setSummary('PHP Extension and Application Repository');
+            $pear_channel->setDefaultPEARProtocols();
+            return $pear_channel;
+        }
+        $a = false;
+        return $a;
+    }
+
     // {{{ packageExists()
 
     function packageExists($package, $channel = false)
@@ -916,28 +1159,15 @@ class PEAR_Registry extends PEAR
         if (is_object($info)) {
             return $this->addPackage2($info);
         }
-        if ($this->packageExists($package, $channel)) {
-            return false;
-        }
-        if (!$this->channelExists($channel)) {
-            return false;
-        }
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
-        $fp = $this->_openPackageFile($package, 'wb', $channel);
-        if ($fp === null) {
-            $this->_unlock();
-            return false;
-        }
-        $info['_lastmodified'] = time();
-        fwrite($fp, serialize($info));
-        $this->_closePackageFile($fp);
-        if (isset($info['filelist'])) {
-            $this->rebuildFileMap();
-        }
+        $ret = $this->_addPackage($package, $info, $channel);
         $this->_unlock();
-        return true;
+        $info['channel'] = 'pear.php.net';
+        $this->_dependencyDB->uninstallPackage($info);
+        $this->_dependencyDB->installPackage($info);
+        return $ret;
     }
 
     // }}}
@@ -948,35 +1178,14 @@ class PEAR_Registry extends PEAR
         if (!is_object($info)) {
             return $this->addPackage($info['package'], $info);
         }
-        $channel = $info->getChannel();
-        $package = $info->getPackage();
-        $save = $info;
-        if ($this->packageExists($package, $channel)) {
-            return false;
-        }
-        if (!$this->channelExists($channel)) {
-            return false;
-        }
-        $info = $info->toArray(true);
-        if (!$info) {
-            return false;
-        }
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
-        $fp = $this->_openPackageFile($package, 'wb', $channel);
-        if ($fp === null) {
-            $this->_unlock();
-            return false;
-        }
-        $info['_lastmodified'] = time();
-        fwrite($fp, serialize($info));
-        $this->_closePackageFile($fp);
-        $this->rebuildFileMap();
+        $ret = $this->_addPackage2($info);
         $this->_unlock();
-        $this->_dependencyDB->uninstallPackage($save);
-        $this->_dependencyDB->installPackage($save);
-        return true;
+        $this->_dependencyDB->uninstallPackage($info);
+        $this->_dependencyDB->installPackage($info);
+        return $ret;
     }
 
     // }}}
@@ -1004,46 +1213,12 @@ class PEAR_Registry extends PEAR
      */
     function deleteChannel($channel)
     {
-        if (strtolower($channel) == '__uri') {
-            return false;
-        }
-        if (!is_string($channel)) {
-            if (is_a($channel, 'PEAR_ChannelFile')) {
-                if (!$channel->validate()) {
-                    return false;
-                }
-                $channel = $channel->getName();
-            } else {
-                return false;
-            }
-        }
-        if (!$channel || $this->_getChannelFromAlias($channel) == 'pear.php.net') {
-            return false;
-        }
-        $channel = $this->_getChannelFromAlias($channel);
-        if ($channel == 'pear.php.net') {
-            return false;
-        }
-        if (!$this->channelExists($channel)) {
-            return false;
-        }
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
-        $test = $this->_listChannelPackages($channel);
-        if (count($test)) {
-            $this->_unlock();
-            return false;
-        }
-        $test = @rmdir($this->_channelDirectoryName($channel));
-        if (!$test) {
-            $this->_unlock();
-            return false;
-        }
-        $file = $this->_channelFileName($channel);
-        $ret = @unlink($file);
+        $ret = $this->_deleteChannel($channel);
         $this->_unlock();
-        return true;
+        return $ret;
     }
 
     // }}}
@@ -1061,52 +1236,12 @@ class PEAR_Registry extends PEAR
         if (!$channel->validate()) {
             return false;
         }
-        if ($this->channelExists($channel->getName())) {
-            if (!$update) {
-                return false;
-            }
-        } else {
-            if ($update) {
-                return false;
-            }
-        }
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
-        $ret = $this->_assertChannelDir();
-        if (PEAR::isError($ret)) {
-            $this->_unlock();
-            return $ret;
-        }
-        $ret = $this->_assertChannelStateDir($channel->getName());
-        if (PEAR::isError($ret)) {
-            $this->_unlock();
-            return $ret;
-        }
-        if ($channel->getAlias() != $channel->getName()) {
-            if (file_exists($this->_getChannelAliasFileName($channel->getAlias())) &&
-                  $this->channelName($channel->getAlias()) != $channel->getName()) {
-                $channel->setAlias($channel->getName());
-            }
-            $fp = @fopen($this->_getChannelAliasFileName($channel->getAlias()), 'w');
-            if (!$fp) {
-                $this->_unlock();
-                return false;
-            }
-            fwrite($fp, $channel->getName());
-            fclose($fp);
-        }
-        $fp = @fopen($this->_channelFileName($channel->getName()), 'wb');
-        if (!$fp) {
-            $this->_unlock();
-            return false;
-        }
-        $info = $channel->toArray();
-        $info['_lastmodified'] = time();
-        fwrite($fp, serialize($info));
-        fclose($fp);
+        $ret = $this->_addChannel($channel, $update);
         $this->_unlock();
-        return true;
+        return $ret;
     }
 
     // }}}
@@ -1119,7 +1254,7 @@ class PEAR_Registry extends PEAR
         }
         $file = $this->_packageFileName($package, $channel);
         $ret = @unlink($file);
-        $this->rebuildFileMap();
+        $this->_rebuildFileMap();
         $this->_unlock();
         $p = array('channel' => $channel, 'package' => $package);
         $this->_dependencyDB->uninstallPackage($p);
@@ -1134,64 +1269,15 @@ class PEAR_Registry extends PEAR
         if (is_object($info)) {
             return $this->updatePackage2($info, $merge);
         }
-        $oldinfo = $this->packageInfo($package, null, $channel);
-        if (empty($oldinfo)) {
-            return false;
-        }
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
-        $fp = $this->_openPackageFile($package, 'w', $channel);
-        if ($fp === null) {
-            $this->_unlock();
-            return false;
-        }
-        if (is_object($info)) {
-            $info = $info->toArray();
-        }
-        $info['_lastmodified'] = time();
-        $newinfo = $info;
-        if ($merge) {
-            $info = array_merge($oldinfo, $info);
-        } else {
-            $diff = $info;
-        }
-        if (isset($newinfo['filelist'])) {
-            $diff = array_diff(array_keys($info['filelist']), array_keys($oldinfo['filelist']));
-            if (count($diff)) {
-                $test = array();
-                foreach ($diff as $key) {
-                    $test[$key] = $info['filelist'][$key];
-                }
-                if ($conflictarr = $this->checkFileMap($test, $package)) {
-                $text = array();
-                foreach ($conflictarr as $item) {
-                    if (is_array($item)) {
-                        $text[] = $item[1] . '::' . $item[0];
-                    } else {
-                        $text[] = "pear::$item";
-                    }
-                }
-                if (!$channel) {
-                    $channel = 'pear.php.net';
-                }
-                require_once 'PEAR/ErrorStack.php';
-                $text = implode(', ', array_unique($text));
-                    PEAR_ErrorStack::staticPush('PEAR_Registry', PEAR_REGISTRY_ERROR_CONFLICT,
-                        'error', array('package' => $package, 'conflicts' => $conflictarr),
-                        "package $channel/$package has files that conflict with installed packages $text");
-                    $this->_closePackageFile($fp);
-                    return false;
-                }
-            }
-        }
-        fwrite($fp, serialize($info));
-        $this->_closePackageFile($fp);
-        if (isset($newinfo['filelist'])) {
-            $this->rebuildFileMap();
-        }
+        $ret = $this->_updatePackage($package, $info, $merge, $channel);
         $this->_unlock();
-        return true;
+        $info['channel'] = 'pear.php.net';
+        $this->_dependencyDB->uninstallPackage($info);
+        $this->_dependencyDB->installPackage($info);
+        return $ret;
     }
 
     // }}}
@@ -1202,67 +1288,14 @@ class PEAR_Registry extends PEAR
         if (!is_object($info)) {
             return $this->updatePackage($info['package'], $info, $merge);
         }
-        $package = $info->getPackage();
-        $channel = $info->getChannel();
-        $oldinfo = $this->packageInfo($package, null, $channel);
-        if (empty($oldinfo)) {
-            return false;
-        }
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
-        $fp = $this->_openPackageFile($package, 'w', $channel);
-        if ($fp === null) {
-            $this->_unlock();
-            return false;
-        }
-        if (is_object($info)) {
-            $save = $info;
-            $info = $info->toArray(true);
-        }
-        $info['_lastmodified'] = time();
-        $newinfo = $info;
-        if ($merge) {
-            $info = array_merge($oldinfo, $info);
-        } else {
-            $diff = $info;
-        }
-        if (isset($newinfo['filelist'])) {
-            $diff = array_diff(array_keys($info['filelist']), array_keys($oldinfo['filelist']));
-            if (count($diff)) {
-                $test = array();
-                foreach ($diff as $key) {
-                    $test[$key] = $info['filelist'][$key];
-                }
-                if ($conflictarr = $this->checkFileMap($test, $package)) {
-                $text = array();
-                foreach ($conflictarr as $item) {
-                    if (is_array($item)) {
-                        $text[] = $item[1] . '/' . $item[0];
-                    } else {
-                        $text[] = "pear.php.net/$item";
-                    }
-                }
-                require_once 'PEAR/ErrorStack.php';
-                $text = implode(', ', array_unique($text));
-                    PEAR_ErrorStack::staticPush('PEAR_Registry', PEAR_REGISTRY_ERROR_CONFLICT,
-                        'error', array('package' => $package, 'conflicts' => $conflictarr),
-                        "package $channel/$package has files that conflict with installed packages $text");
-                    $this->_closePackageFile($fp);
-                    return false;
-                }
-            }
-        }
-        fwrite($fp, serialize($info));
-        $this->_closePackageFile($fp);
-        if (isset($newinfo['filelist'])) {
-            $this->rebuildFileMap();
-        }
+        $ret = $this->_getPackage($info->getPackage(), $info->getChannel());
         $this->_unlock();
-        $save = $this->getPackage($save->getPackage(), $save->getChannel());
-        $this->_dependencyDB->uninstallPackage($save);
-        $this->_dependencyDB->installPackage($save);
-        return true;
+        $this->_dependencyDB->uninstallPackage($info);
+        $this->_dependencyDB->installPackage($info);
+        return $ret;
     }
 
     // }}}
@@ -1271,26 +1304,14 @@ class PEAR_Registry extends PEAR
      * @param string channel name
      * @return PEAR_ChannelFile|false
      */
-    function getChannel($channel)
+    function &getChannel($channel)
     {
-        if (!class_exists('PEAR_ChannelFile')) {
-            include_once 'PEAR/ChannelFile.php';
+        if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
+            return $e;
         }
-        $ch = &PEAR_ChannelFile::fromArray($this->_channelInfo($channel));
-        if ($ch) {
-            return $ch;
-        }
-        if ($this->_getChannelFromAlias($channel) == 'pear.php.net') {
-            // the registry is not properly set up, so use defaults
-            $pear_channel = new PEAR_ChannelFile;
-            $pear_channel->setName('pear.php.net');
-            $pear_channel->setAlias('pear');
-            $pear_channel->setServer('pear.php.net');
-            $pear_channel->setSummary('PHP Extension and Application Repository');
-            $pear_channel->setDefaultPEARProtocols();
-            return $pear_channel;
-        }
-        return false;
+        $ret = &$this->_getChannel($channel);
+        $this->_unlock();
+        return $ret;
     }
 
     // }}}
@@ -1302,14 +1323,11 @@ class PEAR_Registry extends PEAR
      */
     function &getPackage($package, $channel = 'pear.php.net')
     {
-        if (!class_exists('PEAR_PackageFile')) {
-            include_once 'PEAR/PackageFile.php';
+        if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
+            return $e;
         }
-        $info = $this->_packageInfo($package, null, $channel);
-        if ($info === null) {
-            return $info;
-        }
-        $pf = &PEAR_PackageFile::fromArray($info);
+        $pf = &$this->_getPackage($package, $channel);
+        $this->_unlock();
         return $pf;
     }
 
@@ -1375,14 +1393,14 @@ class PEAR_Registry extends PEAR
      * @param string channel name
      * @return PEAR_ChannelFile|false
      */
-    function getChannels()
+    function &getChannels()
     {
         $ret = array();
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
-        foreach ($this->listChannels() as $channel) {
-            $ret[] = $this->getChannel($channel);
+        foreach ($this->_listChannels() as $channel) {
+            $ret[] = &$this->_getChannel($channel);
         }
         $this->_unlock();
         return $ret;
@@ -1428,8 +1446,15 @@ class PEAR_Registry extends PEAR
             }
             return array_filter($pkgs, $notempty);
         }
-        if (empty($this->filemap_cache) && PEAR::isError($err = $this->readFileMap())) {
-            return $err;
+        if (empty($this->filemap_cache)) {
+            if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
+                return $e;
+            }
+            $err = $this->_readFileMap();
+            $this->_unlock();
+            if (PEAR::isError($err)) {
+                return $err;
+            }
         }
         if (!$attrs) {
             $attrs = array('role' => 'php'); // any old call would be for PHP role only

@@ -266,125 +266,6 @@ class PEAR_PackageFile_v2
         return $this->_archiveFile;
     }
 
-    /**
-     * This should only be used to retrieve filenames and install attributes
-     */
-    function getFilelist($preserve = false)
-    {
-        if (isset($this->_packageInfo['filelist']) && !$preserve) {
-            return $this->_packageInfo['filelist'];
-        }
-        if ($contents = $this->getContents()) {
-            $ret = array();
-            if (!isset($contents['dir']['file'][0])) {
-                $contents['dir']['file'] = array($contents['dir']['file']);
-            }
-            foreach ($contents['dir']['file'] as $file) {
-                $name = $file['attribs']['name'];
-                if (!$preserve) {
-                    $file = $file['attribs'];
-                }
-                $ret[$name] = $file;
-            }
-            if (!$preserve) {
-                $this->_packageInfo['filelist'] = $ret;
-            }
-            return $ret;
-        }
-        return false;
-    }
-
-    /**
-     * This is only used at install-time, after all serialization
-     * is over.
-     */
-    function resetFilelist()
-    {
-        $this->_packageInfo['filelist'] = array();
-    }
-
-    /**
-     * Retrieve a list of files that should be installed on this computer
-     */
-    function getInstallationFilelist()
-    {
-        $contents = $this->getFilelist(true);
-        if (isset($contents['dir']['attribs']['baseinstalldir'])) {
-            $base = $contents['dir']['attribs']['baseinstalldir'];
-        }
-        if (isset($this->_packageInfo['phprelease'])) {
-            $release = $this->_packageInfo['phprelease'];
-        } elseif (isset($this->_packageInfo['extsrcrelease'])) {
-            $release = $this->_packageInfo['extsrcrelease'];
-        } elseif (isset($this->_packageInfo['extbinrelease'])) {
-            $release = $this->_packageInfo['extbinrelease'];
-        } // bundles should never reach this point
-        if (isset($this->_packageInfo['bundle'])) {
-            return PEAR::raiseError(
-                'Exception: bundles should be handled in download code only');
-        }
-        if ($release) {
-            if (!isset($release[0])) {
-                if (!isset($release['installconditions']) && !isset($release['filelist'])) {
-                    return $contents;
-                }
-                $release = array($release);
-            }
-            include_once 'PEAR/Dependency2.php';
-            $depchecker = &new PEAR_Dependency2($this->_config, array(),
-                array('channel' => $this->getChannel(), 'package' => $this->getPackage()),
-                PEAR_VALIDATE_INSTALLING);
-            foreach ($release as $instance) {
-                if (isset($instance['installconditions'])) {
-                    $installconditions = $instance['installconditions'];
-                    if (is_array($installconditions)) {
-                        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                        foreach ($installconditions as $type => $conditions) {
-                            if (!isset($conditions[0])) {
-                                $conditions = array($conditions);
-                            }
-                            foreach ($conditions as $condition) {
-                                $ret = $depchecker->{"validate{$type}Dependency"}($condition);
-                                if (PEAR::isError($ret)) {
-                                    PEAR::popErrorHandling();
-                                    continue 3; // skip this release
-                                }
-                            }
-                        }
-                        PEAR::popErrorHandling();
-                    }
-                }
-                // this is the release to use
-                if (isset($instance['filelist'])) {
-                    // ignore files
-                    if (isset($instance['filelist']['ignore'])) {
-                        $ignore = isset($instance['filelist']['ignore'][0]) ?
-                            $instance['filelist']['ignore'] :
-                            array($instance['filelist']['ignore']);
-                        foreach ($ignore as $ig) {
-                            unset ($contents[$ig['attribs']['name']]);
-                        }
-                    }
-                    // install files as this name
-                    if (isset($instance['filelist']['install'])) {
-                        $installas = isset($instance['filelist']['install'][0]) ?
-                            $instance['filelist']['install'] :
-                            array($instance['filelist']['install']);
-                        foreach ($installas as $as) {
-                            $contents[$as['attribs']['name']]['attribs']['install-as'] =
-                                $as['attribs']['as'];
-                        }
-                    }
-                }
-                return $contents;
-            }
-        } else { // simple release - no installconditions or install-as
-            return $contents;
-        }
-        // no releases matched
-        return PEAR::raiseError('No releases in package.xml matched the existing operating ' .
-            'system, extensions installed, or architecture, cannot install');
-    }
 
     /**
      * Directly set the array that defines this packagefile
@@ -992,6 +873,126 @@ class PEAR_PackageFile_v2
                 'extbinrelease', 'bundle', 'changelog'), $notes, 'notes');
         }
         $this->_packageInfo['notes'] = $notes;
+    }
+
+    /**
+     * This should only be used to retrieve filenames and install attributes
+     */
+    function getFilelist($preserve = false)
+    {
+        if (isset($this->_packageInfo['filelist']) && !$preserve) {
+            return $this->_packageInfo['filelist'];
+        }
+        if ($contents = $this->getContents()) {
+            $ret = array();
+            if (!isset($contents['dir']['file'][0])) {
+                $contents['dir']['file'] = array($contents['dir']['file']);
+            }
+            foreach ($contents['dir']['file'] as $file) {
+                $name = $file['attribs']['name'];
+                if (!$preserve) {
+                    $file = $file['attribs'];
+                }
+                $ret[$name] = $file;
+            }
+            if (!$preserve) {
+                $this->_packageInfo['filelist'] = $ret;
+            }
+            return $ret;
+        }
+        return false;
+    }
+
+    /**
+     * This is only used at install-time, after all serialization
+     * is over.
+     */
+    function resetFilelist()
+    {
+        $this->_packageInfo['filelist'] = array();
+    }
+
+    /**
+     * Retrieve a list of files that should be installed on this computer
+     */
+    function getInstallationFilelist()
+    {
+        $contents = $this->getFilelist(true);
+        if (isset($contents['dir']['attribs']['baseinstalldir'])) {
+            $base = $contents['dir']['attribs']['baseinstalldir'];
+        }
+        if (isset($this->_packageInfo['phprelease'])) {
+            $release = $this->_packageInfo['phprelease'];
+        } elseif (isset($this->_packageInfo['extsrcrelease'])) {
+            $release = $this->_packageInfo['extsrcrelease'];
+        } elseif (isset($this->_packageInfo['extbinrelease'])) {
+            $release = $this->_packageInfo['extbinrelease'];
+        } // bundles should never reach this point
+        if (isset($this->_packageInfo['bundle'])) {
+            return PEAR::raiseError(
+                'Exception: bundles should be handled in download code only');
+        }
+        if ($release) {
+            if (!isset($release[0])) {
+                if (!isset($release['installconditions']) && !isset($release['filelist'])) {
+                    return $contents;
+                }
+                $release = array($release);
+            }
+            include_once 'PEAR/Dependency2.php';
+            $depchecker = &new PEAR_Dependency2($this->_config, array(),
+                array('channel' => $this->getChannel(), 'package' => $this->getPackage()),
+                PEAR_VALIDATE_INSTALLING);
+            foreach ($release as $instance) {
+                if (isset($instance['installconditions'])) {
+                    $installconditions = $instance['installconditions'];
+                    if (is_array($installconditions)) {
+                        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                        foreach ($installconditions as $type => $conditions) {
+                            if (!isset($conditions[0])) {
+                                $conditions = array($conditions);
+                            }
+                            foreach ($conditions as $condition) {
+                                $ret = $depchecker->{"validate{$type}Dependency"}($condition);
+                                if (PEAR::isError($ret)) {
+                                    PEAR::popErrorHandling();
+                                    continue 3; // skip this release
+                                }
+                            }
+                        }
+                        PEAR::popErrorHandling();
+                    }
+                }
+                // this is the release to use
+                if (isset($instance['filelist'])) {
+                    // ignore files
+                    if (isset($instance['filelist']['ignore'])) {
+                        $ignore = isset($instance['filelist']['ignore'][0]) ?
+                            $instance['filelist']['ignore'] :
+                            array($instance['filelist']['ignore']);
+                        foreach ($ignore as $ig) {
+                            unset ($contents[$ig['attribs']['name']]);
+                        }
+                    }
+                    // install files as this name
+                    if (isset($instance['filelist']['install'])) {
+                        $installas = isset($instance['filelist']['install'][0]) ?
+                            $instance['filelist']['install'] :
+                            array($instance['filelist']['install']);
+                        foreach ($installas as $as) {
+                            $contents[$as['attribs']['name']]['attribs']['install-as'] =
+                                $as['attribs']['as'];
+                        }
+                    }
+                }
+                return $contents;
+            }
+        } else { // simple release - no installconditions or install-as
+            return $contents;
+        }
+        // no releases matched
+        return PEAR::raiseError('No releases in package.xml matched the existing operating ' .
+            'system, extensions installed, or architecture, cannot install');
     }
 
     /**

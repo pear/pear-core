@@ -146,6 +146,11 @@ class PEAR_Downloader extends PEAR_Common
     var $_downloadDir;
     // {{{ PEAR_Downloader()
 
+    /**
+     * @param PEAR_Frontend_*
+     * @param array
+     * @param PEAR_Config
+     */
     function PEAR_Downloader(&$ui, $options, &$config)
     {
         parent::PEAR_Common();
@@ -158,16 +163,11 @@ class PEAR_Downloader extends PEAR_Common
             $this->_preferredState = null;
         }
 
-        $php_dir = $this->config->get('php_dir');
         if (isset($this->_options['installroot'])) {
-            if (substr($this->_options['installroot'], -1) == DIRECTORY_SEPARATOR) {
-                $this->_options['installroot'] = substr($this->_options['installroot'], 0, -1);
-            }
-            $php_dir = $this->_prependPath($php_dir, $this->_options['installroot']);
+            $this->config->setInstallRoot($this->_options['installroot']);
         }
-        $this->_registry = &new PEAR_Registry($php_dir);
-        $this->_remote = &new PEAR_Remote($config);
-        $this->_remote->setRegistry($this->_registry);
+        $this->_registry = &$config->getRegistry();
+        $this->_remote = &$config->getRemote();
 
         if (isset($this->_options['alldeps']) || isset($this->_options['onlyreqdeps'])) {
             $this->_installed = $this->_registry->listAllPackages();
@@ -281,6 +281,9 @@ class PEAR_Downloader extends PEAR_Common
     {
         foreach ($params as $i => $param) {
             $deps = $param->getDeps();
+            if (!$deps) {
+                continue;
+            }
             if (count($deps)) {
                 $depchecker = &$params[$i]->getDependency2Object($this->config,
                     $this->getOptions(), $param->getParsedPackage(),

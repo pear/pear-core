@@ -252,6 +252,14 @@ class PEAR_Config extends PEAR
     var $_channels = array('pear.php.net');
 
     /**
+     * This variable is used to control the directory values returned
+     * @see setInstallRoot();
+     * @var string|false
+     * @access private
+     */
+    var $_installRoot = false;
+
+    /**
      * If requested, this will always refer to the registry
      * contained in php_dir
      * @var PEAR_Registry
@@ -452,7 +460,7 @@ class PEAR_Config extends PEAR
      *
      * @see PEAR_Config::singleton
      */
-    function PEAR_Config($user_file = '', $system_file = '')
+    function PEAR_Config($user_file = '', $system_file = '', $ftp_file = false)
     {
         $this->PEAR();
         PEAR_Installer_Role::initializeConfig($this);
@@ -474,6 +482,9 @@ class PEAR_Config extends PEAR
         $this->layers = array_keys($this->configuration);
         $this->files['user'] = $user_file;
         $this->files['system'] = $system_file;
+        if ($ftp_file) {
+            $this->readFTPConfigFile($ftp_file);
+        }
         if ($user_file && file_exists($user_file)) {
             $this->readConfigFile($user_file);
         }
@@ -555,6 +566,59 @@ class PEAR_Config extends PEAR
     }
 
     // }}}
+
+    function readFTPConfigFile($path)
+    {
+        if (!class_exists('Net_FTP')) {
+            do {
+                if (PEAR_Common::isIncludeable('Net/FTP.php')) {
+                    include_once 'Net/FTP.php';
+                    if (class_exists('Net_FTP')) {
+                        include_once 'PEAR/FTP.php';
+                        $this->_ftp = &new PEAR_FTP;
+                        $this->_ftp->init($path);
+                        $tmp = System::mktemp('-d');
+                        $e = $this->_ftp->get(basename($path), $tmp . DIRECTORY_SEPARATOR .
+                            'pear.ini', false, FTP_BINARY);
+                        if (PEAR::isError($e)) {
+                            $this->_ftp->popErrorHandling();
+                            return $e;
+                        }
+                        PEAR_Common::addTempFile($tmp . DIRECTORY_SEPARATOR . 'pear.ini');
+                        $this->_ftp->disconnect();
+                        $this->_ftp->popErrorHandling();
+                        $this->files['ftp'] = $tmp . DIRECTORY_SEPARATOR . 'pear.ini';
+                        $e = $this->readConfigFile(null, 'ftp');
+                        if (PEAR::isError($e)) {
+                            return $e;
+                        }
+                        $fail = array();
+                        foreach ($this->configuration['default'] as $key => $val) {
+                            if (strpos($key, '_dir')) {
+                                // any directory configs must be set for this to work
+                                if (!isset($this->configuration['ftp'][$key])) {
+                                    $fail[] = $key;
+                                }
+                            }
+                        }
+                        if (count($fail)) {
+                            $fail = '"' . implode('", "', $fail) . '"';
+                            unset($this->files['ftp']);
+                            unset($this->configuration['ftp']);
+                            return PEAR::raiseError('ERROR: Ftp configuration file must set all ' .
+                                'directory configuration variables.  These variables were not set: ' .
+                                $fail);
+                        } else {
+                            return true;
+                        }
+                    }
+                }
+            } while (false);
+            unset($this->files['ftp']);
+            return PEAR::raiseError('no remote host specified');
+        }
+    }
+
     // {{{ _setupChannels()
     
     /**
@@ -751,10 +815,7 @@ class PEAR_Config extends PEAR
             if (!is_array($data)) {
                 if (strlen(trim($contents)) > 0) {
                     $error = "PEAR_Config: bad data in $file";
-//                if (isset($this)) {
                     return $this->raiseError($error);
-//                } else {
-//                    return PEAR::raiseError($error);
                 } else {
                     $data = array();
                 }
@@ -954,16 +1015,33 @@ class PEAR_Config extends PEAR
         $test = (in_array($key, $this->_channelConfigInfo)) ? $this->_getChannelValue($key, $layer, $channel) :
             null;
         if ($test !== null) {
+            if ($this->_installRoot) {
+                if (strpos($key, '_dir')) {
+                    return $this->_prependPath($test, $this->_installRoot);
+                }
+            }
             return $test;
         }
         if ($layer === null) {
             foreach ($this->layers as $layer) {
                 if (isset($this->configuration[$layer][$key])) {
-                    return $this->configuration[$layer][$key];
+                    $test = $this->configuration[$layer][$key];
+                    if ($this->_installRoot) {
+                        if (@is_dir($test)) {
+                            return $this->_prependPath($test, $this->_installRoot);
+                        }
+                    }
+                    return $test;
                 }
             }
         } elseif (isset($this->configuration[$layer][$key])) {
-            return $this->configuration[$layer][$key];
+            $test = $this->configuration[$layer][$key];
+            if ($this->_installRoot) {
+                if (@is_dir($test)) {
+                    return $this->_prependPath($test, $this->_installRoot);
+                }
+            }
+            return $test;
         }
         return null;
     }
@@ -1055,7 +1133,9 @@ class PEAR_Config extends PEAR
             $channel = $this->get('default_channel', null, 'pear.php.net');
         }
         $reg = $this->getRegistry($layer);
-        $channel = $reg->channelName($channel);
+        if ($reg) {
+            $channel = $reg->channelName($channel);
+        }
         if (!in_array($channel, $this->_channels)) {
             return false;
         }
@@ -1068,17 +1148,19 @@ class PEAR_Config extends PEAR
             }
         } else {
             if ($key == 'default_channel') {
-                $value = $reg->channelName($value);
+                if ($reg) {
+                    $value = $reg->channelName($value);
+                }
                 if (!$value) {
                     return false;
                 }
             }
         }
         $this->configuration[$layer][$key] = $value;
-        if (isset($this->_registry) && $key == 'php_dir') {
-            if ($value != $this->_registry->install_dir) {
-                $this->_registry = &new PEAR_Registry($value);
-                $this->_registry->setConfig($this);
+        if (isset($this->_registry[$layer]) && $key == 'php_dir') {
+            if ($value != $this->_registry[$layer]->install_dir) {
+                $this->_registry[$layer] = &new PEAR_Registry($value);
+                $this->_registry[$layer]->setConfig($this);
             }
         }
         return true;
@@ -1543,8 +1625,46 @@ class PEAR_Config extends PEAR
     function &getRemote()
     {
         include_once 'PEAR/Remote.php';
-        $remote = new PEAR_Remote($this);
+        $remote = &new PEAR_Remote($this);
         return $remote;
+    }
+
+    /**
+     * The ftp server is set in {@link readFTPConfigFile()}.  It exists only if a
+     * remote configuration file has been specified
+     * @return PEAR_FTP|false
+     */
+    function &getFTP()
+    {
+        if (isset($this->_ftp)) {
+            return $this->_ftp;
+        } else {
+            $a = false;
+            return $a;
+        }
+    }
+
+    // {{{ _prependPath($path, $prepend)
+
+    function _prependPath($path, $prepend)
+    {
+        if (strlen($prepend) > 0) {
+            if (OS_WINDOWS && preg_match('/^[a-z]:/i', $path)) {
+                $path = $prepend . substr($path, 2);
+            } else {
+                $path = $prepend . $path;
+            }
+        }
+        return $path;
+    }
+    // }}}
+
+    function setInstallRoot($root)
+    {
+        if (substr($root, -1) == DIRECTORY_SEPARATOR) {
+            $root = substr($root, 0, -1);
+        }
+        $this->_installRoot = $root;
     }
 }
 
