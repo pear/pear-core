@@ -325,12 +325,11 @@ List the files in an installed package.
             $data = array(
                 'caption' => $caption,
                 'border' => true);
-            $data['data'][] = array('Name', $chan->getName());
+            $data['data'][] = array('Name and Server', $chan->getName());
             if ($chan->getAlias() != $chan->getName()) {
                 $data['data'][] = array('Alias', $chan->getAlias());
             }
             $data['data'][] = array('Summary', $chan->getSummary());
-            $data['data'][] = array('Primary Server', $chan->getServer());
             $validate = $chan->getValidationPackage();
             $data['data'][] = array('Validation Package Name', $validate['_content']);
             $data['data'][] = array('Validation Package Version', $validate['attribs']['version']);
