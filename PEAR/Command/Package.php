@@ -205,6 +205,22 @@ $ rpm -bb PEAR::Net_Socket-1.0.spec
 Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
 ',
             ),
+        'convert' => array(
+            'summary' => 'Convert a package.xml 1.0 to package.xml 2.0 format',
+            'function' => 'doConvert',
+            'shortcut' => 'c2',
+            'options' => array(
+                'flat' => array(
+                    'shortopt' => 'f',
+                    'doc' => 'do not beautify the filelist.',
+                    ),
+                ),
+            'doc' => '[descfile] [descfile2]
+Converts a package.xml in 1.0 format into a package.xml
+in 2.0 format.  The new file will be named package2.xml by default,
+and package.xml will be used as the old file by default.
+'
+            ),
         );
 
     var $output;
@@ -253,7 +269,7 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
         include_once 'PEAR/Registry.php';
         $pkginfofile = isset($params[0]) ? $params[0] : 'package.xml';
         $packager =& new PEAR_Packager();
-        $packager->setRegistry($reg = &new PEAR_Registry($this->config->get('php_dir')));
+        $packager->setRegistry($reg = &$this->config->getRegistry());
         $err = $warn = array();
         $dir = dirname($pkginfofile);
         $compress = empty($options['nocompress']) ? true : false;
@@ -343,11 +359,10 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
             $this->ui->outputData($this->output, $command);
             return $this->raiseError('CVS tag failed');
         }
-        $info = $obj->toArray();
-        $version = $info['version'];
+        $version = $obj->getVersion();
         $cvsversion = preg_replace('/[^a-z0-9]/i', '_', $version);
         $cvstag = "RELEASE_$cvsversion";
-        $files = array_keys($info['filelist']);
+        $files = array_keys($obj->getFilelist());
         $command = "cvs";
         if (isset($options['quiet'])) {
             $command .= ' -q';
@@ -783,6 +798,28 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
         $this->ui->outputData("Wrote RPM spec file $spec_file", $command);
 
         return true;
+    }
+
+    function doConvert($command, $options, $params)
+    {
+        $packagexml = isset($params[0]) ? $params[0] : 'package.xml';
+        $newpackagexml = isset($params[1]) ? $params[1] : 'package2.xml';
+        include_once 'PEAR/PackageFile.php';
+        $reg = &$this->config->getRegistry();
+        $pkg = new PEAR_PackageFile($reg, $this->_debug);
+        $pf = $pkg->fromPackageFile($packagexml, PEAR_VALIDATE_NORMAL);
+        if (!PEAR::isError($pf)) {
+            $gen = &$pf->getDefaultGenerator();
+            $newpf = &$gen->toV2();
+            $saved = $newpf->toPackageFile(dirname($newpackagexml), basename($newpackagexml));
+            if (PEAR::isError($saved)) {
+                return $this->raiseError($saved);
+            }
+            $this->ui->outputData('Wrote new version 2.0 package.xml to "' . $newpackagexml . '"');
+            return true;
+        } else {
+            return $this->raiseError($pf);
+        }
     }
 
     // }}}

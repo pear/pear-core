@@ -288,8 +288,7 @@ installed package.'
                 return $obj;
             }
             if ($obj) {
-                $gen = $obj->getDefaultGenerator();
-                $info = $gen->toArray();
+                $obj = $obj->toArray();
             }
         } else {
             $package = $params[0];
@@ -311,11 +310,19 @@ installed package.'
                 $this->raiseError("No information found for `$params[0]'");
                 return;
             }
-            $info = $obj->toArray();
+            $info = $info->toArray();
         }
         unset($info['filelist']);
         unset($info['dirtree']);
         unset($info['changelog']);
+        if (isset($info['xsdversion'])) {
+            $info['package.xml version'] = $info['xsdversion'];
+            unset($info['xsdversion']);
+        }
+        if (isset($info['packagerversion'])) {
+            $info['packaged with PEAR version'] = $info['packagerversion'];
+            unset($info['packagerversion']);
+        }
         $keys = array_keys($info);
         $longtext = array('description', 'summary');
         foreach ($keys as $key) {

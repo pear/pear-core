@@ -120,6 +120,17 @@ class PEAR_PackageFile_v2
         $this->_packageInfo = $pinfo;
     }
 
+    /**
+     * @return array
+     */
+    function toArray()
+    {
+        if (!$this->validate(PEAR_VALIDATE_NORMAL)) {
+            return false;
+        }
+        return $this->getArray();
+    }
+
     function getArray($forReg = false)
     {
         if ($forReg) {

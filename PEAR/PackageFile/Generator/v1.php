@@ -314,15 +314,82 @@ class PEAR_PackageFile_Generator_v1
         return $data;
     }
 
-    /**
-     * @return array
-     */
-    function toArray()
+    function toTgz(&$packager, $compress = true, $where = null)
     {
-        if (!$this->_packagefile->validate(PEAR_VALIDATE_NORMAL)) {
+        include_once 'System.php';
+        if ($where === null) {
+            if (!($where = System::mktemp(array('-d')))) {
+                return $this->raiseError("PEAR_Packagefile: mktemp failed");
+            }
+        }
+        if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING)) {
             return false;
         }
-        return $this->_packagefile->getArray();
+        if ($pkgfile = $this->_packagefile->getPackageFile()) {
+            $pkgdir = dirname(realpath($pkgfile));
+            $pkgfile = basename($pkgfile);
+        } else {
+            return false;
+        }
+        $pkginfo = $this->_packagefile->getArray();
+        $pkgver = $pkginfo['package'] . '-' . $pkginfo['version'];
+        // {{{ Create the package file list
+        $filelist = array();
+        $i = 0;
+
+        foreach ($this->_packagefile->getFilelist() as $fname => $atts) {
+            $file = $pkgdir . DIRECTORY_SEPARATOR . $fname;
+            if (!file_exists($file)) {
+                return $packager->raiseError("File does not exist: $fname");
+            } else {
+                $filelist[$i++] = $file;
+                if (!isset($atts['md5sum'])) {
+                    $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($file));
+                }
+                $packager->log(2, "Adding file $fname");
+            }
+        }
+        // }}}
+        $packagexml = $this->toPackageFile($where, PEAR_VALIDATE_PACKAGING);
+        if ($packagexml) {
+            $ext = $compress ? '.tgz' : '.tar';
+            $dest_package = getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext;
+            $tar =& new Archive_Tar($dest_package, $compress);
+            $tar->setErrorHandling(PEAR_ERROR_RETURN); // XXX Don't print errors
+            // ----- Creates with the package.xml file
+            $ok = $tar->createModify(array($packagexml), '', $where);
+            if (PEAR::isError($ok)) {
+                return $packager->raiseError($ok);
+            } elseif (!$ok) {
+                return $packager->raiseError('PEAR_Packagefile::toTgz(): tarball creation failed');
+            }
+            // ----- Add the content of the package
+            if (!$tar->addModify($filelist, $pkgver, $pkgdir)) {
+                return $packager->raiseError('PEAR_Packagefile::toTgz(): tarball creation failed');
+            }
+            return $dest_package;
+        }
+    }
+
+    function toPackageFile($where = null, $state = PEAR_VALIDATE_NORMAL, $name = 'package.xml')
+    {
+        if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING)) {
+            return false;
+        }
+        include_once 'System.php';
+        if ($where === null) {
+            if (!($where = System::mktemp(array('-d')))) {
+                return PEAR::raiseError("PEAR_Packagefile::toPackageFile: mktemp failed");
+            }
+        }
+        $newpkgfile = $where . DIRECTORY_SEPARATOR . $name;
+        $np = @fopen($newpkgfile, 'wb');
+        if (!$np) {
+            return PEAR::raiseError("PEAR_Packagefile::toPackageFile: unable to save $name as $newpkgfile");
+        }
+        fwrite($np, $this->toXml($state));
+        fclose($np);
+        return $newpkgfile;
     }
 
     /**
@@ -828,73 +895,6 @@ class PEAR_PackageFile_Generator_v1
         }
         return $ret;
     }
-
-    /**
-     * Build a "provides" array from data returned by
-     * analyzeSourceCode().  The format of the built array is like
-     * this:
-     *
-     *  array(
-     *    'class;MyClass' => 'array('type' => 'class', 'name' => 'MyClass'),
-     *    ...
-     *  )
-     *
-     *
-     * @param array $srcinfo array with information about a source file
-     * as returned by the analyzeSourceCode() method.
-     *
-     * @return void
-     *
-     * @access private
-     *
-     */
-    function _buildProvidesArray($srcinfo)
-    {
-        if (!$this->_isValid) {
-            return false;
-        }
-        $file = basename($srcinfo['source_file']);
-        $pn = $this->_packageInfo['package'];
-        $pnl = strlen($pn);
-        foreach ($srcinfo['declared_classes'] as $class) {
-            $key = "class;$class";
-            if (isset($this->_packageInfo['provides'][$key])) {
-                continue;
-            }
-            $this->_packageInfo['provides'][$key] =
-                array('file'=> $file, 'type' => 'class', 'name' => $class);
-            if (isset($srcinfo['inheritance'][$class])) {
-                $this->_packageInfo['provides'][$key]['extends'] =
-                    $srcinfo['inheritance'][$class];
-            }
-        }
-        foreach ($srcinfo['declared_methods'] as $class => $methods) {
-            foreach ($methods as $method) {
-                $function = "$class::$method";
-                $key = "function;$function";
-                if ($method{0} == '_' || !strcasecmp($method, $class) ||
-                    isset($this->_packageInfo['provides'][$key])) {
-                    continue;
-                }
-                $this->_packageInfo['provides'][$key] =
-                    array('file'=> $file, 'type' => 'function', 'name' => $function);
-            }
-        }
-
-        foreach ($srcinfo['declared_functions'] as $function) {
-            $key = "function;$function";
-            if ($function{0} == '_' || isset($this->_packageInfo['provides'][$key])) {
-                continue;
-            }
-            if (!strstr($function, '::') && strncasecmp($function, $pn, $pnl)) {
-                $warnings[] = "in1 " . $file . ": function \"$function\" not prefixed with package name \"$pn\"";
-            }
-            $this->_packageInfo['provides'][$key] =
-                array('file'=> $file, 'type' => 'function', 'name' => $function);
-        }
-    }
-
-    // }}}
 }
 //require_once 'PEAR/PackageFile/Parser/v1.php';
 //require_once 'PEAR/Registry.php';

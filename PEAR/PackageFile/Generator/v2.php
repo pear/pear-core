@@ -93,6 +93,11 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $this->_packagefile = &$packagefile;
     }
 
+    function &toV2()
+    {
+        return $this->_packagefile;
+    }
+
     /**
      * Return an XML document based on the package info (as returned
      * by the PEAR_Common::infoFrom* methods).
@@ -113,17 +118,6 @@ http://pear.php.net/dtd/package-2.0.xsd',
             return $this->_serializedData;
         }
         return false;
-    }
-
-    /**
-     * @return array
-     */
-    function toArray()
-    {
-        if (!$this->_isValid && !$this->validate()) {
-            return false;
-        }
-        return $this->_packageInfo->getArray();
     }
 
    /**
