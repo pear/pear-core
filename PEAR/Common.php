@@ -218,7 +218,7 @@ class PEAR_Common extends PEAR
      */
     function addTempFile($file)
     {
-        $GLOBALS['_PEAR_Common_tempfiles'][] = $file;
+        PEAR_Frontend::addTempFile($file);
     }
 
     // }}}
@@ -252,17 +252,15 @@ class PEAR_Common extends PEAR
      * @return void
      *
      * @access public
+     * @static
      */
     function log($level, $msg, $append_crlf = true)
     {
         if ($this->debug >= $level) {
-            if (is_object($this->ui)) {
-                $this->ui->log($msg, $append_crlf);
+            $ui = &PEAR_Frontend::singleton();
+            if (is_a($ui, 'PEAR_Frontend')) {
+                $ui->log($msg, $append_crlf);
             } else {
-                $ui = &PEAR_Frontend::singleton();
-                if ($ui) {
-                    $ui->log($msg, $append_crlf);
-                }
                 print "$msg\n";
             }
         }

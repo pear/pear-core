@@ -80,15 +80,6 @@ if ($progname == 'gpear' || $progname == 'pear-gtk') {
         }
     }
 }
-PEAR_Command::setFrontendType($fetype);
-$ui = &PEAR_Command::getFrontendObject();
-PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array($ui, "displayFatalError"));
-if (ini_get('safe_mode')) {
-    $ui->outputData('WARNING: running in safe mode requires that all files created ' .
-        'be the same uid as the current script.  PHP reports this script is uid: ' .
-        @getmyuid() . ', and current user is: ' . @get_current_user());
-}
-
 $pear_user_config = '';
 $pear_system_config = '';
 $store_user_config = false;
@@ -106,7 +97,17 @@ foreach ($opts as $opt) {
     }
 }
 
+PEAR_Command::setFrontendType($fetype);
+$ui = &PEAR_Command::getFrontendObject();
 $config = &PEAR_Config::singleton($pear_user_config, $pear_system_config);
+$ui->setConfig($config);
+PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array($ui, "displayFatalError"));
+if (ini_get('safe_mode')) {
+    $ui->outputData('WARNING: running in safe mode requires that all files created ' .
+        'be the same uid as the current script.  PHP reports this script is uid: ' .
+        @getmyuid() . ', and current user is: ' . @get_current_user());
+}
+
 $verbose = $config->get("verbose");
 $cmdopts = array();
 

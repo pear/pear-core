@@ -173,14 +173,15 @@ class PEAR_Task_Common
     }
 
     /**
+     * @param string install or upgrade
      * @static
      * @final
      */
-    function runPostinstallTasks()
+    function runPostinstallTasks($installphase)
     {
         foreach ($GLOBALS['_PEAR_TASK_POSTINSTANCES'] as $class => $tasks) {
             $err = call_user_func(array($class, 'run'),
-                $GLOBALS['_PEAR_TASK_POSTINSTANCES'][$class]);
+                $GLOBALS['_PEAR_TASK_POSTINSTANCES'][$class], $installphase);
             if ($err) {
                 return PEAR_Task_Common::throwError($err);
             }
