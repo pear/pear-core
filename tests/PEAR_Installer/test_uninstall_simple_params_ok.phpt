@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Downloader->sortPackagesForInstall() recursion (simple)
+PEAR_Installer->uninstall() (simple case)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -22,7 +22,7 @@ $package->setNotes('foo');
 $package->addFile('/', 'foo.php', array('role' => 'php'));
 $package->addMaintainer('lead', 'cellog', 'Greg Beaver', 'cellog@php.net');
 $package->addPackageDep('bar', '1.0', 'ge');
-$reg = $config->getRegistry();
+$reg = &$config->getRegistry();
 $reg->addPackage2($package);
 
 $package->resetFilelist();
@@ -36,7 +36,6 @@ $package->resetFilelist();
 $package->addFile('/', 'next.php', array('role' => 'php'));
 $package->clearDeps();
 $package->setPackage('next');
-$package->addPackageDep('foo', '1.0', 'ge');
 $reg->addPackage2($package);
 
 $params[] = $reg->getPackage('next');
@@ -44,10 +43,8 @@ $params[] = $reg->getPackage('foo');
 $params[] = $reg->getPackage('bar');
 
 $dl = &new PEAR_Installer($fakelog);
-$dl->sortPackagesForUninstall($params);
-$phpunit->assertEquals('next', $params[0]->getPackage(), 'next');
-$phpunit->assertEquals('foo', $params[1]->getPackage(), 'foo');
-$phpunit->assertEquals('bar', $params[2]->getPackage(), 'bar');
+$dl->setDownloadedPackages($params);
+$dl->uninstall('next');
 echo 'tests done';
 ?>
 --EXPECT--

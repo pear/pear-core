@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Downloader->uninstall() (simple case)
+PEAR_Installer->uninstall() (complex case - deep recursive dep 1)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -36,24 +36,26 @@ $package->resetFilelist();
 $package->addFile('/', 'next.php', array('role' => 'php'));
 $package->clearDeps();
 $package->setPackage('next');
+$package->addPackageDep('foo', '1.0', 'ge');
 $reg->addPackage2($package);
 
 $params[] = $reg->getPackage('next');
+$params[] = $reg->getPackage('foo');
 
 $dl = &new PEAR_Installer($fakelog);
 $dl->setDownloadedPackages($params);
-$dl->uninstall('next');
+$dl->uninstall('foo');
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' =>
-        'channel://pear.php.net/next cannot be uninstalled, other installed packages depend on this package'),
-), 'next');
-$phpunit->assertEquals(array (
+        'channel://pear.php.net/foo cannot be uninstalled, other installed packages depend on this package')
+), 'foo');
+$phpunit->assertEquals( array (
   0 => 
   array (
-    0 => 'channel://pear.php.net/next (version >= 1.0) is required by package "channel://pear.php.net/bar", installed version is 1.0',
+    0 => 'channel://pear.php.net/foo (version >= 1.0) is required by package "channel://pear.php.net/next"',
     1 => true,
   ),
-), $fakelog->getLog(), 'next');
+ ), $fakelog->getLog(), 'foo');
 echo 'tests done';
 ?>
 --EXPECT--
