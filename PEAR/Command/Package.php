@@ -481,7 +481,8 @@ used for automated conversion or learning the format.
     function doRunTests($command, $options, $params)
     {
         include_once 'PEAR/RunTest.php';
-        $run = new PEAR_RunTest;
+        $log = new PEAR_Common;
+        $run = new PEAR_RunTest($log);
         $tests = array();
         if (isset($options['recur'])) {
             $depth = 4;
