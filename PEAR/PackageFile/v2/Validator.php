@@ -1344,6 +1344,12 @@ class PEAR_PackageFile_v2_Validator
             'a compiled version of this extsrc package');
     }
 
+    function _fileNotFound($file)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('file' => $file),
+            'cannot analyze file "%file%", file not found');
+    }
+
     function _analyzePhpFiles()
     {
         if (!$this->_isValid) {
@@ -1367,8 +1373,7 @@ class PEAR_PackageFile_v2_Validator
             if (in_array($fa['role'], PEAR_Installer_Role::getPhpRoles()) && $dir_prefix) {
                 call_user_func_array($log, array(1, "Analyzing $file"));
                 if (!file_exists($dir_prefix . DIRECTORY_SEPARATOR . $file)) {
-                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_FILE_NOTFOUND,
-                        array('file' => $dir_prefix . DIRECTORY_SEPARATOR . $file));
+                    $this->_fileNotFound($dir_prefix . DIRECTORY_SEPARATOR . $file);
                     continue;
                 }
                 $srcinfo = $this->analyzeSourceCode($dir_prefix . DIRECTORY_SEPARATOR . $file);
