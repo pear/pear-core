@@ -91,5 +91,6 @@ class test_PEAR_Command_Remote extends PEAR_Command_Remote
         return $GLOBALS['__Stupid_php4_b'];
     }
 }
+test_PEAR_Dependency2::singleton($config);
 $command = &new test_PEAR_Command_Remote($fakelog, $config);
 ?>
