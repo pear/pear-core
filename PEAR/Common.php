@@ -23,9 +23,6 @@ require_once 'PEAR.php';
 require_once 'PEAR/Frontend.php';
 require_once 'Archive/Tar.php';
 require_once 'System.php';
-require_once 'PEAR/Config.php';
-require_once 'PEAR/PackageFile.php';
-require_once 'PEAR/Downloader.php';
 
 // {{{ constants and globals
 
@@ -1083,5 +1080,8 @@ class PEAR_Common extends PEAR
         return false;
     }
 }
+require_once 'PEAR/Config.php';
+require_once 'PEAR/PackageFile.php';
+require_once 'PEAR/Downloader.php';
 
 ?>
