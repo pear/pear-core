@@ -235,9 +235,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                         copy($file, $tfile);
                     }
                     $filelist[$i++] = $tfile;
-                    if (!isset($atts['md5sum'])) {
-                        $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($tfile), $i);
-                    }
+                    $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($tfile), $i - 1);
                     $packager->log(2, "Adding file $fname");
                 }
             }
@@ -330,6 +328,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $arr = $this->_packagefile->getArray();
         if (isset($arr['filelist'])) {
             unset($arr['filelist']);
+        }
+        if (isset($arr['_lastversion'])) {
+            unset($arr['_lastversion']);
         }
         if ($state ^ PEAR_VALIDATE_PACKAGING && !isset($arr['bundle'])) {
             $use = $this->_recursiveXmlFilelist($arr['contents']['dir']['file']);

@@ -615,6 +615,9 @@ class PEAR_PackageFile_v2
         } else {
             $info = $this->_packageInfo;
             unset($info['dirtree']);
+            if (isset($info['_lastversion'])) {
+                unset($info['_lastversion']);
+            }
             return $info;
         }
     }

@@ -91,14 +91,17 @@ class PEAR_PackageFile_v2_Validator
         );
         $test = $this->_packageInfo;
         // ignore post-installation array fields
-        if (isset($test['filelist'])) {
+        if (array_key_exists('filelist', $test)) {
             unset($test['filelist']);
         }
-        if (isset($test['_lastmodified'])) {
+        if (array_key_exists('_lastmodified', $test)) {
             unset($test['_lastmodified']);
         }
-        if (isset($test['old'])) {
+        if (array_key_exists('old', $test)) {
             unset($test['old']);
+        }
+        if (array_key_exists('_lastversion', $test)) {
+            unset($test['_lastversion']);
         }
         if (!$this->_stupidSchemaValidate($structure,
                                           $test, '<package>')) {
