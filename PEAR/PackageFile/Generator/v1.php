@@ -290,7 +290,7 @@ class PEAR_PackageFile_Generator_v1
         if (isset($pkginfo['filelist'])) {
             $ret .= "$indent  <filelist>\n";
             if ($state ^ PEAR_VALIDATE_PACKAGING) {
-                $ret .= $this->_recursiveXmlFilelist($pkginfo['filelist']);
+                $ret .= $this->recursiveXmlFilelist($pkginfo['filelist']);
             } else {
                 foreach ($pkginfo['filelist'] as $file => $fa) {
                     @$ret .= "$indent   <file role=\"$fa[role]\"";
@@ -332,9 +332,9 @@ class PEAR_PackageFile_Generator_v1
 
     /**
      * @param array
-     * @access private
+     * @access protected
      */
-    function _recursiveXmlFilelist($list)
+    function recursiveXmlFilelist($list)
     {
         $this->_dirs = array();
         foreach ($list as $file => $attributes) {
