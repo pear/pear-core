@@ -117,6 +117,7 @@ PEAR_ErrorStack:
         </file>
         <file role="php" name="Registry.php"/>
         <file role="php" name="Remote.php"/>
+        <file role="php" name="Runtest.php"/>
         <file role="php" name="Validate.php"/>
       </dir>
       <dir name="OS">
