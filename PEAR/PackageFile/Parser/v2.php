@@ -82,7 +82,7 @@ class PEAR_PackageFile_Parser_v2
         $ret->setRegistry($this->_registry);
         $ret->fromArray($this->_unserializedData);
         // make sure the filelist is in the easy to read format needed
-        $ret->fromArray($ret->getFlattenedFilelist());
+        $ret->flattenFilelist();
         $ret->setPackagefile($file, $archive);
         return $ret;
     }

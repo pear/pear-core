@@ -18,7 +18,8 @@
 // +----------------------------------------------------------------------+
 //
 // $Id$
-
+require_once 'PEAR/ErrorStack.php';
+require_once 'PEAR/PackageFile/Generator/v2.php';
 /**
  * @author Greg Beaver <cellog@php.net>
  * @package PEAR
@@ -42,7 +43,11 @@ class PEAR_PackageFile_v2
 
     var $_packageFile;
     
+    var $_logger;
+    
     var $_prettyFilelists = false;
+    
+    var $_isValid = false;
 
     /**
      * @var PEAR_ErrorStack
@@ -51,11 +56,78 @@ class PEAR_PackageFile_v2
     function PEAR_PackageFile_v2()
     {
         $this->_stack = new PEAR_ErrorStack('PEAR_PackageFile_v2', false, null);
+        $this->_isValid = false;
+    }
+
+    function flattenFilelist()
+    {
+        $filelist = array();
+        if (isset($this->_packageInfo['contents']['dir']['dir'])) {
+            $this->_getFlattenedFilelist($filelist, $this->_packageInfo['contents']['dir']);
+            if (!isset($filelist[1])) {
+                $filelist = $filelist[0];
+            }
+            $this->_packageInfo['contents']['dir']['file'] = $filelist;
+            unset($this->_packageInfo['contents']['dir']['dir']);
+        }   // else already flattened
+    }
+
+    function _getFlattenedFilelist(&$files, $dir, $baseinstall = false, $path = '')
+    {
+        if (isset($dir['attribs']['baseinstalldir'])) {
+            $baseinstall = $dir['attribs']['baseinstalldir'];
+        }
+        if (isset($dir['dir'])) {
+            if (isset($dir['dir']['attribs'])) {
+                $newpath = empty($path) ? $dir['dir']['attribs']['name'] :
+                    $path . '/' . $dir['dir']['attribs']['name'];
+                $this->_getFlattenedFilelist($files, $dir['dir'],
+                    $baseinstall, $newpath);
+            } else {
+                foreach ($dir['dir'] as $subdir) {
+                    $newpath = empty($path) ? $subdir['attribs']['name'] :
+                        $path . '/' . $subdir['attribs']['name'];
+                    $this->_getFlattenedFilelist($files, $subdir,
+                        $baseinstall, $newpath);
+                }
+            }
+        }
+        if (isset($dir['file'])) {
+            if (isset($dir['file']['attribs'])) {
+                $attrs = $dir['file']['attribs'];
+                $name = $attrs['name'];
+                if ($baseinstall) {
+                    $attrs['baseinstalldir'] = $baseinstall;
+                }
+                $attrs['name'] = empty($path) ? $name : $path . '/' . $name;
+                $file['attribs'] = $attrs;
+                $files[] = $file;
+            } else {
+                foreach ($dir['file'] as $file) {
+                    $attrs = $file['attribs'];
+                    $name = $attrs['name'];
+                    if ($baseinstall) {
+                        $attrs['baseinstalldir'] = $baseinstall;
+                    }
+                    $attrs['name'] = empty($path) ? $name : $path . '/' . $name;
+                    $file['attribs'] = $attrs;
+                    $files[] = $file;
+                }
+            }
+        }
     }
 
     function setRegistry(&$registry)
     {
         $this->_registry = &$registry;
+    }
+
+    function setLogger(&$logger)
+    {
+        if (!is_object($logger) || !method_exists($logger, 'log')) {
+            return PEAR::raiseError('Logger must be compatible with PEAR_Common::log');
+        }
+        $this->_logger = &$logger;
     }
 
     function setPackagefile($file, $archive = false)
@@ -97,14 +169,73 @@ class PEAR_PackageFile_v2
     }
 
     /**
+     * This is only useful at install-time, after all serialization
+     * is over.
+     */
+    function getFilelist()
+    {
+        if (isset($this->_packageInfo['filelist'])) {
+            return $this->_packageInfo['filelist'];
+        }
+        return false;
+    }
+
+    /**
+     * This is only used at install-time, after all serialization
+     * is over.
+     */
+    function resetFilelist()
+    {
+        $this->_packageInfo['filelist'] = array();
+    }
+
+    /**
      * @todo construct _filelist and use it
      */
     function setInstalledAs($file, $path)
     {
         if ($path) {
-            return $this->_filelist[$file]['installed_as'] = $path;
+            return $this->_packageInfo[$file]['installed_as'] = $path;
         }
-        unset($this->_filelist[$file]['installed_as']);
+        unset($this->_packageInfo[$file]['installed_as']);
+    }
+
+    /**
+     * This is only used at install-time, after all serialization
+     * is over.
+     */
+    function installedFile($file, $atts)
+    {
+        if (isset($this->_packageInfo['filelist'][$file])) {
+            $this->_packageInfo['filelist'][$file] =
+                array_merge($this->_packageInfo['filelist'][$file], $atts);
+        } else {
+            $this->_packageInfo['filelist'][$file] = $atts;
+        }
+    }
+
+    /**
+     * Retrieve the contents tag
+     */
+    function getContents()
+    {
+        if (isset($this->_packageInfo['contents'])) {
+            return $this->_packageInfo['contents'];
+        }
+        return false;
+    }
+
+    function setFileAttribute($file, $attr, $value, $index)
+    {
+        if (isset($this->_packageInfo['contents']['dir']['file']['attribs'])) {
+            if ($this->_packageInfo['contents']['dir']['file']['attribs']['name'] == $file) {
+                $this->_packageInfo['contents']['dir']['file']['attribs'][$attr] = $value;
+                return;
+            }
+        }
+        if (isset($this->_packageInfo['contents']['dir']['file'][$index]['attribs'])) {
+            $this->_packageInfo['contents']['dir']['file'][$index]['attribs'][$attr] = $value;
+        }
     }
 
     function setDirtree($path)
@@ -145,10 +276,6 @@ class PEAR_PackageFile_v2
     {
         if ($forReg) {
             $this->_packageInfo['old'] = array();
-            $this->_packageInfo['old']['package'] = $this->getPackage();
-            $this->_packageInfo['old']['channel'] = $this->getChannel();
-            $this->_packageInfo['old']['summary'] = $this->getSummary();
-            $this->_packageInfo['old']['description'] = $this->getDescription();
             $this->_packageInfo['old']['release_version'] = $this->getVersion();
             $this->_packageInfo['old']['release_date'] = $this->getDate();
             $this->_packageInfo['old']['release_state'] = $this->getState();
@@ -156,23 +283,12 @@ class PEAR_PackageFile_v2
             $this->_packageInfo['old']['release_notes'] = $this->getNotes();
             $this->_packageInfo['old']['release_deps'] = $this->getDeps();
             $this->_packageInfo['old']['maintainers'] = $this->getMaintainers();
-            if ($this->getExtends()) {
-                $this->_packageInfo['old']['extends'] = $this->getExtends();
-            }
             return $this->_packageInfo;
         } else {
             $info = $this->_packageInfo;
             unset($info['dirtree']);
             return $info;
         }
-    }
-
-    function getFlattenedFilelist()
-    {
-    }
-
-    function getPrettyFilelist()
-    {
     }
 
     function getChannel()
@@ -207,7 +323,7 @@ class PEAR_PackageFile_v2
     /**
      * @param package|api version category to return
      */
-    function getVersion($key = 'package')
+    function getVersion($key = 'release')
     {
         if (isset($this->_packageInfo['version'][$key])) {
             return $this->_packageInfo['version'][$key];
@@ -246,6 +362,38 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    function getLeads()
+    {
+        if (isset($this->_packageInfo['lead'])) {
+            return $this->_packageInfo['lead'];
+        }
+        return false;
+    }
+
+    function getDevelopers()
+    {
+        if (isset($this->_packageInfo['developer'])) {
+            return $this->_packageInfo['developer'];
+        }
+        return false;
+    }
+
+    function getContributors()
+    {
+        if (isset($this->_packageInfo['contributor'])) {
+            return $this->_packageInfo['contributor'];
+        }
+        return false;
+    }
+
+    function getHelpers()
+    {
+        if (isset($this->_packageInfo['helper'])) {
+            return $this->_packageInfo['helper'];
+        }
+        return false;
+    }
+
     function getStability()
     {
         if (isset($this->_packageInfo['stability'])) {
@@ -254,7 +402,7 @@ class PEAR_PackageFile_v2
         return false;
     }
 
-    function getState($key = 'package')
+    function getState($key = 'release')
     {
         if (isset($this->_packageInfo['stability'][$key])) {
             return $this->_packageInfo['stability'][$key];
@@ -309,6 +457,26 @@ class PEAR_PackageFile_v2
     {
         if (isset($this->_packageInfo['notes'])) {
             return $this->_packageInfo['notes'];
+        }
+        return false;
+    }
+
+    function getCompatible()
+    {
+        if (isset($this->_packageInfo['compatible'])) {
+            $compat = $this->_packageInfo['compatible'];
+            if (isset($compat['package'])) {
+                return array($compat);
+            }
+            return $compat;
+        }
+        return false;
+    }
+
+    function getDependencies()
+    {
+        if (isset($this->_packageInfo['dependencies'])) {
+            return $this->_packageInfo['dependencies'];
         }
         return false;
     }
@@ -499,16 +667,51 @@ class PEAR_PackageFile_v2
         return '2.0';
     }
 
+    function getReleaseType()
+    {
+        if (isset($this->_packageInfo['phprelease'])) {
+            return 'php';
+        }
+        if (isset($this->_packageInfo['extsrcrelease'])) {
+            return 'extsrc';
+        }
+        if (isset($this->_packageInfo['extbinrelease'])) {
+            return 'extbin';
+        }
+        if (isset($this->_packageInfo['bundle'])) {
+            return 'bundle';
+        }
+    }
+
+    function getSourcePackage()
+    {
+        if (isset($this->_packageInfo['extbinrelease'])) {
+            return array('channel' => $this->_packageInfo['extbinrelease']['srcchannel'],
+                         'package' => $this->_packageInfo['extbinrelease']['srcpackage']);
+        }
+        return false;
+    }
+
+    function getBundledPackages()
+    {
+        if (isset($this->_packageInfo['bundle'])) {
+            return $this->_packageInfo['contents']['bundledpackage'];
+        }
+        return false;
+    }
+
     function &getDefaultGenerator()
     {
-        include_once 'PEAR/PackageFile/Generator/v2.php';
         $a = &new PEAR_PackageFile_Generator_v2($this);
         return $a;
     }
 
-    function validate()
+    function validate($state = PEAR_VALIDATE_NORMAL)
     {
         $this->_stack->getErrors(true);
+        if (($this->_isValid & $state) == $state) {
+            return true;
+        }
         if (!isset($this->_packageInfo) || !is_array($this->_packageInfo)) {
             return false;
         }
@@ -535,11 +738,13 @@ class PEAR_PackageFile_v2
             'notes',
             'contents', //special validation needed
             '*compatible',
-            '*dependencies', //special validation needed
+            'dependencies', //special validation needed
             '+phprelease|extsrcrelease|+extbinrelease|bundle' //special validation needed
         );
+        $test = $this->_packageInfo;
+        unset($test['attribs']);
         if (!$this->_stupidSchemaValidate($structure,
-                                          $this->_packageInfo, '<package>')) {
+                                          $test, '<package>')) {
             return false;
         }
         if (empty($this->_packageInfo['name'])) {
@@ -582,7 +787,6 @@ class PEAR_PackageFile_v2
                 foreach ($failures['errors'] as $error) {
                     $this->_stack->push(__FUNCTION__, 'error', $error,
                         'Channel validator error: field "%field%" - %reason%');
-                    $this->_isValid = false;
                 }
                 foreach ($failures['warnings'] as $warning) {
                     $this->_stack->push(__FUNCTION__, 'warning', $warning,
@@ -590,6 +794,16 @@ class PEAR_PackageFile_v2
                 }
             }
         }
+        $this->_isValid = !$this->_stack->hasErrors('error');
+        if ($this->_isValid && $state == PEAR_VALIDATE_PACKAGING) {
+            if (!$this->_analyzePhpFiles()) {
+                $this->_isValid = 0;
+            }
+        }
+        if ($this->_isValid) {
+            return $this->_isValid = $state;
+        }
+        return $this->_isValid = 0;
     }
 
     function _stupidSchemaValidate($structure, $xml, $root)
@@ -704,8 +918,26 @@ class PEAR_PackageFile_v2
     function _validateStabilityVersion()
     {
         $structure = array('release', 'api');
-        $this->_stupidSchemaValidate($structure, $this->_packageInfo['version'], '<version>');
-        $this->_stupidSchemaValidate($structure, $this->_packageInfo['stability'], '<stability>');
+        $a = $this->_stupidSchemaValidate($structure, $this->_packageInfo['version'], '<version>');
+        $a &= $this->_stupidSchemaValidate($structure, $this->_packageInfo['stability'], '<stability>');
+        if ($a) {
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                  $this->_packageInfo['version']['release'])) {
+                $this->_invalidVersion('release', $this->_packageInfo['version']['release']);
+            }
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                  $this->_packageInfo['version']['api'])) {
+                $this->_invalidVersion('api', $this->_packageInfo['version']['api']);
+            }
+            if (!in_array($this->_packageInfo['stability']['release'],
+                  array('snapshot', 'devel', 'alpha', 'beta', 'stable'))) {
+                $this->_invalidState('release', $this->_packageinfo['stability']['release']);
+            }
+            if (!in_array($this->_packageInfo['stability']['api'],
+                  array('devel', 'alpha', 'beta', 'stable'))) {
+                $this->_invalidState('api', $this->_packageinfo['stability']['api']);
+            }
+        }
     }
 
     function _validateMaintainers()
@@ -739,8 +971,19 @@ class PEAR_PackageFile_v2
             'max',
             '*exclude',
         );
-        return $this->_stupidSchemaValidate($structure, $dep, '<dependencies><php>');
-            
+        $this->_stupidSchemaValidate($structure, $dep, '<dependencies><php>');
+        if (isset($dep['min'])) {
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                  $dep['min'])) {
+                $this->_invalidVersion('<dep><min>', $dep['min']);
+            }
+        }
+        if (isset($dep['max'])) {
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                  $dep['max'])) {
+                $this->_invalidVersion('<php><max>', $dep['max']);
+            }
+        }
     }
 
     function _validatePearinstallerDep($dep)
@@ -751,8 +994,36 @@ class PEAR_PackageFile_v2
             '*recommended',
             '*exclude',
         );
-        return $this->_stupidSchemaValidate($structure, $dep, '<dependencies><php>');
-            
+        $this->_stupidSchemaValidate($structure, $dep, '<dependencies><pearinstaller>');
+        if (isset($dep['min'])) {
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                  $dep['min'])) {
+                $this->_invalidVersion('<pearinstaller><min>', $dep['min']);
+            }
+        }
+        if (isset($dep['max'])) {
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                  $dep['max'])) {
+                $this->_invalidVersion('<pearinstaller><max>', $dep['max']);
+            }
+        }
+        if (isset($dep['recommended'])) {
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                  $dep['recommended'])) {
+                $this->_invalidVersion('<pearinstaller><recommended>', $dep['recommended']);
+            }
+        }
+        if (isset($dep['exclude'])) {
+            if (!is_array($dep['exclude'])) {
+                $dep['exclude'] = array($dep['exclude']);
+            }
+            foreach ($dep['exclude'] as $exclude) {
+                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                      $exclude)) {
+                    $this->_invalidVersion('<pearinstaller><exclude>', $exclude);
+                }
+            }
+        }
     }
 
     function _validatePackageDep($dep)
@@ -774,7 +1045,36 @@ class PEAR_PackageFile_v2
                 '*conflicts',
             );
         }
-        return $this->_stupidSchemaValidate($structure, $dep, '<dependencies><package>');
+        $this->_stupidSchemaValidate($structure, $dep, '<dependencies><package>');
+        if (isset($dep['min'])) {
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                  $dep['min'])) {
+                $this->_invalidVersion('<package><min>', $dep['min']);
+            }
+        }
+        if (isset($dep['max'])) {
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                  $dep['max'])) {
+                $this->_invalidVersion('<package><max>', $dep['max']);
+            }
+        }
+        if (isset($dep['recommended'])) {
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                  $dep['recommended'])) {
+                $this->_invalidVersion('<package><recommended>', $dep['recommended']);
+            }
+        }
+        if (isset($dep['exclude'])) {
+            if (!is_array($dep['exclude'])) {
+                $dep['exclude'] = array($dep['exclude']);
+            }
+            foreach ($dep['exclude'] as $exclude) {
+                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                      $exclude)) {
+                    $this->_invalidVersion('<package><exclude>', $exclude);
+                }
+            }
+        }
     }
 
     function _validateExtensionDep($dep)
@@ -788,7 +1088,37 @@ class PEAR_PackageFile_v2
             '*exclude',
             '*conflicts',
         );
-        return $this->_stupidSchemaValidate($structure, $dep, '<dependencies><extension>');
+        $this->_stupidSchemaValidate($structure, $dep, '<dependencies><extension>');
+        $this->_stupidSchemaValidate($structure, $dep, '<dependencies><package>');
+        if (isset($dep['min'])) {
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                  $dep['min'])) {
+                $this->_invalidVersion('<extension><min>', $dep['min']);
+            }
+        }
+        if (isset($dep['max'])) {
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                  $dep['max'])) {
+                $this->_invalidVersion('<extension><max>', $dep['max']);
+            }
+        }
+        if (isset($dep['recommended'])) {
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                  $dep['recommended'])) {
+                $this->_invalidVersion('<extension><recommended>', $dep['recommended']);
+            }
+        }
+        if (isset($dep['exclude'])) {
+            if (!is_array($dep['exclude'])) {
+                $dep['exclude'] = array($dep['exclude']);
+            }
+            foreach ($dep['exclude'] as $exclude) {
+                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                      $exclude)) {
+                    $this->_invalidVersion('<extension><exclude>', $exclude);
+                }
+            }
+        }
     }
 
     function _validateOsDep($dep)
@@ -837,7 +1167,7 @@ class PEAR_PackageFile_v2
     function _validateDependencies()
     {
         $structure = array(
-            '*requires',
+            'required',
             '*optional',
             '*group->name->hint'
         );
@@ -955,6 +1285,29 @@ class PEAR_PackageFile_v2
         $required = array('name', 'channel', 'min', 'max', '*exclude');
         foreach ($compat as $package) {
             $this->_stupidSchemaValidate($required, $package, '<compatible>');
+            if (isset($package['min'])) {
+                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                      $package['min'])) {
+                    $this->_invalidVersion('<compatible><min>', $package['min']);
+                }
+            }
+            if (isset($package['max'])) {
+                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                      $package['max'])) {
+                    $this->_invalidVersion('<compatible><max>', $package['max']);
+                }
+            }
+            if (isset($package['exclude'])) {
+                if (!is_array($package['exclude'])) {
+                    $package['exclude'] = array($package['exclude']);
+                }
+                foreach ($package['exclude'] as $exclude) {
+                    if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                          $exclude)) {
+                        $this->_invalidVersion('<compatible><exclude>', $exclude);
+                    }
+                }
+            }
         }
     }
 
@@ -962,6 +1315,30 @@ class PEAR_PackageFile_v2
     {
         if (!$list) {
             $list = $this->_packageInfo['contents'];
+        }
+        if (isset($this->_packageInfo['bundle'])) {
+            if (!isset($list['bundledpackage'])) {
+                return $this->_NoBundledPackages();
+            }
+            if (!isset($list['bundledpackage'][0])) {
+                return $this->_AtLeast2BundledPackages();
+            }
+            foreach ($list['bundledpackage'] as $package) {
+                if (!isset($package['filename'])) {
+                    return $this->_noChildTag('<filename>', '<bundledpackage>');
+                }
+                if (!isset($package['name'])) {
+                    return $this->_noChildTag('<name>', '<bundledpackage>');
+                }
+                if (isset($package['uri'])) {
+                    if (isset($package['channel'])) {
+                        return $this->_ChannelOrUri($package['name']);
+                    }
+                } elseif (!isset($package['channel'])) {
+                    return $this->_ChannelOrUri($package['name']);
+                }
+            }
+            return;
         }
         if (isset($list[$filetag])) {
             if (isset($list[$filetag]['attribs'])) {
@@ -1224,5 +1601,370 @@ class PEAR_PackageFile_v2
         $this->_stack->push(__FUNCTION__, 'error', array(),
             'package.xml <package> tag has no version attribute, or version is not 2.0');
     }
+
+    function _NoBundledPackages()
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array(),
+            'No <bundledpackage> tag was found in <contents>, required for bundle packages');
+    }
+
+    function _AtLeast2BundledPackages()
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array(),
+            'At least 2 packages must be bundled in a bundle package');
+    }
+
+    function _ChannelOrUri($name)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('name' => $name),
+            'Bundled package "%name%" can have either a uri or a channel, not both');
+    }
+
+    function _noChildTag($child, $tag)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('child' => $child, 'tag' => $tag),
+            'Tag <%tag%> is missing child tag <%child%>');
+    }
+
+    function _invalidVersion($type, $value)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('type' => $type, 'value' => $value),
+            'Version type <%type%> is not a valid version (%value%)');
+    }
+
+    function _invalidState($type, $value)
+    {
+        $states = array('stable', 'beta', 'alpha', 'devel');
+        if ($type != 'api') {
+            $states[] = 'snapshot';
+        }
+        $this->_stack->push(__FUNCTION__, 'error', array('type' => $type, 'value' => $value,
+            'types' => $states),
+            'Stability type <%type%> is not a valid stability (%value%), must be one of ' .
+            '%types%');
+    }
+
+    function _analyzePhpFiles()
+    {
+        if (!$this->_isValid) {
+            return false;
+        }
+        if (!isset($this->_packageFile)) {
+            return false;
+        }
+        $dir_prefix = dirname($this->_packageFile);
+        $log = isset($this->_logger) ? array(&$this->_logger, 'log') :
+            array('PEAR_Common', 'log');
+        $info = $this->getContents();
+        $info = $info['dir']['file'];
+        if (isset($info['attribs'])) {
+            $info = array($info);
+        }
+        $provides = array();
+        foreach ($info as $fa) {
+            $fa = $fa['attribs'];
+            $file = $fa['name'];
+            if ($fa['role'] == 'php' && $dir_prefix) {
+                call_user_func_array($log, array(1, "Analyzing $file"));
+                if (!file_exists($dir_prefix . DIRECTORY_SEPARATOR . $file)) {
+                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_FILE_NOTFOUND,
+                        array('file' => $dir_prefix . DIRECTORY_SEPARATOR . $file));
+                    continue;
+                }
+                $srcinfo = $this->_analyzeSourceCode($dir_prefix . DIRECTORY_SEPARATOR . $file);
+                if ($srcinfo) {
+                    $provides = array_merge($provides, $this->_buildProvidesArray($srcinfo));
+                }
+            }
+        }
+        $this->_packageName = $pn = $this->getPackage();
+        $pnl = strlen($pn);
+        foreach ($provides as $key => $what) {
+            if (isset($what['explicit'])) {
+                // skip conformance checks if the provides entry is
+                // specified in the package.xml file
+                continue;
+            }
+            extract($what);
+            if ($type == 'class') {
+                if (!strncasecmp($name, $pn, $pnl)) {
+                    continue;
+                }
+                $this->_stack->push(__FUNCTION__, 'warning',
+                    array('file' => $file, 'type' => $type, 'name' => $name, 'package' => $pn),
+                    'in %file%: %type% "%name%" not prefixed with package name "%package%"');
+            } elseif ($type == 'function') {
+                if (strstr($name, '::') || !strncasecmp($name, $pn, $pnl)) {
+                    continue;
+                }
+                $this->_stack->push(__FUNCTION__, 'warning',
+                    array('file' => $file, 'type' => $type, 'name' => $name, 'package' => $pn),
+                    'in %file%: %type% "%name%" not prefixed with package name "%package%"');
+            }
+        }
+        return $this->_isValid;
+    }
+
+    // {{{ analyzeSourceCode()
+    /**
+     * Analyze the source code of the given PHP file
+     *
+     * @param  string Filename of the PHP file
+     * @return mixed
+     * @access private
+     */
+    function _analyzeSourceCode($file)
+    {
+        if (!function_exists("token_get_all")) {
+            return false;
+        }
+        if (!defined('T_DOC_COMMENT')) {
+            define('T_DOC_COMMENT', T_COMMENT);
+        }
+        if (!defined('T_INTERFACE')) {
+            define('T_INTERFACE', -1);
+        }
+        if (!defined('T_IMPLEMENTS')) {
+            define('T_IMPLEMENTS', -1);
+        }
+        if (!$fp = @fopen($file, "r")) {
+            return false;
+        }
+        $contents = fread($fp, filesize($file));
+        $tokens = token_get_all($contents);
+/*
+        for ($i = 0; $i < sizeof($tokens); $i++) {
+            @list($token, $data) = $tokens[$i];
+            if (is_string($token)) {
+                var_dump($token);
+            } else {
+                print token_name($token) . ' ';
+                var_dump(rtrim($data));
+            }
+        }
+*/
+        $look_for = 0;
+        $paren_level = 0;
+        $bracket_level = 0;
+        $brace_level = 0;
+        $lastphpdoc = '';
+        $current_class = '';
+        $current_interface = '';
+        $current_class_level = -1;
+        $current_function = '';
+        $current_function_level = -1;
+        $declared_classes = array();
+        $declared_interfaces = array();
+        $declared_functions = array();
+        $declared_methods = array();
+        $used_classes = array();
+        $used_functions = array();
+        $extends = array();
+        $implements = array();
+        $nodeps = array();
+        $inquote = false;
+        $interface = false;
+        for ($i = 0; $i < sizeof($tokens); $i++) {
+            if (is_array($tokens[$i])) {
+                list($token, $data) = $tokens[$i];
+            } else {
+                $token = $tokens[$i];
+                $data = '';
+            }
+            if ($inquote) {
+                if ($token != '"') {
+                    continue;
+                } else {
+                    $inquote = false;
+                }
+            }
+            switch ($token) {
+                case T_WHITESPACE :
+                    continue;
+                case ';':
+                    if ($interface) {
+                        $current_function = '';
+                        $current_function_level = -1;
+                    }
+                    break;
+                case '"':
+                    $inquote = true;
+                    break;
+                case T_CURLY_OPEN:
+                case T_DOLLAR_OPEN_CURLY_BRACES:
+                case '{': $brace_level++; continue 2;
+                case '}':
+                    $brace_level--;
+                    if ($current_class_level == $brace_level) {
+                        $current_class = '';
+                        $current_class_level = -1;
+                    }
+                    if ($current_function_level == $brace_level) {
+                        $current_function = '';
+                        $current_function_level = -1;
+                    }
+                    continue 2;
+                case '[': $bracket_level++; continue 2;
+                case ']': $bracket_level--; continue 2;
+                case '(': $paren_level++;   continue 2;
+                case ')': $paren_level--;   continue 2;
+                case T_INTERFACE:
+                    $interface = true;
+                case T_CLASS:
+                    if (($current_class_level != -1) || ($current_function_level != -1)) {
+                        $this->_stack->push(__FUNCTION__, 'error', array('file' => $file),
+                        'Parser error: Invalid PHP file %file%');
+                        return false;
+                    }
+                case T_FUNCTION:
+                case T_NEW:
+                case T_EXTENDS:
+                case T_IMPLEMENTS:
+                    $look_for = $token;
+                    continue 2;
+                case T_STRING:
+                    if (version_compare(zend_version(), '2.0', '<')) {
+                        if (in_array(strtolower($data),
+                            array('public', 'private', 'protected', 'abstract',
+                                  'interface', 'implements', 'clone', 'throw') 
+                                 )) {
+                            $this->_stack->push(__FUNCTION__, 'warning', array(),
+                                'Error, PHP5 token encountered, analysis should be in PHP5');
+                        }
+                    }
+                    if ($look_for == T_CLASS) {
+                        $current_class = $data;
+                        $current_class_level = $brace_level;
+                        $declared_classes[] = $current_class;
+                    } elseif ($look_for == T_INTERFACE) {
+                        $current_interface = $data;
+                        $current_class_level = $brace_level;
+                        $declared_interfaces[] = $current_interface;
+                    } elseif ($look_for == T_IMPLEMENTS) {
+                        $implements[$current_class] = $data;
+                    } elseif ($look_for == T_EXTENDS) {
+                        $extends[$current_class] = $data;
+                    } elseif ($look_for == T_FUNCTION) {
+                        if ($current_class) {
+                            $current_function = "$current_class::$data";
+                            $declared_methods[$current_class][] = $data;
+                        } elseif ($current_interface) {
+                            $current_function = "$current_interface::$data";
+                            $declared_methods[$current_interface][] = $data;
+                        } else {
+                            $current_function = $data;
+                            $declared_functions[] = $current_function;
+                        }
+                        $current_function_level = $brace_level;
+                        $m = array();
+                    } elseif ($look_for == T_NEW) {
+                        $used_classes[$data] = true;
+                    }
+                    $look_for = 0;
+                    continue 2;
+                case T_VARIABLE:
+                    $look_for = 0;
+                    continue 2;
+                case T_DOC_COMMENT:
+                case T_COMMENT:
+                    if (preg_match('!^/\*\*\s!', $data)) {
+                        $lastphpdoc = $data;
+                        if (preg_match_all('/@nodep\s+(\S+)/', $lastphpdoc, $m)) {
+                            $nodeps = array_merge($nodeps, $m[1]);
+                        }
+                    }
+                    continue 2;
+                case T_DOUBLE_COLON:
+                    if (!($tokens[$i - 1][0] == T_WHITESPACE || $tokens[$i - 1][0] == T_STRING)) {
+                        $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILE, array('file' => $file));
+                        return false;
+                    }
+                    $class = $tokens[$i - 1][1];
+                    if (strtolower($class) != 'parent') {
+                        $used_classes[$class] = true;
+                    }
+                    continue 2;
+            }
+        }
+        return array(
+            "source_file" => $file,
+            "declared_classes" => $declared_classes,
+            "declared_interfaces" => $declared_interfaces,
+            "declared_methods" => $declared_methods,
+            "declared_functions" => $declared_functions,
+            "used_classes" => array_diff(array_keys($used_classes), $nodeps),
+            "inheritance" => $extends,
+            "implements" => $implements,
+            );
+    }
+
+    /**
+     * Build a "provides" array from data returned by
+     * analyzeSourceCode().  The format of the built array is like
+     * this:
+     *
+     *  array(
+     *    'class;MyClass' => 'array('type' => 'class', 'name' => 'MyClass'),
+     *    ...
+     *  )
+     *
+     *
+     * @param array $srcinfo array with information about a source file
+     * as returned by the analyzeSourceCode() method.
+     *
+     * @return void
+     *
+     * @access private
+     *
+     */
+    function _buildProvidesArray($srcinfo)
+    {
+        if (!$this->_isValid) {
+            return false;
+        }
+        $providesret = array();
+        $file = basename($srcinfo['source_file']);
+        $pn = $this->getPackage();
+        $pnl = strlen($pn);
+        foreach ($srcinfo['declared_classes'] as $class) {
+            $key = "class;$class";
+            if (isset($providesret[$key])) {
+                continue;
+            }
+            $providesret[$key] =
+                array('file'=> $file, 'type' => 'class', 'name' => $class);
+            if (isset($srcinfo['inheritance'][$class])) {
+                $providesret[$key]['extends'] =
+                    $srcinfo['inheritance'][$class];
+            }
+        }
+        foreach ($srcinfo['declared_methods'] as $class => $methods) {
+            foreach ($methods as $method) {
+                $function = "$class::$method";
+                $key = "function;$function";
+                if ($method{0} == '_' || !strcasecmp($method, $class) ||
+                    isset($providesret[$key])) {
+                    continue;
+                }
+                $providesret[$key] =
+                    array('file'=> $file, 'type' => 'function', 'name' => $function);
+            }
+        }
+
+        foreach ($srcinfo['declared_functions'] as $function) {
+            $key = "function;$function";
+            if ($function{0} == '_' || isset($providesret[$key])) {
+                continue;
+            }
+            if (!strstr($function, '::') && strncasecmp($function, $pn, $pnl)) {
+                $warnings[] = "in1 " . $file . ": function \"$function\" not prefixed with package name \"$pn\"";
+            }
+            $providesret[$key] =
+                array('file'=> $file, 'type' => 'function', 'name' => $function);
+        }
+        return $providesret;
+    }
+
+    // }}}
 }
 ?>
