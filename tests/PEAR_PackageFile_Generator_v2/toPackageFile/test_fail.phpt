@@ -112,6 +112,37 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'bad bundle 1 log');
 
+$pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
+    DIRECTORY_SEPARATOR . 'bundlefail2.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
+    DIRECTORY_SEPARATOR . 'bundlefail2.xml');
+$generator = &$pf->getDefaultGenerator();
+$e = $generator->toPackageFile($temp_path, PEAR_VALIDATE_PACKAGING, 'tub.xml');
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' => 'PEAR_Packagefile_v2::toPackageFile: invalid package.xml'),
+), 'bad bundle 1');
+$phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 1,
+    1 => 'Analyzing bundled package fakefoo-1.9.0.tgz',
+  ),
+  1 => 
+  array (
+    0 => 1,
+    1 => 'Analyzing bundled package fakebar-1.9.0.tgz',
+  ),
+  2 => 
+  array (
+    0 => 1,
+    1 => 'Analyzing bundled package invalid-1.9.0.tgz',
+  ),
+  3 => 
+  array (
+    0 => 1,
+    1 => 'ERROR: package invalid-1.9.0.tgz is not a valid package',
+  ),
+), $fakelog->getLog(), 'bad bundle 2 log');
+
 echo 'tests done';
 ?>
 --EXPECT--
