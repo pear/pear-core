@@ -220,6 +220,10 @@ class PEAR_PackageFile_Generator_v1
         return $ret;
     }
 
+    /**
+     * @param array
+     * @access private
+     */
     function _recursiveXmlFilelist($list)
     {
         $this->_dirs = array();
@@ -229,6 +233,13 @@ class PEAR_PackageFile_Generator_v1
         return $this->_formatDir($this->_dirs);
     }
 
+    /**
+     * @param array
+     * @param array
+     * @param string|null
+     * @param array|null
+     * @access private
+     */
     function _addDir(&$dirs, $dir, $file = null, $attributes = null)
     {
         if ($dir == array() || $dir == array('.')) {
@@ -242,6 +253,12 @@ class PEAR_PackageFile_Generator_v1
         $this->_addDir($dirs['dirs'][$curdir], $dir, $file, $attributes);
     }
 
+    /**
+     * @param array
+     * @param string
+     * @param string
+     * @access private
+     */
     function _formatDir($dirs, $indent = '', $curdir = '')
     {
         $ret = '';
@@ -266,6 +283,12 @@ class PEAR_PackageFile_Generator_v1
         return $ret;
     }
 
+    /**
+     * @param string
+     * @param array
+     * @param string
+     * @access private
+     */
     function _formatFile($file, $attributes, $indent)
     {
         $ret = "$indent   <file role=\"$attributes[role]\"";
@@ -326,6 +349,12 @@ class PEAR_PackageFile_Generator_v1
         return $data;
     }
 
+    /**
+     * @param PEAR_Packager
+     * @param bool if true, a .tgz is written, otherwise a .tar is written
+     * @param string|null directory in which to save the .tgz
+     * @return string|PEAR_Error location of package or error object
+     */
     function toTgz(&$packager, $compress = true, $where = null)
     {
         include_once 'System.php';
