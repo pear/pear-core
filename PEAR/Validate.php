@@ -69,10 +69,16 @@ class PEAR_Validate
         $this->_failures['warning'] = array('field' => $field, 'reason' => $reason);
     }
 
-    function validate()
+    /**
+     * @param int one of the PEAR_VALIDATE_* constants
+     */
+    function validate($state = null)
     {
         if (!isset($this->_packagexml)) {
             return false;
+        }
+        if ($state !== null) {
+            $this->_state = $state;
         }
     }
 
@@ -89,7 +95,8 @@ class PEAR_Validate
         $version = $this->_packagexml->getVersion();
         $versioncomponents = explode('.', $version);
         if (count($versioncomponents) != 3) {
-            $this->_addFailure('version', 'Must have 3 decimals (x.y.z) in a version number');
+            $this->_addFailure('version',
+                'Must have 3 decimals (x.y.z) in a version number');
             return false;
         }
         $name = $this->_packagexml->getPackage();
@@ -104,39 +111,58 @@ class PEAR_Validate
             break;
             case 'alpha' :
             case 'beta' :
-            // check for Package2 version 2.0.0
-            if ($name{strlen($name) - 1} != $versioncomponents[0]) {
+            // check for a package that extends a package,
+            // like Foo and Foo2
+            if ($this->_packagexml->getExtends()) {
                 if ($versioncomponents[0] == '1') {
-                    if ($versioncomponents[1] == '0' && $versioncomponents[2]{0} == '0') {
+                    if ($versioncomponents[2]{0} == '0') {
                         if (strlen($versioncomponents[2]) > 1) {
+                            // version 1.*.0RC1 or 1.*.0beta24 etc.
                             return true;
                         } else {
-                            $this->_addFailure('version', 'version 1.0.0 cannot be alpha or beta');
+                            // version 1.*.0
+                            $this->_addFailure('version',
+                                'version 1.' . $versioncomponents[1] .
+                                    '.0 cannot be alpha or beta');
                             return false;
                         }
                     } else {
-                        $this->_addFailure('version', 'versions greater than 1.0.0 cannot be alpha or beta');
+                        $this->_addFailure('version',
+                            'bugfix versions (1.3.x where x > 0) cannot be alpha or beta');
                         return false;
                     }
                 } else {
-                    $this->_addFailure('version', 'major versions greater than 1 are not allowed for packages ' .
+                    $this->_addFailure('version',
+                        'major versions greater than 1 are not allowed for packages ' .
                         'not containing an identical postfix');
                 }
             } else {
-                if ($versioncomponents[1] == '0'&& $versioncomponents[2]{0} == '0') {
+                $vlen = strlen($versioncomponents[0] . '');
+                if ($name{strlen($name) - $vlen} != $versioncomponents[0]) {
+                    $this->_addFailure('version', 'first version number "' .
+                        $versioncomponents[0] . '" must match the postfix of ' .
+                        'package name "' . $name . '" (' .
+                        $name{strlen($name) - $vlen} . ')');
+                    return false;
+                }
+                if ($versioncomponents[2]{0} == '0') {
                     if (strlen($versioncomponents[2]) > 1) {
+                        // version 2.*.0RC1 etc.
                         return true;
                     } else {
-                        $this->_addFailure('version', 'version ' . $versioncomponents[0] . '.0.0 cannot be alpha or beta');
+                        // version 2.*.0
+                        $this->_addFailure('version', 'version ' .
+                            $versioncomponents[0] . '.0.0 cannot be alpha or beta');
                         return false;
                     }
-                } else {
-                    $this->_addFailure('version', 'versions greater than ' . $versioncomponents[0] .
-                        '.0.0 cannot be alpha or beta');
-                    return false;
                 }
             }
             case 'stable' :
+                if ($versioncomponents[0] == '0') {
+                    $this->_addFailure('version', 'versions less than 1.0 cannot ' .
+                    'be stable');
+                    return false;
+                }
                 return true;
             break;
             default :
