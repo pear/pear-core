@@ -611,52 +611,6 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
     /**
      * @param array
-     * @access private
-     */
-    function _convertFilelist2_0(&$package)
-    {
-        $ret = array('dir' =>
-                    array(
-                        'attribs' => array('name' => '/'),
-                        'file' => array()
-                        )
-                    );
-        $package['platform'] =
-        $package['osmap'] =
-        $package['install-as'] = array();
-        foreach ($this->_packagefile->getFilelist() as $name => $file) {
-            $file['name'] = $name;
-            if (isset($file['replacements'])) {
-                $repl = $file['replacements'];
-                unset($file['replacements']);
-            } else {
-                unset($repl);
-            }
-            if (isset($file['install-as'])) {
-                $package['install-as'][$name] = $file['install-as'];
-                unset($file['install-as']);
-            }
-            if (isset($file['platform'])) {
-                $package['platform'][$name] = $file['platform'];
-                $package['osmap'][$file['platform']][] = $name;
-                unset($file['platform']);
-            }
-            $file = array('attribs' => $file);
-            if (isset($repl)) {
-                foreach ($repl as $replace ) {
-                    $file['tasks:replace'][] = array('attribs' => $replace);
-                }
-                if (count($repl) == 1) {
-                    $file['tasks:replace'] = $file['tasks:replace'][0];
-                }
-            }
-            $ret['dir']['file'][] = $file;
-        }
-        return $ret;
-    }
-
-    /**
-     * @param array
      * @param bool
      * @access private
      */
@@ -750,6 +704,57 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
     /**
      * @param array
+     * @access private
+     */
+    function _convertFilelist2_0(&$package)
+    {
+        $ret = array('dir' =>
+                    array(
+                        'attribs' => array('name' => '/'),
+                        'file' => array()
+                        )
+                    );
+        $package['platform'] =
+        $package['osmap'] =
+        $package['notosmap'] =
+        $package['install-as'] = array();
+        foreach ($this->_packagefile->getFilelist() as $name => $file) {
+            $file['name'] = $name;
+            if (isset($file['replacements'])) {
+                $repl = $file['replacements'];
+                unset($file['replacements']);
+            } else {
+                unset($repl);
+            }
+            if (isset($file['install-as'])) {
+                $package['install-as'][$name] = $file['install-as'];
+                unset($file['install-as']);
+            }
+            if (isset($file['platform'])) {
+                if ($file['platform']{0} == '!') {
+                    $package['notosmap'][substr($file['platform'], 1)][] = $name;
+                } else {
+                    $package['osmap'][$file['platform']][] = $name;
+                }
+                $package['platform'][$name] = $file['platform'];
+                unset($file['platform']);
+            }
+            $file = array('attribs' => $file);
+            if (isset($repl)) {
+                foreach ($repl as $replace ) {
+                    $file['tasks:replace'][] = array('attribs' => $replace);
+                }
+                if (count($repl) == 1) {
+                    $file['tasks:replace'] = $file['tasks:replace'][0];
+                }
+            }
+            $ret['dir']['file'][] = $file;
+        }
+        return $ret;
+    }
+
+    /**
+     * @param array
      * @param array
      * @access private
      */
@@ -763,47 +768,78 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 }
             }
             if (count($package['platform'])) {
-                $oses = array();
+                $notplatform = $platform = array();
                 foreach ($package['platform'] as $file => $os) {
+                    // pre-process for !platform
+                    if ($os{0} == '!') {
+                        $notplatform[$file] = $os;
+                    } else {
+                        $platform[$file] = $os;
+                    }
+                }
+                $oses = array();
+                // add install-as
+                foreach ($platform as $file => $os) {
                     $oses[$os] = count($oses);
                     $release[$oses[$os]]['installconditions']
                         ['os']['name'] = $os;
                     if (isset($package['install-as'][$file])) {
                         $release[$oses[$os]]['filelist']['install'][] =
-                        array('attribs' => 
-                            array('name' => $file,
-                                  'as' => $package['install-as'][$file]));
+                            array('attribs' => 
+                                array('name' => $file,
+                                      'as' => $package['install-as'][$file]));
                     }
                     foreach ($generic as $file) {
                         $release[$oses[$os]]['filelist']['install'][] =
-                        array('attribs' => 
-                            array('name' => $file,
-                                  'as' => $package['install-as'][$file]));
+                            array('attribs' => 
+                                array('name' => $file,
+                                      'as' => $package['install-as'][$file]));
                     }
                 }
-                if (count($generic)) {
-                    foreach ($generic as $file) {
-                        $release[count($oses)]['filelist']['install'][] =
-                        array('attribs' => 
-                            array('name' => $file,
-                                  'as' => $package['install-as'][$file]));
-                    }
-                    foreach ($package['osmap'] as $os => $files) {
-                        foreach ($files as $file) {
-                            $release[count($oses)]['filelist']['ignore'][]
-                                ['attribs']['name'] = $file;
-                        }
-                    }
-                }
+                // add ignore for platform atts
                 foreach ($package['osmap'] as $os => $files) {
-                    foreach ($oses as $os1 => $i) {
-                        if ($os1 == $os) {
+                    foreach ($oses as $osname => $os2) {
+                        if ($os == $osname) {
                             continue;
                         }
                         foreach ($files as $file) {
-                            $release[$i]['filelist']['ignore'][]
-                                ['attribs']['name'] = $file;
+                            $release[$os2]['filelist']['ignore'][]['attribs']['name'] = $file;
                         }
+                    }
+                }
+                foreach ($notplatform as $file => $os) {
+                    if (isset($oses[substr($os, 1)])) {
+                        foreach ($oses as $name => $index) {
+                            if ($name == substr($os, 1)) {
+                                $release[$index]['filelist']['ignore'][]['attribs']['name'] =
+                                    $file;
+                            } elseif (isset($package['install-as'][$file])) {
+                                $release[$index]['filelist']['install'][] =
+                                    array('attribs' => 
+                                        array('name' => $file,
+                                              'as' => $package['install-as'][$file]));
+                            }
+                        }
+                    } else {
+                        if (isset($package['install-as'][$file])) {
+                            foreach ($oses as $index) {
+                                $release[$index]['filelist']['install'][] =
+                                    array('attribs' => 
+                                        array('name' => $file,
+                                              'as' => $package['install-as'][$file]));
+                            }
+                        }
+                    }
+                }
+                // add generic release
+                if (count($generic)) {
+                    $release[count($oses)]['installconditions']
+                        ['os']['name'] = '*';
+                    foreach ($generic as $file) {
+                        $release[count($oses)]['filelist']['install'][] =
+                            array('attribs' => 
+                                array('name' => $file,
+                                      'as' => $package['install-as'][$file]));
                     }
                 }
                 // cleanup
@@ -819,8 +855,11 @@ http://pear.php.net/dtd/package-2.0.xsd',
                             $release[$i]['filelist']['ignore'][0];
                     }
                 }
+                if (count($release) == 1) {
+                    $release = $release[0];
+                }
             } else {
-                $release['installconditions']['os']['attribs']['pattern'] = '*';
+                $release['installconditions']['os']['name'] = '*';
                 foreach ($package['install-as'] as $file => $value) {
                     if (count($package['install-as']) > 1) {
                         $release['filelist']['install'][] =
