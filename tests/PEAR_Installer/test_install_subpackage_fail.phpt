@@ -37,6 +37,8 @@ $oldpackage->addPackageDep('bar', '1.0', 'ge');
 $reg = &$config->getRegistry();
 $reg->addPackage2($oldpackage);
 
+$_test_dep->setPHPVersion('4.3.10');
+$_test_dep->setPEARVersion('1.4.0a1');
 $phpunit->assertNoErrors('setup');
 
 
@@ -46,6 +48,7 @@ $dp2 = &new test_PEAR_Downloader_Package($installer);
 $dp2->setPackageFile($subpackage);
 $params = array(&$dp2);
 $installer->setDownloadedPackages($params);
+$phpunit->assertEquals(array(), $fakelog->getLog(), 'log');
 $installer->install($dp2, array('upgrade' => true));
 $phpunit->assertErrors(array(
 array('package' => 'PEAR_Error', 'message' =>
