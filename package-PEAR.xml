@@ -102,7 +102,7 @@ Other:
         <file role="php" name="Remote.php"/>
       </dir>
       <dir name="scripts" baseinstalldir="/">
-        <file role="script" install-as="pear" name="pear.sh">
+        <file role="script" install-as="pear" name="pear.sh" platform="!windows">
           <replace from="@php_bin@" to="php_bin" type="pear-config"/>
           <replace from="@php_dir@" to="php_dir" type="pear-config"/>
           <replace from="@pear_version@" to="version" type="package-info"/>
