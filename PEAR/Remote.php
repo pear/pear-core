@@ -410,6 +410,12 @@ class PEAR_Remote extends PEAR
             $faultString = "XML-RPC Server Fault: " .
                  str_replace("\n", " ", $faultString);
             return $this->raiseError($faultString, $faultCode);
+        } elseif (is_array($ret) && sizeof($ret) == 2 && !empty($ret['faultString']) &&
+              !empty($ret['faultCode'])) {
+            extract($ret);
+            $faultString = "XML-RPC Server Fault: " .
+                 str_replace("\n", " ", $faultString);
+            return $this->raiseError($faultString, $faultCode);
         }
         return $ret;
     }
