@@ -184,6 +184,12 @@ class PEAR_Registry extends PEAR
             }
             $pear_channel->validate();
             $this->addChannel($pear_channel);
+            $private = new PEAR_ChannelFile;
+            $private->setName('__private');
+            $private->setServer('www.example.com');
+            $private->addFunction('xmlrpc', '1.0', '****');
+            $private->setSummary('Pseudo-channel for static packages');
+            $this->addChannel($private);
             $this->rebuildFileMap();
         } elseif (!file_exists($this->filemap)) {
             $this->rebuildFileMap();
@@ -977,6 +983,9 @@ class PEAR_Registry extends PEAR
      */
     function updateChannel($channel)
     {
+        if (strtolower($channel) == '__private') {
+            return false;
+        }
         return $this->addChannel($channel, true);
     }
 
@@ -990,6 +999,9 @@ class PEAR_Registry extends PEAR
      */
     function deleteChannel($channel)
     {
+        if (strtolower($channel) == '__private') {
+            return false;
+        }
         if (!is_string($channel)) {
             if (is_a($channel, 'PEAR_ChannelFile')) {
                 if (!$channel->validate()) {
@@ -1469,14 +1481,23 @@ class PEAR_Registry extends PEAR
                     'must contain a valid package name in index "param"',
                     'package', null, null, $param);
             }
-            if (!isset($param['channel'])) {
-                $param['channel'] = $defaultchannel;
+            if (!isset($param['uri'])) {
+                if (!isset($param['channel'])) {
+                    $param['channel'] = $defaultchannel;
+                }
+            } else {
+                $param['channel'] = '__private';
             }
         } else {
             $components = parse_url($param);
-            if (isset($components['scheme']) && $components['scheme'] != 'channel') {
-                return PEAR::raiseError('parsePackageName(): only channel:// uris may ' .
-                    'be downloaded, not "' . $param . '"', 'invalid', null, null, $param);
+            if (isset($components['scheme'])) {
+                if ($components['scheme'] == 'http') {
+                    // uri package
+                    $param = array('uri' => $param, 'channel' => '__private');
+                } elseif($components['scheme'] != 'channel') {
+                    return PEAR::raiseError('parsePackageName(): only channel:// uris may ' .
+                        'be downloaded, not "' . $param . '"', 'invalid', null, null, $param);
+                }
             }
             if (!isset($components['path'])) {
                 return PEAR::raiseError('parsePackageName(): array $param ' .
@@ -1496,11 +1517,15 @@ class PEAR_Registry extends PEAR
                     $components['host'] = $defaultchannel;
                 }
             }
-            $param = array(
-                'package' => $components['path']
-                );
-            if (isset($components['host'])) {
-                $param['channel'] = $components['host'];
+            if (is_array($param)) {
+                $param['package'] = $components['path'];
+            } else {
+                $param = array(
+                    'package' => $components['path']
+                    );
+                if (isset($components['host'])) {
+                    $param['channel'] = $components['host'];
+                }
             }
             if (isset($components['fragment'])) {
                 $param['group'] = $components['fragment'];
