@@ -229,6 +229,9 @@ and uninstall).
         }
         if (count($params) == 2) {
             array_push($params, 'user');
+            $layer = 'user';
+        } else {
+            $layer = $params[2];
         }
         array_push($params, $channel);
         if (!call_user_func_array(array(&$this->config, 'set'), $params))
@@ -236,7 +239,7 @@ and uninstall).
             array_pop($params);
             $failmsg = "config-set (" . implode(", ", $params) . ") failed, channel $channel";
         } else {
-            $this->config->store();
+            $this->config->store($layer);
         }
         if ($failmsg) {
             return $this->raiseError($failmsg);
