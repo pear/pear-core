@@ -177,6 +177,10 @@ use the "slide" option to move the release tag.
                     'shortopt' => 'q',
                     'doc' => 'Only display detail for failed tests',
                 ),
+                'simple' => array(
+                    'shortopt' => 's',
+                    'doc' => 'Display simple output for all tests',
+                ),
             ),
             'doc' => '[testfile|dir ...]
 Run regression tests with PHP\'s regression testing script (run-tests.php).',
