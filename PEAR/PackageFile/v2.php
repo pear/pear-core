@@ -1241,11 +1241,15 @@ class PEAR_PackageFile_v2
     }
 
     /**
-     * Determines whether the passed in package is a subpackage of this package
+     * Determines whether the passed in package is a subpackage of this package.
+     *
+     * No version checking is done, only name verification.
      * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     * @return bool
      */
     function isSubpackage($p)
     {
+        $sub = array();
         if (isset($this->_packageInfo['dependencies']['required']['subpackage'])) {
             $sub = $this->_packageInfo['dependencies']['required']['subpackage'];
             if (!isset($sub[0])) {
@@ -1275,13 +1279,15 @@ class PEAR_PackageFile_v2
             }
         }
         foreach ($sub as $dep) {
-            if ($dep['name'] == $p->getPackage()) {
+            if (strtolower($dep['name']) == strtolower($p->getPackage())) {
                 if (isset($dep['channel'])) {
-                    if ($dep['channel'] == $p->getChannel()) {
+                    if (strtolower($dep['channel']) == strtolower($p->getChannel())) {
                         return true;
                     }
-                } else { // all uri deps are in the same virtual channel
-                    return true;
+                } else {
+                    if ($dep['uri'] == $p->getURI()) {
+                        return true;
+                    }
                 }
             }
         }
