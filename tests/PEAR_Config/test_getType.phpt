@@ -36,7 +36,7 @@ $phpunit->assertEquals('integer', $config->getType('cache_ttl'), 'cache_ttl');
 $phpunit->assertEquals('set', $config->getType('sig_type'), 'sig_type');
 $phpunit->assertEquals('string', $config->getType('sig_bin'), 'sig_bin');
 $phpunit->assertEquals('string', $config->getType('sig_keyid'), 'sig_keyid');
-$phpunit->assertEquals('string', $config->getType('sig_keydir'), 'sig_keydir');
+$phpunit->assertEquals('directory', $config->getType('sig_keydir'), 'sig_keydir');
 echo 'tests done';
 ?>
 --EXPECT--
