@@ -1,6 +1,6 @@
 <?php
 /**
- * PEAR_Command_Package (package, package-validate, cvsdiff, cvstag, run-tests, package-dependencies,
+ * PEAR_Command_Package (package, package-validate, cvsdiff, cvstag, package-dependencies,
  * sign, makerpm, convert commands)
  *
  * PHP versions 4 and 5
@@ -175,41 +175,6 @@ revisions of what files were in that release.  If need to fix something
 after running cvstag once, but before the tarball is released to the public,
 use the "slide" option to move the release tag.
 ',
-            ),
-        'run-tests' => array(
-            'summary' => 'Run Regression Tests',
-            'function' => 'doRunTests',
-            'shortcut' => 'rt',
-            'options' => array(
-                'recur' => array(
-                    'shortopt' => 'r',
-                    'doc' => 'Run tests in child directories, recursively.  4 dirs deep maximum',
-                ),
-                'ini' => array(
-                    'shortopt' => 'i',
-                    'doc' => 'actual string of settings to pass to php in format " -d setting=blah"',
-                    'arg' => 'SETTINGS'
-                ),
-                'realtimelog' => array(
-                    'shortopt' => 'l',
-                    'doc' => 'Log test runs/results as they are run',
-                ),
-                'quiet' => array(
-                    'shortopt' => 'q',
-                    'doc' => 'Only display detail for failed tests',
-                ),
-                'simple' => array(
-                    'shortopt' => 's',
-                    'doc' => 'Display simple output for all tests',
-                ),
-                'package' => array(
-                    'shortopt' => 'p',
-                    'doc' => 'Installed package from which to run tests',
-                    'arg' => '[CHANNEL/]PACKAGE'
-                ),
-            ),
-            'doc' => '[testfile|dir ...]
-Run regression tests with PHP\'s regression testing script (run-tests.php).',
             ),
         'package-dependencies' => array(
             'summary' => 'Show package dependencies',
@@ -561,153 +526,6 @@ used for automated conversion or learning the format.
             pclose($fp);
         }
         $this->ui->outputData($this->output, $command);
-        return true;
-    }
-
-    // }}}
-    // {{{ doRunTests()
-
-    function doRunTests($command, $options, $params)
-    {
-        require_once 'PEAR/Common.php';
-        require_once 'PEAR/RunTest.php';
-        require_once "System.php";
-        $log = new PEAR_Common;
-        $log->ui = &$this->ui; // slightly hacky, but it will work
-        $run = new PEAR_RunTest($log, $options);
-        $tests = array();
-        if (isset($options['recur'])) {
-            $depth = 4;
-        } else {
-            $depth = 1;
-        }
-        if (!count($params)) {
-            $params[] = '.';
-        }
-        if (isset($options['package'])) {
-            $reg = &$this->config->getRegistry();
-            $pname = $reg->parsePackageName($options['package'],
-                $this->config->get('default_channel'));
-            $package = &$reg->getPackage($pname['package'], $pname['channel']);
-            if (!$package) {
-                return PEAR::raiseError('Unknown package "' . $options['package'] . '"');
-            }
-            $filelist = $package->getFilelist();
-            foreach ($filelist as $name => $atts) {
-                if ($atts['role'] != 'test') {
-                    continue;
-                }
-                if (!preg_match('/\.phpt$/', $name)) {
-                    continue;
-                }
-                $params[] = $atts['installed_as'];
-            }
-        }
-        foreach ($params as $p) {
-            if (is_dir($p)) {
-                $dir = System::find(array($p, '-type', 'f',
-                                            '-maxdepth', $depth,
-                                            '-name', '*.phpt'));
-                $tests = array_merge($tests, $dir);
-            } else {
-                if (!@file_exists($p)) {
-                    if (!preg_match('/\.phpt$/', $p)) {
-                        $p .= '.phpt';
-                    }
-                    $dir = System::find(array(dirname($p), '-type', 'f',
-                                                '-maxdepth', $depth,
-                                                '-name', $p));
-                    $tests = array_merge($tests, $dir);
-                } else {
-                    $tests[] = $p;
-                }
-            }
-        }
-        $ini_settings = '';
-        if (isset($options['ini'])) {
-            $ini_settings .= $options['ini'];
-        }
-        if (isset($_ENV['TEST_PHP_INCLUDE_PATH'])) {
-            $ini_settings .= " -d include_path={$_ENV['TEST_PHP_INCLUDE_PATH']}";
-        }
-        if ($ini_settings) {
-            $this->ui->outputData('Using INI settings: "' . $ini_settings . '"');
-        }
-        $skipped = $passed = $failed = array();
-        $this->ui->outputData('Running ' . count($tests) . ' tests', $command);
-        $start = time();
-        if (isset($options['realtimelog'])) {
-            @unlink('run-tests.log');
-        }
-        foreach ($tests as $t) {
-            if (isset($options['realtimelog'])) {
-                $fp = @fopen('run-tests.log', 'a');
-                if ($fp) {
-                    fwrite($fp, "Running test $t...");
-                    fclose($fp);
-                }
-            }
-            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-            $result = $run->run($t, $ini_settings);
-            PEAR::staticPopErrorHandling();
-            if (PEAR::isError($result)) {
-                $this->log(0, $result->getMessage());
-                continue;
-            }
-            if (OS_WINDOWS) {
-                for($i=0;$i<2000;$i++) {
-                    $i = $i; // delay - race conditions on windows
-                }
-            }
-            if (isset($options['realtimelog'])) {
-                $fp = @fopen('run-tests.log', 'a');
-                if ($fp) {
-                    fwrite($fp, "$result\n");
-                    fclose($fp);
-                }
-            }
-            if ($result == 'FAILED') {
-            	$failed[] = $t;
-            }
-            if ($result == 'PASSED') {
-            	$passed[] = $t;
-            }
-            if ($result == 'SKIPPED') {
-            	$skipped[] = $t;
-            }
-        }
-        $total = date('i:s', time() - $start);
-        if (count($failed)) {
-            $output = "TOTAL TIME: $total\n";
-            $output .= count($passed) . " PASSED TESTS\n";
-            $output .= count($skipped) . " SKIPPED TESTS\n";
-    		$output .= count($failed) . " FAILED TESTS:\n";
-        	foreach ($failed as $failure) {
-        		$output .= $failure . "\n";
-        	}
-            if (isset($options['realtimelog'])) {
-                $fp = @fopen('run-tests.log', 'a');
-            } else {
-                $fp = @fopen('run-tests.log', 'w');
-            }
-            if ($fp) {
-                fwrite($fp, $output, strlen($output));
-                fclose($fp);
-                $this->ui->outputData('wrote log to "' . realpath('run-tests.log') . '"', $command);
-            }
-        } elseif (@file_exists('run-tests.log') && !@is_dir('run-tests.log')) {
-            @unlink('run-tests.log');
-        }
-        $this->ui->outputData('TOTAL TIME: ' . $total);
-        $this->ui->outputData(count($passed) . ' PASSED TESTS', $command);
-        $this->ui->outputData(count($skipped) . ' SKIPPED TESTS', $command);
-        if (count($failed)) {
-    		$this->ui->outputData(count($failed) . ' FAILED TESTS:', $command);
-        	foreach ($failed as $failure) {
-        		$this->ui->outputData($failure, $command);
-        	}
-        }
-
         return true;
     }
 

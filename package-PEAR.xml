@@ -140,6 +140,7 @@
   * fix potential fatal errors in run-tests command, -p option
   * fix --installroot option for installation
   * fix fatal error if package.xml has no version=&quot;X.0&quot;
+  * move run-tests command into its own file (testing may expand)
   * fix Bug #3966: Improper path in PEAR/PackageFile/v2.php
   * fix Bug #3990: PEAR_Error PEAR_EXCEPTION broken
   * fix Bug #4021: PEAR_Config file_exists can cause warnings
@@ -214,6 +215,10 @@
      </file>
      <file role="php" name="Mirror-init.php"/>
      <file role="php" name="Mirror.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file role="php" name="Test-init.php"/>
+     <file role="php" name="Test.php">
       <replace from="@package_version@" to="version" type="package-info" />
      </file>
     </dir>
