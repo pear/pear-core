@@ -153,25 +153,25 @@ parameter.
         $savechannel = $channel = $this->config->get('default_channel');
         $reg = &$this->config->getRegistry();
         $package = $params[0];
-        $channel = isset($options['channel']) ? $options['channel'] :
-            $this->config->get('default_channel');
-        if (!$reg->channelExists($channel)) {
-            return $this->raiseError('Channel "' . $channel . '" does not exist');
+        $parsed = $reg->parsePackageName($package);
+        if (PEAR::isError($parsed)) {
+            return $this->raiseError('Invalid package name "' . $package . '"');
         }
+        
+        $channel = $parsed['channel'];
         $this->config->set('default_channel', $channel);
         $chan = $reg->getChannel($channel);
         if ($chan->supportsREST()) {
         } else {
             $r = &$this->config->getRemote();
-            $info = $r->call('package.info', $package);
+            $info = $r->call('package.info', $parsed['package']);
         }
         if (PEAR::isError($info)) {
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($info);
         }
         if (!isset($info['name'])) {
-            $this->ui->outputData('No remote package "' . $package . '" was found');
-            return true;
+            return $this->raiseError('No remote package "' . $package . '" was found');
         }
 
         $installed = $reg->packageInfo($info['name'], null, $channel);
@@ -274,7 +274,8 @@ parameter.
                 if ($options['mode'] == 'notinstalled' && isset($installed['version']))
                     continue;
                 if ($options['mode'] == 'upgrades'
-                    && (!isset($installed['version']) || $installed['version'] == $info['stable']))
+                      && (!isset($installed['version']) || version_compare($installed['version'],
+                      $info['stable'], '>=')))
                 {
                     continue;
                 }
@@ -293,14 +294,19 @@ parameter.
                 );
         }
 
+        if (isset($options['mode']) && in_array($options['mode'], array('notinstalled', 'upgrades'))) {
+            $this->config->set('default_channel', $savechannel);
+            $this->ui->outputData($data, $command);
+            return true;
+        }
         foreach ($local_pkgs as $name) {
-            $info = $reg->packageInfo($name, null, $channel);
+            $info = &$reg->getPackage($name, $channel);
             $data['data']['Local'][] = array(
-                $reg->channelAlias($channel) . '/' . $info['package'],
+                $reg->channelAlias($channel) . '/' . $info->getPackage(),
                 '',
-                $info['version'],
-                $info['summary'],
-                @$info['release_deps']
+                $info->getVersion(),
+                $info->getSummary(),
+                $info->getDeps()
                 );
         }
 
@@ -334,19 +340,19 @@ parameter.
             }
         }
         $r = &$this->config->getRemote();
-        $available = $r->call('package.search', $package, $summary, true, true, true);
+        $available = $r->call('package.search', $package, $summary, true, 
+            $this->config->get('preferred_state') == 'stable', true);
         if (PEAR::isError($available)) {
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($available);
         }
         if (!$available) {
-            $this->ui->outputData('no packages found that match pattern "' . $package . '"');
-            return true;
+            return $this->raiseError('no packages found that match pattern "' . $package . '"');
         }
         $data = array(
-            'caption' => 'Matched packages:',
+            'caption' => 'Matched packages, channel ' . $channel . ':',
             'border' => true,
-            'headline' => array('Channel', 'Package', 'Stable/(Latest)', 'Local'),
+            'headline' => array('Package', 'Stable/(Latest)', 'Local'),
             );
 
         foreach ($available as $name => $info) {
@@ -363,7 +369,6 @@ parameter.
                 $info['stable'] = 'none';
             }
             $data['data'][$info['category']][] = array(
-                $channel,
                 $name,
                 $info['stable'] . $unstable,
                 $installed['version'],
