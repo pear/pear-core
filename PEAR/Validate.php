@@ -38,6 +38,18 @@ class PEAR_Validate
      */
     var $_validStates = array('alpha','beta','stable','snapshot','devel');
     /**
+     * Valid file installation roles
+     * @var array
+     * @access private
+     */
+    var $_validInstallRoles = array('php','ext','test','doc','data','src','script');
+    /**
+     * Valid dependency relations
+     * @var array
+     * @access private
+     */
+    var $_validDepRelations = array('has','eq','lt','le','gt','ge','not');
+    /**
      * Format: ('error' => array('field' => name, 'reason' => reason), 'warning' => same)
      * @var array
      * @access private
@@ -59,16 +71,42 @@ class PEAR_Validate
         return (bool)preg_match('/^' . $this->packageregex . '$/', $name);
     }
 
+    function validState($state)
+    {
+        return in_array($state, $this->_validStates);
+    }
+
+    function getValidStates()
+    {
+        return $this->_validStates;
+    }
+
+    function validInstallRole($role)
+    {
+        return in_array($role, $this->_validInstallRoles);
+    }
+
+    function validDepRelation($rel)
+    {
+        return in_array($rel, $this->_validDepRelations);
+    }
+
     function setPackageFile(&$pf)
     {
         $this->_packagexml = &$pf;
     }
 
+    /**
+     * @access private
+     */
     function _addFailure($field, $reason)
     {
         $this->_failures['error'] = array('field' => $field, 'reason' => $reason);
     }
 
+    /**
+     * @access private
+     */
     function _addWarning($field, $reason)
     {
         $this->_failures['warning'] = array('field' => $field, 'reason' => $reason);
@@ -89,14 +127,28 @@ class PEAR_Validate
         $this->validateVersion();
         $this->validateMaintainers();
         $this->validateDate();
+        $this->validateSummary();
+        $this->validateDescription();
+        $this->validateLicense();
+        $this->validateNotes();
         if ($this->_packagexml->getPackagexmlVersion() == '1.0') {
             $this->validateState();
+            $this->validateFilelist();
         } elseif ($this->_packagexml->getPackagexmlVersion() == '2.0') {
             $this->validateTime();
             $this->validateStability();
+            $this->validateDeps();
+            $this->validateMainFilelist();
+            $this->validateReleaseFilelist();
+            $this->validateBundles();
+            $this->validateGlobalTasks();
+            $this->validateChangelog();
         }
     }
 
+    /**
+     * @access protected
+     */
     function validatePackageName()
     {
         if ($this->_state == PEAR_VALIDATE_PACKAGING ||
@@ -120,6 +172,9 @@ class PEAR_Validate
         }
     }
 
+    /**
+     * @access protected
+     */
     function validateVersion()
     {
         if ($this->_state != PEAR_VALIDATE_PACKAGING) {
@@ -211,6 +266,9 @@ class PEAR_Validate
         }
     }
 
+    /**
+     * @access protected
+     */
     function validateMaintainers()
     {
         // maintainers can only be truly validated server-side for most channels
@@ -218,6 +276,9 @@ class PEAR_Validate
         return true;
     }
 
+    /**
+     * @access protected
+     */
     function validateDate()
     {
         // packager automatically sets date, so only validate if
@@ -238,6 +299,9 @@ class PEAR_Validate
         return true;
     }
 
+    /**
+     * @access protected
+     */
     function validateTime()
     {
         if (!$this->_packagexml->getTime()) {
@@ -262,35 +326,118 @@ class PEAR_Validate
         return true;
     }
 
+    /**
+     * @access protected
+     */
     function validateState()
     {
-        if (!in_array($this->_packagexml->getState(), $this->_validStates)) {
+        // this is the closest to "final" php4 can get
+        if (!PEAR_Validate::validState($this->_packagexml->getState())) {
             $this->_addFailure('state', 'release state "' .
                 $this->_packagexml->getState() . '" is not valid, must be one of: ' .
-                implode(', ', $this->_validStates));
+                implode(', ', PEAR_Validate::getValidStates()));
             return false;
         }
         return true;
     }
 
+    /**
+     * @access protected
+     */
     function validateStability()
     {
         $ret = true;
         $packagestability = $this->_packagexml->getState();
         $apistability = $this->_packagexml->getState('api');
-        if (!in_array($packagestability, $this->_validStates)) {
+        if (!PEAR_Validate::validState($packagestability)) {
             $this->_addFailure('state', 'package stability "' .
                 $this->_packagexml->getState() . '" is not valid, must be one of: ' .
-                implode(', ', $this->_validStates));
+                implode(', ', PEAR_Validate::getValidStates()));
             $ret = false;
         }
-        if (!in_array($apistability, $this->_validStates)) {
+        if (!PEAR_Validate::validState($apistability)) {
             $this->_addFailure('state', 'API stability "' .
                 $this->_packagexml->getState() . '" is not valid, must be one of: ' .
-                implode(', ', $this->_validStates));
+                implode(', ', PEAR_Validate::getValidStates()));
             $ret = false;
         }
         return $ret;
+    }
+
+    /**
+     * @access protected
+     */
+    function validateSummary()
+    {
+        return true;
+    }
+
+    /**
+     * @access protected
+     */
+    function validateDescription()
+    {
+        return true;
+    }
+
+    /**
+     * @access protected
+     */
+    function validateLicense()
+    {
+        return true;
+    }
+
+    /**
+     * @access protected
+     */
+    function validateNotes()
+    {
+        return true;
+    }
+
+    /**
+     * for package.xml 2.0 only - channels can't use package.xml 1.0
+     * @access protected
+     */
+    function validateDependencies()
+    {
+        return true;
+    }
+
+    /**
+     * for package.xml 1.0 only
+     * @access private
+     */
+    function _validateFilelist()
+    {
+        return true; // placeholder for now
+    }
+
+    /**
+     * for package.xml 2.0 only
+     * @access protected
+     */
+    function validateMainFilelist()
+    {
+        return true; // placeholder for now
+    }
+
+    /**
+     * for package.xml 2.0 only
+     * @access protected
+     */
+    function validateReleaseFilelist()
+    {
+        return true; // placeholder for now
+    }
+
+    /**
+     * @access protected
+     */
+    function validateChangelog()
+    {
+        return true;
     }
 }
 ?>

@@ -120,7 +120,7 @@ class PEAR_PackageFile_v2
         if (isset($this->_packageInfo['name']['attribs']['channel'])) {
             return $this->_packageInfo['name']['attribs']['channel'];
         }
-        return 'pear';
+        return false;
     }
 
     function getName()
@@ -132,6 +132,14 @@ class PEAR_PackageFile_v2
     {
         if (isset($this->_packageInfo['name']['_content'])) {
             return $this->_packageInfo['name']['_content'];
+        }
+        return false;
+    }
+    
+    function getExtends()
+    {
+        if (isset($this->_packageInfo['extends']['_content'])) {
+            return $this->_packageInfo['extends']['_content'];
         }
         return false;
     }
@@ -354,6 +362,7 @@ class PEAR_PackageFile_v2
         $structure =
         array(
             'name->channel',
+            'extends?',
             'summary',
             'description',
             '+lead->user->email->name->active',

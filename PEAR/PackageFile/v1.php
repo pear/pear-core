@@ -544,42 +544,22 @@ class PEAR_PackageFile_v1
     function _getErrorMessage()
     {
         return array(
-                PEAR_PACKAGEFILE_ERROR_INVALID_PACKAGEVERSION =>
-                    'While parsing package.xml, an invalid <package> version number "%version% was passed in, expecting one of %versions%',
-                PEAR_PACKAGEFILE_ERROR_NO_PACKAGEVERSION =>
-                    'No version number found in <package> tag',
-                PEAR_PACKAGEFILE_ERROR_NO_XML_EXT =>
-                    '%error%',
-                PEAR_PACKAGEFILE_ERROR_CANT_MAKE_PARSER =>
-                    'Unable to create XML parser',
-                PEAR_PACKAGEFILE_ERROR_PARSER_ERROR =>
-                    '%error%',
                 PEAR_PACKAGEFILE_ERROR_NO_NAME =>
                     'Missing Package Name',
-                PEAR_PACKAGEFILE_ERROR_INVALID_NAME =>
-                    'Invalid Package Name "%name%"',
                 PEAR_PACKAGEFILE_ERROR_NO_SUMMARY =>
                     'No summary found',
-                PEAR_PACKAGEFILE_ERROR_UNKNOWN_CHANNEL =>
-                    'Unknown channel, "%channel%"',
                 PEAR_PACKAGEFILE_ERROR_MULTILINE_SUMMARY =>
                     'Summary should be on one line',
                 PEAR_PACKAGEFILE_ERROR_NO_DESCRIPTION =>
                     'Missing description',
                 PEAR_PACKAGEFILE_ERROR_NO_LICENSE =>
                     'Missing license',
-                PEAR_PACKAGEFILE_ERROR_INVALID_VERSION =>
-                    'Invalid <version> version "%version%"',
                 PEAR_PACKAGEFILE_ERROR_NO_VERSION =>
-                    'No <version> version found',
+                    'No release version found',
                 PEAR_PACKAGEFILE_ERROR_NO_STATE =>
-                    'No state found',
-                PEAR_PACKAGEFILE_ERROR_INVALID_STATE =>
-                    'Invalid state "%state%", expecting one of "%states%"',
+                    'No release state found',
                 PEAR_PACKAGEFILE_ERROR_NO_DATE =>
                     'No release date found',
-                PEAR_PACKAGEFILE_ERROR_INVALID_DATE =>
-                    'Invalid release date "%date%", format is YYYY-MM-DD',
                 PEAR_PACKAGEFILE_ERROR_NO_NOTES =>
                     'No release notes found',
                 PEAR_PACKAGEFILE_ERROR_NO_MAINTAINERS =>
@@ -587,35 +567,21 @@ class PEAR_PackageFile_v1
                 PEAR_PACKAGEFILE_ERROR_NO_MAINTHANDLE =>
                     'Maintainer %index% has no handle (user ID at channel server)',
                 PEAR_PACKAGEFILE_ERROR_NO_MAINTROLE =>
-                    'Maintainer %index% has no role, must be one of %roles%',
+                    'Maintainer %index% has no role',
                 PEAR_PACKAGEFILE_ERROR_NO_MAINTNAME =>
                     'Maintainer %index% has no name',
                 PEAR_PACKAGEFILE_ERROR_NO_MAINTEMAIL =>
                     'Maintainer %index% has no email',
-                PEAR_PACKAGEFILE_ERROR_INVALID_MAINTROLE =>
-                    'Maintainer %index% has invalid role "%role%", must be one of %roles%',
                 PEAR_PACKAGEFILE_ERROR_NO_DEPNAME =>
                     'Dependency %index% is not a php dependency, and has no name',
                 PEAR_PACKAGEFILE_ERROR_NO_DEPREL =>
-                    'Dependency %index% has no relation, expecting one of %rels%',
+                    'Dependency %index% has no relation',
                 PEAR_PACKAGEFILE_ERROR_NO_DEPTYPE =>
-                    'Dependency %index% has no type, expecting one of %types%',
+                    'Dependency %index% has no type',
                 PEAR_PACKAGEFILE_ERROR_NO_DEPVERSION =>
                     'Dependency %index% is not a rel="has" dependency, and has no version',
-                PEAR_PACKAGEFILE_ERROR_INVALID_DEPREL =>
-                    'Dependency %index% has invalid relation "%rel%", expecting one of %rels%',
-                PEAR_PACKAGEFILE_ERROR_INVALID_DEPTYPE =>
-                    'Dependency %index% has invalid type "%type%", expecting one of %types%',
-                PEAR_PACKAGEFILE_ERROR_INVALID_DEPNAME =>
-                    'Dependency %index% has a package dependency with invalid package name "%name%"',
                 PEAR_PACKAGEFILE_ERROR_INVALID_DEPOPTIONAL =>
                     'Dependency %index% has invalid optional value "%opt%", should be yes or no',
-                PEAR_PACKAGEFILE_ERROR_UNKNOWN_DEPCHANNEL =>
-                    'Dependency %index% requires unknown channel "%channel%"',
-                PEAR_PACKAGEFILE_ERROR_DEPNAME_IGNORED =>
-                    'Dependency %index% is type="php", name "%name%" will be ignored',
-                PEAR_PACKAGEFILE_ERROR_DEPVERSION_IGNORED =>
-                    'Dependency %index% is rel="has", version "%version%" will be ignored',
                 PEAR_PACKAGEFILE_ERROR_NO_CONFNAME =>
                     'Configure Option %index% has no name',
                 PEAR_PACKAGEFILE_ERROR_NO_CONFPROMPT =>
@@ -624,8 +590,6 @@ class PEAR_PackageFile_v1
                     'No files in <filelist> section of package.xml',
                 PEAR_PACKAGEFILE_ERROR_NO_FILEROLE =>
                     'File "%file%" has no role, expecting one of "%roles%"',
-                PEAR_PACKAGEFILE_ERROR_INVALID_FILEROLE =>
-                    'File "%file%" has invalid role "%role%", expecting one of "%roles%"',
                 PEAR_PACKAGEFILE_ERROR_INVALID_PHPFILE =>
                     'Parser error: Invalid PHP file "%file%"',
                 PEAR_PACKAGEFILE_ERROR_NO_PNAME_PREFIX =>
@@ -659,22 +623,12 @@ class PEAR_PackageFile_v1
         }
         if (empty($info['version'])) {
             $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_VERSION);
-        } elseif (!PEAR_Common::validPackageVersion($info['version'])) {
-            $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_VERSION,
-                array('version' => $info['version']));
         }
         if (empty($info['release_state'])) {
             $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_STATE);
-        } elseif (!in_array($info['release_state'], PEAR_Common::getReleaseStates())) {
-            $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_STATE,
-                array('state' => $info['release_state'],
-                      'states' => PEAR_Common::getReleaseStates()));
         }
         if (empty($info['release_date'])) {
             $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_DATE);
-        } elseif (!preg_match('/^\d{4}-\d\d-\d\d$/', $info['release_date'])) {
-            $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_DATE,
-                array('date' => $info['release_date']));
         }
         if (empty($info['release_notes'])) {
             $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_NOTES);
@@ -691,10 +645,6 @@ class PEAR_PackageFile_v1
                 if (empty($m['role'])) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_MAINTROLE,
                         array('index' => $i, 'roles' => PEAR_Common::getUserRoles()));
-                } elseif (!in_array($m['role'], PEAR_Common::getUserRoles())) {
-                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_MAINTROLE,
-                        array('index' => $i, 'role' => $m['role'], 'roles' =>
-                            PEAR_Common::getUserRoles()));
                 }
                 if (empty($m['name'])) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_MAINTNAME,
@@ -713,18 +663,10 @@ class PEAR_PackageFile_v1
                 if (empty($d['type'])) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_DEPTYPE,
                         array('index' => $i, 'types' => PEAR_Common::getDependencyTypes()));
-                } elseif (!in_array($d['type'], PEAR_Common::getDependencyTypes())) {
-                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_DEPTYPE,
-                        array('index' => $i, 'types' => PEAR_Common::getDependencyTypes(),
-                              'type' => $d['type']));
                 }
                 if (empty($d['rel'])) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_DEPREL,
                         array('index' => $i, 'rels' => PEAR_Common::getDependencyRelations()));
-                } elseif (!in_array($d['rel'], PEAR_Common::getDependencyRelations())) {
-                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_DEPREL,
-                        array('index' => $i, 'types' => PEAR_Common::getDependencyRelations(),
-                              'type' => $d['rel']));
                 }
                 if (!empty($d['optional'])) {
                     if (!in_array($d['optional'], array('yes', 'no'))) {
@@ -745,38 +687,6 @@ class PEAR_PackageFile_v1
                 } elseif ($d['type'] != 'php' && empty($d['name'])) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_DEPNAME,
                         array('index' => $i));
-                }
-                if (isset($this->_registry)) {
-                    if (isset($d['channel'])) {
-                        if (!$this->_registry->channelExists($d['channel'])) {
-                            $this->_validateError(PEAR_PACKAGEFILE_ERROR_UNKNOWN_DEPCHANNEL,
-                                array('index' => $i, 'channel' => $d['channel']));
-                        } else {
-                            if ($d['type'] == 'pkg' && !empty($d['name'])) {
-                                $channel = $this->_registry->getChannel($d['channel']);
-                                if ($channel) {
-                                    if (!$channel->validPackageName($d['name'])) {
-                                        $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_DEPNAME,
-                                            array('index' => $i, 'name' => $d['name']));
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        if ($d['type'] == 'pkg' && !empty($d['name'])) {
-                            if (!PEAR_Common::validPackageName($d['name'])) {
-                                $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_DEPNAME,
-                                    array('index' => $i, 'name' => $d['name']));
-                            }
-                        }
-                    }
-                } else {
-                    if ($d['type'] == 'pkg' && !empty($d['name'])) {
-                        if (!PEAR_Common::validPackageName($d['name'])) {
-                            $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_DEPNAME,
-                                array('index' => $i, 'name' => $d['name']));
-                        }
-                    }
                 }
                 $i++;
             }
