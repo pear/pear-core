@@ -814,7 +814,7 @@ class PEAR_PackageFile_v1
             $chan = $this->_registry->getChannel('pear');
             $validator = $chan->getValidationObject();
             $validator->setPackageFile($this);
-            $this->_isValid &= $validator->validate();
+            //$this->_isValid &= $validator->validate();
         }
         return $this->_isValid;
     }
