@@ -441,9 +441,9 @@ class PEAR_Config extends PEAR
             'group' => 'Maintainers',
             ),
         'sig_keydir' => array(
-            'type' => 'string',
+            'type' => 'directory',
             'default' => PEAR_CONFIG_DEFAULT_SIG_KEYDIR,
-            'doc' => 'which package signature mechanism to use',
+            'doc' => 'directory where signature keys are located',
             'prompt' => 'Signature Key Directory',
             'group' => 'Maintainers',
             ),
