@@ -15,21 +15,21 @@ if (PEAR::isError($test)) {
 }
 $test->setOptions(
 array('baseinstalldir' => 'PEAR',
-'version' => '1.4.0a9',
+'version' => '1.4.0a10',
 'packagedirectory' => dirname(__FILE__),
 'state' => 'alpha',
 'filelistgenerator' => 'cvs',
 'roles' => array('*' => 'test'),
-'notes' => 'Tests for PEAR 1.4.0a9',
+'notes' => 'Tests for PEAR 1.4.0a10',
 'simpleoutput' => true,
 'packagefile' => 'package-PEARtests.xml',
 'cleardependencies' => true,
 'maintainers' => array(),
 'ignore' => array('generatetestPackage.xml.php.inc')));
 $test->addMaintainer('cellog', 'lead', 'Greg Beaver', 'cellog@php.net');
-$test->addDependency('PEAR', '1.4.0a9');
+$test->addDependency('PEAR', '1.4.0a10');
 $test->addDependency('Text_Diff', false, 'has', 'pkg', true);
-if (isset($_GET['make'])) {
+if (isset($_GET['make']) || (isset($_SERVER['argv']) && $_SERVER['argv'] == 'make')) {
     $e = $test->writePackageFile();
 } else {
     $e = $test->debugPackageFile();
