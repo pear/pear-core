@@ -132,22 +132,39 @@ http://pear.php.net/dtd/package-2.0.xsd',
         include_once 'System.php';
         if ($where === null) {
             if (!($where = System::mktemp(array('-d')))) {
-                return $this->raiseError("PEAR_Packagefile: mktemp failed");
+                return PEAR::raiseError('PEAR_Packagefile_v2::toTgz: mktemp failed');
             }
+        } elseif (!@System::mkDir(array('-p', $where))) {
+            return PEAR::raiseError('PEAR_Packagefile_v2::toTgz: "' . $where . '" could' .
+                ' not be created');
+        }
+        if (file_exists($where . DIRECTORY_SEPARATOR . 'package.xml') &&
+              !is_file($where . DIRECTORY_SEPARATOR . 'package.xml')) {
+            return PEAR::raiseError('PEAR_Packagefile_v2::toTgz: unable to save package.xml as' .
+                ' "' . $where . DIRECTORY_SEPARATOR . 'package.xml"');
         }
         if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING)) {
-            return false;
+            return PEAR::raiseError('PEAR_Packagefile_v2::toTgz: invalid package file');
+        }
+        $ext = $compress ? '.tgz' : '.tar';
+        $pkgver = $this->_packagefile->getPackage() . '-' . $this->_packagefile->getVersion();
+        $dest_package = getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext;
+        if (file_exists(getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext) &&
+              !is_file(getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext)) {
+            return PEAR::raiseError('PEAR_Packagefile_v2::toTgz: cannot create tgz file "' .
+                getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext . '"');
         }
         if ($pkgfile = $this->_packagefile->getPackageFile()) {
             $pkgdir = dirname(realpath($pkgfile));
             $pkgfile = basename($pkgfile);
         } else {
-            return false;
+            return PEAR::raiseError('PEAR_Packagefile_v2::toTgz: package file object must ' .
+                'be created from a real file');
         }
-        $pkgver = $this->_packagefile->getPackage() . '-' . $this->_packagefile->getVersion();
         // {{{ Create the package file list
         $filelist = array();
         $i = 0;
+        $this->_packagefile->flattenFilelist();
         $contents = $this->_packagefile->getContents();
         $contents = $contents['dir']['file'];
         if (isset($contents['attribs'])) {
@@ -209,8 +226,6 @@ http://pear.php.net/dtd/package-2.0.xsd',
         }
         $packagexml = $this->toPackageFile($where, PEAR_VALIDATE_PACKAGING, $name);
         if ($packagexml) {
-            $ext = $compress ? '.tgz' : '.tar';
-            $dest_package = getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext;
             $tar =& new Archive_Tar($dest_package, $compress);
             $tar->setErrorHandling(PEAR_ERROR_RETURN); // XXX Don't print errors
             // ----- Creates with the package.xml file
@@ -218,12 +233,13 @@ http://pear.php.net/dtd/package-2.0.xsd',
             if (PEAR::isError($ok)) {
                 return $packager->raiseError($ok);
             } elseif (!$ok) {
-                return $packager->raiseError('PEAR_Packagefile::toTgz(): adding ' . $name .
+                return $packager->raiseError('PEAR_Packagefile_v2::toTgz(): adding ' . $name .
                     ' failed');
             }
             // ----- Add the content of the package
             if (!$tar->addModify($filelist, $pkgver, $where)) {
-                return $packager->raiseError('PEAR_Packagefile::toTgz(): tarball creation failed');
+                return $packager->raiseError(
+                    'PEAR_Packagefile_v2::toTgz(): tarball creation failed');
             }
             // add the package.xml version 1.0
             if ($pf1 !== null) {
@@ -231,8 +247,8 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 $packagexml1 = $pfgen->toPackageFile($where, PEAR_VALIDATE_PACKAGING,
                     'package.xml', true);
                 if (!$tar->addModify(array($packagexml1), '', $where)) {
-                    return $packager->raiseError('PEAR_Packagefile::toTgz(): adding package.xml ' .
-                        'failed');
+                    return $packager->raiseError(
+                        'PEAR_Packagefile_v2::toTgz(): adding package.xml failed');
                 }
             }
             return $dest_package;
@@ -242,19 +258,23 @@ http://pear.php.net/dtd/package-2.0.xsd',
     function toPackageFile($where = null, $state = PEAR_VALIDATE_NORMAL, $name = 'package.xml')
     {
         if (!$this->_packagefile->validate($state)) {
-            return PEAR::raiseError('PEAR_Packagefile::toPackageFile: invalid package.xml',
+            return PEAR::raiseError('PEAR_Packagefile_v2::toPackageFile: invalid package.xml',
                 null, null, null, $this->_packagefile->getValidationWarnings());
         }
         include_once 'System.php';
         if ($where === null) {
             if (!($where = System::mktemp(array('-d')))) {
-                return PEAR::raiseError("PEAR_Packagefile::toPackageFile: mktemp failed");
+                return PEAR::raiseError('PEAR_Packagefile_v2::toPackageFile: mktemp failed');
             }
+        } elseif (!@System::mkDir(array('-p', $where))) {
+            return PEAR::raiseError('PEAR_Packagefile_v2::toPackageFile: "' . $where . '" could' .
+                ' not be created');
         }
         $newpkgfile = $where . DIRECTORY_SEPARATOR . $name;
         $np = @fopen($newpkgfile, 'wb');
         if (!$np) {
-            return PEAR::raiseError("PEAR_Packagefile::toPackageFile: unable to save $name as $newpkgfile");
+            return PEAR::raiseError('PEAR_Packagefile_v2::toPackageFile: unable to save ' .
+               "$name as $newpkgfile");
         }
         fwrite($np, $this->toXml($state));
         fclose($np);
@@ -288,7 +308,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
         if (isset($arr['filelist'])) {
             unset($arr['filelist']);
         }
-        if ($state ^ PEAR_VALIDATE_PACKAGING) {
+        if ($state ^ PEAR_VALIDATE_PACKAGING && !isset($arr['bundle'])) {
             $use = $this->_recursiveXmlFilelist($arr['contents']['dir']['file']);
             unset($arr['contents']['dir']['file']);
             if (isset($use['dir'])) {
@@ -298,8 +318,8 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 $arr['contents']['dir']['file'] = $use['file'];
             }
             $this->options['beautifyFilelist'] = true;
-            $arr['attribs']['packagerversion'] = '@PEAR-VER@';
         }
+        $arr['attribs']['packagerversion'] = '@PEAR-VER@';
         if ($this->serialize($arr, $options)) {
             return $this->_serializedData;
         }
