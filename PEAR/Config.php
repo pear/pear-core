@@ -274,6 +274,13 @@ class PEAR_Config extends PEAR
             'prompt' => 'Default Channel',
             'group' => 'Internet Access',
             ),
+        'auto_discover' => array(
+            'type' => 'integer',
+            'default' => 0,
+            'doc' => 'whether to automatically discover new channels',
+            'prompt' => 'Auto-discover new Channels',
+            'group' => 'Internet Access',
+            ),
         // Internet Access
         'master_server' => array(
             'type' => 'string',
