@@ -142,12 +142,7 @@ class PEAR_Registry extends PEAR
 
     function _initializeDirs()
     {
-        static $called = false;
-        if ($called) {
-            return;
-        }
         $ds = DIRECTORY_SEPARATOR;
-        $called = true;
         // XXX Compatibility code should be removed in the future
         // rename all registry files if any to lowercase
         if (!OS_WINDOWS && $handle = @opendir($this->statedir)) {
@@ -252,6 +247,7 @@ class PEAR_Registry extends PEAR
             if (!System::mkdir(array('-p', $this->statedir))) {
                 return $this->raiseError("could not create directory '{$this->statedir}'");
             }
+            $this->_initializeDirs();
         }
         return true;
     }
@@ -343,7 +339,6 @@ class PEAR_Registry extends PEAR
      */
     function _channelFileName($channel, $noaliases = false)
     {
-        $this->_initializeDirs();
         if (!$channel) {
             $channel = 'pear.php.net';
         }
@@ -377,7 +372,6 @@ class PEAR_Registry extends PEAR
      */
     function _getChannelFromAlias($channel)
     {
-        $this->_initializeDirs();
         if (!$this->_channelExists($channel)) {
             if ($channel == 'pear.php.net') {
                 return 'pear.php.net';
@@ -419,7 +413,6 @@ class PEAR_Registry extends PEAR
 
     function _openPackageFile($package, $mode, $channel = false)
     {
-        $this->_initializeDirs();
         $this->_assertStateDir($channel);
         $file = $this->_packageFileName($package, $channel);
         $fp = @fopen($file, $mode);
@@ -442,7 +435,6 @@ class PEAR_Registry extends PEAR
 
     function _openChannelFile($channel, $mode)
     {
-        $this->_initializeDirs();
         $this->_assertChannelDir();
         $file = $this->_channelFileName($channel);
         $fp = @fopen($file, $mode);
@@ -519,7 +511,6 @@ class PEAR_Registry extends PEAR
 
     function _readFileMap()
     {
-        $this->_initializeDirs();
         $fp = @fopen($this->filemap, 'r');
         if (!$fp) {
             return $this->raiseError('PEAR_Registry: could not open filemap', PEAR_REGISTRY_ERROR_FILE, null, null, $php_errormsg);
@@ -627,7 +618,6 @@ class PEAR_Registry extends PEAR
      */
     function _channelExists($channel, $noaliases = false)
     {
-        $this->_initializeDirs();
         return file_exists($this->_channelFileName($channel, $noaliases));
     }
 
@@ -742,7 +732,6 @@ class PEAR_Registry extends PEAR
      */
     function _isChannelAlias($alias)
     {
-        $this->_initializeDirs();
         return file_exists($this->_getChannelAliasFileName($alias));
     }
 
@@ -824,7 +813,6 @@ class PEAR_Registry extends PEAR
 
     function _listChannels()
     {
-        $this->_initializeDirs();
         $channellist = array();
         $dp = @opendir($this->channelsdir);
         if (!$dp) {
@@ -848,7 +836,6 @@ class PEAR_Registry extends PEAR
         if ($channel && $this->_getChannelFromAlias($channel) != 'pear.php.net') {
             return $this->_listChannelPackages($channel);
         }
-        $this->_initializeDirs();
         $pkglist = array();
         $dp = @opendir($this->statedir);
         if (!$dp) {
@@ -869,7 +856,6 @@ class PEAR_Registry extends PEAR
 
     function _listChannelPackages($channel)
     {
-        $this->_initializeDirs();
         $pkglist = array();
         $dp = @opendir($this->statedir . DIRECTORY_SEPARATOR . '.channel.' . strtolower($channel));
         if (!$dp) {
@@ -896,6 +882,13 @@ class PEAR_Registry extends PEAR
         return $ret;
     }
 
+    /**
+     * Add an installed package to the registry
+     * @param string package name
+     * @param array package info (parsed by PEAR_Common::infoFrom*() methods)
+     * @return bool success of saving
+     * @access private
+     */
     function _addPackage($package, $info)
     {
         if ($this->_packageExists($package)) {
@@ -917,15 +910,23 @@ class PEAR_Registry extends PEAR
         return true;
     }
 
+    /**
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     * @return bool
+     * @access private
+     */
     function _addPackage2($info)
     {
+        if (!$info->validate()) {
+            return false;
+        }
         $channel = $info->getChannel();
         $package = $info->getPackage();
         $save = $info;
         if ($this->_packageExists($package, $channel)) {
             return false;
         }
-        if (!$this->_channelExists($channel)) {
+        if (!$this->_channelExists($channel, true)) {
             return false;
         }
         $info = $info->toArray(true);
@@ -1199,6 +1200,13 @@ class PEAR_Registry extends PEAR
     // }}}
     // {{{ addPackage()
 
+    /**
+     * Add an installed package to the registry
+     * @param string|PEAR_PackageFile_v1|PEAR_PackageFile_v2 package name or object
+     *               that will be passed to {@link addPackage2()}
+     * @param array package info (parsed by PEAR_Common::infoFrom*() methods)
+     * @return bool success of saving
+     */
     function addPackage($package, $info)
     {
         if (is_object($info)) {
@@ -1233,8 +1241,10 @@ class PEAR_Registry extends PEAR
         }
         $ret = $this->_addPackage2($info);
         $this->_unlock();
-        $this->_dependencyDB->uninstallPackage($info);
-        $this->_dependencyDB->installPackage($info);
+        if ($ret) {
+            $this->_dependencyDB->uninstallPackage($info);
+            $this->_dependencyDB->installPackage($info);
+        }
         return $ret;
     }
 
