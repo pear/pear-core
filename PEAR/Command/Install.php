@@ -462,7 +462,7 @@ Run post-installation scripts in package <package>, if any exist.
                             $groups = array($groups);
                         }
                         foreach ($groups as $group) {
-                            $this->ui->outputData('Notice: Optional feature ' .
+                            $this->ui->outputData($param->getPackage() . ': Optional feature ' .
                                 $group['attribs']['name'] . ' available (' .
                                 $group['attribs']['hint'] . ')');
                         }
@@ -473,7 +473,7 @@ Run post-installation scripts in package <package>, if any exist.
                 $pkg = &$reg->getPackage($param->getPackage(), $param->getChannel());
                 $pkg->setConfig($this->config);
                 if ($list = $pkg->listPostinstallScripts()) {
-                    $extrainfo[] = 'This package has post-install scripts:';
+                    $extrainfo[] = $param->getPackage() . ' has post-install scripts:';
                     foreach ($list as $file) {
                         $extrainfo[] = $file;
                     }
