@@ -247,7 +247,10 @@ class PEAR_Warning
                 self::_signal($warning);
             }
         }
-        self::$_hasWarnings = true;
+        if (self::$go) {
+            self::$_hasWarnings = true;
+            self::$warnings[] = $warning;
+        }
     }
 
     /**
