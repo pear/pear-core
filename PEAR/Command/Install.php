@@ -271,32 +271,36 @@ package if needed.
             $options['upgrade'] = true;
             $reg = new PEAR_Registry($this->config->get('php_dir'));
             $remote = &new PEAR_Remote($this->config, $reg);
-            $channel = $this->config->get('default_channel');
-            $state = $this->config->get('preferred_state');
-            if (empty($state) || $state == 'any') {
-                $latest = $remote->call("package.listLatestReleases");
-            } else {
-                $latest = $remote->call("package.listLatestReleases", $state);
-            }
-            if (PEAR::isError($latest)) {
-                return $latest;
-            }
-            $installed = array_flip($reg->listPackages());
-            $params = array();
-            foreach ($latest as $package => $info) {
-                $package = strtolower($package);
-                if (!isset($installed[$package])) {
-                    // skip packages we don't have installed
-                    continue;
+            $savechannel = $this->config->get('default_channel');
+            foreach ($reg->listChannels as $channel) {
+                $this->config->set('default_channel', $channel);
+                $state = $this->config->get('preferred_state');
+                if (empty($state) || $state == 'any') {
+                    $latest = $remote->call("package.listLatestReleases");
+                } else {
+                    $latest = $remote->call("package.listLatestReleases", $state);
                 }
-                $inst_version = $reg->packageInfo($package, 'version');
-                if (version_compare("$info[version]", "$inst_version", "le")) {
-                    // installed version is up-to-date
-                    continue;
+                if (PEAR::isError($latest)) {
+                    return $latest;
                 }
-                $params[] = $channel . '::' . $package;
-                $this->ui->outputData(array('data' => "Will upgrade $package"), $command);
+                $installed = array_flip($reg->listPackages($channel));
+                $params = array();
+                foreach ($latest as $package => $info) {
+                    $package = strtolower($package);
+                    if (!isset($installed[$package])) {
+                        // skip packages we don't have installed
+                        continue;
+                    }
+                    $inst_version = $reg->packageInfo($package, 'version', $channel);
+                    if (version_compare("$info[version]", "$inst_version", "le")) {
+                        // installed version is up-to-date
+                        continue;
+                    }
+                    $params[] = $channel . '::' . $package;
+                    $this->ui->outputData(array('data' => "Will upgrade $package"), $command);
+                }
             }
+            $this->config->set('default_channel', $savechannel);
         }
         $this->downloader = &new PEAR_Downloader($this->ui, $options, $this->config);
         $errors = array();
