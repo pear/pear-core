@@ -97,7 +97,7 @@ Greg Beaver <cellog@php.net> (helper)',
         12 => 
         array (
           0 => 'Last Modified',
-          1 => '2004-12-06',
+          1 => date('Y-m-d'),
         ),
       ),
       'raw' => 
@@ -117,7 +117,7 @@ Greg Beaver <cellog@php.net> (helper)',
         'release_notes' => 'Fix to preserve BC with 1.0 and allow correct behaviour for new users',
         'package.xml version' => '1.0',
         'packaged with PEAR version' => '1.4.0a1',
-        'Last Modified' => '2004-12-06',
+        'Last Modified' => date('Y-m-d'),
       ),
     ),
     'cmd' => 'package-info',
