@@ -55,20 +55,20 @@ class PEAR_PackageFile_Generator_v1
         include_once 'System.php';
         if ($where === null) {
             if (!($where = System::mktemp(array('-d')))) {
-                return PEAR::raiseError('PEAR_Packagefile_v1::toTgz mktemp failed');
+                return PEAR::raiseError('PEAR_Packagefile_v1::toTgz: mktemp failed');
             }
         } elseif (!@System::mkDir(array('-p', $where))) {
             return PEAR::raiseError('PEAR_Packagefile_v1::toTgz: "' . $where . '" could' .
                 ' not be created');
         }
         if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING)) {
-            return PEAR::raiseError('PEAR_Packagefile_v1::toTgz invalid package file');
+            return PEAR::raiseError('PEAR_Packagefile_v1::toTgz: invalid package file');
         }
         if ($pkgfile = $this->_packagefile->getPackageFile()) {
             $pkgdir = dirname(realpath($pkgfile));
             $pkgfile = basename($pkgfile);
         } else {
-            return PEAR::raiseError('PEAR_Packagefile_v1::toTgz package file object must ' .
+            return PEAR::raiseError('PEAR_Packagefile_v1::toTgz: package file object must ' .
                 'be created from a real file');
         }
         $pkginfo = $this->_packagefile->getArray();
@@ -101,11 +101,11 @@ class PEAR_PackageFile_Generator_v1
             if (PEAR::isError($ok)) {
                 return $ok;
             } elseif (!$ok) {
-                return PEAR::raiseError('PEAR_Packagefile_v1::toTgz(): tarball creation failed');
+                return PEAR::raiseError('PEAR_Packagefile_v1::toTgz: tarball creation failed');
             }
             // ----- Add the content of the package
             if (!$tar->addModify($filelist, $pkgver, $pkgdir)) {
-                return PEAR::raiseError('PEAR_Packagefile::toTgz(): tarball creation failed');
+                return PEAR::raiseError('PEAR_Packagefile::toTgz: tarball creation failed');
             }
             return $dest_package;
         }
