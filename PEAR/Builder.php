@@ -192,6 +192,7 @@ class PEAR_Builder extends PEAR_Common
         }
         if (is_object($descfile)) {
             $pkg = $descfile;
+            $descfile = $pkg->getPackageFile();
         } else {
             $pf = &new PEAR_PackageFile($this->config);
             $pkg = &$pf->fromPackageFile($descfile, PEAR_VALIDATE_NORMAL);
