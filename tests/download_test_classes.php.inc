@@ -134,7 +134,7 @@ class test_PEAR_Remote extends PEAR_Remote {
             $proxy_user = @urldecode(@$proxy['user']);
             $proxy_pass = @urldecode(@$proxy['pass']);
         }
-        $c = new test_XML_RPC_Client($channel->getPath('xmlrpc') . $channel->getFileName('xmlrpc')
+        $c = new test_XML_RPC_Client($channel->getPath('xmlrpc')
             .$maxAge, $server_host, $channel->getPort(), $proxy_host, $proxy_port, $proxy_user, $proxy_pass);
         if ($username && $password) {
             $c->setCredentials($username, $password);
@@ -361,6 +361,19 @@ class test_PEAR_Installer extends PEAR_Installer {
     {
         $a = &test_PEAR_Dependency2::singleton($c, $i, $p, $s);
         return $a;
+    }
+
+    /**
+     * For simpler unit-testing
+     * @param PEAR_Config
+     * @param array
+     * @param array
+     * @param int
+     */
+    function &getDependency2Object(&$c, $i, $p, $s)
+    {
+        $z = &test_PEAR_Dependency2::singleton($c, $i, $p, $s);
+        return $z;
     }
 }
 
