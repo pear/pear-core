@@ -488,6 +488,9 @@ Run post-installation scripts in package <package>, if any exist.
                             $param->getPackage() . '#featurename"';
                     }
                 }
+                if (isset($options['installroot'])) {
+                    $reg = &$this->config->getRegistry();
+                }
                 $pkg = &$reg->getPackage($param->getPackage(), $param->getChannel());
                 $pkg->setConfig($this->config);
                 if ($list = $pkg->listPostinstallScripts()) {
