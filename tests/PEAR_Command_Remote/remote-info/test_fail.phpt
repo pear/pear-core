@@ -20,19 +20,15 @@ $e = $command->run('remote-info', array(), array());
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => 'remote-info expects one param: the remote package name'),
 ), 'wrong params');
-$e = $command->run('remote-info', array('channel' => 'smoog'), array('boog'));
+$e = $command->run('remote-info', array(), array('smoog/boog'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 'Channel "smoog" does not exist'),
+    array('package' => 'PEAR_Error', 'message' => 'unknown channel "smoog" in "smoog/boog"'),
+    array('package' => 'PEAR_Error', 'message' => 'Invalid package name "smoog/boog"'),
 ), 'unknown channel');
 $e = $command->run('remote-info', array(), array('boog'));
-$phpunit->assertNoErrors('boog');
-$phpunit->assertEquals(array (
-  0 => 
-  array (
-    'info' => 'No remote package "boog" was found',
-    'cmd' => 'no command',
-  ),
- ), $fakelog->getLog(), 'boog log');
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' => 'No remote package "boog" was found'),
+), 'boog');
 echo 'tests done';
 ?>
 --EXPECT--

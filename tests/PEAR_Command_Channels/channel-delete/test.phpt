@@ -27,7 +27,7 @@ $phpunit->assertEquals(array (
   0 =>
   array (
     'info' => 'Channel "fake" deleted',
-    'cmd' => 'no command', 
+    'cmd' => 'channel-delete', 
   ),
 ), $fakelog->getLog(), 'log');
 

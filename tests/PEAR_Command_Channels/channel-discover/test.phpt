@@ -19,12 +19,12 @@ $phpunit->assertEquals(array (
   0 =>
   array (
     'info' => 'Adding Channel "zornk.php.net" succeeded',
-    'cmd' => 'no command', 
+    'cmd' => 'channel-discover', 
   ),
   1 =>
   array (
     'info' => 'Discovery of channel "zornk.php.net" succeeded',
-    'cmd' => 'no command', 
+    'cmd' => 'channel-discover', 
   ),
 ), $fakelog->getLog(), 'log');
 

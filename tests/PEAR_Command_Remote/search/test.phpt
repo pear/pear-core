@@ -23,6 +23,7 @@ $pf->setLicense('PHP License');
 $pf->setNotes('foo');
 $pf->addMaintainer('lead', 'cellog', 'Greg', 'cellog@php.net');
 $pf->addFile('', 'foo.dat', array('role' => 'data'));
+$pf->clearDeps();
 $pf->validate();
 $phpunit->assertNoErrors('setup');
 $reg->addPackage2($pf);
@@ -64,20 +65,18 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.search",     array('XZ', fals
 $e = $command->run('search', array(), array('Ar'));
 $phpunit->assertNoErrors('after');
 $phpunit->assertTrue($e, 'after');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
     'info' => 
     array (
-      'caption' => 'Matched packages:',
+      'caption' => 'Matched packages, channel pear.php.net:',
       'border' => true,
       'headline' => 
       array (
-        0 => 'Channel',
-        1 => 'Package',
-        2 => 'Stable/(Latest)',
-        3 => 'Local',
+        0 => 'Package',
+        1 => 'Stable/(Latest)',
+        2 => 'Local',
       ),
       'data' => 
       array (
@@ -85,11 +84,10 @@ $phpunit->assertEquals(array (
         array (
           0 => 
           array (
-            0 => 'pear.php.net',
-            1 => 'Archive_Tar',
-            2 => '1.2',
-            3 => '1.0.0',
-            4 => 'Tar file management class',
+            0 => 'Archive_Tar',
+            1 => '1.2',
+            2 => '1.0.0',
+            3 => 'Tar file management class',
           ),
         ),
       ),
@@ -98,15 +96,12 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'log after');
 $e = $command->run('search', array(), array('XZ'));
-$phpunit->assertNoErrors('after 2');
-$phpunit->assertTrue($e, 'after 2');
-$phpunit->assertEquals(array (
-  0 => 
+$phpunit->assertErrors(array (
   array (
-    'info' => 'no packages found that match pattern "XZ"',
-    'cmd' => 'no command',
+    'package' => 'PEAR_Error',
+    'message' => 'no packages found that match pattern "XZ"',
   ),
-), $fakelog->getLog(), 'log after');
+), 'errors');
 echo 'tests done';
 ?>
 --EXPECT--
