@@ -4,15 +4,16 @@
  <name>PEAR</name>
  <summary>PEAR Base System</summary>
  <description>The PEAR package contains:
- * the PEAR base class
- * the PEAR_Error error handling mechanism
- * the alpha-quality PEAR_ErrorStack advanced error handling mechanism
  * the PEAR installer, for creating, distributing
    and installing packages
+ * the alpha-quality PEAR_Exception PHP5 error handling mechanism
+ * the beta-quality PEAR_ErrorStack advanced error handling mechanism
+ * the PEAR_Error error handling mechanism
  * the OS_Guess class for retrieving info about the OS
    where PHP is running on
- * the System class for quick handling common operations
+ * the System class for quick handling of common operations
    with files and directories
+ * the PEAR base class
  </description>
  <maintainers>
   <maintainer>
@@ -22,16 +23,16 @@
    <email>stig@php.net</email>
   </maintainer>
   <maintainer>
+   <user>cellog</user>
+   <role>lead</role>
+   <name>Greg Beaver</name>
+   <email>cellog@php.net</email>
+  </maintainer>
+  <maintainer>
    <user>cox</user>
    <role>lead</role>
    <name>Tomas V.V.Cox</name>
    <email>cox@idecnet.com</email>
-  </maintainer>
-  <maintainer>
-   <user>mj</user>
-   <role>developer</role>
-   <name>Martin Jansen</name>
-   <email>mj@php.net</email>
   </maintainer>
   <maintainer>
    <user>pajoye</user>
@@ -40,17 +41,17 @@
    <email>pajoye@pearfr.org</email>
   </maintainer>
   <maintainer>
-   <user>cellog</user>
-   <role>lead</role>
-   <name>Greg Beaver</name>
-   <email>cellog@php.net</email>
+   <user>mj</user>
+   <role>developer</role>
+   <name>Martin Jansen</name>
+   <email>mj@php.net</email>
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.0dev13</version>
-  <date>2004-09-30</date>
+  <version>1.4.0a1</version>
+  <date>2004-10-21</date>
   <license>PHP License</license>
-  <state>devel</state>
+  <state>alpha</state>
   <notes>
 Installer Roles/Tasks:
 
@@ -73,10 +74,6 @@ Installer Dependency Support:
 
 Installer Channel Support:
 
- * MAJOR BC break in 1.4.0dev12 - default channel is named pear.php.net,
-   with alias pear.
-   As a consequence, after upgrade, delete the .registry/pear.reg file,
-   and run "pear list" to re-order the channel registry
  * channel XSD is available on pearweb
  * add channel.listAll and channel.update to default PEAR protocols
  * add ability to &quot;pear channel-update channelname&quot; to
@@ -192,7 +189,7 @@ PEAR_ErrorStack:
     <file role="php" name="Guess.php"/>
    </dir>
    <dir name="scripts" baseinstalldir="/">
-    <file role="script" install-as="pear" name="pear.sh">
+    <file role="script" install-as="pear" name="pear.sh" platform="!windows">
      <replace from="@php_bin@" to="php_bin" type="pear-config"/>
      <replace from="@php_dir@" to="php_dir" type="pear-config"/>
      <replace from="@pear_version@" to="version" type="package-info"/>

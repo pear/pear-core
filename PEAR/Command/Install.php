@@ -255,13 +255,39 @@ package if needed.
 
     // }}}
 
+    /**
+     * For unit testing purposes
+     */
+    function &getDownloader(&$ui, $options, &$config)
+    {
+        $a = &new PEAR_Downloader($ui, $options, $config);
+        return $a;
+    }
+
+    /**
+     * For unit testing purposes
+     */
+    function &getInstaller(&$ui)
+    {
+        $a = &new PEAR_Installer($ui);
+        return $a;
+    }
+
+    /**
+     * For unit testing purposes
+     */
+    function &getRemote(&$config)
+    {
+        $a = &new PEAR_Remote($config);
+        return $a;
+    }
     // {{{ doInstall()
 
     function doInstall($command, $options, $params)
     {
         require_once 'PEAR/Downloader.php';
         if (empty($this->installer)) {
-            $this->installer = &new PEAR_Installer($this->ui);
+            $this->installer = &$this->getInstaller($this->ui);
         }
         if ($command == 'upgrade') {
             $options['upgrade'] = true;
@@ -269,8 +295,7 @@ package if needed.
         if ($command == 'upgrade-all') {
             include_once "PEAR/Remote.php";
             $options['upgrade'] = true;
-            $reg = new PEAR_Registry($this->config->get('php_dir'));
-            $remote = &new PEAR_Remote($this->config, $reg);
+            $remote = &$this->getRemote($this->config);
             $savechannel = $this->config->get('default_channel');
             foreach ($reg->listChannels as $channel) {
                 $this->config->set('default_channel', $channel);
@@ -304,7 +329,7 @@ package if needed.
             }
             $this->config->set('default_channel', $savechannel);
         }
-        $this->downloader = &new PEAR_Downloader($this->ui, $options, $this->config);
+        $this->downloader = &$this->getDownloader($this->ui, $options, $this->config);
         $errors = array();
         $downloaded = array();
         $downloaded = &$this->downloader->download($params);
@@ -405,7 +430,7 @@ package if needed.
         $params = $newparams;
         // twist this to use it to check on whether dependent packages are also being uninstalled
         // for circular dependencies like subpackages
-        $this->installer->setDownloadedPackages($newparams);
+        $this->installer->setUninstallPackages($newparams);
         $params = array_merge($params, $badparams);
         foreach ($params as $pkg) {
             $this->installer->pushErrorHandling(PEAR_ERROR_RETURN);
