@@ -23,7 +23,6 @@
 
 require_once 'PEAR/Common.php';
 require_once 'PEAR/Registry.php';
-require_once 'PEAR/Dependency.php';
 require_once 'PEAR/Dependency2.php';
 require_once 'PEAR/DependencyDB.php';
 require_once 'PEAR/Remote.php';
