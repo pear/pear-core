@@ -33,7 +33,16 @@ require_once 'PEAR/DependencyDB.php';
  */
 class PEAR_Dependency2
 {
+    /**
+     * One of the PEAR_VALIDATE_* states
+     * @see PEAR_VALIDATE_NORMAL
+     * @var integer
+     */
     var $_state;
+    /**
+     * Command-line options to install/upgrade/uninstall commands
+     * @param array
+     */
     var $_options;
     /**
      * @var OS_Guess
@@ -979,7 +988,7 @@ class PEAR_Dependency2
                 return array($newdep, $type);
             break;
             case 'not' :
-                $newdep['exclude'] = $dep['version'];
+                $newdep['conflicts'] = true;
             break;
             case '>=' :
             case '>' :
@@ -995,6 +1004,7 @@ class PEAR_Dependency2
                     $newdep['exclude'] = $dep['version'];
                 }
             break;
+            case 'ne' :
             case '!=' :
                 $newdep['min'] = '0';
                 $newdep['max'] = '100000';
@@ -1041,12 +1051,17 @@ class PEAR_Dependency2
 
     function raiseError($msg)
     {
-        return PEAR::raiseError(sprintf($msg, $this->_registry->parsedPackageNameToString($this->_currentPackage, true)));
+        if (isset($this->_options['ignore-errors'])) {
+            return $this->warning($msg);
+        }
+        return PEAR::raiseError(sprintf($msg, $this->_registry->parsedPackageNameToString(
+            $this->_currentPackage, true)));
     }
 
     function warning($msg)
     {
-        return array(sprintf($msg, $this->_registry->parsedPackageNameToString($this->_currentPackage, true)));
+        return array(sprintf($msg, $this->_registry->parsedPackageNameToString(
+            $this->_currentPackage, true)));
     }
 }
 ?>
