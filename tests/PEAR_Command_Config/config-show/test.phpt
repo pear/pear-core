@@ -133,7 +133,7 @@ $phpunit->assertEquals(array (
           array (
             0 => 'Unix file mask',
             1 => 'umask',
-            2 => '0',
+            2 => PEAR_CONFIG_DEFAULT_UMASK,
           ),
           3 => 
           array (
@@ -322,7 +322,7 @@ $phpunit->assertEquals(array (
           array (
             0 => 'Unix file mask',
             1 => 'umask',
-            2 => '0',
+            2 => PEAR_CONFIG_DEFAULT_UMASK,
           ),
           3 => 
           array (
@@ -512,7 +512,7 @@ $phpunit->assertEquals(array (
           array (
             0 => 'Unix file mask',
             1 => 'umask',
-            2 => '0',
+            2 => PEAR_CONFIG_DEFAULT_UMASK,
           ),
           3 => 
           array (
