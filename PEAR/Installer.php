@@ -913,64 +913,48 @@ class PEAR_Installer extends PEAR_Downloader
 
         // {{{ checks to do when not in "force" mode
         if (empty($options['force'])) {
-            $test = $this->_registry->checkFileMap($pkg->getFileList(), $pkgname);
+            $testp = $channel == 'pear.php.net' ? $pkgname : array('package' => $pkgname,
+                'channel' => $channel);
+            $test = $this->_registry->checkFileMap($pkg->getFileList(), $testp);
             if (sizeof($test)) {
-                $tmp = $test;
-                foreach ($tmp as $file => $info) {
-                    if (is_array($info)) {
-                        if (strtolower($info[1]) == strtolower($pkgname) &&
-                              strtolower($info[0]) == strtolower($channel)) {
-                            unset($test[$file]);
-                        }
-                    } else {
-                        if ($channel != 'pear.php.net') {
-                            continue;
-                        }
-                        if (strtolower($info) == strtolower($pkgname)) {
-                            unset($test[$file]);
+                $pkgs = $this->getInstallPackages();
+                $found = false;
+                foreach ($pkgs as $param) {
+                    if ($pkg->isSubpackageOf($param)) {
+                        $found = true;
+                        break;
+                    }
+                }
+                if ($found) {
+                    // subpackages can conflict with earlier versions of parent packages
+                    $tmp = $test;
+                    foreach ($tmp as $file => $info) {
+                        if (is_array($info)) {
+                            if (strtolower($info[1]) == strtolower($param->getPackage()) &&
+                                  strtolower($info[0]) == strtolower($param->getChannel())) {
+                                unset($test[$file]);
+                            }
+                        } else {
+                            if (strtolower($param->getChannel()) != 'pear.php.net') {
+                                continue;
+                            }
+                            if (strtolower($info) == strtolower($param->getPackage())) {
+                                unset($test[$file]);
+                            }
                         }
                     }
                 }
                 if (sizeof($test)) {
-                    $pkgs = $this->getInstallPackages();
-                    $found = false;
-                    foreach ($pkgs as $param) {
-                        if ($pkg->isSubpackageOf($param)) {
-                            $found = true;
-                            break;
+                    $msg = "$channel/$pkgname: conflicting files found:\n";
+                    $longest = max(array_map("strlen", array_keys($test)));
+                    $fmt = "%${longest}s (%s)\n";
+                    foreach ($test as $file => $info) {
+                        if (is_array($info)) {
+                            $info = $info[0] . '/' . $info[1];
                         }
+                        $msg .= sprintf($fmt, $file, $info);
                     }
-                    if ($found) {
-                        // subpackages can conflict with earlier versions of parent packages
-                        $tmp = $test;
-                        foreach ($tmp as $file => $info) {
-                            if (is_array($info)) {
-                                if (strtolower($info[1]) == strtolower($param->getPackage()) &&
-                                      strtolower($info[0]) == strtolower($param->getChannel())) {
-                                    unset($test[$file]);
-                                }
-                            } else {
-                                if (strtolower($param->getChannel()) != 'pear.php.net') {
-                                    continue;
-                                }
-                                if (strtolower($info) == strtolower($param->getPackage())) {
-                                    unset($test[$file]);
-                                }
-                            }
-                        }
-                    }
-                    if (sizeof($test)) {
-                        $msg = "$channel/$pkgname: conflicting files found:\n";
-                        $longest = max(array_map("strlen", array_keys($test)));
-                        $fmt = "%${longest}s (%s)\n";
-                        foreach ($test as $file => $info) {
-                            if (is_array($info)) {
-                                $info = $info[0] . '/' . $info[1];
-                            }
-                            $msg .= sprintf($fmt, $file, $info);
-                        }
-                        return $this->raiseError($msg);
-                    }
+                    return $this->raiseError($msg);
                 }
             }
         }

@@ -22,9 +22,10 @@ require_once 'PEAR/XMLParser.php';
 /**
  * Parser for package.xml version 2.0
  * @author Greg Beaver <cellog@php.net>
+ * @author Stephan Schmidt (original XML_Unserializer)
  * @package PEAR
  */
-class PEAR_PackageFile_Parser_v2 extends PEAR_XMLParser
+class PEAR_ChannelFile_Parser extends PEAR_XMLParser
 {
     var $_config;
     var $_logger;
@@ -41,13 +42,13 @@ class PEAR_PackageFile_Parser_v2 extends PEAR_XMLParser
         $this->_logger = &$l;
     }
 
-    function parse($data, $file, $archive = false)
+    function parse($data, $file)
     {
         if (PEAR::isError($err = parent::parse($data, $file))) {
             return $err;
         }
-        include_once 'PEAR/PackageFile/v2.php';
-        $ret = new PEAR_PackageFile_v2;
+        include_once 'PEAR/ChannelFile.php';
+        $ret = new PEAR_ChannelFile;
         $ret->setConfig($this->_config);
         if (isset($this->_logger)) {
             $ret->setLogger($this->_logger);

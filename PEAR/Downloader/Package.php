@@ -390,9 +390,9 @@ class PEAR_Downloader_Package
             return false;
         }
         $options = $this->_downloader->getOptions();
+        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         $url =
             $this->_downloader->_getDepPackageDownloadUrl($dep, $pname);
-        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         if (PEAR::isError($url)) {
             PEAR::popErrorHandling();
             return $url;
@@ -469,8 +469,14 @@ class PEAR_Downloader_Package
                         $nodownload = true;
                     }
                 }
+                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                 $url =
                     $this->_downloader->_getDepPackageDownloadUrl($dep, $pname);
+                if (PEAR::isError($url)) {
+                    PEAR::popErrorHandling();
+                    return $url;
+                }
+                PEAR::popErrorHandling();
                 // check to see if a dep is already installed
                 if (!isset($options['force']) && $this->isInstalled(
                         array(

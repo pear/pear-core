@@ -149,7 +149,7 @@ class PEAR_PackageFile_v2_Validator
             } else {
                 $valpack = $chan->getValidationPackage();
                 $validator = $chan->getValidationObject();
-                if ($this->_pf->getPackage() != $valpack['name']) {
+                if ($this->_pf->getPackage() != $valpack['_content']) {
                     // only run these tests if we are not installing the validation package
                     if (!$validator) {
                         $this->_stack->push(__FUNCTION__, 'error',
