@@ -3,8 +3,12 @@ System commands tests
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
-    echo 'skip';
+    echo 'skip ';
 }
+if (!($fp = @fsockopen('pear.php.net', 80))) {
+    echo 'skip internet is down';
+}
+@fclose($fp);
 ?>
 --FILE--
 <?php
