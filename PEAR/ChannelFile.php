@@ -1614,12 +1614,31 @@ class PEAR_ChannelFile {
     }
 
     /**
+     * Retrieve the name of the validation package for this channel
+     * @return string|false
+     */
+    function getValidationPackage()
+    {
+        if (!$this->_isValid || !$this->validate()) {
+            return false;
+        }
+        if (isset($this->_channelInfo['validatepackage'])) {
+            return false;
+        }
+        return $this->_channelInfo['validatepackage'];
+    }
+
+    /**
      * Retrieve the object that can be used for custom validation
      * @return PEAR_Validate|false false is returned if the validation package
      *         cannot be located
      */
     function &getValidationObject()
     {
+        if (!$this->_isValid || !$this->validate()) {
+            $a = false;
+            return $a;
+        }
         if (isset($this->_channelInfo['validatepackage'])) {
             if (!class_exists($this->_channelInfo['validatepackage']['name'])) {
                 if ($this->isIncludeable(str_replace('_', '/', $this->_channelInfo['validatepackage']['name']) . '.php')) {
