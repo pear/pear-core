@@ -236,10 +236,13 @@ class PEAR_Validate
         // version must be based upon state
         switch ($this->_packagexml->getState()) {
             case 'snapshot' :
+                return true;
             case 'devel' :
                 if ($versioncomponents[0] == '0') {
                     return true;
                 }
+                $this->_addFailure('version',
+                    'packages with devel stability must be < version 1.0.0');
                 return false;
             break;
             case 'alpha' :
@@ -299,9 +302,10 @@ class PEAR_Validate
                     return false;
                 }
                 if (!is_numeric($versioncomponents[2])) {
-                    if (preg_match('/\d+(rc|a|alpha||b|beta|)\d*/i',
+                    if (preg_match('/\d+(rc|a|alpha|b|beta)\d*/i',
                           $versioncomponents[2])) {
-                        $this->_addFailure('version', 'RC/beta/alpha cannot be stable');
+                        $this->_addFailure('version', 'version "' . $version . '" or any ' .
+                            'RC/beta/alpha version cannot be stable');
                         return false;
                     }
                 }
