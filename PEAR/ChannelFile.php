@@ -20,6 +20,7 @@
 
 require_once 'PEAR/ErrorStack.php';
 require_once 'PEAR/Validate.php';
+require_once 'PEAR/Validator/PECL.php';
 require_once 'PEAR/XMLParser.php';
 require_once 'PEAR/Common.php';
 

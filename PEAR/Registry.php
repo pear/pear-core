@@ -207,6 +207,7 @@ class PEAR_Registry extends PEAR
                         $pecl_channel->setServer('pecl.php.net');
                         $pecl_channel->setSummary('PHP Extension Community Library');
                         $pecl_channel->setDefaultPEARProtocols();
+                        $pecl_channel->setValidationPackage('PEAR_Validator_PECL', '1.0');
                     } else {
                         $pecl_channel->setName('pecl.php.net');
                         $pecl_channel->setAlias('pecl');
@@ -1265,6 +1266,7 @@ class PEAR_Registry extends PEAR
             $pear_channel->setAlias('pecl');
             $pear_channel->setSummary('PHP Extension Community Library');
             $pear_channel->setDefaultPEARProtocols();
+            $pear_channel->setValidationPackage('PEAR_Validator_PECL', '1.0');
             return $pear_channel;
         }
         if ($this->_getChannelFromAlias($channel) == '__uri') {
