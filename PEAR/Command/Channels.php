@@ -303,12 +303,14 @@ List the files in an installed package.
             if ($capabilities || $soaps) {
                 if ($capabilities) {
                     foreach ($capabilities as $protocol) {
-                        $data['data'][] = array('xmlrpc', $protocol['version'], $protocol['name']);
+                        $data['data'][] = array('xmlrpc', $protocol['attribs']['version'],
+                            $protocol['_content']);
                     }
                 }
                 if ($soaps) {
                     foreach ($soaps as $protocol) {
-                        $data['data'][] = array('soap', $protocol['version'], $protocol['name']);
+                        $data['data'][] = array('soap', $protocol['attribs']['version'],
+                            $protocol['_content']);
                     }
                 }
             } else {
@@ -462,11 +464,13 @@ List the files in an installed package.
                 // security check: is the downloaded file for the channel we got it from?
                 if ($channel->getName() != strtolower($params[0])) {
                     if (isset($options['force'])) {
-                        return $this->raiseError('WARNING: downloaded channel definition file for channel "'
-                         . $channel->getName() . '" from channel "' . strtolower($params[0]) . '"');
+                        return $this->raiseError('WARNING: downloaded channel definition file' .
+                            ' for channel "' . $channel->getName() . '" from channel "' .
+                            strtolower($params[0]) . '"');
                     } else {
-                        return $this->raiseError('ERROR: downloaded channel definition file for channel "'
-                         . $channel->getName() . '" from channel "' . strtolower($params[0]) . '"');
+                        return $this->raiseError('ERROR: downloaded channel definition file' .
+                            ' for channel "' . $channel->getName() . '" from channel "' .
+                            strtolower($params[0]) . '"');
                     }
                 }
             }
@@ -497,18 +501,20 @@ List the files in an installed package.
             }
         }
         if (!$reg->channelExists($channel->getName())) {
-            return $this->raiseError('Error: Channel `' . $channel->getName() . "' does not exist, use channel-add to add an entry");
+            return $this->raiseError('Error: Channel "' . $channel->getName() .
+                '" does not exist, use channel-add to add an entry');
         }
         $ret = $reg->updateChannel($channel);
         if (PEAR::isError($ret)) {
             return $ret;
         }
         if (!$ret) {
-            return $this->raiseError("Updating Channel `" . $channel->getName() . "' in registry failed");
+            return $this->raiseError('Updating Channel "' . $channel->getName() .
+                '" in registry failed');
         }
         $this->config->setChannels($reg->listChannels());
         $this->config->writeConfigFile();
-        $this->ui->outputData('Update of Channel `' . $channel->getName() . '\' succeeded');
+        $this->ui->outputData('Update of Channel "' . $channel->getName() . '" succeeded');
     }
 
     function doAlias($command, $options, $params)
