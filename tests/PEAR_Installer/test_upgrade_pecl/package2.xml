@@ -59,81 +59,61 @@ this case is to use the new sqlite_exec() function instead. (Stas)
   <dir name="/">
    <dir name="libsqlite">
     <dir name="src">
-     <file name="attach.c" role="src" />
-     <file name="auth.c" role="src" />
-     <file name="btree.c" role="src" />
-     <file name="btree.h" role="src" />
-     <file name="btree_rb.c" role="src" />
-     <file name="build.c" role="src" />
-     <file name="copy.c" role="src" />
-     <file name="date.c" role="src" />
-     <file name="delete.c" role="src" />
-     <file name="encode.c" role="src" />
-     <file name="expr.c" role="src" />
-     <file name="func.c" role="src" />
-     <file name="hash.c" role="src" />
-     <file name="hash.h" role="src" />
-     <file name="insert.c" role="src" />
-     <file name="main.c" role="src" />
-     <file name="opcodes.c" role="src" />
-     <file name="opcodes.h" role="src" />
-     <file name="os.c" role="src" />
-     <file name="os.h" role="src" />
-     <file name="pager.c" role="src" />
-     <file name="pager.h" role="src" />
-     <file name="parse.c" role="src" />
-     <file name="parse.h" role="src" />
-     <file name="parse.y" role="src" />
-     <file name="pragma.c" role="src" />
-     <file name="printf.c" role="src" />
-     <file name="random.c" role="src" />
-     <file name="select.c" role="src" />
-     <file name="sqlite.h.in" role="src" />
-     <file name="sqlite.w32.h" role="src" />
-     <file name="sqliteInt.h" role="src" />
-     <file name="sqlite_config.w32.h" role="src" />
-     <file name="table.c" role="src" />
-     <file name="tokenize.c" role="src" />
-     <file name="trigger.c" role="src" />
-     <file name="update.c" role="src" />
-     <file name="util.c" role="src" />
-     <file name="vacuum.c" role="src" />
-     <file name="vdbe.c" role="src" />
-     <file name="vdbe.h" role="src" />
-     <file name="vdbeaux.c" role="src" />
-     <file name="vdbeInt.h" role="src" />
-     <file name="where.c" role="src" />
+     <file name="attach.c" role="php" />
+     <file name="auth.c" role="php" />
+     <file name="btree.c" role="php" />
+     <file name="btree.h" role="php" />
+     <file name="btree_rb.c" role="php" />
+     <file name="build.c" role="php" />
+     <file name="copy.c" role="php" />
+     <file name="date.c" role="php" />
+     <file name="delete.c" role="php" />
+     <file name="encode.c" role="php" />
+     <file name="expr.c" role="php" />
+     <file name="func.c" role="php" />
+     <file name="hash.c" role="php" />
+     <file name="hash.h" role="php" />
+     <file name="insert.c" role="php" />
+     <file name="main.c" role="php" />
+     <file name="opcodes.c" role="php" />
+     <file name="opcodes.h" role="php" />
+     <file name="os.c" role="php" />
+     <file name="os.h" role="php" />
+     <file name="pager.c" role="php" />
+     <file name="pager.h" role="php" />
+     <file name="parse.c" role="php" />
+     <file name="parse.h" role="php" />
+     <file name="parse.y" role="php" />
+     <file name="pragma.c" role="php" />
+     <file name="printf.c" role="php" />
+     <file name="random.c" role="php" />
+     <file name="select.c" role="php" />
+     <file name="sqlite.h.in" role="php" />
+     <file name="sqlite.w32.h" role="php" />
+     <file name="sqliteInt.h" role="php" />
+     <file name="sqlite_config.w32.h" role="php" />
+     <file name="table.c" role="php" />
+     <file name="tokenize.c" role="php" />
+     <file name="trigger.c" role="php" />
+     <file name="update.c" role="php" />
+     <file name="util.c" role="php" />
+     <file name="vacuum.c" role="php" />
+     <file name="vdbe.c" role="php" />
+     <file name="vdbe.h" role="php" />
+     <file name="vdbeaux.c" role="php" />
+     <file name="vdbeInt.h" role="php" />
+     <file name="where.c" role="php" />
     </dir> <!-- /libsqlite/src -->
     <file name="README" role="doc" />
-    <file name="VERSION" role="src" />
+    <file name="VERSION" role="php" />
    </dir> <!-- /libsqlite -->
-   <dir name="tests">
-    <file name="blankdb.inc" role="test" />
-    <file name="sqlite_001.phpt" role="test" />
-    <file name="sqlite_002.phpt" role="test" />
-    <file name="sqlite_003.phpt" role="test" />
-    <file name="sqlite_004.phpt" role="test" />
-    <file name="sqlite_005.phpt" role="test" />
-    <file name="sqlite_006.phpt" role="test" />
-    <file name="sqlite_007.phpt" role="test" />
-    <file name="sqlite_008.phpt" role="test" />
-    <file name="sqlite_009.phpt" role="test" />
-    <file name="sqlite_010.phpt" role="test" />
-    <file name="sqlite_011.phpt" role="test" />
-    <file name="sqlite_012.phpt" role="test" />
-    <file name="sqlite_013.phpt" role="test" />
-    <file name="sqlite_014.phpt" role="test" />
-    <file name="sqlite_015.phpt" role="test" />
-    <file name="sqlite_016.phpt" role="test" />
-    <file name="sqlite_017.phpt" role="test" />
-   </dir> <!-- /tests -->
-   <file name="config.m4" role="src" />
+   <file name="config.m4" role="php" />
    <file name="CREDITS" role="doc" />
-   <file name="php_sqlite.def" role="src" />
-   <file name="php_sqlite.h" role="src" />
+   <file name="php_sqlite.def" role="php" />
+   <file name="php_sqlite.h" role="php" />
    <file name="README" role="doc" />
-   <file name="sqlite.c" role="src" />
-   <file name="sqlite.dsp" role="src" />
+   <file name="sqlite.c" role="php" />
+   <file name="sqlite.dsp" role="php" />
    <file name="sqlite.php" role="doc" />
    <file name="TODO" role="doc" />
   </dir> <!-- / -->
@@ -149,8 +129,7 @@ this case is to use the new sqlite_exec() function instead. (Stas)
    </pearinstaller>
   </required>
  </dependencies>
- <providesextension>sqlite</providesextension>
- <extsrcrelease />
+ <phprelease />
  <changelog>
   <release>
    <version>
