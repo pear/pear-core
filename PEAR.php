@@ -164,6 +164,11 @@ class PEAR
             if (method_exists($this, $destructor)) {
                 global $_PEAR_destructor_object_list;
                 $_PEAR_destructor_object_list[] = &$this;
+                static $registered = false;
+                if (!$registered) {
+                    register_shutdown_function("_PEAR_call_destructors");
+                    $registered = true;
+                }
                 break;
             } else {
                 $classname = get_parent_class($classname);
@@ -1033,8 +1038,6 @@ class PEAR_Error
 
     // }}}
 }
-
-register_shutdown_function("_PEAR_call_destructors");
 
 /*
  * Local Variables:
