@@ -240,31 +240,48 @@ class PEAR_Downloader_Package
         }
         // get requested dependency group, if any
         $groupname = $this->getGroup();
-        if ($groupname) {
-            if (isset($deps['group'])) {
-                if (isset($deps['group']['attribs'])) {
-                    if (strtolower($deps['group']['attribs']['name']) == strtolower($groupname)) {
-                        $group = $deps['group'];
-                    }
+        if (!$groupname) {
+            $groupname = 'default'; // try the default dependency group
+            $explicit = false;
+        } else {
+            $explicit = true;
+        }
+        if (isset($deps['group'])) {
+            if (isset($deps['group']['attribs'])) {
+                if (strtolower($deps['group']['attribs']['name']) == strtolower($groupname)) {
+                    $group = $deps['group'];
+                } elseif ($explicit) {
+                    $this->_downloader->log(0, 'Warning: package "' .
+                        $this->_registry->parsedPackageNameToString($pname) . '" has no dependency ' .
+                        'group named "' . $groupname . '"');
+                    return;
                 }
             } else {
                 $found = false;
-                foreach ($deps['group'] as $group) {
+                foreach ($deps['group']['package'] as $group) {
                     if (strtolower($group['attribs']['name']) == strtolower($groupname)) {
                         $found = true;
                         break;
                     }
                 }
                 if (!$found) {
-                    unset($group);
+                    $this->_downloader->log(0, 'Warning: package "' .
+                        $this->_registry->parsedPackageNameToString($pname) . '" has no dependency ' .
+                        'group named "' . $groupname . '"');
+                    return;
                 }
             }
-            if (isset($group)) {
-                if (isset($group['package'])) {
+        }
+        if (isset($group)) {
+            if (isset($group['package'])) {
+                if (isset($group['package'][0])) {
                     foreach ($group['package'] as $dep) {
                         $this->_detect2Dep($dep, $pname, 'dependency group "' .
                             $group['attribs']['name'] . '"', $params);
                     }
+                } else {
+                    $this->_detect2Dep($group['package'], $pname, 'dependency group "' .
+                        $group['attribs']['name'] . '"', $params);
                 }
             }
         }
