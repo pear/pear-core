@@ -670,6 +670,10 @@ class PEAR_Registry extends PEAR
             if (!$update) {
                 return false;
             }
+            $checker = $this->_getChannel($channel->getName());
+            if ($channel->getAlias() != $checker->getAlias()) {
+                @unlink($this->_getChannelAliasFileName($checker->getAlias()));
+            }
         } else {
             if ($update) {
                 return false;
