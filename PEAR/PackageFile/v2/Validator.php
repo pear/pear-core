@@ -590,7 +590,7 @@ class PEAR_PackageFile_v2_Validator
                                 $iter = array($iter);
                             }
                             foreach ($iter as $package) {
-                                if (isset($package['url'])) {
+                                if (isset($package['uri'])) {
                                     if (isset($package['channel'])) {
                                         $this->_UrlOrChannel($type,
                                             $package['name']);
