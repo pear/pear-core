@@ -383,12 +383,16 @@ class PEAR_ErrorStack {
     /**
      * Set an error code => error message mapping callback
      * 
-     * This method sets the callback that can be used to generate error
-     * messages for any PEAR_ErrorStack instance
-     * @param array|string Callback function/method
+     * This method sets the callback that can be used to generate context
+     * information for an error.  Passing in NULL will disable context generation
+     * and remove the expensive call to debug_backtrace()
+     * @param array|string|null Callback function/method
      */
     function setContextCallback($contextCallback)
     {
+        if ($contextCallback === null) {
+            return $this->_contextCallback = false;
+        }
         if (!$contextCallback) {
             $this->_contextCallback = array(&$this, 'getFileLine');
         } else {
