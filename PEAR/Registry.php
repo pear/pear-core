@@ -1792,7 +1792,7 @@ class PEAR_Registry extends PEAR
                         continue;
                     }
                     if (!in_array($attrs['role'], PEAR_Installer_Role::getBaseinstallRoles())) {
-                        $attrs['baseinstalldir'] = is_array($package) ? $package[1] : $package;
+                        $attrs['baseinstalldir'] = is_array($package) ? $package[0] : $package;
                     }
                     if (isset($attrs['baseinstalldir'])) {
                         $name = $attrs['baseinstalldir'] . DIRECTORY_SEPARATOR . $name;
