@@ -5,7 +5,8 @@ PEAR_Common::infoFromString test
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
-if (version_compare(zend_version(), '2.0', '>=')) {
+$zv = zend_version();
+if ($zv{0} < 2) {
     echo 'skip';
 }
 if (!function_exists('token_get_all')) {
@@ -438,7 +439,7 @@ var_dump($ret);
 ?>
 --EXPECT--
 Test invalid XML
-Caught error: XML error: not well-formed (invalid token) at line 1
+Caught error: XML error: Empty document at line 1
 Test valid XML, not a package.xml
 Caught error: Invalid Package File, no <package> tag
 Test valid package.xml, invalid version number

@@ -107,8 +107,7 @@ function cleanall($dir)
 Test static:
 Simple: passed
 Simple fail:
-Caught error: Connection to `test.poop.php.net:80' failed: The operation completed successfully.
-
+Caught error: Connection to `test.poop.php.net:80' failed: 
 Test callback:
 Callback Message: setup
 Callback Payload: a:1:{i:0;s:5:"My UI";}
@@ -209,6 +208,5 @@ Callback Payload: a:1:{i:0;s:5:"My UI";}
 Callback Message: message
 Callback Payload: s:35:"Using HTTP proxy test.poop.php.net:";
 Callback Message: connfailed
-Callback Payload: a:4:{i:0;s:17:"test.poop.php.net";i:1;i:80;i:2;i:0;i:3;s:39:"The operation completed successfully.
-";}
-Caught error: Connection to `test.poop.php.net:80' failed: The operation completed successfully.
+Callback Payload: a:4:{i:0;s:17:"test.poop.php.net";i:1;i:80;i:2;i:7;i:3;s:0:"";}
+Caught error: Connection to `test.poop.php.net:80' failed:
