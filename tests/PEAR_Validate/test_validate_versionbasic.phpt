@@ -338,7 +338,7 @@ $phpunit->assertEquals(array (
     0 => 
     array (
       'field' => 'version',
-      'reason' => 'A version number must have between 3 and 4 decimals (x.y.z[.w])',
+      'reason' => 'A version number must have 3 decimals (x.y.z)',
     ),
   ),
 ), $val->getFailures(), 'failures attempt 1 generic');
@@ -356,24 +356,11 @@ $phpunit->assertEquals(array (
     0 => 
     array (
       'field' => 'version',
-      'reason' => 'A version number must have between 3 and 4 decimals (x.y.z[.w])',
+      'reason' => 'A version number must have 3 decimals (x.y.z)',
     ),
   ),
 ), $val->getFailures(), 'failures attempt 1.2.3.4.5 generic');
 
-$pf->setReleaseVersion('1.2.3.4');
-$pf->setReleaseStability('stable');
-$res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertTrue($res, 'attempt 1.2.3.4 generic');
-$phpunit->showall();
-$phpunit->assertEquals(array (
-  'warnings' => 
-  array (
-  ),
-  'errors' => 
-  array (
-  ),
-), $val->getFailures(), 'failures attempt 1.2.3.4 generic');
 echo 'tests done';
 ?>
 --EXPECT--

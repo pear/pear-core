@@ -81,7 +81,6 @@ release notes
   <optional>
    <extension>
     <name>xmlrpc</name>
-    <channel>pear.php.net</channel>
     <min>1.0</min>
    </extension>
   </optional>
