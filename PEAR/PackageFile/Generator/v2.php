@@ -144,7 +144,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 ' "' . $where . DIRECTORY_SEPARATOR . 'package.xml"');
         }
         if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING)) {
-            return PEAR::raiseError('PEAR_Packagefile_v2::toTgz: invalid package file');
+            return PEAR::raiseError('PEAR_Packagefile_v2::toTgz: invalid package.xml');
         }
         $ext = $compress ? '.tgz' : '.tar';
         $pkgver = $this->_packagefile->getPackage() . '-' . $this->_packagefile->getVersion();
