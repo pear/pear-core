@@ -186,17 +186,18 @@ class PEAR_Downloader extends PEAR_Common
         $this->log(1, 'Attempting to discover channel "' . $channel . '"...');
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         $callback = $this->ui ? array(&$this, '_downloadCallback') : null;
-        $a = $this->downloadHttp('http://' . $channel . '/channel.xml', $this->ui, System::mktemp(array('-d')), $callback);
+        $a = $this->downloadHttp('http://' . $channel . '/channel.xml', $this->ui, System::mktemp(array('-d')), $callback, false);
         PEAR::popErrorHandling();
         if (PEAR::isError($a)) {
             return false;
         }
+        list($a, $lastmodified) = $a;
         include_once 'PEAR/ChannelFile.php';
         $b = new PEAR_ChannelFile;
         if ($b->fromXmlFile($a)) {
             @unlink($a);
             if ($this->config->get('auto_discover')) {
-                $this->_registry->addChannel($b);
+                $this->_registry->addChannel($b, $lastmodified);
                 $alias = $b->getName();
                 if ($b->getName() == $this->_registry->channelName($b->getAlias())) {
                     $alias = $b->getAlias();
@@ -269,6 +270,9 @@ class PEAR_Downloader extends PEAR_Common
         }
         call_user_func_array(array($this->getDownloaderPackageClass(), 'removeDuplicates'),
             array(&$params));
+        if (!count($params)) {
+            return array();
+        }
         if (!isset($this->_options['nodeps'])) {
             foreach ($params as $i => $param) {
                 $params[$i]->detectDependencies($params);
@@ -297,7 +301,8 @@ class PEAR_Downloader extends PEAR_Common
             if (PEAR::isError($pf)) {
                 $this->log(1, $pf->getMessage());
                 $this->log(0, 'Error: cannot download "' .
-                    $this->_registry->parsedPackageNameToString($package->getParsedPackage()) .
+                    $this->_registry->parsedPackageNameToString($package->getParsedPackage(),
+                        true) .
                     '"');
                 continue;
             }
@@ -882,6 +887,7 @@ class PEAR_Downloader extends PEAR_Common
      *                           updates
      * @param false|string|array $lastmodified header values to check against for caching
      *                           use false to return the header values from this download
+     * @param false|array $accept Accept headers to send
      * @return string|array  Returns the full path of the downloaded file or a PEAR
      *                       error on failure.  If the error is caused by
      *                       socket-related errors, the error object will
@@ -891,7 +897,8 @@ class PEAR_Downloader extends PEAR_Common
      *
      * @access public
      */
-    function downloadHttp($url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null)
+    function downloadHttp($url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null,
+                          $accept = false)
     {
         if ($callback) {
             call_user_func($callback, 'setup', array(&$ui));
@@ -971,6 +978,9 @@ class PEAR_Downloader extends PEAR_Common
             $request .= 'Proxy-Authorization: Basic ' .
                 base64_encode($proxy_user . ':' . $proxy_pass) . "\r\n";
         }
+        if ($accept) {
+            $request .= 'Accept: ' . implode(', ', $accept) . "\r\n";
+        }
         $request .= "\r\n";
         fwrite($fp, $request);
         $headers = array();
@@ -1044,7 +1054,7 @@ class PEAR_Downloader extends PEAR_Common
                     $lastmodified = $headers['last-modified'];
                 }
             }
-            return array($dest_file, $lastmodified);
+            return array($dest_file, $lastmodified, $headers);
         }
         return $dest_file;
     }
