@@ -509,7 +509,7 @@ used for automated conversion or learning the format.
                     if (!preg_match('/\.phpt$/', $p)) {
                         $p .= '.phpt';
                     }
-                    $dir = System::find(array(getcwd(), '-type', 'f',
+                    $dir = System::find(array(dirname($p), '-type', 'f',
                                                 '-maxdepth', $depth,
                                                 '-name', $p));
                     $tests = array_merge($tests, $dir);
