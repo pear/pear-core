@@ -197,7 +197,7 @@ class PEAR_Validate
                     return false;
                 }
                 if (!is_numeric($versioncomponents[2])) {
-                    if (preg_match('/\n+(rc|a|alpha||b|beta|)\n*/i',
+                    if (preg_match('/\d+(rc|a|alpha||b|beta|)\d*/i',
                           $versioncomponents[2])) {
                         $this->_addFailure('version', 'RC/beta/alpha cannot be stable');
                         return false;
@@ -223,7 +223,7 @@ class PEAR_Validate
         // packager automatically sets date, so only validate if
         // pear validate is called
         if ($this->_state = PEAR_VALIDATE_NORMAL) {
-            if (!preg_match('/\n\n\n\n\-\n\n\-\n\n/',
+            if (!preg_match('/\d\d\d\d\-\d\d\-\d\d/',
                   $this->_packagexml->getDate())) {
                 $this->_addFailure('date', 'invalid release date "' .
                     $this->_packagexml->getDate());
@@ -247,7 +247,7 @@ class PEAR_Validate
         // packager automatically sets time, so only validate if
         // pear validate is called
         if ($this->_state = PEAR_VALIDATE_NORMAL) {
-            if (!preg_match('/\n\n:\n\n:\n\n/',
+            if (!preg_match('/\d\d:\d\d:\d\d/',
                   $this->_packagexml->getDate())) {
                 $this->_addFailure('time', 'invalid release time "' .
                     $this->_packagexml->getDate());
