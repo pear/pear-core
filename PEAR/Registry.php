@@ -140,20 +140,9 @@ class PEAR_Registry extends PEAR
         $this->_config = &$config;
     }
 
-    function _initializeDirs()
+    function _initializeChannelDirs()
     {
         $ds = DIRECTORY_SEPARATOR;
-        // XXX Compatibility code should be removed in the future
-        // rename all registry files if any to lowercase
-        if (!OS_WINDOWS && $handle = @opendir($this->statedir)) {
-            $dest = $this->statedir . $ds;
-            while (false !== ($file = readdir($handle))) {
-                if (preg_match('/^.*[A-Z].*\.reg$/', $file)) {
-                    rename($dest . $file, $dest . strtolower($file));
-                }
-            }
-            closedir($handle);
-        }
         if (!is_dir($this->channelsdir) ||
               !file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
             $pear_channel = $this->_pearChannel;
@@ -178,9 +167,32 @@ class PEAR_Registry extends PEAR
             $private->setSummary('Pseudo-channel for static packages');
             $this->_addChannel($private);
             $this->_rebuildFileMap();
-        } elseif (!file_exists($this->filemap)) {
+        }
+    }
+
+    function _initializeDirs()
+    {
+        $ds = DIRECTORY_SEPARATOR;
+        // XXX Compatibility code should be removed in the future
+        // rename all registry files if any to lowercase
+        if (!OS_WINDOWS && $handle = @opendir($this->statedir)) {
+            $dest = $this->statedir . $ds;
+            while (false !== ($file = readdir($handle))) {
+                if (preg_match('/^.*[A-Z].*\.reg$/', $file)) {
+                    rename($dest . $file, $dest . strtolower($file));
+                }
+            }
+            closedir($handle);
+        }
+        $this->_initializeChannelDirs();
+        if (!file_exists($this->filemap)) {
             $this->_rebuildFileMap();
         }
+        $this->_initializeDepDB();
+    }
+
+    function _initializeDepDB()
+    {
         if (!isset($this->_dependencyDB)) {
             static $initializing = false;
             if (!$initializing) {
@@ -243,11 +255,17 @@ class PEAR_Registry extends PEAR
         if ($channel && $this->_getChannelFromAlias($channel) != 'pear.php.net') {
             return $this->_assertChannelStateDir($channel);
         }
+        $init = false;
         if (!@is_dir($this->statedir)) {
             if (!System::mkdir(array('-p', $this->statedir))) {
                 return $this->raiseError("could not create directory '{$this->statedir}'");
             }
+            $init = true;
+        }
+        if ($init) {
             $this->_initializeDirs();
+        } else {
+            $this->_initializeDepDB();
         }
         return true;
     }
@@ -275,6 +293,7 @@ class PEAR_Registry extends PEAR
                 return $this->raiseError("could not create directory '" . 
                     $this->statedir . DIRECTORY_SEPARATOR . '.channel.' . strtolower($channel) . "'");
             }
+            $this->_initializeChannelDirs();
         }
         return true;
     }
@@ -467,6 +486,9 @@ class PEAR_Registry extends PEAR
                     continue;
                 }
                 foreach ($filelist as $name => $attrs) {
+                    if (isset($attrs['attribs'])) {
+                        $attrs = $attrs['attribs'];
+                    }
                     // it is possible for conflicting packages in different channels to
                     // conflict with data files/doc files
                     if ($name == 'dirtree') {
@@ -1001,9 +1023,7 @@ class PEAR_Registry extends PEAR
         $info['_lastmodified'] = time();
         fwrite($fp, serialize($info));
         $this->_closePackageFile($fp);
-        if (isset($info['filelist'])) {
-            $this->_rebuildFileMap();
-        }
+        $this->_rebuildFileMap();
         return true;
     }
 
@@ -1491,18 +1511,20 @@ class PEAR_Registry extends PEAR
     // {{{ checkFileMap()
 
     /**
-     * Test whether a file belongs to a package.
+     * Test whether a file or set of files belongs to a package.
      *
-     * @param string|array $path file path, absolute or relative to the pear
-     * install dir
-     * @param string name of package that is not installed
-     *
+     * If an array is passed in
+     * @param string|array file path, absolute or relative to the pear
+     *                     install dir
+     * @param string|array name of PEAR package or array('package' => name, 'channel' =>
+     *                     channel) of a package that will be ignored
+     * @param string API version - 1.1 will exclude any files belonging to a package
+     * @param array private recursion variable
      * @return array|false which package and channel the file belongs to, or an empty
-     * string if the file does not belong to an installed package
-     *
-     * @access public
+     *                     string if the file does not belong to an installed package,
+     *                     or belongs to the second parameter's package
      */
-    function checkFileMap($path, $package, $attrs = false)
+    function checkFileMap($path, $package = false, $api = '1.0', $attrs = false)
     {
         if (is_array($path)) {
             static $notempty;
@@ -1517,13 +1539,13 @@ class PEAR_Registry extends PEAR
                         continue;
                     }
                     if (!in_array($attrs['role'], PEAR_Installer_Role::getBaseinstallRoles())) {
-                        $attrs['baseinstalldir'] = $package;
+                        $attrs['baseinstalldir'] = is_array($package) ? $package[1] : $package;
                     }
                     if (isset($attrs['baseinstalldir'])) {
-                        $name = $attrs['baseinstalldir'].DIRECTORY_SEPARATOR.$name;
+                        $name = $attrs['baseinstalldir'] . DIRECTORY_SEPARATOR . $name;
                     }
                 }
-                $pkgs[$name] = $this->checkFileMap($name, $package, $attrs);
+                $pkgs[$name] = $this->checkFileMap($name, $package, $api, $attrs);
             }
             return array_filter($pkgs, $notempty);
         }
@@ -1541,6 +1563,9 @@ class PEAR_Registry extends PEAR
             $attrs = array('role' => 'php'); // any old call would be for PHP role only
         }
         if (isset($this->filemap_cache[$attrs['role']][$path])) {
+            if ($api >= '1.1' && $this->filemap_cache[$attrs['role']][$path] == $package) {
+                return false;
+            }
             return $this->filemap_cache[$attrs['role']][$path];
         }
         $l = strlen($this->install_dir);
@@ -1548,6 +1573,9 @@ class PEAR_Registry extends PEAR
             $path = preg_replace('!^'.DIRECTORY_SEPARATOR.'+!', '', substr($path, $l));
         }
         if (isset($this->filemap_cache[$attrs['role']][$path])) {
+            if ($api >= '1.1' && $this->filemap_cache[$attrs['role']][$path] == $package) {
+                return false;
+            }
             return $this->filemap_cache[$attrs['role']][$path];
         }
         return false;
@@ -1600,7 +1628,7 @@ class PEAR_Registry extends PEAR
                 $param['channel'] = '__uri';
             }
         } else {
-            $components = parse_url($param);
+            $components = @parse_url($param);
             if (isset($components['scheme'])) {
                 if ($components['scheme'] == 'http') {
                     // uri package
@@ -1652,9 +1680,11 @@ class PEAR_Registry extends PEAR
             }
             // check for extension
             $pathinfo = pathinfo($param['package']);
-            if (isset($pathinfo['extension']) && $pathinfo['extension']) {
+            if (isset($pathinfo['extension']) &&
+                  in_array(strtolower($pathinfo['extension']), array('tgz', 'tar'))) {
                 $param['extension'] = $pathinfo['extension'];
-                $param['package'] = $pathinfo['basename'];
+                $param['package'] = substr($pathinfo['basename'], 0,
+                    strlen($pathinfo['basename']) - 4);
             }
             // check for version
             if (strpos($param['package'], '-')) {
@@ -1681,7 +1711,7 @@ class PEAR_Registry extends PEAR
         $validate = $chan->getValidationObject();
         $vpackage = $chan->getValidationPackage();
         // validate package name
-        if (!$validate->validPackageName($param['package'], $vpackage['name'])) {
+        if (!$validate->validPackageName($param['package'], $vpackage['_content'])) {
             return PEAR::raiseError('parsePackageName(): invalid package name "' .
                 $param['package'] . '" in "' . $saveparam . '"',
                 'package', null, null, $param);
@@ -1703,7 +1733,7 @@ class PEAR_Registry extends PEAR
         if (isset($param['version'])) {
             if (isset($param['state'])) {
                 return PEAR::raiseError('parsePackageName(): cannot contain both ' .
-                    'a version and a stability (state)',
+                    'a version and a stability (state) in "' . $saveparam . '"',
                     'version/state', null, null, $param);
             }
             // check whether version is actually a state
@@ -1712,8 +1742,7 @@ class PEAR_Registry extends PEAR
                 unset($param['version']);
             } else {
                 if (!$validate->validVersion($param['version'])) {
-                    return PEAR::raiseError('parsePackageName(): content after ' .
-                        'version/state delimiter "-" "' . $param['version'] .
+                    return PEAR::raiseError('parsePackageName(): "' . $param['version'] .
                         '" is neither a valid version nor a valid state in "' .
                         $saveparam . '"', 'version/state', null, null, $param);
                 }                    
@@ -1739,6 +1768,9 @@ class PEAR_Registry extends PEAR
                 'version' => $p->getVersion(),
             );
         }
+        if (isset($parsed['uri'])) {
+            return $parsed['uri'];
+        }
         $upass = '';
         if (isset($parsed['user'])) {
             $upass = $parsed['user'];
@@ -1760,6 +1792,9 @@ class PEAR_Registry extends PEAR
                 $parsed['opts'][$name] = "$name=$value";
             }
             $ret .= implode('&', $parsed['opts']);
+        }
+        if (isset($parsed['group'])) {
+            $ret .= '#' . $parsed['group'];
         }
         return $ret;
     }
