@@ -542,7 +542,7 @@ $phpunit->assertEquals(array (
   1 =>
   array (
     0 => 1,
-    1 => 'WARNING: failed to download smork/Foobar within preferred state stable", will instead download version 1.5.0a1, stability "alpha"',
+    1 => 'WARNING: failed to download smork/Foobar, will instead download version 1.5.0a1, stability "alpha"',
   ),
   2 => 
   array (

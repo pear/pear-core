@@ -50,7 +50,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     </maintainer>
     <maintainer>
       <user>ssb</user>
-      <name>Stig Sæther Bakken</name>
+      <name>Stig S?ther Bakken</name>
       <email>stig@php.net</email>
       <role>helper</role>
     </maintainer>
@@ -431,7 +431,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     </maintainer>
     <maintainer>
       <user>ssb</user>
-      <name>Stig Sæther Bakken</name>
+      <name>Stig S?ther Bakken</name>
       <email>stig@php.net</email>
       <role>helper</role>
     </maintainer>
@@ -667,8 +667,7 @@ $res = $command->run('install', array(), array('pear#webinstaller'));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => 'install failed'),
 ), 'after install');
-if (OS_WINDOWS) {
-    $phpunit->assertEquals(array(
+$phpunit->assertEquals(array(
   array (
     0 => 3,
     1 => 'Notice: package "pear/PEAR" optional dependency "pear/PEAR_Frontend_Web" will not be automatically downloaded',
@@ -708,8 +707,6 @@ if (OS_WINDOWS) {
     'cmd' => 'no command',
   ),
 ), $fakelog->getLog(), 'log');
-} else {
-}
 echo 'tests done';
 ?>
 --EXPECT--
