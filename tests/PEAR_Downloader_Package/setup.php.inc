@@ -121,7 +121,7 @@ class fake_log
     }
 }
 $fakelog = new fake_log;
-$config = &new PEAR_Config($temp_path . '/pear.ini');
+$config = &PEAR_Config::singleton();//($temp_path . '/pear.ini');
 require_once 'PEAR/Downloader/Package.php';
 /**
  * @param array

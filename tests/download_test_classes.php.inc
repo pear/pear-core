@@ -27,11 +27,11 @@ class test_PEAR_Remote extends PEAR_Remote {
     var $_pearweb;
     var $_fakepearweb = true;
     var $_simulateEpi = true;
-    function test_PEAR_Remote($config)
+    function test_PEAR_Remote(&$config)
     {
         $pearweb = &$GLOBALS['pearweb'];
 //        include dirname(__FILE__) . DIRECTORY_SEPARATOR . 'download_test.config.inc';
-        $this->_pearweb = $pearweb;
+        $this->_pearweb = &$pearweb;
         parent::PEAR_Remote($config);
         $this->_pearweb->setRemote($this);
     }
@@ -325,7 +325,7 @@ class test_PEAR_Downloader extends PEAR_Downloader {
     function test_PEAR_Downloader(&$ui, $options, &$config)
     {
         parent::PEAR_Downloader($ui, $options, $config);
-        $this->_remote = new test_PEAR_Remote($config);
+        $this->_remote = &new test_PEAR_Remote($config);
     }
     
     function downloadHttp($url, &$ui, $save_dir = '.', $callback = null)
@@ -397,7 +397,6 @@ class test_PEAR_Downloader extends PEAR_Downloader {
         }
         $dest_file = $save_dir . DIRECTORY_SEPARATOR . $save_as;
         if (!$wp = @fopen($dest_file, 'wb')) {
-            fclose($fp);
             if ($callback) {
                 call_user_func($callback, 'writefailed', array($dest_file, $php_errormsg));
             }

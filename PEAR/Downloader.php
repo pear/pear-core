@@ -147,6 +147,7 @@ class PEAR_Downloader extends PEAR_Common
 
     function PEAR_Downloader(&$ui, $options, &$config)
     {
+        parent::PEAR_Common();
         $this->_options = $options;
         $this->config = &$config;
         $this->_preferredState = $this->config->get('preferred_state');
@@ -176,13 +177,14 @@ class PEAR_Downloader extends PEAR_Common
                 @array_walk($this->_installed[$key], 'strtolower');
             }
         }
-        parent::PEAR_Common();
     }
 
     function discover($channel)
     {
+        $this->log(1, 'Attempting to discover channel "' . $channel . '"...');
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-        $a = $this->downloadHttp('http://' . $channel . '/channel.xml', $this->ui, System::mktemp());
+        $callback = $this->ui ? array(&$this, '_downloadCallback') : null;
+        $a = $this->downloadHttp('http://' . $channel . '/channel.xml', $this->ui, System::mktemp(array('-d')), $callback);
         PEAR::popErrorHandling();
         if (PEAR::isError($a)) {
             return false;
@@ -191,6 +193,15 @@ class PEAR_Downloader extends PEAR_Common
         $b = new PEAR_ChannelFile;
         if ($b->fromXmlFile($a)) {
             @unlink($a);
+            if ($this->config->get('auto_discover')) {
+                $this->_registry->addChannel($b);
+                $alias = $b->getName();
+                if ($b->getName() == $this->_registry->channelName($b->getAlias())) {
+                    $alias = $b->getAlias();
+                }
+                $this->log(1, 'Auto-discovered channel "' . $channel .
+                    '", alias "' . $b->getAlias() . '", adding to registry');
+            }
             return true;
         }
         @unlink($a);
@@ -415,12 +426,12 @@ class PEAR_Downloader extends PEAR_Common
         }
         if (is_array($url)) {
             if (!isset($url['multiple'])) { // multiple urls returned for a bundle
-                if (count($url) == 3) {
+                if (isset($url['url'])) {
                     $url['url'] .= $ext;
                 }
             } else {
                 foreach ($url as $i => $u) {
-                    if (count($u) == 3) {
+                    if (isset($u['url'])) {
                         $url[$i]['url'] .= $ext;
                     }
                 }

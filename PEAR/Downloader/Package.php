@@ -107,10 +107,10 @@ class PEAR_Downloader_Package
                 }
                 $err = $this->_fromString($param);
                 if (PEAR::isError($err) || !$this->_valid) {
+                    if (PEAR::isError($err)) {
+                        $this->_downloader->log(0, $err->getMessage());
+                    }
                     if (PEAR::isError($origErr)) {
-                        if (PEAR::isError($err)) {
-                            $this->_downloader->log(0, $err->getMessage());
-                        }
                         if (is_array($origErr->getUserInfo())) {
                             foreach ($origErr->getUserInfo() as $err) {
                                 if (is_array($err)) {
@@ -120,11 +120,9 @@ class PEAR_Downloader_Package
                             }
                         }
                         $this->_downloader->log(0, $origErr->getMessage());
-                        return PEAR::raiseError(
-                            "Cannot initialize '$param', invalid or missing package file");
-                    } else {
-                        return PEAR::raiseError($err);
                     }
+                    return PEAR::raiseError(
+                        "Cannot initialize '$param', invalid or missing package file");
                 }
             }
         }
@@ -621,16 +619,31 @@ class PEAR_Downloader_Package
             if ($pname->getCode() == 'channel') {
                 $parsed = $pname->getUserInfo();
                 if ($this->_downloader->discover($parsed['channel'])) {
-                    $this->_downloader->log(0, 'Channel "' . $parsed['channel'] .
-                        '" is not initialized, use ' .
-                        'pear discover ' . $parsed['channel'] . ' to use');
+                    if ($this->_config->get('auto_discover')) {
+                        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                        $pname = $this->_registry->parsePackageName($param,
+                            $this->_config->get('default_channel'));
+                        PEAR::popErrorHandling();
+                    } else {
+                        $this->_downloader->log(0, 'Channel "' . $parsed['channel'] .
+                            '" is not initialized, use ' .
+                            '"pear discover ' . $parsed['channel'] . '" to initialize');
+                    }
                 }
+                if (PEAR::isError($pname)) {
+                    $this->_downloader->log(0, $pname->getMessage());
+                    $err = PEAR::raiseError('invalid package name/package file "' .
+                        $param . '"');
+                    $this->_valid = false;
+                    return $err;
+                }
+            } else {
+                $this->_downloader->log(0, $pname->getMessage());
+                $err = PEAR::raiseError('invalid package name/package file "' .
+                    $param . '"');
+                $this->_valid = false;
+                return $err;
             }
-            $this->_downloader->log(0, $pname->getMessage());
-            $err = PEAR::raiseError('invalid package name/package file "' .
-                $param . '"');
-            $this->_valid = false;
-            return $err;
         }
         if (!isset($this->_type)) {
             $this->_type = 'xmlrpc';
