@@ -156,7 +156,12 @@ use the "slide" option to move the release tag.
             'summary' => 'Run Regression Tests',
             'function' => 'doRunTests',
             'shortcut' => 'rt',
-            'options' => array(),
+            'options' => array(
+                'recur' => array(
+                    'shortopt' => 'r',
+                    'doc' => 'Run tests in child directories, recursively.  4 dirs deep maximum',
+                )
+            ),
             'doc' => '[testfile|dir ...]
 Run regression tests with PHP\'s regression testing script (run-tests.php).',
             ),
@@ -478,10 +483,15 @@ used for automated conversion or learning the format.
         include_once 'PEAR/RunTest.php';
         $run = new PEAR_RunTest;
         $tests = array();
+        if (isset($options['recur'])) {
+            $depth = 4;
+        } else {
+            $depth = 1;
+        }
         foreach ($params as $p) {
             if (is_dir($p)) {
                 $dir = System::find(array($p, '-type', 'f',
-                                            '-maxdepth', '1',
+                                            '-maxdepth', $depth,
                                             '-name', '*.phpt'));
                 $tests = array_merge($tests, $dir);
             } else {
