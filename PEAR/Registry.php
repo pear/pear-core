@@ -925,7 +925,7 @@ class PEAR_Registry extends PEAR
             $this->_unlock();
             return false;
         }
-        $info = $info->toArray();
+        $info = $info->toArray(true);
         $info['_lastmodified'] = time();
         fwrite($fp, serialize($info));
         $this->_closePackageFile($fp);
@@ -1166,7 +1166,7 @@ class PEAR_Registry extends PEAR
             return false;
         }
         if (is_object($info)) {
-            $info = $info->toArray();
+            $info = $info->toArray(true);
         }
         $info['_lastmodified'] = time();
         $newinfo = $info;

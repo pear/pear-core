@@ -879,10 +879,13 @@ installed package.'
             }
         }
         $info['package.xml version'] = '2.0';
+        if ($obj->getLastModified()) {
+            $info['Last Modified'] = date('Y-m-d H:m', $obj->getLastModified());
+        }
         foreach ($info as $key => $value) {
             $data['data'][] = array($key, $value);
         }
-        $data['raw'] = $obj->toArray();
+        $data['raw'] = $obj->getArray(); // no validation needed
 
         $this->ui->outputData($data, 'package-info');
     }

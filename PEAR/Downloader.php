@@ -578,7 +578,7 @@ class PEAR_Downloader extends PEAR_Common
     {
         return $this->_downloadedPackages = $this->_download($packages);
         if (!isset($this->_registry)) {
-            $this->_registry = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+            $this->_registry = &new PEAR_Registry($this->config->get('php_dir', null, 'pear.php.net'));
         }
         if (!isset($this->_remote)) {
             $this->_remote = &new PEAR_Remote($this->config);
@@ -603,7 +603,7 @@ class PEAR_Downloader extends PEAR_Common
                     if (!$this->_internalDownload) {
                         $channel = $this->config->get('default_channel');
                     } else {
-                        $channel = 'pear';
+                        $channel = 'pear.php.net';
                     }
                 }
                 if (PEAR::isError($pkgfile)) {
@@ -717,7 +717,7 @@ class PEAR_Downloader extends PEAR_Common
             if (!$this->_internalDownload) {
                 $channel = $this->config->get('default_channel');
             } else {
-                $channel = 'pear';
+                $channel = 'pear.php.net';
             }
             $package = $pkgfile;
         }
@@ -811,7 +811,7 @@ class PEAR_Downloader extends PEAR_Common
         $channel = $pkg->getChannel();
         $package = $pkg->getPackage();
         $state = $this->_preferredState;
-        $depchannel = isset($info['channel']) ? $info['channel'] : 'pear';
+        $depchannel = isset($info['channel']) ? $info['channel'] : 'pear.php.net';
         if (!isset($this->_options['alldeps']) && isset($info['optional']) &&
               $info['optional'] == 'yes') {
             // skip optional deps
@@ -1134,7 +1134,7 @@ class PEAR_Downloader extends PEAR_Common
         $ret = array();
         foreach($rel['deps'] as $dep) {
             if ($dep['type'] == 'pkg') {
-                $channel = isset($dep['channel']) ? $dep['channel'] : 'pear';
+                $channel = isset($dep['channel']) ? $dep['channel'] : 'pear.php.net';
                 $ret[] = $channel . '/' . $dep['name'];
             }
         }
@@ -1204,7 +1204,7 @@ class PEAR_Downloader extends PEAR_Common
         $ret = array();
         foreach($deps as $dep) {
             if ($dep['type'] == 'pkg') {
-                $channel = isset($dep['channel']) ? $dep['channel'] : 'pear';
+                $channel = isset($dep['channel']) ? $dep['channel'] : 'pear.php.net';
                 $ret[] = $channel . '/' . $dep['name'];
             }
         }

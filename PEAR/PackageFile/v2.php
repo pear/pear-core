@@ -199,7 +199,7 @@ class PEAR_PackageFile_v2
                     'date', 'time'))) {
             return false;
         }
-        if (method_exists($this, $field)) {
+        if (method_exists($this, "get$field")) {
             $test = $this->{"get$field"}();
             if (is_string($test)) {
                 return $test;
@@ -316,10 +316,10 @@ class PEAR_PackageFile_v2
                         }
                     }
                     // install files as this name
-                    if (isset($instance['filelist']['installas'])) {
-                        $installas = isset($instance['filelist']['installas'][0]) ?
-                            $instance['filelist']['installas'] :
-                            array($instance['filelist']['installas']);
+                    if (isset($instance['filelist']['install'])) {
+                        $installas = isset($instance['filelist']['install'][0]) ?
+                            $instance['filelist']['install'] :
+                            array($instance['filelist']['install']);
                         foreach ($installas as $as) {
                             $contents[$as['attribs']['name']]['attribs']['install-as'] =
                                 $as['attribs']['as'];
@@ -342,9 +342,9 @@ class PEAR_PackageFile_v2
     function setInstalledAs($file, $path)
     {
         if ($path) {
-            return $this->_packageInfo[$file]['installed_as'] = $path;
+            return $this->_packageInfo['filelist'][$file]['installed_as'] = $path;
         }
-        unset($this->_packageInfo[$file]['installed_as']);
+        unset($this->_packageInfo['filelist'][$file]['installed_as']);
     }
 
     /**
@@ -405,25 +405,26 @@ class PEAR_PackageFile_v2
     function fromArray($pinfo)
     {
         unset($pinfo['old']);
+        unset($pinfo['xsdversion']);
         $this->_packageInfo = $pinfo;
     }
 
     /**
      * @return array
      */
-    function toArray()
+    function toArray($forreg = false)
     {
         if (!$this->validate(PEAR_VALIDATE_NORMAL)) {
             return false;
         }
-        return $this->getArray();
+        return $this->getArray($forreg);
     }
 
     function getArray($forReg = false)
     {
         if ($forReg) {
             $this->_packageInfo['old'] = array();
-            $this->_packageInfo['old']['release_version'] = $this->getVersion();
+            $this->_packageInfo['old']['version'] = $this->getVersion();
             $this->_packageInfo['old']['release_date'] = $this->getDate();
             $this->_packageInfo['old']['release_state'] = $this->getState();
             $this->_packageInfo['old']['release_license'] = $this->getLicense();
@@ -482,30 +483,52 @@ class PEAR_PackageFile_v2
     function getMaintainers($raw = false)
     {
         
-        if (isset($this->_packageInfo['leads']) ||
-              isset($this->_packageInfo['maintainers'])) {
-            if ($raw) {
-                $ret = (isset($this->_packageInfo['leads'])) ?
-                    array('leads' => $this->_packageInfo['leads']) : array();
-                (isset($this->_packageInfo['maintainers'])) ?
-                    $ret['maintainers'] = $this->_packageInfo['maintainers'] :null;
-                return $ret;
-            } else {
-                $ret = array();
-                if (isset($this->_packageInfo['leads'])) {
-                    foreach ($this->_packageInfo['leads'] as $lead) {
-                        $s = $lead;
-                        $s['role'] = 'lead';
-                        $ret[] = $s;
-                    }
-                }
-                if (isset($this->_packageInfo['maintainers'])) {
-                    foreach ($this->_packageInfo['maintainers'] as $maintainer) {
-                        $s = $maintainer;
-                        $ret[] = $s;
-                    }
+        if ($raw) {
+            $ret = array('lead' => $this->_packageInfo['lead']);
+            (isset($this->_packageInfo['developer'])) ?
+                $ret['developer'] = $this->_packageInfo['developer'] :null;
+            (isset($this->_packageInfo['contributor'])) ?
+                $ret['contributor'] = $this->_packageInfo['contributor'] :null;
+            (isset($this->_packageInfo['helper'])) ?
+                $ret['helper'] = $this->_packageInfo['helper'] :null;
+            return $ret;
+        } else {
+            $ret = array();
+            $leads = isset($this->_packageInfo['lead'][0]) ? $this->_packageInfo['lead'] :
+                array($this->_packageInfo['lead']);
+            foreach ($leads as $lead) {
+                $s = $lead;
+                $s['role'] = 'lead';
+                $ret[] = $s;
+            }
+            if (isset($this->_packageInfo['developer'])) {
+                $leads = isset($this->_packageInfo['developer'][0]) ?
+                    $this->_packageInfo['developer'] :
+                    array($this->_packageInfo['developer']);
+                foreach ($leads as $maintainer) {
+                    $s = $maintainer;
+                    $ret[] = $s;
                 }
             }
+            if (isset($this->_packageInfo['contributor'])) {
+                $leads = isset($this->_packageInfo['contributor'][0]) ?
+                    $this->_packageInfo['contributor'] :
+                    array($this->_packageInfo['contributor']);
+                foreach ($leads as $maintainer) {
+                    $s = $maintainer;
+                    $ret[] = $s;
+                }
+            }
+            if (isset($this->_packageInfo['helper'])) {
+                $leads = isset($this->_packageInfo['helper'][0]) ?
+                    $this->_packageInfo['helper'] :
+                    array($this->_packageInfo['helper']);
+                foreach ($leads as $maintainer) {
+                    $s = $maintainer;
+                    $ret[] = $s;
+                }
+            }
+            return $ret;
         }
         return false;
     }
@@ -643,57 +666,66 @@ class PEAR_PackageFile_v2
                 'php' => 'php',
                 'package' => 'pkg',
                 'extension' => 'ext',
-                'os' => 'os'
+                'os' => 'os',
+                'pearinstaller' => 'pkg',
                 );
-            if (isset($this->_packageInfo['dependendencies']['required'])) {
-                foreach ($this->_packageInfo['dependendencies']['required']
-                      as $dtype => $deps) {
-                    if (!isset($deps[0])) {
-                        $deps = array($deps);
+            foreach ($this->_packageInfo['dependencies']['required']
+                  as $dtype => $deps) {
+                if (!isset($deps[0])) {
+                    $deps = array($deps);
+                }
+                foreach ($deps as $dep) {
+                    if (!isset($map[$dtype])) {
+                        continue;
                     }
-                    foreach ($deps as $dep) {
-                        if (!isset($map[$dtype])) {
-                            continue;
-                        }
-                        $s = array('type' => $map[$dtype],
-                            'channel' => $t = @$dep['channel'] ? $t : 'pear.php.net');
-                        if (!isset($dep['min']) &&
-                              !isset($dep['max'])) {
-                            $s['rel'] = 'has';
-                        } elseif (isset($dep['min']) &&
-                              isset($dep['max'])) {
-                            $s['rel'] = 'ge';
-                            $s1 = $s;
-                            $s['version'] = $dep['min'];
-                            $s1['version'] = $dep['max'];
-                            if ($dtype != 'php') {
-                                $s['name'] = $dep['name'];
-                                $s1['name'] = $dep['name'];
-                            }
-                            $s['optional'] = 'no';
-                            $s1['optional'] = 'no';
-                            $ret[] = $s1;
-                        } elseif (isset($dep['min'])) {
-                            $s['rel'] = 'ge';
-                            $s['version'] = $dep['min'];
-                            $s['optional'] = 'no';
-                            if ($dtype != 'php') {
-                                $s['name'] = $dep['name'];
-                            }
-                        } elseif (isset($dep['max'])) {
-                            $s['rel'] = 'le';
-                            $s['version'] = $dep['min'];
-                            $s['optional'] = 'no';
-                            if ($dtype != 'php') {
-                                $s['name'] = $dep['name'];
-                            }
-                        }
-                        $ret[] = $s;
+                    if ($dtype == 'pearinstaller') {
+                        $dep['name'] = 'PEAR';
+                        $dep['channel'] = 'pear.php.net';
                     }
+                    $s = array('type' => $map[$dtype]);
+                    if (isset($dep['channel'])) {
+                        $s['channel'] = $dep['channel'];
+                    }
+                    if (!isset($dep['min']) &&
+                          !isset($dep['max'])) {
+                        $s['rel'] = 'has';
+                    } elseif (isset($dep['min']) &&
+                          isset($dep['max'])) {
+                        $s['rel'] = 'ge';
+                        $s1 = $s;
+                        $s1['rel'] = 'le';
+                        $s['version'] = $dep['min'];
+                        $s1['version'] = $dep['max'];
+                        if (isset($dep['channel'])) {
+                            $s1['channel'] = $dep['channel'];
+                        }
+                        if ($dtype != 'php') {
+                            $s['name'] = $dep['name'];
+                            $s1['name'] = $dep['name'];
+                        }
+                        $s['optional'] = 'no';
+                        $s1['optional'] = 'no';
+                        $ret[] = $s1;
+                    } elseif (isset($dep['min'])) {
+                        $s['rel'] = 'ge';
+                        $s['version'] = $dep['min'];
+                        $s['optional'] = 'no';
+                        if ($dtype != 'php') {
+                            $s['name'] = $dep['name'];
+                        }
+                    } elseif (isset($dep['max'])) {
+                        $s['rel'] = 'le';
+                        $s['version'] = $dep['min'];
+                        $s['optional'] = 'no';
+                        if ($dtype != 'php') {
+                            $s['name'] = $dep['name'];
+                        }
+                    }
+                    $ret[] = $s;
                 }
             }
-            if (isset($this->_packageInfo['dependendencies']['optional'])) {
-                foreach ($this->_packageInfo['dependendencies']['optional']
+            if (isset($this->_packageInfo['dependencies']['optional'])) {
+                foreach ($this->_packageInfo['dependencies']['optional']
                       as $dtype => $deps) {
                     if (!isset($deps[0])) {
                         $deps = array($deps);
@@ -702,8 +734,7 @@ class PEAR_PackageFile_v2
                         if (!isset($map[$dtype])) {
                             continue;
                         }
-                        $s = array('type' => $map[$dtype],
-                            'channel' => $t = @$dep['channel'] ? $t : 'pear.php.net');
+                        $s = array('type' => $map[$dtype]);
                         if (!isset($dep['min']) &&
                               !isset($dep['max'])) {
                             $s['rel'] = 'has';
@@ -739,8 +770,8 @@ class PEAR_PackageFile_v2
                     }
                 }
             }
-            if (isset($this->_packageInfo['dependendencies']['group'])) {
-                foreach ($this->_packageInfo['dependendencies']['group']
+            if (isset($this->_packageInfo['dependencies']['group'])) {
+                foreach ($this->_packageInfo['dependencies']['group']
                       as $dtype => $deps) {
                     if (!isset($deps[0])) {
                         $deps = array($deps);
@@ -846,6 +877,41 @@ class PEAR_PackageFile_v2
             return $this->_packageInfo['contents']['bundledpackage'];
         }
         return false;
+    }
+
+    function getLastModified()
+    {
+        if (isset($this->_packageInfo['_lastmodified'])) {
+            return $this->_packageInfo['_lastmodified'];
+        }
+        return false;
+    }
+
+    /**
+     * Get the contents of a file listed within the package.xml
+     * @param string
+     * @return string
+     */
+    function getFileContents($file)
+    {
+        if ($this->_archiveFile == $this->_packageFile) { // unpacked
+            $dir = dirname($this->_packageFile);
+            $file = $dir . DIRECTORY_SEPARATOR . $file;
+            $file = str_replace(array('/', '\\'),
+                array(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR), $file);
+            if (file_exists($file) && is_readable($file)) {
+                return implode('', file($file));
+            }
+        } else { // tgz
+            include_once 'Archive/Tar.php';
+            $tar = &new Archive_Tar($this->_archiveFile);
+            $tar->pushErrorHandling(PEAR_ERROR_RETURN);
+            $file = $tar->extractInString($file);
+            $tar->popErrorHandling();
+            if (PEAR::isError($file)) {
+                return PEAR::raiseError("Cannot locate file '$file' in archive");
+            }
+        }
     }
 
     function &getDefaultGenerator()
@@ -1561,7 +1627,7 @@ class PEAR_PackageFile_v2
                                 }
                                 foreach ($value as $v) {
                                     $ret = call_user_func(array($tagClass, 'validateXml'),
-                                        $v, $this->_config);
+                                        $this, $v, $this->_config, $file);
                                     if (is_array($ret)) {
                                         return $this->_invalidTask($task, $ret,
                                             $file['attribs']['name']);
@@ -1572,7 +1638,7 @@ class PEAR_PackageFile_v2
                             }
                             foreach ($value as $v) {
                                 $ret = call_user_func(array($tagClass, 'validateXml'),
-                                    $v, $this->_config);
+                                    $this, $v, $this->_config, $file);
                                 if (is_array($ret)) {
                                     return $this->_invalidTask($task, $ret,
                                         $list[$filetag]['attribs']['name']);
@@ -1616,7 +1682,7 @@ class PEAR_PackageFile_v2
                                 }
                                 foreach ($value as $v) {
                                     $ret = call_user_func(array($tagClass, 'validateXml'),
-                                        $v, $this->_config);
+                                        $this, $v, $this->_config, $file);
                                     if (is_array($ret)) {
                                         return $this->_invalidTask($task, $ret,
                                             $file['attribs']['name']);
@@ -1985,10 +2051,11 @@ class PEAR_PackageFile_v2
      * Analyze the source code of the given PHP file
      *
      * @param  string Filename of the PHP file
+     * @param  boolean whether to analyze $file as the file contents
      * @return mixed
      * @access private
      */
-    function _analyzeSourceCode($file)
+    function _analyzeSourceCode($file, $string = false)
     {
         if (!function_exists("token_get_all")) {
             return false;
@@ -2005,7 +2072,11 @@ class PEAR_PackageFile_v2
         if (!$fp = @fopen($file, "r")) {
             return false;
         }
-        $contents = fread($fp, filesize($file));
+        if ($string) {
+            $contents = $file;
+        } else {
+            $contents = fread($fp, filesize($file));
+        }
         $tokens = token_get_all($contents);
 /*
         for ($i = 0; $i < sizeof($tokens); $i++) {
