@@ -184,6 +184,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
      <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
      <tasks:windowseol/>
     </file>
+    <file name="pecl.bat" role="script">
+     <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
+     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+     <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
+     <tasks:windowseol/>
+    </file>
     <file name="pear.sh" role="script">
      <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
      <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
@@ -288,6 +294,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   </installconditions>
   <filelist>
    <install as="pear.bat" name="scripts/pear.bat" />
+   <install as="pecl.bat" name="scripts/pecl.bat" />
    <install as="pearcmd.php" name="scripts/pearcmd.php" />
    <ignore name="scripts/pear.sh" />
    <ignore name="scripts/pecl.sh" />
@@ -299,6 +306,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <install as="pecl" name="scripts/pecl.sh" />
    <install as="pearcmd.php" name="scripts/pearcmd.php" />
    <ignore name="scripts/pear.bat" />
+   <ignore name="scripts/pecl.bat" />
   </filelist>
  </phprelease>
  <changelog>
