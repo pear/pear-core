@@ -415,9 +415,6 @@ http://pear.php.net/dtd/package-2.0.xsd',
             'name' => $this->_packagefile->getPackage(),
             'channel' => 'pear.php.net',
         );
-        if ($extends = $this->_packagefile->getExtends()) {
-            $arr['extends'] = $extends;
-        }
         $arr['summary'] = $this->_packagefile->getSummary();
         $arr['description'] = $this->_packagefile->getDescription();
         $maintainers = $this->_packagefile->getMaintainers();
