@@ -17,7 +17,8 @@ function returnspush($err)
 }
 $stack->pushCallback('returnspush');
 $log = new Burflog;
-$stack->setLogger($log);
+$a = array(&$log, 'log');
+$stack->setLogger($a);
 $wasCalled = $wasLogged = false;
 $stack->push(1);
 $phpunit->assertTrue($wasCalled, 'returnspush not called');
