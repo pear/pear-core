@@ -13,6 +13,8 @@ copyItem('registry'); //setup for nice clean rebuild
 $db = &PEAR_DependencyDB::singleton($config);
 $db->rebuildDB();
 $p = array('package' => 'PEAR', 'channel' => 'pear.php.net');
+$app = $db->getDependentPackageDependencies($p);
+ksort($app['pear.php.net']);
 $phpunit->assertEquals(array (
   'pear.php.net' => 
   array (
@@ -59,17 +61,6 @@ $phpunit->assertEquals(array (
       'type' => 'required',
       'group' => false,
     ),
-    'peartests' => 
-    array (
-      'dep' => 
-      array (
-        'name' => 'PEAR',
-        'channel' => 'pear.php.net',
-        'min' => '1.4.0dev11',
-      ),
-      'type' => 'required',
-      'group' => false,
-    ),
     'pear_info' => 
     array (
       'dep' => 
@@ -88,6 +79,17 @@ $phpunit->assertEquals(array (
         'name' => 'PEAR',
         'channel' => 'pear.php.net',
         'min' => '1.1',
+      ),
+      'type' => 'required',
+      'group' => false,
+    ),
+    'peartests' => 
+    array (
+      'dep' => 
+      array (
+        'name' => 'PEAR',
+        'channel' => 'pear.php.net',
+        'min' => '1.4.0dev11',
       ),
       'type' => 'required',
       'group' => false,
@@ -134,7 +136,7 @@ $phpunit->assertEquals(array (
       'group' => false,
     ),
   ),
-), $db->getDependentPackageDependencies($p), 'PEAR');
+), $app, 'PEAR');
 $p = array('package' => 'LiveUser', 'channel' => 'pear.php.net');
 $phpunit->assertEquals(false, $db->getDependentPackageDependencies($p), 'LiveUser');
 $p = array('package' => 'Slonk', 'channel' => 'pear.php.net');
