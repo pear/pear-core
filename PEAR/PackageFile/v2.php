@@ -356,6 +356,50 @@ class PEAR_PackageFile_v2
     }
 
     /**
+     * Determines whether this package.xml has post-install scripts or not
+     * @return array|false
+     */
+    function listPostinstallScripts()
+    {
+        $filelist = $this->getFilelist();
+        $contents = $this->getContents();
+        $contents = $contents['dir']['file'];
+        if (!is_array($contents) || !isset($contents[0])) {
+            $contents = array($contents);
+        }
+        $taskfiles = array();
+        foreach ($contents as $file) {
+            $atts = $file['attribs'];
+            unset($file['attribs']);
+            if (count($file)) {
+                $taskfiles[$atts['name']] = $file;
+            }
+        }
+        $common = new PEAR_Common;
+        $common->debug = $this->_config->get('verbose');
+        $this->_scripts = array();
+        $ret = array();
+        foreach ($taskfiles as $name => $tasks) {
+            if (!isset($filelist[$name])) {
+                // ignored files will not be in the filelist
+                continue;
+            }
+            $atts = $filelist[$name];
+            foreach ($tasks as $tag => $raw) {
+                $task = $this->getTask($tag);
+                $task = &new $task($this->_config, $common, PEAR_TASK_INSTALL);
+                if ($task->isScript()) {
+                    $ret[] = $filelist[$name]['installed_as'];
+                }
+            }
+        }
+        if (count($ret)) {
+            return $ret;
+        }
+        return false;
+    }
+
+    /**
      * Initialize post-install scripts for running
      *
      * This method can be used to detect post-install scripts, as the return value
