@@ -402,12 +402,8 @@ class PEAR_PackageFile_Generator_v1
     function &toV2()
     {
         $arr = array(
-            'name' => array(
-                'attribs' => array(
-                        'channel' => 'pear.php.net',
-                    ),
-                '_content' => $this->_packagefile->getPackage(),
-            )
+            'name' => $this->_packagefile->getPackage(),
+            'channel' => 'pear.php.net',
         );
         if ($extends = $this->_packagefile->getExtends()) {
             $arr['extends'] = $extends;
@@ -419,11 +415,13 @@ class PEAR_PackageFile_Generator_v1
             if ($maintainer['role'] != 'lead') {
                 continue;
             }
-            unset($maintainer['role']);
-            $maintainer['active'] = 'yes';
-            $maintainer['user'] = $maintainer['handle'];
-            unset($maintainer['handle']);
-            $arr['lead'][] = array('attribs' => $maintainer);
+            $new = array(
+                'name' => $maintainer['name'],
+                'user' => $maintainer['handle'],
+                'email' => $maintainer['email'],
+                'active' => 'yes',
+            );
+            $arr['lead'][] = $new;
         }
         if (count($arr['lead']) == 1) {
             $arr['lead'] = $arr['lead'][0];
@@ -432,26 +430,33 @@ class PEAR_PackageFile_Generator_v1
             if ($maintainer['role'] == 'lead') {
                 continue;
             }
-            $maintainer['active'] = 'yes';
-            $maintainer['user'] = $maintainer['handle'];
-            unset($maintainer['handle']);
-            $arr['maintainer'][] = array('attribs' => $maintainer);
+            $new = array(
+                'name' => $maintainer['name'],
+                'user' => $maintainer['handle'],
+                'email' => $maintainer['email'],
+                'active' => 'yes',
+            );
+            $arr[$maintainer['role']][] = $new;
         }
-        if (isset($arr['maintainer']) && count($arr['maintainer']) == 1) {
-            $arr['maintainer'] = $arr['maintainer'][0];
+        if (isset($arr['developer']) && count($arr['developer']) == 1) {
+            $arr['developer'] = $arr['developer'][0];
+        }
+        if (isset($arr['contributor']) && count($arr['contributor']) == 1) {
+            $arr['contributor'] = $arr['contributor'][0];
+        }
+        if (isset($arr['helper']) && count($arr['helper']) == 1) {
+            $arr['helper'] = $arr['helper'][0];
         }
         $arr['date'] = $this->_packagefile->getDate();
-        $arr['version'] = array(
-                'attribs' =>
-                    array('api' => $this->_packagefile->getVersion(),
-                          'package' => $this->_packagefile->getVersion()
-                         )
+        $arr['version'] =
+            array(
+                'release' => $this->_packagefile->getVersion(),
+                'api' => $this->_packagefile->getVersion(),
             );
-        $arr['stability'] = array(
-                'attribs' =>
-                    array('api' => $this->_packagefile->getState(),
-                          'package' => $this->_packagefile->getState()
-                         )
+        $arr['stability'] =
+            array(
+                'release' => $this->_packagefile->getState(),
+                'api' => $this->_packagefile->getState(),
             );
         $licensemap =
             array(
@@ -482,17 +487,15 @@ class PEAR_PackageFile_Generator_v1
         if ($cl = $this->_packagefile->getChangelog()) {
             foreach ($cl as $release) {
                 $rel = array();
-                $rel['version'] = array(
-                        'attribs' =>
-                            array('api' => $release['version'],
-                                  'package' => $release['version']
-                                 )
+                $rel['version'] =
+                    array(
+                        'release' => $this->_packagefile->getVersion(),
+                        'api' => $this->_packagefile->getVersion(),
                     );
-                $rel['stability'] = array(
-                        'attribs' =>
-                            array('api' => $release['release_state'],
-                                  'package' => $release['release_state']
-                                 )
+                $rel['stability'] =
+                    array(
+                        'release' => $this->_packagefile->getState(),
+                        'api' => $this->_packagefile->getState(),
                     );
                 $rel['date'] = $release['release_date'];
                 if (isset($release['release_license'])) {
@@ -563,8 +566,7 @@ class PEAR_PackageFile_Generator_v1
     function _convertDependencies2_0(&$release, $internal = false)
     {
         $peardep = array('pearinstaller' =>
-            array('attribs' =>
-                array('min' => '@PEAR-VER@')));
+            array('min' => '@PEAR-VER@'));
         $required = $optional = array();
         $release['dependencies'] = array();
         if ($this->_packagefile->hasDeps()) {
@@ -631,7 +633,10 @@ class PEAR_PackageFile_Generator_v1
         }
         if (!isset($release['dependencies']['required']['php'])) {
             $release['dependencies']['required']['php'] =
-                array('attribs' => array('min' => phpversion()));
+                array('min' => phpversion(), 'max' => '6.0.0');
+        }
+        if (!isset($release['dependencies']['required']['php']['max'])) {
+            $release['dependencies']['required']['php']['max'] = '6.0.0';
         }
         $order = array();
         $bewm = $release['dependencies']['required'];
@@ -640,14 +645,6 @@ class PEAR_PackageFile_Generator_v1
         isset($bewm['package']) ? $order['package'] = $bewm['package'] :0;
         isset($bewm['extension']) ? $order['extension'] = $bewm['extension'] :0;
         $release['dependencies']['required'] = $order;
-        if (isset($release['dependencies']['optional'])) {
-            $release['dependencies']['group'] =
-                $release['dependencies']['optional'];
-            unset($release['dependencies']['optional']);
-            $release['dependencies']['group']['attribs']['name'] = 'optional';
-            $release['dependencies']['group']['attribs']['hint'] =
-                'optional dependencies - you can define custom groups of optional deps';
-        }
     }
 
     function _convertRelease2_0(&$release, $package)
@@ -664,7 +661,7 @@ class PEAR_PackageFile_Generator_v1
                 foreach ($package['platform'] as $file => $os) {
                     $oses[$os] = count($oses);
                     $release[$oses[$os]]['installconditions']
-                        ['os']['attribs']['pattern'] = $os;
+                        ['os']['name'] = $os;
                     if (isset($package['install-as'][$file])) {
                         $release[$oses[$os]]['filelist']['install'][] =
                         array('attribs' => 
@@ -680,7 +677,7 @@ class PEAR_PackageFile_Generator_v1
                 }
                 if (count($generic)) {
                     $release[count($oses)]['installconditions']['os']
-                        ['attribs']['pattern'] = '*';
+                        ['name'] = '*';
                     foreach ($generic as $file) {
                         $release[count($oses)]['filelist']['install'][] =
                         array('attribs' => 
@@ -747,28 +744,32 @@ class PEAR_PackageFile_Generator_v1
         }
         $php = array();
         if ($dep['type'] != 'php') {
-            $php['attribs']['name'] = $dep['name'];
+            $php['name'] = $dep['name'];
             if ($dep['type'] == 'pkg') {
-                $php['attribs']['channel'] = 'pear.php.net';
+                $php['channel'] = 'pear.php.net';
             }
         }
         switch ($dep['rel']) {
             case 'gt' :
-                $php['exclude']['attribs']['version'] = $dep['version'];
+                $php['min'] = $dep['version'];
+                $php['exclude'] = $dep['version'];
+            break;
             case 'ge' :
-                $php['attribs']['min'] = $dep['version'];
+                $php['min'] = $dep['version'];
             break;
             case 'lt' :
-                $php['exclude']['attribs']['version'] = $dep['version'];
+                $php['max'] = $dep['version'];
+                $php['exclude'] = $dep['version'];
+            break;
             case 'le' :
-                $php['attribs']['max'] = $dep['version'];
+                $php['max'] = $dep['version'];
             break;
             case 'eq' :
-                $php['attribs']['max'] = $dep['version'];
-                $php['attribs']['min'] = $dep['version'];
+                $php['min'] = $dep['version'];
+                $php['max'] = $dep['version'];
             break;
             case 'not' :
-                $php['exclude']['attribs']['version'] = $dep['version'];
+                $php['exclude'] = $dep['version'];
             break;
         }
         return $php;
@@ -786,11 +787,11 @@ class PEAR_PackageFile_Generator_v1
             if (!dep) {
                 continue;
             }
-            if (isset($dep['attribs']['min'])) {
-                $min[$dep['attribs']['min']] = count($min);
+            if (isset($dep['min'])) {
+                $min[$dep['min']] = count($min);
             }
-            if (isset($dep['attribs']['max'])) {
-                $max[$dep['attribs']['max']] = count($max);
+            if (isset($dep['max'])) {
+                $max[$dep['max']] = count($max);
             }
         }
         if (count($min) > 0) {
@@ -812,10 +813,10 @@ class PEAR_PackageFile_Generator_v1
             $max = false;
         }
         if ($min) {
-            $php['attribs']['min'] = $min;
+            $php['min'] = $min;
         }
         if ($max) {
-            $php['attribs']['max'] = $max;
+            $php['max'] = $max;
         }
         $exclude = array();
         foreach ($test as $dep) {
@@ -842,21 +843,19 @@ class PEAR_PackageFile_Generator_v1
             $php = array();
             $min = array();
             $max = array();
+            $php['name'] = $name;
+            $php['channel'] = 'pear.php.net';
             foreach ($test as $dep) {
                 if (!$dep) {
                     continue;
                 }
-                if (isset($dep['attribs']['min'])) {
-                    $min[$dep['attribs']['min']] = count($min);
+                if (isset($dep['min'])) {
+                    $min[$dep['min']] = count($min);
                 }
-                if (isset($dep['attribs']['max'])) {
-                    $max[$dep['attribs']['max']] = count($max);
+                if (isset($dep['max'])) {
+                    $max[$dep['max']] = count($max);
                 }
             }
-            if (isset($dep['attribs']['channel'])) {
-                $php['attribs']['channel'] = $dep['attribs']['channel'];
-            }
-            $php['attribs']['name'] = $name;
             if (count($min) > 0) {
                 uksort($min, 'version_compare');
             }
@@ -876,10 +875,10 @@ class PEAR_PackageFile_Generator_v1
                 $max = false;
             }
             if ($min) {
-                $php['attribs']['min'] = $min;
+                $php['min'] = $min;
             }
             if ($max) {
-                $php['attribs']['max'] = $max;
+                $php['max'] = $max;
             }
             $exclude = array();
             foreach ($test as $dep) {
