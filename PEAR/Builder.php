@@ -76,7 +76,7 @@ class PEAR_Builder extends PEAR_Common
                 return $pkg;
             }
         }
-        $dir = dirname($descfile);
+        $dir = dirname($pkg->getArchiveFile());
         $old_cwd = getcwd();
 
         if (!@chdir($dir)) {
