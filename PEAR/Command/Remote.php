@@ -228,7 +228,7 @@ parameter.
             'headline' => array('Channel', 'Package', 'Latest', 'Local'),
             );
         $local_pkgs = $reg->listPackages($channel);
-        
+
         foreach ($available as $name => $info) {
             $installed = $reg->packageInfo($name);
             $desc = $info['summary'];
@@ -261,12 +261,12 @@ parameter.
                 @$info['deps'],
                 );
         }
-        
+
         foreach ($local_pkgs as $name) {
             $info = $reg->packageInfo($name, null, $channel);
             $data['data']['Local'][] = array(
                 $channel,
-                $info['package'], 
+                $info['package'],
                 '',
                 $info['version'],
                 $info['summary'],
@@ -302,10 +302,13 @@ parameter.
             }
         }
         $r = new PEAR_Remote($this->config);
-        $available = $r->call('package.listAll', true, false);
+        $available = $r->call('package.listAll', true, true);
         if (PEAR::isError($available)) {
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($available);
+        }
+        if (!$available) {
+            return $this->raiseError('no packages found');
         }
         $data = array(
             'caption' => 'Matched packages:',
@@ -313,7 +316,7 @@ parameter.
             'headline' => array('Channel', 'Package', 'Stable/(Latest)', 'Local'),
             );
 
-        foreach ((array)$available as $name => $info) {
+        foreach ($available as $name => $info) {
             $found = (!empty($package) && stristr($name, $package) !== false);
             if (!$found && !(isset($params[1]) && !empty($params[1])
                 && (stristr($info['summary'], $params[1]) !== false
