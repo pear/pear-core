@@ -1,6 +1,6 @@
 <?php
 /**
- * Parser for package.xml version 2.0
+ * Parser for package.xml version 1.0
  */
 class PEAR_PackageFile_Parser_PHP4_v1
 {
