@@ -1059,7 +1059,9 @@ class PEAR_ChannelFile {
                 $this->addFunction('xmlrpc', '1.0', 'package.listAll', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.info', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.getDownloadURL', $mirror);
+                $this->addFunction('xmlrpc', '1.1', 'package.getDownloadURL', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.getDepDownloadURL', $mirror);
+                $this->addFunction('xmlrpc', '1.1', 'package.getDepDownloadURL', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.search', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'channel.listAll', $mirror);
 //                $this->setBaseURL('package', 'http://' . $this->getName() . '/rest/1.0/package');
