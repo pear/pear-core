@@ -221,7 +221,8 @@ class PEAR_PackageFile
             PEAR_PackageFile::addTempFile($tmpdir);
         }
         if (!$xml || !$tar->extractList(array($xml), $tmpdir)) {
-            $ret = PEAR::raiseError('could not extract the package.xml file');
+            $ret = PEAR::raiseError('could not extract the package.xml file from "' .
+                $origfile . '"');
             return $ret;
         }
         $ret = &PEAR_PackageFile::fromPackageFile("$tmpdir/$xml", $state, $origfile);
