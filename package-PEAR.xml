@@ -155,6 +155,7 @@ PEAR_ErrorStack:
     </dir>
     <dir name="Task">
      <file role="php" name="Common.php"/>
+     <file role="php" name="Postinstallscript.php"/>
      <file role="php" name="Replace.php"/>
     </dir>
     <file role="php" name="Common.php"/>
