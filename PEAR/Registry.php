@@ -1508,6 +1508,9 @@ class PEAR_Registry extends PEAR
 
     function parsedPackageNameToString($parsed)
     {
+        if (is_string($parsed)) {
+            return $parsed;
+        }
         if (is_object($parsed)) {
             $p = $parsed;
             $parsed = array(
