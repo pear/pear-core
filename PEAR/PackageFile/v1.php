@@ -1158,7 +1158,7 @@ class PEAR_PackageFile_v1
         if (!$fp = @fopen($file, "r")) {
             return false;
         }
-        $contents = fread($fp, filesize($file));
+        $contents = @fread($fp, filesize($file));
         $tokens = token_get_all($contents);
 /*
         for ($i = 0; $i < sizeof($tokens); $i++) {
