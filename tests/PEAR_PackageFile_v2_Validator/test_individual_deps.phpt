@@ -17,14 +17,14 @@ $pf->validate();
 $phpunit->assertErrors(array(
 // required
 // package
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><package><name>blh</name>, found <moo> expected one of "exclude, providesextension"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><package><name>blh</name>, found <moo> expected one of "exclude, nodefault, providesextension"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><package><name>blh2</name>, found <min> expected one of "providesextension"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><required><package><name>blh2</name>: dependencies with a <uri> tag cannot have any versioning information'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><required><package><name>nouri</name>: channel cannot be __uri, this is a pseudo-channel reserved for uri dependencies only'),
 
 // subpackage
 
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><subpackage><name>blh</name>, found <moo> expected one of "exclude, providesextension"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><subpackage><name>blh</name>, found <moo> expected one of "exclude, nodefault, providesextension"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><subpackage><name>blh3</name>, found <min> expected one of "conflicts"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><required><subpackage><name>blh3</name>: conflicting dependencies cannot have versioning info, use <exclude> to exclude specific versions of a dependency'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Subpackage dependency "blh3" cannot use <conflicts/>, only package dependencies can use this tag'),
@@ -56,13 +56,13 @@ $phpunit->assertErrors(array(
 // optional
 // package
 
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional><package><name>blh</name>, found <moo> expected one of "exclude, providesextension"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional><package><name>blh</name>, found <moo> expected one of "exclude, nodefault, providesextension"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional><package><name>blh2</name>, found <min> expected one of "providesextension"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><optional><package><name>blh2</name>: dependencies with a <uri> tag cannot have any versioning information'),
 
 // subpackage
 
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional><subpackage><name>blh</name>, found <moo> expected one of "exclude, providesextension"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional><subpackage><name>blh</name>, found <moo> expected one of "exclude, nodefault, providesextension"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional><subpackage><name>blh3</name>, found <min> expected one of "conflicts"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><optional><subpackage><name>blh3</name>: conflicting dependencies cannot have versioning info, use <exclude> to exclude specific versions of a dependency'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Subpackage dependency "blh3" cannot use <conflicts/>, only package dependencies can use this tag'),
@@ -78,13 +78,13 @@ $phpunit->assertErrors(array(
 // group
 // package
 
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><group name="remoteinstall"><package><name>blh</name>, found <moo> expected one of "exclude, providesextension"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><group name="remoteinstall"><package><name>blh</name>, found <moo> expected one of "exclude, nodefault, providesextension"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><group name="remoteinstall"><package><name>blh2</name>, found <min> expected one of "providesextension"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><group name="remoteinstall"><package><name>blh2</name>: dependencies with a <uri> tag cannot have any versioning information'),
 
 // subpackage
 
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><group name="remoteinstall"><subpackage><name>blh</name>, found <moo> expected one of "exclude, providesextension"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><group name="remoteinstall"><subpackage><name>blh</name>, found <moo> expected one of "exclude, nodefault, providesextension"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><group name="remoteinstall"><subpackage><name>blh3</name>, found <min> expected one of "conflicts"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><group name="remoteinstall"><subpackage><name>blh3</name>: conflicting dependencies cannot have versioning info, use <exclude> to exclude specific versions of a dependency'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Subpackage dependency "blh3" cannot use <conflicts/>, only package dependencies can use this tag'),
