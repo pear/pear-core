@@ -20,40 +20,38 @@ $GLOBALS['pearweb']->addXmlrpcConfig('grob', 'package.getDownloadURL',
     array('version' => '1.1.0',
           'info' =>
           '<?xml version="1.0"?>
-<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>foo_win</name>
  <channel>grob</channel>
- <summary>Main Package</summary>
- <description>Main Package</description>
+ <summary>foo binary</summary>
+ <description>foo binary for windows</description>
  <lead>
   <name>Greg Beaver</name>
   <user>cellog</user>
   <email>cellog@php.net</email>
   <active>yes</active>
  </lead>
- <date>2004-09-30</date>
+ <date>2004-12-05</date>
+ <time>16:23:15</time>
  <version>
   <release>1.1.0</release>
-  <api>1.0.0</api>
+  <api>1.1.0</api>
  </version>
  <stability>
   <release>stable</release>
   <api>stable</api>
  </stability>
- <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
- <notes>test</notes>
+ <license>PHP License</license>
+ <notes>foo_win</notes>
  <contents>
   <dir name="/">
-   <file baseinstalldir="/" name="main.php" role="php" />
-  </dir> <!-- / -->
+   <file md5sum="c81e728d9d4c2f636f067f89cc14862c" name="foo.dll" role="ext" />
+  </dir>
  </contents>
  <dependencies>
   <required>
    <php>
-    <min>4.2</min>
+    <min>4.3.0</min>
     <max>6.0.0</max>
    </php>
    <pearinstaller>
@@ -64,7 +62,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
    </os>
   </required>
  </dependencies>
- <phprelease/>
+ <providesextension>foo</providesextension>
+ <srcpackage>foo</srcpackage>
+ <extbinrelease>
+  <installconditions />
+  <filelist />
+ </extbinrelease>
 </package>',
           'url' => 'http://www.example.com/foo_win-1.1.0'));
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/foo_linux-1.1.0.tgz', $pathtopackagexml2);
@@ -73,40 +76,38 @@ $GLOBALS['pearweb']->addXmlrpcConfig('grob', 'package.getDownloadURL',
     array('version' => '1.1.0',
           'info' =>
           '<?xml version="1.0"?>
-<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>foo_linux</name>
  <channel>grob</channel>
- <summary>Main Package</summary>
- <description>Main Package</description>
+ <summary>foo binary</summary>
+ <description>foo binary for windows</description>
  <lead>
   <name>Greg Beaver</name>
   <user>cellog</user>
   <email>cellog@php.net</email>
   <active>yes</active>
  </lead>
- <date>2004-09-30</date>
+ <date>2004-12-05</date>
+ <time>16:22:47</time>
  <version>
   <release>1.1.0</release>
-  <api>1.0.0</api>
+  <api>1.1.0</api>
  </version>
  <stability>
   <release>stable</release>
   <api>stable</api>
  </stability>
- <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
- <notes>test</notes>
+ <license>PHP License</license>
+ <notes>foo_linux</notes>
  <contents>
   <dir name="/">
-   <file baseinstalldir="/" name="main.php" role="php" />
-  </dir> <!-- / -->
+   <file md5sum="c81e728d9d4c2f636f067f89cc14862c" name="foo.so" role="ext" />
+  </dir>
  </contents>
  <dependencies>
   <required>
    <php>
-    <min>4.2</min>
+    <min>4.3.0</min>
     <max>6.0.0</max>
    </php>
    <pearinstaller>
@@ -117,7 +118,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
    </os>
   </required>
  </dependencies>
- <phprelease/>
+ <providesextension>foo</providesextension>
+ <srcpackage>foo</srcpackage>
+ <extbinrelease>
+  <installconditions />
+  <filelist />
+ </extbinrelease>
 </package>',
           'url' => 'http://www.example.com/foo_linux-1.1.0'));
 
