@@ -35,7 +35,6 @@ $phpunit->assertErrors(array(
 $ch = new PEAR_ChannelFile;
 $ch->setName('fake');
 $ch->setSummary('fake');
-$ch->setServer('pear.php.net');
 $ch->setDefaultPEARProtocols();
 $reg->addChannel($ch);
 $pf = new PEAR_PackageFile_v2;

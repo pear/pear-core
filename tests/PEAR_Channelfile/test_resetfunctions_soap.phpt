@@ -19,7 +19,7 @@ require_once './setup.php.inc';$chf->fromXmlString($first = '<?xml version="1.0"
  <suggestedalias>pear</suggestedalias>
  <summary>PHP Extension and Application Repository</summary>
  <servers>
-  <primary host="pear.php.net">
+  <primary>
    <soap>
     <function version="1.0">logintest</function>
     <function version="1.0">package.listLatestReleases</function>
@@ -48,10 +48,6 @@ $phpt->assertEquals(array (
   array (
     'primary' => 
     array (
-      'attribs' => 
-      array (
-        'host' => 'pear.php.net',
-      ),
       'soap' => 
       array (
         'function' => 
@@ -136,10 +132,6 @@ $phpt->assertEquals(array (
   array (
     'primary' => 
     array (
-      'attribs' => 
-      array (
-        'host' => 'pear.php.net',
-      ),
     ),
   ),
 ), $chf->toArray(), 'Re-parsed array of default is not correct');

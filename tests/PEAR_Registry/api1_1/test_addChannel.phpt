@@ -22,11 +22,9 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $ch = new PEAR_ChannelFile;
 $ch->setName('test.test.test');
 $ch->setAlias('foo');
-$ch->setServer('blah');
 $ch->setSummary('blah');
 $ch->setDefaultPEARProtocols();
-$reg->addChannel($ch);
-$phpunit->assertNoErrors('setup');
+$phpunit->assertTrue($reg->addChannel($ch), 'setup');
 
 $contents = unserialize(implode('', file($statedir . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.channels' . DIRECTORY_SEPARATOR .
     'test.test.test.reg')));

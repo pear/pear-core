@@ -35,7 +35,6 @@ $phpunit->assertEquals(array (
 $ch = new PEAR_ChannelFile;
 $ch->setName('pear.php.net');
 $ch->setSummary('fake');
-$ch->setServer('pear.php.net');
 $ch->setDefaultPEARProtocols();
 $fp = fopen($temp_path . DIRECTORY_SEPARATOR . 'fakechannel.xml', 'wb');
 fwrite($fp, $ch->toXml());

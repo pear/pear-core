@@ -25,7 +25,6 @@ $phpunit->assertEquals(array('pear.php.net', '__uri'), $ret, 'channels raw');
 $ch = new PEAR_ChannelFile;
 $ch->setName('test.test.test');
 $ch->setAlias('foo');
-$ch->setServer('blah');
 $ch->setSummary('blah');
 $ch->setDefaultPEARProtocols();
 $reg->addChannel($ch);

@@ -5,7 +5,7 @@ http://pear.php.net/dtd/channel-1.0.xsd">
  <suggestedalias>pear</suggestedalias>
  <summary>foo</summary>
  <servers>
-  <primary host="pear.php.net">
+  <primary>
    <xmlrpc>
     <function version="1.0">logintest</function>
     <function version="1.0">package.listLatestReleases</function>

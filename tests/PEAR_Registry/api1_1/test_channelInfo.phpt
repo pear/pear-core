@@ -22,7 +22,6 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $ch = new PEAR_ChannelFile;
 $ch->setName('test.test.test');
 $ch->setAlias('foo');
-$ch->setServer('blah');
 $ch->setSummary('blah');
 $ch->setDefaultPEARProtocols();
 $reg->addChannel($ch);
@@ -43,14 +42,11 @@ unset($ret2['_lastmodified']);
 $phpunit->assertEquals(array (
   'name' => 'test.test.test',
   'suggestedalias' => 'foo',
+  'summary' => 'blah',
   'servers' => 
   array (
     'primary' => 
     array (
-      'attribs' => 
-      array (
-        'host' => 'blah',
-      ),
       'xmlrpc' => 
       array (
         'function' => 
@@ -115,19 +111,15 @@ $phpunit->assertEquals(array (
       ),
     ),
   ),
-  'summary' => 'blah',
 ), $ret, 'foo');
 $phpunit->assertEquals(array (
   'name' => 'test.test.test',
   'suggestedalias' => 'foo',
+  'summary' => 'blah',
   'servers' => 
   array (
     'primary' => 
     array (
-      'attribs' => 
-      array (
-        'host' => 'blah',
-      ),
       'xmlrpc' => 
       array (
         'function' => 
@@ -192,19 +184,15 @@ $phpunit->assertEquals(array (
       ),
     ),
   ),
-  'summary' => 'blah',
 ), $ret1, 'test.test.test');
 $phpunit->assertEquals(array (
   'name' => 'test.test.test',
   'suggestedalias' => 'foo',
+  'summary' => 'blah',
   'servers' => 
   array (
     'primary' => 
     array (
-      'attribs' => 
-      array (
-        'host' => 'blah',
-      ),
       'xmlrpc' => 
       array (
         'function' => 
@@ -269,7 +257,6 @@ $phpunit->assertEquals(array (
       ),
     ),
   ),
-  'summary' => 'blah',
 ), $ret, 'test.test.test strict');
 echo 'tests done';
 ?>

@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Channelfile->resetFunctions() (soap)
+PEAR_Channelfile->resetFunctions() (rest)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -19,7 +19,7 @@ require_once './setup.php.inc';$chf->fromXmlString($first = '<?xml version="1.0"
  <suggestedalias>pear</suggestedalias>
  <summary>PHP Extension and Application Repository</summary>
  <servers>
-  <primary host="pear.php.net">
+  <primary>
    <rest>
     <function version="1.0" uri="logintest.xml">logintest</function>
     <function version="1.0" uri="package.listLatestReleases.xml">package.listLatestReleases</function>
@@ -48,10 +48,6 @@ $phpt->assertEquals(array (
   array (
     'primary' => 
     array (
-      'attribs' => 
-      array (
-        'host' => 'pear.php.net',
-      ),
       'rest' => 
       array (
         'function' => 
@@ -143,10 +139,6 @@ $phpt->assertEquals(array (
   array (
     'primary' => 
     array (
-      'attribs' => 
-      array (
-        'host' => 'pear.php.net',
-      ),
     ),
   ),
 ), $chf->toArray(), 'Re-parsed array of default is not correct');
