@@ -133,6 +133,15 @@ class PEAR_ErrorStack {
     static protected $globallogger = false;
 
     /**
+     * PEAR_Warning callback
+     * 
+     * This is only used if set to non-false.  Use to set a default log object for
+     * all stacks, regardless of instantiation order or location
+     * @see PEAR_ErrorStack::setDefaultLogger()
+     */
+    static protected $pearwarningcallback = false;
+
+    /**
      * Global Overriding Callback
      * 
      * This callback will override any error callbacks that specific loggers have set.
@@ -345,7 +354,16 @@ class PEAR_ErrorStack {
         $package = $package ? $package : '*';
         self::$globalcallback[$package] = $callback;
     }
-    
+
+    /**
+     * Do not use
+     * @access private
+     */
+    static public function setPEARWarningCallback($callback)
+    {
+        self::$pearwarningcallback = $callback;
+    }
+
     /**
      * Set an error code => error message mapping callback
      * 
@@ -569,6 +587,9 @@ class PEAR_ErrorStack {
             }
         }
         if ($push) {
+            if (is_callable(self::$pearwarningcallback)) {
+                call_user_func(self::$pearwarningcallback, $err);
+            }
             array_unshift($this->_errors, $err);
             $this->_errorsByLevel[$err['level']][] = &$this->_errors[0];
         }
