@@ -73,6 +73,15 @@ class PEAR_PackageFile_v2
         $this->_isValid = false;
     }
 
+    function isExtension($name)
+    {
+        if (in_array($this->getPackageType(), array('extsrc', 'extbin'))) {
+            return $this->_packageInfo[$this->getPackageType() . 'release']
+                ['providesextension'] == $name;
+        }
+        return false;
+    }
+
     function setRequestedGroup($group)
     {
         $this->_requestedGroup = $group;

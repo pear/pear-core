@@ -302,6 +302,11 @@ class PEAR_PackageFile_v1
         $this->_compatibility = $compatibility;
     }
 
+    function isExtension($name)
+    {
+        return false;
+    }
+
     function setConfig(&$config)
     {
         $this->_config = &$config;
