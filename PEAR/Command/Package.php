@@ -580,6 +580,8 @@ used for automated conversion or learning the format.
                 fclose($fp);
                 $this->ui->outputData('wrote log to "' . realpath('run-tests.log') . '"');
             }
+        } elseif (@file_exists('run-tests.log') && !@is_dir('run-tests.log')) {
+            @unlink('run-tests.log');
         }
         $this->ui->outputData('TOTAL TIME: ' . $total);
         $this->ui->outputData(count($passed) . ' PASSED TESTS');
