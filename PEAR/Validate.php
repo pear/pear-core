@@ -471,8 +471,8 @@ class PEAR_Validate
     {
         // this is the closest to "final" php4 can get
         if (!PEAR_Validate::validState($this->_packagexml->getState())) {
-            $this->_addFailure('state', 'release state "' .
-                $this->_packagexml->getState() . '" is not valid, must be one of: ' .
+            $this->_addFailure('state', 'invalid release state "' .
+                $this->_packagexml->getState() . '", must be one of: ' .
                 implode(', ', PEAR_Validate::getValidStates()));
             return false;
         }
