@@ -862,7 +862,8 @@ class PEAR_Installer extends PEAR_Downloader
     /**
      * Installs the files within the package file specified.
      *
-     * @param string $pkgfile path to the package file
+     * @param string|PEAR_PackageFile_v1|PEAR_PackageFile_v2 $pkgfile path to the package file,
+     *        or a pre-initialized packagefile object
      * @param array $options
      * recognized options:
      * - installroot   : optional prefix directory for installation
