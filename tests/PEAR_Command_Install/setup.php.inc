@@ -79,10 +79,10 @@ test_PEAR_Dependency2::singleton($config);
 require_once 'PEAR/Command/Install.php';
 class test_PEAR_Command_Install extends PEAR_Command_Install
 {
-    function &getDownloader($ui, $options)
+    function &getDownloader($a, $b)
     {
         if (!isset($GLOBALS['__Stupid_php4_a'])) {
-            $GLOBALS['__Stupid_php4_a'] = &new test_PEAR_Downloader($this->ui, $options, $this->config);
+            $GLOBALS['__Stupid_php4_a'] = &new test_PEAR_Downloader($this->ui, $b, $this->config);
         }
         return $GLOBALS['__Stupid_php4_a'];
     }
