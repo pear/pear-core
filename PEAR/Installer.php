@@ -967,12 +967,14 @@ class PEAR_Installer extends PEAR_Downloader
                 }
                 if ($found) {
                     // subpackages can conflict with earlier versions of parent packages
+                    $parentreg = $this->_registry->packageInfo($param->getPackage(), null, $param->getChannel());
                     $tmp = $test;
                     foreach ($tmp as $file => $info) {
                         if (is_array($info)) {
                             if (strtolower($info[1]) == strtolower($param->getPackage()) &&
                                   strtolower($info[0]) == strtolower($param->getChannel())) {
                                 unset($test[$file]);
+                                unset($parentreg['filelist'][$file]);
                             }
                         } else {
                             if (strtolower($param->getChannel()) != 'pear.php.net') {
@@ -980,9 +982,13 @@ class PEAR_Installer extends PEAR_Downloader
                             }
                             if (strtolower($info) == strtolower($param->getPackage())) {
                                 unset($test[$file]);
+                                unset($parentreg['filelist'][$file]);
                             }
                         }
                     }
+                    $pfk = new PEAR_PackageFile($this->config);
+                    $parentpkg = &$pfk->fromArray($parentreg);
+                    $this->_registry->updatePackage2($parentpkg);
                 }
                 if (sizeof($test)) {
                     $msg = "$channel/$pkgname: conflicting files found:\n";
