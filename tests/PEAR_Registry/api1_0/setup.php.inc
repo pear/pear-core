@@ -88,7 +88,7 @@ $files3_new = array(
         "role" => "php",
         ),
     );
-
-$reg = new PEAR_Registry($statedir);
+mkdir($statedir);
+$reg = &new PEAR_Registry($statedir);
 $phpunit = &new PEAR_PHPTest(true);
 ?>
