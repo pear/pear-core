@@ -65,7 +65,7 @@ class PEAR_Validate
     {
         if ($validatepackagename) {
             if (strtolower($name) == strtolower($validatepackagename)) {
-                return (bool) preg_match('/^[a-zA-Z0-9_-]+(?:\.[a-zA-Z0-9_]+)*$/', $name);
+                return (bool) preg_match('/^[a-zA-Z0-9_]+(?:\.[a-zA-Z0-9_]+)*$/', $name);
             }
         }
         return $this->_validPackageName($name);
