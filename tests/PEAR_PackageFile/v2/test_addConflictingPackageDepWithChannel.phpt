@@ -15,7 +15,6 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'required' => 
   array (
@@ -83,6 +82,44 @@ $phpunit->assertEquals(array (
 
 $result = $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log');
+
+$pf->addConflictingPackageDepWithChannel('fakeo1', 'gronko2', 'blooba');
+$phpunit->assertEquals(array (
+  'required' => 
+  array (
+    'php' => 
+    array (
+      'min' => '4.3.6',
+      'max' => '6.0.0',
+    ),
+    'pearinstaller' => 
+    array (
+      'min' => '1.4.0a1',
+    ),
+    'package' => 
+    array (
+      array(
+        'name' => 'fakeo',
+        'channel' => 'gronko',
+        'conflicts' => 'yes',
+      ),
+      array(
+        'name' => 'fakeo',
+        'channel' => 'gronko2',
+        'conflicts' => 'yes',
+      ),
+      array(
+        'name' => 'fakeo1',
+        'channel' => 'gronko2',
+        'conflicts' => 'yes',
+        'providesextension' => 'blooba',
+      ),
+    ),
+  ),
+), $pf->getDeps(true), 'providesextension failed');
+
+$result = $pf->validate(PEAR_VALIDATE_NORMAL);
+$phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log');
 $phpunit->assertNoErrors('after validation');
 $result = $pf->validate(PEAR_VALIDATE_INSTALLING);
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'installing validate empty log');
@@ -91,7 +128,6 @@ $result = $pf->validate(PEAR_VALIDATE_DOWNLOADING);
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'downloading validate empty log');
 $phpunit->assertNoErrors('after validation');
 $result = $pf->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
