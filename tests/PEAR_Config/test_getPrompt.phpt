@@ -10,7 +10,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$config = new PEAR_Config;
+$config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini');
 $phpunit->assertEquals('Default Channel', $config->getPrompt('default_channel'), 'default_channel');
 $phpunit->assertEquals('Remote Configuration File', $config->getPrompt('remote_config'), 'remote_config');
 $phpunit->assertEquals('Auto-discover new Channels', $config->getPrompt('auto_discover'), 'auto_discover');

@@ -57,6 +57,10 @@ touch($temp_path . DIRECTORY_SEPARATOR . 'pear.ini');
 $fp = fopen($temp_path . DIRECTORY_SEPARATOR . 'pear.ini', 'w');
 fwrite($fp, $config);
 fclose($fp);
+touch($temp_path . DIRECTORY_SEPARATOR . 'pear.conf');
+$fp = fopen($temp_path . DIRECTORY_SEPARATOR . 'pear.conf', 'w');
+fwrite($fp, $config);
+fclose($fp);
 
 putenv('PHP_PEAR_SYSCONF_DIR='.$temp_path);
 $home = getenv('HOME');

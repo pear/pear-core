@@ -20,6 +20,7 @@ $phpunit->assertNull($config->get('verbose', 'system'), '$config->get(verbose, s
 $config = new PEAR_Config(dirname(__FILE__) . DIRECTORY_SEPARATOR . 
     'ini' . DIRECTORY_SEPARATOR . 'user.input', 'ya');
 
+$config->set('php_dir', $temp_path); // use sandbox
 $config->setChannels(array('pear.php.net', '__uri', 'test2'));
 $ret = $config->mergeConfigFile('foo', true, 'foo');
 $phpunit->assertErrors(array(
@@ -39,6 +40,7 @@ $phpunit->assertNull($config->get('verbose', 'user', '__uri'), '$config->get(ver
 $phpunit->assertNull($config->get('verbose', 'user', 'test2'), '$config->get(verbose, user, test2)');
 $phpunit->assertTrue($config->readConfigFile(dirname(__FILE__) . DIRECTORY_SEPARATOR . 
     'ini' . DIRECTORY_SEPARATOR . 'user3.input'), 'read user3.input');
+$config->set('php_dir', $temp_path); // use sandbox
 $phpunit->assertTrue($config->mergeConfigFile(dirname(__FILE__) . DIRECTORY_SEPARATOR . 
     'ini' . DIRECTORY_SEPARATOR . 'merge2.input'), 'merge merge2.input', true);
 
@@ -48,6 +50,7 @@ $phpunit->assertEquals(899, $config->get('verbose', 'user', 'test2'), '$config->
 
 $phpunit->assertTrue($config->readConfigFile(dirname(__FILE__) . DIRECTORY_SEPARATOR . 
     'ini' . DIRECTORY_SEPARATOR . 'user3.input', 'user'), 'read user3.input');
+$config->set('php_dir', $temp_path); // use sandbox
 $phpunit->assertTrue($config->mergeConfigFile(dirname(__FILE__) . DIRECTORY_SEPARATOR . 
     'ini' . DIRECTORY_SEPARATOR . 'merge2.input'), 'merge merge2.input', false);
 

@@ -185,7 +185,7 @@ $phpunit->assertEquals(array (
           array (
             0 => 'System Configuration File',
             1 => 'Filename',
-            2 => $temp_path . DIRECTORY_SEPARATOR . 'pearsys.ini',
+            2 => '#no#system#config#',
           ),
         ),
       ),
