@@ -184,7 +184,8 @@ Installer:
     <file role="php" name="Downloader.php"/>
     <file role="php" name="ErrorStack.php"/>
     <file role="php" name="Builder.php"/>
-    <file name="FTP.php" role="php" />
+    <file role="php" name="Frontend.php" />
+    <file role="php" name="FTP.php" />
     <file role="php" name="Installer.php"/>
     <file role="php" name="Packager.php"/>
     <file role="php" name="PackageFile.php">
