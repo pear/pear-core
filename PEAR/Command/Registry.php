@@ -298,7 +298,7 @@ installed package.'
         // "pear shell-test Foo"
         if (!$reg->packageExists($package, $channel)) {
             if ($channel == 'pecl.php.net') {
-                if (!$reg->packageExists($package, 'pear.php.net')) {
+                if ($reg->packageExists($package, 'pear.php.net')) {
                     $channel = 'pear.php.net'; // magically change channels for extensions
                 }
             }
