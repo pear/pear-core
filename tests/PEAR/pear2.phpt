@@ -1,5 +1,5 @@
 --TEST--
-PEAR complete set/push/pop error-handling test (run from pear/tests dir)
+PEAR complete set/push/pop error-handling test
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
