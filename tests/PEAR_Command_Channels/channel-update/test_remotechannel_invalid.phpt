@@ -1,5 +1,5 @@
 --TEST--
-channel-update command (remote channel name)
+channel-update command (remote channel name, changes channel name)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
