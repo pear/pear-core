@@ -165,7 +165,12 @@ use the "slide" option to move the release tag.
                 'recur' => array(
                     'shortopt' => 'r',
                     'doc' => 'Run tests in child directories, recursively.  4 dirs deep maximum',
-                )
+                ),
+                'ini' => array(
+                    'shortopt' => 'i',
+                    'doc' => 'actual string of settings to pass to php in format " -d setting=blah"',
+                    'arg' => 'SETTINGS'
+                ),
             ),
             'doc' => '[testfile|dir ...]
 Run regression tests with PHP\'s regression testing script (run-tests.php).',
@@ -535,10 +540,20 @@ used for automated conversion or learning the format.
                 }
             }
         }
+        $ini_settings = '';
+        if (isset($options['ini'])) {
+            $ini_settings .= $options['ini'];
+        }
+        if (isset($_ENV['TEST_PHP_INCLUDE_PATH'])) {
+            $ini_settings .= " -d include_path={$_ENV['TEST_PHP_INCLUDE_PATH']}";
+        }
+        if ($ini_settings) {
+            $this->ui->outputData('Using INI settings: "' . $ini_settings . '"');
+        }
         $skipped = $passed = $failed = array();
         $this->ui->outputData('Running ' . count($tests) . ' tests');
         foreach ($tests as $t) {
-            $result = $run->run($t);
+            $result = $run->run($t, $ini_settings);
             if ($result == 'FAILED') {
             	$failed[] = $t;
             }
