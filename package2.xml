@@ -87,8 +87,13 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Use 1.2.0 as recommended version of XML_RPC
   
   Specific changes from 1.4.0a2:
+ BC BREAK FOR PECL DEVS ONLY:
+ In order to circumvent strict package-validation, use
+ "pear channel-update pecl.php.net" prior to packaging
+ a pecl release.
   * Fix package.xml version 2.0 generation from package.xml 1.0
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
+  * Implement Request #3647 "pear package" only includes one package.xml
  </notes>
  <contents>
   <dir name="/">
