@@ -21,7 +21,7 @@ $ch->fromXmlString('<?xml version="1.0" encoding="ISO-8859-1" ?>
  <summary>PHP Extension and Application Repository</summary>
  <validatepackage version="1.0">PEAR_Validate</validatepackage>
  <servers>
-  <primary host="pear.php.net">
+  <primary>
    <xmlrpc>
     <function version="1.0">logintest</function>
     <function version="1.0">package.listLatestReleases</function>
@@ -39,7 +39,6 @@ $ch->fromXmlString('<?xml version="1.0" encoding="ISO-8859-1" ?>
     <function version="1.0" uri="package/listLatestReleases">package.listLatestReleases</function>
     <function version="1.0" uri="package/listAll">package.listAll</function>
    </rest>
-   <static version="1.0"/>
   </primary>
   <mirror host="poor.php.net">
    <xmlrpc>
@@ -59,7 +58,6 @@ $ch->fromXmlString('<?xml version="1.0" encoding="ISO-8859-1" ?>
     <function version="1.0" uri="package/listLatestReleases">package.listLatestReleases</function>
     <function version="1.0" uri="package/listAll">package.listAll</function>
    </rest>
-   <static version="1.0"/>
   </mirror>
  </servers>
 </channel>');
@@ -67,7 +65,6 @@ $reg = &$config->getRegistry();
 $reg->addChannel($ch);
 $e = $command->run('channel-info', array(), array('froo'));
 $phpunit->assertNoErrors('1');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -90,7 +87,7 @@ $phpunit->assertEquals(array (
         2 => 
         array (
           0 => 'Primary Server',
-          1 => 'pear.php.net',
+          1 => 'froo',
         ),
         3 => 
         array (
@@ -190,13 +187,6 @@ $phpunit->assertEquals(array (
           1 => '1.0',
           2 => 'package.listAll',
           3 => 'package/listAll',
-        ),
-        11 => 
-        array (
-          0 => 'static',
-          1 => '1.0',
-          2 => '',
-          3 => '',
         ),
       ),
       'headline' => 
@@ -309,13 +299,6 @@ $phpunit->assertEquals(array (
           1 => '1.0',
           2 => 'package.listAll',
           3 => 'package/listAll',
-        ),
-        11 => 
-        array (
-          0 => 'static',
-          1 => '1.0',
-          2 => '',
-          3 => '',
         ),
       ),
       'headline' => 

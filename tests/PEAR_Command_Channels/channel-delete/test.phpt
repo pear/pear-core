@@ -16,7 +16,6 @@ $reg = &$config->getRegistry();
 $ch = new PEAR_ChannelFile;
 $ch->setName('fake');
 $ch->setSummary('fake');
-$ch->setServer('pear.php.net');
 $ch->setDefaultPEARProtocols();
 $reg->addChannel($ch);
 $chan = $reg->getChannel('fake');

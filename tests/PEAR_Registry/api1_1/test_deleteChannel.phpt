@@ -32,13 +32,11 @@ $ret = $reg->deleteChannel($ch);
 $phpunit->assertErrors(array(
 array('package' => 'PEAR_ChannelFile', 'message' => 'Missing channel name'),
 array('package' => 'PEAR_ChannelFile', 'message' => 'Missing channel summary'),
-array('package' => 'PEAR_ChannelFile', 'message' => 'Missing channel server for primary server'),
 ), 'invalid channelfile validation errors');
 $phpunit->assertFalse($ret, 'empty channelfile');
 
 $ch->setName('test.test.test');
 $ch->setAlias('foo');
-$ch->setServer('blah');
 $ch->setSummary('blah');
 $ch->setDefaultPEARProtocols();
 

@@ -20,7 +20,7 @@ $chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
  <suggestedalias>pear</suggestedalias>
  <summary>PHP Extension and Application Repository</summary>
  <servers>
-  <primary host="pear.php.net">
+  <primary>
    <xmlrpc>
     <function version="1.0">logintest</function>
     <function version="1.0">package.listLatestReleases</function>
@@ -49,10 +49,6 @@ $phpt->assertEquals(array (
   array (
     'primary' => 
     array (
-      'attribs' => 
-      array (
-        'host' => 'pear.php.net',
-      ),
       'xmlrpc' => 
       array (
         'function' => 
@@ -137,10 +133,6 @@ $phpt->assertEquals(array (
   array (
     'primary' => 
     array (
-      'attribs' => 
-      array (
-        'host' => 'pear.php.net',
-      ),
       'xmlrpc' => 
       array (
         'function' => 

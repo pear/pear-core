@@ -11,7 +11,8 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 
 error_reporting(E_ALL);
 chdir(dirname(__FILE__));
-require_once './setup.php.inc';$chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
+require_once './setup.php.inc';
+$chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
@@ -19,7 +20,7 @@ require_once './setup.php.inc';$chf->fromXmlString($first = '<?xml version="1.0"
  <suggestedalias>pear</suggestedalias>
  <summary>PHP Extension and Application Repository</summary>
  <servers>
-  <primary host="pear.php.net">
+  <primary>
    <xmlrpc>
     <function version="1.0">logintest</function>
     <function version="1.0">package.listLatestReleases</function>
@@ -48,10 +49,6 @@ $phpt->assertEquals(array (
   array (
     'primary' => 
     array (
-      'attribs' => 
-      array (
-        'host' => 'pear.php.net',
-      ),
       'xmlrpc' => 
       array (
         'function' => 
@@ -136,10 +133,6 @@ $phpt->assertEquals(array (
   array (
     'primary' => 
     array (
-      'attribs' => 
-      array (
-        'host' => 'pear.php.net',
-      ),
     ),
   ),
 ), $chf->toArray(), 'Re-parsed array of default is not correct');

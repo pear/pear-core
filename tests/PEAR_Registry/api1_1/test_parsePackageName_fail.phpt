@@ -29,7 +29,6 @@ $phpunit->assertErrors(array('package' => 'PEAR_Error', 'message' =>
 $ch = new PEAR_ChannelFile;
 $ch->setName('snooker');
 $ch->setAlias('foo');
-$ch->setServer('blah');
 $ch->setSummary('blah');
 $ch->setDefaultPEARProtocols();
 $reg->addChannel($ch);

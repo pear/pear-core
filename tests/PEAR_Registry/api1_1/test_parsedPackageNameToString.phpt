@@ -45,6 +45,11 @@ $phpunit->assertEquals('channel://user:pass@grob/foo-alpha.tgz?arg1=poo&arg2=wow
 array('channel' => 'grob', 'package' => 'foo', 'state' => 'alpha', 'extension' => 'tgz', 'user' =>
 'user', 'pass' => 'pass', 'opts' => array('arg1' => 'poo', 'arg2' => 'wow'), 'group' => 'group')),
 'user:pass@grob/foo-alpha.tgz?arg1=poo&arg2=wow#group');
+$phpunit->assertEquals('channel://user:pass@grob/sub/foo-alpha.tgz?arg1=poo&arg2=wow#group',
+    $reg->parsedPackageNameToString(
+array('channel' => 'grob/sub', 'package' => 'foo', 'state' => 'alpha', 'extension' => 'tgz', 'user' =>
+'user', 'pass' => 'pass', 'opts' => array('arg1' => 'poo', 'arg2' => 'wow'), 'group' => 'group')),
+'user:pass@grob/sub/foo-alpha.tgz?arg1=poo&arg2=wow#group');
 
 $phpunit->assertEquals('http://pear.php.net/Glom.tgz',
     $reg->parsedPackageNameToString(array('uri' => 'http://pear.php.net/Glom.tgz',

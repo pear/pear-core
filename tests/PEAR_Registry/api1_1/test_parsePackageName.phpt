@@ -28,14 +28,21 @@ $phpunit->assertErrors(array('package' => 'PEAR_Error', 'message' =>
 $ch = new PEAR_ChannelFile;
 $ch->setName('snooker');
 $ch->setAlias('foo');
-$ch->setServer('blah');
+$ch->setServer('snooker');
 $ch->setSummary('blah');
 $ch->setDefaultPEARProtocols();
-$reg->addChannel($ch);
-$phpunit->assertNoErrors('setup');
+$phpunit->assertTrue($reg->addChannel($ch), 'add snooker');
+$ch->setName('snooker/test');
+$phpunit->assertTrue($reg->addChannel($ch), 'add snooker/test');
 
 $phpunit->assertEquals(array('package' => 'hello', 'channel' => 'snooker'),
  $reg->parsePackageName('hello', 'snooker'), 'hello, default snooker');
+
+// test complex channel names
+$phpunit->assertEquals(array('package' => 'hello', 'channel' => 'snooker/test'),
+ $reg->parsePackageName('snooker/test/hello'), 'snooker/test/hello');
+$phpunit->assertEquals(array('package' => 'hello', 'channel' => 'snooker/test'),
+ $reg->parsePackageName('channel://snooker/test/hello'), 'channel://snooker/test/hello');
  
 // test states
 $phpunit->assertEquals(array('package' => 'hello', 'channel' => 'pear.php.net',

@@ -37,7 +37,7 @@ $phpunit->assertEquals(array (
         1 => 
         array (
           0 => '__uri',
-          1 => 'www.example.com',
+          1 => '__uri',
           2 => 'Pseudo-channel for static packages',
         ),
       ),
@@ -49,13 +49,11 @@ $phpunit->assertEquals(array (
 $ch = new PEAR_ChannelFile;
 $ch->setName('fake');
 $ch->setSummary('fake');
-$ch->setServer('poor.php.net');
 $ch->setDefaultPEARProtocols();
 $reg = &$config->getRegistry();
 $reg->addChannel($ch);
 $e = $command->run('list-channels', array(), array());
 $phpunit->assertNoErrors('1');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -74,7 +72,7 @@ $phpunit->assertEquals(array (
         0 => 
         array (
           0 => 'fake',
-          1 => 'poor.php.net',
+          1 => 'fake',
           2 => 'fake',
         ),
         1 => 
@@ -86,7 +84,7 @@ $phpunit->assertEquals(array (
         2 => 
         array (
           0 => '__uri',
-          1 => 'www.example.com',
+          1 => '__uri',
           2 => 'Pseudo-channel for static packages',
         ),
       ),
