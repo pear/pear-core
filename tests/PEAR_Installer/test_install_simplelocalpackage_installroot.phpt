@@ -204,6 +204,7 @@ Other:
 ',
     ),
   ),
+  '_lastversion' => null,
   'dirtree' => 
   array (
     $config->_prependPath($temp_path . DIRECTORY_SEPARATOR . 'php', $temp_path . DIRECTORY_SEPARATOR . 'installroot') => true,

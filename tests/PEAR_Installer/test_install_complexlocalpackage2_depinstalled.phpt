@@ -399,7 +399,6 @@ $phpunit->assertNoErrors('set of downloaded packages');
 $installer->setOptions($dp->getOptions());
 $ret = &$installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'attribs' => 
   array (
@@ -539,6 +538,7 @@ $phpunit->assertEquals(array (
       'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
     ),
   ),
+  '_lastversion' => null,
   'dirtree' => 
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,

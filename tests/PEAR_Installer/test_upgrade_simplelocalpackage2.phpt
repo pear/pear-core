@@ -263,6 +263,7 @@ Other:
       'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo1.php',
     ),
   ),
+  '_lastversion' => '1.4.0a1',
   'dirtree' => 
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
