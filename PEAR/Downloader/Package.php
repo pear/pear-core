@@ -471,14 +471,7 @@ class PEAR_Downloader_Package
     function _fromFile($param)
     {
         if (@is_file($param)) {
-            $tar = new Archive_Tar($param);
-            $tar->pushErrorHandling(PEAR_ERROR_RETURN);
-            $packagexml = $tar->extractInString('package.xml');
-            $tar->popErrorHandling();
-            if ($packagexml === null) {
-                return $this->_valid = false;
-            }
-            $pkg = new PEAR_PackageFile($this->_registry, $this->_debug,
+            $pkg = new PEAR_PackageFile($this->_registry, $this->_downloader->_debug,
                 $this->_downloader->getDownloadDir());
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $pf = &$pkg->fromAnyFile($param, PEAR_VALIDATE_INSTALLING);
