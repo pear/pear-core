@@ -63,13 +63,13 @@ class PEAR_DependencyDB
             $this->_config = &$config;
         }
         $this->_registry = &$config->getRegistry();
-        $this->lockfile = $this->_registry->lockfile;
         if (!$depdb) {
             $this->_depdb = $config->get('php_dir', null, 'pear.php.net') .
                 DIRECTORY_SEPARATOR . '.depdb';
         } else {
             $this->_depdb = $depdb;
         }
+        $this->lockfile = dirname($this->_depdb) . '.depdblock';
     }
     // }}}
     // {{{ assertDepsDB()
