@@ -573,6 +573,45 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    /**
+     * Reset dependencies prior to adding new ones
+     */
+    function clearDeps()
+    {
+        $this->_packageInfo['release_deps'] = array();
+    }
+
+    function addPhpDep($version, $rel)
+    {
+        $this->_isValid = false;
+        $this->_packageInfo['release_deps'][] =
+            array('type' => 'php',
+                  'rel' => $rel,
+                  'version' => $version);
+    }
+
+    function addPackageDep($name, $version, $rel, $optional = 'no')
+    {
+        $this->_isValid = false;
+        $this->_packageInfo['release_deps'][] =
+            array('type' => 'pkg',
+                  'name' => $name,
+                  'rel' => $rel,
+                  'version' => $version,
+                  'optional' => $optional);
+    }
+
+    function addExtensionDep($name, $version, $rel, $optional = 'no')
+    {
+        $this->_isValid = false;
+        $this->_packageInfo['release_deps'][] =
+            array('type' => 'ext',
+                  'name' => $name,
+                  'rel' => $rel,
+                  'version' => $version,
+                  'optional' => $optional);
+    }
+
     function hasDeps()
     {
         return isset($this->_packageInfo['release_deps']) &&
@@ -764,7 +803,12 @@ class PEAR_PackageFile_v1
         include_once 'PEAR/Common.php';
         $this->_isValid = true;
         $info = $this->_packageInfo;
-        $this->_packageName = $pn = $info['package'];
+        if (empty($info['package'])) {
+            $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_NAME);
+            $this->_packageName = $pn = 'unknown';
+        } else {
+            $this->_packageName = $pn = $info['package'];
+        }
 
         if (empty($info['summary'])) {
             $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_SUMMARY);
