@@ -270,8 +270,7 @@ class PEAR_Downloader extends PEAR_Common
                     PEAR_INSTALLER_SKIPPED);
             }
         }
-        call_user_func_array(array($this->getDownloaderPackageClass(), 'removeDuplicates'),
-            array(&$params));
+        PEAR_Downloader_Package::removeDuplicates($params);
         if (!count($params)) {
             return array();
         }
@@ -280,8 +279,7 @@ class PEAR_Downloader extends PEAR_Common
                 $params[$i]->detectDependencies($params);
             }
         }
-        while (call_user_func_array(array($this->getDownloaderPackageClass(), 'mergeDependencies'),
-              array(&$params)));
+        while(PEAR_Downloader_Package::mergeDependencies($params));
         PEAR_Downloader_Package::removeInstalled($params);
         if (!count($params)) {
             $this->pushError('No valid packages found', PEAR_INSTALLER_FAILED);
@@ -584,8 +582,16 @@ class PEAR_Downloader extends PEAR_Common
     {
         $xsdversion = isset($dep['rel']) ? '1.0' : '2.0';
         $curchannel = $this->config->get('default_channel');
-        $this->configSet('default_channel', $parr['channel']);
+        if (isset($dep['channel'])) {
+            $remotechannel = $dep['channel'];
+        } else {
+            $remotechannel = 'pear.php.net';
+        }
+        $this->configSet('default_channel', $remotechannel);
         $state = isset($parr['state']) ? $parr['state'] : $this->config->get('preferred_state');
+        if (isset($parr['state']) && isset($parr['version'])) {
+            unset($parr['state']);
+        }
         $url = $this->_remote->call('package.getDepDownloadURL', $xsdversion, $dep, $parr, $state);
         if ($parr['channel'] != $curchannel) {
             $this->configSet('default_channel', $curchannel);
@@ -596,7 +602,7 @@ class PEAR_Downloader extends PEAR_Common
             } else {
                 $ext = '.tgz';
             }
-            if (count($url) == 3) {
+            if (isset($url['url'])) {
                 $url['url'] .= $ext;
             }
         }
@@ -679,7 +685,12 @@ class PEAR_Downloader extends PEAR_Common
     {
         if (strlen($prepend) > 0) {
             if (OS_WINDOWS && preg_match('/^[a-z]:/i', $path)) {
-                $path = $prepend . substr($path, 2);
+                if (preg_match('/^[a-z]:/i', $prepend)) {
+                    $prepend = substr($prepend, 2);
+                } elseif ($prepend{0} != '\\') {
+                    $prepend = "\\$prepend";
+                }
+                $path = substr($path, 0, 2) . $prepend . substr($path, 2);
             } else {
                 $path = $prepend . $path;
             }
