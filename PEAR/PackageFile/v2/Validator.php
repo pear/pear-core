@@ -90,7 +90,16 @@ class PEAR_PackageFile_v2_Validator
             '*changelog',
         );
         $test = $this->_packageInfo;
-        unset($test['attribs']);
+        // ignore post-installation array fields
+        if (isset($test['filelist'])) {
+            unset($test['filelist']);
+        }
+        if (isset($test['_lastmodified'])) {
+            unset($test['_lastmodified']);
+        }
+        if (isset($test['old'])) {
+            unset($test['old']);
+        }
         if (!$this->_stupidSchemaValidate($structure,
                                           $test, '<package>')) {
             return false;
@@ -300,13 +309,16 @@ class PEAR_PackageFile_v2_Validator
     function _processAttribs($choice, $tag, $context)
     {
         if (isset($choice['attribs'])) {
+            if (!is_array($tag)) {
+                $tag = array($tag);
+            }
             $tags = $tag;
             if (!isset($tags[0])) {
                 $tags = array($tags);
             }
             $ret = true;
             foreach ($tags as $i => $tag) {
-                if (!isset($tag['attribs'])) {
+                if (!is_array($tag) || !isset($tag['attribs'])) {
                     foreach ($choice['attribs'] as $attrib) {
                         if ($attrib{0} != '?') {
                             return $this->_tagHasNoAttribs($choice['tag'],
@@ -474,6 +486,7 @@ class PEAR_PackageFile_v2_Validator
                     'name',
                     'uri',
                     'conflicts',
+                    '*providesextension',
                 );
             } else {
                 $structure = array(
@@ -488,6 +501,7 @@ class PEAR_PackageFile_v2_Validator
                     'name',
                     'channel',
                     'conflicts',
+                    '*providesextension',
                 );
             } else {
                 $structure = array(
@@ -497,6 +511,7 @@ class PEAR_PackageFile_v2_Validator
                     '*max',
                     '*recommended',
                     '*exclude',
+                    '*nodefault',
                     '*providesextension',
                 );
             }

@@ -132,7 +132,7 @@ $b = array(&$dp);
 $a->setDownloadedPackages($b);
 $_test_dep->setOs('linux');
 $pf->installBinary($a);
-$phpunit->assertNoErrors('post-install');
+$phpunit->assertNoErrors('post-install linux');
 $dld = $last_dl->getDownloadDir();
 $cleandld = str_replace('\\\\', '\\', $last_dl->getDownloadDir());
 $phpunit->assertEquals(array (
@@ -159,7 +159,7 @@ $phpunit->assertEquals(array (
   4 => 
   array (
     0 => 1,
-    1 => 'Starting to download foo_linux-1.1.0.tgz (725 bytes)',
+    1 => 'Starting to download foo_linux-1.1.0.tgz (723 bytes)',
   ),
   5 => 
   array (
@@ -169,7 +169,7 @@ $phpunit->assertEquals(array (
   6 => 
   array (
     0 => 1,
-    1 => '...done: 725 bytes',
+    1 => '...done: 723 bytes',
   ),
   7 => 
   array (
@@ -215,7 +215,7 @@ $phpunit->assertEquals(array (
     0 => 0,
     1 => 'Download and install of binary extension "channel://grob/foo_linux" successful',
   ),
-), $fakelog->getLog(), 'log');
+), $fakelog->getLog(), 'log linux');
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -233,20 +233,20 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       0 => 'foo_linux-1.1.0.tgz',
-      1 => '725',
+      1 => '723',
     ),
   ),
   3 => 
   array (
     0 => 'bytesread',
-    1 => 725,
+    1 => 723,
   ),
   4 => 
   array (
     0 => 'done',
-    1 => 725,
+    1 => 723,
   ),
-), $fakelog->getDownload(), 'log');
+), $fakelog->getDownload(), 'dl log');
 $phpunit->assertFileExists($ext_dir . DIRECTORY_SEPARATOR . 'foo.so', 'not installed');
 echo 'tests done';
 ?>
