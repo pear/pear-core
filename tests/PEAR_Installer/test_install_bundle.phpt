@@ -289,6 +289,7 @@ Other:
       'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo12.php',
     ),
   ),
+  '_lastversion' => null,
   'dirtree' => 
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
@@ -634,6 +635,7 @@ Other:
       'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo1.php',
     ),
   ),
+  '_lastversion' => null,
   'dirtree' => 
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
@@ -918,6 +920,7 @@ $phpunit->assertEquals(array (
       'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
     ),
   ),
+  '_lastversion' => null,
   'dirtree' => 
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,

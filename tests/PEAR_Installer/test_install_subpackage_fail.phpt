@@ -53,7 +53,7 @@ $installer->install($dp2, array('upgrade' => true));
 $phpunit->assertErrors(array(
 array('package' => 'PEAR_Error', 'message' =>
 "pear.php.net/bar: conflicting files found:\n" .
-"bar.php (foo)\n")), 'install');
+"bar.php (pear.php.net/foo)\n")), 'install');
 
 $params = array(&$dp1, &$dp2);
 $installer->setDownloadedPackages($params);
@@ -61,7 +61,7 @@ $installer->install($dp2, array('upgrade' => true));
 $phpunit->assertErrors(array(
 array('package' => 'PEAR_Error', 'message' =>
 "pear.php.net/bar: conflicting files found:\n" .
-"bar.php (foo)\n")), 'install 2');
+"bar.php (pear.php.net/foo)\n")), 'install 2');
 echo 'tests done';
 ?>
 --EXPECT--

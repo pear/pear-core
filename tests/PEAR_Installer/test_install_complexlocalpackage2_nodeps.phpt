@@ -694,6 +694,7 @@ $phpunit->assertEquals(array (
       'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
     ),
   ),
+  '_lastversion' => null,
   'dirtree' => 
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,

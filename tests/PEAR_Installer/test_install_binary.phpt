@@ -32,22 +32,19 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
     array('version' => '1.1.0',
           'info' =>
           '<?xml version="1.0"?>
-<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>test</name>
  <channel>pear.php.net</channel>
- <summary>PEAR Base System</summary>
- <description>The PEAR package contains:
- </description>
+ <summary>foo binary</summary>
+ <description>foo binary for windows</description>
  <lead>
   <name>Greg Beaver</name>
   <user>cellog</user>
   <email>cellog@php.net</email>
   <active>yes</active>
  </lead>
- <date>2004-09-30</date>
+ <date>2004-11-15</date>
+ <time>13:29:11</time>
  <version>
   <release>1.1.0</release>
   <api>1.1.0</api>
@@ -56,18 +53,17 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <release>stable</release>
   <api>stable</api>
  </stability>
- <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
- <notes>Installer Roles/Tasks:
- </notes>
+ <license>PHP License</license>
+ <notes>foo</notes>
  <contents>
   <dir name="/">
-   <file name="template.spec" role="data" />
-  </dir> <!-- / -->
+   <file md5sum="d41d8cd98f00b204e9800998ecf8427e" name="foo.dll" role="ext" />
+  </dir>
  </contents>
  <dependencies>
   <required>
    <php>
-    <min>4.2</min>
+    <min>4.3.0</min>
     <max>6.0.0</max>
    </php>
    <pearinstaller>
@@ -78,7 +74,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
    </os>
   </required>
  </dependencies>
- <phprelease/>
+ <providesextension>foo</providesextension>
+ <srcpackage>foo</srcpackage>
+ <extbinrelease>
+  <installconditions />
+  <filelist />
+ </extbinrelease>
 </package>',
           'url' => 'http://www.example.com/test-1.1.0'));
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',

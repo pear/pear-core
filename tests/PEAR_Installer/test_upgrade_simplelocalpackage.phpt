@@ -214,6 +214,7 @@ Other:
 ',
     ),
   ),
+  '_lastversion' => '1.4.0a1',
   'dirtree' => 
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,

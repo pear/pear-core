@@ -30,10 +30,7 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
     array('version' => '1.5.2',
           'info' =>
           '<?xml version="1.0"?>
-<package packagerversion="1.4.0a1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
+<package packagerversion="1.4.0a1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>Bar</name>
  <channel>pear.php.net</channel>
  <summary>PEAR Base System</summary>
@@ -47,9 +44,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    where PHP is running on
  * the System class for quick handling of common operations
    with files and directories
- * the PEAR base class
- 
- </description>
+ * the PEAR base class</description>
  <lead>
   <name>Stig Bakken</name>
   <user>ssb</user>
@@ -81,7 +76,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <active>yes</active>
  </developer>
  <date>2004-12-29</date>
- <time>14:14:48</time>
+ <time>21:21:51</time>
  <version>
   <release>1.5.2</release>
   <api>1.5.2</api>
@@ -131,13 +126,11 @@ Installer:
  * fix Request #2220 pear5 build fails on dual php4/php5 system
  * Major bug in Registry - false file conflicts on data/doc/test role
    was possible (and would happen if HTML_Template_IT was installed
-   and HTML_Template_Flexy installation was attempted)
-  
- </notes>
+   and HTML_Template_Flexy installation was attempted)</notes>
  <contents>
   <dir name="/">
-   <file name="foo1.php" role="php" />
-  </dir> <!-- / -->
+   <file md5sum="ed0384ad29e60110b310a02e95287ee6" name="foo1.php" role="php" />
+  </dir>
  </contents>
  <dependencies>
   <required>
@@ -180,9 +173,7 @@ Other:
  * add PEAR_Exception class for PHP5 users
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
- * fix warning in PEAR_Registry for windows 98 users
-   
-   </notes>
+ * fix warning in PEAR_Registry for windows 98 users</notes>
   </release>
  </changelog>
 </package>',
@@ -833,6 +824,7 @@ Other:
       'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo1.php',
     ),
   ),
+  '_lastversion' => null,
   'dirtree' => 
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
@@ -1113,6 +1105,7 @@ $phpunit->assertEquals(array (
       'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
     ),
   ),
+  '_lastversion' => null,
   'dirtree' => 
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,

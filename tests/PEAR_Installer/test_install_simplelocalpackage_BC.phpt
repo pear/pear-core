@@ -170,6 +170,7 @@ Other:
 ',
     ),
   ),
+  '_lastversion' => null,
   'dirtree' => 
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,

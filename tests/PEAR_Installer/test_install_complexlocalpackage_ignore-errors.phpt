@@ -530,6 +530,7 @@ Other:
 ',
     ),
   ),
+  '_lastversion' => null,
   'dirtree' => 
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
@@ -546,35 +547,30 @@ if (OS_WINDOWS) {
     $phpunit->assertEquals(array (
       0 => 
       array (
-        0 => 0,
-        1 => 'pear/PEAR1 requires package "pear/Bar" (version >= 1.0.0)',
+        0 => 3,
+        1 => '+ cp ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php',
       ),
       1 => 
       array (
         0 => 3,
-        1 => '+ cp ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php',
+        1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php ',
       ),
       2 => 
       array (
         0 => 3,
-        1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php ',
-      ),
-      3 => 
-      array (
-        0 => 3,
         1 => 'adding to transaction: installed_as foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php ' . DIRECTORY_SEPARATOR,
       ),
-      4 => 
+      3 => 
       array (
         0 => 2,
         1 => 'about to commit 2 file operations',
       ),
-      5 => 
+      4 => 
       array (
         0 => 3,
         1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
       ),
-      6 => 
+      5 => 
       array (
         0 => 2,
         1 => 'successfully committed 2 file operations',
@@ -584,45 +580,40 @@ if (OS_WINDOWS) {
     $phpunit->assertEquals(array (
       0 => 
       array (
-        0 => 0,
-        1 => 'pear/PEAR1 requires package "pear/Bar" (version >= 1.0.0)',
+        0 => 3,
+        1 => '+ cp ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php',
       ),
       1 => 
       array (
         0 => 3,
-        1 => '+ cp ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php',
+        1 => 'adding to transaction: chmod 644 ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php',
       ),
       2 => 
       array (
         0 => 3,
-        1 => 'adding to transaction: chmod 644 ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php',
+        1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php ',
       ),
       3 => 
       array (
         0 => 3,
-        1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php ',
-      ),
-      4 => 
-      array (
-        0 => 3,
         1 => 'adding to transaction: installed_as foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php ' . DIRECTORY_SEPARATOR,
       ),
-      5 => 
+      4 => 
       array (
         0 => 2,
         1 => 'about to commit 3 file operations',
       ),
-      6 => 
+      5 => 
       array (
         0 => 3,
         1 => '+ chmod 644 ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php',
       ),
-      7 => 
+      6 => 
       array (
         0 => 3,
         1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
       ),
-      8 => 
+      7 => 
       array (
         0 => 2,
         1 => 'successfully committed 3 file operations',
