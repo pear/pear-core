@@ -526,7 +526,7 @@ class test_PEAR_Dependency2 extends PEAR_Dependency2
         return true;
     }
 
-    function validatePackageDependency($dep, $required, $params, $mustbeinstalled = false)
+    function validatePackageDependency($dep, $required, $params)
     {
         if ($this->_state != PEAR_VALIDATE_INSTALLING &&
               $this->_state != PEAR_VALIDATE_DOWNLOADING) {
@@ -534,28 +534,14 @@ class test_PEAR_Dependency2 extends PEAR_Dependency2
         }
         if (isset($dep['providesextension'])) {
             if ($this->extension_loaded($dep['providesextension'])) {
-                if (isset($dep['conflicts'])) {
-                    if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                        return $this->raiseError('%s conflicts with PHP extension "' .
-                            $dep['providesextension'] . '"');
-                    } else {
-                        return $this->warning('warning: %s conflicts with PHP extension "' .
-                            $dep['providesextension'] . '"');
-                    }
-                } else {
-                    $subdep = array(
-                        'name' => $dep['providesextension']
-                    );
-                    if (isset($dep['min'])) {
-                        $subdep['min'] = $dep['min'];
-                    }
-                    if (isset($dep['max'])) {
-                        $subdep['min'] = $dep['max'];
-                    }
-                    if (isset($dep['max'])) {
-                        $subdep['max'] = $dep['max'];
-                    }
-                    $ret = $this->validateExtensionDependency($subdep, $required);
+                $save = $dep;
+                $subdep = $dep;
+                $subdep['name'] = $subdep['providesextension'];
+                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                $ret = $this->validateExtensionDependency($subdep, $required);
+                PEAR::popErrorHandling();
+                if (!PEAR::isError($ret)) {
+                    return true;
                 }
             }
         }
@@ -563,7 +549,7 @@ class test_PEAR_Dependency2 extends PEAR_Dependency2
             return $this->_validatePackageInstall($dep, $required);
         }
         if ($this->_state == PEAR_VALIDATE_DOWNLOADING) {
-            return $this->_validatePackageDownload($dep, $required, $params, $mustbeinstalled);
+            return $this->_validatePackageDownload($dep, $required, $params);
         }
     }
 
