@@ -402,10 +402,11 @@ package if needed.
             $info = $this->installer->install($param, $options);
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($info)) {
+                $oldinfo = $info;
                 $pkg = &$param->getPackageFile();
                 if ($info->getCode() != PEAR_INSTALLER_NOBINARY) {
                     if (!($info = $pkg->installBinary($this->installer))) {
-                        $this->ui->outputData('ERROR: ' .$info->getMessage());
+                        $this->ui->outputData('ERROR: ' .$oldinfo->getMessage());
                         continue;
                     }
                 }
