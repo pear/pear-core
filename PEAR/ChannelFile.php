@@ -1622,8 +1622,8 @@ class PEAR_ChannelFile {
         if (!$this->_isValid || !$this->validate()) {
             return false;
         }
-        if (isset($this->_channelInfo['validatepackage'])) {
-            return false;
+        if (!isset($this->_channelInfo['validatepackage'])) {
+            return array('version' => 'default', 'name' => 'PEAR_Validate');
         }
         return $this->_channelInfo['validatepackage'];
     }
