@@ -16,9 +16,9 @@ $lastmod = $c->lastModified();
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'channel.listAll',
     null,
     array(
-        'pear.php.net',
-        'zornk.ornk.org',
-        'horde.orde.de',
+        array('pear.php.net'),
+        array('zornk.ornk.org'),
+        array('horde.orde.de'),
     ));
 $pathtochannelxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'files'. DIRECTORY_SEPARATOR . 'pearchannel.xml';
