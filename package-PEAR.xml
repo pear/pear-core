@@ -6,7 +6,8 @@
   <description>The PEAR package contains:
  * the PEAR base class
  * the PEAR_Error error handling mechanism
- * the alpha-quality PEAR_ErrorStack advanced error handling mechanism
+ * the alpha-quality PEAR_Exception php5-only exception class
+ * the beta-quality PEAR_ErrorStack advanced error handling mechanism
  * the PEAR installer, for creating, distributing
    and installing packages
  * the OS_Guess class for retrieving info about the OS
@@ -58,6 +59,7 @@ Installer:
  * fix Bug #2189 upgrade-all stops if dependancy fails
  * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
  * fix Bug #1420 Parser bug for T_DOUBLE_COLON
+ * fix Request #2220 pear5 build fails on dual php4/php5 system
 
 Other:
  * add PEAR_Exception class for PHP5 users
