@@ -99,6 +99,10 @@ class PEAR_Exception extends Exception
     private $_method;
     private static $_observers = array();
 
+    private static $_warnings  = array();
+    private static $_warnings_callback = null;
+    private static $_warnings_stack_l = 1;
+
     /**
      * Supported signatures:
      * PEAR_Exception(string $message);
@@ -125,7 +129,7 @@ class PEAR_Exception extends Exception
         $this->_method = $this->error_class . $trace[0]['type'] . $this->error_method . '()';
         parent::__construct($message, $code);
 
-        $this->_signal();
+        $this->_signalObservers();
     }
 
     /**
@@ -163,7 +167,7 @@ class PEAR_Exception extends Exception
         unset(self::$_observers[$label]);
     }
 
-    private function _signal()
+    private function _signalObservers()
     {
         foreach (self::$_observers as $data) {
             $func = $data['callback'];
@@ -177,27 +181,32 @@ class PEAR_Exception extends Exception
                     continue;
                 }
             }
-            if (is_callable($func)) {
-                call_user_func($func, $this);
-                continue;
-            }
-            settype($func, 'array');
-            switch ($func[0]) {
-                case PEAR_OBSERVER_PRINT:
-                    $f = (isset($func[1])) ? $func[1] : '%s';
-                    printf($f, $this->getMessage());
-                    break;
-                case PEAR_OBSERVER_TRIGGER:
-                    $f = (isset($func[1])) ? $func[1] : E_USER_NOTICE;
-                    trigger_error($this->getMessage(), $f);
-                    break;
-                case PEAR_OBSERVER_DIE:
-                    $f = (isset($func[1])) ? $func[1] : '%s';
-                    die(printf($f, $this->getMessage()));
-                    break;
-                default:
-                    trigger_error('invalid observer type', E_USER_WARNING);
-            }
+            self::_signalOne($func, $this, $this->message, $this->code);
+        }
+    }
+
+    private static function _signalOne($func, $func_params, $message, $code)
+    {
+        if (is_callable($func)) {
+            call_user_func($func, $func_params);
+            continue;
+        }
+        settype($func, 'array');
+        switch ($func[0]) {
+            case PEAR_OBSERVER_PRINT:
+                $f = (isset($func[1])) ? $func[1] : '%s';
+                printf($f, $message);
+                break;
+            case PEAR_OBSERVER_TRIGGER:
+                $f = (isset($func[1])) ? $func[1] : E_USER_NOTICE;
+                trigger_error($message, $f);
+                break;
+            case PEAR_OBSERVER_DIE:
+                $f = (isset($func[1])) ? $func[1] : '%s';
+                die(printf($f, $message));
+                break;
+            default:
+                trigger_error('invalid observer type', E_USER_WARNING);
         }
     }
 
@@ -250,6 +259,60 @@ class PEAR_Exception extends Exception
         return $str;
     }
 
+    /**
+     *
+     * @param string|array $callback A callback called each time a new
+     *                               warning is added
+     * @param int $stack_length The number of warnings to store in the
+     *                          stack. -1 means max 99999999 warnings
+     */
+    public static function setWarningOptions($callback = null, $stack_length = 1)
+    {
+        self::$_warnings_stack_l = ($stack_length == -1) ? 99999999 : $stack_length;
+        self::$_warnings_callback = $callback;
+    }
+
+    /**
+     *
+     * @param string     $message The warning descriptive message
+     * @param int        $code    The code of the warning
+     * @param int|string $context A place for the warning, it could be
+     *                            for ex. the class where it occurred (string)
+     *                            or a severity code (int)
+     */
+    public static function addWarning($message, $code = null, $context = 'all')
+    {
+         $w = array('message' => $message,
+                    'code'    => $code,
+                    'context' => $context);
+        self::$_warnings[] = $w;
+        // Stack size control
+        if (count(self::$_warnings) > self::$_warnings_stack_l) {
+            array_shift(self::$_warnings);
+        }
+        // Warning observer triggering
+        if (self::$_warnings_callback) {
+            self::_signalOne(self::$_warnings_callback, $w, $message, $code);
+        }
+    }
+
+    /**
+     * @param int|string $context see addWarning()
+     */
+    public static function getWarning($context = 'all')
+    {
+        $ret = false;
+        foreach(self::$_warnings as $k => $v) {
+            if ($context == 'all' ||
+                $v['context'] == $context ||
+                (is_int($v['context']) && is_int($context) && $v['context'] >= $context) )
+            {
+                $ret[] = $v;
+                unset(self::$_warnings[$k]);
+            }
+        }
+        return $ret;
+    }
 }
 
 ?>
