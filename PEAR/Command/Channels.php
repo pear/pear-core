@@ -495,17 +495,21 @@ List the files in an installed package.
             fclose($fp);
         }
         $channel = new PEAR_ChannelFile;
-        $channel->fromXmlString($contents);
-        $exit = false;
-        if (count($errors = $channel->getErrors(true))) {
-            foreach ($errors as $error) {
-                $this->ui->outputData(ucfirst($error['level'] . ': ' . $error['message']));
-                if (!$exit) {
-                    $exit = $error['level'] == 'error' ? true : false;
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+        $result = $channel->fromXmlString($contents);
+        PEAR::staticPopErrorHandling();
+        if (!$result) {
+            $exit = false;
+            if (count($errors = $channel->getErrors(true))) {
+                foreach ($errors as $error) {
+                    $this->ui->outputData(ucfirst($error['level'] . ': ' . $error['message']));
+                    if (!$exit) {
+                        $exit = $error['level'] == 'error' ? true : false;
+                    }
                 }
-            }
-            if ($exit) {
-                return $this->raiseError('channel-add: invalid channel.xml file');
+                if ($exit) {
+                    return $this->raiseError('channel-add: invalid channel.xml file');
+                }
             }
         }
         $reg = &$this->config->getRegistry();
