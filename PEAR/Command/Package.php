@@ -552,6 +552,7 @@ used for automated conversion or learning the format.
         }
         $skipped = $passed = $failed = array();
         $this->ui->outputData('Running ' . count($tests) . ' tests');
+        $start = time();
         foreach ($tests as $t) {
             $result = $run->run($t, $ini_settings);
             if ($result == 'FAILED') {
@@ -564,6 +565,23 @@ used for automated conversion or learning the format.
             	$skipped[] = $t;
             }
         }
+        $total = date('i:s', time() - $start);
+        if (count($failed)) {
+            $output = "TOTAL TIME: $total\n";
+            $output .= count($passed) . " PASSED TESTS\n";
+            $output .= count($skipped) . " SKIPPED TESTS\n";
+    		$output .= count($failed) . " FAILED TESTS:\n";
+        	foreach ($failed as $failure) {
+        		$output .= $failure . "\n";
+        	}
+            $fp = @fopen('run-tests.log', 'w');
+            if ($fp) {
+                fwrite($fp, $output, strlen($output));
+                fclose($fp);
+                $this->ui->outputData('wrote log to "' . realpath('run-tests.log') . '"');
+            }
+        }
+        $this->ui->outputData('TOTAL TIME: ' . $total);
         $this->ui->outputData(count($passed) . ' PASSED TESTS');
         $this->ui->outputData(count($skipped) . ' SKIPPED TESTS');
         if (count($failed)) {
