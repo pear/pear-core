@@ -196,6 +196,9 @@ class PEAR_PackageFile
                 '" has unsupported package.xml <package> version "' . $packageversion[1] . '"');
             return $a;
         } else {
+            if (!class_exists('PEAR_ErrorStack')) {
+                require_once 'PEAR/ErrorStack.php';
+            }
             PEAR_ErrorStack::staticPush('PEAR_PackageFile', 
                 PEAR_PACKAGEFILE_ERROR_NO_PACKAGEVERSION,
                 'warning', array('xml' => $data), 'package.xml "' . $file .
