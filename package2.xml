@@ -115,6 +115,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 
   Specific changes from 1.4.0a6
   * implement &lt;usesrole&gt;/&lt;usestask&gt; for custom role/task graceful failure
+  * REALLY fix the debug_backtrace() issue (modified wrong pearcmd.php)
   * fix Bug #3864 Invalid dependency relation
   * fix Bug #3863 illogical warning about PEAR_Frontend_Gtk 0.4.0 with PEAR 1.4.0a6
  </notes>
