@@ -51,7 +51,7 @@ hi there
   </maintainers>
  <release>
   <version>1.2.0a1</version>
-  <date>' . $pf->getDate() . '</date>
+  <date>' . date('Y-m-d') . '</date>
   <license>PHP License</license>
   <state>alpha</state>
   <notes>here are the
