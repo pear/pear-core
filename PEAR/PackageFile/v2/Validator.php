@@ -754,7 +754,7 @@ class PEAR_PackageFile_v2_Validator
                                 $iter = array($iter);
                             }
                             foreach ($iter as $package) {
-                                $this->{"_validate{$type}Dep"}($package, "<$simpledep>");
+                                $this->{"_validate{$type}Dep"}($package);
                             }
                         }
                     }
