@@ -341,13 +341,13 @@ class PEAR_Registry extends PEAR
      *
      * @access public
      */
-    function _channelFileName($channel)
+    function _channelFileName($channel, $noaliases = false)
     {
         $this->_initializeDirs();
         if (!$channel) {
             $channel = 'pear.php.net';
         }
-        if (file_exists($this->channelsdir . DIRECTORY_SEPARATOR . '.alias' .
+        if (!$noaliases && file_exists($this->channelsdir . DIRECTORY_SEPARATOR . '.alias' .
               DIRECTORY_SEPARATOR . strtolower($channel) . '.txt')) {
             // translate an alias to an actual channel
             $channel = implode('', file($this->channelsdir . DIRECTORY_SEPARATOR . '.alias' .
@@ -622,13 +622,13 @@ class PEAR_Registry extends PEAR
     /**
      * Determine whether a channel exists in the registry
      * @param string Channel name
+     * @param bool if true, then aliases will be ignored
      * @return boolean
      */
-    function _channelExists($channel)
+    function _channelExists($channel, $noaliases = false)
     {
         $this->_initializeDirs();
-        return file_exists($this->_getChannelAliasFileName($channel)) ||
-            file_exists($this->_channelFileName($channel));
+        return file_exists($this->_channelFileName($channel, $noaliases));
     }
 
     // }}}
@@ -1062,12 +1062,16 @@ class PEAR_Registry extends PEAR
 
     // {{{ channelExists()
 
-    function channelExists($channel)
+    /**
+     * @param string channel name
+     * @param bool if true, then aliases will be ignored
+     */
+    function channelExists($channel, $noaliases = false)
     {
         if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
             return $e;
         }
-        $ret = $this->_channelExists($channel);
+        $ret = $this->_channelExists($channel, $noaliases);
         $this->_unlock();
         return $ret;
     }
@@ -1677,6 +1681,10 @@ class PEAR_Registry extends PEAR
         return $param;
     }
 
+    /**
+     * @param array
+     * @return string
+     */
     function parsedPackageNameToString($parsed)
     {
         if (is_string($parsed)) {
