@@ -327,6 +327,7 @@ List the files in an installed package.
         if (!$reg->deleteChannel($params[0])) {
             return $this->raiseError('Channel deletion failed');
         } else {
+            $this->config->deleteChannel($params[0]);
             $this->ui->outputData('Channel `' . $params[0] . '\' deleted');
         }
     }
@@ -371,6 +372,8 @@ List the files in an installed package.
         if (!$ret) {
             return $this->raiseError("Adding Channel `" . $channel->getName() . "' to registry failed");
         }
+        $this->config->setChannels($reg->listChannels());
+        $this->config->writeConfigFile();
         $this->ui->outputData('Adding Channel `' . $channel->getName() . '\' succeeded');
     }
 
@@ -448,6 +451,8 @@ List the files in an installed package.
         if (!$ret) {
             return $this->raiseError("Updating Channel `" . $channel->getName() . "' in registry failed");
         }
+        $this->config->setChannels($reg->listChannels());
+        $this->config->writeConfigFile();
         $this->ui->outputData('Update of Channel `' . $channel->getName() . '\' succeeded');
     }
 }
