@@ -1398,8 +1398,8 @@ class PEAR_Downloader_Package
         }
         if (strtolower($info['info']->getChannel()) != strtolower($pname['channel'])) {
             $err = false;
-            if ($pname['channel'] == 'pear.php.net') {
-                if ($info['info']->getChannel() != 'pecl.php.net') {
+            if ($pname['channel'] == 'pecl.php.net') {
+                if ($info['info']->getChannel() != 'pear.php.net') {
                     $err = true;
                 }
             } else {
