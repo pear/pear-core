@@ -56,7 +56,7 @@ class PEAR_test_mock_pearweb {
                 $this->_config['xmlrpc'][$server][$info['method']][serialize($info['params'])]);
     }
     
-    function call($server, $method, $params)
+    function call($server, $method, $params = null)
     {
         if (!isset($this->_config['xmlrpc'][$server][$method])) {
             include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'php_dump.php.inc';
