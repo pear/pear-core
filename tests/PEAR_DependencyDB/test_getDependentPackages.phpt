@@ -11,6 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 copyItem('registry'); //setup for nice clean rebuild
 $db = &PEAR_DependencyDB::singleton($config);
+$db->rebuildDB();
 $p = array('package' => 'PEAR', 'channel' => 'pear.php.net');
 $phpunit->assertEquals(array (
   0 => 

@@ -20,6 +20,7 @@ function copyItem($name, $nested = false)
                 $reg = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'tester' .
                     DIRECTORY_SEPARATOR . '.registry';
                 @mkdir($copydir = $php_dir . DIRECTORY_SEPARATOR . '.registry');
+                @unlink($php_dir . DIRECTORY_SEPARATOR . '.depdb');
             }
             if (file_exists($reg)) {
                 $dp = opendir($reg);
