@@ -1601,83 +1601,103 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   'version' => '1.1.0RC5',
   'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0">
-  <name>File</name>
-  <summary>Common file and directory routines</summary>
-  <description>Provides easy access to read/write to files along with
+<package version="1.0" packagerversion="1.4.0a1">
+ <name>File</name>       
+ <summary>Common file and directory routines</summary>
+ <description>Provides easy access to read/write to files along with
 some common routines to deal with paths. Also provides
-interface for handling CSV files.</description>
-  <maintainers>
-    <maintainer>
-      <user>richard</user>
-      <name>Richard Heyes</name>
-      <email>richard@php.net</email>
-      <role>lead</role>
-    </maintainer>
-    <maintainer>
-      <user>tal</user>
-      <name>Tal Peer</name>
-      <email>tal@php.net</email>
-      <role>lead</role>
-    </maintainer>
-    <maintainer>
-      <user>cox</user>
-      <name>Tomas V.V. Cox</name>
-      <email>cox@idecnet.com</email>
-      <role>developer</role>
-    </maintainer>
-    <maintainer>
-      <user>mike</user>
-      <name>Michael Wallner</name>
-      <email>mike@php.net</email>
-      <role>lead</role>
-    </maintainer>
-    <maintainer>
-      <user>dufuz</user>
-      <name>Helgi Þormar</name>
-      <email>dufuz@php.net</email>
-      <role>developer</role>
-    </maintainer>
+interface for handling CSV files.
+ </description>
+ <maintainers>
+  <maintainer>
+   <user>richard</user>
+   <name>Richard Heyes</name>
+   <email>richard@php.net</email>
+   <role>lead</role>
+  </maintainer>
+  <maintainer>
+   <user>tal</user>
+   <name>Tal Peer</name>
+   <email>tal@php.net</email>
+   <role>lead</role>
+  </maintainer>
+  <maintainer>
+   <user>cox</user>
+   <name>Tomas V.V. Cox</name>
+   <email>cox@idecnet.com</email>
+   <role>developer</role>
+  </maintainer>
+  <maintainer>
+   <user>mike</user>
+   <name>Michael Wallner</name>
+   <email>mike@php.net</email>
+   <role>lead</role>
+  </maintainer>
+  <maintainer>
+   <user>dufuz</user>
+   <name>Helgi Bormar</name>
+   <email>dufuz@php.net</email>
+   <role>developer</role>
+  </maintainer>
   </maintainers>
-  <release>
-    <version>1.1.0RC5</version>
+ <release>
+  <version>1.1.0RC5</version>
+  <date>2005-02-21</date>
+  <license>PHP</license>
+  <state>beta</state>
+  <notes>* Bug #3364 fixed, typo
+  </notes>
+  <deps>
+   <dep type="php" rel="ge" version="4.2.0" optional="no"/>
+   <dep type="php" rel="ge" version="4.3.0" optional="yes"/>
+   <dep type="ext" rel="has" optional="no">pcre</dep>
+   <dep type="pkg" rel="has" optional="no">PEAR</dep>
+  </deps>
+  <provides type="class" name="File" extends="PEAR" />
+  <provides type="class" name="File_Util" />
+  <provides type="function" name="File_Util::buildPath" />
+  <provides type="function" name="File_Util::skipRoot" />
+  <provides type="function" name="File_Util::tmpDir" />
+  <provides type="function" name="File_Util::tmpFile" />
+  <provides type="function" name="File_Util::isAbsolute" />
+  <provides type="function" name="File_Util::relativePath" />
+  <provides type="function" name="File_Util::realPath" />
+  <provides type="function" name="File_Util::pathInRoot" />
+  <provides type="function" name="File_Util::listDir" />
+  <provides type="function" name="File_Util::sortFiles" />
+  <provides type="class" name="File_CSV" />
+  <provides type="function" name="File_CSV::raiseError" />
+  <provides type="function" name="File_CSV::getPointer" />
+  <provides type="function" name="File_CSV::unquote" />
+  <provides type="function" name="File_CSV::readQuoted" />
+  <provides type="function" name="File_CSV::read" />
+  <filelist>
+   <file role="php" md5sum="ec3145cc0031907166c15cc03872760f" name="File.php"/>
+   <file role="php" md5sum="406cf1cfffe617ff58117ddd5139b20b" name="File/Util.php"/>
+   <file role="php" md5sum="0d40627d63db2773d2a4f50b73c8ef3f" name="File/CSV.php"/>
+   <file role="test" md5sum="df6b5898ff597b7c96511b821cd8145c" name="tests/parser.php"/>
+   <file role="test" md5sum="cbecf1c21e14ad72f69b472c240099c8" name="tests/test.csv"/>
+   <file role="test" md5sum="9a474bcc00b1b4163bbd20416ac64c5e" name="tests/FileTest.php"/>
+   <file role="test" md5sum="708ad2ca285581f533dde34c5aecf313" name="tests/CSV/001.phpt"/>
+   <file role="test" md5sum="172b0f71a0dced754eb2a11ff89c6c14" name="tests/CSV/001.csv"/>
+   <file role="test" md5sum="00b4ca7e170475a069eff70e448fb943" name="tests/CSV/002.phpt"/>
+   <file role="test" md5sum="b1e626843f63e4eb7946429317cd2392" name="tests/CSV/002.csv"/>
+   <file role="test" md5sum="57bc6c6e04f5d57b8606490ef3bf2ed6" name="tests/CSV/003.phpt"/>
+   <file role="test" md5sum="30054dc637ea7a5f4154495a40fec458" name="tests/CSV/003.csv"/>
+   <file role="test" md5sum="ae5dbc3aca2c7fbc3f2cb745ba67a689" name="tests/CSV/004.phpt"/>
+   <file role="test" md5sum="6606cc2f2161dafd85ee7bf7fb16b50e" name="tests/CSV/004.csv"/>
+   <file role="test" md5sum="08ae198463e38f65d564bd6e35460080" name="tests/CSV/005.phpt"/>
+   <file role="test" md5sum="8e850791c4df407f073d5633a18823e1" name="tests/CSV/005.csv"/>
+   <file role="test" md5sum="50b09f7334858fda160b5d2c2029157d" name="tests/CSV/tests.txt"/>
+  </filelist>
+ </release>
+ <changelog>
+   <release>
+    <version>1.1.0RC4</version>
     <date>2005-02-02</date>
     <license>PHP</license>
     <state>beta</state>
-    <notes>* Bug #3364 fixed, typo</notes>
-    <deps>
-      <dep type="php" rel="ge" version="4.2.0" optional="no"/>
-      <dep type="php" rel="ge" version="4.3.0" optional="yes"/>
-      <dep type="ext" rel="has" optional="no">pcre</dep>
-      <dep type="pkg" rel="has" optional="no">PEAR</dep>
-    </deps>
-    <filelist>
-      <file role="php" md5sum="ec3145cc0031907166c15cc03872760f" name="File.php"/>
-      <file role="php" md5sum="406cf1cfffe617ff58117ddd5139b20b" name="File/Util.php"/>
-      <file role="php" md5sum="0d40627d63db2773d2a4f50b73c8ef3f" name="File/CSV.php"/>
-      <file role="test" md5sum="df6b5898ff597b7c96511b821cd8145c" name="tests/parser.php"/>
-      <file role="test" md5sum="cbecf1c21e14ad72f69b472c240099c8" name="tests/test.csv"/>
-      <file role="test" md5sum="9a474bcc00b1b4163bbd20416ac64c5e" name="tests/FileTest.php"/>
-      <file role="test" md5sum="708ad2ca285581f533dde34c5aecf313" name="tests/CSV/001.phpt"/>
-      <file role="test" md5sum="172b0f71a0dced754eb2a11ff89c6c14" name="tests/CSV/001.csv"/>
-      <file role="test" md5sum="00b4ca7e170475a069eff70e448fb943" name="tests/CSV/002.phpt"/>
-      <file role="test" md5sum="b1e626843f63e4eb7946429317cd2392" name="tests/CSV/002.csv"/>
-      <file role="test" md5sum="57bc6c6e04f5d57b8606490ef3bf2ed6" name="tests/CSV/003.phpt"/>
-      <file role="test" md5sum="30054dc637ea7a5f4154495a40fec458" name="tests/CSV/003.csv"/>
-      <file role="test" md5sum="ae5dbc3aca2c7fbc3f2cb745ba67a689" name="tests/CSV/004.phpt"/>
-      <file role="test" md5sum="6606cc2f2161dafd85ee7bf7fb16b50e" name="tests/CSV/004.csv"/>
-      <file role="test" md5sum="08ae198463e38f65d564bd6e35460080" name="tests/CSV/005.phpt"/>
-      <file role="test" md5sum="8e850791c4df407f073d5633a18823e1" name="tests/CSV/005.csv"/>
-      <file role="test" md5sum="50b09f7334858fda160b5d2c2029157d" name="tests/CSV/tests.txt"/>
-    </filelist>
-  </release>
-  <changelog>
-    <release>
-      <version>1.1.0RC4</version>
-      <date>2005-02-02</date>
-      <license>PHP</license>
-      <state>beta</state>
-      <notes>* Required PHP dep now 4.2.0 because of PEAR (dufuz)
+    <notes>* Required PHP dep now 4.2.0 because of PEAR (dufuz)
 * Patch from Firman Wandayandi for File_CSV (dufuz)
   - Fixed bugs: Fields count less nor more than expected handling
   - Added Mac EOL support (Only loaded on PHP 4.3.0 and higher)
@@ -1685,24 +1705,22 @@ interface for handling CSV files.</description>
 * added kind of a filter callback for File_Util::listDir() (mike)
 * Fixed Bug #3355 (missing delimiter of preg_quote() in File_Util::buildPath()) (mike)
 * Fixed Bug #3357 (infinite loop in File_Util::realPath()) (mike)
-  
-</notes>
-    </release>
-    <release>
-      <version>1.1.0RC3</version>
-      <date>2005-01-13</date>
-      <license>PHP</license>
-      <state>beta</state>
-      <notes>* now really containing the fix for File_CSV
-  
-</notes>
-    </release>
-    <release>
-      <version>1.1.0RC2</version>
-      <date>2005-01-12</date>
-      <license>PHP</license>
-      <state>beta</state>
-      <notes>* added File_Util containing all methods not handling file I/O (mike)
+    </notes>
+   </release>
+   <release>
+    <version>1.1.0RC3</version>
+    <date>2005-01-13</date>
+    <license>PHP</license>
+    <state>beta</state>
+    <notes>* now really containing the fix for File_CSV
+    </notes>
+   </release>
+   <release>
+    <version>1.1.0RC2</version>
+    <date>2005-01-12</date>
+    <license>PHP</license>
+    <state>beta</state>
+    <notes>* added File_Util containing all methods not handling file I/O (mike)
 * deprecated methods are now available in File_Util (still in File for BC) (mike)
 * fixed bug #2827 (File_CSV::discoverFormat() is unable to discover format in 
   one column CSV file), allows 1 field per line in discoverFormat as well as 
@@ -1711,72 +1729,70 @@ interface for handling CSV files.</description>
   in _conf, might give some people issues (can\'t see how tho), also added a 
   new param to discoverFormat so one can inject a check for $ as a separator 
   or something like that (dufuz)
-  
-</notes>
-    </release>
-    <release>
-      <version>1.1.0RC1</version>
-      <date>2004-12-17</date>
-      <license>PHP</license>
-      <state>beta</state>
-      <notes>* Fixed Bug #2810 (Can not call readAll two times)
+    </notes>
+   </release>
+   <release>
+    <version>1.1.0RC1</version>
+    <date>2004-12-17</date>
+    <license>PHP</license>
+    <state>beta</state>
+    <notes>* Fixed Bug #2810 (Can not call readAll two times)
 * Fixed file locking
 - Code cleanup (vastly)
 + Implemented Request #1542 (File::relativePath(), File::realPath())
-  
-</notes>
-    </release>
-    <release>
-      <version>1.0.3</version>
-      <date>2003-01-28</date>
-      <license>PHP</license>
-      <state>stable</state>
-      <notes>Fixed handling of paths containing \'..\' and \'~\' in File::isAbsolute().
-  
-</notes>
-    </release>
-    <release>
-      <version>1.0.2</version>
-      <date>2002-05-26</date>
-      <license>PHP</license>
-      <state>stable</state>
-      <notes>Revert to mode specification instead of using _checkAppend() function
-</notes>
-    </release>
-    <release>
-      <version>1.0.1</version>
-      <date>2002-05-03</date>
-      <license>PHP</license>
-      <state>stable</state>
-      <notes>Bugfix in _checkAppend() usage
-</notes>
-    </release>
-    <release>
-      <version>1.0.0</version>
-      <date>2002-05-02</date>
-      <license>PHP</license>
-      <state>stable</state>
-      <notes>Stable release
-</notes>
-    </release>
-    <release>
-      <version>0.9.2</version>
-      <date>2002-04-24</date>
-      <license>PHP</license>
-      <state>beta</state>
-      <notes>Fixed bug apparent when using fopen wrappers
-</notes>
-    </release>
-    <release>
-      <version>0.9.1</version>
-      <date>2002-04-09</date>
-      <license>PHP</license>
-      <state>beta</state>
-      <notes>Initial release
-</notes>
-    </release>
-  </changelog>
-</package>',
+    </notes>
+   </release>
+   <release>
+    <version>1.0.3</version>
+    <date>2003-01-28</date>
+    <license>PHP</license>
+    <state>stable</state>
+    <notes>Fixed handling of paths containing \'..\' and \'~\' in File::isAbsolute().
+    </notes>
+   </release>
+   <release>
+    <version>1.0.2</version>
+    <date>2002-05-26</date>
+    <license>PHP</license>
+    <state>stable</state>
+    <notes>Revert to mode specification instead of using _checkAppend() function
+    </notes>
+   </release>
+   <release>
+    <version>1.0.1</version>
+    <date>2002-05-03</date>
+    <license>PHP</license>
+    <state>stable</state>
+    <notes>Bugfix in _checkAppend() usage
+    </notes>
+   </release>
+   <release>
+    <version>1.0.0</version>
+    <date>2002-05-02</date>
+    <license>PHP</license>
+    <state>stable</state>
+    <notes>Stable release
+    </notes>
+   </release>
+   <release>
+    <version>0.9.2</version>
+    <date>2002-04-24</date>
+    <license>PHP</license>
+    <state>beta</state>
+    <notes>Fixed bug apparent when using fopen wrappers
+    </notes>
+   </release>
+   <release>
+    <version>0.9.1</version>
+    <date>2002-04-09</date>
+    <license>PHP</license>
+    <state>beta</state>
+    <notes>Initial release
+    </notes>
+   </release>
+ </changelog>
+</package>
+',
   'url' => 'http://pear.php.net/get/File-1.1.0RC5',
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
