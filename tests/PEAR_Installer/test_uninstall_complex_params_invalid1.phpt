@@ -43,7 +43,6 @@ $reg->addPackage2($package);
 
 $params[] = $reg->getPackage('next');
 $params[] = $reg->getPackage('foo');
-
 $installer->setUninstallPackages($params);
 $installer->uninstall('foo');
 $phpunit->assertErrors(array(
@@ -54,7 +53,7 @@ $phpunit->assertEquals( array (
   0 => 
   array (
     0 => 0,
-    1 => 'pear/foo (version >= 1.0) is required by package "pear/next"',
+    1 => 'pear/next (version >= 1.0) is required by installed package "pear/foo"',
   ),
  ), $fakelog->getLog(), 'foo');
 echo 'tests done';
