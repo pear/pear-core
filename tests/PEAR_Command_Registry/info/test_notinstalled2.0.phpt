@@ -57,7 +57,7 @@ Greg Beaver <cellog@php.net> (helper)',
         6 => 
         array (
           0 => 'Release Date',
-          1 => '2004-11-27 20:17:03',
+          1 => '2004-12-06 11:57:00',
         ),
         7 => 
         array (
@@ -67,7 +67,7 @@ Greg Beaver <cellog@php.net> (helper)',
         8 => 
         array (
           0 => 'API Version',
-          1 => '1.2.0 (stable)',
+          1 => '1.2.1 (stable)',
         ),
         9 => 
         array (
@@ -95,6 +95,7 @@ PEAR installer version 1.4.0a1 or newer',
       array (
         'attribs' => 
         array (
+          'packagerversion' => '1.4.0a1',
           'version' => '2.0',
           'xmlns' => 'http://pear.php.net/dtd/package-2.0',
           'xmlns:tasks' => 'http://pear.php.net/dtd/tasks-1.0',
@@ -127,12 +128,12 @@ short and long options.',
           'email' => 'cellog@php.net',
           'active' => 'yes',
         ),
-        'date' => '2004-11-27',
-        'time' => '20:17:03',
+        'date' => '2004-12-06',
+        'time' => '11:57:00',
         'version' => 
         array (
           'release' => '1.2.1',
-          'api' => '1.2.0',
+          'api' => '1.2.1',
         ),
         'stability' => 
         array (
