@@ -539,12 +539,12 @@ class PEAR_Dependency2
             if ($installed) {
                 if ($required) {
                     if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                        return $this->raiseError('%s conflicts with package "' . $name . '"');
+                        return $this->raiseError('%s conflicts with package "' . $dep['name'] . '"');
                     } else {
-                        return $this->warning('warning: %s conflicts with package "' . $name . '"');
+                        return $this->warning('warning: %s conflicts with package "' . $dep['name'] . '"');
                     }
                 } else {
-                    return $this->warning('%s conflicts with package "' . $name . '"');
+                    return $this->warning('%s conflicts with package "' . $dep['name'] . '"');
                 }
             } else {
                 return true;
@@ -557,14 +557,14 @@ class PEAR_Dependency2
             } else {
                 if ($required) {
                     if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                        return $this->raiseError('%s requires package "' . $name . '"' .
+                        return $this->raiseError('%s requires package "' . $dep['name'] . '"' .
                             $extra);
                     } else {
-                        return $this->warning('warning: %s requires package "' . $name . '"' .
+                        return $this->warning('warning: %s requires package "' . $dep['name'] . '"' .
                             $extra);
                     }
                 } else {
-                    return $this->warning('%s can optionally use package "' . $name . '"' .
+                    return $this->warning('%s can optionally use package "' . $dep['name'] . '"' .
                         $extra);
                 }
             }
@@ -572,24 +572,24 @@ class PEAR_Dependency2
         if (!$installed && !$downloaded) {
             if ($required) {
                 if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                    return $this->raiseError('%s requires package "' . $name . '"' .
+                    return $this->raiseError('%s requires package "' . $dep['name'] . '"' .
                         $extra);
                 } else {
-                    return $this->warning('warning: %s requires package "' . $name . '"' .
+                    return $this->warning('warning: %s requires package "' . $dep['name'] . '"' .
                         $extra);
                 }
             } else {
-                return $this->warning('%s can optionally use package "' . $name . '"' .
+                return $this->warning('%s can optionally use package "' . $dep['name'] . '"' .
                     $extra);
             }
         }
         if (isset($dep['min'])) {
             if (version_compare($version, $dep['min'], '<')) {
                 if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                    return $this->raiseError('%s requires package "' . $name . '"' .
+                    return $this->raiseError('%s requires package "' . $dep['name'] . '"' .
                         $extra . ', installed version is ' . $version);
                 } else {
-                    return $this->warning('warning: %s requires package "' . $name . '"' .
+                    return $this->warning('warning: %s requires package "' . $dep['name'] . '"' .
                         $extra . ', installed version is ' . $version);
                 }
             }
@@ -597,10 +597,10 @@ class PEAR_Dependency2
         if (isset($dep['max'])) {
             if (version_compare($version, $dep['max'], '>')) {
                 if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                    return $this->raiseError('%s requires package "' . $name . '"' .
+                    return $this->raiseError('%s requires package "' . $dep['name'] . '"' .
                         $extra . ', installed version is ' . $version);
                 } else {
-                    return $this->warning('warning: %s requires package "' . $name . '"' .
+                    return $this->warning('warning: %s requires package "' . $dep['name'] . '"' .
                         $extra . ', installed version is ' . $version);
                 }
             }
