@@ -1,5 +1,6 @@
 <?php
 require_once 'PEAR/Common.php';
+$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
 
 function cleanall($dir = null)
 {
@@ -26,32 +27,94 @@ function cleanall($dir = null)
 }
 
 register_shutdown_function('cleanall');
-$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'registry_tester';
 cleanall($statedir);
-mkdir($statedir);
-$config = serialize(
-array(
+if (!is_dir($statedir)) {
+    mkdir($statedir);
+}
+if (!is_dir($statedir . DIRECTORY_SEPARATOR . 'php')) {
+    mkdir($statedir . DIRECTORY_SEPARATOR . 'php');
+}
+if (!is_dir($statedir . DIRECTORY_SEPARATOR . 'data')) {
+    mkdir($statedir . DIRECTORY_SEPARATOR . 'data');
+}
+if (!is_dir($statedir . DIRECTORY_SEPARATOR . 'doc')) {
+    mkdir($statedir . DIRECTORY_SEPARATOR . 'doc');
+}
+if (!is_dir($statedir . DIRECTORY_SEPARATOR . 'test')) {
+    mkdir($statedir . DIRECTORY_SEPARATOR . 'test');
+}
+if (!is_dir($statedir . DIRECTORY_SEPARATOR . 'ext')) {
+    mkdir($statedir . DIRECTORY_SEPARATOR . 'ext');
+}
+if (!is_dir($statedir . DIRECTORY_SEPARATOR . 'script')) {
+    mkdir($statedir . DIRECTORY_SEPARATOR . 'script');
+}
+if (!is_dir($statedir . DIRECTORY_SEPARATOR . 'tmp')) {
+    mkdir($statedir . DIRECTORY_SEPARATOR . 'tmp');
+}
+if (!is_dir($statedir . DIRECTORY_SEPARATOR . 'bin')) {
+    mkdir($statedir . DIRECTORY_SEPARATOR . 'bin');
+}
+if (!is_dir($statedir . DIRECTORY_SEPARATOR . 'cache')) {
+    mkdir($statedir . DIRECTORY_SEPARATOR . 'cache');
+}
+// make the fake configuration - we'll use one of these and it should work
+$config = serialize(array('master_server' => 'pear.php.net',
+    'preferred_state' => 'stable',
+    'cache_dir' => $statedir . DIRECTORY_SEPARATOR . 'cache',
     'php_dir' => $statedir . DIRECTORY_SEPARATOR . 'php',
-)
-);
-$fp = fopen($statedir . DIRECTORY_SEPARATOR . 'pear.ini', 'wb');
-fwrite($fp, $config, strlen($config));
+    'ext_dir' => $statedir . DIRECTORY_SEPARATOR . 'ext',
+    'data_dir' => $statedir . DIRECTORY_SEPARATOR . 'data',
+    'doc_dir' => $statedir . DIRECTORY_SEPARATOR . 'doc',
+    'test_dir' => $statedir . DIRECTORY_SEPARATOR . 'test',
+    'bin_dir' => $statedir . DIRECTORY_SEPARATOR . 'bin',));
+touch($statedir . DIRECTORY_SEPARATOR . 'pear.conf');
+$fp = fopen($statedir . DIRECTORY_SEPARATOR . 'pear.conf', 'w');
+fwrite($fp, $config);
 fclose($fp);
+touch($statedir . DIRECTORY_SEPARATOR . 'pear.ini');
+$fp = fopen($statedir . DIRECTORY_SEPARATOR . 'pear.ini', 'w');
+fwrite($fp, $config);
+fclose($fp);
+
+putenv('PHP_PEAR_SYSCONF_DIR='.$statedir);
+$home = getenv('HOME');
+if (!empty($home)) {
+    // for PEAR_Config initialization
+    putenv('HOME="'.$statedir);
+}
 //$config = &new PEAR_Config($statedir . DIRECTORY_SEPARATOR . 'pear.ini');
+require_once dirname(dirname(__FILE__)) . '/download_test_classes.php.inc';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
 $phpunit = &new PEAR_PHPTest(true);
 class fake_log
 {
     var $_log = array();
+    var $_download = array();
     function log($level, $message)
     {
         $this->_log[] = array($level, $message);
+    }
+
+    function _downloadCallback($msg, $params)
+    {
+        if ($msg == 'setup') {
+            $params = 'self';
+        }
+        $this->_download[] = array($msg, $params);
     }
 
     function getLog()
     {
         $log = $this->_log;
         $this->_log = array();
+        return $log;
+    }
+
+    function getDownload()
+    {
+        $log = $this->_download;
+        $this->_download = array();
         return $log;
     }
 }
