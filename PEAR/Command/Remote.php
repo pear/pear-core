@@ -155,8 +155,12 @@ parameter.
             return $this->raiseError('Channel "' . $channel . '" does not exist');
         }
         $this->config->set('default_channel', $channel);
-        $r = &$this->config->getRemote();
-        $info = $r->call('package.info', $package);
+        $chan = $reg->getChannel($channel);
+        if ($chan->supportsREST()) {
+        } else {
+            $r = &$this->config->getRemote();
+            $info = $r->call('package.info', $package);
+        }
         if (PEAR::isError($info)) {
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($info);
@@ -187,7 +191,7 @@ parameter.
             if ($reg->channelExists($channel)) {
                 $this->config->set('default_channel', $channel);
             } else {
-                return $this->raiseError("Channel '$channel' does not exist");
+                return $this->raiseError('Channel "' . $channel . '" does not exist');
             }
         }
         $r = &$this->config->getRemote();
@@ -201,7 +205,7 @@ parameter.
         }
         $i = $j = 0;
         $data = array(
-            'caption' => 'Available packages:',
+            'caption' => 'Channel ' . $channel . ' Available packages:',
             'border' => true,
             'headline' => array('Package', 'Version'),
             );
@@ -321,7 +325,7 @@ parameter.
             if ($reg->channelExists($channel)) {
                 $this->config->set('default_channel', $channel);
             } else {
-                return $this->raiseError("Channel '$channel' does not exist");
+                return $this->raiseError('Channel "' . $channel . '" does not exist');
             }
         }
         $r = &$this->config->getRemote();
@@ -331,7 +335,8 @@ parameter.
             return $this->raiseError($available);
         }
         if (!$available) {
-            return $this->raiseError('no packages found');
+            $this->ui->outputData('no packages found that match pattern "' . $package . '"');
+            return true;
         }
         $data = array(
             'caption' => 'Matched packages:',
@@ -360,27 +365,33 @@ parameter.
                 $desc,
                 );
         }
-        if (!isset($data['data'])) {
-            $this->config->set('default_channel', $savechannel);
-            return $this->raiseError('no packages found');
-        }
         $this->ui->outputData($data, $command);
         $this->config->set('default_channel', $channel);
         return true;
     }
 
     // }}}
+    function &getDownloader($options)
+    {
+        $a = &new PEAR_Downloader($this->ui, $options, $this->config);
+        return $a;
+    }
     // {{{ doDownload()
 
     function doDownload($command, $options, $params)
     {
         include_once 'PEAR/Downloader.php';
+        // make certain that dependencies are ignored
         $options['force'] = 1;
-        $downloader = &new PEAR_Downloader($this->ui, $options, $this->config);
+        $options['nodeps'] = 1;
+        $downloader = &$this->getDownloader($options);
         $downloader->setDownloadDir(getcwd());
         $errors = array();
         $downloaded = array();
-        $downloader->download($params);
+        $err = $downloader->download($params);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
         $errors = $downloader->getErrorMsgs();
         if (count($errors)) {
             $err['data'] = array($errors);
@@ -415,10 +426,10 @@ parameter.
             }
             $this->config->set('default_channel', $channel);
             $remote = &$this->config->getRemote();
-            if (empty($params[1])) {
+            if (empty($params[0])) {
                 $state = $this->config->get('preferred_state');
             } else {
-                $state = $params[1];
+                $state = $params[0];
             }
             $caption = $channel . ' Available Upgrades';
             if (empty($state) || $state == 'any') {
@@ -464,7 +475,7 @@ parameter.
                 $data['data'][] = array($channel, $pkg, "$inst_version ($inst_state)", "$version ($state)", $fs);
             }
             if (empty($data['data'])) {
-                $this->ui->outputData('No upgrades available');
+                $this->ui->outputData('Channel ' . $channel . ': No upgrades available');
             } else {
                 $this->ui->outputData($data, $command);
             }
@@ -489,7 +500,8 @@ parameter.
         }
         $num = 0;
         while ($ent = readdir($dp)) {
-            if (preg_match('/^xmlrpc_cache_[a-z0-9]{32}$/', $ent)) {
+            if (preg_match('/^xmlrpc_cache_[a-z0-9]{32}$/', $ent) ||
+                  preg_match('/rest.cache(file|id)$/', $ent)) {
                 $path = $cache_dir . DIRECTORY_SEPARATOR . $ent;
                 $ok = @unlink($path);
                 if ($ok) {
