@@ -143,7 +143,7 @@ class PEAR_PackageFile_v2_Validator
         $this->_validateFilelist();
         $this->_validateRelease();
         if (!$this->_stack->hasErrors()) {
-            $chan = $this->_pf->_registry->getChannel($this->_pf->getChannel());
+            $chan = $this->_pf->_registry->getChannel($this->_pf->getChannel(), true);
             if (!$chan) {
                 $this->_unknownChannel($this->_pf->getChannel());
             } else {
