@@ -23,22 +23,19 @@ $phpunit->assertEquals(array (
       'headline' => 
       array (
         0 => 'Channel',
-        1 => 'Server',
-        2 => 'Summary',
+        1 => 'Summary',
       ),
       'data' => 
       array (
         0 => 
         array (
           0 => 'pear.php.net',
-          1 => 'pear.php.net',
-          2 => 'PHP Extension and Application Repository',
+          1 => 'PHP Extension and Application Repository',
         ),
         1 => 
         array (
           0 => '__uri',
-          1 => '__uri',
-          2 => 'Pseudo-channel for static packages',
+          1 => 'Pseudo-channel for static packages',
         ),
       ),
     ),
@@ -64,8 +61,7 @@ $phpunit->assertEquals(array (
       'headline' => 
       array (
         0 => 'Channel',
-        1 => 'Server',
-        2 => 'Summary',
+        1 => 'Summary',
       ),
       'data' => 
       array (
@@ -73,19 +69,16 @@ $phpunit->assertEquals(array (
         array (
           0 => 'fake',
           1 => 'fake',
-          2 => 'fake',
         ),
         1 => 
         array (
           0 => 'pear.php.net',
-          1 => 'pear.php.net',
-          2 => 'PHP Extension and Application Repository',
+          1 => 'PHP Extension and Application Repository',
         ),
         2 => 
         array (
           0 => '__uri',
-          1 => '__uri',
-          2 => 'Pseudo-channel for static packages',
+          1 => 'Pseudo-channel for static packages',
         ),
       ),
     ),

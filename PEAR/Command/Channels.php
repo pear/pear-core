@@ -147,11 +147,10 @@ List the files in an installed package.
         $data = array(
             'caption' => 'Registered Channels:',
             'border' => true,
-            'headline' => array('Channel', 'Server', 'Summary')
+            'headline' => array('Channel', 'Summary')
             );
         foreach ($registered as $channel) {
             $data['data'][] = array($channel->getName(),
-                                      $channel->getServer(),
                                       $channel->getSummary());
         }
         if (count($registered)==0) {
