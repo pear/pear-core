@@ -1045,7 +1045,7 @@ class PEAR_PackageFile_v2_Validator
                     '*binarypackage',
                 ), $rel, '<extsrcrelease>');
                 if (isset($rel['binarypackage'])) {
-                    if (!isset($rel['binarypackage'][0])) {
+                    if (!is_array($rel['binarypackage']) || !isset($rel['binarypackage'][0])) {
                         $rel['binarypackage'] = array($rel['binarypackage']);
                     }
                     foreach ($rel['binarypackage'] as $bin) {
