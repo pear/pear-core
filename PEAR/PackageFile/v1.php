@@ -586,51 +586,12 @@ class PEAR_PackageFile_v1
         return false;
     }
 
-    function getDependencyGroup($group)
-    {
-        return false;
-    }
-
-    function isCompatible($pf)
-    {
-        return false;
-    }
-
-    function isSubpackageOf($p)
-    {
-        return $p->isSubpackage($this);
-    }
-
-    function isSubpackage($p)
-    {
-        return false;
-    }
-
-    function dependsOn($package, $channel)
-    {
-        if (strtolower($channel) != 'pear.php.net') {
-            return false;
-        }
-        if (!($deps = $this->getDeps())) {
-            return false;
-        }
-        foreach ($deps as $dep) {
-            if ($dep['type'] != 'pkg') {
-                continue;
-            }
-            if (strtolower($dep['name']) == strtolower($package)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * Reset dependencies prior to adding new ones
      */
     function clearDeps()
     {
-        $this->_packageInfo['release_deps'] = array();
+        unset($this->_packageInfo['release_deps']);
     }
 
     function addPhpDep($version, $rel)
@@ -670,6 +631,45 @@ class PEAR_PackageFile_v1
             count($this->_packageInfo['release_deps']);
     }
 
+    function getDependencyGroup($group)
+    {
+        return false;
+    }
+
+    function isCompatible($pf)
+    {
+        return false;
+    }
+
+    function isSubpackageOf($p)
+    {
+        return $p->isSubpackage($this);
+    }
+
+    function isSubpackage($p)
+    {
+        return false;
+    }
+
+    function dependsOn($package, $channel)
+    {
+        if (strtolower($channel) != 'pear.php.net') {
+            return false;
+        }
+        if (!($deps = $this->getDeps())) {
+            return false;
+        }
+        foreach ($deps as $dep) {
+            if ($dep['type'] != 'pkg') {
+                continue;
+            }
+            if (strtolower($dep['name']) == strtolower($package)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function getConfigureOptions()
     {
         if (isset($this->_packageInfo['configure_options'])) {
@@ -678,18 +678,35 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function hasConfigureOptions()
+    {
+        return isset($this->_packageInfo['configure_options']) &&
+            count($this->_packageInfo['configure_options']);
+    }
+
+    function addConfigureOption($name, $prompt, $default = false)
+    {
+        $o = array('name' => $name, 'prompt' => $prompt);
+        if ($default !== false) {
+            $o['default'] = $default;
+        }
+        if (!isset($this->_packageInfo['configure_options'])) {
+            $this->_packageInfo['configure_options'] = array();
+        }
+        $this->_packageInfo['configure_options'][] = $o;
+    }
+
+    function clearConfigureOptions()
+    {
+        unset($this->_packageInfo['configure_options']);
+    }
+
     function getProvides()
     {
         if (isset($this->_packageInfo['provides'])) {
             return $this->_packageInfo['provides'];
         }
         return false;
-    }
-
-    function hasConfigureOptions()
-    {
-        return isset($this->_packageInfo['configure_options']) &&
-            count($this->_packageInfo['configure_options']);
     }
 
     function addFile($dir, $file, $attrs)
