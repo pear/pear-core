@@ -647,7 +647,7 @@ installed package.'
                         if (isset($package['channel'])) {
                             $name = $package['channel'] . '/' . $package['name'];
                         } else {
-                            $name = '__private/' . $package['name'] . ' (static URI)';
+                            $name = '__uri/' . $package['name'] . ' (static URI)';
                         }
                     }
                     $info[$infoindex] .= "$type $name";
@@ -752,7 +752,7 @@ installed package.'
                             if (isset($package['channel'])) {
                                 $name = $package['channel'] . '/' . $package['name'];
                             } else {
-                                $name = '__private/' . $package['name'] . ' (static URI)';
+                                $name = '__uri/' . $package['name'] . ' (static URI)';
                             }
                         }
                         $info[$infoindex] .= "$type $name";
@@ -817,7 +817,7 @@ installed package.'
                                 if (isset($package['channel'])) {
                                     $name = $package['channel'] . '/' . $package['name'];
                                 } else {
-                                    $name = '__private/' . $package['name'] . ' (static URI)';
+                                    $name = '__uri/' . $package['name'] . ' (static URI)';
                                 }
                             }
                             if (isset($package['uri'])) {
@@ -871,7 +871,7 @@ installed package.'
                     $info['Bundled Packages'] .= "\n";
                 }
                 if (isset($package['uri'])) {
-                    $info['Bundled Packages'] .= '__private/' . $package['name'];
+                    $info['Bundled Packages'] .= '__uri/' . $package['name'];
                     $info['Bundled Packages'] .= "\n  (URI: $package[uri]";
                 } else {
                     $info['Bundled Packages'] .= $package['channel'] . '/' . $package['name'];

@@ -563,7 +563,7 @@ class PEAR_Dependency2
     {
         $dep['package'] = $dep['name'];
         if (isset($dep['uri'])) {
-            $dep['channel'] = '__private';
+            $dep['channel'] = '__uri';
         }
         $depname = $this->_registry->parsedPackageNameToString($dep);
         $found = false;
