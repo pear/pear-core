@@ -471,7 +471,7 @@ class PEAR_PackageFile_Generator_v1
                              'xmlns' => 'http://pear.php.net/dtd/package-2.0',
                              'xmlns:tasks' => 'http://pear.php.net/dtd/tasks-1.0',
                              'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-                             "xsi:schemaLocation = http://pear.php.net/dtd/tasks-1.0\n" .
+                             'xsi:schemaLocation' => "http://pear.php.net/dtd/tasks-1.0\n" .
 "http://pear.php.net/dtd/tasks-1.0.xsd\n" .
 "http://pear.php.net/dtd/package-2.0\n" .
 'http://pear.php.net/dtd/package-2.0.xsd',
