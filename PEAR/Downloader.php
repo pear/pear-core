@@ -1089,6 +1089,7 @@ class PEAR_Downloader extends PEAR_Common
             }
             if (isset($lastmodified['Etag'])) {
                 $ifmodifiedsince .= "If-None-Match: $lastmodified[Etag]\r\n";
+            }
         } else {
             $ifmodifiedsince = ($lastmodified ? "If-Modified-Since: $lastmodified\r\n" : '');
         }
