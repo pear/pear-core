@@ -318,7 +318,8 @@ and uninstall).
         if ($root{strlen($root) - 1} == '/') {
             $root = substr($root, 0, strlen($root) - 1);
         }
-        $config->set('php_dir', $windows ? "$root\\pear\\php" : "$root/pear/php");
+        $config->noRegistry();
+        $config->set('php_dir', $windows ? "$root\\pear\\php" : "$root/pear/php", 'user');
         $config->set('data_dir', $windows ? "$root\\pear\\data" : "$root/pear/data");
         $config->set('ext_dir', $windows ? "$root\\pear\\ext" : "$root/pear/ext");
         $config->set('doc_dir', $windows ? "$root\\pear\\docs" : "$root/pear/docs");
@@ -326,15 +327,43 @@ and uninstall).
         $config->set('cache_dir', $windows ? "$root\\pear\\cache" : "$root/pear/cache");
         $config->set('bin_dir', $windows ? "$root\\pear" : "$root/pear");
         $config->writeConfigFile();
-        $save = $this->config;
-        $this->config = $config;
-        $this->doConfigShow('config-show', array(), array('user'));
-        $this->config = $save;
+        $this->_showConfig($config);
         $this->ui->outputData('Successfully created default configuration file "' . $params[1] . '"',
             $command);
     }
 
     // }}}
+
+    function _showConfig(&$config)
+    {
+        $params = array('user');
+        $keys = $config->getKeys();
+        sort($keys);
+        $channel = 'pear.php.net';
+        $data = array('caption' => 'Configuration (channel ' . $channel . '):');
+        foreach ($keys as $key) {
+            $type = $config->getType($key);
+            $value = $config->get($key, 'user', $channel);
+            if ($type == 'password' && $value) {
+                $value = '********';
+            }
+            if ($value === false) {
+                $value = 'false';
+            } elseif ($value === true) {
+                $value = 'true';
+            }
+            $data['data'][$config->getGroup($key)][] =
+                array($config->getPrompt($key) , $key, $value);
+        }
+        foreach ($config->getLayers() as $layer) {
+            $data['data']['Config Files'][] =
+                array(ucfirst($layer) . ' Configuration File', 'Filename' ,
+                    $config->getConfFile($layer));
+        }
+        
+        $this->ui->outputData($data, 'config-show');
+        return true;
+    }
     // {{{ _checkLayer()
 
     /**

@@ -273,6 +273,12 @@ class PEAR_Config extends PEAR
     var $_regInitialized = array();
 
     /**
+     * @var bool
+     * @access private
+     */
+    var $_noRegistry = false;
+
+    /**
      * Information about the configuration data.  Stores the type,
      * default value and a documentation string for each configuration
      * value.
@@ -570,7 +576,7 @@ class PEAR_Config extends PEAR
         $this->_decodeInput($data);
         $this->configuration[$layer] = $data;
         $this->_setupChannels();
-        if ($phpdir = $this->get('php_dir', $layer, 'pear.php.net')) {
+        if (!$this->_noRegistry && ($phpdir = $this->get('php_dir', $layer, 'pear.php.net'))) {
             $this->_registry[$layer] = &new PEAR_Registry($phpdir);
             $this->_registry[$layer]->setConfig($this);
             $this->_regInitialized[$layer] = false;
@@ -718,7 +724,7 @@ class PEAR_Config extends PEAR
                 PEAR_Config::arrayMergeRecursive($data, $this->configuration[$layer]);
         }
         $this->_setupChannels();
-        if ($phpdir = $this->get('php_dir', $layer, 'pear.php.net')) {
+        if (!$this->_noRegistry && ($phpdir = $this->get('php_dir', $layer, 'pear.php.net'))) {
             $this->_registry[$layer] = &new PEAR_Registry($phpdir);
             $this->_registry[$layer]->setConfig($this);
             $this->_regInitialized[$layer] = false;
@@ -1221,7 +1227,7 @@ class PEAR_Config extends PEAR
             }
         }
         $this->configuration[$layer][$key] = $value;
-        if ($key == 'php_dir') {
+        if ($key == 'php_dir' && !$this->_noRegistry) {
             if (!isset($this->_registry[$layer]) ||
                   $value != $this->_registry[$layer]->install_dir) {
                 $this->_registry[$layer] = &new PEAR_Registry($value);
@@ -1235,6 +1241,9 @@ class PEAR_Config extends PEAR
     // }}}
     function _lazyChannelSetup($uselayer = false)
     {
+        if ($this->_noRegistry) {
+            return;
+        }
         $merge = false;
         foreach ($this->_registry as $layer => $p) {
             if ($uselayer && $uselayer != $layer) {
@@ -1704,12 +1713,22 @@ class PEAR_Config extends PEAR
      */
     function setRegistry(&$reg, $layer = 'user')
     {
+        if ($this->_noRegistry) {
+            return false;
+        }
         if (!in_array($layer, array('user', 'system'))) {
             return false;
         }
         $this->_registry[$layer] = &$reg;
-        $this->_registry[$layer]->setConfig($this);
+        if (is_object($reg)) {
+            $this->_registry[$layer]->setConfig($this);
+        }
         return true;
+    }
+
+    function noRegistry()
+    {
+        $this->_noRegistry = true;
     }
 
     /**
