@@ -43,6 +43,7 @@ $config = &new PEAR_Config($statedir . DIRECTORY_SEPARATOR . 'pear.ini');
 $parser = new PEAR_PackageFile_Parser_v2;
 $parser->setConfig($config);
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 $phpunit = &new PEAR_PHPTest(true);
 class fake_log
 {
@@ -61,4 +62,5 @@ class fake_log
 }
 $fakelog = new fake_log;
 $parser->setLogger($fakelog);
+test_PEAR_Dependency2::singleton($config);
 ?>
