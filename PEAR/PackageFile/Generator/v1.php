@@ -993,17 +993,4 @@ http://pear.php.net/dtd/package-2.0.xsd',
         return $ret;
     }
 }
-//require_once 'PEAR/PackageFile/Parser/v1.php';
-//require_once 'PEAR/Registry.php';
-//$a = new PEAR_PackageFile_Parser_v1;
-//$r = new PEAR_Registry('C:\Program Files\php\pear');
-//$a->setRegistry($r);
-////$p = &$a->parse(file_get_contents('C:\php4\pear_pkgs\Perm_LiveUser\package.xml'), PEAR_VALIDATE_NORMAL,
-//$p = &$a->parse(file_get_contents('C:\devel\pear_with_channels\package-PEAR.xml'), PEAR_VALIDATE_NORMAL,
-////$p = &$a->parse(file_get_contents('C:\devel\chiara\phpdoc\package.xml'), PEAR_VALIDATE_NORMAL,
-//    'C:\devel\pear_with_channels\package-PEAR.xml');
-//$g = &$p->getDefaultGenerator();
-////$v2 = &$g->toV2();
-////$g = &$v2->getDefaultGenerator();
-//echo $g->toXml(PEAR_VALIDATE_NORMAL);
-//?>
+?>
