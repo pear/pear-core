@@ -170,6 +170,7 @@
     </file>
     <file role="php" name="Downloader.php"/>
     <file role="php" name="ErrorStack.php"/>
+    <file role="php" name="Exception.php"/>
     <file role="php" name="Builder.php"/>
     <file role="php" name="Frontend.php" />
     <file role="php" name="FTP.php" />
