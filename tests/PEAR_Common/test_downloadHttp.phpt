@@ -10,6 +10,11 @@ if (!$fp) {
     echo 'skip test.pear.php.net is down';
 } else {
     fclose($fp);
+    if (!($fp = @fopen('http://test.pear.php.net/testdownload.tgz'))) {
+        echo 'skip test.pear.php.net/testdownload.tgz appears to be missing?';
+    } else {
+        fclose($fp);
+    }
 }
 ?>
 --FILE--
