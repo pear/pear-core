@@ -402,7 +402,16 @@ class PEAR_PackageFile_Generator_v1
     function &toV2()
     {
         $arr = array(
-            'attribs' => array('version' => '2.0'),
+            'attribs' => array(
+                             'version' => '2.0',
+                             'xmlns' => 'http://pear.php.net/dtd/package-2.0',
+                             'xmlns:tasks' => 'http://pear.php.net/dtd/tasks-1.0',
+                             'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+                             'xsi:schemaLocation' => 'http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd',
+                         ),
             'name' => $this->_packagefile->getPackage(),
             'channel' => 'pear.php.net',
         );
@@ -490,13 +499,13 @@ class PEAR_PackageFile_Generator_v1
                 $rel = array();
                 $rel['version'] =
                     array(
-                        'release' => $this->_packagefile->getVersion(),
-                        'api' => $this->_packagefile->getVersion(),
+                        'release' => $release['version'],
+                        'api' => $release['version'],
                     );
                 $rel['stability'] =
                     array(
-                        'release' => $this->_packagefile->getState(),
-                        'api' => $this->_packagefile->getState(),
+                        'release' => $release['release_state'],
+                        'api' => $release['release_state'],
                     );
                 $rel['date'] = $release['release_date'];
                 if (isset($release['release_license'])) {
