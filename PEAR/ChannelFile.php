@@ -254,16 +254,6 @@ class PEAR_ChannelFile {
                     '%server% has invalid ssl attribute "%ssl%" can only be yes or not present',
             );
     }
-    
-    /**
-     * Determine whether a mirror type is valid
-     * @param string
-     * @return boolean
-     */
-    function validMirrorType($type)
-    {
-        return in_array($type, $GLOBALS['_PEAR_CHANNELS_MIRROR_TYPES']);
-    }
 
     /**
      * @param string contents of package.xml file
@@ -273,7 +263,8 @@ class PEAR_ChannelFile {
     {
         if (preg_match('/<channel\s+version="([0-9]+\.[0-9]+)"/', $data, $channelversion)) {
             if (!in_array($channelversion[1], $this->_supportedVersions)) {
-                $this->_stack->push(PEAR_CHANNELFILE_ERROR_INVALID_VERSION, 'error', array('version' => $channelversion[1]));
+                $this->_stack->push(PEAR_CHANNELFILE_ERROR_INVALID_VERSION, 'error',
+                    array('version' => $channelversion[1]));
                 return false;
             }
             include_once 'PEAR/XMLParser.php';
@@ -1493,7 +1484,7 @@ class PEAR_ChannelFile {
      * @return PEAR_Validate|false false is returned if the validation package
      *         cannot be located
      */
-    function &getValidationObject()
+    function &getValidationObject($package = false)
     {
         if (!$this->_isValid) {
             if (!$this->validate()) {
@@ -1502,6 +1493,12 @@ class PEAR_ChannelFile {
             }
         }
         if (isset($this->_channelInfo['validatepackage'])) {
+            if ($package == $this->_channelInfo['validatepackage']) {
+                // channel validation packages are always validated by PEAR_Validate
+                include_once 'PEAR/Validate.php';
+                $val = &new PEAR_Validate;
+                return $val;
+            }
             if (!class_exists(str_replace('.', '_',
                   $this->_channelInfo['validatepackage']['_content']))) {
                 if ($this->isIncludeable(str_replace('_', '/',
