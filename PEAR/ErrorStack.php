@@ -122,6 +122,10 @@ define('PEAR_ERRORSTACK_LOG', 3);
  * If this is returned, then the error is completely ignored.
  */
 define('PEAR_ERRORSTACK_IGNORE', 4);
+/**
+ * If this is returned, then the error is logged and die() is called.
+ */
+define('PEAR_ERRORSTACK_DIE', 5);
 /**#@-*/
 
 /**
@@ -537,6 +541,7 @@ class PEAR_ErrorStack {
             $err['repackage'] = $repackage;
         }
         $push = $log = true;
+        $die = false;
         // try the overriding callback first
         $callback = $this->staticPopCallback();
         if ($callback) {
@@ -565,6 +570,9 @@ class PEAR_ErrorStack {
             	case PEAR_ERRORSTACK_LOG: 
             		$push = false;
         		break;
+            	case PEAR_ERRORSTACK_DIE: 
+            		$die = true;
+        		break;
                 // anything else returned has the same effect as pushandlog
             }
         }
@@ -576,6 +584,9 @@ class PEAR_ErrorStack {
             if ($this->_logger || $GLOBALS['_PEAR_ERRORSTACK_DEFAULT_LOGGER']) {
                 $this->_log($err);
             }
+        }
+        if ($die) {
+            die();
         }
         if ($this->_compat && $push) {
             return $this->raiseError($msg, $code, null, null, $err);
