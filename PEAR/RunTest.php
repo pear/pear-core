@@ -39,6 +39,7 @@ require_once 'PEAR.php';
 require_once 'PEAR/Config.php';
 
 define('DETAILED', 1);
+putenv("PHP_PEAR_RUNTESTS=1");
 
 class PEAR_RunTest
 {
@@ -50,7 +51,6 @@ class PEAR_RunTest
     function run($file)
     {
         $cwd = getcwd();
-        putenv('PHP_PEAR_RUNTESTS=1');
         $conf = &PEAR_Config::singleton();
         $php = $conf->get('php_bin');
         //var_dump($php);exit;
@@ -67,7 +67,7 @@ class PEAR_RunTest
             'ARGS'   => '',
         );
 
-        if (!$fp = fopen($file, "r")) {
+        if (!is_file($file) || !$fp = fopen($file, "r")) {
             return PEAR::raiseError("Cannot open test file: $file");
         }
 
@@ -225,7 +225,9 @@ class PEAR_RunTest
         // write .exp
         if (strpos($log_format,'E') !== FALSE) {
             $logname = ereg_replace('\.phpt$','.exp',$file);
-            $log = fopen($logname,'w') or error("Cannot create test log - $logname");
+            if (!$log = fopen($logname,'w')) {
+                return PEAR::raiseError("Cannot create test log - $logname");
+            }
             fwrite($log,$wanted);
             fclose($log);
         }
@@ -233,7 +235,9 @@ class PEAR_RunTest
         // write .out
         if (strpos($log_format,'O') !== FALSE) {
             $logname = ereg_replace('\.phpt$','.out',$file);
-            $log = fopen($logname,'w') or error("Cannot create test log - $logname");
+            if (!$log = fopen($logname,'w')) {
+                return PEAR::raiseError("Cannot create test log - $logname");
+            }
             fwrite($log,$output);
             fclose($log);
         }
@@ -241,7 +245,9 @@ class PEAR_RunTest
         // write .diff
         if (strpos($log_format,'D') !== FALSE) {
             $logname = ereg_replace('\.phpt$','.diff',$file);
-            $log = fopen($logname,'w') or error("Cannot create test log - $logname");
+            if (!$log = fopen($logname,'w')) {
+                return PEAR::raiseError("Cannot create test log - $logname");
+            }
             fwrite($log, $this->generate_diff($wanted,$output));
             fclose($log);
         }
@@ -249,14 +255,16 @@ class PEAR_RunTest
         // write .log
         if (strpos($log_format,'L') !== FALSE) {
             $logname = ereg_replace('\.phpt$','.log',$file);
-            $log = fopen($logname,'w') or error("Cannot create test log - $logname");
+            if (!$log = fopen($logname,'w')) {
+                return PEAR::raiseError("Cannot create test log - $logname");
+            }
             fwrite($log,"
-    ---- EXPECTED OUTPUT
-    $wanted
-    ---- ACTUAL OUTPUT
-    $output
-    ---- FAILED
-    ");
+---- EXPECTED OUTPUT
+$wanted
+---- ACTUAL OUTPUT
+$output
+---- FAILED
+");
             fclose($log);
             //error_report($file,$logname,$tested);
         }
@@ -283,19 +291,15 @@ class PEAR_RunTest
         return implode("\r\n", $diff);
     }
 
-    function error($message)
-    {
-        echo "ERROR: {$message}\n";
-        exit(1);
-    }
-
     //
     //  Write the given text to a temporary file, and return the filename.
     //
 
     function save_text($filename, $text)
     {
-        $fp = fopen($filename, 'w') or error("Cannot open file '" . $filename . "' (save_text)");
+        if (!$fp = fopen($filename, 'w')) {
+            return PEAR::raiseError("Cannot open file '" . $filename . "' (save_text)");
+        }
         fwrite($fp,$text);
         fclose($fp);
     if (1 < DETAILED) echo "
@@ -306,10 +310,4 @@ $text
     }
 
 }
-    function error($message)
-    {
-        echo "ERROR: {$message}\n";
-        exit(1);
-    }
-
 ?>

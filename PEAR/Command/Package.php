@@ -472,6 +472,25 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
 
     function doRunTests($command, $options, $params)
     {
+        include_once 'PEAR/RunTest.php';
+        $run = new PEAR_RunTest;
+        $tests = array();
+        foreach ($params as $p) {
+            if (is_dir($p)) {
+                $dir = System::find(array($p, '-type', 'f',
+                                            '-maxdepth', '1',
+                                            '-name', '*.phpt'));
+                $tests = array_merge($tests, $dir);
+            } else {
+                $tests[] = $p;
+            }
+        }
+        foreach ($tests as $t) {
+            $run->run($t);
+        }
+
+        return true;
+        /*
         $cwd = getcwd();
         $php = $this->config->get('php_bin');
         putenv("TEST_PHP_EXECUTABLE=$php");
@@ -501,6 +520,7 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
             system($cmd);
         }
         return true;
+        */
     }
 
     // }}}
