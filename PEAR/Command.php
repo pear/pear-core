@@ -291,6 +291,14 @@ class PEAR_Command
                 }
                 $GLOBALS['_PEAR_Command_shortcuts'][$shortcut] = $command;
             }
+            foreach ($GLOBALS['_PEAR_Command_objects'][$class]->getShortcuts() as $oname => $short) {
+                if (isset($short['shortopt']) && strlen($short['shortopt']) > 1) {
+                    return PEAR::raiseError('Option "' . $oname . '" short option "' .
+                        $short['shortopt'] . '" must be ' .
+                        'only 1 character in Command "' . $command . '" in class "' .
+                        $GLOBALS['_PEAR_Command_commandlist'][$command] . '"');
+                }
+            }
         }
         ksort($GLOBALS['_PEAR_Command_shortcuts']);
         ksort($GLOBALS['_PEAR_Command_commandlist']);
