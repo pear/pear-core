@@ -31,7 +31,12 @@ class PEAR_Validate
      * @var int one of the PEAR_VALIDATE_* constants
      */
     var $_state = PEAR_VALIDATE_NORMAL;
-
+    /** 
+     * Valid release states
+     * @var array
+     * @access private
+     */
+    var $_validStates = array('alpha','beta','stable','snapshot','devel');
     /**
      * Format: ('error' => array('field' => name, 'reason' => reason), 'warning' => same)
      * @var array
@@ -82,6 +87,11 @@ class PEAR_Validate
         }
         $this->validatePackageName();
         $this->validateVersion();
+        if ($this->_packagexml->getPackagexmlVersion() == '1.0') {
+            $this->validateState($this->_packagexml->getState());
+        } elseif ($this->_packagexml->getPackagexmlVersion() == '2.0') {
+            $this->validateStability($this->_packagexml->getStability());
+        }
     }
 
     function validatePackageName()
@@ -184,7 +194,7 @@ class PEAR_Validate
                     return false;
                 }
                 if (!is_numeric($versioncomponents[2])) {
-                    if (preg_match('/\n+(RC|rc|a|alpha|A|ALPHA|b|beta|B|BETA)\n*/',
+                    if (preg_match('/\n+(rc|a|alpha||b|beta|)\n*/i',
                           $versioncomponents[2])) {
                         $this->_addFailure('version', 'RC/beta/alpha cannot be stable');
                         return false;
@@ -196,6 +206,37 @@ class PEAR_Validate
                 return false;
             break;
         }
+    }
+
+    function validateState()
+    {
+        if (!in_array($this->_packagexml->getState(), $this->_validStates)) {
+            $this->_addFailure('state', 'release state "' .
+                $this->_packagexml->getState() . '" is not valid, must be one of: ' .
+                implode(', ', $this->_validStates));
+            return false;
+        }
+        return true;
+    }
+
+    function validateStability()
+    {
+        $ret = true;
+        $packagestability = $this->_packagexml->getState();
+        $apistability = $this->_packagexml->getState('api');
+        if (!in_array($packagestability, $this->_validStates)) {
+            $this->_addFailure('state', 'package stability "' .
+                $this->_packagexml->getState() . '" is not valid, must be one of: ' .
+                implode(', ', $this->_validStates));
+            $ret = false;
+        }
+        if (!in_array($apistability, $this->_validStates)) {
+            $this->_addFailure('state', 'API stability "' .
+                $this->_packagexml->getState() . '" is not valid, must be one of: ' .
+                implode(', ', $this->_validStates));
+            $ret = false;
+        }
+        return $ret;
     }
 }
 ?>
