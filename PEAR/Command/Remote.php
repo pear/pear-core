@@ -363,45 +363,23 @@ parameter.
             return PEAR::raiseError("download expects one argument: the package to download");
         }
         //$params[0] -> The package to download
-        $savechannel = $channel = $this->config->get('default_channel');
-        $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
-        $package = $params[0];
-        if (strpos($params[0], '::')) {
-            list($channel, $package) = explode('::', $params[0]);
-            if ($reg->channelExists($channel)) {
-                $this->config->set('default_channel', $channel);
-            } else {
-                return $this->raiseError("Channel '$channel' does not exist");
-            }
+        include_once 'PEAR/Downloader.php';
+        $downloader = &new PEAR_Downloader($this->ui, array('force' => 1), $this->config);
+        $errors = array();
+        $downloaded = array();
+        $downloader->download($params);
+        $errors = $downloader->getErrorMsgs();
+        if (count($errors)) {
+            $err['data'] = array($errors);
+            $err['headline'] = 'Download Errors';
+            $this->ui->outputData($err);
+            return $this->raiseError("$command failed");
         }
-        $channelobj = $reg->getChannel($channel);
-        if (!$channelobj) {
-            $this->config->set('default_channel', $savechannel);
-            return $this->raiseError("Serious registry error: channel '$channel' is corrupt, re-set up with channel-update or update-channels");
+        $downloaded = $downloader->getDownloadedPackages();
+        foreach ($downloaded as $pkg) {
+            @copy($pkg['file'], $fname = getcwd() . basename($pkg['file']));
+            $this->ui->outputData("File $fname downloaded", $command);
         }
-        $server = $channelobj->getServer();
-        if (!$channelobj->supports('download')) {
-            $this->config->set('default_channel', $savechannel);
-            return $this->raiseError("Channel '$channel' does not support downloading");
-        }
-        $get = $channelobj->getProtocol('download');
-        $get = $get['name'];
-        if (!ereg('^http://', $params[0])) {
-            $getoption = isset($options['nocompress'])&&$options['nocompress']==1?'?uncompress=on':'';
-            $pkgfile = "http://$server/$get/$package".$getoption;
-        } else {
-            $pkgfile = $params[0];
-        }
-        $this->bytes_downloaded = 0;
-        $saved = PEAR_Common::downloadHttp($pkgfile, $this->ui, '.',
-                                           array(&$this, 'downloadCallback'));
-        if (PEAR::isError($saved)) {
-            $this->config->set('default_channel', $savechannel);
-            return $this->raiseError($saved);
-        }
-        $fname = basename($saved);
-        $this->ui->outputData("File $fname downloaded ($this->bytes_downloaded bytes)", $command);
-        $this->config->set('default_channel', $savechannel);
         return true;
     }
 
