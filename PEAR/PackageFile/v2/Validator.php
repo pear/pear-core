@@ -1739,7 +1739,7 @@ class PEAR_PackageFile_v2_Validator
     function _buildProvidesArray($srcinfo)
     {
         if (!$this->_isValid) {
-            return false;
+            return array();
         }
         $providesret = array();
         $file = basename($srcinfo['source_file']);
