@@ -958,7 +958,9 @@ class PEAR_ChannelFile {
         if (empty($info['name'])) {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_NAME);
         } elseif (!$this->validChannelName($info['name'])) {
-            $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME, array('tag' => 'name', 'name' => $info['name']));
+            if ($info['name'] != '__private') {
+                $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME, array('tag' => 'name', 'name' => $info['name']));
+            }
         }
         if (empty($info['summary'])) {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_SUMMARY);
