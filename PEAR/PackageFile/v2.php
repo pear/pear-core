@@ -1660,7 +1660,7 @@ class PEAR_PackageFile_v2
             array(
                 'name' => $name,
                 'channel' => $channel,
-                'conflicts' => array(),
+                'conflicts' => 'yes',
             );
         if (!isset($this->_packageInfo['dependencies']['required']['package'])) {
             $this->_packageInfo['dependencies']['required']['package'] = $dep;
@@ -1689,8 +1689,8 @@ class PEAR_PackageFile_v2
         $dep =
             array(
                 'name' => $name,
-                'uri' => $channel,
-                'conflicts' => array(),
+                'uri' => $uri,
+                'conflicts' => 'yes',
             );
         if (!isset($this->_packageInfo['dependencies']['required']['package'])) {
             $this->_packageInfo['dependencies']['required']['package'] = $dep;
