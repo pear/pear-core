@@ -1486,7 +1486,7 @@ class PEAR_Installer extends PEAR_Downloader
      */
     function sortPackagesForUninstall(&$packages)
     {
-        $this->_dependencyDB = PEAR_DependencyDB::singleton($this->config);
+        $this->_dependencyDB = &PEAR_DependencyDB::singleton($this->config);
         if (PEAR::isError($this->_dependencyDB)) {
             return $this->_dependencyDB;
         }
