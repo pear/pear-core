@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Downloader_Package::analyzeDependencies() fail tests package.xml 1.0
+PEAR_Downloader_Package::analyzeDependencies() fail tests package.xml 1.0 [nodeps/soft]
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -117,7 +117,8 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
             'xsdversion' => '2.0',
           ),
           'url' => 'http://www.example.com/required-1.1'));
-$dp = &newFakeDownloaderPackage(array());
+$_test_dep->setExtensions(array('bar' => '1.0'));
+$dp = newFakeDownloaderPackage(array('nodeps' => true, 'soft' => true));
 $result = $dp->initialize('mainold');
 $phpunit->assertNoErrors('after create 1');
 
@@ -126,45 +127,10 @@ $dp->detectDependencies($params);
 PEAR_Downloader_Package::mergeDependencies($params);
 $phpunit->assertNoErrors('setup');
 
-$_test_dep->setExtensions(array('bar' => '1.0'));
 $err = $dp->_downloader->analyzeDependencies($params);
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' =>
-        'Cannot install, dependencies failed')
-), 'end');
 $phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => 'Notice: package "pear/mainold" optional dependency "pear/optional" will not be automatically downloaded',
-  ),
-  1 => 
-  array (
-    0 => 3,
-    1 => 'Notice: package "pear/mainold" required dependency "pear/required" will not be automatically downloaded',
-  ),
-  2 => 
-  array (
-    0 => 1,
-    1 => 'Did not download dependencies: pear/optional, pear/required, use --alldeps or --onlyreqdeps to download automatically',
-  ),
-  3 => 
-  array (
-    0 => 0,
-    1 => 'pear/mainold can optionally use package "pear/optional" (version >= 1.1)',
-  ),
-  4 => 
-  array (
-    0 => 0,
-    1 => 'pear/mainold requires package "pear/required" (version >= 1.1)',
-  ),
-  5 => 
-  array (
-    0 => 0,
-    1 => 'pear/mainold requires PHP extension "foo"',
-  ),
-), $fakelog->getLog(), 'end log');
-$phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');
+), $fakelog->getLog(), 'end log 2');
+$phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download 2');
 echo 'tests done';
 ?>
 --EXPECT--
