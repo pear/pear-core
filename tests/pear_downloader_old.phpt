@@ -82,7 +82,7 @@ chdir(dirname(__FILE__));
 PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'catchit');
 set_error_handler('catchphp');
 if (!defined('E_STRICT')) {
-    define(E_STRICT, -1);
+    define('E_STRICT', -1);
 }
 function catchphp($errno, $errmsg)
 {
