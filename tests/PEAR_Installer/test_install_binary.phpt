@@ -132,7 +132,7 @@ $phpunit->assertEquals(array (
   4 => 
   array (
     0 => 1,
-    1 => 'Starting to download test-1.1.0.tgz (725 bytes)',
+    1 => 'Starting to download test-1.1.0.tgz (721 bytes)',
   ),
   5 => 
   array (
@@ -142,7 +142,7 @@ $phpunit->assertEquals(array (
   6 => 
   array (
     0 => 1,
-    1 => '...done: 725 bytes',
+    1 => '...done: 721 bytes',
   ),
   7 => 
   array (
@@ -206,18 +206,18 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       0 => 'test-1.1.0.tgz',
-      1 => '725',
+      1 => '721',
     ),
   ),
   3 => 
   array (
     0 => 'bytesread',
-    1 => 725,
+    1 => 721,
   ),
   4 => 
   array (
     0 => 'done',
-    1 => 725,
+    1 => 721,
   ),
 ), $fakelog->getDownload(), 'install');
 echo 'tests done';
