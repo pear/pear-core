@@ -85,7 +85,8 @@ release notes</notes>
    <file baseinstalldir="freeb" md5sum="ed0384ad29e60110b310a02e95287ee6" name="sunger/foo.dat" role="data">
     <tasks:replace from="@pv@" to="version" type="package-info" />
    </file>
-   <file baseinstalldir="freeb" md5sum="ed0384ad29e60110b310a02e95287ee6" name="foo.php" role="php">
+   <file baseinstalldir="freeb" md5sum="' . (OS_WINDOWS ? 'ed0384ad29e60110b310a02e95287ee6' :
+    '452925d5182994846dbe3b9518db84d8') . '" name="foo.php" role="php">
     <tasks:replace from="@pv@" to="version" type="package-info" />
    </file>
   </dir>
