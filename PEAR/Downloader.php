@@ -588,11 +588,11 @@ class PEAR_Downloader extends PEAR_Common
             if ($version !== null) {
                 // Passed Foo-1.2
                 if ($this->validPackageVersion($version)) {
-                    $msg = "No release of '$channel::$pkgfile' " .
+                    $msg = "No release of '$channel::$package' " .
                           "with version '$version' found, latest release is version " .
                           "'$url[0]', stability '" . $url[1]['state'] . "'";
                 } elseif (in_array($version, $this->getReleaseStates())) {
-                    $msg = "No release of '$channel::$pkgfile' " .
+                    $msg = "No release of '$channel::$package' " .
                           "with state '$version' found, latest release is version " .
                           "'$url[0]', stability '" . $url[1]['state'] . "'";
                 } else {
@@ -602,7 +602,7 @@ class PEAR_Downloader extends PEAR_Common
                 }
             } else {
                 $ug = !isset($this->_options['force']) ? ' is' : ',';
-                $msg = "No release of '$channel::$pkgfile'" .
+                $msg = "No release of '$channel::$package'" .
                        " within preferred_state of '" . $this->config->get('preferred_state') .
                        "' found, latest release$ug version '" . $url[0] . "', stability '" .
                        $url[1]['state'] . "'";
