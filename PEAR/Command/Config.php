@@ -140,7 +140,7 @@ and uninstall).
     {
         // $params[0] -> the layer
         if ($error = $this->_checkLayer(@$params[0])) {
-            return $this->raiseError($error);
+            return $this->raiseError("config-show:$error");
         }
         $keys = $this->config->getKeys();
         sort($keys);
@@ -180,7 +180,7 @@ and uninstall).
         // $params[0] -> the parameter
         // $params[1] -> the layer
         if ($error = $this->_checkLayer(@$params[1])) {
-            return $this->raiseError($error);
+            return $this->raiseError("config-get:$error");
         }
         $channel = isset($options['channel']) ? $options['channel'] :
             $this->config->get('default_channel');
@@ -190,11 +190,13 @@ and uninstall).
         }
         if (sizeof($params) < 1 || sizeof($params) > 2) {
             return $this->raiseError("config-get expects 1 or 2 parameters");
-        } elseif (sizeof($params) == 1) {
-            $this->ui->outputData($this->config->get($params[0]), $command, $channel);
         } else {
-            $data = $this->config->get($params[0], $params[1], $channel);
-            $this->ui->outputData($data, $command);
+            if (count($params) == 1) {
+                $layer = 'user';
+            } else {
+                $layer = $params[1];
+            }
+            $this->ui->outputData($this->config->get($params[0], $layer, $channel), $command);
         }
         return true;
     }
