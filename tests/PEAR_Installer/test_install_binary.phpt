@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Installer->install() (subpackage that conflicts)
+PEAR_Installer->install() (binary package)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
