@@ -150,6 +150,18 @@ class PEAR_Registry extends PEAR
 
     function hasWriteAccess()
     {
+        if (!@file_exists($this->install_dir)) {
+            $dir = $this->install_dir;
+            while ($dir && $dir != '.') {
+                $dir = dirname($dir); // cd ..
+                if (@file_exists($dir)) {
+                    if (@is_writeable($dir)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         return @is_writeable($this->install_dir);
     }
 
