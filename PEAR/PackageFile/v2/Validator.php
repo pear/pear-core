@@ -89,6 +89,10 @@ class PEAR_PackageFile_v2_Validator
             'contents', //special validation needed
             '*compatible',
             'dependencies', //special validation needed
+            '*usesrole',
+            '*usestask', // reserve these for 1.4.0a1 to implement
+                         // this will allow a package.xml to gracefully say it
+                         // needs a certain package installed in order to implement a role or task
             '*providesextension',
             '*srcpackage|*srcuri',
             '+phprelease|extsrcrelease|+extbinrelease|bundle', //special validation needed
