@@ -132,7 +132,7 @@ $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 0,
-    1 => 'No releases for package "pear/required" exist, cannot download "dependency"',
+    1 => 'No releases for package "pear/required" exist',
   ),
   1 => 
   array (
@@ -142,12 +142,12 @@ $phpunit->assertEquals(array (
   2 => 
   array (
     0 => 0,
-    1 => 'No releases for package "pear/optional" exist, cannot download "dependency"',
+    1 => 'No releases for package "pear/optional" exist',
   ),
   3 => 
   array (
     0 => 0,
-    1 => 'No releases for package "pear/sub2" exist, cannot download "dependency"',
+    1 => 'No releases for package "pear/sub2" exist',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');
