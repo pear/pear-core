@@ -303,6 +303,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <install as="pear.bat" name="scripts/pear.bat" />
    <install as="pecl.bat" name="scripts/pecl.bat" />
    <install as="pearcmd.php" name="scripts/pearcmd.php" />
+   <install as="peclcmd.php" name="scripts/peclcmd.php" />
    <ignore name="scripts/pear.sh" />
    <ignore name="scripts/pecl.sh" />
   </filelist>
@@ -312,6 +313,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <install as="pear" name="scripts/pear.sh" />
    <install as="pecl" name="scripts/pecl.sh" />
    <install as="pearcmd.php" name="scripts/pearcmd.php" />
+   <install as="peclcmd.php" name="scripts/peclcmd.php" />
    <ignore name="scripts/pear.bat" />
    <ignore name="scripts/pecl.bat" />
   </filelist>
