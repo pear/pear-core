@@ -643,41 +643,6 @@ class PEAR_PackageFile_v1
     {
         $this->_isValid = true;
         $info = $this->_packageInfo;
-        $channel = isset($info['channel']) ? $info['channel'] : 'pear';
-        $chan = isset($this->_registry) ? $this->_registry->getChannel($channel) : false;
-        if (!$chan) {
-            if ($channel != 'pear') {
-                $this->_validateError(PEAR_PACKAGEFILE_ERROR_UNKNOWN_CHANNEL,
-                    array('channel' => $channel));
-            }
-            if (!isset($info['package'])) {
-                $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_NAME);
-            } elseif (!PEAR_Common::validPackageName($info['package'])) {
-                $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_NAME,
-                    array('name' => $info['package']));
-            }
-            if (isset($info['extends'])) {
-                if (!PEAR_Common::validPackageName($info['extends'])) {
-                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_EXTENDS,
-                        array('extends' => $info['extends']));
-                }
-            }
-        } else {
-            if (!empty($info['package'])) {
-                if (!$chan->validPackageName($info['package'])) {
-                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_NAME,
-                        array('name' => $info['package']));
-                }
-            } else {
-                $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_NAME);
-            }
-            if (isset($info['extends'])) {
-                if (!$chan->validPackageName($info['extends'])) {
-                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_EXTENDS,
-                        array('extends' => $info['extends']));
-                }
-            }
-        }
         $this->_packageName = $pn = $info['package'];
 
         if (empty($info['summary'])) {
@@ -844,6 +809,12 @@ class PEAR_PackageFile_v1
                         array('file' => $file, 'role' => $fa['role'], 'roles' => PEAR_Common::getFileRoles()));
                 }
             }
+        }
+        if (isset($this->_registry)) {
+            $chan = $this->_registry->getChannel('pear');
+            $validator = $chan->getValidationObject();
+            $validator->setPackageFile($this);
+            $this->_isValid &= $validator->validate();
         }
         return $this->_isValid;
     }
