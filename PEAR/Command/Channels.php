@@ -245,9 +245,7 @@ List the files in an installed package.
         if (!$reg->channelExists($channel)) {
             return $this->raiseError("Channel `$channel' does not exist");
         }
-        $info = $reg->channelInfo($channel);
-        include_once 'PEAR/ChannelFile.php';
-        $chan = PEAR_ChannelFile::fromArray($info);
+        $chan = $reg->getChannel($channel);
         if ($chan) {
             $caption = 'Channel ' . $channel . ' Information:';
             $data = array(
@@ -255,18 +253,28 @@ List the files in an installed package.
                 'border' => true);
             $data['data'][] = array('Name', $chan->getName());
             $data['data'][] = array('Summary', $chan->getSummary());
-            $data['data'][] = array('Server', $chan->getServer());
-//            $data['data'][] = array('Package Name Regex', $chan->getPackageNameRegex());
+            $data['data'][] = array('Xmlrpc Server', $chan->getServer('xmlrpc'));
+            $data['data'][] = array('SOAP Server', ($a = $chan->getServer('soap')) ? $a : '(none)');
+            $validate = $chan->getValidationPackage();
+            $data['data'][] = array('Validation Package Name', $validate['name']);
+            $data['data'][] = array('Validation Package Version', $validate['version']);
             $this->ui->outputData($data, 'channel-info');
             
             $data['data'] = array();
             $data['caption'] = 'Server Capabilities';
-            $data['headline'] = array('Type', 'Version', 'Protocol Name');
-            $capabilities = $chan->getProtocols();
-            if ($capabilities) {
-                foreach ($capabilities as $protocol) {
-                    $name = isset($protocol['name']) ? $protocol['name'] : '';
-                    $data['data'][] = array($protocol['type'], $protocol['version'], $name);
+            $data['headline'] = array('Type', 'Version', 'Function Name');
+            $capabilities = $chan->getFunctions('xmlrpc');
+            $soaps = $chan->getFunctions('soap');
+            if ($capabilities || $soaps) {
+                if ($capabilities) {
+                    foreach ($capabilities as $protocol) {
+                        $data['data'][] = array('xmlrpc', $protocol['version'], $protocol['name']);
+                    }
+                }
+                if ($soaps) {
+                    foreach ($soaps as $protocol) {
+                        $data['data'][] = array('soap', $protocol['version'], $protocol['name']);
+                    }
                 }
             } else {
                 $data['data'][] = array('No supported protocols');
@@ -283,16 +291,25 @@ List the files in an installed package.
                         $this->ui->outputData($data);
                     }
                     foreach ($info as $mirror) {
-                        if ($mirror['provides']) {
+                        if (isset($mirror['protocols']['xmlrpc'])) {
                             $data['data'] = array();
-                            $data['caption'] = $mirror['name'] . ' Capabilities';
-                            $data['headline'] = array('Type', 'Version', 'Protocol Name');
-                            foreach ($mirror['provides'] as $protocol) {
-                                $name = isset($protocol['name']) ? $protocol['name'] : '';
-                                $data['data'][] = array($protocol['type'], $protocol['version'], $name);
+                            $data['caption'] = $mirror['name'] . ' Xml-rpc Functions';
+                            $data['headline'] = array('Version', 'Name');
+                            foreach ($mirror['protocols']['xmlrpc']['functions'] as $protocol) {
+                                $data['data'][] = array($protocol['version'], $protocol['name']);
                             }
                             $this->ui->outputData($data);
-                        } else {
+                        }
+                        if (isset($mirror['protocols']['soap'])) {
+                            $data['data'] = array();
+                            $data['caption'] = $mirror['name'] . ' SOAP Functions';
+                            $data['headline'] = array('Version', 'Name');
+                            foreach ($mirror['protocols']['soap']['functions'] as $protocol) {
+                                $data['data'][] = array($protocol['version'], $protocol['name']);
+                            }
+                            $this->ui->outputData($data);
+                        }
+                        if (!isset($mirror['protocols']['xmlrpc']) && !isset($mirror['protocols']['soap'])) {
                             $data['data'][] = array('Mirror Capabilities', 'No supported protocols');
                             $this->ui->outputData($data);
                         }
