@@ -1791,7 +1791,12 @@ class PEAR_Config extends PEAR
     {
         if (strlen($prepend) > 0) {
             if (OS_WINDOWS && preg_match('/^[a-z]:/i', $path)) {
-                $path = substr($path, 0, 2) . '\\' . $prepend . substr($path, 2);
+                if (preg_match('/^[a-z]:/i', $prepend)) {
+                    $prepend = substr($prepend, 2);
+                } elseif ($prepend{0} != '\\') {
+                    $prepend = "\\$prepend";
+                }
+                $path = substr($path, 0, 2) . $prepend . substr($path, 2);
             } else {
                 $path = $prepend . $path;
             }
