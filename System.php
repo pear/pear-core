@@ -211,6 +211,7 @@ class System
     * Make directories. Note that we use call_user_func('mkdir') to avoid
     * a problem with ZE2 calling System::mkDir instead of the native PHP func.
     *
+    * The -p option will create parent directories
     * @param    string  $args    the name of the director(y|ies) to create
     * @return   bool    True for success
     * @access   public
