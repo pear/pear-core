@@ -154,9 +154,11 @@ class PEAR_Registry extends PEAR
             $dir = $this->install_dir;
             while ($dir && $dir != '.') {
                 $dir = dirname($dir); // cd ..
-                if (@file_exists($dir)) {
+                if ($dir != '.' && @file_exists($dir)) {
                     if (@is_writeable($dir)) {
                         return true;
+                    } else {
+                        return false;
                     }
                 }
             }
