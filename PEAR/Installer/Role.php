@@ -208,7 +208,7 @@ class PEAR_Installer_Role
             $class = "PEAR_Installer_Role_".substr($entry, 0, -4);
             $file = "$dir/$entry";
             include_once $file;
-            // List of commands
+            // List of roles
             if (empty($GLOBALS['_PEAR_INSTALLER_ROLES'][$class])) {
                 $GLOBALS['_PEAR_INSTALLER_ROLES'][$class] =
                     call_user_func(array($class, 'getInfo'));
