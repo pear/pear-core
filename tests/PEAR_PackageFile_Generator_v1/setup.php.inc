@@ -6,7 +6,7 @@ require_once 'PEAR/PackageFile/v1.php';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 
 register_shutdown_function('cleanall');
-$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'registry_tester';
+$temp_path = $statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'registry_tester';
 cleanall($statedir);
 mkdir($statedir);
 $config = serialize(

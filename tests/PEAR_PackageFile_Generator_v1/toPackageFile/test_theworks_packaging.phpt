@@ -1,5 +1,5 @@
 --TEST--
-PEAR_PackageFile_Generator_v1->toXml() all bells and whistles package.xml
+PEAR_PackageFile_Generator_v1->toPackageFile() all bells and whistles package.xml
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -14,7 +14,7 @@ $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     DIRECTORY_SEPARATOR . 'theworks.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'theworks.xml');
 $generator = &$pf->getDefaultGenerator();
-$e = $generator->toXml(PEAR_VALIDATE_PACKAGING);
+$e = $generator->toPackageFile($temp_path, PEAR_VALIDATE_PACKAGING, 'tub.xml');
 $phpunit->assertNoErrors('errors');
 $phpunit->assertEquals(array (
   0 => 
@@ -23,6 +23,8 @@ $phpunit->assertEquals(array (
     1 => 'Analyzing foo.php',
   ),
 ), $fakelog->getLog(), 'packaging log');
+$phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'tub.xml', $e, 'filename');
+$e = implode('', file($e));
 $phpunit->assertEquals(str_replace(array("\r\n", "\r"), array("\n", "\n"), '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="' . $generator->getPackagerVersion() . '">
