@@ -123,18 +123,36 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
 ), array (
   'version' => '1.3.0',
   'info' => 
-  array (
-    'id' => '1525',
-    'doneby' => 'cellog',
-    'license' => '',
-    'summary' => '',
-    'description' => '',
-    'releasedate' => '2004-06-27 03:54:00',
-    'releasenotes' => 'hi',
-    'state' => 'stable',
-    'package' => 'APC',
-    'channel' => 'pear.php.net',
-  ),
+            '<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
+<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
+ <name>APC</name>
+ <summary>test</summary>
+ <description>test</description>
+ <maintainers>
+  <maintainer>
+   <user>cellog</user>
+   <role>lead</role>
+   <name>Greg Beaver</name>
+   <email>cellog@php.net</email>
+  </maintainer>
+ </maintainers>
+ <release>
+  <version>1.3.0</version>
+  <date>2004-10-21</date>
+  <license>PHP License</license>
+  <state>stable</state>
+  <notes>
+Installer Roles/Tasks:
+  </notes>
+  <filelist>
+   <dir name="/">
+    <file name="foo12.php" role="php"/>
+   </dir>
+  </filelist>
+ </release>
+</package>
+',
   'url' => 'http://pear.php.net/get/APC-1.3.0',
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
@@ -147,18 +165,36 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
 ), array (
   'version' => '1.4.0a1',
   'info' => 
-  array (
-    'id' => '1525',
-    'doneby' => 'cellog',
-    'license' => '',
-    'summary' => '',
-    'description' => '',
-    'releasedate' => '2004-06-27 03:54:00',
-    'releasenotes' => 'hi',
-    'state' => 'stable',
-    'package' => 'APC',
-    'channel' => 'pear.php.net',
-  ),
+            '<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
+<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
+ <name>APC</name>
+ <summary>test</summary>
+ <description>test</description>
+ <maintainers>
+  <maintainer>
+   <user>cellog</user>
+   <role>lead</role>
+   <name>Greg Beaver</name>
+   <email>cellog@php.net</email>
+  </maintainer>
+ </maintainers>
+ <release>
+  <version>1.4.0a1</version>
+  <date>2004-10-21</date>
+  <license>PHP License</license>
+  <state>stable</state>
+  <notes>
+Installer Roles/Tasks:
+  </notes>
+  <filelist>
+   <dir name="/">
+    <file name="foo12.php" role="php"/>
+   </dir>
+  </filelist>
+ </release>
+</package>
+',
   'url' => 'http://pear.php.net/get/APC-1.4.0a1',
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
@@ -171,18 +207,36 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
 ), array (
   'version' => '1.5.0a1',
   'info' => 
-  array (
-    'id' => '1525',
-    'doneby' => 'cellog',
-    'license' => '',
-    'summary' => '',
-    'description' => '',
-    'releasedate' => '2004-06-27 03:54:00',
-    'releasenotes' => 'hi',
-    'state' => 'alpha',
-    'package' => 'Archive_Tar',
-    'channel' => 'pear.php.net',
-  ),
+          '<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
+<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
+ <name>Archive_Tar</name>
+ <summary>test</summary>
+ <description>test</description>
+ <maintainers>
+  <maintainer>
+   <user>cellog</user>
+   <role>lead</role>
+   <name>Greg Beaver</name>
+   <email>cellog@php.net</email>
+  </maintainer>
+ </maintainers>
+ <release>
+  <version>1.5.0a1</version>
+  <date>2004-10-21</date>
+  <license>PHP License</license>
+  <state>alpha</state>
+  <notes>
+Installer Roles/Tasks:
+  </notes>
+  <filelist>
+   <dir name="/">
+    <file name="foo12.php" role="php"/>
+   </dir>
+  </filelist>
+ </release>
+</package>
+',
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   0 => 
@@ -194,18 +248,36 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
 ), array (
   'version' => '1.5.0a1',
   'info' => 
-  array (
-    'id' => '1525',
-    'doneby' => 'cellog',
-    'license' => '',
-    'summary' => '',
-    'description' => '',
-    'releasedate' => '2004-06-27 03:54:00',
-    'releasenotes' => 'hi',
-    'state' => 'alpha',
-    'package' => 'Archive_Tar',
-    'channel' => 'pear.php.net',
-  ),
+          '<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
+<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
+ <name>Archive_Tar</name>
+ <summary>test</summary>
+ <description>test</description>
+ <maintainers>
+  <maintainer>
+   <user>cellog</user>
+   <role>lead</role>
+   <name>Greg Beaver</name>
+   <email>cellog@php.net</email>
+  </maintainer>
+ </maintainers>
+ <release>
+  <version>1.5.0a1</version>
+  <date>2004-10-21</date>
+  <license>PHP License</license>
+  <state>alpha</state>
+  <notes>
+Installer Roles/Tasks:
+  </notes>
+  <filelist>
+   <dir name="/">
+    <file name="foo12.php" role="php"/>
+   </dir>
+  </filelist>
+ </release>
+</package>
+',
   'url' => 'http://pear.php.net/get/Archive_Tar-1.5.0a1',
 ));
 
@@ -219,18 +291,52 @@ $pearweb->addXmlrpcConfig("smoog", "package.getDownloadURL", array (
 ), array (
   'version' => '1.5.0a1',
   'info' => 
-  array (
-    'id' => '1525',
-    'doneby' => 'cellog',
-    'license' => '',
-    'summary' => '',
-    'description' => '',
-    'releasedate' => '2004-06-27 03:54:00',
-    'releasenotes' => 'hi',
-    'state' => 'alpha',
-    'package' => 'APC',
-    'channel' => 'pear.php.net',
-  ),
+  '<?xml version="1.0"?>
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+ <name>APC</name>
+ <channel>smoog</channel>
+ <summary>PEAR Base System</summary>
+ <description>The PEAR package contains:
+ </description>
+ <lead>
+  <name>Greg Beaver</name>
+  <user>cellog</user>
+  <email>cellog@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2004-09-30</date>
+ <version>
+  <release>1.5.0a1</release>
+  <api>1.4.0</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+ <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+ <notes>Installer Roles/Tasks:
+ </notes>
+ <contents>
+  <dir name="/">
+   <file name="template.spec" role="data" />
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.2</min>
+    <max>6.0.0</max>
+   </php>
+   <pearinstaller>
+    <min>1.4.0dev13</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease/>
+</package>',
 ));
 $pearweb->addXmlrpcConfig("smoog", "package.getDownloadURL", array (
   0 => 
@@ -243,18 +349,52 @@ $pearweb->addXmlrpcConfig("smoog", "package.getDownloadURL", array (
 ), array (
   'version' => '1.5.0a1',
   'info' => 
-  array (
-    'id' => '1525',
-    'doneby' => 'cellog',
-    'license' => '',
-    'summary' => '',
-    'description' => '',
-    'releasedate' => '2004-06-27 03:54:00',
-    'releasenotes' => 'hi',
-    'state' => 'alpha',
-    'package' => 'APC',
-    'channel' => 'smoog',
-  ),
+  '<?xml version="1.0"?>
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+ <name>APC</name>
+ <channel>smoog</channel>
+ <summary>PEAR Base System</summary>
+ <description>The PEAR package contains:
+ </description>
+ <lead>
+  <name>Greg Beaver</name>
+  <user>cellog</user>
+  <email>cellog@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2004-09-30</date>
+ <version>
+  <release>1.5.0a1</release>
+  <api>1.4.0</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+ <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+ <notes>Installer Roles/Tasks:
+ </notes>
+ <contents>
+  <dir name="/">
+   <file name="template.spec" role="data" />
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.2</min>
+    <max>6.0.0</max>
+   </php>
+   <pearinstaller>
+    <min>1.4.0dev13</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease/>
+</package>',
   'url' => 'http://smoog/get/Archive_Tar-1.5.0a1',
 ));
 $config->set('preferred_state', 'alpha');
