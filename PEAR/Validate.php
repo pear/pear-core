@@ -237,9 +237,9 @@ class PEAR_Validate
         }
         $version = $this->_packagexml->getVersion();
         $versioncomponents = explode('.', $version);
-        if (count($versioncomponents) < 3 || count($versioncomponents) > 4) {
+        if (count($versioncomponents) != 3) {
             $this->_addFailure('version',
-                'A version number must have between 3 and 4 decimals (x.y.z[.w])');
+                'A version number must have 3 decimals (x.y.z)');
             return false;
         }
         $name = $this->_packagexml->getPackage();
@@ -264,11 +264,6 @@ class PEAR_Validate
             break;
             case 'alpha' :
             case 'beta' :
-                if (count($versioncomponents) == 4) {
-                    $this->_addFailure('version',
-                        'version "' . $version . '" can only be used for a stable release');
-                    return false;
-                }
                 // check for a package that extends a package,
                 // like Foo and Foo2
                 if (!$this->_packagexml->getExtends()) {
