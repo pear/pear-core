@@ -122,6 +122,10 @@ class PEAR_Command_Common extends PEAR
 
     function getOptions($command)
     {
+        $shortcuts = $this->getShortcuts();
+        if (isset($shortcuts[$command])) {
+            $command = $shortcuts[$command];
+        }
         return @$this->commands[$command]['options'];
     }
 
