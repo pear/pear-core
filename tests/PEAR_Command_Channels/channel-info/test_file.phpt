@@ -61,213 +61,201 @@ $phpunit->assertEquals(array (
   array (
     'info' => 
     array (
-      'caption' => 'Channel froo Information:',
-      'border' => true,
-      'data' => 
+      'main' => 
       array (
-        0 => 
+        'caption' => 'Channel froo Information:',
+        'border' => true,
+        'data' => 
         array (
-          0 => 'Name and Server',
-          1 => 'froo',
+          'server' => 
+          array (
+            0 => 'Name and Server',
+            1 => 'froo',
+          ),
+          'summary' => 
+          array (
+            0 => 'Summary',
+            1 => 'PHP Extension and Application Repository',
+          ),
+          'vpackage' => 
+          array (
+            0 => 'Validation Package Name',
+            1 => 'PEAR_Validate',
+          ),
+          'vpackageversion' => 
+          array (
+            0 => 'Validation Package Version',
+            1 => '1.0',
+          ),
         ),
-        1 => 
+      ),
+      'protocols' => 
+      array (
+        'data' => 
         array (
-          0 => 'Summary',
-          1 => 'PHP Extension and Application Repository',
+          0 => 
+          array (
+            0 => 'xmlrpc',
+            1 => '1.0',
+            2 => 'logintest',
+            3 => '',
+          ),
+          1 => 
+          array (
+            0 => 'xmlrpc',
+            1 => '1.0',
+            2 => 'package.listLatestReleases',
+            3 => '',
+          ),
+          2 => 
+          array (
+            0 => 'xmlrpc',
+            1 => '1.0',
+            2 => 'package.listAll',
+            3 => '',
+          ),
+          3 => 
+          array (
+            0 => 'xmlrpc',
+            1 => '1.0',
+            2 => 'package.info',
+            3 => '',
+          ),
+          4 => 
+          array (
+            0 => 'xmlrpc',
+            1 => '1.0',
+            2 => 'package.getDownloadURL',
+            3 => '',
+          ),
+          5 => 
+          array (
+            0 => 'xmlrpc',
+            1 => '1.0',
+            2 => 'channel.listAll',
+            3 => '',
+          ),
+          6 => 
+          array (
+            0 => 'xmlrpc',
+            1 => '1.0',
+            2 => 'channel.update',
+            3 => '',
+          ),
+          7 => 
+          array (
+            0 => 'soap',
+            1 => '1.0',
+            2 => 'package.listLatestReleases',
+            3 => '',
+          ),
+          8 => 
+          array (
+            0 => 'soap',
+            1 => '1.0',
+            2 => 'package.listAll',
+            3 => '',
+          ),
         ),
-        2 => 
+        'caption' => 'Server Capabilities',
+        'headline' => 
         array (
-          0 => 'Validation Package Name',
-          1 => 'PEAR_Validate',
+          0 => 'Type',
+          1 => 'Version',
+          2 => 'Function Name',
+          3 => 'URI',
         ),
-        3 => 
+      ),
+      'mirrors' => 
+      array (
+        'data' => 
         array (
-          0 => 'Validation Package Version',
-          1 => '1.0',
+          0 => 
+          array (
+            0 => 'poor.php.net',
+          ),
+        ),
+        'caption' => 'Channel froo Mirrors:',
+      ),
+      'mirrorprotocols' => 
+      array (
+        'data' => 
+        array (
+          0 => 
+          array (
+            0 => 'xmlrpc',
+            1 => '1.0',
+            2 => 'logintest',
+            3 => '',
+          ),
+          1 => 
+          array (
+            0 => 'xmlrpc',
+            1 => '1.0',
+            2 => 'package.listLatestReleases',
+            3 => '',
+          ),
+          2 => 
+          array (
+            0 => 'xmlrpc',
+            1 => '1.0',
+            2 => 'package.listAll',
+            3 => '',
+          ),
+          3 => 
+          array (
+            0 => 'xmlrpc',
+            1 => '1.0',
+            2 => 'package.info',
+            3 => '',
+          ),
+          4 => 
+          array (
+            0 => 'xmlrpc',
+            1 => '1.0',
+            2 => 'package.getDownloadURL',
+            3 => '',
+          ),
+          5 => 
+          array (
+            0 => 'xmlrpc',
+            1 => '1.0',
+            2 => 'channel.listAll',
+            3 => '',
+          ),
+          6 => 
+          array (
+            0 => 'xmlrpc',
+            1 => '1.0',
+            2 => 'channel.update',
+            3 => '',
+          ),
+          7 => 
+          array (
+            0 => 'soap',
+            1 => '1.0',
+            2 => 'package.listLatestReleases',
+            3 => '',
+          ),
+          8 => 
+          array (
+            0 => 'soap',
+            1 => '1.0',
+            2 => 'package.listAll',
+            3 => '',
+          ),
+        ),
+        'caption' => 'Mirror poor.php.net Capabilities',
+        'headline' => 
+        array (
+          0 => 'Type',
+          1 => 'Version',
+          2 => 'Function Name',
+          3 => 'URI',
         ),
       ),
     ),
     'cmd' => 'channel-info',
-  ),
-  1 => 
-  array (
-    'info' => 
-    array (
-      'caption' => 'Server Capabilities',
-      'border' => true,
-      'data' => 
-      array (
-        0 => 
-        array (
-          0 => 'xmlrpc',
-          1 => '1.0',
-          2 => 'logintest',
-          3 => '',
-        ),
-        1 => 
-        array (
-          0 => 'xmlrpc',
-          1 => '1.0',
-          2 => 'package.listLatestReleases',
-          3 => '',
-        ),
-        2 => 
-        array (
-          0 => 'xmlrpc',
-          1 => '1.0',
-          2 => 'package.listAll',
-          3 => '',
-        ),
-        3 => 
-        array (
-          0 => 'xmlrpc',
-          1 => '1.0',
-          2 => 'package.info',
-          3 => '',
-        ),
-        4 => 
-        array (
-          0 => 'xmlrpc',
-          1 => '1.0',
-          2 => 'package.getDownloadURL',
-          3 => '',
-        ),
-        5 => 
-        array (
-          0 => 'xmlrpc',
-          1 => '1.0',
-          2 => 'channel.listAll',
-          3 => '',
-        ),
-        6 => 
-        array (
-          0 => 'xmlrpc',
-          1 => '1.0',
-          2 => 'channel.update',
-          3 => '',
-        ),
-        7 => 
-        array (
-          0 => 'soap',
-          1 => '1.0',
-          2 => 'package.listLatestReleases',
-          3 => '',
-        ),
-        8 => 
-        array (
-          0 => 'soap',
-          1 => '1.0',
-          2 => 'package.listAll',
-          3 => '',
-        ),
-      ),
-      'headline' => 
-      array (
-        0 => 'Type',
-        1 => 'Version',
-        2 => 'Function Name',
-        3 => 'URI',
-      ),
-    ),
-    'cmd' => 'no command',
-  ),
-  2 => 
-  array (
-    'info' => 
-    array (
-      'caption' => 'Channel froo Mirrors:',
-      'border' => true,
-      'data' => 
-      array (
-        0 => 
-        array (
-          0 => 'poor.php.net',
-        ),
-      ),
-    ),
-    'cmd' => 'no command',
-  ),
-  3 => 
-  array (
-    'info' => 
-    array (
-      'caption' => 'Mirror poor.php.net Capabilities',
-      'border' => true,
-      'data' => 
-      array (
-        0 => 
-        array (
-          0 => 'xmlrpc',
-          1 => '1.0',
-          2 => 'logintest',
-          3 => '',
-        ),
-        1 => 
-        array (
-          0 => 'xmlrpc',
-          1 => '1.0',
-          2 => 'package.listLatestReleases',
-          3 => '',
-        ),
-        2 => 
-        array (
-          0 => 'xmlrpc',
-          1 => '1.0',
-          2 => 'package.listAll',
-          3 => '',
-        ),
-        3 => 
-        array (
-          0 => 'xmlrpc',
-          1 => '1.0',
-          2 => 'package.info',
-          3 => '',
-        ),
-        4 => 
-        array (
-          0 => 'xmlrpc',
-          1 => '1.0',
-          2 => 'package.getDownloadURL',
-          3 => '',
-        ),
-        5 => 
-        array (
-          0 => 'xmlrpc',
-          1 => '1.0',
-          2 => 'channel.listAll',
-          3 => '',
-        ),
-        6 => 
-        array (
-          0 => 'xmlrpc',
-          1 => '1.0',
-          2 => 'channel.update',
-          3 => '',
-        ),
-        7 => 
-        array (
-          0 => 'soap',
-          1 => '1.0',
-          2 => 'package.listLatestReleases',
-          3 => '',
-        ),
-        8 => 
-        array (
-          0 => 'soap',
-          1 => '1.0',
-          2 => 'package.listAll',
-          3 => '',
-        ),
-      ),
-      'headline' => 
-      array (
-        0 => 'Type',
-        1 => 'Version',
-        2 => 'Function Name',
-        3 => 'URI',
-      ),
-    ),
-    'cmd' => 'no command',
   ),
 ), $fakelog->getLog(), 'log 1');
 echo 'tests done';

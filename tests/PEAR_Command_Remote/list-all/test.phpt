@@ -23,6 +23,7 @@ $pf->setLicense('PHP License');
 $pf->setNotes('foo');
 $pf->addMaintainer('lead', 'cellog', 'Greg', 'cellog@php.net');
 $pf->addFile('', 'foo.dat', array('role' => 'data'));
+$pf->addPhpDep('4.0.0', 'ge');
 $pf->validate();
 $phpunit->assertNoErrors('setup');
 $reg->addPackage2($pf);
@@ -5449,7 +5450,6 @@ $ch->setName('empty');
 $reg->addChannel($ch);
 $e = $command->run('list-all', array(), array());
 $phpunit->assertNoErrors('pear.php.net');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -7309,7 +7309,14 @@ $phpunit->assertEquals(array (
             1 => '',
             2 => '1.0.0',
             3 => 'foo',
-            4 => NULL,
+            4 => 
+            array (
+              array (
+                'type' => 'php',
+                'rel' => 'ge',
+                'version' => '4.0.0',
+              ),
+            ),
           ),
         ),
       ),

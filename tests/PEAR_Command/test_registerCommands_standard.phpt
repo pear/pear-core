@@ -178,7 +178,7 @@ PEAR_Command::getGetoptArgs('info', $s, $l);
 $phpunit->assertEquals('', $s, 'short info'); 
 $phpunit->assertEquals(array(), $l, 'long info');
 PEAR_Command::getGetoptArgs('install', $s, $l);
-$phpunit->assertEquals('fnrsBZR:aoF:O', $s, 'short install'); 
+$phpunit->assertEquals('fnrsBZR:aoF:Op', $s, 'short install'); 
 $phpunit->assertEquals(array (
   0 => 'force',
   1 => 'nodeps',
@@ -192,6 +192,7 @@ $phpunit->assertEquals(array (
   9 => 'onlyreqdeps',
   10 => 'remoteconfig=',
   11 => 'offline',
+  12 => 'pretend',
 ), $l, 'long install');
 PEAR_Command::getGetoptArgs('list', $s, $l);
 $phpunit->assertEquals('c:a', $s, 'short list'); 
@@ -239,8 +240,8 @@ PEAR_Command::getGetoptArgs('remote-list', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short remote-list'); 
 $phpunit->assertEquals(array ('channel='), $l, 'long remote-list');
 PEAR_Command::getGetoptArgs('run-tests', $s, $l);
-$phpunit->assertEquals('ri:', $s, 'short run-tests'); 
-$phpunit->assertEquals(array ('recur', 'ini='), $l, 'long run-tests');
+$phpunit->assertEquals('ri:l', $s, 'short run-tests'); 
+$phpunit->assertEquals(array ('recur', 'ini=', 'realtimelog'), $l, 'long run-tests');
 PEAR_Command::getGetoptArgs('search', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short search'); 
 $phpunit->assertEquals(array ('channel='), $l, 'long search');
@@ -264,7 +265,7 @@ PEAR_Command::getGetoptArgs('update-channels', $s, $l);
 $phpunit->assertEquals('', $s, 'short update-channels'); 
 $phpunit->assertEquals(array (), $l, 'long update-channels');
 PEAR_Command::getGetoptArgs('upgrade', $s, $l);
-$phpunit->assertEquals('fnrBZR:aoF:O', $s, 'short upgrade'); 
+$phpunit->assertEquals('fnrBZR:aoF:Op', $s, 'short upgrade'); 
 $phpunit->assertEquals(array (
   0 => 'force',
   1 => 'nodeps',
@@ -277,6 +278,7 @@ $phpunit->assertEquals(array (
   8 => 'onlyreqdeps',
   9 => 'remoteconfig=',
   10 => 'offline',
+  11 => 'pretend',
 ), $l, 'long upgrade');
 PEAR_Command::getGetoptArgs('upgrade-all', $s, $l);
 $phpunit->assertEquals('nrBZR:F:', $s, 'short upgrade-all'); 

@@ -42,25 +42,25 @@ class test_PEAR_Remote extends PEAR_Remote {
         $method = array_shift($args);
         switch (count($args)) {
             case 0:
-                $result = PEAR_Remote::call_epi($method);
+                $result = PEAR_Remote::call($method);
             break;
             case 1:
-                $result = PEAR_Remote::call_epi($method, $args[0]);
+                $result = PEAR_Remote::call($method, $args[0]);
             break;
             case 2:
-                $result = PEAR_Remote::call_epi($method, $args[0], $args[1]);
+                $result = PEAR_Remote::call($method, $args[0], $args[1]);
             break;
             case 3:
-                $result = PEAR_Remote::call_epi($method, $args[0], $args[1], $args[2]);
+                $result = PEAR_Remote::call($method, $args[0], $args[1], $args[2]);
             break;
             case 4:
-                $result = PEAR_Remote::call_epi($method, $args[0], $args[1], $args[2], $args[3]);
+                $result = PEAR_Remote::call($method, $args[0], $args[1], $args[2], $args[3]);
             break;
             case 5:
-                $result = PEAR_Remote::call_epi($method, $args[0], $args[1], $args[2], $args[3], $args[4]);
+                $result = PEAR_Remote::call($method, $args[0], $args[1], $args[2], $args[3], $args[4]);
             break;
             case 6:
-                $result = PEAR_Remote::call_epi($method, $args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
+                $result = PEAR_Remote::call($method, $args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
             break;
         }
         return $result;

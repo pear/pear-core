@@ -19,7 +19,7 @@ $phpunit->assertEquals(array (
   0 =>
   array (
     'info' => 'Adding Channel "prong" succeeded',
-    'cmd' => 'no command', 
+    'cmd' => 'channel-add', 
   ),
 ), $fakelog->getLog(), 'log');
 

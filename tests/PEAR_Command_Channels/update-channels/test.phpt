@@ -36,17 +36,22 @@ $phpunit->assertEquals(array (
   0 =>
   array (
     'info' => 'Updating channel "pear.php.net"',
-    'cmd' => 'no command',
+    'cmd' => 'update-channels',
   ),
   1 =>
   array (
     'info' => 'Adding new channel "zornk.ornk.org"',
-    'cmd' => 'no command', 
+    'cmd' => 'update-channels', 
   ),
   2 =>
   array (
     'info' => 'Adding new channel "horde.orde.de"',
-    'cmd' => 'no command', 
+    'cmd' => 'update-channels', 
+  ),
+  3 =>
+  array (
+    'info' => 'update-channels complete',
+    'cmd' => 'update-channels',
   ),
 ), $fakelog->getLog(), 'log');
 
