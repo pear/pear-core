@@ -938,13 +938,13 @@ class PEAR_Installer extends PEAR_Downloader
         $pkgname = $pkg->getName();
         $channel = $pkg->getChannel();
 
-        $php_dir = $this->config->get('php_dir', null, $channel);
         if (isset($options['installroot'])) {
             $this->config->setInstallRoot($options['installroot']);
             $this->installroot = ''; // all done automagically now
         } else {
             $this->installroot = '';
         }
+        $php_dir = $this->config->get('php_dir', null, $channel);
 
         // {{{ checks to do when not in "force" mode
         if (empty($options['force'])) {
@@ -1043,8 +1043,9 @@ class PEAR_Installer extends PEAR_Downloader
         $savechannel = $this->config->get('default_channel');
         if (empty($options['register-only'])) {
             if (!is_dir($php_dir)) {
-                return $this->raiseError("no installation destination directory '$php_dir'\n",
-                                         null, PEAR_ERROR_DIE);
+                if (PEAR::isError(System::mkdir(array('-p'), $php_dir))) {
+                    return $this->raiseError("no installation destination directory '$php_dir'\n");
+                }
             }
 
             $tmp_path = dirname($descfile);
@@ -1139,7 +1140,7 @@ class PEAR_Installer extends PEAR_Downloader
         if (PEAR_Task_Common::hasPostinstallTasks()) {
             PEAR_Task_Common::runPostinstallTasks();
         }
-        return $pkg->toArray();
+        return $pkg->toArray(true);
     }
 
     // }}}
