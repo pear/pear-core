@@ -22,10 +22,10 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
     array(array('package' => 'PEAR1', 'channel' => 'pear.php.net'), 'alpha'),
     array('version' => '1.4.0a1',
           'info' =>
-'<?xml version="1.0" encoding="ISO-8859-1"?>
-<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
-<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
- <name>PEAR1</name>
+'<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0" packagerversion="1.4.0a1">
+ <name>PEAR1</name>       
  <summary>PEAR Base System</summary>
  <description>The PEAR package contains:
  * the PEAR installer, for creating, distributing
@@ -42,42 +42,41 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
  <maintainers>
   <maintainer>
    <user>ssb</user>
-   <role>lead</role>
    <name>Stig Bakken</name>
    <email>stig@php.net</email>
+   <role>lead</role>
   </maintainer>
   <maintainer>
    <user>cellog</user>
-   <role>lead</role>
    <name>Greg Beaver</name>
    <email>cellog@php.net</email>
+   <role>lead</role>
   </maintainer>
   <maintainer>
    <user>cox</user>
-   <role>lead</role>
    <name>Tomas V.V.Cox</name>
    <email>cox@idecnet.com</email>
+   <role>lead</role>
   </maintainer>
   <maintainer>
    <user>pajoye</user>
-   <role>lead</role>
    <name>Pierre-Alain Joye</name>
    <email>pajoye@pearfr.org</email>
+   <role>lead</role>
   </maintainer>
   <maintainer>
    <user>mj</user>
-   <role>developer</role>
    <name>Martin Jansen</name>
    <email>mj@php.net</email>
+   <role>developer</role>
   </maintainer>
- </maintainers>
+  </maintainers>
  <release>
   <version>1.4.0a1</version>
-  <date>2004-10-21</date>
+  <date>2004-12-27</date>
   <license>PHP License</license>
   <state>alpha</state>
-  <notes>
-Installer Roles/Tasks:
+  <notes>Installer Roles/Tasks:
 
  * package.xml 2.0 uses a command pattern, allowing extensibility
  * implement the replace, postinstallscript, and preinstallscript tasks
@@ -119,42 +118,39 @@ Installer:
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)
   </notes>
-  <provides type="class" name="OS_Guess"/>
-  <provides type="class" name="System"/>
-  <provides type="function" name="md5_file"/>
   <deps>
    <dep type="php" rel="ge" version="4.2.0"/>
    <dep type="pkg" rel="not">Foo</dep>
    <dep type="pkg" rel="ge" version="1.0.0">Bar</dep>
   </deps>
+  <provides type="class" name="OS_Guess" />
+  <provides type="class" name="System" />
+  <provides type="function" name="md5_file" />
   <filelist>
-   <dir name="/">
-    <file name="foo.php" role="php"/>
-   </dir>
+   <file role="php" md5sum="ed0384ad29e60110b310a02e95287ee6" name="foo.php"/>
   </filelist>
  </release>
  <changelog>
-  <release>
-   <version>1.3.3</version>
-   <date>2004-10-28</date>
-   <state>stable</state>
-   <notes>
-Installer:
+   <release>
+    <version>1.3.3</version>
+    <date>2004-10-28</date>
+    <state>stable</state>
+    <notes>Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
  * fix Bug #1249 display the right state when using --force option
  * fix Bug #2189 upgrade-all stops if dependancy fails
  * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
  * fix Bug #1420 Parser bug for T_DOUBLE_COLON
  * fix Request #2220 pear5 build fails on dual php4/php5 system
- * fix Bug #1163  pear makerpm fails with packages that supply role="doc"
+ * fix Bug #1163  pear makerpm fails with packages that supply role=&quot;doc&quot;
 
 Other:
  * add PEAR_Exception class for PHP5 users
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
-   </notes>
-  </release>
+    </notes>
+   </release>
  </changelog>
 </package>
 ',
@@ -166,10 +162,10 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
          array('channel' => 'pear.php.net', 'package' => 'PEAR1', 'version' => '1.4.0a1'), 'alpha'),
     array('version' => '1.5.0',
           'info' =>
-'<?xml version="1.0" encoding="ISO-8859-1"?>
-<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
-<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
- <name>Bar</name>
+'<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0" packagerversion="1.4.0a1">
+ <name>Bar</name>       
  <summary>PEAR Base System</summary>
  <description>The PEAR package contains:
  * the PEAR installer, for creating, distributing
@@ -186,42 +182,41 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
  <maintainers>
   <maintainer>
    <user>ssb</user>
-   <role>lead</role>
    <name>Stig Bakken</name>
    <email>stig@php.net</email>
+   <role>lead</role>
   </maintainer>
   <maintainer>
    <user>cellog</user>
-   <role>lead</role>
    <name>Greg Beaver</name>
    <email>cellog@php.net</email>
+   <role>lead</role>
   </maintainer>
   <maintainer>
    <user>cox</user>
-   <role>lead</role>
    <name>Tomas V.V.Cox</name>
    <email>cox@idecnet.com</email>
+   <role>lead</role>
   </maintainer>
   <maintainer>
    <user>pajoye</user>
-   <role>lead</role>
    <name>Pierre-Alain Joye</name>
    <email>pajoye@pearfr.org</email>
+   <role>lead</role>
   </maintainer>
   <maintainer>
    <user>mj</user>
-   <role>developer</role>
    <name>Martin Jansen</name>
    <email>mj@php.net</email>
+   <role>developer</role>
   </maintainer>
- </maintainers>
+  </maintainers>
  <release>
   <version>1.5.0</version>
-  <date>2004-10-21</date>
+  <date>2004-12-27</date>
   <license>PHP License</license>
   <state>stable</state>
-  <notes>
-Installer Roles/Tasks:
+  <notes>Installer Roles/Tasks:
 
  * package.xml 2.0 uses a command pattern, allowing extensibility
  * implement the replace, postinstallscript, and preinstallscript tasks
@@ -263,43 +258,39 @@ Installer:
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)
   </notes>
-  <provides type="class" name="OS_Guess"/>
-  <provides type="class" name="System"/>
-  <provides type="function" name="md5_file"/>
   <deps>
    <dep type="pkg" rel="has">Foobar</dep>
   </deps>
+  <provides type="class" name="OS_Guess" />
+  <provides type="class" name="System" />
+  <provides type="function" name="md5_file" />
   <filelist>
-   <dir name="/">
-    <file name="foo1.php" role="php"/>
-   </dir>
+   <file role="php" md5sum="ed0384ad29e60110b310a02e95287ee6" name="foo1.php"/>
   </filelist>
  </release>
  <changelog>
-  <release>
-   <version>1.3.3</version>
-   <date>2004-10-28</date>
-   <state>stable</state>
-   <notes>
-Installer:
+   <release>
+    <version>1.3.3</version>
+    <date>2004-10-28</date>
+    <state>stable</state>
+    <notes>Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
  * fix Bug #1249 display the right state when using --force option
  * fix Bug #2189 upgrade-all stops if dependancy fails
  * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
  * fix Bug #1420 Parser bug for T_DOUBLE_COLON
  * fix Request #2220 pear5 build fails on dual php4/php5 system
- * fix Bug #1163  pear makerpm fails with packages that supply role="doc"
+ * fix Bug #1163  pear makerpm fails with packages that supply role=&quot;doc&quot;
 
 Other:
  * add PEAR_Exception class for PHP5 users
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
-   </notes>
-  </release>
+    </notes>
+   </release>
  </changelog>
-</package>
-',
+</package>',
           'url' => 'http://www.example.com/Bar-1.5.0'));
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
     array('1.0',
@@ -309,10 +300,10 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
          array('channel' => 'pear.php.net', 'package' => 'Bar', 'version' => '1.5.0'), 'alpha'),
     array('version' => '1.4.0a1',
           'info' =>
-'<?xml version="1.0" encoding="ISO-8859-1"?>
-<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
-<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
- <name>Foobar</name>
+'<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0" packagerversion="1.4.0a1">
+ <name>Foobar</name>       
  <summary>PEAR Base System</summary>
  <description>The PEAR package contains:
  * the PEAR installer, for creating, distributing
@@ -329,42 +320,41 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
  <maintainers>
   <maintainer>
    <user>ssb</user>
-   <role>lead</role>
    <name>Stig Bakken</name>
    <email>stig@php.net</email>
+   <role>lead</role>
   </maintainer>
   <maintainer>
    <user>cellog</user>
-   <role>lead</role>
    <name>Greg Beaver</name>
    <email>cellog@php.net</email>
+   <role>lead</role>
   </maintainer>
   <maintainer>
    <user>cox</user>
-   <role>lead</role>
    <name>Tomas V.V.Cox</name>
    <email>cox@idecnet.com</email>
+   <role>lead</role>
   </maintainer>
   <maintainer>
    <user>pajoye</user>
-   <role>lead</role>
    <name>Pierre-Alain Joye</name>
    <email>pajoye@pearfr.org</email>
+   <role>lead</role>
   </maintainer>
   <maintainer>
    <user>mj</user>
-   <role>developer</role>
    <name>Martin Jansen</name>
    <email>mj@php.net</email>
+   <role>developer</role>
   </maintainer>
- </maintainers>
+  </maintainers>
  <release>
   <version>1.4.0a1</version>
-  <date>2004-10-21</date>
+  <date>2004-12-27</date>
   <license>PHP License</license>
   <state>alpha</state>
-  <notes>
-Installer Roles/Tasks:
+  <notes>Installer Roles/Tasks:
 
  * package.xml 2.0 uses a command pattern, allowing extensibility
  * implement the replace, postinstallscript, and preinstallscript tasks
@@ -406,40 +396,36 @@ Installer:
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)
   </notes>
-  <provides type="class" name="OS_Guess"/>
-  <provides type="class" name="System"/>
-  <provides type="function" name="md5_file"/>
+  <provides type="class" name="OS_Guess" />
+  <provides type="class" name="System" />
+  <provides type="function" name="md5_file" />
   <filelist>
-   <dir name="/">
-    <file name="foo12.php" role="php"/>
-   </dir>
+   <file role="php" md5sum="ed0384ad29e60110b310a02e95287ee6" name="foo12.php"/>
   </filelist>
  </release>
  <changelog>
-  <release>
-   <version>1.3.3</version>
-   <date>2004-10-28</date>
-   <state>stable</state>
-   <notes>
-Installer:
+   <release>
+    <version>1.3.3</version>
+    <date>2004-10-28</date>
+    <state>stable</state>
+    <notes>Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
  * fix Bug #1249 display the right state when using --force option
  * fix Bug #2189 upgrade-all stops if dependancy fails
  * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
  * fix Bug #1420 Parser bug for T_DOUBLE_COLON
  * fix Request #2220 pear5 build fails on dual php4/php5 system
- * fix Bug #1163  pear makerpm fails with packages that supply role="doc"
+ * fix Bug #1163  pear makerpm fails with packages that supply role=&quot;doc&quot;
 
 Other:
  * add PEAR_Exception class for PHP5 users
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
-   </notes>
-  </release>
+    </notes>
+   </release>
  </changelog>
-</package>
-',
+</package>',
           'url' => 'http://www.example.com/Foobar-1.4.0a1'));
 $_test_dep->setPHPVersion('4.3.11');
 $_test_dep->setPEARVersion('1.4.0a1');

@@ -16,49 +16,50 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
     array(array('package' => 'test', 'channel' => 'pear.php.net'), 'stable'),
     array('version' => '1.0',
           'info' =>
-          '<?xml version="1.0" encoding="UTF-8"?>
-<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://pear.php.net/dtd/package-1.0.xsd" version="1.0">
+          '<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0" packagerversion="1.4.0dev13">
  <name>test</name>
  <summary>test</summary>
- <description>test</description>
+ <description>test
+ </description>
  <maintainers>
   <maintainer>
    <user>cellog</user>
-   <role>lead</role>
-   <email>cellog@php.net</email>
    <name>Greg Beaver</name>
+   <email>cellog@php.net</email>
+   <role>lead</role>
   </maintainer>
- </maintainers>
+  </maintainers>
  <release>
   <version>1.0</version>
   <date>2004-10-10</date>
   <license>PHP License</license>
   <state>stable</state>
-  <notes>test</notes>
+  <notes>test
+  </notes>
   <filelist>
-   <dir name="test" baseinstalldir="test">
-    <file name="test.php" role="php"/>
-    <file name="test2.php" role="php" install-as="hi.php"/>
-    <file name="test3.php" role="php" install-as="another.php" platform="windows"/>
-    <file name="test4.php" role="data">
-     <replace from="@1@" to="version" type="package-info"/>
-     <replace from="@2@" to="data_dir" type="pear-config"/>
-     <replace from="@3@" to="DIRECTORY_SEPARATOR" type="php-const"/>
-    </file>
-   </dir>
+   <file role="php" baseinstalldir="test" md5sum="31140babf23de55c049f8b56818133eb" name="test/test.php"/>
+   <file role="php" baseinstalldir="test" md5sum="31140babf23de55c049f8b56818133eb" install-as="hi.php" name="test/test2.php"/>
+   <file role="php" baseinstalldir="test" md5sum="31140babf23de55c049f8b56818133eb" platform="windows" install-as="another.php" name="test/test3.php"/>
+   <file role="data" baseinstalldir="test" md5sum="31140babf23de55c049f8b56818133eb" name="test/test4.php">
+    <replace from="@1@" to="version" type="package-info"/>
+    <replace from="@2@" to="data_dir" type="pear-config"/>
+    <replace from="@3@" to="DIRECTORY_SEPARATOR" type="php-const"/>
+   </file>
   </filelist>
  </release>
  <changelog>
-  <release>
-   <version>1.0</version>
-   <date>2004-10-10</date>
-   <license>PHP License</license>
-   <state>stable</state>
-   <notes>test</notes>
-  </release>
+   <release>
+    <version>1.0</version>
+    <date>2004-10-10</date>
+    <license>PHP License</license>
+    <state>stable</state>
+    <notes>test
+    </notes>
+   </release>
  </changelog>
-</package>
-',
+</package>',
           'url' => 'http://www.example.com/test-1.0'));
 $dp = &new test_PEAR_Downloader($fakelog, array(), $config);
 $pkg = &new test_PEAR_PackageFile($config);
