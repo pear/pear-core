@@ -91,8 +91,11 @@ password from your user configuration.',
      */
     function doLogin($command, $options, $params)
     {
-        $server = $this->config->get('master_server');
-        $remote = new PEAR_Remote($this->config);
+        $reg = &$this->config->getRegistry();
+        $channel = $this->config->get('default_channel');
+        $chan = $reg->getChannel($channel);
+        $server = $this->config->get('preferred_mirror');
+        $remote = &$this->config->getRemote();
         $username = $this->config->get('username');
         if (empty($username)) {
             $username = @$_ENV['USER'];
@@ -110,10 +113,14 @@ password from your user configuration.',
         
         $this->config->set('username', $username);
         $this->config->set('password', $password);
-        
-        $remote->expectError(401);
-        $ok = $remote->call('logintest');
-        $remote->popExpect();
+
+        if ($chan->supportsREST()) {
+            $ok = true;
+        } else {
+            $remote->expectError(401);
+            $ok = $remote->call('logintest');
+            $remote->popExpect();
+        }
         if ($ok === true) {
             $this->ui->outputData("Logged in.", $command);
             $this->config->store();
@@ -142,7 +149,10 @@ password from your user configuration.',
      */
     function doLogout($command, $options, $params)
     {
-        $server = $this->config->get('master_server');
+        $reg = &$this->config->getRegistry();
+        $channel = $this->config->get('default_channel');
+        $chan = $reg->getChannel($channel);
+        $server = $this->config->get('preferred_mirror');
         $this->ui->outputData("Logging out from $server.", $command);
         $this->config->remove('username');
         $this->config->remove('password');
