@@ -30,7 +30,7 @@ if (version_compare(phpversion(), '5.0.0', '>=')) {
     $err = 'no element found';
 }
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile', 'message' => 'package.xml "C:\devel\pear_with_channels\tests\PEAR_Command_Registry\testinstallertemp\smong.xml" has no package.xml <package> version'),
+    array('package' => 'PEAR_PackageFile', 'message' => 'package.xml "' . $temp_path . DIRECTORY_SEPARATOR . 'smong.xml" has no package.xml <package> version'),
     array('package' => 'PEAR_Error', 'message' => "XML error: $err at line 1"),
 ), 'invalid file');
 $e = $command->run('info', array(), array('gronk/php_dir'));
