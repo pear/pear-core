@@ -104,6 +104,7 @@ $params = array(&$package);
 $installer->setDownloadedPackages($params);
 $package->installBinary($installer);
 $phpunit->assertNoErrors('install');
+$tampered = $fakelog->getLog();
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -143,7 +144,7 @@ $phpunit->assertEquals(array (
   7 => 
   array (
     0 => 3,
-    1 => '+ cp ' . $last_dl->getDownloadDir() . DIRECTORY_SEPARATOR . 'test-1.1' .
+    1 => '+ cp ' . str_replace('\\\\', '\\', $last_dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'test-1.1' .
         DIRECTORY_SEPARATOR . 'foo.dll ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll',
   ),
   8 => 
@@ -184,7 +185,7 @@ $phpunit->assertEquals(array (
     0 => 0,
     1 => 'Download and install of binary extension "channel://pear.php.net/test" successful',
   ),
-), $fakelog->getLog(), 'install');
+), $tampered, 'install');
 $phpunit->assertEquals(array (
   0 => 
   array (
