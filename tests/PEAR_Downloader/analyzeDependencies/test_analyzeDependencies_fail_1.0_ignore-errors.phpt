@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Downloader_Package::analyzeDependencies() fail tests package.xml 1.0
+PEAR_Downloader_Package::analyzeDependencies() fail tests package.xml 1.0 [ignmore-errors]
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -117,7 +117,7 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
             'xsdversion' => '2.0',
           ),
           'url' => 'http://www.example.com/required-1.1'));
-$dp = &newFakeDownloaderPackage(array());
+$dp = &newFakeDownloaderPackage(array('ignore-errors' => true));
 $result = $dp->initialize('mainold');
 $phpunit->assertNoErrors('after create 1');
 
@@ -128,10 +128,7 @@ $phpunit->assertNoErrors('setup');
 
 $_test_dep->setExtensions(array('bar' => '1.0'));
 $err = $dp->_downloader->analyzeDependencies($params);
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' =>
-        'Cannot install, dependencies failed')
-), 'end');
+$phpunit->assertNoErrors('end');
 $phpunit->assertEquals(array (
   0 => 
   array (

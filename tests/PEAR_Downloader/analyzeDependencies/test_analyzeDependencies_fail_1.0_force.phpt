@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Downloader_Package::analyzeDependencies() fail tests package.xml 1.0
+PEAR_Downloader_Package::analyzeDependencies() fail tests package.xml 1.0 [force]
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -117,7 +117,7 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
             'xsdversion' => '2.0',
           ),
           'url' => 'http://www.example.com/required-1.1'));
-$dp = &newFakeDownloaderPackage(array());
+$dp = &newFakeDownloaderPackage(array('force' => true));
 $result = $dp->initialize('mainold');
 $phpunit->assertNoErrors('after create 1');
 
@@ -128,10 +128,7 @@ $phpunit->assertNoErrors('setup');
 
 $_test_dep->setExtensions(array('bar' => '1.0'));
 $err = $dp->_downloader->analyzeDependencies($params);
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' =>
-        'Cannot install, dependencies failed')
-), 'end');
+$phpunit->assertNoErrors('end');
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -156,12 +153,12 @@ $phpunit->assertEquals(array (
   4 => 
   array (
     0 => 0,
-    1 => 'pear/mainold requires package "pear/required" (version >= 1.1)',
+    1 => 'warning: pear/mainold requires package "pear/required" (version >= 1.1)',
   ),
   5 => 
   array (
     0 => 0,
-    1 => 'pear/mainold requires PHP extension "foo"',
+    1 => 'warning: pear/mainold requires PHP extension "foo"',
   ),
 ), $fakelog->getLog(), 'end log');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');
