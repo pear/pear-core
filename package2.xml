@@ -148,6 +148,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #3990: PEAR_Error PEAR_EXCEPTION broken
   * fix Bug #4021: PEAR_Config file_exists can cause warnings
   * fix Bug #1870: pear makerpm dependancies
+  * fix Bug #4038: Array to string conversion in PEAR/Frontend/CLI.php
  </notes>
  <contents>
   <dir name="/">
