@@ -630,7 +630,7 @@ class PEAR_PackageFile_v2
     function setDescription($desc)
     {
         $this->_isValid = 0;
-        if (!isset($this->_packageInfo['summary'])) {
+        if (!isset($this->_packageInfo['description'])) {
             // ensure that the description tag is set up in the right location
             return $this->_insertBefore($this->_packageInfo,
                 array('lead',
