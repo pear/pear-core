@@ -661,7 +661,7 @@ class PEAR_Downloader_Package
                 } elseif (isset($pname['state'])) {
                     $vs = ', stability "' . $pname['state'] . '"';
                 } else {
-                    $vs = ' within preferred state ' . $this->config->get(
+                    $vs = ' within preferred state ' . $this->_downloader->config->get(
                         'preferred_state') . '"';
                 }
                 $err = PEAR::raiseError(
