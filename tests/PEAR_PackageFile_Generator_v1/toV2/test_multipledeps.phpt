@@ -1,5 +1,5 @@
 --TEST--
-PEAR_PackageFile_Generator_v1->toV2(), no deps
+PEAR_PackageFile_Generator_v1->toV2(), multiple deps
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
