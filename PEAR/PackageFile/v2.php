@@ -266,41 +266,6 @@ class PEAR_PackageFile_v2
         return $this->_archiveFile;
     }
 
-
-    function packageInfo($field)
-    {
-        $map = array(
-            'release_notes' => 'notes',
-            'release-license' => 'license',
-            'release_date' => 'date');
-        $field = isset($map[$field]) ? $map[$field] : $field;
-        if (!in_array($field, 
-            array('name', 'summary', 'channel', 'notes', 'extends', 'description',
-                    'release_notes', 'license', 'license-uri',
-                    'version', 'api-version', 'state', 'api-state',
-                    'date', 'time'))) {
-            return false;
-        }
-        if (method_exists($this, "get$field")) {
-            $test = $this->{"get$field"}();
-            if (is_string($test)) {
-                return $test;
-            }
-        }
-        if ($field == 'license-uri') {
-            if (isset($this->_packageInfo['license']['attribs']['uri'])) {
-                return $this->_packageInfo['license']['attribs']['uri'];
-            }
-        }
-        if ($field == 'api-state') {
-            return $this->getState('api');
-        }
-        if ($field == 'api-version') {
-            return $this->getVersion('api');
-        }
-        return false;
-    }
-
     /**
      * This should only be used to retrieve filenames and install attributes
      */
