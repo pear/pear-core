@@ -138,7 +138,7 @@ $phpunit->assertEquals(array (
   ),
   3 => 
   array (
-    0 => 1,
+    0 => 0,
     1 => 'ERROR: package invalid-1.9.0.tgz is not a valid package',
   ),
 ), $fakelog->getLog(), 'bad bundle 2 log');
