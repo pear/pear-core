@@ -56,6 +56,7 @@ Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
  * fix Bug #1249 display the right state when using --force option
  * fix Bug #2189 upgrade-all stops if dependancy fails
+ * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
 
 Other:
  * add PEAR_Exception class for PHP5 users
