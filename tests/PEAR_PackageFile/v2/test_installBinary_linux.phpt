@@ -19,72 +19,106 @@ $GLOBALS['pearweb']->addXmlrpcConfig('grob', 'package.getDownloadURL',
     array(array('channel' => 'grob', 'package' => 'foo_win', ), 'stable'),
     array('version' => '1.1.0',
           'info' =>
-          array(
-            'channel' => 'grob',
-            'package' => 'foo_win',
-            'license' => 'PHP License',
-            'summary' => 'Test Package',
-            'description' => 'Test Package',
-            'releasedate' => '2003-12-06 00:26:42',
-            'state' => 'stable',
-            'apiversion' => '1.0',
-            'xsdversion' => '2.0',
-            'deps' =>
-            array(
-                'required' =>
-                array(
-                    'php' =>
-                    array(
-                        'min' => '4.2',
-                        'max' => '6.0.0',
-                        ),
-                    'pearinstaller' =>
-                    array(
-                        'min' => '1.4.0dev13',
-                        ),
-                    'os' =>
-                    array(
-                        'name' => 'windows'
-                        ),
-                ),
-            ),
-          ),
+          '<?xml version="1.0"?>
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+ <name>foo_win</name>
+ <channel>grob</channel>
+ <summary>Main Package</summary>
+ <description>Main Package</description>
+ <lead>
+  <name>Greg Beaver</name>
+  <user>cellog</user>
+  <email>cellog@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2004-09-30</date>
+ <version>
+  <release>1.1.0</release>
+  <api>1.0.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+ <notes>test</notes>
+ <contents>
+  <dir name="/">
+   <file baseinstalldir="/" name="main.php" role="php" />
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.2</min>
+    <max>6.0.0</max>
+   </php>
+   <pearinstaller>
+    <min>1.4.0dev13</min>
+   </pearinstaller>
+   <os>
+    <name>windows</name>
+   </os>
+  </required>
+ </dependencies>
+ <phprelease/>
+</package>',
           'url' => 'http://www.example.com/foo_win-1.1.0'));
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/foo_linux-1.1.0.tgz', $pathtopackagexml2);
 $GLOBALS['pearweb']->addXmlrpcConfig('grob', 'package.getDownloadURL',
     array(array('channel' => 'grob', 'package' => 'foo_linux', ), 'stable'),
     array('version' => '1.1.0',
           'info' =>
-          array(
-            'channel' => 'grob',
-            'package' => 'foo_linux',
-            'license' => 'PHP License',
-            'summary' => 'Test Package',
-            'description' => 'Test Package',
-            'releasedate' => '2003-12-06 00:26:42',
-            'state' => 'stable',
-            'apiversion' => '1.0',
-            'xsdversion' => '2.0',
-            'deps' =>
-            array(
-                'required' =>
-                array(
-                    'php' =>
-                    array(
-                        'min' => '4.2',
-                        'max' => '6.0.0',
-                        ),
-                    'pearinstaller' =>
-                    array(
-                        'min' => '1.4.0dev13',
-                        ),
-                    'os' =>
-                    array(
-                        'name' => 'linux'
-                        ),
-                ),
-            ),
-          ),
+          '<?xml version="1.0"?>
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+ <name>foo_linux</name>
+ <channel>grob</channel>
+ <summary>Main Package</summary>
+ <description>Main Package</description>
+ <lead>
+  <name>Greg Beaver</name>
+  <user>cellog</user>
+  <email>cellog@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2004-09-30</date>
+ <version>
+  <release>1.1.0</release>
+  <api>1.0.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+ <notes>test</notes>
+ <contents>
+  <dir name="/">
+   <file baseinstalldir="/" name="main.php" role="php" />
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.2</min>
+    <max>6.0.0</max>
+   </php>
+   <pearinstaller>
+    <min>1.4.0dev13</min>
+   </pearinstaller>
+   <os>
+    <name>linux</name>
+   </os>
+  </required>
+ </dependencies>
+ <phprelease/>
+</package>',
           'url' => 'http://www.example.com/foo_linux-1.1.0'));
 
 $_test_dep->setPHPVersion('4.3.9');
@@ -137,81 +171,66 @@ $dld = $last_dl->getDownloadDir();
 $cleandld = str_replace('\\\\', '\\', $last_dl->getDownloadDir());
 if (OS_WINDOWS) {
     $phpunit->assertEquals(array (
-      0 => 
       array (
         0 => 0,
         1 => 'Attempting to download binary version of extension "foo"',
       ),
-      1 =>
-      array (
-        0 => 0,
-        1 => 'Can only install grob/foo_win on Windows',
-      ),
-      2 => 
       array (
         0 => 3,
         1 => '+ tmp dir created at ' . $dld,
       ),
-      3 => 
+      array (
+        0 => 0,
+        1 => 'Can only install grob/foo_win on Windows',
+      ),
       array (
         0 => 1,
         1 => 'downloading foo_linux-1.1.0.tgz ...',
       ),
-      4 => 
       array (
         0 => 1,
         1 => 'Starting to download foo_linux-1.1.0.tgz (723 bytes)',
       ),
-      5 => 
       array (
         0 => 1,
         1 => '.',
       ),
-      6 => 
       array (
         0 => 1,
         1 => '...done: 723 bytes',
       ),
-      7 => 
       array (
         0 => 3,
         1 => '+ cp ' . $cleandld . DIRECTORY_SEPARATOR . 'foo_linux-1.1.0' . DIRECTORY_SEPARATOR .
             'foo.so ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.so',
       ),
-      8 => 
       array (
         0 => 2,
         1 => 'md5sum ok: ' . $ext_dir . DIRECTORY_SEPARATOR . 'foo.so',
       ),
-      9 => 
       array (
         0 => 3,
         1 => 'adding to transaction: rename ' . $ext_dir . DIRECTORY_SEPARATOR .
             '.tmpfoo.so ' . $ext_dir . DIRECTORY_SEPARATOR . 'foo.so 1',
       ),
-      10 => 
       array (
         0 => 3,
         1 => 'adding to transaction: installed_as foo.so ' . $ext_dir . DIRECTORY_SEPARATOR .
             'foo.so ' . $ext_dir . ' ' . DIRECTORY_SEPARATOR
       ),
-      11 => 
       array (
         0 => 2,
         1 => 'about to commit 2 file operations',
       ),
-      12 => 
       array (
         0 => 3,
         1 => '+ mv ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.so ' .
             $ext_dir . DIRECTORY_SEPARATOR . 'foo.so',
       ),
-      13 => 
       array (
         0 => 2,
         1 => 'successfully committed 2 file operations',
       ),
-      14 => 
       array (
         0 => 0,
         1 => 'Download and install of binary extension "grob/foo_linux" successful',
