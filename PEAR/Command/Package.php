@@ -817,7 +817,8 @@ used for automated conversion or learning the format.
             $newpf = &$gen->toV2();
             $gen = &$newpf->getDefaultGenerator();
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-            $saved = $gen->toPackageFile(dirname($newpackagexml), PEAR_VALIDATE_NORMAL,
+            $state = (isset($options['flat']) ? PEAR_VALIDATE_PACKAGING : PEAR_VALIDATE_NORMAL);
+            $saved = $gen->toPackageFile(dirname($newpackagexml), $state,
                 basename($newpackagexml));
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($saved)) {
