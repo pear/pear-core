@@ -1026,11 +1026,14 @@ class PEAR_Config extends PEAR
         }
         $channel = strtolower($channel);
         
-        $test = (in_array($key, $this->_channelConfigInfo)) ? $this->_getChannelValue($key, $layer, $channel) :
+        $test = (in_array($key, $this->_channelConfigInfo)) ?
+            $this->_getChannelValue($key, $layer, $channel) :
             null;
         if ($test !== null) {
             if ($this->_installRoot) {
-                if (strpos($key, '_dir')) {
+                if (in_array($this->getGroup($key),
+                      array('File Locations', 'File Locations (Advanced)')) &&
+                      $this->getType($key) == 'directory') {
                     return $this->_prependPath($test, $this->_installRoot);
                 }
             }
@@ -1041,7 +1044,9 @@ class PEAR_Config extends PEAR
                 if (isset($this->configuration[$layer][$key])) {
                     $test = $this->configuration[$layer][$key];
                     if ($this->_installRoot) {
-                        if (@is_dir($test)) {
+                        if (in_array($this->getGroup($key),
+                              array('File Locations', 'File Locations (Advanced)')) &&
+                              $this->getType($key) == 'directory') {
                             return $this->_prependPath($test, $this->_installRoot);
                         }
                     }
@@ -1051,7 +1056,9 @@ class PEAR_Config extends PEAR
         } elseif (isset($this->configuration[$layer][$key])) {
             $test = $this->configuration[$layer][$key];
             if ($this->_installRoot) {
-                if (@is_dir($test)) {
+                if (in_array($this->getGroup($key),
+                      array('File Locations', 'File Locations (Advanced)')) &&
+                      $this->getType($key) == 'directory') {
                     return $this->_prependPath($test, $this->_installRoot);
                 }
             }
@@ -1100,16 +1107,10 @@ class PEAR_Config extends PEAR
      * variable will be validated against its legal values.
      *
      * @param string config key
-     *
      * @param string config value
-     *
      * @param string (optional) config layer
-     *
      * @param string channel to set this value for, or null for global value
-     *
      * @return bool TRUE on success, FALSE on failure
-     *
-     * @access public
      */
     function set($key, $value, $layer = 'user', $channel = false)
     {
@@ -1117,7 +1118,7 @@ class PEAR_Config extends PEAR
             return false;
         }
         if ($key == 'default_channel') {
-            // can only set the default_channel globally
+            // can only set this value globally
             $channel = 'pear.php.net';
         }
         if (empty($this->configuration_info[$key])) {
