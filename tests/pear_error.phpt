@@ -16,7 +16,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 include_once "PEAR.php";
 
 if (!defined('E_STRICT')) {
-    define(E_STRICT, -1);
+    define('E_STRICT', -1);
 }
 
 function test_error_handler($errno, $errmsg, $file, $line, $vars) {
