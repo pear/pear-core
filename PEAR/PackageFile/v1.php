@@ -1133,6 +1133,37 @@ class PEAR_PackageFile_v1
         return $a;
     }
 
+    /**
+     * Get the contents of a file listed within the package.xml
+     * @param string
+     * @return string
+     */
+    function getFileContents($file)
+    {
+        if ($this->_archiveFile == $this->_packageFile) { // unpacked
+            $dir = dirname($this->_packageFile);
+            $file = $dir . DIRECTORY_SEPARATOR . $file;
+            $file = str_replace(array('/', '\\'),
+                array(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR), $file);
+            if (file_exists($file) && is_readable($file)) {
+                return implode('', file($file));
+            }
+        } else { // tgz
+            include_once 'Archive/Tar.php';
+            $tar = &new Archive_Tar($this->_archiveFile);
+            $tar->pushErrorHandling(PEAR_ERROR_RETURN);
+            if ($file != 'package.xml' && $file != 'package2.xml') {
+                $file = $this->getPackage() . '-' . $this->getVersion() . '/' . $file;
+            }
+            $file = $tar->extractInString($file);
+            $tar->popErrorHandling();
+            if (PEAR::isError($file)) {
+                return PEAR::raiseError("Cannot locate file '$file' in archive");
+            }
+            return $file;
+        }
+    }
+
     // {{{ analyzeSourceCode()
     /**
      * Analyze the source code of the given PHP file
