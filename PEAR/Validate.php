@@ -34,12 +34,6 @@ class PEAR_Validate
      * @var int one of the PEAR_VALIDATE_* constants
      */
     var $_state = PEAR_VALIDATE_NORMAL;
-    /** 
-     * Valid release states
-     * @var array
-     * @access private
-     */
-    var $_validStates = array('alpha', 'beta', 'stable', 'snapshot', 'devel');
     /**
      * Format: ('error' => array('field' => name, 'reason' => reason), 'warning' => same)
      * @var array
@@ -85,21 +79,45 @@ class PEAR_Validate
         return (bool) preg_match('/^' . _PEAR_COMMON_PACKAGE_NAME_PREG . '$/', $name);
     }
 
+    /**
+     * Determine whether $state represents a valid stability level
+     * @param string
+     * @return bool
+     * @static
+     * @final
+     */
     function validState($state)
     {
-        return in_array($state, $this->_validStates);
+        return in_array($state, array('alpha', 'beta', 'stable', 'snapshot', 'devel'));
     }
 
+    /**
+     * Get a list of valid stability levels
+     * @return array
+     * @static
+     * @final
+     */
     function getValidStates()
     {
-        return $this->_validStates;
+        return array('alpha', 'beta', 'stable', 'snapshot', 'devel');
     }
 
+    /**
+     * Determine whether a version is a properly formatted version number that can be used
+     * by version_compare
+     * @param string
+     * @return bool
+     * @static
+     * @final
+     */
     function validVersion($ver)
     {
         return (bool) preg_match(PEAR_COMMON_PACKAGE_VERSION_PREG, $ver);
     }
 
+    /**
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     */
     function setPackageFile(&$pf)
     {
         $this->_packagexml = &$pf;
