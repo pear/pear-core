@@ -969,6 +969,24 @@ http://pear.php.net/dtd/package-2.0.xsd',
         return false;
     }
 
+    function getDependencyGroup($name)
+    {
+        $name = strtolower($name);
+        if (!isset($this->_packageInfo['dependencies']['group'])) {
+            return false;
+        }
+        $groups = $this->_packageInfo['dependencies']['group'];
+        if (!isset($groups[0])) {
+            $groups = array($groups);
+        }
+        foreach ($groups as $group) {
+            if (strtolower($group['attribs']['name']) == $name) {
+                return $group;
+            }
+        }
+        return false;
+    }
+
     /**
      * @todo handle <exclude>
      */

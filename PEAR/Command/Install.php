@@ -376,14 +376,26 @@ package if needed.
             }
             $package = $parsed['package'];
             $channel = $parsed['channel'];
-            $info = $reg->getPackage($package, $channel);
+            $info = &$reg->getPackage($package, $channel);
             if ($info === null) {
                 $badparams[] = $pkg;
             } else {
-                $newparams[] = $info;
+                $newparams[] = &$info;
+                // add the contents of a dependency group to the list of installed packages
+                if (isset($parsed['group'])) {
+                    $group = $info->getDependencyGroup($parsed['group']);
+                    if ($group) {
+                        $installed = &$reg->getInstalledGroup($group);
+                        if ($installed) {
+                            foreach ($installed as $i => $p) {
+                                $newparams[] = & $installed[$i];
+                            }
+                        }
+                    }
+                }
             }
         }
-        $this->installer->sortPkgDeps($newparams, true);
+        $this->installer->sortPackagesForUninstall($newparams);
         $params = array();
         foreach($newparams as $info) {
             $params[] = $info['info'];

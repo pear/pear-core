@@ -718,42 +718,6 @@ class PEAR_Downloader extends PEAR_Common
     }
 
     /**
-     * Sort a list of arrays of array(downloaded packagefilename) by dependency.
-     *
-     * It also removes duplicate dependencies
-     * @param array an array of PEAR_PackageFile_v[1/2] objects
-     * @return array array of array(packagefilename, package.xml contents)
-     */
-    function sortPackagesForUninstall(&$packages)
-    {
-    }
-
-    function _uninstallDependsOn($a, $b)
-    {
-    }
-
-    function _sortUninstall($a, $b)
-    {
-        if (!$a->getDeps() && !$b->getDeps()) {
-            return 0; // neither package has dependencies, order is insignificant
-        }
-        if ($a->getDeps() && !$b->getDeps()) {
-            return 1; // $a must be installed after $b because $a has dependencies
-        }
-        if (!$a->getDeps() && $b->getDeps()) {
-            return -1; // $b must be installed after $a because $b has dependencies
-        }
-        // both packages have dependencies
-        if ($this->_dependsOn($a, $b)) {
-            return 1;
-        }
-        if ($this->_dependsOn($b, $a)) {
-            return -1;
-        }
-        return 0;
-    }
-
-    /**
      * Download a file through HTTP.  Considers suggested file name in
      * Content-disposition: header and can run a callback function for
      * different events.  The callback will be called with two
