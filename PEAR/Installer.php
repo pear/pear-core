@@ -1491,6 +1491,9 @@ class PEAR_Installer extends PEAR_Downloader
         $filelist = $pkg->getFilelist();
         if (is_object($pkg)) {
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+            if (!class_exists('PEAR_Dependency2')) {
+                require_once 'PEAR/Dependency2.php';
+            }
             $depchecker = &new PEAR_Dependency2($this->config, $options, 
                 array('channel' => $channel, 'package' => $package),
                 PEAR_VALIDATE_UNINSTALLING);
