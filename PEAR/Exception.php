@@ -24,7 +24,6 @@
 define('PEAR_OBSERVER_PRINT',                -2);
 define('PEAR_OBSERVER_TRIGGER',              -4);
 define('PEAR_OBSERVER_DIE',                  -8);
-define('PEAR_OBSERVER_CLASSCALLBACK',        -16);
 
 /**
  * Base PEAR_Exception Class
@@ -168,16 +167,6 @@ class PEAR_Exception extends Exception
                 case PEAR_EXCEPTION_DIE :
                     $f = (isset($func[1])) ? $func[1] : '%s';
                     die(printf($f, $this->getMessage()));
-                    break;
-                case PEAR_OBSERVER_CLASSCALLBACK :
-                    $f = (isset($func[1])) ? $func[1] : false;
-                    if (is_array($f) && isset($f['class']) && isset($f['callback'])) {
-                        if ($this instanceof $f['class']) {
-                            if (is_callable($f['callback'])) {
-                                call_user_func($f['callback'], $this);
-                            }
-                        }
-                    }
                     break;
                 default:
                     trigger_error('invalid observer type', E_USER_WARNING);
