@@ -42,9 +42,13 @@ class PEAR_Command_Package extends PEAR_Command_Common
                     'doc' => 'Print the name of the packaged file.',
                     ),
                 ),
-            'doc' => '[descfile]
+            'doc' => '[descfile] [descfile2]
 Creates a PEAR package from its description file (usually called
-package.xml).
+package.xml).  If a second packagefile is passed in, then
+the packager will check to make sure that one is a package.xml
+version 1.0, and the other is a package.xml version 2.0.  The
+package.xml version 1.0 will be saved as "package.xml" in the archive,
+and the other as "package2.xml" in the archive"
 '
             ),
         'package-validate' => array(
@@ -276,12 +280,13 @@ used for automated conversion or learning the format.
         include_once 'PEAR/Packager.php';
         include_once 'PEAR/Registry.php';
         $pkginfofile = isset($params[0]) ? $params[0] : 'package.xml';
+        $pkg2 = isset($params[1]) ? $params[1] : null;
         $packager =& new PEAR_Packager();
         $reg = &$this->config->getRegistry();
         $err = $warn = array();
         $dir = dirname($pkginfofile);
         $compress = empty($options['nocompress']) ? true : false;
-        $result = $packager->package($pkginfofile, $compress);
+        $result = $packager->package($pkginfofile, $compress, $pkg2);
         if (PEAR::isError($result)) {
             $this->ui->outputData($this->output, $command);
             return $this->raiseError($result);
