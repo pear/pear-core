@@ -305,7 +305,7 @@ class PEAR_Remote extends PEAR
             $ssl = $channel->getSSL();
             $fp = @fsockopen(($ssl ? 'ssl://' : '') . $server_host, $server_port);
             if (!$fp) {
-                $server_host = "ssl://$server_host"; // for error-reporting
+                $server_host = "$ssl$server_host"; // for error-reporting
             }
         }
         if (!$fp && $http_proxy) {
