@@ -35,10 +35,6 @@ $ch->fromXmlString('<?xml version="1.0" encoding="ISO-8859-1" ?>
     <function version="1.0">package.listLatestReleases</function>
     <function version="1.0">package.listAll</function>
    </soap>
-   <rest>
-    <function version="1.0" uri="package/listLatestReleases">package.listLatestReleases</function>
-    <function version="1.0" uri="package/listAll">package.listAll</function>
-   </rest>
   </primary>
   <mirror host="poor.php.net">
    <xmlrpc>
@@ -54,10 +50,6 @@ $ch->fromXmlString('<?xml version="1.0" encoding="ISO-8859-1" ?>
     <function version="1.0">package.listLatestReleases</function>
     <function version="1.0">package.listAll</function>
    </soap>
-   <rest>
-    <function version="1.0" uri="package/listLatestReleases">package.listLatestReleases</function>
-    <function version="1.0" uri="package/listAll">package.listAll</function>
-   </rest>
   </mirror>
  </servers>
 </channel>');
@@ -169,20 +161,6 @@ $phpunit->assertEquals(array (
           2 => 'package.listAll',
           3 => '',
         ),
-        9 => 
-        array (
-          0 => 'rest',
-          1 => '1.0',
-          2 => 'package.listLatestReleases',
-          3 => 'package/listLatestReleases',
-        ),
-        10 => 
-        array (
-          0 => 'rest',
-          1 => '1.0',
-          2 => 'package.listAll',
-          3 => 'package/listAll',
-        ),
       ),
       'headline' => 
       array (
@@ -280,20 +258,6 @@ $phpunit->assertEquals(array (
           1 => '1.0',
           2 => 'package.listAll',
           3 => '',
-        ),
-        9 => 
-        array (
-          0 => 'rest',
-          1 => '1.0',
-          2 => 'package.listLatestReleases',
-          3 => 'package/listLatestReleases',
-        ),
-        10 => 
-        array (
-          0 => 'rest',
-          1 => '1.0',
-          2 => 'package.listAll',
-          3 => 'package/listAll',
         ),
       ),
       'headline' => 
