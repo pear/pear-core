@@ -17,6 +17,11 @@ $pf->validate();
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <package>, found <contents> expected one of "notes"'),
 ), 'no notes');
+$pf->setNotes('');
+$pf->validate();
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => '<notes> cannot be empty (<notes/>)'),
+), 'empty notes');
 echo 'tests done';
 ?>
 --EXPECT--
