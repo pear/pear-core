@@ -48,7 +48,7 @@
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.0a10</version>
+  <version>1.4.0a11</version>
   <date>2005-04-06</date>
   <license>PHP License</license>
   <state>alpha</state>
@@ -148,6 +148,10 @@
   * fix Bug #4038: Array to string conversion in PEAR/Frontend/CLI.php
   * fix Bug #4060: pear upgrade Auth_HTTP fails
   * fix Bug #4072: pear list-all -c channel does not list installed packages
+
+  Specific changes from 1.4.0a10:
+  * Add new &quot;unusualbaseinstall&quot; role type that allows custom roles similar
+    data/test/doc to honor the baseinstalldir attribute
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -607,6 +611,26 @@
     attempt to &quot;upgrade&quot; to 1.3.6
   * split PEAR_PackageFile_v2 into two classes, read-only PEAR_PackageFile_v2, and read-write
     PEAR_PackageFile_v2_rw
+   </notes>
+  </release>
+  <release>
+   <version>1.4.0a10</version>
+   <date>2005-04-06</date>
+   <state>alpha</state>
+   <notes>
+  Specific changes from 1.4.0a9:
+  * add support for writeable tasks
+  * fix potential fatal errors in run-tests command, -p option
+  * fix --installroot option for installation
+  * move run-tests command into its own file (testing may expand)
+  * fix fatal error if package.xml has no version=&quot;X.0&quot;
+  * fix Bug #3966: Improper path in PEAR/PackageFile/v2.php
+  * fix Bug #3990: PEAR_Error PEAR_EXCEPTION broken
+  * fix Bug #4021: PEAR_Config file_exists can cause warnings
+  * fix Bug #1870: pear makerpm dependancies
+  * fix Bug #4038: Array to string conversion in PEAR/Frontend/CLI.php
+  * fix Bug #4060: pear upgrade Auth_HTTP fails
+  * fix Bug #4072: pear list-all -c channel does not list installed packages
    </notes>
   </release>
  </changelog>
