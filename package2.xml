@@ -244,6 +244,13 @@ Installer:
     <channel>pear.php.net</channel>
    </extension>
   </required>
+  <group name="remoteinstall" hint="adds the ability to install packages to a remote ftp server">
+   <package>
+    <name>Net_FTP</name>
+    <channel>pear.php.net</channel>
+    <min>1.3.0RC1</min>
+   </package>
+  </group>
  </dependencies>
  <phprelease>
   <installconditions>
