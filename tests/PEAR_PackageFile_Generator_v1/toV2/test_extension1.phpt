@@ -24,7 +24,7 @@ http://pear.php.net/dtd/tasks-1.0.xsd
 http://pear.php.net/dtd/package-2.0
 http://pear.php.net/dtd/package-2.0.xsd">
  <name>SQLite</name>
- <channel>pear.php.net</channel>
+ <channel>pecl.php.net</channel>
  <summary>SQLite database bindings</summary>
  <description>SQLite is a C library that implements an embeddable SQL database engine.
 Programs that link with the SQLite library can have SQL database access
@@ -161,7 +161,7 @@ this case is to use the new sqlite_exec() function instead. (Stas)
  <dependencies>
   <required>
    <php>
-    <min>' . phpversion() . '</min>
+    <min>4.0.0</min>
     <max>6.0.0</max>
    </php>
    <pearinstaller>
@@ -222,7 +222,8 @@ Increase the default busy timeout interval to 60 seconds.
    </notes>
   </release>
  </changelog>
-</package>', $xml, 'xml');
+</package>
+', $xml, 'xml');
 echo 'tests done';
 ?>
 --EXPECT--

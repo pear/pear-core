@@ -90,7 +90,7 @@ $phpunit->assertEquals(array (
   ),
   3 => 
   array (
-    0 => 'Tag the released code with `pear cvstag ' . $temp_path . DIRECTORY_SEPARATOR . 'validv2.xml\'',
+    0 => 'Tag the released code with "pear cvstag ' . $temp_path . DIRECTORY_SEPARATOR . 'validv2.xml"',
     1 => true,
   ),
   4 => 
