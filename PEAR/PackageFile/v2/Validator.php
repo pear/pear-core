@@ -201,6 +201,7 @@ class PEAR_PackageFile_v2_Validator
             }
             $tag = $xml[$key];
             if (isset($test['choices'])) {
+                $loose = true;
                 foreach ($test['choices'] as $choice) {
                     if ($key == $choice['tag']) {
                         if ($this->_processAttribs($choice, $tag, $root)) {
@@ -209,9 +210,18 @@ class PEAR_PackageFile_v2_Validator
                         }
                         return false;
                     }
+                    if (!isset($choice['multiple']) || $choice['multiple'] != '*') {
+                        $loose = false;
+                    }
                 }
-                $this->_invalidTagOrder($test['choices'], $key, $root);
-                return false;
+                if (!$loose) {
+                    $tags = array();
+                    foreach ($test['choices'] as $choice) {
+                        $tags[] = $choice['tag'];
+                    }
+                    $this->_invalidTagOrder($tags, $key, $root);
+                    return false;
+                }
             } else {
                 if ($key != $test['tag']) {
                     if (isset($test['multiple']) && $test['multiple'] != '*') {
@@ -870,9 +880,6 @@ class PEAR_PackageFile_v2_Validator
             }
             if (isset($this->_packageInfo['extsrcrelease'][0])) {
                 return $this->_extsrcCanOnlyHaveOneRelease();
-            }
-            if (!isset($this->_packageInfo['extsrcrelease']['providesextension'])) {
-                return $this->_invalidTagOrder(array('providesextension'), '', '<extsrcrelease>');
             }
             if (isset($this->_packageInfo['extsrcrelease']['configureoption'])) {
                 $options = $this->_packageInfo['extsrcrelease']['configureoption'];
