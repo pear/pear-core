@@ -285,6 +285,13 @@ class PEAR_Downloader_Package
                         }
                         $params[$i] = false;
                     }
+                } elseif (!isset($options['force']) && !isset($options['upgrade']) &&
+                      !isset($options['soft'])) {
+                    $info = $param->getParsedPackage();
+                    $param->_downloader->log(1, 'Skipping package "' .
+                        $param->_registry->parsedPackageNameToString($info, true) .
+                        '", already installed as version ' . $param->getVersion());
+                    $params[$i] = false;
                 }
             }
         }
@@ -1159,7 +1166,8 @@ class PEAR_Downloader_Package
                         if (!isset($options['soft'])) {
                             $this->_downloader->log(0, 'Channel "' . $parsed['channel'] .
                                 '" is not initialized, use ' .
-                                '"pear discover ' . $parsed['channel'] . '" to initialize');
+                                '"pear channel-discover ' . $parsed['channel'] . '" to initialize' .
+                                'or pear config-set auto_discover 1');
                         }
                     }
                 }
