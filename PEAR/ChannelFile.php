@@ -370,7 +370,8 @@ class PEAR_ChannelFile {
     {
         if (!@is_file($descfile) || !is_readable($descfile) ||
              (!$fp = @fopen($descfile, 'r'))) {
-            return $this->raiseError("Unable to open $descfile");
+            require_once 'PEAR.php';
+            return PEAR::raiseError("Unable to open $descfile");
         }
 
         // read the whole thing so we only get one cdata callback
@@ -404,7 +405,8 @@ class PEAR_ChannelFile {
                 }
             }
             if (PEAR::isError($info)) {
-                return $this->raiseError($info);
+                require_once 'PEAR.php';
+                return PEAR::raiseError($info);
             }
         }
         if (is_string($info)) {
