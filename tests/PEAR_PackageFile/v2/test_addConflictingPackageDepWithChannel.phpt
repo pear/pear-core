@@ -46,7 +46,7 @@ $phpunit->assertEquals(array (
     array (
       'name' => 'fakeo',
       'channel' => 'gronko',
-      'conflicts' => 'yes',
+      'conflicts' => '',
     ),
   ),
 ), $pf->getDeps(true), 'clear failed');
@@ -69,12 +69,12 @@ $phpunit->assertEquals(array (
       array(
         'name' => 'fakeo',
         'channel' => 'gronko',
-        'conflicts' => 'yes',
+        'conflicts' => '',
       ),
       array(
         'name' => 'fakeo',
         'channel' => 'gronko2',
-        'conflicts' => 'yes',
+        'conflicts' => '',
       ),
     ),
   ),
@@ -101,17 +101,17 @@ $phpunit->assertEquals(array (
       array(
         'name' => 'fakeo',
         'channel' => 'gronko',
-        'conflicts' => 'yes',
+        'conflicts' => '',
       ),
       array(
         'name' => 'fakeo',
         'channel' => 'gronko2',
-        'conflicts' => 'yes',
+        'conflicts' => '',
       ),
       array(
         'name' => 'fakeo1',
         'channel' => 'gronko2',
-        'conflicts' => 'yes',
+        'conflicts' => '',
         'providesextension' => 'blooba',
       ),
     ),

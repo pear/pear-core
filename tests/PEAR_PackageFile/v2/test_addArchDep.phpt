@@ -60,7 +60,7 @@ $phpunit->assertEquals(array (
       1 => 
       array (
         'pattern' => 'linux|darwin',
-        'conflicts' => 'yes',
+        'conflicts' => '',
       ),
     ),
   ),

@@ -61,7 +61,7 @@ $phpunit->assertEquals(array (
       1 => 
       array (
         'name' => 'linux',
-        'conflicts' => 'yes',
+        'conflicts' => '',
       ),
     ),
   ),
