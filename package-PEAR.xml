@@ -127,6 +127,9 @@
 
   Specific changes from 1.4.0a8:
   * add --package option to run-tests command, to run installed .phpt tests
+  * significantly drop pear's memory footprint for all commands except powerhouse commands like
+    &quot;pear package&quot;
+  * fix fatal errors when installing pecl packages
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -156,34 +159,43 @@
      </file>
     </dir>
     <dir name="Command">
+     <file role="php" name="Auth-init.php"/>
      <file role="php" name="Auth.php">
       <replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file role="php" name="Build-init.php"/>
      <file role="php" name="Build.php">
       <replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file role="php" name="Channels-init.php"/>
      <file role="php" name="Channels.php">
       <replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file role="php" name="Common.php">
       <replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file role="php" name="Config-init.php"/>
      <file role="php" name="Config.php">
       <replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file role="php" name="Install-init.php"/>
      <file role="php" name="Install.php">
       <replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file role="php" name="Package-init.php"/>
      <file role="php" name="Package.php">
       <replace from="@DATA-DIR@" to="data_dir" type="pear-config" />
       <replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file role="php" name="Registry-init.php"/>
      <file role="php" name="Registry.php">
       <replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file role="php" name="Remote-init.php"/>
      <file role="php" name="Remote.php">
       <replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file role="php" name="Mirror-init.php"/>
      <file role="php" name="Mirror.php">
       <replace from="@package_version@" to="version" type="package-info" />
      </file>
