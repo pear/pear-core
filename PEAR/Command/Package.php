@@ -269,12 +269,6 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
         if (isset($options['showname'])) {
             $this->output = $result;
         }
-        /* (cox) What is supposed to do that code?
-        $lines = explode("\n", $this->output);
-        foreach ($lines as $line) {
-            $this->output .= $line."n";
-        }
-        */
         if (PEAR::isError($result)) {
             $this->output .= "Package failed: ".$result->getMessage();
         }
@@ -673,6 +667,7 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
             if (!isset($attr['role'])) {
                 continue;
             }
+            $name = preg_replace('![/:\\\\]!', '/', $name);
             if ($attr['role'] == 'doc') {
                 $info['doc_files'] .= " $name";
 

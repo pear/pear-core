@@ -4,16 +4,16 @@
   <name>PEAR</name>
   <summary>PEAR Base System</summary>
   <description>The PEAR package contains:
- * the PEAR base class
- * the PEAR_Error error handling mechanism
- * the alpha-quality PEAR_Exception php5-only exception class
- * the beta-quality PEAR_ErrorStack advanced error handling mechanism
  * the PEAR installer, for creating, distributing
    and installing packages
+ * the alpha-quality PEAR_Exception php5-only exception class
+ * the beta-quality PEAR_ErrorStack advanced error handling mechanism
+ * the PEAR_Error error handling mechanism
  * the OS_Guess class for retrieving info about the OS
    where PHP is running on
  * the System class for quick handling common operations
    with files and directories
+ * the PEAR base class
 </description>
   <maintainers>
     <maintainer>
@@ -72,8 +72,6 @@ Other:
         <file role="php" name="Guess.php"/>
       </dir>
       <dir name="PEAR">
-        <file role="php" name="Autoloader.php"/>
-        <file role="php" name="Command.php"/>
         <dir name="Command">
           <file role="php" name="Auth.php"/>
           <file role="php" name="Build.php"/>
@@ -85,14 +83,17 @@ Other:
           <file role="php" name="Remote.php"/>
           <file role="php" name="Mirror.php"/>
         </dir>
+        <dir name="Frontend">
+          <file role="php" name="CLI.php"/>
+        </dir>
+        <file role="php" name="Autoloader.php"/>
+        <file role="php" name="Command.php"/>
         <file role="php" name="Common.php"/>
         <file role="php" name="Config.php"/>
         <file role="php" name="Dependency.php"/>
         <file role="php" name="Downloader.php"/>
+        <file role="php" name="Exception.php"/>
         <file role="php" name="ErrorStack.php"/>
-        <dir name="Frontend">
-          <file role="php" name="CLI.php"/>
-        </dir>
         <file role="php" name="Builder.php"/>
         <file role="php" name="Installer.php"/>
         <file role="php" name="Packager.php"/>
@@ -120,7 +121,6 @@ Other:
       </dir>
       <file role="data" name="package.dtd"/>
       <file role="data" name="template.spec"/>
-      <file role="php" name="Exception.php"/>
       <file role="php" name="PEAR.php"/>
       <file role="php" name="System.php"/>
     </filelist>
