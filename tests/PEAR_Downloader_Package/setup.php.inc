@@ -80,7 +80,7 @@ function &newDownloaderPackage($options)
 {
     global $config, $fakelog;
     $downloader = &new test_PEAR_Downloader($fakelog, $options, $config);
-    $p = &new PEAR_Downloader_Package($downloader);
+    $p = &new test_PEAR_Downloader_Package($downloader);
     return $p;
 }
 ?>
