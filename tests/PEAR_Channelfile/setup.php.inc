@@ -1,5 +1,5 @@
 <?php
-include "PEAR/Channelfile.php";
+include "PEAR/ChannelFile.php";
 require_once dirname(dirname(__FILE__)) . '/phpt_test.php.inc';
 function postprocess($string)
 {
