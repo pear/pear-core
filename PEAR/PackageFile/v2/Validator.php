@@ -83,8 +83,7 @@ class PEAR_PackageFile_v2_Validator
             '*compatible',
             'dependencies', //special validation needed
             '*providesextension',
-            '*srcpackage',
-            '*srcchannel|*srcuri',
+            '*srcpackage|*srcuri',
             '+phprelease|extsrcrelease|+extbinrelease|bundle' //special validation needed
         );
         $test = $this->_packageInfo;
@@ -912,11 +911,8 @@ class PEAR_PackageFile_v2_Validator
             if (!isset($this->_packageInfo['srcpackage'])) {
                 $this->_mustSrcPackage();
             }
-            if (!isset($this->_packageInfo['srcchannel']) && !isset($this->_packageInfo['srcuri'])) {
-                $this->_mustSrcChannelOrUri();
-            }
-            if (isset($this->_packageInfo['srcchannel']) && isset($this->_packageInfo['srcuri'])) {
-                $this->_mustSrcChannelXorUri();
+            if (!isset($this->_packageInfo['channel']) && !isset($this->_packageInfo['srcuri'])) {
+                $this->_mustSrcuri();
             }
             $r = $this->_packageInfo['extbinrelease'];
             if (!isset($r[0])) {
@@ -1186,16 +1182,10 @@ class PEAR_PackageFile_v2_Validator
             '<extbinrelease> packages must specify a source code package');
     }
 
-    function _mustSrcChannelOrUri()
+    function _mustSrcuri()
     {
         $this->_stack->push(__FUNCTION__, 'error', array('release' => $release),
-            '<srcpackage> must be accompanied by <srcchannel> or <srcuri>');
-    }
-
-    function _mustSrcChannelXorUri()
-    {
-        $this->_stack->push(__FUNCTION__, 'error', array('release' => $release),
-            '<srcpackage> must be accompanied by <srcchannel> or <srcuri>, and not both');
+            '<srcpackage> must be accompanied by <srcuri>');
     }
 
     function _analyzePhpFiles()
