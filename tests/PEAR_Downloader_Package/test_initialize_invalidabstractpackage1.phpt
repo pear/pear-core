@@ -18,18 +18,25 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
 $dp = &newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('test');
-$phpunit->assertErrors(array('package' => 'PEAR_Error', 'message' =>
+$phpunit->assertErrors(array(array('package' => 'PEAR_Error', 'message' =>
     'No releases for package "pear/test" exist'),
-    'after initialize');
+    array('package' => 'PEAR_Error', 'message' =>
+    "Cannot initialize 'test', invalid or missing package file"),
+), 'after initialize');
 $phpunit->assertEquals(array (
   0 => 
+  array (
+    0 => 0,
+    1 => 'No releases for package "pear/test" exist',
+  ),
+  1 =>
   array (
     0 => 3,
     1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
-$phpunit->assertNull($result, 'after initialize');
+$phpunit->assertIsa('PEAR_Error', $result, 'after initialize');
 $phpunit->assertNull($dp->getPackageFile(), 'downloadable test');
 echo 'tests done';
 ?>
