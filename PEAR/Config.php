@@ -594,6 +594,7 @@ class PEAR_Config extends PEAR
                     return $e;
                 }
                 $tmp = System::mktemp('-d');
+                PEAR_Common::addTempFile($tmp);
                 $e = $this->_ftp->get(basename($path), $tmp . DIRECTORY_SEPARATOR .
                     'pear.ini', false, FTP_BINARY);
                 if (PEAR::isError($e)) {
