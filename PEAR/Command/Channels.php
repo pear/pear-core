@@ -182,6 +182,7 @@ List the files in an installed package.
         require_once 'System.php';
         $tmpdir = System::mktemp(array('-d'));
         foreach ($channels as $channel) {
+            $channel = $channel[0];
             $save = $channel;
             if ($reg->channelExists($channel, true)) {
                 $this->ui->outputData("Updating channel \"$channel\"");
