@@ -19,9 +19,9 @@
   $Id$
 */
 
-require_once "PEAR.php";
+require_once "PEAR/Frontend.php";
 
-class PEAR_Frontend_CLI extends PEAR
+class PEAR_Frontend_CLI extends PEAR_Frontend
 {
     // {{{ properties
 
@@ -150,6 +150,118 @@ class PEAR_Frontend_CLI extends PEAR
     }
 
     // }}}
+    /**
+     * @param array $xml contents of postinstallscript tag
+     * @param object $script post-installation script
+     * @param string install|upgrade
+     */
+    function runInstallScript($xml, &$script, $installtype)
+    {
+        if (!is_array($xml) || !isset($xml['paramgroup'])) {
+            $script->run(array(), '_default', $installtype);
+        } else {
+            $completedPhases = array();
+            if (!isset($xml['paramgroup'][0])) {
+                $xml['paramgroup'] = array($xml['paramgroup']);
+            }
+            foreach ($xml['paramgroup'] as $group) {
+                if (isset($group['name'])) {
+                    $paramname = explode('::', $group['name']);
+                    if ($lastgroup['id'] != $paramname[0]) {
+                        continue;
+                    }
+                    $group['name'] = $paramname[1];
+                    if (isset($answers)) {
+                        if (isset($answers[$group['name']])) {
+                            switch ($group['conditiontype']) {
+                                case '=' :
+                                    if ($answers[$group['name']] != $group['value']) {
+                                        continue 2;
+                                    }
+                                break;
+                                case '!=' :
+                                    if ($answers[$group['name']] == $group['value']) {
+                                        continue 2;
+                                    }
+                                break;
+                                case 'preg_match' :
+                                    if (!@preg_match('/' . $group['value'] . '/',
+                                          $answers[$group['name']])) {
+                                        continue 2;
+                                    }
+                                break;
+                                default :
+                                return;
+                            }
+                        }
+                    } else {
+                        return;
+                    }
+                }
+                $lastgroup = $group;
+                if (!isset($group['param'][0])) {
+                    $group['param'] = array($group['param']);
+                }
+                $answers = $this->confirmDialog($group['param']);
+                if ($answers) {
+                    array_unshift($completedPhases, $group['id']);
+                    if (!$script->run($answers, $group['id'], $installtype)) {
+                        $script->run($completedPhases, '_undoOnError', $installtype);
+                        return;
+                    }
+                } else {
+                    $script->run($completedPhases, '_undoOnError', $installtype);
+                    return;
+                }
+            }
+        }
+    }
+
+    /**
+     * Ask for user input, confirm the answers and continue until the user is satisfied
+     * @param array an array of arrays, format array('name' => 'paramname', 'prompt' =>
+     *              'text to display', 'type' => 'string'[, default => 'default value'])
+     * @return array
+     */
+    function confirmDialog($params)
+    {
+        $answers = array();
+        $prompts = $types = array();
+        foreach ($params as $param) {
+            $prompts[$param['name']] = $param['prompt'];
+            $types[$param['name']] = $param['type'];
+            if (isset($param['default'])) {
+                $answers[$param['name']] = $param['default'];
+            } else {
+                $answers[$param['name']] = '';
+            }
+        }
+        do {
+            $ok = array('yesno' => 'no');
+            do {
+                $answers = $this->userDialog('', $prompts, $types, $answers);
+            } while (count(array_filter($answers)) != count($prompts));
+            $this->outputData('Your choices:');
+            foreach ($prompts as $name => $prompt) {
+                $this->outputData($prompt . ': ' . $answers[$name]);
+            }
+            $ok = $this->userDialog('',
+                array(
+                    'yesno' => 'These Choices OK? (use "abort" to halt)'
+                ),
+                array(
+                    'yesno' => 'string',
+                ),
+                array(
+                    'yesno' => 'yes'
+                )
+            );
+            if ($ok['yesno'] == 'abort') {
+                return false;
+            }
+        } while ($ok['yesno'] != 'yes');
+        return $answers;
+    }
     // {{{ userDialog(prompt, [type], [default])
 
     function userDialog($command, $prompts, $types = array(), $defaults = array())
@@ -391,6 +503,14 @@ class PEAR_Frontend_CLI extends PEAR
     function outputData($data, $command = '_default')
     {
         switch ($command) {
+            case 'channel-info':
+                foreach ($data as $type => $section) {
+                    if ($type == 'main') {
+                        $section['data'] = array_values($section['data']);
+                    }
+                    $this->outputData($section);
+                }
+                break;
             case 'install':
             case 'upgrade':
             case 'upgrade-all':

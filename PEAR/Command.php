@@ -19,7 +19,8 @@
 // $Id$
 
 
-require_once "PEAR.php";
+require_once 'PEAR.php';
+require_once 'PEAR/Frontend.php';
 
 /**
  * List of commands and what classes they are implemented in.
@@ -38,18 +39,6 @@ $GLOBALS['_PEAR_Command_shortcuts'] = array();
  * @var array class => object
  */
 $GLOBALS['_PEAR_Command_objects'] = array();
-
-/**
- * Which user interface class is being used.
- * @var string class name
- */
-$GLOBALS['_PEAR_Command_uiclass'] = 'PEAR_Frontend_CLI';
-
-/**
- * Instance of $_PEAR_Command_uiclass.
- * @var object
- */
-$GLOBALS['_PEAR_Command_uiobject'] = null;
 
 /**
  * PEAR command class, a simple factory class for administrative
@@ -140,13 +129,8 @@ class PEAR_Command
      */
     function &getFrontendObject()
     {
-        if (empty($GLOBALS['_PEAR_Command_uiobject'])) {
-            $e = PEAR_Command::setFrontendClass($GLOBALS['_PEAR_Command_uiclass']);
-            if (PEAR::isError($e)) {
-                return $e;
-            }
-        }
-        return $GLOBALS['_PEAR_Command_uiobject'];
+        $a = &PEAR_Frontend::singleton();
+        return $a;
     }
 
     // }}}
@@ -162,58 +146,12 @@ class PEAR_Command
      */
     function &setFrontendClass($uiclass)
     {
-        if (is_object($GLOBALS['_PEAR_Command_uiobject']) &&
-              is_a($GLOBALS['_PEAR_Command_uiobject'], $uiclass)) {
-            return $GLOBALS['_PEAR_Command_uiobject'];
-        }
-        if (!class_exists($uiclass)) {
-            $file = str_replace('_', '/', $uiclass) . '.php';
-            if (PEAR_Command::isIncludeable($file)) {
-                include_once $file;
-            }
-        }
-        if (class_exists($uiclass)) {
-            $obj = &new $uiclass;
-            // quick test to see if this class implements a few of the most
-            // important frontend methods
-            if (method_exists($obj, 'userConfirm')) {
-                $GLOBALS['_PEAR_Command_uiobject'] = &$obj;
-                $GLOBALS['_PEAR_Command_uiclass'] = $uiclass;
-                return $obj;
-            } else {
-                $err = PEAR::raiseError("not a frontend class: $uiclass");
-                return $err;
-            }
-        }
-        $err = PEAR::raiseError("no such class: $uiclass");
-        return $err;
+        $a = &PEAR_Frontend::setFrontendClass($uiclass);
+        return $a;
     }
 
     // }}}
     // {{{ setFrontendType()
-
-    // }}}
-    // {{{ isIncludeable()
-
-    /**
-     * @param string $path relative or absolute include path
-     * @return boolean
-     * @static
-     */
-    function isIncludeable($path)
-    {
-        if (file_exists($path) && is_readable($path)) {
-            return true;
-        }
-        $ipath = explode(PATH_SEPARATOR, ini_get('include_path'));
-        foreach ($ipath as $include) {
-            $test = realpath($include . DIRECTORY_SEPARATOR . $path);
-            if (file_exists($test) && is_readable($test)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * Set current frontend.

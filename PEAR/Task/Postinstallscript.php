@@ -17,44 +17,49 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
      * This also attempts to validate the script to make sure it meets the criteria
      * for a post-install script
      * @param PEAR_PackageFile_v2
-     * @param array
+     * @param array The XML contents of the <postinstallscript> tag
      * @param PEAR_Config
      * @param array the entire parsed <file> tag
      * @static
      */
     function validateXml($pkg, $xml, &$config, $fileXml)
     {
-        if ($fileXml['attribs']['role'] != 'php') {
+        if ($fileXml['role'] != 'php') {
             return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
-            $fileXml['attribs']['name'] . '" must be role="php"');
+            $fileXml['name'] . '" must be role="php"');
         }
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-        $file = $pkg->getFileContents($fileXml['attribs']['name']);
+        $file = $pkg->getFileContents($fileXml['name']);
         if (PEAR::isError($file)) {
+            PEAR::popErrorHandling();
             return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
-                $fileXml['attribs']['name'] . '"is not valid: ' .
+                $fileXml['name'] . '"is not valid: ' .
                 $file->getMessage());
         } else {
             $analysis = $pkg->analyzeSourceCode($file, true);
             if (PEAR::isError($analysis)) {
+                PEAR::popErrorHandling();
                 return array(PEAR_TASK_ERROR_INVALID, 'Analysis of post-install script "' .
-                    $fileXml['attribs']['name'] . '"failed');
+                    $fileXml['name'] . '"failed');
             }
             if (count($analysis['declared_classes']) != 1) {
+                PEAR::popErrorHandling();
                 return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
-                    $fileXml['attribs']['name'] . '"must declare exactly 1 class');
+                    $fileXml['name'] . '"must declare exactly 1 class');
             }
             $class = $analysis['declared_classes'][0];
             if ($class != str_replace(array('/', '.php'), array('_', ''),
-                  $fileXml['attribs']['name']) . '_postinstall') {
+                  $fileXml['name']) . '_postinstall') {
+                PEAR::popErrorHandling();
                 return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
-                    $fileXml['attribs']['name'] . '" class "' . $class . '" must be named "' .
+                    $fileXml['name'] . '" class "' . $class . '" must be named "' .
                     str_replace(array('/', '.php'), array('_', ''),
-                    $fileXml['attribs']['name']) . '_postinstall"');
+                    $fileXml['name']) . '_postinstall"');
             }
             if (!isset($analysis['declared_methods'][$class])) {
+                PEAR::popErrorHandling();
                 return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
-                    $fileXml['attribs']['name'] . '" must declare methods init() and run()');
+                    $fileXml['name'] . '" must declare methods init() and run()');
             }
             $methods = array('init' => 0, 'run' => 1);
             foreach ($analysis['declared_methods'][$class] as $method) {
@@ -63,11 +68,86 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
                 }
             }
             if (count($methods)) {
+                PEAR::popErrorHandling();
                 return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
-                    $fileXml['attribs']['name'] . '"must declare methods init() and run()');
+                    $fileXml['name'] . '" must declare methods init() and run()');
             }
         }
         PEAR::popErrorHandling();
+        $definedparams = array();
+        if (isset($xml['paramgroup'])) {
+            $params = $xml['paramgroup'];
+            if (!is_array($params) || !isset($params[0])) {
+                $params = array($params);
+            }
+            foreach ($params as $param) {
+                if (!isset($param['id'])) {
+                    return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
+                        $fileXml['name'] . '" <paramgroup> must have ' .
+                        'an <id> tag');
+                }
+                if (isset($param['name'])) {
+                    if (!in_array($param['name'], $definedparams)) {
+                        return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
+                            $fileXml['name'] . '" <paramgroup> id "' . $param['id'] .
+                            '" parameter "' . $param['name'] . '" has not been previously defined');
+                    }
+                    if (!isset($param['conditiontype'])) {
+                        return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
+                            $fileXml['name'] . '" <paramgroup> id "' . $param['id'] .
+                            '" must have a <conditiontype> tag containing either "=", ' .
+                            '"!=", or "preg_match"');
+                    }
+                    if (!in_array($param['conditiontype'], array('=', '!=', 'preg_match'))) {
+                        return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
+                            $fileXml['name'] . '" <paramgroup> id "' . $param['id'] .
+                            '" must have a <conditiontype> tag containing either "=", ' .
+                            '"!=", or "preg_match"');
+                    }
+                    if (!isset($param['value'])) {
+                        return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
+                            $fileXml['name'] . '" <paramgroup> id "' . $param['id'] .
+                            '" must have a <value> tag containing expected parameter value');
+                    }
+                }
+                if (!isset($param['param'])) {
+                    return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
+                        $fileXml['name'] . '" <paramgroup> id "' . $param['id'] .
+                        '" must contain one or more <param> tags');
+                }
+                $subparams = $param['param'];
+                if (!is_array($subparams) || !isset($subparams[0])) {
+                    $subparams = array($subparams);
+                }
+                foreach ($subparams as $subparam) {
+                    if (!isset($subparam['name'])) {
+                        return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
+                            $fileXml['name'] . '" parameter for ' .
+                            '<paramgroup> id "' . $param['id'] . '" must have ' .
+                            'a <name> tag');
+                    }
+                    if (!preg_match('/[a-zA-Z0-9]+/', $subparam['name'])) {
+                        return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
+                            $fileXml['name'] . '" parameter "' .
+                            $subparam['name'] . '" for <paramgroup> id "' . $param['id'] .
+                            '" is not a valid name.  Must contain only alphanumeric characters');
+                    }
+                    if (!isset($subparam['prompt'])) {
+                        return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
+                            $fileXml['name'] . '" parameter "' .
+                            $subparam['name'] . '" for <paramgroup> id "' . $param['id'] .
+                            '" must have a <prompt> tag');
+                    }
+                    if (!isset($subparam['type'])) {
+                        return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
+                            $fileXml['name'] . '" parameter "' .
+                            $subparam['name'] . '" for <paramgroup> id "' . $param['id'] .
+                            '" must have a <type> tag');
+                    }
+                    $definedparams[] = $param['id'] . '::' . $subparam['name'];
+                }
+            }
+        }
         return true;
     }
 
@@ -81,6 +161,7 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
         $this->_class = str_replace('/', '_', $fileattribs['name']);
         $this->_filename = $fileattribs['name'];
         $this->_class = str_replace ('.php', '', $this->_class) . '_postinstall';
+        $this->_params = $xml;
     }
 
     /**
@@ -120,13 +201,15 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
     /**
      * Run the post-installation script
      * @param array an array of tasks
+     * @param string install or upgrade
      * @access protected
      * @static
      */
-    function run($tasks)
+    function run($tasks, $installphase)
     {
         foreach ($tasks as $i => $task) {
-            $tasks[$i]->_obj->run();
+            $tasks[$i]->installer->ui->runInstallScript($tasks[$i]->_params, $tasks[$i]->_obj,
+                $installphase);
         }
     }
 }
