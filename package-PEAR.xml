@@ -164,7 +164,9 @@ PEAR_ErrorStack:
     <file role="php" name="ChannelFile.php"/>
     <file role="php" name="Config.php"/>
     <file role="php" name="Dependency.php"/>
-    <file role="php" name="Dependency2.php"/>
+    <file role="php" name="Dependency2.php">
+     <replace from="@PEAR-VER@" to="version" type="package-info"/>
+    </file>
     <file role="php" name="Downloader.php"/>
     <file role="php" name="ErrorStack.php"/>
     <file role="php" name="Builder.php"/>
