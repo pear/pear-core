@@ -1719,7 +1719,7 @@ class PEAR_PackageFile_v2
                 'conflicts' => 'yes',
             );
         if ($providesextension) {
-            $dep['providesextension'] = true;
+            $dep['providesextension'] = $providesextension;
         }
         $this->_mergeTag($this->_packageInfo, $dep,
             array(
