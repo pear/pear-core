@@ -57,6 +57,7 @@
    properly
  * fix Bug #2861: package.dtd does not define NUMBER
  * fix Bug #2946: ini_set warning errors
+ * implement Request #2914: Dynamic Include Path for run-tests command
  * make pear help listing more useful (put how-to-use info at the bottom of the listing)
     </notes>
     <provides type="class" name="OS_Guess" />
