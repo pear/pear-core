@@ -1,5 +1,5 @@
 --TEST--
-list-all command
+list-all command, bug #4072 - installed packages not listed for list-all -c option
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
