@@ -54,7 +54,7 @@ $ftp->setConnectError(false);
 $ftp->setCdError(false);
 $e = $config->readFTPConfigFile('ftp://example.com/config.ini');
 $phpunit->assertIsa('PEAR_Error', $e, 'ftp://example.com/config.ini file not found');
-$phpunit->assertEquals('file not found', $e->getMessage(),
+$phpunit->assertEquals('File \'config.ini\' could not be downloaded to \'local\'.', $e->getMessage(),
     'message ftp://example.com/config.ini file not found');
 
 $ftp->addRemoteFile('config.ini', dirname(__FILE__) . DIRECTORY_SEPARATOR .
