@@ -49,7 +49,7 @@ List all installed packages in all channels.
         'channel-delete' => array(
             'summary' => 'Remove a Channel From the List',
             'function' => 'doDelete',
-            'shortcut' => 'cd',
+            'shortcut' => 'cde',
             'options' => array(),
             'doc' => '<channel name>
 Delete a channel from the registry.  You may not

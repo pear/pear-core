@@ -26,6 +26,10 @@ ob_end_clean();
  */
 if ('@include_path@' != '@'.'include_path'.'@') {
     ini_set('include_path', '@include_path@');
+    $raw = false;
+} else {
+    // this is a raw, uninstalled pear, either a cvs checkout, or php distro
+    $raw = true;
 }
 ini_set('allow_url_fopen', true);
 if (!ini_get('safe_mode')) {
@@ -38,8 +42,12 @@ ini_set('magic_quotes_runtime', false);
 set_error_handler('error_handler');
 
 $pear_package_version = "@pear_version@";
+if ($raw) {
+    $pear_package_version = '1.4.0a1';
+}
 
 require_once 'PEAR.php';
+require_once 'PEAR/Frontend.php';
 require_once 'PEAR/Config.php';
 require_once 'PEAR/Command.php';
 require_once 'Console/Getopt.php';
@@ -102,6 +110,19 @@ $config = &PEAR_Config::singleton($pear_user_config, $pear_system_config);
 $verbose = $config->get("verbose");
 $cmdopts = array();
 
+if ($raw) {
+    if (!$config->isDefinedLayer('user') && !$config->isDefinedLayer('system')) {
+        $found = false;
+        foreach ($opts as $opt) {
+            if ($opt[0] == 'd' || $opt[0] == 'D') {
+                $found = true; // the user knows what they are doing, and are setting config values
+            }
+        }
+        if (!$found) {
+            // no prior runs, try to install PEAR
+        }
+    }
+}
 foreach ($opts as $opt) {
     $param = !empty($opt[1]) ? $opt[1] : true;
     switch ($opt[0]) {
@@ -165,7 +186,7 @@ if ($fetype == 'Gtk') {
     $cmd = PEAR_Command::factory($command, $config);
     PEAR::popErrorHandling();
     if (PEAR::isError($cmd)) {
-        usage(null, @$options[1][1]);
+        usage(null, @$options[1][0]);
     }
 
     $short_args = $long_args = null;
@@ -222,6 +243,7 @@ function usage($error = null, $helpsubject = null)
         $put =
             "Usage: $progname [options] command [command-options] <parameters>\n".
             "Type \"$progname help options\" to list all options.\n".
+            "Type \"$progname help shortcuts\" to list all command shortcuts.\n".
             "Type \"$progname help <command>\" to get the help for the specified command.\n".
             "Commands:\n";
         $maxlen = max(array_map("strlen", $all_commands));

@@ -107,7 +107,7 @@ displays help for all configuration parameters.
         'config-create' => array(
             'summary' => 'Create a Default configuration file',
             'function' => 'doConfigCreate',
-            'shortcut' => 'cc',
+            'shortcut' => 'coc',
             'options' => array(),
             'doc' => '<root path> <filename>
 Create a default configuration file with all directory configuration

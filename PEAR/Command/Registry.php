@@ -48,7 +48,7 @@ lists the files in a package.
         'list-installed' => array(
             'summary' => 'List All Installed Packages In All Channels',
             'function' => 'doListAll',
-            'shortcut' => 'la',
+            'shortcut' => 'lin',
             'options' => array(),
             'doc' => '
 List all installed packages in all channels.
