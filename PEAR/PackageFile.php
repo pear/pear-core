@@ -41,11 +41,28 @@ class PEAR_PackageFile
     var $_config;
     var $_debug;
     var $_tmpdir;
+    var $_logger = false;
+    var $_rawReturn = false;
     function PEAR_PackageFile(&$config, $debug = false, $tmpdir = false)
     {
         $this->_config = $config;
         $this->_debug = $debug;
         $this->_tmpdir = $tmpdir;
+    }
+
+    /**
+     * Turn off validation - return a parsed package.xml without checking it
+     *
+     * This is used by the package-validate command
+     */
+    function rawReturn()
+    {
+        $this->_rawReturn = true;
+    }
+
+    function setLogger(&$l)
+    {
+        $this->_logger = &$l;
     }
 
     function &parserFactory($version, $phpversion = false)
@@ -144,9 +161,15 @@ class PEAR_PackageFile
                     '" is not supported, only 1.0 and 2.0 are supported.');
             }
             $object = &$this->parserFactory($packageversion[1]);
+            if ($this->_logger) {
+                $object->setLogger($this->_logger);
+            }
             $object->setConfig($this->_config);
             $pf = $object->parse($data, $file, $archive);
             if (PEAR::isError($pf)) {
+                return $pf;
+            }
+            if ($this->_rawReturn) {
                 return $pf;
             }
             if ($pf->validate($state)) {
@@ -172,6 +195,9 @@ class PEAR_PackageFile
             $object->setConfig($this->_config);
             $pf = $object->parse($data, $state, $file, $archive);
             if (PEAR::isError($pf)) {
+                return $pf;
+            }
+            if ($this->_rawReturn) {
                 return $pf;
             }
             if ($pf->validate($state)) {
