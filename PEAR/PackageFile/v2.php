@@ -73,6 +73,78 @@ class PEAR_PackageFile_v2
         $this->_isValid = false;
     }
 
+    function &getPEARDownloader(&$i, $o, &$c)
+    {
+        $z = &new PEAR_Downloader($i, $o, $c);
+        return $z;
+    }
+
+    /**
+     * Installation of source package has failed, attempt to download and install the
+     * binary version of this package
+     * @param PEAR_Installer
+     */
+    function installBinary(&$installer)
+    {
+        if ($this->getPackageType() == 'extsrc') {
+            foreach ($installer->getInstallPackages() as $p) {
+                if ($p->isExtension($this->_packageInfo['extsrcrelease']['providesextension'])) {
+                    if ($p->getPackage() != $this->getPackage() &&
+                          $p->getChannel() != $this->getChannel()) {
+                        return false; // the user probably downloaded it separately
+                    }
+                }
+            }
+            if (isset($this->_packageInfo['extsrcrelease']['binarypackage'])) {
+                $installer->log(0, 'Attempting to download binary version of extension "' .
+                    $this->_packageInfo['extsrcrelease']['providesextension'] . '"');
+                $params = $this->_packageInfo['extsrcrelease']['binarypackage'];
+                if (!isset($params[0])) {
+                    $params = array($params);
+                }
+                if (isset($this->_packageInfo['channel'])) {
+                    foreach ($params as $i => $param) {
+                        $params[$i] = array('channel' => $this->_packageInfo['channel'],
+                            'package' => $param);
+                    }
+                }
+                $dl = &$this->getPEARDownloader($installer->ui, $installer->getOptions(),
+                    $installer->config);
+                $verbose = $dl->config->get('verbose');
+                $dl->config->set('verbose', -1);
+                foreach ($params as $param) {
+                    PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                    $ret = $dl->download(array($param));
+                    PEAR::popErrorHandling();
+                    if (is_array($ret)) {
+                        break;
+                    }
+                }
+                $dl->config->set('verbose', $verbose);
+                if (is_array($ret)) {
+                    if (count($ret) == 1) {
+                        $pf = $ret[0]->getPackageFile();
+                        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                        $ret = $installer->install($pf);
+                        PEAR::popErrorHandling();
+                        if (is_array($ret)) {
+                            $installer->log(0, 'Download and install of binary extension "' .
+                                $this->_registry->parsedPackageNameToString(
+                                    array('channel' => $pf->getChannel(),
+                                          'package' => $pf->getPackage())) . '" successful');
+                            return true;
+                        }
+                        $installer->log(0, 'Download and install of binary extension "' .
+                            $this->_registry->parsedPackageNameToString(
+                                    array('channel' => $pf->getChannel(),
+                                          'package' => $pf->getPackage())) . '" failed');
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     function isExtension($name)
     {
         if (in_array($this->getPackageType(), array('extsrc', 'extbin'))) {
@@ -865,14 +937,57 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $this->_isValid = 0;
     }
 
+    /**
+     * Determines whether this package claims it is compatible with the version of
+     * the package that has a recommended version dependency
+     * @param PEAR_PackageFile_v2|PEAR_PackageFile_v1|PEAR_Downloader_Package
+     * @return boolean
+     */
+    function isCompatible($pf)
+    {
+        if (!isset($this->_packageInfo['compatible'])) {
+            return false;
+        }
+        if (!isset($this->_packageInfo['channel'])) {
+            return false;
+        }
+        $me = $pf->getVersion();
+        $compatible = $this->_packageInfo['compatible'];
+        if (!isset($compatible[0])) {
+            $compatible = array($compatible);
+        }
+        $found = false;
+        foreach ($compatible as $info) {
+            if (strtolower($info['package']) == strtolower($pf->getPackage())) {
+                if (strtolower($info['channel']) == strtolower($pf->getChannel())) {
+                    $found = true;
+                    break;
+                }
+            }
+        }
+        if (!$found) {
+            return false;
+        }
+        if (isset($info['exclude'])) {
+            if (!isset($info['exclude'][0])) {
+                $info['exclude'] = array($info['exclude']);
+            }
+            foreach ($info['exclude'] as $exclude) {
+                if (version_compare($me, $exclude, '==')) {
+                    return false;
+                }
+            }
+        }
+        if (version_compare($me, $info['min'], '>=') && version_compare($me, $info['max'], '<=')) {
+            return true;
+        }
+        return false;
+    }
+
     function getCompatible()
     {
         if (isset($this->_packageInfo['compatible'])) {
-            $compat = $this->_packageInfo['compatible'];
-            if (isset($compat['package'])) {
-                return array($compat);
-            }
-            return $compat;
+            return $this->_packageInfo['compatible'];
         }
         return false;
     }
@@ -1464,14 +1579,17 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
     function getPackageType()
     {
-        if (isset($this->_packageInfo['php'])) {
+        if (isset($this->_packageInfo['phprelease'])) {
             return 'php';
         }
-        if (isset($this->_packageInfo['extsrc'])) {
+        if (isset($this->_packageInfo['extsrcrelease'])) {
             return 'extsrc';
         }
-        if (isset($this->_packageInfo['extbin'])) {
+        if (isset($this->_packageInfo['extbinrelease'])) {
             return 'extbin';
+        }
+        if (isset($this->_packageInfo['bundle'])) {
+            return 'bundle';
         }
         return false;
     }
@@ -2426,9 +2544,68 @@ http://pear.php.net/dtd/package-2.0.xsd',
         }
         if (isset($this->_packageInfo['extsrcrelease'])) {
             $release = 'extsrcrelease';
+            if (isset($this->_packageInfo['extsrcrelease'][0])) {
+                return $this->_extsrcCanOnlyHaveOneRelease();
+            }
+            if (!isset($this->_packageInfo['extsrcrelease']['providesextension'])) {
+                return $this->_invalidTagOrder(array('providesextension'), '', '<extsrcrelease>');
+            }
+            if (isset($this->_packageInfo['extsrcrelease']['configureoption'])) {
+                $options = $this->_packageInfo['extsrcrelease']['configureoption'];
+                if (!isset($options[0])) {
+                    $options = array($options);
+                }
+                foreach ($options as $option) {
+                    if (!isset($option['attribs'])) {
+                        $this->_tagHasNoAttribs('configureoption', '<extsrcrelease>');
+                    } else {
+                        if (!isset($option['attribs']['name'])) {
+                            $this->_tagMissingAttribute('configureoption', 'name', '<extsrcrelease>');
+                        }
+                        if (!isset($option['attribs']['prompt'])) {
+                            $this->_tagMissingAttribute('configureoption', 'prompt',
+                                '<extsrcrelease>');
+                        }
+                    }
+                }
+            }
         }
         if (isset($this->_packageInfo['extbinrelease'])) {
             $release = 'extbinrelease';
+            $r = $this->_packageInfo['extbinrelease'];
+            if (!isset($r[0])) {
+                $r = array($r);
+            }
+            foreach ($r as $rel) {
+                if (isset($rel['srcuri'])) {
+                    if (isset($rel['srcpackage'])) {
+                        return $this->_invalidTagOrder(array('providesextension'), 'srcpackage',
+                            '<extbinrelease>');
+                    }
+                    if (isset($rel['srcchannel'])) {
+                        return $this->_invalidTagOrder(array('providesextension'), 'srcchannel',
+                            '<extbinrelease>');
+                    }
+                } else {
+                    if (!isset($rel['srcpackage'])) {
+                        return $this->_invalidTagOrder(array('srcpackage', 'srcuri'), '',
+                            '<extbinrelease>');
+                    }
+                    if (!isset($rel['srcchannel'])) {
+                        return $this->_invalidTagOrder(array('srcchannel'), '',
+                            '<extbinrelease>');
+                    }
+                }
+                if (!isset($rel['providesextension'])) {
+                    return $this->_invalidTagOrder(array('providesextension'), '', '<extbinrelease>');
+                }
+                if (!isset($rel['installconditions'])) {
+                    return $this->_invalidTagOrder(array('installconditions'), '', '<extbinrelease>');
+                }
+                if (!isset($rel['filelist'])) {
+                    return $this->_invalidTagOrder(array('filelist'), '', '<extbinrelease>');
+                }
+            }
         }
         if (isset($this->_packageInfo['bundle'])) {
             $release = 'bundle';
@@ -2438,17 +2615,19 @@ http://pear.php.net/dtd/package-2.0.xsd',
             foreach ($this->_packageInfo[$release] as $rel) {
                 if (isset($rel['installconditions'])) {
                     $this->_validateInstallConditions($rel['installconditions'], "<$rel>");
-                } elseif ($release == 'extbinrelease') {
-                    $this->_invalidTagOrder(array('installconditions'), 'filelist',
-                        '<extbinrelease>');
                 }
                 if (isset($rel['filelist'])) {
-                    $this->_validateFilelist($rel['filelist'], 'install', true);
+                    if ($rel['filelist']) {
+                        $this->_validateFilelist($rel['filelist'], 'install', true);
+                    }
                 }
             }
         } else {
             if (isset($this->_packageInfo[$release]['filelist'])) {
-                $this->_validateFilelist($this->_packageInfo[$release]['filelist'], 'install', true);
+                if ($this->_packageInfo[$release]['filelist']) {
+                    $this->_validateFilelist($this->_packageInfo[$release]['filelist'], 'install',
+                        true);
+                }
             }
         }
     }
@@ -2644,6 +2823,12 @@ http://pear.php.net/dtd/package-2.0.xsd',
     {
         $this->_stack->push(__FUNCTION__, 'error', array('task' => $task),
             'Unknown task "%task%" passed in file "%file%"');
+    }
+
+    function _extsrcCanOnlyHaveOneRelease()
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array(),
+            'Only one <extsrcrelease> tag may exist in a package.xml');
     }
 
     function _analyzePhpFiles()

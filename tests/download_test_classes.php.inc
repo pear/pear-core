@@ -318,6 +318,12 @@ class test_PEAR_Installer extends PEAR_Installer {
             return parent::log($level, $msg);
         }
     }
+
+    function &getDependency2($c, $i, $p, $s)
+    {
+        $a = &test_PEAR_Dependency2::singleton($c, $i, $p, $s);
+        return $a;
+    }
 }
 
 require_once 'PEAR/Downloader.php';
@@ -433,6 +439,70 @@ class test_PEAR_Downloader extends PEAR_Downloader {
         return $dest_file;
     }
 
+    function &download($params)
+    {
+        if (!isset($this->_registry)) {
+            $this->_registry = &$this->config->getRegistry();
+        }
+        if (!isset($this->_remote)) {
+            $this->_remote = &$this->config->getRemote();
+        }
+        // convert all parameters into PEAR_Downloader_Package objects
+        foreach ($params as $i => $param) {
+            $params[$i] = &new test_PEAR_Downloader_Package($this);
+            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+            $err = $params[$i]->initialize($param);
+            PEAR::popErrorHandling();
+            if (PEAR::isError($err)) {
+                $this->log(0, $err->getMessage());
+                $params[$i] = false;
+                if (is_object($param)) {
+                    $param = $param->getChannel() . '/' . $param->getPackage();
+                }
+                $this->pushError('Package "' . $param . '" is not valid',
+                    PEAR_INSTALLER_SKIPPED);
+            }
+        }
+        PEAR_Downloader_Package::removeDuplicates($params);
+        if (!isset($this->_options['nodeps'])) {
+            foreach ($params as $i => $param) {
+                $params[$i]->detectDependencies($params);
+            }
+        }
+        while (PEAR_Downloader_Package::mergeDependencies($params));
+        PEAR_Downloader_Package::removeInstalled($params);
+        if (!count($params)) {
+            $this->pushError('No valid packages found', PEAR_INSTALLER_FAILED);
+        }
+        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+        $err = PEAR_Downloader_Package::analyzeDependencies($params);
+        PEAR::popErrorHandling();
+        if (PEAR::isError($err)) {
+            $this->pushError($err->getMessage());
+            return;
+        }
+        $ret = array();
+        $newparams = array();
+        foreach ($params as $package) {
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+            $pf = &$package->download();
+            PEAR::staticPopErrorHandling();
+            if (PEAR::isError($pf)) {
+                $this->log(1, $pf->getMessage());
+                $this->log(0, 'Error: cannot download "' .
+                    $this->_registry->parsedPackageNameToString($package->getParsedPackage()) .
+                    '"');
+                continue;
+            }
+            $newparams[] = &$package;
+            $ret[] = array('file' => $pf->getArchiveFile(),
+                                   'info' => &$pf,
+                                   'pkg' => $pf->getPackage());
+        }
+        $this->_downloadedPackages = $ret;
+        return $newparams;
+    }
+
     function log($level, $msg)
     {
         global $fakelog;
@@ -441,6 +511,238 @@ class test_PEAR_Downloader extends PEAR_Downloader {
         } else {
             return parent::log($level, $msg);
         }
+    }
+}
+
+require_once 'PEAR/Downloader/Package.php';
+class test_PEAR_Downloader_Package extends PEAR_Downloader_Package
+{
+    function &getDependency2Object($c, $i, $p, $s)
+    {
+        $a = &test_PEAR_Dependency2::singleton($c, $i, $p, $s);
+        return $a; 
+    }
+}
+require_once 'PEAR/Dependency2.php';
+class test_PEAR_Dependency2 extends PEAR_Dependency2
+{
+    var $_fakeOS;
+    var $_phpVersion;
+    var $_extensions;
+    var $_installerVer;
+
+    function &singleton($config = null, $installoptions = null, $package = null,
+                              $state = PEAR_VALIDATE_INSTALLING)
+    {
+        if (!isset($GLOBALS['_test_dep'])) {
+            $GLOBALS['_test_dep'] = &new test_PEAR_Dependency2($config,
+                $installoptions, $package, $state);
+        }
+        $a = &new test_PEAR_Dependency2($config, $installoptions, $package, $state);
+        $a->setOS(@$GLOBALS['_test_dep']->getSysname());
+        $a->setPHPVersion(@$GLOBALS['_test_dep']->phpversion());
+        $a->sysname = @$GLOBALS['_test_dep']->sysname;
+        $a->release = @$GLOBALS['_test_dep']->release;
+        $a->cpu = @$GLOBALS['_test_dep']->cpu;
+        $a->extra = @$GLOBALS['_test_dep']->extra;
+        $a->nodename = @$GLOBALS['_test_dep']->nodename;
+        $a->setPEARVersion(@$GLOBALS['_test_dep']->getPEARVersion());
+        $a->setExtensions(@$GLOBALS['_test_dep']->_extensions);
+        return $a;
+    }
+
+    function setOS($os)
+    {
+        $this->_fakeOS = $os;
+    }
+
+    function getPHP_OS()
+    {
+        return $this->_fakeOS;
+    }
+
+    function getSysname()
+    {
+        return $this->_fakeOS;
+    }
+
+    function setArch($uname, $extra)
+    {
+        $this->extra = $extra;
+        list($this->sysname,
+             $this->release,
+             $this->cpu,
+             $this->extra,
+             $this->nodename) = $this->parseSignature($uname, $extra);
+    }
+
+    function setPHPversion($version)
+    {
+        $this->_phpVersion = $version;
+    }
+
+    function phpversion($name = null)
+    {
+        if ($name === null) {
+            return $this->_phpVersion;
+        } else {
+            return $this->extversion($name);
+        }
+    }
+
+    function setPEARversion($version)
+    {
+        $this->_installerVer = $version;
+    }
+
+    function getPEARVersion()
+    {
+        return $this->_installerVer;
+    }
+
+    function setExtensions($exts)
+    {
+        $this->_extensions = $exts;
+    }
+
+    function parseSignature($uname, $extra)
+    {
+        static $sysmap = array(
+            'HP-UX' => 'hpux',
+            'IRIX64' => 'irix',
+        );
+        static $cpumap = array(
+            'i586' => 'i386',
+            'i686' => 'i386',
+            'ppc' => 'powerpc',
+        );
+        $parts = split('[[:space:]]+', trim($uname));
+        $n = count($parts);
+
+        $release = $machine = $cpu = '';
+        $sysname = $parts[0];
+        $nodename = $parts[1];
+        $cpu = $parts[$n-1];
+        $extra = '';
+        if ($cpu == 'unknown') {
+            $cpu = $parts[$n-2];
+        }
+
+        switch ($sysname) {
+            case 'AIX' :
+                $release = "$parts[3].$parts[2]";
+                break;
+            case 'Windows' :
+                switch ($parts[1]) {
+                    case '95/98':
+                        $release = '9x';
+                        break;
+                    default:
+                        $release = $parts[1];
+                        break;
+                }
+                $cpu = 'i386';
+                break;
+            case 'Linux' :
+                $extra = $this->_detectGlibcVersion();
+                // use only the first two digits from the kernel version
+                $release = ereg_replace('^([[:digit:]]+\.[[:digit:]]+).*', '\1', $parts[2]);
+                break;
+            case 'Mac' :
+                $sysname = 'darwin';
+                $nodename = $parts[2];
+                $release = $parts[3];
+                if ($cpu == 'Macintosh') {
+                    if ($parts[$n - 2] == 'Power') {
+                        $cpu = 'powerpc';
+                    }
+                }
+                break;
+            case 'Darwin' :
+                if ($cpu == 'Macintosh') {
+                    if ($parts[$n - 2] == 'Power') {
+                        $cpu = 'powerpc';
+                    }
+                }
+                $release = ereg_replace('^([[:digit:]]+\.[[:digit:]]+).*', '\1', $parts[2]);
+                break;
+            default:
+                $release = ereg_replace('-.*', '', $parts[2]);
+                break;
+        }
+
+
+        if (isset($sysmap[$sysname])) {
+            $sysname = $sysmap[$sysname];
+        } else {
+            $sysname = strtolower($sysname);
+        }
+        if (isset($cpumap[$cpu])) {
+            $cpu = $cpumap[$cpu];
+        }
+        return array($sysname, $release, $cpu, $extra, $nodename);
+    }
+
+    function _detectGlibcVersion()
+    {
+        return $this->extra;
+    }
+
+    function matchSignature($match)
+    {
+        if (is_array($match)) {
+            $fragments = $match;
+        } else {
+            $fragments = explode('-', $match);
+        }
+        $n = count($fragments);
+        $matches = 0;
+        if ($n > 0) {
+            $matches += $this->_matchFragment($fragments[0], $this->sysname);
+        }
+        if ($n > 1) {
+            $matches += $this->_matchFragment($fragments[1], $this->release);
+        }
+        if ($n > 2) {
+            $matches += $this->_matchFragment($fragments[2], $this->cpu);
+        }
+        if ($n > 3) {
+            $matches += $this->_matchFragment($fragments[3], $this->extra);
+        }
+        return ($matches == $n);
+    }
+
+    function _matchFragment($fragment, $value)
+    {
+        if (strcspn($fragment, '*?') < strlen($fragment)) {
+            $reg = '^' . str_replace(array('*', '?', '/'), array('.*', '.', '\\/'), $fragment) . '$';
+            return eregi($reg, $value);
+        }
+        return ($fragment == '*' || !strcasecmp($fragment, $value));
+    }
+
+    function extension_loaded($name)
+    {
+        return isset($this->_extensions[$name]);
+    }
+
+    function extversion($ext)
+    {
+        if ($this->extension_loaded($ext)) {
+            return $this->_extensions[$ext];
+        } else {
+            return false;
+        }
+    }
+}
+require_once 'PEAR/PackageFile/v2.php';
+class test_PEAR_PackageFile_v2 extends PEAR_PackageFile_v2
+{
+    function &getPEARDownloader(&$i, $o, &$c)
+    {
+        $z = &new test_PEAR_Downloader($i, $o, $c);
+        $GLOBALS['last_dl'] = &$z;
+        return $z;
     }
 }
 ?>

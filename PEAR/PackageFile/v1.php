@@ -302,6 +302,11 @@ class PEAR_PackageFile_v1
         $this->_compatibility = $compatibility;
     }
 
+    function installBinary($installer)
+    {
+        return false;
+    }
+
     function isExtension($name)
     {
         return false;
@@ -579,6 +584,11 @@ class PEAR_PackageFile_v1
     }
 
     function getDependencyGroup($group)
+    {
+        return false;
+    }
+
+    function isCompatible($pf)
     {
         return false;
     }

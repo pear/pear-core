@@ -63,8 +63,11 @@ class PEAR_Packager extends PEAR_Common
         if (empty($pkgfile)) {
             $pkgfile = 'package.xml';
         }
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         $pkg = new PEAR_PackageFile($this->config, $this->debug);
-        if (PEAR::isError($pf = &$pkg->fromPackageFile($pkgfile, PEAR_VALIDATE_NORMAL))) {
+        $pf = &$pkg->fromPackageFile($pkgfile, PEAR_VALIDATE_NORMAL);
+        PEAR::staticPopErrorHandling();
+        if (PEAR::isError($pf)) {
             foreach ($pf->getUserInfo() as $error) {
                 $this->log(0, 'Error: ' . $error['message']);
             }

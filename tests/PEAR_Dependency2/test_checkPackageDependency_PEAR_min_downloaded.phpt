@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Dependency2->checkPackageDependency() min failure
+PEAR_Dependency2->checkPackageDependency() min (downloaded) failure
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
