@@ -1,5 +1,5 @@
 --TEST--
-PEAR_PackageFile_Generator_v1->toPackageFile() all bells and whistles package.xml
+PEAR_PackageFile_Generator_v1->toTgz()
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -9,12 +9,16 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 error_reporting(E_ALL);
+$save____dir = getcwd();
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+chdir($temp_path);
+require_once 'PEAR/Packager.php';
 $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'theworks.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'theworks.xml');
 $generator = &$pf->getDefaultGenerator();
-$e = $generator->toPackageFile($temp_path, PEAR_VALIDATE_PACKAGING, 'tub.xml');
+$packager = &new PEAR_Packager;
+$e = $generator->toTgz($packager);
 $phpunit->assertNoErrors('errors');
 $phpunit->assertEquals(array (
   0 => 
@@ -23,11 +27,14 @@ $phpunit->assertEquals(array (
     1 => 'Analyzing foo.php',
   ),
 ), $fakelog->getLog(), 'packaging log');
-$phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'tub.xml', $e, 'filename');
-$e = implode('', file($e));
-$phpunit->assertEquals(str_replace(array("\r\n", "\r"), array("\n", "\n"), '<?xml version="1.0" encoding="ISO-8859-1" ?>
+$pkg = &new PEAR_PackageFile($config);
+$newpf = &$pkg->fromTgzFile($e, PEAR_VALIDATE_NORMAL);
+$phpunit->assertNoErrors('errors');
+$newg = &$newpf->getDefaultGenerator();
+$phpunit->assertEquals(str_replace(array("\r\n", "\r"), array("\n", "\n"),
+    '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="' . $generator->getPackagerVersion() . '">
+<package version="1.0" packagerversion="' . $newg->getPackagerVersion() . '">
  <name>foo</name>       
  <summary>foo</summary>
  <description>foo
@@ -59,10 +66,12 @@ release notes
    <configureoption name="one" default="three" prompt="two"/>
   </configureoptions>
   <filelist>
-   <file role="data" baseinstalldir="freeb" md5sum="8332264d2e0e3c3091ebd6d8cee5d3a3" install-as="merbl.dat" name="sunger/foo.dat">
-    <replace from="@pv@" to="version" type="package-info"/>
-   </file>
-   <file role="php" baseinstalldir="freeb" md5sum="8332264d2e0e3c3091ebd6d8cee5d3a3" install-as="merbl.php" name="foo.php">
+   <dir name="sunger">
+    <file role="data" baseinstalldir="freeb" md5sum="ed0384ad29e60110b310a02e95287ee6" install-as="merbl.dat" name="foo.dat">
+     <replace from="@pv@" to="version" type="package-info"/>
+    </file>
+   </dir> <!-- /sunger -->
+   <file role="php" baseinstalldir="freeb" md5sum="ed0384ad29e60110b310a02e95287ee6" install-as="merbl.php" name="foo.php">
     <replace from="@pv@" to="version" type="package-info"/>
    </file>
   </filelist>
@@ -110,7 +119,14 @@ Other:
    </release>
  </changelog>
 </package>
-'), $e, 'xml');
+'), $newg->toXml(PEAR_VALIDATE_NORMAL), 'packaged stuff');
+
+$phpunit->showall();
+$phpunit->assertEquals('<?php
+?>', $newpf->getFileContents('foo.php'), 'foo.php content');
+$phpunit->assertEquals('<?php
+?>', $newpf->getFileContents('sunger/foo.dat'), 'sunger/foo.dat content');
+chdir($save____dir);
 echo 'tests done';
 ?>
 --EXPECT--
