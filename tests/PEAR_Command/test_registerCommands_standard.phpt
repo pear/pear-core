@@ -169,8 +169,8 @@ $phpunit->assertEquals(array (
   4 => 'dry-run',
 ), $l, 'long cvstag');
 PEAR_Command::getGetoptArgs('download', $s, $l);
-$phpunit->assertEquals('Zf', $s, 'short download'); 
-$phpunit->assertEquals(array('nocompress', 'force'), $l, 'long download');
+$phpunit->assertEquals('Z', $s, 'short download'); 
+$phpunit->assertEquals(array('nocompress'), $l, 'long download');
 PEAR_Command::getGetoptArgs('download-all', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short download-all'); 
 $phpunit->assertEquals(array('channel='), $l, 'long download-all');

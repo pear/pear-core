@@ -270,6 +270,9 @@ class PEAR_Downloader_Package
     function detectDependencies($params)
     {
         $options = $this->_downloader->getOptions();
+        if (isset($options['downloadonly'])) {
+            return;
+        }
         if (isset($options['offline'])) {
             $this->_downloader->log(3, 'Skipping dependency download check, --offline specified');
             return;
@@ -291,30 +294,35 @@ class PEAR_Downloader_Package
 
     function removeInstalled(&$params)
     {
-        foreach ($params as $i => $param) {
-            $options = $param->_downloader->getOptions();
-            // remove self if already installed with this version
-            if ($param->_registry->packageExists($param->getPackage(), $param->getChannel())) {
-                if (version_compare($param->_registry->packageInfo($param->getPackage(), 'version',
-                      $param->getChannel()), $param->getVersion(), '==')) {
-                    if (!isset($options['force'])) {
-                        $info = $param->getParsedPackage();
-                        unset($info['version']);
-                        unset($info['state']);
-                        if (!isset($options['soft'])) {
-                            $param->_downloader->log(1, 'Skipping package "' .
-                                $param->_registry->parsedPackageNameToString($info, true) .
-                                '", already installed as version ' . $param->getVersion());
+        if (!isset($params[0])) {
+            return;
+        }
+        $options = $params[0]->_downloader->getOptions();
+        if (!isset($options['downloadonly'])) {
+            foreach ($params as $i => $param) {
+                // remove self if already installed with this version
+                if ($param->_registry->packageExists($param->getPackage(), $param->getChannel())) {
+                    if (version_compare($param->_registry->packageInfo($param->getPackage(), 'version',
+                          $param->getChannel()), $param->getVersion(), '==')) {
+                        if (!isset($options['force'])) {
+                            $info = $param->getParsedPackage();
+                            unset($info['version']);
+                            unset($info['state']);
+                            if (!isset($options['soft'])) {
+                                $param->_downloader->log(1, 'Skipping package "' .
+                                    $param->_registry->parsedPackageNameToString($info, true) .
+                                    '", already installed as version ' . $param->getVersion());
+                            }
+                            $params[$i] = false;
                         }
+                    } elseif (!isset($options['force']) && !isset($options['upgrade']) &&
+                          !isset($options['soft'])) {
+                        $info = $param->getParsedPackage();
+                        $param->_downloader->log(1, 'Skipping package "' .
+                            $param->_registry->parsedPackageNameToString($info, true) .
+                            '", already installed as version ' . $param->getVersion());
                         $params[$i] = false;
                     }
-                } elseif (!isset($options['force']) && !isset($options['upgrade']) &&
-                      !isset($options['soft'])) {
-                    $info = $param->getParsedPackage();
-                    $param->_downloader->log(1, 'Skipping package "' .
-                        $param->_registry->parsedPackageNameToString($info, true) .
-                        '", already installed as version ' . $param->getVersion());
-                    $params[$i] = false;
                 }
             }
         }
