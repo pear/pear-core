@@ -657,7 +657,7 @@ class PEAR_Config extends PEAR
         foreach ($this->configuration as $layer => $data) {
             if (isset($data['__channels'])) {
                 if (isset($data['__channels'][strtolower($channel)])) {
-                    unset($data['__channels'][strtolower($channel)]);
+                    unset($this->configuration[$layer]['__channels'][strtolower($channel)]);
                 }
             }
         }
@@ -1186,6 +1186,7 @@ class PEAR_Config extends PEAR
      *
      * This should be set via a call to {@link PEAR_Registry::listChannels()}
      * @param array
+     * @return bool success of operation
      */
     function setChannels($channels)
     {
@@ -1205,6 +1206,7 @@ class PEAR_Config extends PEAR
                 }
             }
         }
+        return true;
     }
 
     // }}}
