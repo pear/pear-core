@@ -269,7 +269,9 @@ class PEAR_ErrorStack {
             return $GLOBALS['_PEAR_ERRORSTACK_SINGLETON'][$package];
         }
         if (!class_exists($stackClass)) {
-            $trace = debug_backtrace();
+            if (function_exists('debug_backtrace')) {
+                $trace = debug_backtrace();
+            }
             PEAR_ErrorStack::staticPush('PEAR_ErrorStack', PEAR_ERRORSTACK_ERR_NONCLASS,
                 'exception', array('stackclass' => $stackClass),
                 'stack class "%stackclass%" is not a valid class name (should be like PEAR_ErrorStack)',
@@ -610,7 +612,9 @@ class PEAR_ErrorStack {
         $s = &PEAR_ErrorStack::singleton($package);
         if ($s->_contextCallback) {
             if (!$backtrace) {
-                $backtrace = debug_backtrace();
+                if (function_exists('debug_backtrace')) {
+                    $backtrace = debug_backtrace();
+                }
             }
         }
         return $s->push($code, $level, $params, $msg, $repackage, $backtrace);
