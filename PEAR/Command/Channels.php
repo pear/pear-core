@@ -308,14 +308,16 @@ List the files in an installed package.
             }
             $chan = new PEAR_ChannelFile;
             $chan->fromXmlString($contents);
+            $chan->validate();
             if ($errs = $chan->getErrors(true)) {
                 foreach ($errs as $err) {
                     $this->ui->outputData($err['level'] . ': ' . $err['message']);
                 }
-                return $this->raiseError('Channel file "' . $channel . '" is not valid');
+                return $this->raiseError('Channel file "' . $params[0] . '" is not valid');
             }
         }
         if ($chan) {
+            $channel = $chan->getName();
             $caption = 'Channel ' . $channel . ' Information:';
             $data = array(
                 'caption' => $caption,
@@ -458,14 +460,14 @@ List the files in an installed package.
             $loc = $downloader->downloadHttp($params[0], $this->ui, $tmpdir);
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($loc)) {
-                return $this->raiseError("Cannot open " . $params[0]);
+                return $this->raiseError('channel-add: Cannot open "' . $params[0] . '"');
             } else {
                 $contents = implode('', file($loc));
             }
         } else {
             $fp = @fopen($params[0], 'r');
             if (!$fp) {
-                return $this->raiseError("Cannot open " . $params[0]);
+                return $this->raiseError('channel-add: cannot open "' . $params[0] . '"');
             }
             $contents = '';
             while (!feof($fp)) {
