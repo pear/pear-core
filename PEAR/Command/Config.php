@@ -214,13 +214,18 @@ and uninstall).
         }
         if ($error = $this->_checkLayer(@$params[2])) {
             $failmsg .= $error;
-            return PEAR::raiseError($failmsg);
+            return PEAR::raiseError("config-set:$failmsg");
         }
         $channel = isset($options['channel']) ? $options['channel'] :
             $this->config->get('default_channel');
         $reg = &$this->config->getRegistry();
         if (!$reg->channelExists($channel)) {
             return $this->raiseError('Channel "' . $channel . '" does not exist');
+        }
+        if ($params[0] == 'default_channel') {
+            if (!$reg->channelExists($params[1])) {
+                return $this->raiseError('Channel "' . $params[1] . '" does not exist');
+            }
         }
         array_push($params, $channel);
         if (!call_user_func_array(array(&$this->config, 'set'), $params))
