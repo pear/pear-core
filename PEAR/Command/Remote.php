@@ -313,7 +313,7 @@ parameter.
             'headline' => array('Channel', 'Package', 'Stable/(Latest)', 'Local'),
             );
 
-        foreach ($available as $name => $info) {
+        foreach ((array)$available as $name => $info) {
             $found = (!empty($package) && stristr($name, $package) !== false);
             if (!$found && !(isset($params[1]) && !empty($params[1])
                 && (stristr($info['summary'], $params[1]) !== false
