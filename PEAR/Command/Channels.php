@@ -210,13 +210,16 @@ List the files in an installed package.
                 $channelinfo = new PEAR_ChannelFile;
                 $channelinfo->fromXmlString($info);
                 if ($channelinfo->getErrors()) {
-                    $this->ui->outputData("Downloaded channel data from channel '$channel' is corrupt, skipping");
+                    $this->ui->outputData("Downloaded channel data from channel '$channel' " . 
+                        'is corrupt, skipping');
                     continue;
                 }
                 $channel = $channelinfo;
                 if ($channel->getName() != $save) {
-                    $this->ui->outputData('ERROR: Security risk - downloaded channel definition file for channel "'
-                        . $channel->getName() . ' from channel "' . $save . '".  To use anyway, use channel-update');
+                    $this->ui->outputData('ERROR: Security risk - downloaded channel ' .
+                        'definition file for channel "'
+                        . $channel->getName() . ' from channel "' . $save .
+                        '".  To use anyway, use channel-update');
                     continue;
                 }
                 $reg->updateChannel($channel);
@@ -251,13 +254,16 @@ List the files in an installed package.
                 $channelinfo = new PEAR_Channelfile;
                 $channelinfo->fromXmlString($info);
                 if ($channelinfo->getErrors()) {
-                    $this->ui->outputData("Downloaded channel data from channel '$channel' is corrupt, skipping");
+                    $this->ui->outputData("Downloaded channel data from channel '$channel'" .
+                        ' is corrupt, skipping');
                     continue;
                 }
                 $channel = $channelinfo;
                 if ($channel->getName() != $save) {
-                    $this->ui->outputData('ERROR: Security risk - downloaded channel definition file for channel "'
-                        . $channel->getName() . ' from channel "' . $save . '".  To use anyway, use channel-update');
+                    $this->ui->outputData('ERROR: Security risk - downloaded channel ' .
+                        'definition file for channel "'
+                        . $channel->getName() . ' from channel "' . $save .
+                        '".  To use anyway, use channel-update');
                     continue;
                 }
                 $reg->addChannel($channel);
