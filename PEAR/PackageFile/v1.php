@@ -351,6 +351,14 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function getExtends()
+    {
+        if (isset($this->_packageInfo['extends'])) {
+            return $this->_packageInfo['extends'];
+        }
+        return false;
+    }
+
     function getVersion()
     {
         if (isset($this->_packageInfo['version'])) {
@@ -638,13 +646,21 @@ class PEAR_PackageFile_v1
         $channel = isset($info['channel']) ? $info['channel'] : 'pear';
         $chan = isset($this->_registry) ? $this->_registry->getChannel($channel) : false;
         if (!$chan) {
-            $this->_validateError(PEAR_PACKAGEFILE_ERROR_UNKNOWN_CHANNEL,
-                array('channel' => $channel));
+            if ($channel != 'pear') {
+                $this->_validateError(PEAR_PACKAGEFILE_ERROR_UNKNOWN_CHANNEL,
+                    array('channel' => $channel));
+            }
             if (!isset($info['package'])) {
                 $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_NAME);
             } elseif (!PEAR_Common::validPackageName($info['package'])) {
                 $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_NAME,
                     array('name' => $info['package']));
+            }
+            if (isset($info['extends'])) {
+                if (!PEAR_Common::validPackageName($info['extends'])) {
+                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_EXTENDS,
+                        array('extends' => $info['extends']));
+                }
             }
         } else {
             if (!empty($info['package'])) {
@@ -654,6 +670,12 @@ class PEAR_PackageFile_v1
                 }
             } else {
                 $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_NAME);
+            }
+            if (isset($info['extends'])) {
+                if (!$chan->validPackageName($info['extends'])) {
+                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_EXTENDS,
+                        array('extends' => $info['extends']));
+                }
             }
         }
         $this->_packageName = $pn = $info['package'];

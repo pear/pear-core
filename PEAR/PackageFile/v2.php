@@ -196,8 +196,16 @@ class PEAR_PackageFile_v2
 
     function getDate()
     {
-        if (isset($this->_packageInfo['date'])) {
-            return $this->_packageInfo['date'];
+        if (isset($this->_packageInfo['date']['_content'])) {
+            return $this->_packageInfo['date']['_content'];
+        }
+        return false;
+    }
+    
+    function getTime()
+    {
+        if (isset($this->_packageInfo['date']['attribs']['time'])) {
+            return $this->_packageInfo['date']['attribs']['time'];
         }
         return false;
     }
