@@ -15,7 +15,7 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v1', $pf, 'return of valid parse');
-$phpunit->assertEquals('1.0', $pf->getVersion(), 'pre-set');
+$phpunit->assertEquals('1.0.0', $pf->getVersion(), 'pre-set');
 $pf->setVersion('');
 $phpunit->assertEquals('', $pf->getVersion(), 'set failed');
 $result = $pf->validate(PEAR_VALIDATE_NORMAL);

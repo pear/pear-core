@@ -118,7 +118,7 @@ echo $ret ? "no\n" : "yes\n";
 $ret['source_file'] = str_replace(array(dirname(__FILE__),DIRECTORY_SEPARATOR), array('', '/'), $ret['source_file']);
 var_dump($ret);
 
-rmdir($testdir);
+cleanall($testdir);
 ?>
 --EXPECT--
 first test: returns false with non-existing filename? yes
@@ -126,15 +126,18 @@ second test: returns false with invalid PHP? yes
 fourth test: returns false with invalid PHP? yes
 fifth test: returns false with invalid PHP? yes
 sixth test: returns false with valid PHP? no
-array(6) {
+array(8) {
   ["source_file"]=>
-  string(36) "/pear_common_analyzeSCtest/test5.php"
+  string(26) "/registry_tester/test5.php"
   ["declared_classes"]=>
   array(2) {
     [0]=>
     string(5) "test2"
     [1]=>
     string(4) "blah"
+  }
+  ["declared_interfaces"]=>
+  array(0) {
   }
   ["declared_methods"]=>
   array(2) {
@@ -167,5 +170,8 @@ array(6) {
   array(1) {
     ["blah"]=>
     string(5) "test2"
+  }
+  ["implements"]=>
+  array(0) {
   }
 }
