@@ -59,7 +59,7 @@ class PEAR_RunTest
     //  Run an individual test case.
     //
 
-    function run($file)
+    function run($file, $ini_settings = '')
     {
         $cwd = getcwd();
         $conf = &PEAR_Config::singleton();
@@ -161,7 +161,6 @@ class PEAR_RunTest
 
         $args = $section_text['ARGS'] ? ' -- '.$section_text['ARGS'] : '';
 
-        $ini_settings='';
         $cmd = "$php$ini_settings -f $tmp_file$args 2>&1";
         if (isset($this->_logger)) {
             $this->_logger->log(2, 'Running command "' . $cmd . '"');
