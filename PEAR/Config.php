@@ -713,6 +713,12 @@ class PEAR_Config extends PEAR
 
     // }}}
     // {{{ arrayMergeRecursive($arr2, $arr1)
+    /**
+     * @param array
+     * @param array
+     * @return array
+     * @static
+     */
     function arrayMergeRecursive($arr2, $arr1)
     {
         $ret = array();
