@@ -80,11 +80,31 @@ class PEAR_Validate
         if ($state !== null) {
             $this->_state = $state;
         }
+        $this->validatePackageName();
+        $this->validateVersion();
     }
 
     function validatePackageName()
     {
-        return $this->validPackageName($this->_packagexml->getPackage());
+        if ($this->_state == PEAR_VALIDATE_PACKAGING ||
+              $this->_state == PEAR_VALIDATE_NORMAL) {
+            if ($this->_packagexml->getExtends()) {
+                $vlen = strlen($version = $this->_packagexml->getVersion() . '');
+                $name = $this->_packagexml->getPackage();
+                if ($name{strlen($name) - $vlen} != $version) {
+                    $this->_addFailure('name', "package $name extends package " .
+                        $this->_packagexml->getExtends() . ' and so the name must ' .
+                        'have a postfix equal to the major version like "' . $name .
+                        $version . '"');
+                    return false;
+                }
+            }
+        }
+        if (!$this->validPackageName($this->_packagexml->getPackage())) {
+            $this->_addFailure('name', 'package name ' .
+                $this->_packagexml->getPackage() . ' is invalid');
+            return false;
+        }
     }
 
     function validateVersion()
