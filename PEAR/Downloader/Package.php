@@ -479,7 +479,7 @@ class PEAR_Downloader_Package
             return $url;
         }
         $dep['package'] = $dep['name'];
-        $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params);
+        $ret = $this->_analyzeDownloadURL($url, $dep, 'dependency', $params);
         PEAR::popErrorHandling();
         if (PEAR::isError($ret)) {
             if (!isset($options['soft'])) {
@@ -618,7 +618,7 @@ class PEAR_Downloader_Package
                 }
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                 $dep['package'] = $dep['name'];
-                $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params);
+                $ret = $this->_analyzeDownloadURL($url, $dep, 'dependency', $params);
                 PEAR::popErrorHandling();
                 if (PEAR::isError($ret)) {
                     if (!isset($options['soft'])) {
@@ -740,6 +740,17 @@ class PEAR_Downloader_Package
         }
     }
 
+    function getURI()
+    {
+        if (isset($this->_packagefile)) {
+            return $this->_packagefile->getURI();
+        } elseif (isset($this->_downloadURL)) {
+            return $this->_downloadURL['info']['uri'];
+        } else {
+            return false;
+        }
+    }
+
     function getVersion()
     {
         if (isset($this->_packagefile)) {
@@ -845,12 +856,31 @@ class PEAR_Downloader_Package
      */
     function isEqual($param)
     {
-        if (isset($param['uri'])) {
-            $param['channel'] = '__uri';
-            $param['package'] = $param['dep']['name'];
+        if (is_object($param)) {
+            $channel = $param->getChannel();
+            $package = $param->getPackage();
+            if ($param->getURI()) {
+                $param = array(
+                    'channel' => $param->getChannel(),
+                    'package' => $param->getPackage(),
+                    'version' => $param->getVersion(),
+                    'uri' => $param->getURI(),
+                );
+            } else {
+                $param = array(
+                    'channel' => $param->getChannel(),
+                    'package' => $param->getPackage(),
+                    'version' => $param->getVersion(),
+                );
+            }
+        } else {
+            if (isset($param['uri'])) {
+                $param['channel'] = '__uri';
+                $param['package'] = $param['dep']['name'];
+            }
+            $package = isset($param['package']) ? $param['package'] : $param['info']['package'];
+            $channel = isset($param['channel']) ? $param['channel'] : $param['info']['channel'];
         }
-        $package = isset($param['package']) ? $param['package'] : $param['info']['package'];
-        $channel = isset($param['channel']) ? $param['channel'] : $param['info']['channel'];
         if (isset($param['version'])) {
             return ($package == $this->getPackage() &&
                 $channel == $this->getChannel() &&
@@ -866,14 +896,29 @@ class PEAR_Downloader_Package
         if ($oper != 'ge' && $oper != 'gt' && $oper != 'has' && $oper != '==') {
             return false;
         }
-        $options = $this->_downloader->getOptions();
-        if (isset($dep['uri'])) {
-            $channel = '__uri';
-            $package = $dep['dep']['name'];
+        if (is_object($dep)) {
+            $package = $dep->getPackage();
+            $channel = $dep->getChannel();
+            if ($dep->getURI()) {
+                $dep = array(
+                    'uri' => $dep->getURI(),
+                    'version' => $dep->getVersion(),
+                );
+            } else {
+                $dep = array(
+                    'version' => $dep->getVersion(),
+                );
+            }
         } else {
-            $channel = $dep['info']['channel'];
-            $package = $dep['info']['package'];
+            if (isset($dep['uri'])) {
+                $channel = '__uri';
+                $package = $dep['dep']['name'];
+            } else {
+                $channel = $dep['info']['channel'];
+                $package = $dep['info']['package'];
+            }
         }
+        $options = $this->_downloader->getOptions();
         if ($this->_registry->packageExists($package, $channel)) {
             if (isset($dep['uri'])) {
                 if ($this->_registry->packageInfo($package, 'uri', '__uri') == $dep['uri']) {
@@ -891,7 +936,7 @@ class PEAR_Downloader_Package
                     }
                 } else {
                     if (version_compare($this->_registry->packageInfo(
-                          $dep['info']['package'], 'version', $dep['info']['channel']),
+                          $package, 'version', $channel),
                           $dep['version'], '>=')) {
                         return true;
                     }
