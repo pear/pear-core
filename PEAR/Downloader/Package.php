@@ -221,7 +221,7 @@ class PEAR_Downloader_Package
                                 '" will not be automatically downloaded, ' .
                                 'use --alldeps to automatically download required ' .
                                 'and optional dependencies');
-                            return;
+                            continue;
                         }
                         $this->_detect2Dep($dep, $pname, 'optional', $params);
                     }
@@ -233,9 +233,10 @@ class PEAR_Downloader_Package
                             '" will not be automatically downloaded, ' .
                             'use --alldeps to automatically download ' .
                             'optional dependencies');
-                        return;
+                    } else {
+                        $this->_detect2Dep($deps['optional'][$packagetype], $pname, 'optional',
+                            $params);
                     }
-                    $this->_detect2Dep($deps['optional'][$packagetype], $pname, 'optional', $params);
                 }
             }
             // get requested dependency group, if any
@@ -519,8 +520,8 @@ class PEAR_Downloader_Package
             $deps = $param->getDeps();
             if (count($deps)) {
                 $depchecker = &new PEAR_Dependency2($param->_config,
-                    $param->_downloader->_options, PEAR_VALIDATE_DOWNLOADING,
-                    $param->getParsedPackage());
+                    $param->_downloader->getOptions(), $param->getParsedPackage(),
+                    PEAR_VALIDATE_DOWNLOADING);
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
                 $failed = false;
                 if (isset($deps['required'])) {
@@ -567,6 +568,45 @@ class PEAR_Downloader_Package
                                         $param->_downloader->log(0, $e->getMessage());
                                     } elseif (is_array($e)) {
                                         $param->_downloader->log(0, $e[0]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $groupname = $param->getGroup();
+                    if (isset($deps['group']) && $groupname) {
+                        if (!isset($deps['group'][0])) {
+                            $deps['group'] = array($deps['group']);
+                        }
+                        $found = false;
+                        foreach ($deps['group'] as $group) {
+                            if ($group['attribs']['name'] == $groupname) {
+                                $found = true;
+                                break;
+                            }
+                        }
+                        if ($found) {
+                            unset($group['attribs']);
+                            foreach ($group as $type => $dep) {
+                                if (!isset($dep[0])) {
+                                    if (PEAR::isError($e =
+                                          $depchecker->{"validate{$type}Dependency"}($dep,
+                                          false, $params))) {
+                                        $failed = true;
+                                        $param->_downloader->log(0, $e->getMessage());
+                                    } elseif (is_array($e)) {
+                                        $param->_downloader->log(0, $e[0]);
+                                    }
+                                } else {
+                                    foreach ($dep as $d) {
+                                        if (PEAR::isError($e =
+                                              $depchecker->{"validate{$type}Dependency"}($d,
+                                              false, $params))) {
+                                            $failed = true;
+                                            $param->_downloader->log(0, $e->getMessage());
+                                        } elseif (is_array($e)) {
+                                            $param->_downloader->log(0, $e[0]);
+                                        }
                                     }
                                 }
                             }

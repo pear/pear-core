@@ -1595,6 +1595,7 @@ class PEAR_PackageFile_v2
             $structure = array(
                 'name',
                 'uri',
+                '*providesextension',
                 '*conflicts',
             );
         } else {
@@ -1605,6 +1606,7 @@ class PEAR_PackageFile_v2
                 '*max',
                 '*recommended',
                 '*exclude',
+                '*providesextension',
                 '*conflicts',
             );
         }
