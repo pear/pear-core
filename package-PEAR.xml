@@ -57,6 +57,7 @@ Installer:
  * fix Bug #1249 display the right state when using --force option
  * fix Bug #2189 upgrade-all stops if dependancy fails
  * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
+ * fix Bug #1420 Parser bug for T_DOUBLE_COLON
 
 Other:
  * add PEAR_Exception class for PHP5 users
