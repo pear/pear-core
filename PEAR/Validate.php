@@ -202,17 +202,18 @@ class PEAR_Validate
                     $majver = substr($majver, 1);
                 }
                 if ($majver != $test) {
-                    $this->_addFailure('package', "package $name extends package " .
-                        $this->_packagexml->getExtends() . ' and so the name must ' .
+                    $this->_addWarning('package', "package $name extends package " .
+                        $this->_packagexml->getExtends() . ' and so the name should ' .
                         'have a postfix equal to the major version like "' .
                         $this->_packagexml->getExtends() . $test . '"');
-                    return false;
+                    return true;
                 } elseif (substr($name, 0, strlen($name) - $vlen) !=
                             $this->_packagexml->getExtends()) {
-                    $this->_addFailure('package', "package $name extends package " .
+                    $this->_addWarning('package', "package $name extends package " .
                         $this->_packagexml->getExtends() . ' and so the name must ' .
                         'be an extension like "' . $this->_packagexml->getExtends() .
                         $test . '"');
+                    return true;
                 }
             }
         }
