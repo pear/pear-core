@@ -173,11 +173,8 @@ parameter.
         $channel = $parsed['channel'];
         $this->config->set('default_channel', $channel);
         $chan = $reg->getChannel($channel);
-        if ($chan->supportsREST()) {
-        } else {
-            $r = &$this->config->getRemote();
-            $info = $r->call('package.info', $parsed['package']);
-        }
+        $r = &$this->config->getRemote();
+        $info = $r->call('package.info', $parsed['package']);
         if (PEAR::isError($info)) {
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($info);
