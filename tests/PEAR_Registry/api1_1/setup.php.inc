@@ -73,7 +73,7 @@ $temp_path = $statedir;
 if (!is_dir($temp_path)) {
     mkdir($temp_path);
 }
-if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'php')) {
+if (!is_dir($php_dir = $temp_path . DIRECTORY_SEPARATOR . 'php')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'php');
 }
 if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'data')) {
