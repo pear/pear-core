@@ -90,13 +90,26 @@ class PEAR_Downloader_Package
 
     function initialize($param)
     {
-        $this->_fromFile($param);
+        $origErr = $this->_fromFile($param);
         if (!$this->_valid) {
             $err = $this->_fromUrl($param);
             if (PEAR::isError($err) || !$this->_valid) {
                 $err = $this->_fromString($param);
                 if (PEAR::isError($err) || !$this->_valid) {
-                    return $err;
+                    if (PEAR::isError($origErr)) {
+                        $this->_downloader->log(0, $err->getMessage());
+                        if (is_array($origErr->getUserInfo())) {
+                            foreach ($origErr->getUserInfo() as $err) {
+                                if (is_array($err)) {
+                                    $err = $err['message'];
+                                }
+                                $this->_downloader->log(0, $err);
+                            }
+                        }
+                        return $origErr;
+                    } else {
+                        return $err;
+                    }
                 }
             }
         }
@@ -429,6 +442,9 @@ class PEAR_Downloader_Package
     {
         $pnames = array();
         foreach ($params as $i => $param) {
+            if (!$param) {
+                continue;
+            }
             if ($param->getPackage()) {
                 $pnames[$i] = $param->getChannel() . '/' .
                     $param->getPackage() . '-' . $param->getVersion() . '#' . $param->getGroup();
@@ -513,7 +529,8 @@ class PEAR_Downloader_Package
             $pf = &$pkg->fromAnyFile($param, PEAR_VALIDATE_INSTALLING);
             PEAR::popErrorHandling();
             if (PEAR::isError($pf)) {
-                return $this->_valid = false;
+                $this->_valid = false;
+                return $pf;
             }
             $this->_packagefile = &$pf;
             return $this->_valid = true;

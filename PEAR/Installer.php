@@ -912,28 +912,28 @@ class PEAR_Installer extends PEAR_Downloader
                     $this->expectError(PEAR_INSTALLER_FAILED);
                     $res = $this->_installFile($file, $atts, $tmp_path, $options);
                     $this->popExpect();
-                    if (PEAR::isError($res)) {
-                        if (empty($options['ignore-errors'])) {
-                            $this->rollbackFileTransaction();
-                            if ($res->getMessage() == "file does not exist") {
-                                $this->raiseError("file $file in package.xml does not exist");
-                            }
-                            return $this->raiseError($res);
-                        } else {
-                            $this->log(0, "Warning: " . $res->getMessage());
-                        }
-                    }
                 } else {
                     $this->expectError(PEAR_INSTALLER_FAILED);
                     $res = $this->_installFile2($pkg, $file, $atts, $tmp_path, $options);
+                }
+                if (PEAR::isError($res)) {
+                    if (empty($options['ignore-errors'])) {
+                        $this->rollbackFileTransaction();
+                        if ($res->getMessage() == "file does not exist") {
+                            $this->raiseError("file $file in package.xml does not exist");
+                        }
+                        return $this->raiseError($res);
+                    } else {
+                        $this->log(0, "Warning: " . $res->getMessage());
+                    }
                 }
                 if ($res == PEAR_INSTALLER_OK) {
                     // Register files that were installed
                     $pkg->installedFile($file, $atts);
                 }
             }
-            if (PEAR_Task_Common::hasTasks()) {
-                PEAR_Task_Common::runTasks();
+            if (PEAR_Task_Common::hasPrecommitTasks()) {
+                PEAR_Task_Common::runPrecommitTasks();
             }
             // }}}
 
@@ -976,6 +976,9 @@ class PEAR_Installer extends PEAR_Downloader
         }
         // }}}
         $this->configSet('default_channel', $savechannel);
+        if (PEAR_Task_Common::hasPostinstallTasks()) {
+            PEAR_Task_Common::runPostinstallTasks();
+        }
         return $pkg->toArray();
     }
 

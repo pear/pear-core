@@ -1677,7 +1677,7 @@ class PEAR_PackageFile_v2
                     if (count($f)) { // has tasks
                         foreach ($f as $task => $value) {
                             if ($tagClass = $this->getTask($task)) {
-                                if (!isset($value[0])) {
+                                if (!is_array($value) || !isset($value[0])) {
                                     $value = array($value);
                                 }
                                 foreach ($value as $v) {
@@ -1963,17 +1963,22 @@ class PEAR_PackageFile_v2
     {
         switch ($ret[0]) {
             case PEAR_TASK_ERROR_MISSING_ATTRIB :
-                $info = array('attrib' => $ret[1]);
+                $info = array('attrib' => $ret[1], 'task' => $task);
                 $msg = 'task <%task%> is missing attribute "%attrib%" in file %file%';
             break;
             case PEAR_TASK_ERROR_NOATTRIBS :
-                $info = array();
+                $info = array('task' => $task);
                 $msg = 'task <%task%> has no attributes in file %file%';
             break;
             case PEAR_TASK_ERROR_WRONG_ATTRIB_VALUE :
-                $info = array('attrib' => $ret[1], 'values' => $ret[3], 'was' => $ret[2]);
+                $info = array('attrib' => $ret[1], 'values' => $ret[3],
+                    'was' => $ret[2], 'task' => $task);
                 $msg = 'task <%task%> attribute "%attrib%" has the wrong value "%was%" '.
                     'in file %file%, expecting one of "%values%"';
+            break;
+            case PEAR_TASK_ERROR_INVALID :
+                $info = array('reason' => $ret[1], 'task' => $task);
+                $msg = 'task <%task%> is invalid because of "%reason%"';
             break;
         }
         $this->_stack->push(__FUNCTION__, 'error', $info, $msg);
@@ -2012,7 +2017,7 @@ class PEAR_PackageFile_v2
                         array('file' => $dir_prefix . DIRECTORY_SEPARATOR . $file));
                     continue;
                 }
-                $srcinfo = $this->_analyzeSourceCode($dir_prefix . DIRECTORY_SEPARATOR . $file);
+                $srcinfo = $this->analyzeSourceCode($dir_prefix . DIRECTORY_SEPARATOR . $file);
                 if ($srcinfo) {
                     $provides = array_merge($provides, $this->_buildProvidesArray($srcinfo));
                 }
@@ -2053,9 +2058,8 @@ class PEAR_PackageFile_v2
      * @param  string Filename of the PHP file
      * @param  boolean whether to analyze $file as the file contents
      * @return mixed
-     * @access private
      */
-    function _analyzeSourceCode($file, $string = false)
+    function analyzeSourceCode($file, $string = false)
     {
         if (!function_exists("token_get_all")) {
             return false;
@@ -2069,12 +2073,12 @@ class PEAR_PackageFile_v2
         if (!defined('T_IMPLEMENTS')) {
             define('T_IMPLEMENTS', -1);
         }
-        if (!$fp = @fopen($file, "r")) {
-            return false;
-        }
         if ($string) {
             $contents = $file;
         } else {
+            if (!$fp = @fopen($file, "r")) {
+                return false;
+            }
             $contents = fread($fp, filesize($file));
         }
         $tokens = token_get_all($contents);
