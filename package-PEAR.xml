@@ -67,6 +67,9 @@ Installer Dependency Support:
  * There is no way to disable dependency resolution at the moment, this will be done.
  * Dependency2.php is used by the new PEAR_Downloader_Channel to resolve dependencies
    and include downloaded files in the calculations.
+ * DependencyDB.php is used to resolve complex dependencies between installed packages
+   and any dependencies installed later (a conflicts/not dependency cannot be honored
+   without this DB)
 
 Installer Channel Support:
 
@@ -164,6 +167,7 @@ PEAR_ErrorStack:
     <file role="php" name="ChannelFile.php"/>
     <file role="php" name="Config.php"/>
     <file role="php" name="Dependency.php"/>
+    <file role="php" name="DependencyDB.php"/>
     <file role="php" name="Dependency2.php">
      <replace from="@PEAR-VER@" to="version" type="package-info"/>
     </file>
