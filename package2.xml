@@ -87,6 +87,9 @@ Installer Channel Support:
 
 Installer:
 
+ * with --remoteconfig option, it is possible to remotely install and uninstall packages
+   to an FTP server.  It works by mirroring a local installation, and requires a
+   special, separate local install.
  * Channels implemented
  * Bug #1242: array-to-string conversion
  * fix Bug #2189 upgrade-all stops if dependancy fails
@@ -166,11 +169,12 @@ Installer:
     <file name="Config.php" role="php" />
     <file name="Dependency.php" role="php" />
     <file name="DependencyDB.php" role="php" />
-    <file role="php" name="Dependency2.php">
+    <file name="Dependency2.php" role="php">
      <tasks:replace from="@PEAR-VER@" to="version" type="package-info"/>
     </file>
     <file name="Downloader.php" role="php" />
     <file name="ErrorStack.php" role="php" />
+    <file name="FTP.php" role="php" />
     <file name="Installer.php" role="php" />
     <file name="PackageFile.php" role="php">
      <tasks:replace from="@PEAR-VER@" to="version" type="package-info" />

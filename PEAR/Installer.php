@@ -127,6 +127,13 @@ class PEAR_Installer extends PEAR_Downloader
     {
         $this->_options = $options;
     }
+
+    function setConfig(&$config)
+    {
+        $this->config = &$config;
+        $this->_registry = &$config->getRegistry();
+    }
+
     // }}}
 
     function _removeBackups($files)
@@ -160,11 +167,15 @@ class PEAR_Installer extends PEAR_Downloader
             return $this->raiseError("$channel/$package not installed");
         }
         $ret = array();
+        if ($this->config->isDefinedLayer('ftp') && isset($this->_options['upgrade'])) {
+            $pkg = $this->_registry->getPackage($package, $channel);
+            $this->ftpUninstall($pkg); // no error checking
+        }
         foreach ($filelist as $file => $props) {
             if (empty($props['installed_as'])) {
                 continue;
             }
-            $path = $this->_prependPath($props['installed_as'], $this->installroot);
+            $path = $props['installed_as'];
             if ($backup) {
                 $this->addFileOperation('backup', array($path));
                 $ret[] = $path;
@@ -256,8 +267,7 @@ class PEAR_Installer extends PEAR_Downloader
         list($dest_file, $orig_file) = preg_replace(array('!\\\\+!', '!/!', "!$ds2+!"),
                                                     DIRECTORY_SEPARATOR,
                                                     array($dest_file, $orig_file));
-        $installed_as = $dest_file;
-        $final_dest_file = $this->_prependPath($dest_file, $this->installroot);
+        $final_dest_file = $installed_as = $dest_file;
         $dest_dir = dirname($final_dest_file);
         $dest_file = $dest_dir . DIRECTORY_SEPARATOR . '.tmp' . basename($final_dest_file);
         // }}}
@@ -419,8 +429,7 @@ class PEAR_Installer extends PEAR_Downloader
         }
         list($save_destdir, $dest_dir, $dest_file, $orig_file) =
             $role->processInstallation($pkg, $atts['attribs'], $file, $tmp_path);
-        $installed_as = $dest_file;
-        $final_dest_file = $this->_prependPath($dest_file, $this->installroot);
+        $final_dest_file = $installed_as = $dest_file;
         $dest_dir = dirname($final_dest_file);
         $dest_file = $dest_dir . DIRECTORY_SEPARATOR . '.tmp' . basename($final_dest_file);
         // }}}
@@ -896,11 +905,8 @@ class PEAR_Installer extends PEAR_Downloader
 
         $php_dir = $this->config->get('php_dir', null, $channel);
         if (isset($options['installroot'])) {
-            if (substr($options['installroot'], -1) == DIRECTORY_SEPARATOR) {
-                $options['installroot'] = substr($options['installroot'], 0, -1);
-            }
-            $php_dir = $this->_prependPath($php_dir, $options['installroot']);
-            $this->installroot = $options['installroot'];
+            $this->config->setInstallRoot($options['installroot']);
+            $this->installroot = ''; // all done automagically now
         } else {
             $this->installroot = '';
         }
@@ -1103,6 +1109,151 @@ class PEAR_Installer extends PEAR_Downloader
     }
 
     // }}}
+
+    function ftpUninstall($pkg)
+    {
+        $ftp = &$this->config->getFTP();
+        if (!$ftp) {
+            return PEAR::raiseError('FTP client not initialized');
+        }
+        $this->log(2, 'Connect to FTP server');
+        $e = $ftp->init();
+        if (PEAR::isError($e)) {
+            return $e;
+        }
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+        foreach ($pkg->getFilelist() as $file => $atts) {
+            if ($pkg->getPackagexmlVersion() == '1.0') {
+                $channel = 'pear.php.net';
+                switch ($atts['role']) {
+                    case 'doc':
+                    case 'data':
+                    case 'test':
+                        $dest_dir = $this->config->get($atts['role'] . '_dir', 'ftp', $channel) .
+                                    DIRECTORY_SEPARATOR . $this->pkginfo->getPackage();
+                        unset($atts['baseinstalldir']);
+                        break;
+                    case 'ext':
+                    case 'php':
+                        $dest_dir = $this->config->get($atts['role'] . '_dir', 'ftp', $channel);
+                        break;
+                    case 'script':
+                        $dest_dir = $this->config->get('bin_dir', 'ftp', $channel);
+                        break;
+                    default:
+                        continue 2;
+                }
+                $save_destdir = $dest_dir;
+                if (!empty($atts['baseinstalldir'])) {
+                    $dest_dir .= DIRECTORY_SEPARATOR . $atts['baseinstalldir'];
+                }
+                if (dirname($file) != '.' && empty($atts['install-as'])) {
+                    $dest_dir .= DIRECTORY_SEPARATOR . dirname($file);
+                }
+                if (empty($atts['install-as'])) {
+                    $dest_file = $dest_dir . DIRECTORY_SEPARATOR . basename($file);
+                } else {
+                    $dest_file = $dest_dir . DIRECTORY_SEPARATOR . $atts['install-as'];
+                }
+
+                // Clean up the DIRECTORY_SEPARATOR mess
+                $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
+                $dest_file = preg_replace(array('!\\\\+!', '!/!', "!$ds2+!"),
+                                                            '/',
+                                                            $dest_file);
+            } else {
+                $role = &PEAR_Installer_Role::factory($pkg, $atts['role'], $this->config);
+                $role->setup($this, $pkg, $atts, $file);
+                if (!$role->isInstallable()) {
+                    continue; // this shouldn't happen
+                }
+                list($save_destdir, $dest_dir, $dest_file, $orig_file) =
+                    $role->processInstallation($pkg, $atts['attribs'], $file, $tmp_path, 'ftp');
+                $dest_file = str_replace(DIRECTORY_SEPARATOR, '/', $dest_file);
+            }
+            $this->log(2, 'Deleting "' . $dest_file . '"');
+            $ftp->rm($dest_file);
+        }
+        PEAR::staticPopErrorHandling();
+        $this->log(2, 'Disconnect from FTP server');
+        return $ftp->disconnect();
+    }
+
+    /**
+     * Upload an installed package
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     */
+    function ftpInstall($pkg)
+    {
+        $ftp = &$this->config->getFTP();
+        if (!$ftp) {
+            return PEAR::raiseError('FTP client not initialized');
+        }
+        $this->log(2, 'Connect to FTP server');
+        $e = $ftp->init();
+        if (PEAR::isError($e)) {
+            return $e;
+        }
+        $pf = &$this->_registry->getPackage($pkg->getPackage(), $pkg->getChannel());
+        foreach ($pf->getFilelist() as $file => $atts) {
+            if ($pf->getPackagexmlVersion() == '1.0') {
+                $channel = 'pear.php.net';
+                switch ($atts['role']) {
+                    case 'doc':
+                    case 'data':
+                    case 'test':
+                        $dest_dir = $this->config->get($atts['role'] . '_dir', 'ftp', $channel) .
+                                    DIRECTORY_SEPARATOR . $pf->getPackage();
+                        unset($atts['baseinstalldir']);
+                        break;
+                    case 'ext':
+                    case 'php':
+                        $dest_dir = $this->config->get($atts['role'] . '_dir', 'ftp', $channel);
+                        break;
+                    case 'script':
+                        $dest_dir = $this->config->get('bin_dir', 'ftp', $channel);
+                        break;
+                    default:
+                        continue 2;
+                }
+                $save_destdir = $dest_dir;
+                if (!empty($atts['baseinstalldir'])) {
+                    $dest_dir .= DIRECTORY_SEPARATOR . $atts['baseinstalldir'];
+                }
+                if (dirname($file) != '.' && empty($atts['install-as'])) {
+                    $dest_dir .= DIRECTORY_SEPARATOR . dirname($file);
+                }
+                if (empty($atts['install-as'])) {
+                    $dest_file = $dest_dir . DIRECTORY_SEPARATOR . basename($file);
+                } else {
+                    $dest_file = $dest_dir . DIRECTORY_SEPARATOR . $atts['install-as'];
+                }
+
+                // Clean up the DIRECTORY_SEPARATOR mess
+                $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
+                $dest_file = preg_replace(array('!\\+!', '!/!', "!$ds2+!"),
+                                                            '/',
+                                                            $dest_file);
+            } else {
+                $role = &PEAR_Installer_Role::factory($pf, $atts['role'], $this->config);
+                $role->setup($this, $pf, $atts, $file);
+                if (!$role->isInstallable()) {
+                    continue; // this shouldn't happen
+                }
+                list($save_destdir, $dest_dir, $dest_file, $orig_file) =
+                    $role->processInstallation($pkg, $atts['attribs'], $file, $tmp_path, 'ftp');
+                $dest_file = str_replace(DIRECTORY_SEPARATOR, '/', $dest_file);
+            }
+            $installedas = $atts['installed_as'];
+            $this->log(2, 'Uploading "' . $installedas . '" to "' . $dest_file . '"');
+            if (PEAR::isError($e = $ftp->installFile($installedas, $dest_file))) {
+                return $e;
+            }
+        }
+        $this->log(2, 'Disconnect from FTP server');
+        return $ftp->disconnect();
+    }
+
     // {{{ _compileSourceFiles()
     /**
      * @param string
@@ -1191,6 +1342,12 @@ class PEAR_Installer extends PEAR_Downloader
      */
     function uninstall($package, $options = array())
     {
+        if (isset($options['installroot'])) {
+            $this->config->setInstallRoot($options['installroot']);
+            $this->installroot = '';
+        } else {
+            $this->installroot = '';
+        }
         $this->_registry = &$this->config->getRegistry();
         if (is_object($package)) {
             $channel = $package->getChannel();
@@ -1205,16 +1362,6 @@ class PEAR_Installer extends PEAR_Downloader
         }
         $savechannel = $this->config->get('default_channel');
         $this->configSet('default_channel', $channel);
-        $php_dir = $this->config->get('php_dir');
-        if (isset($options['installroot'])) {
-            if (substr($options['installroot'], -1) == DIRECTORY_SEPARATOR) {
-                $options['installroot'] = substr($options['installroot'], 0, -1);
-            }
-            $this->installroot = $options['installroot'];
-            $php_dir = $this->_prependPath($php_dir, $this->installroot);
-        } else {
-            $this->installroot = '';
-        }
         if (!is_object($pkg)) {
             $pkg = $this->_registry->getPackage($package, $channel);
         }

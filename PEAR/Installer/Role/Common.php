@@ -63,13 +63,13 @@ class PEAR_Installer_Role_Common
      *    3 the full path to the final location of the file
      *    4 the location of the pre-installation file
      */
-    function processInstallation($pkg, $atts, $file, $tmp_path)
+    function processInstallation($pkg, $atts, $file, $tmp_path, $layer = null)
     {
         if (!$this->_setup['locationconfig']) {
             return false;
         }
         if ($this->_setup['honorsbaseinstall']) {
-            $dest_dir = $save_destdir = $this->config->get($this->_setup['locationconfig'], null,
+            $dest_dir = $save_destdir = $this->config->get($this->_setup['locationconfig'], $layer,
                 $pkg->getChannel());
             if (!empty($atts['baseinstalldir'])) {
                 $dest_dir .= DIRECTORY_SEPARATOR . $atts['baseinstalldir'];
@@ -109,6 +109,15 @@ class PEAR_Installer_Role_Common
     function getSupportingConfigVars()
     {
         return array();
+    }
+
+    /**
+     * Get the name of the configuration variable that specifies the location of this file
+     * @return string|false
+     */
+    function getLocationConfig()
+    {
+        return $this->_setup['locationconfig'];
     }
 
     /**
