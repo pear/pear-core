@@ -122,7 +122,7 @@ class PEAR_Exception extends Exception
         $trace       = parent::getTrace();
         $this->error_class  = $trace[0]['class'];
         $this->error_method = $trace[0]['function'];
-        $this->_method = $this->error_class . '::' . $this->error_method . '()';
+        $this->_method = $this->error_class . $trace[0]['type'] . $this->error_method . '()';
         parent::__construct($message, $code);
 
         $this->_signal();
