@@ -430,6 +430,14 @@ http://pear.php.net/dtd/package-2.0.xsd',
             );
             $arr['lead'][] = $new;
         }
+        if (!isset($arr['lead'])) { // some people... you know?
+            $arr['lead'] = array(
+                'name' => 'unknown',
+                'user' => 'unknown',
+                'email' => 'noleadmaintainer@example.com',
+                'active' => 'no',
+            );
+        }
         if (count($arr['lead']) == 1) {
             $arr['lead'] = $arr['lead'][0];
         }
@@ -499,6 +507,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
                         'release' => $release['version'],
                         'api' => $release['version'],
                     );
+                if (!isset($release['release_state'])) {
+                    $release['release_state'] = 'stable';
+                }
                 $rel['stability'] =
                     array(
                         'release' => $release['release_state'],
@@ -517,6 +528,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
                         );
                 } else {
                     $rel['license'] = $arr['license'];
+                }
+                if (!isset($release['release_notes'])) {
+                    $release['release_notes'] = 'no release notes';
                 }
                 $rel['notes'] = $release['release_notes'];
                 $arr['changelog']['release'][] = $rel;
