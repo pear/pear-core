@@ -91,11 +91,6 @@ Installer:
  * Major bug in Registry - false file conflicts on data/doc/test role
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)
-
-PEAR_ErrorStack:
-
- * add optional parameter to staticHasErrors() to allow error
-   determination for single packages
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -110,6 +105,9 @@ PEAR_ErrorStack:
    <dep type="ext" rel="has">pcre</dep>
   </deps>
   <filelist>
+   <dir name="OS">
+    <file role="php" name="Guess.php"/>
+   </dir>
    <dir name="PEAR">
     <file role="php" name="Autoloader.php"/>
     <file role="php" name="Command.php"/>
@@ -168,8 +166,8 @@ PEAR_ErrorStack:
      <file role="php" name="Postinstallscript.php"/>
      <file role="php" name="Replace.php"/>
     </dir>
-    <file role="php" name="Common.php"/>
     <file role="php" name="ChannelFile.php"/>
+    <file role="php" name="Common.php"/>
     <file role="php" name="Config.php"/>
     <file role="php" name="Dependency.php"/>
     <file role="php" name="DependencyDB.php"/>
@@ -188,9 +186,6 @@ PEAR_ErrorStack:
     <file role="php" name="Remote.php"/>
     <file role="php" name="RunTest.php"/>
     <file role="php" name="Validate.php"/>
-   </dir>
-   <dir name="OS">
-    <file role="php" name="Guess.php"/>
    </dir>
    <dir name="scripts" baseinstalldir="/">
     <file role="script" install-as="pear" name="pear.sh" platform="!windows">
@@ -220,24 +215,24 @@ PEAR_ErrorStack:
  </release>
  <changelog>
   <release>
-   <version>1.3</version>
-   <date>2004-02-20</date>
-   <license>PHP License</license>
+   <version>1.3.3</version>
+   <date>2004-10-28</date>
    <state>stable</state>
    <notes>
-PEAR Installer:
+Installer:
+ * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
+ * fix Bug #1249 display the right state when using --force option
+ * fix Bug #2189 upgrade-all stops if dependancy fails
+ * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
+ * fix Bug #1420 Parser bug for T_DOUBLE_COLON
+ * fix Request #2220 pear5 build fails on dual php4/php5 system
+ * fix Bug #1163  pear makerpm fails with packages that supply role="doc"
 
- * Bug #534  pear search doesn't list unstable releases
- * Bug #933  CMD Usability Patch 
- * Bug #937  throwError() treats every call as static 
- * Bug #964 PEAR_ERROR_EXCEPTION causes fatal error 
- * Bug #1008 safe mode raises warning
-
-PEAR_ErrorStack:
-
- * Added experimental error handling, designed to eventually replace
-   PEAR_Error.  It should be considered experimental until explicitly marked
-   stable.  require_once 'PEAR/ErrorStack.php' to use.
+Other:
+ * add PEAR_Exception class for PHP5 users
+ * fix critical problem in package.xml for linux in 1.3.2
+ * fix staticPopCallback() in PEAR_ErrorStack
+ * fix warning in PEAR_Registry for windows 98 users
    </notes>
   </release>
  </changelog>
