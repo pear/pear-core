@@ -129,7 +129,7 @@ class PEAR_Installer extends PEAR_Downloader
     function _deletePackageFiles($package, $channel = false)
     {
         if (!$channel) {
-            $channel = 'pear';
+            $channel = 'pear.php.net';
         }
         if (!strlen($package)) {
             return $this->raiseError("No package to uninstall given");
@@ -163,7 +163,7 @@ class PEAR_Installer extends PEAR_Downloader
         // {{{ return if this file is meant for another platform
         static $os;
         if (!isset($this->_registry)) {
-            $this->_registry = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+            $this->_registry = &$this->config->getRegistry();
         }
         if (isset($atts['platform'])) {
             if (empty($os)) {
@@ -628,7 +628,7 @@ class PEAR_Installer extends PEAR_Downloader
 
     function install($pkgfile, $options = array())
     {
-        $this->_registry = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $this->_registry = &$this->config->getRegistry();
         if (is_object($pkgfile)) {
             $pkg = $pkgfile;
             $pkgfile = $pkg->getArchiveFile();
@@ -670,7 +670,7 @@ class PEAR_Installer extends PEAR_Downloader
                 if (empty($options['soft'])) {
                     $this->log(0, substr($dep_errors, 1));
                 }
-                return $this->raiseError("$channel::$pkgname: Dependencies failed");
+                return $this->raiseError("$channel/$pkgname: Dependencies failed");
             } else if (!empty($dep_errors)) {
                 // Print optional dependencies
                 if (empty($options['soft'])) {
@@ -698,12 +698,12 @@ class PEAR_Installer extends PEAR_Downloader
                     }
                 }
                 if (sizeof($test)) {
-                    $msg = "$channel::$pkgname: conflicting files found:\n";
+                    $msg = "$channel/$pkgname: conflicting files found:\n";
                     $longest = max(array_map("strlen", array_keys($test)));
                     $fmt = "%${longest}s (%s)\n";
                     foreach ($test as $file => $info) {
                         if (is_array($info)) {
-                            $info = $info[0] . '::' . $info[1];
+                            $info = $info[0] . '/' . $info[1];
                         }
                         $msg .= sprintf($fmt, $file, $info);
                     }
@@ -718,7 +718,7 @@ class PEAR_Installer extends PEAR_Downloader
         if (empty($options['upgrade'])) {
             // checks to do only when installing new packages
             if (empty($options['force']) && $this->_registry->packageExists($pkgname, $channel)) {
-                return $this->raiseError("$channel::$pkgname already installed");
+                return $this->raiseError("$channel/$pkgname already installed");
             }
         } else {
             if ($this->_registry->packageExists($pkgname, $channel)) {
@@ -818,7 +818,7 @@ class PEAR_Installer extends PEAR_Downloader
         }
         if (!$ret) {
             $this->configSet('default_channel', $savechannel);
-            return $this->raiseError("Adding package $channel::$pkgname to registry failed");
+            return $this->raiseError("Adding package $channel/$pkgname to registry failed");
         }
         // }}}
         $this->configSet('default_channel', $savechannel);
@@ -890,18 +890,17 @@ class PEAR_Installer extends PEAR_Downloader
      */
     function uninstall($package, $options = array())
     {
-        $this->_registry = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $this->_registry = &$this->config->getRegistry();
         if (is_object($package)) {
             $channel = $package->getChannel();
             $pkg = $package;
             $package = $pkg->getPackage();
         } else {
             $pkg = false;
-            if ($this->validChannelPackage($package, $this->_registry)) {
-                list($channel, $package) = explode('::', $package);
-            } else {
-                $channel = $this->config->get('default_channel');
-            }
+            $info = $this->_registry->parsePackageName($package,
+                $this->config->get('default_channel'));
+            $channel = $info['channel'];
+            $package = $info['package'];
         }
         $savechannel = $this->config->get('default_channel');
         $this->configSet('default_channel', $channel);
@@ -920,7 +919,7 @@ class PEAR_Installer extends PEAR_Downloader
         }
         if (!$pkg) {
             $this->configSet('default_channel', $savechannel);
-            return $this->raiseError("$channel::$package not installed");
+            return $this->raiseError("$channel/$package not installed");
         }
         $filelist = $pkg->getFilelist();
         if (empty($options['nodeps'])) {

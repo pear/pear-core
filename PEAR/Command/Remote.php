@@ -73,7 +73,7 @@ latest stable release of each package.',
             'function' => 'doSearch',
             'shortcut' => 'sp',
             'options' => array(),
-            'doc' => '[[channel::]packagename] [packageinfo]
+            'doc' => '[[channel/]packagename] [packageinfo]
 Lists all packages which match the search parameters.  The first
 parameter is a fragment of a packagename.  The default channel
 will be used unless explicitly overridden.  The second parameter
@@ -104,7 +104,7 @@ latest stable release of each package.',
                     'doc' => 'download an uncompressed (.tar) file',
                     ),
                 ),
-            'doc' => '[channel::]{package|package-version}
+            'doc' => '[channel/]{package|package-version}
 Download a package tarball.  The file will be named as suggested by the
 server, for example if you download the DB package and the latest stable
 version of DB is 1.2, the downloaded file will be DB-1.2.tgz.',
@@ -144,10 +144,10 @@ parameter.
             return $this->raiseError("$command expects one param: the remote package name");
         }
         $savechannel = $channel = $this->config->get('default_channel');
-        $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $reg = &$this->config->getRegistry();
         $package = $params[0];
-        if (strpos($params[0], '::')) {
-            list($channel, $package) = explode('::', $params[0]);
+        if (strpos($params[0], '/')) {
+            list($channel, $package) = explode('/', $params[0]);
             if ($reg->channelExists($channel)) {
                 $this->config->set('default_channel', $channel);
             } else {
@@ -177,7 +177,7 @@ parameter.
     {
         $savechannel = $channel = $this->config->get('default_channel');
         if (isset($options['channel'])) {
-            $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+            $reg = &$this->config->getRegistry();
             $channel = $options['channel'];
             if ($reg->channelExists($channel)) {
                 $this->config->set('default_channel', $channel);
@@ -218,7 +218,7 @@ parameter.
     {
         $savechannel = $channel = $this->config->get('default_channel');
         if (isset($options['channel'])) {
-            $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+            $reg = &$this->config->getRegistry();
             $channel = $options['channel'];
             if ($reg->channelExists($channel)) {
                 $this->config->set('default_channel', $channel);
@@ -227,7 +227,7 @@ parameter.
             }
         }
         $r = new PEAR_Remote($this->config);
-        $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $reg = $this->config->getRegistry();
         $list_options = false;
         if ($this->config->get('preferred_state') == 'stable')
             $list_options = true;
@@ -309,10 +309,10 @@ parameter.
         };
 
         $savechannel = $channel = $this->config->get('default_channel');
-        $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $reg = &$this->config->getRegistry();
         $package = $params[0];
-        if (strpos($params[0], '::')) {
-            list($channel, $package) = explode('::', $params[0]);
+        if (strpos($params[0], '/')) {
+            list($channel, $package) = explode('/', $params[0]);
             if ($reg->channelExists($channel)) {
                 $this->config->set('default_channel', $channel);
             } else {
@@ -423,7 +423,7 @@ parameter.
         include_once "PEAR/Registry.php";
         $savechannel = $channel = $this->config->get('default_channel');
         if (isset($options['channel'])) {
-            $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+            $reg = &$this->config->getRegistry();
             $channel = $options['channel'];
             if ($reg->channelExists($channel)) {
                 $this->config->set('default_channel', $channel);
@@ -432,7 +432,7 @@ parameter.
             }
         }
         $remote = new PEAR_Remote($this->config);
-        $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $reg = &$this->config->getRegistry();
         if (empty($params[1])) {
             $state = $this->config->get('preferred_state');
         } else {

@@ -77,7 +77,7 @@ class PEAR_Command_Install extends PEAR_Command_Common
                     'doc' => 'install all required dependencies',
                     ),
                 ),
-            'doc' => '[channel::]<package> ...
+            'doc' => '[channel/]<package> ...
 Installs one or more PEAR packages.  You can specify a package to
 install in four ways:
 
@@ -99,7 +99,7 @@ Package state beta, use "Package-beta."  To retrieve an uncompressed
 file, append .tar (make sure there is no file by the same name first)
 
 To download a package from another channel, prefix with the channel name like
-"channel::Package"
+"channel/Package"
 
 More than one package may be specified at once.  It is ok to mix these
 four ways of specifying packages.
@@ -214,7 +214,7 @@ more stable.
                     'doc' => 'force install even if there were errors',
                     ),
                 ),
-            'doc' => '[channel::]<package> ...
+            'doc' => '[channel/]<package> ...
 Uninstalls one or more PEAR packages.  More than one package may be
 specified at once.  Prefix with channel name to uninstall from a
 channel not in your default channel ({config default_channel})
@@ -298,7 +298,7 @@ package if needed.
                         // installed version is up-to-date
                         continue;
                     }
-                    $params[] = $channel . '::' . $package;
+                    $params[] = $reg->parsedPackageNameToString(array('package' => $package, 'channel' => $channel));
                     $this->ui->outputData(array('data' => "Will upgrade $package"), $command);
                 }
             }
@@ -317,6 +317,7 @@ package if needed.
         }
         $downloaded = $this->downloader->getDownloadedPackages();
         $this->installer->sortPkgDeps($downloaded);
+        $reg = &$this->config->getRegistry();
         foreach ($downloaded as $pkg) {
             if ($command == 'upgrade-all') {
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
@@ -332,7 +333,12 @@ package if needed.
             if (is_array($info)) {
                 if ($this->config->get('verbose') > 0) {
                     $channel = $pkg['info']->getChannel();
-                    $label = "$channel::" . $info['package'] . " " . $info['version'];
+                    $label = $reg->parsedPackageNameToString(
+                        array(
+                            'channel' => $channel,
+                            'package' => $pkg['info']->getPackage(),
+                            'version' => $pkg['info']->getVersion(),
+                        ));
                     $out = array('data' => "$command ok: $label");
                     if (isset($info['release_warnings'])) {
                         $out['release_warnings'] = $info['release_warnings'];
@@ -358,15 +364,20 @@ package if needed.
             return $this->raiseError("Please supply the package(s) you want to uninstall");
         }
         include_once 'PEAR/Registry.php';
-        $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $reg = &$this->config->getRegistry();
         $newparams = array();
         $badparams = array();
         foreach ($params as $pkg) {
             $channel = $this->config->get('default_channel');
-            $package = $pkg;
-            if (strpos($pkg, '::')) {
-                list($channel, $package) = explode('::', $pkg);
+            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+            $parsed = $reg->parsePackageName($pkg);
+            PEAR::popErrorHandling();
+            if (!$parsed || PEAR::isError($parsed)) {
+                $badparams[] = $pkg;
+                continue;
             }
+            $package = $parsed['package'];
+            $channel = $parsed['channel'];
             $info = $reg->getPackage($package, $channel);
             if ($info === null) {
                 $badparams[] = $pkg;
@@ -390,14 +401,14 @@ package if needed.
                 }
                 if ($this->config->get('verbose') > 0) {
                     if (is_object($pkg)) {
-                        $pkg = $pkg->getChannel() . '::' . $pkg->getPackage();
+                        $pkg = $reg->parsedPackageNameToString($pkg);
                     }
                     $this->ui->outputData("uninstall ok: $pkg", $command);
                 }
             } else {
                 $this->installer->popErrorHandling();
                 if (is_object($pkg)) {
-                    $pkg = $pkg->getChannel() . '::' . $pkg->getPackage();
+                    $pkg = $reg->parsedPackageNameToString($pkg);
                 }
                 return $this->raiseError("uninstall failed: $pkg");
             }
@@ -421,74 +432,10 @@ package if needed.
             $this->installer = &new PEAR_Downloader($this->ui);
         }
         $installer = &$this->installer;
+        $reg = &$this->config->getRegistry();
         if (sizeof($params) < 1) {
             return $this->raiseError("Please supply the package you want to bundle");
         }
-        $pkgfile = $params[0];
-        $need_download = false;
-        if (preg_match('#^(http|ftp)://#', $pkgfile)) {
-            $need_download = true;
-        } elseif (!@is_file($pkgfile)) {
-            if (count($t = explode('::', $pkgfile)) == 2) {
-                $reg = &new PEAR_Registry($this->config->get('php_dir'));
-                $test = $reg->getChannel($t[0]);
-                if (!$test) {
-                    return $this->raiseError("Invalid channel in " . $t[0] . '::' . $t[1]);
-                }
-                if (!$test->validPackageName($t[1])) {
-                    return $this->raiseError("Invalid package name in " . $t[0] . '::' . $t[1]);
-                }
-            } else {
-                $test = $installer->validPackageName($pkgfile);
-            }
-            if ($installer->validPackageName($pkgfile)) {
-                $pkgfile = $installer->getPackageDownloadUrl($pkgfile);
-                $need_download = true;
-            } else {
-                if (strlen($pkgfile)) {
-                    return $this->raiseError("Could not open the package file: $pkgfile");
-                } else {
-                    return $this->raiseError("No package file given");
-                }
-            }
-        }
-
-        // Download package -----------------------------------------------
-        if ($need_download) {
-            $downloaddir = $installer->config->get('download_dir');
-            if (empty($downloaddir)) {
-                if (PEAR::isError($downloaddir = System::mktemp('-d'))) {
-                    return $downloaddir;
-                }
-                $installer->log(2, '+ tmp dir created at ' . $downloaddir);
-            }
-            $callback = $this->ui ? array(&$installer, '_downloadCallback') : null;
-            $file = $installer->downloadHttp($pkgfile, $this->ui, $downloaddir, $callback);
-            if (PEAR::isError($file)) {
-                return $this->raiseError($file);
-            }
-            $pkgfile = $file;
-        }
-
-       // Parse xml file -----------------------------------------------
-        $pkginfo = $installer->infoFromTgzFile($pkgfile);
-        if (PEAR::isError($pkginfo)) {
-            return $this->raiseError($pkginfo);
-        }
-        $installer->validatePackageInfo($pkginfo, $errors, $warnings);
-        // XXX We allow warnings, do we have to do it?
-        if (count($errors)) {
-             if (empty($options['force'])) {
-                return $this->raiseError("The following errors where found:\n".
-                                                 implode("\n", $errors));
-            } else {
-                $this->log(0, "warning : the following errors were found:\n".
-                           implode("\n", $errors));
-            }
-        }
-        $pkgname = $pkginfo['package'];
-
-        // Unpacking -------------------------------------------------
 
         if (isset($options['destination'])) {
             if (!is_dir($options['destination'])) {
@@ -503,12 +450,20 @@ package if needed.
                 $dest = $pwd;
             }
         }
-        $dest .= DIRECTORY_SEPARATOR . $pkgname;
-        $orig = $pkgname . '-' . $pkginfo['version'];
+        $pkgfile = &$this->installer->bundle($params[0], $dest);
+        if (PEAR::isError($pkgfile)) {
+            return $pkgfile;
+        }
+        $pkgname = $pkgfile->getName();
+        $pkgversion = $pkgfile->getVersion();
 
-        $tar = new Archive_Tar($pkgfile);
+        // Unpacking -------------------------------------------------
+        $dest .= DIRECTORY_SEPARATOR . $pkgname;
+        $orig = $pkgname . '-' . $pkgversion;
+
+        $tar = new Archive_Tar($pkgfile->getArchive());
         if (!@$tar->extractModify($dest, $orig)) {
-            return $this->raiseError("unable to unpack $pkgfile");
+            return $this->raiseError('unable to unpack ' . $pkgfile->getArchive());
         }
         $this->ui->outputData("Package ready at '$dest'");
     // }}}

@@ -50,7 +50,7 @@ class PEAR_Remote extends PEAR
     {
         $this->PEAR();
         $this->config = &$config;
-        $this->_registry = &new PEAR_Registry($config->get('php_dir', null, 'pear'));
+        $this->_registry = &$this->config->getRegistry();
     }
 
     // }}}
@@ -118,7 +118,7 @@ class PEAR_Remote extends PEAR
         if ($channel) {
             if (!$channel->supports('xmlrpc', $method, $version)) {
                 // check for channel.list, which is implicitly supported for the PEAR channel
-                if (!(strtolower($server_channel) == 'pear' && $method == 'channel.list')) {
+                if (!(strtolower($server_channel) == 'pear.php.net' && $method == 'channel.list')) {
                     return $this->raiseError("Channel $server_channel does not support xml-rpc method $method");
                 }
             }
@@ -387,6 +387,7 @@ class PEAR_Remote extends PEAR
                 $firstkey = key($php_val);
                 end($php_val);
                 $lastkey = key($php_val);
+                reset($php_val);
                 if ($firstkey === 0 && is_int($lastkey) &&
                     ($lastkey + 1) == count($php_val)) {
                     $is_continuous = true;

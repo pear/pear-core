@@ -1333,11 +1333,11 @@ class PEAR_ChannelFile {
             case '1.0' :
                 $this->resetFunctions('xmlrpc', $mirror);
                 $this->resetFunctions('soap', $mirror);
-                $this->addFunction('xmlrpc', '1.0', 'logintest', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.listLatestReleases', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.listAll', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.info', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.getDownloadURL', $mirror);
+                $this->addFunction('xmlrpc', '1.0', 'package.getDepDownloadURL', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'channel.update', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'channel.listAll', $mirror);
                 return true;
@@ -1435,7 +1435,41 @@ class PEAR_ChannelFile {
         $this->_channelInfo['summary'] = $summary;
         return true;
     }
-    
+
+    /**
+     * @param string
+     * @param boolean determines whether the alias is in channel.xml or local
+     * @return boolean success
+     */
+    function setAlias($alias, $local = false)
+    {
+        if (!$this->validChannelName($alias)) {
+            $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME, array('tag' => 'suggestedalias', 'name' => $alias));
+            return false;
+        }
+        if ($local) {
+            $this->_channelInfo['localalias'] = $alias;
+        } else {
+            $this->_channelInfo['suggestedalias'] = $alias;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    function getAlias()
+    {
+        if (isset($this->_channelInfo['localalias'])) {
+            return $this->_channelInfo['localalias'];
+        }
+        if (isset($this->_channelInfo['suggestedalias'])) {
+            return $this->_channelInfo['suggestedalias'];
+        }
+        if (isset($this->_channelInfo['name'])) {
+            return $this->_channelInfo['name'];
+        }
+    }
+
     /**
      * Set the package validation object if it differs from PEAR's default
      * The class must be includeable via changing _ in the classname to path separator,

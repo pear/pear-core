@@ -269,7 +269,7 @@ class PEAR_PackageFile_PHP4_v1 extends PEAR_PackageFile_v1
 
     function getChannel()
     {
-        return 'pear';
+        return 'pear.php.net';
     }
 
     function getName()
@@ -548,7 +548,7 @@ class PEAR_PackageFile_PHP4_v1 extends PEAR_PackageFile_v1
         $info = $this->_packageInfo;
         $errors = array();
         $warnings = array();
-        $channel = isset($info['channel']) ? $info['channel'] : 'pear';
+        $channel = isset($info['channel']) ? $info['channel'] : 'pear.php.net';
         $chan = isset($this->_registry) ? $this->_registry->getChannel($channel) : false;
         if (!$chan) {
             $this->_validateError(PEAR_PACKAGEFILE_ERROR_UNKNOWN_CHANNEL,

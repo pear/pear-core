@@ -18,7 +18,9 @@
 //
 // $Id$
 define('PEAR_VALIDATE_INSTALLING', 1);
+define('PEAR_VALIDATE_UNINSTALLING', 2); // this is not bit-mapped like the others
 define('PEAR_VALIDATE_NORMAL', 3);
+define('PEAR_VALIDATE_DOWNLOADING', 4); // this is not bit-mapped like the others
 define('PEAR_VALIDATE_PACKAGING', 7);
 require_once 'PEAR/Common.php';
 class PEAR_Validate
