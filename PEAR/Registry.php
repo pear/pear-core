@@ -806,8 +806,8 @@ class PEAR_Registry extends PEAR
             $this->_unlock();
             return false;
         }
-        $info = $info->getDefaultGenerator();
-        $info = $info->toArray();
+        $gen = &$info->getDefaultGenerator();
+        $info = $gen->toArray();
         $info['_lastmodified'] = time();
         fwrite($fp, serialize($info));
         $this->_closePackageFile($fp);

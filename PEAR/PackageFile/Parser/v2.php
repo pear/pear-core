@@ -1,6 +1,30 @@
 <?php
+//
+// +----------------------------------------------------------------------+
+// | PHP Version 5                                                        |
+// +----------------------------------------------------------------------+
+// | Copyright (c) 1997-2004 The PHP Group                                |
+// +----------------------------------------------------------------------+
+// | This source file is subject to version 3.0 of the PHP license,       |
+// | that is bundled with this package in the file LICENSE, and is        |
+// | available through the world-wide-web at the following url:           |
+// | http://www.php.net/license/3_0.txt.                                  |
+// | If you did not receive a copy of the PHP license and are unable to   |
+// | obtain it through the world-wide-web, please send a note to          |
+// | license@php.net so we can mail you a copy immediately.               |
+// +----------------------------------------------------------------------+
+// | Author: Greg Beaver <cellog@php.net>                                 |
+// |         Stephan Schmidt (original XML_Unserializer code)             |
+// |                                                                      |
+// +----------------------------------------------------------------------+
+//
+// $Id$
+
 /**
  * Parser for package.xml version 2.0
+ * @author Greg Beaver <cellog@php.net>
+ * @author Stephan Schmidt (original XML_Unserializer)
+ * @package PEAR
  */
 class PEAR_PackageFile_Parser_v2
 {
@@ -35,17 +59,6 @@ class PEAR_PackageFile_Parser_v2
      */
     var $_depth = 0;
 
-    /**
-     * convert an old package.xml into the new 2.0 format
-     *
-     * This method assumes the channel desired is the pear channel
-     * so set it differently if you desire
-     * @param PEAR_PackageFile_v1
-     */
-    function fromV1($packagefile)
-    {
-    }
-
     function setRegistry($r)
     {
         $this->_registry = $r;
@@ -68,6 +81,8 @@ class PEAR_PackageFile_Parser_v2
         $ret = new PEAR_PackageFile_v2;
         $ret->setRegistry($this->_registry);
         $ret->fromArray($this->_unserializedData);
+        // make sure the filelist is in the easy to read format needed
+        $ret->fromArray($ret->getFlattenedFilelist());
         $ret->setPackagefile($file, $archive);
         return $ret;
     }

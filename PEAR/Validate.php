@@ -20,6 +20,7 @@
 define('PEAR_VALIDATE_INSTALLING', 1);
 define('PEAR_VALIDATE_NORMAL', 3);
 define('PEAR_VALIDATE_PACKAGING', 7);
+require_once 'PEAR/Common.php';
 class PEAR_Validate
 {
     var $packageregex = _PEAR_COMMON_PACKAGE_NAME_PREG;
@@ -66,9 +67,23 @@ class PEAR_Validate
         return '(' . $this->packageregex . ')(-([.0-9a-zA-Z]+))?';
     }
 
+    /**
+     * @param string
+     */
     function validPackageName($name)
     {
         return (bool)preg_match('/^' . $this->packageregex . '$/', $name);
+    }
+
+    /**
+     * This validates a bundle name, and bundle names must conform
+     * to the PEAR naming convention, so the method is final.
+     * @param string
+     * @final
+     */
+    function validBundleName($name)
+    {
+        return (bool)preg_match('/^' . _PEAR_COMMON_PACKAGE_NAME_PREG . '$/', $name);
     }
 
     function validState($state)
@@ -89,6 +104,11 @@ class PEAR_Validate
     function validDepRelation($rel)
     {
         return in_array($rel, $this->_validDepRelations);
+    }
+
+    function validVersion($ver)
+    {
+        return (bool) preg_match(PEAR_COMMON_PACKAGE_VERSION_PREG, $ver);
     }
 
     function setPackageFile(&$pf)
@@ -178,7 +198,7 @@ class PEAR_Validate
     function validateVersion()
     {
         if ($this->_state != PEAR_VALIDATE_PACKAGING) {
-            return true;
+            return $this->validVersion($this->_packagexml->getVersion());
         }
         $version = $this->_packagexml->getVersion();
         $versioncomponents = explode('.', $version);

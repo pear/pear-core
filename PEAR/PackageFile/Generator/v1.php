@@ -1,4 +1,33 @@
 <?php
+//set_include_path('C:/devel/pear_with_channels');
+//
+// +----------------------------------------------------------------------+
+// | PHP Version 5                                                        |
+// +----------------------------------------------------------------------+
+// | Copyright (c) 1997-2004 The PHP Group                                |
+// +----------------------------------------------------------------------+
+// | This source file is subject to version 3.0 of the PHP license,       |
+// | that is bundled with this package in the file LICENSE, and is        |
+// | available through the world-wide-web at the following url:           |
+// | http://www.php.net/license/3_0.txt.                                  |
+// | If you did not receive a copy of the PHP license and are unable to   |
+// | obtain it through the world-wide-web, please send a note to          |
+// | license@php.net so we can mail you a copy immediately.               |
+// +----------------------------------------------------------------------+
+// | Author: Greg Beaver <cellog@php.net>                                 |
+// |                                                                      |
+// +----------------------------------------------------------------------+
+//
+// $Id$
+require_once 'PEAR/Validate.php';
+/**
+ * This class converts a PEAR_PackageFile_v1 object into any output format.
+ *
+ * Supported output formats include array, XML string, and a PEAR_PackageFile_v2
+ * object, for converting package.xml 1.0 into package.xml 2.0 with no sweat.
+ * @author Greg Beaver <cellog@php.net>
+ * @package PEAR
+ */
 class PEAR_PackageFile_Generator_v1
 {
     /**
@@ -16,12 +45,12 @@ class PEAR_PackageFile_Generator_v1
      *
      * @return string XML data
      */
-    function toXml()
+    function toXml($state = PEAR_VALIDATE_NORMAL)
     {
-        if (!$this->_packagefile->validate()) {
+        if (!$this->_packagefile->validate($state)) {
             return false;
         }
-        $pkginfo = $this->_packagefile->toArray();
+        $pkginfo = $this->_packagefile->getArray();
         static $maint_map = array(
             "handle" => "user",
             "name" => "name",
@@ -31,28 +60,28 @@ class PEAR_PackageFile_Generator_v1
         $ret = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
         $ret .= "<!DOCTYPE package SYSTEM \"http://pear.php.net/dtd/package-1.0\">\n";
         $ret .= "<package version=\"1.0\" packagerversion=\"@PEAR-VER@\">
-  <name>$pkginfo[package]</name>
-  <summary>".htmlspecialchars($pkginfo['summary'])."</summary>
-  <description>".htmlspecialchars($pkginfo['description'])."</description>
-  <maintainers>
+ <name>$pkginfo[package]</name>
+ <summary>".htmlspecialchars($pkginfo['summary'])."</summary>
+ <description>".trim(htmlspecialchars($pkginfo['description']))."\n </description>
+ <maintainers>
 ";
         foreach ($pkginfo['maintainers'] as $maint) {
-            $ret .= "    <maintainer>\n";
+            $ret .= "  <maintainer>\n";
             foreach ($maint_map as $idx => $elm) {
-                $ret .= "      <$elm>";
+                $ret .= "   <$elm>";
                 $ret .= htmlspecialchars($maint[$idx]);
                 $ret .= "</$elm>\n";
             }
-            $ret .= "    </maintainer>\n";
+            $ret .= "  </maintainer>\n";
         }
         $ret .= "  </maintainers>\n";
-        $ret .= $this->_makeReleaseXml($pkginfo);
+        $ret .= $this->_makeReleaseXml($pkginfo, false, $state);
         if (@sizeof($pkginfo['changelog']) > 0) {
-            $ret .= "  <changelog>\n";
+            $ret .= " <changelog>\n";
             foreach ($pkginfo['changelog'] as $oldrelease) {
                 $ret .= $this->_makeReleaseXml($oldrelease, true);
             }
-            $ret .= "  </changelog>\n";
+            $ret .= " </changelog>\n";
         }
         $ret .= "</package>\n";
         return $ret;
@@ -71,33 +100,34 @@ class PEAR_PackageFile_Generator_v1
      *
      * @access private
      */
-    function _makeReleaseXml($pkginfo, $changelog = false)
+    function _makeReleaseXml($pkginfo, $changelog = false, $state = PEAR_VALIDATE_NORMAL)
     {
         // XXX QUOTE ENTITIES IN PCDATA, OR EMBED IN CDATA BLOCKS!!
         $indent = $changelog ? "  " : "";
-        $ret = "$indent  <release>\n";
+        $ret = "$indent <release>\n";
         if (!empty($pkginfo['version'])) {
-            $ret .= "$indent    <version>$pkginfo[version]</version>\n";
+            $ret .= "$indent  <version>$pkginfo[version]</version>\n";
         }
         if (!empty($pkginfo['release_date'])) {
-            $ret .= "$indent    <date>$pkginfo[release_date]</date>\n";
+            $ret .= "$indent  <date>$pkginfo[release_date]</date>\n";
         }
         if (!empty($pkginfo['release_license'])) {
-            $ret .= "$indent    <license>$pkginfo[release_license]</license>\n";
+            $ret .= "$indent  <license>$pkginfo[release_license]</license>\n";
         }
         if (!empty($pkginfo['release_state'])) {
-            $ret .= "$indent    <state>$pkginfo[release_state]</state>\n";
+            $ret .= "$indent  <state>$pkginfo[release_state]</state>\n";
         }
         if (!empty($pkginfo['release_notes'])) {
-            $ret .= "$indent    <notes>".htmlspecialchars($pkginfo['release_notes'])."</notes>\n";
+            $ret .= "$indent  <notes>".trim(htmlspecialchars($pkginfo['release_notes']))
+            ."\n$indent  </notes>\n";
         }
         if (!empty($pkginfo['release_warnings'])) {
-            $ret .= "$indent    <warnings>".htmlspecialchars($pkginfo['release_warnings'])."</warnings>\n";
+            $ret .= "$indent  <warnings>".htmlspecialchars($pkginfo['release_warnings'])."</warnings>\n";
         }
         if (isset($pkginfo['release_deps']) && sizeof($pkginfo['release_deps']) > 0) {
-            $ret .= "$indent    <deps>\n";
+            $ret .= "$indent  <deps>\n";
             foreach ($pkginfo['release_deps'] as $dep) {
-                $ret .= "$indent      <dep type=\"$dep[type]\" rel=\"$dep[rel]\"";
+                $ret .= "$indent   <dep type=\"$dep[type]\" rel=\"$dep[rel]\"";
                 if (isset($dep['version'])) {
                     $ret .= " version=\"$dep[version]\"";
                 }
@@ -110,12 +140,12 @@ class PEAR_PackageFile_Generator_v1
                     $ret .= "/>\n";
                 }
             }
-            $ret .= "$indent    </deps>\n";
+            $ret .= "$indent  </deps>\n";
         }
         if (isset($pkginfo['configure_options'])) {
-            $ret .= "$indent    <configureoptions>\n";
+            $ret .= "$indent  <configureoptions>\n";
             foreach ($pkginfo['configure_options'] as $c) {
-                $ret .= "$indent      <configureoption name=\"".
+                $ret .= "$indent   <configureoption name=\"".
                     htmlspecialchars($c['name']) . "\"";
                 if (isset($c['default'])) {
                     $ret .= " default=\"" . htmlspecialchars($c['default']) . "\"";
@@ -123,11 +153,11 @@ class PEAR_PackageFile_Generator_v1
                 $ret .= " prompt=\"" . htmlspecialchars($c['prompt']) . "\"";
                 $ret .= "/>\n";
             }
-            $ret .= "$indent    </configureoptions>\n";
+            $ret .= "$indent  </configureoptions>\n";
         }
         if (isset($pkginfo['provides'])) {
             foreach ($pkginfo['provides'] as $key => $what) {
-                $ret .= "$indent    <provides type=\"$what[type]\" ";
+                $ret .= "$indent  <provides type=\"$what[type]\" ";
                 $ret .= "name=\"$what[name]\" ";
                 if (isset($what['extends'])) {
                     $ret .= "extends=\"$what[extends]\" ";
@@ -136,43 +166,128 @@ class PEAR_PackageFile_Generator_v1
             }
         }
         if (isset($pkginfo['filelist'])) {
-            $ret .= "$indent    <filelist>\n";
-            foreach ($pkginfo['filelist'] as $file => $fa) {
-                @$ret .= "$indent      <file role=\"$fa[role]\"";
-                if (isset($fa['baseinstalldir'])) {
-                    $ret .= ' baseinstalldir="' .
-                        htmlspecialchars($fa['baseinstalldir']) . '"';
-                }
-                if (isset($fa['md5sum'])) {
-                    $ret .= " md5sum=\"$fa[md5sum]\"";
-                }
-                if (isset($fa['platform'])) {
-                    $ret .= " platform=\"$fa[platform]\"";
-                }
-                if (!empty($fa['install-as'])) {
-                    $ret .= ' install-as="' .
-                        htmlspecialchars($fa['install-as']) . '"';
-                }
-                $ret .= ' name="' . htmlspecialchars($file) . '"';
-                if (empty($fa['replacements'])) {
-                    $ret .= "/>\n";
-                } else {
-                    $ret .= ">\n";
-                    foreach ($fa['replacements'] as $r) {
-                        $ret .= "$indent        <replace";
-                        foreach ($r as $k => $v) {
-                            $ret .= " $k=\"" . htmlspecialchars($v) .'"';
-                        }
-                        $ret .= "/>\n";
+            $ret .= "$indent  <filelist>\n";
+            if ($state ^ PEAR_VALIDATE_PACKAGING) {
+                $ret .= $this->_recursiveXmlFilelist($pkginfo['filelist']);
+            } else {
+                foreach ($pkginfo['filelist'] as $file => $fa) {
+                    @$ret .= "$indent   <file role=\"$fa[role]\"";
+                    if (isset($fa['baseinstalldir'])) {
+                        $ret .= ' baseinstalldir="' .
+                            htmlspecialchars($fa['baseinstalldir']) . '"';
                     }
-                    @$ret .= "$indent      </file>\n";
+                    if (isset($fa['md5sum'])) {
+                        $ret .= " md5sum=\"$fa[md5sum]\"";
+                    }
+                    if (isset($fa['platform'])) {
+                        $ret .= " platform=\"$fa[platform]\"";
+                    }
+                    if (!empty($fa['install-as'])) {
+                        $ret .= ' install-as="' .
+                            htmlspecialchars($fa['install-as']) . '"';
+                    }
+                    $ret .= ' name="' . htmlspecialchars($file) . '"';
+                    if (empty($fa['replacements'])) {
+                        $ret .= "/>\n";
+                    } else {
+                        $ret .= ">\n";
+                        foreach ($fa['replacements'] as $r) {
+                            $ret .= "$indent    <replace";
+                            foreach ($r as $k => $v) {
+                                $ret .= " $k=\"" . htmlspecialchars($v) .'"';
+                            }
+                            $ret .= "/>\n";
+                        }
+                        @$ret .= "$indent   </file>\n";
+                    }
                 }
             }
-            $ret .= "$indent    </filelist>\n";
+            $ret .= "$indent  </filelist>\n";
         }
-        $ret .= "$indent  </release>\n";
+        $ret .= "$indent </release>\n";
         return $ret;
     }
+
+    function _recursiveXmlFilelist($list)
+    {
+        $this->_dirs = array();
+        foreach ($list as $file => $attributes) {
+            $this->_addDir($this->_dirs, explode('/', dirname($file)), $file, $attributes);
+        }
+        return $this->_formatDir($this->_dirs);
+    }
+
+    function _addDir(&$dirs, $dir, $file = null, $attributes = null)
+    {
+        if ($dir == array() || $dir == array('.')) {
+            $dirs['files'][basename($file)] = $attributes;
+            return;
+        }
+        $curdir = array_shift($dir);
+        if (!isset($dirs['dirs'][$curdir])) {
+            $dirs['dirs'][$curdir] = array();
+        }
+        $this->_addDir($dirs['dirs'][$curdir], $dir, $file, $attributes);
+    }
+
+    function _formatDir($dirs, $indent = '', $curdir = '')
+    {
+        $ret = '';
+        if (!count($dirs)) {
+            return '';
+        }
+        if (isset($dirs['dirs'])) {
+            uksort($dirs['dirs'], 'strnatcasecmp');
+            foreach ($dirs['dirs'] as $dir => $contents) {
+                $usedir = "$curdir/$dir";
+                $ret .= "$indent   <dir name=\"$dir\">\n";
+                $ret .= $this->_formatDir($contents, "$indent ", $usedir);
+                $ret .= "$indent   </dir> <!-- $usedir -->\n";
+            }
+        }
+        if (isset($dirs['files'])) {
+            uksort($dirs['files'], 'strnatcasecmp');
+            foreach ($dirs['files'] as $file => $attribs) {
+                $ret .= $this->_formatFile($file, $attribs, $indent);
+            }
+        }
+        return $ret;
+    }
+
+    function _formatFile($file, $attributes, $indent)
+    {
+        $ret = "$indent   <file role=\"$attributes[role]\"";
+        if (isset($attributes['baseinstalldir'])) {
+            $ret .= ' baseinstalldir="' .
+                htmlspecialchars($attributes['baseinstalldir']) . '"';
+        }
+        if (isset($attributes['md5sum'])) {
+            $ret .= " md5sum=\"$attributes[md5sum]\"";
+        }
+        if (isset($attributes['platform'])) {
+            $ret .= " platform=\"$attributes[platform]\"";
+        }
+        if (!empty($attributes['install-as'])) {
+            $ret .= ' install-as="' .
+                htmlspecialchars($attributes['install-as']) . '"';
+        }
+        $ret .= ' name="' . htmlspecialchars($file) . '"';
+        if (empty($attributes['replacements'])) {
+            $ret .= "/>\n";
+        } else {
+            $ret .= ">\n";
+            foreach ($attributes['replacements'] as $r) {
+                $ret .= "$indent    <replace";
+                foreach ($r as $k => $v) {
+                    $ret .= " $k=\"" . htmlspecialchars($v) .'"';
+                }
+                $ret .= "/>\n";
+            }
+            $ret .= "$indent   </file>\n";
+        }
+        return $ret;
+    }
+
     // {{{ _unIndent()
 
     /**
@@ -447,6 +562,17 @@ class PEAR_PackageFile_Generator_v1
         } else {
             $release['dependencies']['required'] = $peardep;
         }
+        if (!isset($release['dependencies']['required']['php'])) {
+            $release['dependencies']['required']['php'] =
+                array('attribs' => array('min' => phpversion()));
+        }
+        $order = array();
+        $bewm = $release['dependencies']['required'];
+        $order['php'] = $bewm['php'];
+        $order['pearinstaller'] = $bewm['pearinstaller'];
+        isset($bewm['package']) ? $order['package'] = $bewm['package'] :0;
+        isset($bewm['extension']) ? $order['extension'] = $bewm['extension'] :0;
+        $release['dependencies']['required'] = $order;
         if (isset($release['dependencies']['optional'])) {
             $release['dependencies']['group'] =
                 $release['dependencies']['optional'];
@@ -772,17 +898,17 @@ class PEAR_PackageFile_Generator_v1
 
     // }}}
 }
-//set_include_path('C:/devel/pear_with_channels');
 //require_once 'PEAR/PackageFile/Parser/v1.php';
 //require_once 'PEAR/Registry.php';
 //$a = new PEAR_PackageFile_Parser_v1;
 //$r = new PEAR_Registry('C:\Program Files\php\pear');
 //$a->setRegistry($r);
+////$p = &$a->parse(file_get_contents('C:\php4\pear_pkgs\Perm_LiveUser\package.xml'), PEAR_VALIDATE_NORMAL,
 //$p = &$a->parse(file_get_contents('C:\devel\pear_with_channels\package-PEAR.xml'), PEAR_VALIDATE_NORMAL,
 ////$p = &$a->parse(file_get_contents('C:\devel\chiara\phpdoc\package.xml'), PEAR_VALIDATE_NORMAL,
 //    'C:\devel\pear_with_channels\package-PEAR.xml');
 //$g = &$p->getDefaultGenerator();
-//$v2 = &$g->toV2();
-//$g = &$v2->getDefaultGenerator();
-//echo $g->toXml();
+////$v2 = &$g->toV2();
+////$g = &$v2->getDefaultGenerator();
+//echo $g->toXml(PEAR_VALIDATE_NORMAL);
 //?>
