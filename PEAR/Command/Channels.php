@@ -291,14 +291,14 @@ List the files in an installed package.
                 $loc = $downloader->downloadHttp($channel, $this->ui, $tmpdir);
                 PEAR::staticPopErrorHandling();
                 if (PEAR::isError($loc)) {
-                    return $this->raiseError('Cannot open ' . $channel);
+                    return $this->raiseError('Cannot open "' . $channel . '"');
                 } else {
                     $contents = implode('', file($loc));
                 }
             } else {
                 $fp = @fopen($params[0], 'r');
                 if (!$fp) {
-                    return $this->raiseError('Cannot open ' . $channel);
+                    return $this->raiseError('Cannot open "' . $channel . '"');
                 }
                 $contents = '';
                 while (!feof($fp)) {
