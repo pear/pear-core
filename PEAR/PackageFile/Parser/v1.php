@@ -225,11 +225,15 @@ class PEAR_PackageFile_Parser_v1
                 break;
             case 'package' :
                 if (isset($attribs['version'])) {
-                    $this->_packageInfo['xsdversion'] = $attribs['version'];
+                    $this->_packageInfo['xsdversion'] = trim($attribs['version']);
                 } else {
                     $this->_packageInfo['xsdversion'] = '1.0';
                 }
                 break;
+            case 'name' :
+                if (isset($attribs['extends'])) {
+                    $this->_packageInfo['extends'] = trim($attribs['extends']);
+                }
         }
     }
 

@@ -87,10 +87,13 @@ class PEAR_Validate
         }
         $this->validatePackageName();
         $this->validateVersion();
+        $this->validateMaintainers();
+        $this->validateDate();
         if ($this->_packagexml->getPackagexmlVersion() == '1.0') {
-            $this->validateState($this->_packagexml->getState());
+            $this->validateState();
         } elseif ($this->_packagexml->getPackagexmlVersion() == '2.0') {
-            $this->validateStability($this->_packagexml->getStability());
+            $this->validateTime();
+            $this->validateStability();
         }
     }
 
@@ -206,6 +209,57 @@ class PEAR_Validate
                 return false;
             break;
         }
+    }
+
+    function validateMaintainers()
+    {
+        // maintainers can only be truly validated server-side for most channels
+        // but allow this customization for those who wish it
+        return true;
+    }
+
+    function validateDate()
+    {
+        // packager automatically sets date, so only validate if
+        // pear validate is called
+        if ($this->_state = PEAR_VALIDATE_NORMAL) {
+            if (!preg_match('/\n\n\n\n\-\n\n\-\n\n/',
+                  $this->_packagexml->getDate())) {
+                $this->_addFailure('date', 'invalid release date "' .
+                    $this->_packagexml->getDate());
+                return false;
+            }
+            if (strtotime($this->_packagexml->getDate()) == -1) {
+                $this->_addFailure('date', 'invalid release date "' .
+                    $this->_packagexml->getDate());
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function validateTime()
+    {
+        if (!$this->_packagexml->getTime()) {
+            // default of no time value set
+            return true;
+        }
+        // packager automatically sets time, so only validate if
+        // pear validate is called
+        if ($this->_state = PEAR_VALIDATE_NORMAL) {
+            if (!preg_match('/\n\n:\n\n:\n\n/',
+                  $this->_packagexml->getDate())) {
+                $this->_addFailure('time', 'invalid release time "' .
+                    $this->_packagexml->getDate());
+                return false;
+            }
+            if (strtotime($this->_packagexml->getDate()) == -1) {
+                $this->_addFailure('time', 'invalid release time "' .
+                    $this->_packagexml->getDate());
+                return false;
+            }
+        }
+        return true;
     }
 
     function validateState()
