@@ -280,6 +280,8 @@ class PEAR_Command
                 $GLOBALS['_PEAR_Command_shortcuts'][$shortcut] = $command;
             }
         }
+        ksort($GLOBALS['_PEAR_Command_shortcuts']);
+        ksort($GLOBALS['_PEAR_Command_commandlist']);
         @closedir($dp);
         return true;
     }
