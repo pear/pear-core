@@ -41,33 +41,11 @@ class PEAR_Validate
      */
     var $_validStates = array('alpha','beta','stable','snapshot','devel');
     /**
-     * Valid file installation roles
-     * @var array
-     * @access private
-     */
-    var $_validInstallRoles = array('php','ext','test','doc','data','src','script');
-    /**
-     * Valid dependency relations
-     * @var array
-     * @access private
-     */
-    var $_validDepRelations = array('has','eq','lt','le','gt','ge','not');
-    /**
      * Format: ('error' => array('field' => name, 'reason' => reason), 'warning' => same)
      * @var array
      * @access private
      */
     var $_failures = array('error' => array(), 'warning' => array());
-
-    function getChannelPackageDownloadRegex()
-    {
-        return '(' . _PEAR_CHANNELS_NAME_PREG . ')::' . $this->getPackageDownloadRegex();
-    }
-
-    function getPackageDownloadRegex()
-    {
-        return '(' . $this->packageregex . ')(-([.0-9a-zA-Z]+))?';
-    }
 
     /**
      * @param string
@@ -79,11 +57,12 @@ class PEAR_Validate
 
     /**
      * This validates a bundle name, and bundle names must conform
-     * to the PEAR naming convention, so the method is final.
+     * to the PEAR naming convention, so the method is final and static.
      * @param string
      * @final
+     * @static
      */
-    function validBundleName($name)
+    function validGroupName($name)
     {
         return (bool)preg_match('/^' . _PEAR_COMMON_PACKAGE_NAME_PREG . '$/', $name);
     }
@@ -96,16 +75,6 @@ class PEAR_Validate
     function getValidStates()
     {
         return $this->_validStates;
-    }
-
-    function validInstallRole($role)
-    {
-        return in_array($role, $this->_validInstallRoles);
-    }
-
-    function validDepRelation($rel)
-    {
-        return in_array($rel, $this->_validDepRelations);
     }
 
     function validVersion($ver)
