@@ -26,6 +26,14 @@ $e = $command->run('config-create', array(), array('badroot', $temp_path . '/con
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => 'Root directory must be an absolute path beginning with "/", was: "badroot"'),
 ), 'bad root dir');
+$e = $command->run('config-create', array(), array('C:\\badroot', $temp_path . '/config.ini'));
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' => 'Root directory must be an absolute path beginning with "/", was: "C:/badroot"'),
+), 'C:\\badroot dir');
+$e = $command->run('config-create', array('windows' => true), array('5:\\badroot', $temp_path . '/config.ini'));
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' => 'Root directory must be an absolute path beginning with "\\" or "C:\\", was: "5:/badroot"'),
+), 'C:\\badroot dir');
 $phpunit->assertFileNotExists($temp_path . '/config.ini', 'make sure no create');
 $e = $command->run('config-create', array(), array('/okroot', $temp_path . '/#\\##/'));
 $phpunit->assertErrors(array(
