@@ -1273,7 +1273,8 @@ class PEAR_Downloader extends PEAR_Common
             $config = &PEAR_Config::singleton();
         }
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
-        if ($proxy = parse_url($config->get('http_proxy'))) {
+        if ($config->get('http_proxy')&& 
+              $proxy = parse_url($config->get('http_proxy'))) {
             $proxy_host = @$proxy['host'];
             $proxy_port = @$proxy['port'];
             $proxy_user = @$proxy['user'];
