@@ -564,9 +564,16 @@ installed package.'
         $info['Release Version'] = $obj->getVersion() . ' (' . $obj->getState() . ')';
         $info['API Version'] = $obj->getVersion('api') . ' (' . $obj->getState('api') . ')';
         $info['License'] = $obj->getLicense();
-        $lic = $obj->getLicense(true);
-        if (isset($lic['attribs']['uri'])) {
-            $info['License'] .= ' (' . $lic['attribs']['uri'] . ')';
+        $uri = $obj->getLicenseLocation();
+        if ($uri) {
+            if (isset($uri['uri'])) {
+                $info['License'] .= ' (' . $uri['uri'] . ')';
+            } else {
+                $extra = $obj->getInstalledLocation($info['filesource']);
+                if ($extra) {
+                    $info['License'] .= ' (' . $uri['filesource'] . ')';
+                }
+            }
         }
         $info['Release Notes'] = $obj->getNotes();
         if ($compat = $obj->getCompatible()) {

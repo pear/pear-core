@@ -19,6 +19,7 @@
 //
 // $Id$
 require_once 'PEAR/ErrorStack.php';
+require_once 'PEAR/Validate.php';
 require_once 'PEAR/PackageFile/Generator/v2.php';
 /**
  * @author Greg Beaver <cellog@php.net>
@@ -421,93 +422,6 @@ class PEAR_PackageFile_v2
     }
 
     /**
-     * @todo construct _filelist and use it
-     */
-    function setInstalledAs($file, $path)
-    {
-        if ($path) {
-            return $this->_packageInfo['filelist'][$file]['installed_as'] = $path;
-        }
-        unset($this->_packageInfo['filelist'][$file]['installed_as']);
-    }
-
-    /**
-     * This is only used at install-time, after all serialization
-     * is over.
-     */
-    function installedFile($file, $atts)
-    {
-        if (isset($this->_packageInfo['filelist'][$file])) {
-            $this->_packageInfo['filelist'][$file] =
-                array_merge($this->_packageInfo['filelist'][$file], $atts['attribs']);
-        } else {
-            $this->_packageInfo['filelist'][$file] = $atts['attribs'];
-        }
-    }
-
-    /**
-     * Retrieve the contents tag
-     */
-    function getContents()
-    {
-        if (isset($this->_packageInfo['contents'])) {
-            return $this->_packageInfo['contents'];
-        }
-        return false;
-    }
-
-    function addFile($dir, $file, $attrs)
-    {
-        if ($dir == '/') {
-            $dir = '';
-        } else {
-            $dir .= '/';
-        }
-        $attrs['name'] = $dir . $file;
-        $this->_packageInfo['contents']['dir']['attribs']['name'] = '/';
-        if (isset($this->_packageInfo['contents']['dir']['file'])) {
-            if (!isset($this->_packageInfo['contents']['dir']['file'][0])) {
-                $this->_packageInfo['contents']['dir']['file'] =
-                    array($this->_packageInfo['contents']['dir']['file']);
-            }
-            $this->_packageInfo['contents']['dir']['file'][]['attribs'] = $attrs;
-        } else {
-            $this->_packageInfo['contents']['dir']['file']['attribs'] = $attrs;
-        }
-    }
-
-    function setFileAttribute($file, $attr, $value, $index)
-    {
-        if (isset($this->_packageInfo['contents']['dir']['file']['attribs'])) {
-            if ($this->_packageInfo['contents']['dir']['file']['attribs']['name'] == $file) {
-                $this->_packageInfo['contents']['dir']['file']['attribs'][$attr] = $value;
-                return;
-            }
-        }
-        if (isset($this->_packageInfo['contents']['dir']['file'][$index]['attribs'])) {
-            $this->_packageInfo['contents']['dir']['file'][$index]['attribs'][$attr] = $value;
-        }
-    }
-
-    function setDirtree($path)
-    {
-        $this->_packageInfo['dirtree'][$path] = true;
-    }
-
-    function getDirtree()
-    {
-        if (isset($this->_packageInfo['dirtree']) && count($this->_packageInfo['dirtree'])) {
-            return $this->_packageInfo['dirtree'];
-        }
-        return false;
-    }
-
-    function resetDirtree()
-    {
-        unset($this->_packageInfo['dirtree']);
-    }
-
-    /**
      * Directly set the array that defines this packagefile
      *
      * WARNING: no validation.  This should only be performed by internal methods
@@ -552,6 +466,41 @@ class PEAR_PackageFile_v2
         }
     }
 
+    function getName()
+    {
+        return $this->getPackage();
+    }
+
+    function getPackage()
+    {
+        if (isset($this->_packageInfo['name'])) {
+            return $this->_packageInfo['name'];
+        }
+        return false;
+    }
+
+    function setPackage($package)
+    {
+        $this->_isValid = 0;
+        if (!isset($this->_packageInfo['name'])) {
+            return $this->_packageInfo = array_merge(array('name' => array($package)),
+                $this->_packageInfo);
+        }
+        $this->_packageInfo['name'] = $package;
+        if (!isset($this->_packageInfo['attribs'])) {
+            return $this->_packageInfo = array_merge(array('attribs' => array(
+                                 'version' => '2.0',
+                                 'xmlns' => 'http://pear.php.net/dtd/package-2.0',
+                                 'xmlns:tasks' => 'http://pear.php.net/dtd/tasks-1.0',
+                                 'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+                                 'xsi:schemaLocation' => 'http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0
+    http://pear.php.net/dtd/package-2.0.xsd',
+                             )), $this->_packageInfo);
+        }
+    }
+
     function getChannel()
     {
         if (isset($this->_packageInfo['uri'])) {
@@ -574,43 +523,33 @@ class PEAR_PackageFile_v2
     function setUri($uri)
     {
         unset($this->_packageInfo['channel']);
+        $this->_isValid = 0;
+        if (!isset($this->_packageInfo['uri'])) {
+            // ensure that the uri tag is set up in the right location
+            return $this->_insertBefore($this->_packageInfo, 
+                array('extends', 'summary', 'description', 'lead',
+                'developer', 'contributor', 'helper', 'date', 'time', 'version',
+                'stability', 'license', 'notes', 'contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), $uri, 'uri');
+        }
         $this->_packageInfo['uri'] = $uri;
     }
 
     function setChannel($channel)
     {
         unset($this->_packageInfo['uri']);
-        $this->_packageInfo['channel'] = $channel;
         $this->_isValid = 0;
-    }
-
-    function getName()
-    {
-        return $this->getPackage();
-    }
-
-    function getPackage()
-    {
-        if (isset($this->_packageInfo['name'])) {
-            return $this->_packageInfo['name'];
+        if (!isset($this->_packageInfo['channel'])) {
+            // ensure that the channel tag is set up in the right location
+            return $this->_insertBefore($this->_packageInfo,
+                array('extends', 'summary', 'description', 'lead',
+                'developer', 'contributor', 'helper', 'date', 'time', 'version',
+                'stability', 'license', 'notes', 'contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), $channel, 'channel');
         }
-        return false;
-    }
-
-    function setPackage($package)
-    {
-        $this->_packageInfo['attribs'] = array(
-                             'version' => '2.0',
-                             'xmlns' => 'http://pear.php.net/dtd/package-2.0',
-                             'xmlns:tasks' => 'http://pear.php.net/dtd/tasks-1.0',
-                             'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-                             'xsi:schemaLocation' => 'http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd',
-                         );
-        $this->_packageInfo['name'] = $package;
-        $this->_isValid = 0;
+        $this->_packageInfo['channel'] = $channel;
     }
 
     function getExtends()
@@ -623,31 +562,63 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
     function setExtends($extends)
     {
-        $this->_packageInfo['extends'] = $extends;
         $this->_isValid = 0;
+        if (!isset($this->_packageInfo['extends'])) {
+            // ensure that the extends tag is set up in the right location
+            return $this->_insertBefore($this->_packageInfo,
+                array('summary', 'description', 'lead',
+                'developer', 'contributor', 'helper', 'date', 'time', 'version',
+                'stability', 'license', 'notes', 'contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), $extends, 'extends');
+        }
+        $this->_packageInfo['extends'] = $extends;
     }
 
-    /**
-     * @param package|api version category to return
-     */
-    function getVersion($key = 'release')
+    function getSummary()
     {
-        if (isset($this->_packageInfo['version'][$key])) {
-            return $this->_packageInfo['version'][$key];
+        if (isset($this->_packageInfo['summary'])) {
+            return $this->_packageInfo['summary'];
         }
         return false;
     }
 
-    function setReleaseVersion($version)
+    function setSummary($summary)
     {
-        $this->_packageInfo['version']['release'] = $version;
         $this->_isValid = 0;
+        if (!isset($this->_packageInfo['summary'])) {
+            // ensure that the summary tag is set up in the right location
+            return $this->_insertBefore($this->_packageInfo,
+                array('summary', 'description', 'lead',
+                'developer', 'contributor', 'helper', 'date', 'time', 'version',
+                'stability', 'license', 'notes', 'contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), $summary, 'summary');
+        }
+        $this->_packageInfo['summary'] = $summary;
     }
 
-    function setAPIVersion($version)
+    function getDescription()
     {
-        $this->_packageInfo['version']['api'] = $version;
+        if (isset($this->_packageInfo['description'])) {
+            return $this->_packageInfo['description'];
+        }
+        return false;
+    }
+
+    function setDescription($desc)
+    {
         $this->_isValid = 0;
+        if (!isset($this->_packageInfo['summary'])) {
+            // ensure that the description tag is set up in the right location
+            return $this->_insertBefore($this->_packageInfo,
+                array('lead',
+                'developer', 'contributor', 'helper', 'date', 'time', 'version',
+                'stability', 'license', 'notes', 'contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), $desc, 'description');
+        }
+        $this->_packageInfo['description'] = $desc;
     }
 
     /**
@@ -656,6 +627,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
      */
     function addMaintainer($role, $handle, $name, $email, $active = 'yes')
     {
+        if (!in_array($role, array('lead', 'developer', 'contributor', 'helper'))) {
+            return false;
+        }
         if (isset($this->_packageInfo[$role])) {
             if (!isset($this->_packageInfo[$role][0])) {
                 $this->_packageInfo[$role] = array($this->_packageInfo[$role]);
@@ -668,6 +642,21 @@ http://pear.php.net/dtd/package-2.0.xsd',
                     'active' => $active,
                 );
         } else {
+            $testarr = array('lead',
+                    'developer', 'contributor', 'helper', 'date', 'time', 'version',
+                    'stability', 'license', 'notes', 'contents', 'compatible',
+                    'dependencies', 'phprelease', 'extsrcrelease',
+                    'extbinrelease', 'bundle', 'changelog');
+            foreach (array('lead', 'developer', 'contributor', 'helper') as $testrole) {
+                array_shift($testarr);
+                if ($role == $testrole) {
+                    break;
+                }
+            }
+            if (!isset($this->_packageInfo[$role])) {
+                // ensure that the extends tag is set up in the right location
+                $this->_insertBefore($this->_packageInfo, $testarr, array(), $role);
+            }
             $this->_packageInfo[$role] =
                 array(
                     'name' => $name,
@@ -676,29 +665,43 @@ http://pear.php.net/dtd/package-2.0.xsd',
                     'active' => $active,
                 );
         }
+        $this->_isValid = 0;
     }
 
-    function updateMaintainer($role, $handle, $name, $email)
+    function updateMaintainer($newrole, $handle, $name, $email, $active = 'yes')
     {
         $found = false;
-        if (!isset($this->_packageInfo[$role]) ||
-              !is_array($this->_packageInfo[$role])) {
-            return $this->addMaintainer($role, $handle, $name, $email);
-        }
-        if (!isset($this->_packageInfo[$role][0])) {
-            $this->_packageInfo[$role] = array($this->_packageInfo[$role]);
-        }
-        foreach ($this->_packageInfo[$role] as $i => $maintainer) {
-            if ($maintainer['user'] == $handle) {
-                $found = $i;
-                break;
+        foreach (array('lead', 'developer', 'contributor', 'helper') as $role) {
+            if (!isset($this->_packageInfo[$role])) {
+                continue;
+            }
+            $info = $this->_packageInfo[$role];
+            if (!isset($info[0])) {
+                if ($info['user'] == $handle) {
+                    $found = true;
+                    break;
+                }
+            }
+            foreach ($info as $i => $maintainer) {
+                if ($maintainer['user'] == $handle) {
+                    $found = $i;
+                    break 2;
+                }
             }
         }
-        if ($found !== false) {
-            unset($this->_packageInfo[$role][$found]);
-            $this->_packageInfo[$role] = array_values($this->_packageInfo[$role]);
+        if ($found === false) {
+            return $this->addMaintainer($newrole, $handle, $name, $email, $active);
         }
-        $this->addMaintainer($role, $handle, $name, $email);
+        if ($found !== false) {
+            if ($found === true) {
+                unset($this->_packageInfo[$role]);
+            } else {
+                unset($this->_packageInfo[$role][$found]);
+                $this->_packageInfo[$role] = array_values($this->_packageInfo[$role]);
+            }
+        }
+        $this->addMaintainer($newrole, $handle, $name, $email);
+        $this->_isValid = 0;
     }
 
     function deleteMaintainer($handle)
@@ -712,13 +715,20 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 $this->_packageInfo[$role] = array($this->_packageInfo[$role]);
             }
             foreach ($this->_packageInfo[$role] as $i => $maintainer) {
-                if ($maintainer['handle'] == $handle) {
+                if ($maintainer['user'] == $handle) {
                     $found = $i;
                     break;
                 }
             }
             if ($found !== false) {
                 unset($this->_packageInfo[$role][$found]);
+                if (!count($this->_packageInfo[$role]) && $role == 'lead') {
+                    $this->_isValid = 0;
+                }
+                if (!count($this->_packageInfo[$role])) {
+                    unset($this->_packageInfo[$role]);
+                    return true;
+                }
                 $this->_packageInfo[$role] =
                     array_values($this->_packageInfo[$role]);
                 if (count($this->_packageInfo[$role]) == 1) {
@@ -735,7 +745,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
     function getMaintainers($raw = false)
     {
-        
+        if (!$this->_isValid && !$this->validate()) {
+            return false;
+        }
         if ($raw) {
             $ret = array('lead' => $this->_packageInfo['lead']);
             (isset($this->_packageInfo['developer'])) ?
@@ -764,6 +776,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                     $s = $maintainer;
                     $s['handle'] = $s['user'];
                     unset($s['user']);
+                    $s['role'] = 'developer';
                     $ret[] = $s;
                 }
             }
@@ -775,6 +788,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                     $s = $maintainer;
                     $s['handle'] = $s['user'];
                     unset($s['user']);
+                    $s['role'] = 'contributor';
                     $ret[] = $s;
                 }
             }
@@ -786,6 +800,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                     $s = $maintainer;
                     $s['handle'] = $s['user'];
                     unset($s['user']);
+                    $s['role'] = 'helper';
                     $ret[] = $s;
                 }
             }
@@ -826,6 +841,87 @@ http://pear.php.net/dtd/package-2.0.xsd',
         return false;
     }
 
+    function getDate()
+    {
+        if (isset($this->_packageInfo['date'])) {
+            return $this->_packageInfo['date'];
+        }
+        return false;
+    }
+
+    function setDate($date)
+    {
+        if (!isset($this->_packageInfo['date'])) {
+            // ensure that the extends tag is set up in the right location
+            $this->_insertBefore($this->_packageInfo,
+                array('time', 'version',
+                    'stability', 'license', 'notes', 'contents', 'compatible',
+                    'dependencies', 'phprelease', 'extsrcrelease',
+                    'extbinrelease', 'bundle', 'changelog'), array(), 'stability');
+        }
+        $this->_packageInfo['date'] = $date;
+        $this->_isValid = 0;
+    }
+
+    function getTime()
+    {
+        if (isset($this->_packageInfo['time'])) {
+            return $this->_packageInfo['time'];
+        }
+        return false;
+    }
+
+    function setTime($time)
+    {
+        $this->_isValid = 0;
+        if (!isset($this->_packageInfo['time'])) {
+            // ensure that the time tag is set up in the right location
+            return $this->_insertBefore($this->_packageInfo,
+                    array('version',
+                    'stability', 'license', 'notes', 'contents', 'compatible',
+                    'dependencies', 'phprelease', 'extsrcrelease',
+                    'extbinrelease', 'bundle', 'changelog'), $time, 'time');
+        }
+        $this->_packageInfo['time'] = $time;
+    }
+
+    /**
+     * @param package|api version category to return
+     */
+    function getVersion($key = 'release')
+    {
+        if (isset($this->_packageInfo['version'][$key])) {
+            return $this->_packageInfo['version'][$key];
+        }
+        return false;
+    }
+
+    function setReleaseVersion($version)
+    {
+        $this->_isValid = 0;
+        if (!isset($this->_packageInfo['version'])) {
+            // ensure that the version tag is set up in the right location
+            $this->_insertBefore($this->_packageInfo,
+                array('stability', 'license', 'notes', 'contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'version');
+        }
+        $this->_packageInfo['version']['release'] = $version;
+    }
+
+    function setAPIVersion($version)
+    {
+        $this->_isValid = 0;
+        if (!isset($this->_packageInfo['version'])) {
+            // ensure that the version tag is set up in the right location
+            $this->_insertBefore($this->_packageInfo,
+                array('stability', 'license', 'notes', 'contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'version');
+        }
+        $this->_packageInfo['version']['api'] = $version;
+    }
+
     function getStability()
     {
         if (isset($this->_packageInfo['stability'])) {
@@ -844,59 +940,61 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
     function setReleaseStability($state)
     {
+        if (!isset($this->_packageInfo['stability'])) {
+            // ensure that the stability tag is set up in the right location
+            $this->_insertBefore($this->_packageInfo,
+                array('license', 'notes', 'contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'stability');
+        }
         $this->_packageInfo['stability']['release'] = $state;
         $this->_isValid = 0;
     }
 
     function setAPIStability($state)
     {
+        if (!isset($this->_packageInfo['stability'])) {
+            // ensure that the stability tag is set up in the right location
+            $this->_insertBefore($this->_packageInfo,
+                array('license', 'notes', 'contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'stability');
+        }
         $this->_packageInfo['stability']['api'] = $state;
         $this->_isValid = 0;
     }
 
-    function getDate()
-    {
-        if (isset($this->_packageInfo['date'])) {
-            return $this->_packageInfo['date'];
-        }
-        return false;
-    }
-
-    function setDate($date)
-    {
-        $this->_packageInfo['date'] = $date;
-        $this->_isValid = 0;
-    }
-
-    function getTime()
-    {
-        if (isset($this->_packageInfo['time'])) {
-            return $this->_packageInfo['time'];
-        }
-        return false;
-    }
-
-    function setTime($time)
-    {
-        $this->_packageInfo['time'] = $time;
-        $this->_isValid = 0;
-    }
-
-    function getLicense($raw = false)
+    function getLicense()
     {
         if (isset($this->_packageInfo['license'])) {
-            if ($raw) {
+            if (is_array($this->_packageInfo['license'])) {
+                return $this->_packageInfo['license']['_content'];
+            } else {
                 return $this->_packageInfo['license'];
             }
-            return $this->_packageInfo['license']['_content'];
         }
         return false;
+    }
+
+    function getLicenseLocation()
+    {
+        if (!isset($this->_packageInfo['license']) || !is_array($this->_packageInfo['license'])) {
+            return false;
+        }
+        return $this->_packageInfo['license']['attribs'];
     }
 
     function setLicense($license, $uri = false, $filesource = false)
     {
+        if (!isset($this->_packageInfo['license'])) {
+            // ensure that the license tag is set up in the right location
+            $this->_insertBefore($this->_packageInfo,
+                array('notes', 'contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), 0, 'license');
+        }
         if ($uri || $filesource) {
-            $attribs = arary();
+            $attribs = array();
             if ($uri) {
                 $attribs['uri'] = $uri;
             }
@@ -910,34 +1008,6 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $this->_isValid = 0;
     }
 
-    function getSummary()
-    {
-        if (isset($this->_packageInfo['summary'])) {
-            return $this->_packageInfo['summary'];
-        }
-        return false;
-    }
-
-    function setSummary($summary)
-    {
-        $this->_packageInfo['summary'] = $summary;
-        $this->_isValid = 0;
-    }
-
-    function getDescription()
-    {
-        if (isset($this->_packageInfo['description'])) {
-            return $this->_packageInfo['description'];
-        }
-        return false;
-    }
-
-    function setDescription($desc)
-    {
-        $this->_packageInfo['description'] = $desc;
-        $this->_isValid = 0;
-    }
-
     function getNotes()
     {
         if (isset($this->_packageInfo['notes'])) {
@@ -948,8 +1018,121 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
     function setNotes($notes)
     {
-        $this->_packageInfo['notes'] = $notes;
         $this->_isValid = 0;
+        if (!isset($this->_packageInfo['license'])) {
+            // ensure that the notes tag is set up in the right location
+            return $this->_insertBefore($this->_packageInfo,
+                array('contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), $notes, 'notes');
+        }
+        $this->_packageInfo['notes'] = $notes;
+    }
+
+    /**
+     * This is only used at install-time, after all serialization
+     * is over.
+     * @param string file name
+     * @param string installed path
+     */
+    function setInstalledAs($file, $path)
+    {
+        if ($path) {
+            return $this->_packageInfo['filelist'][$file]['installed_as'] = $path;
+        }
+        unset($this->_packageInfo['filelist'][$file]['installed_as']);
+    }
+
+    function getInstalledLocation($file)
+    {
+        if (isset($this->_packageInfo['filelist'][$file]['installed_as'])) {
+            return $this->_packageInfo['filelist'][$file]['installed_as'];
+        }
+        return false;
+    }
+
+    /**
+     * This is only used at install-time, after all serialization
+     * is over.
+     */
+    function installedFile($file, $atts)
+    {
+        if (isset($this->_packageInfo['filelist'][$file])) {
+            $this->_packageInfo['filelist'][$file] =
+                array_merge($this->_packageInfo['filelist'][$file], $atts['attribs']);
+        } else {
+            $this->_packageInfo['filelist'][$file] = $atts['attribs'];
+        }
+    }
+
+    /**
+     * Retrieve the contents tag
+     */
+    function getContents()
+    {
+        if (isset($this->_packageInfo['contents'])) {
+            return $this->_packageInfo['contents'];
+        }
+        return false;
+    }
+
+    function addFile($dir, $file, $attrs)
+    {
+        $this->_isValid = 0;
+        if ($dir == '/') {
+            $dir = '';
+        } else {
+            $dir .= '/';
+        }
+        $attrs['name'] = $dir . $file;
+        if (!isset($this->_packageInfo['contents'])) {
+            // ensure that the contents tag is set up
+            $this->_insertBefore($this->_packageInfo,
+                array('compatible', 'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'contents');
+        }
+        $this->_packageInfo['contents']['dir']['attribs']['name'] = '/';
+        if (isset($this->_packageInfo['contents']['dir']['file'])) {
+            if (!isset($this->_packageInfo['contents']['dir']['file'][0])) {
+                $this->_packageInfo['contents']['dir']['file'] =
+                    array($this->_packageInfo['contents']['dir']['file']);
+            }
+            $this->_packageInfo['contents']['dir']['file'][]['attribs'] = $attrs;
+        } else {
+            $this->_packageInfo['contents']['dir']['file']['attribs'] = $attrs;
+        }
+    }
+
+    function setFileAttribute($file, $attr, $value, $index)
+    {
+        $this->_isValid = 0;
+        if (isset($this->_packageInfo['contents']['dir']['file']['attribs'])) {
+            if ($this->_packageInfo['contents']['dir']['file']['attribs']['name'] == $file) {
+                $this->_packageInfo['contents']['dir']['file']['attribs'][$attr] = $value;
+                return;
+            }
+        }
+        if (isset($this->_packageInfo['contents']['dir']['file'][$index]['attribs'])) {
+            $this->_packageInfo['contents']['dir']['file'][$index]['attribs'][$attr] = $value;
+        }
+    }
+
+    function setDirtree($path)
+    {
+        $this->_packageInfo['dirtree'][$path] = true;
+    }
+
+    function getDirtree()
+    {
+        if (isset($this->_packageInfo['dirtree']) && count($this->_packageInfo['dirtree'])) {
+            return $this->_packageInfo['dirtree'];
+        }
+        return false;
+    }
+
+    function resetDirtree()
+    {
+        unset($this->_packageInfo['dirtree']);
     }
 
     /**
@@ -1001,6 +1184,13 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
     function addCompatiblePackage($name, $channel, $min, $max, $exclude = false)
     {
+        if (!isset($this->_packageInfo['compatible'])) {
+            // ensure that the compatible tag is set up
+            $this->_insertBefore($this->_packageInfo,
+                array('dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'contents');
+        }
+        $this->_isValid = 0;
         $set = array(
             'name' => $name,
             'channel' => $channel,
@@ -1401,6 +1591,16 @@ http://pear.php.net/dtd/package-2.0.xsd',
      */
     function addPhpDep($min, $max)
     {
+        $this->_isValid = 0;
+        if (!isset($this->_packageInfo['dependencies'])) {
+            // ensure that the dependencies tag is set up
+            $this->_insertBefore($this->_packageInfo,
+                array('phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
+        } elseif (!isset($this->_packageInfo['dependencies']['required'])) {
+            $this->_insertBefore($this->_packageInfo['dependencies'],
+                array('optional', 'group'), array(), 'required');
+        }
         $args = func_get_args();
         array_shift($args);
         array_shift($args);
@@ -1419,6 +1619,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
             $dep['exclude'] = $exclude;
         }
         if (!isset($this->_packageInfo['dependencies']['required']['php'])) {
+            $this->_insertBefore($this->_packageInfo['dependencies']['required'],
+                array('pearinstaller', 'package', 'subpackage',
+                'extension', 'os', 'arch'), $dep, 'php');
             $this->_packageInfo['dependencies']['required']['php'] = $dep;
         } else {
             $this->_packageInfo['dependencies']['required']['php'][] = $dep;
@@ -1433,6 +1636,16 @@ http://pear.php.net/dtd/package-2.0.xsd',
      */
     function addPearinstallerDep($min, $max = false, $recommended = false)
     {
+        $this->_isValid = 0;
+        if (!isset($this->_packageInfo['dependencies'])) {
+            // ensure that the dependencies tag is set up
+            $this->_insertBefore($this->_packageInfo,
+                array('phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
+        } elseif (!isset($this->_packageInfo['dependencies']['required'])) {
+            $this->_insertBefore($this->_packageInfo['dependencies'],
+                array('optional', 'group'), array(), 'required');
+        }
         $args = func_get_args();
         if (count($args) > 3) {
             $exclude = array_slice($args, 3);
@@ -1467,6 +1680,16 @@ http://pear.php.net/dtd/package-2.0.xsd',
      */
     function addConflictingPackageDepWithChannel($name, $channel)
     {
+        $this->_isValid = 0;
+        if (!isset($this->_packageInfo['dependencies'])) {
+            // ensure that the dependencies tag is set up
+            $this->_insertBefore($this->_packageInfo,
+                array('phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
+        } elseif (!isset($this->_packageInfo['dependencies']['required'])) {
+            $this->_insertBefore($this->_packageInfo['dependencies'],
+                array('optional', 'group'), array(), 'required');
+        }
         $dep =
             array(
                 'name' => $name,
@@ -1487,6 +1710,16 @@ http://pear.php.net/dtd/package-2.0.xsd',
      */
     function addConflictingPackageDepWithUri($name, $uri)
     {
+        $this->_isValid = 0;
+        if (!isset($this->_packageInfo['dependencies'])) {
+            // ensure that the dependencies tag is set up
+            $this->_insertBefore($this->_packageInfo,
+                array('phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
+        } elseif (!isset($this->_packageInfo['dependencies']['required'])) {
+            $this->_insertBefore($this->_packageInfo['dependencies'],
+                array('optional', 'group'), array(), 'required');
+        }
         $dep =
             array(
                 'name' => $name,
@@ -1510,8 +1743,26 @@ http://pear.php.net/dtd/package-2.0.xsd',
      * @param string $exclude... optional excluded versions
      */
     function addPackageDepWithChannel($type, $name, $channel, $min = false, $max = false,
-                                      $recommended = false)
+                                      $recommended = false, $group = null)
     {
+        $this->_isValid = 0;
+        if (!isset($this->_packageInfo['dependencies'])) {
+            // ensure that the dependencies tag is set up
+            $this->_insertBefore($this->_packageInfo,
+                array('phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
+        } elseif (!isset($this->_packageInfo['dependencies'][$type])) {
+            $save = $this->_packageInfo['dependencies'];
+            $new = array();
+            foreach (array('required', 'optional', 'group') as $possible) {
+                if ($type == $possible) {
+                    $new[$type] = array();
+                } elseif (isset($save[$type])) {
+                    $new[$type] = $save[$type];
+                }
+            }
+            $this->_packageInfo['dependencies'] = $new;
+        }
         $args = func_get_args();
         if (count($args) > 6) {
             $exclude = array_slice($args, 6);
@@ -1547,8 +1798,26 @@ http://pear.php.net/dtd/package-2.0.xsd',
         }
     }
 
-    function addPackageDepWithUri($type, $name, $uri)
+    function addPackageDepWithUri($type, $name, $uri, $group = null)
     {
+        $this->_isValid = 0;
+        if (!isset($this->_packageInfo['dependencies'])) {
+            // ensure that the dependencies tag is set up
+            $this->_insertBefore($this->_packageInfo,
+                array('phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
+        } elseif (!isset($this->_packageInfo['dependencies'][$type])) {
+            $save = $this->_packageInfo['dependencies'];
+            $new = array();
+            foreach (array('required', 'optional', 'group') as $possible) {
+                if ($type == $possible) {
+                    $new[$type] = array();
+                } elseif (isset($save[$type])) {
+                    $new[$type] = $save[$type];
+                }
+            }
+            $this->_packageInfo['dependencies'] = $new;
+        }
         $dep = array('name' => $name, 'uri' => $uri);
         if (!isset($this->_packageInfo['dependencies'][$type]['package'])) {
             $this->_packageInfo['dependencies'][$type]['package'] = $dep;
@@ -1567,8 +1836,26 @@ http://pear.php.net/dtd/package-2.0.xsd',
      * @param string $exclude... optional excluded versions
      */
     function addSubpackageDepWithChannel($type, $name, $channel, $min = false, $max = false,
-                                      $recommended = false)
+                                      $recommended = false, $group = null)
     {
+        $this->_isValid = 0;
+        if (!isset($this->_packageInfo['dependencies'])) {
+            // ensure that the dependencies tag is set up
+            $this->_insertBefore($this->_packageInfo,
+                array('phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
+        } elseif (!isset($this->_packageInfo['dependencies'][$type])) {
+            $save = $this->_packageInfo['dependencies'];
+            $new = array();
+            foreach (array('required', 'optional', 'group') as $possible) {
+                if ($type == $possible) {
+                    $new[$type] = array();
+                } elseif (isset($save[$type])) {
+                    $new[$type] = $save[$type];
+                }
+            }
+            $this->_packageInfo['dependencies'] = $new;
+        }
         $args = func_get_args();
         if (count($args) > 6) {
             $exclude = array_slice($args, 6);
@@ -1600,8 +1887,26 @@ http://pear.php.net/dtd/package-2.0.xsd',
         }
     }
 
-    function addSubpackageDepWithUri($type, $name, $uri)
+    function addSubpackageDepWithUri($type, $name, $uri, $group = null)
     {
+        $this->_isValid = 0;
+        if (!isset($this->_packageInfo['dependencies'])) {
+            // ensure that the dependencies tag is set up
+            $this->_insertBefore($this->_packageInfo,
+                array('phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
+        } elseif (!isset($this->_packageInfo['dependencies'][$type])) {
+            $save = $this->_packageInfo['dependencies'];
+            $new = array();
+            foreach (array('required', 'optional', 'group') as $possible) {
+                if ($type == $possible) {
+                    $new[$type] = array();
+                } elseif (isset($save[$type])) {
+                    $new[$type] = $save[$type];
+                }
+            }
+            $this->_packageInfo['dependencies'] = $new;
+        }
         $dep = array('name' => $name, 'uri' => $uri);
         if (!isset($this->_packageInfo['dependencies'][$type]['subpackage'])) {
             $this->_packageInfo['dependencies'][$type]['subpackage'] = $dep;
@@ -1610,8 +1915,26 @@ http://pear.php.net/dtd/package-2.0.xsd',
         }
     }
 
-    function addExtensionDep($name, $version, $rel, $optional = 'no')
+    function addExtensionDep($type, $name, $version, $rel, $optional = 'no', $group = null)
     {
+        $this->_isValid = 0;
+        if (!isset($this->_packageInfo['dependencies'])) {
+            // ensure that the dependencies tag is set up
+            $this->_insertBefore($this->_packageInfo,
+                array('phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
+        } elseif (!isset($this->_packageInfo['dependencies'][$type])) {
+            $save = $this->_packageInfo['dependencies'];
+            $new = array();
+            foreach (array('required', 'optional', 'group') as $possible) {
+                if ($type == $possible) {
+                    $new[$type] = array();
+                } elseif (isset($save[$type])) {
+                    $new[$type] = $save[$type];
+                }
+            }
+            $this->_packageInfo['dependencies'] = $new;
+        }
     }
 
     function getPackageType()
@@ -1633,7 +1956,12 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
     function setPackageType($type)
     {
+        $this->_isValid = 0;
         $type .= 'release';
+        if (!isset($this->_packageInfo[$type])) {
+            // ensure that the compatible tag is set up
+            $this->_insertBefore($this->_packageInfo, array('changelog'), array(), $type);
+        }
         $this->_packageInfo[$type] = array();
     }
 
@@ -1719,6 +2047,37 @@ http://pear.php.net/dtd/package-2.0.xsd',
     {
         $a = &new PEAR_PackageFile_Generator_v2($this);
         return $a;
+    }
+
+    /**
+     * Key-friendly array_splice
+     * @param tagname to splice a value in before
+     * @param mixed the value to splice in
+     * @param string the new tag name
+     */
+    function _ksplice($array, $key, $value, $newkey)
+    {
+        $offset = array_search($key, array_keys($array));
+        $after = array_slice($array, $offset);
+        $before = array_slice($array, 0, $offset);
+        $before[$newkey] = $value;
+        return array_merge($before, $after);
+    }
+
+    /**
+     * @param array a list of possible keys, in the order they may occur
+     * @param mixed contents of the new package.xml tag
+     * @param string tag name
+     * @access private
+     */
+    function _insertBefore(&$array, $keys, $contents, $newkey)
+    {
+        foreach ($keys as $key) {
+            if (isset($array[$key])) {
+                return $array = $this->_ksplice($array, $key, $contents, $newkey);
+            }
+        }
+        $array[$newkey] = $contents;
     }
 
     function validate($state = PEAR_VALIDATE_NORMAL)
