@@ -106,6 +106,10 @@ latest stable release of each package.',
                     'shortopt' => 'Z',
                     'doc' => 'download an uncompressed (.tar) file',
                     ),
+                'force' => array(
+                    'shortopt' => 'f',
+                    'doc' => 'force download of non-preferred state package',
+                    ),
                 ),
             'doc' => '<package>...
 Download package tarballs.  The files will be named as suggested by the
@@ -241,7 +245,7 @@ parameter.
         $list_options = false;
         if ($this->config->get('preferred_state') == 'stable')
             $list_options = true;
-        $available = $r->call('package.listAll', $list_options);
+        $available = $r->call('package.listAll', $list_options, $list_options, true);
         if (PEAR::isError($available)) {
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($available);
@@ -383,7 +387,6 @@ parameter.
     {
         include_once 'PEAR/Downloader.php';
         // make certain that dependencies are ignored
-        $options['force'] = 1;
         $options['nodeps'] = 1;
         $downloader = &$this->getDownloader($options);
         $downloader->setDownloadDir(getcwd());
