@@ -136,6 +136,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * significantly drop pear's memory footprint for all commands except powerhouse commands like
     &quot;pear package&quot;
   * fix fatal errors when installing pecl packages
+  * make download command work for non-root in a shared environment
  </notes>
  <contents>
   <dir name="/">

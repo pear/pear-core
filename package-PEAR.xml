@@ -130,6 +130,7 @@
   * significantly drop pear's memory footprint for all commands except powerhouse commands like
     &quot;pear package&quot;
   * fix fatal errors when installing pecl packages
+  * make download command work for non-root in a shared environment
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
