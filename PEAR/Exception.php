@@ -118,6 +118,10 @@ class PEAR_Exception extends Exception
             $this->cause = null;
         } elseif ($p2 instanceof Exception || is_array($p2)) {
             $code = $p3;
+            if (is_array($p2) && isset($p2['message'])) {
+                // fix potential problem of passing in a single warning
+                $p2 = array($p2);
+            }
             $this->cause = $p2;
         } else {
             $code = null;
