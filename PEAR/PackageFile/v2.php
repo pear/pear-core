@@ -1071,10 +1071,35 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    /**
+     * Reset the listing of package contents
+     * @param string base installation dir for the whole package, if any
+     */
+    function clearContents($baseinstall = false)
+    {
+        if (!isset($this->_packageInfo['contents'])) {
+            $this->_insertBefore($this->_packageInfo,
+                array('compatible',
+                    'dependencies', 'phprelease', 'extsrcrelease',
+                    'extbinrelease', 'bundle', 'changelog'), array(), 'contents');
+        }
+        $this->_packageInfo['contents'] = 
+            array('dir' => array('attribs' => array('name' => '/')));
+        if ($baseinstall) {
+            $this->_packageInfo['contents']['dir']['attribs']['baseinstalldir'] = $baseinstall;
+        }
+    }
+
+    /**
+     * @param string path to the file
+     * @param string filename
+     * @param array extra attributes
+     */
     function addFile($dir, $file, $attrs)
     {
         $this->_isValid = 0;
-        if ($dir == '/') {
+        $dir = preg_replace(array('!\\\\+!', '!/!'), '/', $dir);
+        if ($dir == '/' || $dir == '') {
             $dir = '';
         } else {
             $dir .= '/';
@@ -1086,7 +1111,6 @@ class PEAR_PackageFile_v2
                 array('compatible', 'dependencies', 'phprelease', 'extsrcrelease',
                 'extbinrelease', 'bundle', 'changelog'), array(), 'contents');
         }
-        $this->_packageInfo['contents']['dir']['attribs']['name'] = '/';
         if (isset($this->_packageInfo['contents']['dir']['file'])) {
             if (!isset($this->_packageInfo['contents']['dir']['file'][0])) {
                 $this->_packageInfo['contents']['dir']['file'] =
