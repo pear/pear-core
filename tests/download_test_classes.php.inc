@@ -788,4 +788,29 @@ class fake_log
         return $log;
     }
 }
+
+function cleanall($dir = null)
+{
+    if ($dir !== null) {
+        $statedir = $dir;
+    } else {
+        $statedir = $GLOBALS['statedir'];
+    }
+    clearstatcache();
+    if (file_exists($statedir)) {
+        $dp = opendir($statedir);
+        while ($ent = readdir($dp)) {
+            if (in_array($ent, array('.', '..'))) {
+                continue;
+            }
+            if (is_dir($statedir . DIRECTORY_SEPARATOR . $ent)) {
+                cleanall($statedir . DIRECTORY_SEPARATOR . $ent);
+                continue;
+            }
+            unlink($statedir . DIRECTORY_SEPARATOR . $ent);
+        }
+        closedir($dp);
+        rmdir($statedir);
+    }
+}
 ?>

@@ -5,29 +5,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.i
 
 // ------------------------------------------------------------------------- //
 
-function cleanall($dir = null)
-{
-    if ($dir !== null) {
-        $statedir = $dir;
-    } else {
-        $statedir = $GLOBALS['statedir'];
-    }
-    if (file_exists($statedir)) {
-        $dp = opendir($statedir);
-        while ($ent = readdir($dp)) {
-            if (in_array($ent, array('.', '..'))) {
-                continue;
-            }
-            if (is_dir($statedir . DIRECTORY_SEPARATOR . $ent)) {
-                cleanall($statedir . DIRECTORY_SEPARATOR . $ent);
-                continue;
-            }
-            unlink($statedir . DIRECTORY_SEPARATOR . $ent);
-        }
-        closedir($dp);
-        rmdir($statedir);
-    }
-}
+require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 
 function copyItem($name, $nested = false)
 {

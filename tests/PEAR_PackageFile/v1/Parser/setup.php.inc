@@ -2,29 +2,8 @@
 require_once 'PEAR/PackageFile/Parser/v1.php';
 require_once 'PEAR/Config.php';
 
-function cleanall($dir = null)
-{
-    if ($dir !== null) {
-        $statedir = $dir;
-    } else {
-        $statedir = $GLOBALS['statedir'];
-    }
-    if (file_exists($statedir)) {
-        $dp = opendir($statedir);
-        while ($ent = readdir($dp)) {
-            if (in_array($ent, array('.', '..'))) {
-                continue;
-            }
-            if (is_dir($statedir . DIRECTORY_SEPARATOR . $ent)) {
-                cleanall($statedir . DIRECTORY_SEPARATOR . $ent);
-                continue;
-            }
-            unlink($statedir . DIRECTORY_SEPARATOR . $ent);
-        }
-        closedir($dp);
-        rmdir($statedir);
-    }
-}
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
+
 
 register_shutdown_function('cleanall');
 $statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'registry_tester';
@@ -43,21 +22,6 @@ $parser = new PEAR_PackageFile_Parser_v1;
 $parser->setConfig($config);
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
 $phpunit = &new PEAR_PHPTest(true);
-class fake_log
-{
-    var $_log = array();
-    function log($level, $message)
-    {
-        $this->_log[] = array($level, $message);
-    }
-
-    function getLog()
-    {
-        $log = $this->_log;
-        $this->_log = array();
-        return $log;
-    }
-}
 $fakelog = new fake_log;
 $parser->setLogger($fakelog);
 ?>
