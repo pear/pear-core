@@ -1015,6 +1015,9 @@ class PEAR_Config extends PEAR
      */
     function get($key, $layer = null, $channel = null)
     {
+        if (!isset($this->configuration_info[$key])) {
+            return null;
+        }
         if ($key == '__channels') {
             return null;
         }
@@ -1663,7 +1666,7 @@ class PEAR_Config extends PEAR
     {
         if (strlen($prepend) > 0) {
             if (OS_WINDOWS && preg_match('/^[a-z]:/i', $path)) {
-                $path = $prepend . substr($path, 2);
+                $path = substr($path, 0, 2) . '\\' . $prepend . substr($path, 2);
             } else {
                 $path = $prepend . $path;
             }
