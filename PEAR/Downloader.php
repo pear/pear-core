@@ -623,7 +623,8 @@ class PEAR_Downloader extends PEAR_Common
             // don't install with the old version information unless we're doing a plain
             // vanilla simple installation.  If the user says to install a particular
             // version or state, ignore the current installed version
-            if (!isset($parr['version']) && !isset($parr['state']) && $version) {
+            if (!isset($parr['version']) && !isset($parr['state']) && $version
+                  && !isset($this->_options['downloadonly'])) {
                 $url = $this->_remote->call('package.getDownloadURL', $parr, $state, $version);
             } else {
                 $url = $this->_remote->call('package.getDownloadURL', $parr, $state);
