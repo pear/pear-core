@@ -1798,12 +1798,16 @@ class PEAR_PackageFile_v2
      * @param array|false optional excluded versions
      * @param string extension this package provides, if any
      * @return bool false if the dependency group has not been initialized with
-     *              {@link addDependencyGroup()}
+     *              {@link addDependencyGroup()}, or a subpackage is added with
+     *              a providesextension
      */
     function addGroupPackageDepWithChannel($type, $groupname, $name, $channel, $min = false,
                                       $max = false, $recommended = false, $exclude = false,
                                       $providesextension = false)
     {
+        if ($type == 'subpackage' && $providesextension) {
+            return false; // subpackages must be php packages
+        }
         $dep = $this->_constructDep($name, $channel, false, $min, $max, $recommended, $exclude,
             $providesextension);
         return $this->_addGroupDependency($type, $dep, $groupname);
@@ -1820,6 +1824,9 @@ class PEAR_PackageFile_v2
      */
     function addGroupPackageDepWithURI($type, $groupname, $name, $uri, $providesextension = false)
     {
+        if ($type == 'subpackage' && $providesextension) {
+            return false; // subpackages must be php packages
+        }
         $dep = $this->_constructDep($name, false, $uri, false, false, false, false,
             $providesextension);
         return $this->_addGroupDependency($type, $dep, $groupname);
