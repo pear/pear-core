@@ -295,6 +295,7 @@ and uninstall).
         $config->set('test_dir', "$root/pear/tests");
         $config->set('cache_dir', "$root/pear/cache");
         $config->set('bin_dir', "$root/pear");
+        $config->writeConfigFile();
         $save = $this->config;
         $this->config = $config;
         $this->doConfigShow('config-show', array(), array('user'));
