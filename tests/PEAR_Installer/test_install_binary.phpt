@@ -14,10 +14,10 @@ $_test_dep->setOs('windows');
 $_test_dep->setPEARVersion('1.4.0dev13');
 $_test_dep->setPHPVersion('5.0.0');
 
-$pf = &new PEAR_PackageFile($config);
+$pf = &new test_PEAR_PackageFile($config);
 $oldpackage = &$pf->fromPackageFile(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     'test_install_binary' . DIRECTORY_SEPARATOR . 'package.xml', PEAR_VALIDATE_INSTALLING);
-
+$phpunit->assertNoErrors('oldpackage');
 $package = new test_PEAR_PackageFile_v2;
 $package->setConfig($config);
 $package->setPackagefile(dirname(__FILE__) . DIRECTORY_SEPARATOR .
@@ -25,11 +25,11 @@ $package->setPackagefile(dirname(__FILE__) . DIRECTORY_SEPARATOR .
 $package->fromArray($oldpackage->getArray());
 
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'test_install_binary'. DIRECTORY_SEPARATOR . 'test-1.1.tgz';
-$GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.1.tgz', $pathtopackagexml);
+    'test_install_binary'. DIRECTORY_SEPARATOR . 'test-1.1.0.tgz';
+$GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.1.0.tgz', $pathtopackagexml);
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
     array(array('channel' => 'pear.php.net', 'package' => 'test', ), 'stable'),
-    array('version' => '1.1',
+    array('version' => '1.1.0',
           'info' =>
           array(
             'channel' => 'pear.php.net',
@@ -61,7 +61,7 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
                 ),
             ),
           ),
-          'url' => 'http://www.example.com/test-1.1'));
+          'url' => 'http://www.example.com/test-1.1.0'));
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
     array(array('channel' => 'pear.php.net','package' => 'fail'), 'stable'),
     array('version' => '1.0',
@@ -100,8 +100,11 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
 
 
 $phpunit->assertNoErrors('setup');
-$params = array(&$package);
+$dp = &new test_PEAR_Downloader_Package($installer);
+$dp->setPackageFile($package);
+$params = array(&$dp);
 $installer->setDownloadedPackages($params);
+$phpunit->assertNoErrors('prior to install');
 $package->installBinary($installer);
 $phpunit->assertNoErrors('install');
 $tampered = $fakelog->getLog();
@@ -124,12 +127,12 @@ $phpunit->assertEquals(array (
   3 => 
   array (
     0 => 1,
-    1 => 'downloading test-1.1.tgz ...',
+    1 => 'downloading test-1.1.0.tgz ...',
   ),
   4 => 
   array (
     0 => 1,
-    1 => 'Starting to download test-1.1.tgz (715 bytes)',
+    1 => 'Starting to download test-1.1.0.tgz (725 bytes)',
   ),
   5 => 
   array (
@@ -139,12 +142,12 @@ $phpunit->assertEquals(array (
   6 => 
   array (
     0 => 1,
-    1 => '...done: 715 bytes',
+    1 => '...done: 725 bytes',
   ),
   7 => 
   array (
     0 => 3,
-    1 => '+ cp ' . str_replace('\\\\', '\\', $last_dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'test-1.1' .
+    1 => '+ cp ' . str_replace('\\\\', '\\', $last_dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'test-1.1.0' .
         DIRECTORY_SEPARATOR . 'foo.dll ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll',
   ),
   8 => 
@@ -156,7 +159,7 @@ $phpunit->assertEquals(array (
   array (
     0 => 3,
     1 => 'adding to transaction: rename ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll ' .
-        $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll',
+        $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll 1',
   ),
   10 => 
   array (
@@ -195,26 +198,26 @@ $phpunit->assertEquals(array (
   1 => 
   array (
     0 => 'saveas',
-    1 => 'test-1.1.tgz',
+    1 => 'test-1.1.0.tgz',
   ),
   2 => 
   array (
     0 => 'start',
     1 => 
     array (
-      0 => 'test-1.1.tgz',
-      1 => '715',
+      0 => 'test-1.1.0.tgz',
+      1 => '725',
     ),
   ),
   3 => 
   array (
     0 => 'bytesread',
-    1 => 715,
+    1 => 725,
   ),
   4 => 
   array (
     0 => 'done',
-    1 => 715,
+    1 => 725,
   ),
 ), $fakelog->getDownload(), 'install');
 echo 'tests done';

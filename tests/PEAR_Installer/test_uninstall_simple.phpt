@@ -41,7 +41,7 @@ $reg->addPackage2($package);
 $params = array();
 
 $dl = &new PEAR_Installer($fakelog);
-$dl->setDownloadedPackages($params);
+$dl->setUninstallPackages($params);
 $dl->uninstall('foo');
 $phpunit->assertNoErrors('foo');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'foo');

@@ -40,8 +40,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
    </pearinstaller>
   </required>
  </dependencies>
+ <providesextension>foo</providesextension>
  <extsrcrelease>
-  <providesextension>foo</providesextension>
   <binarypackage>fail</binarypackage>
   <binarypackage>test</binarypackage>
  </extsrcrelease>

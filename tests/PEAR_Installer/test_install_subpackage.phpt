@@ -37,9 +37,14 @@ $reg->addPackage2($oldpackage);
 
 $phpunit->assertNoErrors('setup');
 
-$params = array(&$package, &$subpackage);
+$dp1 = &new test_PEAR_Downloader_Package($installer);
+$dp1->setPackageFile($package);
+$dp2 = &new test_PEAR_Downloader_Package($installer);
+$dp2->setPackageFile($subpackage);
+$params = array(&$dp1, &$dp2);
 $installer->setDownloadedPackages($params);
-$installer->install($subpackage, array('upgrade' => true));
+$phpunit->assertNoErrors('dl setup');
+$installer->install($dp2, array('upgrade' => true));
 $phpunit->assertNoErrors('install');
 echo 'tests done';
 ?>

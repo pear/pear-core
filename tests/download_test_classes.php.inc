@@ -439,68 +439,37 @@ class test_PEAR_Downloader extends PEAR_Downloader {
         return $dest_file;
     }
 
-    function &download($params)
+    /**
+     * For simpler unit-testing
+     * @param PEAR_Config
+     * @param array
+     * @param array
+     * @param int
+     */
+    function &getDependency2Object(&$c, $i, $p, $s)
     {
-        if (!isset($this->_registry)) {
-            $this->_registry = &$this->config->getRegistry();
-        }
-        if (!isset($this->_remote)) {
-            $this->_remote = &$this->config->getRemote();
-        }
-        // convert all parameters into PEAR_Downloader_Package objects
-        foreach ($params as $i => $param) {
-            $params[$i] = &new test_PEAR_Downloader_Package($this);
-            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-            $err = $params[$i]->initialize($param);
-            PEAR::popErrorHandling();
-            if (PEAR::isError($err)) {
-                $this->log(0, $err->getMessage());
-                $params[$i] = false;
-                if (is_object($param)) {
-                    $param = $param->getChannel() . '/' . $param->getPackage();
-                }
-                $this->pushError('Package "' . $param . '" is not valid',
-                    PEAR_INSTALLER_SKIPPED);
-            }
-        }
-        PEAR_Downloader_Package::removeDuplicates($params);
-        if (!isset($this->_options['nodeps'])) {
-            foreach ($params as $i => $param) {
-                $params[$i]->detectDependencies($params);
-            }
-        }
-        while (PEAR_Downloader_Package::mergeDependencies($params));
-        PEAR_Downloader_Package::removeInstalled($params);
-        if (!count($params)) {
-            $this->pushError('No valid packages found', PEAR_INSTALLER_FAILED);
-        }
-        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-        $err = $this->analyzeDependencies($params);
-        PEAR::popErrorHandling();
-        if (PEAR::isError($err)) {
-            $this->pushError($err->getMessage());
-            return;
-        }
-        $ret = array();
-        $newparams = array();
-        foreach ($params as $package) {
-            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-            $pf = &$package->download();
-            PEAR::staticPopErrorHandling();
-            if (PEAR::isError($pf)) {
-                $this->log(1, $pf->getMessage());
-                $this->log(0, 'Error: cannot download "' .
-                    $this->_registry->parsedPackageNameToString($package->getParsedPackage()) .
-                    '"');
-                continue;
-            }
-            $newparams[] = &$package;
-            $ret[] = array('file' => $pf->getArchiveFile(),
-                                   'info' => &$pf,
-                                   'pkg' => $pf->getPackage());
-        }
-        $this->_downloadedPackages = $ret;
-        return $newparams;
+        $z = &new PEAR_Dependency2($c, $i, $p, $s);
+        return $z;
+    }
+
+    /**
+     * For simpler unit-testing
+     * @param PEAR_Downloader
+     * @return PEAR_Downloader_Package
+     */
+    function &newDownloaderPackage(&$t)
+    {
+        $a = new test_PEAR_Downloader_Package($t);
+        return $a;
+    }
+
+    /**
+     * For simpler unit-testing
+     * @return string
+     */
+    function getDownloaderPackageClass()
+    {
+        return 'test_PEAR_Downloader_Package';
     }
 
     function log($level, $msg)
@@ -521,6 +490,18 @@ class test_PEAR_Downloader_Package extends PEAR_Downloader_Package
     {
         $a = &test_PEAR_Dependency2::singleton($c, $i, $p, $s);
         return $a; 
+    }
+
+    /**
+     * For simpler unit-testing
+     * @param PEAR_Config
+     * @param int
+     * @param string
+     */
+    function &getPackagefileObject(&$c, $d, $dir)
+    {
+        $a = &new test_PEAR_PackageFile($c, $d, $dir);
+        return $a;
     }
 }
 require_once 'PEAR/Dependency2.php';
@@ -735,6 +716,14 @@ class test_PEAR_Dependency2 extends PEAR_Dependency2
         }
     }
 }
+require_once 'PEAR/PackageFile.php';
+class test_PEAR_PackageFile extends PEAR_PackageFile
+{
+    function getClassPrefix()
+    {
+        return 'test_PEAR_PackageFile_v';
+    }
+}
 require_once 'PEAR/PackageFile/v2.php';
 class test_PEAR_PackageFile_v2 extends PEAR_PackageFile_v2
 {
@@ -751,6 +740,23 @@ class test_PEAR_PackageFile_v2 extends PEAR_PackageFile_v2
         return $z;
     }
 }
+require_once 'PEAR/PackageFile/v1.php';
+class test_PEAR_PackageFile_v1 extends PEAR_PackageFile_v1
+{
+    function &getPEARDownloader(&$i, $o, &$c)
+    {
+        $z = &new test_PEAR_Downloader($i, $o, $c);
+        $GLOBALS['last_dl'] = &$z;
+        return $z;
+    }
+
+    function &getPEARDependency2(&$c, $o, $p, $s = PEAR_VALIDATE_INSTALLING)
+    {
+        $z = &test_PEAR_Dependency2::singleton(&$c, $o, $p, $s);
+        return $z;
+    }
+}
+
 class fake_log
 {
     var $_log = array();

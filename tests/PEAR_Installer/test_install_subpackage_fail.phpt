@@ -37,18 +37,23 @@ $reg->addPackage2($oldpackage);
 
 $phpunit->assertNoErrors('setup');
 
-$params = array(&$subpackage);
+
+$dp1 = &new test_PEAR_Downloader_Package($installer);
+$dp1->setPackageFile($oldpackage);
+$dp2 = &new test_PEAR_Downloader_Package($installer);
+$dp2->setPackageFile($subpackage);
+$params = array(&$dp2);
 $installer->setDownloadedPackages($params);
-$installer->install($subpackage, array('upgrade' => true));
+$installer->install($dp2, array('upgrade' => true));
 $phpunit->assertErrors(array(
 array('package' => 'PEAR_Error', 'message' =>
 'pear.php.net/bar: conflicting files found:
 bar.php (foo)
 ')), 'install');
 
-$params = array(&$oldpackage, &$subpackage);
+$params = array(&$dp1, &$dp2);
 $installer->setDownloadedPackages($params);
-$installer->install($subpackage, array('upgrade' => true));
+$installer->install($dp2, array('upgrade' => true));
 $phpunit->assertErrors(array(
 array('package' => 'PEAR_Error', 'message' =>
 'pear.php.net/bar: conflicting files found:

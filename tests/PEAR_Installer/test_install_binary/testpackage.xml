@@ -15,8 +15,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </lead>
  <date>2004-10-01</date>
  <version>
-  <release>1.1</release>
-  <api>1.1</api>
+  <release>1.1.0</release>
+  <api>1.1.0</api>
  </version>
  <stability>
   <release>stable</release>
@@ -43,10 +43,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
    </os>
   </required>
  </dependencies>
+ <providesextension>foo</providesextension>
+ <srcpackage>foo</srcpackage>
+ <srcchannel>pear.php.net</srcchannel>
  <extbinrelease>
-  <srcpackage>foo</srcpackage>
-  <srcchannel>pear.php.net</srcchannel>
-  <providesextension>foo</providesextension>
   <installconditions/>
   <filelist/>
   </extbinrelease>

@@ -43,7 +43,7 @@ $params[] = $reg->getPackage('foo');
 $params[] = $reg->getPackage('bar');
 
 $dl = &new PEAR_Installer($fakelog);
-$dl->setDownloadedPackages($params);
+$dl->setUninstallPackages($params);
 $dl->uninstall('next');
 echo 'tests done';
 ?>
