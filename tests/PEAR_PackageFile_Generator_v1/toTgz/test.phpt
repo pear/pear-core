@@ -71,7 +71,7 @@ release notes
      <replace from="@pv@" to="version" type="package-info"/>
     </file>
    </dir> <!-- /sunger -->
-   <file role="php" baseinstalldir="freeb" md5sum="ed0384ad29e60110b310a02e95287ee6" install-as="merbl.php" name="foo.php">
+   <file role="php" baseinstalldir="freeb" md5sum="9df02b4a6fafef4e9be2962bfeaed509" install-as="merbl.php" name="foo.php">
     <replace from="@pv@" to="version" type="package-info"/>
    </file>
   </filelist>
