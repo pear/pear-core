@@ -1305,9 +1305,14 @@ class PEAR_Registry extends PEAR
         }
         $ret = $this->_updatePackage($package, $info, $merge, $channel);
         $this->_unlock();
-        $info['channel'] = 'pear.php.net';
-        $this->_dependencyDB->uninstallPackage($info);
-        $this->_dependencyDB->installPackage($info);
+        if ($ret) {
+            include_once 'PEAR/PackageFile/v1.php';
+            $pf = new PEAR_PackageFile_v1;
+            $pf->setConfig($this->_config);
+            $pf->fromArray($this->packageInfo($package, null, $channel));
+            $this->_dependencyDB->uninstallPackage($pf);
+            $this->_dependencyDB->installPackage($pf);
+        }
         return $ret;
     }
 
