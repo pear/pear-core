@@ -141,15 +141,16 @@ $phpunit->assertEquals(array (
 ), $contents, 'depdb');
 $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.filemap', 'filemap');
 $contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.filemap')));
+ksort($contents['php']);
 $phpunit->assertEquals(array (
   'php' =>
   array (
+    'foo.php' => 'foop',
     'foor.php' =>
     array (
       0 => 'grob',
       1 => 'foo',
     ),
-    'foo.php' => 'foop',
   ),
 ), $contents, 'filemap');
 echo 'tests done';
