@@ -1082,9 +1082,13 @@ class PEAR_Downloader extends PEAR_Common
                 $request = "GET $path HTTP/1.0\r\n";
             }
         }
+        $ifmodifiedsince = '';
         if (is_array($lastmodified)) {
-            $ifmodifiedsince = 'If-Modified-Since: ' . $lastmodified['Last-Modified'] . "\r\n" .
-                "If-None-Match: $lastmodified[Etag]\r\n";
+            if (isset($lastmodified['Last-Modified'])) {
+                $ifmodifiedsince = 'If-Modified-Since: ' . $lastmodified['Last-Modified'] . "\r\n";
+            }
+            if (isset($lastmodified['Etag'])) {
+                $ifmodifiedsince .= "If-None-Match: $lastmodified[Etag]\r\n";
         } else {
             $ifmodifiedsince = ($lastmodified ? "If-Modified-Since: $lastmodified\r\n" : '');
         }
