@@ -19,7 +19,7 @@
 // $Id$
 
 require_once 'PEAR/Common.php';
-
+require_once 'PEAR/PackageFile.php';
 /**
  * Class to handle building (compiling) extensions.
  *
@@ -66,8 +66,14 @@ class PEAR_Builder extends PEAR_Common
      */
     function _build_win32($descfile, $callback = null)
     {
-        if (PEAR::isError($info = $this->infoFromDescriptionFile($descfile))) {
-            return $info;
+        if (is_object($descfile)) {
+            $pkg = $descfile;
+        } else {
+            $pf = &new PEAR_PackageFile($this->config, $this->debug);
+            $pkg = &$pf->fromPackageFile($descfile, PEAR_VALIDATE_NORMAL);
+            if (PEAR::isError($pkg)) {
+                return $pkg;
+            }
         }
         $dir = dirname($descfile);
         $old_cwd = getcwd();
@@ -77,7 +83,7 @@ class PEAR_Builder extends PEAR_Common
         }
         $this->log(2, "building in $dir");
 
-        $dsp = $info['package'].'.dsp';
+        $dsp = $pkg->getPackage().'.dsp';
         if (!@is_file("$dir/$dsp")) {
             return $this->raiseError("The DSP $dsp does not exist.");
         }
@@ -93,7 +99,7 @@ class PEAR_Builder extends PEAR_Common
         // figure out the build platform and type
         $platform = 'Win32';
         $buildtype = 'Release';
-        if (preg_match('/.*?'.$info['package'].'\s-\s(\w+)\s(.*?)-+/i',$this->_firstline,$matches)) {
+        if (preg_match('/.*?'.$pkg->getPackage().'\s-\s(\w+)\s(.*?)-+/i',$this->_firstline,$matches)) {
             $platform = $matches[1];
             $buildtype = $matches[2];
         }
@@ -115,7 +121,7 @@ class PEAR_Builder extends PEAR_Common
         // this regex depends on the build platform and type having been
         // correctly identified above.
         $regex ='/.*?!IF\s+"\$\(CFG\)"\s+==\s+("'.
-                    $info['package'].'\s-\s'.
+                    $pkg->getPackage().'\s-\s'.
                     $platform.'\s'.
                     $buildtype.'").*?'.
                     '\/out:"(.*?)"/is';
@@ -157,7 +163,8 @@ class PEAR_Builder extends PEAR_Common
      * directory, but compiles in a temporary directory
      * (/var/tmp/pear-build-USER/PACKAGE-VERSION).
      *
-     * @param string $descfile path to XML package description file
+     * @param string|PEAR_PackageFile_v* $descfile path to XML package description file, or
+     *               a PEAR_PackageFile object
      *
      * @param mixed $callback callback function used to report output,
      * see PEAR_Builder::_runCommand for details
@@ -173,7 +180,6 @@ class PEAR_Builder extends PEAR_Common
      * @access public
      *
      * @see PEAR_Builder::_runCommand
-     * @see PEAR_Common::infoFromDescriptionFile
      */
     function build($descfile, $callback = null)
     {
@@ -183,15 +189,21 @@ class PEAR_Builder extends PEAR_Common
         if (PEAR_OS != 'Unix') {
             return $this->raiseError("building extensions not supported on this platform");
         }
-        if (PEAR::isError($info = $this->infoFromDescriptionFile($descfile))) {
-            return $info;
+        if (is_object($descfile)) {
+            $pkg = $descfile;
+        } else {
+            $pf = &new PEAR_PackageFile($this->config);
+            $pkg = &$pf->fromPackageFile($descfile, PEAR_VALIDATE_NORMAL);
+            if (PEAR::isError($pkg)) {
+                return $pkg;
+            }
         }
         $dir = dirname($descfile);
         $old_cwd = getcwd();
         if (!@chdir($dir)) {
             return $this->raiseError("could not chdir to $dir");
         }
-        $vdir = "$info[package]-$info[version]";
+        $vdir = $pkg->getPackage() . '-' . $pkg->getVersion();
         if (is_dir($vdir)) {
             chdir($vdir);
         }
@@ -230,7 +242,7 @@ class PEAR_Builder extends PEAR_Common
             $user='defaultuser';
         }
         $build_basedir = "/var/tmp/pear-build-$user";
-        $build_dir = "$build_basedir/$info[package]-$info[version]";
+        $build_dir = "$build_basedir/$vdir";
         $this->log(1, "building in $build_dir");
         if (is_dir($build_dir)) {
             System::rm("-rf $build_dir");
