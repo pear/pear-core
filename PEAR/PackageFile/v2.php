@@ -147,6 +147,9 @@ class PEAR_PackageFile_v2
     function installBinary(&$installer)
     {
         if ($this->getPackageType() == 'extsrc') {
+            if (!is_array($installer->getInstallPackages())) {
+                return false;
+            }
             foreach ($installer->getInstallPackages() as $p) {
                 if ($p->isExtension($this->_packageInfo['providesextension'])) {
                     if ($p->getPackageType() != 'extsrc') {
@@ -213,7 +216,7 @@ class PEAR_PackageFile_v2
         if (in_array($this->getPackageType(), array('extsrc', 'extbin'))) {
             if (!isset($this->_packageInfo['providesextension'])) {
                 // ensure that the channel tag is set up in the right location
-                return (bool) $this->_insertBefore($this->_packageInfo,
+                $this->_packageInfo = $this->_insertBefore($this->_packageInfo,
                     array('srcpackage', 'srcuri', 'phprelease', 'extsrcrelease',
                     'extbinrelease', 'bundle', 'changelog'), $extension, 'providesextension');
             }
@@ -564,7 +567,7 @@ class PEAR_PackageFile_v2
         $this->_isValid = 0;
         if (!isset($this->_packageInfo['uri'])) {
             // ensure that the uri tag is set up in the right location
-            return $this->_insertBefore($this->_packageInfo, 
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo, 
                 array('extends', 'summary', 'description', 'lead',
                 'developer', 'contributor', 'helper', 'date', 'time', 'version',
                 'stability', 'license', 'notes', 'contents', 'compatible',
@@ -581,7 +584,7 @@ class PEAR_PackageFile_v2
         $this->_isValid = 0;
         if (!isset($this->_packageInfo['channel'])) {
             // ensure that the channel tag is set up in the right location
-            return $this->_insertBefore($this->_packageInfo,
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo,
                 array('extends', 'summary', 'description', 'lead',
                 'developer', 'contributor', 'helper', 'date', 'time', 'version',
                 'stability', 'license', 'notes', 'contents', 'compatible',
@@ -605,7 +608,7 @@ class PEAR_PackageFile_v2
         $this->_isValid = 0;
         if (!isset($this->_packageInfo['extends'])) {
             // ensure that the extends tag is set up in the right location
-            return $this->_insertBefore($this->_packageInfo,
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo,
                 array('summary', 'description', 'lead',
                 'developer', 'contributor', 'helper', 'date', 'time', 'version',
                 'stability', 'license', 'notes', 'contents', 'compatible',
@@ -629,7 +632,7 @@ class PEAR_PackageFile_v2
         $this->_isValid = 0;
         if (!isset($this->_packageInfo['summary'])) {
             // ensure that the summary tag is set up in the right location
-            return $this->_insertBefore($this->_packageInfo,
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo,
                 array('description', 'lead',
                 'developer', 'contributor', 'helper', 'date', 'time', 'version',
                 'stability', 'license', 'notes', 'contents', 'compatible',
@@ -653,7 +656,7 @@ class PEAR_PackageFile_v2
         $this->_isValid = 0;
         if (!isset($this->_packageInfo['description'])) {
             // ensure that the description tag is set up in the right location
-            return $this->_insertBefore($this->_packageInfo,
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo,
                 array('lead',
                 'developer', 'contributor', 'helper', 'date', 'time', 'version',
                 'stability', 'license', 'notes', 'contents', 'compatible',
@@ -699,7 +702,8 @@ class PEAR_PackageFile_v2
             }
             if (!isset($this->_packageInfo[$role])) {
                 // ensure that the extends tag is set up in the right location
-                $this->_insertBefore($this->_packageInfo, $testarr, array(), $role);
+                $this->_packageInfo = $this->_insertBefore($this->_packageInfo, $testarr,
+                    array(), $role);
             }
             $this->_packageInfo[$role] =
                 array(
@@ -897,7 +901,7 @@ class PEAR_PackageFile_v2
     {
         if (!isset($this->_packageInfo['date'])) {
             // ensure that the extends tag is set up in the right location
-            $this->_insertBefore($this->_packageInfo,
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo,
                 array('time', 'version',
                     'stability', 'license', 'notes', 'contents', 'compatible',
                     'dependencies', 'providesextension', 'srcpackage', 'srcuri',
@@ -921,7 +925,7 @@ class PEAR_PackageFile_v2
         $this->_isValid = 0;
         if (!isset($this->_packageInfo['time'])) {
             // ensure that the time tag is set up in the right location
-            return $this->_insertBefore($this->_packageInfo,
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo,
                     array('version',
                     'stability', 'license', 'notes', 'contents', 'compatible',
                     'dependencies', 'providesextension', 'srcpackage', 'srcuri',
@@ -948,7 +952,7 @@ class PEAR_PackageFile_v2
               isset($this->_packageInfo['version']['release'])) {
             unset($this->_packageInfo['version']['release']);
         }
-        $this->_mergeTag($this->_packageInfo, $version, array(
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $version, array(
             'version' => array('stability', 'license', 'notes', 'contents', 'compatible',
                 'dependencies', 'providesextension', 'srcpackage', 'srcuri',
                 'phprelease', 'extsrcrelease',
@@ -963,7 +967,7 @@ class PEAR_PackageFile_v2
               isset($this->_packageInfo['version']['api'])) {
             unset($this->_packageInfo['version']['api']);
         }
-        $this->_mergeTag($this->_packageInfo, $version, array(
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $version, array(
             'version' => array('stability', 'license', 'notes', 'contents', 'compatible',
                 'dependencies', 'providesextension', 'srcpackage', 'srcuri',
                 'phprelease', 'extsrcrelease',
@@ -997,7 +1001,7 @@ class PEAR_PackageFile_v2
               isset($this->_packageInfo['stability']['release'])) {
             unset($this->_packageInfo['stability']['release']);
         }
-        $this->_mergeTag($this->_packageInfo, $state, array(
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $state, array(
             'stability' => array('license', 'notes', 'contents', 'compatible',
                 'dependencies', 'providesextension', 'srcpackage', 'srcuri',
                 'phprelease', 'extsrcrelease',
@@ -1015,7 +1019,7 @@ class PEAR_PackageFile_v2
               isset($this->_packageInfo['stability']['api'])) {
             unset($this->_packageInfo['stability']['api']);
         }
-        $this->_mergeTag($this->_packageInfo, $state, array(
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $state, array(
             'stability' => array('license', 'notes', 'contents', 'compatible',
                 'dependencies', 'providesextension', 'srcpackage', 'srcuri',
                 'phprelease', 'extsrcrelease',
@@ -1048,7 +1052,7 @@ class PEAR_PackageFile_v2
     {
         if (!isset($this->_packageInfo['license'])) {
             // ensure that the license tag is set up in the right location
-            $this->_insertBefore($this->_packageInfo,
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo,
                 array('notes', 'contents', 'compatible',
                 'dependencies', 'providesextension', 'srcpackage', 'srcuri',
                 'phprelease', 'extsrcrelease',
@@ -1082,7 +1086,7 @@ class PEAR_PackageFile_v2
         $this->_isValid = 0;
         if (!isset($this->_packageInfo['notes'])) {
             // ensure that the notes tag is set up in the right location
-            return $this->_insertBefore($this->_packageInfo,
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo,
                 array('contents', 'compatible',
                 'dependencies', 'providesextension', 'srcpackage', 'srcuri',
                 'phprelease', 'extsrcrelease',
@@ -1262,7 +1266,7 @@ class PEAR_PackageFile_v2
         $this->_filesValid = false;
         $this->_isValid = 0;
         if (!isset($this->_packageInfo['contents'])) {
-            $this->_insertBefore($this->_packageInfo,
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo,
                 array('compatible',
                     'dependencies', 'providesextension', 'srcpackage', 'srcuri',
                     'phprelease', 'extsrcrelease',
@@ -1287,7 +1291,7 @@ class PEAR_PackageFile_v2
         }
         $this->_filesValid = false;
         $this->_isValid = 0;
-        $this->_mergeTag($this->_packageInfo, $path, array(
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $path, array(
                 'contents' => array('compatible', 'dependencies', 'providesextension',
                 'srcpackage', 'srcuri', 'phprelease', 'extsrcrelease', 'extbinrelease',
                 'bundle', 'changelog'),
@@ -1315,7 +1319,7 @@ class PEAR_PackageFile_v2
         $attrs['name'] = $dir . $file;
         if (!isset($this->_packageInfo['contents'])) {
             // ensure that the contents tag is set up
-            $this->_insertBefore($this->_packageInfo,
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo,
                 array('compatible', 'dependencies', 'providesextension', 'srcpackage', 
                 'srcuri', 'phprelease', 'extsrcrelease',
                 'extbinrelease', 'bundle', 'changelog'), array(), 'contents');
@@ -1462,7 +1466,7 @@ class PEAR_PackageFile_v2
             $set['exclude'] = $exclude;
         }
         $this->_isValid = 0;
-        $this->_mergeTag($this->_packageInfo, $set, array(
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $set, array(
                 'compatible' => array('dependencies', 'providesextension', 'srcpackage', 'srcuri',
                     'phprelease', 'extsrcrelease', 'extbinrelease', 'bundle', 'changelog')
             ));
@@ -1730,7 +1734,7 @@ class PEAR_PackageFile_v2
     function clearDeps()
     {
         if (!isset($this->_packageInfo['dependencies'])) {
-            $this->_mergeTag($this->_packageInfo, array(),
+            $this->_packageInfo = $this->_mergeTag($this->_packageInfo, array(),
                 array(
                     'dependencies' => array('providesextension', 'srcpackage', 'srcuri',
                         'phprelease', 'extsrcrelease', 'extbinrelease',
@@ -1764,7 +1768,7 @@ class PEAR_PackageFile_v2
                 'warning: PHP dependency already exists, overwriting');
             unset($this->_packageInfo['dependencies']['required']['php']);
         }
-        $this->_mergeTag($this->_packageInfo, $dep,
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('providesextension', 'srcpackage', 'srcuri',
                     'phprelease', 'extsrcrelease', 'extbinrelease',
@@ -1806,7 +1810,7 @@ class PEAR_PackageFile_v2
                 'warning: PEAR Installer dependency already exists, overwriting');
             unset($this->_packageInfo['dependencies']['required']['pearinstaller']);
         }
-        $this->_mergeTag($this->_packageInfo, $dep,
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('providesextension', 'srcpackage', 'srcuri',
                     'phprelease', 'extsrcrelease', 'extbinrelease',
@@ -1834,7 +1838,7 @@ class PEAR_PackageFile_v2
         if ($providesextension) {
             $dep['providesextension'] = $providesextension;
         }
-        $this->_mergeTag($this->_packageInfo, $dep,
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('providesextension', 'srcpackage', 'srcuri',
                     'phprelease', 'extsrcrelease', 'extbinrelease',
@@ -1862,7 +1866,7 @@ class PEAR_PackageFile_v2
         if ($providesextension) {
             $dep['providesextension'] = $providesextension;
         }
-        $this->_mergeTag($this->_packageInfo, $dep,
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('providesextension', 'srcpackage', 'srcuri',
                     'phprelease', 'extsrcrelease', 'extbinrelease',
@@ -1875,7 +1879,7 @@ class PEAR_PackageFile_v2
     function addDependencyGroup($name, $hint)
     {
         $this->_isValid = 0;
-        $this->_mergeTag($this->_packageInfo,
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo,
             array('attribs' => array('name' => $name, 'hint' => $hint)),
             array(
                 'dependencies' => array('providesextension', 'srcpackage', 'srcuri',
@@ -2022,7 +2026,8 @@ class PEAR_PackageFile_v2
         } else {
             if (!isset($this->_packageInfo['dependencies']['group'][0])) {
                 if ($this->_packageInfo['dependencies']['group']['attribs']['name'] == $groupname) {
-                    $this->_mergeTag($this->_packageInfo['dependencies']['group'], $dep,
+                    $this->_packageInfo['dependencies']['group'] = $this->_mergeTag(
+                        $this->_packageInfo['dependencies']['group'], $dep,
                         array(
                             $type => $arr
                         ));
@@ -2034,7 +2039,8 @@ class PEAR_PackageFile_v2
             } else {
                 foreach ($this->_packageInfo['dependencies']['group'] as $i => $group) {
                     if ($group['attribs']['name'] == $groupname) {
-                    $this->_mergeTag($this->_packageInfo['dependencies']['group'][$i], $dep,
+                    $this->_packageInfo['dependencies']['group'][$i] = $this->_mergeTag(
+                        $this->_packageInfo['dependencies']['group'][$i], $dep,
                         array(
                             $type => $arr
                         ));
@@ -2070,7 +2076,7 @@ class PEAR_PackageFile_v2
         }
         $dep = $this->_constructDep($name, $channel, false, $min, $max, $recommended, $exclude,
             $providesextension, $nodefault);
-        $this->_mergeTag($this->_packageInfo, $dep,
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('providesextension', 'srcpackage', 'srcuri',
                     'phprelease', 'extsrcrelease', 'extbinrelease',
@@ -2098,7 +2104,7 @@ class PEAR_PackageFile_v2
         }
         $dep = $this->_constructDep($name, false, $uri, false, false, false, false,
             $providesextension, $nodefault);
-        $this->_mergeTag($this->_packageInfo, $dep,
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('providesextension', 'srcpackage', 'srcuri',
                     'phprelease', 'extsrcrelease', 'extbinrelease',
@@ -2130,7 +2136,7 @@ class PEAR_PackageFile_v2
         }
         $dep = $this->_constructDep($name, $channel, false, $min, $max, $recommended, $exclude,
             $nodefault);
-        $this->_mergeTag($this->_packageInfo, $dep,
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('providesextension', 'srcpackage', 'srcuri',
                     'phprelease', 'extsrcrelease', 'extbinrelease',
@@ -2155,7 +2161,7 @@ class PEAR_PackageFile_v2
             array_shift($arr);
         }
         $dep = $this->_constructDep($name, false, $uri, false, false, false, false, $nodefault);
-        $this->_mergeTag($this->_packageInfo, $dep,
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('providesextension', 'srcpackage', 'srcuri',
                     'phprelease', 'extsrcrelease', 'extbinrelease',
@@ -2182,7 +2188,7 @@ class PEAR_PackageFile_v2
             array_shift($arr);
         }
         $dep = $this->_constructDep($name, false, false, $min, $max, $recommended, $exclude);
-        $this->_mergeTag($this->_packageInfo, $dep,
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('providesextension', 'srcpackage', 'srcuri',
                     'phprelease', 'extsrcrelease', 'extbinrelease',
@@ -2203,7 +2209,7 @@ class PEAR_PackageFile_v2
         if ($conflicts) {
             $dep['conflicts'] = '';
         }
-        $this->_mergeTag($this->_packageInfo, $dep,
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('providesextension', 'srcpackage', 'srcuri',
                     'phprelease', 'extsrcrelease', 'extbinrelease',
@@ -2224,7 +2230,7 @@ class PEAR_PackageFile_v2
         if ($conflicts) {
             $dep['conflicts'] = '';
         }
-        $this->_mergeTag($this->_packageInfo, $dep,
+        $this->_packageInfo = $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('providesextension', 'srcpackage', 'srcuri',
                     'phprelease', 'extsrcrelease', 'extbinrelease',
@@ -2278,7 +2284,8 @@ class PEAR_PackageFile_v2
         }
         if (!isset($this->_packageInfo[$type])) {
             // ensure that the release tag is set up
-            $this->_insertBefore($this->_packageInfo, array('changelog'), array(), $type);
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo, array('changelog'),
+                array(), $type);
         }
         $this->_packageInfo[$type] = array();
         return true;
@@ -2293,7 +2300,7 @@ class PEAR_PackageFile_v2
             if ($type != 'bundle') {
                 $type .= 'release';
             }
-            $this->_mergeTag($this->_packageInfo, array(),
+            $this->_packageInfo = $this->_mergeTag($this->_packageInfo, array(),
                 array($type => array('changelog')));
             return true;
         }
@@ -2355,7 +2362,7 @@ class PEAR_PackageFile_v2
             return false;
         }
         $this->_isValid = 0;
-        $this->_mergeTag($r, array('attribs' => array('name' => $path, 'as' => $as)),
+        $r = $this->_mergeTag($r, array('attribs' => array('name' => $path, 'as' => $as)),
             array(
                 'filelist' => array(),
                 'install' => array('ignore')
@@ -2374,7 +2381,7 @@ class PEAR_PackageFile_v2
             return false;
         }
         $this->_isValid = 0;
-        $this->_mergeTag($r, array('attribs' => array('name' => $path)),
+        $r = $this->_mergeTag($r, array('attribs' => array('name' => $path)),
             array(
                 'filelist' => array(),
                 'ignore' => array()
@@ -2397,7 +2404,7 @@ class PEAR_PackageFile_v2
             return false;
         }
         $this->_isValid = 0;
-        $this->_mergeTag($r, $package,
+        $r = $this->_mergeTag($r, $package,
             array(
                 'binarypackage' => array(),
             ));
@@ -2423,7 +2430,7 @@ class PEAR_PackageFile_v2
             $opt['default'] = $default;
         }
         $this->_isValid = 0;
-        $this->_mergeTag($r, $opt,
+        $r = $this->_mergeTag($r, $opt,
             array(
                 'configureoption' => array('binarypackage'),
             ));
@@ -2452,7 +2459,7 @@ class PEAR_PackageFile_v2
             }
             $dep['exclude'] = $exclude;
         }
-        $this->_mergeTag($r, $dep,
+        $r = $this->_mergeTag($r, $dep,
             array(
                 'installconditions' => array('filelist'),
                 'php' => array('extension', 'os', 'arch')
@@ -2476,7 +2483,7 @@ class PEAR_PackageFile_v2
         }
         $this->_isValid = 0;
         $dep = $this->_constructDep($name, false, false, $min, $max, $recommended, $exclude);
-        $this->_mergeTag($r, $dep,
+        $r = $this->_mergeTag($r, $dep,
             array(
                 'installconditions' => array('filelist'),
                 'extension' => array('os', 'arch')
@@ -2502,7 +2509,7 @@ class PEAR_PackageFile_v2
         if ($conflicts) {
             $dep['conflicts'] = '';
         }
-        $this->_mergeTag($r, $dep,
+        $r = $this->_mergeTag($r, $dep,
             array(
                 'installconditions' => array('filelist'),
                 'os' => array('arch')
@@ -2528,7 +2535,7 @@ class PEAR_PackageFile_v2
         if ($conflicts) {
             $dep['conflicts'] = '';
         }
-        $this->_mergeTag($r, $dep,
+        $r = $this->_mergeTag($r, $dep,
             array(
                 'installconditions' => array('filelist'),
                 'arch' => array()
@@ -2556,13 +2563,14 @@ class PEAR_PackageFile_v2
     {
         $this->_isValid = 0;
         if ($channel) {
-            $this->_insertBefore($this->_packageInfo, array('phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), $packageOrUri, 'srcpackage');
-            $this->_insertBefore($this->_packageInfo, array('phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), $channel, 'srcchannel');
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo, array('phprelease',
+                'extsrcrelease', 'extbinrelease', 'bundle', 'changelog'),
+                $packageOrUri, 'srcpackage');
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo, array('phprelease',
+                'extsrcrelease', 'extbinrelease', 'bundle', 'changelog'), $channel, 'srcchannel');
         } else {
-            $this->_insertBefore($this->_packageInfo, array('phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), $packageOrUri, 'srcuri');
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo, array('phprelease',
+                'extsrcrelease', 'extbinrelease', 'bundle', 'changelog'), $packageOrUri, 'srcuri');
         }
     }
 
@@ -2652,7 +2660,7 @@ class PEAR_PackageFile_v2
      * @param string tag name
      * @access private
      */
-    function _insertBefore(&$array, $keys, $contents, $newkey)
+    function _insertBefore($array, $keys, $contents, $newkey)
     {
         foreach ($keys as $key) {
             if (isset($array[$key])) {
@@ -2660,6 +2668,7 @@ class PEAR_PackageFile_v2
             }
         }
         $array[$newkey] = $contents;
+        return $array;
     }
 
     /**
@@ -2676,28 +2685,33 @@ class PEAR_PackageFile_v2
      * This allows construction of nested tags
      * @access private
      */
-    function _mergeTag(&$manip, $contents, $order)
+    function _mergeTag($manip, $contents, $order)
     {
-        $arr = &$manip;
-        foreach ($order as $tag => $curorder) {
-            if (!isset($arr[$tag])) {
-                // ensure that the dependencies tag is set up
-                $this->_insertBefore($arr, $curorder, array(), $tag);
+        if (count($order)) {
+            foreach ($order as $tag => $curorder) {
+                if (!isset($manip[$tag])) {
+                    // ensure that the tag is set up
+                    $manip = $this->_insertBefore($manip, $curorder, array(), $tag);
+                }
+                if (count($order) > 1) {
+                    $manip[$tag] = $this->_mergeTag($manip[$tag], $contents, array_slice($order, 1));
+                    return $manip;
+                }
             }
-            $last = &$arr;
-            $arr = &$arr[$tag];
-        }
-        $arr = &$last;
-        if (is_array($arr[$tag]) && isset($arr[$tag][0])) {
-            $arr[$tag][] = $contents;
         } else {
-            if (!count($arr[$tag])) {
-                $arr[$tag] = $contents;
+            return $manip;
+        }
+        if (is_array($manip[$tag]) && !empty($manip[$tag]) && isset($manip[$tag][0])) {
+            $manip[$tag][] = $contents;
+        } else {
+            if (!count($manip[$tag])) {
+                $manip[$tag] = $contents;
             } else {
-                $arr[$tag] = array($arr[$tag]);
-                $arr[$tag][] = $contents;
+                $manip[$tag] = array($manip[$tag]);
+                $manip[$tag][] = $contents;
             }
         }
+        return $manip;
     }
 
     function validate($state = PEAR_VALIDATE_NORMAL)
@@ -2708,6 +2722,9 @@ class PEAR_PackageFile_v2
         if (!isset($this->_v2Validator)) {
             include_once 'PEAR/PackageFile/v2/Validator.php';
             $this->_v2Validator = new PEAR_PackageFile_v2_Validator;
+        }
+        if (isset($this->_packageInfo['xsdversion'])) {
+            unset($this->_packageInfo['xsdversion']);
         }
         return $this->_v2Validator->validate($this, $state);
     }
