@@ -339,6 +339,33 @@ class PEAR_PackageFile_v1
         // placeholder
     }
 
+    /**
+     * For saving in the registry.
+     *
+     * Set the last version that was installed
+     * @param string
+     */
+    function setLastInstalledVersion($version)
+    {
+        $this->_packageInfo['_lastversion'] = $version;
+    }
+
+    /**
+     * @return string|false
+     */
+    function getLastInstalledVersion()
+    {
+        if (isset($this->_packageInfo['_lastversion'])) {
+            return $this->_packageInfo['_lastversion'];
+        }
+        return false;
+    }
+
+    function initPostinstallScripts()
+    {
+        return false;
+    }
+
     function setLogger(&$logger)
     {
         if ($logger && (!is_object($logger) || !method_exists($logger, 'log'))) {

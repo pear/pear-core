@@ -150,15 +150,23 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
     }
 
     // }}}
+
+    function runPostinstallScripts(&$scripts)
+    {
+        foreach ($scripts as $i => $script) {
+            $this->runInstallScript($scripts[$i]->_params, $scripts[$i]->_obj);
+        }
+    }
+
     /**
      * @param array $xml contents of postinstallscript tag
      * @param object $script post-installation script
      * @param string install|upgrade
      */
-    function runInstallScript($xml, &$script, $installtype)
+    function runInstallScript($xml, &$script)
     {
         if (!is_array($xml) || !isset($xml['paramgroup'])) {
-            $script->run(array(), '_default', $installtype);
+            $script->run(array(), '_default');
         } else {
             $completedPhases = array();
             if (!isset($xml['paramgroup'][0])) {
@@ -205,12 +213,12 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 $answers = $this->confirmDialog($group['param']);
                 if ($answers) {
                     array_unshift($completedPhases, $group['id']);
-                    if (!$script->run($answers, $group['id'], $installtype)) {
-                        $script->run($completedPhases, '_undoOnError', $installtype);
+                    if (!$script->run($answers, $group['id'])) {
+                        $script->run($completedPhases, '_undoOnError');
                         return;
                     }
                 } else {
-                    $script->run($completedPhases, '_undoOnError', $installtype);
+                    $script->run($completedPhases, '_undoOnError');
                     return;
                 }
             }

@@ -1,13 +1,16 @@
 <?php
 require_once 'PEAR/Task/Common.php';
 /**
- * Implements the postinstallscript file task
+ * Implements the postinstallscript file task.
+ *
+ * Note that post-install scripts are handled separately from installation, by the
+ * "pear run-scripts" command
  * @package PEAR
  * @author Greg Beaver <cellog@php.net>
  */
 class PEAR_Task_Postinstallscript extends PEAR_Task_Common
 {
-    var $type = 'postinstall-multiple';
+    var $type = 'script';
     var $_class;
     var $_obj;
     var $_pkg;
@@ -157,64 +160,62 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
      * Initialize a task instance with the parameters
      * @param array raw, parsed xml
      * @param array attributes from the <file> tag containing this task
+     * @param string|null last installed version of this package, if any (useful for upgrades)
      */
-    function init($xml, $fileattribs)
+    function init($xml, $fileattribs, $lastversion)
     {
         $this->_class = str_replace('/', '_', $fileattribs['name']);
         $this->_filename = $fileattribs['name'];
         $this->_class = str_replace ('.php', '', $this->_class) . '_postinstall';
         $this->_params = $xml;
+        $this->_lastversion = $lastversion;
     }
 
     /**
+     * Unlike other tasks, the installed file name is passed in instead of the file contents,
+     * because this task is handled post-installation
      * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
-     * @param string file contents
-     * @param string the eventual final file location (informational only)
+     * @param string file name
      * @return bool|PEAR_Error false to skip this file, PEAR_Error to fail
      *         (use $this->throwError)
      */
-    function startSession($pkg, $contents, $dest)
+    function startSession($pkg, $contents)
     {
-        $orig = $contents;
-        $contents = str_replace(array('<?php', '?>'), array('', ''), $contents);
-        $this->installer->log(0, 'Including external post-installation script "' .
-            $dest . '" - any fatal errors are in this script');
-        eval($contents);
+        $this->logger->log(0, 'Including external post-installation script "' .
+            $contents . '" - any errors are in this script');
+        include_once $contents;
         if (class_exists($this->_class)) {
-            $this->installer->log(0, 'Inclusion succeeded');
+            $this->logger->log(0, 'Inclusion succeeded');
         } else {
             return $this->throwError('init of post-install script class "' . $this->_class
                 . '" failed');
         }
         $this->_obj = new $this->_class;
-        $this->installer->log(1, 'running post-install script "' . $this->_class . '->init()"');
+        $this->logger->log(1, 'running post-install script "' . $this->_class . '->init()"');
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-        $res = $this->_obj->init($this->config, $this->installer->ui, $pkg);
+        $res = $this->_obj->init($this->config, $pkg);
         PEAR::popErrorHandling();
         if ($res) {
-            $this->installer->log(0, 'init succeeded');
+            $this->logger->log(0, 'init succeeded');
         } else {
             return $this->throwError('init of post-install script "' . $this->_class .
                 '->init()" failed');
         }
-        $this->_contents = $dest;
+        $this->_contents = $contents;
         $this->_pkg = $pkg;
-        return $orig; // unchanged
+        return true;
     }
 
     /**
-     * Run the post-installation script
+     * No longer used
+     * @see PEAR_PackageFile_v2::runPostinstallScripts()
      * @param array an array of tasks
      * @param string install or upgrade
      * @access protected
      * @static
      */
-    function run($tasks, $installphase)
+    function run()
     {
-        foreach ($tasks as $i => $task) {
-            $tasks[$i]->installer->ui->runInstallScript($tasks[$i]->_params, $tasks[$i]->_obj,
-                $installphase, $tasks[$i]->_pkg, $tasks[$i]->_contents);
-        }
     }
 }
 ?>

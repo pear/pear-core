@@ -489,15 +489,17 @@ class PEAR_Installer extends PEAR_Downloader
                 $tag = str_replace($pkg->getTasksNs() . ':', '', $tag);
                 $task = "PEAR_Task_$tag";
                 $task = &new $task($this->config, $this, PEAR_TASK_INSTALL);
-                $task->init($raw, $attribs);
-                $res = $task->startSession($pkg, $contents, $final_dest_file);
-                if (!$res) {
-                    continue; // skip this file
+                if (!$task->isScript()) { // scripts are only handled after installation
+                    $task->init($raw, $attribs);
+                    $res = $task->startSession($pkg, $contents, $final_dest_file);
+                    if (!$res) {
+                        continue; // skip this file
+                    }
+                    if (PEAR::isError($res)) {
+                        return $res;
+                    }
+                    $contents = $res; // save changes
                 }
-                if (PEAR::isError($res)) {
-                    return $res;
-                }
-                $contents = $res; // save changes
                 $wp = @fopen($dest_file, "wb");
                 if (!is_resource($wp)) {
                     return $this->raiseError("failed to create $dest_file: $php_errormsg",
@@ -1094,9 +1096,6 @@ class PEAR_Installer extends PEAR_Downloader
                     $pkg->installedFile($file, $atts);
                 }
             }
-            if (PEAR_Task_Common::hasPrecommitTasks()) {
-                PEAR_Task_Common::runPrecommitTasks();
-            }
             // }}}
 
             // {{{ compile and install source files
@@ -1121,10 +1120,12 @@ class PEAR_Installer extends PEAR_Downloader
 
         $ret = false;
         $installphase = 'install';
+        $oldversion = false;
         // {{{ Register that the package is installed -----------------------
         if (empty($options['upgrade'])) {
             // if 'force' is used, replace the info in registry
             if (!empty($options['force']) && $this->_registry->packageExists($pkgname, $channel)) {
+                $oldversion = $this->_registry->packageInfo($pkgname, 'version', $channel);
                 $this->_registry->deletePackage($pkgname, $channel);
             }
             $ret = $this->_registry->addPackage2($pkg);

@@ -334,6 +334,92 @@ class PEAR_PackageFile_v2
     }
 
     /**
+     * For saving in the registry.
+     *
+     * Set the last version that was installed
+     * @param string
+     */
+    function setLastInstalledVersion($version)
+    {
+        $this->_packageInfo['_lastversion'] = $version;
+    }
+
+    /**
+     * @return string|false
+     */
+    function getLastInstalledVersion()
+    {
+        if (isset($this->_packageInfo['_lastversion'])) {
+            return $this->_packageInfo['_lastversion'];
+        }
+        return false;
+    }
+
+    /**
+     * Initialize post-install scripts for running
+     *
+     * This method can be used to detect post-install scripts, as the return value
+     * indicates whether any exist
+     * @return bool
+     */
+    function initPostinstallScripts()
+    {
+        $filelist = $this->getFilelist();
+        $contents = $this->getContents();
+        $contents = $contents['dir']['file'];
+        if (!is_array($contents) || !isset($contents[0])) {
+            $contents = array($contents);
+        }
+        $taskfiles = array();
+        foreach ($contents as $file) {
+            $atts = $file['attribs'];
+            unset($file['attribs']);
+            if (count($file)) {
+                $taskfiles[$atts['name']] = $file;
+            }
+        }
+        $common = new PEAR_Common;
+        $common->debug = $this->_config->get('verbose');
+        $this->_scripts = array();
+        foreach ($taskfiles as $name => $tasks) {
+            $atts = $filelist[$name];
+            foreach ($tasks as $tag => $raw) {
+                $task = $this->getTask($tag);
+                $task = &new $task($this->_config, $common, PEAR_TASK_INSTALL);
+                if (!$task->isScript()) {
+                    continue; // scripts are only handled after installation
+                }
+                $lastversion = isset($this->_packageInfo['_lastversion']) ?
+                    $this->_packageInfo['_lastversion'] : null;
+                $task->init($raw, $atts, $lastversion);
+                $res = $task->startSession($this, $atts['installed_as']);
+                if (!$res) {
+                    continue; // skip this file
+                }
+                if (PEAR::isError($res)) {
+                    return $res;
+                }
+                $this->_scripts[] = &$task;
+            }
+        }
+        if (count($this->_scripts)) {
+            return true;
+        }
+        return false;
+    }
+
+    function runPostinstallScripts()
+    {
+        if ($this->initPostinstallScripts()) {
+            $ui = &PEAR_Frontend::singleton();
+            if ($ui) {
+                $ui->runPostinstallScripts($this->_scripts, $this);
+            }
+        }
+    }
+
+
+    /**
      * Convert a recursive set of <dir> and <file> tags into a single <dir> tag with
      * <file> tags.
      */
