@@ -164,8 +164,8 @@ $phpunit->assertEquals(array (
   10 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: installed_as foo.dll ' . $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll '
-        . $ext_dir . ' ' . DIRECTORY_SEPARATOR
+    1 => 'adding to transaction: installed_as foo.dll ' . $ext_dir . DIRECTORY_SEPARATOR .
+        'foo.dll ' . $ext_dir . ' ' . DIRECTORY_SEPARATOR
   ),
   11 => 
   array (

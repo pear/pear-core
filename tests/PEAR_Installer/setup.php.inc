@@ -62,7 +62,7 @@ if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'cache')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'cache');
 }
 // make the fake configuration - we'll use one of these and it should work
-$config = serialize(array('master_server' => $server,
+$config = serialize(array(
     'preferred_state' => 'stable',
     'cache_dir' => $temp_path . DIRECTORY_SEPARATOR . 'cache',
     'php_dir' => $temp_path . DIRECTORY_SEPARATOR . 'php',
