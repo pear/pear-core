@@ -819,7 +819,9 @@ class PEAR_PackageFile_v2_Validator
 
     function _validateFilelist($list = false, $filetag = 'file', $allowignore = false)
     {
+        $iscontents = false;
         if (!$list) {
+            $iscontents = true;
             $list = $this->_packageInfo['contents'];
         }
         if (isset($this->_packageInfo['bundle'])) {
@@ -846,29 +848,38 @@ class PEAR_PackageFile_v2_Validator
             }
             return;
         }
-        if (isset($list[$filetag])) {
+        if ($allowignore) {
+            $struc = array(
+                '*install->name->as',
+                '*ignore->name'
+            );
+        } else {
+            $struc = array(
+                '*dir->name->?baseinstalldir',
+                '*file->name->role->?baseinstalldir->?md5sum'
+            );
+        }
+        if (!isset($list['attribs']) || !isset($list['attribs']['name'])) {
+            $dirname = $iscontents ? '<contents>' : '<dir name="*unknown*">';
+        } else {
+            $dirname = '<dir name="' . $list['attribs']['name'] . '">';
+        }
+        $this->_stupidSchemaValidate($struc, $list, $dirname);
+        if (!$allowignore && isset($list[$filetag])) {
             if (!isset($list[$filetag][0])) {
                 // single file
                 $list[$filetag] = array($list[$filetag]);
             }
             foreach ($list[$filetag] as $i => $file)
             {
+                if (isset($file['attribs']) && isset($file['attribs']['role'])) {
+                    if (!$this->_validateRole($file['attribs']['role'])) {
+                        $this->_invalidFileRole($file['attribs']['name'],
+                            $dirname, $file['attribs']['role']);
+                    }
+                }
                 if (!isset($file['attribs'])) {
-                    return $this->_tagHasNoAttribs($filetag,
-                        '<dir name="' . $list['attribs']['name'] . '">');
-                }
-                if (!isset($file['attribs']['name'])) {
-                    return $this->_tagMissingAttribute($filetag, 'name',
-                        '<dir name="' . $list['attribs']['name'] . '">');
-                }
-                if (!$allowignore && !isset($file['attribs']['role'])) {
-                    return $this->_tagMissingAttribute($filetag, 'role',
-                        '<dir name="' . $list['attribs']['name'] . '"><file name="' .
-                        $list[$filetag]['attribs']['name'] . '">');
-                }
-                if (!$allowignore && !$this->_validateRole($file['attribs']['role'])) {
-                    return $this->_invalidFileRole($file['attribs']['name'],
-                        $list['attribs']['name'], $file['attribs']['role']);
+                    continue;
                 }
                 $save = $file['attribs'];
                 unset($file['attribs']);
@@ -882,7 +893,7 @@ class PEAR_PackageFile_v2_Validator
                                     $ret = call_user_func(array($tagClass, 'validateXml'),
                                         $this->_pf, $v, $this->_pf->_config, $save);
                                     if (is_array($ret)) {
-                                        return $this->_invalidTask($task, $ret,
+                                        $this->_invalidTask($task, $ret,
                                             $save['attribs']['name']);
                                     }
                                 }
@@ -893,12 +904,11 @@ class PEAR_PackageFile_v2_Validator
                                 $ret = call_user_func(array($tagClass, 'validateXml'),
                                     $this->_pf, $v, $this->_pf->_config, $save);
                                 if (is_array($ret)) {
-                                    return $this->_invalidTask($task, $ret,
-                                        $save['attribs']['name']);
+                                    $this->_invalidTask($task, $ret, @$save['attribs']['name']);
                                 }
                             }
                         } else {
-                            $this->_unknownTask($task, $save['attribs']['name']);
+                            $this->_unknownTask($task, $save['name']);
                         }
                     }
                 }
@@ -906,53 +916,22 @@ class PEAR_PackageFile_v2_Validator
         }
         if (isset($list['ignore'])) {
             if (!$allowignore) {
-                $this->_ignoreNotAllowed();
+                $this->_ignoreNotAllowed('ignore');
             }
-            if (!isset($list['ignore'][0])) {
-                // single file
-                $list['ignore'] = array($list['ignore']);
-            }
-            foreach ($list['ignore'] as $i => $file) {
-                if (!isset($file['attribs'])) {
-                    return $this->_tagHasNoAttribs('ignore',
-                        '<dir name="' . $list['attribs']['name'] . '">');
-                }
-                if (!isset($file['attribs']['name'])) {
-                    return $this->_tagMissingAttribute('ignore', 'name',
-                        '<dir name="' . $list['attribs']['name'] . '">');
-                }
+        }
+        if (isset($list['install'])) {
+            if (!$allowignore) {
+                $this->_ignoreNotAllowed('install');
             }
         }
         if (isset($list['dir'])) {
-            if ($this->_processDir($list['dir'])) {
-                if (!isset($list['dir']['attribs'])) {
-                    foreach ($list['dir'] as $dir) {
-                        $this->_validateFilelist($dir, $filetag, $allowignore);
-                        return;
-                    }
-                }
+            if (!isset($list['dir'][0])) {
+                $list['dir'] = array($list['dir']);
             }
-            return $this->_validateFilelist($list['dir'], $filetag, $allowignore);
-        }
-    }
-
-    function _processDir($dirs)
-    {
-        if (!isset($dirs['attribs'])) {
-            foreach ($dirs as $i => $dir) {
-                if (!is_int($i)) {
-                    return $this->_tagHasNoAttribs('dir',
-                        'unknown');
-                }
-            }
-            return true;
-        } else {
-            if (!isset($dirs['attribs']['name'])) {
-                return $this->_tagMissingAttribute('dir', 'name',
-                    'unknown');
+            foreach ($list['dir'] as $dir) {
+                $this->_validateFilelist($dir, $filetag, $allowignore);
             }
         }
-        return true;
     }
 
     function _validateRelease()
@@ -1065,11 +1044,11 @@ class PEAR_PackageFile_v2_Validator
             'Invalid tag order in %root%, found <%actual%> expected one of "%oktags%"');
     }
 
-    function _ignoreNotAllowed()
+    function _ignoreNotAllowed($type)
     {
-        $this->_stack->push(__FUNCTION__, 'error', array(),
-            '<ignore> is not allowed inside global <contents>, only inside ' .
-            '<phprelease>/<extsrcrelease>/<extbinrelease>/<bundle>');
+        $this->_stack->push(__FUNCTION__, 'error', array('type' => $type),
+            '<%type%> is not allowed inside global <contents>, only inside ' .
+            '<phprelease>/<extbinrelease>');
     }
 
     function _tagMissingAttribute($tag, $attr, $context)
@@ -1233,8 +1212,8 @@ class PEAR_PackageFile_v2_Validator
 
     function _unknownTask($task, $file)
     {
-        $this->_stack->push(__FUNCTION__, 'error', array('task' => $task),
-            'Unknown task "%task%" passed in file "%file%"');
+        $this->_stack->push(__FUNCTION__, 'error', array('task' => $task, 'file' => $file),
+            'Unknown task "%task%" passed in file <file name="%file%">');
     }
 
     function _extsrcCanOnlyHaveOneRelease()
