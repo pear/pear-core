@@ -1090,7 +1090,7 @@ class PEAR_PackageFile_v2_Validator
                 $this->_cannotHaveSrcpackage($release);
             }
             $releases = $this->_packageInfo['bundle'];
-            if (!isset($releases[0])) {
+            if (!is_array($releases) || !isset($releases[0])) {
                 $releases = array($releases);
             }
             foreach ($releases as $rel) {
