@@ -1,5 +1,4 @@
 <?php
-//set_include_path('C:/devel/pear_with_channels');
 //
 // +----------------------------------------------------------------------+
 // | PHP Version 5                                                        |
