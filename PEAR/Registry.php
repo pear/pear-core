@@ -207,6 +207,7 @@ class PEAR_Registry extends PEAR
                     $this->_config = &new PEAR_Config($this->statedir . DIRECTORY_SEPARATOR .
                         $file);
                     $this->_config->setRegistry($this);
+                    $this->_config->set('php_dir', $this->install_dir);
                 }
                 $this->_dependencyDB = &PEAR_DependencyDB::singleton($this->_config);
                 if (PEAR::isError($this->_dependencyDB)) {
@@ -660,7 +661,11 @@ class PEAR_Registry extends PEAR
      */
     function _channelExists($channel, $noaliases = false)
     {
-        return file_exists($this->_channelFileName($channel, $noaliases));
+        $a = file_exists($this->_channelFileName($channel, $noaliases));
+        if (!$a && $channel == 'pear.php.net') {
+            return true;
+        }
+        return $a;
     }
 
     // }}}
@@ -680,7 +685,7 @@ class PEAR_Registry extends PEAR
         if (!$channel->validate()) {
             return false;
         }
-        if ($this->_channelExists($channel->getName())) {
+        if (file_exists($this->_channelFileName($channel->getName()))) {
             if (!$update) {
                 return false;
             }
@@ -874,8 +879,8 @@ class PEAR_Registry extends PEAR
     {
         $channellist = array();
         $dp = @opendir($this->channelsdir);
-        if (!$dp) {
-            return array('pear.php.net');
+        if (!$dp  || !@is_dir($this->channelsdir)) {
+            return array('pear.php.net', '__uri');
         }
         while ($ent = readdir($dp)) {
             if ($ent{0} == '.' || substr($ent, -4) != '.reg') {
