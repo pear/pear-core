@@ -97,6 +97,17 @@ class PEAR_Downloader_Package
      * @var string
      */
     var $_type;
+    /**
+     * Contents of package.xml, if downloaded from a remote channel
+     * @var string|false
+     * @access private
+     */
+    var $_rawpackagefile;
+    /**
+     * @var boolean
+     * @access private
+     */
+    var $_validated = false;
 
     /**
      * @param PEAR_Config
@@ -264,6 +275,7 @@ class PEAR_Downloader_Package
                 $this->_parsedname['group'] = 'default'; // download the default dependency group
                 $this->_explicitGroup = false;
             }
+            $this->_rawpackagefile = $dep['raw'];
         }
     }
 
@@ -290,6 +302,16 @@ class PEAR_Downloader_Package
         } else {
             return $this->_detect1($deps, $pname, $options, $params);
         }
+    }
+
+    function setValidated()
+    {
+        $this->_validated = true;
+    }
+
+    function alreadyValidated()
+    {
+        return $this->_validated;
     }
 
     function removeInstalled(&$params)
@@ -1170,6 +1192,17 @@ class PEAR_Downloader_Package
                     '"' . $saveparam);
                     return $err;
             }
+            if ($this->_rawpackagefile) {
+                $tar = &new Archive_Tar($file);
+                $packagexml = $tar->extractInString('package2.xml');
+                if (!$packagexml) {
+                    $packagexml = $tar->extractInString('package.xml');
+                }
+                if (trim($packagexml) != trim($this->_rawpackagefile)) {
+                    return $this->raiseError('CRITICAL ERROR: package.xml downloaded does ' .
+                        'not match value returned from xml-rpc');
+                }
+            }
             // whew, download worked!
             $pkg = &$this->getPackagefileObject($this->_config, $this->_downloader->debug,
                 $this->_downloader->getDownloadDir());
@@ -1281,6 +1314,7 @@ class PEAR_Downloader_Package
         if (PEAR::isError($info)) {
             return $info;
         }
+        $this->_rawpackagefile = $info['raw'];
         $ret = $this->_analyzeDownloadURL($info, $param, $pname);
         if (PEAR::isError($ret)) {
             return $ret;

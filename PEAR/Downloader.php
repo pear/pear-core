@@ -339,6 +339,9 @@ class PEAR_Downloader extends PEAR_Common
             if (!$deps) {
                 continue;
             }
+            if ($param->alreadyValidated()) {
+                continue;
+            }
             if (count($deps)) {
                 $depchecker = &$this->getDependency2Object($this->config, $this->getOptions(),
                     $param->getParsedPackage(), PEAR_VALIDATE_DOWNLOADING);
@@ -354,6 +357,7 @@ class PEAR_Downloader extends PEAR_Common
                     if (!isset($this->_options['soft'])) {
                         $this->log(0, $installcheck->getMessage());
                     }
+                    $params[$i]->setValidated();
                     continue;
                 }
                 $failed = false;
@@ -485,6 +489,7 @@ class PEAR_Downloader extends PEAR_Common
                     }
                 }
                 PEAR::staticPopErrorHandling();
+                $params[$i]->setValidated();
                 if ($failed) {
                     if (isset($this->_options['ignore-errors']) || isset($this->_options['nodeps'])) {
                         // this is probably not needed, but just in case
@@ -588,6 +593,7 @@ class PEAR_Downloader extends PEAR_Common
         if (!is_array($url)) {
             return $url;
         }
+        $url['raw'] = $url['info'];
         $pkg = &$this->getPackagefileObject($this->config, $this->debug, $this->getDownloadDir());
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         $pinfo = &$pkg->fromXmlString($url['info'], PEAR_VALIDATE_DOWNLOADING, 'remote');
@@ -642,6 +648,7 @@ class PEAR_Downloader extends PEAR_Common
         if (isset($url['__PEAR_ERROR_CLASS__'])) {
             return PEAR::raiseError($url['message']);
         }
+        $url['raw'] = $url['info'];
         $pkg = &$this->getPackagefileObject($this->config, $this->debug, $this->getDownloadDir());
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         $pinfo = &$pkg->fromXmlString($url['info'], PEAR_VALIDATE_DOWNLOADING, 'remote');
