@@ -19,6 +19,7 @@
 //
 // $Id$
 require_once 'PEAR/XMLParser.php';
+require_once 'PEAR/PackageFile/v2.php';
 /**
  * Parser for package.xml version 2.0
  * @author Greg Beaver <cellog@php.net>
@@ -46,7 +47,6 @@ class PEAR_PackageFile_Parser_v2 extends PEAR_XMLParser
         if (PEAR::isError($err = parent::parse($data, $file))) {
             return $err;
         }
-        include_once 'PEAR/PackageFile/v2.php';
         $ret = new PEAR_PackageFile_v2;
         $ret->setConfig($this->_config);
         if (isset($this->_logger)) {

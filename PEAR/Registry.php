@@ -30,6 +30,9 @@ require_once 'System.php';
 require_once 'PEAR.php';
 require_once 'PEAR/Installer/Role.php';
 require_once 'PEAR/DependencyDB.php';
+require_once 'PEAR/ChannelFile.php';
+require_once 'PEAR/PackageFile.php';
+require_once 'PEAR/PackageFile/v1.php';
 
 define('PEAR_REGISTRY_ERROR_LOCK',   -2);
 define('PEAR_REGISTRY_ERROR_FORMAT', -3);
@@ -152,9 +155,6 @@ class PEAR_Registry extends PEAR
                 if (!file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
                     $pear_channel = $this->_pearChannel;
                     if (!is_a($pear_channel, 'PEAR_ChannelFile') || !$pear_channel->validate()) {
-                        if (!class_exists('PEAR_ChannelFile')) {
-                            include_once 'PEAR/ChannelFile.php';
-                        }
                         $pear_channel = new PEAR_ChannelFile;
                         $pear_channel->setName('pear.php.net');
                         $pear_channel->setAlias('pear');
@@ -1103,9 +1103,6 @@ class PEAR_Registry extends PEAR
      */
     function &_getPackage($package, $channel = 'pear.php.net')
     {
-        if (!class_exists('PEAR_PackageFile')) {
-            include_once 'PEAR/PackageFile.php';
-        }
         $info = $this->_packageInfo($package, null, $channel);
         if ($info === null) {
             return $info;
@@ -1128,9 +1125,6 @@ class PEAR_Registry extends PEAR
      */
     function &_getChannel($channel, $noaliases = false)
     {
-        if (!class_exists('PEAR_ChannelFile')) {
-            include_once 'PEAR/ChannelFile.php';
-        }
         $ch = false;
         if ($this->_channelExists($channel, $noaliases)) {
             $ch = &PEAR_ChannelFile::fromArray($this->_channelInfo($channel, $noaliases));
@@ -1340,7 +1334,6 @@ class PEAR_Registry extends PEAR
         $ret = $this->_addPackage($package, $info);
         $this->_unlock();
         if ($ret) {
-            include_once 'PEAR/PackageFile/v1.php';
             $pf = new PEAR_PackageFile_v1;
             $pf->setConfig($this->_config);
             $pf->fromArray($info);
@@ -1464,7 +1457,6 @@ class PEAR_Registry extends PEAR
         $ret = $this->_updatePackage($package, $info, $merge);
         $this->_unlock();
         if ($ret) {
-            include_once 'PEAR/PackageFile/v1.php';
             $pf = new PEAR_PackageFile_v1;
             $pf->setConfig($this->_config);
             $pf->fromArray($this->packageInfo($package));

@@ -23,6 +23,8 @@ require_once 'PEAR.php';
 require_once 'PEAR/Registry.php';
 require_once 'PEAR/Installer/Role.php';
 require_once 'System.php';
+require_once 'PEAR/Remote.php';
+require_once 'PEAR/REST.php';
 
 /**
  * Last created PEAR_Config instance.
@@ -608,7 +610,7 @@ class PEAR_Config extends PEAR
                 }
             }
             if (class_exists('Net_FTP')) {
-                include_once 'PEAR/FTP.php';
+                require_once 'PEAR/FTP.php';
                 $this->_ftp = &new PEAR_FTP;
                 $this->_ftp->pushErrorHandling(PEAR_ERROR_RETURN);
                 $e = $this->_ftp->init($path);
@@ -1757,7 +1759,6 @@ class PEAR_Config extends PEAR
      */
     function &getRemote()
     {
-        include_once 'PEAR/Remote.php';
         $remote = &new PEAR_Remote($this);
         return $remote;
     }
@@ -1767,7 +1768,6 @@ class PEAR_Config extends PEAR
      */
     function &getREST($ui = null)
     {
-        include_once 'PEAR/REST.php';
         $remote = &new PEAR_REST($ui, $this);
         return $remote;
     }

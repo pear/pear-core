@@ -20,6 +20,7 @@
 //
 // $Id$
 
+require_once 'System.php';
 /**
  * This class converts a PEAR_PackageFile_v2 object into any output format.
  *
@@ -132,7 +133,6 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 '" is not equivalent to "' . basename($this->_packagefile->getPackageFile())
                 . '"');
         }
-        include_once 'System.php';
         if ($where === null) {
             if (!($where = System::mktemp(array('-d')))) {
                 return PEAR::raiseError('PEAR_Packagefile_v2::toTgz: mktemp failed');
@@ -283,7 +283,6 @@ http://pear.php.net/dtd/package-2.0.xsd',
             return PEAR::raiseError('PEAR_Packagefile_v2::toPackageFile: invalid package.xml',
                 null, null, null, $this->_packagefile->getValidationWarnings());
         }
-        include_once 'System.php';
         if ($where === null) {
             if (!($where = System::mktemp(array('-d')))) {
                 return PEAR::raiseError('PEAR_Packagefile_v2::toPackageFile: mktemp failed');

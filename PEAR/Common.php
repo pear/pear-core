@@ -24,6 +24,8 @@ require_once 'PEAR/Frontend.php';
 require_once 'Archive/Tar.php';
 require_once 'System.php';
 require_once 'PEAR/Config.php';
+require_once 'PEAR/PackageFile.php';
+require_once 'PEAR/Downloader.php';
 
 // {{{ constants and globals
 
@@ -328,7 +330,6 @@ class PEAR_Common extends PEAR
      */
     function infoFromTgzFile($file)
     {
-        include_once 'PEAR/PackageFile.php';
         $packagefile = &new PEAR_PackageFile($this->config);
         $pf = &$packagefile->fromTgzFile($file, PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($pf)) {
@@ -360,7 +361,6 @@ class PEAR_Common extends PEAR
      */
     function infoFromDescriptionFile($descfile)
     {
-        include_once 'PEAR/PackageFile.php';
         $packagefile = &new PEAR_PackageFile($this->config);
         $pf = &$packagefile->fromPackageFile($descfile, PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($pf)) {
@@ -392,7 +392,6 @@ class PEAR_Common extends PEAR
      */
     function infoFromString($data)
     {
-        include_once 'PEAR/PackageFile.php';
         $packagefile = &new PEAR_PackageFile($this->config);
         $pf = &$packagefile->fromXmlString($data, PEAR_VALIDATE_NORMAL, false);
         if (PEAR::isError($pf)) {
@@ -458,7 +457,6 @@ class PEAR_Common extends PEAR
     function infoFromAny($info)
     {
         if (is_string($info) && file_exists($info)) {
-            include_once 'PEAR/PackageFile.php';
             $packagefile = &new PEAR_PackageFile($this->config);
             $pf = &$packagefile->fromAnyFile($info, PEAR_VALIDATE_NORMAL);
             if (PEAR::isError($pf)) {
@@ -491,8 +489,6 @@ class PEAR_Common extends PEAR
      */
     function xmlFromInfo($pkginfo)
     {
-        include_once 'PEAR/PackageFile.php';
-        include_once 'PEAR/Config.php';
         $config = &PEAR_Config::singleton();
         $packagefile = &new PEAR_PackageFile($config);
         $pf = &$packagefile->fromArray($pkginfo);
@@ -518,8 +514,6 @@ class PEAR_Common extends PEAR
      */
     function validatePackageInfo($info, &$errors, &$warnings, $dir_prefix = '')
     {
-        include_once 'PEAR/PackageFile.php';
-        include_once 'PEAR/Config.php';
         $config = &PEAR_Config::singleton();
         $packagefile = &new PEAR_PackageFile($config);
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
@@ -1064,9 +1058,6 @@ class PEAR_Common extends PEAR
      */
     function downloadHttp($url, &$ui, $save_dir = '.', $callback = null)
     {
-        if (!class_exists('PEAR_Downloader')) {
-            include_once 'PEAR/Downloader.php';
-        }
         return PEAR_Downloader::downloadHttp($url, $ui, $save_dir, $callback);
     }
 

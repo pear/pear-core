@@ -19,6 +19,8 @@
 //
 // $Id$
 require_once 'PEAR/Validate.php';
+require_once 'System.php';
+require_once 'PEAR/PackageFile/v2.php';
 /**
  * This class converts a PEAR_PackageFile_v1 object into any output format.
  *
@@ -51,7 +53,6 @@ class PEAR_PackageFile_Generator_v1
      */
     function toTgz(&$packager, $compress = true, $where = null)
     {
-        include_once 'System.php';
         if ($where === null) {
             if (!($where = System::mktemp(array('-d')))) {
                 return PEAR::raiseError('PEAR_Packagefile_v1::toTgz: mktemp failed');
@@ -134,7 +135,6 @@ class PEAR_PackageFile_Generator_v1
             return PEAR::raiseError('PEAR_Packagefile_v1::toPackageFile: invalid package.xml',
                 null, null, null, $this->_packagefile->getValidationWarnings());
         }
-        include_once 'System.php';
         if ($where === null) {
             if (!($where = System::mktemp(array('-d')))) {
                 return PEAR::raiseError('PEAR_Packagefile_v1::toPackageFile: mktemp failed');
@@ -615,7 +615,6 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 $arr['changelog']['release'][] = $rel;
             }
         }
-        include_once 'PEAR/PackageFile/v2.php';
         $ret = new PEAR_PackageFile_v2;
         $ret->setConfig($this->_packagefile->_config);
         $ret->setLogger($this->_packagefile->_logger);

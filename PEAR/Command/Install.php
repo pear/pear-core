@@ -20,6 +20,7 @@
 
 require_once "PEAR/Command/Common.php";
 require_once "PEAR/Installer.php";
+require_once 'PEAR/Downloader.php';
 
 /**
  * PEAR commands for installation or deinstallation/upgrading of
@@ -317,7 +318,6 @@ package if needed.
 
     function doInstall($command, $options, $params)
     {
-        require_once 'PEAR/Downloader.php';
         if (empty($this->installer)) {
             $this->installer = &$this->getInstaller($this->ui);
         }
@@ -334,6 +334,7 @@ package if needed.
         if ($command == 'upgrade-all') {
             $options['upgrade'] = true;
             $remote = &$this->config->getRemote($this->config);
+            $reg = &$this->config->getRegistry();
             $savechannel = $this->config->get('default_channel');
             foreach ($reg->listChannels() as $channel) {
                 $this->config->set('default_channel', $channel);
