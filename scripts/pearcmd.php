@@ -39,6 +39,7 @@ ob_implicit_flush(true);
 @ini_set('track_errors', true);
 @ini_set('html_errors', false);
 @ini_set('magic_quotes_runtime', false);
+$_PEAR_PHPDIR = '#$%^&*';
 set_error_handler('error_handler');
 
 $pear_package_version = "@pear_version@";
@@ -51,6 +52,7 @@ require_once 'PEAR/Frontend.php';
 require_once 'PEAR/Config.php';
 require_once 'PEAR/Command.php';
 require_once 'Console/Getopt.php';
+
 
 PEAR_Command::setFrontendType('CLI');
 $all_commands = PEAR_Command::getCommands();
@@ -100,6 +102,7 @@ foreach ($opts as $opt) {
 PEAR_Command::setFrontendType($fetype);
 $ui = &PEAR_Command::getFrontendObject();
 $config = &PEAR_Config::singleton($pear_user_config, $pear_system_config);
+$_PEAR_PHPDIR = $config->get('php_dir');
 $ui->setConfig($config);
 PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array($ui, "displayFatalError"));
 if (ini_get('safe_mode')) {
@@ -348,6 +351,16 @@ function error_handler($errno, $errmsg, $file, $line, $vars) {
     );
     $prefix = $errortype[$errno];
     $file = basename($file);
+    if (function_exists('debug_backtrace')) {
+        $trace = debug_backtrace();
+        if (isset($trace[1]) && isset($trace[1]['file'])) {
+            $dir = $trace[1]['file'];
+            global $_PEAR_PHPDIR;
+            if (stristr($dir, $_PEAR_PHPDIR)) {
+                $file = substr($dir, strlen($_PEAR_PHPDIR) + 1);
+            }
+        }
+    }
     print "\n$prefix: $errmsg in $file on line $line\n";
 }
 
