@@ -1406,8 +1406,13 @@ class PEAR_Downloader_Package
                     $vs = ', version "' . $pname['version'] . '"';
                 } elseif (isset($pname['state'])) {
                     $vs = ', stability "' . $pname['state'] . '"';
+                } elseif ($param == 'dependency') {
+                    if (!class_exists('PEAR_Dependency2')) {
+                        require_once 'PEAR/Dependency2.php';
+                    }
+                    $vs = PEAR_Dependency2::_getExtraString($pname);
                 } else {
-                    $vs = ' within preferred state ' . $this->_config->get(
+                    $vs = ' within preferred state "' . $this->_config->get(
                         'preferred_state') . '"';
                 }
                 if (!isset($options['soft'])) {
@@ -1427,8 +1432,10 @@ class PEAR_Downloader_Package
                     $vs = ', version "' . $pname['version'] . '"';
                 } elseif (isset($pname['state'])) {
                     $vs = ', stability "' . $pname['state'] . '"';
+                } elseif ($param == 'dependency') {
+                    $vs = PEAR_Dependency2::_getExtraString($pname);
                 } else {
-                    $vs = ' within preferred state ' . $this->_downloader->config->get(
+                    $vs = ' within preferred state "' . $this->_downloader->config->get(
                         'preferred_state') . '"';
                 }
                 $err = PEAR::raiseError(
