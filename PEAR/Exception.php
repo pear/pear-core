@@ -21,9 +21,9 @@
 //
 // $Id$
 
-define('PEAR_OBSERVER_PRINT',                -2);
-define('PEAR_OBSERVER_TRIGGER',              -4);
-define('PEAR_OBSERVER_DIE',                  -8);
+define('PEAR_EXCEPTION_PRINT',                -2);
+define('PEAR_EXCEPTION_TRIGGER',              -4);
+define('PEAR_EXCEPTION_DIE',                  -8);
 
 /**
  * Base PEAR_Exception Class
@@ -99,6 +99,7 @@ class PEAR_Exception extends Exception
 {
     protected $cause;
     private static $_observers = array();
+    private static $_uniqueid = 0;
     private $_trace;
 
     /**
@@ -145,9 +146,14 @@ class PEAR_Exception extends Exception
     }
 
     /**
-     * Additional signal handling can be added or overridden by child classes
+     * @return int unique identifier for an observer
      */
-    protected function signal()
+    public static function getUniqueId()
+    {
+        return self::$_uniqueid++;
+    }
+
+    private function signal()
     {
         foreach (self::$_observers as $func) {
             if (is_callable($func)) {
