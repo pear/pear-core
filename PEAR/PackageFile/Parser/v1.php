@@ -7,6 +7,7 @@ class PEAR_PackageFile_Parser_v1
 {
     var $_registry;
     var $_config;
+    var $_logger;
     /**
      * BC hack to allow PEAR_Common::infoFromString() to sort of
      * work with the version 2.0 format - there's no filelist though
@@ -23,6 +24,11 @@ class PEAR_PackageFile_Parser_v1
     {
         $this->_config = &$c;
         $this->_registry = &$c->getRegistry();
+    }
+
+    function setLogger(&$l)
+    {
+        $this->_logger = &$l;
     }
 
     /**
@@ -60,16 +66,19 @@ class PEAR_PackageFile_Parser_v1
 
         if (!xml_parse($xp, $data, 1)) {
             $code = xml_get_error_code($xp);
+            $line = xml_get_current_line_number($xp);
             xml_parser_free($xp);
             return PEAR::raiseError(sprintf("XML error: %s at line %d",
-                           $str = xml_error_string($code),
-                           $line = xml_get_current_line_number($xp)), 2);
+                           $str = xml_error_string($code), $line), 2);
         }
 
         xml_parser_free($xp);
 
         $pf = new PEAR_PackageFile_v1;
         $pf->setConfig($this->_config);
+        if (isset($this->_logger)) {
+            $pf->setLogger($this->_logger);
+        }
         $pf->setPackagefile($file, $archive);
         $pf->fromArray($this->_packageInfo);
         return $pf;
