@@ -203,10 +203,8 @@ class PEAR_PackageFile_v2_Validator
             $key = next($keys);
         }
         $unfoundtags = array();
+        $ret = true;
         foreach ($structure as $struc) {
-            if (!$key && @$struc['multiple'] == '*') {
-                continue;
-            }
             $test = $this->_processStructure($struc);
             if ($key) {
                 $tag = $xml[$key];
@@ -215,18 +213,16 @@ class PEAR_PackageFile_v2_Validator
                 $loose = true;
                 foreach ($test['choices'] as $choice) {
                     if ($key == $choice['tag']) {
-                        if ($this->_processAttribs($choice, $tag, $root)) {
+                        $key = next($keys);
+                        while ($key == 'attribs' || $key == '_contents') {
                             $key = next($keys);
-                            while ($key == 'attribs' || $key == '_contents') {
-                                $key = next($keys);
-                            }
-                            $unfoundtags = array();
-                            if ($key && $key != $choice['tag'] && isset($choice['multiple'])) {
-                                $unfoundtags[] = $choice['tag'];
-                            }
-                            continue 2;
                         }
-                        return false;
+                        $unfoundtags = array();
+                        if ($key && $key != $choice['tag'] && isset($choice['multiple'])) {
+                            $unfoundtags[] = $choice['tag'];
+                        }
+                        $ret &= $this->_processAttribs($choice, $tag, $root);
+                        continue 2;
                     } else {
                         $unfoundtags[] = $choice['tag'];
                     }
@@ -255,23 +251,21 @@ class PEAR_PackageFile_v2_Validator
                 } else {
                     $unfoundtags = array();
                 }
-                if ($this->_processAttribs($test, $tag, $root)) {
+                $key = next($keys);
+                while ($key == 'attribs' || $key == '_contents') {
                     $key = next($keys);
-                    while ($key == 'attribs' || $key == '_contents') {
-                        $key = next($keys);
-                    }
-                    if ($key && $key != $test['tag'] && isset($test['multiple'])) {
-                        $unfoundtags[] = $test['tag'];
-                    }
-                    continue;
                 }
-                return false;
+                if ($key && $key != $test['tag'] && isset($test['multiple'])) {
+                    $unfoundtags[] = $test['tag'];
+                }
+                $ret &= $this->_processAttribs($test, $tag, $root);
+                continue;
             }
         }
         if (count($unfoundtags)) {
             $this->_invalidTagOrder($unfoundtags, $key, $root);
         }
-        return true;
+        return $ret;
     }
 
     function _processAttribs($choice, $tag, $context)
@@ -285,18 +279,24 @@ class PEAR_PackageFile_v2_Validator
                         return $this->_processAttribs($choice, $tags, $context);
                     }
                     if (!isset($tag['attribs'])) {
-                        return $this->_tagHasNoAttribs($choice['tag'],
-                            $context);
+                        foreach ($choice['attribs'] as $attrib) {
+                            if ($attrib{0} != '?') {
+                                return $this->_tagHasNoAttribs($choice['tag'],
+                                    $context);
+                            }
+                        }
                     }
+                    $ret = true;
                     foreach ($choice['attribs'] as $attrib) {
                         if ($attrib{0} != '?') {
                             if (!isset($tag['attribs'][$attrib])) {
-                                return $this->_tagMissingAttribute($choice['tag'],
+                                $ret &= $this->_tagMissingAttribute($choice['tag'],
                                     $attrib, $context);
                             }
                         }
                     }
                 }
+                return $ret;
             } else {
                 if (!isset($tag['attribs'])) {
                     foreach ($choice['attribs'] as $attrib) {
@@ -673,28 +673,17 @@ class PEAR_PackageFile_v2_Validator
             }
         }
         if (isset($this->_packageInfo['dependencies']['group'])) {
+            $groups = $this->_packageInfo['dependencies']['group'];
+            if (!isset($groups[0])) {
+                $groups = array($groups);
+            }
             $structure = array(
                 '*package',
                 '*subpackage',
                 '*extension',
             );
-            if ($this->_stupidSchemaValidate($structure,
-                  $this->_packageInfo['dependencies']['group'], '<group>')) {
-                $groups = $this->_packageInfo['dependencies']['group'];
-                if (!isset($groups[0])) {
-                    $groups = array($groups);
-                }
-                foreach ($groups as $group) {
-                    if (!isset($group['attribs'])) {
-                        $this->_tagHasNoAttribs('group', '<dependencies>');
-                    } else {
-                        if (!isset($group['attribs']['name'])) {
-                            $this->_tagMissingAttribute('group', 'name', '<dependencies>');
-                        }
-                        if (!isset($group['attribs']['hint'])) {
-                            $this->_tagMissingAttribute('group', 'hint', '<dependencies>');
-                        }
-                    }
+            foreach ($groups as $group) {
+                if ($this->_stupidSchemaValidate($structure, $group, '<group>')) {
                     foreach (array('package', 'subpackage', 'extension') as $type) {
                         if (isset($group[$type])) {
                             $iter = $group[$type];
@@ -1020,7 +1009,7 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array('tag' => $tag,
             'attribute' => $attr, 'context' => $context),
-            'tag <%tag%> in context "%context%" has no attribute "%attr%"');
+            'tag <%tag%> in context "%context%" has no attribute "%attribute%"');
     }
 
     function _tagHasNoAttribs($tag, $context)
