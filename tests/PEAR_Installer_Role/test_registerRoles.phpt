@@ -95,6 +95,7 @@ $phpunit->assertEquals(array (
     'honorsbaseinstall' => false,
     'phpfile' => false,
     'executable' => false,
+    'phpextension' => false,
   ),
   'PEAR_Installer_Role_Test' => 
   array (
