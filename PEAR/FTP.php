@@ -1,9 +1,39 @@
 <?php
-require_once 'Net/FTP.php';
+//
+// +----------------------------------------------------------------------+
+// | PHP Version 5                                                        |
+// +----------------------------------------------------------------------+
+// | Copyright (c) 1997-2004 The PHP Group                                |
+// +----------------------------------------------------------------------+
+// | This source file is subject to version 3.0 of the PHP license,       |
+// | that is bundled with this package in the file LICENSE, and is        |
+// | available through the world-wide-web at the following url:           |
+// | http://www.php.net/license/3_0.txt.                                  |
+// | If you did not receive a copy of the PHP license and are unable to   |
+// | obtain it through the world-wide-web, please send a note to          |
+// | license@php.net so we can mail you a copy immediately.               |
+// +----------------------------------------------------------------------+
+// | Author: Greg Beaver <cellog@php.net>                                 |
+// +----------------------------------------------------------------------+
+//
+// $Id$
+
+/**
+ * @author Greg Beaver <cellog@php.net>
+ * @package PEAR
+ */
 class PEAR_FTP extends Net_FTP
 {
+    /**
+     * @var array
+     * @access private
+     */
     var $_parsed;
 
+    /**
+     * @param string full url to remote config file
+     * @return true|PEAR_Error
+     */
     function init($url = null)
     {
         if ($url !== null) {
@@ -37,6 +67,7 @@ class PEAR_FTP extends Net_FTP
             $this->popErrorHandling();
             return $e;
         }
+        return true;
     }
 
     /**
@@ -50,7 +81,6 @@ class PEAR_FTP extends Net_FTP
      * @return  mixed             True on success, otherwise PEAR::Error
      * @see     NET_FTP_ERR_CREATEDIR_FAILED
      */
-    
     function mkdir($dir, $recursive = false)
     {
         $dir = $this->_construct_path($dir);
@@ -84,6 +114,10 @@ class PEAR_FTP extends Net_FTP
         }
     }
 
+    /**
+     * @param string full path to local file
+     * @param string full path to remote file
+     */
     function installFile($local, $remote)
     {
         $this->pushErrorHandling(PEAR_ERROR_RETURN);
