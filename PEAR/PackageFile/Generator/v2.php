@@ -127,7 +127,10 @@ http://pear.php.net/dtd/package-2.0.xsd',
     function toTgz2(&$packager, &$pf1, $compress = true, $where = null)
     {
         if (!$this->_packagefile->isEquivalent($pf1)) {
-            return false;
+            return PEAR::raiseError('PEAR_Packagefile_v2::toTgz: "' .
+                basename($pf1->getPackageFile()) .
+                '" is not equivalent to "' . basename($this->_packagefile->getPackageFile())
+                . '"');
         }
         include_once 'System.php';
         if ($where === null) {
