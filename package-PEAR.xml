@@ -48,7 +48,7 @@
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.0a6</version>
+  <version>1.4.0a7</version>
   <date>2005-03-17</date>
   <license>PHP License</license>
   <state>alpha</state>
@@ -109,6 +109,7 @@
 
   Specific changes from 1.4.0a6
   * fix Bug #3864 Invalid dependency relation
+  * fix Bug #3863 illogical warning about PEAR_Frontend_Gtk 0.4.0 with PEAR 1.4.0a6
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -359,6 +360,15 @@
   * fix Bug #3801 [PATCH] analyzeSourceCode() reports PHP4 code as PHP5
   * fix Bug #3671 Installing package features doesn't work as expected
   * implement Request #3717 [Patch] Implement Simple run-tests output
+   </notes>
+  </release>
+  <release>
+   <version>1.4.0a6</version>
+   <date>2005-03-17</date>
+   <state>alpha</state>
+   <notes>
+  Specific changes from 1.4.0a5:
+  * fix Bug #3860 PEAR_Dependency2 not included in 1 case
    </notes>
   </release>
  </changelog>
