@@ -13,7 +13,7 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Author: Stig Sæther Bakken <ssb@php.net>                             |
+  | Author: Stig S?ther Bakken <ssb@php.net>                             |
   +----------------------------------------------------------------------+
 
   $Id$
@@ -110,6 +110,28 @@ class PEAR_Frontend_CLI extends PEAR
     function displayFatalError($eobj)
     {
         $this->displayError($eobj);
+        if (class_exists('PEAR_Config')) {
+            $config = &PEAR_Config::singleton();
+            if ($config->get('verbose') > 5) {
+                if (function_exists('debug_print_backtrace')) {
+                    debug_print_backtrace();
+                } elseif (function_exists('debug_backtrace')) {
+                    $trace = debug_backtrace();
+                    $raised = false;
+                    foreach ($trace as $i => $frame) {
+                        if (!$raised) {
+                            if (isset($frame['class']) && strtolower($frame['class']) ==
+                                  'pear' && strtolower($frame['function']) == 'raiseerror') {
+                                $raised = true;
+                            } else {
+                                continue;
+                            }
+                        }
+                        @$this->_displayLine("#$i: $frame[class]$frame[type]$frame[function] $frame[line]");
+                    }
+                }
+            }
+        }
         exit(1);
     }
 
