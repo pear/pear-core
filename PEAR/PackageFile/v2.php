@@ -390,6 +390,14 @@ class PEAR_PackageFile_v2
         $this->_packageInfo['dirtree'][$path] = true;
     }
 
+    function getDirtree()
+    {
+        if (isset($this->_packageInfo['dirtree']) && count($this->_packageInfo['dirtree'])) {
+            return $this->_packageInfo['dirtree'];
+        }
+        return false;
+    }
+
     function resetDirtree()
     {
         unset($this->_packageInfo['dirtree']);

@@ -273,7 +273,6 @@ used for automated conversion or learning the format.
         $pkginfofile = isset($params[0]) ? $params[0] : 'package.xml';
         $packager =& new PEAR_Packager();
         $reg = &$this->config->getRegistry();
-        $packager->setConfig($this->config);
         $err = $warn = array();
         $dir = dirname($pkginfofile);
         $compress = empty($options['nocompress']) ? true : false;
