@@ -30,14 +30,7 @@ class PEAR_Task_Replace extends PEAR_Task_Common
         if (!isset($xml['attribs']['from'])) {
             return array(PEAR_TASK_ERROR_MISSING_ATTRIB, 'from');
         }
-        if ($xml['attribs']['type'] == 'php-const') {
-            if (preg_match('/^[a-z0-9_]+$/i', $xml['attribs']['to'])) {
-                return true;
-            } else {
-                return array(PEAR_TASK_ERROR_WRONG_ATTRIB_VALUE, $xml['attribs']['type'],
-                    array('/^[a-z0-9_]+$/i'));
-            }
-        } elseif ($xml['attribs']['type'] == 'pear-config') {
+        if ($xml['attribs']['type'] == 'pear-config') {
             if (!in_array($xml['attribs']['to'], $config->getKeys())) {
                 return array(PEAR_TASK_ERROR_WRONG_ATTRIB_VALUE, 'to', $xml['attribs']['to'],
                     $config->getKeys());
@@ -58,7 +51,7 @@ class PEAR_Task_Replace extends PEAR_Task_Common
             }
         } else {
             return array(PEAR_TASK_ERROR_WRONG_ATTRIB_VALUE, 'type', $xml['attribs']['type'],
-                array('php-const', 'pear-config', 'package-info'));
+                array('pear-config', 'package-info'));
         }
     }
 
@@ -88,14 +81,7 @@ class PEAR_Task_Replace extends PEAR_Task_Common
         foreach ($this->_replacements as $a) {
             $a = $a['attribs'];
             $to = '';
-            if ($a['type'] == 'php-const') {
-                if (preg_match('/^[a-z0-9_]+$/i', $a['to'])) {
-                    eval("\$to = $a[to];");
-                } else {
-                    $this->installer->log(0, "invalid php-const replacement: $a[to]");
-                    return false;
-                }
-            } elseif ($a['type'] == 'pear-config') {
+            if ($a['type'] == 'pear-config') {
                 if ($a['to'] == 'master_server') {
                     $chan = $this->registry->getChannel($pkg->getChannel());
                     if ($chan) {
@@ -111,7 +97,7 @@ class PEAR_Task_Replace extends PEAR_Task_Common
                     $this->installer->log(0, "invalid pear-config replacement: $a[to]");
                     return false;
                 }
-            } elseif ($a['type'] == 'package-info') {
+            } else {
                 if ($t = $pkg->packageInfo($a['to'])) {
                     $to = $t;
                 } else {
