@@ -145,6 +145,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix potential fatal errors in run-tests command, -p option
   * fix Bug #3966 Improper path in PEAR/PackageFile/v2.php
   * fix Bug #3990: PEAR_Error PEAR_EXCEPTION broken
+  * fix Bug #4021: PEAR_Config file_exists can cause warnings
  </notes>
  <contents>
   <dir name="/">
