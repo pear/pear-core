@@ -68,7 +68,7 @@ class PEAR_Dependency2
         if (isset($dep['not']) && $dep['not'] == 'yes') {
             $not = true;
         }
-        switch (strtolower($dep['attribs']['name'])) {
+        switch (strtolower($dep['name'])) {
             case 'windows' :
                 if ($not) {
                     if (substr(PHP_OS, 0, 3) == 'WIN') {
@@ -94,13 +94,13 @@ class PEAR_Dependency2
             break;
             default :
                 if ($not) {
-                    if ($dep['attribs']['name'] == $this->_os->getSysname()) {
-                        return $this->raiseError('Cannot install %s on ' . $dep['attribs']['name']);
+                    if ($dep['name'] == $this->_os->getSysname()) {
+                        return $this->raiseError('Cannot install %s on ' . $dep['name']);
                     }
                 } else {
-                    if ($dep['attribs']['name'] != $this->_os->getSysname()) {
+                    if ($dep['name'] != $this->_os->getSysname()) {
                         return $this->raiseError('Cannot install %s on ' . $this->_os->getSysname() .
-                            ', can only install on ' . $dep['attribs']['name']);
+                            ', can only install on ' . $dep['name']);
                     }
                 }
         }
@@ -122,16 +122,16 @@ class PEAR_Dependency2
         if (isset($dep['not']) && $dep['not'] == 'yes') {
             $not = true;
         }
-        if (!$this->_os->matchSignature($dep['attribs']['pattern'])) {
+        if (!$this->_os->matchSignature($dep['pattern'])) {
             if (!$not) {
                 return $this->raiseError('%s Architecture dependency failed, cannot match "' .
-                    $dep['attribs']['pattern'] . "'");
+                    $dep['pattern'] . "'");
             }
             return true;
         } else {
             if ($not) {
                 return $this->raiseError('%s Architecture dependency failed, required "' .
-                    $dep['attribs']['pattern'] . "'");
+                    $dep['pattern'] . "'");
             }
             return true;
         }
@@ -143,124 +143,124 @@ class PEAR_Dependency2
               $this->_state != PEAR_VALIDATE_DOWNLOADING) {
             return true;
         }
-        $loaded = extension_loaded($dep['attribs']['name']);
-        if (isset($dep['attribs']['not']) && $dep['attribs']['not'] == 'yes') {
+        $loaded = extension_loaded($dep['name']);
+        if (isset($dep['not']) && $dep['not'] == 'yes') {
             if ($loaded) {
                 if ($required) {
                     if (!isset($this->_options['nodeps'])) {
                         return $this->raiseError('%s conflicts with PHP extension "' .
-                            $dep['attribs']['name'] . '"');
+                            $dep['name'] . '"');
                     } else {
                         return $this->warning('warning: %s conflicts with PHP extension "' .
-                            $dep['attribs']['name'] . '"');
+                            $dep['name'] . '"');
                     }
                 } else {
                     return $this->warning('warning: %s conflicts with PHP extension "' .
-                        $dep['attribs']['name'] . '"');
+                        $dep['name'] . '"');
                 }
             } else {
                 return true;
             }
         }
-        if (!isset($dep['attribs']['min']) && !isset($dep['attribs']['max']) &&
-              !isset($dep['attribs']['recommended'])) {
+        if (!isset($dep['min']) && !isset($dep['max']) &&
+              !isset($dep['recommended'])) {
             if ($loaded) {
                 return true;
             } else {
                 if ($required) {
                     if (!isset($this->_options['nodeps'])) {
                         return $this->raiseError('%s requires PHP extension "' .
-                            $dep['attribs']['name'] . '"');
+                            $dep['name'] . '"');
                     } else {
                         return $this->warning('warning: %s requires PHP extension "' .
-                            $dep['attribs']['name'] . '"');
+                            $dep['name'] . '"');
                     }
                 } else {
                     return $this->warning('%s can optionally use PHP extension "' .
-                        $dep['attribs']['name'] . '"');
+                        $dep['name'] . '"');
                 }
             }
         }
-        $version = phpversion($dep['attribs']['name']);
-        if (isset($dep['attribs']['min'])) {
-            if (!version_compare($version, $dep['attribs']['min'], '>=')) {
+        $version = phpversion($dep['name']);
+        if (isset($dep['min'])) {
+            if (!version_compare($version, $dep['min'], '>=')) {
                 if ($required) {
                     if (!isset($this->_options['nodeps'])) {
                         return $this->raiseError('%s requires PHP extension "' .
-                            $dep['attribs']['name'] . '" version ' . $dep['attribs']['min'] .
+                            $dep['name'] . '" version ' . $dep['min'] .
                             ' or greater');
                     } else {
                         return $this->warning('warning: %s requires PHP extension "' .
-                            $dep['attribs']['name'] . '" version ' . $dep['attribs']['min'] .
+                            $dep['name'] . '" version ' . $dep['min'] .
                             ' or greater');
                     }
                 } else {
                     return $this->warning('warning: %s optionally requires PHP extension "' .
-                        $dep['attribs']['name'] . '" version ' . $dep['attribs']['min'] .
+                        $dep['name'] . '" version ' . $dep['min'] .
                         ' or greater');
                 }
             }
         }
-        if (isset($dep['attribs']['max'])) {
-            if (!version_compare($version, $dep['attribs']['max'], '<=')) {
+        if (isset($dep['max'])) {
+            if (!version_compare($version, $dep['max'], '<=')) {
                 if ($required) {
                     if (!isset($this->_options['nodeps'])) {
                         return $this->raiseError('%s requires PHP extension "' .
-                            $dep['attribs']['name'] . '" version ' . $dep['attribs']['max'] .
+                            $dep['name'] . '" version ' . $dep['max'] .
                             ' or less');
                     } else {
                         return $this->warning('warning: %s requires PHP extension "' .
-                            $dep['attribs']['name'] . '" version ' . $dep['attribs']['max'] .
+                            $dep['name'] . '" version ' . $dep['max'] .
                             ' or less');
                     }
                 } else {
                     return $this->warning('warning: %s requires PHP extension "' .
-                        $dep['attribs']['name'] . '" version ' . $dep['attribs']['max'] .
+                        $dep['name'] . '" version ' . $dep['max'] .
                         ' or less');
                 }
             }
         }
         if (isset($dep['exclude'])) {
-            if (isset($dep['exclude']['attribs'])) {
-                if (version_compare($version, $dep['exclude']['attribs']['version'], '==')) {
+            if (!is_array($dep['exclude'])) {
+                if (version_compare($version, $dep['exclude'], '==')) {
                     if (!isset($this->_options['force'])) {
                         return $this->raiseError('%s is not compatible with PHP extension "' .
-                            $dep['attribs']['name'] . '" version ' .
-                            $dep['exclude']['attribs']['version']);
+                            $dep['name'] . '" version ' .
+                            $dep['exclude']);
                     } else {
                         return $this->warning('warning: %s is not compatible with PHP extension "' .
-                            $dep['attribs']['name'] . '" version ' .
-                            $dep['exclude']['attribs']['version']);
+                            $dep['name'] . '" version ' .
+                            $dep['exclude']);
                     }
                 }
             } else {
                 foreach ($dep['exclude'] as $exclude) {
-                    if (version_compare($version, $exclude['attribs']['version'], '==')) {
+                    if (version_compare($version, $exclude, '==')) {
                         if (!isset($this->_options['force'])) {
                             return $this->raiseError('%s is not compatible with PHP extension "' .
-                                $dep['attribs']['name'] . '" version ' .
-                                $exclude['attribs']['version']);
+                                $dep['name'] . '" version ' .
+                                $exclude);
                         } else {
                             return $this->warning('warning: %s is not compatible with PHP extension "' .
-                                $dep['attribs']['name'] . '" version ' .
-                                $exclude['attribs']['version']);
+                                $dep['name'] . '" version ' .
+                                $exclude);
                         }
                     }
                 }
             }
         }
-        if (isset($dep['attribs']['recommended'])) {
-            if (version_compare($version, $dep['attribs']['recommended'], '==')) {
+        if (isset($dep['recommended'])) {
+            if (version_compare($version, $dep['recommended'], '==')) {
                 return true;
             } else {
                 if (!isset($this->_options['force'])) {
-                    return $this->warning('%s dependency: PHP extension ' . $dep['attribs']['name'] .
+                    return $this->warning('%s dependency: PHP extension ' . $dep['name'] .
                         ' version "' . $version . '"' .
-                        ' is not the recommended version "' . $dep['attribs']['recommended'].'"');
+                        ' is not the recommended version "' . $dep['recommended'].'"');
                 } else {
-                    return $this->raiseError('%s dependency: PHP extension ' . $dep['attribs']['name'] .
+                    return $this->raiseError('%s dependency: PHP extension ' . $dep['name'] .
                         ' version "' . $version . '"' .
-                        ' is not the recommended version "' . $dep['attribs']['recommended'] .
+                        ' is not the recommended version "' . $dep['recommended'] .
                         '", but may be compatible, use --force to install');
                 }
             }
@@ -274,56 +274,56 @@ class PEAR_Dependency2
             return true;
         }
         $version = phpversion();
-        if (!version_compare($version, $dep['attribs']['min'], '>=')) {
+        if (!version_compare($version, $dep['min'], '>=')) {
             if ($required) {
                 if (!isset($this->_options['nodeps'])) {
-                    return $this->raiseError('%s requires PHP version '. $dep['attribs']['min'] .
+                    return $this->raiseError('%s requires PHP version '. $dep['min'] .
                         ' or greater');
                 } else {
                     return $this->warning('warning: %s requires PHP version ' .
-                        $dep['attribs']['min'] . ' or greater');
+                        $dep['min'] . ' or greater');
                 }
             } else {
-                return $this->warning('warning: %s requires PHP version ' . $dep['attribs']['min'] .
+                return $this->warning('warning: %s requires PHP version ' . $dep['min'] .
                     ' or greater');
             }
         }
-        if (!version_compare($version, $dep['attribs']['max'], '<=')) {
+        if (!version_compare($version, $dep['max'], '<=')) {
             if ($required) {
                 if (!isset($this->_options['nodeps'])) {
                     return $this->raiseError('%s requires PHP version ' .
-                        $dep['attribs']['max'] . ' or less');
+                        $dep['max'] . ' or less');
                 } else {
-                    return $this->warning('%s requires PHP version ' . $dep['attribs']['max'] .
+                    return $this->warning('%s requires PHP version ' . $dep['max'] .
                         ' or less');
                 }
             } else {
-                return $this->warning('%s requires PHP version ' . $dep['attribs']['max'] .
+                return $this->warning('%s requires PHP version ' . $dep['max'] .
                     ' or less');
             }
         }
         if (isset($dep['exclude'])) {
-            if (isset($dep['exclude']['attribs'])) {
-                if (version_compare($version, $dep['exclude']['attribs']['version'], '==')) {
+            if (!is_array($dep['exclude'])) {
+                if (version_compare($version, $dep['exclude'], '==')) {
                     if (!isset($this->_options['force'])) {
                         return $this->raiseError('%s is not compatible with PHP version "' .
-                            $dep['attribs']['name'] . '" version ' .
-                            $dep['exclude']['attribs']['version']);
+                            $dep['name'] . '" version ' .
+                            $dep['exclude']);
                     } else {
                         return $this->warning('warning: %s is not compatible with PHP version "' .
-                            $dep['attribs']['name'] . '" version ' .
-                            $dep['exclude']['attribs']['version']);
+                            $dep['name'] . '" version ' .
+                            $dep['exclude']);
                     }
                 }
             } else {
                 foreach ($dep['exclude'] as $exclude) {
-                    if (version_compare($version, $exclude['attribs']['version'], '==')) {
+                    if (version_compare($version, $exclude, '==')) {
                         if (!isset($this->_options['force'])) {
                             return $this->raiseError('%s is not compatible with PHP version "' .
-                                $dep['attribs']['name'] . '"');
+                                $dep['name'] . '"');
                         } else {
                             return $this->warning('warning: %s is not compatible with PHP version "' .
-                                $dep['attribs']['name'] . '"');
+                                $dep['name'] . '"');
                         }
                     }
                 }
@@ -350,33 +350,33 @@ class PEAR_Dependency2
         $found = false;
         foreach ($params as $param) {
             if ($param->isEqual(
-                  array('package' => $dep['attribs']['name'],
-                        'channel' => $dep['attribs']['channel']))) {
+                  array('package' => $dep['name'],
+                        'channel' => $dep['channel']))) {
                 $found = true;
                 break;
             }
         }
         $name = $this->_registry->parsedPackageNameToString(
-                            array('package' => $dep['attribs']['name'],
-                                  'channel' => $dep['attribs']['channel']));
+                            array('package' => $dep['name'],
+                                  'channel' => $dep['channel']));
         if ($found) {
             $version = $param->getVersion();
             $installed = true;
             $downloaded = true;
         } else {
-            if ($this->_registry->packageExists($dep['attribs']['name'],
-                  $dep['attribs']['channel'])) {
+            if ($this->_registry->packageExists($dep['name'],
+                  $dep['channel'])) {
                 $installed = true;
                 $downloaded = false;
-                $version = $this->_registry->packageinfo($dep['attribs']['name'], 'version',
-                    $dep['attribs']['channel']);
+                $version = $this->_registry->packageinfo($dep['name'], 'version',
+                    $dep['channel']);
             } else {
                 $installed = false;
                 $downloaded = false;
                 $version = 'not installed or downloaded';
             }
         }
-        if (isset($dep['attribs']['not']) && $dep['attribs']['not'] == 'yes') {
+        if (isset($dep['conflicts']) && $dep['conflicts'] == 'yes') {
             if ($installed) {
                 if ($required) {
                     if (!isset($this->_options['nodeps'])) {
@@ -391,8 +391,8 @@ class PEAR_Dependency2
                 return true;
             }
         }
-        if (!isset($dep['attribs']['min']) && !isset($dep['attribs']['max']) &&
-              !isset($dep['attribs']['recommended'])) {
+        if (!isset($dep['min']) && !isset($dep['max']) &&
+              !isset($dep['recommended'])) {
             if ($installed || $downloaded) {
                 return true;
             } else {
@@ -407,42 +407,42 @@ class PEAR_Dependency2
                 }
             }
         }
-        if (isset($dep['attribs']['min'])) {
+        if (isset($dep['min'])) {
             if (!($installed || $downloaded) ||
-                  !version_compare($version, $dep['attribs']['min'], '>=')) {
+                  !version_compare($version, $dep['min'], '>=')) {
                 if ($required) {
                     if (!isset($this->_options['nodeps'])) {
                         return $this->raiseError('%s requires package "' .
-                            $name . '" version ' . $dep['attribs']['min'] .
+                            $name . '" version ' . $dep['min'] .
                             ' or greater');
                     } else {
                         return $this->warning('warning: %s requires package "' .
-                            $name . '" version ' . $dep['attribs']['min'] .
+                            $name . '" version ' . $dep['min'] .
                             ' or greater');
                     }
                 } else {
                     return $this->warning('warning: %s requires package "' .
-                        $name . '" version ' . $dep['attribs']['min'] .
+                        $name . '" version ' . $dep['min'] .
                         ' or greater');
                 }
             }
         }
-        if (isset($dep['attribs']['max'])) {
+        if (isset($dep['max'])) {
             if (!($installed || $downloaded) ||
-                  !version_compare($version, $dep['attribs']['max'], '>=')) {
+                  !version_compare($version, $dep['max'], '>=')) {
                 if ($required) {
                     if (!isset($this->_options['nodeps'])) {
                         return $this->raiseError('%s requires package "' .
-                            $name . '" version ' . $dep['attribs']['max'] .
+                            $name . '" version ' . $dep['max'] .
                             ' or less');
                     } else {
                         return $this->warning('%s requires package "' .
-                            $name . '" version ' . $dep['attribs']['max'] .
+                            $name . '" version ' . $dep['max'] .
                             ' or less');
                     }
                 } else {
                     return $this->warning('warning: %s requires package "' .
-                        $name . '" version ' . $dep['attribs']['max'] .
+                        $name . '" version ' . $dep['max'] .
                         ' or less');
                 }
             }
@@ -454,46 +454,46 @@ class PEAR_Dependency2
             }
         }
         if (isset($dep['exclude'])) {
-            if (isset($dep['exclude']['attribs'])) {
-                if (version_compare($version, $dep['exclude']['attribs']['version'], '==')) {
+            if (!is_array($dep['exclude'])) {
+                if (version_compare($version, $dep['exclude'], '==')) {
                     if (!isset($this->_options['force'])) {
                         return $this->raiseError('%s is not compatible with package "' .
                             $name . '" version ' .
-                            $dep['exclude']['attribs']['version']);
+                            $dep['exclude']);
                     } else {
                         return $this->warning('warning: %s is not compatible with package "' .
                             $name . '" version ' .
-                            $dep['exclude']['attribs']['version']);
+                            $dep['exclude']);
                     }
                 }
             } else {
                 foreach ($dep['exclude'] as $exclude) {
-                    if (version_compare($version, $exclude['attribs']['version'], '==')) {
+                    if (version_compare($version, $exclude, '==')) {
                         if (!isset($this->_options['force'])) {
                             return $this->raiseError('%s is not compatible with package "' .
                                 $name . '" version ' .
-                                $exclude['attribs']['version']);
+                                $exclude);
                         } else {
                             return $this->warning('warning: %s is not compatible with package "' .
                                 $name . '" version ' .
-                                $exclude['attribs']['version']);
+                                $exclude);
                         }
                     }
                 }
             }
         }
-        if (isset($dep['attribs']['recommended'])) {
-            if (version_compare($version, $dep['attribs']['recommended'], '==')) {
+        if (isset($dep['recommended'])) {
+            if (version_compare($version, $dep['recommended'], '==')) {
                 return true;
             } else {
                 if (!isset($this->_options['force'])) {
                     return array('%s dependency package ' . $name .
                         ' version "' . $version . '"' .
-                        ' is not the recommended version "' . $dep['attribs']['recommended'].'"');
+                        ' is not the recommended version "' . $dep['recommended'].'"');
                 } else {
                     return $this->raiseError('%s dependency package ' . $name .
                         ' version "' . $version . '"' .
-                        ' is not the recommended version "' . $dep['attribs']['recommended'] .
+                        ' is not the recommended version "' . $dep['recommended'] .
                         '", but may be compatible, use --force to install');
                 }
             }
@@ -513,8 +513,8 @@ class PEAR_Dependency2
     {
         $channels = $this->registry->listAllPackages();
         $name = $this->_registry->parsedPackageNameToString(
-                            array('package' => $testdep['attribs']['name'],
-                                  'channel' => $testdep['attribs']['channel']));
+                            array('package' => $testdep['name'],
+                                  'channel' => $testdep['channel']));
         foreach ($channels as $channelname => $packages) {
             foreach ($packages as $pkg) {
                 if ($pkg == $package && $channel == $channelname) {
@@ -527,8 +527,8 @@ class PEAR_Dependency2
                 foreach ($deps as $dep) {
                     $depchannel = isset($dep['channel']) ? $dep['channel'] : 'pear.php.net';
                     if ($dep['type'] == 'pkg' && (strcasecmp($dep['name'],
-                          $testdep['attribs']['package']) == 0) &&
-                          ($depchannel == $testdep['attribs']['channel'])) {
+                          $testdep['package']) == 0) &&
+                          ($depchannel == $testdep['channel'])) {
                         if ($dep['rel'] == 'ne') {
                             continue;
                         }
@@ -589,10 +589,10 @@ class PEAR_Dependency2
         $newdep = array();
         switch ($type) {
             case 'Package' :
-                $newdep['attribs']['channel'] = 'pear.php.net';
+                $newdep['channel'] = 'pear.php.net';
             case 'Extension' :
             case 'Os' :
-                $newdep['attribs']['name'] = $dep['name'];
+                $newdep['name'] = $dep['name'];
             break;
         }
         $dep['rel'] = $this->signOperator($dep['rel']);
@@ -601,38 +601,38 @@ class PEAR_Dependency2
                 return array($newdep, $type);
             break;
             case 'not' :
-                $newdep['attribs']['not'] = 'yes';
+                $newdep['conflicts'] = 'yes';
             break;
             case '>=' :
             case '>' :
-                $newdep['attribs']['min'] = $dep['version'];
+                $newdep['min'] = $dep['version'];
                 if ($dep['rel'] == '>') {
-                    $newdep['exclude']['attribs']['version'] = $dep['version'];
+                    $newdep['exclude'] = $dep['version'];
                 }
             break;
             case '<=' :
             case '<' :
-                $newdep['attribs']['min'] = $dep['version'];
+                $newdep['min'] = $dep['version'];
                 if ($dep['rel'] == '<') {
-                    $newdep['exclude']['attribs']['version'] = $dep['version'];
+                    $newdep['exclude'] = $dep['version'];
                 }
             break;
             case '!=' :
-                $newdep['attribs']['min'] = '0';
-                $newdep['attribs']['max'] = '100000';
-                $newdep['exclude']['attribs']['version'] = $dep['version'];
+                $newdep['min'] = '0';
+                $newdep['max'] = '100000';
+                $newdep['exclude'] = $dep['version'];
             break;
             case '==' :
-                $newdep['attribs']['min'] = $dep['version'];
-                $newdep['attribs']['max'] = $dep['version'];
+                $newdep['min'] = $dep['version'];
+                $newdep['max'] = $dep['version'];
             break;
         }
         if ($type == 'Php') {
-            if (!isset($newdep['attribs']['min'])) {
-                $newdep['attribs']['min'] = '4.2.0';
+            if (!isset($newdep['min'])) {
+                $newdep['min'] = '4.2.0';
             }
-            if (!isset($newdep['attribs']['max'])) {
-                $newdep['attribs']['max'] = '6.0.0';
+            if (!isset($newdep['max'])) {
+                $newdep['max'] = '6.0.0';
             }
         }
         return array($newdep, $type);
