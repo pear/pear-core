@@ -34,7 +34,7 @@ class PEAR_PackageFile_v2
      * @var array
      * @access private
      */
-    var $_packageInfo;
+    var $_packageInfo = array();
 
     /**
      * path to package .tgz or false if this is a local/extracted package.xml
@@ -143,8 +143,7 @@ class PEAR_PackageFile_v2
         if ($this->getPackageType() == 'extsrc') {
             foreach ($installer->getInstallPackages() as $p) {
                 if ($p->isExtension($this->_packageInfo['providesextension'])) {
-                    if ($p->getPackage() != $this->getPackage() &&
-                          $p->getChannel() != $this->getChannel()) {
+                    if ($p->getPackageType() != 'extsrc') {
                         return false; // the user probably downloaded it separately
                     }
                 }
@@ -411,13 +410,8 @@ class PEAR_PackageFile_v2
     function setPackage($package)
     {
         $this->_isValid = 0;
-        if (!isset($this->_packageInfo['name'])) {
-            return $this->_packageInfo = array_merge(array('name' => $package),
-                $this->_packageInfo);
-        }
-        $this->_packageInfo['name'] = $package;
         if (!isset($this->_packageInfo['attribs'])) {
-            return $this->_packageInfo = array_merge(array('attribs' => array(
+            $this->_packageInfo = array_merge(array('attribs' => array(
                                  'version' => '2.0',
                                  'xmlns' => 'http://pear.php.net/dtd/package-2.0',
                                  'xmlns:tasks' => 'http://pear.php.net/dtd/tasks-1.0',
@@ -428,6 +422,11 @@ class PEAR_PackageFile_v2
     http://pear.php.net/dtd/package-2.0.xsd',
                              )), $this->_packageInfo);
         }
+        if (!isset($this->_packageInfo['name'])) {
+            return $this->_packageInfo = array_merge(array('name' => $package),
+                $this->_packageInfo);
+        }
+        $this->_packageInfo['name'] = $package;
     }
 
     function getChannel()
@@ -518,7 +517,7 @@ class PEAR_PackageFile_v2
         if (!isset($this->_packageInfo['summary'])) {
             // ensure that the summary tag is set up in the right location
             return $this->_insertBefore($this->_packageInfo,
-                array('summary', 'description', 'lead',
+                array('description', 'lead',
                 'developer', 'contributor', 'helper', 'date', 'time', 'version',
                 'stability', 'license', 'notes', 'contents', 'compatible',
                 'dependencies', 'phprelease', 'extsrcrelease',
@@ -786,7 +785,7 @@ class PEAR_PackageFile_v2
                 array('time', 'version',
                     'stability', 'license', 'notes', 'contents', 'compatible',
                     'dependencies', 'phprelease', 'extsrcrelease',
-                    'extbinrelease', 'bundle', 'changelog'), array(), 'stability');
+                    'extbinrelease', 'bundle', 'changelog'), array(), 'date');
         }
         $this->_packageInfo['date'] = $date;
         $this->_isValid = 0;
@@ -827,28 +826,30 @@ class PEAR_PackageFile_v2
 
     function setReleaseVersion($version)
     {
-        $this->_isValid = 0;
-        if (!isset($this->_packageInfo['version'])) {
-            // ensure that the version tag is set up in the right location
-            $this->_insertBefore($this->_packageInfo,
-                array('stability', 'license', 'notes', 'contents', 'compatible',
-                'dependencies', 'phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), array(), 'version');
+        if (isset($this->_packageInfo['version']) &&
+              isset($this->_packageInfo['version']['release'])) {
+            unset($this->_packageInfo['version']['release']);
         }
-        $this->_packageInfo['version']['release'] = $version;
+        $this->_mergeTag($this->_packageInfo, $version, array(
+            'version' => array('stability', 'license', 'notes', 'contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'),
+            'release' => array('api')));
+        $this->_isValid = 0;
     }
 
     function setAPIVersion($version)
     {
-        $this->_isValid = 0;
-        if (!isset($this->_packageInfo['version'])) {
-            // ensure that the version tag is set up in the right location
-            $this->_insertBefore($this->_packageInfo,
-                array('stability', 'license', 'notes', 'contents', 'compatible',
-                'dependencies', 'phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), array(), 'version');
+        if (isset($this->_packageInfo['version']) &&
+              isset($this->_packageInfo['version']['api'])) {
+            unset($this->_packageInfo['version']['api']);
         }
-        $this->_packageInfo['version']['api'] = $version;
+        $this->_mergeTag($this->_packageInfo, $version, array(
+            'version' => array('stability', 'license', 'notes', 'contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'),
+            'api' => array()));
+        $this->_isValid = 0;
     }
 
     function getStability()
@@ -867,29 +868,37 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    /**
+     * snapshot|devel|alpha|beta|stable
+     */
     function setReleaseStability($state)
     {
-        if (!isset($this->_packageInfo['stability'])) {
-            // ensure that the stability tag is set up in the right location
-            $this->_insertBefore($this->_packageInfo,
-                array('license', 'notes', 'contents', 'compatible',
-                'dependencies', 'phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), array(), 'stability');
+        if (isset($this->_packageInfo['stability']) &&
+              isset($this->_packageInfo['stability']['release'])) {
+            unset($this->_packageInfo['stability']['release']);
         }
-        $this->_packageInfo['stability']['release'] = $state;
+        $this->_mergeTag($this->_packageInfo, $state, array(
+            'stability' => array('license', 'notes', 'contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'),
+            'release' => array('api')));
         $this->_isValid = 0;
     }
 
+    /**
+     * @param devel|alpha|beta|stable
+     */
     function setAPIStability($state)
     {
-        if (!isset($this->_packageInfo['stability'])) {
-            // ensure that the stability tag is set up in the right location
-            $this->_insertBefore($this->_packageInfo,
-                array('license', 'notes', 'contents', 'compatible',
-                'dependencies', 'phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), array(), 'stability');
+        if (isset($this->_packageInfo['stability']) &&
+              isset($this->_packageInfo['stability']['api'])) {
+            unset($this->_packageInfo['stability']['api']);
         }
-        $this->_packageInfo['stability']['api'] = $state;
+        $this->_mergeTag($this->_packageInfo, $state, array(
+            'stability' => array('license', 'notes', 'contents', 'compatible',
+                'dependencies', 'phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'),
+            'api' => array()));
         $this->_isValid = 0;
     }
 
@@ -948,7 +957,7 @@ class PEAR_PackageFile_v2
     function setNotes($notes)
     {
         $this->_isValid = 0;
-        if (!isset($this->_packageInfo['license'])) {
+        if (!isset($this->_packageInfo['notes'])) {
             // ensure that the notes tag is set up in the right location
             return $this->_insertBefore($this->_packageInfo,
                 array('contents', 'compatible',
@@ -2498,7 +2507,7 @@ class PEAR_PackageFile_v2
             $arr = &$arr[$tag];
         }
         $arr = &$last;
-        if (isset($arr[$tag][0])) {
+        if (is_array($arr[$tag]) && isset($arr[$tag][0])) {
             $arr[$tag][] = $contents;
         } else {
             if (!count($arr[$tag])) {

@@ -559,6 +559,17 @@ class PEAR_Downloader_Package
         }
     }
 
+    function getPackageType()
+    {
+        if (isset($this->_packagefile)) {
+            return $this->_packagefile->getPackageType();
+        } elseif (isset($this->_downloadURL)) {
+            return $this->_downloadURL['info']['packagetype'];
+        } else {
+            return false;
+        }
+    }
+
     function isBundle()
     {
         if (isset($this->_packagefile)) {
@@ -994,6 +1005,9 @@ class PEAR_Downloader_Package
                 }
                 if (PEAR::isError($pname)) {
                     $this->_downloader->log(0, $pname->getMessage());
+                    if (!is_array($param)) {
+                        $param = $this->_registry->parsedPackageNameToString($param);
+                    }
                     $err = PEAR::raiseError('invalid package name/package file "' .
                         $param . '"');
                     $this->_valid = false;
