@@ -993,7 +993,13 @@ class PEAR_Registry extends PEAR
         if ($info === null) {
             return $info;
         }
-        $pf = &PEAR_PackageFile::fromArray($info);
+        $a = $this->_config;
+        if (!$a) {
+            $this->_config = &new PEAR_Config;
+            $this->_config->set('php_dir', $this->statedir);
+        }
+        $pkg = &new PEAR_PackageFile($this->_config);
+        $pf = &$pkg->fromArray($info);
         return $pf;
     }
 

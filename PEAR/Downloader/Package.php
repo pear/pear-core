@@ -132,6 +132,9 @@ class PEAR_Downloader_Package
                         }
                         $this->_downloader->log(0, $origErr->getMessage());
                     }
+                    if (is_array($param)) {
+                        $param = $this->_registry->parsedPackageNameToString($param);
+                    }
                     return PEAR::raiseError(
                         "Cannot initialize '$param', invalid or missing package file");
                 }
@@ -559,6 +562,20 @@ class PEAR_Downloader_Package
         }
     }
 
+    /**
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     */
+    function isSubpackage(&$pf)
+    {
+        if (isset($this->_packagefile)) {
+            return $this->_packagefile->isSubpackage($pf);
+        } elseif (isset($this->_downloadURL)) {
+            return false;
+        } else {
+            return false;
+        }
+    }
+
     function getPackageType()
     {
         if (isset($this->_packagefile)) {
@@ -759,7 +776,14 @@ class PEAR_Downloader_Package
         return false;
     }
 
-    function &getDependency2Object($c, $i, $p, $s)
+    /**
+     * For simpler unit-testing
+     * @param PEAR_Config
+     * @param array
+     * @param array
+     * @param int
+     */
+    function &getDependency2Object(&$c, $i, $p, $s)
     {
         $z = &new PEAR_Dependency2($c, $i, $p, $s);
         return $z;
@@ -903,11 +927,23 @@ class PEAR_Downloader_Package
         return false;
     }
 
+    /**
+     * For simpler unit-testing
+     * @param PEAR_Config
+     * @param int
+     * @param string
+     */
+    function &getPackagefileObject(&$c, $d, $dir)
+    {
+        $a = &new PEAR_PackageFile($c, $d, $dir);
+        return $a;
+    }
+
     function _fromFile($param)
     {
         if (@is_file($param)) {
             $this->_type = 'local';
-            $pkg = new PEAR_PackageFile($this->_config, $this->_downloader->_debug,
+            $pkg = &$this->getPackagefileObject($this->_config, $this->_downloader->_debug,
                 $this->_downloader->getDownloadDir());
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $pf = &$pkg->fromAnyFile($param, PEAR_VALIDATE_INSTALLING);
@@ -942,7 +978,7 @@ class PEAR_Downloader_Package
                     return $err;
             }
             // whew, download worked!
-            $pkg = new PEAR_PackageFile($this->_config, $this->_downloader->debug,
+            $pkg = &$this->getPackagefileObject($this->_config, $this->_downloader->debug,
                 $this->_downloader->getDownloadDir());
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $pf = &$pkg->fromAnyFile($file, PEAR_VALIDATE_INSTALLING);
@@ -1005,7 +1041,7 @@ class PEAR_Downloader_Package
                 }
                 if (PEAR::isError($pname)) {
                     $this->_downloader->log(0, $pname->getMessage());
-                    if (!is_array($param)) {
+                    if (is_array($param)) {
                         $param = $this->_registry->parsedPackageNameToString($param);
                     }
                     $err = PEAR::raiseError('invalid package name/package file "' .
