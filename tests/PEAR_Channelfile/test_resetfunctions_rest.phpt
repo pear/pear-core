@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Channelfile->setName()
+PEAR_Channelfile->resetFunctions() (soap)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -11,8 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 
 error_reporting(E_ALL);
 chdir(dirname(__FILE__));
-require_once './setup.php.inc';
-$chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
+require_once './setup.php.inc';$chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
@@ -21,15 +20,15 @@ $chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
  <summary>PHP Extension and Application Repository</summary>
  <servers>
   <primary host="pear.php.net">
-   <xmlrpc>
-    <function version="1.0">logintest</function>
-    <function version="1.0">package.listLatestReleases</function>
-    <function version="1.0">package.listAll</function>
-    <function version="1.0">package.info</function>
-    <function version="1.0">package.getDownloadURL</function>
-    <function version="1.0">channel.listAll</function>
-    <function version="1.0">channel.update</function>
-   </xmlrpc>
+   <rest>
+    <function version="1.0" uri="logintest.xml">logintest</function>
+    <function version="1.0" uri="package.listLatestReleases.xml">package.listLatestReleases</function>
+    <function version="1.0" uri="package.listAll.xml">package.listAll</function>
+    <function version="1.0" uri="package.info.xml">package.info</function>
+    <function version="1.0" uri="package.getDownloadURL.xml">package.getDownloadURL</function>
+    <function version="1.0" uri="channel.listAll.xml">channel.listAll</function>
+    <function version="1.0" uri="channel.update.xml">channel.update</function>
+   </rest>
   </primary>
  </servers>
 </channel>');
@@ -53,7 +52,7 @@ $phpt->assertEquals(array (
       array (
         'host' => 'pear.php.net',
       ),
-      'xmlrpc' => 
+      'rest' => 
       array (
         'function' => 
         array (
@@ -62,6 +61,7 @@ $phpt->assertEquals(array (
             'attribs' => 
             array (
               'version' => '1.0',
+              'uri' => 'logintest.xml',
             ),
             '_content' => 'logintest',
           ),
@@ -70,6 +70,7 @@ $phpt->assertEquals(array (
             'attribs' => 
             array (
               'version' => '1.0',
+              'uri' => 'package.listLatestReleases.xml',
             ),
             '_content' => 'package.listLatestReleases',
           ),
@@ -78,6 +79,7 @@ $phpt->assertEquals(array (
             'attribs' => 
             array (
               'version' => '1.0',
+              'uri' => 'package.listAll.xml',
             ),
             '_content' => 'package.listAll',
           ),
@@ -86,6 +88,7 @@ $phpt->assertEquals(array (
             'attribs' => 
             array (
               'version' => '1.0',
+              'uri' => 'package.info.xml',
             ),
             '_content' => 'package.info',
           ),
@@ -94,6 +97,7 @@ $phpt->assertEquals(array (
             'attribs' => 
             array (
               'version' => '1.0',
+              'uri' => 'package.getDownloadURL.xml',
             ),
             '_content' => 'package.getDownloadURL',
           ),
@@ -102,6 +106,7 @@ $phpt->assertEquals(array (
             'attribs' => 
             array (
               'version' => '1.0',
+              'uri' => 'channel.listAll.xml',
             ),
             '_content' => 'channel.listAll',
           ),
@@ -110,6 +115,7 @@ $phpt->assertEquals(array (
             'attribs' => 
             array (
               'version' => '1.0',
+              'uri' => 'channel.update.xml',
             ),
             '_content' => 'channel.update',
           ),
@@ -119,8 +125,8 @@ $phpt->assertEquals(array (
   ),
 ), $chf->toArray(), 'Parsed array of default is not correct');
 $chf->fromXmlString($chf->toXml());
+$chf->resetFunctions('rest');
 
-$chf->setName('boopie');
 $phpt->assertTrue($chf->validate(), 're-parsing validate');
 $phpt->assertEquals(array (
   'attribs' => 
@@ -130,7 +136,7 @@ $phpt->assertEquals(array (
     'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
     'xsi:schemaLocation' => 'http://pear.php.net/dtd/channel-1.0 http://pear.php.net/dtd/channel-1.0.xsd',
   ),
-  'name' => 'boopie',
+  'name' => 'pear.php.net',
   'summary' => 'PHP Extension and Application Repository',
   'suggestedalias' => 'pear',
   'servers' => 
@@ -141,71 +147,9 @@ $phpt->assertEquals(array (
       array (
         'host' => 'pear.php.net',
       ),
-      'xmlrpc' => 
-      array (
-        'function' => 
-        array (
-          0 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'logintest',
-          ),
-          1 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.listLatestReleases',
-          ),
-          2 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.listAll',
-          ),
-          3 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.info',
-          ),
-          4 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.getDownloadURL',
-          ),
-          5 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'channel.listAll',
-          ),
-          6 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'channel.update',
-          ),
-        ),
-      ),
     ),
   ),
-), $chf->toArray(), 'setname failed');
+), $chf->toArray(), 'Re-parsed array of default is not correct');
 echo 'tests done';
 ?>
 --EXPECT--

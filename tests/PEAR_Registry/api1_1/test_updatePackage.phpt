@@ -37,6 +37,7 @@ $phpunit->assertTrue($ret, 'install of valid package');
 
 $pf->clearDeps();
 $pf->addPackageDep('gloomy', '6.50', 'le', 'yes');
+$pf->addFile('', 'foor.php', array('role' => 'php'));
 $ret = $reg->updatePackage($pf->getPackage(), $pf->getArray(), false);
 // we are not going to test the merge option because merging in the values is
 // just plain stupid for the pear installer
@@ -91,6 +92,15 @@ $phpunit->assertEquals(array (
     ),
   ),
 ), $contents, 'depdb');
+$phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.filemap', 'filemap');
+$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.filemap', 'filemap')));
+$phpunit->assertEquals(array (
+  'php' =>
+  array (
+    'foo.php' => 'foop',
+    'foor.php' => 'foop',
+  ),
+), $contents, 'filemap');
 echo 'tests done';
 ?>
 --EXPECT--

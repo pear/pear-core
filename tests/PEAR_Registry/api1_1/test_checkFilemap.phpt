@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Registry->addPackage2() (API v1.1)
+PEAR_Registry->checkFileMap() (API v1.1)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -30,11 +30,9 @@ $pf->setDate('2004-11-17');
 $pf->setNotes('sum');
 $pf->addMaintainer('lead', 'cellog', 'Greg Beaver', 'cellog@php.net');
 $pf->addFile('', 'foo.php', array('role' => 'php'));
-$ret = $reg->addPackage2($pf);
-$phpunit->assertErrors(array(
-array('package' => 'PEAR_PackageFile_v1', 'message' => 'Missing Package Name'),
-), 'pf1 validation errors');
-$phpunit->assertFalse($ret, 'install of invalid package');
+$pf->addFile('test', 'foo.txt', array('role' => 'doc'));
+$pf->addFile('data', 'foo.dat', array('role' => 'data'));
+$pf->addFile('sub/file', 'foo.php', array('role' => 'php'));
 $pf->setPackage('foop');
 $ret = $reg->addPackage2($pf);
 $phpunit->assertTrue($ret, 'install of valid package');
@@ -63,18 +61,13 @@ $pf2->setSummary('foo');
 $pf2->setLicense('PHP License');
 $pf2->setLogger($fakelog);
 $pf2->clearContents();
-$pf2->addFile('', 'foor.php', array('role' => 'php'));
+$pf2->addFile('', 'foo.php', array('role' => 'php'));
+$pf2->addFile('sub/data', 'foo.dat', array('role' => 'data'));
+$pf2->addFile('data', 'foo.dat', array('role' => 'data'));
 $pf2->addMaintainer('lead', 'cellog', 'Greg Beaver', 'cellog@php.net');
 $pf2->setNotes('blah');
 $pf2->setPearinstallerDep('1.4.0a1');
 $pf2->setPhpDep('4.2.0', '5.0.0');
-$pf2->addPackageDepWithChannel('optional', 'frong', 'floop');
-
-$ret = $reg->addPackage2($pf2);
-$phpunit->assertErrors(array(
-array('package' => 'PEAR_PackageFile_v2', 'message' => 'Unknown channel "grob"')
-), 'invalid pf2');
-$phpunit->assertFalse($ret, 'invalid pf2');
 
 $cf = new PEAR_ChannelFile;
 $cf->setName('grob');
@@ -85,67 +78,69 @@ $reg = &$config->getRegistry();
 $reg->addChannel($cf);
 $phpunit->assertNoErrors('channel add');
 
+$ret = $reg->checkFileMap($pf->getFilelist(), 'foop', '1.1');
+$phpunit->assertEquals(array(), $ret, 'first');
+
+$ret = $reg->checkFileMap($pf2->getFilelist(), array('grob', 'foo'), '1.1');
+$phpunit->assertEquals(array('foo.php' => 'foop'), $ret, 'second');
+
+$ret = $reg->deletePackage('foop');
+$phpunit->assertTrue($ret, 'delete');
+
 $ret = $reg->addPackage2($pf2);
-$phpunit->assertTrue($ret, 'valid pf2');
-$pf2file = $statedir  . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.registry' .
-    DIRECTORY_SEPARATOR . '.channel.grob' . DIRECTORY_SEPARATOR . 'foo.reg';
-$phpunit->assertFileExists($pf2file, 'reg file of foop.reg');
-$contents = unserialize(implode('', file($pf2file)));
-$phpunit->showall();
-$phpunit->assertTrue(isset($contents['_lastmodified']), '_lastmodified not set pf2');
-unset($contents['_lastmodified']);
-$phpunit->assertEquals($pf2->getArray(true), $contents, 'pf2 file saved');
-$phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb');
-$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb')));
+$phpunit->assertTrue($ret, 'add pf2');
+
+$pf3 = new PEAR_PackageFile_v2;
+$pf3->setConfig($config);
+$pf3->setPackageType('php');
+$pf3->setPackage('foo');
+$pf3->setChannel('snork');
+$pf3->setAPIStability('stable');
+$pf3->setReleaseStability('stable');
+$pf3->setAPIVersion('1.0.0');
+$pf3->setReleaseVersion('1.0.0');
+$pf3->setDate('2004-11-12');
+$pf3->setDescription('foo source');
+$pf3->setSummary('foo');
+$pf3->setLicense('PHP License');
+$pf3->setLogger($fakelog);
+$pf3->clearContents();
+$pf3->addFile('', 'foo.php', array('role' => 'php'));
+$pf3->addFile('sub/data', 'foo.dat', array('role' => 'data'));
+$pf3->addFile('data', 'foo.dat', array('role' => 'data'));
+$pf3->addMaintainer('lead', 'cellog', 'Greg Beaver', 'cellog@php.net');
+$pf3->setNotes('blah');
+$pf3->setPearinstallerDep('1.4.0a1');
+$pf3->setPhpDep('4.2.0', '5.0.0');
+
+$cf = new PEAR_ChannelFile;
+$cf->setName('snork');
+$cf->setServer('grob');
+$cf->setSummary('grob');
+$cf->setDefaultPEARProtocols();
+$reg = &$config->getRegistry();
+$reg->addChannel($cf);
+$phpunit->assertNoErrors('channel add');
+
+$ret = $reg->checkFileMap($pf3->getFilelist(), array('snork', 'foo'), '1.1');
 $phpunit->assertEquals(array (
-  '_version' => '1.0',
-  'dependencies' => 
+  'foo.php' => 
   array (
-    'grob' => 
-    array (
-      'foo' => 
-      array (
-        0 => 
-        array (
-          'dep' => 
-          array (
-            'name' => 'frong',
-            'channel' => 'floop',
-          ),
-          'type' => 'optional',
-          'group' => false,
-        ),
-      ),
-    ),
+    0 => 'grob',
+    1 => 'foo',
   ),
-  'packages' => 
+  'foo' . DIRECTORY_SEPARATOR . 'sub/data/foo.dat' => 
   array (
-    'floop' => 
-    array (
-      'frong' => 
-      array (
-        0 => 
-        array (
-          'channel' => 'grob',
-          'package' => 'foo',
-        ),
-      ),
-    ),
+    0 => 'grob',
+    1 => 'foo',
   ),
-), $contents, 'depdb');
-$phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.filemap', 'filemap');
-$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.filemap', 'filemap')));
-$phpunit->assertEquals(array (
-  'php' =>
+  'foo' . DIRECTORY_SEPARATOR . 'data/foo.dat' => 
   array (
-    'foor.php' =>
-    array (
-      0 => 'grob',
-      1 => 'foo',
-    ),
-    'foo.php' => 'foop',
+    0 => 'grob',
+    1 => 'foo',
   ),
-), $contents, 'filemap');
+), $ret, 'second');
+
 echo 'tests done';
 ?>
 --EXPECT--

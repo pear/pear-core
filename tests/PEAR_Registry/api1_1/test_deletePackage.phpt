@@ -90,6 +90,11 @@ $phpunit->assertEquals(array (
 ), $contents, 'depdb after delete');
 $phpunit->assertFileNotExists($statedir  . DIRECTORY_SEPARATOR . 'php' .
     DIRECTORY_SEPARATOR . '.registry' . DIRECTORY_SEPARATOR . 'foop.reg', 'reg file of foop.reg after delete');
+$phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.filemap', 'filemap');
+$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.filemap', 'filemap')));
+$phpunit->assertEquals(array (
+), $contents, 'filemap');
+
 echo 'tests done';
 ?>
 --EXPECT--

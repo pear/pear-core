@@ -28,7 +28,7 @@ $ch->setDefaultPEARProtocols();
 $reg->addChannel($ch);
 $phpunit->assertNoErrors('setup');
 
-$contents = unserialize(implode('', file($statedir . DIRECTORY_SEPARATOR . '.channels' . DIRECTORY_SEPARATOR .
+$contents = unserialize(implode('', file($statedir . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.channels' . DIRECTORY_SEPARATOR .
     'test.test.test.reg')));
 $phpunit->assertTrue(isset($contents['_lastmodified']), 'lastmodified not set');
 unset($contents['_lastmodified']);
@@ -39,7 +39,7 @@ $phpunit->assertEquals('gronk', $ch->getAlias(), 'make sure set worked');
 $reg->updateChannel($ch);
 $phpunit->assertNoErrors('setup');
 
-$contents = unserialize(implode('', file($statedir . DIRECTORY_SEPARATOR . '.channels' . DIRECTORY_SEPARATOR .
+$contents = unserialize(implode('', file($statedir . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.channels' . DIRECTORY_SEPARATOR .
     'test.test.test.reg')));
 $phpunit->assertTrue(isset($contents['_lastmodified']), 'lastmodified not set');
 unset($contents['_lastmodified']);

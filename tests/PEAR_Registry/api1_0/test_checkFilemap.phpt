@@ -33,8 +33,9 @@ dump done
 
 $testing = $reg->checkFilemap(array_merge($files3, $files2), 'pkg3');
 $phpunit->assertEquals(array(
-    'pkg3-1.php' => 'pkg3',
-    'pkg3' . DIRECTORY_SEPARATOR . 'pkg3-2.php' => 'pkg3'),
+  'pkg3-1.php' => 'pkg3',
+  'pkg3' . DIRECTORY_SEPARATOR . 'pkg3-2.php' => 'pkg3',
+),
     $testing, '');
 echo 'tests done';
 ?>
