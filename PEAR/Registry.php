@@ -889,6 +889,12 @@ class PEAR_Registry extends PEAR
             $channellist[] = substr($ent, 0, -4);
         }
         closedir($dp);
+        if (!in_array('pear.php.net', $channellist)) {
+            $channellist[] = 'pear.php.net';
+        }
+        if (!in_array('__uri', $channellist)) {
+            $channellist[] = '__uri';
+        }
         return $channellist;
     }
 
