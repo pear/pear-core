@@ -89,7 +89,7 @@ class PEAR_Validate
         $version = $this->_packagexml->getVersion();
         $versioncomponents = explode('.', $version);
         if (count($versioncomponents) != 3) {
-            $this->addFailure('version', 'Must have 3 decimals (x.y.z) in a version number');
+            $this->_addFailure('version', 'Must have 3 decimals (x.y.z) in a version number');
             return false;
         }
         $name = $this->_packagexml->getPackage();
