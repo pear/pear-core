@@ -468,9 +468,11 @@ installed package.'
                                 'return join(" = ",$a);'), $info[$key][$i]);
                             $info[$key][$i] = implode(', ', $info[$key][$i]);
                         }
+                        $info[$key] = implode("\n", $info[$key]);
+                        break;
                     }
                     default: {
-                        $info[$key] = implode("\n", $info[$key]);
+                        $info[$key] = implode(", ", $info[$key]);
                         break;
                     }
                 }
