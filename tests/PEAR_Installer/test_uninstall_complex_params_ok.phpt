@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Downloader->uninstall() (complex case - deep recursive dep)
+PEAR_Installer->uninstall() (complex case - deep recursive dep)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {

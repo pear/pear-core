@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Downloader->uninstall() (simple case)
+PEAR_Installer->uninstall() (simple case)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -39,12 +39,21 @@ $package->setPackage('next');
 $reg->addPackage2($package);
 
 $params[] = $reg->getPackage('next');
-$params[] = $reg->getPackage('foo');
-$params[] = $reg->getPackage('bar');
 
 $dl = &new PEAR_Installer($fakelog);
 $dl->setDownloadedPackages($params);
 $dl->uninstall('next');
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' =>
+        'channel://pear.php.net/next cannot be uninstalled, other installed packages depend on this package'),
+), 'next');
+$phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 'channel://pear.php.net/next (version >= 1.0) is required by package "channel://pear.php.net/bar", installed version is 1.0',
+    1 => true,
+  ),
+), $fakelog->getLog(), 'next');
 echo 'tests done';
 ?>
 --EXPECT--

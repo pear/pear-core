@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Downloader->sortPackagesForInstall() recursion (simple)
+PEAR_Installer->sortPackagesForUninstall() recursion (simple)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {

@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Downloader->uninstall() (simple case)
+PEAR_Installer->uninstall() (simple case)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
