@@ -137,6 +137,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
     &quot;pear package&quot;
   * fix fatal errors when installing pecl packages
   * make download command work for non-root in a shared environment
+  * make sure that if 1.4.0a8 (alpha) is installed, and 1.3.6 (newer) exists, pear will not
+    attempt to &quot;upgrade&quot; to 1.3.6
  </notes>
  <contents>
   <dir name="/">

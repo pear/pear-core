@@ -616,7 +616,21 @@ class PEAR_Downloader extends PEAR_Common
         // on the latest release as array(version, info).  On success it contains
         // array(version, info, download url string)
         $state = isset($parr['state']) ? $parr['state'] : $this->config->get('preferred_state');
-        $url = $this->_remote->call('package.getDownloadURL', $parr, $state);
+        $chan = &$this->_registry->getChannel($parr['channel']);
+        if ($chan->supports('xmlrpc', 'package.getDownloadURL', false, '1.1')) {
+            $version = $this->_registry->packageInfo($parr['package'], 'version',
+                $parr['channel']);
+            // don't install with the old version information unless we're doing a plain
+            // vanilla simple installation.  If the user says to install a particular
+            // version or state, ignore the current installed version
+            if (!isset($parr['version']) && !isset($parr['state']) && $version) {
+                $url = $this->_remote->call('package.getDownloadURL', $parr, $state, $version);
+            } else {
+                $url = $this->_remote->call('package.getDownloadURL', $parr, $state);
+            }
+        } else {
+            $url = $this->_remote->call('package.getDownloadURL', $parr, $state);
+        }
         if (PEAR::isError($url)) {
             return $url;
         }
@@ -674,7 +688,20 @@ class PEAR_Downloader extends PEAR_Common
         if (isset($parr['state']) && isset($parr['version'])) {
             unset($parr['state']);
         }
-        $url = $this->_remote->call('package.getDepDownloadURL', $xsdversion, $dep, $parr, $state);
+        $chan = &$this->_registry->getChannel($parr['channel']);
+        if ($chan->supports('xmlrpc', 'package.getDepDownloadURL', false, '1.1')) {
+            $version = $this->_registry->packageInfo($dep['name'], 'version',
+                $remotechannel);
+            if ($version) {
+                $url = $this->_remote->call('package.getDepDownloadURL', $xsdversion, $dep, $parr,
+                    $state, $version);
+            } else {
+                $url = $this->_remote->call('package.getDepDownloadURL', $xsdversion, $dep, $parr,
+                    $state);
+            }
+        } else {
+            $url = $this->_remote->call('package.getDepDownloadURL', $xsdversion, $dep, $parr, $state);
+        }
         if ($parr['channel'] != $curchannel) {
             $this->configSet('default_channel', $curchannel);
         }
