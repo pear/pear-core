@@ -11,7 +11,6 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 PEAR_Command::registerCommands(false, dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fakecommands');
-$phpunit->showAll();
 $phpunit->assertEquals(array (
   'login' => 'PEAR_Command_Grunk',
   'logout' => 'PEAR_Command_Grunk',
