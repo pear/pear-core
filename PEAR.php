@@ -604,6 +604,8 @@ class PEAR
     function staticPopErrorHandling()
     {
         $stack = &$GLOBALS['_PEAR_error_handler_stack'];
+        $setmode     = &$GLOBALS['_PEAR_default_error_mode'];
+        $setoptions  = &$GLOBALS['_PEAR_default_error_options'];
         array_pop($stack);
         list($mode, $options) = $stack[sizeof($stack) - 1];
         array_pop($stack);
