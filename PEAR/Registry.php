@@ -1288,6 +1288,47 @@ class PEAR_Registry extends PEAR
     }
 
     // }}}
+
+    /**
+     * Get PEAR_PackageFile_v[1/2] objects representing the contents of
+     * a dependency group that are installed.
+     *
+     * This is used at uninstall-time
+     * @param array
+     * @return array|false
+     */
+    function getInstalledGroup($group)
+    {
+        $ret = array();
+        if (isset($group['package'])) {
+            if (!isset($group['package'][0])) {
+                $group['$package'] = array($group['package']);
+            }
+            foreach ($group['package'] as $package) {
+                $depchannel = isset($package['channel']) ? $package['channel'] : '__private';
+                $p = $this->getPackage($package['name'], $depchannel);
+                if ($p) {
+                    $ret[] = &$p;
+                }
+            }
+        }
+        if (isset($group['subpackage'])) {
+            if (!isset($group['subpackage'][0])) {
+                $group['$subpackage'] = array($group['subpackage']);
+            }
+            foreach ($group['subpackage'] as $package) {
+                $depchannel = isset($package['channel']) ? $package['channel'] : '__private';
+                $p = $this->getPackage($package['name'], $depchannel);
+                if ($p) {
+                    $ret[] = &$p;
+                }
+            }
+        }
+        if (!count($ret)) {
+            return false;
+        }
+    }
+
     // {{{ getChannelValidator()
     /**
      * @param string channel name

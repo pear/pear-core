@@ -578,6 +578,11 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function getDependencyGroup($group)
+    {
+        return false;
+    }
+
     function dependsOn($package, $channel)
     {
         if (strtolower($channel) != 'pear.php.net') {

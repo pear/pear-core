@@ -159,6 +159,55 @@ class PEAR_DependencyDB
         return false;
     }
 
+    /**
+     * Determine whether $parent depends on $child, near or deep
+     */
+    function dependsOn($parent, $child)
+    {
+        $c = array();
+        $this->_getDepDB();
+        return $this->_dependsOn($parent, $child, $c);
+    }
+    
+    function _dependsOn($parent, $child, &$checked)
+    {
+        if (is_object($parent)) {
+            $channel = strtolower($parent->getChannel());
+            $package = strtolower($parent->getPackage());
+        } else {
+            $channel = strtolower($parent['channel']);
+            $package = strtolower($parent['package']);
+        }
+        if (isset($checked[$channel][$package])) {
+            return false; // avoid endless recursion
+        }
+        $checked[$channel][$package] = true;
+        if (is_object($child)) {
+            $depchannel = strtolower($child->getChannel());
+            $deppackage = strtolower($child->getPackage());
+        } else {
+            $depchannel = strtolower($child['channel']);
+            $deppackage = strtolower($child['package']);
+        }
+        if (!isset($this->_cache['dependencies'][$channel][$package])) {
+            return false;
+        }
+        foreach ($this->_cache['dependencies'][$channel][$package] as $info) {
+            if ($info['dep']['channel'] == $depchannel &&
+                  $info['dep']['name'] == $deppackage) {
+                return true;
+            }
+        }
+        foreach ($this->_cache['dependencies'][$channel][$package] as $info) {
+            if ($this->_dependsOn(array(
+                    'channel' => $info['dep']['channel'],
+                    'package' => $info['dep']['name']), $child, $checked)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function installPackage(&$package)
     {
         $data = $this->_getDepDB();

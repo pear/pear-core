@@ -1139,6 +1139,40 @@ class PEAR_Installer extends PEAR_Downloader
         return $this->_registry->deletePackage($package, $channel);
     }
 
+    /**
+     * Sort a list of arrays of array(downloaded packagefilename) by dependency.
+     *
+     * It also removes duplicate dependencies
+     * @param array an array of PEAR_PackageFile_v[1/2] objects
+     * @return array array of array(packagefilename, package.xml contents)
+     */
+    function sortPackagesForUninstall(&$packages)
+    {
+        $this->_dependencyDB = PEAR_DependencyDB::singleton($this->config);
+        usort($packages, array(&$this, '_sortUninstall'));
+    }
+
+    function _sortUninstall($a, $b)
+    {
+        if (!$a->getDeps() && !$b->getDeps()) {
+            return 0; // neither package has dependencies, order is insignificant
+        }
+        if ($a->getDeps() && !$b->getDeps()) {
+            return 1; // $a must be installed after $b because $a has dependencies
+        }
+        if (!$a->getDeps() && $b->getDeps()) {
+            return -1; // $b must be installed after $a because $b has dependencies
+        }
+        // both packages have dependencies
+        if ($this->_dependencyDB->dependsOn($a, $b)) {
+            return 1;
+        }
+        if ($this->_dependencyDB->dependsOn($b, $a)) {
+            return -1;
+        }
+        return 0;
+    }
+
     // }}}
     // {{{ _sortDirs()
     function _sortDirs($a, $b)
