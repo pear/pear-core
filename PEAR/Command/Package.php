@@ -20,15 +20,7 @@
 //
 // $Id$
 
-require_once 'PEAR/Common.php';
-require_once 'PEAR/Packager.php';
 require_once 'PEAR/Command/Common.php';
-require_once 'PEAR/RunTest.php';
-require_once "Archive/Tar.php";
-require_once "System.php";
-require_once "PEAR/Installer.php";
-require_once "OS/Guess.php";
-require_once 'PEAR/Dependency2.php';
 
 class PEAR_Command_Package extends PEAR_Command_Common
 {
@@ -294,12 +286,21 @@ used for automated conversion or learning the format.
     // }}}
     function &getPackager()
     {
+        if (!class_exists('PEAR_Packager')) {
+            require_once 'PEAR/Packager.php';
+        }
         $a = &new PEAR_Packager;
         return $a;
     }
 
     function getPackageFile($config, $debug = false, $tmpdir = null)
     {
+        if (!class_exists('PEAR_Common')) {
+            require_once 'PEAR/Common.php';
+        }
+        if (!class_exists('PEAR/PackageFile.php')) {
+            require_once 'PEAR/PackageFile.php';
+        }
         $a = &new PEAR_PackageFile($config, $debug, $tmpdir);
         $common = new PEAR_Common;
         $common->ui = $this->ui;
@@ -526,6 +527,9 @@ used for automated conversion or learning the format.
 
     function doRunTests($command, $options, $params)
     {
+        require_once 'PEAR/Common.php';
+        require_once 'PEAR/RunTest.php';
+        require_once "System.php";
         $log = new PEAR_Common;
         $log->ui = &$this->ui; // slightly hacky, but it will work
         $run = new PEAR_RunTest($log, $options);
@@ -706,6 +710,7 @@ used for automated conversion or learning the format.
                     $data['data'][] = array($req, $type, $name, $rel, $version);
                 }
             } else { // package.xml 2.0 dependencies display
+                require_once 'PEAR/Dependency2.php';
                 $deps = $info->getDependencies();
                 $reg = &$this->config->getRegistry();
                 if (is_array($deps)) {
@@ -782,6 +787,8 @@ used for automated conversion or learning the format.
 
     function doSign($command, $options, $params)
     {
+        require_once "System.php";
+        require_once "Archive/Tar.php";
         // should move most of this code into PEAR_Packager
         // so it'll be easy to implement "pear package --sign"
         if (sizeof($params) != 1) {
@@ -845,6 +852,8 @@ used for automated conversion or learning the format.
 
     function doMakeRPM($command, $options, $params)
     {
+        require_once "System.php";
+        require_once "Archive/Tar.php";
         if (sizeof($params) != 1) {
             return $this->raiseError("bad parameter(s), try \"help $command\"");
         }
@@ -940,6 +949,7 @@ used for automated conversion or learning the format.
             }
         }
         if ($srcfiles > 0) {
+            require_once 'OS/Guess.php';
             $os = new OS_Guess;
             $arch = $os->getCpu();
         } else {

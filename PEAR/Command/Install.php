@@ -19,9 +19,6 @@
 // $Id$
 
 require_once "PEAR/Command/Common.php";
-require_once "PEAR/Installer.php";
-require_once 'PEAR/Downloader.php';
-require_once 'PEAR/PackageFile/v2.php';
 
 /**
  * PEAR commands for installation or deinstallation/upgrading of
@@ -311,6 +308,9 @@ Run post-installation scripts in package <package>, if any exist.
      */
     function &getDownloader(&$ui, $options, &$config)
     {
+        if (!class_exists('PEAR_Downloader')) {
+            require_once 'PEAR/Downloader.php';
+        }
         $a = &new PEAR_Downloader($ui, $options, $config);
         return $a;
     }
@@ -320,6 +320,9 @@ Run post-installation scripts in package <package>, if any exist.
      */
     function &getInstaller(&$ui)
     {
+        if (!class_exists('PEAR_Installer')) {
+            require_once 'PEAR/Installer.php';
+        }
         $a = &new PEAR_Installer($ui);
         return $a;
     }
@@ -500,7 +503,7 @@ Run post-installation scripts in package <package>, if any exist.
     function doUninstall($command, $options, $params)
     {
         if (empty($this->installer)) {
-            $this->installer = &new PEAR_Installer($this->ui);
+            $this->installer = &$this->getInstaller($this->ui);
         }
         if (isset($options['remoteconfig'])) {
             $e = $this->config->readFTPConfigFile($options['remoteconfig']);

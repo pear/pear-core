@@ -19,8 +19,6 @@
 // $Id$
 
 require_once 'PEAR/ErrorStack.php';
-require_once 'PEAR/Validate.php';
-require_once 'PEAR/Validator/PECL.php';
 require_once 'PEAR/XMLParser.php';
 require_once 'PEAR/Common.php';
 
@@ -1491,6 +1489,9 @@ class PEAR_ChannelFile {
      */
     function &getValidationObject($package = false)
     {
+        if (!class_exists('PEAR_Validate')) {
+            require_once 'PEAR/Validate.php';
+        }
         if (!$this->_isValid) {
             if (!$this->validate()) {
                 $a = false;

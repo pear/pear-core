@@ -20,10 +20,6 @@
 // $Id$
 
 require_once 'PEAR/Command/Common.php';
-require_once 'PEAR/Common.php';
-require_once 'PEAR/Remote.php';
-require_once 'PEAR/Registry.php';
-require_once 'PEAR/Downloader.php';
 
 class PEAR_Command_Remote extends PEAR_Command_Common
 {
@@ -383,6 +379,9 @@ parameter.
     // }}}
     function &getDownloader($options)
     {
+        if (!class_exists('PEAR_Downloader')) {
+            require_once 'PEAR/Downloader.php';
+        }
         $a = &new PEAR_Downloader($this->ui, $options, $this->config);
         return $a;
     }
@@ -427,6 +426,7 @@ parameter.
 
     function doListUpgrades($command, $options, $params)
     {
+        require_once 'PEAR/Common.php';
         $savechannel = $channel = $this->config->get('default_channel');
         $reg = &$this->config->getRegistry();
         foreach ($reg->listChannels() as $channel) {

@@ -22,15 +22,6 @@
 // $Id$
 
 require_once 'PEAR/Common.php';
-require_once 'PEAR/ChannelFile.php';
-require_once 'PEAR/Registry.php';
-require_once 'PEAR/Dependency2.php';
-require_once 'PEAR/DependencyDB.php';
-require_once 'PEAR/Remote.php';
-require_once 'PEAR/PackageFile.php';
-require_once 'PEAR/Downloader/Package.php';
-require_once 'System.php';
-
 
 define('PEAR_INSTALLER_OK',       1);
 define('PEAR_INSTALLER_FAILED',   0);
@@ -187,12 +178,19 @@ class PEAR_Downloader extends PEAR_Common
         $this->log(1, 'Attempting to discover channel "' . $channel . '"...');
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         $callback = $this->ui ? array(&$this, '_downloadCallback') : null;
-        $a = $this->downloadHttp('http://' . $channel . '/channel.xml', $this->ui, System::mktemp(array('-d')), $callback, false);
+        if (!class_exists('System')) {
+            require_once 'System.php';
+        }
+        $a = $this->downloadHttp('http://' . $channel . '/channel.xml', $this->ui,
+            System::mktemp(array('-d')), $callback, false);
         PEAR::popErrorHandling();
         if (PEAR::isError($a)) {
             return false;
         }
         list($a, $lastmodified) = $a;
+        if (!class_exists('PEAR/ChannelFile.php')) {
+            require_once 'PEAR/ChannelFile.php';
+        }
         $b = new PEAR_ChannelFile;
         if ($b->fromXmlFile($a)) {
             @unlink($a);
@@ -218,6 +216,9 @@ class PEAR_Downloader extends PEAR_Common
      */
     function &newDownloaderPackage(&$t)
     {
+        if (!class_exists('PEAR_Downloader_Package')) {
+            require_once 'PEAR/Downloader/Package.php';
+        }
         $a = new PEAR_Downloader_Package($t);
         return $a;
     }
@@ -231,21 +232,19 @@ class PEAR_Downloader extends PEAR_Common
      */
     function &getDependency2Object(&$c, $i, $p, $s)
     {
+        if (!class_exists('PEAR/Dependency2.php')) {
+            require_once 'PEAR/Dependency2.php';
+        }
         $z = &new PEAR_Dependency2($c, $i, $p, $s);
         return $z;
     }
 
-    /**
-     * For simpler unit-testing
-     * @return string
-     */
-    function getDownloaderPackageClass()
-    {
-        return 'PEAR_Downloader_Package';
-    }
-
     function &download($params)
     {
+        if (!count($params)) {
+            $a = array();
+            return $a;
+        }
         if (!isset($this->_registry)) {
             $this->_registry = &$this->config->getRegistry();
         }
@@ -517,6 +516,9 @@ class PEAR_Downloader extends PEAR_Common
         }
         $downloaddir = $this->config->get('download_dir');
         if (empty($downloaddir)) {
+            if (!class_exists('System')) {
+                require_once 'System.php';
+            }
             if (PEAR::isError($downloaddir = System::mktemp('-d'))) {
                 return $downloaddir;
             }
@@ -566,6 +568,9 @@ class PEAR_Downloader extends PEAR_Common
      */
     function &getPackagefileObject(&$c, $d, $dir)
     {
+        if (!class_exists('PEAR_PackageFile')) {
+            require_once 'PEAR/PackageFile.php';
+        }
         $a = &new PEAR_PackageFile($c, $d, $dir);
         return $a;
     }

@@ -17,7 +17,6 @@
 // +----------------------------------------------------------------------+
 //
 // $Id$
-require_once 'Archive/Tar.php';
 /**
  * Coordinates download parameters and manages their dependencies
  * prior to downloading them.
@@ -1215,6 +1214,7 @@ class PEAR_Downloader_Package
                     return $err;
             }
             if ($this->_rawpackagefile) {
+                require_once 'Archive/Tar.php';
                 $tar = &new Archive_Tar($file);
                 $packagexml = $tar->extractInString('package2.xml');
                 if (!$packagexml) {

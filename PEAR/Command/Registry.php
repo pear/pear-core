@@ -20,9 +20,6 @@
 // $Id$
 
 require_once 'PEAR/Command/Common.php';
-require_once 'PEAR/Registry.php';
-require_once 'PEAR/Config.php';
-require_once 'PEAR/PackageFile.php';
 
 class PEAR_Command_Registry extends PEAR_Command_Common
 {
@@ -185,6 +182,9 @@ installed package.'
         if (!is_dir($params[0]) && (file_exists($params[0]) || $fp = @fopen($params[0],
               'r'))) {
             @fclose($fp);
+            if (!class_exists('PEAR_PackageFile')) {
+                require_once 'PEAR/PackageFile.php';
+            }
             $pkg = &new PEAR_PackageFile($this->config, $this->_debug);
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $info = &$pkg->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
@@ -338,6 +338,9 @@ installed package.'
         $reg = &$this->config->getRegistry();
         if ((@is_file($params[0]) && !is_dir($params[0])) || $fp = @fopen($params[0], 'r')) {
             @fclose($fp);
+            if (!class_exists('PEAR_PackageFile')) {
+                require_once 'PEAR/PackageFile.php';
+            }
             $pkg = &new PEAR_PackageFile($this->config, $this->_debug);
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $obj = &$pkg->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);

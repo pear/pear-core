@@ -23,6 +23,7 @@ define('PEAR_VALIDATE_NORMAL', 3);
 define('PEAR_VALIDATE_DOWNLOADING', 4); // this is not bit-mapped like the others
 define('PEAR_VALIDATE_PACKAGING', 7);
 require_once 'PEAR/Common.php';
+require_once 'PEAR/Validator/PECL.php';
 class PEAR_Validate
 {
     var $packageregex = _PEAR_COMMON_PACKAGE_NAME_PREG;
@@ -258,7 +259,7 @@ class PEAR_Validate
                         'version "' . $version . '" should be "' .
                         implode('.' ,$versioncomponents) . '"');
                 } else {
-                    $this->_addFailure('version',
+                    $this->_addWarning('version',
                         'packages with devel stability must be < version 1.0.0');
                 }
                 return true;

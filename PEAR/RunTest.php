@@ -53,6 +53,10 @@ class PEAR_RunTest
      */
     function PEAR_RunTest($logger = null, $options = array())
     {
+        if (is_null($logger)) {
+            require_once 'PEAR/Common.php';
+            $logger = new PEAR_Common;
+        }
         $this->_logger = $logger;
         $this->_options = $options;
     }

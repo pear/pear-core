@@ -20,9 +20,6 @@
 // $Id$
 
 require_once "PEAR/Command/Common.php";
-require_once "PEAR/Command.php";
-require_once "PEAR/Remote.php";
-require_once "PEAR.php";
 
 /**
  * PEAR commands for providing file mirrors

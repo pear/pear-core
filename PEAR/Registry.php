@@ -26,13 +26,8 @@ TODO:
     - Add application level lock (avoid change the registry from the cmdline
       while using the GTK interface, for ex.)
 */
-require_once 'System.php';
 require_once 'PEAR.php';
-require_once 'PEAR/Installer/Role.php';
 require_once 'PEAR/DependencyDB.php';
-require_once 'PEAR/ChannelFile.php';
-require_once 'PEAR/PackageFile.php';
-require_once 'PEAR/PackageFile/v1.php';
 
 define('PEAR_REGISTRY_ERROR_LOCK',   -2);
 define('PEAR_REGISTRY_ERROR_FORMAT', -3);
@@ -185,6 +180,9 @@ class PEAR_Registry extends PEAR
                 if (!file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
                     $pear_channel = $this->_pearChannel;
                     if (!is_a($pear_channel, 'PEAR_ChannelFile') || !$pear_channel->validate()) {
+                        if (!class_exists('PEAR_ChannelFile')) {
+                            require_once 'PEAR/ChannelFile.php';
+                        }
                         $pear_channel = new PEAR_ChannelFile;
                         $pear_channel->setName('pear.php.net');
                         $pear_channel->setAlias('pear');
@@ -201,6 +199,9 @@ class PEAR_Registry extends PEAR
                 if (!file_exists($this->channelsdir . $ds . 'pecl.php.net.reg')) {
                     $pecl_channel = $this->_peclChannel;
                     if (!is_a($pecl_channel, 'PEAR_ChannelFile') || !$pecl_channel->validate()) {
+                        if (!class_exists('PEAR_ChannelFile')) {
+                            require_once 'PEAR/ChannelFile.php';
+                        }
                         $pecl_channel = new PEAR_ChannelFile;
                         $pecl_channel->setName('pecl.php.net');
                         $pecl_channel->setAlias('pecl');
@@ -216,6 +217,9 @@ class PEAR_Registry extends PEAR
                     $this->_addChannel($pecl_channel);
                 }
                 if (!file_exists($this->channelsdir . $ds . '__uri.reg')) {
+                    if (!class_exists('PEAR_ChannelFile')) {
+                        require_once 'PEAR/ChannelFile.php';
+                    }
                     $private = new PEAR_ChannelFile;
                     $private->setName('__uri');
                     $private->addFunction('xmlrpc', '1.0', '****');
@@ -319,6 +323,7 @@ class PEAR_Registry extends PEAR
             if (!$this->hasWriteAccess()) {
                 return false;
             }
+            require_once 'System.php';
             if (!System::mkdir(array('-p', $this->statedir))) {
                 return $this->raiseError("could not create directory '{$this->statedir}'");
             }
@@ -375,6 +380,7 @@ class PEAR_Registry extends PEAR
             if (!$this->hasWriteAccess()) {
                 return false;
             }
+            require_once 'System.php';
             if (!System::mkdir(array('-p', $channelDir))) {
                 return $this->raiseError("could not create directory '" . $channelDir .
                     "'");
@@ -400,6 +406,7 @@ class PEAR_Registry extends PEAR
             if (!$this->hasWriteAccess()) {
                 return false;
             }
+            require_once 'System.php';
             if (!System::mkdir(array('-p', $this->channelsdir))) {
                 return $this->raiseError("could not create directory '{$this->channelsdir}'");
             }
@@ -408,6 +415,7 @@ class PEAR_Registry extends PEAR
             if (!$this->hasWriteAccess()) {
                 return false;
             }
+            require_once 'System.php';
             if (!System::mkdir(array('-p', $this->channelsdir . DIRECTORY_SEPARATOR . '.alias'))) {
                 return $this->raiseError("could not create directory '{$this->channelsdir}/.alias'");
             }
@@ -603,6 +611,9 @@ class PEAR_Registry extends PEAR
 
     function _rebuildFileMap()
     {
+        if (!class_exists('PEAR_Installer_Role')) {
+            require_once 'PEAR/Installer/Role.php';
+        }
         $channels = $this->_listAllPackages();
         $files = array();
         foreach ($channels as $channel => $packages) {
@@ -1230,6 +1241,9 @@ class PEAR_Registry extends PEAR
             $this->_config = &new PEAR_Config;
             $this->_config->set('php_dir', $this->statedir);
         }
+        if (!class_exists('PEAR_PackageFile')) {
+            require_once 'PEAR/PackageFile.php';
+        }
         $pkg = &new PEAR_PackageFile($this->_config);
         $pf = &$pkg->fromArray($info);
         return $pf;
@@ -1245,6 +1259,9 @@ class PEAR_Registry extends PEAR
     {
         $ch = false;
         if ($this->_channelExists($channel, $noaliases)) {
+            if (!class_exists('PEAR_ChannelFile')) {
+                require_once 'PEAR/ChannelFile.php';
+            }
             $ch = &PEAR_ChannelFile::fromArray($this->_channelInfo($channel, $noaliases));
         }
         if ($ch) {
@@ -1252,6 +1269,9 @@ class PEAR_Registry extends PEAR
         }
         if ($this->_getChannelFromAlias($channel) == 'pear.php.net') {
             // the registry is not properly set up, so use defaults
+            if (!class_exists('PEAR_ChannelFile')) {
+                require_once 'PEAR/ChannelFile.php';
+            }
             $pear_channel = new PEAR_ChannelFile;
             $pear_channel->setName('pear.php.net');
             $pear_channel->setAlias('pear');
@@ -1261,6 +1281,9 @@ class PEAR_Registry extends PEAR
         }
         if ($this->_getChannelFromAlias($channel) == 'pecl.php.net') {
             // the registry is not properly set up, so use defaults
+            if (!class_exists('PEAR_ChannelFile')) {
+                require_once 'PEAR/ChannelFile.php';
+            }
             $pear_channel = new PEAR_ChannelFile;
             $pear_channel->setName('pecl.php.net');
             $pear_channel->setAlias('pecl');
@@ -1271,6 +1294,9 @@ class PEAR_Registry extends PEAR
         }
         if ($this->_getChannelFromAlias($channel) == '__uri') {
             // the registry is not properly set up, so use defaults
+            if (!class_exists('PEAR_ChannelFile')) {
+                require_once 'PEAR/ChannelFile.php';
+            }
             $private = new PEAR_ChannelFile;
             $private->setName('__uri');
             $private->addFunction('xmlrpc', '1.0', '****');
@@ -1462,6 +1488,9 @@ class PEAR_Registry extends PEAR
         $ret = $this->_addPackage($package, $info);
         $this->_unlock();
         if ($ret) {
+            if (!class_exists('PEAR_PackageFile_v1')) {
+                require_once 'PEAR/PackageFile/v1.php';
+            }
             $pf = new PEAR_PackageFile_v1;
             $pf->setConfig($this->_config);
             $pf->fromArray($info);
@@ -1748,6 +1777,9 @@ class PEAR_Registry extends PEAR
         if (is_array($path)) {
             static $notempty;
             if (empty($notempty)) {
+                if (!class_exists('PEAR_Installer_Role')) {
+                    require_once 'PEAR/Installer/Role.php';
+                }
                 $notempty = create_function('$a','return !empty($a);');
             }
             $package = is_array($package) ? array(strtolower($package[0]), strtolower($package[1]))

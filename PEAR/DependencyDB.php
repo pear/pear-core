@@ -21,7 +21,6 @@
 // $Id$
 
 require_once 'PEAR.php';
-require_once 'PEAR/Registry.php';
 require_once 'PEAR/Config.php';
 
 /**

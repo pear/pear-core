@@ -53,6 +53,7 @@ class PEAR_PackageFile_Generator_v1
      */
     function toTgz(&$packager, $compress = true, $where = null)
     {
+        require_once 'Archive/Tar.php';
         if ($where === null) {
             if (!($where = System::mktemp(array('-d')))) {
                 return PEAR::raiseError('PEAR_Packagefile_v1::toTgz: mktemp failed');
