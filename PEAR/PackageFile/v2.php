@@ -628,6 +628,9 @@ class PEAR_PackageFile_v2
         if (!$arr) {
             $arr = $this->getArray(true);
         }
+        if ($field == 'apiversion') {
+            return $arr['version']['api'];
+        }
         if (isset($arr['old'][$field])) {
             if (!is_string($arr['old'][$field])) {
                 return null;
