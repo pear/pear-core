@@ -383,24 +383,32 @@ class PEAR_PackageFile_Generator_v1
         }
     }
 
+    /**
+     * @param string|null directory to place the package.xml in, or null for a temporary dir
+     * @param int one of the PEAR_VALIDATE_* constants
+     * @param string name of the generated file
+     * @param bool if true, then no analysis will be performed on role="php" files
+     * @return string|PEAR_Error path to the created file on success
+     */
     function toPackageFile($where = null, $state = PEAR_VALIDATE_NORMAL, $name = 'package.xml',
                            $nofilechecking = false)
     {
         if (!$this->_packagefile->validate($state, $nofilechecking)) {
-            return false;
+            return PEAR::raiseError('PEAR_Packagefile_v1::toPackageFile: invalid packagefile');
         }
         include_once 'System.php';
         if ($where === null) {
             if (!($where = System::mktemp(array('-d')))) {
-                return PEAR::raiseError("PEAR_Packagefile::toPackageFile: mktemp failed");
+                return PEAR::raiseError("PEAR_Packagefile_v1::toPackageFile: mktemp failed");
             }
         }
         $newpkgfile = $where . DIRECTORY_SEPARATOR . $name;
         $np = @fopen($newpkgfile, 'wb');
         if (!$np) {
-            return PEAR::raiseError("PEAR_Packagefile::toPackageFile: unable to save $name as $newpkgfile");
+            return PEAR::raiseError('PEAR_Packagefile_v1::toPackageFile: unable to save ' .
+               "$name as $newpkgfile");
         }
-        fwrite($np, $this->toXml($state, $nofilechecking));
+        fwrite($np, $this->toXml($state, true));
         fclose($np);
         return $newpkgfile;
     }
