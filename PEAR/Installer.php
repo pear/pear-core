@@ -1379,51 +1379,48 @@ class PEAR_Installer extends PEAR_Downloader
         $this->log(1, "\nBuild process completed successfully");
         foreach ($built as $ext) {
             $bn = basename($ext['file']);
-            list($_ext_name, ) = explode('.', $bn);
-            // extension dir must be created if it doesn't exist
-            // all errors after this point must fail the install without attempting
-            // to install the binary package
-            $ext_dir = $this->config->get('ext_dir');
-            if (!@is_dir($ext_dir) && !System::mkdir(array('-p', $ext_dir))) {
-                $this->log(3, "+ mkdir -p $ext_dir");
-                return $this->raiseError("failed to create extension dir '$ext_dir'",
-                    PEAR_INSTALLER_NOBINARY);
+            list($_ext_name, $_ext_suff) = explode('.', $bn);
+            if ($_ext_suff == '.so' || $_ext_suff == '.dll') {
+                if (extension_loaded($_ext_name)) {
+                    $this->raiseError("Extension '$_ext_name' already loaded. " .
+                                      'Please unload it in your php.ini file ' .
+                                      'prior to install or upgrade');
+                }
+                $role = 'ext';
+            } else {
+                $role = 'src';
             }
-            $dest = $ext_dir . DIRECTORY_SEPARATOR . '.tmp' . $bn;
-            $finaldest = $ext_dir . DIRECTORY_SEPARATOR . $bn;
-            $this->log(1, "Installing '$bn' at ext_dir ($dest)");
-            $this->log(3, "+ cp $ext[file] ext_dir ($dest)");
+            $dest = $ext['dest'];
+            $this->log(1, "Installing '$ext[file]'");
             $copyto = $this->_prependPath($dest, $this->installroot);
+            $copydir = dirname($copyto);
+            if (!@is_dir($copydir)) {
+                if (!$this->mkDirHier($copydir)) {
+                    return $this->raiseError("failed to mkdir $copydir",
+                        PEAR_INSTALLER_FAILED);
+                }
+                $this->log(3, "+ mkdir $copydir");
+            }
             if (!@copy($ext['file'], $copyto)) {
-                $this->rollbackFileTransaction();
-                $this->configSet('default_channel', $savechannel);
-                return $this->raiseError("failed to copy $bn to $copyto", PEAR_INSTALLER_NOBINARY);
+                return $this->raiseError("failed to write $copyto", PEAR_INSTALLER_FAILED);
             }
-            if (extension_loaded($_ext_name)) {
-                return $this->raiseError("Extension '$_ext_name' already loaded. Please unload it ".
-                                  "in your php.ini file prior to install/upgrade, or use the " .
-                                  "pecl command instead of the pear command.",
-                                  PEAR_INSTALLER_NOBINARY);
+            $this->log(3, "+ cp $ext[file] $copyto");
+            if (!OS_WINDOWS) {
+                $mode = 0666 & ~(int)octdec($this->config->get('umask'));
+                $this->addFileOperation('chmod', array($mode, $copyto));
+                if (!@chmod($copyto, $mode)) {
+                    $this->log(0, "failed to change mode of $copyto");
+                }
             }
-            $this->log(3, "+ rm $finaldest");
-            @unlink($finaldest);
-            if (file_exists($finaldest)) {
-                return $this->raiseError("extension '$_ext_name' cannot be installed, filename " .
-                                  "'$finaldest' cannot be removed.  Please delete" .
-                                  "it and rename '$dest' manually", PEAR_INSTALLER_NOBINARY);
-            }
-            $this->log(3, "+ rename $dest to $finaldest");
-            if (!@rename($dest, $finaldest)) {
-                return $this->raiseError("extension '$_ext_name' file '$dest' could not be renamed" .
-                                  "to '$finaldest'", PEAR_INSTALLER_NOBINARY);
-            }
-            $filelist->installedFile($bn, array(
-                'role' => 'ext',
-                'installed_as' => $ext_dir . DIRECTORY_SEPARATOR . $bn,
+            $this->addFileOperation('rename', array($ext['file'], $copyto));
+
+            $pkginfo['filelist'][$bn] = array(
+                'role' => $role,
+                'installed_as' => $dest,
                 'php_api' => $ext['php_api'],
                 'zend_mod_api' => $ext['zend_mod_api'],
                 'zend_ext_api' => $ext['zend_ext_api'],
-                ));
+                );
         }
     }
 

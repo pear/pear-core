@@ -74,6 +74,10 @@
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
+  
+  Specific changes from 1.4.0a1:
+  * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
+  * Use 1.2.0 as recommended version of XML_RPC
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -172,7 +176,9 @@
     <file role="php" name="Downloader.php"/>
     <file role="php" name="ErrorStack.php"/>
     <file role="php" name="Exception.php"/>
-    <file role="php" name="Builder.php"/>
+    <file role="php" name="Builder.php">
+     <replace from="@PEAR-VER@" to="version" type="package-info"/>
+    </file>
     <file role="php" name="Frontend.php" />
     <file role="php" name="FTP.php" />
     <file role="php" name="Installer.php"/>
