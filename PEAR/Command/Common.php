@@ -132,10 +132,10 @@ class PEAR_Command_Common extends PEAR
     {
         $short_args = "";
         $long_args = array();
-        if (empty($this->commands[$command])) {
+        if (empty($this->commands[$command]) || empty($this->commands[$command]['options'])) {
             return;
         }
-        reset($this->commands[$command]);
+        reset($this->commands[$command]['options']);
         while (list($option, $info) = each($this->commands[$command]['options'])) {
             $larg = $sarg = '';
             if (isset($info['arg'])) {

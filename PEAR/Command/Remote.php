@@ -41,14 +41,7 @@ Get details on a package from the server.',
             'summary' => 'List Available Upgrades',
             'function' => 'doListUpgrades',
             'shortcut' => 'lu',
-            'options' => array(
-                'channel' =>
-                    array(
-                    'shortopt' => 'c',
-                    'doc' => 'specify a channel other than the default channel',
-                    'arg' => 'CHAN',
-                    )
-                ),
+            'options' => array(),
             'doc' => '[preferred_state]
 List releases on the server of packages you have installed where
 a newer version is available with the same release state (stable etc.)
@@ -419,71 +412,67 @@ parameter.
 
     function doListUpgrades($command, $options, $params)
     {
-        include_once "PEAR/Registry.php";
         $savechannel = $channel = $this->config->get('default_channel');
-        if (isset($options['channel'])) {
-            $reg = &$this->config->getRegistry();
-            $channel = $options['channel'];
-            if ($reg->channelExists($channel)) {
-                $this->config->set('default_channel', $channel);
-            } else {
-                return $this->raiseError("Channel '$channel' does not exist");
-            }
-        }
-        $remote = &$this->config->getRemote();
         $reg = &$this->config->getRegistry();
-        if (empty($params[1])) {
-            $state = $this->config->get('preferred_state');
-        } else {
-            $state = $params[1];
-        }
-        $caption = 'Available Upgrades';
-        if (empty($state) || $state == 'any') {
-            $latest = $remote->call("package.listLatestReleases");
-        } else {
-            $latest = $remote->call("package.listLatestReleases", $state);
-            $caption .= ' (' . implode(', ', PEAR_Common::betterStates($state, true)) . ')';
-        }
-        $caption .= ':';
-        if (PEAR::isError($latest)) {
-            $this->config->set('default_channel', $savechannel);
-            return $latest;
-        }
-        $inst = array_flip($reg->listPackages($channel));
-        $data = array(
-            'caption' => $caption,
-            'border' => 1,
-            'headline' => array('Channel', 'Package', 'Local', 'Remote', 'Size'),
-            );
-        foreach ((array)$latest as $pkg => $info) {
-            $package = strtolower($pkg);
-            if (!isset($inst[$package])) {
-                // skip packages we don't have installed
+        foreach ($reg->listChannels() as $channel) {
+            if ($channel == '__uri') {
                 continue;
             }
-            extract($info);
-            $pkginfo = $reg->packageInfo($package, null, $channel);
-            $inst_version = $pkginfo['version'];
-            $inst_state   = $pkginfo['release_state'];
-            if (version_compare("$version", "$inst_version", "le")) {
-                // installed version is up-to-date
-                continue;
-            }
-            if ($filesize >= 20480) {
-                $filesize += 1024 - ($filesize % 1024);
-                $fs = sprintf("%dkB", $filesize / 1024);
-            } elseif ($filesize > 0) {
-                $filesize += 103 - ($filesize % 103);
-                $fs = sprintf("%.1fkB", $filesize / 1024.0);
+            $this->config->set('default_channel', $channel);
+            $remote = &$this->config->getRemote();
+            if (empty($params[1])) {
+                $state = $this->config->get('preferred_state');
             } else {
-                $fs = "  -"; // XXX center instead
+                $state = $params[1];
             }
-            $data['data'][] = array($channel, $pkg, "$inst_version ($inst_state)", "$version ($state)", $fs);
-        }
-        if (empty($data['data'])) {
-            $this->ui->outputData('No upgrades available');
-        } else {
-            $this->ui->outputData($data, $command);
+            $caption = $channel . ' Available Upgrades';
+            if (empty($state) || $state == 'any') {
+                $latest = $remote->call("package.listLatestReleases");
+            } else {
+                $latest = $remote->call("package.listLatestReleases", $state);
+                $caption .= ' (' . implode(', ', PEAR_Common::betterStates($state, true)) . ')';
+            }
+            $caption .= ':';
+            if (PEAR::isError($latest)) {
+                $this->config->set('default_channel', $savechannel);
+                return $latest;
+            }
+            $inst = array_flip($reg->listPackages($channel));
+            $data = array(
+                'caption' => $caption,
+                'border' => 1,
+                'headline' => array('Channel', 'Package', 'Local', 'Remote', 'Size'),
+                );
+            foreach ((array)$latest as $pkg => $info) {
+                $package = strtolower($pkg);
+                if (!isset($inst[$package])) {
+                    // skip packages we don't have installed
+                    continue;
+                }
+                extract($info);
+                $pkginfo = $reg->packageInfo($package, null, $channel);
+                $inst_version = $pkginfo['version'];
+                $inst_state   = $pkginfo['release_state'];
+                if (version_compare("$version", "$inst_version", "le")) {
+                    // installed version is up-to-date
+                    continue;
+                }
+                if ($filesize >= 20480) {
+                    $filesize += 1024 - ($filesize % 1024);
+                    $fs = sprintf("%dkB", $filesize / 1024);
+                } elseif ($filesize > 0) {
+                    $filesize += 103 - ($filesize % 103);
+                    $fs = sprintf("%.1fkB", $filesize / 1024.0);
+                } else {
+                    $fs = "  -"; // XXX center instead
+                }
+                $data['data'][] = array($channel, $pkg, "$inst_version ($inst_state)", "$version ($state)", $fs);
+            }
+            if (empty($data['data'])) {
+                $this->ui->outputData('No upgrades available');
+            } else {
+                $this->ui->outputData($data, $command);
+            }
         }
         $this->config->set('default_channel', $savechannel);
         return true;

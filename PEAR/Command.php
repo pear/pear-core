@@ -272,11 +272,20 @@ class PEAR_Command
             }
             $implements = $GLOBALS['_PEAR_Command_objects'][$class]->getCommands();
             foreach ($implements as $command => $desc) {
+                if (isset($GLOBALS['_PEAR_Command_commandlist'][$command])) {
+                    return PEAR::raiseError('Command "' . $command . '" already registered in ' .
+                        'class "' . $GLOBALS['_PEAR_Command_commandlist'][$command] . '"');
+                }
                 $GLOBALS['_PEAR_Command_commandlist'][$command] = $class;
                 $GLOBALS['_PEAR_Command_commanddesc'][$command] = $desc;
             }
             $shortcuts = $GLOBALS['_PEAR_Command_objects'][$class]->getShortcuts();
             foreach ($shortcuts as $shortcut => $command) {
+                if (isset($GLOBALS['_PEAR_Command_shortcuts'][$shortcut])) {
+                    return PEAR::raiseError('Command shortcut "' . $shortcut . '" already ' .
+                        'registered to command "' . $command . '" in class "' .
+                        $GLOBALS['_PEAR_Command_commandlist'][$command] . '"');
+                }
                 $GLOBALS['_PEAR_Command_shortcuts'][$shortcut] = $command;
             }
         }

@@ -264,6 +264,7 @@ class PEAR_PHPTest
             var_export($control);
             echo "\nReceived:\n";
             var_export($test);
+            echo "\n";
             return false;
         }
         return true;
