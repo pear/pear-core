@@ -803,7 +803,8 @@ and package.xml will be used as the old file by default.
     function doConvert($command, $options, $params)
     {
         $packagexml = isset($params[0]) ? $params[0] : 'package.xml';
-        $newpackagexml = isset($params[1]) ? $params[1] : 'package2.xml';
+        $newpackagexml = isset($params[1]) ? $params[1] : dirname($packagexml) .
+            DIRECTORY_SEPARATOR . 'package2.xml';
         include_once 'PEAR/PackageFile.php';
         $reg = &$this->config->getRegistry();
         $pkg = new PEAR_PackageFile($reg, $this->_debug);
@@ -811,14 +812,25 @@ and package.xml will be used as the old file by default.
         if (!PEAR::isError($pf)) {
             $gen = &$pf->getDefaultGenerator();
             $newpf = &$gen->toV2();
-            $saved = $newpf->toPackageFile(dirname($newpackagexml), basename($newpackagexml));
+            $gen = &$newpf->getDefaultGenerator();
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+            $saved = $gen->toPackageFile(dirname($newpackagexml), PEAR_VALIDATE_NORMAL,
+                basename($newpackagexml));
+            PEAR::staticPopErrorHandling();
             if (PEAR::isError($saved)) {
-                return $this->raiseError($saved);
+                if (is_array($saved->getUserInfo())) {
+                    foreach ($saved->getUserInfo() as $warning) {
+                        $this->ui->outputData($warning['message']);
+                    }
+                }
+                $this->ui->outputData($saved->getMessage());
+                return true;
             }
-            $this->ui->outputData('Wrote new version 2.0 package.xml to "' . $newpackagexml . '"');
+            $this->ui->outputData('Wrote new version 2.0 package.xml to "' . $saved . '"');
             return true;
         } else {
-            return $this->raiseError($pf);
+            $this->ui->outputData($pf->getMessage());
+            return true;
         }
     }
 

@@ -93,6 +93,28 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $this->_packagefile = &$packagefile;
     }
 
+    function toPackageFile($where = null, $state = PEAR_VALIDATE_NORMAL, $name = 'package.xml')
+    {
+        if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING)) {
+            return PEAR::raiseError('PEAR_Packagefile::toPackageFile: invalid package.xml',
+                null, null, null, $this->_packagefile->getValidationWarnings());
+        }
+        include_once 'System.php';
+        if ($where === null) {
+            if (!($where = System::mktemp(array('-d')))) {
+                return PEAR::raiseError("PEAR_Packagefile::toPackageFile: mktemp failed");
+            }
+        }
+        $newpkgfile = $where . DIRECTORY_SEPARATOR . $name;
+        $np = @fopen($newpkgfile, 'wb');
+        if (!$np) {
+            return PEAR::raiseError("PEAR_Packagefile::toPackageFile: unable to save $name as $newpkgfile");
+        }
+        fwrite($np, $this->toXml($state));
+        fclose($np);
+        return $newpkgfile;
+    }
+
     function &toV2()
     {
         return $this->_packagefile;

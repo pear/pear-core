@@ -64,6 +64,16 @@ class PEAR_PackageFile_v2
         $this->_archiveFile = $archive ? $archive : $file;
     }
 
+    /**
+     * Wrapper to {@link PEAR_ErrorStack::getErrors()}
+     * @param boolean determines whether to purge the error stack after retrieving
+     * @return array
+     */
+    function getValidationWarnings($purge = true)
+    {
+        return $this->_stack->getErrors($purge);
+    }
+
     function getPackageFile()
     {
         return $this->_packageFile;
@@ -136,6 +146,7 @@ class PEAR_PackageFile_v2
         if ($forReg) {
             $this->_packageInfo['old'] = array();
             $this->_packageInfo['old']['package'] = $this->getPackage();
+            $this->_packageInfo['old']['channel'] = $this->getChannel();
             $this->_packageInfo['old']['summary'] = $this->getSummary();
             $this->_packageInfo['old']['description'] = $this->getDescription();
             $this->_packageInfo['old']['release_version'] = $this->getVersion();
@@ -166,8 +177,8 @@ class PEAR_PackageFile_v2
 
     function getChannel()
     {
-        if (isset($this->_packageInfo['name']['attribs']['channel'])) {
-            return $this->_packageInfo['name']['attribs']['channel'];
+        if (isset($this->_packageInfo['channel'])) {
+            return $this->_packageInfo['channel'];
         }
         return false;
     }
@@ -179,16 +190,16 @@ class PEAR_PackageFile_v2
 
     function getPackage()
     {
-        if (isset($this->_packageInfo['name']['_content'])) {
-            return $this->_packageInfo['name']['_content'];
+        if (isset($this->_packageInfo['name'])) {
+            return $this->_packageInfo['name'];
         }
         return false;
     }
     
     function getExtends()
     {
-        if (isset($this->_packageInfo['extends']['_content'])) {
-            return $this->_packageInfo['extends']['_content'];
+        if (isset($this->_packageInfo['extends'])) {
+            return $this->_packageInfo['extends'];
         }
         return false;
     }
@@ -198,8 +209,8 @@ class PEAR_PackageFile_v2
      */
     function getVersion($key = 'package')
     {
-        if (isset($this->_packageInfo['version']['attribs'][$key])) {
-            return $this->_packageInfo['version']['attribs'][$key];
+        if (isset($this->_packageInfo['version'][$key])) {
+            return $this->_packageInfo['version'][$key];
         }
         return false;
     }
@@ -219,14 +230,14 @@ class PEAR_PackageFile_v2
                 $ret = array();
                 if (isset($this->_packageInfo['leads'])) {
                     foreach ($this->_packageInfo['leads'] as $lead) {
-                        $s = $lead['attribs'];
+                        $s = $lead;
                         $s['role'] = 'lead';
                         $ret[] = $s;
                     }
                 }
                 if (isset($this->_packageInfo['maintainers'])) {
                     foreach ($this->_packageInfo['maintainers'] as $maintainer) {
-                        $s = $maintainer['attribs'];
+                        $s = $maintainer;
                         $ret[] = $s;
                     }
                 }
@@ -245,24 +256,24 @@ class PEAR_PackageFile_v2
 
     function getState($key = 'package')
     {
-        if (isset($this->_packageInfo['stability']['attribs'][$key])) {
-            return $this->_packageInfo['stability']['attribs'][$key];
+        if (isset($this->_packageInfo['stability'][$key])) {
+            return $this->_packageInfo['stability'][$key];
         }
         return false;
     }
 
     function getDate()
     {
-        if (isset($this->_packageInfo['date']['_content'])) {
-            return $this->_packageInfo['date']['_content'];
+        if (isset($this->_packageInfo['date'])) {
+            return $this->_packageInfo['date'];
         }
         return false;
     }
     
     function getTime()
     {
-        if (isset($this->_packageInfo['date']['attribs']['time'])) {
-            return $this->_packageInfo['date']['attribs']['time'];
+        if (isset($this->_packageInfo['time'])) {
+            return $this->_packageInfo['time'];
         }
         return false;
     }
@@ -296,8 +307,8 @@ class PEAR_PackageFile_v2
 
     function getNotes()
     {
-        if (isset($this->_packageInfo['release_notes'])) {
-            return $this->_packageInfo['release_notes'];
+        if (isset($this->_packageInfo['notes'])) {
+            return $this->_packageInfo['notes'];
         }
         return false;
     }
@@ -329,36 +340,36 @@ class PEAR_PackageFile_v2
                             continue;
                         }
                         $s = array('type' => $map[$dtype],
-                            'channel' => $t = @$dep['attribs']['channel'] ? $t : 'pear.php.net');
-                        if (!isset($dep['attribs']['min']) &&
-                              !isset($dep['attribs']['max'])) {
+                            'channel' => $t = @$dep['channel'] ? $t : 'pear.php.net');
+                        if (!isset($dep['min']) &&
+                              !isset($dep['max'])) {
                             $s['rel'] = 'has';
-                        } elseif (isset($dep['attribs']['min']) &&
-                              isset($dep['attribs']['max'])) {
+                        } elseif (isset($dep['min']) &&
+                              isset($dep['max'])) {
                             $s['rel'] = 'ge';
                             $s1 = $s;
-                            $s['version'] = $dep['attribs']['min'];
-                            $s1['version'] = $dep['attribs']['max'];
+                            $s['version'] = $dep['min'];
+                            $s1['version'] = $dep['max'];
                             if ($dtype != 'php') {
-                                $s['name'] = $dep['_content'];
-                                $s1['name'] = $dep['_content'];
+                                $s['name'] = $dep['name'];
+                                $s1['name'] = $dep['name'];
                             }
                             $s['optional'] = 'no';
                             $s1['optional'] = 'no';
                             $ret[] = $s1;
-                        } elseif (isset($dep['attribs']['min'])) {
+                        } elseif (isset($dep['min'])) {
                             $s['rel'] = 'ge';
-                            $s['version'] = $dep['attribs']['min'];
+                            $s['version'] = $dep['min'];
                             $s['optional'] = 'no';
                             if ($dtype != 'php') {
-                                $s['name'] = $dep['_content'];
+                                $s['name'] = $dep['name'];
                             }
-                        } elseif (isset($dep['attribs']['max'])) {
+                        } elseif (isset($dep['max'])) {
                             $s['rel'] = 'le';
-                            $s['version'] = $dep['attribs']['min'];
+                            $s['version'] = $dep['min'];
                             $s['optional'] = 'no';
                             if ($dtype != 'php') {
-                                $s['name'] = $dep['_content'];
+                                $s['name'] = $dep['name'];
                             }
                         }
                         $ret[] = $s;
@@ -376,36 +387,36 @@ class PEAR_PackageFile_v2
                             continue;
                         }
                         $s = array('type' => $map[$dtype],
-                            'channel' => $t = @$dep['attribs']['channel'] ? $t : 'pear.php.net');
-                        if (!isset($dep['attribs']['min']) &&
-                              !isset($dep['attribs']['max'])) {
+                            'channel' => $t = @$dep['channel'] ? $t : 'pear.php.net');
+                        if (!isset($dep['min']) &&
+                              !isset($dep['max'])) {
                             $s['rel'] = 'has';
-                        } elseif (isset($dep['attribs']['min']) &&
-                              isset($dep['attribs']['max'])) {
+                        } elseif (isset($dep['min']) &&
+                              isset($dep['max'])) {
                             $s['rel'] = 'ge';
                             $s1 = $s;
-                            $s['version'] = $dep['attribs']['min'];
-                            $s1['version'] = $dep['attribs']['max'];
+                            $s['version'] = $dep['min'];
+                            $s1['version'] = $dep['max'];
                             if ($dtype != 'php') {
-                                $s['name'] = $dep['_content'];
-                                $s1['name'] = $dep['_content'];
+                                $s['name'] = $dep['name'];
+                                $s1['name'] = $dep['name'];
                             }
                             $s['optional'] = 'yes';
                             $s1['optional'] = 'yes';
                             $ret[] = $s1;
-                        } elseif (isset($dep['attribs']['min'])) {
+                        } elseif (isset($dep['min'])) {
                             $s['rel'] = 'ge';
-                            $s['version'] = $dep['attribs']['min'];
+                            $s['version'] = $dep['min'];
                             $s['optional'] = 'yes';
                             if ($dtype != 'php') {
-                                $s['name'] = $dep['_content'];
+                                $s['name'] = $dep['name'];
                             }
-                        } elseif (isset($dep['attribs']['max'])) {
+                        } elseif (isset($dep['max'])) {
                             $s['rel'] = 'le';
-                            $s['version'] = $dep['attribs']['min'];
+                            $s['version'] = $dep['min'];
                             $s['optional'] = 'yes';
                             if ($dtype != 'php') {
-                                $s['name'] = $dep['_content'];
+                                $s['name'] = $dep['name'];
                             }
                         }
                         $ret[] = $s;
@@ -423,36 +434,36 @@ class PEAR_PackageFile_v2
                             continue;
                         }
                         $s = array('type' => $map[$dtype],
-                            'channel' => $t = @$dep['attribs']['channel'] ? $t : 'pear.php.net');
-                        if (!isset($dep['attribs']['min']) &&
-                              !isset($dep['attribs']['max'])) {
+                            'channel' => $t = $dep['channel']);
+                        if (!isset($dep['min']) &&
+                              !isset($dep['max'])) {
                             $s['rel'] = 'has';
-                        } elseif (isset($dep['attribs']['min']) &&
-                              isset($dep['attribs']['max'])) {
+                        } elseif (isset($dep['min']) &&
+                              isset($dep['max'])) {
                             $s['rel'] = 'ge';
                             $s1 = $s;
-                            $s['version'] = $dep['attribs']['min'];
-                            $s1['version'] = $dep['attribs']['max'];
+                            $s['version'] = $dep['min'];
+                            $s1['version'] = $dep['max'];
                             if ($dtype != 'php') {
-                                $s['name'] = $dep['_content'];
-                                $s1['name'] = $dep['_content'];
+                                $s['name'] = $dep['name'];
+                                $s1['name'] = $dep['name'];
                             }
                             $s['optional'] = 'yes';
                             $s1['optional'] = 'yes';
                             $ret[] = $s1;
-                        } elseif (isset($dep['attribs']['min'])) {
+                        } elseif (isset($dep['min'])) {
                             $s['rel'] = 'ge';
-                            $s['version'] = $dep['attribs']['min'];
+                            $s['version'] = $dep['min'];
                             $s['optional'] = 'yes';
                             if ($dtype != 'php') {
-                                $s['name'] = $dep['_content'];
+                                $s['name'] = $dep['name'];
                             }
-                        } elseif (isset($dep['attribs']['max'])) {
+                        } elseif (isset($dep['max'])) {
                             $s['rel'] = 'le';
-                            $s['version'] = $dep['attribs']['min'];
+                            $s['version'] = $dep['min'];
                             $s['optional'] = 'yes';
                             if ($dtype != 'php') {
-                                $s['name'] = $dep['_content'];
+                                $s['name'] = $dep['name'];
                             }
                         }
                         $ret[] = $s;
@@ -480,11 +491,7 @@ class PEAR_PackageFile_v2
 
     function hasDeps()
     {
-        $type = $this->getPackageType();
-        if (!$type) {
-            return false;
-        }
-        return isset($this->_packageInfo[$type]['dependencies']);
+        return isset($this->_packageInfo['dependencies']);
     }
 
     function getPackagexmlVersion()
@@ -507,18 +514,23 @@ class PEAR_PackageFile_v2
         }
         $structure =
         array(
-            'name->channel',
+            'name',
+            'channel',
             '*extends', // can't be multiple, but this works fine
             'summary',
             'description',
-            '+lead->user->email->name->active',
-            '*maintainer->role->user->email->name->active',
+            '+lead', // these all need content checks
+            '*developer',
+            '*contributor',
+            '*helper',
             'date',
-            'version->api->package',
-            'stability->api->package',
+            '*time',
+            'version',
+            'stability',
             'license->?uri->?filesource',
             'notes',
             'contents', //special validation needed
+            '*compatible',
             '*dependencies', //special validation needed
             '+phprelease|+extsrcrelease|+extbinrelease|+bundle' //special validation needed
         );
@@ -526,8 +538,11 @@ class PEAR_PackageFile_v2
                                           $this->_packageInfo, '<package>')) {
             return false;
         }
-        if (!isset($this->_packageInfo['name']['_content'])) {
+        if (empty($this->_packageInfo['name'])) {
             $this->_tagCannotBeEmpty('name');
+        }
+        if (empty($this->_packageInfo['channel'])) {
+            $this->_tagCannotBeEmpty('channel');
         }
         if (is_array($this->_packageInfo['license']) &&
               !isset($this->_packageInfo['license']['_content'])) {
@@ -535,6 +550,9 @@ class PEAR_PackageFile_v2
         }
         if (isset($this->_packageInfo['dependencies'])) {
             $this->_validateDependencies();
+        }
+        if (isset($this->_packageInfo['compatible'])) {
+            $this->_validateCompatible();
         }
         if (!isset($this->_packageInfo['contents']['dir'])) {
             $this->_filelistMustContainDir('contents');
@@ -544,6 +562,8 @@ class PEAR_PackageFile_v2
             $this->_filelistCannotContainFile('contents');
             return false;
         }
+        $this->_validateMaintainers();
+        $this->_validateStabilityVersion();
         $this->_validateFilelist();
         $this->_validateRelease();
         return !$this->_stack->hasErrors();
@@ -555,8 +575,11 @@ class PEAR_PackageFile_v2
         reset($keys);
         $key = current($keys);
         foreach ($structure as $struc) {
-            $tag = $xml[$key];
             $test = $this->_processStructure($struc);
+            if (!$key && @$struc['multiple'] == '*') {
+                continue;
+            }
+            $tag = $xml[$key];
             if (isset($test['choices'])) {
                 foreach ($test['choices'] as $choice) {
                     if ($key == $choice['tag']) {
@@ -567,16 +590,16 @@ class PEAR_PackageFile_v2
                         return false;
                     }
                 }
-                $this->_invalidTagOrder($test['choices'], $key);
+                $this->_invalidTagOrder($test['choices'], $key, $root);
                 return false;
             } else {
                 if ($key != $test['tag']) {
                     if (isset($test['multiple']) && $test['multiple'] != '*') {
-                        $this->_invalidTagOrder($test['tag'], $key);
+                        $this->_invalidTagOrder($test['tag'], $key, $root);
                         return false;
                     }
                     if (!isset($test['multiple'])) {
-                        $this->_invalidTagOrder($test['tag'], $key);
+                        $this->_invalidTagOrder($test['tag'], $key, $root);
                         return false;
                     }
                     continue;
@@ -655,6 +678,139 @@ class PEAR_PackageFile_v2
         return $ret;
     }
 
+    function _validateStabilityVersion()
+    {
+        $structure = array('release', 'api');
+        $this->_stupidSchemaValidate($structure, $this->_packageInfo['version'], '<version>');
+        $this->_stupidSchemaValidate($structure, $this->_packageInfo['stability'], '<stability>');
+    }
+
+    function _validateMaintainers()
+    {
+        $structure =
+            array(
+                'name',
+                'user',
+                'email',
+                'active',
+            );
+        foreach (array('lead', 'developer', 'contributor', 'helper') as $type) {
+            if (!isset($this->_packageInfo[$type])) {
+                continue;
+            }
+            if (isset($this->_packageInfo[$type][0])) {
+                foreach ($this->_packageInfo[$type] as $lead) {
+                    $this->_stupidSchemaValidate($structure, $lead, '<' . $type . '>');
+                }
+            } else {
+                $this->_stupidSchemaValidate($structure, $this->_packageInfo[$type],
+                    '<' . $type . '>');
+            }
+        }
+    }
+
+    function _validatePhpDep($dep)
+    {
+        $structure = array(
+            'min',
+            'max',
+            '*exclude',
+        );
+        return $this->_stupidSchemaValidate($structure, $dep, '<dependencies><php>');
+            
+    }
+
+    function _validatePearinstallerDep($dep)
+    {
+        $structure = array(
+            'min',
+            '*max',
+            '*recommended',
+            '*exclude',
+        );
+        return $this->_stupidSchemaValidate($structure, $dep, '<dependencies><php>');
+            
+    }
+
+    function _validatePackageDep($dep)
+    {
+        if (isset($dep['uri'])) {
+            $structure = array(
+                'name',
+                'uri',
+                '*conflicts',
+            );
+        } else {
+            $structure = array(
+                'name',
+                'channel',
+                '*min',
+                '*max',
+                '*recommended',
+                '*exclude',
+                '*conflicts',
+            );
+        }
+        return $this->_stupidSchemaValidate($structure, $dep, '<dependencies><package>');
+    }
+
+    function _validateExtensionDep($dep)
+    {
+        $structure = array(
+            'name',
+            'channel',
+            '*min',
+            '*max',
+            '*recommended',
+            '*exclude',
+            '*conflicts',
+        );
+        return $this->_stupidSchemaValidate($structure, $dep, '<dependencies><extension>');
+    }
+
+    function _validateOsDep($dep)
+    {
+        $structure = array(
+            'name',
+            '*conflicts',
+        );
+        return $this->_stupidSchemaValidate($structure, $dep, '<dependencies><os>');
+    }
+
+    function _validateArchDep($dep)
+    {
+        $structure = array(
+            'pattern',
+            '*conflicts',
+        );
+        return $this->_stupidSchemaValidate($structure, $dep, '<dependencies><arch>');
+    }
+
+    function _validateInstallConditions($cond, $release)
+    {
+        $structure = array(
+            '*php',
+            '*extension',
+            '*os',
+            '*arch',
+        );
+        if (!$this->_stupidSchemaValidate($structure,
+              $cond, $release . '<installconditions>')) {
+            return false;
+        }
+        foreach (array('php', 'pearinstaller', 'os', 'arch') as $type) {
+            if (isset($cond[$type])) {
+                $iter = $cond[$type];
+                if (!isset($iter[0])) {
+                    $iter = array($iter);
+                }
+                foreach ($iter as $package) {
+                    $this->{"_validate{$type}Dep"}($package);
+                }
+            }
+        }
+    }
+
     function _validateDependencies()
     {
         $structure = array(
@@ -668,14 +824,21 @@ class PEAR_PackageFile_v2
         }
         foreach (array('required', 'optional') as $simpledep) {
             if (isset($this->_packageInfo['dependencies'][$simpledep])) {
-                $structure = array(
-                    'php->?min->?max',
-                    'pearinstaller->?min->?max->?recommended',
-                    '*package->name->?min->?max->?recommended->?not',
-                    '*extension->name->?min->?max->?recommended->?not',
-                    '*os->name->?not',
-                    '*arch->pattern->?not',
-                );
+                if ($simpledep == 'optional') {
+                    $structure = array(
+                        '*package',
+                        '*extension',
+                    );
+                } else {
+                    $structure = array(
+                        'php',
+                        'pearinstaller',
+                        '*package',
+                        '*extension',
+                        '*os',
+                        '*arch',
+                    );
+                }
                 if ($this->_stupidSchemaValidate($structure,
                       $this->_packageInfo['dependencies'][$simpledep], "<$simpledep>")) {
                     foreach (array('package', 'extension') as $type) {
@@ -685,19 +848,34 @@ class PEAR_PackageFile_v2
                                 $iter = array($iter);
                             }
                             foreach ($iter as $package) {
-                                if (isset($package['attribs']['url'])) {
-                                    if (isset($package['attribs']['channel'])) {
+                                if (isset($package['url'])) {
+                                    if (isset($package['channel'])) {
                                         $this->_UrlOrChannel($type,
-                                            $package['attribs']['name']);
+                                            $package['name']);
                                     }
                                 } else {
                                     if ($type == 'extension') {
                                         continue;
                                     }
-                                    if (!isset($package['attribs']['channel'])) {
-                                        $this->_NoChannel($type, $package['attribs']['name']);
+                                    if (!isset($package['channel'])) {
+                                        $this->_NoChannel($type, $package['name']);
                                     }
                                 }
+                                $this->{"_validate{$type}Dep"}($package);
+                            }
+                        }
+                    }
+                    if ($simpledep == 'optional') {
+                        continue;
+                    }
+                    foreach (array('php', 'pearinstaller', 'os', 'arch') as $type) {
+                        if (isset($this->_packageInfo['dependencies'][$simpledep][$type])) {
+                            $iter = $this->_packageInfo['dependencies'][$simpledep][$type];
+                            if (!isset($iter[0])) {
+                                $iter = array($iter);
+                            }
+                            foreach ($iter as $package) {
+                                $this->{"_validate{$type}Dep"}($package);
                             }
                         }
                     }
@@ -706,8 +884,8 @@ class PEAR_PackageFile_v2
         }
         if (isset($this->_packageInfo['dependencies']['group'])) {
             $structure = array(
-                '*package->name->?min->?max->?recommended->?not',
-                '*extension->name->?min->?max->?recommended->?not',
+                '*package',
+                '*extension',
             );
             if ($this->_stupidSchemaValidate($structure,
                   $this->_packageInfo['dependencies']['group'], '<group>')) {
@@ -724,23 +902,36 @@ class PEAR_PackageFile_v2
                             }
                             foreach ($iter as $package) {
                                 if (isset($package['url'])) {
-                                    if (isset($package['attribs']['channel'])) {
+                                    if (isset($package['channel'])) {
                                         $this->_UrlOrChannelGroup($type,
-                                            $package['attribs']['name'],
-                                            $group['attribs']['name']);
+                                            $package['name'],
+                                            $group['name']);
                                     }
                                 } else {
-                                    if (!isset($package['attribs']['channel'])) {
+                                    if (!isset($package['channel'])) {
                                         $this->_NoChannelGroup($type,
-                                            $package['attribs']['name'],
-                                            $group['attribs']['name']);
+                                            $package['name'],
+                                            $group['name']);
                                     }
                                 }
+                                $this->{"_validate{$type}Dep"}($package);
                             }
                         }
                     }
                 }
             }
+        }
+    }
+
+    function _validateCompatible()
+    {
+        $compat = $this->_packageInfo['compatible'];
+        if (isset($compat['name'])) {
+            $compat = array($compat);
+        }
+        $required = array('name', 'channel', 'min', 'max', '*exclude');
+        foreach ($compat as $package) {
+            $this->_stupidSchemaValidate($required, $package, '<compatible>');
         }
     }
 
@@ -878,6 +1069,7 @@ class PEAR_PackageFile_v2
         }
         if (isset($this->_packageInfo[$release][0])) {
             foreach ($this->_packageInfo[$release] as $rel) {
+                $this->_validateInstallConditions($rel['installconditions'], "<$rel>");
                 if (isset($rel['filelist'])) {
                     $this->_validateFilelist($rel['filelist'], 'install', true);
                 }
@@ -904,11 +1096,11 @@ class PEAR_PackageFile_v2
         $this->_flatFilelist = isset($this->_filelist);
     }
 
-    function _invalidTagOrder($oktags, $actual)
+    function _invalidTagOrder($oktags, $actual, $root)
     {
         $this->_stack->push(__FUNCTION__, 'error',
-            array('oktags' => $oktags, 'actual' => $actual),
-            'Invalid tag order, found <%actual%> expected one of "%oktags%"');
+            array('oktags' => $oktags, 'actual' => $actual, 'root' => $root),
+            'Invalid tag order in %root%, found <%actual%> expected one of "%oktags%"');
     }
 
     function _ignoreNotAllowed()
