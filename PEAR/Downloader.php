@@ -274,8 +274,8 @@ class PEAR_Downloader extends PEAR_Common
                 $params[$i]->detectDependencies($params);
             }
         }
-        while (call_user_func(array($this->getDownloaderPackageClass(), 'mergeDependencies'),
-              $params));
+        while (call_user_func_array(array($this->getDownloaderPackageClass(), 'mergeDependencies'),
+              array(&$params)));
         call_user_func_array(array($this->getDownloaderPackageClass(), 'removeInstalled'),
             array(&$params));
         if (!count($params)) {
@@ -290,9 +290,9 @@ class PEAR_Downloader extends PEAR_Common
         }
         $ret = array();
         $newparams = array();
-        foreach ($params as $package) {
+        foreach ($params as $i => $package) {
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-            $pf = &$package->download();
+            $pf = &$params[$i]->download();
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($pf)) {
                 $this->log(1, $pf->getMessage());
@@ -301,7 +301,7 @@ class PEAR_Downloader extends PEAR_Common
                     '"');
                 continue;
             }
-            $newparams[] = &$package;
+            $newparams[] = &$params[$i];
             $ret[] = array('file' => $pf->getArchiveFile(),
                                    'info' => &$pf,
                                    'pkg' => $pf->getPackage());

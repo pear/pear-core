@@ -624,6 +624,10 @@ http://pear.php.net/dtd/package-2.0.xsd',
                         if (count($deps['php']) > 1) {
                             $php = $this->_processMultipleDeps($deps['php']);
                         } else {
+                            if (!isset($deps['php'][0])) {
+                                list($key, $blah) = each ($deps['php']); // stupid buggy versions
+                                $deps['php'] = array($blah[0]);
+                            }
                             $php = $this->_processDep($deps['php'][0]);
                             if (!$php) {
                                 break; // poor mans throw
@@ -781,6 +785,13 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 $php['exclude'] = $dep['version'];
             break;
             case 'ge' :
+                if (!isset($dep['version'])) {
+                    if ($dep['type'] == 'php') {
+                        if (isset($dep['name'])) {
+                            $dep['version'] = $dep['name'];
+                        }
+                    }
+                }
                 $php['min'] = $dep['version'];
             break;
             case 'lt' :

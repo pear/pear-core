@@ -191,6 +191,16 @@ class PEAR_Registry extends PEAR
             if (!$initializing) {
                 $initializing = true;
                 $this->_dependencyDB = &PEAR_DependencyDB::singleton($this->_config);
+                if (PEAR::isError($this->_dependencyDB)) {
+                    // attempt to recover by removing the dep db
+                    @unlink($this->_config->get('php_dir', null, 'pear.php.net') .
+                        DIRECTORY_SEPARATOR . '.depdb');
+                    $this->_dependencyDB = &PEAR_DependencyDB::singleton($this->_config);
+                    if (PEAR::isError($this->_dependencyDB)) {
+                        echo $this->_dependencyDB->getMessage();
+                        die('Unrecoverable error');
+                    }
+                }
                 $initializing = false;
             }
         }

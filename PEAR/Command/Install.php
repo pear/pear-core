@@ -478,7 +478,11 @@ package if needed.
                 }
             }
         }
-        $this->installer->sortPackagesForUninstall($newparams);
+        $err = $this->installer->sortPackagesForUninstall($newparams);
+        if (PEAR::isError($err)) {
+            $this->ui->outputData($err->getMessage(), $command);
+            return true;
+        }
         $params = $newparams;
         // twist this to use it to check on whether dependent packages are also being uninstalled
         // for circular dependencies like subpackages
@@ -500,14 +504,16 @@ package if needed.
                     $this->ui->outputData("uninstall ok: $pkg", $command);
                 }
                 if (is_object($savepkg)) {
-                    PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                    $info = $this->installer->ftpUninstall($savepkg);
-                    PEAR::popErrorHandling();
-                    if (PEAR::isError($info)) {
-                        $this->ui->outputData($info->getMessage());
-                        $this->ui->outputData("remote uninstall failed: $pkg");
-                    } else {
-                        $this->ui->outputData("remote uninstall ok: $pkg");
+                    if ($this->config->isDefinedLayer('ftp')) {
+                        $this->installer->pushErrorHandling(PEAR_ERROR_RETURN);
+                        $info = $this->installer->ftpUninstall($savepkg);
+                        $this->installer->popErrorHandling();
+                        if (PEAR::isError($info)) {
+                            $this->ui->outputData($info->getMessage());
+                            $this->ui->outputData("remote uninstall failed: $pkg");
+                        } else {
+                            $this->ui->outputData("remote uninstall ok: $pkg");
+                        }
                     }
                 }
             } else {
