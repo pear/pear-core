@@ -265,10 +265,6 @@ class PEAR_PackageFile_Parser_v1
                     $this->_packageInfo['packagerversion'] = $attribs['packagerversion'];
                 }
                 break;
-            case 'name' :
-                if (isset($attribs['extends'])) {
-                    $this->_packageInfo['extends'] = trim($attribs['extends']);
-                }
         }
     }
 
@@ -299,6 +295,9 @@ class PEAR_PackageFile_Parser_v1
                         $this->current_maintainer['name'] = $data;
                         break;
                 }
+                break;
+            case 'extends' :
+                $this->_packageInfo['extends'] = $data;
                 break;
             case 'summary':
                 $this->_packageInfo['summary'] = $data;

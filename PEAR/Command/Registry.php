@@ -513,7 +513,7 @@ installed package.'
         $data = array(
             'caption' => $caption,
             'border' => true);
-        switch ($obj->getReleaseType()) {
+        switch ($obj->getPackageType()) {
             case 'php' :
                 $release = 'PEAR-style PHP-based Package';
             break;
@@ -874,7 +874,7 @@ installed package.'
                 }
             }
         }
-        if ($obj->getReleaseType() == 'bundle') {
+        if ($obj->getPackageType() == 'bundle') {
             $info['Bundled Packages'] = '';
             foreach ($obj->getBundledPackages() as $package) {
                 if (!empty($info['Bundled Packages'])) {

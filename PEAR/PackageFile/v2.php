@@ -1941,22 +1941,6 @@ class PEAR_PackageFile_v2
         return '2.0';
     }
 
-    function getReleaseType()
-    {
-        if (isset($this->_packageInfo['phprelease'])) {
-            return 'php';
-        }
-        if (isset($this->_packageInfo['extsrcrelease'])) {
-            return 'extsrc';
-        }
-        if (isset($this->_packageInfo['extbinrelease'])) {
-            return 'extbin';
-        }
-        if (isset($this->_packageInfo['bundle'])) {
-            return 'bundle';
-        }
-    }
-
     function getSourcePackage()
     {
         if (isset($this->_packageInfo['extbinrelease'])) {

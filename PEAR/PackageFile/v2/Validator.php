@@ -940,7 +940,7 @@ class PEAR_PackageFile_v2_Validator
      */
     function _validateRole($role)
     {
-        return in_array($role, PEAR_Installer_Role::getValidRoles($this->_pf->getReleaseType()));
+        return in_array($role, PEAR_Installer_Role::getValidRoles($this->_pf->getPackageType()));
     }
 
     function _invalidTagOrder($oktags, $actual, $root)
@@ -981,7 +981,7 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array(
             'file' => $file, 'dir' => $dir, 'role' => $role,
-            'roles' => PEAR_Installer_Role::getValidRoles($this->_pf->getReleaseType())),
+            'roles' => PEAR_Installer_Role::getValidRoles($this->_pf->getPackageType())),
             'File "%file%" in directory "%dir%" has invalid role "%role%", should be one of %roles%');
     }
 

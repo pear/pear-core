@@ -418,7 +418,7 @@ class PEAR_Installer extends PEAR_Downloader
         $channel = $pkg->getChannel();
         // {{{ assemble the destination paths
         if (!in_array($atts['attribs']['role'],
-              PEAR_Installer_Role::getValidRoles($pkg->getReleaseType()))) {
+              PEAR_Installer_Role::getValidRoles($pkg->getPackageType()))) {
             return $this->raiseError('Invalid role `' . $atts['attribs']['role'] .
                     "' for file $file");
         }
