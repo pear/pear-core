@@ -997,14 +997,18 @@ class PEAR_PackageFile_v2_Validator
                     $list['dir'] = array($list['dir']);
                 }
                 foreach ($list['dir'] as $dir) {
-                    if ($dir['attribs']['name'] == '/' ||
-                          !isset($this->_packageInfo['contents']['dir']['dir'])) {
-                        // always use nothing if the filelist has already been flattened
-                        $newdirs = '';
-                    } elseif ($dirs == '') {
-                        $newdirs = $dir['attribs']['name'];
+                    if (isset($dir['attribs']) && isset($dir['attribs']['name'])) {
+                        if ($dir['attribs']['name'] == '/' ||
+                              !isset($this->_packageInfo['contents']['dir']['dir'])) {
+                            // always use nothing if the filelist has already been flattened
+                            $newdirs = '';
+                        } elseif ($dirs == '') {
+                            $newdirs = $dir['attribs']['name'];
+                        } else {
+                            $newdirs = $dirs . '/' . $dir['attribs']['name'];
+                        }
                     } else {
-                        $newdirs = $dirs . '/' . $dir['attribs']['name'];
+                        $newdirs = $dirs;
                     }
                     $this->_validateFilelist($dir, $allowignore, $newdirs);
                 }
