@@ -1264,7 +1264,7 @@ class PEAR_ChannelFile {
         if ($mirror) {
             if (isset($this->_channelInfo['mirrors'])) {
                 foreach ($this->_channelInfo['mirrors'] as $mirror) {
-                    if ($mirror['name'] == $mirror) {
+                    if ($mirror['server'] == $mirror) {
                         if (isset($mirror['protocols'][$protocol]['functions'])) {
                             return $mirror['protocols'][$protocol]['functions'];
                         }
@@ -1344,7 +1344,7 @@ class PEAR_ChannelFile {
         if ($mirror) {
             if (isset($this->_channelInfo['mirrors'])) {
                 foreach ($this->_channelInfo['mirrors'] as $i => $mirror) {
-                    if ($mirror['name'] == $mirror) {
+                    if ($mirror['server'] == $mirror) {
                         $this->_channelInfo['mirrors'][$i]['protocols'][$type]['functions'] = array();
                         return true;
                     }
