@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Validate->validate(), packagename tests
+PEAR_Validate->validate(), version tests (basic)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -324,9 +324,10 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('$val->validate');
 $phpunit->assertTrue($res, '$val->validate');
 
-$pf->setExtends('blah');
-$res = $val->validate(PEAR_VALIDATE_NORMAL);
-$phpunit->assertFalse($res, 'extends');
+/****************************************** generic tests *****************************************/
+$pf->setReleaseVersion('1');
+$res = $val->validate(PEAR_VALIDATE_PACKAGING);
+$phpunit->assertFalse($res, 'attempt 1 generic');
 $phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
@@ -336,17 +337,16 @@ $phpunit->assertEquals(array (
   array (
     0 => 
     array (
-      'field' => 'package',
-      'reason' => 'package PEAR extends package blah and so the name must have a postfix equal to the major version like "blah1"',
+      'field' => 'version',
+      'reason' => 'A version number must have between 3 and 4 decimals (x.y.z[.w])',
     ),
   ),
-), $val->getFailures(), 'failures extends');
+), $val->getFailures(), 'failures attempt 1 generic');
 
-$pf->setReleaseVersion('2.0.0');
-$pf->setPackage('blah');
-$res = $val->validate(PEAR_VALIDATE_NORMAL);
-$phpunit->assertNoErrors('extends no postfix');
-$phpunit->assertFalse($res, 'extends no postfix');
+$pf->setReleaseVersion('1.2.3.4.5');
+$res = $val->validate(PEAR_VALIDATE_PACKAGING);
+$phpunit->assertFalse($res, 'attempt 1.2.3.4.5 generic');
+$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
@@ -355,17 +355,17 @@ $phpunit->assertEquals(array (
   array (
     0 => 
     array (
-      'field' => 'package',
-      'reason' => 'package blah extends package blah and so the name must have a postfix equal to the major version like "blah2"',
+      'field' => 'version',
+      'reason' => 'A version number must have between 3 and 4 decimals (x.y.z[.w])',
     ),
   ),
-), $val->getFailures(), 'failures extends no postfix');
+), $val->getFailures(), 'failures attempt 1.2.3.4.5 generic');
 
-$pf->setReleaseVersion('2.0.0');
-$pf->setPackage('blah2');
-$res = $val->validate(PEAR_VALIDATE_NORMAL);
-$phpunit->assertNoErrors('extends good');
-$phpunit->assertTrue($res, 'extends good');
+$pf->setReleaseVersion('1.2.3.4');
+$pf->setReleaseStability('stable');
+$res = $val->validate(PEAR_VALIDATE_PACKAGING);
+$phpunit->assertTrue($res, 'attempt 1.2.3.4 generic');
+$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
@@ -373,35 +373,7 @@ $phpunit->assertEquals(array (
   'errors' => 
   array (
   ),
-), $val->getFailures(), 'no failures');
-
-$pf->setReleaseVersion('20.0.0');
-$pf->setPackage('blah20');
-$res = $val->validate(PEAR_VALIDATE_NORMAL);
-$phpunit->assertNoErrors('extends good');
-$phpunit->assertTrue($res, 'extends good');
-$phpunit->assertEquals(array (
-  'warnings' => 
-  array (
-  ),
-  'errors' => 
-  array (
-  ),
-), $val->getFailures(), 'no failures');
-
-$pf->setReleaseVersion('0.2.5');
-$pf->setPackage('blah2');
-$res = $val->validate(PEAR_VALIDATE_NORMAL);
-$phpunit->assertNoErrors('extends good');
-$phpunit->assertTrue($res, 'extends good');
-$phpunit->assertEquals(array (
-  'warnings' => 
-  array (
-  ),
-  'errors' => 
-  array (
-  ),
-), $val->getFailures(), 'no failures');
+), $val->getFailures(), 'failures attempt 1.2.3.4 generic');
 echo 'tests done';
 ?>
 --EXPECT--

@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Validate->validate(), packagename tests
+PEAR_Validate->validate(), version tests (extends alpha)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -324,9 +324,111 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('$val->validate');
 $phpunit->assertTrue($res, '$val->validate');
 
-$pf->setExtends('blah');
-$res = $val->validate(PEAR_VALIDATE_NORMAL);
-$phpunit->assertFalse($res, 'extends');
+/****************************************** alpha tests *****************************************/
+$pf->setReleaseStability('alpha');
+$pf->setPackage('PEAR2');
+$pf->setExtends('PEAR');
+$pf->setReleaseVersion('2.4.0a1');
+$res = $val->validate(PEAR_VALIDATE_PACKAGING);
+$phpunit->assertTrue($res, 'attempt 2.4.0a1 alpha');
+$phpunit->showall();
+$phpunit->assertEquals(array (
+  'warnings' => 
+  array (
+  ),
+  'errors' => 
+  array (
+  ),
+), $val->getFailures(), 'failures attempt 2.4.0a1 alpha');
+
+$pf->setReleaseVersion('0.2.5');
+$res = $val->validate(PEAR_VALIDATE_PACKAGING);
+$phpunit->assertTrue($res, 'attempt 0.2.5 alpha');
+$phpunit->showall();
+$phpunit->assertEquals(array (
+  'warnings' => 
+  array (
+  ),
+  'errors' => 
+  array (
+  ),
+), $val->getFailures(), 'failures attempt 0.2.5 alpha');
+
+$pf->setReleaseVersion('2.4.2a1');
+$res = $val->validate(PEAR_VALIDATE_PACKAGING);
+$phpunit->assertFalse($res, 'attempt 2.4.2a1 alpha');
+$phpunit->showall();
+$phpunit->assertEquals(array (
+  'warnings' => 
+  array (
+  ),
+  'errors' => 
+  array (
+    0 => 
+    array (
+      'field' => 'version',
+      'reason' => 'bugfix versions (2.x.y where y > 0) cannot be alpha or beta',
+    ),
+  ),
+), $val->getFailures(), 'failures attempt 2.4.2a1 alpha');
+
+$pf->setReleaseVersion('2.4.0');
+$res = $val->validate(PEAR_VALIDATE_PACKAGING);
+$phpunit->assertFalse($res, 'attempt 2.4.0 alpha');
+$phpunit->showall();
+$phpunit->assertEquals(array (
+  'warnings' => 
+  array (
+  ),
+  'errors' => 
+  array (
+    0 => 
+    array (
+      'field' => 'version',
+      'reason' => 'version 2.4.0 cannot be alpha or beta',
+    ),
+  ),
+), $val->getFailures(), 'failures attempt 2.4.0 alpha');
+
+$pf->setReleaseVersion('2.4.00000');
+$res = $val->validate(PEAR_VALIDATE_PACKAGING);
+$phpunit->assertFalse($res, 'attempt 2.4.00000 alpha');
+$phpunit->showall();
+$phpunit->assertEquals(array (
+  'warnings' => 
+  array (
+  ),
+  'errors' => 
+  array (
+    0 => 
+    array (
+      'field' => 'version',
+      'reason' => 'version 2.4.0 cannot be alpha or beta',
+    ),
+  ),
+), $val->getFailures(), 'failures attempt 2.4.00000 alpha');
+
+$pf->setReleaseVersion('000.2.5');
+$res = $val->validate(PEAR_VALIDATE_PACKAGING);
+$phpunit->assertFalse($res, 'attempt 000.2.5 alpha');
+$phpunit->showall();
+$phpunit->assertEquals(array (
+  'warnings' => 
+  array (
+  ),
+  'errors' => 
+  array (
+    0 => 
+    array (
+      'field' => 'version',
+      'reason' => 'version "000.2.5" should be "0.2.5"',
+    ),
+  ),
+), $val->getFailures(), 'failures attempt 000.2.5 alpha');
+
+$pf->setReleaseVersion('1.5.0');
+$res = $val->validate(PEAR_VALIDATE_PACKAGING);
+$phpunit->assertFalse($res, 'attempt 1.5.0 alpha');
 $phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
@@ -337,16 +439,21 @@ $phpunit->assertEquals(array (
     0 => 
     array (
       'field' => 'package',
-      'reason' => 'package PEAR extends package blah and so the name must have a postfix equal to the major version like "blah1"',
+      'reason' => 'package PEAR2 extends package PEAR and so the name must have a postfix equal to the major version like "PEAR1"',
+    ),
+    1 => 
+    array (
+      'field' => 'version',
+      'reason' => 'first version number "1" must match the postfix of package name "PEAR2" (2)',
     ),
   ),
-), $val->getFailures(), 'failures extends');
+), $val->getFailures(), 'failures attempt 1.5.0 alpha');
 
-$pf->setReleaseVersion('2.0.0');
-$pf->setPackage('blah');
-$res = $val->validate(PEAR_VALIDATE_NORMAL);
-$phpunit->assertNoErrors('extends no postfix');
-$phpunit->assertFalse($res, 'extends no postfix');
+$pf->setPackage('PEAR9');
+$pf->setReleaseVersion('10.5.0');
+$res = $val->validate(PEAR_VALIDATE_PACKAGING);
+$phpunit->assertFalse($res, 'attempt 10.5.0 alpha');
+$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
@@ -356,52 +463,15 @@ $phpunit->assertEquals(array (
     0 => 
     array (
       'field' => 'package',
-      'reason' => 'package blah extends package blah and so the name must have a postfix equal to the major version like "blah2"',
+      'reason' => 'package PEAR9 extends package PEAR and so the name must have a postfix equal to the major version like "PEAR10"',
+    ),
+    1 => 
+    array (
+      'field' => 'version',
+      'reason' => 'first version number "10" must match the postfix of package name "PEAR9" (9)',
     ),
   ),
-), $val->getFailures(), 'failures extends no postfix');
-
-$pf->setReleaseVersion('2.0.0');
-$pf->setPackage('blah2');
-$res = $val->validate(PEAR_VALIDATE_NORMAL);
-$phpunit->assertNoErrors('extends good');
-$phpunit->assertTrue($res, 'extends good');
-$phpunit->assertEquals(array (
-  'warnings' => 
-  array (
-  ),
-  'errors' => 
-  array (
-  ),
-), $val->getFailures(), 'no failures');
-
-$pf->setReleaseVersion('20.0.0');
-$pf->setPackage('blah20');
-$res = $val->validate(PEAR_VALIDATE_NORMAL);
-$phpunit->assertNoErrors('extends good');
-$phpunit->assertTrue($res, 'extends good');
-$phpunit->assertEquals(array (
-  'warnings' => 
-  array (
-  ),
-  'errors' => 
-  array (
-  ),
-), $val->getFailures(), 'no failures');
-
-$pf->setReleaseVersion('0.2.5');
-$pf->setPackage('blah2');
-$res = $val->validate(PEAR_VALIDATE_NORMAL);
-$phpunit->assertNoErrors('extends good');
-$phpunit->assertTrue($res, 'extends good');
-$phpunit->assertEquals(array (
-  'warnings' => 
-  array (
-  ),
-  'errors' => 
-  array (
-  ),
-), $val->getFailures(), 'no failures');
+), $val->getFailures(), 'failures attempt 10.5.0 alpha');
 echo 'tests done';
 ?>
 --EXPECT--
