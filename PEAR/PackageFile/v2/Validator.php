@@ -124,7 +124,7 @@ class PEAR_PackageFile_v2_Validator
         if (empty($this->_packageInfo['notes'])) {
             $this->_tagCannotBeEmpty('notes');
         }
-        if (isset($this->_packageInfo['time'])&& empty($this->_packageInfo['time'])) {
+        if (isset($this->_packageInfo['time']) && empty($this->_packageInfo['time'])) {
             $this->_tagCannotBeEmpty('time');
         }
         if (isset($this->_packageInfo['dependencies'])) {
