@@ -167,6 +167,54 @@ class PEAR_PackageFile_v2_Validator
         }
         $this->_validateMaintainers();
         $this->_validateStabilityVersion();
+        $fail = false;
+        if (array_key_exists('usesrole', $this->_packageInfo)) {
+            $roles = $this->_packageInfo['usesrole'];
+            if (!is_array($roles) || !isset($roles[0])) {
+                $roles = array($roles);
+            }
+            foreach ($roles as $role) {
+                if (!isset($role['role'])) {
+                    $this->_usesroletaskMustHaveRoleTask('usesrole');
+                    $fail = true;
+                } else {
+                    if (!isset($role['channel'])) {
+                        if (!isset($role['uri'])) {
+                            $this->_usesroletaskMustHaveChannelOrUri($role['role'], 'usesrole');
+                            $fail = true;
+                        }
+                    } elseif (!isset($role['package'])) {
+                        $this->_usesroletaskMustHavePackage($role['role'], 'usesrole');
+                        $fail = true;
+                    }
+                }
+            }
+        }
+        if (array_key_exists('usestask', $this->_packageInfo)) {
+            $roles = $this->_packageInfo['usestask'];
+            if (!is_array($roles) || !isset($roles[0])) {
+                $roles = array($roles);
+            }
+            foreach ($roles as $role) {
+                if (!isset($role['task'])) {
+                    $this->_usesroletaskMustHaveRoleTask('usestask', 'task');
+                    $fail = true;
+                } else {
+                    if (!isset($role['channel'])) {
+                        if (!isset($role['uri'])) {
+                            $this->_usesroletaskMustHaveChannelOrUri($role['task'], 'usestask');
+                            $fail = true;
+                        }
+                    } elseif (!isset($role['package'])) {
+                        $this->_usesroletaskMustHavePackage($role['task'], 'usestask');
+                        $fail = true;
+                    }
+                }
+            }
+        }
+        if ($fail) {
+            return false;
+        }
         $this->_validateFilelist();
         $this->_validateRelease();
         if (!$this->_stack->hasErrors()) {
@@ -946,6 +994,29 @@ class PEAR_PackageFile_v2_Validator
             {
                 if (isset($file['attribs']) && isset($file['attribs']['role'])) {
                     if (!$this->_validateRole($file['attribs']['role'])) {
+                        if (isset($this->_packageInfo['usesrole'])) {
+                            $roles = $this->_packageInfo['usesrole'];
+                            if (!isset($roles[0])) {
+                                $roles = array($roles);
+                            }
+                            foreach ($roles as $role) {
+                                if ($role['role'] = $file['attribs']['role']) {
+                                    $msg = 'This package contains role "%role%" and requires ' .
+                                        'package "%package%" to be used';
+                                    if (isset($role['uri'])) {
+                                        $params = array('role' => $role['role'],
+                                            'package' => $role['uri']);
+                                    } else {
+                                        $params = array('role' => $role['role'],
+                                            'package' => $this->_pf->_registry->
+                                            parsedPackageNameToString(array('package' =>
+                                                $role['package'], 'channel' => $role['channel']),
+                                                true));
+                                    }
+                                    $this->_stack->push('_mustInstallRole', 'error', $params, $msg);
+                                }
+                            }
+                        }
                         $this->_invalidFileRole($file['attribs']['name'],
                             $dirname, $file['attribs']['role']);
                     }
@@ -972,6 +1043,30 @@ class PEAR_PackageFile_v2_Validator
                                 }
                             }
                         } else {
+                            if (isset($this->_packageInfo['usestask'])) {
+                                $roles = $this->_packageInfo['usestask'];
+                                if (!isset($roles[0])) {
+                                    $roles = array($roles);
+                                }
+                                foreach ($roles as $role) {
+                                    if ($role['task'] = $task) {
+                                        $msg = 'This package contains task "%task%" and requires ' .
+                                            'package "%package%" to be used';
+                                        if (isset($role['uri'])) {
+                                            $params = array('task' => $role['task'],
+                                                'package' => $role['uri']);
+                                        } else {
+                                            $params = array('task' => $role['task'],
+                                                'package' => $this->_pf->_registry->
+                                                parsedPackageNameToString(array('package' =>
+                                                    $role['package'], 'channel' => $role['channel']),
+                                                    true));
+                                        }
+                                        $this->_stack->push('_mustInstallTask', 'error',
+                                            $params, $msg);
+                                    }
+                                }
+                            }
                             $this->_unknownTask($task, $save['name']);
                         }
                     }
@@ -1439,6 +1534,24 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array(),
             'Cannot validate files, no path to package file is set (use setPackageFile())');
+    }
+
+    function usesroletaskMustHaveChannelOrUri($role, $tag)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('role' => $role, 'tag' => $tag),
+            '<%tag%> must contain either <channel> and <package> or <uri>');
+    }
+
+    function usesroletaskMustHavePackage($role, $tag)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('role' => $role, 'tag' => $tag),
+            '<%tag%> must contain <package>');
+    }
+
+    function _usesroletaskMustHaveRoleTask($tag, $type)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('tag' => $tag, 'type' => $type),
+            '<%tag%> must contain <%type%> defining the %type% to be used');
     }
 
     function _analyzeBundledPackages()
