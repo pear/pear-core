@@ -1505,17 +1505,17 @@ class PEAR_Installer extends PEAR_Downloader
             return 0; // neither package has dependencies, order is insignificant
         }
         if ($a->getDeps() && !$b->getDeps()) {
-            return 1; // $a must be installed after $b because $a has dependencies
+            return -1; // $a must be installed after $b because $a has dependencies
         }
         if (!$a->getDeps() && $b->getDeps()) {
-            return -1; // $b must be installed after $a because $b has dependencies
+            return 1; // $b must be installed after $a because $b has dependencies
         }
         // both packages have dependencies
         if ($this->_dependencyDB->dependsOn($a, $b)) {
-            return 1;
+            return -1;
         }
         if ($this->_dependencyDB->dependsOn($b, $a)) {
-            return -1;
+            return 1;
         }
         return 0;
     }
