@@ -547,7 +547,7 @@ $phpunit->assertEquals(array (
   1 =>
   array (
     0 => 0,
-    1 => 'Failed to download smork/Foobar, latest release is version 1.5.0a1, stability "alpha", use "channel://smork/Foobar-1.5.0a1" to install',
+    1 => 'Failed to download smork/Foobar within preferred state "stable", latest release is version 1.5.0a1, stability "alpha", use "channel://smork/Foobar-1.5.0a1" to install',
   ),
   2 =>
   array (

@@ -12,6 +12,115 @@ error_reporting(E_ALL);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $packagexml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' .
     'PEAR_Frontend_Web-0.4.tgz';
+$pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
+  0 => 
+  array (
+    'package' => 'PEAR_Frontend_Web',
+    'channel' => 'pear.php.net',
+    'version' => '0.4',
+  ),
+  1 => 'stable',
+), array (
+  'version' => '0.4',
+  'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0">
+  <name>PEAR_Frontend_Web</name>
+  <summary>HTML (Web) PEAR Package Manager</summary>
+  <description>Web Interface to the PEAR Package Manager</description>
+  <maintainers>
+    <maintainer>
+      <user>dickmann</user>
+      <name>Christian Dickmann</name>
+      <email>dickmann@php.net</email>
+      <role>lead</role>
+    </maintainer>
+    <maintainer>
+      <user>pajoye</user>
+      <name>Pierre-Alain Joye</name>
+      <email>pajoye@pearfr.org</email>
+      <role>lead</role>
+    </maintainer>
+    <maintainer>
+      <user>ssb</user>
+      <name>Stig S?ther Bakken</name>
+      <email>stig@php.net</email>
+      <role>helper</role>
+    </maintainer>
+  </maintainers>
+  <release>
+    <version>0.4</version>
+    <date>2003-06-07</date>
+    <license>PHP License</license>
+    <state>beta</state>
+    <notes>Bugfixes release:
+- Remove Pager dep
+- Should work well on non apache system (ie IIS)
+- The \'installed packages\' is now the entry page
+  (no more remote connection during startup)</notes>
+    <deps>
+      <dep type="pkg" rel="has">Net_UserAgent_Detect</dep>
+      <dep type="pkg" rel="has">HTML_Template_IT</dep>
+    </deps>
+    <filelist>
+      <file role="php" baseinstalldir="PEAR" name="WebInstaller.php"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web.php"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/config.gif"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/download.gif"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/error.gif"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/info.gif"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/infoplus.gif"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/install.gif"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/install_fail.gif"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/install_ok.gif"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/install_wait.gif"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/login.gif"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/logout.gif"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/manual.gif"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/pearsmall.gif"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/trash.gif"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/package.jpg"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/category.jpg"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/pkglist.png"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/pkgsearch.png"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/style.css"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/dhtml.css"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/dhtml.js"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/nodhtml.js"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/bottom.inc.tpl.html"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/error.popup.tpl.html"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/error.tpl.html"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/footer.inc.tpl.html"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/header.inc.tpl.html"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/package.info.tpl.html"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/package.list.tpl.html"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/start.tpl.html"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/top.inc.tpl.html"/>
+      <file role="php" baseinstalldir="PEAR" name="Frontend/Web/userDialog.tpl.html"/>
+      <file role="doc" baseinstalldir="PEAR" name="docs/example.php">
+        <replace from="@php_bin@" to="php_bin" type="pear-config"/>
+        <replace from="@bin_dir@" to="bin_dir" type="pear-config"/>
+        <replace from="@php_dir@" to="php_dir" type="pear-config"/>
+        <replace from="@pear_version@" to="version" type="package-info"/>
+        <replace from="@include_path@" to="php_dir" type="pear-config"/>
+      </file>
+    </filelist>
+  </release>
+  <changelog>
+    <release>
+      <version>0.3</version>
+      <date>2003-05-28</date>
+      <notes>Bugfixes release:
+- Fix a bug while using both CLI and Web installer
+  (Invalid characters, bug #23516)
+- Installs correctly the CLI tools
+
+</notes>
+    </release>
+  </changelog>
+</package>',
+  'url' => 'http://pear.php.net/get/PEAR_Frontend_Web-0.4',
+));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '2.0',
   1 => 
@@ -43,7 +152,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     </maintainer>
     <maintainer>
       <user>ssb</user>
-      <name>Stig Sæther Bakken</name>
+      <name>Stig S?ther Bakken</name>
       <email>stig@php.net</email>
       <role>helper</role>
     </maintainer>
@@ -147,7 +256,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     </maintainer>
     <maintainer>
       <user>ssb</user>
-      <name>Stig Sæther Bakken</name>
+      <name>Stig S?ther Bakken</name>
       <email>stig@php.net</email>
       <role>helper</role>
     </maintainer>
@@ -227,6 +336,97 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   0 => 
   array (
+    'package' => 'PEAR_Frontend_Gtk',
+    'channel' => 'pear.php.net',
+    'version' => '0.3',
+  ),
+  1 => 'stable',
+), array (
+  'version' => '0.3',
+  'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
+<package version="1.0">
+  <name>PEAR_Frontend_Gtk</name>
+  <summary>Gtk (Desktop) PEAR Package Manager</summary>
+  <description>Desktop Interface to the PEAR Package Manager, Requires PHP-GTK</description>
+  <maintainers>
+    <maintainer>
+      <user>alan_k</user>
+      <name>Alan Knowles</name>
+      <email>alan@akbkhome.com</email>
+      <role>lead</role>
+    </maintainer>
+    <maintainer>
+      <user>ssb</user>
+      <name>Stig S?ther Bakken</name>
+      <email>stig@php.net</email>
+      <role>helper</role>
+    </maintainer>
+  </maintainers>
+  <release>
+    <version>0.3</version>
+    <date>2002-07-25</date>
+    <license>PHP License</license>
+    <state>beta</state>
+    <notes>Attempt to fix package file so it installs,
+           some of the warnings have been fixed</notes>
+    <filelist>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="e4be5b3a5263eddc74c2b61e75be9f14" name="Gtk.php"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="43f980e244d7fadd1585a01623fbd915" name="Gtk/Config.php"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="241bca542f590036ad2b7404cfd604e9" name="Gtk/DirSelect.php"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="f32fee8dd69cc8854862347194909e38" name="Gtk/Documentation.php"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="7804108f16ff949e47d43b54bc7456ef" name="Gtk/Info.php"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="5c51ecf48c0929a9c29aa09b7d23c90b" name="Gtk/Install.php"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="aa44455fe0742dd4a8fabb57cd59fb43" name="Gtk/PackageData.php"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="59e0751781f81a05a6ac3d7703459d9e" name="Gtk/Packages.php"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="d31aca89e13ad6d97a150e644bac7d40" name="Gtk/Summary.php"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="0519d8543853cbe45ec1df23a9a9351a" name="Gtk/WidgetHTML.php"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="dc025107b797ce26a50e38359d3bac4c" name="Gtk/installer.glade"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="a65ef13fb4c2080404b465af28f67fe3" name="Gtk/xpm/black_close_icon.xpm"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="bcf01d6ad7db72033b549a71fc300ad0" name="Gtk/xpm/check_no.xpm"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="cf7bb81fd9067efa3a43cb4546610a90" name="Gtk/xpm/check_yes.xpm"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="3d075af534dc7474d30fc5213d38e55d" name="Gtk/xpm/downloading_image.xpm"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="1c0a9cf7ec836d67f090789c7ea51175" name="Gtk/xpm/folder_closed.xpm"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="1c0a9cf7ec836d67f090789c7ea51175" name="Gtk/xpm/folder_open.xpm"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="d2f693edec6a3a72410bbfe2635cca4c" name="Gtk/xpm/info_icon.xpm"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="14b1710cb02528017e352f2c9bb77c79" name="Gtk/xpm/nav_configuration.xpm"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="7a50b5f799249969ebde6aedbce9dbd6" name="Gtk/xpm/nav_documentation.xpm"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="11231b7afd52573bdb7b466e4ae575a4" name="Gtk/xpm/nav_installer.xpm"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="922ab909b15f2eeb85097c341dc9c45a" name="Gtk/xpm/package.xpm"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="195fe43665f08098ae0f59af1a471497" name="Gtk/xpm/pear.xpm"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="81cc4d8580e7a9000f8f151dc56f3769" name="Gtk/xpm/stock_delete-16.xpm"/>
+      <file role="php" baseinstalldir="PEAR/Frontend" md5sum="031b0d5f66e38031d54cd8ae89631cfe" name="Gtk/xpm/stock_delete-outline-16.xpm"/>
+    </filelist>
+  </release>
+  <changelog>
+    <release>
+      <version>0.3</version>
+      <date>2002-07-25</date>
+      <state>beta</state>
+      <notes>Attempt to fix package file so it installs,
+           some of the warnings have been fixed
+</notes>
+    </release>
+    <release>
+      <version>0.2</version>
+      <date>2002-06-16</date>
+      <state>snapshot</state>
+      <notes>Snapshot - First Working Version
+</notes>
+    </release>
+    <release>
+      <version>0.1</version>
+      <date>2002-06-13</date>
+      <state>snapshot</state>
+      <notes>Snapshot - dont expect it to work
+</notes>
+    </release>
+  </changelog>
+</package>',
+  'url' => 'http://pear.php.net/get/PEAR_Frontend_Gtk-0.3',
+));
+$pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
+  0 => 
+  array (
     'package' => 'PEAR_Frontend_Web',
     'channel' => 'pear.php.net',
     'state' => 'beta',
@@ -255,7 +455,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
     </maintainer>
     <maintainer>
       <user>ssb</user>
-      <name>Stig Sæther Bakken</name>
+      <name>Stig S?ther Bakken</name>
       <email>stig@php.net</email>
       <role>helper</role>
     </maintainer>
