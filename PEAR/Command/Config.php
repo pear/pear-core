@@ -290,7 +290,7 @@ and uninstall).
         $root = $params[0];
         // Clean up the DIRECTORY_SEPARATOR mess
         $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
-        $root = preg_replace(array('!\\+!', '!/+!', "!$ds2+!"),
+        $root = preg_replace(array('!\\\\+!', '!/+!', "!$ds2+!"),
                              array('/', '/', '/'),
                             $root);
         if ($root{0} != '/') {
