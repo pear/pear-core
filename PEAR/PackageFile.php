@@ -240,7 +240,7 @@ class PEAR_PackageFile
             $tar->popErrorHandling();
         }
         if (!is_array($content)) {
-            if (!@is_file($file)) {
+            if (is_string($file) && strlen($file < 255) && !@is_file($file)) {
                 $ret = PEAR::raiseError("could not open file \"$file\"");
                 return $ret;
             }
@@ -296,7 +296,8 @@ class PEAR_PackageFile
      */
     function &fromPackageFile($descfile, $state, $archive = false)
     {
-        if (!@is_file($descfile) || !is_readable($descfile) ||
+        if (is_string($descfile) && strlen($descfile) < 255 &&
+             !@is_file($descfile) || !is_readable($descfile) ||
              (!$fp = @fopen($descfile, 'r'))) {
             return PEAR::raiseError("Unable to open $descfile");
         }
@@ -322,7 +323,8 @@ class PEAR_PackageFile
     function &fromAnyFile($info, $state)
     {
         $fp = false;
-        if (is_string($info) && (file_exists($info) || ($fp = @fopen($info, 'r')))) {
+        if (is_string($info) && strlen($info) < 255 &&
+             (file_exists($info) || ($fp = @fopen($info, 'r')))) {
             if ($fp) {
                 fclose($fp);
             }
