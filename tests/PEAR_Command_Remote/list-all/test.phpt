@@ -10,6 +10,22 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(E_ALL);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+$reg = &$config->getRegistry();
+$pf = new PEAR_PackageFile_v1;
+$pf->setConfig($config);
+$pf->setPackage('Archive_Zip');
+$pf->setSummary('foo');
+$pf->setDate(date('Y-m-d'));
+$pf->setDescription('foo');
+$pf->setVersion('1.0.0');
+$pf->setState('stable');
+$pf->setLicense('PHP License');
+$pf->setNotes('foo');
+$pf->addMaintainer('lead', 'cellog', 'Greg', 'cellog@php.net');
+$pf->addFile('', 'foo.dat', array('role' => 'data'));
+$pf->validate();
+$phpunit->assertNoErrors('setup');
+$reg->addPackage2($pf);
 $pearweb->addXmlrpcConfig("empty", "package.listAll",     array(
     0 =>
         true,
@@ -5440,6 +5456,7 @@ $ch->setName('empty');
 $reg->addChannel($ch);
 $e = $command->run('list-all', array(), array());
 $phpunit->assertNoErrors('pear.php.net');
+$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -7291,6 +7308,17 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
+        'Local' => 
+        array (
+          0 => 
+          array (
+            0 => 'pear/Archive_Zip',
+            1 => '',
+            2 => '1.0.0',
+            3 => 'foo',
+            4 => NULL,
+          ),
+        ),
       ),
     ),
     'cmd' => 'list-all',
@@ -7332,7 +7360,6 @@ $phpunit->assertEquals(array (
 ), $fakelog->getLog(), 'smoog log');
 $phpunit->assertNoErrors('smoog');
 $e = $command->run('list-all', array('channel' => 'empty'), array());
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
