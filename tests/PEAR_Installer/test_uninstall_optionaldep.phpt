@@ -39,7 +39,14 @@ $dl = &new PEAR_Installer($fakelog);
 $dl->setUninstallPackages($params);
 $dl->uninstall('foo');
 $phpunit->assertNoErrors('foo');
-$phpunit->assertEquals(array(), $fakelog->getLog(), 'foo');
+$phpunit->assertEquals( array (
+  0 => 
+  array (
+    0 => 'pear/bar (version >= 1.0) can be optionally used by installed package "pear/foo"',
+    1 => true,
+  ),
+ )
+, $fakelog->getLog(), 'foo');
 echo 'tests done';
 ?>
 --EXPECT--
