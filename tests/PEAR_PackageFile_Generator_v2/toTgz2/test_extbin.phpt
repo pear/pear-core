@@ -40,7 +40,6 @@ $pkg = &new PEAR_PackageFile($config);
 $newpf = &$pkg->fromTgzFile($e, PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('errors');
 $xml = $newpf->getFileContents('package.xml');
-$phpunit->showall();
 $phpunit->assertEquals('<?xml version="1.0"?>
 <package packagerversion="' . $generator->getPackagerVersion() . '" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>foo</name>
@@ -70,10 +69,10 @@ multi-line
 release notes</notes>
  <contents>
   <dir name="/">
-   <file baseinstalldir="freeb" md5sum="8332264d2e0e3c3091ebd6d8cee5d3a3" name="sunger/foo.dat" role="data">
+   <file baseinstalldir="freeb" md5sum="ed0384ad29e60110b310a02e95287ee6" name="sunger/foo.dat" role="data">
     <tasks:replace from="@pv@" to="version" type="package-info" />
    </file>
-   <file baseinstalldir="freeb" md5sum="8332264d2e0e3c3091ebd6d8cee5d3a3" name="foo.php" role="ext">
+   <file baseinstalldir="freeb" md5sum="ed0384ad29e60110b310a02e95287ee6" name="foo.php" role="ext">
     <tasks:replace from="@pv@" to="version" type="package-info" />
    </file>
   </dir>

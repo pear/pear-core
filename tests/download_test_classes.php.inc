@@ -161,9 +161,11 @@ class test_PEAR_Remote extends PEAR_Remote {
 
     function call_epi($method)
     {
+        static $norecur = false;
         $args = func_get_args();
         array_shift($args);
-        if ($this->_fakepearweb) {
+        if ($this->_fakepearweb && !$norecur) {
+            $norecur = true;
             $server_channel = $this->config->get('default_channel');
             $channel = $this->_registry->getChannel($server_channel);
             if ($channel) {
@@ -194,31 +196,32 @@ class test_PEAR_Remote extends PEAR_Remote {
             } else {
                 $result = $this->_pearweb->call($server_channel, $method);
             }
-        }/* else {
+            $norecur = false;
+        } else {
             switch (count($args)) {
                 case 0:
-                    $result = parent::call($method);
+                    $result = parent::call_epi($method);
                 break;
                 case 1:
-                    $result = parent::call($method, $args[0]);
+                    $result = parent::call_epi($method, $args[0]);
                 break;
                 case 2:
-                    $result = parent::call($method, $args[0], $args[1]);
+                    $result = parent::call_epi($method, $args[0], $args[1]);
                 break;
                 case 3:
-                    $result = parent::call($method, $args[0], $args[1], $args[2]);
+                    $result = parent::call_epi($method, $args[0], $args[1], $args[2]);
                 break;
                 case 4:
-                    $result = parent::call($method, $args[0], $args[1], $args[2], $args[3]);
+                    $result = parent::call_epi($method, $args[0], $args[1], $args[2], $args[3]);
                 break;
                 case 5:
-                    $result = parent::call($method, $args[0], $args[1], $args[2], $args[3], $args[4]);
+                    $result = parent::call_epi($method, $args[0], $args[1], $args[2], $args[3], $args[4]);
                 break;
                 case 6:
-                    $result = parent::call($method, $args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
+                    $result = parent::call_epi($method, $args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
                 break;
             }
-        }*/
+        }
         if (PEAR::isError($result)) {
             return $result;
         }
