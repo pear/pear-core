@@ -801,9 +801,14 @@ class PEAR_Registry extends PEAR
         if (!$test) {
             return false;
         }
+        $file = $this->_getChannelAliasFileName($this->_getAlias($channel));
+        $test = @unlink($file);
+        if (!$test) {
+            return false;
+        }
         $file = $this->_channelFileName($channel);
         $ret = @unlink($file);
-        return true;
+        return $ret;
     }
 
     // }}}
