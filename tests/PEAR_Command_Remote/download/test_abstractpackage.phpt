@@ -21,36 +21,50 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
     array(array('package' => 'test', 'channel' => 'pear.php.net'), 'stable'),
     array('version' => '1.0',
           'info' =>
-          '<?xml version="1.0" encoding="ISO-8859-1"?>
-<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
-<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
+          '<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0" packagerversion="1.4.0dev13">
  <name>test</name>
  <summary>test</summary>
- <description>test</description>
+ <description>test
+ </description>
  <maintainers>
   <maintainer>
    <user>cellog</user>
-   <role>lead</role>
    <name>Greg Beaver</name>
    <email>cellog@php.net</email>
+   <role>lead</role>
   </maintainer>
- </maintainers>
+  </maintainers>
  <release>
   <version>1.0</version>
-  <date>2004-10-21</date>
+  <date>2004-10-10</date>
   <license>PHP License</license>
   <state>stable</state>
-  <notes>
-Installer Roles/Tasks:
+  <notes>test
   </notes>
   <filelist>
-   <dir name="/">
-    <file name="foo12.php" role="php"/>
-   </dir>
+   <file role="php" baseinstalldir="test" md5sum="31140babf23de55c049f8b56818133eb" name="test/test.php"/>
+   <file role="php" baseinstalldir="test" md5sum="31140babf23de55c049f8b56818133eb" install-as="hi.php" name="test/test2.php"/>
+   <file role="php" baseinstalldir="test" md5sum="31140babf23de55c049f8b56818133eb" platform="windows" install-as="another.php" name="test/test3.php"/>
+   <file role="data" baseinstalldir="test" md5sum="31140babf23de55c049f8b56818133eb" name="test/test4.php">
+    <replace from="@1@" to="version" type="package-info"/>
+    <replace from="@2@" to="data_dir" type="pear-config"/>
+    <replace from="@3@" to="DIRECTORY_SEPARATOR" type="php-const"/>
+   </file>
   </filelist>
  </release>
-</package>
-',
+ <changelog>
+   <release>
+    <version>1.0</version>
+    <date>2004-10-10</date>
+    <license>PHP License</license>
+    <state>stable</state>
+    <notes>test
+    </notes>
+   </release>
+ </changelog>
+</package>',
           'url' => 'http://www.example.com/test-1.0'));
 mkdir($temp_path . DIRECTORY_SEPARATOR . 'bloob');
 chdir($temp_path . DIRECTORY_SEPARATOR . 'bloob');
