@@ -12,16 +12,18 @@ error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'nope',
     $temp_path . DIRECTORY_SEPARATOR . 'nope');
-$phpunit->assertFalse($config->getRegistry(), 'initial user');
+$phpunit->assertFalse($config->getRegistry('user'), 'initial user');
 $phpunit->assertFalse($config->getRegistry('system'), 'initial system');
 
 $reg = &new PEAR_Registry($temp_path);
 $config->setRegistry($reg, 'system');
-$phpunit->assertIsa('PEAR_Registry', $config->getRegistry('user'), 'after system user');
+$phpunit->assertFalse($config->getRegistry('user'), 'after system user');
+$phpunit->assertIsa('PEAR_Registry', $config->getRegistry(), 'after system blank');
 $phpunit->assertIsa('PEAR_Registry', $config->getRegistry('system'), 'after system system');
 
 $reg1 = &new PEAR_Registry($temp_path . DIRECTORY_SEPARATOR . 'php');
 $config->setRegistry($reg1, 'user');
+$phpunit->assertIsa('PEAR_Registry', $config->getRegistry(), 'after user blank');
 $phpunit->assertIsa('PEAR_Registry', $config->getRegistry('user'), 'after user user');
 $phpunit->assertIsa('PEAR_Registry', $config->getRegistry('system'), 'after user system');
 
