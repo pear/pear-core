@@ -13,7 +13,10 @@ error_reporting(E_ALL);
 chdir(dirname(__FILE__));
 include "PEAR/Channelfile.php";
 require_once 'PEAR/ErrorStack.php';
-
+function postprocess($string)
+{
+    return str_replace("\r", "\n", str_replace("\r\n", "\n", $string));
+}
 function logStack($err)
 {
     echo "caught Error Stack error:\n";
@@ -21,1675 +24,963 @@ function logStack($err)
     echo 'code : ' . $err['code'] . "\n";
 }
 PEAR_ErrorStack::setDefaultCallback('logStack');
-echo "test default\n";
 $chf = new PEAR_ChannelFile;
-$chf->fromXmlString('<?xml version="1.0" encoding="ISO-8859-1" ?>
+$chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
 <channel version="1.0">
- <name>PEAR5</name>
-<summary>PEAR packages for PHP 5</summary>
-<server>pear.php.net</server>
-<subchannels>
-<subchannel name="PEAR5.qa">
-<server>qa.pear.php.net</server>
-<summary>Quality Assurance releases of unmaintained packages</summary>
-<deps><dep type="pkg" rel="ge" version="1.4">PEAR</dep>
-<dep type="php" rel="ge" version="5.0.0"/></deps>
-</subchannel>
-<subchannel name="pear.boo">
-<server>boo.pear.php.net</server>
-<summary>booya</summary>
-<deps><dep type="pkg" rel="ge" version="1.5">PEAR</dep>
-<dep type="php" rel="ge" version="5.1.0"/></deps>
-</subchannel>
-</subchannels>
-<deps>
- <dep type="php" rel="ge" version="5.0.0"/>
-</deps>
+ <name>pear</name>
+ <summary>PHP Extension and Application Repository</summary>
+ <protocols>
+  <xmlrpc host="pear.php.net">
+   <function version="1.0">logintest</function>
+   <function version="1.0">package.listLatestReleases</function>
+   <function version="1.0">package.listAll</function>
+   <function version="1.0">package.info</function>
+   <function version="1.0">package.getDownloadURL</function>
+   <function version="1.0">channel.listAll</function>
+   <function version="1.0">channel.update</function>
+  </xmlrpc>
+ </protocols>
 </channel>');
 
 echo "after parsing\n";
-var_dump($chf->validate());
-var_dump($chf->toArray());
-var_dump($chf->toXml());
+if (!$chf->validate()) {
+    echo "test default failed\n";
+    var_export($chf->toArray());
+    var_export($chf->toXml());
+} else {
+    if (var_export($chf->toArray(), true) !=
+    var_export(array (
+  'version' => '1.0',
+  'name' => 'pear',
+  'summary' => 'PHP Extension and Application Repository',
+  'protocols' => array('xmlrpc' => 
+  array (
+    'host' => 'pear.php.net',
+    'functions' => 
+    array (
+      1 => 
+      array (
+        'version' => '1.0',
+        'name' => 'logintest',
+      ),
+      2 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listLatestReleases',
+      ),
+      3 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listAll',
+      ),
+      4 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.info',
+      ),
+      5 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.getDownloadURL',
+      ),
+      6 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.listAll',
+      ),
+      7 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.update',
+      ),
+    )),
+  ),
+), true))
+    {
+        echo "Parsed array of default is not correct\n";
+        var_export($chf->toArray());
+        echo "Expected\n";
+            var_export(array (
+  'version' => '1.0',
+  'name' => 'pear',
+  'summary' => 'PHP Extension and Application Repository',
+  'protocols' => array('xmlrpc' => 
+  array (
+    'host' => 'pear.php.net',
+    'functions' => 
+    array (
+      1 => 
+      array (
+        'version' => '1.0',
+        'name' => 'logintest',
+      ),
+      2 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listLatestReleases',
+      ),
+      3 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listAll',
+      ),
+      4 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.info',
+      ),
+      5 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.getDownloadURL',
+      ),
+      6 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.listAll',
+      ),
+      7 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.update',
+      ),
+    ),
+  ),
+)));
+    } // if toArray() doesn't match
+
+    if (var_export($chf->toXml(), true) !=
+          var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
+<channel version="1.0">
+ <name>pear</name>
+ <summary>PHP Extension and Application Repository</summary>
+ <protocols>
+  <xmlrpc host="pear.php.net">
+   <function version="1.0">logintest</function>
+   <function version="1.0">package.listLatestReleases</function>
+   <function version="1.0">package.listAll</function>
+   <function version="1.0">package.info</function>
+   <function version="1.0">package.getDownloadURL</function>
+   <function version="1.0">channel.listAll</function>
+   <function version="1.0">channel.update</function>
+  </xmlrpc>
+ </protocols>
+</channel>
+'), true)) {
+        echo "Re-generated XML of default is not correct\n";
+        var_export($chf->toXml());
+    } // if toXml() doesn't match
+}
 $chf->fromXmlString($chf->toXml());
 
 echo "after re-parsing\n";
-var_dump($chf->validate());
-var_dump($chf->toArray());
-var_dump($chf->toXml());
-
+if (!$chf->validate()) {
+    echo "test default failed\n";
+    var_export($chf->toArray());
+    var_export($chf->toXml());
+} else {
+    if (var_export($chf->toArray(), true) !=
+    var_export(array (
+  'version' => '1.0',
+  'name' => 'pear',
+  'summary' => 'PHP Extension and Application Repository',
+  'protocols' => array('xmlrpc' => 
+  array (
+    'host' => 'pear.php.net',
+    'functions' => 
+    array (
+      1 => 
+      array (
+        'version' => '1.0',
+        'name' => 'logintest',
+      ),
+      2 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listLatestReleases',
+      ),
+      3 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listAll',
+      ),
+      4 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.info',
+      ),
+      5 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.getDownloadURL',
+      ),
+      6 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.listAll',
+      ),
+      7 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.update',
+      ),
+    ),
+  ),)
+), true))
+    {
+        echo "Parsed re-generated array of default is not correct\n";
+        var_export($chf->toArray());
+        echo "Expected\n";
+            var_export(array (
+  'version' => '1.0',
+  'name' => 'pear',
+  'summary' => 'PHP Extension and Application Repository',
+  'protocols' => array('xmlrpc' => 
+  array (
+    'host' => 'pear.php.net',
+    'functions' => 
+    array (
+      1 => 
+      array (
+        'version' => '1.0',
+        'name' => 'logintest',
+      ),
+      2 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listLatestReleases',
+      ),
+      3 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listAll',
+      ),
+      4 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.info',
+      ),
+      5 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.getDownloadURL',
+      ),
+      6 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.listAll',
+      ),
+      7 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.update',
+      ),
+    ),)
+  ),
+));
+    } // if toArray() doesn't match
+}
 echo "test compatibility\n";
-$chf = new PEAR_ChannelFile(true);
-$chf->fromXmlString('<?xml version="1.0" encoding="ISO-8859-1" ?>
+$chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
 <channel version="1.0">
- <name>PEAR5</name>
-<summary>PEAR packages for PHP 5</summary>
-<server>pear.php.net</server>
-<subchannels>
-<subchannel name="PEAR5.qa">
-<server>qa.pear.php.net</server>
-<summary>Quality Assurance releases of unmaintained packages</summary>
-<deps><dep type="pkg" rel="ge" version="1.4">PEAR</dep>
-<dep type="php" rel="ge" version="5.0.0"/></deps>
-</subchannel>
-<subchannel name="pear.boo">
-<server>boo.pear.php.net</server>
-<summary>booya</summary>
-<deps><dep type="pkg" rel="ge" version="1.5">PEAR</dep>
-<dep type="php" rel="ge" version="5.1.0"/></deps>
-</subchannel>
-</subchannels>
-<deps>
- <dep type="php" rel="ge" version="5.0.0"/>
-</deps>
+ <name>pear</name>
+ <summary>PHP Extension and Application Repository</summary>
+ <protocols>
+  <xmlrpc host="pear.php.net">
+   <function version="1.0">logintest</function>
+   <function version="1.0">package.listLatestReleases</function>
+   <function version="1.0">package.listAll</function>
+   <function version="1.0">package.info</function>
+   <function version="1.0">package.getDownloadURL</function>
+   <function version="1.0">channel.listAll</function>
+   <function version="1.0">channel.update</function>
+  </xmlrpc>
+ </protocols>
 </channel>');
 
-echo "after parsing\n";
-var_dump($chf->validate());
-var_dump($chf->toArray());
-var_dump($chf->toXml());
+echo "after parsing (compatibility)\n";
+if (!$chf->validate()) {
+    echo "test default failed\n";
+    var_export($chf->toArray());
+    var_export($chf->toXml());
+} else {
+    if (var_export($chf->toArray(), true) !=
+    var_export(array (
+  'version' => '1.0',
+  'name' => 'pear',
+  'summary' => 'PHP Extension and Application Repository',
+  'protocols' => array('xmlrpc' => 
+  array (
+    'host' => 'pear.php.net',
+    'functions' => 
+    array (
+      1 => 
+      array (
+        'version' => '1.0',
+        'name' => 'logintest',
+      ),
+      2 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listLatestReleases',
+      ),
+      3 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listAll',
+      ),
+      4 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.info',
+      ),
+      5 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.getDownloadURL',
+      ),
+      6 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.listAll',
+      ),
+      7 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.update',
+      ),
+    ),
+  ),)
+), true))
+    {
+        echo "Parsed array of default is not correct (compatibility)\n";
+        var_export($chf->toArray());
+        echo "Expected\n";
+            var_export(array (
+  'version' => '1.0',
+  'name' => 'pear',
+  'summary' => 'PHP Extension and Application Repository',
+  'protocols' => array('xmlrpc' => 
+  array (
+    'host' => 'pear.php.net',
+    'functions' => 
+    array (
+      1 => 
+      array (
+        'version' => '1.0',
+        'name' => 'logintest',
+      ),
+      2 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listLatestReleases',
+      ),
+      3 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listAll',
+      ),
+      4 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.info',
+      ),
+      5 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.getDownloadURL',
+      ),
+      6 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.listAll',
+      ),
+      7 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.update',
+      ),
+    ),
+  ),)
+));
+    } // if toArray() doesn't match
+
+    if (var_export($chf->toXml(), true) !=
+          var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
+<channel version="1.0">
+ <name>pear</name>
+ <summary>PHP Extension and Application Repository</summary>
+ <protocols>
+  <xmlrpc host="pear.php.net">
+   <function version="1.0">logintest</function>
+   <function version="1.0">package.listLatestReleases</function>
+   <function version="1.0">package.listAll</function>
+   <function version="1.0">package.info</function>
+   <function version="1.0">package.getDownloadURL</function>
+   <function version="1.0">channel.listAll</function>
+   <function version="1.0">channel.update</function>
+  </xmlrpc>
+ </protocols>
+</channel>
+'), true)) {
+        echo "Re-generated XML of default is not correct (compatibility)\n";
+        var_export($chf->toXml());
+    } // if toXml() doesn't match
+}
 $chf->fromXmlString($chf->toXml());
 
 echo "after re-parsing\n";
-var_dump($chf->validate());
-var_dump($chf->toArray());
-var_dump($chf->toXml());
-
+if (!$chf->validate()) {
+    echo "test default failed\n";
+    var_export($chf->toArray());
+    var_export($chf->toXml());
+} else {
+    if (var_export($chf->toArray(), true) !=
+    var_export(array (
+  'version' => '1.0',
+  'name' => 'pear',
+  'summary' => 'PHP Extension and Application Repository',
+  'protocols' => array('xmlrpc' => 
+  array (
+    'host' => 'pear.php.net',
+    'functions' => 
+    array (
+      1 => 
+      array (
+        'version' => '1.0',
+        'name' => 'logintest',
+      ),
+      2 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listLatestReleases',
+      ),
+      3 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listAll',
+      ),
+      4 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.info',
+      ),
+      5 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.getDownloadURL',
+      ),
+      6 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.listAll',
+      ),
+      7 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.update',
+      ),
+    ),
+  ),)
+), true))
+    {
+        echo "Parsed re-generated array of default is not correct (compatibility)\n";
+        var_export($chf->toArray());
+        echo "Expected\n";
+            var_export(array (
+  'version' => '1.0',
+  'name' => 'pear',
+  'summary' => 'PHP Extension and Application Repository',
+  'protocols' => array('xmlrpc' => 
+  array (
+    'host' => 'pear.php.net',
+    'functions' => 
+    array (
+      1 => 
+      array (
+        'version' => '1.0',
+        'name' => 'logintest',
+      ),
+      2 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listLatestReleases',
+      ),
+      3 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listAll',
+      ),
+      4 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.info',
+      ),
+      5 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.getDownloadURL',
+      ),
+      6 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.listAll',
+      ),
+      7 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.update',
+      ),
+    ),
+  ),)
+));
+    } // if toArray() doesn't match
+}
 echo "\ntest add validatepackage\n";
 $chf->setValidationPackage('PEAR_Validate', '1.0');
-var_dump($chf->toArray());
-var_dump($chf->toXml());
+if (var_export($chf->toXml(), true) != var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
+<channel version="1.0">
+ <name>pear</name>
+ <summary>PHP Extension and Application Repository</summary>
+ <validatepackage version="1.0">PEAR_Validate</validatepackage>
+ <protocols>
+  <xmlrpc host="pear.php.net">
+   <function version="1.0">logintest</function>
+   <function version="1.0">package.listLatestReleases</function>
+   <function version="1.0">package.listAll</function>
+   <function version="1.0">package.info</function>
+   <function version="1.0">package.getDownloadURL</function>
+   <function version="1.0">channel.listAll</function>
+   <function version="1.0">channel.update</function>
+  </xmlrpc>
+ </protocols>
+</channel>
+'), true)) {
+    echo "add validatepackage did not match\n";
+    var_dump(var_export($chf->toXml(), true));
+    echo "Expected\n";
+    var_dump(var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
+<channel version="1.0">
+ <name>pear</name>
+ <summary>PHP Extension and Application Repository</summary>
+ <validatepackage version="1.0">PEAR_Validate</validatepackage>
+ <protocols>
+  <xmlrpc host="pear.php.net">
+   <function version="1.0">logintest</function>
+   <function version="1.0">package.listLatestReleases</function>
+   <function version="1.0">package.listAll</function>
+   <function version="1.0">package.info</function>
+   <function version="1.0">package.getDownloadURL</function>
+   <function version="1.0">channel.listAll</function>
+   <function version="1.0">channel.update</function>
+  </xmlrpc>
+ </protocols>
+</channel>
+'), true));
+} // if validatepackage xml is wrong
 $chf->fromXmlString($chf->toXml());
 
 echo "after re-parsing\n";
-var_dump($chf->validate());
-var_dump($chf->toArray());
-var_dump($chf->toXml());
-
+if (!$chf->validate()) {
+    echo "re-parse validatepackage failed\n";
+    var_export($chf->toArray());
+    var_export($chf->toXml());
+} else {
+    if (var_export($chf->toArray(), true) !=
+    var_export(array (
+  'version' => '1.0',
+  'name' => 'pear',
+  'summary' => 'PHP Extension and Application Repository',
+  'validatepackage' =>
+  array (
+    'version' => '1.0',
+    'name' => 'PEAR_Validate',
+  ),
+  'protocols' => array('xmlrpc' => 
+  array (
+    'host' => 'pear.php.net',
+    'functions' => 
+    array (
+      1 => 
+      array (
+        'version' => '1.0',
+        'name' => 'logintest',
+      ),
+      2 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listLatestReleases',
+      ),
+      3 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listAll',
+      ),
+      4 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.info',
+      ),
+      5 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.getDownloadURL',
+      ),
+      6 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.listAll',
+      ),
+      7 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.update',
+      ),
+    ),
+  ),)
+), true))
+    {
+        echo "Parsed array of re-parsed validatepackage is not correct\n";
+        var_export($chf->toArray());
+        echo "Expected\n";
+            var_export(array (
+  'version' => '1.0',
+  'name' => 'pear',
+  'summary' => 'PHP Extension and Application Repository',
+  'validatepackage' =>
+  array (
+    'version' => '1.0',
+    'name' => 'PEAR_Validate',
+  ),
+  'protocols' => array('xmlrpc' => 
+  array (
+    'host' => 'pear.php.net',
+    'functions' => 
+    array (
+      1 => 
+      array (
+        'version' => '1.0',
+        'name' => 'logintest',
+      ),
+      2 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listLatestReleases',
+      ),
+      3 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.listAll',
+      ),
+      4 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.info',
+      ),
+      5 => 
+      array (
+        'version' => '1.0',
+        'name' => 'package.getDownloadURL',
+      ),
+      6 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.listAll',
+      ),
+      7 => 
+      array (
+        'version' => '1.0',
+        'name' => 'channel.update',
+      ),
+    ),
+  ),)
+));
+    } // if toArray() doesn't match
+}
 echo "\ntest add protocols\n";
-$chf->addProtocol('xml-rpc', '1.0', 'package.listall');
-$chf->addProtocol('xml-rpc', '1.0', 'release.list');
-$chf->addProtocol('get', '1.0');
-var_dump($chf->toArray());
-var_dump($chf->toXml());
+$chf->addFunction('xmlrpc', '1.0', 'gronk.dothis');
+$chf->addFunction('soap', '1.0', 'release.list');
+$chf->toXml();
+$chf->getErrors(true);
+$chf->setServer('pear.php.net', 'soap');
+$chf->getErrors(true);
+if (var_export($chf->toXml(), true) != var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
+<channel version="1.0">
+ <name>pear</name>
+ <summary>PHP Extension and Application Repository</summary>
+ <validatepackage version="1.0">PEAR_Validate</validatepackage>
+ <protocols>
+  <xmlrpc host="pear.php.net">
+   <function version="1.0">logintest</function>
+   <function version="1.0">package.listLatestReleases</function>
+   <function version="1.0">package.listAll</function>
+   <function version="1.0">package.info</function>
+   <function version="1.0">package.getDownloadURL</function>
+   <function version="1.0">channel.listAll</function>
+   <function version="1.0">channel.update</function>
+   <function version="1.0">gronk.dothis</function>
+  </xmlrpc>
+  <soap host="pear.php.net">
+   <function version="1.0">release.list</function>
+  </soap>
+ </protocols>
+</channel>
+'), true)) {
+    echo "After adding protocols, xml was incorrect\n";
+    var_export($chf->toXml());
+    echo "\nExpected\n";
+    var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
+<channel version="1.0">
+ <name>pear</name>
+ <summary>PHP Extension and Application Repository</summary>
+ <validatepackage version="1.0">PEAR_Validate</validatepackage>
+ <protocols>
+  <xmlrpc host="pear.php.net">
+   <function version="1.0">logintest</function>
+   <function version="1.0">package.listLatestReleases</function>
+   <function version="1.0">package.listAll</function>
+   <function version="1.0">package.info</function>
+   <function version="1.0">package.getDownloadURL</function>
+   <function version="1.0">channel.listAll</function>
+   <function version="1.0">channel.update</function>
+   <function version="1.0">gronk.dothis</function>
+  </xmlrpc>
+  <soap host="pear.php.net">
+   <function version="1.0">release.list</function>
+  </soap>
+ </protocols>
+</channel>
+'), true);
+} // if toXml() is wrong after adding protocols
 $chf->fromXmlString($chf->toXml());
 
 echo "after re-parsing\n";
-var_dump($chf->validate());
-var_dump($chf->toArray());
-var_dump($chf->toXml());
+if (var_export($chf->toXml(), true) != var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
+<channel version="1.0">
+ <name>pear</name>
+ <summary>PHP Extension and Application Repository</summary>
+ <validatepackage version="1.0">PEAR_Validate</validatepackage>
+ <protocols>
+  <xmlrpc host="pear.php.net">
+   <function version="1.0">logintest</function>
+   <function version="1.0">package.listLatestReleases</function>
+   <function version="1.0">package.listAll</function>
+   <function version="1.0">package.info</function>
+   <function version="1.0">package.getDownloadURL</function>
+   <function version="1.0">channel.listAll</function>
+   <function version="1.0">channel.update</function>
+   <function version="1.0">gronk.dothis</function>
+  </xmlrpc>
+  <soap host="pear.php.net">
+   <function version="1.0">release.list</function>
+  </soap>
+ </protocols>
+</channel>
+'), true)) {
+    echo "After adding protocols, xml was incorrect\n";
+    var_export($chf->toXml());
+    echo "\nExpected\n";
+    var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
+<channel version="1.0">
+ <name>pear</name>
+ <summary>PHP Extension and Application Repository</summary>
+ <validatepackage version="1.0">PEAR_Validate</validatepackage>
+ <protocols>
+  <xmlrpc host="pear.php.net">
+   <function version="1.0">logintest</function>
+   <function version="1.0">package.listLatestReleases</function>
+   <function version="1.0">package.listAll</function>
+   <function version="1.0">package.info</function>
+   <function version="1.0">package.getDownloadURL</function>
+   <function version="1.0">channel.listAll</function>
+   <function version="1.0">channel.update</function>
+   <function version="1.0">gronk.dothis</function>
+  </xmlrpc>
+  <soap host="pear.php.net">
+   <function version="1.0">release.list</function>
+  </soap>
+ </protocols>
+</channel>
+'), true);
+} // if toXml() is wrong after adding protocols (re-parsing)
 
 echo "\ntest add mirror\n";
-$chf->addMirror('server', 'mirror.php.net');
-$chf->addMirrorProtocol('mirror.php.net', 'xml-rpc', '1.0', 'package.listall');
-$chf->addMirrorProtocol('mirror.php.net', 'xml-rpc', '1.0', 'release.list');
-var_dump($chf->toArray());
-var_dump($chf->toXml());
+$chf->addMirror('server', 'us2');
+$chf->setServer('mirror.php.net', 'xmlrpc', 'us2');
+$chf->addMirrorFunction('us2', 'xmlrpc', '1.0', 'package.listAll');
+$chf->addMirrorFunction('us2', 'xmlrpc', '1.0', 'release.list');
+if (var_export($chf->toXml(), true) != var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
+<channel version="1.0">
+ <name>pear</name>
+ <summary>PHP Extension and Application Repository</summary>
+ <validatepackage version="1.0">PEAR_Validate</validatepackage>
+ <protocols>
+  <xmlrpc host="pear.php.net">
+   <function version="1.0">logintest</function>
+   <function version="1.0">package.listLatestReleases</function>
+   <function version="1.0">package.listAll</function>
+   <function version="1.0">package.info</function>
+   <function version="1.0">package.getDownloadURL</function>
+   <function version="1.0">channel.listAll</function>
+   <function version="1.0">channel.update</function>
+   <function version="1.0">gronk.dothis</function>
+  </xmlrpc>
+  <soap host="pear.php.net">
+   <function version="1.0">release.list</function>
+  </soap>
+ </protocols>
+ <mirrors>
+  <mirror type="server" name="us2">
+   <protocols>
+    <xmlrpc host="mirror.php.net">
+     <function version="1.0">package.listAll</function>
+     <function version="1.0">release.list</function>
+    </xmlrpc>
+   </protocols>
+  </mirror>
+ </mirrors>
+</channel>
+'), true)) {
+    echo "Wrong after adding mirror\n";
+    var_export($chf->toXml());
+    echo "\nExpecting\n";
+    var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
+<channel version="1.0">
+ <name>pear</name>
+ <summary>PHP Extension and Application Repository</summary>
+ <validatepackage version="1.0">PEAR_Validate</validatepackage>
+ <protocols>
+  <xmlrpc host="pear.php.net">
+   <function version="1.0">logintest</function>
+   <function version="1.0">package.listLatestReleases</function>
+   <function version="1.0">package.listAll</function>
+   <function version="1.0">package.info</function>
+   <function version="1.0">package.getDownloadURL</function>
+   <function version="1.0">channel.listAll</function>
+   <function version="1.0">channel.update</function>
+   <function version="1.0">gronk.dothis</function>
+  </xmlrpc>
+  <soap host="pear.php.net">
+   <function version="1.0">release.list</function>
+  </soap>
+ </protocols>
+ <mirrors>
+  <mirror type="server" name="us2">
+   <protocols>
+    <xmlrpc host="mirror.php.net">
+     <function version="1.0">package.listAll</function>
+     <function version="1.0">release.list</function>
+    </xmlrpc>
+   </protocols>
+  </mirror>
+ </mirrors>
+</channel>
+'));
+} // wrong xml mirror
 $chf->fromXmlString($chf->toXml());
 
 echo "after re-parsing\n";
-var_dump($chf->validate());
-var_dump($chf->toArray());
-var_dump($chf->toXml());
+if (var_export($chf->toXml(), true) != var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
+<channel version="1.0">
+ <name>pear</name>
+ <summary>PHP Extension and Application Repository</summary>
+ <validatepackage version="1.0">PEAR_Validate</validatepackage>
+ <protocols>
+  <xmlrpc host="pear.php.net">
+   <function version="1.0">logintest</function>
+   <function version="1.0">package.listLatestReleases</function>
+   <function version="1.0">package.listAll</function>
+   <function version="1.0">package.info</function>
+   <function version="1.0">package.getDownloadURL</function>
+   <function version="1.0">channel.listAll</function>
+   <function version="1.0">channel.update</function>
+   <function version="1.0">gronk.dothis</function>
+  </xmlrpc>
+  <soap host="pear.php.net">
+   <function version="1.0">release.list</function>
+  </soap>
+ </protocols>
+ <mirrors>
+  <mirror type="server" name="us2">
+   <protocols>
+    <xmlrpc host="mirror.php.net">
+     <function version="1.0">package.listAll</function>
+     <function version="1.0">release.list</function>
+    </xmlrpc>
+   </protocols>
+  </mirror>
+ </mirrors>
+</channel>
+'), true)) {
+    echo "Wrong after adding mirror (re-parsing)\n";
+    var_export($chf->toXml());
+    echo "\nExpecting\n";
+    var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
+<channel version="1.0">
+ <name>pear</name>
+ <summary>PHP Extension and Application Repository</summary>
+ <validatepackage version="1.0">PEAR_Validate</validatepackage>
+ <protocols>
+  <xmlrpc host="pear.php.net">
+   <function version="1.0">logintest</function>
+   <function version="1.0">package.listLatestReleases</function>
+   <function version="1.0">package.listAll</function>
+   <function version="1.0">package.info</function>
+   <function version="1.0">package.getDownloadURL</function>
+   <function version="1.0">channel.listAll</function>
+   <function version="1.0">channel.update</function>
+   <function version="1.0">gronk.dothis</function>
+  </xmlrpc>
+  <soap host="pear.php.net">
+   <function version="1.0">release.list</function>
+  </soap>
+ </protocols>
+ <mirrors>
+  <mirror type="server" name="us2">
+   <protocols>
+    <xmlrpc host="mirror.php.net">
+     <function version="1.0">package.listAll</function>
+     <function version="1.0">release.list</function>
+    </xmlrpc>
+   </protocols>
+  </mirror>
+ </mirrors>
+</channel>
+'));
+} // wrong xml mirror (after re-parsing)
 ?>
 --EXPECT--
-test default
 after parsing
-bool(true)
-array(7) {
-  ["version"]=>
-  string(3) "1.0"
-  ["name"]=>
-  string(5) "pear5"
-  ["summary"]=>
-  string(23) "PEAR packages for PHP 5"
-  ["server"]=>
-  string(12) "pear.php.net"
-  ["subchannels"]=>
-  array(2) {
-    [1]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear5.qa"
-      ["server"]=>
-      string(15) "qa.pear.php.net"
-      ["summary"]=>
-      string(51) "Quality Assurance releases of unmaintained packages"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.4"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.0.0"
-        }
-      }
-    }
-    [2]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear.boo"
-      ["server"]=>
-      string(16) "boo.pear.php.net"
-      ["summary"]=>
-      string(5) "booya"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.5"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.1.0"
-        }
-      }
-    }
-  }
-  ["release_deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-  ["deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-}
-string(823) "<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/channel-1.0">
-<channel version="1.0">
- <name>pear5</name>
- <summary>PEAR packages for PHP 5</summary>
- <server>pear.php.net</server>
- <subchannels>
-  <subchannel name="pear5.qa" server="qa.pear.php.net">
-   <summary>Quality Assurance releases of unmaintained packages</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.4">PEAR</dep>
-    <dep type="php" rel="ge" version="5.0.0"/>
-   </deps>
-  </subchannel>
-  <subchannel name="pear.boo" server="boo.pear.php.net">
-   <summary>booya</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.5">PEAR</dep>
-    <dep type="php" rel="ge" version="5.1.0"/>
-   </deps>
-  </subchannel>
- </subchannels>
- <deps>
-  <dep type="php" rel="ge" version="5.0.0"/>
- </deps>
-</channel>
-"
 after re-parsing
-bool(true)
-array(7) {
-  ["version"]=>
-  string(3) "1.0"
-  ["name"]=>
-  string(5) "pear5"
-  ["summary"]=>
-  string(23) "PEAR packages for PHP 5"
-  ["server"]=>
-  string(12) "pear.php.net"
-  ["subchannels"]=>
-  array(2) {
-    [1]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear5.qa"
-      ["server"]=>
-      string(15) "qa.pear.php.net"
-      ["summary"]=>
-      string(51) "Quality Assurance releases of unmaintained packages"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.4"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.0.0"
-        }
-      }
-    }
-    [2]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear.boo"
-      ["server"]=>
-      string(16) "boo.pear.php.net"
-      ["summary"]=>
-      string(5) "booya"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.5"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.1.0"
-        }
-      }
-    }
-  }
-  ["release_deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-  ["deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-}
-string(823) "<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/channel-1.0">
-<channel version="1.0">
- <name>pear5</name>
- <summary>PEAR packages for PHP 5</summary>
- <server>pear.php.net</server>
- <subchannels>
-  <subchannel name="pear5.qa" server="qa.pear.php.net">
-   <summary>Quality Assurance releases of unmaintained packages</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.4">PEAR</dep>
-    <dep type="php" rel="ge" version="5.0.0"/>
-   </deps>
-  </subchannel>
-  <subchannel name="pear.boo" server="boo.pear.php.net">
-   <summary>booya</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.5">PEAR</dep>
-    <dep type="php" rel="ge" version="5.1.0"/>
-   </deps>
-  </subchannel>
- </subchannels>
- <deps>
-  <dep type="php" rel="ge" version="5.0.0"/>
- </deps>
-</channel>
-"
 test compatibility
-after parsing
-bool(true)
-array(7) {
-  ["version"]=>
-  string(3) "1.0"
-  ["name"]=>
-  string(5) "pear5"
-  ["summary"]=>
-  string(23) "PEAR packages for PHP 5"
-  ["server"]=>
-  string(12) "pear.php.net"
-  ["subchannels"]=>
-  array(2) {
-    [1]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear5.qa"
-      ["server"]=>
-      string(15) "qa.pear.php.net"
-      ["summary"]=>
-      string(51) "Quality Assurance releases of unmaintained packages"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.4"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.0.0"
-        }
-      }
-    }
-    [2]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear.boo"
-      ["server"]=>
-      string(16) "boo.pear.php.net"
-      ["summary"]=>
-      string(5) "booya"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.5"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.1.0"
-        }
-      }
-    }
-  }
-  ["release_deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-  ["deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-}
-string(823) "<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/channel-1.0">
-<channel version="1.0">
- <name>pear5</name>
- <summary>PEAR packages for PHP 5</summary>
- <server>pear.php.net</server>
- <subchannels>
-  <subchannel name="pear5.qa" server="qa.pear.php.net">
-   <summary>Quality Assurance releases of unmaintained packages</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.4">PEAR</dep>
-    <dep type="php" rel="ge" version="5.0.0"/>
-   </deps>
-  </subchannel>
-  <subchannel name="pear.boo" server="boo.pear.php.net">
-   <summary>booya</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.5">PEAR</dep>
-    <dep type="php" rel="ge" version="5.1.0"/>
-   </deps>
-  </subchannel>
- </subchannels>
- <deps>
-  <dep type="php" rel="ge" version="5.0.0"/>
- </deps>
-</channel>
-"
+after parsing (compatibility)
 after re-parsing
-bool(true)
-array(7) {
-  ["version"]=>
-  string(3) "1.0"
-  ["name"]=>
-  string(5) "pear5"
-  ["summary"]=>
-  string(23) "PEAR packages for PHP 5"
-  ["server"]=>
-  string(12) "pear.php.net"
-  ["subchannels"]=>
-  array(2) {
-    [1]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear5.qa"
-      ["server"]=>
-      string(15) "qa.pear.php.net"
-      ["summary"]=>
-      string(51) "Quality Assurance releases of unmaintained packages"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.4"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.0.0"
-        }
-      }
-    }
-    [2]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear.boo"
-      ["server"]=>
-      string(16) "boo.pear.php.net"
-      ["summary"]=>
-      string(5) "booya"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.5"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.1.0"
-        }
-      }
-    }
-  }
-  ["release_deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-  ["deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-}
-string(823) "<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/channel-1.0">
-<channel version="1.0">
- <name>pear5</name>
- <summary>PEAR packages for PHP 5</summary>
- <server>pear.php.net</server>
- <subchannels>
-  <subchannel name="pear5.qa" server="qa.pear.php.net">
-   <summary>Quality Assurance releases of unmaintained packages</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.4">PEAR</dep>
-    <dep type="php" rel="ge" version="5.0.0"/>
-   </deps>
-  </subchannel>
-  <subchannel name="pear.boo" server="boo.pear.php.net">
-   <summary>booya</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.5">PEAR</dep>
-    <dep type="php" rel="ge" version="5.1.0"/>
-   </deps>
-  </subchannel>
- </subchannels>
- <deps>
-  <dep type="php" rel="ge" version="5.0.0"/>
- </deps>
-</channel>
-"
 
 test add validatepackage
-array(8) {
-  ["version"]=>
-  string(3) "1.0"
-  ["name"]=>
-  string(5) "pear5"
-  ["summary"]=>
-  string(23) "PEAR packages for PHP 5"
-  ["server"]=>
-  string(12) "pear.php.net"
-  ["subchannels"]=>
-  array(2) {
-    [1]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear5.qa"
-      ["server"]=>
-      string(15) "qa.pear.php.net"
-      ["summary"]=>
-      string(51) "Quality Assurance releases of unmaintained packages"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.4"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.0.0"
-        }
-      }
-    }
-    [2]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear.boo"
-      ["server"]=>
-      string(16) "boo.pear.php.net"
-      ["summary"]=>
-      string(5) "booya"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.5"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.1.0"
-        }
-      }
-    }
-  }
-  ["release_deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-  ["deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-  ["validatepackage"]=>
-  array(2) {
-    ["version"]=>
-    string(3) "1.0"
-    ["name"]=>
-    string(13) "PEAR_Validate"
-  }
-}
-string(887) "<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/channel-1.0">
-<channel version="1.0">
- <name>pear5</name>
- <summary>PEAR packages for PHP 5</summary>
- <server>pear.php.net</server>
- <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <subchannels>
-  <subchannel name="pear5.qa" server="qa.pear.php.net">
-   <summary>Quality Assurance releases of unmaintained packages</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.4">PEAR</dep>
-    <dep type="php" rel="ge" version="5.0.0"/>
-   </deps>
-  </subchannel>
-  <subchannel name="pear.boo" server="boo.pear.php.net">
-   <summary>booya</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.5">PEAR</dep>
-    <dep type="php" rel="ge" version="5.1.0"/>
-   </deps>
-  </subchannel>
- </subchannels>
- <deps>
-  <dep type="php" rel="ge" version="5.0.0"/>
- </deps>
-</channel>
-"
 after re-parsing
-bool(true)
-array(8) {
-  ["version"]=>
-  string(3) "1.0"
-  ["name"]=>
-  string(5) "pear5"
-  ["summary"]=>
-  string(23) "PEAR packages for PHP 5"
-  ["server"]=>
-  string(12) "pear.php.net"
-  ["validatepackage"]=>
-  array(2) {
-    ["version"]=>
-    string(3) "1.0"
-    ["name"]=>
-    string(13) "PEAR_Validate"
-  }
-  ["subchannels"]=>
-  array(2) {
-    [1]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear5.qa"
-      ["server"]=>
-      string(15) "qa.pear.php.net"
-      ["summary"]=>
-      string(51) "Quality Assurance releases of unmaintained packages"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.4"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.0.0"
-        }
-      }
-    }
-    [2]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear.boo"
-      ["server"]=>
-      string(16) "boo.pear.php.net"
-      ["summary"]=>
-      string(5) "booya"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.5"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.1.0"
-        }
-      }
-    }
-  }
-  ["release_deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-  ["deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-}
-string(887) "<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/channel-1.0">
-<channel version="1.0">
- <name>pear5</name>
- <summary>PEAR packages for PHP 5</summary>
- <server>pear.php.net</server>
- <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <subchannels>
-  <subchannel name="pear5.qa" server="qa.pear.php.net">
-   <summary>Quality Assurance releases of unmaintained packages</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.4">PEAR</dep>
-    <dep type="php" rel="ge" version="5.0.0"/>
-   </deps>
-  </subchannel>
-  <subchannel name="pear.boo" server="boo.pear.php.net">
-   <summary>booya</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.5">PEAR</dep>
-    <dep type="php" rel="ge" version="5.1.0"/>
-   </deps>
-  </subchannel>
- </subchannels>
- <deps>
-  <dep type="php" rel="ge" version="5.0.0"/>
- </deps>
-</channel>
-"
 
 test add protocols
-array(9) {
-  ["version"]=>
-  string(3) "1.0"
-  ["name"]=>
-  string(5) "pear5"
-  ["summary"]=>
-  string(23) "PEAR packages for PHP 5"
-  ["server"]=>
-  string(12) "pear.php.net"
-  ["validatepackage"]=>
-  array(2) {
-    ["version"]=>
-    string(3) "1.0"
-    ["name"]=>
-    string(13) "PEAR_Validate"
-  }
-  ["subchannels"]=>
-  array(2) {
-    [1]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear5.qa"
-      ["server"]=>
-      string(15) "qa.pear.php.net"
-      ["summary"]=>
-      string(51) "Quality Assurance releases of unmaintained packages"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.4"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.0.0"
-        }
-      }
-    }
-    [2]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear.boo"
-      ["server"]=>
-      string(16) "boo.pear.php.net"
-      ["summary"]=>
-      string(5) "booya"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.5"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.1.0"
-        }
-      }
-    }
-  }
-  ["release_deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-  ["deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-  ["provides"]=>
-  array(3) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(7) "xml-rpc"
-      ["version"]=>
-      string(3) "1.0"
-      ["name"]=>
-      string(15) "package.listall"
-    }
-    [2]=>
-    array(3) {
-      ["type"]=>
-      string(7) "xml-rpc"
-      ["version"]=>
-      string(3) "1.0"
-      ["name"]=>
-      string(12) "release.list"
-    }
-    [3]=>
-    array(2) {
-      ["type"]=>
-      string(3) "get"
-      ["version"]=>
-      string(3) "1.0"
-    }
-  }
-}
-string(1084) "<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/channel-1.0">
-<channel version="1.0">
- <name>pear5</name>
- <summary>PEAR packages for PHP 5</summary>
- <server>pear.php.net</server>
- <provides>
-  <protocol type="xml-rpc" version="1.0">package.listall</protocol>
-  <protocol type="xml-rpc" version="1.0">release.list</protocol>
-  <protocol type="get" version="1.0"/>
- </provides>
- <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <subchannels>
-  <subchannel name="pear5.qa" server="qa.pear.php.net">
-   <summary>Quality Assurance releases of unmaintained packages</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.4">PEAR</dep>
-    <dep type="php" rel="ge" version="5.0.0"/>
-   </deps>
-  </subchannel>
-  <subchannel name="pear.boo" server="boo.pear.php.net">
-   <summary>booya</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.5">PEAR</dep>
-    <dep type="php" rel="ge" version="5.1.0"/>
-   </deps>
-  </subchannel>
- </subchannels>
- <deps>
-  <dep type="php" rel="ge" version="5.0.0"/>
- </deps>
-</channel>
-"
+caught Error Stack error:
+Missing channel server for soap protocol
+code : 10
+caught Error Stack error:
+Cannot generate xml, contents are invalid
+code : 23
 after re-parsing
-bool(true)
-array(9) {
-  ["version"]=>
-  string(3) "1.0"
-  ["name"]=>
-  string(5) "pear5"
-  ["summary"]=>
-  string(23) "PEAR packages for PHP 5"
-  ["server"]=>
-  string(12) "pear.php.net"
-  ["provides"]=>
-  array(3) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(7) "xml-rpc"
-      ["version"]=>
-      string(3) "1.0"
-      ["name"]=>
-      string(15) "package.listall"
-    }
-    [2]=>
-    array(3) {
-      ["type"]=>
-      string(7) "xml-rpc"
-      ["version"]=>
-      string(3) "1.0"
-      ["name"]=>
-      string(12) "release.list"
-    }
-    [3]=>
-    array(2) {
-      ["type"]=>
-      string(3) "get"
-      ["version"]=>
-      string(3) "1.0"
-    }
-  }
-  ["validatepackage"]=>
-  array(2) {
-    ["version"]=>
-    string(3) "1.0"
-    ["name"]=>
-    string(13) "PEAR_Validate"
-  }
-  ["subchannels"]=>
-  array(2) {
-    [1]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear5.qa"
-      ["server"]=>
-      string(15) "qa.pear.php.net"
-      ["summary"]=>
-      string(51) "Quality Assurance releases of unmaintained packages"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.4"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.0.0"
-        }
-      }
-    }
-    [2]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear.boo"
-      ["server"]=>
-      string(16) "boo.pear.php.net"
-      ["summary"]=>
-      string(5) "booya"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.5"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.1.0"
-        }
-      }
-    }
-  }
-  ["release_deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-  ["deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-}
-string(1084) "<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/channel-1.0">
-<channel version="1.0">
- <name>pear5</name>
- <summary>PEAR packages for PHP 5</summary>
- <server>pear.php.net</server>
- <provides>
-  <protocol type="xml-rpc" version="1.0">package.listall</protocol>
-  <protocol type="xml-rpc" version="1.0">release.list</protocol>
-  <protocol type="get" version="1.0"/>
- </provides>
- <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <subchannels>
-  <subchannel name="pear5.qa" server="qa.pear.php.net">
-   <summary>Quality Assurance releases of unmaintained packages</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.4">PEAR</dep>
-    <dep type="php" rel="ge" version="5.0.0"/>
-   </deps>
-  </subchannel>
-  <subchannel name="pear.boo" server="boo.pear.php.net">
-   <summary>booya</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.5">PEAR</dep>
-    <dep type="php" rel="ge" version="5.1.0"/>
-   </deps>
-  </subchannel>
- </subchannels>
- <deps>
-  <dep type="php" rel="ge" version="5.0.0"/>
- </deps>
-</channel>
-"
 
 test add mirror
-array(10) {
-  ["version"]=>
-  string(3) "1.0"
-  ["name"]=>
-  string(5) "pear5"
-  ["summary"]=>
-  string(23) "PEAR packages for PHP 5"
-  ["server"]=>
-  string(12) "pear.php.net"
-  ["provides"]=>
-  array(3) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(7) "xml-rpc"
-      ["version"]=>
-      string(3) "1.0"
-      ["name"]=>
-      string(15) "package.listall"
-    }
-    [2]=>
-    array(3) {
-      ["type"]=>
-      string(7) "xml-rpc"
-      ["version"]=>
-      string(3) "1.0"
-      ["name"]=>
-      string(12) "release.list"
-    }
-    [3]=>
-    array(2) {
-      ["type"]=>
-      string(3) "get"
-      ["version"]=>
-      string(3) "1.0"
-    }
-  }
-  ["validatepackage"]=>
-  array(2) {
-    ["version"]=>
-    string(3) "1.0"
-    ["name"]=>
-    string(13) "PEAR_Validate"
-  }
-  ["subchannels"]=>
-  array(2) {
-    [1]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear5.qa"
-      ["server"]=>
-      string(15) "qa.pear.php.net"
-      ["summary"]=>
-      string(51) "Quality Assurance releases of unmaintained packages"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.4"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.0.0"
-        }
-      }
-    }
-    [2]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear.boo"
-      ["server"]=>
-      string(16) "boo.pear.php.net"
-      ["summary"]=>
-      string(5) "booya"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.5"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.1.0"
-        }
-      }
-    }
-  }
-  ["release_deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-  ["deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-  ["mirrors"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(6) "server"
-      ["name"]=>
-      string(14) "mirror.php.net"
-      ["provides"]=>
-      array(2) {
-        [1]=>
-        array(3) {
-          ["type"]=>
-          string(7) "xml-rpc"
-          ["version"]=>
-          string(3) "1.0"
-          ["name"]=>
-          string(15) "package.listall"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(7) "xml-rpc"
-          ["version"]=>
-          string(3) "1.0"
-          ["name"]=>
-          string(12) "release.list"
-        }
-      }
-    }
-  }
-}
-string(1332) "<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/channel-1.0">
-<channel version="1.0">
- <name>pear5</name>
- <summary>PEAR packages for PHP 5</summary>
- <server>pear.php.net</server>
- <provides>
-  <protocol type="xml-rpc" version="1.0">package.listall</protocol>
-  <protocol type="xml-rpc" version="1.0">release.list</protocol>
-  <protocol type="get" version="1.0"/>
- </provides>
- <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <mirrors>
-  <mirror type="server" name="mirror.php.net">
-   <provides>
-    <protocol type="xml-rpc" version="1.0">package.listall</protocol>
-    <protocol type="xml-rpc" version="1.0">release.list</protocol>
-   </provides>
-  </mirror>
- </mirrors>
- <subchannels>
-  <subchannel name="pear5.qa" server="qa.pear.php.net">
-   <summary>Quality Assurance releases of unmaintained packages</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.4">PEAR</dep>
-    <dep type="php" rel="ge" version="5.0.0"/>
-   </deps>
-  </subchannel>
-  <subchannel name="pear.boo" server="boo.pear.php.net">
-   <summary>booya</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.5">PEAR</dep>
-    <dep type="php" rel="ge" version="5.1.0"/>
-   </deps>
-  </subchannel>
- </subchannels>
- <deps>
-  <dep type="php" rel="ge" version="5.0.0"/>
- </deps>
-</channel>
-"
 after re-parsing
-bool(true)
-array(10) {
-  ["version"]=>
-  string(3) "1.0"
-  ["name"]=>
-  string(5) "pear5"
-  ["summary"]=>
-  string(23) "PEAR packages for PHP 5"
-  ["server"]=>
-  string(12) "pear.php.net"
-  ["provides"]=>
-  array(3) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(7) "xml-rpc"
-      ["version"]=>
-      string(3) "1.0"
-      ["name"]=>
-      string(15) "package.listall"
-    }
-    [2]=>
-    array(3) {
-      ["type"]=>
-      string(7) "xml-rpc"
-      ["version"]=>
-      string(3) "1.0"
-      ["name"]=>
-      string(12) "release.list"
-    }
-    [3]=>
-    array(2) {
-      ["type"]=>
-      string(3) "get"
-      ["version"]=>
-      string(3) "1.0"
-    }
-  }
-  ["validatepackage"]=>
-  array(2) {
-    ["version"]=>
-    string(3) "1.0"
-    ["name"]=>
-    string(13) "PEAR_Validate"
-  }
-  ["mirrors"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(6) "server"
-      ["name"]=>
-      string(14) "mirror.php.net"
-      ["provides"]=>
-      array(2) {
-        [1]=>
-        array(3) {
-          ["type"]=>
-          string(7) "xml-rpc"
-          ["version"]=>
-          string(3) "1.0"
-          ["name"]=>
-          string(15) "package.listall"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(7) "xml-rpc"
-          ["version"]=>
-          string(3) "1.0"
-          ["name"]=>
-          string(12) "release.list"
-        }
-      }
-    }
-  }
-  ["subchannels"]=>
-  array(2) {
-    [1]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear5.qa"
-      ["server"]=>
-      string(15) "qa.pear.php.net"
-      ["summary"]=>
-      string(51) "Quality Assurance releases of unmaintained packages"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.4"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.0.0"
-        }
-      }
-    }
-    [2]=>
-    array(4) {
-      ["name"]=>
-      string(8) "pear.boo"
-      ["server"]=>
-      string(16) "boo.pear.php.net"
-      ["summary"]=>
-      string(5) "booya"
-      ["deps"]=>
-      array(2) {
-        [1]=>
-        array(4) {
-          ["type"]=>
-          string(3) "pkg"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(3) "1.5"
-          ["name"]=>
-          string(4) "PEAR"
-        }
-        [2]=>
-        array(3) {
-          ["type"]=>
-          string(3) "php"
-          ["rel"]=>
-          string(2) "ge"
-          ["version"]=>
-          string(5) "5.1.0"
-        }
-      }
-    }
-  }
-  ["release_deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-  ["deps"]=>
-  array(1) {
-    [1]=>
-    array(3) {
-      ["type"]=>
-      string(3) "php"
-      ["rel"]=>
-      string(2) "ge"
-      ["version"]=>
-      string(5) "5.0.0"
-    }
-  }
-}
-string(1332) "<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/channel-1.0">
-<channel version="1.0">
- <name>pear5</name>
- <summary>PEAR packages for PHP 5</summary>
- <server>pear.php.net</server>
- <provides>
-  <protocol type="xml-rpc" version="1.0">package.listall</protocol>
-  <protocol type="xml-rpc" version="1.0">release.list</protocol>
-  <protocol type="get" version="1.0"/>
- </provides>
- <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <mirrors>
-  <mirror type="server" name="mirror.php.net">
-   <provides>
-    <protocol type="xml-rpc" version="1.0">package.listall</protocol>
-    <protocol type="xml-rpc" version="1.0">release.list</protocol>
-   </provides>
-  </mirror>
- </mirrors>
- <subchannels>
-  <subchannel name="pear5.qa" server="qa.pear.php.net">
-   <summary>Quality Assurance releases of unmaintained packages</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.4">PEAR</dep>
-    <dep type="php" rel="ge" version="5.0.0"/>
-   </deps>
-  </subchannel>
-  <subchannel name="pear.boo" server="boo.pear.php.net">
-   <summary>booya</summary>
-   <deps>
-    <dep type="pkg" rel="ge" version="1.5">PEAR</dep>
-    <dep type="php" rel="ge" version="5.1.0"/>
-   </deps>
-  </subchannel>
- </subchannels>
- <deps>
-  <dep type="php" rel="ge" version="5.0.0"/>
- </deps>
-</channel>
-"
