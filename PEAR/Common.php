@@ -20,6 +20,7 @@
 // $Id$
 
 require_once 'PEAR.php';
+require_once 'PEAR/Frontend.php';
 require_once 'Archive/Tar.php';
 require_once 'System.php';
 require_once 'PEAR/Config.php';
@@ -258,6 +259,10 @@ class PEAR_Common extends PEAR
             if (is_object($this->ui)) {
                 $this->ui->log($msg, $append_crlf);
             } else {
+                $ui = &PEAR_Frontend::singleton();
+                if ($ui) {
+                    $ui->log($msg, $append_crlf);
+                }
                 print "$msg\n";
             }
         }

@@ -301,7 +301,8 @@ class PEAR_PackageFile_v2
                     $attrs['baseinstalldir'] = $baseinstall;
                 }
                 $attrs['name'] = empty($path) ? $name : $path . '/' . $name;
-                $attrs['name'] = preg_replace(array('!\\\\+!', '!/+!'), '/', $attrs['name']);
+                $attrs['name'] = preg_replace(array('!\\\\+!', '!/+!'), array('/', '/'),
+                    $attrs['name']);
                 $file['attribs'] = $attrs;
                 $files[] = $file;
             }
@@ -1174,7 +1175,7 @@ class PEAR_PackageFile_v2
             return false;
         }
         $this->_isValid = 0;
-        $dir = preg_replace(array('!\\\\+!', '!/+!'), '/', $dir);
+        $dir = preg_replace(array('!\\\\+!', '!/+!'), array('/', '/'), $dir);
         if ($dir == '/' || $dir == '') {
             $dir = '';
         } else {
