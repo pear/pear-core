@@ -23,7 +23,7 @@ $ret = $db->rebuildDB();
 $phpunit->assertNoErrors('rebuild');
 $phpunit->assertTrue($ret, 'rebuild ret');
 $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb');
-$contents = implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb'));
+$contents = implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb'));
 $phpunit->assertEquals(array (
   '_version' => '1.0',
   'dependencies' => 
