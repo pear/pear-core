@@ -18,6 +18,7 @@ $subreg = new PEAR_Registry($statedir);
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
 channel pear.php.net:
+channel pecl.php.net:
 dump done
 ', $reg, 'Initial dump is incorrect');
 
@@ -26,6 +27,7 @@ $phpunit->assertRegEquals('dumping registry...
 channel __uri:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
+channel pecl.php.net:
 dump done
 ', $reg, 'After adding pkg1');
 
@@ -34,6 +36,7 @@ $phpunit->assertRegEquals('dumping registry...
 channel __uri:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
+channel pecl.php.net:
 dump done
 ', $subreg, 'After adding pkg1, new registry object');
 
@@ -45,6 +48,7 @@ channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 pkg2: version="2.0" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set
 pkg3: version="3.0" filelist=array(pkg3-1.php[role=php],pkg3-2.php[role=php,baseinstalldir=pkg3]) maintainers="Array" _lastmodified is set
+channel pecl.php.net:
 dump done
 ', $reg, 'after adding pkg2 and pkg3');
 
@@ -57,6 +61,7 @@ channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 pkg2: version="2.1" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set
 pkg3: version="3.0" filelist=array(pkg3-1.php[role=php],pkg3-2.php[role=php,baseinstalldir=pkg3]) maintainers="Array" _lastmodified is set
+channel pecl.php.net:
 dump done
 ', $reg, 'after updating pkg2');
 $phpunit->assertRegEquals('dumping registry...
@@ -65,6 +70,7 @@ channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 pkg2: version="2.1" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set
 pkg3: version="3.0" filelist=array(pkg3-1.php[role=php],pkg3-2.php[role=php,baseinstalldir=pkg3]) maintainers="Array" _lastmodified is set
+channel pecl.php.net:
 dump done
 ', $subreg, 'after updating pkg2, new registry object');
 
@@ -76,6 +82,7 @@ channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 pkg2: version="2.1" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set
 pkg3: version="3.1b1" filelist=array(pkg3-1.php[role=php],pkg3-2.php[role=php,baseinstalldir=pkg3]) maintainers="Array" _lastmodified is set status="beta"
+channel pecl.php.net:
 dump done
 ', $reg, 'after updating pkg3 1');
 
@@ -87,6 +94,7 @@ channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 pkg2: version="2.1" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set
 pkg3: version="3.1b1" filelist=array(pkg3-3.php[role=php,baseinstalldir=pkg3],pkg3-4.php[role=php]) maintainers="Array" _lastmodified is set status="beta"
+channel pecl.php.net:
 dump done
 ', $reg, 'after updating pkg3 2');
 echo "tests done";

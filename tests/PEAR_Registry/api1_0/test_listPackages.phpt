@@ -12,6 +12,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
 channel pear.php.net:
+channel pecl.php.net:
 dump done
 ', $reg, 'Initial dump is incorrect');
 $phpunit->assertEquals(array (
