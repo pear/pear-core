@@ -241,6 +241,18 @@ class test_PEAR_Installer extends PEAR_Installer {
                       "in favor of PEAR_Downloader class", E_USER_WARNING);
         return $ret;
     }
+
+    /**
+     * For simpler unit-testing
+     * @param PEAR_Config
+     * @param int
+     * @param string
+     */
+    function &getPackagefileObject(&$c, $d, $dir)
+    {
+        $a = &new test_PEAR_PackageFile($c, $d, $dir);
+        return $a;
+    }
     
     function downloadHttp($url, &$ui, $save_dir = '.', $callback = null)
     {
@@ -383,6 +395,18 @@ class test_PEAR_Downloader extends PEAR_Downloader {
     {
         parent::PEAR_Downloader($ui, $options, $config);
         $this->_remote = &new test_PEAR_Remote($config);
+    }
+
+    /**
+     * For simpler unit-testing
+     * @param PEAR_Config
+     * @param int
+     * @param string
+     */
+    function &getPackagefileObject(&$c, $d, $dir)
+    {
+        $a = &new test_PEAR_PackageFile($c, $d, $dir);
+        return $a;
     }
     
     function downloadHttp($url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null)
