@@ -181,21 +181,23 @@ class PEAR_Downloader_Package
               || isset($deps['group'])) { // package.xml 2.0
             // get required dependency group
             if (isset($deps['required']['package'])) {
-                if (!isset($deps['required']['package']['attribs'])) {
+                if (isset($deps['required']['package'][0])) {
                     foreach ($deps['required']['package'] as $dep) {
                         $this->_downloadDeps[] =
                             $this->_downloader->_getDepPackageDownloadUrl($dep, $pname);
                     }
                 } else {
                     $this->_downloadDeps[] =
-                        $this->_downloader->_getDepPackageDownloadUrl($dep, $pname);
+                        $this->_downloader->_getDepPackageDownloadUrl($deps['required']['package'],
+                            $pname);
                 }
             }
             // get optional dependency group, if any
             $groupname = $this->getGroup();
             if ($groupname) {
                 if (isset($deps['group'])) {
-                    if (isset($deps['group']['attribs'])) {
+                    if (isset($deps['group']['attribs']) && $deps['group']['attribs']['name'] ==
+                          $groupname) {
                         if (isset($deps['group']['package'])) {
                             if (isset($deps['group']['package']['attribs'])) {
                                 $this->_downloadDeps[] =
@@ -204,11 +206,27 @@ class PEAR_Downloader_Package
                             } else {
                                 foreach ($deps['group']['package'] as $dep) {
                                     $this->_downloader->_getDepPackageDownloadUrl(
-                                        $dep, $pname);
+                                        $deps['group']['package'], $pname);
                                 }
                             }
                         }
                     } else {
+                        foreach ($deps['group'] as $group) {
+                            if ($group['attribs']['name'] == $groupname) {
+                                if (isset($group['package'])) {
+                                    if (isset($group['package']['attribs'])) {
+                                        $this->_downloadDeps[] =
+                                            $this->_downloader->_getDepPackageDownloadUrl(
+                                                $group['package'], $pname);
+                                    } else {
+                                        foreach ($group['package'] as $dep) {
+                                            $this->_downloader->_getDepPackageDownloadUrl(
+                                                $group['package'], $pname);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
