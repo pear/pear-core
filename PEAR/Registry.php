@@ -535,7 +535,7 @@ class PEAR_Registry extends PEAR
             return $this->statedir;
         } else {
             return $this->statedir . DIRECTORY_SEPARATOR . strtolower('.channel.' .
-                str_replace('/', '_', $channel));
+                str_replace('/', '_', $this->_getChannelFromAlias($channel)));
         }
     }
 
