@@ -1,5 +1,5 @@
 --TEST--
-PEAR_PackageFile_Parser_v2_Validator->validate(), compatible tag tests
+PEAR_PackageFile_Parser_v2_Validator->validate(), contents tag tests
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
