@@ -354,7 +354,7 @@ $config->set('preferred_state', 'alpha');
 $res = $command->run('install', array(), array($pathtopackagexml));
 $phpunit->assertNoErrors('after install');
 $phpunit->assertTrue($res, 'result');
-$dl = &$command->getDownloader();
+$dl = &$command->getDownloader(1, array());
 if (OS_WINDOWS) {
     $phpunit->assertEquals(array (
       0 => 
