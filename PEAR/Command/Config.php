@@ -197,7 +197,7 @@ and uninstall).
             return $this->raiseError("config-get expects 1 or 2 parameters");
         } else {
             if (count($params) == 1) {
-                $layer = 'user';
+                $layer = null;
             } else {
                 $layer = $params[1];
             }
