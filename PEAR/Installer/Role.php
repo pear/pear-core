@@ -26,6 +26,7 @@ class PEAR_Installer_Role
     }
 
     /**
+     * @param PEAR_PackageFile_v2
      * @param string role name
      * @param PEAR_Config
      * @return PEAR_Installer_Role_Common
