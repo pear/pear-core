@@ -26,7 +26,7 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'No maintainers found, at least one must be defined'),
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'No files in <filelist> section of package.xml'),
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'No release notes found'),
-    array('package' => 'PEAR_Error', 'message' => 'PEAR_Packagefile_v1::toPackageFile: invalid packagefile'),
+    array('package' => 'PEAR_Error', 'message' => 'PEAR_Packagefile_v1::toPackageFile: invalid package.xml'),
 ), 'bad');
 $phpunit->assertIsa('PEAR_Error', $e, 'error');
 
