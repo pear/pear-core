@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Common::infoFromString test (valid xml, partially empty package.xml 7)
+PEAR_PackageFile_v1->validate() test (valid xml, partially empty package.xml 7)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -14,7 +14,7 @@ if (!function_exists('token_get_all')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 
 $php5 = version_compare(phpversion(), '5.0.0', '>=');
-$ret = $common->infoFromString('<?xml version="1.0" encoding="ISO-8859-1" ?>' .
+$pf = &$parser->parse('<?xml version="1.0" encoding="ISO-8859-1" ?>' .
     '<package version="1.0"><name>test</name><summary>PEAR test</summary>' . 
     '<description>The test</description><license>PHP License</license>  <maintainers>
     <maintainer>
@@ -27,17 +27,15 @@ $ret = $common->infoFromString('<?xml version="1.0" encoding="ISO-8859-1" ?>' .
     <date>2003-11-17</date>
     <state>beta</state>
     <notes>test</notes></release>
-</package>');
+</package>',    
+    'package.xml');
 
+$ret = $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v1',
         'message' => 'No files in <filelist> section of package.xml'),
-    array('package' => 'PEAR_Error',
-        'message' => 'No files in <filelist> section of package.xml'),
-    array('package' => 'PEAR_Error',
-        'message' => 'Parsing of package.xml from file "" failed'),
         ), 'error message');
-$phpunit->assertIsa('PEAR_Error', $ret, 'return');
+$phpunit->assertNotTrue($ret, 'return');
 
 echo 'tests done';
 ?>

@@ -13,7 +13,6 @@ if (!function_exists('token_get_all')) {
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 
-echo "Test invalid XML\n";
 $php5 = version_compare(phpversion(), '5.0.0', '>=');
 $ret = $common->infoFromString('<?xml version="1.0" encoding="ISO-8859-1" ?>' .
     "\n<package version=\"1.0\"><name>test</name></package>");
