@@ -125,9 +125,29 @@ class PEAR_Command
         }
         $class = $GLOBALS['_PEAR_Command_commandlist'][$command];
         if (!class_exists($class)) {
+            require_once $GLOBALS['_PEAR_Command_objects'][$class];
+        }
+        if (!class_exists($class)) {
             return PEAR::raiseError("unknown command `$command'");
         }
         $ui =& PEAR_Command::getFrontendObject();
+        $obj = &new $class($ui, $config);
+        return $obj;
+    }
+
+    // }}}
+    // {{{ & getObject()
+    function getObject($command)
+    {
+        $class = $GLOBALS['_PEAR_Command_commandlist'][$command];
+        if (!class_exists($class)) {
+            require_once $GLOBALS['_PEAR_Command_objects'][$class];
+        }
+        if (!class_exists($class)) {
+            return PEAR::raiseError("unknown command `$command'");
+        }
+        $ui =& PEAR_Command::getFrontendObject();
+        $config = &PEAR_Config::singleton();
         $obj = &new $class($ui, $config);
         return $obj;
     }
@@ -215,40 +235,42 @@ class PEAR_Command
             $GLOBALS['_PEAR_Command_commandlist'] = array();
         }
         while ($entry = readdir($dp)) {
-            if ($entry{0} == '.' || substr($entry, -4) != '.php' || $entry == 'Common.php') {
+            if ($entry{0} == '.' || substr($entry, -4) != '.php' || $entry == 'Common.php' ||
+                  strpos($entry, '-init.php')) {
                 continue;
             }
             $class = "PEAR_Command_".substr($entry, 0, -4);
-            $file = "$dir/$entry";
+            $file = "$dir/" . substr($entry, 0, -4) . '-init.php';
             include_once $file;
             // List of commands
             if (empty($GLOBALS['_PEAR_Command_objects'][$class])) {
-                $GLOBALS['_PEAR_Command_objects'][$class] = &new $class($ui, $config);
+                $GLOBALS['_PEAR_Command_objects'][$class] = "$dir/$entry";
             }
-            $implements = $GLOBALS['_PEAR_Command_objects'][$class]->getCommands();
             foreach ($implements as $command => $desc) {
                 if (isset($GLOBALS['_PEAR_Command_commandlist'][$command])) {
                     return PEAR::raiseError('Command "' . $command . '" already registered in ' .
                         'class "' . $GLOBALS['_PEAR_Command_commandlist'][$command] . '"');
                 }
                 $GLOBALS['_PEAR_Command_commandlist'][$command] = $class;
-                $GLOBALS['_PEAR_Command_commanddesc'][$command] = $desc;
-            }
-            $shortcuts = $GLOBALS['_PEAR_Command_objects'][$class]->getShortcuts();
-            foreach ($shortcuts as $shortcut => $command) {
-                if (isset($GLOBALS['_PEAR_Command_shortcuts'][$shortcut])) {
-                    return PEAR::raiseError('Command shortcut "' . $shortcut . '" already ' .
-                        'registered to command "' . $command . '" in class "' .
-                        $GLOBALS['_PEAR_Command_commandlist'][$command] . '"');
+                $GLOBALS['_PEAR_Command_commanddesc'][$command] = $desc['summary'];
+                if (isset($desc['shortcut'])) {
+                    $shortcut = $desc['shortcut'];
+                    if (isset($GLOBALS['_PEAR_Command_shortcuts'][$shortcut])) {
+                        return PEAR::raiseError('Command shortcut "' . $shortcut . '" already ' .
+                            'registered to command "' . $command . '" in class "' .
+                            $GLOBALS['_PEAR_Command_commandlist'][$command] . '"');
+                    }
+                    $GLOBALS['_PEAR_Command_shortcuts'][$shortcut] = $command;
                 }
-                $GLOBALS['_PEAR_Command_shortcuts'][$shortcut] = $command;
-            }
-            foreach ($GLOBALS['_PEAR_Command_objects'][$class]->getShortcuts() as $oname => $short) {
-                if (isset($short['shortopt']) && strlen($short['shortopt']) > 1) {
-                    return PEAR::raiseError('Option "' . $oname . '" short option "' .
-                        $short['shortopt'] . '" must be ' .
-                        'only 1 character in Command "' . $command . '" in class "' .
-                        $GLOBALS['_PEAR_Command_commandlist'][$command] . '"');
+                if (isset($desc['options'])) {
+                    foreach ($desc['options'] as $oname => $option) {
+                        if (isset($option['shortopt']) && strlen($option['shortopt']) > 1) {
+                            return PEAR::raiseError('Option "' . $oname . '" short option "' .
+                                $option['shortopt'] . '" must be ' .
+                                'only 1 character in Command "' . $command . '" in class "' .
+                                $class . '"');
+                        }
+                    }
                 }
             }
         }
@@ -323,8 +345,7 @@ class PEAR_Command
         if (!isset($GLOBALS['_PEAR_Command_commandlist'][$command])) {
             return null;
         }
-        $class = $GLOBALS['_PEAR_Command_commandlist'][$command];
-        $obj = &$GLOBALS['_PEAR_Command_objects'][$class];
+        $obj = &PEAR_Command::getObject($command);
         return $obj->getGetoptArgs($command, $short_args, $long_args);
     }
 
@@ -367,8 +388,8 @@ class PEAR_Command
             $command = $GLOBALS['_PEAR_Command_shortcuts'][$command];
         }
         if (isset($cmds[$command])) {
-            $class = $cmds[$command];
-            return $GLOBALS['_PEAR_Command_objects'][$class]->getHelp($command);
+            $obj = &PEAR_Command::getObject($command);
+            return $obj->getHelp($command);
         }
         return false;
     }
