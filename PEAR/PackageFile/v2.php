@@ -2715,6 +2715,15 @@ class PEAR_PackageFile_v2
         return $manip;
     }
 
+    function analyzeSourceCode($file, $string = false)
+    {
+        if (!isset($this->_v2Validator)) {
+            include_once 'PEAR/PackageFile/v2/Validator.php';
+            $this->_v2Validator = new PEAR_PackageFile_v2_Validator;
+        }
+        return $this->_v2Validator->analyzeSourceCode($file, $string);
+    }
+
     function validate($state = PEAR_VALIDATE_NORMAL)
     {
         if (!isset($this->_packageInfo) || !is_array($this->_packageInfo)) {
