@@ -751,4 +751,35 @@ class test_PEAR_PackageFile_v2 extends PEAR_PackageFile_v2
         return $z;
     }
 }
+class fake_log
+{
+    var $_log = array();
+    var $_download = array();
+    function log($level, $message)
+    {
+        $this->_log[] = array($level, $message);
+    }
+
+    function _downloadCallback($msg, $params)
+    {
+        if ($msg == 'setup') {
+            $params = 'self';
+        }
+        $this->_download[] = array($msg, $params);
+    }
+
+    function getLog()
+    {
+        $log = $this->_log;
+        $this->_log = array();
+        return $log;
+    }
+
+    function getDownload()
+    {
+        $log = $this->_download;
+        $this->_download = array();
+        return $log;
+    }
+}
 ?>
