@@ -481,15 +481,29 @@ List the files in an installed package.
                 }
             }
         } else {
-            $fp = @fopen($params[0], 'r');
-            if (!$fp) {
-                return $this->raiseError("Cannot open " . $params[0]);
+            if (strpos($params[0], '://')) {
+                $downloader = &$this->getDownloader();
+                require_once 'System.php';
+                $tmpdir = System::mktemp(array('-d'));
+                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                $loc = $downloader->downloadHttp($params[0], $this->ui, $tmpdir);
+                PEAR::staticPopErrorHandling();
+                if (PEAR::isError($loc)) {
+                    return $this->raiseError("Cannot open " . $params[0]);
+                } else {
+                    $contents = implode('', file($loc));
+                }
+            } else {
+                $fp = @fopen($params[0], 'r');
+                if (!$fp) {
+                    return $this->raiseError("Cannot open " . $params[0]);
+                }
+                $contents = '';
+                while (!feof($fp)) {
+                    $contents .= fread($fp, 1024);
+                }
+                fclose($fp);
             }
-            $contents = '';
-            while (!feof($fp)) {
-                $contents .= fread($fp, 1024);
-            }
-            fclose($fp);
             include_once 'PEAR/ChannelFile.php';
             $channel = new PEAR_ChannelFile;
             $channel->fromXmlString($contents);
@@ -521,6 +535,12 @@ List the files in an installed package.
         $this->config->setChannels($reg->listChannels());
         $this->config->writeConfigFile();
         $this->ui->outputData('Update of Channel "' . $channel->getName() . '" succeeded');
+    }
+
+    function &getDownloader()
+    {
+        $a = new PEAR_Downloader($this->ui, array(), $this->config);
+        return $a;
     }
 
     function doAlias($command, $options, $params)
