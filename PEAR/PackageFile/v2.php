@@ -238,6 +238,9 @@ class PEAR_PackageFile_v2
         }
         if ($contents = $this->getContents()) {
             $ret = array();
+            if (!isset($contents['dir']['file'][0])) {
+                $contents['dir']['file'] = array($contents['dir']['file']);
+            }
             foreach ($contents['dir']['file'] as $file) {
                 $name = $file['attribs']['name'];
                 if (!$preserve) {
@@ -878,6 +881,79 @@ http://pear.php.net/dtd/package-2.0.xsd',
     {
         if (isset($this->_packageInfo['dependencies'])) {
             return $this->_packageInfo['dependencies'];
+        }
+        return false;
+    }
+
+    function isSubpackageOf($p)
+    {
+        return $p->isSubpackage($this);
+    }
+
+    /**
+     * Determines whether the passed in package is a subpackage of this package
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     */
+    function isSubpackage($p)
+    {
+        if (isset($this->_packageInfo['dependencies']['required']['subpackage'])) {
+            $sub = $this->_packageInfo['dependencies']['required']['subpackage'];
+            if (!isset($sub[0])) {
+                $sub = array($sub);
+            }
+            foreach ($sub as $dep) {
+                if ($dep['name'] == $p->getPackage()) {
+                    if (isset($dep['channel'])) {
+                        if ($dep['channel'] == $p->getChannel()) {
+                            return true;
+                        }
+                    } else {
+                        return true;
+                    }
+                }
+            }
+        }
+        if (isset($this->_packageInfo['dependencies']['optional']['subpackage'])) {
+            $sub = $this->_packageInfo['dependencies']['optional']['subpackage'];
+            if (!isset($sub[0])) {
+                $sub = array($sub);
+            }
+            foreach ($sub as $dep) {
+                if ($dep['name'] == $p->getPackage()) {
+                    if (isset($dep['channel'])) {
+                        if ($dep['channel'] == $p->getChannel()) {
+                            return true;
+                        }
+                    } else {
+                        return true;
+                    }
+                }
+            }
+        }
+        if (isset($this->_packageInfo['dependencies']['group'])) {
+            $group = $this->_packageInfo['dependencies']['group'];
+            if (!isset($group[0])) {
+                $group = array($group);
+            }
+            foreach ($group as $deps) {
+                if (isset($deps['subpackage'])) {
+                    $sub = $deps['subpackage'];
+                    if (!isset($sub[0])) {
+                        $sub = array($sub);
+                    }
+                    foreach ($sub as $dep) {
+                        if ($dep['name'] == $p->getPackage()) {
+                            if (isset($dep['channel'])) {
+                                if ($dep['channel'] == $p->getChannel()) {
+                                    return true;
+                                }
+                            } else {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
         }
         return false;
     }

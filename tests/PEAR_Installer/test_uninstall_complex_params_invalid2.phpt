@@ -42,9 +42,8 @@ $reg->addPackage2($package);
 $params[] = $reg->getPackage('foo');
 $params[] = $reg->getPackage('bar');
 
-$dl = &new PEAR_Installer($fakelog);
-$dl->setDownloadedPackages($params);
-$dl->uninstall('foo');
+$installer->setDownloadedPackages($params);
+$installer->uninstall('foo');
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' =>
         'channel://pear.php.net/foo cannot be uninstalled, other installed packages depend on this package')
@@ -52,8 +51,8 @@ $phpunit->assertErrors(array(
 $phpunit->assertEquals( array (
   0 => 
   array (
-    0 => 'channel://pear.php.net/foo (version >= 1.0) is required by package "channel://pear.php.net/next"',
-    1 => true,
+    0 => 0,
+    1 => 'channel://pear.php.net/foo (version >= 1.0) is required by package "channel://pear.php.net/next"',
   ),
  ), $fakelog->getLog(), 'foo');
 echo 'tests done';
