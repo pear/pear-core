@@ -20,7 +20,6 @@
  * @since      File available since Release 1.4.0a1
  */
 
-
 /**
  * FTP class used for PEAR's remote installation feature
  * @category   pear
