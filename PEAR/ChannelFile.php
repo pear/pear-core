@@ -1684,7 +1684,7 @@ class PEAR_ChannelFile {
 
     function isIncludeable($path)
     {
-        $possibilities = explode(PATH_SEPARATOR, get_include_path());
+        $possibilities = explode(PATH_SEPARATOR, ini_get('include_path'));
         foreach ($possibilities as $dir) {
             if (file_exists($dir . DIRECTORY_SEPARATOR . $path)
                   && is_readable($dir . DIRECTORY_SEPARATOR . $path)) {
