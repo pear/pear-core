@@ -1323,6 +1323,9 @@ class PEAR_Common extends PEAR
         if (!function_exists("token_get_all")) {
             return false;
         }
+        if (!defined('T_DOC_COMMENT')) {
+            define('T_DOC_COMMENT', T_COMMENT);
+        }
         if (!$fp = @fopen($file, "r")) {
             return false;
         }
@@ -1428,6 +1431,7 @@ class PEAR_Common extends PEAR
                 case T_VARIABLE:
                     $look_for = 0;
                     continue 2;
+                case T_DOC_COMMENT:
                 case T_COMMENT:
                     if (preg_match('!^/\*\*\s!', $data)) {
                         $lastphpdoc = $data;
