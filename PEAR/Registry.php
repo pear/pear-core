@@ -975,7 +975,7 @@ class PEAR_Registry extends PEAR
         if ($ch) {
             return $ch;
         }
-        if (strtolower($channel) = 'pear') {
+        if (strtolower($channel) == 'pear') {
             // the registry is not properly set up, so use defaults
             $pear_channel = new PEAR_ChannelFile;
             $pear_channel->setName('pear');
