@@ -895,7 +895,15 @@ class PEAR_PackageFile_v2_Validator
         }
         $res = $this->_stupidSchemaValidate($struc, $list, $dirname);
         if ($allowignore && $res) {
-            $filelist = $this->_pf->getFilelist();
+            $this->_pf->getFilelist();
+            $fcontents = $this->_pf->getContents();
+            $filelist = array();
+            if (!isset($fcontents['dir']['file'][0])) {
+                $fcontents['dir']['file'] = array($fcontents['dir']['file']);
+            }
+            foreach ($fcontents['dir']['file'] as $file) {
+                $filelist[$file['attribs']['name']] = true;
+            }
             if (isset($list['install'])) {
                 if (!isset($list['install'][0])) {
                     $list['install'] = array($list['install']);
@@ -938,8 +946,11 @@ class PEAR_PackageFile_v2_Validator
                 if (count($file)) { // has tasks
                     foreach ($file as $task => $value) {
                         if ($tagClass = $this->_pf->getTask($task)) {
-                            if (!isset($value[0])) {
+                            if (!is_array($value) || !isset($value[0])) {
                                 $value = array($value);
+                            }
+                            if (!is_array($value)) {
+                                var_dump($value);
                             }
                             foreach ($value as $v) {
                                 $ret = call_user_func(array($tagClass, 'validateXml'),
