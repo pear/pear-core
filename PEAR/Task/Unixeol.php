@@ -26,9 +26,6 @@
 require_once 'PEAR/Task/Common.php';
 /**
  * Implements the unix line endings file task.
- *
- * Note that post-install scripts are handled separately from installation, by the
- * "pear run-scripts" command
  * @category   pear
  * @package    PEAR
  * @author     Greg Beaver <cellog@php.net>
