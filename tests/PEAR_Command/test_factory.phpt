@@ -10,7 +10,6 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-require_once 'PEAR/Frontend/CLI.php';
 PEAR_Command::registerCommands(false, dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fakecommands');
 $err = &PEAR_Command::factory('smogin', $config);
 $phpunit->assertErrors(array(
