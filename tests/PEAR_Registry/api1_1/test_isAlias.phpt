@@ -39,6 +39,12 @@ $ch->setAlias('bar');
 $reg->updateChannel($ch);
 $phpunit->assertFalse($reg->isAlias('foo'), 'foo alias after');
 $phpunit->assertTrue($reg->isAlias('bar'), 'bar alias after');
+// test change of alias to alias that is in use
+$ch->setAlias('pear');
+$reg->updateChannel($ch);
+$phpunit->assertFalse($reg->isAlias('foo'), 'foo alias after pear');
+$phpunit->assertFalse($reg->isAlias('bar'), 'bar alias after pear');
+$phpunit->assertTrue($reg->isAlias('test.test.test'), 'test.test.test alias after pear');
 echo 'tests done';
 ?>
 --EXPECT--
