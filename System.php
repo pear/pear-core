@@ -441,11 +441,17 @@ class System
         } else {
             $path_delim = OS_WINDOWS ? ';' : ':';
         }
-        // Honor safe mode
-        if (!ini_get('safe_mode') || !$path = ini_get('safe_mode_exec_dir')) {
-            $path = getenv('PATH');
+        // full path given
+        if (basename($program) != $program) {
+            $path_elements[] = dirname($program);
+            $program = basename($program);
+        } else {
+            // Honor safe mode
+            if (!ini_get('safe_mode') || !$path = ini_get('safe_mode_exec_dir')) {
+                $path = getenv('PATH');
+            }
+            $path_elements = explode($path_delim, $path);
         }
-        $path_elements = explode($path_delim, $path);
 
         if (OS_WINDOWS) {
             $exe_suffixes = getenv('PATHEXT')
@@ -460,11 +466,6 @@ class System
         } else {
             $exe_suffixes = array('');
             $pear_is_executable = 'is_executable';
-        }
-
-        // full path given
-        if (basename($program) != $program) {
-            return $pear_is_executable($program) ? $program : $fallback;
         }
 
         foreach ($exe_suffixes as $suff) {
