@@ -326,18 +326,18 @@ $phpunit->assertTrue($res, '$val->validate');
 $pf->setReleaseVersion('1.0.4');
 $pf->setReleaseStability('devel');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 1.0.4 devel');
+$phpunit->assertTrue($res, 'attempt 1.0.4 devel');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
       'field' => 'version',
       'reason' => 'packages with devel stability must be < version 1.0.0',
     ),
+  ),
+  'errors' => 
+  array (
   ),
 ), $val->getFailures(), 'failures attempt 1.0.4 devel');
 

@@ -92,6 +92,7 @@ class test_PEAR_Command_Package extends PEAR_Command_Package
 
     function &getPackager()
     {
+        require_once 'PEAR/Packager.php';
         $a = &new PEAR_Packager;
         $a->ui = &$GLOBALS['fakelog'];
         return  $a;

@@ -420,11 +420,16 @@ $phpunit->assertEquals(array (
 
 $pf->setReleaseVersion('1.5.0');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 1.5.0 beta');
+$phpunit->assertTrue($res, 'attempt 1.5.0 beta');
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
     0 => 
+    array (
+      'field' => 'package',
+      'reason' => 'package PEAR2 extends package PEAR and so the name should have a postfix equal to the major version like "PEAR1"',
+    ),
+    1 => 
     array (
       'field' => 'version',
       'reason' => 'first version number "1" must match the postfix of package name "PEAR2" (2)',
@@ -432,22 +437,22 @@ $phpunit->assertEquals(array (
   ),
   'errors' => 
   array (
-    0 => 
-    array (
-      'field' => 'package',
-      'reason' => 'package PEAR2 extends package PEAR and so the name must have a postfix equal to the major version like "PEAR1"',
-    ),
   ),
 ), $val->getFailures(), 'failures attempt 1.5.0 beta');
 
 $pf->setPackage('PEAR9');
 $pf->setReleaseVersion('10.5.0');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 10.5.0 beta');
+$phpunit->assertTrue($res, 'attempt 10.5.0 beta');
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
     0 => 
+    array (
+      'field' => 'package',
+      'reason' => 'package PEAR9 extends package PEAR and so the name should have a postfix equal to the major version like "PEAR10"',
+    ),
+    1 => 
     array (
       'field' => 'version',
       'reason' => 'first version number "10" must match the postfix of package name "PEAR9" (9)',
@@ -455,11 +460,6 @@ $phpunit->assertEquals(array (
   ),
   'errors' => 
   array (
-    0 => 
-    array (
-      'field' => 'package',
-      'reason' => 'package PEAR9 extends package PEAR and so the name must have a postfix equal to the major version like "PEAR10"',
-    ),
   ),
 ), $val->getFailures(), 'failures attempt 10.5.0 beta');
 echo 'tests done';
