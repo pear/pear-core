@@ -14,7 +14,7 @@ $config = new PEAR_Config;
 $config->remove('data_dir');
 $config->remove('bin_dir');
 $config->remove('doc_dir');
-$config->set('php_dir', 'hi');
+$config->set('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'hi');
 $config->set('data_dir', 'hi', 'system');
 $config->set('bin_dir', 'hi');
 $config->set('bin_dir', 'hi', 'system');
