@@ -10,7 +10,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(E_ALL);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pf = new PEAR_PackageFile_v2;
+$pf = new PEAR_PackageFile_v2_rw;
 $pf->setPackagefile(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' . DIRECTORY_SEPARATOR
     . 'package.xml');
 $pf->setConfig($config);

@@ -17,6 +17,8 @@ $pf->flattenFilelist();
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
 $phpunit->assertEquals('pear.php.net', $pf->getChannel(), 'pre-set');
+$pfa = &$pf->getRW();
+$pf = &$pfa;
 $pf->addCompatiblePackage('PEAR', 'pear.php.net', '1.3b3', '1.4.0a1');
 $phpunit->assertEquals(array (
   'name' => 'PEAR',

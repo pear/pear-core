@@ -13,9 +13,9 @@ $dep = &new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php
     'package' => 'foo'), PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('create 1');
 
-require_once 'PEAR/PackageFile/v2.php';
+require_once 'PEAR/PackageFile/v2/rw.php';
 require_once 'PEAR/Downloader.php';
-$package = new PEAR_PackageFile_v2;
+$package = new PEAR_PackageFile_v2_rw;
 $package->setLogger($fakelog);
 $package->setPackage('foo');
 $package->setChannel('pear.php.net');
@@ -39,7 +39,7 @@ $package->setConfig($config);
 $reg = $config->getRegistry();
 $reg->addPackage2($package);
 
-$pkg2 = new PEAR_PackageFile_v2;
+$pkg2 = new PEAR_PackageFile_v2_rw;
 $pkg2->setPackage('bar');
 $pkg2->setChannel('pear.php.net');
 $dl = &new PEAR_Downloader($fakelog, array(), $config);

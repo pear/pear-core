@@ -808,8 +808,8 @@ class test_PEAR_PackageFile extends PEAR_PackageFile
         return 'test_PEAR_PackageFile_v';
     }
 }
-require_once 'PEAR/PackageFile/v2.php';
-class test_PEAR_PackageFile_v2 extends PEAR_PackageFile_v2
+require_once 'PEAR/PackageFile/v2/rw.php';
+class test_PEAR_PackageFile_v2 extends PEAR_PackageFile_v2_rw
 {
     function &getPEARDownloader(&$i, $o, &$c)
     {

@@ -71,7 +71,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
           'url' => 'http://www.example.com/main-1.1'));
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
     array('2.0', array('name' => 'required', 'channel' => 'pear.php.net', 'min' => '1.1'),
-        array('channel' => 'pear.php.net', 'package' => 'main', 'version' => '1.1'), 'stable'),
+        array('channel' => 'pear.php.net', 'package' => 'main', 'version' => '1.1'), 'stable',
+        '1.0'),
     array('version' => '1.1',
           'info' =>
 '<?xml version="1.0"?>

@@ -13,6 +13,8 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_nosummary'. DIRECTORY_SEPARATOR . 'package.xml';
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
+$pfa = &$pf->getRW();
+$pf = &$pfa;
 $pf->validate();
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <package>, found <description> expected one of "extends, summary"'),
@@ -20,6 +22,8 @@ $phpunit->assertErrors(array(
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_nosummary'. DIRECTORY_SEPARATOR . 'package2.xml';
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
+$pfa = &$pf->getRW();
+$pf = &$pfa;
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
 $pf->validate();
 $phpunit->assertErrors(array(

@@ -35,7 +35,7 @@ $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Foobar-1.5.0a1.tgz', 
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
     array('2.0',
          array('name' => 'Bar', 'channel' => 'pear.php.net', 'min' => '1.0.0'),
-         array('channel' => 'pear.php.net', 'package' => 'PEAR1', 'version' => '1.5.0a1'), 'alpha'),
+         array('channel' => 'pear.php.net', 'package' => 'PEAR1', 'version' => '1.5.0a1'), 'alpha', '1.4.0a1'),
     array('version' => '1.5.2',
           'info' =>
           '<?xml version="1.0"?>

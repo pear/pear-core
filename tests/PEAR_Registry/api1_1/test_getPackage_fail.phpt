@@ -41,7 +41,7 @@ $phpunit->assertTrue($ret, 'install of valid package');
 $ret = $reg->getPackage('gromp');
 $phpunit->assertNull($ret, 'gromp');
 
-$pf2 = new PEAR_PackageFile_v2;
+$pf2 = new PEAR_PackageFile_v2_rw;
 $pf2->setConfig($config);
 $pf2->setPackageType('extsrc');
 $pf2->addBinarypackage('foo_win');

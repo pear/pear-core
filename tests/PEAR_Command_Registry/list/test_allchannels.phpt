@@ -70,9 +70,10 @@ $phpunit->assertEquals($actual, $fakelog->getLog(), 'no packages installed');
 
 $reg = &$config->getRegistry();
 $pkg = &new PEAR_PackageFile($config);
-$info = $pkg->fromPackageFile(dirname(__FILE__) . DIRECTORY_SEPARATOR .
+$i = $pkg->fromPackageFile(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     DIRECTORY_SEPARATOR . 'packagefiles' . DIRECTORY_SEPARATOR . 'package2.xml',
     PEAR_VALIDATE_NORMAL);
+$info = &$i->getRW();
 $reg->addPackage2($info);
 require_once 'PEAR/ChannelFile.php';
 $ch = new PEAR_ChannelFile;

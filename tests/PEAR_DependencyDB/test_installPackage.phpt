@@ -130,7 +130,7 @@ $ch->setDefaultPEARProtocols();
 $reg = &$config->getRegistry();
 $reg->addChannel($ch);
 
-$pf = new PEAR_PackageFile_v2;
+$pf = new PEAR_PackageFile_v2_rw;
 $pf->setConfig($config);
 $pf->setAPIStability('stable');
 $pf->setAPIVersion('1.0.0');

@@ -19,7 +19,7 @@ if (PEAR_Registry::apiVersion() != '1.1') {
 <?php
 error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pf2 = new PEAR_PackageFile_v2;
+$pf2 = new PEAR_PackageFile_v2_rw;
 $pf2->setConfig($config);
 $pf2->setPackageType('php');
 $pf2->setPackage('foo');

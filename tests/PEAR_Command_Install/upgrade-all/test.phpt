@@ -1597,6 +1597,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
     'channel' => 'pear.php.net',
   ),
   1 => 'alpha',
+  2 => '1.1.0RC3',
 ), array (
   'version' => '1.1.0RC5',
   'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
@@ -1802,6 +1803,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
     'channel' => 'pear.php.net',
   ),
   1 => 'alpha',
+  2 => '1.1.0',
 ), array (
   'version' => '1.1.1',
   'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
@@ -1935,6 +1937,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
     'channel' => 'pear.php.net',
   ),
   1 => 'alpha',
+  2 => '0.6.1',
 ), array (
   'version' => '0.6.2',
   'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
@@ -2181,6 +2184,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
     'channel' => 'pear.php.net',
   ),
   1 => 'alpha',
+  2 => '0.23.1',
 ), array (
   'version' => '0.25.0',
   'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
@@ -2365,6 +2369,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
     'channel' => 'pear.php.net',
   ),
   1 => 'alpha',
+  2 => '1.2.0RC3',
 ), array (
   'version' => '1.2.0RC6',
   'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
@@ -2549,6 +2554,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'version' => '1.1.0RC5',
   ),
   3 => 'alpha',
+  4 => '1.3.4',
 ), array (
   'version' => '1.3.4',
   'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
@@ -2746,6 +2752,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'version' => '1.1.1',
   ),
   3 => 'alpha',
+  4 => '1.0.5',
 ), array (
   'version' => '1.0.5',
   'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
@@ -2851,6 +2858,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'version' => '0.6.2',
   ),
   3 => 'alpha',
+  4 => '1.3.4',
 ), array (
   'version' => '1.3.4',
   'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
@@ -3049,6 +3057,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'version' => '0.6.2',
   ),
   3 => 'alpha',
+  4 => '1.2.4',
 ), array (
   'version' => '1.2.4',
   'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
@@ -3304,6 +3313,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'version' => '0.6.2',
   ),
   3 => 'alpha',
+  4 => '1.2',
 ), array (
   'version' => '1.2',
   'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>

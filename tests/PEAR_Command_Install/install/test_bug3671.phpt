@@ -641,6 +641,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
     'group' => 'webinstaller',
   ),
   1 => 'alpha',
+  2 => '1.4.0a5',
 ), array (
   'version' => '1.4.0a5',
   'info' => '<?xml version="1.0"?>

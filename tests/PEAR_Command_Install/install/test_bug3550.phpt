@@ -550,6 +550,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'version' => '0.4',
   ),
   3 => 'beta',
+  4 => '2.0.1',
 ), array (
   'version' => '2.0.1',
   'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
@@ -634,6 +635,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'version' => '0.4',
   ),
   3 => 'beta',
+  4 => '1.1',
 ), array (
   'version' => '1.1',
   'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>

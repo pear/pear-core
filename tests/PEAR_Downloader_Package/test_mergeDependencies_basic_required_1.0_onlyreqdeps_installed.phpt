@@ -81,7 +81,8 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
         'package' =>
             "required",
         ),
-        array('channel' => 'pear.php.net', 'package' => 'mainold', 'version' => '1.0'), 'stable'),
+        array('channel' => 'pear.php.net', 'package' => 'mainold', 'version' => '1.0'), 'stable',
+        '1.0'),
     array('version' => '1.1',
           'info' =>
           '<?xml version="1.0" encoding="UTF-8"?>

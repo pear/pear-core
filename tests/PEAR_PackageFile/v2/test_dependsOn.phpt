@@ -9,7 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pf = new PEAR_PackageFile_v2;
+$pf = new PEAR_PackageFile_v2_rw;
 $pf->addPackageDepWithChannel('required', 'test', 'pear.php.net');
 $pf->addPackageDepWithChannel('required', 'PEAR_Server', 'pear.chiaraquartet.net');
 $phpunit->assertTrue($pf->dependsOn('TesT', 'pear.php.net'), 'first test');

@@ -17,6 +17,8 @@ $pf->flattenFilelist();
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
 $phpunit->assertEquals('pear.php.net', $pf->getChannel(), 'pre-set');
+$pfa = &$pf->getRW();
+$pf = &$pfa;
 $pf->clearContents();
 $pf->setPackageType('extsrc');
 $pf->addFile('', 'foo.c', array('role' => 'src'));
