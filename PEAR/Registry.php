@@ -1458,7 +1458,7 @@ class PEAR_Registry extends PEAR
      */
     function &getChannel($channel, $noaliases = false)
     {
-        if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
+        if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
             return $e;
         }
         $ret = &$this->_getChannel($channel, $noaliases);
@@ -1475,7 +1475,7 @@ class PEAR_Registry extends PEAR
      */
     function &getPackage($package, $channel = 'pear.php.net')
     {
-        if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
+        if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
             return $e;
         }
         $pf = &$this->_getPackage($package, $channel);
@@ -1551,7 +1551,7 @@ class PEAR_Registry extends PEAR
     function &getChannels()
     {
         $ret = array();
-        if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
+        if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
             return $e;
         }
         foreach ($this->_listChannels() as $channel) {
