@@ -328,13 +328,9 @@ $pf->setExtends('PEAR');
 $pf->setPackage('PEAR2');
 $pf->setReleaseVersion('2.4.0a1');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 2.4.0a1 stable');
-$phpunit->showall();
+$phpunit->assertTrue($res, 'attempt 2.4.0a1 stable');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
@@ -342,17 +338,16 @@ $phpunit->assertEquals(array (
       'reason' => 'version "2.4.0a1" or any RC/beta/alpha version cannot be stable',
     ),
   ),
+  'errors' => 
+  array (
+  ),
 ), $val->getFailures(), 'failures attempt 2.4.0a1 stable');
 
 $pf->setReleaseVersion('0.4.5');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 0.4.5 stable');
-$phpunit->showall();
+$phpunit->assertTrue($res, 'attempt 0.4.5 stable');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
@@ -360,15 +355,22 @@ $phpunit->assertEquals(array (
       'reason' => 'versions less than 1.0.0 cannot be stable',
     ),
   ),
+  'errors' => 
+  array (
+  ),
 ), $val->getFailures(), 'failures attempt 0.4.5 stable');
 
 $pf->setReleaseVersion('3.0.0');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertFalse($res, 'attempt 3.0.0 stable');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
+    0 => 
+    array (
+      'field' => 'version',
+      'reason' => 'first version number "3" must match the postfix of package name "PEAR2" (2)',
+    ),
   ),
   'errors' => 
   array (
@@ -377,21 +379,20 @@ $phpunit->assertEquals(array (
       'field' => 'package',
       'reason' => 'package PEAR2 extends package PEAR and so the name must have a postfix equal to the major version like "PEAR3"',
     ),
-    1 => 
-    array (
-      'field' => 'version',
-      'reason' => 'first version number "3" must match the postfix of package name "PEAR2" (2)',
-    ),
   ),
 ), $val->getFailures(), 'failures attempt 3.0.0 stable');
 
 $pf->setReleaseVersion('30.0.0');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertFalse($res, 'attempt 30.0.0 stable');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
+    0 => 
+    array (
+      'field' => 'version',
+      'reason' => 'first version number "30" must match the postfix of package name "PEAR2" (2)',
+    ),
   ),
   'errors' => 
   array (
@@ -400,11 +401,6 @@ $phpunit->assertEquals(array (
       'field' => 'package',
       'reason' => 'package PEAR2 extends package PEAR and so the name must have a postfix equal to the major version like "PEAR30"',
     ),
-    1 => 
-    array (
-      'field' => 'version',
-      'reason' => 'first version number "30" must match the postfix of package name "PEAR2" (2)',
-    ),
   ),
 ), $val->getFailures(), 'failures attempt 30.0.0 stable');
 
@@ -412,10 +408,14 @@ $pf->setReleaseVersion('1.0.0');
 $pf->setReleaseStability('stable');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertFalse($res, 'attempt 1.0.0 stable');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
+    0 => 
+    array (
+      'field' => 'version',
+      'reason' => 'first version number "1" must match the postfix of package name "PEAR2" (2)',
+    ),
   ),
   'errors' => 
   array (
@@ -424,11 +424,6 @@ $phpunit->assertEquals(array (
       'field' => 'package',
       'reason' => 'package PEAR2 extends package PEAR and so the name must have a postfix equal to the major version like "PEAR1"',
     ),
-    1 => 
-    array (
-      'field' => 'version',
-      'reason' => 'first version number "1" must match the postfix of package name "PEAR2" (2)',
-    ),
   ),
 ), $val->getFailures(), 'failures attempt 1.0.0 stable');
 
@@ -436,7 +431,6 @@ $pf->setReleaseVersion('2.0.0pl1');
 $pf->setReleaseStability('stable');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 2.0.0pl1 stable');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
@@ -450,7 +444,6 @@ $pf->setPackage('PEAR30');
 $pf->setReleaseVersion('30.3.5');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 30.3.5 stable');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (

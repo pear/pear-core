@@ -326,13 +326,9 @@ $phpunit->assertTrue($res, '$val->validate');
 $pf->setReleaseStability('stable');
 $pf->setReleaseVersion('1.4.0a1');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 1.4.0a1 stable');
-$phpunit->showall();
+$phpunit->assertTrue($res, 'attempt 1.4.0a1 stable');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
@@ -340,17 +336,16 @@ $phpunit->assertEquals(array (
       'reason' => 'version "1.4.0a1" or any RC/beta/alpha version cannot be stable',
     ),
   ),
+  'errors' => 
+  array (
+  ),
 ), $val->getFailures(), 'failures attempt 1.4.0a1 stable');
 
 $pf->setReleaseVersion('0.4.5');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 0.4.5 stable');
-$phpunit->showall();
+$phpunit->assertTrue($res, 'attempt 0.4.5 stable');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
@@ -358,17 +353,16 @@ $phpunit->assertEquals(array (
       'reason' => 'versions less than 1.0.0 cannot be stable',
     ),
   ),
+  'errors' => 
+  array (
+  ),
 ), $val->getFailures(), 'failures attempt 0.4.5 stable');
 
 $pf->setReleaseVersion('2.0.0');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 2.0.0 stable');
-$phpunit->showall();
+$phpunit->assertTrue($res, 'attempt 2.0.0 stable');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
@@ -377,13 +371,15 @@ $phpunit->assertEquals(array (
                   '1 for any package that does not have an <extends> tag',
     ),
   ),
+  'errors' => 
+  array (
+  ),
 ), $val->getFailures(), 'failures attempt 2.0.0 stable');
 
 $pf->setReleaseVersion('1.0.0');
 $pf->setReleaseStability('stable');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 1.0.0 stable');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
@@ -397,7 +393,6 @@ $pf->setReleaseVersion('1.0.0pl1');
 $pf->setReleaseStability('stable');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 1.0.0pl1 stable');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
