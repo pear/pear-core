@@ -786,17 +786,21 @@ class PEAR_PackageFile_v2_Validator
         }
         $required = array('name', 'channel', 'min', 'max', '*exclude');
         foreach ($compat as $package) {
-            $this->_stupidSchemaValidate($required, $package, '<compatible>');
+            $type = '<compatible>';
+            if (isset($package['name'])) {
+                $type .= '<name>' . $package['name'] . '</name>';
+            }
+            $this->_stupidSchemaValidate($required, $package, $type);
             if (isset($package['min'])) {
                 if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
                       $package['min'])) {
-                    $this->_invalidVersion('<compatible><min>', $package['min']);
+                    $this->_invalidVersion(substr($type, 1) . '<min', $package['min']);
                 }
             }
             if (isset($package['max'])) {
                 if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
                       $package['max'])) {
-                    $this->_invalidVersion('<compatible><max>', $package['max']);
+                    $this->_invalidVersion(substr($type, 1) . '<max', $package['max']);
                 }
             }
             if (isset($package['exclude'])) {
@@ -806,7 +810,7 @@ class PEAR_PackageFile_v2_Validator
                 foreach ($package['exclude'] as $exclude) {
                     if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
                           $exclude)) {
-                        $this->_invalidVersion('<compatible><exclude>', $exclude);
+                        $this->_invalidVersion(substr($type, 1) . '<exclude', $exclude);
                     }
                 }
             }
