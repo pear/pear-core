@@ -143,7 +143,8 @@ class PEAR_Packager extends PEAR_Common
             if (file_exists("$pkgdir/CVS/Root")) {
                 $cvsversion = preg_replace('/[^a-z0-9]/i', '_', $pf->getVersion());
                 $cvstag = "RELEASE_$cvsversion";
-                $this->log(1, "Tag the released code with `pear cvstag $pkgfile'");
+                $this->log(1, 'Tag the released code with "pear cvstag ' .
+                    $main->getPackageFile() . '"');
                 $this->log(1, "(or set the CVS tag $cvstag by hand)");
             }
         } else { // this branch is executed for single packagefile packaging
