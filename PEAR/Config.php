@@ -240,7 +240,7 @@ class PEAR_Config extends PEAR
     var $_channelConfigInfo = array(
         'php_dir', 'ext_dir', 'doc_dir', 'bin_dir', 'data_dir',
         'test_dir', 'php_bin', 'username', 'password', 'verbose',
-        'preferred_state', 'umask'
+        'preferred_state', 'umask', 'preferred_mirror',
         );
 
     /**
@@ -292,6 +292,13 @@ class PEAR_Config extends PEAR
             'default' => 'pear.php.net',
             'doc' => 'the default channel to use for all non explicit commands',
             'prompt' => 'Default Channel',
+            'group' => 'Internet Access',
+            ),
+        'preferred_mirror' => array(
+            'type' => 'string',
+            'default' => 'pear.php.net',
+            'doc' => 'the default server or mirror to use for channel actions',
+            'prompt' => 'Default Channel Mirror',
             'group' => 'Internet Access',
             ),
         'remote_config' => array(
@@ -1170,6 +1177,18 @@ class PEAR_Config extends PEAR
                 $this->_lazyChannelSetup($layer);
             }
         }
+        if ($key == 'preferred_mirror') {
+            if ($channel == '__uri') {
+                return false; // can't set the __uri pseudo-channel's mirror
+            }
+            $reg = &$this->getRegistry($layer);
+            if (is_object($reg)) {
+                $chan = &$reg->getChannel($channel ? $channel : 'pear.php.net');
+                if (!$chan->getMirror($value)) {
+                    return false; // mirror does not exist
+                }
+            }
+        }
         if (empty($this->configuration_info[$key])) {
             return false;
         }
@@ -1738,6 +1757,16 @@ class PEAR_Config extends PEAR
     {
         include_once 'PEAR/Remote.php';
         $remote = &new PEAR_Remote($this);
+        return $remote;
+    }
+
+    /**
+     * @return PEAR_REST
+     */
+    function &getREST($ui = null)
+    {
+        include_once 'PEAR/REST.php';
+        $remote = &new PEAR_REST($ui, $this);
         return $remote;
     }
 
