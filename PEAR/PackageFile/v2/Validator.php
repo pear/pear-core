@@ -1396,13 +1396,19 @@ class PEAR_PackageFile_v2_Validator
     function _fileNotFound($file)
     {
         $this->_stack->push(__FUNCTION__, 'error', array('file' => $file),
-            'cannot analyze file "%file%", file not found');
+            'File "%file%" in package.xml does not exist');
     }
 
     function _notInContents($file, $tag)
     {
         $this->_stack->push(__FUNCTION__, 'error', array('file' => $file, 'tag' => $tag),
             '<%tag% name="%file%"> is invalid, file is not in <contents>');
+    }
+
+    function _cannotValidateNoPathSet()
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array(),
+            'Cannot validate files, no path to package file is set (use setPackageFile())');
     }
 
     function _analyzeBundledPackages()
@@ -1428,6 +1434,7 @@ class PEAR_PackageFile_v2_Validator
         foreach ($info as $package) {
             if (!file_exists($dir_prefix . DIRECTORY_SEPARATOR . $package)) {
                 $this->_fileNotFound($dir_prefix . DIRECTORY_SEPARATOR . $package);
+                $this->_isValid = 0;
                 continue;
             }
             call_user_func_array($log, array(1, "Analyzing bundled package $package"));
@@ -1456,6 +1463,7 @@ class PEAR_PackageFile_v2_Validator
             return false;
         }
         if (!isset($this->_pf->_packageFile)) {
+            $this->_cannotValidateNoPathSet();
             return false;
         }
         $dir_prefix = dirname($this->_pf->_packageFile);
@@ -1470,12 +1478,13 @@ class PEAR_PackageFile_v2_Validator
         foreach ($info as $fa) {
             $fa = $fa['attribs'];
             $file = $fa['name'];
+            if (!file_exists($dir_prefix . DIRECTORY_SEPARATOR . $file)) {
+                $this->_fileNotFound($dir_prefix . DIRECTORY_SEPARATOR . $file);
+                $this->_isValid = 0;
+                continue;
+            }
             if (in_array($fa['role'], PEAR_Installer_Role::getPhpRoles()) && $dir_prefix) {
                 call_user_func_array($log, array(1, "Analyzing $file"));
-                if (!file_exists($dir_prefix . DIRECTORY_SEPARATOR . $file)) {
-                    $this->_fileNotFound($dir_prefix . DIRECTORY_SEPARATOR . $file);
-                    continue;
-                }
                 $srcinfo = $this->analyzeSourceCode($dir_prefix . DIRECTORY_SEPARATOR . $file);
                 if ($srcinfo) {
                     $provides = array_merge($provides, $this->_buildProvidesArray($srcinfo));
@@ -1485,7 +1494,7 @@ class PEAR_PackageFile_v2_Validator
         $this->_packageName = $pn = $this->_pf->getPackage();
         $pnl = strlen($pn);
         foreach ($provides as $key => $what) {
-            if (isset($what['explicit'])) {
+            if (isset($what['explicit']) || !$what) {
                 // skip conformance checks if the provides entry is
                 // specified in the package.xml file
                 continue;
@@ -1537,7 +1546,7 @@ class PEAR_PackageFile_v2_Validator
             if (!$fp = @fopen($file, "r")) {
                 return false;
             }
-            $contents = fread($fp, filesize($file));
+            $contents = @fread($fp, filesize($file));
         }
         $tokens = token_get_all($contents);
 /*
