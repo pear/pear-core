@@ -165,36 +165,33 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
 ), array (
   'version' => '1.4.0a1',
   'info' => 
-            '<?xml version="1.0" encoding="ISO-8859-1"?>
-<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
-<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
- <name>APC</name>
- <summary>test</summary>
- <description>test</description>
+            '<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0" packagerversion="1.4.0a1">
+ <name>APC</name>       
+ <summary>APC pear</summary>
+ <description>APC pear
+ </description>
  <maintainers>
   <maintainer>
    <user>cellog</user>
-   <role>lead</role>
    <name>Greg Beaver</name>
    <email>cellog@php.net</email>
+   <role>lead</role>
   </maintainer>
- </maintainers>
+  </maintainers>
  <release>
   <version>1.4.0a1</version>
-  <date>2004-10-21</date>
+  <date>2004-12-31</date>
   <license>PHP License</license>
-  <state>stable</state>
-  <notes>
-Installer Roles/Tasks:
+  <state>alpha</state>
+  <notes>hi
   </notes>
   <filelist>
-   <dir name="/">
-    <file name="foo12.php" role="php"/>
-   </dir>
+   <file role="php" md5sum="ed0384ad29e60110b310a02e95287ee6" name="foo.php"/>
   </filelist>
  </release>
-</package>
-',
+</package>',
   'url' => 'http://pear.php.net/get/APC-1.4.0a1',
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
@@ -207,36 +204,48 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
 ), array (
   'version' => '1.5.0a1',
   'info' => 
-          '<?xml version="1.0" encoding="ISO-8859-1"?>
-<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
-<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
+          '<?xml version="1.0"?>
+<package packagerversion="1.4.0a1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>Archive_Tar</name>
- <summary>test</summary>
- <description>test</description>
- <maintainers>
-  <maintainer>
-   <user>cellog</user>
-   <role>lead</role>
-   <name>Greg Beaver</name>
-   <email>cellog@php.net</email>
-  </maintainer>
- </maintainers>
- <release>
-  <version>1.5.0a1</version>
-  <date>2004-10-21</date>
-  <license>PHP License</license>
-  <state>alpha</state>
-  <notes>
-Installer Roles/Tasks:
-  </notes>
-  <filelist>
-   <dir name="/">
-    <file name="foo12.php" role="php"/>
-   </dir>
-  </filelist>
- </release>
-</package>
-',
+ <channel>pear.php.net</channel>
+ <summary>Archive_Tar</summary>
+ <description>Archive_Tar</description>
+ <lead>
+  <name>Greg Beaver</name>
+  <user>cellog</user>
+  <email>cellog@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2004-12-31</date>
+ <time>18:59:24</time>
+ <version>
+  <release>1.5.0a1</release>
+  <api>1.4.0</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+ <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+ <notes>stuff</notes>
+ <contents>
+  <dir name="/">
+   <file md5sum="ed0384ad29e60110b310a02e95287ee6" name="foo.php" role="php" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.2.0</min>
+    <max>6.0.0</max>
+   </php>
+   <pearinstaller>
+    <min>1.4.0dev13</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+</package>',
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   0 => 
@@ -248,36 +257,48 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
 ), array (
   'version' => '1.5.0a1',
   'info' => 
-          '<?xml version="1.0" encoding="ISO-8859-1"?>
-<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
-<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
+          '<?xml version="1.0"?>
+<package packagerversion="1.4.0a1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>Archive_Tar</name>
- <summary>test</summary>
- <description>test</description>
- <maintainers>
-  <maintainer>
-   <user>cellog</user>
-   <role>lead</role>
-   <name>Greg Beaver</name>
-   <email>cellog@php.net</email>
-  </maintainer>
- </maintainers>
- <release>
-  <version>1.5.0a1</version>
-  <date>2004-10-21</date>
-  <license>PHP License</license>
-  <state>alpha</state>
-  <notes>
-Installer Roles/Tasks:
-  </notes>
-  <filelist>
-   <dir name="/">
-    <file name="foo12.php" role="php"/>
-   </dir>
-  </filelist>
- </release>
-</package>
-',
+ <channel>pear.php.net</channel>
+ <summary>Archive_Tar</summary>
+ <description>Archive_Tar</description>
+ <lead>
+  <name>Greg Beaver</name>
+  <user>cellog</user>
+  <email>cellog@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2004-12-31</date>
+ <time>18:59:24</time>
+ <version>
+  <release>1.5.0a1</release>
+  <api>1.4.0</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+ <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+ <notes>stuff</notes>
+ <contents>
+  <dir name="/">
+   <file md5sum="ed0384ad29e60110b310a02e95287ee6" name="foo.php" role="php" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.2.0</min>
+    <max>6.0.0</max>
+   </php>
+   <pearinstaller>
+    <min>1.4.0dev13</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+</package>',
   'url' => 'http://pear.php.net/get/Archive_Tar-1.5.0a1',
 ));
 
