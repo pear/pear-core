@@ -1116,6 +1116,7 @@ class PEAR_Installer extends PEAR_Downloader
         // }}}
 
         $ret = false;
+        $installphase = 'install';
         // {{{ Register that the package is installed -----------------------
         if (empty($options['upgrade'])) {
             // if 'force' is used, replace the info in registry
@@ -1129,6 +1130,7 @@ class PEAR_Installer extends PEAR_Downloader
                 $ret = $this->_registry->addPackage2($pkg);
             } else {
                 $ret = $this->_registry->updatePackage2($pkg);
+                $installphase = 'upgrade';
             }
         }
         if (!$ret) {
@@ -1138,7 +1140,7 @@ class PEAR_Installer extends PEAR_Downloader
         // }}}
         $this->configSet('default_channel', $savechannel);
         if (PEAR_Task_Common::hasPostinstallTasks()) {
-            PEAR_Task_Common::runPostinstallTasks();
+            PEAR_Task_Common::runPostinstallTasks($installphase);
         }
         return $pkg->toArray(true);
     }
