@@ -247,6 +247,10 @@ define('PEAR_PACKAGEFILE_ERROR_PHP5', 46);
 define('PEAR_PACKAGEFILE_ERROR_FILE_NOTFOUND', 47);
 
 /**
+ * Error code when a <dep type="php" rel="not"... is encountered (use rel="ne")
+ */
+define('PEAR_PACKAGEFILE_PHP_NO_NOT', 48);
+/**
  * package.xml encapsulator
  * @package PEAR
  * @author Greg Beaver
@@ -338,7 +342,7 @@ class PEAR_PackageFile_v1
 
     function setLogger(&$logger)
     {
-        if (!is_object($logger) || !method_exists($logger, 'log')) {
+        if ($logger && (!is_object($logger) || !method_exists($logger, 'log'))) {
             return PEAR::raiseError('Logger must be compatible with PEAR_Common::log');
         }
         $this->_logger = &$logger;
@@ -888,9 +892,15 @@ class PEAR_PackageFile_v1
                 PEAR_PACKAGEFILE_ERROR_NO_DEPTYPE =>
                     'Dependency %index% has no type',
                 PEAR_PACKAGEFILE_ERROR_NO_DEPVERSION =>
-                    'Dependency %index% is not a rel="has" dependency, and has no version',
+                    'Dependency %index% is not a rel="has" or rel="not" dependency, ' .
+                        'and has no version',
+                PEAR_PACKAGEFILE_ERROR_DEPVERSION_IGNORED =>
+                    'Dependency %index% is a rel="%rel%" dependency, versioning is ignored',
                 PEAR_PACKAGEFILE_ERROR_INVALID_DEPOPTIONAL =>
                     'Dependency %index% has invalid optional value "%opt%", should be yes or no',
+                PEAR_PACKAGEFILE_PHP_NO_NOT =>
+                    'Dependency %index%: php dependencies cannot use "not" rel, use "ne"' .
+                        ' to exclude specific versions',
                 PEAR_PACKAGEFILE_ERROR_NO_CONFNAME =>
                     'Configure Option %index% has no name',
                 PEAR_PACKAGEFILE_ERROR_NO_CONFPROMPT =>
@@ -1003,18 +1013,22 @@ class PEAR_PackageFile_v1
                             array('index' => $i, 'opt' => $d['optional']));
                     }
                 }
-                if ($d['rel'] != 'has' && empty($d['version'])) {
+                if ($d['rel'] != 'has' && $d['rel'] != 'not' && empty($d['version'])) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_DEPVERSION,
                         array('index' => $i));
-                } elseif ($d['rel'] == 'has' && !empty($d['version'])) {
+                } elseif (($d['rel'] == 'has' || $d['rel'] == 'not') && !empty($d['version'])) {
                     $this->_validateWarning(PEAR_PACKAGEFILE_ERROR_DEPVERSION_IGNORED,
-                        array('index' => $i, 'version' => $d['version']));
+                        array('index' => $i, 'rel' => $de['rel']));
                 }
                 if ($d['type'] == 'php' && !empty($d['name'])) {
                     $this->_validateWarning(PEAR_PACKAGEFILE_ERROR_DEPNAME_IGNORED,
                         array('index' => $i, 'name' => $d['name']));
                 } elseif ($d['type'] != 'php' && empty($d['name'])) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_DEPNAME,
+                        array('index' => $i));
+                }
+                if (($d['rel'] == 'not') && ($d['type'] == 'php')) {
+                    $this->_validateError(PEAR_PACKAGEFILE_PHP_NO_NOT,
                         array('index' => $i));
                 }
                 $i++;
@@ -1082,17 +1096,18 @@ class PEAR_PackageFile_v1
             return false;
         }
         $dir_prefix = dirname($this->_packageFile);
+        $common = new PEAR_Common;
         $log = isset($this->_logger) ? array(&$this->_logger, 'log') :
-            array('PEAR_Common', 'log');
+            array($common, 'log');
         $info = $this->getFilelist();
         foreach ($info as $file => $fa) {
+            if (!file_exists($dir_prefix . DIRECTORY_SEPARATOR . $file)) {
+                $this->_validateError(PEAR_PACKAGEFILE_ERROR_FILE_NOTFOUND,
+                    array('file' => realpath($dir_prefix) . DIRECTORY_SEPARATOR . $file));
+                continue;
+            }
             if ($fa['role'] == 'php' && $dir_prefix) {
                 call_user_func_array($log, array(1, "Analyzing $file"));
-                if (!file_exists($dir_prefix . DIRECTORY_SEPARATOR . $file)) {
-                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_FILE_NOTFOUND,
-                        array('file' => realpath($dir_prefix) . DIRECTORY_SEPARATOR . $file));
-                    continue;
-                }
                 $srcinfo = $this->_analyzeSourceCode($dir_prefix . DIRECTORY_SEPARATOR . $file);
                 if ($srcinfo) {
                     $this->_buildProvidesArray($srcinfo);
