@@ -27,6 +27,14 @@ $e = $command->run('channel-delete', array(), array('pear.php.net'));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => 'Cannot delete the pear.php.net channel'),
 ), 'pear.php.net');
+$e = $command->run('channel-delete', array(), array('pecl'));
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' => 'Cannot delete the pecl.php.net channel'),
+), 'pear.php.net');
+$e = $command->run('channel-delete', array(), array('pecl.php.net'));
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' => 'Cannot delete the pecl.php.net channel'),
+), 'pear.php.net');
 $e = $command->run('channel-delete', array(), array('__uri'));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => 'Cannot delete the __uri pseudo-channel'),

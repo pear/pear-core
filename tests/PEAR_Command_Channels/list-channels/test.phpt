@@ -34,6 +34,11 @@ $phpunit->assertEquals(array (
         ),
         1 => 
         array (
+          0 => 'pecl.php.net',
+          1 => 'PHP Extension Community Library',
+        ),
+        2 => 
+        array (
           0 => '__uri',
           1 => 'Pseudo-channel for static packages',
         ),
@@ -75,7 +80,12 @@ $phpunit->assertEquals(array (
           0 => 'pear.php.net',
           1 => 'PHP Extension and Application Repository',
         ),
-        2 => 
+        2 =>
+        array (
+          0 => 'pecl.php.net',
+          1 => 'PHP Extension Community Library',
+        ),
+        3 => 
         array (
           0 => '__uri',
           1 => 'Pseudo-channel for static packages',

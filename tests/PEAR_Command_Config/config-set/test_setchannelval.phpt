@@ -41,7 +41,8 @@ $configinfo = array('master_server' => $server,
     'doc_dir' => $temp_path . DIRECTORY_SEPARATOR . 'doc',
     'test_dir' => $temp_path . DIRECTORY_SEPARATOR . 'test',
     'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',
-    '__channels' => array('__uri' => array('php_dir' => $temp_path . DIRECTORY_SEPARATOR . 'poo')));
+    '__channels' => array('pecl.php.net' => array(),
+        '__uri' => array('php_dir' => $temp_path . DIRECTORY_SEPARATOR . 'poo')));
 
 $info = explode("\n", implode('', file($temp_path . DIRECTORY_SEPARATOR . 'pear.ini')));
 $info = unserialize($info[1]);
