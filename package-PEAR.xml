@@ -47,11 +47,15 @@
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.0dev12</version>
-  <date>2004-09-24</date>
+  <version>1.4.0dev13</version>
+  <date>2004-09-30</date>
   <license>PHP License</license>
   <state>devel</state>
   <notes>
+Installer Roles/Tasks:
+
+ * package.xml 2.0 uses a command pattern, allowing extensibility
+
 Installer Dependency Support:
 
  * package.xml 2.0 has continued to improve and evolve
@@ -123,6 +127,18 @@ PEAR_ErrorStack:
     <dir name="Frontend">
      <file role="php" name="CLI.php"/>
     </dir>
+    <dir name="Installer">
+     <dir name="Role">
+      <file role="php" name="Common.php"/>
+      <file role="php" name="Data.php"/>
+      <file role="php" name="Doc.php"/>
+      <file role="php" name="Package.php"/>
+      <file role="php" name="Php.php"/>
+      <file role="php" name="Script.php"/>
+      <file role="php" name="Test.php"/>
+     </dir>
+     <file role="php" name="Role.php"/>
+    </dir>
     <dir name="PackageFile">
      <dir name="Generator">
       <file role="php" name="v1.php">
@@ -136,6 +152,10 @@ PEAR_ErrorStack:
      </dir>
      <file role="php" name="v1.php"/>
      <file role="php" name="v2.php"/>
+    </dir>
+    <dir name="Task">
+     <file role="php" name="Common.php"/>
+     <file role="php" name="Replace.php"/>
     </dir>
     <file role="php" name="Common.php"/>
     <file role="php" name="ChannelFile.php"/>
