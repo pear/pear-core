@@ -282,6 +282,13 @@ class PEAR_Config extends PEAR
             'prompt' => 'Default Channel',
             'group' => 'Internet Access',
             ),
+        'remote_config' => array(
+            'type' => 'string',
+            'default' => '',
+            'doc' => 'ftp url of remote configuration file to use for synchronized install',
+            'prompt' => 'Remote Configuration File',
+            'group' => 'Internet Access',
+            ),
         'auto_discover' => array(
             'type' => 'integer',
             'default' => 0,
@@ -482,14 +489,17 @@ class PEAR_Config extends PEAR
         $this->layers = array_keys($this->configuration);
         $this->files['user'] = $user_file;
         $this->files['system'] = $system_file;
-        if ($ftp_file) {
-            $this->readFTPConfigFile($ftp_file);
-        }
         if ($user_file && file_exists($user_file)) {
             $this->readConfigFile($user_file);
         }
         if ($system_file && file_exists($system_file)) {
             $this->mergeConfigFile($system_file, false, 'system');
+        }
+        if (!$ftp_file) {
+            $ftp_file = $this->get('remote_config');
+        }
+        if ($ftp_file) {
+            $this->readFTPConfigFile($ftp_file);
         }
         foreach ($this->configuration_info as $key => $info) {
             $this->configuration['default'][$key] = $info['default'];
