@@ -645,6 +645,11 @@ class PEAR_PackageFile_v1
             count($this->_packageInfo['configure_options']);
     }
 
+    function addFile($dir, $file, $attrs)
+    {
+        $this->_packageInfo['filelist'][$dir . '/' . $file] = $attrs;
+    }
+
     function getFilelist()
     {
         if (isset($this->_packageInfo['filelist'])) {
