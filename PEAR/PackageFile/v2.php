@@ -1083,10 +1083,12 @@ class PEAR_PackageFile_v2
                     'dependencies', 'phprelease', 'extsrcrelease',
                     'extbinrelease', 'bundle', 'changelog'), array(), 'contents');
         }
-        $this->_packageInfo['contents'] = 
-            array('dir' => array('attribs' => array('name' => '/')));
-        if ($baseinstall) {
-            $this->_packageInfo['contents']['dir']['attribs']['baseinstalldir'] = $baseinstall;
+        if ($this->getPackageType() != 'bundle') {
+            $this->_packageInfo['contents'] = 
+                array('dir' => array('attribs' => array('name' => '/')));
+            if ($baseinstall) {
+                $this->_packageInfo['contents']['dir']['attribs']['baseinstalldir'] = $baseinstall;
+            }
         }
     }
 
@@ -1678,8 +1680,9 @@ class PEAR_PackageFile_v2
      * Mark a package as conflicting with this package
      * @param string package name
      * @param string package channel
+     * @param string extension this package provides, if any
      */
-    function addConflictingPackageDepWithChannel($name, $channel)
+    function addConflictingPackageDepWithChannel($name, $channel, $providesextension = false)
     {
         $this->_isValid = 0;
         $dep =
@@ -1688,6 +1691,9 @@ class PEAR_PackageFile_v2
                 'channel' => $channel,
                 'conflicts' => 'yes',
             );
+        if ($providesextension) {
+            $dep['providesextension'] = true;
+        }
         $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
@@ -1701,8 +1707,9 @@ class PEAR_PackageFile_v2
      * Mark a package as conflicting with this package
      * @param string package name
      * @param string package channel
+     * @param string extension this package provides, if any
      */
-    function addConflictingPackageDepWithUri($name, $uri)
+    function addConflictingPackageDepWithUri($name, $uri, $providesextension = false)
     {
         $this->_isValid = 0;
         $dep =
@@ -1711,6 +1718,9 @@ class PEAR_PackageFile_v2
                 'uri' => $uri,
                 'conflicts' => 'yes',
             );
+        if ($providesextension) {
+            $dep['providesextension'] = true;
+        }
         $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
@@ -1740,10 +1750,12 @@ class PEAR_PackageFile_v2
      * @param string|false maximum version allowed
      * @param string|false recommended installation version
      * @param array|false versions to exclude from installation
+     * @param string extension this package provides, if any
      * @return array
      * @access private
      */
-    function _constructDep($name, $channel, $uri, $min, $max, $recommended, $exclude)
+    function _constructDep($name, $channel, $uri, $min, $max, $recommended, $exclude,
+                           $providesextension = false)
     {
         $dep =
             array(
@@ -1769,6 +1781,9 @@ class PEAR_PackageFile_v2
             }
             $dep['exclude'] = $exclude;
         }
+        if ($providesextension) {
+            $dep['providesextension'] = $providesextension;
+        }
         return $dep;
     }
 
@@ -1781,13 +1796,16 @@ class PEAR_PackageFile_v2
      * @param string maximum version
      * @param string recommended version
      * @param array|false optional excluded versions
+     * @param string extension this package provides, if any
      * @return bool false if the dependency group has not been initialized with
      *              {@link addDependencyGroup()}
      */
     function addGroupPackageDepWithChannel($type, $groupname, $name, $channel, $min = false,
-                                      $max = false, $recommended = false, $exclude = false)
+                                      $max = false, $recommended = false, $exclude = false,
+                                      $providesextension = false)
     {
-        $dep = $this->_constructDep($name, $channel, false, $min, $max, $recommended, $exclude);
+        $dep = $this->_constructDep($name, $channel, false, $min, $max, $recommended, $exclude,
+            $providesextension);
         return $this->_addGroupDependency($type, $dep, $groupname);
     }
 
@@ -1796,12 +1814,14 @@ class PEAR_PackageFile_v2
      * @param string group name
      * @param string package name
      * @param string package uri
+     * @param string extension this package provides, if any
      * @return bool false if the dependency group has not been initialized with
      *              {@link addDependencyGroup()}
      */
-    function addGroupPackageDepWithURI($type, $groupname, $name, $uri)
+    function addGroupPackageDepWithURI($type, $groupname, $name, $uri, $providesextension = false)
     {
-        $dep = $this->_constructDep($name, false, $uri, false, false, false, false);
+        $dep = $this->_constructDep($name, false, $uri, false, false, false, false,
+            $providesextension);
         return $this->_addGroupDependency($type, $dep, $groupname);
     }
 
@@ -1874,17 +1894,20 @@ class PEAR_PackageFile_v2
      * @param string minimum version
      * @param string maximum version
      * @param string recommended version
+     * @param string extension this package provides, if any
      * @param array|false optional excluded versions
      */
     function addPackageDepWithChannel($type, $name, $channel, $min = false, $max = false,
-                                      $recommended = false, $exclude = false)
+                                      $recommended = false, $exclude = false,
+                                      $providesextension = false)
     {
         $this->_isValid = 0;
         $arr = array('optional', 'group');
         if ($type != 'required') {
             array_shift($arr);
         }
-        $dep = $this->_constructDep($name, $channel, false, $min, $max, $recommended, $exclude);
+        $dep = $this->_constructDep($name, $channel, false, $min, $max, $recommended, $exclude,
+            $providesextension);
         $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
@@ -1898,15 +1921,17 @@ class PEAR_PackageFile_v2
      * @param optional|required
      * @param string name of the package
      * @param string uri of the package
+     * @param string extension this package provides, if any
      */
-    function addPackageDepWithUri($type, $name, $uri)
+    function addPackageDepWithUri($type, $name, $uri, $providesextension = false)
     {
         $this->_isValid = 0;
         $arr = array('optional', 'group');
         if ($type != 'required') {
             array_shift($arr);
         }
-        $dep = $this->_constructDep($name, false, $uri, false, false, false, false);
+        $dep = $this->_constructDep($name, false, $uri, false, false, false, false,
+            $providesextension);
         $this->_mergeTag($this->_packageInfo, $dep,
             array(
                 'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
@@ -1926,7 +1951,7 @@ class PEAR_PackageFile_v2
      * @param array incompatible versions
      */
     function addSubpackageDepWithChannel($type, $name, $channel, $min = false, $max = false,
-                                      $recommended = false, $exclude = false)
+                                         $recommended = false, $exclude = false)
     {
         $this->_isValid = 0;
         $arr = array('optional', 'group');
@@ -2215,7 +2240,7 @@ class PEAR_PackageFile_v2
         if ($r === null) {
             return false;
         }
-        $opt = array('name' => $name, 'prompt' => $prompt);
+        $opt = array('attribs' => array('name' => $name, 'prompt' => $prompt));
         if ($default !== null) {
             $opt['default'] = $default;
         }
