@@ -1,5 +1,5 @@
 --TEST--
-PEAR_PackageFile_Parser_v2_Validator->validate(), no <version><api>
+PEAR_PackageFile_Parser_v2_Validator->validate(), no <version><release>
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
