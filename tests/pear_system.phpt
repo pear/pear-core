@@ -19,6 +19,8 @@ if (OS_WINDOWS) {
 /*******************
         mkDir
 ********************/
+echo "Testing: MkDir\n";
+
 // Single directory creation
 System::mkDir('singledir');
 if( !is_dir('singledir') ){
@@ -56,6 +58,7 @@ if (!@is_dir("dir2{$sep}dir21") || !@is_dir("dir6{$sep}dir61{$sep}dir611")) {
 /*******************
         mkTemp
 ********************/
+echo "Testing: mkTemp\n";
 
 // Create a temporal file with "tst" as filename prefix
 $tmpfile = System::mkTemp('tst');
@@ -74,6 +77,7 @@ if (!@is_dir($tmpdir) || !ereg("^dir1{$ereg_sep}tmp", $tmpdir)) {
 /*******************
         rm
 ********************/
+echo "Testing: rm\n";
 
 // Try to delete a dir without "-r" option
 if (@System::rm('dir1')) {
@@ -89,20 +93,181 @@ if (!@System::rm("-r $del")) {
 /*******************
         which
 ********************/
+echo "Testing: which\n";
 
 if (OS_UNIX) {
     if (System::which('ls') != '/bin/ls') {
         print "System::which('ls') failed\n";
     }
-    if (System::which('i_am_not_a_command')) {
-        print "System::which('i_am_not_a_command') did not failed\n";
+    if (System::which('/bin/ls') != '/bin/ls') {
+        print "System::which('/bin/ls') failed\n";
     }
-} // XXX Windows test
+} elseif (OS_WINDOWS) {
+    $sysroot = getenv('SystemRoot') . '\\system32\\';
+    if (strcasecmp(System::which('cmd'), $sysroot . 'cmd.exe') != 0) {
+        print "System::which('cmd') failed\n";
+    }
+    if (strcasecmp(System::which('cmd.exe'), $sysroot . 'cmd.exe') != 0) {
+        print "System::which('cmd.exe') failed\n";
+    }
+    if (strcasecmp(System::which($sysroot . 'cmd.exe'),
+            $sysroot . 'cmd.exe') != 0) {
+        print 'System::which(' . $sysroot . "cmd.exe') failed\n";
+    }
+    if (strcasecmp(System::which($sysroot . 'cmd'),
+            $sysroot . 'cmd.exe') != 0) {
+        print 'System::which(' . $sysroot . "cmd') failed\n";
+    }
+}
+if (System::which('i_am_not_a_command')) {
+    print "System::which('i_am_not_a_command') did not failed\n";
+}
+// Missing tests for safe mode constraint...
 
-/*******************
-        cat
-********************/
-// Missing tests yet
+ /*******************
+         cat
+ ********************/
+echo "Testing: cat\n";
+
+function file_put_contents($file, $text) {
+    $fd = fopen($file, 'w');
+    fputs($fd, $text);
+    fclose($fd);
+}
+
+$catfile = System::mktemp('tst');;
+
+// Create temp files
+$tmpfile = array();
+$totalfiles = 3;
+for ($i = 0; $i < $totalfiles + 1; ++$i) {
+    $tmpfile[] = System::mktemp('tst');
+    file_put_contents($tmpfile[$i], 'FILE ' . $i);
+}
+
+// Concat in new file
+for ($i = $totalfiles; $i > 0; --$i) {
+    $cat = '';
+    $expected = '';
+    for ($j = $i; $j > 0; --$j) {
+        $cat .= $tmpfile[$j] . ' ';
+        $expected .= 'FILE ' . $j;
+    }
+    $cat .= '> ' . $catfile;
+    System::cat($cat);
+    if (file_get_contents($catfile) != $expected) {
+        print "System::cat('$cat') failed\n";
+    }
+}
+
+// Concat append to file
+for ($i = $totalfiles; $i > 0; --$i) {
+    $cat = '';
+    for ($j = $i; $j > 0; --$j) {
+        $cat .= $tmpfile[$j] . ' ';
+        $expected .= 'FILE ' . $j;
+    }
+    $cat .= '>> ' . $catfile;
+    System::cat($cat);
+    if (file_get_contents($catfile) != $expected) {
+        print "System::cat('$cat') failed\n";
+    }
+}
+
+// Concat to string
+for ($i = $totalfiles; $i > 0; --$i) {
+    $cat = '';
+    $expected = '';
+    for ($j = $i; $j > 0; --$j) {
+        $cat .= $tmpfile[$j] . ' ';
+        $expected .= 'FILE ' . $j;
+    }
+    if (System::cat($cat) != $expected) {
+        print "System::cat('$cat') failed\n";
+    }
+}
+
+// Concat by array to string
+for ($i = $totalfiles; $i > 0; --$i) {
+    $cat = array();
+    $expected = '';
+    for ($j = $i; $j > 0; --$j) {
+        $cat[] = $tmpfile[$j] . ' ';
+        $expected .= 'FILE ' . $j;
+    }
+    if (System::cat($cat) != $expected) {
+        print "System::cat(Array) failed\n";
+    }
+}
+
+// Concat by array in new file
+for ($i = $totalfiles; $i > 0; --$i) {
+    $cat = array();
+    $expected = '';
+    for ($j = $i; $j > 0; --$j) {
+        $cat[] = $tmpfile[$j] . ' ';
+        $expected .= 'FILE ' . $j;
+    }
+    $cat[] = '>';
+    $cat[] = $catfile;
+    System::cat($cat);
+    if (file_get_contents($catfile) != $expected) {
+        print "System::cat(Array > $catfile) failed\n";
+    }
+}
+
+// Concat by array append to file
+for ($i = $totalfiles; $i > 0; --$i) {
+    $cat = array();
+    for ($j = $i; $j > 0; --$j) {
+        $cat[] = $tmpfile[$j] . ' ';
+        $expected .= 'FILE ' . $j;
+    }
+    $cat[] = '>>';
+    $cat[] = $catfile;
+    System::cat($cat);
+    if (file_get_contents($catfile) != $expected) {
+        print "System::cat(Array >> $catfile) failed\n";
+    }
+}
+
+// Concat from url wrapper
+$cat = 'http://www.php.net/ http://pear.php.net/ > ' . $catfile;
+if (!System::cat($cat)) {
+    print "System::cat('$cat') failed\n";
+}
+
+// Concat to files with space in names
+$catfile = System::mktemp('tst') . ' space in filename';
+
+// Create temp files
+$tmpfile = array();
+$totalfiles = 3;
+for ($i = 0; $i < $totalfiles + 1; ++$i) {
+    $tmpfile[$i] = System::mktemp('tst') . ' space in filename';
+    file_put_contents($tmpfile[$i], 'FILE ' . $i);
+}
+
+// Concat in new file
+for ($i = $totalfiles; $i > 0; --$i) {
+    $cat = '';
+    $expected = '';
+    for ($j = $i; $j > 0; --$j) {
+        $cat .= '"' . $tmpfile[$j] . '" ';
+        $expected .= 'FILE ' . $j;
+    }
+    $cat .= ' > "' . $catfile . '"';
+    System::cat($cat);
+    if (file_get_contents($catfile) != $expected) {
+        print "System::cat('$cat') failed\n";
+    }
+}
+
+// Clean up
+for ($i = 0; $i < $totalfiles + 1; ++$i) {
+    unlink($tmpfile[$i]);
+}
+unlink($catfile);
 
 print "end\n";
 ?>
