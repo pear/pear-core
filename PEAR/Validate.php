@@ -233,14 +233,14 @@ class PEAR_Validate
                 $this->_addFailure('version',
                     'Invalid version number "' . $this->_packagexml->getVersion() . '"');
             }
-            return;
+            return false;
         }
         $version = $this->_packagexml->getVersion();
         $versioncomponents = explode('.', $version);
         if (count($versioncomponents) != 3) {
-            $this->_addFailure('version',
-                'A version number must have 3 decimals (x.y.z)');
-            return false;
+            $this->_addWarning('version',
+                'A version number should have 3 decimals (x.y.z)');
+            return true;
         }
         $name = $this->_packagexml->getPackage();
         // version must be based upon state
