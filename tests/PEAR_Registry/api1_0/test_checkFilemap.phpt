@@ -10,24 +10,24 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $phpunit->assertRegEquals('dumping registry...
-channel pear.php.net:
 channel __uri:
+channel pear.php.net:
 dump done
 ', $reg, 'Initial dump is incorrect');
 
 $reg->addPackage("pkg3", array("name" => "pkg3", "version" => "3.0", "filelist" => $files3, 'maintainers' => array()));
 $phpunit->assertRegEquals('dumping registry...
+channel __uri:
 channel pear.php.net:
 pkg3: version="3.0" filelist=array(pkg3-1.php[role=php],pkg3-2.php[role=php,baseinstalldir=pkg3]) maintainers="Array" _lastmodified is set
-channel __uri:
 dump done
 ', $reg, 'after adding pkg3');
 
 $reg->updatePackage("pkg3", array("version" => "3.1b1", "status" => "beta"));
 $phpunit->assertRegEquals('dumping registry...
+channel __uri:
 channel pear.php.net:
 pkg3: version="3.1b1" filelist=array(pkg3-1.php[role=php],pkg3-2.php[role=php,baseinstalldir=pkg3]) maintainers="Array" _lastmodified is set status="beta"
-channel __uri:
 dump done
 ', $reg, 'after update of pkg3');
 
