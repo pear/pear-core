@@ -154,7 +154,7 @@ $phpunit->assertEquals(array (
           array (
             0 => 'Signature Key Directory',
             1 => 'sig_keydir',
-            2 => $temp_path . DIRECTORY_SEPARATOR . 'pearkeys',
+            2 => PEAR_CONFIG_DEFAULT_SIG_KEYDIR,
           ),
           3 => 
           array (
@@ -337,7 +337,7 @@ $phpunit->assertEquals(array (
           array (
             0 => 'Signature Key Directory',
             1 => 'sig_keydir',
-            2 => $temp_path . DIRECTORY_SEPARATOR . 'pearkeys',
+            2 => PEAR_CONFIG_DEFAULT_SIG_KEYDIR,
           ),
           3 => 
           array (
@@ -521,7 +521,7 @@ $phpunit->assertEquals(array (
           array (
             0 => 'Signature Key Directory',
             1 => 'sig_keydir',
-            2 => $temp_path . DIRECTORY_SEPARATOR . 'pearkeys',
+            2 => PEAR_CONFIG_DEFAULT_SIG_KEYDIR,
           ),
           3 => 
           array (
