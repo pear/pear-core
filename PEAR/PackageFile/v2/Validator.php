@@ -143,13 +143,15 @@ class PEAR_PackageFile_v2_Validator
         if (isset($this->_packageInfo['compatible'])) {
             $this->_validateCompatible();
         }
-        if (!isset($this->_packageInfo['contents']['dir'])) {
-            $this->_filelistMustContainDir('contents');
-            return false;
-        }
-        if (isset($this->_packageInfo['contents']['file'])) {
-            $this->_filelistCannotContainFile('contents');
-            return false;
+        if (!isset($this->_packageInfo['bundle'])) {
+            if (!isset($this->_packageInfo['contents']['dir'])) {
+                $this->_filelistMustContainDir('contents');
+                return false;
+            }
+            if (isset($this->_packageInfo['contents']['file'])) {
+                $this->_filelistCannotContainFile('contents');
+                return false;
+            }
         }
         $this->_validateMaintainers();
         $this->_validateStabilityVersion();
@@ -832,36 +834,30 @@ class PEAR_PackageFile_v2_Validator
         }
     }
 
+    function _validateBundle($list)
+    {
+        if (!isset($list['bundledpackage'])) {
+            return $this->_NoBundledPackages();
+        }
+        if (!is_array($list['bundledpackage']) || !isset($list['bundledpackage'][0])) {
+            return $this->_AtLeast2BundledPackages();
+        }
+        foreach ($list['bundledpackage'] as $package) {
+            if (!is_string($package)) {
+                $this->_bundledPackagesMustBeFilename();
+            }
+        }
+    }
+
     function _validateFilelist($list = false, $filetag = 'file', $allowignore = false)
     {
         $iscontents = false;
         if (!$list) {
             $iscontents = true;
             $list = $this->_packageInfo['contents'];
-        }
-        if (isset($this->_packageInfo['bundle'])) {
-            if (!isset($list['bundledpackage'])) {
-                return $this->_NoBundledPackages();
+            if (isset($this->_packageInfo['bundle'])) {
+                return $this->_validateBundle($list);
             }
-            if (!isset($list['bundledpackage'][0])) {
-                return $this->_AtLeast2BundledPackages();
-            }
-            foreach ($list['bundledpackage'] as $package) {
-                if (!isset($package['filename'])) {
-                    return $this->_noChildTag('<filename>', '<bundledpackage>');
-                }
-                if (!isset($package['name'])) {
-                    return $this->_noChildTag('<name>', '<bundledpackage>');
-                }
-                if (isset($package['uri'])) {
-                    if (isset($package['channel'])) {
-                        return $this->_ChannelOrUri($package['name']);
-                    }
-                } elseif (!isset($package['channel'])) {
-                    return $this->_ChannelOrUri($package['name']);
-                }
-            }
-            return;
         }
         if ($allowignore) {
             $struc = array(
@@ -1299,6 +1295,13 @@ class PEAR_PackageFile_v2_Validator
         $this->_stack->push(__FUNCTION__, 'error', array('type' => $type),
             '%type%: channel cannot be __uri, this is a pseudo-channel reserved for uri ' .
             'dependencies only');
+    }
+
+    function _bundledPackagesMustBeFilename()
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array(),
+            '<bundledpackage> tags must contain only the filename of a package release ' .
+            'in the bundle');
     }
 
     function _analyzePhpFiles()
