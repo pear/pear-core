@@ -42,7 +42,8 @@ $phpunit->assertEquals(array('master_server' => $server,
     'data_dir' => $temp_path . DIRECTORY_SEPARATOR . 'data',
     'doc_dir' => $temp_path . DIRECTORY_SEPARATOR . 'doc',
     'test_dir' => $temp_path . DIRECTORY_SEPARATOR . 'test',
-    'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',), unserialize($contents[1]), 'after write 1');
+    'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',
+    '__channels' => array('__uri' => array())), unserialize($contents[1]), 'after write 1');
 
 $phpunit->assertFileNotExists($temp_path . DIRECTORY_SEPARATOR . 'pear.frompf', 'pear.frompf');
 $config->writeConfigFile($temp_path . DIRECTORY_SEPARATOR . 'pear.frompf', 'system');
@@ -50,12 +51,12 @@ $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'pear.frompf', 'pe
 
 $contents = explode("\n", implode('', file($temp_path . DIRECTORY_SEPARATOR . 'pear.frompf')));
 $phpunit->assertEquals('#PEAR_Config 0.9', $contents[0], 'after write sys 0');
-$phpunit->assertEquals(array('preferred_state' => 'beta'), unserialize($contents[1]), 'after write sys 1');
+$phpunit->assertEquals(array('__channels' => array('__uri' => array()),'preferred_state' => 'beta'), unserialize($contents[1]), 'after write sys 1');
 
 $config->readConfigFile($temp_path . DIRECTORY_SEPARATOR . 'pear.frompf', 'system');
 
-$config->set('php_dir', 'hello');
-$config->set('php_dir', 'bye', 'system');
+$config->set('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'hello');
+$config->set('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'bye', 'system');
 $config->writeConfigFile(null, 'both');
 
 $phpunit->showall();
@@ -64,16 +65,21 @@ $phpunit->assertEquals('#PEAR_Config 0.9', $contents[0], 'after both 0');
 $phpunit->assertEquals(array('master_server' => $server,
     'preferred_state' => 'alpha',
     'cache_dir' => $temp_path . DIRECTORY_SEPARATOR . 'cache',
-    'php_dir' => 'hello',
+    'php_dir' => $temp_path . DIRECTORY_SEPARATOR . 'hello',
     'ext_dir' => $temp_path . DIRECTORY_SEPARATOR . 'ext',
     'data_dir' => $temp_path . DIRECTORY_SEPARATOR . 'data',
     'doc_dir' => $temp_path . DIRECTORY_SEPARATOR . 'doc',
     'test_dir' => $temp_path . DIRECTORY_SEPARATOR . 'test',
-    'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',), unserialize($contents[1]), 'after both 1');
+    'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',
+    '__channels' => array('__uri' => array())), unserialize($contents[1]), 'after both 1');
 
 $contents = explode("\n", implode('', file($temp_path . DIRECTORY_SEPARATOR . 'pear.frompf')));
 $phpunit->assertEquals('#PEAR_Config 0.9', $contents[0], 'after both sys 0');
-$phpunit->assertEquals(array('preferred_state' => 'beta', 'php_dir' => 'bye'), unserialize($contents[1]), 'after both sys 1');
+$phpunit->assertEquals(array(
+    '__channels' => array('__uri' => array()),
+    'preferred_state' => 'beta',
+    'php_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bye',
+    ), unserialize($contents[1]), 'after both sys 1');
 
 $config->writeConfigFile($temp_path . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR .
     'glonk.ini');
