@@ -2374,6 +2374,30 @@ class PEAR_PackageFile_v2
         return '2.0';
     }
 
+    /**
+     * For extension binary releases, this is used to specify either the
+     * static URI to a source package, or the package name and channel of the extsrc
+     * package it is based on.
+     * @param string Package name, or full URI to source package (extsrc type)
+     * @param string|false channel name
+     */
+    function setSourcePackage($packageOrUri, $channel = false)
+    {
+        $this->_isValid = 0;
+        if ($channel) {
+            $this->_insertBefore($this->_packageInfo, array('phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), $packageOrUri, 'srcpackage');
+            $this->_insertBefore($this->_packageInfo, array('phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), $channel, 'srcchannel');
+        } else {
+            $this->_insertBefore($this->_packageInfo, array('phprelease', 'extsrcrelease',
+                'extbinrelease', 'bundle', 'changelog'), $packageOrUri, 'srcuri');
+        }
+    }
+
+    /**
+     * @return array|false
+     */
     function getSourcePackage()
     {
         if (isset($this->_packageInfo['extbinrelease'])) {
