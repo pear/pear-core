@@ -203,7 +203,7 @@ class PEAR_Downloader extends PEAR_Common
                     $alias = $b->getAlias();
                 }
                 $this->log(1, 'Auto-discovered channel "' . $channel .
-                    '", alias "' . $b->getAlias() . '", adding to registry');
+                    '", alias "' . $alias . '", adding to registry');
             }
             return true;
         }
@@ -308,7 +308,7 @@ class PEAR_Downloader extends PEAR_Common
             $pf = &$params[$i]->download();
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($pf)) {
-                if (!isset($options['soft'])) {
+                if (!isset($this->_options['soft'])) {
                     $this->log(1, $pf->getMessage());
                     $this->log(0, 'Error: cannot download "' .
                         $this->_registry->parsedPackageNameToString($package->getParsedPackage(),
@@ -687,7 +687,7 @@ class PEAR_Downloader extends PEAR_Common
         if ($this === null || $this->_registry === null) {
             $package = "http://pear.php.net/get/$package";
         } else {
-            $chan = $this->_registry->getChannel();
+            $chan = $this->_registry->getChannel($channel);
             $package = "http://" . $chan->getServer() . "/get/$package";
         }
         if (!extension_loaded("zlib")) {
@@ -1108,7 +1108,7 @@ class PEAR_Downloader extends PEAR_Common
             $password = $config->get('password');
             if ($username && $password) {
                 $tmp = base64_encode("$username:$password");
-                $req_headers .= "Authorization: Basic $tmp\r\n";
+                $request .= "Authorization: Basic $tmp\r\n";
             }
         }
         if ($proxy_host != '' && $proxy_user != '') {
