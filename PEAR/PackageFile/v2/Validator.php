@@ -1536,13 +1536,13 @@ class PEAR_PackageFile_v2_Validator
             'Cannot validate files, no path to package file is set (use setPackageFile())');
     }
 
-    function usesroletaskMustHaveChannelOrUri($role, $tag)
+    function _usesroletaskMustHaveChannelOrUri($role, $tag)
     {
         $this->_stack->push(__FUNCTION__, 'error', array('role' => $role, 'tag' => $tag),
-            '<%tag%> must contain either <channel> and <package> or <uri>');
+            '<%tag%> must contain either <uri>, or <channel> and <package>');
     }
 
-    function usesroletaskMustHavePackage($role, $tag)
+    function _usesroletaskMustHavePackage($role, $tag)
     {
         $this->_stack->push(__FUNCTION__, 'error', array('role' => $role, 'tag' => $tag),
             '<%tag%> must contain <package>');
