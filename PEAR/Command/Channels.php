@@ -165,7 +165,7 @@ List the files in an installed package.
     {
         $reg = &$this->config->getRegistry();
         if ($this->config->get('default_channel') != 'pear.php.net') {
-            $this->ui->outputData('WARNING: default channel is not pear.php.net');
+            $this->ui->outputData('WARNING: default channel is not pear.php.net', $command);
         }
         $remote = &$this->config->getRemote();
         $channels = $remote->call('channel.listAll');
@@ -185,10 +185,10 @@ List the files in an installed package.
             $channel = $channel[0];
             $save = $channel;
             if ($reg->channelExists($channel, true)) {
-                $this->ui->outputData("Updating channel \"$channel\"");
+                $this->ui->outputData("Updating channel \"$channel\"", $command);
                 $test = $reg->getChannel($channel, true);
                 if (!$test) {
-                    $this->ui->outputData("Channel '$channel' is corrupt in registry!");
+                    $this->ui->outputData("Channel '$channel' is corrupt in registry!", $command);
                     $lastmodified = false;
                 } else {
                     $lastmodified = $test->lastModified();
@@ -200,20 +200,20 @@ List the files in an installed package.
                 PEAR::staticPopErrorHandling();
                 if (PEAR::isError($contents)) {
                     $this->ui->outputData('ERROR: Cannot retrieve channel.xml for channel "' .
-                        $test->getName() . '"');
+                        $test->getName() . '"', $command);
                     continue;
                 }
                 list($contents, $lastmodified) = $contents;
                 $info = implode('', file($contents));
                 if (!$info) {
-                    $this->ui->outputData("Channel \"$channel\" is up-to-date");
+                    $this->ui->outputData("Channel \"$channel\" is up-to-date", $command);
                     continue;
                 }
                 $channelinfo = new PEAR_ChannelFile;
                 $channelinfo->fromXmlString($info);
                 if ($channelinfo->getErrors()) {
                     $this->ui->outputData("Downloaded channel data from channel \"$channel\" " . 
-                        'is corrupt, skipping');
+                        'is corrupt, skipping', $command);
                     continue;
                 }
                 $channel = $channelinfo;
@@ -221,7 +221,7 @@ List the files in an installed package.
                     $this->ui->outputData('ERROR: Security risk - downloaded channel ' .
                         'definition file for channel "'
                         . $channel->getName() . ' from channel "' . $save .
-                        '".  To use anyway, use channel-update');
+                        '".  To use anyway, use channel-update', $command);
                     continue;
                 }
                 $reg->updateChannel($channel, $lastmodified);
@@ -234,18 +234,18 @@ List the files in an installed package.
                             '" is aliased to "' . $channel . '" already and cannot be ' .
                             're-aliased to "' . $temp->getName() . '" because a channel with ' .
                             'that name or alias already exists!  Please re-alias and try ' .
-                            'again.');
+                            'again.', $command);
                         continue;
                     }
                 }
-                $this->ui->outputData("Adding new channel \"$channel\"");
+                $this->ui->outputData("Adding new channel \"$channel\"", $command);
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
                 $contents = $dl->downloadHttp('http://' . $channel . '/channel.xml',
                     $this->ui, $tmpdir, null, false);
                 PEAR::staticPopErrorHandling();
                 if (PEAR::isError($contents)) {
                     $this->ui->outputData('ERROR: Cannot retrieve channel.xml for channel "' .
-                        $channel . '"');
+                        $channel . '"', $command);
                     continue;
                 }
                 list($contents, $lastmodified) = $contents;
@@ -254,7 +254,7 @@ List the files in an installed package.
                 $channelinfo->fromXmlString($info);
                 if ($channelinfo->getErrors()) {
                     $this->ui->outputData("Downloaded channel data from channel \"$channel\"" .
-                        ' is corrupt, skipping');
+                        ' is corrupt, skipping', $command);
                     continue;
                 }
                 $channel = $channelinfo;
@@ -262,12 +262,13 @@ List the files in an installed package.
                     $this->ui->outputData('ERROR: Security risk - downloaded channel ' .
                         'definition file for channel "'
                         . $channel->getName() . '" from channel "' . $save .
-                        '".  To use anyway, use channel-update');
+                        '".  To use anyway, use channel-update', $command);
                     continue;
                 }
                 $reg->addChannel($channel, $lastmodified);
             }
         }
+        $this->ui->outputData('update-channels complete', $command);
         return true;
     }
     
@@ -321,18 +322,20 @@ List the files in an installed package.
         if ($chan) {
             $channel = $chan->getName();
             $caption = 'Channel ' . $channel . ' Information:';
-            $data = array(
+            $data1 = array(
                 'caption' => $caption,
                 'border' => true);
-            $data['data'][] = array('Name and Server', $chan->getName());
+            $data1['data']['server'] = array('Name and Server', $chan->getName());
             if ($chan->getAlias() != $chan->getName()) {
-                $data['data'][] = array('Alias', $chan->getAlias());
+                $data1['data']['alias'] = array('Alias', $chan->getAlias());
             }
-            $data['data'][] = array('Summary', $chan->getSummary());
+            $data1['data']['summary'] = array('Summary', $chan->getSummary());
             $validate = $chan->getValidationPackage();
-            $data['data'][] = array('Validation Package Name', $validate['_content']);
-            $data['data'][] = array('Validation Package Version', $validate['attribs']['version']);
-            $this->ui->outputData($data, 'channel-info');
+            $data1['data']['vpackage'] = array('Validation Package Name', $validate['_content']);
+            $data1['data']['vpackageversion'] =
+                array('Validation Package Version', $validate['attribs']['version']);
+            $d = array();
+            $d['main'] = $data1;
 
             $data['data'] = array();
             $data['caption'] = 'Server Capabilities';
@@ -361,7 +364,7 @@ List the files in an installed package.
             } else {
                 $data['data'][] = array('No supported protocols');
             }
-            $this->ui->outputData($data);
+            $d['protocols'] = $data;
             $data['data'] = array();
             $mirrors = $chan->getMirrors();
             if ($mirrors) {
@@ -369,7 +372,7 @@ List the files in an installed package.
                 unset($data['headline']);
                 foreach ($mirrors as $mirror) {
                     $data['data'][] = array($mirror['attribs']['host']);
-                    $this->ui->outputData($data);
+                    $d['mirrors'] = $data;
                 }
                 foreach ($mirrors as $mirror) {
                     $data['data'] = array();
@@ -399,9 +402,10 @@ List the files in an installed package.
                     } else {
                         $data['data'][] = array('No supported protocols');
                     }
-                    $this->ui->outputData($data);
+                    $d['mirrorprotocols'] = $data;
                 }
             }
+            $this->ui->outputData($d, 'channel-info');
         } else {
             return $this->raiseError('Serious error: Channel "' . $params[0] .
                 '" has a corrupted registry entry');
@@ -437,7 +441,7 @@ List the files in an installed package.
             return $this->raiseError('Channel "' . $channel . '"deletion failed');
         } else {
             $this->config->deleteChannel($channel);
-            $this->ui->outputData('Channel "' . $channel . '" deleted');
+            $this->ui->outputData('Channel "' . $channel . '" deleted', $command);
         }
     }
 
@@ -501,7 +505,7 @@ List the files in an installed package.
         }
         $this->config->setChannels($reg->listChannels());
         $this->config->writeConfigFile();
-        $this->ui->outputData('Adding Channel "' . $channel->getName() . '" succeeded');
+        $this->ui->outputData('Adding Channel "' . $channel->getName() . '" succeeded', $command);
     }
 
     function doUpdate($command, $options, $params)
@@ -673,7 +677,7 @@ List the files in an installed package.
         if (PEAR::isError($err)) {
             return $this->raiseError("Discovery of channel \"$params[0]\" failed");
         }
-        $this->ui->outputData("Discovery of channel \"$params[0]\" succeeded");
+        $this->ui->outputData("Discovery of channel \"$params[0]\" succeeded", $command);
     }
 }
 ?>
