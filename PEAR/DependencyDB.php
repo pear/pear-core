@@ -317,12 +317,14 @@ class PEAR_DependencyDB
             } else {
                 $depchannel = strtolower($dep['dep']['channel']);
             }
-            foreach ($data['packages'][$depchannel][strtolower($dep['dep']['name'])] as
-                  $i => $info) {
-                if ($info['channel'] == $channel &&
-                      $info['package'] == $package) {
-                    $found = true;
-                    break;
+            if (isset($data['packages'][$depchannel][strtolower($dep['dep']['name'])])) {
+                foreach ($data['packages'][$depchannel][strtolower($dep['dep']['name'])] as
+                      $i => $info) {
+                    if ($info['channel'] == $channel &&
+                          $info['package'] == $package) {
+                        $found = true;
+                        break;
+                    }
                 }
             }
             if ($found) {
