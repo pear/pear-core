@@ -185,9 +185,16 @@ class PEAR_Downloader_Package
         if (isset($this->_downloadURL['url'])) {
             $this->_isvalid = false;
             $info = $this->getParsedPackage();
+            foreach ($info as $i => $p) {
+                $info[$i] = strtolower($p);
+            }
             $err = $this->_fromUrl($this->_downloadURL['url'],
                 $this->_registry->parsedPackageNameToString($this->_parsedname, true));
-            if ($info != $this->getParsedPackage()) {
+            $newinfo = $this->getParsedPackage();
+            foreach ($newinfo as $i => $p) {
+                $newinfo[$i] = strtolower($p);
+            }
+            if ($info != $newinfo) {
                 return PEAR::raiseError('CRITICAL ERROR: We are ' .
                     $this->_registry->parsedPackageNameToString($info) . ', but the file ' .
                     'downloaded claims to be ' .
