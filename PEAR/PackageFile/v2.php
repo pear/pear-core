@@ -1088,6 +1088,7 @@ class PEAR_PackageFile_v2
         if (isset($this->_packageInfo['filelist']) && !$preserve) {
             return $this->_packageInfo['filelist'];
         }
+        $this->flattenFilelist();
         if ($contents = $this->getContents()) {
             $ret = array();
             if (!isset($contents['dir']['file'][0])) {
