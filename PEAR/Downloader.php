@@ -204,6 +204,7 @@ class PEAR_Downloader extends PEAR_Common
         $need_download = false;
         if (preg_match('#^(http|ftp)://#', $pkgfile)) {
             $need_download = true;
+            $chan = false;
         } elseif (!@is_file($pkgfile)) {
             $package = $pkgfile;
             $channel = $this->config->get('default_channel');
@@ -580,7 +581,7 @@ class PEAR_Downloader extends PEAR_Common
         }
         $url = $this->_getPackageDownloadUrl($package, $channel, $version);
         if (!$url) {
-            return $this->raiseError("No releases found for package '$channel::$pkgfile'");
+            return $this->raiseError("No releases found for package '$channel::$package'");
         }
         if (is_array($url) && count($url) == 2) {
             // nothing found, but there is a latest release
