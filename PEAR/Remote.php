@@ -72,7 +72,7 @@ class PEAR_Remote extends PEAR
         $filename = $cachedir . DIRECTORY_SEPARATOR . 'xmlrpc_cache_' . $id;
         if (!file_exists($filename)) {
             return null;
-        };
+        }
 
         $fp = fopen($filename, 'rb');
         if (!$fp) {
@@ -105,7 +105,7 @@ class PEAR_Remote extends PEAR
         if ($fp) {
             fwrite($fp, serialize($data));
             fclose($fp);
-        };
+        }
     }
 
     // }}}
@@ -146,12 +146,12 @@ class PEAR_Remote extends PEAR
         // If cache is newer than $cachettl seconds, we use the cache!
         if ($this->cache !== null && $this->cache['age'] < $cachettl) {
             return $this->cache['content'];
-        };
+        }
         if (extension_loaded("xmlrpc")) {
             $result = call_user_func_array(array(&$this, 'call_epi'), $args);
             if (!PEAR::isError($result)) {
                 $this->saveCache($_args, $result);
-            };
+            }
             return $result;
         }
         if (!@include_once("XML/RPC.php")) {
@@ -162,13 +162,15 @@ class PEAR_Remote extends PEAR
         $username = $this->config->get('username');
         $password = $this->config->get('password');
         $eargs = array();
-        foreach($args as $arg) $eargs[] = $this->_encode($arg);
+        foreach($args as $arg) {
+            $eargs[] = $this->_encode($arg);
+        }
         $f = new XML_RPC_Message($method, $eargs);
         if ($this->cache !== null) {
             $maxAge = '?maxAge='.$this->cache['lastChange'];
         } else {
             $maxAge = '';
-        };
+        }
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
         if ($proxy = parse_url($this->config->get('http_proxy'))) {
             $proxy_host = @$proxy['host'];
@@ -280,7 +282,7 @@ class PEAR_Remote extends PEAR
             $maxAge = '?maxAge='.$this->cache['lastChange'];
         } else {
             $maxAge = '';
-        };
+        }
 
         if ($use_proxy && $proxy_host != '' && $proxy_user != '') {
             $req_headers .= 'Proxy-Authorization: Basic '
