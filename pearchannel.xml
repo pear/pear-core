@@ -3,13 +3,14 @@
 <channel version="1.0">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
- <server>pear.php.net</server>
+ <server>pear.Chiara</server>
  <provides>
   <protocol type="xml-rpc" version="1.0">logintest</protocol>
   <protocol type="xml-rpc" version="1.0">package.listLatestReleases</protocol>
   <protocol type="xml-rpc" version="1.0">package.listAll</protocol>
   <protocol type="xml-rpc" version="1.0">package.info</protocol>
   <protocol type="xml-rpc" version="1.0">package.getDownloadURL</protocol>
-  <protocol type="download" version="1.0">get</protocol>
+  <protocol type="xml-rpc" version="1.0">channel.listAll</protocol>
+  <protocol type="xml-rpc" version="1.0">channel.update</protocol>
  </provides>
 </channel>

@@ -1435,6 +1435,7 @@ class PEAR_ChannelFile {
                 $this->addProtocol('xml-rpc', '1.0', 'package.listAll', $mirror);
                 $this->addProtocol('xml-rpc', '1.0', 'package.info', $mirror);
                 $this->addProtocol('xml-rpc', '1.0', 'package.getDownloadURL', $mirror);
+                $this->addProtocol('xml-rpc', '1.0', 'channel.update', $mirror);
                 return true;
             break;
             default :
@@ -1676,6 +1677,19 @@ class PEAR_ChannelFile {
             }
         }
         return false;
+    }
+
+    /**
+     * This function is used by the channel updater and retrieves a value set by
+     * the registry, or the current time if it has not been set
+     * @return string
+     */
+    function lastModified()
+    {
+        if (isset($this->_channelInfo['_lastmodified'])) {
+            return $this->_channelInfo['_lastmodified'];
+        }
+        return time();
     }
 }
 ?>

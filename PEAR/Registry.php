@@ -877,7 +877,9 @@ class PEAR_Registry extends PEAR
             $this->_unlock();
             return false;
         }
-        fwrite($fp, serialize($channel->toArray()));
+        $info = $channel->toArray();
+        $info['_lastmodified'] = time();
+        fwrite($fp, serialize($info));
         fclose($fp);
         $this->_unlock();
         return true;

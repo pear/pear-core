@@ -48,10 +48,15 @@
     </maintainer>
   </maintainers>
   <release>
-    <version>1.4.0dev8</version>
-    <date>2004-06-10</date>
+    <version>1.4.0dev9</version>
+    <date>2004-08-02</date>
     <state>devel</state>
     <notes>
+Installer Channel Support:
+ * add channel.listAll and channel.update to default PEAR protocols
+ * add ability to &quot;pear channel-update channelname&quot; to
+   retrieve updates manually for individual channels
+
 Installer:
 
  * Channels implemented
