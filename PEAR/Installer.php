@@ -476,7 +476,7 @@ class PEAR_Installer extends PEAR_Downloader
             }
         } else { // file with tasks
             if (!file_exists($orig_file)) {
-                return $this->raiseError("file does not exist",
+                return $this->raiseError("file $orig_file does not exist",
                                          PEAR_INSTALLER_FAILED);
             }
             $fp = fopen($orig_file, "r");
