@@ -1879,7 +1879,19 @@ class PEAR_Config extends PEAR
         if (substr($root, -1) == DIRECTORY_SEPARATOR) {
             $root = substr($root, 0, -1);
         }
+        $old = $this->_installRoot;
         $this->_installRoot = $root;
+        if (($old != $root) && !$this->_noRegistry) {
+            foreach (array_keys($this->_registry) as $layer) {
+                if ($layer == 'ftp' || !isset($this->_registry[$layer])) {
+                    continue;
+                }
+                $this->_registry[$layer] =
+                    &new PEAR_Registry($this->get('php_dir', $layer, 'pear.php.net'));
+                $this->_registry[$layer]->setConfig($this);
+                $this->_regInitialized[$layer] = false;
+            }
+        }
     }
 }
 
