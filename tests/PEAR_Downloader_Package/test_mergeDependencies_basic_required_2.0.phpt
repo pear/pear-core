@@ -51,6 +51,11 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
                 ),
                 'group' =>
                 array(
+                    'attribs' =>
+                    array(
+                        'name' => 'foo',
+                        'hint' => 'testing group',
+                    ),
                     'package' =>
                         array(
                             array(
