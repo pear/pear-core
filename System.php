@@ -208,8 +208,7 @@ class System
     }
 
     /**
-    * Make directories. Note that we use call_user_func('mkdir') to avoid
-    * a problem with ZE2 calling System::mkDir instead of the native PHP func.
+    * Make directories.
     *
     * The -p option will create parent directories
     * @param    string  $args    the name of the director(y|ies) to create
@@ -247,7 +246,7 @@ class System
                     $dir = dirname($dir);
                 }
                 while ($newdir = array_shift($dirstack)) {
-                    if (!call_user_func('mkdir', $newdir, $mode)) {
+                    if (!mkdir($newdir, $mode)) {
                         $ret = false;
                     }
                 }
