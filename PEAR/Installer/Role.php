@@ -64,6 +64,7 @@ class PEAR_Installer_Role
         if (isset($ret[$release])) {
             return $ret[$release];
         }
+        $ret[$release] = array();
         foreach ($GLOBALS['_PEAR_INSTALLER_ROLES'] as $role => $okreleases) {
             if (in_array($release, $okreleases['releasetypes'])) {
                 $ret[$release][] = strtolower(str_replace('PEAR_Installer_Role_', '', $role));
