@@ -264,7 +264,13 @@ class PEAR_Config extends PEAR
      * contained in php_dir
      * @var PEAR_Registry
      */
-    var $_registry;
+    var $_registry = array();
+
+    /**
+     * @var array
+     * @access private
+     */
+    var $_regInitialized = array();
 
     /**
      * Information about the configuration data.  Stores the type,
@@ -564,9 +570,13 @@ class PEAR_Config extends PEAR
         $this->_decodeInput($data);
         $this->configuration[$layer] = $data;
         $this->_setupChannels();
-        $this->_registry[$layer]
-            = &new PEAR_Registry($this->get('php_dir', $layer, 'pear.php.net'));
-        $this->_registry[$layer]->setConfig($this);
+        if ($phpdir = $this->get('php_dir', $layer, 'pear.php.net')) {
+            $this->_registry[$layer] = &new PEAR_Registry($phpdir);
+            $this->_registry[$layer]->setConfig($this);
+            $this->_regInitialized[$layer] = false;
+        } else {
+            unset($this->_registry[$layer]);
+        }
         return true;
     }
 
@@ -708,9 +718,13 @@ class PEAR_Config extends PEAR
                 PEAR_Config::arrayMergeRecursive($data, $this->configuration[$layer]);
         }
         $this->_setupChannels();
-        $this->_registry[$layer]
-            = &new PEAR_Registry($this->get('php_dir', $layer, 'pear.php.net'));
-        $this->_registry[$layer]->setConfig($this);
+        if ($phpdir = $this->get('php_dir', $layer, 'pear.php.net')) {
+            $this->_registry[$layer] = &new PEAR_Registry($phpdir);
+            $this->_registry[$layer]->setConfig($this);
+            $this->_regInitialized[$layer] = false;
+        } else {
+            unset($this->_registry[$layer]);
+        }
         return true;
     }
 
@@ -758,6 +772,7 @@ class PEAR_Config extends PEAR
      */
     function writeConfigFile($file = null, $layer = 'user', $data = null)
     {
+        $this->_lazyChannelSetup($layer);
         if ($layer == 'both' || $layer == 'all') {
             foreach ($this->files as $type => $file) {
                 $err = $this->writeConfigFile($file, $type, $data);
@@ -990,16 +1005,32 @@ class PEAR_Config extends PEAR
 
     // }}}
     // {{{ getDefaultChannel([layer])
+    /**
+     * Retrieve the default channel.
+     *
+     * On startup, channels are not initialized, so if the default channel is not
+     * pear.php.net, then initialize the config.
+     * @param string registry layer
+     * @return string|false
+     */
     function getDefaultChannel($layer = null)
     {
+        $ret = false;
         if ($layer === null) {
             foreach ($this->layers as $layer) {
                 if (isset($this->configuration[$layer]['default_channel'])) {
-                    return $this->configuration[$layer]['default_channel'];
+                    $ret = $this->configuration[$layer]['default_channel'];
+                    break;
                 }
             }
         } elseif (isset($this->configuration[$layer]['default_channel'])) {
-            return $this->configuration[$layer]['default_channel'];
+            $ret = $this->configuration[$layer]['default_channel'];
+        }
+        if ($ret) {
+            if ($ret != 'pear.php.net') {
+                $this->_lazyChannelSetup();
+            }
+            return $ret;
         }
         return 'pear.php.net';
     }
@@ -1014,7 +1045,7 @@ class PEAR_Config extends PEAR
      *
      * @access public
      */
-    function get($key, $layer = null, $channel = null)
+    function get($key, $layer = null, $channel = false)
     {
         if (!isset($this->configuration_info[$key])) {
             return null;
@@ -1025,8 +1056,10 @@ class PEAR_Config extends PEAR
         if ($key == 'default_channel') {
             return $this->getDefaultChannel($layer);
         }
-        if ($channel === null) {
+        if (!$channel) {
             $channel = $this->getDefaultChannel();
+        } elseif ($channel != 'pear.php.net') {
+            $this->_lazyChannelSetup();
         }
         $channel = strtolower($channel);
         
@@ -1127,6 +1160,9 @@ class PEAR_Config extends PEAR
         if ($key == 'default_channel') {
             // can only set this value globally
             $channel = 'pear.php.net';
+            if ($value != 'pear.php.net') {
+                $this->_lazyChannelSetup($layer);
+            }
         }
         if (empty($this->configuration_info[$key])) {
             return false;
@@ -1154,12 +1190,15 @@ class PEAR_Config extends PEAR
         if (!$channel) {
             $channel = $this->get('default_channel', null, 'pear.php.net');
         }
-        $reg = $this->getRegistry($layer);
-        if ($reg) {
-            $channel = $reg->channelName($channel);
-        }
         if (!in_array($channel, $this->_channels)) {
-            return false;
+            $this->_lazyChannelSetup($layer);
+            $reg = &$this->getRegistry($layer);
+            if ($reg) {
+                $channel = $reg->channelName($channel);
+            }
+            if (!in_array($channel, $this->_channels)) {
+                return false;
+            }
         }
         if ($channel != 'pear.php.net') {
             if (in_array($key, $this->_channelConfigInfo)) {
@@ -1170,6 +1209,9 @@ class PEAR_Config extends PEAR
             }
         } else {
             if ($key == 'default_channel') {
+                if (!isset($reg)) {
+                    $reg = &$this->getRegistry($layer);
+                }
                 if ($reg) {
                     $value = $reg->channelName($value);
                 }
@@ -1183,6 +1225,7 @@ class PEAR_Config extends PEAR
             if (!isset($this->_registry[$layer]) ||
                   $value != $this->_registry[$layer]->install_dir) {
                 $this->_registry[$layer] = &new PEAR_Registry($value);
+                $this->_regInitialized[$layer] = false;
                 $this->_registry[$layer]->setConfig($this);
             }
         }
@@ -1190,6 +1233,30 @@ class PEAR_Config extends PEAR
     }
 
     // }}}
+    function _lazyChannelSetup($uselayer = false)
+    {
+        $merge = false;
+        foreach ($this->_registry as $layer => $p) {
+            if ($uselayer && $uselayer != $layer) {
+                continue;
+            }
+            if (!$this->_regInitialized[$layer]) {
+                if (!is_object($this->_registry[$layer])) {
+                    if ($phpdir = $this->get('php_dir', $layer, 'pear.php.net')) {
+                        $this->_registry[$layer] = &new PEAR_Registry($phpdir);
+                        $this->_registry[$layer]->setConfig($this);
+                        $this->_regInitialized[$layer] = false;
+                    } else {
+                        unset($this->_registry[$layer]);
+                        return;
+                    }
+                }
+                $this->setChannels($this->_registry[$layer]->listChannels(), $merge);
+                $this->_regInitialized[$layer] = true;
+                $merge = true;
+            }
+        }
+    }
     // {{{ setChannels()
     
     /**
