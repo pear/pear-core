@@ -477,9 +477,8 @@ parameter.
                     continue;
                 }
                 extract($info);
-                $pkginfo = $reg->packageInfo($package, null, $channel);
-                $inst_version = $pkginfo['version'];
-                $inst_state   = $pkginfo['release_state'];
+                $inst_version = $reg->packageInfo($package, 'version', $channel);
+                $inst_state   = $reg->packageInfo($package, 'release_state', $channel);
                 if (version_compare("$version", "$inst_version", "le")) {
                     // installed version is up-to-date
                     continue;
