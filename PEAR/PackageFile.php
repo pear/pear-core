@@ -206,6 +206,10 @@ class PEAR_PackageFile
         $origfile = $file;
         foreach ($content as $file) {
             $name = $file['filename'];
+            if ($name == 'package2.xml') { // allow a .tgz to distribute both versions
+                $xml = $name;
+                break;
+            }
             if ($name == 'package.xml') {
                 $xml = $name;
                 break;
