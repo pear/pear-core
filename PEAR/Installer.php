@@ -265,7 +265,9 @@ class PEAR_Installer extends PEAR_Downloader
         // Clean up the DIRECTORY_SEPARATOR mess
         $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
         list($dest_file, $orig_file) = preg_replace(array('!\\\\+!', '!/!', "!$ds2+!"),
-                                                    DIRECTORY_SEPARATOR,
+                                                    array(DIRECTORY_SEPARATOR,
+                                                          DIRECTORY_SEPARATOR,
+                                                          DIRECTORY_SEPARATOR),
                                                     array($dest_file, $orig_file));
         $final_dest_file = $installed_as = $dest_file;
         $dest_dir = dirname($final_dest_file);
@@ -1143,8 +1145,8 @@ class PEAR_Installer extends PEAR_Downloader
                 // Clean up the DIRECTORY_SEPARATOR mess
                 $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
                 $dest_file = preg_replace(array('!\\\\+!', '!/!', "!$ds2+!"),
-                                                            '/',
-                                                            $dest_file);
+                                          array('/', '/', '/'),
+                                          $dest_file);
             } else {
                 $role = &PEAR_Installer_Role::factory($pkg, $atts['role'], $this->config);
                 $role->setup($this, $pkg, $atts, $file);
@@ -1216,8 +1218,8 @@ class PEAR_Installer extends PEAR_Downloader
                 // Clean up the DIRECTORY_SEPARATOR mess
                 $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
                 $dest_file = preg_replace(array('!\\+!', '!/!', "!$ds2+!"),
-                                                            '/',
-                                                            $dest_file);
+                                          array('/', '/', '/'),
+                                          $dest_file);
             } else {
                 $role = &PEAR_Installer_Role::factory($pf, $atts['role'], $this->config);
                 $role->setup($this, $pf, $atts, $file);

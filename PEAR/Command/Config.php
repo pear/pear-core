@@ -279,8 +279,8 @@ and uninstall).
         // Clean up the DIRECTORY_SEPARATOR mess
         $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
         $root = preg_replace(array('!\\+!', '!/+!', "!$ds2+!"),
-                                                    '/',
-                                                    $root);
+                             array('/', '/', '/'),
+                            $root);
         if ($root{0} != '/') {
             return PEAR::raiseError('Root directory must be an absolute path beginning with "/", ' .
                 'was: "' . $root . '"');

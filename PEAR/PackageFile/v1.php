@@ -747,7 +747,7 @@ class PEAR_PackageFile_v1
 
     function addFile($dir, $file, $attrs)
     {
-        $dir = preg_replace(array('!\\\\+!', '!/+!'), '/', $dir);
+        $dir = preg_replace(array('!\\\\+!', '!/+!'), array('/', '/'), $dir);
         if ($dir == '/' || $dir == '') {
             $dir = '';
         } else {
