@@ -158,14 +158,6 @@ class PEAR_PackageFile_v2
         $this->_logger = &$logger;
     }
 
-    function setLogger(&$logger)
-    {
-        if (!is_object($logger) || !method_exists($logger, 'log')) {
-            return PEAR::raiseError('Logger must be compatible with PEAR_Common::log');
-        }
-        $this->_logger = &$logger;
-    }
-
     function setPackagefile($file, $archive = false)
     {
         $this->_packageFile = $file;
@@ -232,7 +224,7 @@ class PEAR_PackageFile_v2
      */
     function getFilelist($preserve = false)
     {
-        if (isset($this->_packageInfo['filelist'])) {
+        if (isset($this->_packageInfo['filelist']) && !$preserve) {
             return $this->_packageInfo['filelist'];
         }
         if ($contents = $this->getContents()) {
@@ -270,10 +262,6 @@ class PEAR_PackageFile_v2
         if (isset($contents['dir']['attribs']['baseinstalldir'])) {
             $base = $contents['dir']['attribs']['baseinstalldir'];
         }
-        $contents = $contents['dir']['file'];
-        if (!isset($contents[0])) {
-            $contents = array($contents);
-        }
         if (isset($this->_packageInfo['phprelease'])) {
             $release = $this->_packageInfo['phprelease'];
         } elseif (isset($this->_packageInfo['extsrcrelease'])) {
@@ -285,58 +273,62 @@ class PEAR_PackageFile_v2
             return PEAR::raiseError(
                 'Exception: bundles should be handled in download code only');
         }
-        if (!isset($release[0])) {
-            if (!isset($release['installconditions']) && !isset($release['filelist'])) {
-                return $contents;
+        if ($release) {
+            if (!isset($release[0])) {
+                if (!isset($release['installconditions']) && !isset($release['filelist'])) {
+                    return $contents;
+                }
+                $release = array($release);
             }
-            $release = array($release);
-        }
-        include_once 'PEAR/Dependency2.php';
-        $depchecker = &new PEAR_Dependency2($this->_registry, array(),
-            array('channel' => $this->getChannel(), 'package' => $this->getPackage()),
-            PEAR_VALIDATE_INSTALLING);
-        foreach ($release as $instance) {
-            if (isset($instance['installconditions'])) {
-                $installconditions = $instance['installconditions'];
-                if (is_array($installconditions)) {
-                    PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                    foreach ($installconditions as $type => $conditions) {
-                        if (!isset($conditions[0])) {
-                            $conditions = array($conditions);
-                        }
-                        foreach ($conditions as $condition) {
-                            $ret = $depchecker->{"validate{$type}Dependency"}($condition);
-                            if (PEAR::isError($ret)) {
-                                PEAR::popErrorHandling();
-                                continue 3; // skip this release
+            include_once 'PEAR/Dependency2.php';
+            $depchecker = &new PEAR_Dependency2($this->_registry, array(),
+                array('channel' => $this->getChannel(), 'package' => $this->getPackage()),
+                PEAR_VALIDATE_INSTALLING);
+            foreach ($release as $instance) {
+                if (isset($instance['installconditions'])) {
+                    $installconditions = $instance['installconditions'];
+                    if (is_array($installconditions)) {
+                        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                        foreach ($installconditions as $type => $conditions) {
+                            if (!isset($conditions[0])) {
+                                $conditions = array($conditions);
+                            }
+                            foreach ($conditions as $condition) {
+                                $ret = $depchecker->{"validate{$type}Dependency"}($condition);
+                                if (PEAR::isError($ret)) {
+                                    PEAR::popErrorHandling();
+                                    continue 3; // skip this release
+                                }
                             }
                         }
+                        PEAR::popErrorHandling();
                     }
-                    PEAR::popErrorHandling();
                 }
+                // this is the release to use
+                if (isset($instance['filelist'])) {
+                    // ignore files
+                    if (isset($instance['filelist']['ignore'])) {
+                        $ignore = isset($instance['filelist']['ignore'][0]) ?
+                            $instance['filelist']['ignore'] :
+                            array($instance['filelist']['ignore']);
+                        foreach ($ignore as $ig) {
+                            unset ($contents[$ig['attribs']['name']]);
+                        }
+                    }
+                    // install files as this name
+                    if (isset($instance['filelist']['installas'])) {
+                        $installas = isset($instance['filelist']['installas'][0]) ?
+                            $instance['filelist']['installas'] :
+                            array($instance['filelist']['installas']);
+                        foreach ($installas as $as) {
+                            $contents[$as['attribs']['name']]['attribs']['install-as'] =
+                                $as['attribs']['as'];
+                        }
+                    }
+                }
+                return $contents;
             }
-            // this is the release to use
-            if (isset($instance['filelist'])) {
-                // ignore files
-                if (isset($instance['filelist']['ignore'])) {
-                    $ignore = isset($instance['filelist']['ignore'][0]) ?
-                        $instance['filelist']['ignore'] :
-                        array($instance['filelist']['ignore']);
-                    foreach ($ignore as $ig) {
-                        unset ($contents[$ig['attribs']['name']]);
-                    }
-                }
-                // install files as this name
-                if (isset($instance['filelist']['installas'])) {
-                    $installas = isset($instance['filelist']['installas'][0]) ?
-                        $instance['filelist']['installas'] :
-                        array($instance['filelist']['installas']);
-                    foreach ($installas as $as) {
-                        $contents[$as['attribs']['name']]['attribs']['install-as'] =
-                            $as['attribs']['as'];
-                    }
-                }
-            }
+        } else { // simple release - no installconditions or install-as
             return $contents;
         }
         // no releases matched
@@ -363,9 +355,9 @@ class PEAR_PackageFile_v2
     {
         if (isset($this->_packageInfo['filelist'][$file])) {
             $this->_packageInfo['filelist'][$file] =
-                array_merge($this->_packageInfo['filelist'][$file], $atts);
+                array_merge($this->_packageInfo['filelist'][$file], $atts['attribs']);
         } else {
-            $this->_packageInfo['filelist'][$file] = $atts;
+            $this->_packageInfo['filelist'][$file] = $atts['attribs'];
         }
     }
 
@@ -438,6 +430,7 @@ class PEAR_PackageFile_v2
             $this->_packageInfo['old']['release_notes'] = $this->getNotes();
             $this->_packageInfo['old']['release_deps'] = $this->getDeps();
             $this->_packageInfo['old']['maintainers'] = $this->getMaintainers();
+            $this->_packageInfo['xsdversion'] = '2.0';
             return $this->_packageInfo;
         } else {
             $info = $this->_packageInfo;
@@ -1610,8 +1603,8 @@ class PEAR_PackageFile_v2
                             '<dir name="' . $list['attribs']['name'] . '">');
                     }
                     if (!$allowignore && !$this->_validateRole($file['attribs']['role'])) {
-                        return $this->_invalidFileRole($list[$filetag]['attribs']['name'],
-                            $list['attribs']['name']);
+                        return $this->_invalidFileRole($file['attribs']['name'],
+                            $list['attribs']['name'], $file['attribs']['role']);
                     }
                     $f = $file;
                     unset($f['attribs']);
@@ -1744,8 +1737,7 @@ class PEAR_PackageFile_v2
      */
     function _validateRole($role)
     {
-        include_once 'PEAR/Common.php';
-        return in_array($role, PEAR_Common::getFileRoles());
+        return in_array($role, PEAR_Installer_Role::getValidRoles($this->getReleaseType()));
     }
 
     function _detectFilelist()
@@ -1947,7 +1939,7 @@ class PEAR_PackageFile_v2
         foreach ($info as $fa) {
             $fa = $fa['attribs'];
             $file = $fa['name'];
-            if ($fa['role'] == 'php' && $dir_prefix) {
+            if (in_array($fa['role'], PEAR_Installer_Role::getPhpRoles()) && $dir_prefix) {
                 call_user_func_array($log, array(1, "Analyzing $file"));
                 if (!file_exists($dir_prefix . DIRECTORY_SEPARATOR . $file)) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_FILE_NOTFOUND,

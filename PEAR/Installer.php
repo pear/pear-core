@@ -371,49 +371,18 @@ class PEAR_Installer extends PEAR_Downloader
 
         $channel = $pkg->getChannel();
         // {{{ assemble the destination paths
-        switch ($atts['role']) {
-            case 'doc':
-            case 'data':
-            case 'test':
-                $dest_dir = $this->config->get($atts['role'] . '_dir',
-                    null, $channel) . DIRECTORY_SEPARATOR . $this->pkginfo->getPackage();
-                unset($atts['baseinstalldir']);
-                break;
-            case 'ext':
-            case 'php':
-                $dest_dir = $this->config->get($atts['role'] . '_dir',
-                    null, $channel);
-                break;
-            case 'script':
-                $dest_dir = $this->config->get('bin_dir', null, $channel);
-                break;
-            case 'src':
-            case 'extsrc':
-                $this->source_files++;
-                return;
-            default:
-                return $this->raiseError('Invalid role `' . $atts['role'] .
+        if (!in_array($atts['attribs']['role'],
+              PEAR_Installer_Role::getValidRoles($pkg->getReleaseType()))) {
+            return $this->raiseError('Invalid role `' . $atts['attribs']['role'] .
                     "' for file $file");
         }
-        $save_destdir = $dest_dir;
-        if (!empty($atts['baseinstalldir'])) {
-            $dest_dir .= DIRECTORY_SEPARATOR . $atts['baseinstalldir'];
+        $role = &PEAR_Installer_Role::factory($pkg, $atts['attribs']['role'], $this->config);
+        $role->setup($this, $pkg, $atts['attribs'], $file);
+        if (!$role->isInstallable()) {
+            return;
         }
-        if (dirname($file) != '.' && empty($atts['install-as'])) {
-            $dest_dir .= DIRECTORY_SEPARATOR . dirname($file);
-        }
-        if (empty($atts['install-as'])) {
-            $dest_file = $dest_dir . DIRECTORY_SEPARATOR . basename($file);
-        } else {
-            $dest_file = $dest_dir . DIRECTORY_SEPARATOR . $atts['install-as'];
-        }
-        $orig_file = $tmp_path . DIRECTORY_SEPARATOR . $file;
-
-        // Clean up the DIRECTORY_SEPARATOR mess
-        $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
-        list($dest_file, $orig_file) = preg_replace(array('!\\\\+!', '!/!', "!$ds2+!"),
-                                                    DIRECTORY_SEPARATOR,
-                                                    array($dest_file, $orig_file));
+        list($save_destdir, $dest_dir, $dest_file, $orig_file) =
+            $role->processInstallation($pkg, $atts['attribs'], $file, $tmp_path);
         $installed_as = $dest_file;
         $final_dest_file = $this->_prependPath($dest_file, $this->installroot);
         $dest_dir = dirname($final_dest_file);
@@ -427,8 +396,9 @@ class PEAR_Installer extends PEAR_Downloader
             }
             $this->log(3, "+ mkdir $dest_dir");
         }
-        unset($file['attribs']);
-        if (!count($file)) { // no tasks
+        $attribs = $atts['attribs'];
+        unset($atts['attribs']);
+        if (!count($atts)) { // no tasks
             if (!file_exists($orig_file)) {
                 return $this->raiseError("file $orig_file does not exist",
                                          PEAR_INSTALLER_FAILED);
@@ -438,7 +408,7 @@ class PEAR_Installer extends PEAR_Downloader
                                          PEAR_INSTALLER_FAILED);
             }
             $this->log(3, "+ cp $orig_file $dest_file");
-            if (isset($atts['md5sum'])) {
+            if (isset($attribs['md5sum'])) {
                 $md5sum = md5_file($dest_file);
             }
         } else { // file with tasks
@@ -449,10 +419,10 @@ class PEAR_Installer extends PEAR_Downloader
             $fp = fopen($orig_file, "r");
             $contents = fread($fp, filesize($orig_file));
             fclose($fp);
-            if (isset($atts['md5sum'])) {
+            if (isset($attribs['md5sum'])) {
                 $md5sum = md5($contents);
             }
-            foreach ($file as $tag => $raw) {
+            foreach ($atts as $tag => $raw) {
                 $tag = str_replace($pkg->getTasksNs(), '', $tag);
                 $task = "PEAR_Task_$tag";
                 $task = new $task($this->config);
@@ -468,7 +438,7 @@ class PEAR_Installer extends PEAR_Downloader
         }
         // {{{ check the md5
         if (isset($md5sum)) {
-            if (strtolower($md5sum) == strtolower($atts['md5sum'])) {
+            if (strtolower($md5sum) == strtolower($attribs['md5sum'])) {
                 $this->log(2, "md5sum ok: $final_dest_file");
             } else {
                 if (empty($options['force'])) {
@@ -484,7 +454,7 @@ class PEAR_Installer extends PEAR_Downloader
         // }}}
         // {{{ set file permissions
         if (!OS_WINDOWS) {
-            if ($atts['role'] == 'script') {
+            if ($role->isExecutable()) {
                 $mode = 0777 & ~(int)octdec($this->config->get('umask'));
                 $this->log(3, "+ chmod +x $dest_file");
             } else {
@@ -499,7 +469,7 @@ class PEAR_Installer extends PEAR_Downloader
         $this->addFileOperation("rename", array($dest_file, $final_dest_file));
         // Store the full path where the file was installed for easy unistall
         $this->addFileOperation("installed_as", array($file, $installed_as,
-                                $save_destdir, dirname(substr($dest_file, strlen($save_destdir)))));
+                            $save_destdir, dirname(substr($dest_file, strlen($save_destdir)))));
 
         //$this->log(2, "installed: $dest_file");
         return PEAR_INSTALLER_OK;
@@ -879,7 +849,7 @@ class PEAR_Installer extends PEAR_Downloader
         if (empty($options['upgrade'])) {
             // checks to do only when installing new packages
             if (empty($options['force']) && $this->_registry->packageExists($pkgname, $channel)) {
-                return $this->raiseError("$channel/$pkgname already installed");
+                return $this->raiseError("$channel/$pkgname is already installed");
             }
         } else {
             if ($this->_registry->packageExists($pkgname, $channel)) {

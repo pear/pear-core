@@ -21,6 +21,7 @@
 
 require_once 'PEAR.php';
 require_once 'PEAR/Registry.php';
+require_once 'PEAR/Installer/Role.php';
 require_once 'System.php';
 
 /**
@@ -447,6 +448,7 @@ class PEAR_Config extends PEAR
     function PEAR_Config($user_file = '', $system_file = '')
     {
         $this->PEAR();
+        PEAR_Installer_Role::initializeConfig($this);
         $sl = DIRECTORY_SEPARATOR;
         if (empty($user_file)) {
             if (OS_WINDOWS) {
@@ -769,6 +771,51 @@ class PEAR_Config extends PEAR
     }
 
     // }}}
+
+    /**
+     * @param PEAR_Installer_Role_Common
+     * @return true|PEAR_Error
+     * @access private
+     */
+    function _addConfigVars($role)
+    {
+        $vars = call_user_func(array($role, 'getSupportingConfigVars'));
+        foreach ($vars as $name => $var) {
+            if (!is_array($var)) {
+                return $this->raiseError('Configuration information must be an array');
+            }
+            if (!isset($var['type'])) {
+                return $this->raiseError('Configuration information must contain a type');
+            } else {
+                if (!in_array($var['type'], array('string', 'mask', 'password'))) {
+                    return $this->raiseError(
+                        'Configuration type must be one of string, mask, or password');
+                }
+            }
+            if (!isset($var['default'])) {
+                return $this->raiseError(
+                    'Configuration information must contain a default value ("default" index)');
+            }
+            if (!isset($var['doc'])) {
+                return $this->raiseError(
+                    'Configuration information must contain a summary ("doc" index)');
+            }
+            if (!isset($var['prompt'])) {
+                return $this->raiseError(
+                    'Configuration information must contain a simple prompt ("prompt" index)');
+            }
+            if (!isset($var['group'])) {
+                return $this->raiseError(
+                    'Configuration information must contain a simple group ("group" index)');
+            }
+            if (isset($this->configuration_info[$name])) {
+                return $this->raiseError('Configuration variable "' . $name .
+                    '" already exists');
+            }
+            $this->configuration_info[$name] = $var;
+        }
+        return true;
+    }
     // {{{ _encodeOutput(&data)
 
     /**

@@ -26,8 +26,9 @@ TODO:
     - Add application level lock (avoid change the registry from the cmdline
       while using the GTK interface, for ex.)
 */
-require_once "System.php";
-require_once "PEAR.php";
+require_once 'System.php';
+require_once 'PEAR.php';
+require_once 'PEAR/Installer/Role.php';
 
 define('PEAR_REGISTRY_ERROR_LOCK',   -2);
 define('PEAR_REGISTRY_ERROR_FORMAT', -3);
@@ -425,11 +426,16 @@ class PEAR_Registry extends PEAR
                 foreach ($filelist as $name => $attrs) {
                     // it is possible for conflicting packages in different channels to
                     // conflict with data files/doc files
-                    if (isset($attrs['role']) && in_array($attrs['role'], array('src', 'extsrc'))) {
+                    if ($name == 'dirtree') {
+                        continue;
+                    }
+                    if (isset($attrs['role']) && !in_array($attrs['role'],
+                          PEAR_Installer_Role::getInstallableRoles())) {
                         // these are not installed
                         continue;
                     }
-                    if (isset($attrs['role']) && in_array($attrs['role'], array('doc', 'data', 'test'))) {
+                    if (isset($attrs['role']) && !in_array($attrs['role'],
+                          PEAR_Installer_Role::getBaseinstallRoles())) {
                         $attrs['baseinstalldir'] = $package;
                     }
                     if (isset($attrs['baseinstalldir'])) {
@@ -439,9 +445,9 @@ class PEAR_Registry extends PEAR
                     }
                     $file = preg_replace(',^/+,', '', $file);
                     if ($channel != 'pear.php.net') {
-                        $files[$file] = array(strtolower($channel), $package);
+                        $files[$attrs['role']][$file] = array(strtolower($channel), $package);
                     } else {
-                        $files[$file] = $package;
+                        $files[$attrs['role']][$file] = $package;
                     }
                 }
             }
@@ -1301,7 +1307,7 @@ class PEAR_Registry extends PEAR
      *
      * @access public
      */
-    function checkFileMap($path, $package)
+    function checkFileMap($path, $package, $attrs = false)
     {
         if (is_array($path)) {
             static $notempty;
@@ -1311,33 +1317,36 @@ class PEAR_Registry extends PEAR
             $pkgs = array();
             foreach ($path as $name => $attrs) {
                 if (is_array($attrs)) {
-                    if (in_array($attrs['role'], array('src', 'extsrc'))) {
+                    if (!in_array($attrs['role'], PEAR_Installer_Role::getInstallableRoles())) {
                         // these are not installed
                         continue;
                     }
-                    if (in_array($attrs['role'], array('doc', 'data', 'test'))) {
+                    if (!in_array($attrs['role'], PEAR_Installer_Role::getBaseinstallRoles())) {
                         $attrs['baseinstalldir'] = $package;
                     }
                     if (isset($attrs['baseinstalldir'])) {
                         $name = $attrs['baseinstalldir'].DIRECTORY_SEPARATOR.$name;
                     }
                 }
-                $pkgs[$name] = $this->checkFileMap($name, $package);
+                $pkgs[$name] = $this->checkFileMap($name, $package, $attrs);
             }
             return array_filter($pkgs, $notempty);
         }
         if (empty($this->filemap_cache) && PEAR::isError($err = $this->readFileMap())) {
             return $err;
         }
-        if (isset($this->filemap_cache[$path])) {
-            return $this->filemap_cache[$path];
+        if (!$attrs) {
+            $attrs = array('role' => 'php'); // any old call would be for PHP role only
+        }
+        if (isset($this->filemap_cache[$attrs['role']][$path])) {
+            return $this->filemap_cache[$attrs['role']][$path];
         }
         $l = strlen($this->install_dir);
         if (substr($path, 0, $l) == $this->install_dir) {
             $path = preg_replace('!^'.DIRECTORY_SEPARATOR.'+!', '', substr($path, $l));
         }
-        if (isset($this->filemap_cache[$path])) {
-            return $this->filemap_cache[$path];
+        if (isset($this->filemap_cache[$attrs['role']][$path])) {
+            return $this->filemap_cache[$attrs['role']][$path];
         }
         return false;
     }

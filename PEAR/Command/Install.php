@@ -321,16 +321,12 @@ package if needed.
         $this->installer->sortPkgDeps($downloaded);
         $reg = &$this->config->getRegistry();
         foreach ($downloaded as $pkg) {
-            if ($command == 'upgrade-all') {
-                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-            }
+            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $info = $this->installer->install($pkg['info'], $options, $this->config);
-            if ($command == 'upgrade-all') {
-                PEAR::popErrorHandling();
-                if (PEAR::isError($info)) {
-                    $this->ui->outputData(array('data' => 'ERROR: ' .$info->getMessage()));
-                    continue;
-                }
+            PEAR::popErrorHandling();
+            if (PEAR::isError($info)) {
+                $this->ui->outputData('ERROR: ' .$info->getMessage());
+                continue;
             }
             if (is_array($info)) {
                 if ($this->config->get('verbose') > 0) {

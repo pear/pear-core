@@ -361,36 +361,33 @@ class PEAR_Downloader_Package
                     $param->getParsedPackage());
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
                 $failed = false;
-                if (isset($deps['required']) && isset($deps['optional']) &&
-                      isset($deps['group'])) {
-                    if (isset($deps['required'])) {
-                        foreach ($deps['required'] as $type => $dep) {
-                            if (isset($dep['attribs'])) {
+                if (isset($deps['required'])) {
+                    foreach ($deps['required'] as $type => $dep) {
+                        if (!isset($dep[0])) {
+                            if (PEAR::isError($e =
+                                  $depchecker->{"validate{$type}Dependency"}($dep,
+                                  true, $params))) {
+                                $failed = true;
+                                $param->_downloader->log(0, $e->getMessage());
+                            } elseif (is_array($e)) {
+                                $param->_downloader->log(0, $e[0]);
+                            }
+                        } else {
+                            foreach ($dep as $d) {
                                 if (PEAR::isError($e =
-                                      $depchecker->{"validate{$type}Dependency"}($dep,
+                                      $depchecker->{"validate{$type}Dependency"}($d,
                                       true, $params))) {
                                     $failed = true;
                                     $param->_downloader->log(0, $e->getMessage());
                                 } elseif (is_array($e)) {
                                     $param->_downloader->log(0, $e[0]);
                                 }
-                            } else {
-                                foreach ($dep as $d) {
-                                    if (PEAR::isError($e =
-                                          $depchecker->{"validate{$type}Dependency"}($d,
-                                          true, $params))) {
-                                        $failed = true;
-                                        $param->_downloader->log(0, $e->getMessage());
-                                    } elseif (is_array($e)) {
-                                        $param->_downloader->log(0, $e[0]);
-                                    }
-                                }
                             }
                         }
                     }
                     if (isset($deps['optional'])) {
                         foreach ($deps['optional'] as $type => $dep) {
-                            if (isset($dep['attribs'])) {
+                            if (!isset($dep[0])) {
                                 if (PEAR::isError($e =
                                       $depchecker->{"validate{$type}Dependency"}($dep,
                                       false, $params))) {
