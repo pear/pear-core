@@ -534,6 +534,10 @@ class PEAR_Registry extends PEAR
         if ($key === null) {
             return $data;
         }
+        // compatibility for package.xml version 2.0
+        if (isset($data['old'][$key])) {
+            return $data['old'][$key];
+        }
         if (isset($data[$key])) {
             return $data[$key];
         }
@@ -542,7 +546,7 @@ class PEAR_Registry extends PEAR
 
     // }}}
     // {{{ _channelInfo()
-    
+
     /**
      * @param string Channel name
      * @return array|false
@@ -751,6 +755,9 @@ class PEAR_Registry extends PEAR
 
     function addPackage($package, $info, $channel = false)
     {
+        if (is_object($info)) {
+            return $this->addPackage2($info);
+        }
         if ($this->packageExists($package, $channel)) {
             return false;
         }
@@ -776,8 +783,44 @@ class PEAR_Registry extends PEAR
     }
 
     // }}}
+    // {{{ addPackage2()
+
+    function addPackage2($info)
+    {
+        if (!is_object($info)) {
+            return $this->addPackage($info['package'], $info);
+        }
+        $channel = $info->getChannel();
+        $package = $info->getPackage();
+        if ($this->packageExists($package, $channel)) {
+            return false;
+        }
+        if (!$this->channelExists($channel)) {
+            return false;
+        }
+        if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
+            return $e;
+        }
+        $fp = $this->_openPackageFile($package, 'wb', $channel);
+        if ($fp === null) {
+            $this->_unlock();
+            return false;
+        }
+        $info = $info->getDefaultGenerator();
+        $info = $info->toArray();
+        $info['_lastmodified'] = time();
+        fwrite($fp, serialize($info));
+        $this->_closePackageFile($fp);
+        if (isset($info['filelist'])) {
+            $this->rebuildFileMap();
+        }
+        $this->_unlock();
+        return true;
+    }
+
+    // }}}
     // {{{ updateChannel()
-    
+
     /**
      * For future expandibility purposes, separate this
      * @param PEAR_ChannelFile
@@ -906,6 +949,9 @@ class PEAR_Registry extends PEAR
 
     function updatePackage($package, $info, $merge = true, $channel = false)
     {
+        if (is_object($info)) {
+            return $this->updatePackage2($info, $merge);
+        }
         $oldinfo = $this->packageInfo($package, null, $channel);
         if (empty($oldinfo)) {
             return false;
@@ -917,6 +963,10 @@ class PEAR_Registry extends PEAR
         if ($fp === null) {
             $this->_unlock();
             return false;
+        }
+        if (is_object($info)) {
+            $info = $info->getDefaultGenerator();
+            $info = $info->toArray();
         }
         $info['_lastmodified'] = time();
         $newinfo = $info;
@@ -964,6 +1014,74 @@ class PEAR_Registry extends PEAR
     }
 
     // }}}
+    // {{{ updatePackage2()
+
+    function updatePackage2($info, $merge = true)
+    {
+        if (!is_object($info)) {
+            return $this->updatePackage($info['package'], $info, $merge);
+        }
+        $package = $info->getPackage();
+        $channel = $info->getChannel();
+        $oldinfo = $this->packageInfo($package, null, $channel);
+        if (empty($oldinfo)) {
+            return false;
+        }
+        if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
+            return $e;
+        }
+        $fp = $this->_openPackageFile($package, 'w', $channel);
+        if ($fp === null) {
+            $this->_unlock();
+            return false;
+        }
+        if (is_object($info)) {
+            $info = $info->getDefaultGenerator();
+            $info = $info->toArray();
+        }
+        $info['_lastmodified'] = time();
+        $newinfo = $info;
+        if ($merge) {
+            $info = array_merge($oldinfo, $info);
+        } else {
+            $diff = $info;
+        }
+        if (isset($newinfo['filelist'])) {
+            $diff = array_diff(array_keys($info['filelist']), array_keys($oldinfo['filelist']));
+            if (count($diff)) {
+                $test = array();
+                foreach ($diff as $key) {
+                    $test[$key] = $info['filelist'][$key];
+                }
+                if ($conflictarr = $this->checkFileMap($test, $package)) {
+                $text = array();
+                foreach ($conflictarr as $item) {
+                    if (is_array($item)) {
+                        $text[] = $item[1] . '::' . $item[0];
+                    } else {
+                        $text[] = "pear::$item";
+                    }
+                }
+                require_once 'PEAR/ErrorStack.php';
+                $text = implode(', ', array_unique($text));
+                    PEAR_ErrorStack::staticPush('PEAR_Registry', PEAR_REGISTRY_ERROR_CONFLICT,
+                        'error', array('package' => $package, 'conflicts' => $conflictarr),
+                        "package $channel::$package has files that conflict with installed packages $text");
+                    $this->_closePackageFile($fp);
+                    return false;
+                }
+            }
+        }
+        fwrite($fp, serialize($info));
+        $this->_closePackageFile($fp);
+        if (isset($newinfo['filelist'])) {
+            $this->rebuildFileMap();
+        }
+        $this->_unlock();
+        return true;
+    }
+
+    // }}}
     // {{{ getChannel()
     /**
      * @param string channel name
@@ -988,6 +1106,26 @@ class PEAR_Registry extends PEAR
             return $pear_channel;
         }
         return false;
+    }
+
+    // }}}
+    // {{{ getPackage()
+    /**
+     * @param string package name
+     * @param string channel name
+     * @return PEAR_PackageFile_v1|PEAR_PackageFile_v2|null
+     */
+    function &getPackage($package, $channel = 'pear')
+    {
+        if (!class_exists('PEAR_PackageFile')) {
+            include_once 'PEAR/PackageFile.php';
+        }
+        $info = $this->_packageInfo($package, null, $channel);
+        if ($info === null) {
+            return $info;
+        }
+        $pf = &PEAR_PackageFile::fromArray($info);
+        return $pf;
     }
 
     // }}}

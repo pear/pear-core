@@ -1326,6 +1326,12 @@ class PEAR_Common extends PEAR
         if (!defined('T_DOC_COMMENT')) {
             define('T_DOC_COMMENT', T_COMMENT);
         }
+        if (!defined('T_INTERFACE')) {
+            define('T_INTERFACE', -1);
+        }
+        if (!defined('T_IMPLEMENTS')) {
+            define('T_IMPLEMENTS', -1);
+        }
         if (!$fp = @fopen($file, "r")) {
             return false;
         }
@@ -1348,17 +1354,21 @@ class PEAR_Common extends PEAR
         $brace_level = 0;
         $lastphpdoc = '';
         $current_class = '';
+        $current_interface = '';
         $current_class_level = -1;
         $current_function = '';
         $current_function_level = -1;
         $declared_classes = array();
+        $declared_interfaces = array();
         $declared_functions = array();
         $declared_methods = array();
         $used_classes = array();
         $used_functions = array();
         $extends = array();
+        $implements = array();
         $nodeps = array();
         $inquote = false;
+        $interface = false;
         for ($i = 0; $i < sizeof($tokens); $i++) {
             if (is_array($tokens[$i])) {
                 list($token, $data) = $tokens[$i];
@@ -1374,6 +1384,11 @@ class PEAR_Common extends PEAR
                 }
             }
             switch ($token) {
+                case ';':
+                    if ($interface) {
+                        $current_function = '';
+                        $current_function_level = -1;
+                    }
                 case '"':
                     $inquote = true;
                     break;
@@ -1395,6 +1410,8 @@ class PEAR_Common extends PEAR
                 case ']': $bracket_level--; continue 2;
                 case '(': $paren_level++;   continue 2;
                 case ')': $paren_level--;   continue 2;
+                case T_INTERFACE:
+                    $interface = true;
                 case T_CLASS:
                     if (($current_class_level != -1) || ($current_function_level != -1)) {
                         PEAR::raiseError("Parser error: Invalid PHP file $file",
@@ -1404,6 +1421,7 @@ class PEAR_Common extends PEAR
                 case T_FUNCTION:
                 case T_NEW:
                 case T_EXTENDS:
+                case T_IMPLEMENTS:
                     $look_for = $token;
                     continue 2;
                 case T_STRING:
@@ -1411,12 +1429,21 @@ class PEAR_Common extends PEAR
                         $current_class = $data;
                         $current_class_level = $brace_level;
                         $declared_classes[] = $current_class;
+                    } elseif ($look_for == T_INTERFACE) {
+                        $current_interface = $data;
+                        $current_class_level = $brace_level;
+                        $declared_interfaces[] = $current_interface;
+                    } elseif ($look_for == T_IMPLEMENTS) {
+                        $implements[$current_class] = $data;
                     } elseif ($look_for == T_EXTENDS) {
                         $extends[$current_class] = $data;
                     } elseif ($look_for == T_FUNCTION) {
                         if ($current_class) {
                             $current_function = "$current_class::$data";
                             $declared_methods[$current_class][] = $data;
+                        } elseif ($current_interface) {
+                            $current_function = "$current_interface::$data";
+                            $declared_methods[$current_interface][] = $data;
                         } else {
                             $current_function = $data;
                             $declared_functions[] = $current_function;
@@ -1456,10 +1483,12 @@ class PEAR_Common extends PEAR
         return array(
             "source_file" => $file,
             "declared_classes" => $declared_classes,
+            "declared_interfaces" => $declared_interfaces,
             "declared_methods" => $declared_methods,
             "declared_functions" => $declared_functions,
             "used_classes" => array_diff(array_keys($used_classes), $nodeps),
             "inheritance" => $extends,
+            "implements" => $implements,
             );
     }
 

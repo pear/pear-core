@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
-<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://pear.php.net/dtd/package-1.0.xsd">
+<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
  <name>PEAR</name>
  <summary>PEAR Base System</summary>
  <description>The PEAR package contains:
@@ -35,7 +35,7 @@
   </maintainer>
   <maintainer>
    <user>pajoye</user>
-   <role>developer</role>
+   <role>lead</role>
    <name>Pierre-Alain Joye</name>
    <email>pajoye@pearfr.org</email>
   </maintainer>
@@ -123,6 +123,18 @@ PEAR_ErrorStack:
     <file role="php" name="PackageFile.php">
      <replace from="@PEAR-VER@" to="version" type="package-info"/>
     </file>
+    <dir name="PackageFile">
+     <dir name="Generator">
+      <file role="php" name="v1.php"/>
+      <file role="php" name="v2.php"/>
+     </dir>
+     <dir name="Parser">
+      <file role="php" name="v1.php"/>
+      <file role="php" name="v2.php"/>
+     </dir>
+     <file role="php" name="v1.php"/>
+     <file role="php" name="v2.php"/>
+    </dir>
     <file role="php" name="Registry.php"/>
     <file role="php" name="Remote.php"/>
     <file role="php" name="RunTest.php"/>

@@ -25,16 +25,25 @@ class PEAR_PackageFile_PHP4_v2 extends PEAR_PackageFile_v2
 
     function fromArray($pinfo)
     {
+        unset($pinfo['old']);
         $this->_packageInfo = $pinfo;
-        if (!$this->validate()) {
-            unset($this->_packageInfo);
-            return false;
-        }
-        $this->_detectFilelist();
     }
 
-    function getArray()
+    function getArray($forReg = false)
     {
+        if ($forReg) {
+            $this->_packageInfo['old'] = array();
+            $this->_packageInfo['old']['package'] = $this->getPackage();
+            $this->_packageInfo['old']['summary'] = $this->getSummary();
+            $this->_packageInfo['old']['description'] = $this->getDescription();
+            $this->_packageInfo['old']['release_version'] = $this->getVersion();
+            $this->_packageInfo['old']['release_date'] = $this->getDate();
+            $this->_packageInfo['old']['release_state'] = $this->getState();
+            $this->_packageInfo['old']['release_license'] = $this->getLicense();
+            $this->_packageInfo['old']['release_notes'] = $this->getNotes();
+            $this->_packageInfo['old']['release_deps'] = $this->getDeps();
+            $this->_packageInfo['old']['maintainers'] = $this->getMaintainers();
+        }
         return $this->_packageInfo;
     }
 
@@ -54,7 +63,7 @@ class PEAR_PackageFile_PHP4_v2 extends PEAR_PackageFile_v2
     function getPackage()
     {
         if (isset($this->_packageInfo['name']['_content'])) {
-            return $this->_packageInfo['package']['_content'];
+            return $this->_packageInfo['name']['_content'];
         }
         return false;
     }
@@ -183,7 +192,7 @@ class PEAR_PackageFile_PHP4_v2 extends PEAR_PackageFile_v2
                 );
             foreach ($this->_packageInfo[$type]['dependendencies'] as $dtype => $deps) {
                 foreach ($deps as $dep) {
-                    $s = array('type' => $map[$dtype]);
+                    $s = array('type' => $map[$dtype], 'channel' => $t = @$dep['attribs']['channel'] ? $t : 'pear');
                     if (!isset($dep['attribs']['min']) &&
                           !isset($dep['attribs']['max'])) {
                         $s['rel'] = 'has';
@@ -244,6 +253,11 @@ class PEAR_PackageFile_PHP4_v2 extends PEAR_PackageFile_v2
             return false;
         }
         return isset($this->_packageInfo[$type]['dependencies']);
+    }
+
+    function getPackagexmlVersion()
+    {
+        return '2.0';
     }
 
     function validate()

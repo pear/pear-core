@@ -17,9 +17,9 @@
 // +----------------------------------------------------------------------+
 //
 // $Id$
-define('PEAR_VALIDATE_NORMAL', 1);
-define('PEAR_VALIDATE_PACKAGING', 2);
-define('PEAR_VALIDATE_INSTALLING', 3);
+define('PEAR_VALIDATE_INSTALLING', 1);
+define('PEAR_VALIDATE_NORMAL', 3);
+define('PEAR_VALIDATE_PACKAGING', 7);
 class PEAR_Validate
 {
     var $packageregex = _PEAR_COMMON_PACKAGE_NAME_PREG;
