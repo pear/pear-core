@@ -1,4 +1,9 @@
 <?php
+/**
+ * Implements the replace file task
+ * @package PEAR
+ * @author Greg Beaver <cellog@php.net>
+ */
 class PEAR_Task_Replace extends PEAR_Task_Common
 {
     var $type = 'simple';
