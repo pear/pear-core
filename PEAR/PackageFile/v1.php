@@ -406,14 +406,7 @@ class PEAR_PackageFile_v1
     function setPackage($package)
     {
         $this->_packageInfo['package'] = $package;
-    }
-
-    function getExtends()
-    {
-        if (isset($this->_packageInfo['extends'])) {
-            return $this->_packageInfo['extends'];
-        }
-        return false;
+        $this->_isValid = false;
     }
 
     function getVersion()
@@ -422,6 +415,12 @@ class PEAR_PackageFile_v1
             return $this->_packageInfo['version'];
         }
         return false;
+    }
+
+    function setVersion($version)
+    {
+        $this->_packageInfo['version'] = $version;
+        $this->_isValid = false;
     }
 
     function getMaintainers()
@@ -440,6 +439,7 @@ class PEAR_PackageFile_v1
     {
         $this->_packageInfo['maintainers'][] =
             array('handle' => $handle, 'role' => $role, 'email' => $email, 'name' => $name);
+        $this->_isValid = false;
     }
 
     function updateMaintainer($role, $handle, $name, $email)
@@ -489,6 +489,12 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function setState($state)
+    {
+        $this->_packageInfo['state'] = $state;
+        $this->_isValid = false;
+    }
+
     function getDate()
     {
         if (isset($this->_packageInfo['release_date'])) {
@@ -497,12 +503,24 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function setDate($date)
+    {
+        $this->_packageInfo['release_date'] = $date;
+        $this->_isValid = false;
+    }
+
     function getLicense()
     {
         if (isset($this->_packageInfo['release_license'])) {
             return $this->_packageInfo['release_license'];
         }
         return false;
+    }
+
+    function setLicense($date)
+    {
+        $this->_packageInfo['release_license'] = $date;
+        $this->_isValid = false;
     }
 
     function getSummary()
@@ -516,6 +534,7 @@ class PEAR_PackageFile_v1
     function setSummary($summary)
     {
         $this->_packageInfo['summary'] = $summary;
+        $this->_isValid = false;
     }
 
     function getDescription()
@@ -529,6 +548,7 @@ class PEAR_PackageFile_v1
     function setDescription($desc)
     {
         $this->_packageInfo['description'] = $desc;
+        $this->_isValid = false;
     }
 
     function getNotes()
@@ -542,6 +562,7 @@ class PEAR_PackageFile_v1
     function setNotes($notes)
     {
         $this->_packageInfo['release_notes'] = $notes;
+        $this->_isValid = false;
     }
 
     function getDeps()
