@@ -69,11 +69,14 @@ class PEAR_Dependency2
      */
     function validateOsDependency($dep)
     {
-        if ($this->_state != PEAR_VALIDATE_INSTALLING) {
+        if ($this->_state != PEAR_VALIDATE_INSTALLING &&
+              $this->_state != PEAR_VALIDATE_DOWNLOADING) {
             return true;
         }
         if (isset($dep['conflicts']) && $dep['conflicts'] == 'yes') {
             $not = true;
+        } else {
+            $not = false;
         }
         switch (strtolower($dep['name'])) {
             case 'windows' :

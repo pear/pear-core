@@ -11,9 +11,12 @@ class PEAR_Task_Replace extends PEAR_Task_Common
 
     /**
      * Validate the raw xml at parsing-time.
+     * @param PEAR_PackageFile_v2
      * @param array raw, parsed xml
+     * @param PEAR_Config
+     * @static
      */
-    function validateXml($xml, &$config)
+    function validateXml($pkg, $xml, &$config, $fileXml)
     {
         if (!isset($xml['attribs'])) {
             return array(PEAR_TASK_ERROR_NOATTRIBS);
@@ -62,8 +65,9 @@ class PEAR_Task_Replace extends PEAR_Task_Common
     /**
      * Initialize a task instance with the parameters
      * @param array raw, parsed xml
+     * @param unused
      */
-    function init($xml)
+    function init($xml, $attribs)
     {
         $this->_replacements = isset($xml['attribs']) ? array($xml) : $xml;
     }
@@ -73,15 +77,16 @@ class PEAR_Task_Replace extends PEAR_Task_Common
      *
      * See validateXml() source for the complete list of allowed fields
      * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
-     * @param string location this file will temporarily install to
-     * @param string final location this file will go to
-     * @return false|PEAR_Error false to skip this file, PEAR_Error to fail
-     *         (use $this->throwError)
+     * @param string file contents
+     * @param string the eventual final file location (informational only)
+     * @return string|false|PEAR_Error false to skip this file, PEAR_Error to fail
+     *         (use $this->throwError), otherwise return the new contents
      */
-    function startSession($pkg, $temp, $dest)
+    function startSession($pkg, $contents, $dest)
     {
         $subst_from = $subst_to = array();
         foreach ($this->_replacements as $a) {
+            $a = $a['attribs'];
             $to = '';
             if ($a['type'] == 'php-const') {
                 if (preg_match('/^[a-z0-9_]+$/i', $a['to'])) {
@@ -100,14 +105,14 @@ class PEAR_Task_Replace extends PEAR_Task_Common
                         return false;
                     }
                 } else {
-                    $to = $this->config->get($a['to'], null, $channel);
+                    $to = $this->config->get($a['to'], null, $pkg->getChannel());
                 }
                 if (is_null($to)) {
                     $this->installer->log(0, "invalid pear-config replacement: $a[to]");
                     return false;
                 }
             } elseif ($a['type'] == 'package-info') {
-                if ($t = $this->pkginfo->packageInfo($a['to'])) {
+                if ($t = $pkg->packageInfo($a['to'])) {
                     $to = $t;
                 } else {
                     $this->installer->log(0, "invalid package-info replacement: $a[to]");
@@ -120,20 +125,11 @@ class PEAR_Task_Replace extends PEAR_Task_Common
             }
         }
         $this->installer->log(3, "doing " . sizeof($subst_from) .
-            " substitution(s) for $final_dest_file");
+            " substitution(s) for $dest");
         if (sizeof($subst_from)) {
             $contents = str_replace($subst_from, $subst_to, $contents);
         }
-        $wp = @fopen($dest_file, "wb");
-        if (!is_resource($wp)) {
-            return $this->throwError("failed to create $dest_file: $php_errormsg",
-                                     PEAR_INSTALLER_FAILED);
-        }
-        if (!fwrite($wp, $contents)) {
-            return $this->throwError("failed writing to $dest_file: $php_errormsg",
-                                     PEAR_INSTALLER_FAILED);
-        }
-        fclose($wp);
+        return $contents;
     }
 }
 ?>

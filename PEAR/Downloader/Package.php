@@ -227,12 +227,6 @@ class PEAR_Downloader_Package
                         $this->_downloader->_getDepPackageDownloadUrl($dep, $pname);
                     continue;
                 }
-                if ($dep['type'] == 'php') {
-                    
-                }
-                if ($dep['type'] == 'ext') {
-                    
-                }
             }
         }
     }

@@ -423,17 +423,28 @@ class PEAR_Installer extends PEAR_Downloader
                 $md5sum = md5($contents);
             }
             foreach ($atts as $tag => $raw) {
-                $tag = str_replace($pkg->getTasksNs(), '', $tag);
+                $tag = str_replace($pkg->getTasksNs() . ':', '', $tag);
                 $task = "PEAR_Task_$tag";
-                $task = new $task($this->config);
-                $task->init($raw);
-                $res = $task->startSession($pkg, $dest_file, $final_dest_file);
+                $task = new $task($this->config, $this);
+                $task->init($raw, $attribs);
+                $res = $task->startSession($pkg, $contents, $final_dest_file);
                 if (!$res) {
                     continue; // skip this file
                 }
                 if (PEAR::isError($res)) {
                     return $res;
                 }
+                $contents = $res; // save changes
+                $wp = @fopen($dest_file, "wb");
+                if (!is_resource($wp)) {
+                    return $this->raiseError("failed to create $dest_file: $php_errormsg",
+                                             PEAR_INSTALLER_FAILED);
+                }
+                if (!fwrite($wp, $contents)) {
+                    return $this->raiseError("failed writing to $dest_file: $php_errormsg",
+                                             PEAR_INSTALLER_FAILED);
+                }
+                fclose($wp);
             }
         }
         // {{{ check the md5
