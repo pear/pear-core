@@ -13,8 +13,8 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Authors:   Tomas V.V.Cox <cox@idecnet.com>                           |
-// |            Greg Beaver <cellog@php.net>                              |
+// | Authors:   Greg Beaver <cellog@php.net>                              |
+// |            Tomas V.V.Cox <cox@idecnet.com>                           |
 // |                                                                      |
 // +----------------------------------------------------------------------+
 //
@@ -24,24 +24,67 @@ require_once 'PEAR.php';
 require_once 'PEAR/Registry.php';
 require_once 'PEAR/Config.php';
 
+/**
+ * Track dependency relationships between installed packages
+ * @author Greg Beaver <cellog@php.net>
+ * @author Tomas V.V.Cox <cox@idec.net.com>
+ * @package PEAR
+ */
 class PEAR_DependencyDB
 {
     // {{{ properties
 
+    /**
+     * This is initialized by {@link setConfig()}
+     * @var PEAR_Config
+     * @access private
+     */
     var $_config;
+    /**
+     * This is initialized by {@link setConfig()}
+     * @var PEAR_Registry
+     * @access private
+     */
     var $_registry;
+    /**
+     * Filename of the dependency DB (usually .depdb)
+     * @var string
+     * @access private
+     */
     var $_depdb = false;
-    var $lockfile = false;
-    var $lock_fp = false;
+    /**
+     * File name of the lockfile (usually .depdblock)
+     * @var string
+     * @access private
+     */
+    var $_lockfile = false;
+    /**
+     * Open file resource for locking the lockfile
+     * @var resource|false
+     * @access private
+     */
+    var $_lockFp = false;
+    /**
+     * API version of this class, used to validate a file on-disk
+     * @var string
+     * @access private
+     */
     var $_version = '1.0';
+    /**
+     * Cached dependency database file
+     * @var array|null
+     * @access private
+     */
     var $_cache;
 
     // }}}
     // {{{ & singleton()
 
     /**
+     * Get a raw dependency database.  Calls setConfig() and assertDepsDB()
      * @param string
      * @param PEAR_Config
+     * @param string|false full path to the dependency database, or false to use default
      * @return PEAR_DependencyDB|PEAR_Error
      * @static
      */
@@ -57,6 +100,11 @@ class PEAR_DependencyDB
         return $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE'];
     }
 
+    /**
+     * Set up the registry/location of dependency DB
+     * @param PEAR_Config
+     * @param string|false full path to the dependency database, or false to use default
+     */
     function setConfig(&$config, $depdb = false)
     {
         if (!$config) {
@@ -71,11 +119,16 @@ class PEAR_DependencyDB
         } else {
             $this->_depdb = $depdb;
         }
-        $this->lockfile = dirname($this->_depdb) . DIRECTORY_SEPARATOR . '.depdblock';
+        $this->_lockfile = dirname($this->_depdb) . DIRECTORY_SEPARATOR . '.depdblock';
     }
     // }}}
     // {{{ assertDepsDB()
 
+    /**
+     * Create the dependency database, if it doesn't exist.  Error if the database is
+     * newer than the code reading it.
+     * @return void|PEAR_Error
+     */
     function assertDepsDB()
     {
         if (!is_file($this->_depdb)) {
@@ -96,7 +149,7 @@ class PEAR_DependencyDB
 
     /**
      * Get a list of installed packages that depend on this package
-     * @param PEAR_PackageFile|array
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2|array
      * @return array|false
      */
     function getDependentPackages(&$pkg)
@@ -119,7 +172,7 @@ class PEAR_DependencyDB
      * Get a list of the actual dependencies of installed packages that depend on
      * a package.
      * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2|array
-     * @return array
+     * @return array|false
      */
     function getDependentPackageDependencies(&$pkg)
     {
@@ -150,6 +203,8 @@ class PEAR_DependencyDB
 
     /**
      * Get a list of dependencies of this installed package
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2|array
+     * @return array|false
      */
     function getDependencies(&$pkg)
     {
@@ -218,6 +273,10 @@ class PEAR_DependencyDB
         return false;
     }
 
+    /**
+     * Register dependencies of a package that is being installed or upgraded
+     * @param PEAR_PackageFile_v2|PEAR_PackageFile_v2
+     */
     function installPackage(&$package)
     {
         $data = $this->_getDepDB();
@@ -226,6 +285,13 @@ class PEAR_DependencyDB
         $this->_writeDepDB($data);
     }
 
+    /**
+     * Remove dependencies of a package that is being uninstalled, or upgraded.
+     *
+     * Upgraded packages first uninstall, then install
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2|array If an array, then it must have
+     *        indices 'channel' and 'package'
+     */
     function uninstallPackage(&$pkg)
     {
         $data = $this->_getDepDB();
@@ -282,6 +348,10 @@ class PEAR_DependencyDB
         $this->_writeDepDB($data);
     }
 
+    /**
+     * Rebuild the dependency DB by reading registry entries.
+     * @return true|PEAR_Error
+     */
     function rebuildDB()
     {
         $depdb = array('_version' => $this->_version);
@@ -300,48 +370,67 @@ class PEAR_DependencyDB
         return true;
     }
 
+    /**
+     * Register usage of the dependency DB to prevent race conditions
+     * @param int one of the LOCK_* constants
+     * @return true|PEAR_Error
+     * @access private
+     */
     function _lock($mode = LOCK_EX)
     {
         if (!eregi('Windows 9', php_uname())) {
-            if ($mode != LOCK_UN && is_resource($this->lock_fp)) {
+            if ($mode != LOCK_UN && is_resource($this->_lockFp)) {
                 // XXX does not check type of lock (LOCK_SH/LOCK_EX)
                 return true;
             }
             $open_mode = 'w';
             // XXX People reported problems with LOCK_SH and 'w'
             if ($mode === LOCK_SH) {
-                if (@!is_file($this->lockfile)) {
-                    touch($this->lockfile);
+                if (@!is_file($this->_lockfile)) {
+                    touch($this->_lockfile);
                 }
                 $open_mode = 'r';
             }
 
-            $this->lock_fp = @fopen($this->lockfile, $open_mode);
-
-            if (!is_resource($this->lock_fp)) {
+            if (!is_resource($this->_lockFp)) {
+                $this->_lockFp = @fopen($this->_lockfile, $open_mode);
+            }
+            if (!is_resource($this->_lockFp)) {
                 return PEAR::raiseError("could not create lock file" .
                                          (isset($php_errormsg) ? ": " . $php_errormsg : ""));
             }
-            if (!(int)flock($this->lock_fp, $mode)) {
+            if (!(int)flock($this->_lockFp, $mode)) {
                 switch ($mode) {
                     case LOCK_SH: $str = 'shared';    break;
                     case LOCK_EX: $str = 'exclusive'; break;
                     case LOCK_UN: $str = 'unlock';    break;
                     default:      $str = 'unknown';   break;
                 }
-                return PEAR::raiseError("could not acquire $str lock ($this->lockfile)");
+                return PEAR::raiseError("could not acquire $str lock ($this->_lockfile)");
             }
         }
         return true;
     }
 
+    /**
+     * Release usage of dependency DB
+     * @return true|PEAR_Error
+     * @access private
+     */
     function _unlock()
     {
         $ret = $this->_lock(LOCK_UN);
-        $this->lock_fp = null;
+        if (is_resource($this->_lockFp)) {
+            fclose($this->_lockFp);
+        }
+        $this->_lockFp = null;
         return $ret;
     }
 
+    /**
+     * Load the dependency database from disk, or return the cache
+     * @return array|PEAR_Error
+     */
     function _getDepDB()
     {
         if (isset($this->_cache)) {
@@ -361,6 +450,12 @@ class PEAR_DependencyDB
         return $data;
     }
 
+    /**
+     * Write out the dependency database to disk
+     * @param array the database
+     * @return true|PEAR_Error
+     * @access private
+     */
     function _writeDepDB(&$deps)
     {
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
@@ -381,8 +476,11 @@ class PEAR_DependencyDB
     }
 
     /**
-     * @param array
+     * Register all dependencies from a package in the dependencies database, in essence
+     * "installing" the package's dependency information
+     * @param array the database
      * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     * @access private
      */
     function _setPackageDeps(&$data, &$pkg)
     {
@@ -466,7 +564,14 @@ class PEAR_DependencyDB
         }
     }
 
-    function _registerDep(&$data, $pkg, $dep, $type, $group = false)
+    /**
+     * @param array the database
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     * @param array the specific dependency
+     * @param required|optional whether this is a required or an optional dep
+     * @param string|false dependency group this dependency is from, or false for ordinary dep
+     */
+    function _registerDep(&$data, &$pkg, $dep, $type, $group = false)
     {
         $info = array(
             'dep' => $dep,
