@@ -70,6 +70,7 @@ $pf2->addMaintainer('lead', 'cellog', 'Greg Beaver', 'cellog@php.net');
 $pf2->setNotes('blah');
 $pf2->setPearinstallerDep('1.4.0a1');
 $pf2->setPhpDep('4.2.0', '5.0.0');
+$pf2->addPackageDepWithChannel('optional', 'frong', 'floop');
 
 $ret = $reg->addPackage2($pf2);
 $phpunit->assertErrors(array(
@@ -97,7 +98,44 @@ $phpunit->showall();
 $phpunit->assertTrue(isset($contents['_lastmodified']), '_lastmodified not set pf2');
 unset($contents['_lastmodified']);
 $phpunit->assertEquals($pf2->getArray(true), $contents, 'pf2 file saved');
-
+$phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb');
+$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb')));
+$phpunit->assertEquals(array (
+  '_version' => '1.0',
+  'dependencies' => 
+  array (
+    'grob' => 
+    array (
+      'foo' => 
+      array (
+        0 => 
+        array (
+          'dep' => 
+          array (
+            'name' => 'frong',
+            'channel' => 'floop',
+          ),
+          'type' => 'optional',
+          'group' => false,
+        ),
+      ),
+    ),
+  ),
+  'packages' => 
+  array (
+    'floop' => 
+    array (
+      'frong' => 
+      array (
+        0 => 
+        array (
+          'channel' => 'grob',
+          'package' => 'foo',
+        ),
+      ),
+    ),
+  ),
+), $contents, 'depdb');
 echo 'tests done';
 ?>
 --EXPECT--
