@@ -732,6 +732,9 @@ class PEAR_ChannelFile {
      */
     function validChannelServer($server)
     {
+        if ($server == '__uri') {
+            return true;
+        }
         return (bool) preg_match(PEAR_CHANNELS_SERVER_PREG, $server);
     }
 
@@ -1020,8 +1023,8 @@ class PEAR_ChannelFile {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_SERVER);
             return false;
         } elseif (!$this->validChannelServer($server)) {
-            $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_SERVER,
-                array('server' => $server));
+            $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME,
+                array('tag' => 'name', 'name' => $server));
             return false;
         }
         if ($mirror) {
@@ -1080,6 +1083,7 @@ class PEAR_ChannelFile {
         } else {
             $this->_channelInfo['suggestedalias'] = $alias;
         }
+        return true;
     }
 
     /**

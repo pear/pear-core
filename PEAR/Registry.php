@@ -164,7 +164,6 @@ class PEAR_Registry extends PEAR
             $this->_addChannel($pear_channel);
             $private = new PEAR_ChannelFile;
             $private->setName('__uri');
-            $private->setServer('www.example.com');
             $private->addFunction('xmlrpc', '1.0', '****');
             $private->setSummary('Pseudo-channel for static packages');
             $this->_addChannel($private);
@@ -295,11 +294,10 @@ class PEAR_Registry extends PEAR
         if (!$channel || $this->_getChannelFromAlias($channel) == 'pear.php.net') {
             return $this->_assertStateDir($channel);
         }
-        $channel = strtolower($channel);
-        if (!@is_dir($this->statedir . DIRECTORY_SEPARATOR . '.channel.' . strtolower($channel))) {
-            if (!System::mkdir(array('-p', $this->statedir . DIRECTORY_SEPARATOR . '.channel.' . strtolower($channel)))) {
-                return $this->raiseError("could not create directory '" . 
-                    $this->statedir . DIRECTORY_SEPARATOR . '.channel.' . strtolower($channel) . "'");
+        $channelDir = $this->_channelDirectoryName($channel);
+        if (!@is_dir($channelDir)) {
+            if (!System::mkdir(array('-p', $channelDir))) {
+                return $this->raiseError("could not create directory '" . $channelDir . "'");
             }
             $this->_initializeChannelDirs();
         }
@@ -348,7 +346,8 @@ class PEAR_Registry extends PEAR
     function _packageFileName($package, $channel = false)
     {
         if ($channel && $this->_getChannelFromAlias($channel) != 'pear.php.net') {
-            $package = '.channel.' . strtolower($channel) . DIRECTORY_SEPARATOR . $package;
+            return $this->_channelDirectoryName($channel) . DIRECTORY_SEPARATOR .
+                strtolower($package) . '.reg';
         }
         return $this->statedir . DIRECTORY_SEPARATOR . strtolower($package) . '.reg';
     }
@@ -359,23 +358,17 @@ class PEAR_Registry extends PEAR
     /**
      * Get the name of the file where data for a given channel is stored.
      * @param string channel name
-     *
      * @return string registry file name
-     *
-     * @access public
      */
     function _channelFileName($channel, $noaliases = false)
     {
-        if (!$channel) {
-            $channel = 'pear.php.net';
+        if (!$noaliases) {
+            if (@file_exists($this->_getChannelAliasFileName($channel))) {
+                $channel = implode('', file($this->_getChannelAliasFileName($channel)));
+            }
         }
-        if (!$noaliases && file_exists($this->channelsdir . DIRECTORY_SEPARATOR . '.alias' .
-              DIRECTORY_SEPARATOR . strtolower($channel) . '.txt')) {
-            // translate an alias to an actual channel
-            $channel = implode('', file($this->channelsdir . DIRECTORY_SEPARATOR . '.alias' .
-                DIRECTORY_SEPARATOR . strtolower($channel) . '.txt'));
-        }
-        return $this->channelsdir . DIRECTORY_SEPARATOR . strtolower($channel) . '.reg';
+        return $this->channelsdir . DIRECTORY_SEPARATOR . str_replace('/', '_',
+            strtolower($channel)) . '.reg';
     }
 
     // }}}
@@ -388,7 +381,7 @@ class PEAR_Registry extends PEAR
     function _getChannelAliasFileName($alias)
     {
         return $this->channelsdir . DIRECTORY_SEPARATOR . '.alias' .
-              DIRECTORY_SEPARATOR . strtolower($alias) . '.txt';
+              DIRECTORY_SEPARATOR . str_replace('/', '_', strtolower($alias)) . '.txt';
     }
 
     // }}}
@@ -431,7 +424,8 @@ class PEAR_Registry extends PEAR
         if (!$channel || $this->_getChannelFromAlias($channel) == 'pear.php.net') {
             return $this->statedir;
         } else {
-            return $this->statedir . DIRECTORY_SEPARATOR . strtolower('.channel.' . $channel);
+            return $this->statedir . DIRECTORY_SEPARATOR . strtolower('.channel.' .
+                str_replace('/', '_', $channel));
         }
     }
 
@@ -898,7 +892,7 @@ class PEAR_Registry extends PEAR
     function _listChannelPackages($channel)
     {
         $pkglist = array();
-        $dp = @opendir($this->statedir . DIRECTORY_SEPARATOR . '.channel.' . strtolower($channel));
+        $dp = @opendir($this->_channelDirectoryName($channel));
         if (!$dp) {
             return $pkglist;
         }
@@ -1673,11 +1667,23 @@ class PEAR_Registry extends PEAR
                 if (strpos($components['path'], '/')) {
                     $parts = explode('/', $components['path']);
                     $components['host'] = array_shift($parts);
-                    $components['path'] = implode('/', $parts);
+                    if (count($parts) > 1) {
+                        $components['path'] = array_pop($parts);
+                        $components['host'] .= '/' . implode('/', $parts);
+                    } else {
+                        $components['path'] = implode('/', $parts);
+                    }
                 } else {
                     $components['host'] = $defaultchannel;
                 }
+            } else {
+                if (strpos($components['path'], '/')) {
+                    $parts = explode('/', $components['path']);
+                    $components['path'] = array_pop($parts);
+                    $components['host'] .= '/' . implode('/', $parts);
+                }
             }
+
             if (is_array($param)) {
                 $param['package'] = $components['path'];
             } else {
