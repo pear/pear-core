@@ -54,7 +54,7 @@ $phpunit->assertEquals('stable', $newpf->getState(), 'state');
 $phpunit->assertEquals('2004-11-17', $newpf->getDate(), 'date');
 $phpunit->assertEquals('sum', $newpf->getNotes(), 'notes');
 $phpunit->assertEquals(array(array('handle' => 'cellog', 'role' => 'lead', 'email' => 'cellog@php.net', 'name' => 'Greg Beaver')), $newpf->getMaintainers(), 'maintainers');
-$phpunit->assertEquals(array('/foo.php' => array('role' => 'php')), $newpf->getFilelist(), 'filelist');
+$phpunit->assertEquals(array('foo.php' => array('role' => 'php')), $newpf->getFilelist(), 'filelist');
 $phpunit->assertEquals('foop', $newpf->getPackage(), 'package');
 echo 'tests done';
 ?>

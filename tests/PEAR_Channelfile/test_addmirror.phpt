@@ -34,155 +34,312 @@ $chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
   </primary>
  </servers>
 </channel>');
-
-echo "after parsing\n";
-if (!$chf->validate()) {
-    echo "test default failed\n";
-    var_export($chf->toArray());
-    var_export($chf->toXml());
-} else {
-    $phpt->assertEquals(array (
-  'mirrors' => 
+$phpt->assertTrue($chf->validate(), 'initial setup');
+$phpt->assertEquals(array (
+  'attribs' => 
   array (
+    'version' => '1.0',
+    'xmlns' => 'http://pear.php.net/channel-1.0',
+    'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+    'xsi:schemaLocation' => 'http://pear.php.net/dtd/channel-1.0.xsd',
   ),
-  'subchannels' => 
-  array (
-  ),
-  'version' => '1.0',
   'name' => 'pear.php.net',
   'suggestedalias' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
-  'validatepackage' =>
-  array(
-    'version' => '1.0',
-    'name' => 'PEAR_Validate',
-  ),
-  'server' => 'pear.php.net',
-  'port' => 80,
-  'protocols' => 
+  'validatepackage' => 
   array (
-    'xmlrpc' => 
+    'attribs' => 
     array (
-      'functions' => 
+      'version' => '1.0',
+    ),
+    '_content' => 'PEAR_Validate',
+  ),
+  'servers' => 
+  array (
+    'primary' => 
+    array (
+      'attribs' => 
       array (
-        1 => 
+        'host' => 'pear.php.net',
+      ),
+      'xmlrpc' => 
+      array (
+        'function' => 
         array (
-          'version' => '1.0',
-          'name' => 'logintest',
-        ),
-        2 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listLatestReleases',
-        ),
-        3 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listAll',
-        ),
-        4 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.info',
-        ),
-        5 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.getDownloadURL',
-        ),
-        6 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.listAll',
-        ),
-        7 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.update',
+          0 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'logintest',
+          ),
+          1 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listLatestReleases',
+          ),
+          2 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listAll',
+          ),
+          3 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.info',
+          ),
+          4 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.getDownloadURL',
+          ),
+          5 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.listAll',
+          ),
+          6 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.update',
+          ),
         ),
       ),
     ),
   ),
 ), $chf->toArray(), 'Parsed array of default is not correct');
-}
 $chf->addMirror('mirror.php.net');
-
-echo "after add\n";
-if (!$chf->validate()) {
-    echo "test default failed\n";
-    var_export($chf->toArray());
-    var_export($chf->toXml());
-} else {
-    $phpt->assertEquals(array (
-  'mirrors' => 
+$phpt->assertTrue($chf->validate(), 'after add mirror');
+$phpt->assertEquals(array (
+  'attribs' => 
   array (
-    1 =>
-    array(
-      'server' => 'mirror.php.net',
-    ),
+    'version' => '1.0',
+    'xmlns' => 'http://pear.php.net/channel-1.0',
+    'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+    'xsi:schemaLocation' => 'http://pear.php.net/dtd/channel-1.0.xsd',
   ),
-  'subchannels' => 
-  array (
-  ),
-  'version' => '1.0',
   'name' => 'pear.php.net',
   'suggestedalias' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
-  'validatepackage' =>
-  array(
-    'version' => '1.0',
-    'name' => 'PEAR_Validate',
-  ),
-  'server' => 'pear.php.net',
-  'port' => 80,
-  'protocols' => 
+  'validatepackage' => 
   array (
-    'xmlrpc' => 
+    'attribs' => 
     array (
-      'functions' => 
+      'version' => '1.0',
+    ),
+    '_content' => 'PEAR_Validate',
+  ),
+  'servers' => 
+  array (
+    'primary' => 
+    array (
+      'attribs' => 
       array (
-        1 => 
+        'host' => 'pear.php.net',
+      ),
+      'xmlrpc' => 
+      array (
+        'function' => 
         array (
-          'version' => '1.0',
-          'name' => 'logintest',
+          0 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'logintest',
+          ),
+          1 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listLatestReleases',
+          ),
+          2 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listAll',
+          ),
+          3 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.info',
+          ),
+          4 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.getDownloadURL',
+          ),
+          5 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.listAll',
+          ),
+          6 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.update',
+          ),
         ),
-        2 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listLatestReleases',
-        ),
-        3 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listAll',
-        ),
-        4 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.info',
-        ),
-        5 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.getDownloadURL',
-        ),
-        6 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.listAll',
-        ),
-        7 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.update',
-        ),
+      ),
+    ),
+    'mirror' => 
+    array (
+      'attribs' => 
+      array (
+        'host' => 'mirror.php.net',
       ),
     ),
   ),
 ), $chf->toArray(), 'addMirror() did not work as expected');
-}
-
+$chf->addMirror('mirror.php2.net', 7900, '/something/');
+$phpt->assertTrue($chf->validate(), 'after add mirror 2');
+$phpt->assertEquals(array (
+  'attribs' => 
+  array (
+    'version' => '1.0',
+    'xmlns' => 'http://pear.php.net/channel-1.0',
+    'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+    'xsi:schemaLocation' => 'http://pear.php.net/dtd/channel-1.0.xsd',
+  ),
+  'name' => 'pear.php.net',
+  'suggestedalias' => 'pear',
+  'summary' => 'PHP Extension and Application Repository',
+  'validatepackage' => 
+  array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
+    '_content' => 'PEAR_Validate',
+  ),
+  'servers' => 
+  array (
+    'primary' => 
+    array (
+      'attribs' => 
+      array (
+        'host' => 'pear.php.net',
+      ),
+      'xmlrpc' => 
+      array (
+        'function' => 
+        array (
+          0 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'logintest',
+          ),
+          1 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listLatestReleases',
+          ),
+          2 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listAll',
+          ),
+          3 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.info',
+          ),
+          4 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.getDownloadURL',
+          ),
+          5 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.listAll',
+          ),
+          6 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.update',
+          ),
+        ),
+      ),
+    ),
+    'mirror' => 
+    array (
+      0 => 
+      array (
+        'attribs' => 
+        array (
+          'host' => 'mirror.php.net',
+        ),
+      ),
+      1 => 
+      array (
+        'attribs' => 
+        array (
+          'host' => 'mirror.php2.net',
+        ),
+      ),
+    ),
+  ),
+), $chf->toArray(), 'addmirror 2');
+echo 'tests done';
 ?>
 --EXPECT--
-after parsing
-after add
+tests done

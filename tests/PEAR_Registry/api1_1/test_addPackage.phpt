@@ -83,6 +83,14 @@ $phpunit->assertEquals(array (
     ),
   ),
 ), $contents, 'depdb');
+$phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.filemap', 'filemap');
+$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.filemap', 'filemap')));
+$phpunit->assertEquals(array (
+  'php' =>
+  array (
+    'foo.php' => 'foop',
+  ),
+), $contents, 'filemap');
 echo 'tests done';
 ?>
 --EXPECT--

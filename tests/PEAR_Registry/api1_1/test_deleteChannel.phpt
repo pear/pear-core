@@ -33,7 +33,6 @@ $phpunit->assertErrors(array(
 array('package' => 'PEAR_ChannelFile', 'message' => 'Missing channel name'),
 array('package' => 'PEAR_ChannelFile', 'message' => 'Missing channel summary'),
 array('package' => 'PEAR_ChannelFile', 'message' => 'Missing channel server for primary server'),
-array('package' => 'PEAR_ChannelFile', 'message' => 'No <xmlrpc> tag is defined'),
 ), 'invalid channelfile validation errors');
 $phpunit->assertFalse($ret, 'empty channelfile');
 
@@ -62,7 +61,7 @@ $ch->setName('test.test.test');
 $reg->addChannel($ch);
 $phpunit->assertNoErrors('setup');
 
-$contents = unserialize(implode('', file($statedir . DIRECTORY_SEPARATOR . '.channels' . DIRECTORY_SEPARATOR .
+$contents = unserialize(implode('', file($statedir . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.channels' . DIRECTORY_SEPARATOR .
     'test.test.test.reg')));
 $phpunit->assertTrue(isset($contents['_lastmodified']), 'lastmodified not set');
 unset($contents['_lastmodified']);

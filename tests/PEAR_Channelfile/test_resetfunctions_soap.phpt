@@ -11,21 +11,17 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 
 error_reporting(E_ALL);
 chdir(dirname(__FILE__));
-require_once './setup.php.inc';
-$chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
+require_once './setup.php.inc';$chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear.php.net</name>
  <suggestedalias>pear</suggestedalias>
  <summary>PHP Extension and Application Repository</summary>
- <validatepackage version="1.0">PEAR_Validate</validatepackage>
  <servers>
   <primary host="pear.php.net">
-   <xmlrpc>
-    <function version="1.0">logintest</function>
-   </xmlrpc>
    <soap>
+    <function version="1.0">logintest</function>
     <function version="1.0">package.listLatestReleases</function>
     <function version="1.0">package.listAll</function>
     <function version="1.0">package.info</function>
@@ -36,133 +32,118 @@ $chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
   </primary>
  </servers>
 </channel>');
-
-echo "after parsing\n";
-if (!$chf->validate()) {
-    echo "test default failed\n";
-    var_export($chf->toArray());
-    var_export($chf->toXml());
-} else {
-    $phpt->assertEquals(array (
-  'mirrors' => 
+$phpt->assertTrue($chf->validate(), 'initial parse');
+$phpt->assertEquals(array (
+  'attribs' => 
   array (
+    'version' => '1.0',
+    'xmlns' => 'http://pear.php.net/channel-1.0',
+    'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+    'xsi:schemaLocation' => 'http://pear.php.net/dtd/channel-1.0.xsd',
   ),
-  'subchannels' => 
-  array (
-  ),
-  'version' => '1.0',
   'name' => 'pear.php.net',
   'suggestedalias' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
-  'validatepackage' =>
-  array(
-    'version' => '1.0',
-    'name' => 'PEAR_Validate',
-  ),
-  'server' => 'pear.php.net',
-  'port' => 80,
-  'protocols' => 
+  'servers' => 
   array (
-    'xmlrpc' => 
+    'primary' => 
     array (
-      'functions' => 
+      'attribs' => 
       array (
-        1 => 
-        array (
-          'version' => '1.0',
-          'name' => 'logintest',
-        ),
+        'host' => 'pear.php.net',
       ),
-    ),
-    'soap' =>
-    array(
-      'functions' =>
-      array(
-        1 => 
+      'soap' => 
+      array (
+        'function' => 
         array (
-          'version' => '1.0',
-          'name' => 'package.listLatestReleases',
-        ),
-        2 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listAll',
-        ),
-        3 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.info',
-        ),
-        4 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.getDownloadURL',
-        ),
-        5 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.listAll',
-        ),
-        6 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.update',
+          0 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'logintest',
+          ),
+          1 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listLatestReleases',
+          ),
+          2 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listAll',
+          ),
+          3 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.info',
+          ),
+          4 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.getDownloadURL',
+          ),
+          5 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.listAll',
+          ),
+          6 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.update',
+          ),
         ),
       ),
     ),
   ),
 ), $chf->toArray(), 'Parsed array of default is not correct');
-}
+$chf->fromXmlString($chf->toXml());
 $chf->resetFunctions('soap');
 
-echo "after reset\n";
-if (!$chf->validate()) {
-    echo "test default failed\n";
-    var_export($chf->toArray());
-    var_export($chf->toXml());
-} else {
-    $phpt->assertEquals(array (
-  'mirrors' => 
+$phpt->assertTrue($chf->validate(), 're-parsing validate');
+$phpt->assertEquals(array (
+  'attribs' => 
   array (
-  ),
-  'subchannels' => 
-  array (
-  ),
-  'version' => '1.0',
-  'name' => 'pear.php.net',
-  'suggestedalias' => 'pear',
-  'summary' => 'PHP Extension and Application Repository',
-  'validatepackage' =>
-  array(
     'version' => '1.0',
-    'name' => 'PEAR_Validate',
+    'xmlns' => 'http://pear.php.net/channel-1.0',
+    'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+    'xsi:schemaLocation' => 'http://pear.php.net/dtd/channel-1.0 http://pear.php.net/dtd/channel-1.0.xsd',
   ),
-  'server' => 'pear.php.net',
-  'port' => 80,
-  'protocols' => 
+  'name' => 'pear.php.net',
+  'summary' => 'PHP Extension and Application Repository',
+  'suggestedalias' => 'pear',
+  'servers' => 
   array (
-    'xmlrpc' => 
+    'primary' => 
     array (
-      'functions' => 
+      'attribs' => 
       array (
-        1 => 
-        array (
-          'version' => '1.0',
-          'name' => 'logintest',
-        ),
-      ),
-    ),
-    'soap' =>
-    array (
-      'functions' =>
-      array (
+        'host' => 'pear.php.net',
       ),
     ),
   ),
-), $chf->toArray(), 'resetFunctions() did not work as expected');
-}
-
+), $chf->toArray(), 'Re-parsed array of default is not correct');
+echo 'tests done';
 ?>
 --EXPECT--
-after parsing
-after reset
+tests done

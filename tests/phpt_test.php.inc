@@ -352,7 +352,7 @@ class PEAR_PHPTest
     {
         ob_start();
         print "dumping registry...\n";
-        $infos = $reg->allPackageInfo();
+        $infos = $reg->packageInfo(null, null, null);
         foreach ($infos as $channel => $info) {
             echo "channel $channel:\n";
             foreach ($info as $pkg) {

@@ -27,7 +27,6 @@ $ch->setSummary('blah');
 $ch->setDefaultPEARProtocols();
 $reg->addChannel($ch);
 $phpunit->assertNoErrors('setup');
-$phpunit->showall();
 $ret = $reg->channelInfo('snark');
 $phpunit->assertNull($ret, 'snark');
 $ret = $reg->channelInfo('foo', true);
@@ -44,170 +43,233 @@ unset($ret2['_lastmodified']);
 $phpunit->assertEquals(array (
   'name' => 'test.test.test',
   'suggestedalias' => 'foo',
-  'server' => 'blah',
-  'summary' => 'blah',
-  'protocols' => 
+  'servers' => 
   array (
-    'xmlrpc' => 
+    'primary' => 
     array (
-      'functions' => 
+      'attribs' => 
       array (
-        0 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listLatestReleases',
-        ),
-        1 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listAll',
-        ),
-        2 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.info',
-        ),
-        3 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.getDownloadURL',
-        ),
-        4 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.getDepDownloadURL',
-        ),
-        5 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.update',
-        ),
-        6 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.listAll',
-        ),
+        'host' => 'blah',
       ),
-    ),
-    'soap' => 
-    array (
-      'functions' => 
+      'xmlrpc' => 
       array (
+        'function' => 
+        array (
+          0 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listLatestReleases',
+          ),
+          1 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listAll',
+          ),
+          2 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.info',
+          ),
+          3 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.getDownloadURL',
+          ),
+          4 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.getDepDownloadURL',
+          ),
+          5 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.update',
+          ),
+          6 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.listAll',
+          ),
+        ),
       ),
     ),
   ),
+  'summary' => 'blah',
 ), $ret, 'foo');
 $phpunit->assertEquals(array (
   'name' => 'test.test.test',
   'suggestedalias' => 'foo',
-  'server' => 'blah',
-  'summary' => 'blah',
-  'protocols' => 
+  'servers' => 
   array (
-    'xmlrpc' => 
+    'primary' => 
     array (
-      'functions' => 
+      'attribs' => 
       array (
-        0 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listLatestReleases',
-        ),
-        1 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listAll',
-        ),
-        2 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.info',
-        ),
-        3 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.getDownloadURL',
-        ),
-        4 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.getDepDownloadURL',
-        ),
-        5 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.update',
-        ),
-        6 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.listAll',
-        ),
+        'host' => 'blah',
       ),
-    ),
-    'soap' => 
-    array (
-      'functions' => 
+      'xmlrpc' => 
       array (
+        'function' => 
+        array (
+          0 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listLatestReleases',
+          ),
+          1 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listAll',
+          ),
+          2 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.info',
+          ),
+          3 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.getDownloadURL',
+          ),
+          4 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.getDepDownloadURL',
+          ),
+          5 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.update',
+          ),
+          6 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.listAll',
+          ),
+        ),
       ),
     ),
   ),
+  'summary' => 'blah',
 ), $ret1, 'test.test.test');
 $phpunit->assertEquals(array (
   'name' => 'test.test.test',
   'suggestedalias' => 'foo',
-  'server' => 'blah',
-  'summary' => 'blah',
-  'protocols' => 
+  'servers' => 
   array (
-    'xmlrpc' => 
+    'primary' => 
     array (
-      'functions' => 
+      'attribs' => 
       array (
-        0 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listLatestReleases',
-        ),
-        1 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listAll',
-        ),
-        2 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.info',
-        ),
-        3 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.getDownloadURL',
-        ),
-        4 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.getDepDownloadURL',
-        ),
-        5 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.update',
-        ),
-        6 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.listAll',
-        ),
+        'host' => 'blah',
       ),
-    ),
-    'soap' => 
-    array (
-      'functions' => 
+      'xmlrpc' => 
       array (
+        'function' => 
+        array (
+          0 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listLatestReleases',
+          ),
+          1 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listAll',
+          ),
+          2 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.info',
+          ),
+          3 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.getDownloadURL',
+          ),
+          4 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.getDepDownloadURL',
+          ),
+          5 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.update',
+          ),
+          6 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.listAll',
+          ),
+        ),
       ),
     ),
   ),
+  'summary' => 'blah',
 ), $ret, 'test.test.test strict');
 echo 'tests done';
 ?>

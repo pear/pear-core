@@ -21,8 +21,7 @@ error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pf2 = new PEAR_PackageFile_v2;
 $pf2->setConfig($config);
-$pf2->setPackageType('extsrc');
-$pf2->addBinarypackage('foo_win');
+$pf2->setPackageType('php');
 $pf2->setPackage('foo');
 $pf2->setChannel('grob');
 $pf2->setAPIStability('stable');
@@ -35,14 +34,12 @@ $pf2->setSummary('foo');
 $pf2->setLicense('PHP License');
 $pf2->setLogger($fakelog);
 $pf2->clearContents();
-$pf2->addFile('', 'foo.grop', array('role' => 'src'));
-$pf2->addBinarypackage('foo_linux');
+$pf2->addFile('', 'foor.php', array('role' => 'php'));
 $pf2->addMaintainer('lead', 'cellog', 'Greg Beaver', 'cellog@php.net');
 $pf2->setNotes('blah');
 $pf2->setPearinstallerDep('1.4.0a1');
 $pf2->setPhpDep('4.2.0', '5.0.0');
 $pf2->addPackageDepWithChannel('optional', 'frong', 'floop');
-$pf2->setProvidesExtension('foo');
 $cf = new PEAR_ChannelFile;
 $cf->setName('grob');
 $cf->setServer('grob');
@@ -56,6 +53,7 @@ $ret = $reg->addPackage2($pf2);
 $phpunit->assertTrue($ret, 'valid pf2');
 
 $pf2->addPackageDepWithUri('optional', 'boop', 'http://www.example.com/boomp.tgz');
+$pf2->addFile('', 'flong.php', array('role' => 'php'));
 $ret = $reg->updatePackage2($pf2);
 $phpunit->assertTrue($ret, 'update pf2');
 
@@ -125,6 +123,23 @@ $phpunit->assertEquals(array (
     ),
   ),
 ), $contents, 'depdb');
+$phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.filemap', 'filemap');
+$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.filemap', 'filemap')));
+$phpunit->assertEquals(array (
+  'php' =>
+  array (
+    'foor.php' =>
+    array (
+      0 => 'grob',
+      1 => 'foo',
+    ),
+    'flong.php' =>
+    array (
+      0 => 'grob',
+      1 => 'foo',
+    ),
+  ),
+), $contents, 'filemap');
 echo 'tests done';
 ?>
 --EXPECT--
