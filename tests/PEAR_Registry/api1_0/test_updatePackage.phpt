@@ -81,6 +81,7 @@ pkg2: version="2.1" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,base
 pkg3: version="3.1b1" filelist=array(pkg3-3.php[role=php,baseinstalldir=pkg3],pkg3-4.php[role=php]) _lastmodified is set status="beta"
 dump done
 ', $reg, 'after updating pkg3 2');
+echo "tests done";
 ?>
 --EXPECT--
-creating registry object
+tests done

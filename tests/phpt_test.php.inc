@@ -177,6 +177,30 @@ class PEAR_PHPTest
         return false;
     }
 
+    function assertSame($test, $test1, $message)
+    {
+        $this->assertNoErrors($message, debug_backtrace());
+        if ($test === $test1) {
+            return true;
+        }
+        $this->_failTest(debug_backtrace(), $message);
+        echo "Unexpectedly two vars are not the same thing: \n";
+        echo "\n'$message'\n";
+        return false;
+    }
+
+    function assertNotSame($test, $test1, $message)
+    {
+        $this->assertNoErrors($message, debug_backtrace());
+        if ($test !== $test1) {
+            return true;
+        }
+        $this->_failTest(debug_backtrace(), $message);
+        echo "Unexpectedly two vars are the same thing: \n";
+        echo "\n'$message'\n";
+        return false;
+    }
+
     function assertFalse($test, $message)
     {
         $this->assertNoErrors($message, debug_backtrace());
@@ -247,9 +271,21 @@ class PEAR_PHPTest
 
     function assertFileExists($fname, $message)
     {
+        $this->assertNoErrors($message, debug_backtrace());
         if (!@file_exists($fname)) {
             $this->_failTest(debug_backtrace(), $message);
             echo "File '$fname' does not exist, and should\n";
+            return false;
+        }
+        return true;
+    }
+
+    function assertFileNotExists($fname, $message)
+    {
+        $this->assertNoErrors($message, debug_backtrace());
+        if (@file_exists($fname)) {
+            $this->_failTest(debug_backtrace(), $message);
+            echo "File '$fname' exists, and should not\n";
             return false;
         }
         return true;

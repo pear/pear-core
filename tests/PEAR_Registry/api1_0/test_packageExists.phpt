@@ -38,7 +38,7 @@ pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,base
 dump done
 ', $subreg, 'After adding pkg1, new registry object');
 $phpunit->assertTrue($subreg->packageExists('pkg1'), 'after create, subreg');
-
+echo "tests done";
 ?>
 --EXPECT--
-creating registry object
+tests done

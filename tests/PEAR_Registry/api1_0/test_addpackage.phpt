@@ -56,5 +56,4 @@ $phpunit->assertFalse($reg->addPackage('pkg1', array()), 'bad addpackage');
 echo 'tests done';
 ?>
 --EXPECT--
-creating registry object
 tests done

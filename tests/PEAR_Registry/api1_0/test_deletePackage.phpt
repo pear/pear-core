@@ -57,5 +57,4 @@ dump done
 echo 'tests done';
 ?>
 --EXPECT--
-creating registry object
 tests done
