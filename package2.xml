@@ -270,7 +270,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>Archive_Tar</name>
     <channel>pear.php.net</channel>
     <min>1.1</min>
-    <recommended>1.3.0</recommended>
+    <recommended>1.2</recommended>
+    <exclude>1.3.0</exclude>
    </package>
    <package>
     <name>Console_Getopt</name>
