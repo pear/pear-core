@@ -587,7 +587,12 @@ class PEAR_Config extends PEAR
             if (class_exists('Net_FTP')) {
                 include_once 'PEAR/FTP.php';
                 $this->_ftp = &new PEAR_FTP;
-                $this->_ftp->init($path);
+                $this->_ftp->pushErrorHandling(PEAR_ERROR_RETURN);
+                $e = $this->_ftp->init($path);
+                if (PEAR::isError($e)) {
+                    $this->_ftp->popErrorHandling();
+                    return $e;
+                }
                 $tmp = System::mktemp('-d');
                 $e = $this->_ftp->get(basename($path), $tmp . DIRECTORY_SEPARATOR .
                     'pear.ini', false, FTP_BINARY);
@@ -604,8 +609,10 @@ class PEAR_Config extends PEAR
                     return $e;
                 }
                 $fail = array();
-                foreach ($this->configuration['default'] as $key => $val) {
-                    if (strpos($key, '_dir')) {
+                foreach ($this->configuration_info as $key => $val) {
+                    if (in_array($this->getGroup($key),
+                          array('File Locations', 'File Locations (Advanced)')) &&
+                          $this->getType($key) == 'directory') {
                         // any directory configs must be set for this to work
                         if (!isset($this->configuration['ftp'][$key])) {
                             $fail[] = $key;

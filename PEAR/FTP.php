@@ -37,13 +37,13 @@ class PEAR_FTP extends Net_FTP
     function init($url = null)
     {
         if ($url !== null) {
-            $this->_parsed = parse_url($url);
+            $this->_parsed = @parse_url($url);
         }
         if (!isset($this->_parsed['host'])) {
             return PEAR::raiseError('No FTP Host specified');
         }
         if (!isset($this->_parsed['path'])) {
-            return PEAR::raiseError('No file path specified');
+            return PEAR::raiseError('No FTP file path to remote config specified');
         }
         $host = $this->_parsed['host'];
         $user = @$this->_parsed['user'];
@@ -62,7 +62,11 @@ class PEAR_FTP extends Net_FTP
             $this->popErrorHandling();
             return $e;
         }
-        $e = $this->cd(dirname($path));
+        $path = dirname($path);
+        if ($path == '\\') { // windows will do this
+            $path = '/';
+        }
+        $e = $this->cd($path);
         if (PEAR::isError($e)) {
             $this->popErrorHandling();
             return $e;
@@ -93,8 +97,12 @@ class PEAR_FTP extends Net_FTP
             return true;
         }
         $this->cd($savedir);
-        if ($recursive === false){
-            $res = @ftp_mkdir($this->_handle, $dir);
+        if ($recursive === false) {
+            if (method_exists($this, '_testftp_mkdir')) {
+                $res = $this->_testftp_mkdir($this->_handle, $dir);
+            } else {
+                $res = @ftp_mkdir($this->_handle, $dir);
+            }
             if (!$res) {
                 return $this->raiseError("Creation of '$dir' failed", NET_FTP_ERR_CREATEDIR_FAILED);
             } else {
