@@ -90,22 +90,40 @@ http://pear.php.net/dtd/package-2.0.xsd',
      * @var PEAR_PackageFile_v2
      */
     var $_packagefile;
+    /**
+     * @param PEAR_PackageFile_v2
+     */
     function PEAR_PackageFile_Generator_v2(&$packagefile)
     {
         $this->_packagefile = &$packagefile;
     }
 
+    /**
+     * @return string
+     */
     function getPackagerVersion()
     {
         return '@PEAR-VER@';
     }
 
+    /**
+     * @param PEAR_Packager
+     * @param bool generate a .tgz or a .tar
+     * @param string|null temporary directory to package in
+     */
     function toTgz(&$packager, $compress = true, $where = null)
     {
         $a = null;
         return $this->toTgz2($packager, $a, $compress, $where);
     }
 
+    /**
+     * Package up both a package.xml and package2.xml for the same release
+     * @param PEAR_Packager
+     * @param PEAR_PackageFile_v1
+     * @param bool generate a .tgz or a .tar
+     * @param string|null temporary directory to package in
+     */
     function toTgz2(&$packager, &$pf1, $compress = true, $where = null)
     {
         if (!$this->_packagefile->isEquivalent($pf1)) {
@@ -681,6 +699,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
                     }
                 }
 
+                if (is_string($value) && $value && ($value{strlen($value) - 1} == "\n")) {
+                    $value .= str_repeat($this->options['indent'], $this->_tagDepth);
+                }
                 $tmp .= $this->_createXMLTag(array(
                                                     'qname'      => $key,
                                                     'attributes' => $atts,

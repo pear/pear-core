@@ -155,7 +155,9 @@ Installer:
       <file role="php" name="v1.php">
        <replace from="@PEAR-VER@" to="version" type="package-info"/>
       </file>
-      <file role="php" name="v2.php"/>
+      <file role="php" name="v2.php">
+       <replace from="@PEAR-VER@" to="version" type="package-info"/>
+      </file>
      </dir>
      <dir name="Parser">
       <file role="php" name="v1.php"/>

@@ -146,7 +146,9 @@ Installer:
       <file name="v1.php" role="php">
        <tasks:replace from="@PEAR-VER@" to="version" type="package-info" />
       </file>
-      <file name="v2.php" role="php" />
+      <file name="v2.php" role="php">
+       <tasks:replace from="@PEAR-VER@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /PEAR/PackageFile/Generator -->
      <dir name="Parser">
       <file name="v1.php" role="php" />
