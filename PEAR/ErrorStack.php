@@ -749,7 +749,8 @@ class PEAR_ErrorStack {
      * @static
      * @return array 
      */
-    function staticGetErrors($purge = false, $level = false, $merge = false, $sortfunc = array('PEAR_ErrorStack', '_sortErrors'))
+    function staticGetErrors($purge = false, $level = false, $merge = false,
+                             $sortfunc = array('PEAR_ErrorStack', '_sortErrors'))
     {
         $ret = array();
         if (!is_callable($sortfunc)) {
