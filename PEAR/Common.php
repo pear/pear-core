@@ -490,7 +490,7 @@ class PEAR_Common extends PEAR
         $packagefile = &new PEAR_PackageFile($config);
         $pf = &$packagefile->fromArray($pkginfo);
         $gen = &$pf->getDefaultGenerator();
-        return $gen->toXml();
+        return $gen->toXml(PEAR_VALIDATE_PACKAGING);
     }
 
     // }}}
