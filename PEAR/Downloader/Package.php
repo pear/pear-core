@@ -897,6 +897,9 @@ class PEAR_Downloader_Package
             $channel = isset($param['channel']) ? $param['channel'] :
                 $param['info']->getChannel();
             if (isset($param['rel'])) {
+                if (!class_exists('PEAR_Dependency2')) {
+                    require_once 'PEAR/Dependency2.php';
+                }
                 $newdep = PEAR_Dependency2::normalizeDep($param);
                 $newdep = $newdep[0];
             } elseif (isset($param['min'])) {
