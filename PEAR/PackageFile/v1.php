@@ -361,6 +361,11 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function listPostinstallScripts()
+    {
+        return false;
+    }
+
     function initPostinstallScripts()
     {
         return false;
