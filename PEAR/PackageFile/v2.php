@@ -512,6 +512,10 @@ class PEAR_PackageFile_v2
         if (!isset($this->_packageInfo) || !is_array($this->_packageInfo)) {
             return false;
         }
+        if (!isset($this->_packageInfo['attribs']['version']) ||
+              $this->_packageInfo['attribs']['version'] != '2.0') {
+            $this->_noPackageVersion();
+        }
         $structure =
         array(
             'name',
@@ -532,7 +536,7 @@ class PEAR_PackageFile_v2
             'contents', //special validation needed
             '*compatible',
             '*dependencies', //special validation needed
-            '+phprelease|+extsrcrelease|+extbinrelease|+bundle' //special validation needed
+            '+phprelease|extsrcrelease|+extbinrelease|bundle' //special validation needed
         );
         if (!$this->_stupidSchemaValidate($structure,
                                           $this->_packageInfo, '<package>')) {
@@ -566,7 +570,26 @@ class PEAR_PackageFile_v2
         $this->_validateStabilityVersion();
         $this->_validateFilelist();
         $this->_validateRelease();
-        return !$this->_stack->hasErrors();
+        if (!$this->_stack->hasErrors()) {
+            $chan = $this->_registry->getChannel($this->getChannel());
+            if (!$chan) {
+                $this->_unknownChannel($this->getChannel());
+            } else {
+                $validator = $chan->getValidationObject();
+                $validator->setPackageFile($this);
+                $validator->validate($state);
+                $failures = $validator->getFailures();
+                foreach ($failures['errors'] as $error) {
+                    $this->_stack->push(__FUNCTION__, 'error', $error,
+                        'Channel validator error: field "%field%" - %reason%');
+                    $this->_isValid = false;
+                }
+                foreach ($failures['warnings'] as $warning) {
+                    $this->_stack->push(__FUNCTION__, 'warning', $warning,
+                        'Channel validator warning: field "%field%" - %reason%');
+                }
+            }
+        }
     }
 
     function _stupidSchemaValidate($structure, $xml, $root)
@@ -1188,6 +1211,18 @@ class PEAR_PackageFile_v2
             'name' => $name, 'group' => $group),
             'Group "%group%" dependency <%type%> "%name%" must have either url OR ' .
             'channel attributes');
+    }
+
+    function _unknownChannel($channel)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('channel' => $channel),
+            'Unknown channel "%channel%"');
+    }
+
+    function _noPackageVersion()
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array(),
+            'package.xml <package> tag has no version attribute, or version is not 2.0');
     }
 }
 ?>
