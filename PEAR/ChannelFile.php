@@ -189,7 +189,7 @@ class PEAR_ChannelFile {
         if (!class_exists('PEAR_ErrorStack')) {
             include_once 'PEAR/ErrorStack.php';
         }
-        $this->_stack = &PEAR_ErrorStack::singleton('PEAR_ChannelFile');
+        $this->_stack = &new PEAR_ErrorStack('PEAR_ChannelFile');
         $this->_stack->setErrorMessageTemplate($this->_getErrorMessage());
         $this->_isValid = false;
     }
