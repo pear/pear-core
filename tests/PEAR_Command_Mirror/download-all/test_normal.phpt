@@ -82,36 +82,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.listAll",     array(true,true
             array(
             ),
         ),
-    'Archive_Tar' =>
-        array(
-        'packageid' =>
-            "24",
-        'categoryid' =>
-            "33",
-        'category' =>
-            "File Formats",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Tar file management class",
-        'description' =>
-            "This class provides handling of tar files in PHP.
-It supports creating, listing, extracting and adding to tar files.
-Gzip support is available if PHP has the zlib extension built-in or
-loaded. Bz2 compression is also supported with the bz2 extension loaded.",
-        'lead' =>
-            "vblavet",
-        'stable' =>
-            "1.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-      )
+        )
 );
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   0 => 
