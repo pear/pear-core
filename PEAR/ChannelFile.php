@@ -762,7 +762,7 @@ class PEAR_ChannelFile {
         $ret = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
         $ret .= "<channel version=\"$channelInfo[version]\" xmlns=\"http://pear.php.net/channel-1.0\"
   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
-  xsi:schemaLocation=\"http://pear.php.net/dtd/channel-$channelInfo[version].xsd\">
+  xsi:schemaLocation=\"http://pear.php.net/dtd/channel-$channelInfo[version] http://pear.php.net/dtd/channel-$channelInfo[version].xsd\">
  <name>$channelInfo[name]</name>
  <summary>" . htmlspecialchars($channelInfo['summary'])."</summary>
 ";
