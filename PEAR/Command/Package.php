@@ -894,6 +894,19 @@ used for automated conversion or learning the format.
     }
 
     // }}}
+
+    /**
+     * For unit testing purposes
+     */
+    function &getInstaller(&$ui)
+    {
+        if (!class_exists('PEAR_Installer')) {
+            require_once 'PEAR/Installer.php';
+        }
+        $a = &new PEAR_Installer($ui);
+        return $a;
+    }
+
     // {{{ doMakeRPM()
 
     /*
@@ -936,41 +949,48 @@ used for automated conversion or learning the format.
             }
             return $this->raiseError("$params[0] is not a valid package");
         }
-        $tar = &new Archive_Tar($params[0]);
-        $tmpdir = System::mktemp('-d pear2rpm');
-        $instroot = System::mktemp('-d pear2rpm');
+        $tmpdir = System::mktemp(array('-d', 'pear2rpm'));
+        $instroot = System::mktemp(array('-d', 'pear2rpm'));
         $tmp = $this->config->get('verbose');
         $this->config->set('verbose', 0);
         $installer = $this->getInstaller($this->ui);
+        require_once 'PEAR/Downloader/Package.php';
+        $pack = new PEAR_Downloader_Package($installer);
+        $pack->setPackageFile($pf);
+        $params[0] = &$pack;
+        $installer->setOptions(array('installroot' => $instroot,
+                                          'nodeps' => true, 'soft' => true));
+        $installer->setDownloadedPackages($params);
         $info = $installer->install($params[0],
                                     array('installroot' => $instroot,
-                                          'nodeps' => true));
-        $pkgdir = "$info[package]-$info[version]";
+                                          'nodeps' => true, 'soft' => true));
+        $pkgdir = $pf->getPackage() . '-' . $pf->getVersion();
         $info['rpm_xml_dir'] = '/var/lib/pear';
         $this->config->set('verbose', $tmp);
-        if (!$tar->extractList('package2.xml', $tmpdir, $pkgdir)) {
-            if (!$tar->extractList('package.xml', $tmpdir, $pkgdir)) {
-                return $this->raiseError("failed to extract $params[0]");
-            }
-        }
-        if (!file_exists("$tmpdir/package2.xml") && !file_exists("$tmpdir/package.xml")) {
-            return $this->raiseError("no package2.xml or package.xml found in $params[0]");
-        }
         if (isset($options['spec-template'])) {
             $spec_template = $options['spec-template'];
         } else {
             $spec_template = '@DATA-DIR@/PEAR/template.spec';
         }
+        $info['possible_channel'] = '';
         if (isset($options['rpm-pkgname'])) {
             $rpm_pkgname_format = $options['rpm-pkgname'];
         } else {
-            $rpm_pkgname_format = "PEAR::%s";
+            if ($pf->getChannel() == 'pear.php.net' || $pf->getChannel() == 'pecl.php.net') {
+                $alias = 'PEAR';
+            } else {
+                $chan = &$reg->getChannel($pf->getChannel());
+                $alias = $chan->getAlias();
+                $alias = strtoupper($alias);
+                $info['possible_channel'] = $pf->getChannel() . '/';
+            }
+            $rpm_pkgname_format = $alias . '::%s';
         }
 
         $info['extra_headers'] = '';
         $info['doc_files'] = '';
         $info['files'] = '';
-        $info['rpm_package'] = sprintf($rpm_pkgname_format, $info['package']);
+        $info['rpm_package'] = sprintf($rpm_pkgname_format, $pf->getPackage());
         $srcfiles = 0;
         foreach ($info['filelist'] as $name => $attr) {
             if (!isset($attr['role'])) {
@@ -994,16 +1014,21 @@ used for automated conversion or learning the format.
                         $prefix = '%{_includedir}/php';
                     break; // XXX good place?
                     case 'test':
-                        $prefix = "$c_prefix/tests/" . $info['package'];
+                        $prefix = "$c_prefix/tests/" . $pf->getPackage();
                     break;
                     case 'data':
-                        $prefix = "$c_prefix/data/" . $info['package'];
+                        $prefix = "$c_prefix/data/" . $pf->getPackage();
                     break;
                     case 'script':
                         $prefix = '%{_bindir}';
                     break;
-                    default: // non-standard roles will not be installed at all
-                    continue;
+                    default: // non-standard roles
+                        $prefix = "$c_prefix/$attr[role]/" . $pf->getPackage();
+                        $this->ui->outputData('WARNING: role "' . $attr['role'] . '" used, ' .
+                            'and will be installed in "' . $c_prefix . '/' . $attr['role'] .
+                            '/' . $pf->getPackage() .
+                            ' - hand-edit the final .spec if this is wrong', $command);
+                    break;
                 }
                 $name = str_replace('\\', '/', $name);
                 $info['files'] .= "$prefix/$name\n";
@@ -1031,7 +1056,113 @@ used for automated conversion or learning the format.
         if (!$fp) {
             return $this->raiseError("could not open RPM spec file template $spec_template: $php_errormsg");
         }
-        $spec_contents = preg_replace('/@([a-z0-9_-]+)@/e', '$info["\1"]', fread($fp, filesize($spec_template)));
+        $info['package'] = $pf->getPackage();
+        $info['version'] = $pf->getVersion();
+        $info['release_license'] = $pf->getLicense();
+        if ($pf->getDeps()) {
+            if ($pf->getPackagexmlVersion() == '1.0') {
+                $requires = $conflicts = array();
+                foreach ($pf->getDeps() as $dep) {
+                    if (isset($dep['optional']) && $dep['optional'] == 'yes') {
+                        continue;
+                    }
+                    if ($dep['type'] != 'pkg') {
+                        continue;
+                    }
+                    if (isset($dep['channel']) && $dep['channel'] != 'pear.php.net' &&
+                          $dep['channel'] != 'pecl.php.net') {
+                        $chan = &$reg->getChannel($dep['channel']);
+                        $package = strtoupper($chan->getAlias()) . '::' . $dep['name'];
+                    } else {
+                        $package = 'PEAR::' . $dep['name'];
+                    }
+                    $trans = array(
+                        '>' => '>',
+                        '<' => '<',
+                        '>=' => '>=',
+                        '<=' => '<=',
+                        '=' => '=',
+                        'gt' => '>',
+                        'lt' => '<',
+                        'ge' => '>=',
+                        'le' => '<=',
+                        'eq' => '=',
+                    );
+                    if ($dep['rel'] == 'has') {
+                        $requires[] = $package;
+                    } elseif ($dep['rel'] == 'not') {
+                        $conflicts[] = $package;
+                    } elseif ($dep['rel'] == 'ne') {
+                        $conflicts[] = $package . ' = ' . $dep['version'];
+                    } elseif (isset($trans[$dep['rel']])) {
+                        $requires[] = $package . ' ' . $trans[$dep['rel']] . ' ' . $dep['version'];
+                    }
+                }
+                if (count($requires)) {
+                    $info['extra_headers'] .= 'Requires: ' . implode(', ', $requires);
+                }
+                if (count($conflicts)) {
+                    $info['extra_headers'] .= 'Conflicts: ' . implode(', ', $conflicts);
+                }
+            } else {
+                $requires = $conflicts = array();
+                $deps = $pf->getDeps(true);
+                if (isset($deps['required']['package'])) {
+                    if (!isset($deps['required']['package'][0])) {
+                        $deps['required']['package'] = array($deps['required']['package']);
+                    }
+                    foreach ($deps['required']['package'] as $dep) {
+                        if ($dep['channel'] != 'pear.php.net' &&  $dep['channel'] != 'pecl.php.net') {
+                            $chan = &$reg->getChannel($dep['channel']);
+                            $package = strtoupper($chan->getAlias()) . '::' . $dep['name'];
+                        } else {
+                            $package = 'PEAR::' . $dep['name'];
+                        }
+                    }
+                    if (!isset($dep['min']) && !isset($dep['max']) && !isset($dep['exclude'])) {
+                        if (isset($dep['conflicts'])) {
+                            $conflicts[] = $package;
+                        } else {
+                            $requires[] = $package;
+                        }
+                    } else {
+                        if (isset($dep['min'])) {
+                            $requires[] = $package . ' >= ' . $dep['min'];
+                        }
+                        if (isset($dep['max'])) {
+                            $requires[] = $package . ' <= ' . $dep['max'];
+                        }
+                        if (isset($dep['exclude'])) {
+                            $ex = $dep['exclude'];
+                            if (!is_array($ex)) {
+                                $ex = array($ex);
+                            }
+                            foreach ($ex as $ver) {
+                                $conflicts[] = $package . ' = ' . $ver;
+                            }
+                        }
+                    }
+                    require_once 'Archive/Tar.php';
+                    $tar = new Archive_Tar($pf->getArchiveFile());
+                    $tar->pushErrorHandling(PEAR_ERROR_RETURN);
+                    $a = $tar->extractInString('package2.xml');
+                    $tar->popErrorHandling();
+                    if ($a === null || PEAR::isError($a)) {
+                        // this doesn't have a package.xml version 1.0
+                        $requires[] = 'PEAR::PEAR >= ' . $deps['required']['pearinstaller']['min'];
+                    }
+                    if (count($requires)) {
+                        $info['extra_headers'] .= 'Requires: ' . implode(', ', $requires);
+                    }
+                    if (count($conflicts)) {
+                        $info['extra_headers'] .= 'Conflicts: ' . implode(', ', $conflicts);
+                    }
+                }
+            }
+        }
+
+        $spec_contents = preg_replace('/@([a-z0-9_-]+)@/e', '$info["\1"]',
+            fread($fp, filesize($spec_template)));
         fclose($fp);
         $spec_file = "$info[rpm_package]-$info[version].spec";
         $wp = fopen($spec_file, "wb");

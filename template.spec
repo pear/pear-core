@@ -6,7 +6,7 @@ License: @release_license@
 Group: Development/Libraries
 Source: http://@master_server@/get/@package@-%{version}.tgz
 BuildRoot: %{_tmppath}/%{name}-root
-URL: http://@master_server@/
+URL: http://@master_server@/package/@package@
 Prefix: %{_prefix}
 #Docdir: @doc_dir@/@package@
 BuildArchitectures: @arch@
@@ -31,7 +31,7 @@ pear -v -c %{buildroot}/pearrc \
 echo BuildRoot=%{buildroot}
 
 %postun
-pear uninstall --nodeps -r @package@
+pear uninstall --nodeps -r @possible_channel@@package@
 rm @rpm_xml_dir@/@package@.xml
 
 %post

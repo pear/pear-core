@@ -964,8 +964,11 @@ class PEAR_Installer extends PEAR_Downloader
 
         if (isset($options['installroot'])) {
             $this->config->setInstallRoot($options['installroot']);
+            $this->_registry = &$this->config->getRegistry();
             $this->installroot = ''; // all done automagically now
         } else {
+            $this->config->setInstallRoot(false);
+            $this->_registry = &$this->config->getRegistry();
             $this->installroot = '';
         }
         $php_dir = $this->config->get('php_dir', null, $channel);
