@@ -36,6 +36,7 @@ class PEAR_Command_Registry extends PEAR_Command_Common
                 'channel' => array(
                     'shortopt' => 'c',
                     'doc' => 'list installed packages from this channel',
+                    'arg' => 'CHAN',
                     ),
                 ),
             'doc' => '<package>
@@ -57,12 +58,7 @@ List all installed packages in all channels.
             'summary' => 'List Files In Installed Package',
             'function' => 'doFileList',
             'shortcut' => 'fl',
-            'options' => array(
-                'channel' => array(
-                    'shortopt' => 'c',
-                    'doc' => 'package is in this channel',
-                    ),
-                ),
+            'options' => array(),
             'doc' => '<package>
 List the files in an installed package.
 '

@@ -114,10 +114,10 @@ latest stable release of each package.',
                     'doc' => 'download an uncompressed (.tar) file',
                     ),
                 ),
-            'doc' => '[channel/]{package|package-version}
-Download a package tarball.  The file will be named as suggested by the
+            'doc' => '<package>...
+Download package tarballs.  The files will be named as suggested by the
 server, for example if you download the DB package and the latest stable
-version of DB is 1.2, the downloaded file will be DB-1.2.tgz.',
+version of DB is 1.6.5, the downloaded file will be DB-1.6.5.tgz.',
             ),
         'clear-cache' => array(
             'summary' => 'Clear XML-RPC Cache',
@@ -386,21 +386,12 @@ parameter.
 
     function doDownload($command, $options, $params)
     {
-        if (count($params) != 1) {
-            return PEAR::raiseError("download expects one argument: the package to download");
-        }
-        //$params[0] -> The package to download
         include_once 'PEAR/Downloader.php';
-        $downloader = &new PEAR_Downloader($this->ui, array('force' => 1), $this->config);
+        $options['force'] = 1;
+        $downloader = &new PEAR_Downloader($this->ui, $options, $this->config);
+        $downloader->setDownloadDir(getcwd());
         $errors = array();
         $downloaded = array();
-        if (isset($options['nocompress'])) {
-            foreach ($params as $i => $param) {
-                if (!strpos($param, '.tar')) {
-                    $params[$i] .= '.tar';
-                }
-            }
-        }
         $downloader->download($params);
         $errors = $downloader->getErrorMsgs();
         if (count($errors)) {
@@ -411,8 +402,7 @@ parameter.
         }
         $downloaded = $downloader->getDownloadedPackages();
         foreach ($downloaded as $pkg) {
-            @copy($pkg['file'], $fname = getcwd() . basename($pkg['file']));
-            $this->ui->outputData("File $fname downloaded", $command);
+            $this->ui->outputData("File $pkg[file] downloaded", $command);
         }
         return true;
     }
