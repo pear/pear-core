@@ -15,6 +15,7 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
     var $_obj;
     var $_pkg;
     var $_contents;
+    var $phase = PEAR_TASK_INSTALL;
 
     /**
      * Validate the raw xml at parsing-time.
@@ -184,6 +185,9 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
      */
     function startSession($pkg, $contents)
     {
+        if ($this->installphase != PEAR_TASK_INSTALL) {
+            return false;
+        }
         $this->logger->log(0, 'Including external post-installation script "' .
             $contents . '" - any errors are in this script');
         include_once $contents;
