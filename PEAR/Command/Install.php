@@ -307,7 +307,7 @@ package if needed.
         $this->downloader = &new PEAR_Downloader($this->ui, $options, $this->config);
         $errors = array();
         $downloaded = array();
-        $this->downloader->download($params);
+        $downloaded = &$this->downloader->download($params);
         $errors = $this->downloader->getErrorMsgs();
         if (count($errors)) {
             foreach ($errors as $error) {
@@ -317,12 +317,13 @@ package if needed.
             $this->ui->outputData($err);
             return $this->raiseError("$command failed");
         }
-        $downloaded = $this->downloader->getDownloadedPackages();
-        $this->installer->sortPkgDeps($downloaded);
+        $this->installer->sortPackagesForInstall($downloaded);
+        $this->installer->setDownloadedPackages($downloaded);
         $reg = &$this->config->getRegistry();
-        foreach ($downloaded as $pkg) {
+        foreach ($downloaded as $param) {
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-            $info = $this->installer->install($pkg['info'], $options, $this->config);
+            $info = $this->installer->install($param->getPackageFile(), $options,
+                $this->config);
             PEAR::popErrorHandling();
             if (PEAR::isError($info)) {
                 $this->ui->outputData('ERROR: ' .$info->getMessage());
@@ -330,12 +331,12 @@ package if needed.
             }
             if (is_array($info)) {
                 if ($this->config->get('verbose') > 0) {
-                    $channel = $pkg['info']->getChannel();
+                    $channel = $param->getChannel();
                     $label = $reg->parsedPackageNameToString(
                         array(
                             'channel' => $channel,
-                            'package' => $pkg['info']->getPackage(),
-                            'version' => $pkg['info']->getVersion(),
+                            'package' => $param->getPackage(),
+                            'version' => $param->getVersion(),
                         ));
                     $out = array('data' => "$command ok: $label");
                     if (isset($info['release_warnings'])) {

@@ -78,10 +78,17 @@ class PEAR_Installer extends PEAR_Downloader
      */
     var $tmpdir;
 
-    /** PEAR_Registry object used by the installer
-     * @var object
+    /**
+     * PEAR_Registry object used by the installer
+     * @var PEAR_Registry
      */
     var $registry;
+
+    /**
+     * array of PEAR_Downloader_Packages
+     * @var array
+     */
+    var $_downloadedPackages;
 
     /** List of file transactions queued for an install/upgrade/uninstall.
      *
@@ -741,6 +748,16 @@ class PEAR_Installer extends PEAR_Downloader
     }
 
     // }}}
+    /**
+     * Set the list of PEAR_Downloader_Package objects to allow more sane
+     * dependency validation
+     * @param array
+     */
+    function setDownloadedPackages(&$pkgs)
+    {
+        $this->_downloadedPackages = &$pkgs;
+    }
+
     // {{{ install()
 
     /**
