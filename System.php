@@ -66,7 +66,7 @@ class System
     function _parseArgs($argv, $short_options, $long_options = null)
     {
         if (!is_array($argv) && $argv !== null) {
-            $argv = preg_split('/\s+/', $argv);
+            $argv = preg_split('/\s+/', $argv, -1, PREG_SPLIT_NO_EMPTY);
         }
         return Console_Getopt::getopt2($argv, $short_options);
     }
@@ -280,7 +280,7 @@ class System
         $ret = null;
         $files = array();
         if (!is_array($args)) {
-            $args = preg_split('/\s+/', $args);
+            $args = preg_split('/\s+/', $args, -1, PREG_SPLIT_NO_EMPTY);
         }
         for($i=0; $i < count($args); $i++) {
             if ($args[$i] == '>') {
