@@ -183,12 +183,14 @@ http://pear.php.net/dtd/package-2.0.xsd">
      <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
      <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
      <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
+     <tasks:windowseol/>
     </file>
     <file name="pear.sh" role="script">
      <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
      <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
      <tasks:replace from="@pear_version@" to="version" type="package-info" />
      <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
+     <tasks:unixeol/>
     </file>
     <file name="pearcmd.php" role="php">
      <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
