@@ -822,8 +822,7 @@ class PEAR_Installer extends PEAR_Downloader
         }
         // }}}
         $this->configSet('default_channel', $savechannel);
-        $gen = $pkg->getDefaultGenerator();
-        return $gen->toArray();
+        return $pkg->toArray();
     }
 
     // }}}

@@ -1386,11 +1386,14 @@ class PEAR_Common extends PEAR
                 }
             }
             switch ($token) {
+                case T_WHITESPACE:
+                    continue;
                 case ';':
                     if ($interface) {
                         $current_function = '';
                         $current_function_level = -1;
                     }
+                    break;
                 case '"':
                     $inquote = true;
                     break;
@@ -1427,6 +1430,15 @@ class PEAR_Common extends PEAR
                     $look_for = $token;
                     continue 2;
                 case T_STRING:
+                    if (version_compare(zend_version(), '2.0', '<')) {
+                        if (in_array(strtolower($data),
+                            array('public', 'private', 'protected', 'abstract',
+                                  'interface', 'implements', 'clone', 'throw') 
+                                 )) {
+                            PEAR::raiseError('Error: PHP5 packages must be packaged by php 5 PEAR');
+                            return false;
+                        }
+                    }
                     if ($look_for == T_CLASS) {
                         $current_class = $data;
                         $current_class_level = $brace_level;

@@ -71,87 +71,40 @@ class PEAR_Packager extends PEAR_Common
             return $this->raiseError("Cannot package without registry, use PEAR_Packager::setRegistry() first");
         }
         $pkg = new PEAR_PackageFile($this->_registry, $this->debug);
-        if (!$pkg->fromPackageFile($pkgfile)) {
-            foreach ($pkg->getErrors(true) as $error) {
-                $loglevel = $error['level'] == 'error' ? 0 : 1;
-                $this->log($loglevel, ucfirst($error['level']) . ': ' . $error['message']);
+        if (PEAR::isError($pf = &$pkg->fromPackageFile($pkgfile, PEAR_VALIDATE_NORMAL))) {
+            foreach ($pf->getUserInfo() as $error) {
+                $this->log(0, 'Error: ' . $error['message']);
             }
+            $this->log(0, $pf->getMessage());
             return $this->raiseError("Cannot package, errors in package file");
-        }
-
-        $pkgdir = dirname(realpath($pkgfile));
-        $pkgfile = basename($pkgfile);
-
-        if (!$pkg->analyzePhpFiles($pkgdir)) {
-            foreach ($pkg->getErrors(true) as $error) {
-                $loglevel = $error['level'] == 'error' ? 0 : 1;
-                $this->log($loglevel, ucfirst($error['level']) . ': ' . $error['message']);
+        } else {
+            foreach ($pf->getValidationWarnings() as $warning) {
+                $this->log(1, 'Warning: ' . $warning);
             }
         }
+
         // }}}
-
-        $pkginfo = $pkg->toArray();
-        $pkgver = $pkginfo['package'] . '-' . $pkginfo['version'];
-
-        // {{{ Create the package file list
-        $filelist = array();
-        $i = 0;
-
-        foreach ($pkginfo['filelist'] as $fname => $atts) {
-            $file = $pkgdir . DIRECTORY_SEPARATOR . $fname;
-            if (!file_exists($file)) {
-                return $this->raiseError("File does not exist: $fname");
-            } else {
-                $filelist[$i++] = $file;
-                if (empty($pkginfo['filelist'][$fname]['md5sum'])) {
-                    $md5sum = md5_file($file);
-                    $pkginfo['filelist'][$fname]['md5sum'] = $md5sum;
-                }
-                $this->log(2, "Adding file $fname");
+        $pf->setLogger($this);
+        if (!$pf->validate(PEAR_VALIDATE_PACKAGING)) {
+            foreach ($pf->getValidationWarnings() as $warning) {
+                $this->log(0, 'Error: ' . $warning);
+            }
+            return $this->raiseError("Cannot package, errors in package");
+        } else {
+            foreach ($pf->getValidationWarnings() as $warning) {
+                $this->log(1, 'Warning: ' . $warning);
             }
         }
-        // }}}
 
-        // {{{ regenerate package.xml
-        $new_xml = $pkg->toXml();
-        if (!$new_xml) {
-            foreach ($pkg->getErrors(true) as $error) {
-                $loglevel = $error['level'] == 'error' ? 0 : 1;
-                $this->log($loglevel, ucfirst($error['level']) . ': ' . $error['message']);
-            }
-            return $this->raiseError("Cannot package, errors in package file");
-        }
-        if (!($tmpdir = System::mktemp(array('-d')))) {
-            return $this->raiseError("PEAR_Packager: mktemp failed");
-        }
-        $newpkgfile = $tmpdir . DIRECTORY_SEPARATOR . 'package.xml';
-        $np = @fopen($newpkgfile, 'wb');
-        if (!$np) {
-            return $this->raiseError("PEAR_Packager: unable to rewrite $pkgfile as $newpkgfile");
-        }
-        fwrite($np, $new_xml);
-        fclose($np);
-        // }}}
+        $gen = &$pf->getDefaultGenerator();
+        $tgzfile = $gen->toTgz($this, $compress);
+        $dest_package = basename($tgzfile);
+        $pkgdir = dirname($pkgfile);
 
         // {{{ TAR the Package -------------------------------------------
-        $ext = $compress ? '.tgz' : '.tar';
-        $dest_package = getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext;
-        $tar =& new Archive_Tar($dest_package, $compress);
-        $tar->setErrorHandling(PEAR_ERROR_RETURN); // XXX Don't print errors
-        // ----- Creates with the package.xml file
-        $ok = $tar->createModify(array($newpkgfile), '', $tmpdir);
-        if (PEAR::isError($ok)) {
-            return $this->raiseError($ok);
-        } elseif (!$ok) {
-            return $this->raiseError('PEAR_Packager: tarball creation failed');
-        }
-        // ----- Add the content of the package
-        if (!$tar->addModify($filelist, $pkgver, $pkgdir)) {
-            return $this->raiseError('PEAR_Packager: tarball creation failed');
-        }
         $this->log(1, "Package $dest_package done");
         if (file_exists("$pkgdir/CVS/Root")) {
-            $cvsversion = preg_replace('/[^a-z0-9]/i', '_', $pkginfo['version']);
+            $cvsversion = preg_replace('/[^a-z0-9]/i', '_', $pf->getVersion());
             $cvstag = "RELEASE_$cvsversion";
             $this->log(1, "Tag the released code with `pear cvstag $pkgfile'");
             $this->log(1, "(or set the CVS tag $cvstag by hand)");

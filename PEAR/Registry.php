@@ -919,8 +919,7 @@ class PEAR_Registry extends PEAR
             $this->_unlock();
             return false;
         }
-        $gen = &$info->getDefaultGenerator();
-        $info = $gen->toArray();
+        $info = $info->toArray();
         $info['_lastmodified'] = time();
         fwrite($fp, serialize($info));
         $this->_closePackageFile($fp);
@@ -1091,7 +1090,6 @@ class PEAR_Registry extends PEAR
             return false;
         }
         if (is_object($info)) {
-            $info = $info->getDefaultGenerator();
             $info = $info->toArray();
         }
         $info['_lastmodified'] = time();
@@ -1162,8 +1160,7 @@ class PEAR_Registry extends PEAR
             return false;
         }
         if (is_object($info)) {
-            $arr = &$info->getDefaultGenerator();
-            $info = $arr->toArray();
+            $info = $info->toArray();
         }
         $info['_lastmodified'] = time();
         $newinfo = $info;

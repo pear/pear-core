@@ -232,6 +232,9 @@ class PEAR_PackageFile_Parser_v1
                 } else {
                     $this->_packageInfo['xsdversion'] = '1.0';
                 }
+                if (isset($attribs['packagerversion'])) {
+                    $this->_packageInfo['packagerversion'] = $attribs['packagerversion'];
+                }
                 break;
             case 'name' :
                 if (isset($attribs['extends'])) {
