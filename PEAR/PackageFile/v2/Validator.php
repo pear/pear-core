@@ -198,6 +198,9 @@ class PEAR_PackageFile_v2_Validator
         $keys = array_keys($xml);
         reset($keys);
         $key = current($keys);
+        while ($key == 'attribs' || $key == '_contents') {
+            $key = next($keys);
+        }
         $unfoundtags = array();
         foreach ($structure as $struc) {
             $test = $this->_processStructure($struc);
@@ -213,6 +216,9 @@ class PEAR_PackageFile_v2_Validator
                     if ($key == $choice['tag']) {
                         if ($this->_processAttribs($choice, $tag, $root)) {
                             $key = next($keys);
+                            while ($key == 'attribs' || $key == '_contents') {
+                                $key = next($keys);
+                            }
                             $unfoundtags = array();
                             continue 2;
                         }
@@ -247,10 +253,16 @@ class PEAR_PackageFile_v2_Validator
                 }
                 if ($this->_processAttribs($test, $tag, $root)) {
                     $key = next($keys);
+                    while ($key == 'attribs' || $key == '_contents') {
+                        $key = next($keys);
+                    }
                     continue;
                 }
                 return false;
             }
+        }
+        if (count($unfoundtags)) {
+            $this->_invalidTagOrder($unfoundtags, $key, $root);
         }
         return true;
     }
