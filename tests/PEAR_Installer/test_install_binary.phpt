@@ -237,13 +237,13 @@ $phpunit->assertEquals(array (
       ),
       1 => 
       array (
-        0 => 0,
-        1 => 'Cannot install pear/fail on windows operating system, can only install on linux',
+        0 => 3,
+        1 => '+ tmp dir created at ' . $last_dl->getDownloadDir(),
       ),
       2 => 
       array (
-        0 => 3,
-        1 => '+ tmp dir created at ' . $last_dl->getDownloadDir(),
+        0 => 0,
+        1 => 'Cannot install pear/fail on windows operating system, can only install on linux',
       ),
       3 => 
       array (

@@ -46,9 +46,9 @@ $params[] = $reg->getPackage('bar');
 
 $dl = &new PEAR_Installer($fakelog);
 $dl->sortPackagesForUninstall($params);
-$phpunit->assertEquals('next', $params[0]->getPackage(), 'next');
+$phpunit->assertEquals('foo', $params[0]->getPackage(), 'next');
 $phpunit->assertEquals('bar', $params[1]->getPackage(), 'bar');
-$phpunit->assertEquals('foo', $params[2]->getPackage(), 'foo');
+$phpunit->assertEquals('next', $params[2]->getPackage(), 'foo');
 echo 'tests done';
 ?>
 --EXPECT--

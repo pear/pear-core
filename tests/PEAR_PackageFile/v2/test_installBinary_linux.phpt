@@ -245,13 +245,13 @@ if (OS_WINDOWS) {
   ),
   1 => 
   array (
-    0 => 0,
-    1 => 'Can only install grob/foo_win on Windows',
+    0 => 3,
+    1 => '+ tmp dir created at ' . $dld,
   ),
   2 => 
   array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dld,
+    0 => 0,
+    1 => 'Can only install grob/foo_win on Windows',
   ),
   3 => 
   array (

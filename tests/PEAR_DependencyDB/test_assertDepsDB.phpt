@@ -21,6 +21,13 @@ $contents = unserialize($contents);
 ksort($contents['dependencies']);
 ksort($contents['dependencies']['pear.php.net']);
 ksort($contents['packages']['pear.php.net']);
+function sortstuff($a, $b)
+{
+    return strnatcasecmp($a['package'], $b['package']);
+}
+foreach ($contents['packages']['pear.php.net'] as $p => $cont) {
+    usort($contents['packages']['pear.php.net'][$p], 'sortstuff');
+}
 $phpunit->assertEquals(array (
   '_version' => '1.0',
   'dependencies' => 
@@ -1261,6 +1268,9 @@ $contents = unserialize($contents);
 ksort($contents['dependencies']);
 ksort($contents['dependencies']['pear.php.net']);
 ksort($contents['packages']['pear.php.net']);
+foreach ($contents['packages']['pear.php.net'] as $p => $cont) {
+    usort($contents['packages']['pear.php.net'][$p], 'sortstuff');
+}
 $phpunit->assertEquals(array (
   '_version' => '1.1',
   'dependencies' => 
