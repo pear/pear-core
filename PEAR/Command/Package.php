@@ -202,6 +202,11 @@ use the "slide" option to move the release tag.
                     'shortopt' => 's',
                     'doc' => 'Display simple output for all tests',
                 ),
+                'package' => array(
+                    'shortopt' => 'p',
+                    'doc' => 'Installed package from which to run tests',
+                    'arg' => '[CHANNEL/]PACKAGE'
+                ),
             ),
             'doc' => '[testfile|dir ...]
 Run regression tests with PHP\'s regression testing script (run-tests.php).',
@@ -578,6 +583,22 @@ used for automated conversion or learning the format.
         }
         if (!count($params)) {
             $params[] = '.';
+        }
+        if (isset($options['package'])) {
+            $reg = &$this->config->getRegistry();
+            $pname = $reg->parsePackageName($options['package'],
+                $this->config->get('default_channel'));
+            $package = &$reg->getPackage($pname['package'], $pname['channel']);
+            $filelist = $package->getFilelist();
+            foreach ($filelist as $name => $atts) {
+                if ($atts['role'] != 'test') {
+                    continue;
+                }
+                if (!preg_match('/\.phpt$/', $name)) {
+                    continue;
+                }
+                $params[] = $atts['installed_as'];
+            }
         }
         foreach ($params as $p) {
             if (is_dir($p)) {
