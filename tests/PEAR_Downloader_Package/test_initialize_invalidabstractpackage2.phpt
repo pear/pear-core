@@ -64,7 +64,7 @@ $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('test');
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' =>
-    'Failed to download pear/test within preferred state stable", ' .
+    'Failed to download pear/test within preferred state "stable", ' .
     'latest release is version 0.2.0, stability "beta", use "channel://pear.php.net/test-0.2.0" to install'),
     array('package' => 'PEAR_Error', 'message' =>
     "Cannot initialize 'test', invalid or missing package file"),
@@ -78,7 +78,7 @@ $phpunit->assertEquals(array (
   1 =>
   array (
     0 => 0,
-    1 => 'Failed to download pear/test within preferred state stable", latest release is version 0.2.0, stability "beta", use "channel://pear.php.net/test-0.2.0" to install'
+    1 => 'Failed to download pear/test within preferred state "stable", latest release is version 0.2.0, stability "beta", use "channel://pear.php.net/test-0.2.0" to install'
   ), 
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
