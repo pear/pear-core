@@ -405,8 +405,8 @@ class PEAR_Frontend_CLI extends PEAR
 
                 foreach($data['data'] as $category) {
                     foreach($category as $pkg) {
-                        unset($pkg[3]);
                         unset($pkg[4]);
+                        unset($pkg[5]);
                         $this->_tableRow($pkg, null, array(1 => array('wrap' => 55)));
                     }
                 };

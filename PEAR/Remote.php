@@ -20,6 +20,7 @@
 
 require_once 'PEAR.php';
 require_once 'PEAR/Config.php';
+require_once 'PEAR/Registry.php';
 
 /**
  * This is a class for doing remote operations against the central
@@ -35,6 +36,11 @@ class PEAR_Remote extends PEAR
 
     var $config = null;
     var $cache  = null;
+    /**
+     * @var PEAR_Registry
+     * @access private
+     */
+    var $_registry;
 
     // }}}
 
@@ -44,8 +50,16 @@ class PEAR_Remote extends PEAR
     {
         $this->PEAR();
         $this->config = &$config;
+        $this->_registry = &new PEAR_Registry($config->get('php_dir', null, 'pear'));
     }
 
+    // }}}
+    // {{{ setRegistry()
+    
+    function setRegistry(&$reg)
+    {
+        $this->_registry = &$reg;
+    }
     // }}}
 
     // {{{ getCache()
@@ -96,19 +110,46 @@ class PEAR_Remote extends PEAR
 
     // }}}
 
+    function callWithVersion($version, $method)
+    {
+        $_args = $args = func_get_args();
+        $server_channel = $this->config->get('default_channel');
+        $channel = $this->_registry->getChannel($server_channel);
+        if ($channel) {
+            if (!$channel->supports('xml-rpc', $method, $version)) {
+                // check for channel.list, which is implicitly supported for the PEAR channel
+                if (!(strtolower($server_channel) == 'pear' && $method == 'channel.list')) {
+                    return $this->raiseError("Channel $server_channel does not support xml-rpc method $method");
+                }
+            }
+        }
+        array_shift($_args);
+        return call_user_func_array(array(&$this, 'call'), $_args);
+    }
     // {{{ call(method, [args...])
 
     function call($method)
     {
         $_args = $args = func_get_args();
 
-        $this->cache = $this->getCache($args);
+        $server_channel = $this->config->get('default_channel');
+        $channel = $this->_registry->getChannel($server_channel);
+        if ($channel) {
+            if (!$channel->supports('xml-rpc', $method)) {
+                // check for channel.list, which is implicitly supported for the PEAR channel
+                if (!(strtolower($server_channel) == 'pear' && $method == 'channel.list')) {
+                    return $this->raiseError("Channel $server_channel does not support xml-rpc method $method");
+                }
+            }
+        }
+
+        array_unshift($_args, $channel); // cache by channel
+        $this->cache = $this->getCache($_args);
         $cachettl = $this->config->get('cache_ttl');
         // If cache is newer than $cachettl seconds, we use the cache!
         if ($this->cache !== null && $this->cache['age'] < $cachettl) {
             return $this->cache['content'];
         };
-
         if (extension_loaded("xmlrpc")) {
             $result = call_user_func_array(array(&$this, 'call_epi'), $args);
             if (!PEAR::isError($result)) {
@@ -120,7 +161,7 @@ class PEAR_Remote extends PEAR
             return $this->raiseError("For this remote PEAR operation you need to install the XML_RPC package");
         }
         array_shift($args);
-        $server_host = $this->config->get('master_server');
+        $server_host = $this->_registry->channelInfo($server_channel, 'server');
         $username = $this->config->get('username');
         $password = $this->config->get('password');
         $eargs = array();
@@ -196,7 +237,8 @@ class PEAR_Remote extends PEAR
         array_shift($params);
         $method = str_replace("_", ".", $method);
         $request = xmlrpc_encode_request($method, $params);
-        $server_host = $this->config->get("master_server");
+        $server_channel = $this->config->get('default_channel');
+        $server_host = $this->_registry->channelInfo($server_channel, 'server');
         if (empty($server_host)) {
             return $this->raiseError("PEAR_Remote::call: no master_server configured");
         }

@@ -77,7 +77,7 @@ class PEAR_Command_Install extends PEAR_Command_Common
                     'doc' => 'install all required dependencies',
                     ),
                 ),
-            'doc' => '<package> ...
+            'doc' => '[channel::]<package> ...
 Installs one or more PEAR packages.  You can specify a package to
 install in four ways:
 
@@ -90,9 +90,16 @@ anywhere on the net.
 package.xml.  Useful for testing, or for wrapping a PEAR package in
 another package manager such as RPM.
 
-"Package" : queries your configured server
+"Package[-version/state][.tar]" : queries your default channel\'s server
 ({config master_server}) and downloads the newest package with
 the preferred quality/state ({config preferred_state}).
+
+To retrieve Package version 1.1, use "Package-1.1," to retrieve
+Package state beta, use "Package-beta."  To retrieve an uncompressed
+file, append .tar (make sure there is no file by the same name first)
+
+To download a package from another channel, prefix with the channel name like
+"channel::Package"
 
 More than one package may be specified at once.  It is ok to mix these
 four ways of specifying packages.
@@ -207,9 +214,10 @@ more stable.
                     'doc' => 'force install even if there were errors',
                     ),
                 ),
-            'doc' => '<package> ...
+            'doc' => '[channel::]<package> ...
 Uninstalls one or more PEAR packages.  More than one package may be
-specified at once.
+specified at once.  Prefix with channel name to uninstall from a
+channel not in your default channel ({config default_channel})
 '),
         'bundle' => array(
             'summary' => 'Unpacks a Pecl Package',
@@ -261,7 +269,9 @@ package if needed.
         if ($command == 'upgrade-all') {
             include_once "PEAR/Remote.php";
             $options['upgrade'] = true;
-            $remote = &new PEAR_Remote($this->config);
+            $reg = new PEAR_Registry($this->config->get('php_dir'));
+            $remote = &new PEAR_Remote($this->config, $reg);
+            $channel = $this->config->get('default_channel');
             $state = $this->config->get('preferred_state');
             if (empty($state) || $state == 'any') {
                 $latest = $remote->call("package.listLatestReleases");
@@ -271,7 +281,6 @@ package if needed.
             if (PEAR::isError($latest)) {
                 return $latest;
             }
-            $reg = new PEAR_Registry($this->config->get('php_dir'));
             $installed = array_flip($reg->listPackages());
             $params = array();
             foreach ($latest as $package => $info) {
@@ -285,7 +294,7 @@ package if needed.
                     // installed version is up-to-date
                     continue;
                 }
-                $params[] = $package;
+                $params[] = $channel . '::' . $package;
                 $this->ui->outputData(array('data' => "Will upgrade $package"), $command);
             }
         }
@@ -306,7 +315,8 @@ package if needed.
             $info = $this->installer->install($pkg['file'], $options, $this->config);
             if (is_array($info)) {
                 if ($this->config->get('verbose') > 0) {
-                    $label = "$info[package] $info[version]";
+                    $channel = isset($info['channel']) ? $info['channel'] : 'pear';
+                    $label = "$channel::$info[package] $info[version]";
                     $out = array('data' => "$command ok: $label");
                     if (isset($info['release_warnings'])) {
                         $out['release_warnings'] = $info['release_warnings'];
@@ -332,11 +342,16 @@ package if needed.
             return $this->raiseError("Please supply the package(s) you want to uninstall");
         }
         include_once 'PEAR/Registry.php';
-        $reg = new PEAR_Registry($this->config->get('php_dir'));
+        $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
         $newparams = array();
         $badparams = array();
         foreach ($params as $pkg) {
-            $info = $reg->packageInfo($pkg);
+            $channel = $this->config->get('default_channel');
+            $package = $pkg;
+            if (strpos($pkg, '::')) {
+                list($channel, $package) = explode('::', $pkg);
+            }
+            $info = $reg->packageInfo($package, null, $channel);
             if ($info === null) {
                 $badparams[] = $pkg;
             } else {
@@ -346,7 +361,8 @@ package if needed.
         $this->installer->sortPkgDeps($newparams, true);
         $params = array();
         foreach($newparams as $info) {
-            $params[] = $info['info']['package'];
+            $channel = isset($info['info']['channel']) ? $info['info']['channel'] : 'pear';
+            $params[] = $channel . '::' . $info['info']['package'];
         }
         $params = array_merge($params, $badparams);
         foreach ($params as $pkg) {
@@ -385,6 +401,18 @@ package if needed.
         if (preg_match('#^(http|ftp)://#', $pkgfile)) {
             $need_download = true;
         } elseif (!@is_file($pkgfile)) {
+            if ($t = $installer->splitChannelPackage($pkgfile)) {
+                $reg = &new PEAR_Registry($this->config->get('php_dir'));
+                $test = $reg->getChannel($t[0]);
+                if (!$test) {
+                    return $this->raiseError("Invalid channel in " . $t[0] . '::' . $t[1]);
+                }
+                if (!$test->validPackageName($t[1])) {
+                    return $this->raiseError("Invalid package name in " . $t[0] . '::' . $t[1]);
+                }
+            } else {
+                $test = $installer->validPackageName($pkgfile);
+            }
             if ($installer->validPackageName($pkgfile)) {
                 $pkgfile = $installer->getPackageDownloadUrl($pkgfile);
                 $need_download = true;

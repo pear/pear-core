@@ -28,9 +28,14 @@ class PEAR_Command_Common extends PEAR
      * PEAR_Config object used to pass user system and configuration
      * on when executing commands
      *
-     * @var object
+     * @var PEAR_Config
      */
     var $config;
+    /**
+     * @var PEAR_Registry
+     * @access protected
+     */
+    var $_registry;
 
     /**
      * User Interface object, for all interaction with the user.

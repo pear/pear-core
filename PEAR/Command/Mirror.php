@@ -76,7 +76,8 @@ class PEAR_Command_Mirror extends PEAR_Command_Common
     */
     function doDownloadAll($command, $options, $params)
     {
-        $this->config->set("php_dir", "."); 
+        $this->config->set("php_dir", ".");
+        $this->ui->outputData('Using Channel ' . $this->config->get('default_channel'));
         $remote = &new PEAR_Remote($this->config);
         $remoteInfo = $remote->call("package.listAll");
         if (PEAR::isError($remoteInfo)) {

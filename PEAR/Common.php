@@ -38,7 +38,25 @@ define('_PEAR_COMMON_PACKAGE_VERSION_PREG', '\d+(?:\.\d+)*(?:[a-z]+\d*)?');
 define('PEAR_COMMON_PACKAGE_VERSION_PREG', '/^' . _PEAR_COMMON_PACKAGE_VERSION_PREG . '$/i');
 
 // XXX far from perfect :-)
-define('PEAR_COMMON_PACKAGE_DOWNLOAD_PREG', '/^(' . _PEAR_COMMON_PACKAGE_NAME_PREG . ')(-([.0-9a-zA-Z]+))?$/');
+define('_PEAR_COMMON_PACKAGE_DOWNLOAD_PREG', '(' . _PEAR_COMMON_PACKAGE_NAME_PREG .
+    ')(-([.0-9a-zA-Z]+))?');
+define('PEAR_COMMON_PACKAGE_DOWNLOAD_PREG', '/^' . _PEAR_COMMON_PACKAGE_DOWNLOAD_PREG .
+    '$/');
+
+define('_PEAR_CHANNELS_NAME_PREG', '[A-Za-z][a-zA-Z0-9_\.]+');
+define('PEAR_CHANNELS_NAME_PREG', '/^' . _PEAR_CHANNELS_NAME_PREG . '$/');
+
+// this should allow any dns or IP address
+define('_PEAR_CHANNELS_SERVER_PREG', '[a-zA-Z0-9_-]+(?:\.[a-zA-Z0-9_-]+)*');
+define('PEAR_CHANNELS_SERVER_PREG', '/^' . _PEAR_CHANNELS_SERVER_PREG . '$/i');
+
+define('_PEAR_CHANNELS_PACKAGE_PREG',  '(' ._PEAR_CHANNELS_SERVER_PREG . ')::('
+         . _PEAR_COMMON_PACKAGE_NAME_PREG . ')');
+define('PEAR_CHANNELS_PACKAGE_PREG', '/^' . _PEAR_CHANNELS_PACKAGE_PREG . '$/i');
+
+define('_PEAR_COMMON_CHANNEL_DOWNLOAD_PREG', '(' . _PEAR_CHANNELS_NAME_PREG . ')::('
+    . _PEAR_COMMON_PACKAGE_NAME_PREG . ')(-([.0-9a-zA-Z]+))?');
+define('PEAR_COMMON_CHANNEL_DOWNLOAD_PREG', '/^' . _PEAR_COMMON_CHANNEL_DOWNLOAD_PREG . '$/');
 
 /**
  * List of temporary files and directories registered by
@@ -778,6 +796,18 @@ class PEAR_Common extends PEAR
      */
     function infoFromString($data)
     {
+//        require_once 'PEAR/PackageFile.php';
+//        $packagefile = new PEAR_PackageFile();
+//        if (!$packagefile->fromXMLString($data)) {
+//            $errs = $packagefile->getErrors();
+//            foreach ($errs as $error) {
+//                $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
+//            }
+//            return $e;
+//        }
+//        return $this->pkginfo = $packagefile->toArray();
+//        
+        
         require_once('PEAR/Dependency.php');
         if (PEAR_Dependency::checkExtension($error, 'xml')) {
             return $this->raiseError($error);
@@ -1620,6 +1650,55 @@ class PEAR_Common extends PEAR
 
 
     // }}}
+    // {{{ validPackageName()
+
+    /**
+     * Test whether a string contains a valid package name.
+     *
+     * @param string $name the package name to test
+     * @param PEAR_Registry A Registry object
+     *
+     * @return bool
+     *
+     * @access public
+     */
+    function validChannelPackage($name, &$reg)
+    {
+        if ($res = $this->splitChannelPackage($name)) {
+            $channel = $reg->getChannel($res[0]);
+            if (!$channel) {
+                return false;
+            } else {
+                return $channel->validPackageName($res[1]);
+            }
+        } else {
+            return false;
+        }
+    }
+
+
+    // }}}
+    // {{{ splitChannelPackage()
+
+    /**
+     * Test whether a string contains a valid package name.
+     *
+     * @param string $name the package name to test
+     *
+     * @return bool
+     *
+     * @access public
+     */
+    function splitChannelPackage($name)
+    {
+        if (!strpos($name, '::')) {
+            return false;
+        }
+        return explode('::', $name);
+    }
+
+
+    // }}}
     // {{{ validPackageVersion()
 
     /**
@@ -1836,8 +1915,9 @@ class PEAR_Common extends PEAR
         $checkdupes = array();
         $newret = array();
         foreach($ret as $i => $p) {
-            if (!isset($checkdupes[$p['info']['package']])) {
-                $checkdupes[$p['info']['package']][] = $i;
+            $channel = isset($p['info']['channel']) ? $p['info']['channel'] : 'pear';
+            if (!isset($checkdupes[$channel . '::' . $p['info']['package']])) {
+                $checkdupes[$channel . '::' . $p['info']['package']][] = $i;
                 $newret[] = $p;
             }
         }
@@ -1864,8 +1944,10 @@ class PEAR_Common extends PEAR
      */
     function _sortPkgDeps($p1, $p2)
     {
-        $p1name = $p1['info']['package'];
-        $p2name = $p2['info']['package'];
+        $c1 = isset($p1['info']['channel']) ? $p1['info']['channel'] : 'pear';
+        $c2 = isset($p2['info']['channel']) ? $p2['info']['channel'] : 'pear';
+        $p1name = $c1 . '::' . $p1['info']['package'];
+        $p2name = $c2 . '::' . $p2['info']['package'];
         $p1deps = $this->_getPkgDeps($p1);
         $p2deps = $this->_getPkgDeps($p2);
         if (!count($p1deps) && !count($p2deps)) {
@@ -1909,8 +1991,10 @@ class PEAR_Common extends PEAR
      */
     function _sortPkgDepsRev($p1, $p2)
     {
-        $p1name = $p1['info']['package'];
-        $p2name = $p2['info']['package'];
+        $c1 = isset($p1['info']['channel']) ? $p1['info']['channel'] : 'pear';
+        $c2 = isset($p2['info']['channel']) ? $p2['info']['channel'] : 'pear';
+        $p1name = $c1 . '::' . $p1['info']['package'];
+        $p2name = $c2 . '::' . $p2['info']['package'];
         $p1deps = $this->_getRevPkgDeps($p1);
         $p2deps = $this->_getRevPkgDeps($p2);
         if (!count($p1deps) && !count($p2deps)) {
@@ -1960,7 +2044,8 @@ class PEAR_Common extends PEAR
         $ret = array();
         foreach($rel['deps'] as $dep) {
             if ($dep['type'] == 'pkg') {
-                $ret[] = $dep['name'];
+                $channel = isset($dep['channel']) ? $dep['channel'] : 'pear';
+                $ret[] = $channel . '::' . $dep['name'];
             }
         }
         return $ret;
@@ -1978,7 +2063,8 @@ class PEAR_Common extends PEAR
     {
         $tree = array();
         foreach ($packages as $p) {
-            $package = $p['info']['package'];
+            $channel = isset($p['info']['channel']) ? $p['info']['channel'] : 'pear';
+            $package = $channel . '::' . $p['info']['package'];
             $deps = $this->_getPkgDeps($p);
             $tree[$package] = $deps;
         }
@@ -2028,7 +2114,8 @@ class PEAR_Common extends PEAR
         $ret = array();
         foreach($p['info']['release_deps'] as $dep) {
             if ($dep['type'] == 'pkg') {
-                $ret[] = $dep['name'];
+                $channel = isset($dep['channel']) ? $dep['channel'] : 'pear';
+                $ret[] = $channel . '::' . $dep['name'];
             }
         }
         return $ret;

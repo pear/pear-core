@@ -14,6 +14,7 @@
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
 // | Author: Stig Bakken <ssb@php.net>                                    |
+// |         Greg Beaver <cellog@php.net>                                 |
 // +----------------------------------------------------------------------+
 //
 // $Id$
@@ -208,7 +209,7 @@ class PEAR_Config extends PEAR
         );
 
     var $layers = array();
-
+    
     /**
      * Configuration data, two-dimensional array where the first
      * dimension is the config layer ('user', 'system' and 'default'),
@@ -226,6 +227,27 @@ class PEAR_Config extends PEAR
         'system' => array(),
         'default' => array(),
         );
+    
+    /**
+     * Configuration values that can be set for a channel
+     *
+     * All other configuration values can only have a global value
+     * @var array
+     * @access private
+     */
+    var $_channelConfigInfo = array(
+        'php_dir', 'ext_dir', 'doc_dir', 'bin_dir', 'data_dir',
+        'test_dir', 'php_bin', 'username', 'password', 'verbose',
+        'preferred_state', 'umask'
+        );
+
+    /**
+     * Channels that can be accessed
+     * @see setChannels()
+     * @var array
+     * @access private
+     */
+    var $_channels = array('pear');
 
     /**
      * Information about the configuration data.  Stores the type,
@@ -235,6 +257,14 @@ class PEAR_Config extends PEAR
      * @var array layer => array(infotype => value, ...)
      */
     var $configuration_info = array(
+        // Channels/Internet Access
+        'default_channel' => array(
+            'type' => 'string',
+            'default' => 'pear',
+            'doc' => 'the default channel to use for all non explicit commands',
+            'prompt' => 'Default Channel',
+            'group' => 'Internet Access',
+            ),
         // Internet Access
         'master_server' => array(
             'type' => 'string',
@@ -386,6 +416,7 @@ class PEAR_Config extends PEAR
             'prompt' => 'Signature Key Directory',
             'group' => 'Maintainers',
             ),
+        // __channels is reserved - used for channel-specific configuration
         );
 
     // }}}
@@ -533,11 +564,35 @@ class PEAR_Config extends PEAR
         }
         $this->_decodeInput($data);
         if ($override) {
-            $this->configuration[$layer] = array_merge($this->configuration[$layer], $data);
+            $this->configuration[$layer] = PEAR_Config::arrayMergeRecursive($this->configuration[$layer], $data);
         } else {
-            $this->configuration[$layer] = array_merge($data, $this->configuration[$layer]);
+            $this->configuration[$layer] = PEAR_Config::arrayMergeRecursive($data, $this->configuration[$layer]);
         }
         return true;
+    }
+
+    // }}}
+    // {{{ arrayMergeRecursive($arr2, $arr1)
+    function arrayMergeRecursive($arr2, $arr1)
+    {
+        $ret = array();
+        foreach ($arr2 as $key => $data) {
+            if (!isset($arr1[$key])) {
+                $ret[$key] = $data;
+                unset($arr1[$key]);
+                continue;
+            }
+            if (is_array($data)) {
+                if (!is_array($arr1[$key])) {
+                    $ret[$key] = $arr1[$key];
+                    unset($arr1[$key]);
+                    continue;
+                }
+                $ret[$key] = PEAR_Config::arrayMergeRecursive($arr1[$key], $arr2[$key]);
+                unset($arr1[$key]);
+            }
+        }
+        return array_merge($ret, $arr1);
     }
 
     // }}}
@@ -617,7 +672,7 @@ class PEAR_Config extends PEAR
         $size = filesize($file);
         $rt = get_magic_quotes_runtime();
         set_magic_quotes_runtime(0);
-        $contents = fread($fp, $size);
+        $contents = @fread($fp, $size);
         set_magic_quotes_runtime($rt);
         fclose($fp);
         $version = '0.1';
@@ -626,7 +681,7 @@ class PEAR_Config extends PEAR
             $contents = substr($contents, strlen($matches[0]));
         }
         if (version_compare("$version", '1', '<')) {
-            $data = unserialize($contents);
+            $data = @unserialize($contents);
             if (!is_array($data)) {
                 if (strlen(trim($contents)) > 0) {
                     $error = "PEAR_Config: bad data in $file";
@@ -675,6 +730,11 @@ class PEAR_Config extends PEAR
     function _encodeOutput(&$data)
     {
         foreach ($data as $key => $value) {
+            if ($key == '__channels') {
+                foreach ($data['__channels'] as $channel => $blah) {
+                    $data['__channels'][$channel] = $this->_encodeOutput($data['__channels'][$channel]);
+                }
+            }
             if (!isset($this->configuration_info[$key])) {
                 continue;
             }
@@ -715,6 +775,11 @@ class PEAR_Config extends PEAR
             return true;
         }
         foreach ($data as $key => $value) {
+            if ($key == '__channels') {
+                foreach ($data['__channels'] as $channel => $blah) {
+                    $this->_decodeInput($data['__channels'][$channel]);
+                }
+            }
             if (!isset($this->configuration_info[$key])) {
                 continue;
             }
@@ -736,6 +801,22 @@ class PEAR_Config extends PEAR
     // }}}
     // {{{ get(key, [layer])
 
+    // }}}
+    // {{{ getDefaultChannel([layer])
+    function getDefaultChannel($layer = null)
+    {
+        if ($layer === null) {
+            foreach ($this->layers as $layer) {
+                if (isset($this->configuration[$layer]['default_channel'])) {
+                    return $this->configuration[$layer]['default_channel'];
+                }
+            }
+        } elseif (isset($this->configuration[$layer]['default_channel'])) {
+            return $this->configuration[$layer]['default_channel'];
+        }
+        return 'pear';
+    }
+
     /**
      * Returns a configuration value, prioritizing layers as per the
      * layers property.
@@ -746,8 +827,24 @@ class PEAR_Config extends PEAR
      *
      * @access public
      */
-    function get($key, $layer = null)
+    function get($key, $layer = null, $channel = null)
     {
+        if ($key == '__channels') {
+            return null;
+        }
+        if ($key == 'default_channel') {
+            return $this->getDefaultChannel($layer);
+        }
+        if ($channel === null) {
+            $channel = $this->getDefaultChannel();
+        }
+        $channel = strtolower($channel);
+        
+        $test = (in_array($key, $this->_channelConfigInfo)) ? $this->_getChannelValue($key, $layer, $channel) :
+            null;
+        if ($test !== null) {
+            return $test;
+        }
         if ($layer === null) {
             foreach ($this->layers as $layer) {
                 if (isset($this->configuration[$layer][$key])) {
@@ -759,6 +856,36 @@ class PEAR_Config extends PEAR
         }
         return null;
     }
+
+    // }}}
+    // {{{ _getChannelValue(key, value, [layer])
+    /**
+     * Returns a channel-specific configuration value, prioritizing layers as per the
+     * layers property.
+     *
+     * @param string config key
+     *
+     * @return mixed the config value, or NULL if not found
+     *
+     * @access private
+     */
+    function _getChannelValue($key, $layer, $channel)
+    {
+        if ($key == '__channels' || $channel == 'pear') {
+            return null;
+        }
+        if ($layer === null) {
+            foreach ($this->layers as $layer) {
+                if (isset($this->configuration[$layer]['__channels'][$channel][$key])) {
+                    return $this->configuration[$layer]['__channels'][$channel][$key];
+                }
+            }
+        } elseif (isset($this->configuration[$layer]['__channels'][$channel][$key])) {
+            return $this->configuration[$layer]['__channels'][$channel][$key];
+        }
+        return null;
+    }
+
 
     // }}}
     // {{{ set(key, value, [layer])
@@ -775,12 +902,21 @@ class PEAR_Config extends PEAR
      *
      * @param string (optional) config layer
      *
+     * @param string channel to set this value for, or null for global value
+     *
      * @return bool TRUE on success, FALSE on failure
      *
      * @access public
      */
-    function set($key, $value, $layer = 'user')
+    function set($key, $value, $layer = 'user', $channel = false)
     {
+        if ($key == '__channels') {
+            return false;
+        }
+        if ($key == 'default_channel') {
+            // can only set the default_channel globally
+            $channel = 'pear';
+        }
         if (empty($this->configuration_info[$key])) {
             return false;
         }
@@ -804,8 +940,48 @@ class PEAR_Config extends PEAR
                 break;
             }
         }
+        if (!$channel) {
+            $channel = $this->get('default_channel', null, 'pear');
+        }
+        $channel = strtolower($channel);
+        if (!in_array($channel, $this->_channels)) {
+            return false;
+        }
+        if ($channel != 'pear') {
+            if (in_array($key, $this->_channelConfigInfo)) {
+                $this->configuration[$layer]['__channels'][$channel][$key] = $value;
+                return true;
+            } else {
+                return false;
+            }
+        }
         $this->configuration[$layer][$key] = $value;
         return true;
+    }
+
+    // }}}
+    // {{{ setChannels()
+    
+    /**
+     * Set the list of channels.
+     *
+     * This should be set via a call to {@link PEAR_Registry::listChannels()}
+     * @param array
+     */
+    function setChannels($channels)
+    {
+        if (!is_array($channels)) {
+            return false;
+        }
+        $this->_channels = $channels;
+        foreach ($channels as $channel) {
+            $channel = strtolower($channel);
+            foreach ($this->layers as $layer) {
+                if (!isset($this->configuration[$layer]['__channels'][$channel])) {
+                    $this->configuration[$layer]['__channels'][$channel] = array();
+                }
+            }
+        }
     }
 
     // }}}
@@ -980,7 +1156,14 @@ class PEAR_Config extends PEAR
     {
         $keys = array();
         foreach ($this->layers as $layer) {
-            $keys = array_merge($keys, $this->configuration[$layer]);
+            $test = $this->configuration[$layer];
+            if (isset($test['__channels'])) {
+                foreach ($test['__channels'] as $channel => $configs) {
+                    $keys = array_merge($keys, $configs);
+                }
+            }
+            unset($test['__channels']);
+            $keys = array_merge($keys, $test);
         }
         return array_keys($keys);
     }
@@ -1001,6 +1184,13 @@ class PEAR_Config extends PEAR
      */
     function remove($key, $layer = 'user')
     {
+        $channel = $this->getDefaultChannel();
+        if ($channel !== 'pear') {
+            if (isset($this->configuration[$layer]['__channels'][$channel][$key])) {
+                unset($this->configuration[$layer]['__channels'][$channel][$key]);
+                return true;
+            }
+        }
         if (isset($this->configuration[$layer][$key])) {
             unset($this->configuration[$layer][$key]);
             return true;
@@ -1074,15 +1264,31 @@ class PEAR_Config extends PEAR
      * Tells what config layer that gets to define a key.
      *
      * @param string config key
+     * @param boolean return the defining channel
      *
-     * @return string the config layer, or an empty string if not found
+     * @return string|array the config layer, or an empty string if not found.
+     *
+     *         if $returnchannel, the return is an array array('layer' => layername,
+     *         'channel' => channelname), or an empty string if not found
      *
      * @access public
      */
-    function definedBy($key)
+    function definedBy($key, $returnchannel = false)
     {
         foreach ($this->layers as $layer) {
+            $channel = $this->getDefaultChannel();
+            if ($channel !== 'pear') {
+                if (isset($this->configuration[$layer]['__channels'][$channel][$key])) {
+                    if ($returnchannel) {
+                        return array('layer' => $layer, 'channel' => $channel);
+                    }
+                    return $layer;
+                }
+            }
             if (isset($this->configuration[$layer][$key])) {
+                if ($returnchannel) {
+                    return array('layer' => $layer, 'channel' => 'pear');
+                }
                 return $layer;
             }
         }
@@ -1163,6 +1369,12 @@ class PEAR_Config extends PEAR
         return array_keys($cf);
     }
 
+    // }}}
+    // {{{ apiVersion()
+    function apiVersion()
+    {
+        return '1.1';
+    }
     // }}}
 }
 

@@ -250,8 +250,10 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
     {
         $this->output = '';
         include_once 'PEAR/Packager.php';
+        include_once 'PEAR/Registry.php';
         $pkginfofile = isset($params[0]) ? $params[0] : 'package.xml';
         $packager =& new PEAR_Packager();
+        $packager->setRegistry($reg = &new PEAR_Registry($this->config->get('php_dir')));
         $err = $warn = array();
         $dir = dirname($pkginfofile);
         $compress = empty($options['nocompress']) ? true : false;
@@ -286,22 +288,26 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
         if (sizeof($params) < 1) {
             $params[0] = "package.xml";
         }
-        $obj = new PEAR_Common;
-        $info = null;
-        if ($fp = @fopen($params[0], "r")) {
-            $test = fread($fp, 5);
-            fclose($fp);
-            if ($test == "<?xml") {
-                $info = $obj->infoFromDescriptionFile($params[0]);
-            }
-        }
-        if (empty($info)) {
-            $info = $obj->infoFromTgzFile($params[0]);
-        }
+        include_once 'PEAR/PackageFile.php';
+        $obj = new PEAR_PackageFile;
+        $obj->setup($this->ui, $this->_debug);
+        $reg = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $obj->setRegistry($reg);
+        $info = $obj->fromAny($params[0]);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
-        $obj->validatePackageInfo($info, $err, $warn);
+        $err = array();
+        $warn = array();
+        if (!$obj->validate()) {
+            foreach ($obj->getErrors() as $error) {
+                if ($error['level'] == 'warning') {
+                    $warn[] = $error['message'];
+                } else {
+                    $err[] = $error['message'];
+                }
+            }
+        }
         $this->_displayValidationResults($err, $warn);
         $this->ui->outputData($this->output, $command);
         return true;
@@ -318,17 +324,30 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
             $help = $this->getHelp($command);
             return $this->raiseError("$command: missing parameter: $help[0]");
         }
-        $obj = new PEAR_Common;
-        $info = $obj->infoFromDescriptionFile($params[0]);
+        include_once 'PEAR/PackageFile.php';
+        $obj = new PEAR_PackageFile;
+        $obj->setup($this->ui, $this->_debug);
+        $reg = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $obj->setRegistry($reg);
+        $info = $obj->fromAny($params[0]);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
         $err = $warn = array();
-        $obj->validatePackageInfo($info, $err, $warn);
+        if (!$obj->validate()) {
+            foreach ($obj->getErrors() as $error) {
+                if ($error['level'] == 'warning') {
+                    $warn[] = $error['message'];
+                } else {
+                    $err[] = $error['message'];
+                }
+            }
+        }
         if (!$this->_displayValidationResults($err, $warn, true)) {
             $this->ui->outputData($this->output, $command);
-            break;
+            return $this->raiseError('CVS tag failed');
         }
+        $info = $obj->toArray();
         $version = $info['version'];
         $cvsversion = preg_replace('/[^a-z0-9]/i', '_', $version);
         $cvstag = "RELEASE_$cvsversion";
@@ -376,11 +395,30 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
             $help = $this->getHelp($command);
             return $this->raiseError("$command: missing parameter: $help[0]");
         }
-        $obj = new PEAR_Common;
-        $info = $obj->infoFromDescriptionFile($params[0]);
+        include_once 'PEAR/PackageFile.php';
+        $obj = new PEAR_PackageFile;
+        $obj->setup($this->ui, $this->_debug);
+        $reg = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $obj->setRegistry($reg);
+        $info = $obj->fromAny($params[0]);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
+        $err = $warn = array();
+        if (!$obj->validate()) {
+            foreach ($obj->getErrors() as $error) {
+                if ($error['level'] == 'warning') {
+                    $warn[] = $error['message'];
+                } else {
+                    $err[] = $error['message'];
+                }
+            }
+        }
+        if (!$this->_displayValidationResults($err, $warn, true)) {
+            $this->ui->outputData($this->output, $command);
+            return $this->raiseError('CVS diff failed');
+        }
+        $info = $obj->toArray();
         $files = array_keys($info['filelist']);
         $cmd = "cvs";
         if (isset($options['quiet'])) {
@@ -474,12 +512,31 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
         if (sizeof($params) != 1) {
             return $this->raiseError("bad parameter(s), try \"help $command\"");
         }
-
-        $obj = new PEAR_Common();
-        if (PEAR::isError($info = $obj->infoFromAny($params[0]))) {
+        include_once 'PEAR/PackageFile.php';
+        $obj = new PEAR_PackageFile;
+        $obj->setup($this->ui, $this->_debug);
+        $reg = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $obj->setRegistry($reg);
+        $info = $obj->fromAny($params[0]);
+        if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
+        $err = $warn = array();
+        if (!$obj->validate()) {
+            foreach ($obj->getErrors() as $error) {
+                if ($error['level'] == 'warning') {
+                    $warn[] = $error['message'];
+                } else {
+                    $err[] = $error['message'];
+                }
+            }
+        }
+        if (!$this->_displayValidationResults($err, $warn, true)) {
+            $this->ui->outputData($this->output, $command);
+            return $this->raiseError('package-dependencies failed');
+        }
 
+        $info = $obj->toArray();
         if (is_array($info['release_deps'])) {
             $data = array(
                 'caption' => 'Dependencies for ' . $info['package'],

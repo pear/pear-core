@@ -42,16 +42,17 @@ Get details on a package from the server.',
             'function' => 'doListUpgrades',
             'shortcut' => 'lu',
             'options' => array(),
-            'doc' => '
+            'doc' => '[channel] [preferred_state]
 List releases on the server of packages you have installed where
-a newer version is available with the same release state (stable etc.).'
+a newer version is available with the same release state (stable etc.)
+or the state passed as the second parameter.'
             ),
         'remote-list' => array(
             'summary' => 'List Remote Packages',
             'function' => 'doRemoteList',
             'shortcut' => 'rl',
             'options' => array(),
-            'doc' => '
+            'doc' => '[channel]
 Lists the packages available on the configured server along with the
 latest stable release of each package.',
             ),
@@ -60,16 +61,18 @@ latest stable release of each package.',
             'function' => 'doSearch',
             'shortcut' => 'sp',
             'options' => array(),
-            'doc' => '
-Lists all packages which match the search parameters (first param
-is package name, second package info)',
+            'doc' => '[[channel::]packagename] [packageinfo]
+Lists all packages which match the search parameters.  The first
+parameter is a fragment of a packagename.  The default channel
+will be used unless explicitly overridden.  The second parameter
+will be used to match any portion of the summary/description',
             ),
         'list-all' => array(
             'summary' => 'List All Packages',
             'function' => 'doListAll',
             'shortcut' => 'la',
             'options' => array(),
-            'doc' => '
+            'doc' => '[channel]
 Lists the packages available on the configured server along with the
 latest stable release of each package.',
             ),
@@ -122,17 +125,29 @@ parameter.
         if (sizeof($params) != 1) {
             return $this->raiseError("$command expects one param: the remote package name");
         }
+        $savechannel = $channel = $this->config->get('default_channel');
+        $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $package = $params[0];
+        if (strpos($params[0], '::')) {
+            list($channel, $package) = explode('::', $params[0]);
+            if ($reg->channelExists($channel)) {
+                $this->config->set('default_channel', $channel);
+            } else {
+                return $this->raiseError("Channel '$channel' does not exist");
+            }
+        }
         $r = new PEAR_Remote($this->config);
-        $info = $r->call('package.info', $params[0]);
+        $info = $r->call('package.info', $package);
         if (PEAR::isError($info)) {
+            $this->config->set('default_channel', $savechannel);
             return $this->raiseError($info);
         }
 
-        $reg = new PEAR_Registry($this->config->get('php_dir'));
-        $installed = $reg->packageInfo($info['name']);
+        $installed = $reg->packageInfo($info['name'], null, $channel);
         $info['installed'] = $installed['version'] ? $installed['version'] : '- no -';
 
         $this->ui->outputData($info, $command);
+        $this->config->set('default_channel', $savechannel);
 
         return true;
     }
@@ -142,12 +157,23 @@ parameter.
 
     function doRemoteList($command, $options, $params)
     {
+        $savechannel = $channel = $this->config->get('default_channel');
+        if (isset($params[0])) {
+            $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+            $channel = $params[0];
+            if ($reg->channelExists($channel)) {
+                $this->config->set('default_channel', $channel);
+            } else {
+                return $this->raiseError("Channel '$channel' does not exist");
+            }
+        }
         $r = new PEAR_Remote($this->config);
         $list_options = false;
         if ($this->config->get('preferred_state') == 'stable')
             $list_options = true;
         $available = $r->call('package.listAll', $list_options);
         if (PEAR::isError($available)) {
+            $this->config->set('default_channel', $savechannel);
             return $this->raiseError($available);
         }
         $i = $j = 0;
@@ -163,6 +189,7 @@ parameter.
             $data = '(no packages installed yet)';
         }
         $this->ui->outputData($data, $command);
+        $this->config->set('default_channel', $savechannel);
         return true;
     }
 
@@ -171,24 +198,36 @@ parameter.
 
     function doListAll($command, $options, $params)
     {
+        $savechannel = $channel = $this->config->get('default_channel');
+        if (isset($params[0])) {
+            $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+            $channel = $params[0];
+            if ($reg->channelExists($channel)) {
+                $this->config->set('default_channel', $channel);
+            } else {
+                return $this->raiseError("Channel '$channel' does not exist");
+            }
+        }
         $r = new PEAR_Remote($this->config);
-        $reg = new PEAR_Registry($this->config->get('php_dir'));
+        $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
         $list_options = false;
         if ($this->config->get('preferred_state') == 'stable')
             $list_options = true;
         $available = $r->call('package.listAll', $list_options);
         if (PEAR::isError($available)) {
+            $this->config->set('default_channel', $savechannel);
             return $this->raiseError($available);
         }
         if (!is_array($available)) {
+            $this->config->set('default_channel', $savechannel);
             return $this->raiseError('The package list could not be fetched from the remote server. Please try again. (Debug info: "'.$available.'")');
         }
         $data = array(
             'caption' => 'All packages:',
             'border' => true,
-            'headline' => array('Package', 'Latest', 'Local'),
+            'headline' => array('Channel', 'Package', 'Latest', 'Local'),
             );
-        $local_pkgs = $reg->listPackages();
+        $local_pkgs = $reg->listPackages($channel);
         
         foreach ($available as $name => $info) {
             $installed = $reg->packageInfo($name);
@@ -214,6 +253,7 @@ parameter.
             }
 
             $data['data'][$info['category']][] = array(
+                $channel,
                 $name,
                 @$info['stable'],
                 @$installed['version'],
@@ -223,8 +263,9 @@ parameter.
         }
         
         foreach ($local_pkgs as $name) {
-            $info = $reg->packageInfo($name);
+            $info = $reg->packageInfo($name, null, $channel);
             $data['data']['Local'][] = array(
+                $channel,
                 $info['package'], 
                 '',
                 $info['version'],
@@ -233,6 +274,7 @@ parameter.
                 );
         }
 
+        $this->config->set('default_channel', $savechannel);
         $this->ui->outputData($data, $command);
         return true;
     }
@@ -248,20 +290,31 @@ parameter.
             return $this->raiseError('no valid search string supplied');
         };
 
+        $savechannel = $channel = $this->config->get('default_channel');
+        $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $package = $params[0];
+        if (strpos($params[0], '::')) {
+            list($channel, $package) = explode('::', $params[0]);
+            if ($reg->channelExists($channel)) {
+                $this->config->set('default_channel', $channel);
+            } else {
+                return $this->raiseError("Channel '$channel' does not exist");
+            }
+        }
         $r = new PEAR_Remote($this->config);
-        $reg = new PEAR_Registry($this->config->get('php_dir'));
         $available = $r->call('package.listAll', true, false);
         if (PEAR::isError($available)) {
+            $this->config->set('default_channel', $savechannel);
             return $this->raiseError($available);
         }
         $data = array(
             'caption' => 'Matched packages:',
             'border' => true,
-            'headline' => array('Package', 'Stable/(Latest)', 'Local'),
+            'headline' => array('Channel', 'Package', 'Stable/(Latest)', 'Local'),
             );
 
         foreach ($available as $name => $info) {
-            $found = (!empty($params[0]) && stristr($name, $params[0]) !== false);
+            $found = (!empty($package) && stristr($name, $package) !== false);
             if (!$found && !(isset($params[1]) && !empty($params[1])
                 && (stristr($info['summary'], $params[1]) !== false
                     || stristr($info['description'], $params[1]) !== false)))
@@ -269,7 +322,7 @@ parameter.
                 continue;
             };
 
-            $installed = $reg->packageInfo($name);
+            $installed = $reg->packageInfo($name, null, $channel);
             $desc = $info['summary'];
             if (isset($params[$name]))
                 $desc .= "\n\n".$info['description'];
@@ -282,6 +335,7 @@ parameter.
                 $info['stable'] = 'none';
             }
             $data['data'][$info['category']][] = array(
+                $channel,
                 $name,
                 $info['stable'] . $unstable,
                 $installed['version'],
@@ -289,9 +343,11 @@ parameter.
                 );
         }
         if (!isset($data['data'])) {
+            $this->config->set('default_channel', $savechannel);
             return $this->raiseError('no packages found');
         }
         $this->ui->outputData($data, $command);
+        $this->config->set('default_channel', $channel);
         return true;
     }
 
@@ -300,14 +356,36 @@ parameter.
 
     function doDownload($command, $options, $params)
     {
-        //$params[0] -> The package to download
         if (count($params) != 1) {
             return PEAR::raiseError("download expects one argument: the package to download");
         }
-        $server = $this->config->get('master_server');
+        //$params[0] -> The package to download
+        $savechannel = $channel = $this->config->get('default_channel');
+        $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $package = $params[0];
+        if (strpos($params[0], '::')) {
+            list($channel, $package) = explode('::', $params[0]);
+            if ($reg->channelExists($channel)) {
+                $this->config->set('default_channel', $channel);
+            } else {
+                return $this->raiseError("Channel '$channel' does not exist");
+            }
+        }
+        $channelobj = $reg->getChannel($channel);
+        if (!$channelobj) {
+            $this->config->set('default_channel', $savechannel);
+            return $this->raiseError("Serious registry error: channel '$channel' is corrupt, re-set up with channel-update or update-channels");
+        }
+        $server = $channelobj->getServer();
+        if (!$channelobj->supports('download')) {
+            $this->config->set('default_channel', $savechannel);
+            return $this->raiseError("Channel '$channel' does not support downloading");
+        }
+        $get = $channelobj->getProtocol('download');
+        $get = $get['name'];
         if (!ereg('^http://', $params[0])) {
             $getoption = isset($options['nocompress'])&&$options['nocompress']==1?'?uncompress=on':'';
-            $pkgfile = "http://$server/get/$params[0]".$getoption;
+            $pkgfile = "http://$server/$get/$package".$getoption;
         } else {
             $pkgfile = $params[0];
         }
@@ -315,10 +393,12 @@ parameter.
         $saved = PEAR_Common::downloadHttp($pkgfile, $this->ui, '.',
                                            array(&$this, 'downloadCallback'));
         if (PEAR::isError($saved)) {
+            $this->config->set('default_channel', $savechannel);
             return $this->raiseError($saved);
         }
         $fname = basename($saved);
         $this->ui->outputData("File $fname downloaded ($this->bytes_downloaded bytes)", $command);
+        $this->config->set('default_channel', $savechannel);
         return true;
     }
 
@@ -335,11 +415,22 @@ parameter.
     function doListUpgrades($command, $options, $params)
     {
         include_once "PEAR/Registry.php";
+        $savechannel = $channel = $this->config->get('default_channel');
+        if (isset($params[0])) {
+            $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+            $channel = $params[0];
+            if ($reg->channelExists($channel)) {
+                $this->config->set('default_channel', $channel);
+            } else {
+                return $this->raiseError("Channel '$channel' does not exist");
+            }
+        }
         $remote = new PEAR_Remote($this->config);
-        if (empty($params[0])) {
+        $reg = new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        if (empty($params[1])) {
             $state = $this->config->get('preferred_state');
         } else {
-            $state = $params[0];
+            $state = $params[1];
         }
         $caption = 'Available Upgrades';
         if (empty($state) || $state == 'any') {
@@ -350,14 +441,14 @@ parameter.
         }
         $caption .= ':';
         if (PEAR::isError($latest)) {
+            $this->config->set('default_channel', $savechannel);
             return $latest;
         }
-        $reg = new PEAR_Registry($this->config->get('php_dir'));
-        $inst = array_flip($reg->listPackages());
+        $inst = array_flip($reg->listPackages($channel));
         $data = array(
             'caption' => $caption,
             'border' => 1,
-            'headline' => array('Package', 'Local', 'Remote', 'Size'),
+            'headline' => array('Channel', 'Package', 'Local', 'Remote', 'Size'),
             );
         foreach ((array)$latest as $pkg => $info) {
             $package = strtolower($pkg);
@@ -366,7 +457,7 @@ parameter.
                 continue;
             }
             extract($info);
-            $pkginfo = $reg->packageInfo($package);
+            $pkginfo = $reg->packageInfo($package, null, $channel);
             $inst_version = $pkginfo['version'];
             $inst_state   = $pkginfo['release_state'];
             if (version_compare("$version", "$inst_version", "le")) {
@@ -382,13 +473,14 @@ parameter.
             } else {
                 $fs = "  -"; // XXX center instead
             }
-            $data['data'][] = array($pkg, "$inst_version ($inst_state)", "$version ($state)", $fs);
+            $data['data'][] = array($channel, $pkg, "$inst_version ($inst_state)", "$version ($state)", $fs);
         }
         if (empty($data['data'])) {
             $this->ui->outputData('No upgrades available');
         } else {
             $this->ui->outputData($data, $command);
         }
+        $this->config->set('default_channel', $savechannel);
         return true;
     }
 

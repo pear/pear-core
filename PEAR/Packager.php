@@ -20,6 +20,7 @@
 // $Id$
 
 require_once 'PEAR/Common.php';
+require_once 'PEAR/PackageFile.php';
 require_once 'System.php';
 
 /**
@@ -33,6 +34,10 @@ require_once 'System.php';
  */
 class PEAR_Packager extends PEAR_Common
 {
+    /**
+     * @var PEAR_Registry
+     */
+    var $_registry;
     // {{{ constructor
 
     function PEAR_Packager()
@@ -41,6 +46,10 @@ class PEAR_Packager extends PEAR_Common
     }
 
     // }}}
+    function setRegistry(&$reg)
+    {
+        $this->_registry = $reg;
+    }
     // {{{ destructor
 
     function _PEAR_Packager()
@@ -58,28 +67,32 @@ class PEAR_Packager extends PEAR_Common
         if (empty($pkgfile)) {
             $pkgfile = 'package.xml';
         }
-        // $this->pkginfo gets populated inside
-        $pkginfo = $this->infoFromDescriptionFile($pkgfile);
-        if (PEAR::isError($pkginfo)) {
-            return $this->raiseError($pkginfo);
+        $pkg = new PEAR_PackageFile;
+        $pkg->setup($this->ui, $this->debug);
+        if (!isset($this->_registry)) {
+            return $this->raiseError("Cannot package without registry, use PEAR_Packager::setRegistry() first");
+        }
+        $pkg->setRegistry($this->_registry);
+        if (!$pkg->fromPackageFile($pkgfile)) {
+            foreach ($pkg->getErrors(true) as $error) {
+                $loglevel = $error['level'] == 'error' ? 0 : 1;
+                $this->log($loglevel, ucfirst($error['level']) . ': ' . $error['message']);
+            }
+            return $this->raiseError("Cannot package, errors in package file");
         }
 
         $pkgdir = dirname(realpath($pkgfile));
         $pkgfile = basename($pkgfile);
 
-        $errors = $warnings = array();
-        $this->validatePackageInfo($pkginfo, $errors, $warnings, $pkgdir);
-        foreach ($warnings as $w) {
-            $this->log(1, "Warning: $w");
-        }
-        foreach ($errors as $e) {
-            $this->log(0, "Error: $e");
-        }
-        if (sizeof($errors) > 0) {
-            return $this->raiseError('Errors in package');
+        if (!$pkg->analyzePhpFiles($pkgdir)) {
+            foreach ($pkg->getErrors(true) as $error) {
+                $loglevel = $error['level'] == 'error' ? 0 : 1;
+                $this->log($loglevel, ucfirst($error['level']) . ': ' . $error['message']);
+            }
         }
         // }}}
 
+        $pkginfo = $pkg->toArray();
         $pkgver = $pkginfo['package'] . '-' . $pkginfo['version'];
 
         // {{{ Create the package file list
@@ -102,9 +115,13 @@ class PEAR_Packager extends PEAR_Common
         // }}}
 
         // {{{ regenerate package.xml
-        $new_xml = $this->xmlFromInfo($pkginfo);
-        if (PEAR::isError($new_xml)) {
-            return $this->raiseError($new_xml);
+        $new_xml = $pkg->toXml();
+        if (!$new_xml) {
+            foreach ($pkg->getErrors(true) as $error) {
+                $loglevel = $error['level'] == 'error' ? 0 : 1;
+                $this->log($loglevel, ucfirst($error['level']) . ': ' . $error['message']);
+            }
+            return $this->raiseError("Cannot package, errors in package file");
         }
         if (!($tmpdir = System::mktemp(array('-d')))) {
             return $this->raiseError("PEAR_Packager: mktemp failed");
