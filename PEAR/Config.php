@@ -24,7 +24,6 @@ require_once 'PEAR/Registry.php';
 require_once 'PEAR/Installer/Role.php';
 require_once 'System.php';
 require_once 'PEAR/Remote.php';
-require_once 'PEAR/REST.php';
 
 /**
  * Last created PEAR_Config instance.
@@ -1812,6 +1811,9 @@ class PEAR_Config extends PEAR
      */
     function &getREST($ui = null)
     {
+        if (!class_exists('PEAR_REST')) {
+            require_once 'PEAR/REST.php';
+        }
         $remote = &new PEAR_REST($ui, $this);
         return $remote;
     }

@@ -17,7 +17,6 @@
 // +----------------------------------------------------------------------+
 //
 // $Id$
-require_once 'PEAR/Common.php';
 require_once 'PEAR/Validate.php';
 /**
  * Error code if the package.xml <package> tag does not contain a valid version
@@ -231,6 +230,9 @@ class PEAR_PackageFile
      */
     function &fromTgzFile($file, $state)
     {
+        if (!class_exists('Archive_Tar')) {
+            require_once 'Archive/Tar.php';
+        }
         $tar = new Archive_Tar($file);
         if ($this->_debug <= 1) {
             $tar->pushErrorHandling(PEAR_ERROR_RETURN);

@@ -20,10 +20,6 @@
 // $Id$
 
 require_once 'PEAR/Command/Common.php';
-require_once 'PEAR/Downloader.php';
-require_once 'PEAR/Config.php';
-require_once 'PEAR/ChannelFile.php';
-require_once 'System.php';
 
 class PEAR_Command_Channels extends PEAR_Command_Common
 {
@@ -193,6 +189,9 @@ List the files in an installed package.
             $data = 'no updates available';
         }
         $dl = &$this->getDownloader();
+        if (!class_exists('System')) {
+            require_once 'System.php';
+        }
         $tmpdir = System::mktemp(array('-d'));
         foreach ($channels as $channel) {
             $channel = $channel[0];
@@ -225,6 +224,9 @@ List the files in an installed package.
                 if (!$info) {
                     $this->ui->outputData("Channel \"$channel\" is up-to-date", $command);
                     continue;
+                }
+                if (!class_exists('PEAR_ChannelFile')) {
+                    require_once 'PEAR/ChannelFile.php';
                 }
                 $channelinfo = new PEAR_ChannelFile;
                 $channelinfo->fromXmlString($info);
@@ -267,6 +269,9 @@ List the files in an installed package.
                 }
                 list($contents, $lastmodified) = $contents;
                 $info = implode('', file($contents));
+                if (!class_exists('PEAR_ChannelFile')) {
+                    require_once 'PEAR/ChannelFile.php';
+                }
                 $channelinfo = new PEAR_Channelfile;
                 $channelinfo->fromXmlString($info);
                 if ($channelinfo->getErrors()) {
@@ -302,6 +307,9 @@ List the files in an installed package.
         } else {
             if (strpos($channel, '://')) {
                 $downloader = &$this->getDownloader();
+                if (!class_exists('System')) {
+                    require_once 'System.php';
+                }
                 $tmpdir = System::mktemp(array('-d'));
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
                 $loc = $downloader->downloadHttp($channel, $this->ui, $tmpdir);
@@ -325,6 +333,9 @@ List the files in an installed package.
                     $contents .= fread($fp, 1024);
                 }
                 fclose($fp);
+            }
+            if (!class_exists('PEAR_ChannelFile')) {
+                require_once 'PEAR/ChannelFile.php';
             }
             $chan = new PEAR_ChannelFile;
             $chan->fromXmlString($contents);
@@ -472,6 +483,9 @@ List the files in an installed package.
         }
         if (strpos($params[0], '://')) {
             $downloader = &$this->getDownloader();
+            if (!class_exists('System')) {
+                require_once 'System.php';
+            }
             $tmpdir = System::mktemp(array('-d'));
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $loc = $downloader->downloadHttp($params[0], $this->ui, $tmpdir, null, false);
@@ -493,6 +507,9 @@ List the files in an installed package.
                 $contents .= fread($fp, 1024);
             }
             fclose($fp);
+        }
+        if (!class_exists('PEAR_ChannelFile')) {
+            require_once 'PEAR/ChannelFile.php';
         }
         $channel = new PEAR_ChannelFile;
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
@@ -532,6 +549,9 @@ List the files in an installed package.
 
     function doUpdate($command, $options, $params)
     {
+        if (!class_exists('System')) {
+            require_once 'System.php';
+        }
         $tmpdir = System::mktemp(array('-d'));
         $reg = &$this->config->getRegistry();
         if (sizeof($params) != 1) {
@@ -559,6 +579,9 @@ List the files in an installed package.
                 return;
             }
             $contents = implode('', file($contents));
+            if (!class_exists('PEAR_ChannelFile')) {
+                require_once 'PEAR/ChannelFile.php';
+            }
             $channel = new PEAR_ChannelFile;
             $channel->fromXmlString($contents);
             if (!$channel->getErrors()) {
@@ -599,6 +622,9 @@ List the files in an installed package.
                 }
                 fclose($fp);
             }
+            if (!class_exists('PEAR_ChannelFile')) {
+                require_once 'PEAR/ChannelFile.php';
+            }
             $channel = new PEAR_ChannelFile;
             $channel->fromXmlString($contents);
         }
@@ -633,6 +659,9 @@ List the files in an installed package.
 
     function &getDownloader()
     {
+        if (!class_exists('PEAR_Downloader')) {
+            require_once 'PEAR/Downloader.php';
+        }
         $a = new PEAR_Downloader($this->ui, array(), $this->config);
         return $a;
     }

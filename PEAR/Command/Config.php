@@ -21,7 +21,6 @@
 // $Id$
 
 require_once "PEAR/Command/Common.php";
-require_once "PEAR/Config.php";
 
 /**
  * PEAR commands for managing configuration data.

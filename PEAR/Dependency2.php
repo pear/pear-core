@@ -18,10 +18,7 @@
 //
 // $Id$
 
-require_once 'OS/Guess.php';
 require_once 'PEAR/Validate.php';
-require_once 'PEAR/DependencyDB.php';
-require_once 'PEAR/Downloader/Package.php';
 
 /**
  * Dependency check for PEAR packages
@@ -77,9 +74,15 @@ class PEAR_Dependency2
     {
         $this->_config = &$config;
         $this->_registry = &$config->getRegistry();
+        if (!class_exists('PEAR_DependencyDB')) {
+            require_once 'PEAR/DependencyDB.php';
+        }
         $this->_dependencydb = &PEAR_DependencyDB::singleton($config);
         $this->_options = $installoptions;
         $this->_state = $state;
+        if (!class_exists('OS_Guess')) {
+            require_once 'OS/Guess.php';
+        }
         $this->_os = new OS_Guess;
         $this->_currentPackage = $package;
     }
@@ -776,6 +779,9 @@ class PEAR_Dependency2
         // into using these to validate uninstalls of circular dependencies
         $downloaded = &$dl->getUninstallPackages();
         foreach ($downloaded as $i => $pf) {
+            if (!class_exists('PEAR_Downloader_Package')) {
+                require_once 'PEAR/Downloader/Package.php';
+            }
             $dp = &new PEAR_Downloader_Package($dl);
             $dp->setPackageFile($downloaded[$i]);
             $params[$i] = &$dp;
@@ -922,6 +928,9 @@ class PEAR_Dependency2
         }
         $fail = false;
         if ($deps) {
+            if (!class_exists('PEAR_Downloader_Package')) {
+                require_once 'PEAR/Downloader/Package.php';
+            }
             $dp = &new PEAR_Downloader_Package($dl);
             if (is_object($pkg)) {
                 $dp->setPackageFile($pkg);

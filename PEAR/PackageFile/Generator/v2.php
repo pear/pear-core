@@ -127,6 +127,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
      */
     function toTgz2(&$packager, &$pf1, $compress = true, $where = null)
     {
+        require_once 'Archive/Tar.php';
         if (!$this->_packagefile->isEquivalent($pf1)) {
             return PEAR::raiseError('PEAR_Packagefile_v2::toTgz: "' .
                 basename($pf1->getPackageFile()) .

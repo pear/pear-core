@@ -20,7 +20,6 @@
 
 require_once 'PEAR.php';
 require_once 'PEAR/Config.php';
-require_once 'PEAR/Registry.php';
 
 /**
  * This is a class for doing remote operations against the central

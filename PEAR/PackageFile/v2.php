@@ -19,10 +19,6 @@
 //
 // $Id$
 require_once 'PEAR/ErrorStack.php';
-require_once 'PEAR/Validate.php';
-require_once 'PEAR/Dependency2.php';
-require_once 'PEAR/PackageFile/Generator/v2.php';
-require_once 'PEAR/PackageFile/v2/Validator.php';
 /**
  * @author Greg Beaver <cellog@php.net>
  * @package PEAR
@@ -136,6 +132,9 @@ class PEAR_PackageFile_v2
      */
     function &getPEARDependency2(&$c, $o, $p, $s = PEAR_VALIDATE_INSTALLING)
     {
+        if (!class_exists('PEAR_Dependency2')) {
+            require_once 'PEAR/Dependency2.php';
+        }
         $z = &new PEAR_Dependency2($c, $o, $p, $s);
         return $z;
     }
@@ -2773,6 +2772,9 @@ class PEAR_PackageFile_v2
 
     function &getDefaultGenerator()
     {
+        if (!class_exists('PEAR_PackageFile_Generator_v2')) {
+            require_once 'PEAR/PackageFile/Generator/v2.php';
+        }
         $a = &new PEAR_PackageFile_Generator_v2($this);
         return $a;
     }
@@ -2866,6 +2868,9 @@ class PEAR_PackageFile_v2
             return false;
         }
         if (!isset($this->_v2Validator)) {
+            if (!class_exists('PEAR_PackageFile_v2_Validator')) {
+                require_once 'PEAR/PackageFile/v2/Validator.php';
+            }
             $this->_v2Validator = new PEAR_PackageFile_v2_Validator;
         }
         if (isset($this->_packageInfo['xsdversion'])) {

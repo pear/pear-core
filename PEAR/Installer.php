@@ -23,7 +23,6 @@
 
 require_once "OS/Guess.php";
 require_once 'PEAR/Downloader.php';
-require_once 'PEAR/Task/Common.php';
 
 define('PEAR_INSTALLER_NOBINARY', -240);
 /**
@@ -162,6 +161,17 @@ class PEAR_Installer extends PEAR_Downloader
         }
         if (!strlen($package)) {
             return $this->raiseError("No package to uninstall given");
+        }
+        if (strtolower($package) == 'pear' && $channel == 'pear.php.net') {
+            // to avoid race conditions, include all possible needed files
+            require_once 'PEAR/Task/Common.php';
+            require_once 'PEAR/Task/Replace.php';
+            require_once 'PEAR/Task/Unixeol.php';
+            require_once 'PEAR/Task/Windowseol.php';
+            require_once 'PEAR/PackageFile/v1.php';
+            require_once 'PEAR/PackageFile/v2.php';
+            require_once 'PEAR/PackageFile/Generator/v1.php';
+            require_once 'PEAR/PackageFile/Generator/v2.php';
         }
         $filelist = $this->_registry->packageInfo($package, 'filelist', $channel);
         if ($filelist == null) {
@@ -1208,8 +1218,10 @@ class PEAR_Installer extends PEAR_Downloader
         }
         // }}}
         $this->configSet('default_channel', $savechannel);
-        if (PEAR_Task_Common::hasPostinstallTasks()) {
-            PEAR_Task_Common::runPostinstallTasks($installphase);
+        if (class_exists('PEAR_Task_Common')) { // this is auto-included if any tasks exist
+            if (PEAR_Task_Common::hasPostinstallTasks()) {
+                PEAR_Task_Common::runPostinstallTasks($installphase);
+            }
         }
         return $pkg->toArray(true);
     }
