@@ -475,28 +475,14 @@ class PEAR_Dependency2
         }
         if (isset($dep['providesextension'])) {
             if (extension_loaded($dep['providesextension'])) {
-                if (isset($dep['conflicts'])) {
-                    if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                        return $this->raiseError('%s conflicts with PHP extension "' .
-                            $dep['providesextension'] . '"');
-                    } else {
-                        return $this->warning('warning: %s conflicts with PHP extension "' .
-                            $dep['providesextension'] . '"');
-                    }
-                } else {
-                    $subdep = array(
-                        'name' => $dep['providesextension']
-                    );
-                    if (isset($dep['min'])) {
-                        $subdep['min'] = $dep['min'];
-                    }
-                    if (isset($dep['max'])) {
-                        $subdep['min'] = $dep['max'];
-                    }
-                    if (isset($dep['max'])) {
-                        $subdep['max'] = $dep['max'];
-                    }
-                    $ret = $this->validateExtensionDependency($subdep, $required);
+                $save = $dep;
+                $subdep = $dep;
+                $subdep['name'] = $subdep['providesextension'];
+                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                $ret = $this->validateExtensionDependency($subdep, $required);
+                PEAR::popErrorHandling();
+                if (!PEAR::isError($ret)) {
+                    return true;
                 }
             }
         }
