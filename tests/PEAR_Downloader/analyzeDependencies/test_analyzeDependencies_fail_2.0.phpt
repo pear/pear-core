@@ -220,6 +220,11 @@ $phpunit->assertEquals(array (
     0 => 0,
     1 => 'pear/main can optionally use package "pear/sub2" (version >= 1.1)',
   ),
+  4 => 
+  array (
+    0 => 0,
+    1 => 'pear/sub1 requires PHP (version >= 4.2, version <= 6.0.0), installed version is 4.0',
+  ),
 ), $fakelog->getLog(), 'end log');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');
 
