@@ -136,10 +136,7 @@ class PEAR_Remote extends PEAR
         $channel = $this->_registry->getChannel($server_channel);
         if ($channel) {
             if (!$channel->supports('xml-rpc', $method)) {
-                // check for channel.list, which is implicitly supported for the PEAR channel
-                if (!(strtolower($server_channel) == 'pear' && $method == 'channel.list')) {
-                    return $this->raiseError("Channel $server_channel does not support xml-rpc method $method");
-                }
+                return $this->raiseError("Channel $server_channel does not support xml-rpc method $method");
             }
         }
 
