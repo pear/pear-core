@@ -272,8 +272,12 @@ class PEAR_PackageFile_v2_Validator
                 }
             } else {
                 if (!isset($tag['attribs'])) {
-                    return $this->_tagHasNoAttribs($choice['tag'],
-                        $context);
+                    foreach ($choice['attribs'] as $attrib) {
+                        if ($attrib{0} != '?') {
+                            return $this->_tagHasNoAttribs($choice['tag'],
+                                $context);
+                        }
+                    }
                 }
                 foreach ($choice['attribs'] as $attrib) {
                     if ($attrib{0} != '?') {
