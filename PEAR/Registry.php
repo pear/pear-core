@@ -1012,6 +1012,14 @@ class PEAR_Registry extends PEAR
     function _addPackage2($info)
     {
         if (!$info->validate()) {
+            if (class_exists('PEAR_Common')) {
+                $ui = PEAR_Frontend::singleton();
+                if ($ui) {
+                    foreach ($info->getValidationWarnings() as $err) {
+                        $ui->log($err['message']);
+                    }
+                }
+            }
             return false;
         }
         $channel = $info->getChannel();

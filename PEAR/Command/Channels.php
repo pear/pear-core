@@ -79,6 +79,11 @@ channel.xml.
                     'shortopt' => 'f',
                     'doc' => 'will force download of new channel.xml if an existing channel name is used',
                     ),
+                'channel' => array(
+                    'shortopt' => 'c',
+                    'arg' => 'CHANNEL',
+                    'doc' => 'will force download of new channel.xml if an existing channel name is used',
+                    ),
 ),
             'doc' => '[<channel.xml>|<channel name>]
 Update a channel in the channel list directly.  Note that all
@@ -165,15 +170,23 @@ List the files in an installed package.
     function doUpdateAll($command, $options, $params)
     {
         $reg = &$this->config->getRegistry();
-        if ($this->config->get('default_channel') != 'pear.php.net') {
-            $this->ui->outputData('WARNING: default channel is not pear.php.net', $command);
+        $savechannel = $this->config->get('default_channel');
+        if (isset($options['channel'])) {
+            if (!$reg->channelExists($options['channel'])) {
+                return $this->raiseError('Unknown channel "' . $options['channel'] . '"');
+            }
+            $this->config->set('default_channel', $options['channel']);
+        } else {
+            $this->config->set('default_channel', 'pear.php.net');
         }
         $remote = &$this->config->getRemote();
         $channels = $remote->call('channel.listAll');
         if (PEAR::isError($channels)) {
+            $this->config->set('default_channel', $savechannel);
             return $channels;
         }
         if (!is_array($channels) || isset($channels['faultCode'])) {
+            $this->config->set('default_channel', $savechannel);
             return $this->raiseError("Incorrect channel listing returned from channel '$chan'");
         }
         if (!count($channels)) {
@@ -268,6 +281,7 @@ List the files in an installed package.
                 $reg->addChannel($channel, $lastmodified);
             }
         }
+        $this->config->set('default_channel', $savechannel);
         $this->ui->outputData('update-channels complete', $command);
         return true;
     }

@@ -453,6 +453,32 @@ Run post-installation scripts in package <package>, if any exist.
                         }
                     }
                 }
+                $deps = $param->getDeps();
+                if ($deps) {
+                    if (isset($deps['group'])) {
+                        $groups = $deps['group'];
+                        if (!isset($groups[0])) {
+                            $groups = array($groups);
+                        }
+                        foreach ($groups as $group) {
+                            $this->ui->outputData('Notice: Optional feature ' .
+                                $group['attribs']['name'] . ' available (' .
+                                $group['attribs']['hint'] . ')');
+                        }
+                        $this->ui->outputData('To install use "pear install ' .
+                            $param->getPackage() . '#featurename"');
+                    }
+                }
+                $pkg = &$reg->getPackage($param->getPackage(), $param->getChannel());
+                $pkg->setConfig($this->config);
+                if ($list = $pkg->listPostinstallScripts()) {
+                    $this->ui->outputData('This package has post-install scripts:');
+                    foreach ($list as $file) {
+                        $this->ui->outputData($file);
+                    }
+                    $this->ui->outputData('Use "pear run-scripts ' . $pkg->getPackage() . '" to run');
+                    $this->ui->outputData('DO NOT RUN SCRIPTS FROM UNTRUSTED SOURCES');
+                }
             } else {
                 return $this->raiseError("$command failed");
             }
