@@ -11,7 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 error_reporting(E_ALL);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'php', $config->get('php_dir'), $config->get('php_dir', 'user', '__uri'), 'setup');
-$command->run('config-set', array('channel' => '__uri'), array('php_dir', 'poo'));
+$command->run('config-set', array('channel' => '__uri'), array('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'poo'));
 $phpunit->assertNoErrors('after opt user');
 $phpunit->assertEquals(array (
   0 => 
@@ -20,9 +20,9 @@ $phpunit->assertEquals(array (
     'cmd' => 'config-set',
   ),
 ), $fakelog->getLog(), 'ui log, opt user');
-$phpunit->assertEquals('poo', $config->get('php_dir', 'user', '__uri'), 'php_dir opt system');
+$phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'poo', $config->get('php_dir', 'user', '__uri'), 'php_dir opt system');
 $phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'php', $config->get('php_dir', 'system', '__uri'), 'setup opt system');
-$command->run('config-set', array('channel' => '__uri'), array('php_dir', 'poo', 'system'));
+$command->run('config-set', array('channel' => '__uri'), array('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'poo', 'system'));
 $phpunit->assertNoErrors('after');
 $phpunit->assertEquals(array (
   0 => 
@@ -31,7 +31,7 @@ $phpunit->assertEquals(array (
     'cmd' => 'config-set',
   ),
 ), $fakelog->getLog(), 'ui log opt system');
-$phpunit->assertEquals('poo', $config->get('php_dir', 'system', '__uri'), 'php_dir system opt');
+$phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'poo', $config->get('php_dir', 'system', '__uri'), 'php_dir system opt');
 $configinfo = array('master_server' => $server,
     'preferred_state' => 'stable',
     'cache_dir' => $temp_path . DIRECTORY_SEPARATOR . 'cache',
@@ -41,7 +41,7 @@ $configinfo = array('master_server' => $server,
     'doc_dir' => $temp_path . DIRECTORY_SEPARATOR . 'doc',
     'test_dir' => $temp_path . DIRECTORY_SEPARATOR . 'test',
     'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',
-    '__channels' => array('__uri' => array('php_dir' => 'poo')));
+    '__channels' => array('__uri' => array('php_dir' => $temp_path . DIRECTORY_SEPARATOR . 'poo')));
 
 $info = explode("\n", implode('', file($temp_path . DIRECTORY_SEPARATOR . 'pear.ini')));
 $info = unserialize($info[1]);
