@@ -83,7 +83,7 @@ if (!empty($home)) {
     // for PEAR_Config initialization
     putenv('HOME="'.$statedir);
 }
-//$config = &new PEAR_Config($statedir . DIRECTORY_SEPARATOR . 'pear.ini');
+$config = &PEAR_Config::singleton($statedir . DIRECTORY_SEPARATOR . 'pear.ini');
 require_once dirname(dirname(__FILE__)) . '/download_test_classes.php.inc';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
 $phpunit = &new PEAR_PHPTest(true);
@@ -119,4 +119,6 @@ class fake_log
     }
 }
 $fakelog = new fake_log;
+
+$common = &new PEAR_Common;
 ?>

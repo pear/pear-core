@@ -20,6 +20,15 @@
 require_once 'PEAR/Common.php';
 require_once 'PEAR/Validate.php';
 /**
+ * Error code if the package.xml <package> tag does not contain a valid version
+ */
+define('PEAR_PACKAGEFILE_ERROR_NO_PACKAGEVERSION', 1);
+/**
+ * Error code if the package.xml <package> tag version is not supported (version 1.0 and 1.1 are the only supported versions,
+ * currently
+ */
+define('PEAR_PACKAGEFILE_ERROR_INVALID_PACKAGEVERSION', 2);
+/**
  * Abstraction for the package.xml package description file
  *
  * @author Gregory Beaver <cellog@php.net>
@@ -138,10 +147,15 @@ class PEAR_PackageFile
                     2, null, null, $pf->getValidationWarnings());
                 return $a;
             }
+        } elseif (preg_match('/<package[^>]+version="([^"]+)"/', $data, $packageversion)) {
+            $a = PEAR::raiseError('package.xml file "' . $file .
+                '" has unsupported package.xml <package> version "' . $packageversion[1] . '"');
+            return $a;
         } else {
-//            PEAR_Error_Stack::staticPush('PEAR_PackageFile', 
-//                PEAR_PACKAGEFILE_ERROR_NO_PACKAGEVERSION,
-//                'warning', array('xml' => $data));
+            PEAR_ErrorStack::staticPush('PEAR_PackageFile', 
+                PEAR_PACKAGEFILE_ERROR_NO_PACKAGEVERSION,
+                'warning', array('xml' => $data), 'package.xml "' . $file .
+                    '" has no package.xml <package> version');
             $object = &PEAR_PackageFile::parserFactory('1.0');
             $object->setConfig($this->_config);
             $pf = $object->parse($data, $state, $file, $archive);
