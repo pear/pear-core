@@ -845,8 +845,10 @@ class PEAR_Registry extends PEAR
                 }
                 return $ret;
             }
+            $ps = $this->_listPackages($channel);
             return array_map(array(&$this, '_packageInfo'),
-                             $this->_listPackages($channel));
+                             $ps, array_fill(0, count($ps), null),
+                             array_fill(0, count($ps), $channel));
         }
         $fp = $this->_openPackageFile($package, 'r', $channel);
         if ($fp === null) {
