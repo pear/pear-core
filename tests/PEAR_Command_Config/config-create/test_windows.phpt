@@ -1,4 +1,4 @@
---TEST--
+5--TEST--
 config-create command --windows
 --SKIPIF--
 <?php
@@ -213,6 +213,9 @@ $config->readConfigFile($temp_path . DIRECTORY_SEPARATOR . 'remote.ini');
 $phpunit->assertEquals(array (
   '__channels' => 
   array (
+    'pecl.php.net' => 
+    array (
+    ),
     '__uri' => 
     array (
     ),

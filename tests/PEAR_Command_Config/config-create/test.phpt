@@ -213,10 +213,12 @@ $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'remote.ini', 'not
 $contents = explode("\n", implode('', file($temp_path . DIRECTORY_SEPARATOR . 'remote.ini')));
 $contents = unserialize($contents[1]);
 $config->readConfigFile($temp_path . DIRECTORY_SEPARATOR . 'remote.ini');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   '__channels' => 
   array (
+    'pecl.php.net' =>
+    array (
+    ),
     '__uri' => 
     array (
     ),
