@@ -249,7 +249,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>XML_RPC</name>
     <channel>pear.php.net</channel>
     <min>1.2.0RC1</min>
-    <recommended>1.2.0RC6</recommended>
+    <recommended>1.2.0RC7</recommended>
    </package>
    <extension>
     <name>xml</name>
