@@ -242,6 +242,11 @@ define('PEAR_PACKAGEFILE_ERROR_CHANNELVAL', 45);
 define('PEAR_PACKAGEFILE_ERROR_PHP5', 46);
 
 /**
+ * Error code when a file is listed in package.xml but does not exist
+ */
+define('PEAR_PACKAGEFILE_ERROR_FILE_NOTFOUND', 47);
+
+/**
  * package.xml encapsulator
  * @package PEAR
  * @author Greg Beaver
@@ -906,6 +911,8 @@ class PEAR_PackageFile_v1
                     'Channel validator error: field "%field%" - %reason%',
                 PEAR_PACKAGEFILE_ERROR_PHP5 =>
                     'Error, PHP5 token encountered, analysis should be in PHP5',
+                PEAR_PACKAGEFILE_ERROR_FILE_NOTFOUND =>
+                    'File "%file%" in package.xml does not exist',
             );
     }
 
@@ -1083,7 +1090,7 @@ class PEAR_PackageFile_v1
                 call_user_func_array($log, array(1, "Analyzing $file"));
                 if (!file_exists($dir_prefix . DIRECTORY_SEPARATOR . $file)) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_FILE_NOTFOUND,
-                        array('file' => $dir_prefix . DIRECTORY_SEPARATOR . $file));
+                        array('file' => realpath($dir_prefix) . DIRECTORY_SEPARATOR . $file));
                     continue;
                 }
                 $srcinfo = $this->_analyzeSourceCode($dir_prefix . DIRECTORY_SEPARATOR . $file);
