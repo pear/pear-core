@@ -28,6 +28,9 @@ $phpunit->assertEquals(array(
   'pear.php.net' =>
   array (
   ),
+  'pecl.php.net' =>
+  array (
+  ),
 ), $a, 'startout');
 $pf = new PEAR_PackageFile_v1;
 $pf->setConfig($config);
@@ -94,6 +97,9 @@ $phpunit->assertEquals(array(
   'pear.php.net' =>
   array (
     0 => 'foop',
+  ),
+  'pecl.php.net' =>
+  array (
   ),
 ), $a, 'startout');
 echo 'tests done';

@@ -22,7 +22,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 
 $ret = $reg->listChannels();
 sort($ret);
-$phpunit->assertEquals(array('__uri', 'pear.php.net'), $ret, 'channels raw');
+$phpunit->assertEquals(array('__uri', 'pear.php.net', 'pecl.php.net'), $ret, 'channels raw');
 $ch = new PEAR_ChannelFile;
 $ch->setName('test.test.test');
 $ch->setAlias('foo');
@@ -33,7 +33,7 @@ $phpunit->assertNoErrors('setup');
 
 $ret = $reg->listChannels();
 sort($ret);
-$phpunit->assertEquals(array('__uri', 'pear.php.net', 'test.test.test'), $ret, 'channels after 1 add');
+$phpunit->assertEquals(array('__uri', 'pear.php.net', 'pecl.php.net', 'test.test.test'), $ret, 'channels after 1 add');
 
 echo 'tests done';
 ?>

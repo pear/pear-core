@@ -28,10 +28,11 @@ $reg->addChannel($ch);
 $phpunit->assertNoErrors('setup');
 
 $ret = $reg->getChannels();
-$phpunit->assertEquals(3, count($ret), 'count($ret)');
+$phpunit->assertEquals(4, count($ret), 'count($ret)');
 $phpunit->assertIsa('PEAR_ChannelFile', $ret[0], '$ret[0]');
 $phpunit->assertIsa('PEAR_ChannelFile', $ret[1], '$ret[1]');
 $phpunit->assertIsa('PEAR_ChannelFile', $ret[2], '$ret[2]');
+$phpunit->assertIsa('PEAR_ChannelFile', $ret[3], '$ret[3]');
 
 function chsort($a, $b)
 {
@@ -41,7 +42,8 @@ function chsort($a, $b)
 usort($ret, 'chsort');
 $phpunit->assertEquals('__uri', $ret[0]->getName(), '0 name');
 $phpunit->assertEquals('pear.php.net', $ret[1]->getName(), '1 name');
-$phpunit->assertEquals('test.test.test', $ret[2]->getName(), '2 name');
+$phpunit->assertEquals('pecl.php.net', $ret[2]->getName(), '2 name');
+$phpunit->assertEquals('test.test.test', $ret[3]->getName(), '3 name');
 echo 'tests done';
 ?>
 --EXPECT--
