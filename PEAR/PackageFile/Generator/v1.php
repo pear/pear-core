@@ -1,11 +1,11 @@
 <?php
-class PEAR_PackageFile_Generator_PHP4_v1
+class PEAR_PackageFile_Generator_v1
 {
     /**
-     * @var PEAR_PackageFile_php4_v1
+     * @var PEAR_PackageFile_v1
      */
     var $_packagefile;
-    function PEAR_PackageFile_Generator_PHP4_v1(&$packagefile)
+    function PEAR_PackageFile_Generator_v1(&$packagefile)
     {
         $this->_packagefile = &$packagefile;
     }
@@ -204,12 +204,10 @@ class PEAR_PackageFile_Generator_PHP4_v1
      */
     function toArray()
     {
-        if (!$this->_isValid && !$this->validate()) {
+        if (!$this->_packagefile->validate(PEAR_VALIDATE_NORMAL)) {
             return false;
         }
-        $pinfo = $this->_packageInfo;
-        unset($pinfo['_packagexml_version']);
-        return $pinfo;
+        return $this->_packagefile->getArray();
     }
 
     /**

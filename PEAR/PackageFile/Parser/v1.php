@@ -2,8 +2,9 @@
 /**
  * Parser for package.xml version 1.0
  */
-class PEAR_PackageFile_Parser_PHP4_v1
+class PEAR_PackageFile_Parser_v1
 {
+    var $_registry;
     /**
      * BC hack to allow PEAR_Common::infoFromString() to sort of
      * work with the version 2.0 format
@@ -13,11 +14,16 @@ class PEAR_PackageFile_Parser_PHP4_v1
     {
     }
 
+    function setRegistry($r)
+    {
+        $this->_registry = $r;
+    }
+
     /**
      * @param string contents of package.xml file, version 1.0
      * @return bool success of parsing
      */
-    function parse($data, $state, $file)
+    function parse($data, $state, $file, $archive = false)
     {
         require_once('PEAR/Dependency.php');
         if (PEAR_Dependency::checkExtension($error, 'xml')) {
@@ -59,17 +65,37 @@ class PEAR_PackageFile_Parser_PHP4_v1
 
         xml_parser_free($xp);
 
-        foreach ($this->_packageInfo as $k => $v) {
-            if (!is_array($v)) {
-                $this->_packageInfo[$k] = trim($v);
+        include_once 'PEAR/PackageFile/v1.php';
+        $pf = new PEAR_PackageFile_v1;
+        $pf->setRegistry($this->_registry);
+        $pf->setPackagefile($file, $archive);
+        $pf->fromArray($this->_packageInfo);
+        return $pf;
+    }
+    // {{{ _unIndent()
+
+    /**
+     * Unindent given string (?)
+     *
+     * @param string $str The string that has to be unindented.
+     * @return string
+     * @access private
+     */
+    function _unIndent($str)
+    {
+        // remove leading newlines
+        $str = preg_replace('/^[\r\n]+/', '', $str);
+        // find whitespace at the beginning of the first line
+        $indent_len = strspn($str, " \t");
+        $indent = substr($str, 0, $indent_len);
+        $data = '';
+        // remove the same amount of whitespace from following lines
+        foreach (explode("\n", $str) as $line) {
+            if (substr($line, 0, $indent_len) == $indent) {
+                $data .= substr($line, $indent_len) . "\n";
             }
         }
-        $pf = new PEAR_PackageFile_PHP4_v1;
-        $pf->fromArray($this->_packageInfo);
-        if (!$pf->validate()) {
-            return PEAR::raiseError("Parsing of package.xml in file '$file' failed");
-        }
-        return $pf;
+        return $data;
     }
 
     // Support for package DTD v1.0:

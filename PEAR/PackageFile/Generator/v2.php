@@ -2,7 +2,7 @@
 /**
  *
  */
-class PEAR_PackageFile_Generator_PHP4_v2
+class PEAR_PackageFile_Generator_v2
 {
    /**
     * default options for the serialization
@@ -58,10 +58,10 @@ http://pear.php.net/dtd/package-2.0.xsd',
     */
     var $_serializedData = null;
     /**
-     * @var PEAR_PackageFile_php4_v2
+     * @var PEAR_PackageFile_v2
      */
     var $_packagefile;
-    function PEAR_PackageFile_Generator_PHP4_v2(&$packagefile)
+    function PEAR_PackageFile_Generator_v2(&$packagefile)
     {
         $this->_packagefile = &$packagefile;
     }

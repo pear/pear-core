@@ -275,13 +275,15 @@ package if needed.
             foreach ($reg->listChannels as $channel) {
                 $this->config->set('default_channel', $channel);
                 $state = $this->config->get('preferred_state');
+                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                 if (empty($state) || $state == 'any') {
                     $latest = $remote->call("package.listLatestReleases");
                 } else {
                     $latest = $remote->call("package.listLatestReleases", $state);
                 }
+                PEAR::popErrorHandling();
                 if (PEAR::isError($latest)) {
-                    return $latest;
+                    continue;
                 }
                 $installed = array_flip($reg->listPackages($channel));
                 $params = array();
@@ -316,11 +318,21 @@ package if needed.
         $downloaded = $this->downloader->getDownloadedPackages();
         $this->installer->sortPkgDeps($downloaded);
         foreach ($downloaded as $pkg) {
-            $info = $this->installer->install($pkg['file'], $options, $this->config);
+            if ($command == 'upgrade-all') {
+                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+            }
+            $info = $this->installer->install($pkg['info'], $options, $this->config);
+            if ($command == 'upgrade-all') {
+                PEAR::popErrorHandling();
+                if (PEAR::isError($info)) {
+                    $this->ui->outputData(array('data' => 'ERROR: ' .$info->getMessage()));
+                    continue;
+                }
+            }
             if (is_array($info)) {
                 if ($this->config->get('verbose') > 0) {
-                    $channel = isset($info['channel']) ? $info['channel'] : 'pear';
-                    $label = "$channel::$info[package] $info[version]";
+                    $channel = $pkg['info']->getChannel();
+                    $label = "$channel::" . $info['package'] . " " . $info['version'];
                     $out = array('data' => "$command ok: $label");
                     if (isset($info['release_warnings'])) {
                         $out['release_warnings'] = $info['release_warnings'];
@@ -355,7 +367,7 @@ package if needed.
             if (strpos($pkg, '::')) {
                 list($channel, $package) = explode('::', $pkg);
             }
-            $info = $reg->packageInfo($package, null, $channel);
+            $info = $reg->getPackage($package, $channel);
             if ($info === null) {
                 $badparams[] = $pkg;
             } else {
@@ -365,16 +377,28 @@ package if needed.
         $this->installer->sortPkgDeps($newparams, true);
         $params = array();
         foreach($newparams as $info) {
-            $channel = isset($info['info']['channel']) ? $info['info']['channel'] : 'pear';
-            $params[] = $channel . '::' . $info['info']['package'];
+            $params[] = $info['info'];
         }
         $params = array_merge($params, $badparams);
         foreach ($params as $pkg) {
-            if ($this->installer->uninstall($pkg, $options)) {
+            $this->installer->pushErrorHandling(PEAR_ERROR_RETURN);
+            if ($err = $this->installer->uninstall($pkg, $options)) {
+                $this->installer->popErrorHandling();
+                if (PEAR::isError($err)) {
+                    $this->ui->outputData($err->getMessage(), $command);
+                    continue;
+                }
                 if ($this->config->get('verbose') > 0) {
+                    if (is_object($pkg)) {
+                        $pkg = $pkg->getChannel() . '::' . $pkg->getPackage();
+                    }
                     $this->ui->outputData("uninstall ok: $pkg", $command);
                 }
             } else {
+                $this->installer->popErrorHandling();
+                if (is_object($pkg)) {
+                    $pkg = $pkg->getChannel() . '::' . $pkg->getPackage();
+                }
                 return $this->raiseError("uninstall failed: $pkg");
             }
         }

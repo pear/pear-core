@@ -289,11 +289,9 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
             $params[0] = "package.xml";
         }
         include_once 'PEAR/PackageFile.php';
-        $obj = new PEAR_PackageFile;
-        $obj->setup($this->ui, $this->_debug);
         $reg = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
-        $obj->setRegistry($reg);
-        $info = $obj->fromAny($params[0]);
+        $obj = &new PEAR_PackageFile($reg, $this->_debug);
+        $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_PACKAGE);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
@@ -325,11 +323,9 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
             return $this->raiseError("$command: missing parameter: $help[0]");
         }
         include_once 'PEAR/PackageFile.php';
-        $obj = new PEAR_PackageFile;
-        $obj->setup($this->ui, $this->_debug);
         $reg = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
-        $obj->setRegistry($reg);
-        $info = $obj->fromAny($params[0]);
+        $obj = &new PEAR_PackageFile($reg, $this->_debug);
+        $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
@@ -396,11 +392,9 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
             return $this->raiseError("$command: missing parameter: $help[0]");
         }
         include_once 'PEAR/PackageFile.php';
-        $obj = new PEAR_PackageFile;
-        $obj->setup($this->ui, $this->_debug);
         $reg = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
-        $obj->setRegistry($reg);
-        $info = $obj->fromAny($params[0]);
+        $obj = &new PEAR_PackageFile($reg, $this->_debug);
+        $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
@@ -533,11 +527,9 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
             return $this->raiseError("bad parameter(s), try \"help $command\"");
         }
         include_once 'PEAR/PackageFile.php';
-        $obj = new PEAR_PackageFile;
-        $obj->setup($this->ui, $this->_debug);
         $reg = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
-        $obj->setRegistry($reg);
-        $info = $obj->fromAny($params[0]);
+        $obj = &new PEAR_PackageFile($reg, $this->_debug);
+        $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }

@@ -279,14 +279,17 @@ installed package.'
             return $this->raiseError("This command only accepts one param: ".
                                      "the package you want information");
         }
+        $info = false;
+        $reg = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
         if (@is_file($params[0])) {
-            $obj  = &new PEAR_PackageFile;
-            $info = $obj->fromAny($params[0]);
-            if (PEAR::isError($info)) {
-                return $info;
+            $obj = &new PEAR_PackageFile($reg);
+            $obj = &$obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
+            if (PEAR::isError($obj)) {
+                return $obj;
             }
-            if ($info) {
-                $info = $obj->toArray();
+            if ($obj) {
+                $gen = $obj->getDefaultGenerator();
+                $info = $gen->toArray();
             }
         } else {
             $package = $params[0];
@@ -294,22 +297,24 @@ installed package.'
             if (strpos($package, '::')) {
                 list($channel, $package) = explode('::', $package);
             }
-            $reg = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
             $info = $reg->packageInfo($package, null, $channel);
         }
         if (PEAR::isError($info)) {
             return $info;
         }
         if (empty($info)) {
-            $obj = new PEAR_PackageFile;
-            $info = $obj->fromAny($params[0]);
+            $obj = &new PEAR_PackageFile($reg);
+            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+            $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
+            PEAR::popErrorHandling();
             if (PEAR::isError($info) || !$info) {
-                $this->raiseError("Nothing found for `$params[0]'");
+                $this->raiseError("No information found for `$params[0]'");
                 return;
             }
             $info = $obj->toArray();
         }
         unset($info['filelist']);
+        unset($info['dirtree']);
         unset($info['changelog']);
         $keys = array_keys($info);
         $longtext = array('description', 'summary');
