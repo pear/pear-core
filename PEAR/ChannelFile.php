@@ -902,7 +902,7 @@ class PEAR_ChannelFile {
      * @param string mirror name
      * @return boolean
      */
-    function supports($type, $name = null, $version = '1.0', $mirror = false)
+    function supports($type, $name = null, $mirror = false, $version = '1.0')
     {
         $protocols = $this->getFunctions($type, $mirror);
         if (!$protocols) {
