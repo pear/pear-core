@@ -12,6 +12,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
 channel pear.php.net:
+channel pecl.php.net:
 dump done
 ', $reg, 'Initial dump is incorrect');
 
@@ -20,6 +21,7 @@ $phpunit->assertRegEquals('dumping registry...
 channel __uri:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
+channel pecl.php.net:
 dump done
 ', $reg, 'After adding pkg1');
 
@@ -28,6 +30,7 @@ $phpunit->assertRegEquals('dumping registry...
 channel __uri:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
+channel pecl.php.net:
 dump done
 ', $subreg, 'After adding pkg1, new registry object');
 unset($subreg);
@@ -40,6 +43,7 @@ channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 pkg2: version="2.0" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set
 pkg3: version="3.0" filelist=array(pkg3-1.php[role=php],pkg3-2.php[role=php,baseinstalldir=pkg3]) maintainers="Array" _lastmodified is set
+channel pecl.php.net:
 dump done
 ', $reg, 'after adding pkg2 and pkg3');
 
@@ -50,6 +54,7 @@ channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 pkg2: version="2.0" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set
 pkg3: version="3.0" filelist=array(pkg3-1.php[role=php],pkg3-2.php[role=php,baseinstalldir=pkg3]) maintainers="Array" _lastmodified is set
+channel pecl.php.net:
 dump done
 ', $subreg, 'after adding pkg2 and pkg3, new registry object');
 $phpunit->assertFalse($reg->addPackage('pkg1', array()), 'bad addpackage');

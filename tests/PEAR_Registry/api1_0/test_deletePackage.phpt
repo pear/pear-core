@@ -12,6 +12,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
 channel pear.php.net:
+channel pecl.php.net:
 dump done
 ', $reg, 'Initial dump is incorrect');
 
@@ -22,6 +23,7 @@ channel __uri:
 channel pear.php.net:
 pkg2: version="2.0" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set
 pkg3: version="3.0" filelist=array(pkg3-1.php[role=php],pkg3-2.php[role=php,baseinstalldir=pkg3]) maintainers="Array" _lastmodified is set
+channel pecl.php.net:
 dump done
 ', $reg, 'after adding pkg2 and pkg3');
 
@@ -30,6 +32,7 @@ $phpunit->assertRegEquals('dumping registry...
 channel __uri:
 channel pear.php.net:
 pkg3: version="3.0" filelist=array(pkg3-1.php[role=php],pkg3-2.php[role=php,baseinstalldir=pkg3]) maintainers="Array" _lastmodified is set
+channel pecl.php.net:
 dump done
 ', $reg, 'after first delete');
 
@@ -38,6 +41,7 @@ $phpunit->assertRegEquals('dumping registry...
 channel __uri:
 channel pear.php.net:
 pkg3: version="3.0" filelist=array(pkg3-1.php[role=php],pkg3-2.php[role=php,baseinstalldir=pkg3]) maintainers="Array" _lastmodified is set
+channel pecl.php.net:
 dump done
 ', $reg, 'after second delete');
 
@@ -46,6 +50,7 @@ $phpunit->assertRegEquals('dumping registry...
 channel __uri:
 channel pear.php.net:
 pkg3: version="3.0" filelist=array(pkg3-1.php[role=php],pkg3-2.php[role=php,baseinstalldir=pkg3]) maintainers="Array" _lastmodified is set
+channel pecl.php.net:
 dump done
 ', $subreg, 'after second delete, new object');
 
@@ -53,6 +58,7 @@ $phpunit->assertTrue($reg->deletePackage("pkg3"), 'third delete');
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
 channel pear.php.net:
+channel pecl.php.net:
 dump done
 ', $reg, 'after third delete');
 echo 'tests done';
