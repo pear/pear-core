@@ -303,6 +303,9 @@ class PEAR_Command
         if (empty($GLOBALS['_PEAR_Command_commandlist'])) {
             PEAR_Command::registerCommands();
         }
+        if (isset($GLOBALS['_PEAR_Command_shortcuts'][$command])) {
+            $command = $GLOBALS['_PEAR_Command_shortcuts'][$command];
+        }
         if (!isset($GLOBALS['_PEAR_Command_commandlist'][$command])) {
             return null;
         }
@@ -346,6 +349,9 @@ class PEAR_Command
     function getHelp($command)
     {
         $cmds = PEAR_Command::getCommands();
+        if (isset($GLOBALS['_PEAR_Command_shortcuts'][$command])) {
+            $command = $GLOBALS['_PEAR_Command_shortcuts'][$command];
+        }
         if (isset($cmds[$command])) {
             $class = $cmds[$command];
             return $GLOBALS['_PEAR_Command_objects'][$class]->getHelp($command);
