@@ -428,31 +428,49 @@ class System
     * The "which" command (show the full path of a command)
     *
     * @param string $program The command to search for
+    * @param mixed  $fallback Value to return if $program is not found
+    *
     * @return mixed A string with the full path or false if not found
     * @author Stig Bakken <ssb@php.net>
     */
     function which($program, $fallback = false)
     {
-        // is_executable() is not available on windows
-        if (OS_WINDOWS) {
-            $pear_is_executable = 'is_file';
+        // avaible since 4.3.0RC2
+        if (defined('PATH_SEPARATOR')) {
+            $path_delim = PATH_SEPARATOR;
         } else {
+            $path_delim = OS_WINDOWS ? ';' : ':';
+        }
+        // Honor safe mode
+        if (!ini_get('safe_mode') || !$path = ini_get('safe_mode_exec_dir')) {
+            $path = getenv('PATH');
+        }
+        $path_elements = explode($path_delim, $path);
+
+        if (OS_WINDOWS) {
+            $exe_suffixes = getenv('PATHEXT')
+                                ? explode($path_delim, getenv('PATHEXT'))
+                                : array('.exe','.bat','.cmd','.com');
+            // allow passing a command.exe param
+            if (strpos($program, '.') !== false) {
+                array_unshift($exe_suffixes, '');
+            }
+            // is_executable() is not available on windows for PHP4
+            $pear_is_executable = (function_exists('is_executable')) ? 'is_executable' : 'is_file';
+        } else {
+            $exe_suffixes = array('');
             $pear_is_executable = 'is_executable';
         }
 
         // full path given
         if (basename($program) != $program) {
-            return (@$pear_is_executable($program)) ? $program : $fallback;
+            return $pear_is_executable($program) ? $program : $fallback;
         }
 
-        // XXX FIXME honor safe mode
-        $path_delim = OS_WINDOWS ? ';' : ':';
-        $exe_suffixes = OS_WINDOWS ? array('.exe','.bat','.cmd','.com') : array('');
-        $path_elements = explode($path_delim, getenv('PATH'));
         foreach ($exe_suffixes as $suff) {
             foreach ($path_elements as $dir) {
                 $file = $dir . DIRECTORY_SEPARATOR . $program . $suff;
-                if (@is_file($file) && @$pear_is_executable($file)) {
+                if ($pear_is_executable($file)) {
                     return $file;
                 }
             }
@@ -497,7 +515,7 @@ class System
                 case '-type':
                     if (in_array($args[$i+1], array('d', 'f'))) {
                         if ($args[$i+1] == 'd') {
-                             $do_files = false;
+                            $do_files = false;
                         } else {
                             $do_dirs = false;
                         }
