@@ -277,44 +277,98 @@ class PEAR_PackageFile_v2
                 'php' => 'php',
                 'package' => 'pkg',
                 'extension' => 'ext',
-                'sapi' => 'sapi',
                 'os' => 'os'
                 );
-            foreach ($this->_packageInfo[$type]['dependendencies'] as $dtype => $deps) {
-                foreach ($deps as $dep) {
-                    $s = array('type' => $map[$dtype], 'channel' => $t = @$dep['attribs']['channel'] ? $t : 'pear');
-                    if (!isset($dep['attribs']['min']) &&
-                          !isset($dep['attribs']['max'])) {
-                        $s['rel'] = 'has';
-                    } elseif (isset($dep['attribs']['min']) &&
-                          isset($dep['attribs']['max'])) {
-                        $s['rel'] = 'ge';
-                        $s1 = $s;
-                        $s['version'] = $dep['attribs']['min'];
-                        $s1['version'] = $dep['attribs']['max'];
-                        if ($dtype != 'php') {
-                            $s['name'] = $dep['_content'];
-                            $s1['name'] = $dep['_content'];
-                        }
-                        $s['optional'] = $dep['attribs']['optional'];
-                        $s1['optional'] = $dep['attribs']['optional'];
-                        $ret[] = $s1;
-                    } elseif (isset($dep['attribs']['min'])) {
-                        $s['rel'] = 'ge';
-                        $s['version'] = $dep['attribs']['min'];
-                        $s['optional'] = $dep['attribs']['optional'];
-                        if ($dtype != 'php') {
-                            $s['name'] = $dep['_content'];
-                        }
-                    } elseif (isset($dep['attribs']['max'])) {
-                        $s['rel'] = 'le';
-                        $s['version'] = $dep['attribs']['min'];
-                        $s['optional'] = $dep['attribs']['optional'];
-                        if ($dtype != 'php') {
-                            $s['name'] = $dep['_content'];
-                        }
+            if (isset($this->_packageInfo[$type]['dependendencies']['required'])) {
+                foreach ($this->_packageInfo[$type]['dependendencies']['required']
+                      as $dtype => $deps) {
+                    if (!isset($deps[0])) {
+                        $deps = array($deps);
                     }
-                    $ret[] = $s;
+                    foreach ($deps as $dep) {
+                        if (!isset($map[$dtype])) {
+                            continue;
+                        }
+                        $s = array('type' => $map[$dtype], 'channel' => $t = @$dep['attribs']['channel'] ? $t : 'pear');
+                        if (!isset($dep['attribs']['min']) &&
+                              !isset($dep['attribs']['max'])) {
+                            $s['rel'] = 'has';
+                        } elseif (isset($dep['attribs']['min']) &&
+                              isset($dep['attribs']['max'])) {
+                            $s['rel'] = 'ge';
+                            $s1 = $s;
+                            $s['version'] = $dep['attribs']['min'];
+                            $s1['version'] = $dep['attribs']['max'];
+                            if ($dtype != 'php') {
+                                $s['name'] = $dep['_content'];
+                                $s1['name'] = $dep['_content'];
+                            }
+                            $s['optional'] = 'no';
+                            $s1['optional'] = 'no';
+                            $ret[] = $s1;
+                        } elseif (isset($dep['attribs']['min'])) {
+                            $s['rel'] = 'ge';
+                            $s['version'] = $dep['attribs']['min'];
+                            $s['optional'] = 'no';
+                            if ($dtype != 'php') {
+                                $s['name'] = $dep['_content'];
+                            }
+                        } elseif (isset($dep['attribs']['max'])) {
+                            $s['rel'] = 'le';
+                            $s['version'] = $dep['attribs']['min'];
+                            $s['optional'] = 'no';
+                            if ($dtype != 'php') {
+                                $s['name'] = $dep['_content'];
+                            }
+                        }
+                        $ret[] = $s;
+                    }
+                }
+            }
+            if (isset($this->_packageInfo[$type]['dependendencies']['group'])) {
+                foreach ($this->_packageInfo[$type]['dependendencies']['group']
+                      as $dtype => $deps) {
+                    if (!isset($deps[0])) {
+                        $deps = array($deps);
+                    }
+                    foreach ($deps as $dep) {
+                        if (!isset($map[$dtype])) {
+                            continue;
+                        }
+                        $s = array('type' => $map[$dtype], 'channel' => $t = @$dep['attribs']['channel'] ? $t : 'pear');
+                        if (!isset($dep['attribs']['min']) &&
+                              !isset($dep['attribs']['max'])) {
+                            $s['rel'] = 'has';
+                        } elseif (isset($dep['attribs']['min']) &&
+                              isset($dep['attribs']['max'])) {
+                            $s['rel'] = 'ge';
+                            $s1 = $s;
+                            $s['version'] = $dep['attribs']['min'];
+                            $s1['version'] = $dep['attribs']['max'];
+                            if ($dtype != 'php') {
+                                $s['name'] = $dep['_content'];
+                                $s1['name'] = $dep['_content'];
+                            }
+                            $s['optional'] = 'yes';
+                            $s1['optional'] = 'yes';
+                            $ret[] = $s1;
+                        } elseif (isset($dep['attribs']['min'])) {
+                            $s['rel'] = 'ge';
+                            $s['version'] = $dep['attribs']['min'];
+                            $s['optional'] = 'yes';
+                            if ($dtype != 'php') {
+                                $s['name'] = $dep['_content'];
+                            }
+                        } elseif (isset($dep['attribs']['max'])) {
+                            $s['rel'] = 'le';
+                            $s['version'] = $dep['attribs']['min'];
+                            $s['optional'] = 'yes';
+                            if ($dtype != 'php') {
+                                $s['name'] = $dep['_content'];
+                            }
+                        }
+                        $ret[] = $s;
+                    }
                 }
             }
             return $ret;
@@ -375,12 +429,12 @@ class PEAR_PackageFile_v2
             '*maintainer->role->user->email->name->active',
             'date',
             'version->api->package',
-            'license->?uri->?filesource',
             'stability->api->package',
+            'license->?uri->?filesource',
             'notes',
-            '*bundle->name', //special validation needed
-            'filelist', //special validation needed
-            '+php|+extsrc|+extbin' //special validation needed
+            'contents', //special validation needed
+            '*dependencies', //special validation needed
+            '+phprelease|+extsrcrelease|+extbinrelease|+bundle' //special validation needed
         );
         reset($keys);
         $key = current($keys);
@@ -425,15 +479,15 @@ class PEAR_PackageFile_v2
               !isset($this->_packageInfo['license']['_content'])) {
             $this->_tagCannotBeEmpty('license');
         }
-        if (isset($this->_packageInfo['bundle'])) {
-            $this->_validateBundle();
+        if (isset($this->_packageInfo['dependencies'])) {
+            $this->_validateDependencies();
         }
-        if (!isset($this->_packageInfo['filelist']['dir'])) {
-            $this->_filelistMustContainDir();
+        if (!isset($this->_packageInfo['contents']['dir'])) {
+            $this->_filelistMustContainDir('contents');
             return false;
         }
-        if (isset($this->_packageInfo['filelist']['file'])) {
-            $this->_filelistCannotContainFile();
+        if (isset($this->_packageInfo['contents']['file'])) {
+            $this->_filelistCannotContainFile('contents');
             return false;
         }
         $this->_validateFilelist();
@@ -505,91 +559,91 @@ class PEAR_PackageFile_v2
         return $ret;
     }
 
-    function _validateBundle()
+    function _validateDependencies()
     {
     }
 
-    function _validateFilelist($list = false, $allowignorefile = false)
+    function _validateFilelist($list = false, $filetag = 'file', $allowignore = false)
     {
         if (!$list) {
-            $list = $this->_packageInfo['filelist'];
+            $list = $this->_packageInfo['contents'];
         }
-        if (isset($list['file'])) {
-            if (isset($list['file']['attribs'])) {
+        if (isset($list[$filetag])) {
+            if (isset($list[$filetag]['attribs'])) {
                 // single file
-                if (!isset($list['file']['attribs'])) {
-                    return $this->_tagHasNoAttribs('file',
+                if (!isset($list[$filetag]['attribs'])) {
+                    return $this->_tagHasNoAttribs($filetag,
                         '<dir name="' . $list['attribs']['name'] . '">');
                 }
-                if (!isset($list['file']['attribs']['name'])) {
-                    return $this->_tagMissingAttribute('file', 'name',
+                if (!isset($list[$filetag]['attribs']['name'])) {
+                    return $this->_tagMissingAttribute($filetag, 'name',
                         '<dir name="' . $list['attribs']['name'] . '">');
                 }
-                if (!isset($list['file']['attribs']['role'])) {
-                    return $this->_tagMissingAttribute('file', 'role',
+                if (!$allowignore && !isset($list[$filetag]['attribs']['role'])) {
+                    return $this->_tagMissingAttribute($filetag, 'role',
                         '<dir name="' . $list['attribs']['name'] . '"><file name="' .
-                        $list['file']['attribs']['name'] . '">');
+                        $list[$filetag]['attribs']['name'] . '">');
                 }
-                if (!$allowignorefile && !$this->_validateRole($list['file']['attribs']['role'])) {
-                    return $this->_invalidFileRole($list['file']['attribs']['name'],
+                if (!$allowignore && !$this->_validateRole($list[$filetag]['attribs']['role'])) {
+                    return $this->_invalidFileRole($list[$filetag]['attribs']['name'],
                         $list['attribs']['name']);
                 }
             } else {
-                if (!is_array($list['file'])) {
-                    return $this->_tagHasNoAttribs('file',
+                if (!is_array($list[$filetag])) {
+                    return $this->_tagHasNoAttribs($filetag,
                         '<dir name="' . $list['attribs']['name'] . '"><file>' .
-                        $list['file'] . '</file>');
+                        $list[$filetag] . '</file>');
                 }
-                foreach ($list['file'] as $i => $file) {
+                foreach ($list[$filetag] as $i => $file) {
                     if (!is_int($i)) {
-                        return $this->_tagHasNoAttribs('file',
+                        return $this->_tagHasNoAttribs($filetag,
                             '<dir name="' . $list['attribs']['name'] . '">');
                     }
                     if (!isset($file['attribs'])) {
-                        return $this->_tagHasNoAttribs('file',
+                        return $this->_tagHasNoAttribs($filetag,
                             '<dir name="' . $list['attribs']['name'] . '">');
                     }
                     if (!isset($file['attribs']['name'])) {
-                        return $this->_tagMissingAttribute('file', 'name',
+                        return $this->_tagMissingAttribute($filetag, 'name',
                             '<dir name="' . $list['attribs']['name'] . '">');
                     }
-                    if (!$allowignorefile && !$this->_validateRole($file['attribs']['role'])) {
-                        return $this->_invalidFileRole($list['file']['attribs']['name'],
+                    if (!$allowignore && !$this->_validateRole($file['attribs']['role'])) {
+                        return $this->_invalidFileRole($list[$filetag]['attribs']['name'],
                             $list['attribs']['name']);
                     }
                 }
             }
         }
-        if (isset($list['ignorefile'])) {
-            if (!$allowignorefile) {
-                $this->_ignorefileNotAllowed();
+        if (isset($list['ignore'])) {
+            if (!$allowignore) {
+                $this->_ignoreNotAllowed();
             }
-            if (isset($list['ignorefile']['attribs'])) {
+            if (isset($list['ignore']['attribs'])) {
                 // single file
-                if (!isset($list['ignorefile']['attribs'])) {
-                    return $this->_tagHasNoAttribs('ignorefile',
+                if (!isset($list['ignore']['attribs'])) {
+                    return $this->_tagHasNoAttribs('ignore',
                         '<dir name="' . $list['attribs']['name'] . '">');
                 }
-                if (!isset($list['ignorefile']['attribs']['name'])) {
-                    return $this->_tagMissingAttribute('ignorefile', 'name',
+                if (!isset($list['ignore']['attribs']['name'])) {
+                    return $this->_tagMissingAttribute('ignore', 'name',
                         '<dir name="' . $list['attribs']['name'] . '">');
                 }
             } else {
-                if (!is_array($list['ignorefile'])) {
-                    return $this->_tagHasNoAttribs('ignorefile',
+                if (!is_array($list['ignore'])) {
+                    return $this->_tagHasNoAttribs('ignore',
                         '<dir name="' . $list['attribs']['name'] . '">');
                 }
-                foreach ($list['ignorefile'] as $i => $file) {
+                foreach ($list['ignore'] as $i => $file) {
                     if (!is_int($i)) {
-                        return $this->_tagHasNoAttribs('ignorefile',
+                        return $this->_tagHasNoAttribs('ignore',
                             '<dir name="' . $list['attribs']['name'] . '">');
                     }
                     if (!isset($file['attribs'])) {
-                        return $this->_tagHasNoAttribs('ignorefile',
+                        return $this->_tagHasNoAttribs('ignore',
                             '<dir name="' . $list['attribs']['name'] . '">');
                     }
                     if (!isset($file['attribs']['name'])) {
-                        return $this->_tagMissingAttribute('ignorefile', 'name',
+                        return $this->_tagMissingAttribute('ignore', 'name',
                             '<dir name="' . $list['attribs']['name'] . '">');
                     }
                 }
@@ -599,12 +653,12 @@ class PEAR_PackageFile_v2
             if ($this->_processDir($list['dir'])) {
                 if (!isset($list['dir']['attribs'])) {
                     foreach ($list['dir'] as $dir) {
-                        $this->_validateFilelist($dir);
+                        $this->_validateFilelist($dir, $filetag, $allowignore);
                         return;
                     }
                 }
             }
-            return $this->_validateFilelist($list['dir'], $allowignorefile);
+            return $this->_validateFilelist($list['dir'], $filetag, $allowignore);
         }
     }
 
@@ -629,24 +683,27 @@ class PEAR_PackageFile_v2
 
     function _validateRelease()
     {
-        if (isset($this->_packageInfo['php'])) {
-            $release = 'php';
+        if (isset($this->_packageInfo['phprelease'])) {
+            $release = 'phprelease';
         }
-        if (isset($this->_packageInfo['extsrc'])) {
-            $release = 'extsrc';
+        if (isset($this->_packageInfo['extsrcrelease'])) {
+            $release = 'extsrcrelease';
         }
-        if (isset($this->_packageInfo['extbin'])) {
-            $release = 'extbin';
+        if (isset($this->_packageInfo['extbinrelease'])) {
+            $release = 'extbinrelease';
+        }
+        if (isset($this->_packageInfo['bundle'])) {
+            $release = 'bundle';
         }
         if (isset($this->_packageInfo[$release][0])) {
             foreach ($this->_packageInfo[$release] as $rel) {
                 if (isset($rel['filelist'])) {
-                    $this->_validateFilelist($rel['filelist'], true);
+                    $this->_validateFilelist($rel['filelist'], 'install', true);
                 }
             }
         } else {
             if (isset($this->_packageInfo[$release]['filelist'])) {
-                $this->_validateFilelist($this->_packageInfo[$release]['filelist'], true);
+                $this->_validateFilelist($this->_packageInfo[$release]['filelist'], 'install', true);
             }
         }
     }
@@ -673,10 +730,11 @@ class PEAR_PackageFile_v2
             'Invalid tag order, found <%actual%> expected one of "%oktags%"');
     }
 
-    function _ignorefileNotAllowed()
+    function _ignoreNotAllowed()
     {
         $this->_stack->push(__FUNCTION__, 'error', array(),
-            '<ignorefile> is not allowed inside global <filelist>, only inside <php>/<extsrc>/<extbin>');
+            '<ignore> is not allowed inside global <contents>, only inside ' .
+            '<phprelease>/<extsrcrelease>/<extbinrelease>/<bundle>');
     }
 
     function _tagMissingAttribute($tag, $attr, $context)
@@ -707,16 +765,18 @@ class PEAR_PackageFile_v2
             'File "%file%" in directory "%dir%" has invalid role "%role%", should be one of %roles%');
     }
 
-    function _filelistCannotContainFile()
+    function _filelistCannotContainFile($filelist)
     {
-        $this->_stack->push(__FUNCTION__, 'error', array(),
-            '<filelist> can only contain <dir>, contains <file>.  Use <dir name="/"> as the first dir element');
+        $this->_stack->push(__FUNCTION__, 'error', array('tag' => $filelist),
+            '<%filelist%> can only contain <dir>, contains <file>.  Use ' .
+            '<dir name="/"> as the first dir element');
     }
 
-    function _filelistMustContainDir()
+    function _filelistMustContainDir($filelist)
     {
-        $this->_stack->push(__FUNCTION__, 'error', array(),
-            '<filelist> must contain <dir>.  Use <dir name="/"> as the first dir element');
+        $this->_stack->push(__FUNCTION__, 'error', array('tag' => $filelist),
+            '<%filelist%> must contain <dir>.  Use <dir name="/"> as the ' .
+            'first dir element');
     }
 
     function _tagCannotBeEmpty($tag)

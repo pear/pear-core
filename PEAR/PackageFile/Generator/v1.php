@@ -265,6 +265,12 @@ class PEAR_PackageFile_Generator_v1
                           'package' => $this->_packagefile->getVersion()
                          )
             );
+        $arr['stability'] = array(
+                'attribs' =>
+                    array('api' => $this->_packagefile->getState(),
+                          'package' => $this->_packagefile->getState()
+                         )
+            );
         $licensemap =
             array(
                 'php license' => 'http://www.php.net/license/3_0.txt',
@@ -283,17 +289,14 @@ class PEAR_PackageFile_Generator_v1
             'attribs' => array('uri' => $uri),
             '_content' => $this->_packagefile->getLicense()
             );
-        $arr['stability'] = array(
-                'attribs' =>
-                    array('api' => $this->_packagefile->getState(),
-                          'package' => $this->_packagefile->getState()
-                         )
-            );
         $arr['notes'] = $this->_packagefile->getNotes();
-        $arr['filelist'] = $this->_convertFilelist2_0();
-        $release = $this->_packagefile->getConfigureOptions() ? 'extsrc' : 'php';
+        $temp = array();
+        $arr['contents'] = $this->_convertFilelist2_0($temp);
+        $this->_convertDependencies2_0($arr);
+        $release = $this->_packagefile->getConfigureOptions() ?
+            'extsrcrelease' : 'phprelease';
         $arr[$release] = array();
-        $this->_convertRelease2_0($arr[$release]);
+        $this->_convertRelease2_0($arr[$release], $temp);
         if ($cl = $this->_packagefile->getChangelog()) {
             foreach ($cl as $release) {
                 $rel = array();
@@ -301,6 +304,12 @@ class PEAR_PackageFile_Generator_v1
                         'attribs' =>
                             array('api' => $release['version'],
                                   'package' => $release['version']
+                                 )
+                    );
+                $rel['stability'] = array(
+                        'attribs' =>
+                            array('api' => $release['release_state'],
+                                  'package' => $release['release_state']
                                  )
                     );
                 $rel['date'] = $release['release_date'];
@@ -317,12 +326,6 @@ class PEAR_PackageFile_Generator_v1
                 } else {
                     $rel['license'] = $arr['license'];
                 }
-                $rel['stability'] = array(
-                        'attribs' =>
-                            array('api' => $release['release_state'],
-                                  'package' => $release['release_state']
-                                 )
-                    );
                 $rel['notes'] = $release['release_notes'];
                 $arr['changelog']['release'][] = $rel;
             }
@@ -333,7 +336,7 @@ class PEAR_PackageFile_Generator_v1
         return $ret;
     }
 
-    function _convertFilelist2_0()
+    function _convertFilelist2_0(&$package)
     {
         $ret = array('dir' =>
                     array(
@@ -341,6 +344,9 @@ class PEAR_PackageFile_Generator_v1
                         'file' => array()
                         )
                     );
+        $package['platform'] =
+        $package['osmap'] =
+        $package['install-as'] = array();
         foreach ($this->_packagefile->getFilelist() as $name => $file) {
             $file['name'] = $name;
             if (isset($file['replacements'])) {
@@ -348,6 +354,15 @@ class PEAR_PackageFile_Generator_v1
                 unset($file['replacements']);
             } else {
                 unset($repl);
+            }
+            if (isset($file['install-as'])) {
+                $package['install-as'][$name] = $file['install-as'];
+                unset($file['install-as']);
+            }
+            if (isset($file['platform'])) {
+                $package['platform'][$name] = $file['platform'];
+                $package['osmap'][$file['platform']][] = $name;
+                unset($file['platform']);
             }
             $file = array('attribs' => $file);
             if (isset($repl)) {
@@ -363,69 +378,174 @@ class PEAR_PackageFile_Generator_v1
         return $ret;
     }
 
-    function _convertRelease2_0(&$release)
+    function _convertDependencies2_0(&$release)
     {
-        $release['dependencies'] = array();
-        $release['dependencies']['pearinstaller'] =
+        $peardep = array('pearinstaller' =>
             array('attribs' =>
-                array('min' => '@PEAR-VER@'));
+                array('min' => '@PEAR-VER@')));
+        $required = $optional = array();
+        $release['dependencies'] = array();
         if ($this->_packagefile->hasDeps()) {
-            $deps = array();
             foreach ($this->_packagefile->getDeps() as $dep) {
-                // organize deps by dependency type and name
-                if (!isset($deps[$dep['type']])) {
-                    $deps[$dep['type']] = array();
-                }
-                if (isset($dep['name'])) {
-                    $deps[$dep['type']][$dep['name']][] = $dep;
+                if (!isset($dep['optional']) || $dep['optional'] == 'no') {
+                    $required[] = $dep;
                 } else {
-                    $deps[$dep['type']][] = $dep;
+                    $optional[] = $dep;
                 }
             }
-            do {
-                if (isset($deps['php'])) {
-                    $php = array();
-                    if (count($deps['php']) > 1) {
-                        $php = $this->_processMultipleDeps($deps['php']);
+            foreach (array('required', 'optional') as $arr) {
+                $deps = array();
+                foreach ($$arr as $dep) {
+                    // organize deps by dependency type and name
+                    if (!isset($deps[$dep['type']])) {
+                        $deps[$dep['type']] = array();
+                    }
+                    if (isset($dep['name'])) {
+                        $deps[$dep['type']][$dep['name']][] = $dep;
                     } else {
-                        $php = $this->_processDep($deps['php'][0]);
-                        if (!$php) {
-                            break; // poor mans throw
+                        $deps[$dep['type']][] = $dep;
+                    }
+                }
+                do {
+                    if (isset($deps['php'])) {
+                        $php = array();
+                        if (count($deps['php']) > 1) {
+                            $php = $this->_processMultipleDeps($deps['php']);
+                        } else {
+                            $php = $this->_processDep($deps['php'][0]);
+                            if (!$php) {
+                                break; // poor mans throw
+                            }
+                        }
+                        $release['dependencies'][$arr]['php'] = $php;
+                    }
+                } while (false);
+                do {
+                    if (isset($deps['pkg'])) {
+                        $pkg = array();
+                        if (count($deps['pkg']) > 1) {
+                            $pkg = $this->_processMultipleDepsName($deps['pkg']);
+                        } else {
+                            $pkg = $this->_processDep($deps['pkg'][0]);
+                            if (!$pkg) {
+                                break; // poor mans throw
+                            }
+                        }
+                        $release['dependencies'][$arr]['package'] = $pkg;
+                    }
+                } while (false);
+                do {
+                    if (isset($deps['ext'])) {
+                        $pkg = array();
+                        if (count($deps['ext']) > 1) {
+                            $pkg = $this->_processMultipleDepsName($deps['ext']);
+                        } else {
+                            $pkg = $this->_processDep($deps['ext'][0]);
+                            if (!$pkg) {
+                                break; // poor mans throw
+                            }
+                        }
+                        $release['dependencies'][$arr]['extension'] = $pkg;
+                    }
+                } while (false);
+                // skip sapi - it's not supported so nobody will have used it
+                // skip os - it's not supported in 1.0
+            }
+        }
+        if (isset($release['dependencies']['required'])) {
+            $release['dependencies']['required'] =
+                array_merge($peardep, $release['dependencies']['required']);
+        } else {
+            $release['dependencies']['required'] = $peardep;
+        }
+        if (isset($release['dependencies']['optional'])) {
+            $release['dependencies']['group'] =
+                $release['dependencies']['optional'];
+            unset($release['dependencies']['optional']);
+            $release['dependencies']['group']['attribs']['name'] = 'optional';
+            $release['dependencies']['group']['attribs']['hint'] =
+                'optional dependencies - you can define custom groups of optional deps';
+        }
+    }
+
+    function _convertRelease2_0(&$release, $package)
+    {
+        if (count($package['platform']) || count($package['install-as'])) {
+            $generic = array();
+            foreach ($package['install-as'] as $file => $as) {
+                if (!isset($package['platform'][$file])) {
+                    $generic[] = $file;
+                }
+            }
+            if (count($package['platform'])) {
+                $oses = array();
+                foreach ($package['platform'] as $file => $os) {
+                    $oses[$os] = count($oses);
+                    $release[$oses[$os]]['installconditions']
+                        ['os']['attribs']['pattern'] = $os;
+                    if (isset($package['install-as'][$file])) {
+                        $release[$oses[$os]]['filelist']['install'][] =
+                        array('attribs' => 
+                            array('name' => $file,
+                                  'as' => $package['install-as'][$file]));
+                    }
+                    foreach ($generic as $file) {
+                        $release[$oses[$os]]['filelist']['install'][] =
+                        array('attribs' => 
+                            array('name' => $file,
+                                  'as' => $package['install-as'][$file]));
+                    }
+                }
+                if (count($generic)) {
+                    $release[count($oses)]['installconditions']['os']
+                        ['attribs']['pattern'] = '*';
+                    foreach ($generic as $file) {
+                        $release[count($oses)]['filelist']['install'][] =
+                        array('attribs' => 
+                            array('name' => $file,
+                                  'as' => $package['install-as'][$file]));
+                    }
+                }
+                foreach ($package['osmap'] as $os => $files) {
+                    foreach ($oses as $os1 => $i) {
+                        if ($os1 == $os) {
+                            continue;
+                        }
+                        foreach ($files as $file) {
+                            $release[$i]['filelist']['ignore'][]
+                                ['attribs']['name'] = $file;
                         }
                     }
-                    $release['dependencies']['php'] = $php;
                 }
-            } while (false);
-            do {
-                if (isset($deps['pkg'])) {
-                    $pkg = array();
-                    if (count($deps['pkg']) > 1) {
-                        $pkg = $this->_processMultipleDepsName($deps['pkg']);
-                    } else {
-                        $pkg = $this->_processDep($deps['pkg'][0]);
-                        if (!$pkg) {
-                            break; // poor mans throw
-                        }
+                // cleanup
+                foreach ($release as $i => $rel) {
+                    if (isset($rel['filelist']['install']) &&
+                          count($rel['filelist']['install']) == 1) {
+                        $release[$i]['filelist']['install'] =
+                            $release[$i]['filelist']['install'][0];
                     }
-                    $release['dependencies']['package'] = $pkg;
-                }
-            } while (false);
-            do {
-                if (isset($deps['ext'])) {
-                    $pkg = array();
-                    if (count($deps['ext']) > 1) {
-                        $pkg = $this->_processMultipleDepsName($deps['ext']);
-                    } else {
-                        $pkg = $this->_processDep($deps['ext'][0]);
-                        if (!$pkg) {
-                            break; // poor mans throw
-                        }
+                    if (isset($rel['filelist']['ignore']) &&
+                          count($rel['filelist']['ignore']) == 1) {
+                        $release[$i]['filelist']['ignore'] =
+                            $release[$i]['filelist']['ignore'][0];
                     }
-                    $release['dependencies']['extension'] = $pkg;
                 }
-            } while (false);
-            // skip sapi - it's not supported so nobody will have used it
-            // skip os - it's not supported in 1.0
+            } else {
+                $release['installconditions']['os']['attribs']['pattern'] = '*';
+                foreach ($package['install-as'] as $file => $value) {
+                    if (count($package['install-as']) > 1) {
+                        $release['filelist']['install'][] =
+                            array('attribs' =>
+                                array('name' => $file,
+                                      'as' => $value));
+                    } else {
+                        $release['filelist']['install'] =
+                            array('attribs' =>
+                                array('name' => $file,
+                                      'as' => $value));
+                    }
+                }
+            }
         }
     }
 
