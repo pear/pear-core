@@ -136,6 +136,7 @@
     PEAR_PackageFile_v2_rw
 
   Specific changes from 1.4.0a9:
+  * add support for writeable tasks
   * fix potential fatal errors in run-tests command, -p option
   * fix --installroot option for installation
   * fix fatal error if package.xml has no version=&quot;X.0&quot;
@@ -290,6 +291,26 @@
      </file>
     </dir>
     <dir name="Task">
+     <dir name="Postinstallscript">
+      <file role="php" name="rw.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir>
+     <dir name="Replace">
+      <file role="php" name="rw.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir>
+     <dir name="Unixeol">
+      <file role="php" name="rw.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir>
+     <dir name="Windowseol">
+      <file role="php" name="rw.php">
+       <replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir>
      <file role="php" name="Common.php">
       <replace from="@package_version@" to="version" type="package-info" />
      </file>
