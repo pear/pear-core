@@ -19,7 +19,7 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'tag <dir> in context "<dir name="Installer">" has no attribute "name"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dir name="*unknown*">, found <ignore> expected one of "dir, file"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dir name="*unknown*">, found <install> expected one of "file"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Unknown task "tasks:nobodylikesme" passed in file <file name="Test.php">'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Unknown task "tasks:nobodylikesme" passed in file <file name="PEAR/Instaler/Test.php">'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<ignore> is not allowed inside global <contents>, only inside <phprelease>/<extbinrelease>, use <dir> and <file> only'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<install> is not allowed inside global <contents>, only inside <phprelease>/<extbinrelease>, use <dir> and <file> only'),
 ), '1');
