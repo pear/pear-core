@@ -556,15 +556,17 @@ class PEAR_Config extends PEAR
      */
     function readConfigFile($file = null, $layer = 'user')
     {
-        if (empty($this->files[$layer])) {
-            return $this->raiseError("unknown config file type `$layer'");
-        }
         if ($file === null) {
+            if (empty($this->files[$layer])) {
+                return $this->raiseError("unknown config file type `$layer'");
+            }
             $file = $this->files[$layer];
         }
         $data = $this->_readConfigDataFrom($file);
         if (PEAR::isError($data)) {
             return $data;
+        } else {
+            $this->files[$layer] = $file;
         }
         $this->_decodeInput($data);
         $this->configuration[$layer] = $data;
