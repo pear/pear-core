@@ -29,6 +29,7 @@ class PEAR_Installer_Role_Common
             'honorsbaseinstall' => true,
             'phpfile' => false,
             'executable' => false,
+            'phpextension' => false,
         );
     /**
      * This is used at startup to initialize the list of valid file roles, and what each role
@@ -46,6 +47,7 @@ class PEAR_Installer_Role_Common
             'honorsbaseinstall' => true,
             'phpfile' => false,
             'executable' => false,
+            'phpextension' => false,
         );
     }
 
@@ -136,6 +138,11 @@ class PEAR_Installer_Role_Common
     function isInstallable()
     {
         return $this->_setup['installable'];
+    }
+
+    function isExtension()
+    {
+        return $this->_setup['phpextension'];
     }
 }
 ?>

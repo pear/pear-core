@@ -9,6 +9,7 @@ class PEAR_Installer_Role_Ext extends PEAR_Installer_Role_Common
             'honorsbaseinstall' => true,
             'phpfile' => false,
             'executable' => false,
+            'phpextension' => true,
         );
     function getInfo()
     {
@@ -19,6 +20,7 @@ class PEAR_Installer_Role_Ext extends PEAR_Installer_Role_Common
             'honorsbaseinstall' => true,
             'phpfile' => false,
             'executable' => false,
+            'phpextension' => true,
         );
     }
 

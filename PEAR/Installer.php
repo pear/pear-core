@@ -377,7 +377,8 @@ class PEAR_Installer extends PEAR_Downloader
             }
         }
         // }}}
-        $this->addFileOperation("rename", array($dest_file, $final_dest_file));
+        $this->addFileOperation("rename", array($dest_file, $final_dest_file,
+            $atts['role'] == 'ext'));
         // Store the full path where the file was installed for easy unistall
         $this->addFileOperation("installed_as", array($file, $installed_as,
                                 $save_destdir, dirname(substr($dest_file, strlen($save_destdir)))));
@@ -511,7 +512,7 @@ class PEAR_Installer extends PEAR_Downloader
             }
         }
         // }}}
-        $this->addFileOperation("rename", array($dest_file, $final_dest_file));
+        $this->addFileOperation("rename", array($dest_file, $final_dest_file, $role->isExtension()));
         // Store the full path where the file was installed for easy unistall
         $this->addFileOperation("installed_as", array($file, $installed_as,
                             $save_destdir, dirname(substr($dest_file, strlen($save_destdir)))));
@@ -528,7 +529,7 @@ class PEAR_Installer extends PEAR_Downloader
      *
      * @see startFileTransaction()
      * @param string $type This can be one of:
-     *    - rename:  rename a file ($data has 2 values)
+     *    - rename:  rename a file ($data has 3 values)
      *    - backup:  backup an existing file ($data has 1 value)
      *    - removebackup:  clean up backups created during install ($data has 1 value)
      *    - chmod:   change permissions on a file ($data has 2 values)
@@ -538,7 +539,7 @@ class PEAR_Installer extends PEAR_Downloader
      * @param array $data For all file operations, this array must contain the
      *    full path to the file or directory that is being operated on.  For
      *    the rename command, the first parameter must be the file to rename,
-     *    the second its new name.
+     *    the second its new name, the third whether this is a PHP extension.
      *
      *    The installed_as operation contains 4 elements in this order:
      *    1. Filename as listed in the filelist element from package.xml
@@ -646,8 +647,14 @@ class PEAR_Installer extends PEAR_Downloader
                 case 'rename':
                     $test = @unlink($data[1]);
                     if (!$test && file_exists($data[1])) {
+                        if ($data[2]) {
+                            $extra = ', this extension must be installed manually.  Rename to "' .
+                                basename($data[1]) . '"';
+                        } else {
+                            $extra = '';
+                        }
                         $this->log(1, 'Could not delete ' . $data[1] . ', cannot rename ' .
-                            $data[0]);
+                            $data[0] . $extra);
                         return false;
                     }
                     @rename($data[0], $data[1]);
