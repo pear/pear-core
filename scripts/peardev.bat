@@ -16,7 +16,7 @@ REM ----------------------------------------------------------------------
 REM  Authors:     Alexander Merz (alexmerz@php.net)
 REM ----------------------------------------------------------------------
 REM
-REM  Last updated 12/29/2004 ($Id: peardev.bat,v 1.1 2005-03-21 15:23:08 cellog Exp $ is not replaced if the file is binary)
+REM  $Id: peardev.bat,v 1.2 2005-03-21 15:23:43 cellog Exp $
 
 REM change this lines to match the paths of your system
 REM -------------------
