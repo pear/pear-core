@@ -1760,7 +1760,11 @@ class PEAR_Config extends PEAR
             return $this->_registry['system'];
         } elseif ($use === null && isset($this->_registry['default'])) {
             return $this->_registry['default'];
+        } elseif ($use) {
+            $a = false;
+            return $a;
         } else {
+            // only go here if null was passed in
             die("CRITICAL ERROR: Registry could not be initialized from any value");
         }
     }
