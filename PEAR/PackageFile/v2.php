@@ -469,16 +469,17 @@ class PEAR_PackageFile_v2
     function getArray($forReg = false)
     {
         if ($forReg) {
-            $this->_packageInfo['old'] = array();
-            $this->_packageInfo['old']['version'] = $this->getVersion();
-            $this->_packageInfo['old']['release_date'] = $this->getDate();
-            $this->_packageInfo['old']['release_state'] = $this->getState();
-            $this->_packageInfo['old']['release_license'] = $this->getLicense();
-            $this->_packageInfo['old']['release_notes'] = $this->getNotes();
-            $this->_packageInfo['old']['release_deps'] = $this->getDeps();
-            $this->_packageInfo['old']['maintainers'] = $this->getMaintainers();
-            $this->_packageInfo['xsdversion'] = '2.0';
-            return $this->_packageInfo;
+            $arr = $this->_packageInfo;
+            $arr['old'] = array();
+            $arr['old']['version'] = $this->getVersion();
+            $arr['old']['release_date'] = $this->getDate();
+            $arr['old']['release_state'] = $this->getState();
+            $arr['old']['release_license'] = $this->getLicense();
+            $arr['old']['release_notes'] = $this->getNotes();
+            $arr['old']['release_deps'] = $this->getDeps();
+            $arr['old']['maintainers'] = $this->getMaintainers();
+            $arr['xsdversion'] = '2.0';
+            return $arr;
         } else {
             $info = $this->_packageInfo;
             unset($info['dirtree']);
