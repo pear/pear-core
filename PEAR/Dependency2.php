@@ -471,7 +471,7 @@ class PEAR_Dependency2
                             ' or greater');
                     }
                 } else {
-                    return $this->warning('warning: %s requires package "' .
+                    return $this->warning('warning: %s optionally requires package "' .
                         $name . '" version ' . $dep['min'] .
                         ' or greater');
                 }
@@ -491,7 +491,7 @@ class PEAR_Dependency2
                             ' or less');
                     }
                 } else {
-                    return $this->warning('warning: %s requires package "' .
+                    return $this->warning('warning: %s optionally requires package "' .
                         $name . '" version ' . $dep['max'] .
                         ' or less');
                 }
