@@ -534,8 +534,12 @@ class PEAR_Registry extends PEAR
         if (!$channel || $this->_getChannelFromAlias($channel) == 'pear.php.net') {
             return $this->statedir;
         } else {
+            $ch = $this->_getChannelFromAlias($channel);
+            if (!$ch) {
+                $ch = $channel;
+            }
             return $this->statedir . DIRECTORY_SEPARATOR . strtolower('.channel.' .
-                str_replace('/', '_', $this->_getChannelFromAlias($channel)));
+                str_replace('/', '_', $ch));
         }
     }
 
