@@ -192,17 +192,27 @@ class PEAR_Validate
                   $this->_packagexml->getExtends()) {
                 $version = $this->_packagexml->getVersion() . '';
                 $name = $this->_packagexml->getPackage();
-                if ($name{strlen($name) - 1} != $version{0}) {
+                $test = array_shift(explode('.', $version));
+                if ($test == '0') {
+                    return true;
+                }
+                $vlen = strlen($test);
+                $majver = substr($name, strlen($name) - $vlen);
+                while ($majver && !is_numeric($majver{0})) {
+                    $majver = substr($majver, 1);
+                }
+                if ($majver != $test) {
                     $this->_addFailure('package', "package $name extends package " .
                         $this->_packagexml->getExtends() . ' and so the name must ' .
                         'have a postfix equal to the major version like "' .
-                        $this->_packagexml->getExtends() . $version{0} . '"');
+                        $this->_packagexml->getExtends() . $test . '"');
                     return false;
-                } elseif (substr($name, 0, strlen($name) - 1) != $this->_packagexml->getExtends()) {
+                } elseif (substr($name, 0, strlen($name) - $vlen) !=
+                            $this->_packagexml->getExtends()) {
                     $this->_addFailure('package', "package $name extends package " .
                         $this->_packagexml->getExtends() . ' and so the name must ' .
                         'be an extension like "' . $this->_packagexml->getExtends() .
-                        $version{0} . '"');
+                        $test . '"');
                 }
             }
         }
@@ -227,9 +237,9 @@ class PEAR_Validate
         }
         $version = $this->_packagexml->getVersion();
         $versioncomponents = explode('.', $version);
-        if (count($versioncomponents) != 3) {
+        if (count($versioncomponents) < 3 || count($versioncomponents) > 4) {
             $this->_addFailure('version',
-                'Must have 3 decimals (x.y.z) in a version number');
+                'A version number must have between 3 and 4 decimals (x.y.z[.w])');
             return false;
         }
         $name = $this->_packagexml->getPackage();
@@ -238,21 +248,39 @@ class PEAR_Validate
             case 'snapshot' :
                 return true;
             case 'devel' :
-                if ($versioncomponents[0] == '0') {
+                if ($versioncomponents[0] . 'a' == '0a') {
                     return true;
                 }
-                $this->_addFailure('version',
-                    'packages with devel stability must be < version 1.0.0');
+                if ($versioncomponents[0] == 0) {
+                    $versioncomponents[0] = '0';
+                    $this->_addFailure('version',
+                        'version "' . $version . '" should be "' .
+                        implode('.' ,$versioncomponents) . '"');
+                } else {
+                    $this->_addFailure('version',
+                        'packages with devel stability must be < version 1.0.0');
+                }
                 return false;
             break;
             case 'alpha' :
             case 'beta' :
+                if (count($versioncomponents) == 4) {
+                    $this->_addFailure('version',
+                        'version "' . $version . '" can only be used for a stable release');
+                    return false;
+                }
                 // check for a package that extends a package,
                 // like Foo and Foo2
                 if (!$this->_packagexml->getExtends()) {
                     if ($versioncomponents[0] == '1') {
                         if ($versioncomponents[2]{0} == '0') {
-                            if (strlen($versioncomponents[2]) > 1) {
+                            if ($versioncomponents[2] == '0') {
+                                // version 1.*.0000
+                                $this->_addFailure('version',
+                                    'version 1.' . $versioncomponents[1] .
+                                        '.0 cannot be alpha or beta');
+                                return false;
+                            } elseif (strlen($versioncomponents[2]) > 1) {
                                 // version 1.*.0RC1 or 1.*.0beta24 etc.
                                 return true;
                             } else {
@@ -270,34 +298,74 @@ class PEAR_Validate
                     } elseif ($versioncomponents[0] != '0') {
                         $this->_addFailure('version',
                             'major versions greater than 1 are not allowed for packages ' .
-                            'not containing an identical postfix');
+                            'without an <extends> tag or an identical postfix (foo2 v2.0.0)');
+                        return false;
+                    }
+                    if ($versioncomponents[0] . 'a' == '0a') {
+                        return true;
+                    }
+                    if ($versioncomponents[0] == 0) {
+                        $versioncomponents[0] = '0';
+                        $this->_addFailure('version',
+                            'version "' . $version . '" should be "' .
+                            implode('.' ,$versioncomponents) . '"');
                     }
                 } else {
                     $vlen = strlen($versioncomponents[0] . '');
-                    if ($name{strlen($name) - $vlen} != $versioncomponents[0]) {
+                    $majver = substr($name, strlen($name) - $vlen);
+                    while ($majver && !is_numeric($majver{0})) {
+                        $majver = substr($majver, 1);
+                    }
+                    if (($versioncomponents[0] != 0) && $majver != $versioncomponents[0]) {
                         $this->_addFailure('version', 'first version number "' .
                             $versioncomponents[0] . '" must match the postfix of ' .
                             'package name "' . $name . '" (' .
-                            $name{strlen($name) - $vlen} . ')');
+                            $majver . ')');
                         return false;
                     }
-                    if ($versioncomponents[2]{0} == '0') {
-                        if (strlen($versioncomponents[2]) > 1) {
-                            // version 2.*.0RC1 etc.
-                            return true;
+                    if ($versioncomponents[0] == $majver) {
+                        if ($versioncomponents[2]{0} == '0') {
+                            if ($versioncomponents[2] == '0') {
+                                // version 2.*.0000
+                                $this->_addFailure('version',
+                                    "version $majver." . $versioncomponents[1] .
+                                        '.0 cannot be alpha or beta');
+                                return false;
+                            } elseif (strlen($versioncomponents[2]) > 1) {
+                                // version 2.*.0RC1 or 2.*.0beta24 etc.
+                                return true;
+                            } else {
+                                // version 2.*.0
+                                $this->_addFailure('version',
+                                    "version $majver." . $versioncomponents[1] .
+                                        '.0 cannot be alpha or beta');
+                                return false;
+                            }
                         } else {
-                            // version 2.*.0
-                            $this->_addFailure('version', 'version ' .
-                                $versioncomponents[0] . '.0.0 cannot be alpha or beta');
+                            $this->_addFailure('version',
+                                "bugfix versions ($majver.x.y where y > 0) cannot be alpha or beta");
                             return false;
                         }
+                    } elseif ($versioncomponents[0] != '0') {
+                        $this->_addFailure('version',
+                            "only versions 0.x.y and $majver.x.y");
+                        return false;
+                    }
+                    if ($versioncomponents[0] . 'a' == '0a') {
+                        return true;
+                    }
+                    if ($versioncomponents[0] == 0) {
+                        $versioncomponents[0] = '0';
+                        $this->_addFailure('version',
+                            'version "' . $version . '" should be "' .
+                            implode('.' ,$versioncomponents) . '"');
                     }
                 }
                 return true;
             break;
             case 'stable' :
                 if ($versioncomponents[0] == '0') {
-                    $this->_addFailure('version', 'versions less than 1.0 cannot ' .
+                    $this->_addFailure('version', 'versions less than 1.0.0 cannot ' .
                     'be stable');
                     return false;
                 }
@@ -308,6 +376,25 @@ class PEAR_Validate
                             'RC/beta/alpha version cannot be stable');
                         return false;
                     }
+                }
+                // check for a package that extends a package,
+                // like Foo and Foo2
+                if ($this->_packagexml->getExtends()) {
+                    $vlen = strlen($versioncomponents[0] . '');
+                    $majver = substr($name, strlen($name) - $vlen);
+                    while ($majver && !is_numeric($majver{0})) {
+                        $majver = substr($majver, 1);
+                    }
+                    if (($versioncomponents[0] != 0) && $majver != $versioncomponents[0]) {
+                        $this->_addFailure('version', 'first version number "' .
+                            $versioncomponents[0] . '" must match the postfix of ' .
+                            'package name "' . $name . '" (' .
+                            $majver . ')');
+                        return false;
+                    }
+                } elseif ($versioncomponents[0] > 1) {
+                    $this->_addFailure('version', 'major version x in x.y.z may not be greater than ' .
+                        '1 for any package that does not have an <extends> tag');
                 }
                 return true;
             break;
