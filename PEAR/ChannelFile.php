@@ -157,6 +157,10 @@ define('PEAR_CHANNELFILE_ERROR_NO_SUBSUMMARY', 31);
  * methods.
  */
 define('PEAR_CHANNELFILE_ERROR_MIRROR_NOT_FOUND', 32);
+/**
+ * Error code when a server port is not numeric
+ */
+define('PEAR_CHANNELFILE_ERROR_INVALID_PORT', 33);
 /**@#-*/
 
 
@@ -311,6 +315,8 @@ class PEAR_ChannelFile {
                     'No summary for subchannel "%name%"',
                 PEAR_CHANNELFILE_ERROR_MIRROR_NOT_FOUND =>
                     'Mirror "%mirror%" does not exist',
+                PEAR_CHANNELFILE_ERROR_INVALID_PORT =>
+                    'Port "%port%" must be numeric',
             );
     }
     
@@ -514,6 +520,7 @@ class PEAR_ChannelFile {
     function _handlePrimaryOpen1_0($attribs)
     {
         $this->_channelInfo['server'] = @$attribs['host'];
+        $this->_channelInfo['port'] = isset($attribs['port']) ? $attribs['port'] : '80';
     }
 
     function _handleMirrorOpen1_0($attribs)
@@ -976,6 +983,9 @@ class PEAR_ChannelFile {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_HOST,
                 array('server' => $info['server'], 'type' => 'primary'));
         }
+        if (isset($info['port']) && !is_numeric($info['port'])) {
+            $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_PORT, array('port' => $info['port']));
+        }
 
         if (!isset($info['protocols']['xmlrpc']) || !isset($info['protocols']['xmlrpc']['functions'])) {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_XMLRPC);
@@ -1126,6 +1136,29 @@ class PEAR_ChannelFile {
         } else {
             return false;
         }
+    }
+
+    /**
+     * @return string|80 port number to connect to
+     */
+    function getPort($mirror = false)
+    {
+        if ($mirror) {
+            foreach ($this->getMirrors() as $mir) {
+                if ($mir['name'] == $mirror) {
+                    if (isset($mir['port'])) {
+                        return $mir['port'];
+                    } else {
+                        return 80;
+                    }
+                }
+            }
+            return false;
+        }
+        if (isset($this->_channelInfo['port'])) {
+            return $this->_channelInfo['port'];
+        }
+        return 80;
     }
 
     /**
