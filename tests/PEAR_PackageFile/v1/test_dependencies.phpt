@@ -36,7 +36,6 @@ $phpunit->assertEquals(array (
     'type' => 'pkg',
     'name' => 'foo',
     'rel' => 'not',
-    'version' => '1.0',
     'optional' => 'no',
   ),
 ), $pf->getDeps(), 'package set failed');
