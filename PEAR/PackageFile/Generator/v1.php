@@ -181,14 +181,14 @@ class PEAR_PackageFile_Generator_v1
             $ret .= "\n<extends>$pkginfo[extends]</extends>";
         }
         $ret .=
- "\n <summary>".htmlspecialchars($pkginfo['summary'])."</summary>\n" .
-" <description>".trim(htmlspecialchars($pkginfo['description']))."\n </description>\n" .
+ "\n <summary>".htmlentities($pkginfo['summary'])."</summary>\n" .
+" <description>".trim(htmlentities($pkginfo['description']))."\n </description>\n" .
 " <maintainers>\n";
         foreach ($pkginfo['maintainers'] as $maint) {
             $ret .= "  <maintainer>\n";
             foreach ($maint_map as $idx => $elm) {
                 $ret .= "   <$elm>";
-                $ret .= htmlspecialchars($maint[$idx]);
+                $ret .= htmlentities($maint[$idx]);
                 $ret .= "</$elm>\n";
             }
             $ret .= "  </maintainer>\n";
@@ -237,11 +237,11 @@ class PEAR_PackageFile_Generator_v1
             $ret .= "$indent  <state>$pkginfo[release_state]</state>\n";
         }
         if (!empty($pkginfo['release_notes'])) {
-            $ret .= "$indent  <notes>".trim(htmlspecialchars($pkginfo['release_notes']))
+            $ret .= "$indent  <notes>".trim(htmlentities($pkginfo['release_notes']))
             ."\n$indent  </notes>\n";
         }
         if (!empty($pkginfo['release_warnings'])) {
-            $ret .= "$indent  <warnings>".htmlspecialchars($pkginfo['release_warnings'])."</warnings>\n";
+            $ret .= "$indent  <warnings>".htmlentities($pkginfo['release_warnings'])."</warnings>\n";
         }
         if (isset($pkginfo['release_deps']) && sizeof($pkginfo['release_deps']) > 0) {
             $ret .= "$indent  <deps>\n";
@@ -265,11 +265,11 @@ class PEAR_PackageFile_Generator_v1
             $ret .= "$indent  <configureoptions>\n";
             foreach ($pkginfo['configure_options'] as $c) {
                 $ret .= "$indent   <configureoption name=\"".
-                    htmlspecialchars($c['name']) . "\"";
+                    htmlentities($c['name']) . "\"";
                 if (isset($c['default'])) {
-                    $ret .= " default=\"" . htmlspecialchars($c['default']) . "\"";
+                    $ret .= " default=\"" . htmlentities($c['default']) . "\"";
                 }
-                $ret .= " prompt=\"" . htmlspecialchars($c['prompt']) . "\"";
+                $ret .= " prompt=\"" . htmlentities($c['prompt']) . "\"";
                 $ret .= "/>\n";
             }
             $ret .= "$indent  </configureoptions>\n";
@@ -293,7 +293,7 @@ class PEAR_PackageFile_Generator_v1
                     @$ret .= "$indent   <file role=\"$fa[role]\"";
                     if (isset($fa['baseinstalldir'])) {
                         $ret .= ' baseinstalldir="' .
-                            htmlspecialchars($fa['baseinstalldir']) . '"';
+                            htmlentities($fa['baseinstalldir']) . '"';
                     }
                     if (isset($fa['md5sum'])) {
                         $ret .= " md5sum=\"$fa[md5sum]\"";
@@ -303,9 +303,9 @@ class PEAR_PackageFile_Generator_v1
                     }
                     if (!empty($fa['install-as'])) {
                         $ret .= ' install-as="' .
-                            htmlspecialchars($fa['install-as']) . '"';
+                            htmlentities($fa['install-as']) . '"';
                     }
-                    $ret .= ' name="' . htmlspecialchars($file) . '"';
+                    $ret .= ' name="' . htmlentities($file) . '"';
                     if (empty($fa['replacements'])) {
                         $ret .= "/>\n";
                     } else {
@@ -313,7 +313,7 @@ class PEAR_PackageFile_Generator_v1
                         foreach ($fa['replacements'] as $r) {
                             $ret .= "$indent    <replace";
                             foreach ($r as $k => $v) {
-                                $ret .= " $k=\"" . htmlspecialchars($v) .'"';
+                                $ret .= " $k=\"" . htmlentities($v) .'"';
                             }
                             $ret .= "/>\n";
                         }
@@ -401,7 +401,7 @@ class PEAR_PackageFile_Generator_v1
         $ret = "$indent   <file role=\"$attributes[role]\"";
         if (isset($attributes['baseinstalldir'])) {
             $ret .= ' baseinstalldir="' .
-                htmlspecialchars($attributes['baseinstalldir']) . '"';
+                htmlentities($attributes['baseinstalldir']) . '"';
         }
         if (isset($attributes['md5sum'])) {
             $ret .= " md5sum=\"$attributes[md5sum]\"";
@@ -411,9 +411,9 @@ class PEAR_PackageFile_Generator_v1
         }
         if (!empty($attributes['install-as'])) {
             $ret .= ' install-as="' .
-                htmlspecialchars($attributes['install-as']) . '"';
+                htmlentities($attributes['install-as']) . '"';
         }
-        $ret .= ' name="' . htmlspecialchars($file) . '"';
+        $ret .= ' name="' . htmlentities($file) . '"';
         if (empty($attributes['replacements'])) {
             $ret .= "/>\n";
         } else {
@@ -421,7 +421,7 @@ class PEAR_PackageFile_Generator_v1
             foreach ($attributes['replacements'] as $r) {
                 $ret .= "$indent    <replace";
                 foreach ($r as $k => $v) {
-                    $ret .= " $k=\"" . htmlspecialchars($v) .'"';
+                    $ret .= " $k=\"" . htmlentities($v) .'"';
                 }
                 $ret .= "/>\n";
             }
