@@ -1462,6 +1462,11 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    /**
+     * Get the contents of a dependency group
+     * @param string
+     * @return array|false
+     */
     function getDependencyGroup($name)
     {
         $name = strtolower($name);
