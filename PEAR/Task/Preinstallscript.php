@@ -1,4 +1,5 @@
 <?php
+require_once 'PEAR/Task/Common.php';
 /**
  * Implements the preinstallscript file task
  * @package PEAR

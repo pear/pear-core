@@ -1,4 +1,5 @@
 <?php
+require_once 'PEAR/Task/Common.php';
 /**
  * Implements the replace file task
  * @package PEAR
