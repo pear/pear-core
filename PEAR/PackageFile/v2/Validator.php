@@ -175,7 +175,7 @@ class PEAR_PackageFile_v2_Validator
             }
             foreach ($roles as $role) {
                 if (!isset($role['role'])) {
-                    $this->_usesroletaskMustHaveRoleTask('usesrole');
+                    $this->_usesroletaskMustHaveRoleTask('usesrole', 'role');
                     $fail = true;
                 } else {
                     if (!isset($role['channel'])) {
