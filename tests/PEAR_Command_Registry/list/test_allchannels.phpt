@@ -44,6 +44,22 @@ $workingcopy = array (
     ),
     'cmd' => 'list',
   ),
+  'pecl.php.net' => 
+  array (
+    'info' => 
+    array (
+      'caption' => 'Installed packages, channel pecl.php.net:',
+      'border' => true,
+      'data' => 
+      array (
+        0 => 
+        array (
+          0 => '(no packages installed)',
+        ),
+      ),
+    ),
+    'cmd' => 'list',
+  ),
 );
 $actual = array();
 foreach ($reg->listChannels() as $chan) {
@@ -130,6 +146,22 @@ $workingcopy = array (
     'info' => 
     array (
       'caption' => 'Installed packages, channel __uri:',
+      'border' => true,
+      'data' => 
+      array (
+        0 => 
+        array (
+          0 => '(no packages installed)',
+        ),
+      ),
+    ),
+    'cmd' => 'list',
+  ),
+  'pecl.php.net' => 
+  array (
+    'info' => 
+    array (
+      'caption' => 'Installed packages, channel pecl.php.net:',
       'border' => true,
       'data' => 
       array (
