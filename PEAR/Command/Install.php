@@ -347,6 +347,9 @@ Run post-installation scripts in package <package>, if any exist.
             $reg = &$this->config->getRegistry();
             $savechannel = $this->config->get('default_channel');
             foreach ($reg->listChannels() as $channel) {
+                if ($channel == '__uri') {
+                    continue;
+                }
                 $this->config->set('default_channel', $channel);
                 $state = $this->config->get('preferred_state');
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);

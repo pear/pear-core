@@ -871,6 +871,9 @@ class PEAR_ChannelFile {
      */
     function getFunctions($protocol, $mirror = false)
     {
+        if ($this->getName() == '__uri') {
+            return false;
+        }
         if ($mirror) {
             if ($mir = $this->getMirror($mirror)) {
                 if (isset($mir[$protocol]['function'])) {
