@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Installer->install() with simple local package.xml, version 2.0
+PEAR_Installer->install() with complex local package.xml 2.0 [preferred_state = alpha, force, offline]
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -9,17 +9,82 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$_test_dep->setPEARVersion('1.4.0a1');
-$_test_dep->setPHPVersion('4.3.11');
+$ch = new PEAR_ChannelFile;
+$ch->setName('smork');
+$ch->setSummary('smork');
+$ch->setDefaultPEARProtocols();
+$reg = &$config->getRegistry();
+$phpunit->assertTrue($reg->addChannel($ch), 'smork setup');
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'simplepackage2.xml';
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
+    'packages'. DIRECTORY_SEPARATOR . 'package2.xml';
+$pathtobarxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'Bar-1.5.2.tgz';
+$pathtofoobarxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1.tgz';
+$GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Bar-1.5.2.tgz', $pathtobarxml);
+$GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Foobar-1.5.0a1.tgz', $pathtofoobarxml);
+$GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
+    array('2.0',
+         array('name' => 'Bar', 'channel' => 'pear.php.net', 'min' => '1.0.0'),
+         array('channel' => 'pear.php.net', 'package' => 'PEAR1', 'version' => '1.4.0a1'), 'alpha'),
+    array('version' => '1.5.2',
+          'info' =>
+          array(
+            'package' => 'Bar',
+            'channel' => 'pear.php.net',
+            'license' => 'PHP License',
+            'summary' => 'test',
+            'description' => 'test',
+            'releasedate' => '2003-12-06 00:26:42',
+            'state' => 'stable',
+            'deps' =>
+            array(
+                'required' =>
+                array(
+                    'php' =>
+                    array(
+                        'min' => '4.3.6',
+                        'max' => '6.0.0',
+                    ),
+                    'pearinstaller' =>
+                    array(
+                        'min' => '1.4.0a1',
+                    ),
+                    'package' =>
+                    array(
+                        'name' => 'Foobar',
+                        'channel' => 'smork',
+                    ),
+                ),
+            ),
+          ),
+          'url' => 'http://www.example.com/Bar-1.5.2'));
+$GLOBALS['pearweb']->addXmlrpcConfig('smork', 'package.getDepDownloadURL',
+    array('2.0',
+         array('name' => 'Foobar', 'channel' => 'smork'),
+         array('channel' => 'pear.php.net', 'package' => 'Bar', 'version' => '1.5.2'), 'alpha'),
+    array('version' => '1.5.0a1',
+          'info' =>
+          array(
+            'package' => 'Foobar',
+            'channel' => 'smork',
+            'license' => 'PHP License',
+            'summary' => 'test',
+            'description' => 'test',
+            'releasedate' => '2003-12-06 00:26:42',
+            'state' => 'alpha',
+          ),
+          'url' => 'http://www.example.com/Foobar-1.5.0a1'));
+$_test_dep->setPHPVersion('4.3.11');
+$_test_dep->setPEARVersion('1.4.0a1');
+$dp = &new test_PEAR_Downloader($fakelog, array('force' => true, 'offline' => true), $config);
 $phpunit->assertNoErrors('after create');
-$result = $dp->download(array($pathtopackagexml));
+$config->set('preferred_state', 'alpha');
+$result = &$dp->download(array($pathtopackagexml));
 $phpunit->assertEquals(1, count($result), 'return');
-$phpunit->assertIsa('test_PEAR_Downloader_Package', $result[0], 'right class');
-$phpunit->assertIsa('PEAR_PackageFile_v2', $pf = $result[0]->getPackageFile(), 'right kind of pf');
-$phpunit->assertEquals('PEAR', $pf->getPackage(), 'right package');
+$phpunit->assertIsa('test_PEAR_Downloader_Package', $result[0], 'right class 0');
+$phpunit->assertIsa('PEAR_PackageFile_v2', $pf = $result[0]->getPackageFile(), 'right kind of pf 0');
+$phpunit->assertEquals('PEAR1', $pf->getPackage(), 'right package');
 $phpunit->assertEquals('pear.php.net', $pf->getChannel(), 'right channel');
 $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(1, count($dlpackages), 'downloaded packages count');
@@ -29,8 +94,8 @@ $phpunit->assertEquals($pathtopackagexml,
     $dlpackages[0]['file'], 'file');
 $phpunit->assertIsa('PEAR_PackageFile_v2',
     $dlpackages[0]['info'], 'info');
-$phpunit->assertEquals('PEAR',
-    $dlpackages[0]['pkg'], 'PEAR');
+$phpunit->assertEquals('PEAR1',
+    $dlpackages[0]['pkg'], 'PEAR1');
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
@@ -39,14 +104,24 @@ $phpunit->assertEquals(array (
     0 => 3,
     1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
   ),
+  1 =>
+  array (
+    0 => 3,
+    'Skipping dependency download check, --offline specified',
+  ),
+  2 =>
+  array (
+    0 => 0,
+    1 => 'warning: pear/PEAR1 requires package "pear/Bar" (version >= 1.0.0)',
+  ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
 ), $fakelog->getDownload(), 'download callback messages');
-
-$installer->setOptions($dp->getOptions());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
+$installer->setOptions($dp->getOptions());
+
 $ret = &$installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
@@ -58,7 +133,7 @@ $phpunit->assertEquals(array (
     'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
     'xsi:schemaLocation' => 'http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd',
   ),
-  'name' => 'PEAR',
+  'name' => 'PEAR1',
   'channel' => 'pear.php.net',
   'summary' => 'PEAR Base System',
   'description' => 'The PEAR package contains:
@@ -113,7 +188,7 @@ $phpunit->assertEquals(array (
   'date' => '2004-09-30',
   'version' => 
   array (
-    'release' => '1.4.0a1',
+    'release' => '1.5.0a1',
     'api' => '1.4.0',
   ),
   'stability' => 
@@ -129,47 +204,7 @@ $phpunit->assertEquals(array (
     ),
     '_content' => 'PHP License',
   ),
-  'notes' => 'Installer Roles/Tasks:
-
- * package.xml 2.0 uses a command pattern, allowing extensibility
- * implement the replace, postinstallscript, and preinstallscript tasks
-
-Installer Dependency Support:
-
- * package.xml 2.0 has continued to improve and evolve
- * Downloader/Package.php is now used to coordinate downloading.  Old code
-   has not yet been deleted, as error handling is crappy right now.  Uninstall
-   ordering is broken, and needs to be redone.
- * Pre-download dependency resolution works, mostly.
- * There is no way to disable dependency resolution at the moment, this will be done.
- * Dependency2.php is used by the new PEAR_Downloader_Channel to resolve dependencies
-   and include downloaded files in the calculations.
- * DependencyDB.php is used to resolve complex dependencies between installed packages
-   and any dependencies installed later (a conflicts/not dependency cannot be honored
-   without this DB)
-
-Installer Channel Support:
-
- * channel XSD is available on pearweb
- * add channel.listAll and channel.update to default PEAR protocols
- * add ability to "pear channel-update channelname" to
-   retrieve updates manually for individual channels
- * fix channel.xml generation to use a valid schema declaration
-
-Installer:
-
- * with --remoteconfig option, it is possible to remotely install and uninstall packages
-   to an FTP server.  It works by mirroring a local installation, and requires a
-   special, separate local install.
- * Channels implemented
- * Bug #1242: array-to-string conversion
- * fix Bug #2189 upgrade-all stops if dependancy fails
- * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
- * fix Bug #1420 Parser bug for T_DOUBLE_COLON
- * fix Request #2220 pear5 build fails on dual php4/php5 system
- * Major bug in Registry - false file conflicts on data/doc/test role
-   was possible (and would happen if HTML_Template_IT was installed
-   and HTML_Template_Flexy installation was attempted)',
+  'notes' => 'stuff',
   'contents' => 
   array (
     'dir' => 
@@ -194,55 +229,31 @@ Installer:
     array (
       'php' => 
       array (
-        'min' => '4.2',
+        'min' => '4.2.0',
         'max' => '6.0.0',
       ),
       'pearinstaller' => 
       array (
         'min' => '1.4.0dev13',
       ),
+      'package' => 
+      array (
+        0 => 
+        array (
+          'name' => 'Foo',
+          'channel' => 'pear.php.net',
+          'conflicts' => '',
+        ),
+        1 => 
+        array (
+          'name' => 'Bar',
+          'channel' => 'pear.php.net',
+          'min' => '1.0.0',
+        ),
+      ),
     ),
   ),
   'phprelease' => '',
-  'changelog' => 
-  array (
-    'release' => 
-    array (
-      'version' => 
-      array (
-        'release' => '1.3.3',
-        'api' => '1.3.0',
-      ),
-      'stability' => 
-      array (
-        'release' => 'stable',
-        'api' => 'stable',
-      ),
-      'date' => '2004-10-28',
-      'license' => 
-      array (
-        'attribs' => 
-        array (
-          'uri' => 'http://www.php.net/license/3_0.txt',
-        ),
-        '_content' => 'PHP License',
-      ),
-      'notes' => 'Installer:
- * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
- * fix Bug #1249 display the right state when using --force option
- * fix Bug #2189 upgrade-all stops if dependancy fails
- * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
- * fix Bug #1420 Parser bug for T_DOUBLE_COLON
- * fix Request #2220 pear5 build fails on dual php4/php5 system
- * fix Bug #1163  pear makerpm fails with packages that supply role="doc"
-
-Other:
- * add PEAR_Exception class for PHP5 users
- * fix critical problem in package.xml for linux in 1.3.2
- * fix staticPopCallback() in PEAR_ErrorStack
- * fix warning in PEAR_Registry for windows 98 users',
-    ),
-  ),
   'filelist' => 
   array (
     'foo.php' => 
@@ -258,51 +269,11 @@ Other:
   ),
   'old' => 
   array (
-    'version' => '1.4.0a1',
+    'version' => '1.5.0a1',
     'release_date' => '2004-09-30',
     'release_state' => 'alpha',
     'release_license' => 'PHP License',
-    'release_notes' => 'Installer Roles/Tasks:
-
- * package.xml 2.0 uses a command pattern, allowing extensibility
- * implement the replace, postinstallscript, and preinstallscript tasks
-
-Installer Dependency Support:
-
- * package.xml 2.0 has continued to improve and evolve
- * Downloader/Package.php is now used to coordinate downloading.  Old code
-   has not yet been deleted, as error handling is crappy right now.  Uninstall
-   ordering is broken, and needs to be redone.
- * Pre-download dependency resolution works, mostly.
- * There is no way to disable dependency resolution at the moment, this will be done.
- * Dependency2.php is used by the new PEAR_Downloader_Channel to resolve dependencies
-   and include downloaded files in the calculations.
- * DependencyDB.php is used to resolve complex dependencies between installed packages
-   and any dependencies installed later (a conflicts/not dependency cannot be honored
-   without this DB)
-
-Installer Channel Support:
-
- * channel XSD is available on pearweb
- * add channel.listAll and channel.update to default PEAR protocols
- * add ability to "pear channel-update channelname" to
-   retrieve updates manually for individual channels
- * fix channel.xml generation to use a valid schema declaration
-
-Installer:
-
- * with --remoteconfig option, it is possible to remotely install and uninstall packages
-   to an FTP server.  It works by mirroring a local installation, and requires a
-   special, separate local install.
- * Channels implemented
- * Bug #1242: array-to-string conversion
- * fix Bug #2189 upgrade-all stops if dependancy fails
- * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
- * fix Bug #1420 Parser bug for T_DOUBLE_COLON
- * fix Request #2220 pear5 build fails on dual php4/php5 system
- * Major bug in Registry - false file conflicts on data/doc/test role
-   was possible (and would happen if HTML_Template_IT was installed
-   and HTML_Template_Flexy installation was attempted)',
+    'release_notes' => 'stuff',
     'release_deps' => 
     array (
       0 => 
@@ -316,7 +287,7 @@ Installer:
       array (
         'type' => 'php',
         'rel' => 'ge',
-        'version' => '4.2',
+        'version' => '4.2.0',
         'optional' => 'no',
       ),
       2 => 
@@ -326,6 +297,22 @@ Installer:
         'name' => 'PEAR',
         'rel' => 'ge',
         'version' => '1.4.0dev13',
+        'optional' => 'no',
+      ),
+      3 => 
+      array (
+        'type' => 'pkg',
+        'channel' => 'pear.php.net',
+        'name' => 'Foo',
+        'rel' => 'not',
+      ),
+      4 => 
+      array (
+        'type' => 'pkg',
+        'channel' => 'pear.php.net',
+        'name' => 'Bar',
+        'rel' => 'ge',
+        'version' => '1.0.0',
         'optional' => 'no',
       ),
     ),
@@ -374,9 +361,15 @@ Installer:
     ),
   ),
   'xsdversion' => '2.0',
-), $ret, 'return of install');
+)
+, $ret, 'return of install 2');
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
     'installed file');
+$reg = &$config->getRegistry();
+$info = $reg->packageInfo('PEAR1');
+$phpunit->assertTrue(isset($info['_lastmodified']), 'lastmodified is set?');
+unset($info['_lastmodified']);
+$phpunit->assertEquals($ret, $info, 'test installation, PEAR1');
 echo 'tests done';
 ?>
 --EXPECT--
