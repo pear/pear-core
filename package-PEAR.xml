@@ -105,7 +105,11 @@
   * implement Request #3717 [Patch] Implement Simple run-tests output
 
   Specific changes from 1.4.0a5
-  * fix Bug #3860 PEAR_Dependency2 not included in 1 case  </notes>
+  * fix Bug #3860 PEAR_Dependency2 not included in 1 case
+
+  Specific changes from 1.4.0a6
+  * fix Bug #3864 Invalid dependency relation
+  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
   <provides type="function" name="md5_file"/>
