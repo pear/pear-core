@@ -26,21 +26,24 @@ function logStack($err)
 PEAR_ErrorStack::setDefaultCallback('logStack');
 $chf = new PEAR_ChannelFile;
 $chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
-<channel version="1.0">
+<channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
- <protocols>
-  <xmlrpc host="pear.php.net">
-   <function version="1.0">logintest</function>
-   <function version="1.0">package.listLatestReleases</function>
-   <function version="1.0">package.listAll</function>
-   <function version="1.0">package.info</function>
-   <function version="1.0">package.getDownloadURL</function>
-   <function version="1.0">channel.listAll</function>
-   <function version="1.0">channel.update</function>
-  </xmlrpc>
- </protocols>
+ <servers>
+  <primary host="pear.php.net">
+   <xmlrpc>
+    <function version="1.0">logintest</function>
+    <function version="1.0">package.listLatestReleases</function>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">package.info</function>
+    <function version="1.0">package.getDownloadURL</function>
+    <function version="1.0">channel.listAll</function>
+    <function version="1.0">channel.update</function>
+   </xmlrpc>
+  </primary>
+ </servers>
 </channel>');
 
 echo "after parsing\n";
@@ -51,12 +54,18 @@ if (!$chf->validate()) {
 } else {
     if (var_export($chf->toArray(), true) !=
     var_export(array (
+  'mirrors' => 
+  array (
+  ),
+  'subchannels' => 
+  array (
+  ),
   'version' => '1.0',
   'name' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
+  'server' => 'pear.php.net',
   'protocols' => array('xmlrpc' => 
   array (
-    'host' => 'pear.php.net',
     'functions' => 
     array (
       1 => 
@@ -102,12 +111,18 @@ if (!$chf->validate()) {
         var_export($chf->toArray());
         echo "Expected\n";
             var_export(array (
+  'mirrors' => 
+  array (
+  ),
+  'subchannels' => 
+  array (
+  ),
   'version' => '1.0',
   'name' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
+  'server' => 'pear.php.net',
   'protocols' => array('xmlrpc' => 
   array (
-    'host' => 'pear.php.net',
     'functions' => 
     array (
       1 => 
@@ -152,23 +167,25 @@ if (!$chf->validate()) {
 
     if (var_export($chf->toXml(), true) !=
           var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
-<channel version="1.0">
+<channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
- <protocols>
-  <xmlrpc host="pear.php.net">
-   <function version="1.0">logintest</function>
-   <function version="1.0">package.listLatestReleases</function>
-   <function version="1.0">package.listAll</function>
-   <function version="1.0">package.info</function>
-   <function version="1.0">package.getDownloadURL</function>
-   <function version="1.0">channel.listAll</function>
-   <function version="1.0">channel.update</function>
-  </xmlrpc>
- </protocols>
-</channel>
-'), true)) {
+ <servers>
+  <primary host="pear.php.net">
+   <xmlrpc>
+    <function version="1.0">logintest</function>
+    <function version="1.0">package.listLatestReleases</function>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">package.info</function>
+    <function version="1.0">package.getDownloadURL</function>
+    <function version="1.0">channel.listAll</function>
+    <function version="1.0">channel.update</function>
+   </xmlrpc>
+  </primary>
+ </servers>
+</channel>'), true)) {
         echo "Re-generated XML of default is not correct\n";
         var_export($chf->toXml());
     } // if toXml() doesn't match
@@ -183,12 +200,18 @@ if (!$chf->validate()) {
 } else {
     if (var_export($chf->toArray(), true) !=
     var_export(array (
+  'mirrors' => 
+  array (
+  ),
+  'subchannels' => 
+  array (
+  ),
   'version' => '1.0',
   'name' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
+  'server' => 'pear.php.net',
   'protocols' => array('xmlrpc' => 
   array (
-    'host' => 'pear.php.net',
     'functions' => 
     array (
       1 => 
@@ -234,12 +257,18 @@ if (!$chf->validate()) {
         var_export($chf->toArray());
         echo "Expected\n";
             var_export(array (
+  'mirrors' => 
+  array (
+  ),
+  'subchannels' => 
+  array (
+  ),
   'version' => '1.0',
   'name' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
+  'server' => 'pear.php.net',
   'protocols' => array('xmlrpc' => 
   array (
-    'host' => 'pear.php.net',
     'functions' => 
     array (
       1 => 
@@ -284,21 +313,24 @@ if (!$chf->validate()) {
 }
 echo "test compatibility\n";
 $chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
-<channel version="1.0">
+<channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
- <protocols>
-  <xmlrpc host="pear.php.net">
-   <function version="1.0">logintest</function>
-   <function version="1.0">package.listLatestReleases</function>
-   <function version="1.0">package.listAll</function>
-   <function version="1.0">package.info</function>
-   <function version="1.0">package.getDownloadURL</function>
-   <function version="1.0">channel.listAll</function>
-   <function version="1.0">channel.update</function>
-  </xmlrpc>
- </protocols>
+ <servers>
+  <primary host="pear.php.net">
+   <xmlrpc>
+    <function version="1.0">logintest</function>
+    <function version="1.0">package.listLatestReleases</function>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">package.info</function>
+    <function version="1.0">package.getDownloadURL</function>
+    <function version="1.0">channel.listAll</function>
+    <function version="1.0">channel.update</function>
+   </xmlrpc>
+  </primary>
+ </servers>
 </channel>');
 
 echo "after parsing (compatibility)\n";
@@ -309,12 +341,18 @@ if (!$chf->validate()) {
 } else {
     if (var_export($chf->toArray(), true) !=
     var_export(array (
+  'mirrors' => 
+  array (
+  ),
+  'subchannels' => 
+  array (
+  ),
   'version' => '1.0',
   'name' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
+  'server' => 'pear.php.net',
   'protocols' => array('xmlrpc' => 
   array (
-    'host' => 'pear.php.net',
     'functions' => 
     array (
       1 => 
@@ -360,12 +398,18 @@ if (!$chf->validate()) {
         var_export($chf->toArray());
         echo "Expected\n";
             var_export(array (
+  'mirrors' => 
+  array (
+  ),
+  'subchannels' => 
+  array (
+  ),
   'version' => '1.0',
   'name' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
+  'server' => 'pear.php.net',
   'protocols' => array('xmlrpc' => 
   array (
-    'host' => 'pear.php.net',
     'functions' => 
     array (
       1 => 
@@ -410,23 +454,25 @@ if (!$chf->validate()) {
 
     if (var_export($chf->toXml(), true) !=
           var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
-<channel version="1.0">
+<channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
- <protocols>
-  <xmlrpc host="pear.php.net">
-   <function version="1.0">logintest</function>
-   <function version="1.0">package.listLatestReleases</function>
-   <function version="1.0">package.listAll</function>
-   <function version="1.0">package.info</function>
-   <function version="1.0">package.getDownloadURL</function>
-   <function version="1.0">channel.listAll</function>
-   <function version="1.0">channel.update</function>
-  </xmlrpc>
- </protocols>
-</channel>
-'), true)) {
+ <servers>
+  <primary host="pear.php.net">
+   <xmlrpc>
+    <function version="1.0">logintest</function>
+    <function version="1.0">package.listLatestReleases</function>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">package.info</function>
+    <function version="1.0">package.getDownloadURL</function>
+    <function version="1.0">channel.listAll</function>
+    <function version="1.0">channel.update</function>
+   </xmlrpc>
+  </primary>
+ </servers>
+</channel>'), true)) {
         echo "Re-generated XML of default is not correct (compatibility)\n";
         var_export($chf->toXml());
     } // if toXml() doesn't match
@@ -441,12 +487,18 @@ if (!$chf->validate()) {
 } else {
     if (var_export($chf->toArray(), true) !=
     var_export(array (
+  'mirrors' => 
+  array (
+  ),
+  'subchannels' => 
+  array (
+  ),
   'version' => '1.0',
   'name' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
+  'server' => 'pear.php.net',
   'protocols' => array('xmlrpc' => 
   array (
-    'host' => 'pear.php.net',
     'functions' => 
     array (
       1 => 
@@ -492,12 +544,18 @@ if (!$chf->validate()) {
         var_export($chf->toArray());
         echo "Expected\n";
             var_export(array (
+  'mirrors' => 
+  array (
+  ),
+  'subchannels' => 
+  array (
+  ),
   'version' => '1.0',
   'name' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
+  'server' => 'pear.php.net',
   'protocols' => array('xmlrpc' => 
   array (
-    'host' => 'pear.php.net',
     'functions' => 
     array (
       1 => 
@@ -543,46 +601,50 @@ if (!$chf->validate()) {
 echo "\ntest add validatepackage\n";
 $chf->setValidationPackage('PEAR_Validate', '1.0');
 if (var_export($chf->toXml(), true) != var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
-<channel version="1.0">
+<channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
  <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <protocols>
-  <xmlrpc host="pear.php.net">
-   <function version="1.0">logintest</function>
-   <function version="1.0">package.listLatestReleases</function>
-   <function version="1.0">package.listAll</function>
-   <function version="1.0">package.info</function>
-   <function version="1.0">package.getDownloadURL</function>
-   <function version="1.0">channel.listAll</function>
-   <function version="1.0">channel.update</function>
-  </xmlrpc>
- </protocols>
-</channel>
-'), true)) {
+ <servers>
+  <primary host="pear.php.net">
+   <xmlrpc>
+    <function version="1.0">logintest</function>
+    <function version="1.0">package.listLatestReleases</function>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">package.info</function>
+    <function version="1.0">package.getDownloadURL</function>
+    <function version="1.0">channel.listAll</function>
+    <function version="1.0">channel.update</function>
+   </xmlrpc>
+  </primary>
+ </servers>
+</channel>'), true)) {
     echo "add validatepackage did not match\n";
     var_dump(var_export($chf->toXml(), true));
     echo "Expected\n";
     var_dump(var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
-<channel version="1.0">
+<channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
  <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <protocols>
-  <xmlrpc host="pear.php.net">
-   <function version="1.0">logintest</function>
-   <function version="1.0">package.listLatestReleases</function>
-   <function version="1.0">package.listAll</function>
-   <function version="1.0">package.info</function>
-   <function version="1.0">package.getDownloadURL</function>
-   <function version="1.0">channel.listAll</function>
-   <function version="1.0">channel.update</function>
-  </xmlrpc>
- </protocols>
-</channel>
-'), true));
+ <servers>
+  <primary host="pear.php.net">
+   <xmlrpc>
+    <function version="1.0">logintest</function>
+    <function version="1.0">package.listLatestReleases</function>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">package.info</function>
+    <function version="1.0">package.getDownloadURL</function>
+    <function version="1.0">channel.listAll</function>
+    <function version="1.0">channel.update</function>
+   </xmlrpc>
+  </primary>
+ </servers>
+</channel>'), true));
 } // if validatepackage xml is wrong
 $chf->fromXmlString($chf->toXml());
 
@@ -594,6 +656,12 @@ if (!$chf->validate()) {
 } else {
     if (var_export($chf->toArray(), true) !=
     var_export(array (
+  'mirrors' => 
+  array (
+  ),
+  'subchannels' => 
+  array (
+  ),
   'version' => '1.0',
   'name' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
@@ -602,9 +670,9 @@ if (!$chf->validate()) {
     'version' => '1.0',
     'name' => 'PEAR_Validate',
   ),
+  'server' => 'pear.php.net',
   'protocols' => array('xmlrpc' => 
   array (
-    'host' => 'pear.php.net',
     'functions' => 
     array (
       1 => 
@@ -650,6 +718,12 @@ if (!$chf->validate()) {
         var_export($chf->toArray());
         echo "Expected\n";
             var_export(array (
+  'mirrors' => 
+  array (
+  ),
+  'subchannels' => 
+  array (
+  ),
   'version' => '1.0',
   'name' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
@@ -658,9 +732,9 @@ if (!$chf->validate()) {
     'version' => '1.0',
     'name' => 'PEAR_Validate',
   ),
+  'server' => 'pear.php.net',
   'protocols' => array('xmlrpc' => 
   array (
-    'host' => 'pear.php.net',
     'functions' => 
     array (
       1 => 
@@ -708,259 +782,256 @@ $chf->addFunction('xmlrpc', '1.0', 'gronk.dothis');
 $chf->addFunction('soap', '1.0', 'release.list');
 $chf->toXml();
 $chf->getErrors(true);
-$chf->setServer('pear.php.net', 'soap');
-$chf->getErrors(true);
 if (var_export($chf->toXml(), true) != var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
-<channel version="1.0">
+<channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
  <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <protocols>
-  <xmlrpc host="pear.php.net">
-   <function version="1.0">logintest</function>
-   <function version="1.0">package.listLatestReleases</function>
-   <function version="1.0">package.listAll</function>
-   <function version="1.0">package.info</function>
-   <function version="1.0">package.getDownloadURL</function>
-   <function version="1.0">channel.listAll</function>
-   <function version="1.0">channel.update</function>
-   <function version="1.0">gronk.dothis</function>
-  </xmlrpc>
-  <soap host="pear.php.net">
-   <function version="1.0">release.list</function>
-  </soap>
- </protocols>
-</channel>
-'), true)) {
+ <servers>
+  <primary host="pear.php.net">
+   <xmlrpc>
+    <function version="1.0">logintest</function>
+    <function version="1.0">package.listLatestReleases</function>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">package.info</function>
+    <function version="1.0">package.getDownloadURL</function>
+    <function version="1.0">channel.listAll</function>
+    <function version="1.0">channel.update</function>
+    <function version="1.0">gronk.dothis</function>
+   </xmlrpc>
+   <soap>
+    <function version="1.0">release.list</function>
+   </soap>
+  </primary>
+ </servers>
+</channel>'), true)) {
     echo "After adding protocols, xml was incorrect\n";
     var_export($chf->toXml());
     echo "\nExpected\n";
     var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
-<channel version="1.0">
+<channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
  <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <protocols>
-  <xmlrpc host="pear.php.net">
-   <function version="1.0">logintest</function>
-   <function version="1.0">package.listLatestReleases</function>
-   <function version="1.0">package.listAll</function>
-   <function version="1.0">package.info</function>
-   <function version="1.0">package.getDownloadURL</function>
-   <function version="1.0">channel.listAll</function>
-   <function version="1.0">channel.update</function>
-   <function version="1.0">gronk.dothis</function>
-  </xmlrpc>
-  <soap host="pear.php.net">
-   <function version="1.0">release.list</function>
-  </soap>
- </protocols>
-</channel>
-'), true);
+ <servers>
+  <primary host="pear.php.net">
+   <xmlrpc>
+    <function version="1.0">logintest</function>
+    <function version="1.0">package.listLatestReleases</function>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">package.info</function>
+    <function version="1.0">package.getDownloadURL</function>
+    <function version="1.0">channel.listAll</function>
+    <function version="1.0">channel.update</function>
+    <function version="1.0">gronk.dothis</function>
+   </xmlrpc>
+   <soap>
+    <function version="1.0">release.list</function>
+   </soap>
+  </primary>
+ </servers>
+</channel>'));
 } // if toXml() is wrong after adding protocols
 $chf->fromXmlString($chf->toXml());
 
 echo "after re-parsing\n";
 if (var_export($chf->toXml(), true) != var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
-<channel version="1.0">
+<channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
  <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <protocols>
-  <xmlrpc host="pear.php.net">
-   <function version="1.0">logintest</function>
-   <function version="1.0">package.listLatestReleases</function>
-   <function version="1.0">package.listAll</function>
-   <function version="1.0">package.info</function>
-   <function version="1.0">package.getDownloadURL</function>
-   <function version="1.0">channel.listAll</function>
-   <function version="1.0">channel.update</function>
-   <function version="1.0">gronk.dothis</function>
-  </xmlrpc>
-  <soap host="pear.php.net">
-   <function version="1.0">release.list</function>
-  </soap>
- </protocols>
-</channel>
-'), true)) {
+ <servers>
+  <primary host="pear.php.net">
+   <xmlrpc>
+    <function version="1.0">logintest</function>
+    <function version="1.0">package.listLatestReleases</function>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">package.info</function>
+    <function version="1.0">package.getDownloadURL</function>
+    <function version="1.0">channel.listAll</function>
+    <function version="1.0">channel.update</function>
+    <function version="1.0">gronk.dothis</function>
+   </xmlrpc>
+   <soap>
+    <function version="1.0">release.list</function>
+   </soap>
+  </primary>
+ </servers>
+</channel>'), true)) {
     echo "After adding protocols, xml was incorrect\n";
     var_export($chf->toXml());
     echo "\nExpected\n";
     var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
-<channel version="1.0">
+<channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
  <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <protocols>
-  <xmlrpc host="pear.php.net">
-   <function version="1.0">logintest</function>
-   <function version="1.0">package.listLatestReleases</function>
-   <function version="1.0">package.listAll</function>
-   <function version="1.0">package.info</function>
-   <function version="1.0">package.getDownloadURL</function>
-   <function version="1.0">channel.listAll</function>
-   <function version="1.0">channel.update</function>
-   <function version="1.0">gronk.dothis</function>
-  </xmlrpc>
-  <soap host="pear.php.net">
-   <function version="1.0">release.list</function>
-  </soap>
- </protocols>
-</channel>
-'), true);
+ <servers>
+  <primary host="pear.php.net">
+   <xmlrpc>
+    <function version="1.0">logintest</function>
+    <function version="1.0">package.listLatestReleases</function>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">package.info</function>
+    <function version="1.0">package.getDownloadURL</function>
+    <function version="1.0">channel.listAll</function>
+    <function version="1.0">channel.update</function>
+    <function version="1.0">gronk.dothis</function>
+   </xmlrpc>
+   <soap>
+    <function version="1.0">release.list</function>
+   </soap>
+  </primary>
+ </servers>
+</channel>'));
 } // if toXml() is wrong after adding protocols (re-parsing)
 
 echo "\ntest add mirror\n";
-$chf->addMirror('server', 'us2');
-$chf->setServer('mirror.php.net', 'xmlrpc', 'us2');
-$chf->addMirrorFunction('us2', 'xmlrpc', '1.0', 'package.listAll');
-$chf->addMirrorFunction('us2', 'xmlrpc', '1.0', 'release.list');
+$chf->addMirror('mirror.php.net');
+$chf->addMirrorFunction('mirror.php.net', 'xmlrpc', '1.0', 'package.listAll');
+$chf->addMirrorFunction('mirror.php.net', 'xmlrpc', '1.0', 'release.list');
 if (var_export($chf->toXml(), true) != var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
-<channel version="1.0">
+<channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
  <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <protocols>
-  <xmlrpc host="pear.php.net">
-   <function version="1.0">logintest</function>
-   <function version="1.0">package.listLatestReleases</function>
-   <function version="1.0">package.listAll</function>
-   <function version="1.0">package.info</function>
-   <function version="1.0">package.getDownloadURL</function>
-   <function version="1.0">channel.listAll</function>
-   <function version="1.0">channel.update</function>
-   <function version="1.0">gronk.dothis</function>
-  </xmlrpc>
-  <soap host="pear.php.net">
-   <function version="1.0">release.list</function>
-  </soap>
- </protocols>
- <mirrors>
-  <mirror type="server" name="us2">
-   <protocols>
-    <xmlrpc host="mirror.php.net">
-     <function version="1.0">package.listAll</function>
-     <function version="1.0">release.list</function>
-    </xmlrpc>
-   </protocols>
+ <servers>
+  <primary host="pear.php.net">
+   <xmlrpc>
+    <function version="1.0">logintest</function>
+    <function version="1.0">package.listLatestReleases</function>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">package.info</function>
+    <function version="1.0">package.getDownloadURL</function>
+    <function version="1.0">channel.listAll</function>
+    <function version="1.0">channel.update</function>
+    <function version="1.0">gronk.dothis</function>
+   </xmlrpc>
+   <soap>
+    <function version="1.0">release.list</function>
+   </soap>
+  </primary>
+  <mirror host="mirror.php.net">
+   <xmlrpc>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">release.list</function>
+   </xmlrpc>
   </mirror>
- </mirrors>
-</channel>
-'), true)) {
+ </servers>
+</channel>'), true)) {
     echo "Wrong after adding mirror\n";
     var_export($chf->toXml());
     echo "\nExpecting\n";
     var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
-<channel version="1.0">
+<channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
  <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <protocols>
-  <xmlrpc host="pear.php.net">
-   <function version="1.0">logintest</function>
-   <function version="1.0">package.listLatestReleases</function>
-   <function version="1.0">package.listAll</function>
-   <function version="1.0">package.info</function>
-   <function version="1.0">package.getDownloadURL</function>
-   <function version="1.0">channel.listAll</function>
-   <function version="1.0">channel.update</function>
-   <function version="1.0">gronk.dothis</function>
-  </xmlrpc>
-  <soap host="pear.php.net">
-   <function version="1.0">release.list</function>
-  </soap>
- </protocols>
- <mirrors>
-  <mirror type="server" name="us2">
-   <protocols>
-    <xmlrpc host="mirror.php.net">
-     <function version="1.0">package.listAll</function>
-     <function version="1.0">release.list</function>
-    </xmlrpc>
-   </protocols>
+ <servers>
+  <primary host="pear.php.net">
+   <xmlrpc>
+    <function version="1.0">logintest</function>
+    <function version="1.0">package.listLatestReleases</function>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">package.info</function>
+    <function version="1.0">package.getDownloadURL</function>
+    <function version="1.0">channel.listAll</function>
+    <function version="1.0">channel.update</function>
+    <function version="1.0">gronk.dothis</function>
+   </xmlrpc>
+   <soap>
+    <function version="1.0">release.list</function>
+   </soap>
+  </primary>
+  <mirror host="mirror.php.net">
+   <xmlrpc>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">release.list</function>
+   </xmlrpc>
   </mirror>
- </mirrors>
-</channel>
-'));
+ </servers>
+</channel>'));
 } // wrong xml mirror
 $chf->fromXmlString($chf->toXml());
 
 echo "after re-parsing\n";
 if (var_export($chf->toXml(), true) != var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
-<channel version="1.0">
+<channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
  <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <protocols>
-  <xmlrpc host="pear.php.net">
-   <function version="1.0">logintest</function>
-   <function version="1.0">package.listLatestReleases</function>
-   <function version="1.0">package.listAll</function>
-   <function version="1.0">package.info</function>
-   <function version="1.0">package.getDownloadURL</function>
-   <function version="1.0">channel.listAll</function>
-   <function version="1.0">channel.update</function>
-   <function version="1.0">gronk.dothis</function>
-  </xmlrpc>
-  <soap host="pear.php.net">
-   <function version="1.0">release.list</function>
-  </soap>
- </protocols>
- <mirrors>
-  <mirror type="server" name="us2">
-   <protocols>
-    <xmlrpc host="mirror.php.net">
-     <function version="1.0">package.listAll</function>
-     <function version="1.0">release.list</function>
-    </xmlrpc>
-   </protocols>
+ <servers>
+  <primary host="pear.php.net">
+   <xmlrpc>
+    <function version="1.0">logintest</function>
+    <function version="1.0">package.listLatestReleases</function>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">package.info</function>
+    <function version="1.0">package.getDownloadURL</function>
+    <function version="1.0">channel.listAll</function>
+    <function version="1.0">channel.update</function>
+    <function version="1.0">gronk.dothis</function>
+   </xmlrpc>
+   <soap>
+    <function version="1.0">release.list</function>
+   </soap>
+  </primary>
+  <mirror host="mirror.php.net">
+   <xmlrpc>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">release.list</function>
+   </xmlrpc>
   </mirror>
- </mirrors>
-</channel>
-'), true)) {
+ </servers>
+</channel>'), true)) {
     echo "Wrong after adding mirror (re-parsing)\n";
     var_export($chf->toXml());
     echo "\nExpecting\n";
     var_export(postprocess('<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE channel SYSTEM "http://pear.php.net/dtd/channel-1.0.dtd">
-<channel version="1.0">
+<channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0.xsd">
  <name>pear</name>
  <summary>PHP Extension and Application Repository</summary>
  <validatepackage version="1.0">PEAR_Validate</validatepackage>
- <protocols>
-  <xmlrpc host="pear.php.net">
-   <function version="1.0">logintest</function>
-   <function version="1.0">package.listLatestReleases</function>
-   <function version="1.0">package.listAll</function>
-   <function version="1.0">package.info</function>
-   <function version="1.0">package.getDownloadURL</function>
-   <function version="1.0">channel.listAll</function>
-   <function version="1.0">channel.update</function>
-   <function version="1.0">gronk.dothis</function>
-  </xmlrpc>
-  <soap host="pear.php.net">
-   <function version="1.0">release.list</function>
-  </soap>
- </protocols>
- <mirrors>
-  <mirror type="server" name="us2">
-   <protocols>
-    <xmlrpc host="mirror.php.net">
-     <function version="1.0">package.listAll</function>
-     <function version="1.0">release.list</function>
-    </xmlrpc>
-   </protocols>
+ <servers>
+  <primary host="pear.php.net">
+   <xmlrpc>
+    <function version="1.0">logintest</function>
+    <function version="1.0">package.listLatestReleases</function>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">package.info</function>
+    <function version="1.0">package.getDownloadURL</function>
+    <function version="1.0">channel.listAll</function>
+    <function version="1.0">channel.update</function>
+    <function version="1.0">gronk.dothis</function>
+   </xmlrpc>
+   <soap>
+    <function version="1.0">release.list</function>
+   </soap>
+  </primary>
+  <mirror host="mirror.php.net">
+   <xmlrpc>
+    <function version="1.0">package.listAll</function>
+    <function version="1.0">release.list</function>
+   </xmlrpc>
   </mirror>
- </mirrors>
-</channel>
-'));
+ </servers>
+</channel>'));
 } // wrong xml mirror (after re-parsing)
 ?>
 --EXPECT--
@@ -974,12 +1045,6 @@ test add validatepackage
 after re-parsing
 
 test add protocols
-caught Error Stack error:
-Missing channel server for soap protocol
-code : 10
-caught Error Stack error:
-Cannot generate xml, contents are invalid
-code : 23
 after re-parsing
 
 test add mirror

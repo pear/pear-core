@@ -266,9 +266,9 @@ class PEAR_ChannelFile {
                 PEAR_CHANNELFILE_ERROR_MULTILINE_SUMMARY =>
                     'Channel summary should be on one line, but is multi-line',
                 PEAR_CHANNELFILE_ERROR_NO_HOST =>
-                    'Missing channel server for %protocol% protocol',
+                    'Missing channel server for %type% server',
                 PEAR_CHANNELFILE_ERROR_INVALID_HOST =>
-                    'Server name "%server%" is invalid for protocol %protocol%',
+                    'Server name "%server%" is invalid for %type% server',
                 PEAR_CHANNELFILE_ERROR_NO_DEPTYPE =>
                     'Dependency number %index% has no type attribute',
                 PEAR_CHANNELFILE_ERROR_INVALID_DEPTYPE =>
@@ -437,7 +437,11 @@ class PEAR_ChannelFile {
         xml_parser_set_option($xp, XML_OPTION_CASE_FOLDING, false);
 
         $this->element_stack = array();
-        $this->_channelInfo = array();
+        $this->_channelInfo =
+            array(
+                'mirrors' => array(),
+                'subchannels' => array(),
+            );
         $this->_isValid = true;
         $this->current_element = false;
         $this->_subchannelIndex =
@@ -502,42 +506,29 @@ class PEAR_ChannelFile {
         $this->_channelInfo['version'] = $attribs['version'];
     }
 
-    function _handleDepsOpen1_0($attribs)
+    function _handleValidatepackageOpen1_0($attribs)
     {
-        $this->d_i = 0;
-        if (!$this->_subchannelIndex) {
-            $this->_channelInfo['deps'] = array();
-        } else {
-            $this->_channelInfo['subchannels'][$this->_subchannelIndex]['deps'] = array();
-        }
+        $this->_channelInfo['validatepackage'] = $attribs;
     }
 
-    function _handleSubchannelsOpen1_0($attribs)
+    function _handlePrimaryOpen1_0($attribs)
     {
-        $this->_channelInfo['subchannels'] = array();
-        $this->_subchannelIndex = 0;
+        $this->_channelInfo['server'] = @$attribs['host'];
     }
 
-    function _handleMirrorsOpen1_0($attribs)
+    function _handleMirrorOpen1_0($attribs)
     {
-        $this->_channelInfo['mirrors'] = array();
-        $this->_subchannelIndex = 0;
-    }
-
-    function _handleDepOpen1_0($attribs)
-    {
-        // dependencies array index
-        $this->d_i++;
-        if (!$this->_subchannelIndex) {
-            $this->_channelInfo['deps'][$this->d_i] = $attribs;
-        } else {
-            $this->_channelInfo['subchannels'][$this->_subchannelIndex]['deps'][$this->d_i] = $attribs;
-        }
+        $this->_mirrorIndex++;
+        $this->_channelInfo['mirrors'][$this->_mirrorIndex]['server'] = @$attribs['host'];
     }
 
     function _handleXmlrpcOpen1_0($attribs)
     {
         $this->_protocol = 'xmlrpc';
+        if ($this->_subchannelIndex) {
+            $this->_channelInfo['_subchannels'][$this->_subchannelIndex]['protocols'][$this->_protocol] = $attribs;
+            return;
+        }
         if ($this->_mirrorIndex) {
             $this->_functionsIndex = 0;
             $this->_channelInfo['mirrors'][$this->_mirrorIndex]['protocols'][$this->_protocol]
@@ -551,6 +542,10 @@ class PEAR_ChannelFile {
     function _handleSoapOpen1_0($attribs)
     {
         $this->_protocol = 'soap';
+        if ($this->_subchannelIndex) {
+            $this->_channelInfo['_subchannels'][$this->_subchannelIndex]['protocols'][$this->_protocol] = $attribs;
+            return;
+        }
         if ($this->_mirrorIndex) {
             $this->_functionsIndex = 0;
             $this->_channelInfo['mirrors'][$this->_mirrorIndex]['protocols'][$this->_protocol]
@@ -564,6 +559,10 @@ class PEAR_ChannelFile {
     function _handleFunctionOpen1_0($attribs)
     {
         $this->_functionsIndex++;
+        if ($this->_subchannelIndex) {
+            $this->_channelInfo['_subchannels'][$this->_subchannelIndex]['protocols'][$this->_protocol]['functions'][$this->_functionsIndex] = $attribs;
+            return;
+        }
         if ($this->_mirrorIndex) {
             $this->_channelInfo['mirrors'][$this->_mirrorIndex]['protocols'][$this->_protocol]['functions'][$this->_functionsIndex] = $attribs;
         } else {
@@ -573,17 +572,12 @@ class PEAR_ChannelFile {
 
     function _handleSubchannelOpen1_0($attribs)
     {
+        $this->_mirrorIndex = 0;
         $this->_subchannelIndex++;
         if (isset($attribs['name'])) {
             $attribs['name'] = strtolower($attribs['name']);
         }
         $this->_channelInfo['subchannels'][$this->_subchannelIndex] = $attribs;
-    }
-
-    function _handleMirrorOpen1_0($attribs)
-    {
-        $this->_mirrorIndex++;
-        $this->_channelInfo['mirrors'][$this->_mirrorIndex] = $attribs;
     }
 
     // }}}
@@ -632,6 +626,10 @@ class PEAR_ChannelFile {
     function _handleFunctionClose1_0($data)
     {
         if ($data != '') {
+            if ($this->_subchannelIndex) {
+                $this->_channelInfo['_subchannels'][$this->_subchannelIndex]['protocols'][$this->_protocol]['functions'][$this->_functionsIndex]['name'] = $data;
+                return;
+            }
             if ($this->_mirrorIndex) {
                 $this->_channelInfo['mirrors'][$this->_mirrorIndex]['protocols'][$this->_protocol]['functions'][$this->_functionsIndex]['name'] = $data;
             } else {
@@ -640,72 +638,21 @@ class PEAR_ChannelFile {
         }
     }
 
-    function _handleValidatepackageOpen1_0($attribs)
-    {
-        $this->_channelInfo['validatepackage'] = $attribs;
-    }
-
     function _handleValidatepackageClose1_0($data)
     {
         $this->_channelInfo['validatepackage']['name'] = $data;
     }
 
-    function _handleMirrorClose1_0($data)
-    {
-        if (!$this->_subchannelIndex) {
-            $mirror = $this->_channelInfo['mirrors'][$this->_mirrorIndex];
-        } else {
-            $this->_validateError(PEAR_CHANNELFILE_ERROR_SUBCH_MIRROR, array('mirror' => $data,
-                'subchannel' => $this->_subchannelIndex));
-        }
-    }
-
-    function _handleServerClose1_0($data)
-    {
-        if (!$this->_subchannelIndex) {
-            $this->_channelInfo['server'] = $data;
-        } else {
-            $this->_channelInfo['subchannels'][$this->_subchannelIndex]['server'] = $data;
-        }
-    }
-
-    function _handleDepClose1_0($data)
-    {
-        if ($data) {
-            if (!$this->_subchannelIndex) {
-                $this->_channelInfo['deps'][$this->d_i]['name'] = $data;
-            } else {
-                $this->_channelInfo['subchannels'][$this->_subchannelIndex]
-                                  ['deps'][$this->d_i]['name'] = $data;
-            }
-        }
-    }
-
-    function _handleSubpackagesClose1_0($data)
-    {
-        $this->_subchannelIndex = 0;
-    }
-
-    function _handleFunctionsClose1_0($data)
-    {
-        $this->_functionsIndex = 0;
-    }
-
     function _handleXmlrpcClose1_0($data)
     {
+        $this->_functionsIndex = 0;
         unset($this->_protocol);
     }
 
     function _handleSoapClose1_0($data)
     {
+        $this->_functionsIndex = 0;
         unset($this->_protocol);
-    }
-
-    function _handleDepsClose1_0($data)
-    {
-        $this->d_i = 0;
-        // BC code
-        $this->_channelInfo['release_deps'] = @$this->_channelInfo['deps'];
     }
 
     // {{{ _channelInfoCdata_1_0()
@@ -813,7 +760,6 @@ class PEAR_ChannelFile {
         }
         $channelInfo = $this->_channelInfo;
         $ret = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
-        $ret .= "<!DOCTYPE channel SYSTEM \"http://pear.php.net/dtd/channel-$channelInfo[version].dtd\">\n";
         $ret .= "<channel version=\"$channelInfo[version]\" xmlns=\"http://pear.php.net/channel-1.0\"
   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
   xsi:schemaLocation=\"http://pear.php.net/dtd/channel-$channelInfo[version].xsd\">
@@ -824,17 +770,19 @@ class PEAR_ChannelFile {
             $ret .= ' <validatepackage version="' . $channelInfo['validatepackage']['version']. '">' . htmlspecialchars($channelInfo['validatepackage']['name']) .
                 "</validatepackage>\n";
         }
-        $ret .= " <protocols>\n";
-        $ret .= $this->_makeXmlrpcXml($channelInfo['protocols']['xmlrpc'], '  ');
+        $ret .= " <servers>\n";
+        $ret .= "  <primary host=\"$channelInfo[server]\">\n";
+        $ret .= $this->_makeXmlrpcXml($channelInfo['protocols']['xmlrpc'], '   ');
         if (isset($channelInfo['protocols']['soap'])) {
-            $ret .= $this->_makeSoapXml($channelInfo['protocols']['soap'], '  ');
+            $ret .= $this->_makeSoapXml($channelInfo['protocols']['soap'], '   ');
         }
-        $ret .= " </protocols>\n";
+        $ret .= "  </primary>\n";
         if (isset($channelInfo['mirrors'])) {
             $ret .= $this->_makeMirrorsXml($channelInfo);
         }
+        $ret .= " </servers>\n";
         $ret .= $this->_makeXml($channelInfo);
-        $ret .= "</channel>\n";
+        $ret .= "</channel>";
         return str_replace("\r", "\n", str_replace("\r\n", "\n", $ret));
     }
 
@@ -846,7 +794,7 @@ class PEAR_ChannelFile {
      */
     function _makeXmlrpcXml($info, $indent)
     {
-        $ret = $indent . "<xmlrpc host=\"$info[host]\"";
+        $ret = $indent . "<xmlrpc";
         if (isset($info['path'])) {
             $ret .= ' path="' . htmlspecialchars($info['path']) . '"';
         }
@@ -867,7 +815,7 @@ class PEAR_ChannelFile {
      */
     function _makeSoapXml($info, $indent)
     {
-        $ret = $indent . "<soap host=\"$info[host]\"";
+        $ret = $indent . "<soap";
         if (isset($info['path'])) {
             $ret .= ' path="' . htmlspecialchars($info['path']) . '"';
         }
@@ -888,25 +836,21 @@ class PEAR_ChannelFile {
      */
     function _makeMirrorsXml($channelInfo)
     {
-        $ret = " <mirrors>\n";
+        $ret = "";
         foreach ($channelInfo['mirrors'] as $mirror) {
-            $ret .= '  <mirror type="' . $mirror['type'];
-            $ret .= '" name="' . $mirror['name'] . "\">\n";
+            $ret .= '  <mirror host="' . $mirror['server'] . "\">\n";
             if (isset($mirror['protocols']['xmlrpc']) || isset($mirror['protocols']['soap'])) {
-                $ret .= "   <protocols>\n";
                 if (isset($mirror['protocols']['xmlrpc'])) {
-                    $ret .= $this->_makeXmlrpcXml($mirror['protocols']['xmlrpc'], '    ');
+                    $ret .= $this->_makeXmlrpcXml($mirror['protocols']['xmlrpc'], '   ');
                 }
                 if (isset($mirror['protocols']['soap'])) {
-                    $ret .= $this->_makeSoapXml($mirror['protocols']['soap'], '    ');
+                    $ret .= $this->_makeSoapXml($mirror['protocols']['soap'], '   ');
                 }
-                $ret .= "   </protocols>\n";
                 $ret .= "  </mirror>\n";
             } else {
                 $ret .= "/>\n";
             }
         }
-        $ret .= " </mirrors>\n";
         return $ret;
     }
 
@@ -944,42 +888,17 @@ class PEAR_ChannelFile {
         $indent = $subchannel ? ' ' : '';
         $ret = '';
         if (!$subchannel && !empty($channelInfo['subchannels'])) {
-            $ret .= " <subchannels>\n";
             foreach ($channelInfo['subchannels'] as $subchannel) {
-                $ret .= "  <subchannel name=\"$subchannel[name]\">\n";
-                $ret .= "   <summary>$subchannel[summary]</summary>\n";
-                $ret .= "   <protocols>\n";
+                $ret .= " <subchannel name=\"$subchannel[name]\">\n";
+                $ret .= "  <summary>$subchannel[summary]</summary>\n";
                 if (isset($subchannel['protocols']['xmlrpc'])) {
-                    $ret .= $this->_makeXmlrpcXml($subchannel['protocols']['xmlrpc'], '    ');
+                    $ret .= $this->_makeXmlrpcXml($subchannel['protocols']['xmlrpc'], '   ');
                 }
                 if (isset($subchannel['protocols']['soap'])) {
-                    $ret .= $this->_makeSoapXml($subchannel['protocols']['soap'], '    ');
+                    $ret .= $this->_makeSoapXml($subchannel['protocols']['soap'], '   ');
                 }
-                $ret .= "   </protocols>\n";
-                if (isset($subchannel['deps'])) {
-                    $ret .= $this->_makeXml($subchannel, true);
-                }
-                $ret .= "  </subchannel>\n";
+                $ret .= " </subchannel>\n";
             }
-            $ret .= " </subchannels>\n";
-        }
-        if (isset($channelInfo['deps']) && sizeof($channelInfo['deps']) > 0) {
-            if ($indent) {
-                $indent .= ' ';
-            }
-            $ret .= "$indent <deps>\n";
-            foreach ($channelInfo['deps'] as $dep) {
-                $ret .= "$indent  <dep type=\"$dep[type]\" rel=\"$dep[rel]\"";
-                if (isset($dep['version'])) {
-                    $ret .= " version=\"$dep[version]\"";
-                }
-                if (isset($dep['name'])) {
-                    $ret .= ">$dep[name]</dep>\n";
-                } else {
-                    $ret .= "/>\n";
-                }
-            }
-            $ret .= "$indent </deps>\n";
         }
         return $ret;
     }
@@ -1037,50 +956,38 @@ class PEAR_ChannelFile {
                 $this->_validateError(PEAR_CHANNELFILE_ERROR_NOVALIDATE_VERSION, array('package' => @$info['validatepackage']['name']));
             }
         }
+        if (!isset($info['server'])) {
+            $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_HOST, array('type' => 'primary'));
+        } elseif (!$this->validChannelServer($info['server'])) {
+            $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_HOST,
+                array('server' => $info['server'], 'type' => 'primary'));
+        }
+
         if (!isset($info['protocols']['xmlrpc']) || !isset($info['protocols']['xmlrpc']['functions'])) {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_XMLRPC);
         } else {
-            if (empty($info['protocols']['xmlrpc']['host'])) {
-                $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_HOST, array('protocol' => 'xmlrpc'));
-            } elseif (!$this->validChannelServer($info['protocols']['xmlrpc']['host'])) {
-                $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_HOST,
-                    array('server' => $info['protocols']['xmlrpc']['host'], 'protocol' => 'xmlrpc'));
-            }
             $this->validateFunctions('xmlrpc', $info['protocols']['xmlrpc']['functions']);
         }
         if (isset($info['protocols']['soap'])) {
-            if (empty($info['protocols']['soap']['host'])) {
-                $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_HOST, array('protocol' => 'soap'));
-            } elseif (!$this->validChannelServer($info['protocols']['soap']['host'])) {
-                $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_HOST,
-                    array('server' => $info['protocols']['soap']['host'], 'protocol' => 'soap'));
-            }
             $this->validateFunctions('soap', $info['protocols']['soap']['functions']);
         }
         if (isset($info['mirrors'])) {
             $i = 1;
             foreach ($info['mirrors'] as $mirror) {
-                if (!$this->validMirrorType($mirror['type'])) {
-                    $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_MIRRORTYPE,
-                        array('type' => $mirror['type']));
+                if (!isset($mirror['server'])) {
+                    $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_HOST, array('type' => 'mirror'));
+                } elseif (!$this->validChannelServer($mirror['server'])) {
+                    $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_HOST,
+                        array('server' => $mirror['server'], 'type' => 'mirror'));
                 }
-                switch ($mirror['type']) {
-                    case 'server' :
-                        if (!$this->validChannelServer($mirror['name'])) {
-                            $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_MIRROR,
-                                array('type' => 'server', 'name' => $mirror['name']));
-                        }
-                        if (isset($mirror['protocols']['xmlrpc'])) {
-                            $this->validateFunctions('xmlrpc', $mirror['protocols']['xmlrpc']['functions'], $mirror['name']);
-                        }
-                        if (isset($mirror['protocols']['soap'])) {
-                            $this->validateFunctions('soap', $mirror['protocols']['soap']['functions'], $mirror['name']);
-                        }
-                    break;
+                if (isset($mirror['protocols']['xmlrpc'])) {
+                    $this->validateFunctions('xmlrpc', $mirror['protocols']['xmlrpc']['functions'], $mirror['server']);
+                }
+                if (isset($mirror['protocols']['soap'])) {
+                    $this->validateFunctions('soap', $mirror['protocols']['soap']['functions'], $mirror['server']);
                 }
             }
         }
-        $this->validateDeps($info);
         if (isset($info['subchannels'])) {
             foreach ($info['subchannels'] as $subchannel) {
                 if (!isset($subchannel['name']) || empty($subchannel['name'])) {
@@ -1090,7 +997,6 @@ class PEAR_ChannelFile {
                     $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_SUBSUMMARY,
                         array('name' => @$subchannel['name']));
                 }
-                $this->validateDeps($subchannel);
                 if (isset($subchannel['protocols']['xmlrpc'])) {
                     if (empty($subchannel['protocols']['xmlrpc']['host'])) {
                         $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_HOST, 'xmlrpc');
@@ -1112,51 +1018,6 @@ class PEAR_ChannelFile {
             }
         }
         return $this->_isValid;
-    }
-
-    // }}}
-    // {{{ validateDeps()
-
-    /**
-     * @param array the information containing deps
-     * @param string the name of the parent element (mirror name, for instance)
-     */
-    function validateDeps($info)
-    {
-        if (isset($info['deps'])) {
-            $i = 1;
-            foreach ($info['deps'] as $d) {
-                if (empty($d['type'])) {
-                    $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_DEPTYPE,
-                        array('index' => $i));
-                } elseif (!in_array($d['type'], PEAR_Common::getDependencyTypes())) {
-                    $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_DEPTYPE,
-                        array('index' => $i, 'type' => $d['type'], 'deps' => PEAR_Common::getDependencyTypes()));
-                }
-                if (empty($d['rel'])) {
-                    $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_DEPREL,
-                        array('index' => $i));
-                } elseif (!in_array($d['rel'], PEAR_Common::getDependencyRelations())) {
-                    $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_DEPREL,
-                        array('index' => $i, 'rel' => $d['rel'], 'rels' => PEAR_Common::getDependencyRelations()));
-                }
-                if ($d['rel'] != 'has' && empty($d['version'])) {
-                    $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_DEPVERSION,
-                        array('index' => $i));
-                } elseif ($d['rel'] == 'has' && !empty($d['version'])) {
-                    $this->_validateWarning(PEAR_CHANNELFILE_ERROR_DEPVERSION_IGNORED,
-                        array('index' => $i, 'version' => $d['version']));
-                }
-                if ($d['type'] == 'php' && !empty($d['name'])) {
-                    $this->_validateWarning(PEAR_CHANNELFILE_ERROR_PHPNAME_IGNORED,
-                        array('index' => $i, 'name' => $d['name']));
-                } elseif ($d['type'] != 'php' && empty($d['name'])) {
-                    $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_DEPNAME,
-                        array('index' => $i));
-                }
-                $i++;
-            }
-        }
     }
 
     // }}}
@@ -1232,10 +1093,22 @@ class PEAR_ChannelFile {
     /**
      * @return string|false
      */
-    function getServer($protocol)
+    function getServer($mirror = false)
     {
-        if (isset($this->_channelInfo['protocols'][$protocol]['host'])) {
-            return $this->_channelInfo['protocols'][$protocol]['host'];
+        if ($mirror) {
+            foreach ($this->getMirrors() as $mir) {
+                if ($mir['name'] == $mirror) {
+                    if (isset($mir['server'])) {
+                        return $mir['server'];
+                    } else {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+        if (isset($this->_channelInfo['server'])) {
+            return $this->_channelInfo['server'];
         } else {
             return false;
         }
@@ -1244,8 +1117,30 @@ class PEAR_ChannelFile {
     /**
      * @return string|false
      */
-    function getPath($protocol)
+    function getPath($protocol, $mirror = false, $subchannel = false)
     {
+        if ($subchannel) {
+            foreach ($this->_channelInfo['subchannels'] as $subchannel) {
+                if ($subchannel['name'] == $subchannel) {
+                    if (isset($subchannel['protocols'][$protocol]['path'])) {
+                        return $subchannel['protocols'][$protocol]['path'];
+                    } else {
+                        return '/';
+                    }
+                }
+            }
+        }
+        if ($mirror) {
+            foreach ($this->getMirrors() as $mir) {
+                if ($mir['name'] == $mirror) {
+                    if (isset($mir['protocols'][$protocol]['path'])) {
+                        return $mir['protocols'][$protocol]['path'];
+                    } else {
+                        return '/';
+                    }
+                }
+            }
+        }
         if (isset($this->_channelInfo['protocols'][$protocol]['path'])) {
             return $this->_channelInfo['protocols'][$protocol]['path'];
         } else {
@@ -1256,8 +1151,30 @@ class PEAR_ChannelFile {
     /**
      * @return string|false
      */
-    function getFilename($protocol)
+    function getFilename($protocol, $mirror = false, $subchannel = false)
     {
+        if ($subchannel) {
+            foreach ($this->_channelInfo['subchannels'] as $subchannel) {
+                if ($subchannel['name'] == $subchannel) {
+                    if (isset($subchannel['protocols'][$protocol]['filename'])) {
+                        return $subchannel['protocols'][$protocol]['filename'];
+                    } else {
+                        return '/';
+                    }
+                }
+            }
+        }
+        if ($mirror) {
+            foreach ($this->getMirrors() as $mir) {
+                if ($mir['name'] == $mirror) {
+                    if (isset($mir['protocols'][$protocol]['filename'])) {
+                        return $mir['protocols'][$protocol]['filename'];
+                    } else {
+                        return '/';
+                    }
+                }
+            }
+        }
         if (isset($this->_channelInfo['protocols'][$protocol]['filename'])) {
             return $this->_channelInfo['protocols'][$protocol]['filename'];
         } else {
@@ -1282,8 +1199,19 @@ class PEAR_ChannelFile {
      * @param string Mirror name
      * @return array|false
      */
-    function getFunctions($protocol, $mirror = false)
+    function getFunctions($protocol, $mirror = false, $subchannel = false)
     {
+        if ($subchannel) {
+            foreach ($this->_channelInfo['subchannels'] as $subchannel) {
+                if ($subchannel['name'] == $subchannel) {
+                    if (isset($subchannel['protocols'][$protocol]['functions'])) {
+                        return $subchannel['protocols'][$protocol]['functions'];
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
         if ($mirror) {
             if (isset($this->_channelInfo['mirrors'])) {
                 foreach ($this->_channelInfo['mirrors'] as $mirror) {
@@ -1313,9 +1241,9 @@ class PEAR_ChannelFile {
      * @param string Mirror name, if any
      * @return array
      */
-     function getFunction($type, $name = null, $mirror = false)
+     function getFunction($type, $name = null, $mirror = false, $subchannel = false)
      {
-        $protocols = $this->getFunctions($type, $mirror);
+        $protocols = $this->getFunctions($type, $mirror, $subchannel);
         if (!$protocols) {
             return false;
         }
@@ -1338,9 +1266,9 @@ class PEAR_ChannelFile {
      * @param string mirror name
      * @return boolean
      */
-    function supports($type, $name = null, $version = '1.0', $mirror = false)
+    function supports($type, $name = null, $version = '1.0', $mirror = false, $subchannel = false)
     {
-        $protocols = $this->getFunctions($type, $mirror);
+        $protocols = $this->getFunctions($type, $mirror, $subchannel);
         if (!$protocols) {
             return false;
         }
@@ -1418,7 +1346,7 @@ class PEAR_ChannelFile {
             }
             return $ret;
         } else {
-            return false;
+            return array();
         }
     }
     
@@ -1447,7 +1375,7 @@ class PEAR_ChannelFile {
      * @error PEAR_CHANNELFILE_ERROR_NO_SERVER
      * @error PEAR_CHANNELFILE_ERROR_INVALID_SERVER
      */
-    function setServer($server, $protocol, $mirror = false)
+    function setServer($server, $mirror = false)
     {
         if (empty($server)) {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_SERVER);
@@ -1469,10 +1397,10 @@ class PEAR_ChannelFile {
                     array('mirror' => $mirror));
                 return false;
             }
-            $this->_channelInfo['mirrors'][$i]['protocols'][$protocol]['host'] = $server;
+            $this->_channelInfo['mirrors'][$i]['server'] = $server;
             return true;
         }
-        $this->_channelInfo['protocols'][$protocol]['host'] = $server;
+        $this->_channelInfo['server'] = $server;
         return true;
     }
 
@@ -1585,7 +1513,7 @@ class PEAR_ChannelFile {
     {
         $found = false;
         foreach ($this->_channelInfo['mirrors'] as $i => $mir) {
-            if ($mirror == $mir['name']) {
+            if ($mirror == $mir['server']) {
                 $found = true;
                 break;
             }
@@ -1599,23 +1527,32 @@ class PEAR_ChannelFile {
         if (!isset($this->_channelInfo['mirrors'][$i]['protocols'][$type]['functions'])) {
             $this->_channelInfo['mirrors'][$i]['protocols'][$type]['functions'] = array(1 => $set);
             $this->_isValid = false;
-            return;
+            return true;
         }
         $this->_channelInfo['mirrors'][$i]['protocols'][$type]['functions'][] = $set;
+        $this->_isValid = false;
+        return true;
     }
     
     /**
-     * @param string mirror type
-     * @param string mirror name
+     * @param string mirror server
+     * @return boolean
      */
-    function addMirror($type, $name)
+    function addMirror($server)
     {
-        $set = array('type' => $type, 'name' => $name);
-        if (!isset($this->_channelInfo['mirrors'])) {
+        if (isset($this->_channelInfo['mirrors'])) {
+            $test = array_flip($this->_channelInfo['mirrors']);
+            if (isset($test[$server])) {
+                return false;
+            }
+        }
+        $set = array('server' => $server);
+        if (!isset($this->_channelInfo['mirrors']) || !count($this->_channelInfo['mirrors'])) {
             $this->_channelInfo['mirrors'] = array(1 => $set);
-            return;
+            return true;
         }
         $this->_channelInfo['mirrors'][] = $set;
+        return true;
     }
 
     /**

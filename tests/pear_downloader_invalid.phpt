@@ -97,7 +97,7 @@ require_once 'PEAR/ChannelFile.php';
 $chan = new PEAR_ChannelFile;
 $chan->setName('pear');
 $chan->setSummary('PEAR');
-$chan->setServer($server, 'xmlrpc');
+$chan->setServer($server);
 $chan->setDefaultPEARProtocols();
 $reg = new PEAR_Registry($config->get('php_dir'), $chan);
 $options = array();

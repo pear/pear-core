@@ -125,7 +125,7 @@ require_once 'PEAR/ChannelFile.php';
 $chan = new PEAR_ChannelFile;
 
 $chan->setName('test');
-$chan->setServer('pear.php.net', 'xmlrpc');
+$chan->setServer('pear.php.net');
 $chan->setSummary('hello');
 $chan->setDefaultPEARProtocols();
 $reg->addChannel($chan);
@@ -135,7 +135,7 @@ dumpall($reg);
 echo "test add bad channel\n";
 $chan = new PEAR_ChannelFile;
 
-$chan->setServer('pear.php.net', 'xmlrpc');
+$chan->setServer('pear.php.net');
 $chan->setSummary('hello');
 $reg->addChannel($chan);
 
