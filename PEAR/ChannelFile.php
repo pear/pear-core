@@ -145,6 +145,8 @@ $GLOBALS['_PEAR_CHANNELS_MIRROR_TYPES'] =  array('server');
 
 
 /**
+ * The Channel handling class
+ *
  * @category   pear
  * @package    PEAR
  * @author     Greg Beaver <cellog@php.net>
