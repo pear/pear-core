@@ -429,7 +429,7 @@ package if needed.
         if (preg_match('#^(http|ftp)://#', $pkgfile)) {
             $need_download = true;
         } elseif (!@is_file($pkgfile)) {
-            if ($t = $installer->splitChannelPackage($pkgfile)) {
+            if (count($t = explode('::', $pkgfile)) == 2) {
                 $reg = &new PEAR_Registry($this->config->get('php_dir'));
                 $test = $reg->getChannel($t[0]);
                 if (!$test) {

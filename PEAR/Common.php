@@ -116,7 +116,9 @@ $GLOBALS['_PEAR_Common_script_phases'] = array('pre-install', 'post-install', 'p
 // }}}
 
 /**
- * Class providing common functionality for PEAR adminsitration classes.
+ * Class providing common functionality for PEAR administration classes.
+ * @deprecated This class will disappear, and its components will be spread
+ *             into smaller classes, like the AT&T breakup
  */
 class PEAR_Common extends PEAR
 {
@@ -160,12 +162,6 @@ class PEAR_Common extends PEAR
      * @access private
      */
     var $_validPackageFile;
-    /**
-     * Temporary variable used in sorting packages by dependency in {@link sortPkgDeps()}
-     * @var array
-     * @access private
-     */
-    var $_packageSortTree;
 
     // }}}
 
@@ -714,6 +710,7 @@ class PEAR_Common extends PEAR
      * @return array  array with package information
      *
      * @access public
+     * @deprecated use PEAR_PackageFile->fromTgzFile() instead
      *
      */
     function infoFromTgzFile($file)
@@ -765,6 +762,7 @@ class PEAR_Common extends PEAR
      * @return array  array with package information
      *
      * @access public
+     * @deprecated use PEAR_PackageFile->fromPackageFile() instead
      *
      */
     function infoFromDescriptionFile($descfile)
@@ -792,6 +790,7 @@ class PEAR_Common extends PEAR
      * @return array   array with package information
      *
      * @access public
+     * @deprecated use PEAR_PackageFile->fromXmlstring() instead
      *
      */
     function infoFromString($data)
@@ -866,6 +865,7 @@ class PEAR_Common extends PEAR
      * @access public
      * @param  string Filename of the source ('package.xml', '<package>.tgz')
      * @return string
+     * @deprecated use PEAR_PackageFile->fromAnyFile() instead
      */
     function infoFromAny($info)
     {
@@ -904,6 +904,7 @@ class PEAR_Common extends PEAR
      * @return string XML data
      *
      * @access public
+     * @deprecated use a PEAR_PackageFile_v* object's generator instead
      */
     function xmlFromInfo($pkginfo)
     {
@@ -1073,6 +1074,7 @@ class PEAR_Common extends PEAR
      *                may be found, or empty if they are not available
      * @access public
      * @return boolean
+     * @deprecated use the validation of PEAR_PackageFile objects
      */
     function validatePackageInfo($info, &$errors, &$warnings, $dir_prefix = '')
     {
@@ -1683,55 +1685,6 @@ class PEAR_Common extends PEAR
 
 
     // }}}
-    // {{{ validPackageName()
-
-    /**
-     * Test whether a string contains a valid package name.
-     *
-     * @param string $name the package name to test
-     * @param PEAR_Registry A Registry object
-     *
-     * @return bool
-     *
-     * @access public
-     */
-    function validChannelPackage($name, &$reg)
-    {
-        if ($res = $this->splitChannelPackage($name)) {
-            $channel = $reg->getChannel($res[0]);
-            if (!$channel) {
-                return false;
-            } else {
-                return $channel->validPackageName($res[1]);
-            }
-        } else {
-            return false;
-        }
-    }
-
-
-    // }}}
-    // {{{ splitChannelPackage()
-
-    /**
-     * Test whether a string contains a valid package name.
-     *
-     * @param string $name the package name to test
-     *
-     * @return bool
-     *
-     * @access public
-     */
-    function splitChannelPackage($name)
-    {
-        if (!strpos($name, '::')) {
-            return false;
-        }
-        return explode('::', $name);
-    }
-
-
-    // }}}
     // {{{ validPackageVersion()
 
     /**
@@ -1796,362 +1749,14 @@ class PEAR_Common extends PEAR
      *                 getCode().
      *
      * @access public
+     * @deprecated in favor of PEAR_Downloader::downloadHttp()
      */
     function downloadHttp($url, &$ui, $save_dir = '.', $callback = null)
     {
-        if ($callback) {
-            call_user_func($callback, 'setup', array(&$ui));
+        if (!class_exists('PEAR_Downloader')) {
+            include_once 'PEAR/Downloader.php';
         }
-        if (preg_match('!^http://([^/:?#]*)(:(\d+))?(/.*)!', $url, $matches)) {
-            list(,$host,,$port,$path) = $matches;
-        }
-        if (isset($this)) {
-            $config = &$this->config;
-        } else {
-            $config = &PEAR_Config::singleton();
-        }
-        $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
-        if ($proxy = parse_url($config->get('http_proxy'))) {
-            $proxy_host = @$proxy['host'];
-            $proxy_port = @$proxy['port'];
-            $proxy_user = @$proxy['user'];
-            $proxy_pass = @$proxy['pass'];
-
-            if ($proxy_port == '') {
-                $proxy_port = 8080;
-            }
-            if ($callback) {
-                call_user_func($callback, 'message', "Using HTTP proxy $host:$port");
-            }
-        }
-        if (empty($port)) {
-            $port = 80;
-        }
-        if ($proxy_host != '') {
-            $fp = @fsockopen($proxy_host, $proxy_port, $errno, $errstr);
-            if (!$fp) {
-                if ($callback) {
-                    call_user_func($callback, 'connfailed', array($proxy_host, $proxy_port,
-                                                                  $errno, $errstr));
-                }
-                return PEAR::raiseError("Connection to `$proxy_host:$proxy_port' failed: $errstr", $errno);
-            }
-            $request = "GET $url HTTP/1.0\r\n";
-        } else {
-            $fp = @fsockopen($host, $port, $errno, $errstr);
-            if (!$fp) {
-                if ($callback) {
-                    call_user_func($callback, 'connfailed', array($host, $port,
-                                                                  $errno, $errstr));
-                }
-                return PEAR::raiseError("Connection to `$host:$port' failed: $errstr", $errno);
-            }
-            $request = "GET $path HTTP/1.0\r\n";
-        }
-        $request .= "Host: $host:$port\r\n".
-            "User-Agent: PHP/".PHP_VERSION."\r\n";
-        if ($proxy_host != '' && $proxy_user != '') {
-            $request .= 'Proxy-Authorization: Basic ' .
-                base64_encode($proxy_user . ':' . $proxy_pass) . "\r\n";
-        }
-        $request .= "\r\n";
-        fwrite($fp, $request);
-        $headers = array();
-        while (trim($line = fgets($fp, 1024))) {
-            if (preg_match('/^([^:]+):\s+(.*)\s*$/', $line, $matches)) {
-                $headers[strtolower($matches[1])] = trim($matches[2]);
-            } elseif (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
-                if ($matches[1] != 200) {
-                    return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)");
-                }
-            }
-        }
-        if (isset($headers['content-disposition']) &&
-            preg_match('/\sfilename=\"([^;]*\S)\"\s*(;|$)/', $headers['content-disposition'], $matches)) {
-            $save_as = basename($matches[1]);
-        } else {
-            $save_as = basename($url);
-        }
-        if ($callback) {
-            $tmp = call_user_func($callback, 'saveas', $save_as);
-            if ($tmp) {
-                $save_as = $tmp;
-            }
-        }
-        $dest_file = $save_dir . DIRECTORY_SEPARATOR . $save_as;
-        if (!$wp = @fopen($dest_file, 'wb')) {
-            fclose($fp);
-            if ($callback) {
-                call_user_func($callback, 'writefailed', array($dest_file, $php_errormsg));
-            }
-            return PEAR::raiseError("could not open $dest_file for writing");
-        }
-        if (isset($headers['content-length'])) {
-            $length = $headers['content-length'];
-        } else {
-            $length = -1;
-        }
-        $bytes = 0;
-        if ($callback) {
-            call_user_func($callback, 'start', array(basename($dest_file), $length));
-        }
-        while ($data = @fread($fp, 1024)) {
-            $bytes += strlen($data);
-            if ($callback) {
-                call_user_func($callback, 'bytesread', $bytes);
-            }
-            if (!@fwrite($wp, $data)) {
-                fclose($fp);
-                if ($callback) {
-                    call_user_func($callback, 'writefailed', array($dest_file, $php_errormsg));
-                }
-                return PEAR::raiseError("$dest_file: write failed ($php_errormsg)");
-            }
-        }
-        fclose($fp);
-        fclose($wp);
-        if ($callback) {
-            call_user_func($callback, 'done', $bytes);
-        }
-        return $dest_file;
-    }
-
-    // }}}
-    // {{{ sortPkgDeps()
-
-    /**
-     * Sort a list of arrays of array(downloaded packagefilename) by dependency.
-     *
-     * It also removes duplicate dependencies
-     * @param array
-     * @param boolean Sort packages in reverse order if true
-     * @return array array of array(packagefilename, package.xml contents)
-     */
-    function sortPkgDeps(&$packages, $uninstall = false)
-    {
-        $ret = array();
-        if ($uninstall) {
-            foreach($packages as $packageinfo) {
-                $ret[] = array('info' => $packageinfo);
-            }
-        } else {
-            foreach($packages as $packagefile) {
-                if (!is_array($packagefile)) {
-                    $ret[] = array('file' => $packagefile,
-                                   'info' => $a = $this->infoFromAny($packagefile),
-                                   'pkg' => $a['package']);
-                } else {
-                    $ret[] = $packagefile;
-                }
-            }
-        }
-        $checkdupes = array();
-        $newret = array();
-        foreach($ret as $i => $p) {
-            $channel = isset($p['info']['channel']) ? $p['info']['channel'] : 'pear';
-            if (!isset($checkdupes[$channel . '::' . $p['info']['package']])) {
-                $checkdupes[$channel . '::' . $p['info']['package']][] = $i;
-                $newret[] = $p;
-            }
-        }
-        $this->_packageSortTree = $this->_getPkgDepTree($newret);
-
-        $func = $uninstall ? '_sortPkgDepsRev' : '_sortPkgDeps';
-        usort($newret, array(&$this, $func));
-        $this->_packageSortTree = null;
-        $packages = $newret;
-    }
-
-    // }}}
-    // {{{ _sortPkgDeps()
-
-    /**
-     * Compare two package's package.xml, and sort
-     * so that dependencies are installed first
-     *
-     * This is a crude compare, real dependency checking is done on install.
-     * The only purpose this serves is to make the command-line
-     * order-independent (you can list a dependent package first, and
-     * installation occurs in the order required)
-     * @access private
-     */
-    function _sortPkgDeps($p1, $p2)
-    {
-        $c1 = isset($p1['info']['channel']) ? $p1['info']['channel'] : 'pear';
-        $c2 = isset($p2['info']['channel']) ? $p2['info']['channel'] : 'pear';
-        $p1name = $c1 . '::' . $p1['info']['package'];
-        $p2name = $c2 . '::' . $p2['info']['package'];
-        $p1deps = $this->_getPkgDeps($p1);
-        $p2deps = $this->_getPkgDeps($p2);
-        if (!count($p1deps) && !count($p2deps)) {
-            return 0; // order makes no difference
-        }
-        if (!count($p1deps)) {
-            return -1; // package 2 has dependencies, package 1 doesn't
-        }
-        if (!count($p2deps)) {
-            return 1; // package 1 has dependencies, package 2 doesn't
-        }
-        // both have dependencies
-        if (in_array($p1name, $p2deps)) {
-            return -1; // put package 1 first: package 2 depends on package 1
-        }
-        if (in_array($p2name, $p1deps)) {
-            return 1; // put package 2 first: package 1 depends on package 2
-        }
-        if ($this->_removedDependency($p1name, $p2name)) {
-            return -1; // put package 1 first: package 2 depends on packages that depend on package 1
-        }
-        if ($this->_removedDependency($p2name, $p1name)) {
-            return 1; // put package 2 first: package 1 depends on packages that depend on package 2
-        }
-        // doesn't really matter if neither depends on the other
-        return 0;
-    }
-
-    // }}}
-    // {{{ _sortPkgDepsRev()
-
-    /**
-     * Compare two package's package.xml, and sort
-     * so that dependencies are uninstalled last
-     *
-     * This is a crude compare, real dependency checking is done on uninstall.
-     * The only purpose this serves is to make the command-line
-     * order-independent (you can list a dependency first, and
-     * uninstallation occurs in the order required)
-     * @access private
-     */
-    function _sortPkgDepsRev($p1, $p2)
-    {
-        $c1 = isset($p1['info']['channel']) ? $p1['info']['channel'] : 'pear';
-        $c2 = isset($p2['info']['channel']) ? $p2['info']['channel'] : 'pear';
-        $p1name = $c1 . '::' . $p1['info']['package'];
-        $p2name = $c2 . '::' . $p2['info']['package'];
-        $p1deps = $this->_getRevPkgDeps($p1);
-        $p2deps = $this->_getRevPkgDeps($p2);
-        if (!count($p1deps) && !count($p2deps)) {
-            return 0; // order makes no difference
-        }
-        if (!count($p1deps)) {
-            return 1; // package 2 has dependencies, package 1 doesn't
-        }
-        if (!count($p2deps)) {
-            return -1; // package 2 has dependencies, package 1 doesn't
-        }
-        // both have dependencies
-        if (in_array($p1name, $p2deps)) {
-            return 1; // put package 1 last
-        }
-        if (in_array($p2name, $p1deps)) {
-            return -1; // put package 2 last
-        }
-        if ($this->_removedDependency($p1name, $p2name)) {
-            return 1; // put package 1 last: package 2 depends on packages that depend on package 1
-        }
-        if ($this->_removedDependency($p2name, $p1name)) {
-            return -1; // put package 2 last: package 1 depends on packages that depend on package 2
-        }
-        // doesn't really matter if neither depends on the other
-        return 0;
-    }
-
-    // }}}
-    // {{{ _getPkgDeps()
-
-    /**
-     * get an array of package dependency names
-     * @param array
-     * @return array
-     * @access private
-     */
-    function _getPkgDeps($p)
-    {
-        if (!isset($p['info']['releases'])) {
-            return $this->_getRevPkgDeps($p);
-        }
-        $rel = array_shift($p['info']['releases']);
-        if (!isset($rel['deps'])) {
-            return array();
-        }
-        $ret = array();
-        foreach($rel['deps'] as $dep) {
-            if ($dep['type'] == 'pkg') {
-                $channel = isset($dep['channel']) ? $dep['channel'] : 'pear';
-                $ret[] = $channel . '::' . $dep['name'];
-            }
-        }
-        return $ret;
-    }
-
-    // }}}
-    // {{{ _getPkgDeps()
-
-    /**
-     * get an array representation of the package dependency tree
-     * @return array
-     * @access private
-     */
-    function _getPkgDepTree($packages)
-    {
-        $tree = array();
-        foreach ($packages as $p) {
-            $channel = isset($p['info']['channel']) ? $p['info']['channel'] : 'pear';
-            $package = $channel . '::' . $p['info']['package'];
-            $deps = $this->_getPkgDeps($p);
-            $tree[$package] = $deps;
-        }
-        return $tree;
-    }
-
-    // }}}
-    // {{{ _removedDependency($p1, $p2)
-
-    /**
-     * get an array of package dependency names for uninstall
-     * @param string package 1 name
-     * @param string package 2 name
-     * @return bool
-     * @access private
-     */
-    function _removedDependency($p1, $p2)
-    {
-        if (empty($this->_packageSortTree[$p2])) {
-            return false;
-        }
-        if (!in_array($p1, $this->_packageSortTree[$p2])) {
-            foreach ($this->_packageSortTree[$p2] as $potential) {
-                if ($this->_removedDependency($p1, $potential)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return true;
-    }
-
-    // }}}
-    // {{{ _getRevPkgDeps()
-
-    /**
-     * get an array of package dependency names for uninstall
-     * @param array
-     * @return array
-     * @access private
-     */
-    function _getRevPkgDeps($p)
-    {
-        if (!isset($p['info']['release_deps'])) {
-            return array();
-        }
-        $ret = array();
-        foreach($p['info']['release_deps'] as $dep) {
-            if ($dep['type'] == 'pkg') {
-                $channel = isset($dep['channel']) ? $dep['channel'] : 'pear';
-                $ret[] = $channel . '::' . $dep['name'];
-            }
-        }
-        return $ret;
+        return PEAR_Downloader::downloadHttp($url, $ui, $save_dir, $callback);
     }
 
     // }}}
