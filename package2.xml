@@ -142,8 +142,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
     PEAR_PackageFile_v2_rw
 
   Specific changes from 1.4.0a9:
+  * add support for writeable tasks
   * fix potential fatal errors in run-tests command, -p option
   * fix --installroot option for installation
+  * move run-tests command into its own file (testing may expand)
   * fix fatal error if package.xml has no version=&quot;X.0&quot;
   * fix Bug #3966: Improper path in PEAR/PackageFile/v2.php
   * fix Bug #3990: PEAR_Error PEAR_EXCEPTION broken
@@ -207,6 +209,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
      <file name="Remote.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="Test-init.php" role="php"/>
+     <file name="Test.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
     </dir> <!-- /PEAR/Command -->
     <dir name="Downloader">
      <file name="Package.php" role="php">
@@ -223,13 +229,27 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file name="Common.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
-      <file name="Data.php" role="php" />
-      <file name="Doc.php" role="php" />
-      <file name="Ext.php" role="php" />
-      <file name="Php.php" role="php" />
-      <file name="Script.php" role="php" />
-      <file name="Src.php" role="php" />
-      <file name="Test.php" role="php" />
+      <file name="Data.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Doc.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Ext.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Php.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Script.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Src.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Test.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /PEAR/Installer/Role -->
      <file name="Role.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -268,6 +288,26 @@ http://pear.php.net/dtd/package-2.0.xsd">
      </file>
     </dir> <!-- /PEAR/PackageFile -->
     <dir name="Task">
+     <dir name="Postinstallscript">
+      <file name="rw.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /PEAR/Task/Postinstallscript -->
+     <dir name="Replace">
+      <file name="rw.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /PEAR/Task/Replace -->
+     <dir name="Unixeol">
+      <file name="rw.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /PEAR/Task/Unixeol -->
+     <dir name="Windowseol">
+      <file name="rw.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /PEAR/Task/Windowseol -->
      <file name="Common.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>

@@ -129,36 +129,6 @@ after running cvstag once, but before the tarball is released to the public,
 use the "slide" option to move the release tag.
 ',
             ),
-        'run-tests' => array(
-            'summary' => 'Run Regression Tests',
-            'function' => 'doRunTests',
-            'shortcut' => 'rt',
-            'options' => array(
-                'recur' => array(
-                    'shortopt' => 'r',
-                    'doc' => 'Run tests in child directories, recursively.  4 dirs deep maximum',
-                ),
-                'ini' => array(
-                    'shortopt' => 'i',
-                    'doc' => 'actual string of settings to pass to php in format " -d setting=blah"',
-                    'arg' => 'SETTINGS'
-                ),
-                'realtimelog' => array(
-                    'shortopt' => 'l',
-                    'doc' => 'Log test runs/results as they are run',
-                ),
-                'quiet' => array(
-                    'shortopt' => 'q',
-                    'doc' => 'Only display detail for failed tests',
-                ),
-                'simple' => array(
-                    'shortopt' => 's',
-                    'doc' => 'Display simple output for all tests',
-                ),
-            ),
-            'doc' => '[testfile|dir ...]
-Run regression tests with PHP\'s regression testing script (run-tests.php).',
-            ),
         'package-dependencies' => array(
             'summary' => 'Show package dependencies',
             'function' => 'doPackageDependencies',
