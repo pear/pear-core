@@ -1639,7 +1639,7 @@ class PEAR_PackageFile_v2
                         if (isset($dep['name'])) {
                             $s['name'] = $dep['name'];
                         }
-                        if (isset($dep['conflicts']) && $dep['conflicts'] == 'yes') {
+                        if (isset($dep['conflicts'])) {
                             $s['rel'] = 'not';
                         } else {
                             if (!isset($dep['min']) &&
@@ -1785,7 +1785,7 @@ class PEAR_PackageFile_v2
             array(
                 'name' => $name,
                 'channel' => $channel,
-                'conflicts' => 'yes',
+                'conflicts' => '',
             );
         if ($providesextension) {
             $dep['providesextension'] = $providesextension;
@@ -1812,7 +1812,7 @@ class PEAR_PackageFile_v2
             array(
                 'name' => $name,
                 'uri' => $uri,
-                'conflicts' => 'yes',
+                'conflicts' => '',
             );
         if ($providesextension) {
             $dep['providesextension'] = $providesextension;
@@ -2128,7 +2128,7 @@ class PEAR_PackageFile_v2
         $this->_isValid = 0;
         $dep = array('name' => $name);
         if ($conflicts) {
-            $dep['conflicts'] = 'yes';
+            $dep['conflicts'] = '';
         }
         $this->_mergeTag($this->_packageInfo, $dep,
             array(
@@ -2148,7 +2148,7 @@ class PEAR_PackageFile_v2
         $this->_isValid = 0;
         $dep = array('pattern' => $pattern);
         if ($conflicts) {
-            $dep['conflicts'] = 'yes';
+            $dep['conflicts'] = '';
         }
         $this->_mergeTag($this->_packageInfo, $dep,
             array(
@@ -2425,7 +2425,7 @@ class PEAR_PackageFile_v2
         }
         $dep = array('name' => $name);
         if ($conflicts) {
-            $dep['conflicts'] = 'yes';
+            $dep['conflicts'] = '';
         }
         $this->_mergeTag($r, $dep,
             array(
@@ -2451,7 +2451,7 @@ class PEAR_PackageFile_v2
         }
         $dep = array('pattern' => $pattern);
         if ($conflicts) {
-            $dep['conflicts'] = 'yes';
+            $dep['conflicts'] = '';
         }
         $this->_mergeTag($r, $dep,
             array(
