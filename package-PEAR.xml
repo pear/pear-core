@@ -87,6 +87,10 @@ Installer:
 
  * Channels implemented
  * Bug #1242: array-to-string conversion
+ * fix Bug #2189 upgrade-all stops if dependancy fails
+ * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
+ * fix Bug #1420 Parser bug for T_DOUBLE_COLON
+ * fix Request #2220 pear5 build fails on dual php4/php5 system
  * Major bug in Registry - false file conflicts on data/doc/test role
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)
