@@ -28,6 +28,8 @@
  */
 class PEAR_PackageFile_Parser_v2
 {
+    var $_config;
+    var $_logger;
     var $_registry;
     /**
      * unserilialized data
@@ -65,6 +67,11 @@ class PEAR_PackageFile_Parser_v2
         $this->_registry = &$c->getRegistry();
     }
 
+    function setLogger(&$l)
+    {
+        $this->_logger = &$l;
+    }
+
     function parse($data, $state, $file, $archive = false)
     {
         $this->_valStack = array();
@@ -86,6 +93,9 @@ class PEAR_PackageFile_Parser_v2
         include_once 'PEAR/PackageFile/v2.php';
         $ret = new PEAR_PackageFile_v2;
         $ret->setConfig($this->_config);
+        if (isset($this->_logger)) {
+            $pf->setLogger($this->_logger);
+        }
         $ret->fromArray($this->_unserializedData);
         // make sure the filelist is in the easy to read format needed
         $ret->flattenFilelist();
