@@ -42,7 +42,7 @@ class PEAR_DependencyDB
     /**
      * @param string
      * @param PEAR_Config
-     * @return PEAR_DependencyDB
+     * @return PEAR_DependencyDB|PEAR_Error
      * @static
      */
     function &singleton(&$config, $depdb = false)
@@ -50,12 +50,14 @@ class PEAR_DependencyDB
         if (!isset($GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE'])) {
             $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE'] = new PEAR_DependencyDB;
             $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE']->setConfig($config, $depdb);
-            $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE']->assertDepsDB();
+            if (PEAR::isError($e = $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE']->assertDepsDB())) {
+                return $e;
+            }
         }
         return $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE'];
     }
 
-    function setConfig(&$config, $depdb)
+    function setConfig(&$config, $depdb = false)
     {
         if (!$config) {
             $this->_config = &PEAR_Config::singleton();
@@ -81,8 +83,13 @@ class PEAR_DependencyDB
         } else {
             $depdb = $this->_getDepDB();
             // Datatype format has been changed, rebuild the Deps DB
-            if ($depdb['_version'] != $this->_version) {
+            if ($depdb['_version'] < $this->_version) {
                 $this->rebuildDB();
+            }
+            if ($depdb['_version']{0} > $this->_version{0}) {
+                return PEAR::raiseError('Dependency database is version ' .
+                    $depdb['_version'] . ', and we are version ' .
+                    $this->_version . ', cannot continue');
             }
         }
     }
@@ -132,7 +139,8 @@ class PEAR_DependencyDB
         foreach ($depend as $info) {
             $temp = $this->getDependencies($info);
             foreach ($temp as $dep) {
-                if ($dep['dep']['channel'] == $channel && $dep['dep']['name'] == $package) {
+                if (strtolower($dep['dep']['channel']) == strtolower($channel) &&
+                      strtolower($dep['dep']['name']) == strtolower($package)) {
                     $dependencies[$info['channel']][$info['package']] = $dep;
                 }
             }
@@ -161,6 +169,8 @@ class PEAR_DependencyDB
 
     /**
      * Determine whether $parent depends on $child, near or deep
+     * @param array|PEAR_PackageFile_v2|PEAR_PackageFile_v2
+     * @param array|PEAR_PackageFile_v2|PEAR_PackageFile_v2
      */
     function dependsOn($parent, $child)
     {
@@ -178,10 +188,6 @@ class PEAR_DependencyDB
             $channel = strtolower($parent['channel']);
             $package = strtolower($parent['package']);
         }
-        if (isset($checked[$channel][$package])) {
-            return false; // avoid endless recursion
-        }
-        $checked[$channel][$package] = true;
         if (is_object($child)) {
             $depchannel = strtolower($child->getChannel());
             $deppackage = strtolower($child->getPackage());
@@ -189,12 +195,16 @@ class PEAR_DependencyDB
             $depchannel = strtolower($child['channel']);
             $deppackage = strtolower($child['package']);
         }
+        if (isset($checked[$channel][$package][$depchannel][$deppackage])) {
+            return false; // avoid endless recursion
+        }
+        $checked[$channel][$package][$depchannel][$deppackage] = true;
         if (!isset($this->_cache['dependencies'][$channel][$package])) {
             return false;
         }
         foreach ($this->_cache['dependencies'][$channel][$package] as $info) {
-            if ($info['dep']['channel'] == $depchannel &&
-                  $info['dep']['name'] == $deppackage) {
+            if (strtolower($info['dep']['channel']) == strtolower($depchannel) &&
+                  strtolower($info['dep']['name']) == strtolower($deppackage)) {
                 return true;
             }
         }

@@ -1114,7 +1114,7 @@ class PEAR_Installer extends PEAR_Downloader
     {
         $ftp = &$this->config->getFTP();
         if (!$ftp) {
-            return PEAR::raiseError('FTP client not initialized');
+            return $this->raiseError('FTP client not initialized');
         }
         $this->log(2, 'Connect to FTP server');
         $e = $ftp->init();
@@ -1425,11 +1425,14 @@ class PEAR_Installer extends PEAR_Downloader
      *
      * It also removes duplicate dependencies
      * @param array an array of PEAR_PackageFile_v[1/2] objects
-     * @return array array of array(packagefilename, package.xml contents)
+     * @return array|PEAR_Error array of array(packagefilename, package.xml contents)
      */
     function sortPackagesForUninstall(&$packages)
     {
         $this->_dependencyDB = PEAR_DependencyDB::singleton($this->config);
+        if (PEAR::isError($this->_dependencyDB)) {
+            return $this->_dependencyDB;
+        }
         usort($packages, array(&$this, '_sortUninstall'));
     }
 

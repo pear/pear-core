@@ -751,6 +751,9 @@ class PEAR_Dependency2
 
     function validatePackageUninstall(&$dl)
     {
+        if (PEAR::isError($this->_dependencydb)) {
+            return $this->_dependencydb;
+        }
         $params = array();
         // construct an array of "downloaded" packages to fool the package dependency checker
         // into using these to validate uninstalls of circular dependencies
