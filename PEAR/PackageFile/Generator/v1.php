@@ -402,6 +402,7 @@ class PEAR_PackageFile_Generator_v1
     function &toV2()
     {
         $arr = array(
+            'attribs' => array('version' => '2.0'),
             'name' => $this->_packagefile->getPackage(),
             'channel' => 'pear.php.net',
         );
