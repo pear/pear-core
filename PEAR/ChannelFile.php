@@ -968,7 +968,7 @@ class PEAR_ChannelFile {
         } else {
             $this->validateFunctions('xmlrpc', $info['protocols']['xmlrpc']['functions']);
         }
-        if (isset($info['protocols']['soap'])) {
+        if (isset($info['protocols']['soap']['functions'])) {
             $this->validateFunctions('soap', $info['protocols']['soap']['functions']);
         }
         if (isset($info['mirrors'])) {
