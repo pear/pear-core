@@ -670,7 +670,7 @@ class PEAR_Downloader_Package
                     ', latest release is version ' . $info['version'] .
                     ', stability "' . $info['info']['state'] . '", use "' .
                     $pname['channel'] . '/' . $pname['package'] . '-' .
-                    $pname['version'] . '" to install');
+                    $info['version'] . '" to install');
                 return $err;
             }
         }
