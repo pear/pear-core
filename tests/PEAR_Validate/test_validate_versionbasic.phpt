@@ -325,35 +325,35 @@ $phpunit->assertTrue($res, '$val->validate');
 /****************************************** generic tests *****************************************/
 $pf->setReleaseVersion('1');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 1 generic');
+$phpunit->assertTrue($res, 'attempt 1 generic');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
       'field' => 'version',
-      'reason' => 'A version number must have 3 decimals (x.y.z)',
+      'reason' => 'A version number should have 3 decimals (x.y.z)',
     ),
+  ),
+  'errors' => 
+  array (
   ),
 ), $val->getFailures(), 'failures attempt 1 generic');
 
 $pf->setReleaseVersion('1.2.3.4.5');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertFalse($res, 'attempt 1.2.3.4.5 generic');
+$phpunit->assertTrue($res, 'attempt 1.2.3.4.5 generic');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
       'field' => 'version',
-      'reason' => 'A version number must have 3 decimals (x.y.z)',
+      'reason' => 'A version number should have 3 decimals (x.y.z)',
     ),
+  ),
+  'errors' => 
+  array (
   ),
 ), $val->getFailures(), 'failures attempt 1.2.3.4.5 generic');
 
