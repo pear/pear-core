@@ -15,19 +15,19 @@ if (PEAR::isError($test)) {
 }
 $test->setOptions(
 array('baseinstalldir' => 'PEAR',
-'version' => '1.4.0a1',
+'version' => '1.4.0a9',
 'packagedirectory' => dirname(__FILE__),
 'state' => 'alpha',
 'filelistgenerator' => 'cvs',
 'roles' => array('*' => 'test'),
-'notes' => 'Tests for PEAR 1.4.0a1',
+'notes' => 'Tests for PEAR 1.4.0a9',
 'simpleoutput' => true,
 'packagefile' => 'package-PEARtests.xml',
 'cleardependencies' => true,
 'maintainers' => array(),
 'ignore' => array('generatetestPackage.xml.php.inc')));
 $test->addMaintainer('cellog', 'lead', 'Greg Beaver', 'cellog@php.net');
-$test->addDependency('PEAR', '1.4.0a1');
+$test->addDependency('PEAR', '1.4.0a9');
 $test->addDependency('Text_Diff', false, 'has', 'pkg', true);
 if (isset($_GET['make'])) {
     $e = $test->writePackageFile();
