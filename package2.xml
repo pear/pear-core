@@ -112,14 +112,14 @@ Installer:
     <dir name="Command">
      <file name="Auth.php" role="php" />
      <file name="Build.php" role="php" />
-     <file name="Package.php" role="php">
-      <tasks:replace from="@DATA-DIR@" to="data_dir" type="pear-config" />
-     </file>
+     <file name="Channels.php" role="php" />
      <file name="Common.php" role="php" />
      <file name="Config.php" role="php" />
      <file name="Install.php" role="php" />
      <file name="Mirror.php" role="php" />
-     <file name="Package.php" role="php" />
+     <file name="Package.php" role="php">
+      <tasks:replace from="@DATA-DIR@" to="data_dir" type="pear-config" />
+     </file>
      <file name="Registry.php" role="php" />
      <file name="Remote.php" role="php" />
     </dir> <!-- /PEAR/Command -->
