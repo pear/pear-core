@@ -16,13 +16,15 @@
 // | Authors: Tomas V.V.Cox <cox@idecnet.com>                             |
 // |          Hans Lellelid <hans@velum.net>                              |
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
+// |          Greg Beaver <cellog@php.net>                                |
 // +----------------------------------------------------------------------+
 //
 // $Id$
 
-define('PEAR_OBSERVER_PRINT',      -2);
-define('PEAR_OBSERVER_TRIGGER',    -4);
-define('PEAR_OBSERVER_DIE',        -8);
+define('PEAR_OBSERVER_PRINT',                -2);
+define('PEAR_OBSERVER_TRIGGER',              -4);
+define('PEAR_OBSERVER_DIE',                  -8);
+define('PEAR_OBSERVER_CLASSCALLBACK',        -16);
 
 /**
  * Base PEAR_Exception Class
@@ -35,6 +37,7 @@ define('PEAR_OBSERVER_DIE',        -8);
  * - Added more context info available (like class, method or cause)
  * - cause can be a PEAR_Exception or an array of mixed
  *   PEAR_Exceptions/PEAR_ErrorStack warnings
+ * - callbacks for specific exception classes and their children
  *
  * 2) Ideas:
  *
@@ -121,7 +124,7 @@ class PEAR_Exception extends Exception
             $this->cause = null;
         }
         parent::__construct($message, $code);
-        $this->_signal();
+        $this->signal();
     }
 
     /**
@@ -142,7 +145,10 @@ class PEAR_Exception extends Exception
         unset(self::$_observers[$label]);
     }
 
-    private function _signal()
+    /**
+     * Additional signal handling can be added or overridden by child classes
+     */
+    protected function signal()
     {
         foreach (self::$_observers as $func) {
             if (is_callable($func)) {
@@ -151,22 +157,51 @@ class PEAR_Exception extends Exception
             }
             settype($func, 'array');
             switch ($func[0]) {
-                case PEAR_EXCEPTION_PRINT:
+                case PEAR_EXCEPTION_PRINT :
                     $f = (isset($func[1])) ? $func[1] : '%s';
                     printf($f, $this->getMessage());
                     break;
-                case PEAR_EXCEPTION_TRIGGER:
+                case PEAR_EXCEPTION_TRIGGER :
                     $f = (isset($func[1])) ? $func[1] : E_USER_NOTICE;
                     trigger_error($this->getMessage(), $f);
                     break;
-                case PEAR_EXCEPTION_DIE:
+                case PEAR_EXCEPTION_DIE :
                     $f = (isset($func[1])) ? $func[1] : '%s';
                     die(printf($f, $this->getMessage()));
+                    break;
+                case PEAR_OBSERVER_CLASSCALLBACK :
+                    $f = (isset($func[1])) ? $func[1] : false;
+                    if (is_array($f) && isset($f['class']) && isset($f['callback'])) {
+                        if ($this instanceof $f['class']) {
+                            if (is_callable($f['callback'])) {
+                                call_user_func($f['callback'], $this);
+                            }
+                        }
+                    }
                     break;
                 default:
                     trigger_error('invalid observer type', E_USER_WARNING);
             }
         }
+    }
+
+    /**
+     * Return specific error information that can be used for more detailed
+     * error messages or translation.
+     *
+     * This method may be overridden in child exception classes in order
+     * to add functionality not present in PEAR_Exception and is a placeholder
+     * to define API
+     *
+     * The returned array must be an associative array of parameter => value like so:
+     * <pre>
+     * array('name' => $name, 'context' => array(...))
+     * </pre>
+     * @return array
+     */
+    public function getErrorData()
+    {
+        return array();
     }
 
     /**
@@ -308,7 +343,7 @@ class PEAR_Exception extends Exception
                    . $cause['message'] . ' in ' . $cause['file']
                    . ' on line ' . $cause['line'] . "\n";
         }
-        return $causeMsg.$this->getTraceAsString();
+        return $causeMsg . $this->getTraceAsString();
     }
 }
 
