@@ -98,7 +98,7 @@ password from your user configuration.',
      *
      * @param array $params list of additional parameters
      *
-     * @return bool TRUE on success, FALSE for unknown commands, or
+     * @return bool TRUE on success or
      * a PEAR error on failure
      *
      * @access public
@@ -141,7 +141,7 @@ password from your user configuration.',
         } else {
             return $this->raiseError("Login failed!");
         }
-
+        return true;
     }
 
     // }}}
@@ -156,7 +156,7 @@ password from your user configuration.',
      *
      * @param array $params list of additional parameters
      *
-     * @return bool TRUE on success, FALSE for unknown commands, or
+     * @return bool TRUE on success or
      * a PEAR error on failure
      *
      * @access public
@@ -171,6 +171,7 @@ password from your user configuration.',
         $this->config->remove('username');
         $this->config->remove('password');
         $this->config->store();
+        return true;
     }
 
     // }}}
