@@ -55,6 +55,7 @@
 Installer Roles/Tasks:
 
  * package.xml 2.0 uses a command pattern, allowing extensibility
+ * implement the replace, postinstallscript, and preinstallscript tasks
 
 Installer Dependency Support:
 
@@ -155,6 +156,7 @@ PEAR_ErrorStack:
     </dir>
     <dir name="Task">
      <file role="php" name="Common.php"/>
+     <file role="php" name="Preinstallscript.php"/>
      <file role="php" name="Postinstallscript.php"/>
      <file role="php" name="Replace.php"/>
     </dir>
