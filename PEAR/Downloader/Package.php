@@ -479,7 +479,7 @@ class PEAR_Downloader_Package
             return $url;
         }
         $dep['package'] = $dep['name'];
-        $ret = $this->_analyzeDownloadURL($url, $dep, 'dependency', $params);
+        $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params);
         PEAR::popErrorHandling();
         if (PEAR::isError($ret)) {
             if (!isset($options['soft'])) {
@@ -618,7 +618,7 @@ class PEAR_Downloader_Package
                 }
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                 $dep['package'] = $dep['name'];
-                $ret = $this->_analyzeDownloadURL($url, $dep, 'dependency', $params);
+                $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params);
                 PEAR::popErrorHandling();
                 if (PEAR::isError($ret)) {
                     if (!isset($options['soft'])) {
@@ -1274,13 +1274,21 @@ class PEAR_Downloader_Package
         }
     }
 
+    /**
+     * @param array output of package.getDownloadURL
+     * @param string|array|object information for detecting packages to be downloaded, and
+     *                            for errors
+     * @param array name information of the package
+     * @param array|null packages to be downloaded
+     * @access private
+     */
     function _analyzeDownloadURL($info, $param, $pname, $params = null)
     {
-        if (PEAR_Downloader_Package::willDownload($param, $params)) {
+        if (!is_string($param) && PEAR_Downloader_Package::willDownload($param, $params)) {
             return false;
         }
         if (!$info) {
-            if (!is_array($param)) {
+            if (!is_string($param)) {
                 $saveparam = ", cannot download \"$param\"";
             } else {
                 $saveparam = '';
