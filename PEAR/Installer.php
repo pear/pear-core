@@ -864,9 +864,10 @@ class PEAR_Installer extends PEAR_Downloader
         }
         // Parse xml file -----------------------------------------------
         $pkg = new PEAR_PackageFile($this->config, $this->debug, $tmpdir);
-        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-        if (PEAR::isError($p = &$pkg->fromAnyFile($descfile, PEAR_VALIDATE_INSTALLING))) {
-            PEAR::popErrorHandling();
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+        $p = &$pkg->fromAnyFile($descfile, PEAR_VALIDATE_INSTALLING);
+        PEAR::staticPopErrorHandling();
+        if (PEAR::isError($p)) {
             foreach ($pkg->getValidationWarnings(true) as $err) {
                 $loglevel = $err['level'] == 'error' ? 0 : 1;
                 if (!isset($this->_options['soft'])) {
@@ -874,8 +875,9 @@ class PEAR_Installer extends PEAR_Downloader
                 }
             }
             return $this->raiseError('Installation failed: invalid package file');
+        } else {
+            $descfile = $p->getPackageFile();
         }
-        PEAR::popErrorHandling();
         return $p;
     }
 
@@ -916,7 +918,7 @@ class PEAR_Installer extends PEAR_Downloader
     /**
      * Installs the files within the package file specified.
      *
-     * @param string|PEAR_PackageFile_v1|PEAR_PackageFile_v2 $pkgfile path to the package file,
+     * @param string|PEAR_Downloader_Package $pkgfile path to the package file,
      *        or a pre-initialized packagefile object
      * @param array $options
      * recognized options:
