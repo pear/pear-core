@@ -502,8 +502,7 @@ class PEAR_DependencyDB
         $pkg->setConfig($this->_config);
         if ($pkg->getPackagexmlVersion() == '1.0') {
             $gen = &$pkg->getDefaultGenerator();
-            $v2 = &$gen->toV2();
-            $deps = $v2->getDeps(true);
+            $deps = &$gen->dependenciesToV2();
         } else {
             $deps = $pkg->getDeps(true);
         }
