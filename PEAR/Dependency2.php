@@ -698,34 +698,39 @@ class PEAR_Dependency2
             if (version_compare($version, $dep['recommended'], '==')) {
                 return true;
             } else {
-                foreach ($params as $parent) {
-                    if ($parent->isEqual($this->_currentPackage)) {
-                        $found = true;
-                        break;
-                    }
+                if (!$found && $installed) {
+                    $param = $this->_registry->getPackage($dep['name'], $dep['channel']);
                 }
-                if ($found) {
-                    if ($param->isCompatible($parent)) {
-                        return true;
+                if ($param) {
+                    foreach ($params as $parent) {
+                        if ($parent->isEqual($this->_currentPackage)) {
+                            $found = true;
+                            break;
+                        }
                     }
-                } else { // this is for validPackage() calls
-                    $parent = $this->_registry->getPackage($this->_currentPackage['package'],
-                        $this->_currentPackage['channel']);
-                    if ($parent !== null) {
+                    if ($found) {
                         if ($param->isCompatible($parent)) {
                             return true;
+                        }
+                    } else { // this is for validPackage() calls
+                        $parent = $this->_registry->getPackage($this->_currentPackage['package'],
+                            $this->_currentPackage['channel']);
+                        if ($parent !== null) {
+                            if ($param->isCompatible($parent)) {
+                                return true;
+                            }
                         }
                     }
                 }
                 if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                    return $this->raiseError('%s dependency package ' . $depname .
-                        ' ' . $installed . ' version "' . $version . '"' .
-                        ' is not the recommended version "' . $dep['recommended'] .
-                        '", but may be compatible, use --force to install');
+                    return $this->raiseError('%s dependency package "' . $depname .
+                        '" ' . $installed . ' version ' . $version . 
+                        ' is not the recommended version ' . $dep['recommended'] .
+                        ', but may be compatible, use --force to install');
                 } else {
-                    return $this->warning('warning: %s dependency package ' . $depname .
-                        ' ' . $installed . ' version "' . $version . '"' .
-                        ' is not the recommended version "' . $dep['recommended'].'"');
+                    return $this->warning('warning: %s dependency package "' . $depname .
+                        '" ' . $installed . ' version ' . $version .
+                        ' is not the recommended version ' . $dep['recommended']);
                 }
             }
         }
