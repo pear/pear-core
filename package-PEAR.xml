@@ -115,6 +115,9 @@ Installer:
    <dir name="PEAR">
     <file role="php" name="Autoloader.php"/>
     <file role="php" name="Command.php"/>
+    <dir name="ChannelFile">
+     <file name="Parser.php" role="php" />
+    </dir>
     <dir name="Command">
      <file role="php" name="Auth.php"/>
      <file role="php" name="Build.php"/>
@@ -191,6 +194,7 @@ Installer:
     <file role="php" name="Remote.php"/>
     <file role="php" name="RunTest.php"/>
     <file role="php" name="Validate.php"/>
+    <file role="php" name="XMLParser.php"/>
    </dir>
    <dir name="scripts" baseinstalldir="/">
     <file role="script" install-as="pear" name="pear.sh" platform="!windows">

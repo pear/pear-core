@@ -106,6 +106,9 @@ Installer:
     <file name="Guess.php" role="php" />
    </dir> <!-- /OS -->
    <dir name="PEAR">
+    <dir name="ChannelFile">
+     <file name="Parser.php" role="php" />
+    </dir> <!-- /PEAR/ChannelFile -->
     <dir name="Command">
      <file name="Auth.php" role="php" />
      <file name="Build.php" role="php" />
@@ -184,6 +187,7 @@ Installer:
     <file name="Remote.php" role="php" />
     <file name="RunTest.php" role="php" />
     <file name="Validate.php" role="php" />
+    <file name="XMLParser.php" role="php" />
    </dir> <!-- /PEAR -->
    <dir name="scripts" baseinstalldir="/">
     <file name="pear.bat" role="script">
