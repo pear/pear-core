@@ -89,6 +89,10 @@ class PEAR_Downloader_Package
      */
     var $_explicitState = false;
     /**
+     * If this package is invoked with Package#group, this variable will be true
+     */
+    var $_explicitGroup = false;
+    /**
      * Package type local|url|xmlrpc
      * @var string
      */
@@ -180,8 +184,15 @@ class PEAR_Downloader_Package
         }
         if (isset($this->_downloadURL['url'])) {
             $this->_isvalid = false;
+            $info = $this->getParsedPackage();
             $err = $this->_fromUrl($this->_downloadURL['url'],
                 $this->_registry->parsedPackageNameToString($this->_parsedname, true));
+            if ($info != $this->getParsedPackage()) {
+                return PEAR::raiseError('CRITICAL ERROR: We are ' .
+                    $this->_registry->parsedPackageNameToString($info) . ', but the file ' .
+                    'downloaded claims to be ' .
+                    $this->_registry->parsedPackageNameToString($this->getParsedPackage()));
+            }
             if (PEAR::isError($err) || !$this->_valid) {
                 return $err;
             }
@@ -237,10 +248,8 @@ class PEAR_Downloader_Package
                 );
             if (!isset($dep['info']['nodefault'])) {
                 $this->_parsedname['group'] = 'default'; // download the default dependency group
+                $this->_explicitGroup = false;
             }
-        }
-        if (isset($dep['group'])) {
-            $this->_parsedname['group'] = $dep['group'];
         }
     }
 
@@ -368,15 +377,13 @@ class PEAR_Downloader_Package
             }
             // get requested dependency group, if any
             $groupname = $this->getGroup();
+            $explicit = $this->_explicitGroup;
             if (!$groupname) {
                 if ($this->canDefault()) {
                     $groupname = 'default'; // try the default dependency group
                 } else {
                     return;
                 }
-                $explicit = false;
-            } else {
-                $explicit = true;
             }
             if (isset($deps['group'])) {
                 if (isset($deps['group']['attribs'])) {
@@ -945,7 +952,7 @@ class PEAR_Downloader_Package
             $bundles[] = $i;
             $pf = &$param->getPackageFile();
             $newdeps = array();
-            $contents = $pf->BundledPackages();
+            $contents = $pf->getBundledPackages();
             if (!is_array($contents)) {
                 $contents = array($contents);
             }
@@ -953,7 +960,7 @@ class PEAR_Downloader_Package
                 $filecontents = $pf->getFileContents($file);
                 $dl = &$param->getDownloader();
                 $options = $dl->getOptions();
-                $fp = @fopen($dl->getDownloadDir() . DIRECTORY_SEPARATOR . $file);
+                $fp = @fopen($dl->getDownloadDir() . DIRECTORY_SEPARATOR . $file, 'wb');
                 if (!$fp) {
                     continue;
                 }
@@ -964,7 +971,7 @@ class PEAR_Downloader_Package
                 }
                 $obj = &new PEAR_Downloader_Package($params[$i]->getDownloader());
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                $e = $obj->_fromFile($dep);
+                $e = $obj->_fromFile($dl->getDownloadDir() . DIRECTORY_SEPARATOR . $file);
                 PEAR::popErrorHandling();
                 if (PEAR::isError($e)) {
                     if (!isset($options['soft'])) {
@@ -1201,6 +1208,11 @@ class PEAR_Downloader_Package
             $this->_explicitState = $pname['state'];
         } else {
             $this->_explicitState = false;
+        }
+        if (isset($pname['group'])) {
+            $this->_explicitGroup = true;
+        } else {
+            $this->_explicitGroup = false;
         }
         $info = $this->_downloader->_getPackageDownloadUrl($pname);
         $ret = $this->_analyzeDownloadURL($info, $param, $pname);
