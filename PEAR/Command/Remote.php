@@ -107,10 +107,6 @@ latest stable release of each package.',
                     'shortopt' => 'Z',
                     'doc' => 'download an uncompressed (.tar) file',
                     ),
-                'force' => array(
-                    'shortopt' => 'f',
-                    'doc' => 'force download of non-preferred state package',
-                    ),
                 ),
             'doc' => '<package>...
 Download package tarballs.  The files will be named as suggested by the
@@ -392,7 +388,7 @@ parameter.
     function doDownload($command, $options, $params)
     {
         // make certain that dependencies are ignored
-        $options['nodeps'] = 1;
+        $options['downloadonly'] = 1;
         $downloader = &$this->getDownloader($options);
         $downloader->setDownloadDir(getcwd());
         $errors = array();

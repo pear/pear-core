@@ -285,7 +285,7 @@ class PEAR_Downloader extends PEAR_Common
                 }
             }
         }
-        while(PEAR_Downloader_Package::mergeDependencies($params));
+        while (PEAR_Downloader_Package::mergeDependencies($params));
         PEAR_Downloader_Package::removeInstalled($params);
         if (!count($params)) {
             $this->pushError('No valid packages found', PEAR_INSTALLER_FAILED);
@@ -331,6 +331,9 @@ class PEAR_Downloader extends PEAR_Common
      */
     function analyzeDependencies(&$params)
     {
+        if (isset($this->_options['downloadonly'])) {
+            return;
+        }
         foreach ($params as $i => $param) {
             $deps = $param->getDeps();
             if (!$deps) {
