@@ -92,7 +92,7 @@ class PEAR_Task_Replace extends PEAR_Task_Common
                     if ($chan) {
                         $to = $chan->getServer();
                     } else {
-                        $this->logger->log(0, "invalid pear-config replacement: $a[to]");
+                        $this->logger->log(0, "$dest: invalid pear-config replacement: $a[to]");
                         return false;
                     }
                 } else {
@@ -108,14 +108,14 @@ class PEAR_Task_Replace extends PEAR_Task_Common
                     }
                 }
                 if (is_null($to)) {
-                    $this->logger->log(0, "invalid pear-config replacement: $a[to]");
+                    $this->logger->log(0, "$dest: invalid pear-config replacement: $a[to]");
                     return false;
                 }
             } else {
                 if ($t = $pkg->packageInfo($a['to'])) {
                     $to = $t;
                 } else {
-                    $this->logger->log(0, "invalid package-info replacement: $a[to]");
+                    $this->logger->log(0, "$dest: invalid package-info replacement: $a[to]");
                     return false;
                 }
             }
