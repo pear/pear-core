@@ -119,7 +119,7 @@ class System
             System::raiseError("Could not open dir $sPath");
             return $struct; // XXX could not open error
         }
-        $struct['dirs'][] = $sPath; // XXX don't add if '.' or '..' ?
+        $struct['dirs'][] = $sPath = realpath($sPath); // XXX don't add if '.' or '..' ?
         $list = array();
         while ($file = readdir($dir)) {
             if ($file != '.' && $file != '..') {
@@ -524,8 +524,14 @@ class System
                     $i++;
                     break;
                 case '-name':
+                    if (OS_WINDOWS) {
+                        if ($args[$i+1]{0} == '\\') {
+                            // prepend drive
+                            $args[$i+1] = addslashes(substr(getcwd(), 0, 2) . $args[$i + 1]);
+                        }
+                    }
                     $patterns[] = "(" . preg_replace(array('/\./', '/\*/'),
-                                                     array('\.', '.*'),
+                                                     array('\.', '.*', ),
                                                      $args[$i+1])
                                       . ")";
                     $i++;
