@@ -44,7 +44,8 @@ $phpunit->assertEquals(array('master_server' => $server,
     'doc_dir' => $temp_path . DIRECTORY_SEPARATOR . 'doc',
     'test_dir' => $temp_path . DIRECTORY_SEPARATOR . 'test',
     'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',
-    '__channels' => array('__uri' => array())), unserialize($contents[1]), 'after write 1');
+    '__channels' => array('pecl.php.net' => array(),'__uri' => array())),
+    unserialize($contents[1]), 'after write 1');
 
 $phpunit->assertFileNotExists($temp_path . DIRECTORY_SEPARATOR . 'pear.frompf', 'pear.frompf');
 $config->writeConfigFile($temp_path . DIRECTORY_SEPARATOR . 'pear.frompf', 'system');
@@ -52,7 +53,7 @@ $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'pear.frompf', 'pe
 
 $contents = explode("\n", implode('', file($temp_path . DIRECTORY_SEPARATOR . 'pear.frompf')));
 $phpunit->assertEquals('#PEAR_Config 0.9', $contents[0], 'after write sys 0');
-$phpunit->assertEquals(array('__channels' => array('__uri' => array()),'preferred_state' => 'beta'), unserialize($contents[1]), 'after write sys 1');
+$phpunit->assertEquals(array('__channels' => array('pecl.php.net' => array(),'__uri' => array()),'preferred_state' => 'beta'), unserialize($contents[1]), 'after write sys 1');
 
 $config->readConfigFile($temp_path . DIRECTORY_SEPARATOR . 'pear.frompf', 'system');
 
@@ -60,7 +61,6 @@ $config->set('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'hello');
 $config->set('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'bye', 'system');
 $config->writeConfigFile(null, 'both');
 
-$phpunit->showall();
 $contents = explode("\n", implode('', file($temp_path . DIRECTORY_SEPARATOR . 'pear.ini')));
 $phpunit->assertEquals('#PEAR_Config 0.9', $contents[0], 'after both 0');
 $phpunit->assertEquals(array('master_server' => $server,
@@ -72,12 +72,12 @@ $phpunit->assertEquals(array('master_server' => $server,
     'doc_dir' => $temp_path . DIRECTORY_SEPARATOR . 'doc',
     'test_dir' => $temp_path . DIRECTORY_SEPARATOR . 'test',
     'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',
-    '__channels' => array('__uri' => array())), unserialize($contents[1]), 'after both 1');
+    '__channels' => array('pecl.php.net' => array(),'__uri' => array())), unserialize($contents[1]), 'after both 1');
 
 $contents = explode("\n", implode('', file($temp_path . DIRECTORY_SEPARATOR . 'pear.frompf')));
 $phpunit->assertEquals('#PEAR_Config 0.9', $contents[0], 'after both sys 0');
 $phpunit->assertEquals(array(
-    '__channels' => array('__uri' => array()),
+    '__channels' => array('pecl.php.net' => array(),'__uri' => array()),
     'preferred_state' => 'beta',
     'php_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bye',
     ), unserialize($contents[1]), 'after both sys 1');
