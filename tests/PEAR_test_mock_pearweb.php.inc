@@ -84,6 +84,9 @@ class PEAR_test_mock_pearweb {
                     $result = $this->_remote->parentcall($method, $args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
                 break;
             }
+            if (PEAR::isError($result)) {
+                $result = null;
+            }
             $dump = new PHP_Dump($result);
             $args = new PHP_Dump($args);
             if (!isset($this->_pearweb->_config['xmlrpc'][$server][$method][serialize($args)]))
@@ -124,6 +127,9 @@ class PEAR_test_mock_pearweb {
                 case 6:
                     $result = $this->_remote->parentcall($method, $args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
                 break;
+            }
+            if (PEAR::isError($result)) {
+                $result = null;
             }
             $dump = new PHP_Dump($result);
             $args = new PHP_Dump($args);

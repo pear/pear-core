@@ -73,9 +73,24 @@ class test_PEAR_Remote extends PEAR_Remote {
         $server_channel = $this->config->get('default_channel');
         $channel = $this->_registry->getChannel($server_channel);
         if ($channel) {
-            if (!$channel->supports('xmlrpc', $method)) {
-                // check for channel.list, which is implicitly supported for the PEAR channel
-                return $this->raiseError("Channel $server_channel does not support xml-rpc method $method");
+            $mirror = $this->config->get('preferred_mirror');
+            if ($channel->getMirror($mirror)) {
+                if ($channel->supports('xmlrpc', $method, $mirror)) {
+                    $server_channel = $server_host = $mirror; // use the preferred mirror
+                    $server_port = $channel->getPort($mirror);
+                } elseif (!$channel->supports('xmlrpc', $method)) {
+                    return $this->raiseError("Channel $server_channel does not " .
+                        "support xml-rpc method $method");
+                }
+            }
+            if (!isset($server_host)) {
+                if (!$channel->supports('xmlrpc', $method)) {
+                    return $this->raiseError("Channel $server_channel does not support " .
+                        "xml-rpc method $method");
+                } else {
+                    $server_host = $server_channel;
+                    $server_port = $channel->getPort();
+                }
             }
         } else {
             return $this->raiseError("Unknown channel '$server_channel'");
@@ -151,10 +166,33 @@ class test_PEAR_Remote extends PEAR_Remote {
         if ($this->_fakepearweb) {
             $server_channel = $this->config->get('default_channel');
             $channel = $this->_registry->getChannel($server_channel);
-            if (count($args)) {
-                $result = $this->_pearweb->call($channel->getServer(), $method, $args);
+            if ($channel) {
+                $mirror = $this->config->get('preferred_mirror');
+                if ($channel->getMirror($mirror)) {
+                    if ($channel->supports('xmlrpc', $method, $mirror)) {
+                        $server_channel = $server_host = $mirror; // use the preferred mirror
+                        $server_port = $channel->getPort($mirror);
+                    } elseif (!$channel->supports('xmlrpc', $method)) {
+                        return $this->raiseError("Channel $server_channel does not " .
+                            "support xml-rpc method $method");
+                    }
+                }
+                if (!isset($server_host)) {
+                    if (!$channel->supports('xmlrpc', $method)) {
+                        return $this->raiseError("Channel $server_channel does not support " .
+                            "xml-rpc method $method");
+                    } else {
+                        $server_host = $server_channel;
+                        $server_port = $channel->getPort();
+                    }
+                }
             } else {
-                $result = $this->_pearweb->call($channel->getServer(), $method);
+                return $this->raiseError("Unknown channel '$server_channel'");
+            }
+            if (count($args)) {
+                $result = $this->_pearweb->call($server_channel, $method, $args);
+            } else {
+                $result = $this->_pearweb->call($server_channel, $method);
             }
         }/* else {
             switch (count($args)) {
@@ -770,6 +808,16 @@ class test_PEAR_Config extends PEAR_Config
         $remote = &new test_PEAR_Remote($this);
         return $remote;
     }
+
+    function &singleton($user_file = '', $system_file = '')
+    {
+        if (is_object($GLOBALS['_PEAR_Config_instance'])) {
+            return $GLOBALS['_PEAR_Config_instance'];
+        }
+        $GLOBALS['_PEAR_Config_instance'] =
+             &new test_PEAR_Config($user_file, $system_file);
+        return $GLOBALS['_PEAR_Config_instance'];
+    }
 }
 
 class fake_log
@@ -806,6 +854,19 @@ class fake_log
         $log = $this->_download;
         $this->_download = array();
         return $log;
+    }
+
+    function setDialogOutput($input, $output)
+    {
+        $this->_dialogInput[var_export($input, true)] = $output;
+    }
+
+    function userDialog()
+    {
+        $input = func_get_args();
+        if (isset($this->_dialogInput[var_export($input, true)])) {
+            return $this->_dialogInput[var_export($input, true)];
+        }
     }
 }
 
