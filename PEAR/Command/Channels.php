@@ -482,9 +482,9 @@ List the files in an installed package.
             $channel->fromXmlString($contents);
             if (!$channel->getErrors()) {
                 // security check: is the downloaded file for the channel we got it from?
-                if ($channel->getName() != strtolower($params[0])) {
+                if (strtolower($channel->getName()) != strtolower($params[0])) {
                     if (isset($options['force'])) {
-                        return $this->raiseError('WARNING: downloaded channel definition file' .
+                        $this->ui->log(0, 'WARNING: downloaded channel definition file' .
                             ' for channel "' . $channel->getName() . '" from channel "' .
                             strtolower($params[0]) . '"');
                     } else {
@@ -537,6 +537,21 @@ List the files in an installed package.
         if (!$reg->channelExists($channel->getName())) {
             return $this->raiseError('Error: Channel "' . $channel->getName() .
                 '" does not exist, use channel-add to add an entry');
+        }
+        $regchan = $reg->getChannel($channel->getName());
+        if ($regchan) {
+            // security check: is the primary server the same?
+            if ($channel->getServer() != $regchan->getServer()) {
+                if (isset($options['force'])) {
+                    $this->ui->log(0, 'WARNING: primary server "' . $regchan->getServer() .
+                        '" for channel "' . $channel->getName() . '" will be changed to "' .
+                        $channel->getServer() . '"');
+                } else {
+                    return $this->raiseError('ERROR: primary server "' . $regchan->getServer() .
+                        '" for channel "' . $channel->getName() . '" would be changed to "' .
+                        $channel->getServer() . '", use --force to update anyways');
+                }
+            }
         }
         $ret = $reg->updateChannel($channel);
         if (PEAR::isError($ret)) {
