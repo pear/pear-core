@@ -57,7 +57,7 @@ class PEAR_Packager extends PEAR_Common
 
     // {{{ package()
 
-    function package($pkgfile = null, $compress = true)
+    function package($pkgfile = null, $compress = true, $pkg2 = null)
     {
         // {{{ validate supplied package.xml file
         if (empty($pkgfile)) {
@@ -75,11 +75,43 @@ class PEAR_Packager extends PEAR_Common
             return $this->raiseError("Cannot package, errors in package file");
         } else {
             foreach ($pf->getValidationWarnings() as $warning) {
-                $this->log(1, 'Warning: ' . $warning);
+                $this->log(1, 'Warning: ' . $warning['message']);
             }
         }
 
         // }}}
+        if ($pkg2) {
+            $this->log(0, 'Attempting to process the second package file');
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+            $pf2 = &$pkg->fromPackageFile($pkg2, PEAR_VALIDATE_NORMAL);
+            PEAR::staticPopErrorHandling();
+            if (PEAR::isError($pf2)) {
+                foreach ($pf2->getUserInfo() as $error) {
+                    $this->log(0, 'Error: ' . $error['message']);
+                }
+                $this->log(0, $pf2->getMessage());
+                return $this->raiseError("Cannot package, errors in second package file");
+            } else {
+                foreach ($pf2->getValidationWarnings() as $warning) {
+                    $this->log(1, 'Warning: ' . $warning['message']);
+                }
+            }
+            if ($pf2->getPackagexmlVersion() == '2.0') {
+                $main = &$pf2;
+                $other = &$pf;
+            } else {
+                $main = &$pf;
+                $other = &$pf2;
+            }
+            if ($main->getPackagexmlVersion() != '2.0') {
+                return PEAR::raiseError('Error: cannot package two package.xml version 1.0, can ' .
+                    'only package together a package.xml 1.0 and package.xml 2.0');
+            }
+            if ($other->getPackagexmlVersion() != '1.0') {
+                return PEAR::raiseError('Error: cannot package two package.xml version 2.0, can ' .
+                    'only package together a package.xml 1.0 and package.xml 2.0');
+            }
+        }
         $pf->setLogger($this);
         if (!$pf->validate(PEAR_VALIDATE_PACKAGING)) {
             foreach ($pf->getValidationWarnings() as $warning) {
@@ -91,22 +123,49 @@ class PEAR_Packager extends PEAR_Common
                 $this->log(1, 'Warning: ' . $warning['message']);
             }
         }
-
-        $gen = &$pf->getDefaultGenerator();
-        $tgzfile = $gen->toTgz($this, $compress);
-        $dest_package = basename($tgzfile);
-        $pkgdir = dirname($pkgfile);
-
-        // {{{ TAR the Package -------------------------------------------
-        $this->log(1, "Package $dest_package done");
-        if (file_exists("$pkgdir/CVS/Root")) {
-            $cvsversion = preg_replace('/[^a-z0-9]/i', '_', $pf->getVersion());
-            $cvstag = "RELEASE_$cvsversion";
-            $this->log(1, "Tag the released code with `pear cvstag $pkgfile'");
-            $this->log(1, "(or set the CVS tag $cvstag by hand)");
+        if ($pkg2) {
+            $pf2->setLogger($this);
+            if (!$pf2->validate(PEAR_VALIDATE_PACKAGING)) {
+                foreach ($pf2->getValidationWarnings() as $warning) {
+                    $this->log(0, 'Error: ' . $warning['message']);
+                }
+                return $this->raiseError("Cannot package, errors in package");
+            } else {
+                foreach ($pf2->getValidationWarnings() as $warning) {
+                    $this->log(1, 'Warning: ' . $warning['message']);
+                }
+            }
         }
-        // }}}
 
+        if ($pkg2) {
+            $gen = &$main->getDefaultGenerator();
+            $tgzfile = $gen->toTgz2($this, $other, $compress);
+            $dest_package = basename($tgzfile);
+            $pkgdir = dirname($pkgfile);
+    
+            // TAR the Package -------------------------------------------
+            $this->log(1, "Package $dest_package done");
+            if (file_exists("$pkgdir/CVS/Root")) {
+                $cvsversion = preg_replace('/[^a-z0-9]/i', '_', $pf->getVersion());
+                $cvstag = "RELEASE_$cvsversion";
+                $this->log(1, "Tag the released code with `pear cvstag $pkgfile'");
+                $this->log(1, "(or set the CVS tag $cvstag by hand)");
+            }
+        } else {
+            $gen = &$pf->getDefaultGenerator();
+            $tgzfile = $gen->toTgz($this, $compress);
+            $dest_package = basename($tgzfile);
+            $pkgdir = dirname($pkgfile);
+    
+            // TAR the Package -------------------------------------------
+            $this->log(1, "Package $dest_package done");
+            if (file_exists("$pkgdir/CVS/Root")) {
+                $cvsversion = preg_replace('/[^a-z0-9]/i', '_', $pf->getVersion());
+                $cvstag = "RELEASE_$cvsversion";
+                $this->log(1, "Tag the released code with `pear cvstag $pkgfile'");
+                $this->log(1, "(or set the CVS tag $cvstag by hand)");
+            }
+        }
         return $dest_package;
     }
 

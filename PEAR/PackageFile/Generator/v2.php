@@ -97,6 +97,12 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
     function toTgz(&$packager, $compress = true, $where = null)
     {
+        $a = null;
+        return $this->toTgz2($packager, $a, $compress, $where);
+    }
+
+    function toTgz2(&$packager, &$pf1, $compress = true, $where = null)
+    {
         include_once 'System.php';
         if ($where === null) {
             if (!($where = System::mktemp(array('-d')))) {
@@ -137,7 +143,12 @@ http://pear.php.net/dtd/package-2.0.xsd',
             }
         }
         // }}}
-        $packagexml = $this->toPackageFile($where, PEAR_VALIDATE_PACKAGING);
+        if ($pf1 !== null) {
+            $name = 'package2.xml';
+        } else {
+            $name = 'package.xml';
+        }
+        $packagexml = $this->toPackageFile($where, PEAR_VALIDATE_PACKAGING, $name);
         if ($packagexml) {
             $ext = $compress ? '.tgz' : '.tar';
             $dest_package = getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext;
@@ -148,11 +159,21 @@ http://pear.php.net/dtd/package-2.0.xsd',
             if (PEAR::isError($ok)) {
                 return $packager->raiseError($ok);
             } elseif (!$ok) {
-                return $packager->raiseError('PEAR_Packagefile::toTgz(): tarball creation failed');
+                return $packager->raiseError('PEAR_Packagefile::toTgz(): adding ' . $name .
+                    ' failed');
             }
             // ----- Add the content of the package
             if (!$tar->addModify($filelist, $pkgver, $pkgdir)) {
                 return $packager->raiseError('PEAR_Packagefile::toTgz(): tarball creation failed');
+            }
+            // add the package.xml version 1.0
+            if ($pf1 !== null) {
+                $pfgen = &$pf1->getDefaultGenerator();
+                $packagexml1 = $pfgen->toPackageFile($where, PEAR_VALIDATE_PACKAGING);
+                if (!$tar->addModify(array($packagexml1), '', $where)) {
+                    return $packager->raiseError('PEAR_Packagefile::toTgz(): adding package.xml ' .
+                        'failed');
+                }
             }
             return $dest_package;
         }
