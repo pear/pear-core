@@ -1426,6 +1426,10 @@ class PEAR_PackageFile_v2_Validator
         }
         $pkg = &new PEAR_PackageFile($this->_pf->_config);
         foreach ($info as $package) {
+            if (!file_exists($dir_prefix . DIRECTORY_SEPARATOR . $package)) {
+                $this->_fileNotFound($dir_prefix . DIRECTORY_SEPARATOR . $package);
+                continue;
+            }
             call_user_func_array($log, array(1, "Analyzing bundled package $package"));
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $ret = $pkg->fromAnyFile($dir_prefix . DIRECTORY_SEPARATOR . $package,
