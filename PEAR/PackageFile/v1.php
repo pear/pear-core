@@ -387,6 +387,11 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function getExtends()
+    {
+        return false;
+    }
+
     /**
      * @return array
      */
