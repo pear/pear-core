@@ -71,7 +71,7 @@ channel.xml.
         'channel-update' => array(
             'summary' => 'Update an Existing Channel',
             'function' => 'doUpdate',
-            'shortcut' => 'ca',
+            'shortcut' => 'cu',
             'options' => array(
                 'force' => array(
                     'shortopt' => 'f',
@@ -89,6 +89,26 @@ an existing channel.
             'summary' => 'Retrieve Information on a Channel',
             'function' => 'doInfo',
             'shortcut' => 'ci',
+            'options' => array(),
+            'doc' => '<package>
+List the files in an installed package.
+'
+            ),
+        'channel-alias' => array(
+            'summary' => 'Specify an alias to a channel name',
+            'function' => 'doAlias',
+            'shortcut' => 'cha',
+            'options' => array(),
+            'doc' => '<channel> <alias>
+Specify a specific alias to use for a channel name.
+The alias may not be an existing channel name or
+alias.
+'
+            ),
+        'channel-discover' => array(
+            'summary' => 'Initialize a Channel from its server',
+            'function' => 'doDiscover',
+            'shortcut' => 'di',
             'options' => array(),
             'doc' => '<package>
 List the files in an installed package.
@@ -145,8 +165,8 @@ List the files in an installed package.
     {
         $reg = new PEAR_Registry($this->config->get('php_dir'));
         $chan = $this->config->get('default_channel');
-        if ($chan != 'pear') {
-            $this->ui->outputData('WARNING: default channel is not PEAR');
+        if ($chan != 'pear.php.net') {
+            $this->ui->outputData('WARNING: default channel is not pear.php.net');
         }
         $remote = &new PEAR_Remote($this->config, $reg);
         $channels = $remote->call('channel.listAll');
@@ -240,7 +260,7 @@ List the files in an installed package.
         if (sizeof($params) != 1) {
             return $this->raiseError("No channel specified");
         }
-        $reg = new PEAR_Registry($this->config->get('php_dir'));
+        $reg = &$this->config->getRegistry();
         $channel = strtolower($params[0]);
         if (!$reg->channelExists($channel)) {
             return $this->raiseError("Channel `$channel' does not exist");
@@ -252,6 +272,9 @@ List the files in an installed package.
                 'caption' => $caption,
                 'border' => true);
             $data['data'][] = array('Name', $chan->getName());
+            if ($chan->getAlias() != $chan->getName()) {
+                $data['data'][] = array('Alias', $chan->getAlias());
+            }
             $data['data'][] = array('Summary', $chan->getSummary());
             $data['data'][] = array('Xmlrpc Server', $chan->getServer('xmlrpc'));
             $data['data'][] = array('SOAP Server', ($a = $chan->getServer('soap')) ? $a : '(none)');
@@ -328,24 +351,25 @@ List the files in an installed package.
         if (sizeof($params) != 1) {
             return $this->raiseError('No Channel Specified');
         }
-        if (strtolower(trim($params[0])) == 'pear') {
-            return $this->raiseError('Cannot delete the PEAR channel');
-        }
         $reg = new PEAR_Registry($this->config->get('php_dir'));
-        if (!$reg->channelExists($params[0])) {
-            return $this->raiseError('Channel `' . $params[0] . '\' does not exist');
+        if (($channel = $reg->channelName($params[0])) == 'pear.php.net') {
+            return $this->raiseError('Cannot delete the pear.php.net channel');
         }
-        if (PEAR::isError($err = $reg->listPackages($params[0]))) {
+        if (!$reg->channelExists($channel)) {
+            return $this->raiseError('Channel `' . $channel . '\' does not exist');
+        }
+        if (PEAR::isError($err = $reg->listPackages($channel))) {
             return $err;
         }
         if (count($err)) {
-            return $this->raiseError('Channel `' . $params[0] .'\' has installed packages, cannot delete');
+            return $this->raiseError('Channel `' . $channel .
+                '\' has installed packages, cannot delete');
         }
-        if (!$reg->deleteChannel($params[0])) {
+        if (!$reg->deleteChannel($channel)) {
             return $this->raiseError('Channel deletion failed');
         } else {
-            $this->config->deleteChannel($params[0]);
-            $this->ui->outputData('Channel `' . $params[0] . '\' deleted');
+            $this->config->deleteChannel($channel);
+            $this->ui->outputData('Channel `' . $channel . '\' deleted');
         }
     }
 
@@ -471,6 +495,43 @@ List the files in an installed package.
         $this->config->setChannels($reg->listChannels());
         $this->config->writeConfigFile();
         $this->ui->outputData('Update of Channel `' . $channel->getName() . '\' succeeded');
+    }
+
+    function doAlias($command, $options, $params)
+    {
+        $reg = &new PEAR_Registry($this->config->get('php_dir'));
+        if (sizeof($params) == 1) {
+            return $this->raiseError("No channel alias specified");
+        }
+        if (sizeof($params) != 2) {
+            return $this->raiseError(
+                "Invalid format, correct is: channel-alias channel alias");
+        }
+        
+    }
+
+    function doDiscover($command, $options, $params)
+    {
+        $reg = &new PEAR_Registry($this->config->get('php_dir'));
+        if (sizeof($params) != 1) {
+            return $this->raiseError("No channel server specified");
+        }
+        if ($reg->channelExists($params[0])) {
+            if ($reg->isChannelAlias($params[0])) {
+                return $this->raiseError("A Channel alias named \"$params[0]\" " .
+                    'already exists, aliasing channel "' . $reg->channelName($params[0])
+                    . '"');
+            } else {
+                return $this->raiseError("Channel \"$params[0]\" is already initialized");
+            }
+        }
+        $this->pushErrorHandling(PEAR_ERROR_RETURN);
+        $err = $this->doAdd($command, $options, array($params[0] . '/channel.xml'));
+        $this->popErrorHandling();
+        if (PEAR::isError($err)) {
+            return $this->raiseError("Discovery of channel \"$params[0]\" failed");
+        }
+        $this->ui->outputData("Discovery of channel \"$params[0]\" succeeded");
     }
 }
 ?>

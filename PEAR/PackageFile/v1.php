@@ -331,7 +331,7 @@ class PEAR_PackageFile_v1
 
     function getChannel()
     {
-        return 'pear';
+        return 'pear.php.net';
     }
 
     function getArray()
@@ -723,7 +723,7 @@ class PEAR_PackageFile_v1
             }
         }
         if (isset($this->_registry)) {
-            $chan = $this->_registry->getChannel('pear');
+            $chan = $this->_registry->getChannel('pear.php.net');
             $validator = $chan->getValidationObject();
             $validator->setPackageFile($this);
             //$this->_isValid &= $validator->validate();

@@ -337,7 +337,7 @@ class PEAR_PackageFile_Generator_v1
         $arr = array(
             'name' => array(
                 'attribs' => array(
-                        'channel' => 'pear',
+                        'channel' => 'pear.php.net',
                     ),
                 '_content' => $this->_packagefile->getPackage(),
             )
@@ -493,7 +493,7 @@ class PEAR_PackageFile_Generator_v1
         return $ret;
     }
 
-    function _convertDependencies2_0(&$release)
+    function _convertDependencies2_0(&$release, $internal = false)
     {
         $peardep = array('pearinstaller' =>
             array('attribs' =>
@@ -682,9 +682,7 @@ class PEAR_PackageFile_Generator_v1
         if ($dep['type'] != 'php') {
             $php['attribs']['name'] = $dep['name'];
             if ($dep['type'] == 'pkg') {
-                // no way to guess for extensions, so we'll assume they
-                // are NOT pecl
-                $php['attribs']['channel'] = 'pear';
+                $php['attribs']['channel'] = 'pear.php.net';
             }
         }
         switch ($dep['rel']) {

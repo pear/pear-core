@@ -13,7 +13,8 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Authors: Stig Bakken <ssb@php.net>                                   |
+// | Authors: Greg Beaver <cellog@php.net>                                |
+// |          Stig Bakken <ssb@php.net>                                   |
 // |          Tomas V.V.Cox <cox@idecnet.com>                             |
 // |          Martin Jansen <mj@php.net>                                  |
 // +----------------------------------------------------------------------+
@@ -25,6 +26,7 @@ require_once 'PEAR/Registry.php';
 require_once 'PEAR/Dependency.php';
 require_once 'PEAR/Remote.php';
 require_once 'PEAR/PackageFile.php';
+require_once 'PEAR/Downloader/Package.php';
 require_once 'System.php';
 
 
@@ -136,6 +138,11 @@ class PEAR_Downloader extends PEAR_Common
      */
     var $_packageSortTree;
 
+    /**
+     * Temporary directory, or configuration value where downloads will occur
+     * @var string
+     */
+    var $_downloadDir;
     // {{{ PEAR_Downloader()
 
     function PEAR_Downloader(&$ui, $options, &$config)
@@ -170,6 +177,84 @@ class PEAR_Downloader extends PEAR_Common
             }
         }
         parent::PEAR_Common();
+    }
+
+    function discover($channel)
+    {
+        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+        $a = $this->downloadHttp($channel . '/channel.xml', $this->ui, System::mktemp());
+        PEAR::popErrorHandling();
+        if (PEAR::isError($a)) {
+            return false;
+        }
+        include_once 'PEAR/ChannelFile.php';
+        $b = new PEAR_ChannelFile;
+        if ($b->fromXmlFile($a)) {
+            @unlink($a);
+            return true;
+        }
+        @unlink($a);
+        return false;
+    }
+
+    function _download($params)
+    {
+        if (!isset($this->_registry)) {
+            $this->_registry = &$this->config->getRegistry();
+        }
+        if (!isset($this->_remote)) {
+            $this->_remote = &$this->config->getRemote();
+        }
+        // convert all parameters into PEAR_Downloader_Package objects
+        foreach ($params as $i => $param) {
+            $params[$i] = &new PEAR_Downloader_Package($this);
+            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+            $err = $params[$i]->initialize($param);
+            PEAR::popErrorHandling();
+            if (PEAR::isError($err)) {
+                $this->log(0, $err->getMessage());
+                $params[$i] = false;
+            }
+        }
+        PEAR_Downloader_Package::removeDuplicates($params);
+        foreach ($params as $i => $param) {
+            $params[$i]->detectDependencies();
+        }
+        do {
+            $err = PEAR_Downloader_Package::mergeDependencies($params);
+        } while ($err && !PEAR::isError($err));
+        $err = PEAR_Downloader_Package::analyzeDependencies($params);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        $ret = array();
+        foreach ($params as $package) {
+            $pf = &$package->download();
+            $ret[] = array('file' => $pf->getArchiveFile(),
+                                   'info' => &$pf,
+                                   'pkg' => $pf->getPackage());
+        }
+        return $ret;
+    }
+
+    /**
+     * Retrieve the directory that downloads will happen in
+     * @access private
+     * @return string
+     */
+    function getDownloadDir()
+    {
+        if (isset($this->_downloadDir)) {
+            return $this->_downloadDir;
+        }
+        $downloaddir = $this->config->get('download_dir');
+        if (empty($downloaddir)) {
+            if (PEAR::isError($downloaddir = System::mktemp('-d'))) {
+                return $downloaddir;
+            }
+            $this->log(3, '+ tmp dir created at ' . $downloaddir);
+        }
+        return $this->_downloadDir = $downloaddir;
     }
 
     // }}}
@@ -215,7 +300,7 @@ class PEAR_Downloader extends PEAR_Common
         } elseif (!@is_file($pkgfile)) {
             $package = $pkgfile;
             $channel = $this->config->get('default_channel');
-            if (strpos($pkgfile, '::')) {
+            if (strpos($pkgfile, '::')); {
                 list($channel, $package) = explode('::', $pkgfile);
             }
             if (!$this->_registry->channelExists($channel)) {
@@ -233,7 +318,7 @@ class PEAR_Downloader extends PEAR_Common
                     }
                 }
                 $pkgfile = $this->_getPackageDownloadUrl($package, $channel, $version);
-                $pkgfile = $pkgfile[2];
+                $pkgfile = $pkgfile['url'];
                 $need_download = true;
             } else {
                 if (strlen($pkgfile)) {
@@ -292,32 +377,77 @@ class PEAR_Downloader extends PEAR_Common
     // {{{ getPackageDownloadUrl()
 
     /**
-     * @param string package name
-     * @param string channel name
-     * @param string|array version or state to download
+     * @param array output of {@link parsePackageName()}
      * @access private
      */
-    function _getPackageDownloadUrl($package, $channel = false, $version = null)
+    function _getPackageDownloadUrl($parr)
     {
-        $channel = $channel ? $channel : 'pear';
         $curchannel = $this->config->get('default_channel');
-        $this->configSet('default_channel', $channel);
-        if ($version === null) {
-            // tell the thing to retrieve any download in the preferred_state range
-            $version = $this->betterStates($this->config->get('preferred_state'), true);
-        }
+        $this->configSet('default_channel', $parr['channel']);
         // getDownloadURL returns an array.  On error, it only contains information
         // on the latest release as array(version, info).  On success it contains
         // array(version, info, download url string)
-        $url = $this->_remote->call('package.getDownloadURL', $channel, $package, $version);
-        if ($channel != $curchannel) {
+        $url = $this->_remote->call('package.getDownloadURL', $parr,
+            $this->config->get('preferred_state'));
+        if ($parr['channel'] != $curchannel) {
             $this->configSet('default_channel', $curchannel);
         }
-        if (is_array($url) && count($url) == 3) {
-            if (!extension_loaded("zlib")) {
-                $url[2] .= '.tar';
+        if (isset($url['__PEAR_ERROR_CLASS__'])) {
+            return PEAR::raiseError($url['message']);
+        }
+        if (!extension_loaded("zlib")) {
+            $ext = '.tar';
+        } else {
+            $ext = '.tgz';
+        }
+        if (is_array($url)) {
+            if (!isset($url['multiple'])) { // multiple urls returned for a bundle
+                if (count($url) == 3) {
+                    $url['url'] .= $ext;
+                }
             } else {
-                $url[2] .= '.tgz';
+                foreach ($url as $i => $u) {
+                    if (count($u) == 3) {
+                        $url[$i]['url'] .= $ext;
+                    }
+                }
+            }
+        }
+        return $url;
+    }
+    // }}}
+    // {{{ getDepPackageDownloadUrl()
+
+    /**
+     * @param array dependency array
+     * @access private
+     */
+    function _getDepPackageDownloadUrl($dep, $parr)
+    {
+        $xsdversion = isset($dep['rel']) ? '1.0' : '2.0';
+        $curchannel = $this->config->get('default_channel');
+        $this->configSet('default_channel', $parr['channel']);
+        $url = $this->_remote->call('package.getDepDownloadURL', $xsdversion, $dep,
+            $parr, $this->config->get('preferred_state'));
+        if ($parr['channel'] != $curchannel) {
+            $this->configSet('default_channel', $curchannel);
+        }
+        if (is_array($url)) {
+            if (!extension_loaded("zlib")) {
+                $ext = '.tar';
+            } else {
+                $ext = '.tgz';
+            }
+            if (!isset($url['multiple'])) { // multiple urls returned for a bundle
+                if (count($url) == 3) {
+                    $url['url'] .= $ext;
+                }
+            } else {
+                foreach ($url as $i => $u) {
+                    if (count($u) == 3) {
+                        $url[$i]['url'] .= $ext;
+                    }
+                }
             }
         }
         return $url;
@@ -356,11 +486,15 @@ class PEAR_Downloader extends PEAR_Common
         if (@is_file($pkgfile)) {
             return $pkgfile;
         }
-        if (strpos($pkgfile, '::')) {
-            $channel = array_shift(explode('::', $pkgfile));
-        } else {
-            $channel = ($this->_internalDownload) ? 'pear' : $this->config->get('default_channel');
+        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+        $parsed = $this->_registry->parsePackageName($pkgfile);
+        PEAR::popErrorHandling();
+        if (!$parsed) {
+            // this is a url
+            return $pkgfile;
         }
+        $package = $parsed['package'];
+        
         $chan = $this->_registry->getChannel($channel);
         if (!$chan) {
             // regexes defined in Common.php
@@ -429,6 +563,7 @@ class PEAR_Downloader extends PEAR_Common
      */
     function doDownload($packages)
     {
+        return $this->_downloadedPackages = $this->_download($packages);
         if (!isset($this->_registry)) {
             $this->_registry = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
         }
@@ -478,20 +613,19 @@ class PEAR_Downloader extends PEAR_Common
                 return $this->raiseError("Invalid package.xml file");
             }
             $pkg = $test;
-            $gen = $pkg->getDefaultGenerator();
             if ($need_download) {
                 // package was a url, no channel enforcement needed
                 $channel = $pkg->getChannel();
-                $this->_toDownload[] = $channel . '::' . $pkg->getPackage();
+                $this->_toDownload[] = $channel . '/' . $pkg->getPackage();
             } else {
                 $pkgchannel = $pkg->getChannel();
                 $explicit = version_compare($pkg->getPackagexmlVersion(), '2.0', 'ge');
                 if (!is_file($savepkgfile) && (strtolower($pkgchannel) != strtolower($channel))) {
                     if ($explicit) {
-                        $msg = "Downloaded package $pkgchannel::" .
+                        $msg = "Downloaded package $pkgchannel/" .
                             $pkg->getPackage() . " from channel $channel, implicitly a pear package";
                     } else {
-                        $msg = "Downloaded package $pkgchannel::" .
+                        $msg = "Downloaded package $pkgchannel/" .
                             $pkg->getPackage() . " from channel $channel";
                     }
                     if (isset($this->_options['force'])) {
@@ -503,7 +637,7 @@ class PEAR_Downloader extends PEAR_Common
             }
             if (isset($this->_options['alldeps']) || isset($this->_options['onlyreqdeps'])) {
                 $channel = $pkg->getChannel();
-                $mywillinstall[strtolower($channel . '::' . $pkg->getPackage())] = $pkg->getDeps();
+                $mywillinstall[strtolower($channel . '/' . $pkg->getPackage())] = $pkg->getDeps();
             }
             $this->_downloadedPackages[] = array('pkg' => $pkg->getPackage(),
                                        'file' => $pkgfile, 'info' => $pkg);
@@ -564,7 +698,7 @@ class PEAR_Downloader extends PEAR_Common
         if (is_array($pkgfile)) {
             $channel = $pkgfile['channel'];
             $package = $pkgfile['package'];
-            $pkgfile = $pkgfile['channel'] . '::' . $pkgfile['package'];
+            $pkgfile = $pkgfile['channel'] . '/' . $pkgfile['package'];
             $usefulpkgfile = true;
         } else {
             if (!$this->_internalDownload) {
@@ -581,29 +715,30 @@ class PEAR_Downloader extends PEAR_Common
         // ignore packages that are installed unless we are upgrading
         if ($this->_registry->packageExists($package, $channel)
               && empty($this->_options['upgrade']) && empty($this->_options['force'])) {
-            $this->log(0, "Package '$channel::$package' already installed, skipping");
+            $this->log(0, "Package '$channel/$package' already installed, skipping");
             return false;
         }
         $curinfo = $this->_registry->packageInfo($package, null, $channel);
         if (in_array($pkgfile, $this->_toDownload)) {
             return false;
         }
-        $url = $this->_getPackageDownloadUrl($package, $channel, $version);
+        $parsedPname = $this->_registry->parsePackageName("channel://$channel/$package-$version");
+        $url = $this->_getPackageDownloadUrl($parsedPname);
         if (!$url) {
-            return $this->raiseError("No releases found for package '$channel::$package'");
+            return $this->raiseError("No releases found for package '$channel/$package'");
         }
         if (is_array($url) && count($url) == 2) {
             // nothing found, but there is a latest release
             if ($version !== null) {
                 // Passed Foo-1.2
                 if ($this->validPackageVersion($version)) {
-                    $msg = "No release of '$channel::$package' " .
+                    $msg = "No release of '$channel/$package' " .
                           "with version '$version' found, latest release is version " .
-                          "'$url[0]', stability '" . $url[1]['state'] . "'";
+                          "'$url[0]', stability '" . $url['info']['state'] . "'";
                 } elseif (in_array($version, $this->getReleaseStates())) {
-                    $msg = "No release of '$channel::$package' " .
+                    $msg = "No release of '$channel/$package' " .
                           "with state '$version' found, latest release is version " .
-                          "'$url[0]', stability '" . $url[1]['state'] . "'";
+                          "'$url[0]', stability '" . $url['info']['state'] . "'";
                 } else {
                     // invalid suffix passed
                     return $this->raiseError("Invalid suffix '-$version', be sure to pass a valid PEAR ".
@@ -611,37 +746,38 @@ class PEAR_Downloader extends PEAR_Common
                 }
             } else {
                 $ug = !isset($this->_options['force']) ? ' is' : ',';
-                $msg = "No release of '$channel::$package'" .
+                $msg = "No release of '$channel/$package'" .
                        " within preferred_state of '" . $this->config->get('preferred_state') .
-                       "' found, latest release$ug version '" . $url[0] . "', stability '" .
-                       $url[1]['state'] . "'";
+                       "' found, latest release$ug version '" . $url['version'] . "', stability '" .
+                       $url['info']['state'] . "'";
             }
             if (!isset($this->_options['force'])) {
                 return $this->raiseError($msg . ', use --force to install');
             } else {
                 $this->log(0, 'Warning: ' . $msg . ' will be downloaded');
                 // default to downloading the latest package on --force
-                $version = $url[0];
-                $pkgfile = $this->_getPackageDownloadUrl($package, $channel, $url[0]);
-                $this->_toDownload[] = $channel . '::' . $pkgfile[2];
-                return $this->_downloadFile($pkgfile[2], $version, $origpkgfile, $state);
+                $version = $url['version'];
+                $pname = $this->_registry->parsePackageName("channel://$channel/$package-" . $url['version']);
+                $pkgfile = $this->_getPackageDownloadUrl($pname);
+                $this->_toDownload[] = $channel . '/' . $pkgfile['url'];
+                return $this->_downloadFile($pkgfile['url'], $version, $origpkgfile, $state);
             }
         }
         // Check if we haven't already the version
         if (empty($this->_options['force']) && !is_null($curinfo)) {
-            $version = isset($url[0]) ? $url[0] : $version;
+            $version = isset($url['version']) ? $url['version'] : $version;
             if ($curinfo['version'] == $version) {
-                $this->log(0, "Package '$channel::{$curinfo['package']}', version '{$curinfo['version']}' already installed, skipping");
+                $this->log(0, "Package '$channel/{$curinfo['package']}', version '{$curinfo['version']}' already installed, skipping");
                 return false;
             } elseif (version_compare("$version", "{$curinfo['version']}") < 0) {
-                $this->log(0, "Package '$channel::{$curinfo['package']}' version '{$curinfo['version']}' " .
+                $this->log(0, "Package '$channel/{$curinfo['package']}' version '{$curinfo['version']}' " .
                               " is installed and {$curinfo['version']} is > requested '$version', skipping");
                 return false;
             }
         }
-        $this->_toDownload[] = $channel . '::' . $package;
+        $this->_toDownload[] = $channel . '/' . $package;
             
-        return $this->_downloadFile($url[2], $version, $origpkgfile, $state);
+        return $this->_downloadFile($url['url'], $version, $origpkgfile, $state);
     }
 
     // }}}
@@ -649,7 +785,7 @@ class PEAR_Downloader extends PEAR_Common
 
     /**
      * Process a dependency, download if necessary
-     * @param package name
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
      * @param array dependency information from PEAR_Remote call
      * @param array packages that will be installed in this iteration
      * @return false|string|PEAR_Error
@@ -657,17 +793,17 @@ class PEAR_Downloader extends PEAR_Common
      * @todo Add test for relation 'lt'/'le' -> make sure that the dependency requested is
      *       in fact lower than the required value.  This will be very important for BC dependencies
      */
-    function _processDependency($package, $info, $mywillinstall)
+    function _processDependency($pkg, $info, $mywillinstall)
     {
-        $channel = explode('::', $package);
-        $package = $channel[1];
-        $channel = $channel[0];
+        $channel = $pkg->getChannel();
+        $package = $pkg->getPackage();
         $state = $this->_preferredState;
         $depchannel = isset($info['channel']) ? $info['channel'] : 'pear';
         if (!isset($this->_options['alldeps']) && isset($info['optional']) &&
               $info['optional'] == 'yes') {
             // skip optional deps
-            $this->log(0, "skipping Package '$channel::$package' optional dependency '$depchannel::$info[name]'");
+            $this->log(0, "skipping Package '$channel/$package' optional dependency" .
+                " '$depchannel/$info[name]'");
             return false;
         }
         // {{{ get releases
@@ -675,15 +811,20 @@ class PEAR_Downloader extends PEAR_Common
         if ($channel != $curchannel) {
             $this->configSet('default_channel', $depchannel);
         }
-        $releases = $this->_remote->call('package.info', $info['name'], 'releases', true);
+        $downloadURL = $this->_remote->call('package.getDepDownloadURL',
+            $pkg->getPackagexmlVersion(), $info,
+            $this->config->get('preferred_state'));
+        $releases = $this->_remote->call('package.info', $info['name'],
+            'releases', true);
         $this->configSet('default_channel', $curchannel);
         if (PEAR::isError($releases)) {
             return $releases;
         }
         if (!count($releases)) {
-            if (!isset($this->_installed[strtolower($depchannel)][strtolower($info['name'])])) {
-                $this->pushError("Package '$channel::$package' dependency '$depchannel::$info[name]' ".
-                            "has no releases");
+            if (!isset($this->_installed[strtolower($depchannel)]
+                  [strtolower($info['name'])])) {
+                $this->pushError("Package '$channel/$package' dependency '" .
+                    "$depchannel::$info[name]' has no releases");
             }
             return false;
         }
@@ -711,22 +852,22 @@ class PEAR_Downloader extends PEAR_Common
                     $this->betterStates($release['state'], true));
             }
             $savestate = array_shift($get);
-            $this->pushError( "Release for '$channel::$package' dependency '$depchannel::$info[name]' " .
+            $this->pushError( "Release for '$channel/$package' dependency '$depchannel/$info[name]' " .
                 "has state '$savestate', requires '$state'");
             return false;
         }
-        if (in_array(strtolower($depchannel . '::' . $info['name']), $this->_toDownload) ||
-              isset($mywillinstall[strtolower($depchannel . '::' . $info['name'])])) {
+        if (in_array(strtolower($depchannel . '/' . $info['name']), $this->_toDownload) ||
+              isset($mywillinstall[strtolower($depchannel . '/' . $info['name'])])) {
             // skip upgrade check for packages we will install
             return false;
         }
         if (!isset($this->_installed[$depchannel][strtolower($info['name'])])) {
             // check to see if we can install the specific version required
             if ($info['rel'] == 'eq') {
-                return $depchannel . '::' . $info['name'] . '-' . $info['version'];
+                return $depchannel . '/' . $info['name'] . '-' . $info['version'];
             }
             // skip upgrade check for packages we don't have installed
-            return $depchannel . '::' . $info['name'];
+            return $depchannel . '/' . $info['name'];
         }
         // }}}
 
@@ -737,14 +878,14 @@ class PEAR_Downloader extends PEAR_Common
             if (version_compare($release_version, $inst_version, 'le')) {
                 return false;
             } else {
-                return $depchannel . '::' . $info['name'];
+                return $depchannel . '/' . $info['name'];
             }
         }
         if (version_compare($info['version'], $inst_version, 'le')) {
             // installed version is up-to-date
             return false;
         }
-        return $depchannel . '::' . $info['name'];
+        return $depchannel . '/' . $info['name'];
     }
 
     // }}}
@@ -852,8 +993,8 @@ class PEAR_Downloader extends PEAR_Common
         $newret = array();
         foreach($ret as $i => $p) {
             $channel = $p['info']->getChannel();
-            if (!isset($checkdupes[$channel . '::' . $p['info']->getPackage()])) {
-                $checkdupes[$channel . '::' . $p['info']->getPackage()][] = $i;
+            if (!isset($checkdupes[$channel . '/' . $p['info']->getPackage()])) {
+                $checkdupes[$channel . '/' . $p['info']->getPackage()][] = $i;
                 $newret[] = $p;
             }
         }
@@ -882,8 +1023,8 @@ class PEAR_Downloader extends PEAR_Common
     {
         $c1 = $p1['info']->getChannel();
         $c2 = $p2['info']->getChannel();
-        $p1name = $c1 . '::' . $p1['info']->getPackage();
-        $p2name = $c2 . '::' . $p2['info']->getPackage();
+        $p1name = $c1 . '/' . $p1['info']->getPackage();
+        $p2name = $c2 . '/' . $p2['info']->getPackage();
         $p1deps = $this->_getPkgDeps($p1);
         $p2deps = $this->_getPkgDeps($p2);
         if (!count($p1deps) && !count($p2deps)) {
@@ -929,8 +1070,8 @@ class PEAR_Downloader extends PEAR_Common
     {
         $c1 = $p1['info']->getChannel();
         $c2 = $p2['info']->getChannel();
-        $p1name = $c1 . '::' . $p1['info']->getPackage();
-        $p2name = $c2 . '::' . $p2['info']->getPackage();
+        $p1name = $c1 . '/' . $p1['info']->getPackage();
+        $p2name = $c2 . '/' . $p2['info']->getPackage();
         $p1deps = $this->_getRevPkgDeps($p1);
         $p2deps = $this->_getRevPkgDeps($p2);
         if (!count($p1deps) && !count($p2deps)) {
@@ -981,7 +1122,7 @@ class PEAR_Downloader extends PEAR_Common
         foreach($rel['deps'] as $dep) {
             if ($dep['type'] == 'pkg') {
                 $channel = isset($dep['channel']) ? $dep['channel'] : 'pear';
-                $ret[] = $channel . '::' . $dep['name'];
+                $ret[] = $channel . '/' . $dep['name'];
             }
         }
         return $ret;
@@ -1000,7 +1141,7 @@ class PEAR_Downloader extends PEAR_Common
         $tree = array();
         foreach ($packages as $p) {
             $channel = $p['info']->getChannel();
-            $package = $channel . '::' . $p['info']->getPackage();
+            $package = $channel . '/' . $p['info']->getPackage();
             $deps = $this->_getPkgDeps($p);
             $tree[$package] = $deps;
         }
@@ -1051,7 +1192,7 @@ class PEAR_Downloader extends PEAR_Common
         foreach($deps as $dep) {
             if ($dep['type'] == 'pkg') {
                 $channel = isset($dep['channel']) ? $dep['channel'] : 'pear';
-                $ret[] = $channel . '::' . $dep['name'];
+                $ret[] = $channel . '/' . $dep['name'];
             }
         }
         return $ret;

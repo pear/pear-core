@@ -92,6 +92,10 @@ class PEAR_Registry extends PEAR
      */
     var $filemap_cache = array();
 
+    /**
+     * @var false|PEAR_ChannelFile
+     */
+    var $_pearChannel;
     // }}}
 
     // {{{ constructor
@@ -115,7 +119,17 @@ class PEAR_Registry extends PEAR
         $this->statedir = $pear_install_dir.$ds.'.registry';
         $this->filemap  = $pear_install_dir.$ds.'.filemap';
         $this->lockfile = $pear_install_dir.$ds.'.lock';
+        $this->_pearChannel = $pear_channel;
+    }
 
+    function _initializeDirs()
+    {
+        static $called = false;
+        if ($called) {
+            return;
+        }
+        $ds = DIRECTORY_SEPARATOR;
+        $called = true;
         // XXX Compatibility code should be removed in the future
         // rename all registry files if any to lowercase
         if (!OS_WINDOWS && $handle = @opendir($this->statedir)) {
@@ -128,16 +142,19 @@ class PEAR_Registry extends PEAR
             closedir($handle);
         }
         if (!is_dir($this->channelsdir) ||
-              !file_exists($this->channelsdir . $ds . 'pear.reg')) {
+              !file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
+            $pear_channel = $this->_pearChannel;
             if (!is_a($pear_channel, 'PEAR_ChannelFile') || !$pear_channel->validate()) {
                 include_once 'PEAR/ChannelFile.php';
                 $pear_channel = new PEAR_ChannelFile;
-                $pear_channel->setName('pear');
+                $pear_channel->setName('pear.php.net');
+                $pear_channel->setAlias('pear');
                 $pear_channel->setServer('pear.php.net');
                 $pear_channel->setSummary('PHP Extension and Application Repository');
                 $pear_channel->setDefaultPEARProtocols();
             } else {
-                $pear_channel->setName('pear');
+                $pear_channel->setName('pear.php.net');
+                $pear_channel->setAlias('pear');
             }
             $pear_channel->validate();
             $this->addChannel($pear_channel);
@@ -146,7 +163,6 @@ class PEAR_Registry extends PEAR
             $this->rebuildFileMap();
         }
     }
-
     // }}}
     // {{{ destructor
 
@@ -177,7 +193,7 @@ class PEAR_Registry extends PEAR
      */
     function _assertStateDir($channel = false)
     {
-        if ($channel && strtolower($channel) != 'pear') {
+        if ($channel && $this->_getChannelFromAlias($channel) != 'pear.php.net') {
             return $this->_assertChannelStateDir($channel);
         }
         if (!@is_dir($this->statedir)) {
@@ -202,7 +218,7 @@ class PEAR_Registry extends PEAR
      */
     function _assertChannelStateDir($channel)
     {
-        if (!$channel || $channel == 'pear') {
+        if (!$channel || $this->_getChannelFromAlias($channel) == 'pear.php.net') {
             return $this->_assertStateDir($channel);
         }
         $channel = strtolower($channel);
@@ -233,6 +249,11 @@ class PEAR_Registry extends PEAR
                 return $this->raiseError("could not create directory '{$this->channelsdir}'");
             }
         }
+        if (!@is_dir($this->channelsdir . DIRECTORY_SEPARATOR . '.alias')) {
+            if (!System::mkdir(array('-p', $this->channelsdir . DIRECTORY_SEPARATOR . '.alias'))) {
+                return $this->raiseError("could not create directory '{$this->channelsdir}/.alias'");
+            }
+        }
         return true;
     }
 
@@ -251,14 +272,14 @@ class PEAR_Registry extends PEAR
      */
     function _packageFileName($package, $channel = false)
     {
-        if ($channel && strtolower($channel) != 'pear') {
+        if ($channel && $this->_getChannelFromAlias($channel) != 'pear.php.net') {
             $package = '.channel.' . strtolower($channel) . DIRECTORY_SEPARATOR . $package;
         }
         return $this->statedir . DIRECTORY_SEPARATOR . strtolower($package) . '.reg';
     }
 
     // }}}
-    // {{{ _packageFileName()
+    // {{{ _channelFileName()
 
     /**
      * Get the name of the file where data for a given channel is stored.
@@ -270,12 +291,55 @@ class PEAR_Registry extends PEAR
      */
     function _channelFileName($channel)
     {
+        $this->_initializeDirs();
         if (!$channel) {
-            $channel = 'pear';
+            $channel = 'pear.php.net';
+        }
+        if (file_exists($this->channelsdir . DIRECTORY_SEPARATOR . '.alias' .
+              DIRECTORY_SEPARATOR . strtolower($channel) . '.txt')) {
+            // translate an alias to an actual channel
+            $channel = implode('', file($this->channelsdir . DIRECTORY_SEPARATOR . '.alias' .
+                DIRECTORY_SEPARATOR . strtolower($channel) . '.txt'));
         }
         return $this->channelsdir . DIRECTORY_SEPARATOR . strtolower($channel) . '.reg';
     }
 
+    // }}}
+    // {{{ getChannelAliasFileName()
+
+    /**
+     * @param string
+     * @return string
+     */
+    function _getChannelAliasFileName($alias)
+    {
+        return $this->channelsdir . DIRECTORY_SEPARATOR . '.alias' .
+              DIRECTORY_SEPARATOR . strtolower($alias) . '.txt';
+    }
+
+    // }}}
+    // {{{ _getChannelFromAlias()
+
+    /**
+     * Get the name of a channel from its alias
+     */
+    function _getChannelFromAlias($channel)
+    {
+        $this->_initializeDirs();
+        if (!$this->_channelExists($channel)) {
+            if ($channel == 'pear.php.net') {
+                return 'pear.php.net';
+            }
+            return false;
+        }
+        $channel = strtolower($channel);
+        if (file_exists($this->_getChannelAliasFileName($channel))) {
+            // translate an alias to an actual channel
+            return implode('', file($this->_getChannelAliasFileName($channel)));
+        } else {
+            return $channel;
+        }
+    }    
     // }}}
     // {{{ _channelDirectoryName()
 
@@ -291,7 +355,7 @@ class PEAR_Registry extends PEAR
      */
     function _channelDirectoryName($channel)
     {
-        if (!$channel || strtolower($channel) == 'pear') {
+        if (!$channel || $this->_getChannelFromAlias($channel) == 'pear.php.net') {
             return $this->statedir;
         } else {
             return $this->statedir . DIRECTORY_SEPARATOR . strtolower('.channel.' . $channel);
@@ -303,6 +367,7 @@ class PEAR_Registry extends PEAR
 
     function _openPackageFile($package, $mode, $channel = false)
     {
+        $this->_initializeDirs();
         $this->_assertStateDir($channel);
         $file = $this->_packageFileName($package, $channel);
         $fp = @fopen($file, $mode);
@@ -325,6 +390,7 @@ class PEAR_Registry extends PEAR
 
     function _openChannelFile($channel, $mode)
     {
+        $this->_initializeDirs();
         $this->_assertChannelDir();
         $file = $this->_channelFileName($channel);
         $fp = @fopen($file, $mode);
@@ -372,7 +438,7 @@ class PEAR_Registry extends PEAR
                         $file = $name;
                     }
                     $file = preg_replace(',^/+,', '', $file);
-                    if ($channel != 'pear') {
+                    if ($channel != 'pear.php.net') {
                         $files[$file] = array(strtolower($channel), $package);
                     } else {
                         $files[$file] = $package;
@@ -396,6 +462,7 @@ class PEAR_Registry extends PEAR
 
     function readFileMap()
     {
+        $this->_initializeDirs();
         $fp = @fopen($this->filemap, 'r');
         if (!$fp) {
             return $this->raiseError('PEAR_Registry: could not open filemap', PEAR_REGISTRY_ERROR_FILE, null, null, $php_errormsg);
@@ -496,7 +563,23 @@ class PEAR_Registry extends PEAR
      */
     function _channelExists($channel)
     {
-        return file_exists($this->_channelFileName($channel));
+        $this->_initializeDirs();
+        return file_exists($this->_getChannelAliasFileName($channel)) ||
+            file_exists($this->_channelFileName($channel));
+    }
+
+    // }}}
+    // {{{ _isChannelAlias()
+
+    /**
+     * Determine whether a channel exists in the registry
+     * @param string Channel Alias
+     * @return boolean
+     */
+    function _isChannelAlias($alias)
+    {
+        $this->_initializeDirs();
+        return file_exists($this->_getChannelAliasFileName($alias));
     }
 
     // }}}
@@ -577,10 +660,11 @@ class PEAR_Registry extends PEAR
 
     function _listChannels()
     {
+        $this->_initializeDirs();
         $channellist = array();
         $dp = @opendir($this->channelsdir);
         if (!$dp) {
-            return array('pear');
+            return array('pear.php.net');
         }
         while ($ent = readdir($dp)) {
             if ($ent{0} == '.' || substr($ent, -4) != '.reg') {
@@ -597,9 +681,10 @@ class PEAR_Registry extends PEAR
 
     function _listPackages($channel = false)
     {
-        if ($channel && strtolower($channel) != 'pear') {
+        if ($channel && $this->_getChannelFromAlias($channel) != 'pear.php.net') {
             return $this->_listChannelPackages($channel);
         }
+        $this->_initializeDirs();
         $pkglist = array();
         $dp = @opendir($this->statedir);
         if (!$dp) {
@@ -620,6 +705,7 @@ class PEAR_Registry extends PEAR
 
     function _listChannelPackages($channel)
     {
+        $this->_initializeDirs();
         $pkglist = array();
         $dp = @opendir($this->statedir . DIRECTORY_SEPARATOR . '.channel.' . strtolower($channel));
         if (!$dp) {
@@ -673,6 +759,20 @@ class PEAR_Registry extends PEAR
     }
 
     // }}}
+
+    // {{{ isAlias()
+
+    function isAlias($alias)
+    {
+        if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
+            return $e;
+        }
+        $ret = $this->_isChannelAlias($alias);
+        $this->_unlock();
+        return $ret;
+    }
+
+    // }}}
     // {{{ packageInfo()
 
     function packageInfo($package = null, $key = null, $channel = false)
@@ -694,6 +794,19 @@ class PEAR_Registry extends PEAR
             return $e;
         }
         $ret = $this->_channelInfo($channel, $key);
+        $this->_unlock();
+        return $ret;
+    }
+
+    // }}}
+    // {{{ packageInfo()
+
+    function channelName($channel = null)
+    {
+        if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
+            return $e;
+        }
+        $ret = $this->_getChannelFromAlias($channel);
         $this->_unlock();
         return $ret;
     }
@@ -850,11 +963,11 @@ class PEAR_Registry extends PEAR
                 return false;
             }
         }
-        if (!$channel) {
-            $channel = 'pear';
+        if (!$channel || $this->_getChannelFromAlias($channel) == 'pear.php.net') {
+            return false;
         }
-        $channel = strtolower($channel);
-        if ($channel == 'pear') {
+        $channel = $this->_getChannelFromAlias($channel);
+        if ($channel == 'pear.php.net') {
             return false;
         }
         if (!$this->channelExists($channel)) {
@@ -915,6 +1028,19 @@ class PEAR_Registry extends PEAR
         if (PEAR::isError($ret)) {
             $this->_unlock();
             return $ret;
+        }
+        if ($channel->getAlias() != $channel->getName()) {
+            if (file_exists($this->_getChannelAliasFileName($channel->getAlias())) &&
+                  $this->channelName($channel->getAlias()) != $channel->getName()) {
+                $channel->setAlias($channel->getName());
+            }
+            $fp = @fopen($this->_getChannelAliasFileName($channel->getAlias()), 'w');
+            if (!$fp) {
+                $this->_unlock();
+                return false;
+            }
+            fwrite($fp, $channel->getName());
+            fclose($fp);
         }
         $fp = @fopen($this->_channelFileName($channel->getName()), 'wb');
         if (!$fp) {
@@ -992,13 +1118,13 @@ class PEAR_Registry extends PEAR
                     }
                 }
                 if (!$channel) {
-                    $channel = 'pear';
+                    $channel = 'pear.php.net';
                 }
                 require_once 'PEAR/ErrorStack.php';
                 $text = implode(', ', array_unique($text));
                     PEAR_ErrorStack::staticPush('PEAR_Registry', PEAR_REGISTRY_ERROR_CONFLICT,
                         'error', array('package' => $package, 'conflicts' => $conflictarr),
-                        "package $channel::$package has files that conflict with installed packages $text");
+                        "package $channel/$package has files that conflict with installed packages $text");
                     $this->_closePackageFile($fp);
                     return false;
                 }
@@ -1057,16 +1183,16 @@ class PEAR_Registry extends PEAR
                 $text = array();
                 foreach ($conflictarr as $item) {
                     if (is_array($item)) {
-                        $text[] = $item[1] . '::' . $item[0];
+                        $text[] = $item[1] . '/' . $item[0];
                     } else {
-                        $text[] = "pear::$item";
+                        $text[] = "pear.php.net/$item";
                     }
                 }
                 require_once 'PEAR/ErrorStack.php';
                 $text = implode(', ', array_unique($text));
                     PEAR_ErrorStack::staticPush('PEAR_Registry', PEAR_REGISTRY_ERROR_CONFLICT,
                         'error', array('package' => $package, 'conflicts' => $conflictarr),
-                        "package $channel::$package has files that conflict with installed packages $text");
+                        "package $channel/$package has files that conflict with installed packages $text");
                     $this->_closePackageFile($fp);
                     return false;
                 }
@@ -1096,10 +1222,11 @@ class PEAR_Registry extends PEAR
         if ($ch) {
             return $ch;
         }
-        if (strtolower($channel) == 'pear') {
+        if ($this->_getChannelFromAlias($channel) == 'pear.php.net') {
             // the registry is not properly set up, so use defaults
             $pear_channel = new PEAR_ChannelFile;
-            $pear_channel->setName('pear');
+            $pear_channel->setName('pear.php.net');
+            $pear_channel->setAlias('pear');
             $pear_channel->setServer('pear.php.net');
             $pear_channel->setSummary('PHP Extension and Application Repository');
             $pear_channel->setDefaultPEARProtocols();
@@ -1115,7 +1242,7 @@ class PEAR_Registry extends PEAR
      * @param string channel name
      * @return PEAR_PackageFile_v1|PEAR_PackageFile_v2|null
      */
-    function &getPackage($package, $channel = 'pear')
+    function &getPackage($package, $channel = 'pear.php.net')
     {
         if (!class_exists('PEAR_PackageFile')) {
             include_once 'PEAR/PackageFile.php';
@@ -1231,6 +1358,178 @@ class PEAR_Registry extends PEAR
     }
     // }}}
 
+
+    /**
+     * Parse a package name, or validate a parsed package name array
+     * @param string|array pass in an array of format
+     *                     array(
+     *                      'package' => 'pname',
+     *                     ['channel' => 'channame',]
+     *                     ['version' => 'version',]
+     *                     ['state' => 'state',]
+     *                     ['group' => 'groupname'])
+     *                     or a string of format
+     *                     [channel://][channame/]pname[-version|-state][/group=groupname]
+     * @return array|PEAR_Error
+     */
+    function parsePackageName($param, $defaultchannel = 'pear.php.net')
+    {
+        $saveparam = $param;
+        if (is_array($param)) {
+            // convert to string for error messages
+            $saveparam = '';
+            if (isset($param['channel'])) {
+                $saveparam = $param['channel'] . '/';
+            }
+            $saveparam .= $param['package'];
+            if (isset($param['state']) || isset($param['version'])) {
+                $saveparam .= '-'. (isset($param['state']) ? $param['state'] :
+                    $param['version']);
+            }
+            if (isset($param['group'])) {
+                $saveparam .= '#' . $param['group'];
+            }
+            // process the array
+            if (!isset($param['package'])) {
+                return PEAR::raiseError('parsePackageName(): array $param ' .
+                    'must contain a valid package name in index "param"',
+                    'package', null, null, $param);
+            }
+            if (!isset($param['channel'])) {
+                $param['channel'] = $defaultchannel;
+            }
+        } else {
+            $components = parse_url($param);
+            if (isset($components['scheme']) && $components['scheme'] != 'channel') {
+                return false;
+            }
+            if (!isset($components['path'])) {
+                return PEAR::raiseError('parsePackageName(): array $param ' .
+                    'must contain a valid package name in "' . $param . '"',
+                    'package', null, null, $param);
+            }
+            if (!isset($components['scheme'])) {
+                if (strpos($components['path'], '/')) {
+                    $parts = explode('/', $components['path']);
+                    $components['host'] = array_shift($parts);
+                    $components['path'] = implode('/', $parts);
+                } else {
+                    $components['host'] = $defaultchannel;
+                }
+            }
+            $param = array(
+                'package' => $components['path']
+                );
+            if (isset($components['host'])) {
+                $param['channel'] = $components['host'];
+            }
+            if (isset($components['user'])) {
+                $param['user'] = $components['user'];
+            }
+            if (isset($components['pass'])) {
+                $param['pass'] = $components['pass'];
+            }
+            if (isset($components['query'])) {
+                parse_str($components['query'], $param['opts']);
+            }
+            // check for extension
+            $pathinfo = pathinfo($param['package']);
+            if (isset($pathinfo['extension'])) {
+                $param['extension'] = $pathinfo['extension'];
+                $param['package'] = $pathinfo['basename'];
+            }
+            // check for version
+            if (strpos($param['package'], '-')) {
+                $test = explode('-', $param['package']);
+                if (count($test) != 2) {
+                    return PEAR::raiseError('parsePackageName(): only one version/state ' .
+                        'delimiter "-" is allowed in "' . $saveparam . '"',
+                        'version', null, null, $param);
+                }
+                list($param['package'], $param['version']) = $test;
+            }
+        }
+        // validation
+        if (!$this->channelExists($param['channel'])) {
+            return PEAR::raiseError('unknown channel "' . $param['channel'] .
+                '" in "' . $saveparam . '"', 'channel', null, null, $param);
+        }
+        $chan = $this->getChannel($param['channel']);
+        if (!$chan) {
+            return PEAR::raiseError("Exception: corrupt registry, could not " .
+                "retrieve channel " . $param['channel'] . " information",
+                'registry', null, null, $param);
+        }
+        $validate = $chan->getValidationObject();
+        // validate package name
+        if (!$validate->validPackageName($param['package'])) {
+            return PEAR::raiseError('parsePackageName(): invalid package name "' .
+                $param['package'] . '" in "' . $saveparam . '"',
+                'package', null, null, $param);
+        }
+        if (isset($param['state'])) {
+            if (!in_array(strtolower($param['state']), $validate->getValidStates())) {
+                return PEAR::raiseError('parsePackageName(): state "' . $param['state']
+                    . '" is not a valid state in "' . $saveparam . '"',
+                    'state', null, null, $param);
+            }
+        }
+        if (isset($param['version'])) {
+            if (isset($param['state'])) {
+                return PEAR::raiseError('parsePackageName(): cannot contain both ' .
+                    'a version and a stability (state)',
+                    'version/state', null, null, $param);
+            }
+            // check whether version is actually a state
+            if (in_array(strtolower($param['version']), $validate->getValidStates())) {
+                $param['state'] = strtolower($param['version']);
+                unset($param['version']);
+            } else {
+                if (!$validate->validVersion($param['version'])) {
+                    return PEAR::raiseError('parsePackageName(): content after ' .
+                        'version/state delimiter "-" "' . $param['version'] .
+                        '" is neither a valid version nor a valid state in "' .
+                        $saveparam . '"', 'version/state', null, null, $param);
+                }                    
+            }
+        }
+        return $param;
+    }
+
+    function parsedPackageNameToString($parsed)
+    {
+        if (is_object($parsed)) {
+            $p = $parsed;
+            $parsed = array(
+                'package' => $p->getPackage(),
+                'channel' => $p->getChannel(),
+                'version' => $p->getVersion(),
+            );
+        }
+        $upass = '';
+        if (isset($parsed['user'])) {
+            $upass = $parsed['user'];
+            if (isset($parsed['pass'])) {
+                $upass .= ':' . $parsed['pass'];
+            }
+            $upass = "$upass@";
+        }
+        $ret = 'channel://' . $upass . $parsed['channel'] . '/' . $parsed['package'];
+        if (isset($parsed['version']) || isset($parsed['state'])) {
+            $ret .= '-' . @$parsed['version'] . @$parsed['state'];
+        }
+        if (isset($parsed['extension'])) {
+            $ret .= '.' . $parsed['extension'];
+        }
+        if (isset($parsed['opts'])) {
+            $ret .= '?';
+            foreach ($parsed['opts'] as $name => $value) {
+                $parsed['opts'][$name] = "$name=$value";
+            }
+            $ret .= implode('&', $parsed['opts']);
+        }
+        return $ret;
+    }
 }
 
 ?>

@@ -18,6 +18,7 @@
 //
 // $Id$
 require_once 'Archive/Tar.php';
+require_once 'PEAR/Dependency2.php';
 /**
  * Coordinates download parameters and manages their dependencies
  * prior to downloading them.
@@ -101,6 +102,27 @@ class PEAR_Downloader_Package
         }
     }
 
+    function &download()
+    {
+        if (isset($this->_packagefile)) {
+            return $this->_packagefile;
+        }
+        if (isset($this->_downloadURL['url'])) {
+            $this->_isvalid = false;
+            $err = $this->_fromUrl($this->_downloadURL['url'],
+                $this->_registry->parsedPackageNameToString($this->_parsedname));
+            if (PEAR::isError($err) || !$this->_valid) {
+                return $err;
+            }
+        }
+        return $this->_packagefile;
+    }
+
+    function &getPackageFile()
+    {
+        return $this->_packagefile;
+    }
+
     function fromDepURL($dep)
     {
         $this->_downloadURL = $dep;
@@ -136,7 +158,8 @@ class PEAR_Downloader_Package
                 }
             }
             // get optional dependency group, if any
-            if ($groupname = $this->getGroup()) {
+            $groupname = $this->getGroup();
+            if ($groupname) {
                 if (isset($deps['group'])) {
                     if (isset($deps['group']['attribs'])) {
                         if (isset($deps['group']['package'])) {
@@ -176,52 +199,6 @@ class PEAR_Downloader_Package
                 }
                 if ($dep['type'] == 'ext') {
                     
-                }
-            }
-        }
-    }
-
-    /**
-     * @param array all packages to be installed
-     */
-    function analyzeDependencies($params)
-    {
-        foreach ($this->_downloadDeps as $rel) {
-            if (isset($rel['multiple'])) {
-                foreach ($rel['multiple'] as $bundlepackage) {
-                    PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                    $analyzed = $this->_analyzeDownloadURL($bundlepackage,
-                        $this->_registry->parsedPackageNameToString($pname), $pname, $params);
-                    PEAR::popErrorHandling();
-                    if (PEAR::isError($analyzed)) {
-                        if ($this->_isRequired($bundlepackage)) {
-                            $this->_downloader->log(0, $analyzed->getMessage());
-                            if (!isset($this->_downloader->_options['force'])) {
-                                return PEAR::raiseError('Cannot install package "' .
-                                    $this->_registry->parsedPackageNameToString($pname) .
-                                    '", dependency "' .
-                                    $this->_registry->parsedPackageNameToString($bundlepackage) .
-                                    '" failed');
-                            }
-                        }
-                    }
-                }
-            } else {
-                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                $analyzed = $this->_analyzeDownloadURL($rel,
-                    $this->_registry->parsedPackageNameToString($pname), $pname, $params);
-                PEAR::popErrorHandling();
-                if (PEAR::isError($analyzed)) {
-                    if ($this->_isRequired($rel)) {
-                        $this->_downloader->log(0, $analyzed->getMessage());
-                        if (!isset($this->_downloader->_options['force'])) {
-                            return PEAR::raiseError('Cannot install package "' .
-                                $this->_registry->parsedPackageNameToString($pname) .
-                                '", dependency "' .
-                                $this->_registry->parsedPackageNameToString($dep) .
-                                '" failed');
-                        }
-                    }
                 }
             }
         }
@@ -305,9 +282,108 @@ class PEAR_Downloader_Package
     {
         $package = isset($param['package']) ? $param['package'] : $param['info']['package'];
         $channel = isset($param['channel']) ? $param['channel'] : $param['info']['channel'];
-        return ($package == $this->getPackage() &&
-            $channel == $this->getChannel() &&
-            $param['version'] == $this->getVersion());
+        if (isset($param['version'])) {
+            return ($package == $this->getPackage() &&
+                $channel == $this->getChannel() &&
+                $param['version'] == $this->getVersion());
+        } else {
+            return $package == $this->getPackage() &&
+                $channel == $this->getChannel();
+        }
+    }
+
+    function isInstalled($dep)
+    {
+        if ($this->_registry->packageExists($dep['info']['package'], $dep['info']['channel'])) {
+            if ($this->_registry->packageInfo($dep['info']['package'], 'version',
+                  $dep['info']['channel'])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param array all packages to be installed
+     * @static
+     */
+    function analyzeDependencies($params)
+    {
+        foreach ($params as $param) {
+            $deps = $param->getDeps();
+            if (count($deps)) {
+                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                $failed = false;
+                $depchecker = &new PEAR_Dependency2($param->_config,
+                    $param->_downloader->_options, PEAR_VALIDATE_DOWNLOADING);
+                if (isset($deps['required']) && isset($deps['optional']) &&
+                      isset($deps['group'])) {
+                    if (isset($deps['required'])) {
+                        foreach ($deps['required'] as $type => $dep) {
+                            if (isset($dep['attribs'])) {
+                                if (PEAR::isError($e =
+                                      $depchecker->{"validate{$type}Dependency"}($dep,
+                                      true, $params))) {
+                                    $failed = true;
+                                    $param->_downloader->log(0, $e->getMessage());
+                                } elseif (is_array($e)) {
+                                    $param->_downloader->log(0, $e[0]);
+                                }
+                            } else {
+                                foreach ($dep as $d) {
+                                    if (PEAR::isError($e =
+                                          $depchecker->{"validate{$type}Dependency"}($d,
+                                          true, $params))) {
+                                        $failed = true;
+                                        $param->_downloader->log(0, $e->getMessage());
+                                    } elseif (is_array($e)) {
+                                        $param->_downloader->log(0, $e[0]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (isset($deps['optional'])) {
+                        foreach ($deps['optional'] as $type => $dep) {
+                            if (isset($dep['attribs'])) {
+                                if (PEAR::isError($e =
+                                      $depchecker->{"validate{$type}Dependency"}($dep,
+                                      false, $params))) {
+                                    $failed = true;
+                                    $param->_downloader->log(0, $e->getMessage());
+                                } elseif (is_array($e)) {
+                                    $param->_downloader->log(0, $e[0]);
+                                }
+                            } else {
+                                foreach ($dep as $d) {
+                                    if (PEAR::isError($e =
+                                          $depchecker->{"validate{$type}Dependency"}($d,
+                                          false, $params))) {
+                                        $failed = true;
+                                        $param->_downloader->log(0, $e->getMessage());
+                                    } elseif (is_array($e)) {
+                                        $param->_downloader->log(0, $e[0]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    foreach ($deps as $dep) {
+                        if (PEAR::isError($e = $depchecker->validateDependency1($dep, $params))) {
+                            $failed = true;
+                            $param->_downloader->log(0, $e->getMessage());
+                        } elseif (is_array($e)) {
+                            $param->_downloader->log(0, $e[0]);
+                        }
+                    }
+                }
+                PEAR::popErrorHandling();
+                if ($failed) {
+                    return PEAR::raiseError("Cannot install, dependencies failed");
+                }
+            }
+        }
     }
 
     /**
@@ -347,7 +423,8 @@ class PEAR_Downloader_Package
         foreach ($params as $i => $param) {
             $newdeps = array();
             foreach ($param->_downloadDeps as $dep) {
-                if (!PEAR_Downloader_Package::willDownload($dep, array_merge($params, $newparams))) {
+                if (!PEAR_Downloader_Package::willDownload($dep,
+                      array_merge($params, $newparams)) && !$param->isInstalled($dep)) {
                     $newdeps[] = $dep;
                 } else {
                     // detect versioning conflicts here
@@ -360,11 +437,12 @@ class PEAR_Downloader_Package
                 $obj = &new PEAR_Downloader_Package($params[$i]->_downloader);
                 $obj->fromDepURL($dep);
                 $obj->detectDependencies();
-                $newparams[] = &$obj;
+                $j = &$obj;
+                $newparams[] = &$j;
             }
         }
         if (count($newparams)) {
-            foreach ($newparams as $i => $obj) {
+            foreach ($newparams as $i => $unused) {
                 $params[] = &$newparams[$i];
             }
             return true;
@@ -418,10 +496,11 @@ class PEAR_Downloader_Package
     {
         if (!is_array($param) &&
               (preg_match('#^(http|ftp)://#', $param))) {
-            $callback = $this->ui ? array(&$this, '_downloadCallback') : null;
+            $callback = $this->_downloader->ui ?
+                array(&$this->_downloader, '_downloadCallback') : null;
             $this->_downloader->pushErrorHandling(PEAR_ERROR_RETURN);
-            $file = $this->_downloader->downloadHttp($param, $this->ui, $this->_downloader->getDownloadDir(),
-                $callback);
+            $file = $this->_downloader->downloadHttp($param, $this->_downloader->ui,
+                $this->_downloader->getDownloadDir(), $callback);
             $this->_downloader->popErrorHandling();
             if (PEAR::isError($file)) {
                 if (!empty($saveparam)) {
@@ -431,7 +510,7 @@ class PEAR_Downloader_Package
                     '"' . $saveparam);
             }
             // whew, download worked!
-            $pkg = new PEAR_PackageFile($this->_registry, $this->downloader->debug,
+            $pkg = new PEAR_PackageFile($this->_registry, $this->_downloader->debug,
                 $this->_downloader->getDownloadDir());
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $pf = &$pkg->fromAnyFile($param, PEAR_VALIDATE_INSTALLING);
@@ -446,6 +525,7 @@ class PEAR_Downloader_Package
                 $this->_valid = false;
                 return $err;
             }
+            $this->_packagefile = &$pf;
             return $this->_valid = true;
         }
         return $this->_valid = false;

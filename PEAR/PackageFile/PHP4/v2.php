@@ -52,7 +52,7 @@ class PEAR_PackageFile_PHP4_v2 extends PEAR_PackageFile_v2
         if (isset($this->_packageInfo['name']['attribs']['channel'])) {
             return $this->_packageInfo['name']['attribs']['channel'];
         }
-        return 'pear';
+        return 'pear.php.net';
     }
 
     function getName()
@@ -192,7 +192,8 @@ class PEAR_PackageFile_PHP4_v2 extends PEAR_PackageFile_v2
                 );
             foreach ($this->_packageInfo[$type]['dependendencies'] as $dtype => $deps) {
                 foreach ($deps as $dep) {
-                    $s = array('type' => $map[$dtype], 'channel' => $t = @$dep['attribs']['channel'] ? $t : 'pear');
+                    $s = array('type' => $map[$dtype],
+                        'channel' => $t = @$dep['attribs']['channel'] ? $t : 'pear.php.net');
                     if (!isset($dep['attribs']['min']) &&
                           !isset($dep['attribs']['max'])) {
                         $s['rel'] = 'has';

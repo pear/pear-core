@@ -20,6 +20,7 @@
 // $Id$
 
 require_once 'PEAR.php';
+require_once 'PEAR/Registry.php';
 require_once 'System.php';
 
 /**
@@ -247,7 +248,14 @@ class PEAR_Config extends PEAR
      * @var array
      * @access private
      */
-    var $_channels = array('pear');
+    var $_channels = array('pear.php.net');
+
+    /**
+     * If requested, this will always refer to the registry
+     * contained in php_dir
+     * @var PEAR_Registry
+     */
+    var $_registry;
 
     /**
      * Information about the configuration data.  Stores the type,
@@ -260,7 +268,7 @@ class PEAR_Config extends PEAR
         // Channels/Internet Access
         'default_channel' => array(
             'type' => 'string',
-            'default' => 'pear',
+            'default' => 'pear.php.net',
             'doc' => 'the default channel to use for all non explicit commands',
             'prompt' => 'Default Channel',
             'group' => 'Internet Access',
@@ -426,8 +434,11 @@ class PEAR_Config extends PEAR
     /**
      * Constructor.
      *
-     * @param string (optional) file to read user-defined options from
-     * @param string (optional) file to read system-wide defaults from
+     * @param string file to read user-defined options from
+     * @param string file to read system-wide defaults from
+     * @param bool   determines whether a registry object "follows"
+     *               the value of php_dir (is automatically created
+     *               and moved when php_dir is changed)
      *
      * @access public
      *
@@ -528,6 +539,8 @@ class PEAR_Config extends PEAR
         $this->_decodeInput($data);
         $this->configuration[$layer] = $data;
         $this->_setupChannels();
+        $this->_registry[$layer]
+            = &new PEAR_Registry($this->get('php_dir', $layer, 'pear.php.net'));
         return true;
     }
 
@@ -608,6 +621,8 @@ class PEAR_Config extends PEAR
             $this->configuration[$layer] = PEAR_Config::arrayMergeRecursive($data, $this->configuration[$layer]);
         }
         $this->_setupChannels();
+        $this->_registry[$layer]
+            = &new PEAR_Registry($this->get('php_dir', $layer, 'pear.php.net'));
         return true;
     }
 
@@ -854,7 +869,7 @@ class PEAR_Config extends PEAR
         } elseif (isset($this->configuration[$layer]['default_channel'])) {
             return $this->configuration[$layer]['default_channel'];
         }
-        return 'pear';
+        return 'pear.php.net';
     }
 
     /**
@@ -911,7 +926,7 @@ class PEAR_Config extends PEAR
      */
     function _getChannelValue($key, $layer, $channel)
     {
-        if ($key == '__channels' || $channel == 'pear') {
+        if ($key == '__channels' || $channel == 'pear.php.net') {
             return null;
         }
         if ($layer === null) {
@@ -955,7 +970,7 @@ class PEAR_Config extends PEAR
         }
         if ($key == 'default_channel') {
             // can only set the default_channel globally
-            $channel = 'pear';
+            $channel = 'pear.php.net';
         }
         if (empty($this->configuration_info[$key])) {
             return false;
@@ -981,21 +996,34 @@ class PEAR_Config extends PEAR
             }
         }
         if (!$channel) {
-            $channel = $this->get('default_channel', null, 'pear');
+            $channel = $this->get('default_channel', null, 'pear.php.net');
         }
-        $channel = strtolower($channel);
+        $reg = $this->getRegistry($layer);
+        $channel = $reg->channelName($channel);
         if (!in_array($channel, $this->_channels)) {
             return false;
         }
-        if ($channel != 'pear') {
+        if ($channel != 'pear.php.net') {
             if (in_array($key, $this->_channelConfigInfo)) {
                 $this->configuration[$layer]['__channels'][$channel][$key] = $value;
                 return true;
             } else {
                 return false;
             }
+        } else {
+            if ($key == 'default_channel') {
+                $value = $reg->channelName($channel);
+                if (!$value) {
+                    return false;
+                }
+            }
         }
         $this->configuration[$layer][$key] = $value;
+        if (isset($this->_registry) && $key == 'php_dir') {
+            if ($value != $this->_registry->install_dir) {
+                $this->_registry = &new PEAR_Registry($value);
+            }
+        }
         return true;
     }
 
@@ -1016,7 +1044,7 @@ class PEAR_Config extends PEAR
         $this->_channels = $channels;
         foreach ($channels as $channel) {
             $channel = strtolower($channel);
-            if ($channel == 'pear') {
+            if ($channel == 'pear.php.net') {
                 continue;
             }
             foreach ($this->layers as $layer) {
@@ -1229,7 +1257,7 @@ class PEAR_Config extends PEAR
     function remove($key, $layer = 'user')
     {
         $channel = $this->getDefaultChannel();
-        if ($channel !== 'pear') {
+        if ($channel !== 'pear.php.net') {
             if (isset($this->configuration[$layer]['__channels'][$channel][$key])) {
                 unset($this->configuration[$layer]['__channels'][$channel][$key]);
                 return true;
@@ -1321,7 +1349,7 @@ class PEAR_Config extends PEAR
     {
         foreach ($this->layers as $layer) {
             $channel = $this->getDefaultChannel();
-            if ($channel !== 'pear') {
+            if ($channel !== 'pear.php.net') {
                 if (isset($this->configuration[$layer]['__channels'][$channel][$key])) {
                     if ($returnchannel) {
                         return array('layer' => $layer, 'channel' => $channel);
@@ -1331,7 +1359,7 @@ class PEAR_Config extends PEAR
             }
             if (isset($this->configuration[$layer][$key])) {
                 if ($returnchannel) {
-                    return array('layer' => $layer, 'channel' => 'pear');
+                    return array('layer' => $layer, 'channel' => 'pear.php.net');
                 }
                 return $layer;
             }
@@ -1420,6 +1448,46 @@ class PEAR_Config extends PEAR
         return '1.1';
     }
     // }}}
+
+    /**
+     * @return PEAR_Registry
+     */
+    function &getRegistry($layer = 'user')
+    {
+        if (isset($this->_registry[$layer])) {
+            return $this->_registry[$layer];
+        } else {
+            $a = false;
+            return $a;
+        }
+    }
+    /**
+     * This is to allow customization like the use of installroot
+     * @param PEAR_Registry
+     * @return bool
+     */
+    function setRegistry(&$reg, $layer = user)
+    {
+        if (!in_array($layer, array('user', 'system'))) {
+            return false;
+        }
+        if (isset($this->_registry[$layer])) {
+            $this->_registry[$layer] = &$reg;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @return PEAR_Remote
+     */
+    function &getRemote()
+    {
+        include_once 'PEAR/Remote.php';
+        $remote = new PEAR_Remote($this);
+        return $remote;
+    }
 }
 
 ?>

@@ -104,10 +104,10 @@ installed package.'
 
     function doList($command, $options, $params)
     {
-        $reg = new PEAR_Registry($this->config->get('php_dir'));
+        $reg = &$this->config->getRegistry();
         if (sizeof($params) == 1) {
             if ($reg->channelExists($params[0])) {
-                $channel = strtolower($params[0]);
+                $channel = $reg->channelName($params[0]);
             } else {
                 return $this->raiseError("Channel `$params[0]' does not exist, use list-files to list a package's contents");
             }
@@ -280,7 +280,7 @@ installed package.'
                                      "the package you want information");
         }
         $info = false;
-        $reg = &new PEAR_Registry($this->config->get('php_dir', null, 'pear'));
+        $reg = &$this->config->getRegistry();
         if (@is_file($params[0])) {
             $obj = &new PEAR_PackageFile($reg);
             $obj = &$obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
@@ -293,8 +293,8 @@ installed package.'
             }
         } else {
             $package = $params[0];
-            $channel = 'pear';
-            if (strpos($package, '::')) {
+            $channel = 'pear.php.net';
+            if (strpos($package, '::')); {
                 list($channel, $package) = explode('::', $package);
             }
             $info = $reg->packageInfo($package, null, $channel);

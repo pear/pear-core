@@ -743,7 +743,7 @@ class PEAR_PackageFile_PHP5_v1 extends PEAR_PackageFile_v1
 
     function getChannel()
     {
-        return 'pear';
+        return 'pear.php.net';
     }
 
     function getPackagexmlVersion()
