@@ -312,7 +312,11 @@ class PEAR_ErrorStack {
      */
     function setDefaultLogger(&$log)
     {
-        $GLOBALS['_PEAR_ERRORSTACK_DEFAULT_LOGGER'] = &$log;
+        if (is_object($log) && method_exists($log, 'log') ) {
+            $GLOBALS['_PEAR_ERRORSTACK_DEFAULT_LOGGER'] = &$log;
+        } elseif (is_callable($log)) {
+            $GLOBALS['_PEAR_ERRORSTACK_DEFAULT_LOGGER'] = &$log;
+	}
     }
     
     /**
@@ -321,7 +325,11 @@ class PEAR_ErrorStack {
      */
     function setLogger(&$log)
     {
-        $this->_logger = &$log;
+        if (is_object($log) && method_exists($log, 'log') ) {
+            $this->_logger = &$log;
+        } elseif (is_callable($log)) {
+            $this->_logger = &$log;
+        }
     }
     
     /**
@@ -373,7 +381,7 @@ class PEAR_ErrorStack {
     }
     
     /**
-     * Set an error code => error message mapping callback
+     * Set a callback that generates context information (location of error) for an error stack
      * 
      * This method sets the callback that can be used to generate context
      * information for an error.  Passing in NULL will disable context generation
@@ -638,7 +646,15 @@ class PEAR_ErrorStack {
      * @param array $levels Error level => Log constant map
      * @access protected
      */
-    function _log($err, $levels = array(
+    function _log($err)
+    {
+        if ($this->_logger) {
+            $logger = &$this->_logger;
+        } else {
+            $logger = &$GLOBALS['_PEAR_ERRORSTACK_DEFAULT_LOGGER'];
+        }
+        if (is_a($logger, 'Log')) {
+            $levels = array(
                 'exception' => PEAR_LOG_CRIT,
                 'alert' => PEAR_LOG_ALERT,
                 'critical' => PEAR_LOG_CRIT,
@@ -646,17 +662,15 @@ class PEAR_ErrorStack {
                 'warning' => PEAR_LOG_WARNING,
                 'notice' => PEAR_LOG_NOTICE,
                 'info' => PEAR_LOG_INFO,
-                'debug' => PEAR_LOG_DEBUG))
-    {
-        if (isset($levels[$err['level']])) {
-            $level = $levels[$err['level']];
-        } else {
-            $level = PEAR_LOG_INFO;
-        }
-        if ($this->_logger) {
-            $this->_logger->log($err['message'], $level, $err);
-        } else {
-            $GLOBALS['_PEAR_ERRORSTACK_DEFAULT_LOGGER']->log($err['message'], $level, $err);
+                'debug' => PEAR_LOG_DEBUG);
+            if (isset($levels[$err['level']])) {
+                $level = $levels[$err['level']];
+            } else {
+                $level = PEAR_LOG_INFO;
+            }
+            $logger->log($err['message'], $level, $err);
+        } else { // support non-standard logs
+            call_user_func($logger, $err);
         }
     }
 
