@@ -31,14 +31,14 @@ if ('@include_path@' != '@'.'include_path'.'@') {
     // this is a raw, uninstalled pear, either a cvs checkout, or php distro
     $raw = true;
 }
-ini_set('allow_url_fopen', true);
+@ini_set('allow_url_fopen', true);
 if (!ini_get('safe_mode')) {
     @set_time_limit(0);
 }
 ob_implicit_flush(true);
-ini_set('track_errors', true);
-ini_set('html_errors', false);
-ini_set('magic_quotes_runtime', false);
+@ini_set('track_errors', true);
+@ini_set('html_errors', false);
+@ini_set('magic_quotes_runtime', false);
 set_error_handler('error_handler');
 
 $pear_package_version = "@pear_version@";
@@ -120,6 +120,28 @@ if ($raw) {
         }
         if (!$found) {
             // no prior runs, try to install PEAR
+            if (strpos(dirname(__FILE__), 'scripts')) {
+                $packagexml = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'package2.xml';
+                $pearbase = dirname(dirname(__FILE__));
+            } else {
+                $packagexml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'package2.xml';
+                $pearbase = dirname(__FILE__);
+            }
+            if (file_exists($packagexml)) {
+                $options[1] = array(
+                    'install',
+                    $packagexml
+                );
+                $config->set('php_dir', $pearbase . DIRECTORY_SEPARATOR . 'php');
+                $config->set('data_dir', $pearbase . DIRECTORY_SEPARATOR . 'data');
+                $config->set('doc_dir', $pearbase . DIRECTORY_SEPARATOR . 'docs');
+                $config->set('test_dir', $pearbase . DIRECTORY_SEPARATOR . 'tests');
+                $config->set('ext_dir', $pearbase . DIRECTORY_SEPARATOR . 'extensions');
+                $config->set('bin_dir', $pearbase);
+                $config->mergeConfigFile($pearbase . 'pear.ini', false);
+                $config->store();
+                $config->set('auto_discover', 1);
+            }
         }
     }
 }
