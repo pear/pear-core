@@ -146,11 +146,43 @@ class PEAR_PackageFile_v2
         return false;
     }
 
-    function isExtension($name)
+    /**
+     * @param string Extension name
+     * @return bool success of operation
+     */
+    function setProvidesExtension($extension)
+    {
+        if (in_array($this->getPackageType(), array('extsrc', 'extbin'))) {
+            $this->_packageInfo[$this->getPackageType() . 'release']
+                ['providesextension'] = $extension;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return string|false Extension name
+     */
+    function getProvidesExtension()
+    {
+        if (in_array($this->getPackageType(), array('extsrc', 'extbin'))) {
+            if (isset($this->_packageInfo[$this->getPackageType() . 'release']
+                  ['providesextension'])) {
+                return $this->_packageInfo[$this->getPackageType() . 'release']['providesextension'];
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string Extension name
+     * @return bool
+     */
+    function isExtension($extension)
     {
         if (in_array($this->getPackageType(), array('extsrc', 'extbin'))) {
             return $this->_packageInfo[$this->getPackageType() . 'release']
-                ['providesextension'] == $name;
+                ['providesextension'] == $extension;
         }
         return false;
     }
@@ -168,6 +200,10 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    /**
+     * Convert a recursive set of <dir> and <file> tags into a single <dir> tag with
+     * <file> tags.
+     */
     function flattenFilelist()
     {
         $filelist = array();
@@ -181,29 +217,36 @@ class PEAR_PackageFile_v2
         }   // else already flattened
     }
 
+    /**
+     * @param array the final flattened file list
+     * @param array the current directory being processed
+     * @param string|false any recursively inherited baeinstalldir attribute
+     * @param string private recursion variable
+     * @return array
+     * @access protected
+     */
     function _getFlattenedFilelist(&$files, $dir, $baseinstall = false, $path = '')
     {
         if (isset($dir['attribs']['baseinstalldir'])) {
             $baseinstall = $dir['attribs']['baseinstalldir'];
         }
         if (isset($dir['dir'])) {
-            if (isset($dir['dir']['attribs'])) {
-                $newpath = empty($path) ? $dir['dir']['attribs']['name'] :
-                    $path . '/' . $dir['dir']['attribs']['name'];
-                $this->_getFlattenedFilelist($files, $dir['dir'],
+            if (!isset($dir['dir'][0])) {
+                $dir['dir'] = array($dir['dir']);
+            }
+            foreach ($dir['dir'] as $subdir) {
+                $newpath = empty($path) ? $subdir['attribs']['name'] :
+                    $path . '/' . $subdir['attribs']['name'];
+                $this->_getFlattenedFilelist($files, $subdir,
                     $baseinstall, $newpath);
-            } else {
-                foreach ($dir['dir'] as $subdir) {
-                    $newpath = empty($path) ? $subdir['attribs']['name'] :
-                        $path . '/' . $subdir['attribs']['name'];
-                    $this->_getFlattenedFilelist($files, $subdir,
-                        $baseinstall, $newpath);
-                }
             }
         }
         if (isset($dir['file'])) {
-            if (isset($dir['file']['attribs'])) {
-                $attrs = $dir['file']['attribs'];
+            if (!isset($dir['file'][0])) {
+                $dir['file'] = array($dir['file']);
+            }
+            foreach ($dir['file'] as $file) {
+                $attrs = $file['attribs'];
                 $name = $attrs['name'];
                 if ($baseinstall) {
                     $attrs['baseinstalldir'] = $baseinstall;
@@ -211,17 +254,6 @@ class PEAR_PackageFile_v2
                 $attrs['name'] = empty($path) ? $name : $path . '/' . $name;
                 $file['attribs'] = $attrs;
                 $files[] = $file;
-            } else {
-                foreach ($dir['file'] as $file) {
-                    $attrs = $file['attribs'];
-                    $name = $attrs['name'];
-                    if ($baseinstall) {
-                        $attrs['baseinstalldir'] = $baseinstall;
-                    }
-                    $attrs['name'] = empty($path) ? $name : $path . '/' . $name;
-                    $file['attribs'] = $attrs;
-                    $files[] = $file;
-                }
             }
         }
     }
@@ -329,7 +361,7 @@ class PEAR_PackageFile_v2
     {
         $this->_isValid = 0;
         if (!isset($this->_packageInfo['name'])) {
-            return $this->_packageInfo = array_merge(array('name' => array($package)),
+            return $this->_packageInfo = array_merge(array('name' => $package),
                 $this->_packageInfo);
         }
         $this->_packageInfo['name'] = $package;
@@ -1148,14 +1180,17 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    /**
+     * @param string Dependent package name
+     * @param string Dependent package's channel name
+     * @param string minimum version of specified package that this release is guaranteed to be
+     *               compatible with
+     * @param string maximum version of specified package that this release is guaranteed to be
+     *               compatible with
+     * @param string versions of specified package that this release is not compatible with
+     */
     function addCompatiblePackage($name, $channel, $min, $max, $exclude = false)
     {
-        if (!isset($this->_packageInfo['compatible'])) {
-            // ensure that the compatible tag is set up
-            $this->_insertBefore($this->_packageInfo,
-                array('dependencies', 'phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), array(), 'contents');
-        }
         $this->_isValid = 0;
         $set = array(
             'name' => $name,
@@ -1167,16 +1202,23 @@ class PEAR_PackageFile_v2
             $set['exclude'] = $exclude;
         }
         $this->_isValid = 0;
-        if (isset($this->_packageInfo['compatible'])) {
-            if (!isset($this->_packageInfo['compatible'][0])) {
-                $this->_packageInfo['compatible'] = array($this->_packageInfo['compatible']);
-            }
-            $this->_packageInfo['compatible'][] = $set;
-        } else {
-            $this->_packageInfo['compatible'] = $set;
-        }
+        $this->_mergeTag($this->_packageInfo, $set, array(
+                'compatible' => array('dependencies', 'phprelease', 'extsrcrelease',
+                    'extbinrelease', 'bundle', 'changelog')
+            ));
     }
 
+    /**
+     * Remove all compatible tags
+     */
+    function clearCompatible()
+    {
+        unset($this->_packageInfo['compatible']);
+    }
+
+    /**
+     * @return array|false
+     */
     function getCompatible()
     {
         if (isset($this->_packageInfo['compatible'])) {
@@ -1209,34 +1251,13 @@ class PEAR_PackageFile_v2
             if (!isset($sub[0])) {
                 $sub = array($sub);
             }
-            foreach ($sub as $dep) {
-                if ($dep['name'] == $p->getPackage()) {
-                    if (isset($dep['channel'])) {
-                        if ($dep['channel'] == $p->getChannel()) {
-                            return true;
-                        }
-                    } else {
-                        return true;
-                    }
-                }
-            }
         }
         if (isset($this->_packageInfo['dependencies']['optional']['subpackage'])) {
-            $sub = $this->_packageInfo['dependencies']['optional']['subpackage'];
-            if (!isset($sub[0])) {
-                $sub = array($sub);
+            $sub1 = $this->_packageInfo['dependencies']['optional']['subpackage'];
+            if (!isset($sub1[0])) {
+                $sub1 = array($sub1);
             }
-            foreach ($sub as $dep) {
-                if ($dep['name'] == $p->getPackage()) {
-                    if (isset($dep['channel'])) {
-                        if ($dep['channel'] == $p->getChannel()) {
-                            return true;
-                        }
-                    } else {
-                        return true;
-                    }
-                }
-            }
+            $sub = array_merge($sub, $sub1);
         }
         if (isset($this->_packageInfo['dependencies']['group'])) {
             $group = $this->_packageInfo['dependencies']['group'];
@@ -1245,21 +1266,22 @@ class PEAR_PackageFile_v2
             }
             foreach ($group as $deps) {
                 if (isset($deps['subpackage'])) {
-                    $sub = $deps['subpackage'];
-                    if (!isset($sub[0])) {
-                        $sub = array($sub);
+                    $sub2 = $deps['subpackage'];
+                    if (!isset($sub2[0])) {
+                        $sub2 = array($sub2);
                     }
-                    foreach ($sub as $dep) {
-                        if ($dep['name'] == $p->getPackage()) {
-                            if (isset($dep['channel'])) {
-                                if ($dep['channel'] == $p->getChannel()) {
-                                    return true;
-                                }
-                            } else {
-                                return true;
-                            }
-                        }
+                    $sub = array_merge($sub, $sub2);
+                }
+            }
+        }
+        foreach ($sub as $dep) {
+            if ($dep['name'] == $p->getPackage()) {
+                if (isset($dep['channel'])) {
+                    if ($dep['channel'] == $p->getChannel()) {
+                        return true;
                     }
+                } else { // all uri deps are in the same virtual channel
+                    return true;
                 }
             }
         }
@@ -1268,67 +1290,16 @@ class PEAR_PackageFile_v2
 
     function dependsOn($package, $channel)
     {
-        if (!($deps = $this->getDeps(true))) {
+        if (!($deps = $this->getDependencies())) {
             return false;
         }
-        if (isset($deps['required']['package'])) {
-            if (!isset($deps['required']['package'][0])) {
-                $deps['required']['package'] = array($deps['required']['package']);
-            }
-            foreach ($deps['required']['package'] as $dep) {
-                $depchannel = isset($dep['channel']) ? $dep['channel'] : '__uri';
-                if (strtolower($dep['name']) == strtolower($package) &&
-                      $depchannel == $channel) {
-                    return true;
-                }  
-            }
-        }
-        if (isset($deps['required']['subpackage'])) {
-            if (!isset($deps['required']['subpackage'][0])) {
-                $deps['required']['subpackage'] = array($deps['required']['subpackage']);
-            }
-            foreach ($deps['required']['subpackage'] as $dep) {
-                $depchannel = isset($dep['channel']) ? $dep['channel'] : '__uri';
-                if (strtolower($dep['name']) == strtolower($package) &&
-                      $depchannel == $channel) {
-                    return true;
-                }  
-            }
-        }
-        if (isset($deps['optional']['package'])) {
-            if (!isset($deps['optional']['package'][0])) {
-                $deps['optional']['package'] = array($deps['optional']['package']);
-            }
-            foreach ($deps['optional']['package'] as $dep) {
-                $depchannel = isset($dep['channel']) ? $dep['channel'] : '__uri';
-                if (strtolower($dep['name']) == strtolower($package) &&
-                      $depchannel == $channel) {
-                    return true;
-                }  
-            }
-        }
-        if (isset($deps['optional']['subpackage'])) {
-            if (!isset($deps['optional']['subpackage'][0])) {
-                $deps['optional']['subpackage'] = array($deps['optional']['subpackage']);
-            }
-            foreach ($deps['optional']['subpackage'] as $dep) {
-                $depchannel = isset($dep['channel']) ? $dep['channel'] : '__uri';
-                if (strtolower($dep['name']) == strtolower($package) &&
-                      $depchannel == $channel) {
-                    return true;
-                }  
-            }
-        }
-        if (isset($deps['group'])) {
-            if (!isset($deps['group'][0])) {
-                $dep['group'] = array($deps['group']);
-            }
-            foreach ($deps['group'] as $group) {
-                if (isset($group['package'])) {
-                    if (!is_array($group['package'])) {
-                        $group['package'] = array($group['package']);
+        foreach (array('package', 'subpackage') as $type) {
+            foreach (array('required', 'optional') as $needed) {
+                if (isset($deps[$needed][$type])) {
+                    if (!isset($deps[$needed][$type][0])) {
+                        $deps[$needed][$type] = array($deps[$needed][$type]);
                     }
-                    foreach ($group['package'] as $dep) {
+                    foreach ($deps[$needed][$type] as $dep) {
                         $depchannel = isset($dep['channel']) ? $dep['channel'] : '__uri';
                         if (strtolower($dep['name']) == strtolower($package) &&
                               $depchannel == $channel) {
@@ -1336,16 +1307,23 @@ class PEAR_PackageFile_v2
                         }  
                     }
                 }
-                if (isset($group['subpackage'])) {
-                    if (!is_array($group['subpackage'])) {
-                        $group['subpackage'] = array($group['subpackage']);
-                    }
-                    foreach ($group['subpackage'] as $dep) {
-                        $depchannel = isset($dep['channel']) ? $dep['channel'] : '__uri';
-                        if (strtolower($dep['name']) == strtolower($package) &&
-                              $depchannel == $channel) {
-                            return true;
-                        }  
+            }
+            if (isset($deps['group'])) {
+                if (!isset($deps['group'][0])) {
+                    $dep['group'] = array($deps['group']);
+                }
+                foreach ($deps['group'] as $group) {
+                    if (isset($group[$type])) {
+                        if (!is_array($group[$type])) {
+                            $group[$type] = array($group[$type]);
+                        }
+                        foreach ($group[$type] as $dep) {
+                            $depchannel = isset($dep['channel']) ? $dep['channel'] : '__uri';
+                            if (strtolower($dep['name']) == strtolower($package) &&
+                                  $depchannel == $channel) {
+                                return true;
+                            }  
+                        }
                     }
                 }
             }
@@ -1551,74 +1529,49 @@ class PEAR_PackageFile_v2
     }
 
     /**
-     * @param string $min
-     * @param string $max
-     * @param string $exclude... optional excluded versions
+     * @param string minimum PHP version allowed
+     * @param string maximum PHP version allowed
+     * @param array $exclude incompatible PHP versions
      */
-    function addPhpDep($min, $max)
+    function setPhpDep($min, $max, $exclude = false)
     {
         $this->_isValid = 0;
-        if (!isset($this->_packageInfo['dependencies'])) {
-            // ensure that the dependencies tag is set up
-            $this->_insertBefore($this->_packageInfo,
-                array('phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
-        } elseif (!isset($this->_packageInfo['dependencies']['required'])) {
-            $this->_insertBefore($this->_packageInfo['dependencies'],
-                array('optional', 'group'), array(), 'required');
-        }
-        $args = func_get_args();
-        array_shift($args);
-        array_shift($args);
-        if (count($args)) {
-            $exclude = $args;
-            if (count($exclude) == 1) {
-                $exclude = $exclude[0];
-            }
-        }
         $dep =
             array(
                 'min' => $min,
                 'max' => $max
             );
-        if (isset($exclude)) {
-            $dep['exclude'] = $exclude;
-        }
-        if (!isset($this->_packageInfo['dependencies']['required']['php'])) {
-            $this->_insertBefore($this->_packageInfo['dependencies']['required'],
-                array('pearinstaller', 'package', 'subpackage',
-                'extension', 'os', 'arch'), $dep, 'php');
-            $this->_packageInfo['dependencies']['required']['php'] = $dep;
-        } else {
-            $this->_packageInfo['dependencies']['required']['php'][] = $dep;
-        }
-    }
-
-    /**
-     * @param string $min
-     * @param string $max
-     * @param string $recommended
-     * @param string $exclude... optional excluded versions
-     */
-    function addPearinstallerDep($min, $max = false, $recommended = false)
-    {
-        $this->_isValid = 0;
-        if (!isset($this->_packageInfo['dependencies'])) {
-            // ensure that the dependencies tag is set up
-            $this->_insertBefore($this->_packageInfo,
-                array('phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
-        } elseif (!isset($this->_packageInfo['dependencies']['required'])) {
-            $this->_insertBefore($this->_packageInfo['dependencies'],
-                array('optional', 'group'), array(), 'required');
-        }
-        $args = func_get_args();
-        if (count($args) > 3) {
-            $exclude = array_slice($args, 3);
+        if ($exclude) {
             if (count($exclude) == 1) {
                 $exclude = $exclude[0];
             }
+            $dep['exclude'] = $exclude;
         }
+        if (isset($this->_packageInfo['dependencies']['required']['php'])) {
+            $this->_stack->push(__FUNCTION__, 'warning', array('dep' =>
+            $this->_packageInfo['dependencies']['required']['php']),
+                'warning: PHP dependency already exists, overwriting');
+            unset($this->_packageInfo['dependencies']['required']['php']);
+        }
+        $this->_mergeTag($this->_packageInfo, $dep,
+            array(
+                'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
+                    'bundle', 'changelog'),
+                'required' => array('optional', 'group'),
+                'php' => array('pearinstaller', 'package', 'subpackage', 'extension', 'os', 'arch')
+            ));
+        return true;
+    }
+
+    /**
+     * @param string minimum allowed PEAR installer version
+     * @param string maximum allowed PEAR installer version
+     * @param string recommended PEAR installer version
+     * @param array incompatible version of the PEAR installer
+     */
+    function setPearinstallerDep($min, $max = false, $recommended = false, $exclude = false)
+    {
+        $this->_isValid = 0;
         $dep =
             array(
                 'min' => $min,
@@ -1629,14 +1582,25 @@ class PEAR_PackageFile_v2
         if ($recommended) {
             $dep['recommended'] = $recommended;
         }
-        if (isset($exclude)) {
+        if ($exclude) {
+            if (count($exclude) == 1) {
+                $exclude = $exclude[0];
+            }
             $dep['exclude'] = $exclude;
         }
-        if (!isset($this->_packageInfo['dependencies']['required']['pearinstaller'])) {
-            $this->_packageInfo['dependencies']['required']['pearinstaller'] = $dep;
-        } else {
-            $this->_packageInfo['dependencies']['required']['pearinstaller'][] = $dep;
+        if (isset($this->_packageInfo['dependencies']['required']['pearinstaller'])) {
+            $this->_stack->push(__FUNCTION__, 'warning', array('dep' =>
+            $this->_packageInfo['dependencies']['required']['pearinstaller']),
+                'warning: PEAR Installer dependency already exists, overwriting');
+            unset($this->_packageInfo['dependencies']['required']['pearinstaller']);
         }
+        $this->_mergeTag($this->_packageInfo, $dep,
+            array(
+                'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
+                    'bundle', 'changelog'),
+                'required' => array('optional', 'group'),
+                'pearinstaller' => array('package', 'subpackage', 'extension', 'os', 'arch')
+            ));
     }
 
     /**
@@ -1647,30 +1611,19 @@ class PEAR_PackageFile_v2
     function addConflictingPackageDepWithChannel($name, $channel)
     {
         $this->_isValid = 0;
-        if (!isset($this->_packageInfo['dependencies'])) {
-            // ensure that the dependencies tag is set up
-            $this->_insertBefore($this->_packageInfo,
-                array('phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
-        } elseif (!isset($this->_packageInfo['dependencies']['required'])) {
-            $this->_insertBefore($this->_packageInfo['dependencies'],
-                array('optional', 'group'), array(), 'required');
-        }
         $dep =
             array(
                 'name' => $name,
                 'channel' => $channel,
                 'conflicts' => 'yes',
             );
-        if (!isset($this->_packageInfo['dependencies']['required']['package'])) {
-            $this->_packageInfo['dependencies']['required']['package'] = $dep;
-        } else {
-            if (!isset($this->_packageInfo['dependencies']['required']['package'][0])) {
-                $this->_packageInfo['dependencies']['required']['package'] = array(
-                    $this->_packageInfo['dependencies']['required']['package']);
-            }
-            $this->_packageInfo['dependencies']['required']['package'][] = $dep;
-        }
+        $this->_mergeTag($this->_packageInfo, $dep,
+            array(
+                'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
+                    'bundle', 'changelog'),
+                'required' => array('optional', 'group'),
+                'package' => array('subpackage', 'extension', 'os', 'arch')
+            ));
     }
 
     /**
@@ -1681,152 +1634,34 @@ class PEAR_PackageFile_v2
     function addConflictingPackageDepWithUri($name, $uri)
     {
         $this->_isValid = 0;
-        if (!isset($this->_packageInfo['dependencies'])) {
-            // ensure that the dependencies tag is set up
-            $this->_insertBefore($this->_packageInfo,
-                array('phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
-        } elseif (!isset($this->_packageInfo['dependencies']['required'])) {
-            $this->_insertBefore($this->_packageInfo['dependencies'],
-                array('optional', 'group'), array(), 'required');
-        }
         $dep =
             array(
                 'name' => $name,
                 'uri' => $uri,
                 'conflicts' => 'yes',
             );
-        if (!isset($this->_packageInfo['dependencies']['required']['package'])) {
-            $this->_packageInfo['dependencies']['required']['package'] = $dep;
-        } else {
-            if (!isset($this->_packageInfo['dependencies']['required']['package'][0])) {
-                $this->_packageInfo['dependencies']['required']['package'] = array(
-                    $this->_packageInfo['dependencies']['required']['package']);
-            }
-            $this->_packageInfo['dependencies']['required']['package'][] = $dep;
-        }
+        $this->_mergeTag($this->_packageInfo, $dep,
+            array(
+                'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
+                    'bundle', 'changelog'),
+                'required' => array('optional', 'group'),
+                'package' => array('subpackage', 'extension', 'os', 'arch')
+            ));
     }
 
     function addDependencyGroup($name, $hint)
     {
-        if (!isset($this->_packageInfo['dependencies']['group'])) {
-            $this->_packageInfo['dependencies']['group'] = array(
-                'attribs' =>
-                    array(
-                        'name' => $name,
-                        'hint' => $hint,
-                    )
-                );
-        } else {
-            if (!isset($this->_packageInfo['dependencies']['group'][0])) {
-                if ($this->_packageInfo['dependencies']['group']['name'] == $name) {
-                    $this->_packageInfo['dependencies']['group']['hint'] = $hint;
-                    return;
-                } else {
-                    $this->_packageInfo['dependencies']['group'] =
-                        array(
-                            'name' => $name,
-                            'hint' => $hint
-                        );
-                }
-            } else {
-                foreach ($this->_packageInfo['dependencies']['group'] as $i => $group) {
-                    if ($group['name'] == $name) {
-                        $this->_packageInfo['dependencies']['group'][$i]['hint'] = $hint;
-                        return;
-                    }
-                }
-                $this->_packageInfo['dependencies']['group'][] =
-                    array(
-                        'name' => $name,
-                        'hint' => $hint
-                    );
-            }
-        }
+        $this->_isValid = 0;
+        $this->_mergeTag($this->_packageInfo,
+            array('attribs' => array('name' => $name, 'hint' => $hint)),
+            array(
+                'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
+                    'bundle', 'changelog'),
+                'group' => array(),
+            ));
     }
 
     /**
-     * @param package|subpackage
-     * @param string group name
-     * @param string package name
-     * @param string package channel
-     * @param string minimum version
-     * @param string maximum version
-     * @param string recommended version
-     * @param array|false optional excluded versions
-     * @return bool false if the dependency group has not been initialized with
-     *              {@link addDependencyGroup()}
-     */
-    function addGroupDependencyWithChannel($type, $group, $name, $channel, $min = false, $max = false,
-                                      $recommended = false, $exclude = false)
-    {
-        if (!isset($this->_packageInfo['dependencies']['group'])) {
-            return false;
-        } else {
-            if (!isset($this->_packageInfo['dependencies']['group'][0])) {
-                if ($this->_packageInfo['dependencies']['group']['name'] == $name) {
-                    $this->_packageInfo['dependencies']['group']['package'] =
-                        $this->_constructPackageDep(array(), $name, $channel, false, 
-                            $min, $max, $recommended, $exclude);
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                foreach ($this->_packageInfo['dependencies']['group'] as $i => $group) {
-                    if ($group['name'] == $name) {
-                        $this->_packageInfo['dependencies']['group'][$i]['package'] =
-                            $this->_constructPackageDep(
-                                $this->_packageInfo['dependencies']['group'][$i]['package'],
-                                $name, $channel, false, $min, $max, $recommended,
-                                $exclude);
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-    }
-
-    /**
-     * @param package|subpackage
-     * @param string group name
-     * @param string package name
-     * @param string package uri
-     * @return bool false if the dependency group has not been initialized with
-     *              {@link addDependencyGroup()}
-     */
-    function addGroupDependencyWithURI($type, $group, $name, $uri)
-    {
-        if (!isset($this->_packageInfo['dependencies']['group'])) {
-            return false;
-        } else {
-            if (!isset($this->_packageInfo['dependencies']['group'][0])) {
-                if ($this->_packageInfo['dependencies']['group']['name'] == $name) {
-                    $this->_packageInfo['dependencies']['group']['package'] =
-                        $this->_constructPackageDep(array(), $name, false, $uri, 
-                            false, false, false, false);
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                foreach ($this->_packageInfo['dependencies']['group'] as $i => $group) {
-                    if ($group['name'] == $name) {
-                        $this->_packageInfo['dependencies']['group'][$i]['package'] =
-                            $this->_constructPackageDep(
-                                $this->_packageInfo['dependencies']['group'][$i]['package'],
-                                $name, false, $uri, false, false, false, false);
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-    }
-
-    /**
-     * @param array pre-existing array of dependencies of this type
      * @param string package name
      * @param string|false channel name, false if this is a uri
      * @param string|false uri name, false if this is a channel
@@ -1834,9 +1669,10 @@ class PEAR_PackageFile_v2
      * @param string|false maximum version allowed
      * @param string|false recommended installation version
      * @param array|false versions to exclude from installation
+     * @return array
+     * @access private
      */
-    function _constructPackageDep($arr, $name, $channel, $uri, $min, $max,
-                                  $recommended, $exclude)
+    function _constructDep($name, $channel, $uri, $min, $max, $recommended, $exclude)
     {
         $dep =
             array(
@@ -1844,7 +1680,7 @@ class PEAR_PackageFile_v2
             );
         if ($channel) {
             $dep['channel'] = $channel;
-        } else {
+        } elseif ($uri) {
             $dep['uri'] = $uri;
         }
         if ($min) {
@@ -1862,15 +1698,102 @@ class PEAR_PackageFile_v2
             }
             $dep['exclude'] = $exclude;
         }
-        if (count($arr)) {
-            if (!isset($arr[0])) {
-                $arr = array($arr);
-            }
-            $arr[] = $dep;
-        } else {
-            $arr = $dep;
+        return $dep;
+    }
+
+    /**
+     * @param package|subpackage
+     * @param string group name
+     * @param string package name
+     * @param string package channel
+     * @param string minimum version
+     * @param string maximum version
+     * @param string recommended version
+     * @param array|false optional excluded versions
+     * @return bool false if the dependency group has not been initialized with
+     *              {@link addDependencyGroup()}
+     */
+    function addGroupPackageDepWithChannel($type, $groupname, $name, $channel, $min = false,
+                                      $max = false, $recommended = false, $exclude = false)
+    {
+        $dep = $this->_constructDep($name, $channel, false, $min, $max, $recommended, $exclude);
+        return $this->_addGroupDependency($type, $dep, $groupname);
+    }
+
+    /**
+     * @param package|subpackage
+     * @param string group name
+     * @param string package name
+     * @param string package uri
+     * @return bool false if the dependency group has not been initialized with
+     *              {@link addDependencyGroup()}
+     */
+    function addGroupPackageDepWithURI($type, $groupname, $name, $uri)
+    {
+        $dep = $this->_constructDep($name, false, $uri, false, false, false, false);
+        return $this->_addGroupDependency($type, $dep, $groupname);
+    }
+
+    /**
+     * @param string group name (must be pre-existing)
+     * @param string extension name
+     * @param string minimum version allowed
+     * @param string maximum version allowed
+     * @param string recommended version
+     * @param array incompatible versions
+     */
+    function addGroupExtensionDep($groupname, $name, $min = false, $max = false,
+                                         $recommended = false, $exclude = false)
+    {
+        $this->_isValid = 0;
+        $dep = $this->_constructDep($name, false, false, $min, $max, $recommended, $exclude);
+        return $this->_addGroupDependency('extension', $dep, $groupname);
+    }
+
+    /**
+     * @param package|subpackage|extension
+     * @param array dependency contents
+     * @param string name of the dependency group to add this to
+     * @return boolean
+     * @access private
+     */
+    function _addGroupDependency($type, $dep, $groupname)
+    {
+        $arr = array('subpackage', 'extension');
+        if ($type != 'package') {
+            array_shift($arr);
         }
-        return $arr;
+        if ($type == 'extension') {
+            array_shift($arr);
+        }
+        if (!isset($this->_packageInfo['dependencies']['group'])) {
+            return false;
+        } else {
+            if (!isset($this->_packageInfo['dependencies']['group'][0])) {
+                if ($this->_packageInfo['dependencies']['group']['attribs']['name'] == $groupname) {
+                    $this->_mergeTag($this->_packageInfo['dependencies']['group'], $dep,
+                        array(
+                            $type => $arr
+                        ));
+                    $this->_isValid = 0;
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                foreach ($this->_packageInfo['dependencies']['group'] as $i => $group) {
+                    if ($group['attribs']['name'] == $groupname) {
+                    $this->_mergeTag($this->_packageInfo['dependencies']['group'][$i], $dep,
+                        array(
+                            $type => $arr
+                        ));
+                        $this->_isValid = 0;
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
     }
 
     /**
@@ -1886,63 +1809,40 @@ class PEAR_PackageFile_v2
                                       $recommended = false, $exclude = false)
     {
         $this->_isValid = 0;
-        if (!isset($this->_packageInfo['dependencies'])) {
-            // ensure that the dependencies tag is set up
-            $this->_insertBefore($this->_packageInfo,
-                array('phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
-        } elseif (!isset($this->_packageInfo['dependencies'][$type])) {
-            $save = $this->_packageInfo['dependencies'];
-            $new = array();
-            foreach (array('required', 'optional') as $possible) {
-                if ($type == $possible) {
-                    $new[$type] = array();
-                } elseif (isset($save[$possible])) {
-                    $new[$possible] = $save[$possible];
-                }
-            }
-            $this->_packageInfo['dependencies'] = $new;
+        $arr = array('optional', 'group');
+        if ($type != 'required') {
+            array_shift($arr);
         }
-        if (!isset($this->_packageInfo['dependencies'][$type]['package'])) {
-            $this->_packageInfo['dependencies'][$type]['package'] =
-                $this->_constructPackageDep(array(), $name, $channel, false, $min,
-                    $max, $recommended, $exclude);
-        } else {
-            $this->_packageInfo['dependencies'][$type]['package'] =
-                $this->_constructPackageDep($this->_packageInfo['dependencies'][$type]['package'],
-                    $name, $channel, false, $min, $max, $recommended, $exclude);
-        }
+        $dep = $this->_constructDep($name, $channel, false, $min, $max, $recommended, $exclude);
+        $this->_mergeTag($this->_packageInfo, $dep,
+            array(
+                'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
+                    'bundle', 'changelog'),
+                $type => $arr,
+                'package' => array('subpackage', 'extension', 'os', 'arch')
+            ));
     }
 
+    /**
+     * @param optional|required
+     * @param string name of the package
+     * @param string uri of the package
+     */
     function addPackageDepWithUri($type, $name, $uri)
     {
         $this->_isValid = 0;
-        if (!isset($this->_packageInfo['dependencies'])) {
-            // ensure that the dependencies tag is set up
-            $this->_insertBefore($this->_packageInfo,
-                array('phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
-        } elseif (!isset($this->_packageInfo['dependencies'][$type])) {
-            $save = $this->_packageInfo['dependencies'];
-            $new = array();
-            foreach (array('required', 'optional', 'group') as $possible) {
-                if ($type == $possible) {
-                    $new[$type] = array();
-                } elseif (isset($save[$possible])) {
-                    $new[$possible] = $save[$possible];
-                }
-            }
-            $this->_packageInfo['dependencies'] = $new;
+        $arr = array('optional', 'group');
+        if ($type != 'required') {
+            array_shift($arr);
         }
-        if (!isset($this->_packageInfo['dependencies'][$type]['package'])) {
-            $this->_packageInfo['dependencies'][$type]['package'] =
-                $this->_constructPackageDep(array(), $name, false, $uri, false,
-                    false, false, false);
-        } else {
-            $this->_packageInfo['dependencies'][$type]['package'] =
-                $this->_constructPackageDep($this->_packageInfo['dependencies'][$type]['package'],
-                    $name, false, $uri, false, false, false, false);
-        }
+        $dep = $this->_constructDep($name, false, $uri, false, false, false, false);
+        $this->_mergeTag($this->_packageInfo, $dep,
+            array(
+                'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
+                    'bundle', 'changelog'),
+                $type => $arr,
+                'package' => array('subpackage', 'extension', 'os', 'arch')
+            ));
     }
 
     /**
@@ -1952,91 +1852,113 @@ class PEAR_PackageFile_v2
      * @param string minimum version
      * @param string maximum version
      * @param string recommended version
-     * @param string $exclude... optional excluded versions
+     * @param array incompatible versions
      */
     function addSubpackageDepWithChannel($type, $name, $channel, $min = false, $max = false,
                                       $recommended = false, $exclude = false)
     {
         $this->_isValid = 0;
-        if (!isset($this->_packageInfo['dependencies'])) {
-            // ensure that the dependencies tag is set up
-            $this->_insertBefore($this->_packageInfo,
-                array('phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
-        } elseif (!isset($this->_packageInfo['dependencies'][$type])) {
-            $save = $this->_packageInfo['dependencies'];
-            $new = array();
-            foreach (array('required', 'optional', 'group') as $possible) {
-                if ($type == $possible) {
-                    $new[$type] = array();
-                } elseif (isset($save[$possible])) {
-                    $new[$possible] = $save[$possible];
-                }
-            }
-            $this->_packageInfo['dependencies'] = $new;
+        $arr = array('optional', 'group');
+        if ($type != 'required') {
+            array_shift($arr);
         }
-        if (!isset($this->_packageInfo['dependencies'][$type]['subpackage'])) {
-            $this->_packageInfo['dependencies'][$type]['subpackage'] =
-                $this->_constructPackageDep(array(), $name, $channel, false, $min,
-                    $max, $recommended, $exclude);
-        } else {
-            $this->_packageInfo['dependencies'][$type]['subpackage'] =
-                $this->_constructPackageDep($this->_packageInfo['dependencies'][$type]['subpackage'],
-                    $name, $channel, false, $min, $max, $recommended, $exclude);
-        }
+        $dep = $this->_constructDep($name, $channel, false, $min, $max, $recommended, $exclude);
+        $this->_mergeTag($this->_packageInfo, $dep,
+            array(
+                'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
+                    'bundle', 'changelog'),
+                $type => $arr,
+                'subpackage' => array('extension', 'os', 'arch')
+            ));
     }
 
-    function addSubpackageDepWithUri($type, $name, $uri, $group = null)
+    /**
+     * @param optional|required optional, required
+     * @param string package name
+     * @param string package uri for download
+     */
+    function addSubpackageDepWithUri($type, $name, $uri)
     {
         $this->_isValid = 0;
-        if (!isset($this->_packageInfo['dependencies'])) {
-            // ensure that the dependencies tag is set up
-            $this->_insertBefore($this->_packageInfo,
-                array('phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
-        } elseif (!isset($this->_packageInfo['dependencies'][$type])) {
-            $save = $this->_packageInfo['dependencies'];
-            $new = array();
-            foreach (array('required', 'optional', 'group') as $possible) {
-                if ($type == $possible) {
-                    $new[$type] = array();
-                } elseif (isset($save[$possible])) {
-                    $new[$possible] = $save[$possible];
-                }
-            }
-            $this->_packageInfo['dependencies'] = $new;
+        $arr = array('optional', 'group');
+        if ($type != 'required') {
+            array_shift($arr);
         }
-        if (!isset($this->_packageInfo['dependencies'][$type]['subpackage'])) {
-            $this->_packageInfo['dependencies'][$type]['subpackage'] =
-                $this->_constructPackageDep(array(), $name, false, $uri, false,
-                    false, false, false);
-        } else {
-            $this->_packageInfo['dependencies'][$type]['subpackage'] =
-                $this->_constructPackageDep($this->_packageInfo['dependencies'][$type]['subpackage'],
-                    $name, false, $uri, false, false, false, false);
-        }
+        $dep = $this->_constructDep($name, false, $uri, false, false, false, false);
+        $this->_mergeTag($this->_packageInfo, $dep,
+            array(
+                'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
+                    'bundle', 'changelog'),
+                $type => $arr,
+                'subpackage' => array('extension', 'os', 'arch')
+            ));
     }
 
-    function addExtensionDep($type, $name, $version, $rel, $optional = 'no', $group = null)
+
+    /**
+     * @param optional|required optional, required
+     * @param string extension name
+     * @param string minimum version
+     * @param string maximum version
+     * @param string recommended version
+     * @param array incompatible versions
+     */
+    function addExtensionDep($type, $name, $min = false, $max = false, $recommended = false,
+                             $exclude = false)
     {
         $this->_isValid = 0;
-        if (!isset($this->_packageInfo['dependencies'])) {
-            // ensure that the dependencies tag is set up
-            $this->_insertBefore($this->_packageInfo,
-                array('phprelease', 'extsrcrelease',
-                'extbinrelease', 'bundle', 'changelog'), array(), 'dependencies');
-        } elseif (!isset($this->_packageInfo['dependencies'][$type])) {
-            $save = $this->_packageInfo['dependencies'];
-            $new = array();
-            foreach (array('required', 'optional', 'group') as $possible) {
-                if ($type == $possible) {
-                    $new[$type] = array();
-                } elseif (isset($save[$type])) {
-                    $new[$type] = $save[$type];
-                }
-            }
-            $this->_packageInfo['dependencies'] = $new;
+        $arr = array('optional', 'group');
+        if ($type != 'required') {
+            array_shift($arr);
         }
+        $dep = $this->_constructDep($name, false, false, $min, $max, $recommended, $exclude);
+        $this->_mergeTag($this->_packageInfo, $dep,
+            array(
+                'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
+                    'bundle', 'changelog'),
+                $type => $arr,
+                'extension' => array('os', 'arch')
+            ));
+    }
+
+    /**
+     * @param string Operating system name
+     * @param boolean true if this package cannot be installed on this OS
+     */
+    function addOsDep($name, $conflicts = false)
+    {
+        $this->_isValid = 0;
+        $dep = array('name' => $name);
+        if ($conflicts) {
+            $dep['conflicts'] = 'yes';
+        }
+        $this->_mergeTag($this->_packageInfo, $dep,
+            array(
+                'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
+                    'bundle', 'changelog'),
+                'required' => array('optional', 'group'),
+                'os' => array('arch')
+            ));
+    }
+
+    /**
+     * @param string Architecture matching pattern
+     * @param boolean true if this package cannot be installed on this architecture
+     */
+    function addArchDep($pattern, $conflicts = false)
+    {
+        $this->_isValid = 0;
+        $dep = array('pattern' => $pattern);
+        if ($conflicts) {
+            $dep['conflicts'] = 'yes';
+        }
+        $this->_mergeTag($this->_packageInfo, $dep,
+            array(
+                'dependencies' => array('phprelease', 'extsrcrelease', 'extbinrelease',
+                    'bundle', 'changelog'),
+                'required' => array('optional', 'group'),
+                'arch' => array()
+            ));
     }
 
     function getPackageType()
@@ -2056,15 +1978,36 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    /**
+     * Set the kind of package
+     *
+     * - a php package is a PEAR-style package
+     * - an extbin package is a PECL-style extension binary
+     * - an extsrc package is a PECL-style source for a binary
+     * - a bundle package is a collection of other pre-compiled packages
+     * @param php|extbin|extsrc|bundle
+     * @return bool success
+     */
     function setPackageType($type)
     {
         $this->_isValid = 0;
-        $type .= 'release';
+        if (!in_array($type, array('php', 'extbin', 'extsrc', 'bundle'))) {
+            return false;
+        }
+        if ($type != 'bundle') {
+            $type .= 'release';
+        }
+        foreach (array('phprelease', 'extbinrelease', 'extsrcrelease', 'bundle') as $test) {
+            if ($type != $test) {
+                unset($this->_packageInfo[$test]);
+            }
+        }
         if (!isset($this->_packageInfo[$type])) {
-            // ensure that the compatible tag is set up
+            // ensure that the release tag is set up
             $this->_insertBefore($this->_packageInfo, array('changelog'), array(), $type);
         }
         $this->_packageInfo[$type] = array();
+        return true;
     }
 
     function hasDeps()
@@ -2164,6 +2107,44 @@ class PEAR_PackageFile_v2
             }
         }
         $array[$newkey] = $contents;
+    }
+
+    /**
+     * @param subsection of {@link $_packageInfo}
+     * @param array|string tag contents
+     * @param array format:
+     * <pre>
+     * array(
+     *   tagname => array(list of tag names that follow this one),
+     *   childtagname => array(list of child tag names that follow this one),
+     * )
+     * </pre>
+     *
+     * This allows construction of nested tags
+     * @access private
+     */
+    function _mergeTag(&$manip, $contents, $order)
+    {
+        $arr = &$manip;
+        foreach ($order as $tag => $curorder) {
+            if (!isset($arr[$tag])) {
+                // ensure that the dependencies tag is set up
+                $this->_insertBefore($arr, $curorder, array(), $tag);
+            }
+            $last = &$arr;
+            $arr = &$arr[$tag];
+        }
+        $arr = &$last;
+        if (isset($arr[$tag][0])) {
+            $arr[$tag][] = $contents;
+        } else {
+            if (!count($arr[$tag])) {
+                $arr[$tag] = $contents;
+            } else {
+                $arr[$tag] = array($arr[$tag]);
+                $arr[$tag][] = $contents;
+            }
+        }
     }
 
     function validate($state = PEAR_VALIDATE_NORMAL)
