@@ -28,6 +28,7 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
           'url' => 'http://www.example.com/test-1.0'));
 $dp = &new test_PEAR_Downloader($fakelog, array(), $config);
 $pkg = &new test_PEAR_PackageFile($config);
+$pkg->setLogger($fakelog);
 $pf = $pkg->fromTgzFile($pathtopackagexml, PEAR_VALIDATE_NORMAL);
 $registry = &$config->getRegistry();
 $registry->addPackage2($pf);
@@ -37,12 +38,11 @@ $result = $dp->download(array('test'));
 $phpunit->assertEquals(0, count($result), 'return');
 $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($dlpackages), 'downloaded packages count');
-$phpunit->showAll();
 $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 1,
-    1 => 'Skipping package "channel://pear.php.net/test", already installed as version 1.0',
+    1 => 'Skipping package "pear/test", already installed as version 1.0',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
@@ -59,12 +59,11 @@ $result = $dp->download(array('test'));
 $phpunit->assertEquals(0, count($result), 'return');
 $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($dlpackages), 'downloaded packages count');
-$phpunit->showAll();
 $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 1,
-    1 => 'Skipping package "channel://pear.php.net/test", already installed as version 1.0',
+    1 => 'Skipping package "pear/test", already installed as version 1.0',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');

@@ -208,7 +208,7 @@ $phpunit->assertEquals(array (
   13 => 
   array (
     0 => 0,
-    1 => 'Download and install of binary extension "channel://grob/foo_win" successful',
+    1 => 'Download and install of binary extension "grob/foo_win" successful',
   ),
 ), $fakelog->getLog(), 'log');
 $phpunit->assertEquals(array (

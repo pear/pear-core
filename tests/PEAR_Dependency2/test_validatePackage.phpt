@@ -16,6 +16,7 @@ $phpunit->assertNoErrors('create 1');
 require_once 'PEAR/PackageFile/v2.php';
 require_once 'PEAR/Downloader.php';
 $package = new PEAR_PackageFile_v2;
+$package->setLogger($fakelog);
 $package->setPackage('foo');
 $package->setChannel('pear.php.net');
 $package->setSummary('foo');
@@ -46,11 +47,11 @@ $result = $dep->validatePackage($pkg2, $dl);
 $phpunit->showall();
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/foo cannot be installed, conflicts with installed packages')), 'vp');
+          'message' => 'pear/foo cannot be installed, conflicts with installed packages')), 'vp');
 $phpunit->assertEquals(array (
   0 => 
   array (
-    0 => 'channel://pear.php.net/foo conflicts with  package "channel://pear.php.net/bar"',
+    0 => 'pear/foo conflicts with  package "pear/bar"',
     1 => true,
   ),
 ), $fakelog->getLog(), 'vp');

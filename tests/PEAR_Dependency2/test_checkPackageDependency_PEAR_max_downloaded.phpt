@@ -30,7 +30,7 @@ $result = $dep->validatePackageDependency(
     ), true, $params);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine requires package "channel://pear.php.net/foo" (version >= 0.1, version <= 0.9), downloaded version is 1.0')
+          'message' => 'pear/mine requires package "pear/foo" (version >= 0.1, version <= 0.9), downloaded version is 1.0')
 ), 'min');
 $phpunit->assertIsa('PEAR_Error', $result, 'min');
 
@@ -44,7 +44,7 @@ $result = $dep->validatePackageDependency(
     ), false, $params);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine requires package "channel://pear.php.net/foo" (version >= 0.1, version <= 0.9), downloaded version is 1.0')
+          'message' => 'pear/mine requires package "pear/foo" (version >= 0.1, version <= 0.9), downloaded version is 1.0')
 ), 'min optional');
 $phpunit->assertIsa('PEAR_Error', $result, 'min optional');
 

@@ -16,14 +16,14 @@ $phpunit->assertNoErrors('create 1');
 $dep->setOS('foo');
 $result = $dep->validateOsDependency(array('name' => 'foo', 'conflicts' => 'yes'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 'Cannot install channel://pear.php.net/mine on foo operating system'),
+    array('package' => 'PEAR_Error', 'message' => 'Cannot install pear/mine on foo operating system'),
 ), 'foo');
 $phpunit->assertIsa('PEAR_Error', $result, 'foo');
 
 $dep->setOS('bar');
 $result = $dep->validateOsDependency(array('name' => 'foo'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 'Cannot install channel://pear.php.net/mine on bar operating system, can only install on foo'),
+    array('package' => 'PEAR_Error', 'message' => 'Cannot install pear/mine on bar operating system, can only install on foo'),
 ), 'bar');
 $phpunit->assertIsa('PEAR_Error', $result, 'bar');
 
@@ -35,12 +35,12 @@ $phpunit->assertNoErrors('create 1');
 $dep->setOS('foo');
 $result = $dep->validateOsDependency(array('name' => 'foo', 'conflicts' => 'yes'));
 $phpunit->assertNoErrors('nodeps conflict');
-$phpunit->assertEquals(array('warning: Cannot install channel://pear.php.net/mine on foo operating system'), $result, 'nodeps conflict');
+$phpunit->assertEquals(array('warning: Cannot install pear/mine on foo operating system'), $result, 'nodeps conflict');
 
 $dep->setOS('bar');
 $result = $dep->validateOsDependency(array('name' => 'foo'));
 $phpunit->assertNoErrors('nodeps');
-$phpunit->assertEquals(array('warning: Cannot install channel://pear.php.net/mine on bar operating system, can only install on foo'), $result, 'nodeps');
+$phpunit->assertEquals(array('warning: Cannot install pear/mine on bar operating system, can only install on foo'), $result, 'nodeps');
 
 // force
 $dep = &new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
@@ -50,12 +50,12 @@ $phpunit->assertNoErrors('create 1');
 $dep->setOS('foo');
 $result = $dep->validateOsDependency(array('name' => 'foo', 'conflicts' => 'yes'));
 $phpunit->assertNoErrors('force conflict');
-$phpunit->assertEquals(array('warning: Cannot install channel://pear.php.net/mine on foo operating system'), $result, 'force conflict');
+$phpunit->assertEquals(array('warning: Cannot install pear/mine on foo operating system'), $result, 'force conflict');
 
 $dep->setOS('bar');
 $result = $dep->validateOsDependency(array('name' => 'foo'));
 $phpunit->assertNoErrors('force');
-$phpunit->assertEquals(array('warning: Cannot install channel://pear.php.net/mine on bar operating system, can only install on foo'), $result, 'force');
+$phpunit->assertEquals(array('warning: Cannot install pear/mine on bar operating system, can only install on foo'), $result, 'force');
 echo 'tests done';
 ?>
 --EXPECT--

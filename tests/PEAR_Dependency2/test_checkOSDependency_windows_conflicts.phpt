@@ -16,14 +16,14 @@ $phpunit->assertNoErrors('create 1');
 $dep->setOS('darwin');
 $result = $dep->validateOsDependency(array('name' => 'windows'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 'Can only install channel://pear.php.net/mine on Windows'),
+    array('package' => 'PEAR_Error', 'message' => 'Can only install pear/mine on Windows'),
 ), 'windows/darwin');
 $phpunit->assertIsa('PEAR_Error', $result, 'windows/darwin');
 
 $dep->setOS('WINDOWS');
 $result = $dep->validateOsDependency(array('name' => 'windows', 'conflicts' => 'yes'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 'Cannot install channel://pear.php.net/mine on Windows'),
+    array('package' => 'PEAR_Error', 'message' => 'Cannot install pear/mine on Windows'),
 ), 'windows/windows conflicts');
 $phpunit->assertIsa('PEAR_Error', $result, 'windows/windows conflicts');
 
@@ -35,12 +35,12 @@ $phpunit->assertNoErrors('create 1');
 $dep->setOS('darwin');
 $result = $dep->validateOsDependency(array('name' => 'windows'));
 $phpunit->assertNoErrors('nodeps');
-$phpunit->assertEquals(array('warning: Can only install channel://pear.php.net/mine on Windows'), $result, 'nodeps');
+$phpunit->assertEquals(array('warning: Can only install pear/mine on Windows'), $result, 'nodeps');
 
 $dep->setOS('WINDOWS');
 $result = $dep->validateOsDependency(array('name' => 'windows', 'conflicts' => 'yes'));
 $phpunit->assertNoErrors('nodeps conflict');
-$phpunit->assertEquals(array('warning: Cannot install channel://pear.php.net/mine on Windows'), $result, 'nodeps conflict');
+$phpunit->assertEquals(array('warning: Cannot install pear/mine on Windows'), $result, 'nodeps conflict');
 
 // force
 $dep = &new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
@@ -50,12 +50,12 @@ $phpunit->assertNoErrors('create 1');
 $dep->setOS('darwin');
 $result = $dep->validateOsDependency(array('name' => 'windows'));
 $phpunit->assertNoErrors('nodeps');
-$phpunit->assertEquals(array('warning: Can only install channel://pear.php.net/mine on Windows'), $result, 'nodeps');
+$phpunit->assertEquals(array('warning: Can only install pear/mine on Windows'), $result, 'nodeps');
 
 $dep->setOS('WINDOWS');
 $result = $dep->validateOsDependency(array('name' => 'windows', 'conflicts' => 'yes'));
 $phpunit->assertNoErrors('nodeps conflict');
-$phpunit->assertEquals(array('warning: Cannot install channel://pear.php.net/mine on Windows'), $result, 'nodeps conflict');
+$phpunit->assertEquals(array('warning: Cannot install pear/mine on Windows'), $result, 'nodeps conflict');
 echo 'tests done';
 ?>
 --EXPECT--

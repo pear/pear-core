@@ -128,27 +128,26 @@ $phpunit->assertNoErrors('after create 1');
 $params = array(&$dp);
 $dp->detectDependencies($params);
 $phpunit->assertNoErrors('after detect');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 0,
-    1 => 'No releases for package "channel://pear.php.net/required" exist, cannot download "dependency"',
+    1 => 'No releases for package "pear/required" exist, cannot download "dependency"',
   ),
   1 => 
   array (
     0 => 3,
-    1 => 'Notice: package "pear.php.net/main" optional dependency "pear.php.net/optional" will not be automatically downloaded',
+    1 => 'Notice: package "pear/main" optional dependency "pear/optional" will not be automatically downloaded',
   ),
   2 => 
   array (
     0 => 0,
-    1 => 'No releases for package "channel://pear.php.net/optional" exist, cannot download "dependency"',
+    1 => 'No releases for package "pear/optional" exist, cannot download "dependency"',
   ),
   3 => 
   array (
     0 => 0,
-    1 => 'No releases for package "channel://pear.php.net/sub2" exist, cannot download "dependency"',
+    1 => 'No releases for package "pear/sub2" exist, cannot download "dependency"',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');
@@ -165,22 +164,22 @@ $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/main-1.0 requires PHP (version >= 4.2, version <= 6.0.0), installed version is 4.0',
+    1 => 'pear/main requires PHP (version >= 4.2, version <= 6.0.0), installed version is 4.0',
   ),
   1 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/main-1.0 requires package "channel://pear.php.net/required" (version >= 1.1)',
+    1 => 'pear/main requires package "pear/required" (version >= 1.1)',
   ),
   2 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/main-1.0 can optionally use package "channel://pear.php.net/optional" (version >= 1.1)',
+    1 => 'pear/main can optionally use package "pear/optional" (version >= 1.1)',
   ),
   3 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/main-1.0 can optionally use package "channel://pear.php.net/sub2" (version >= 1.1)',
+    1 => 'pear/main can optionally use package "pear/sub2" (version >= 1.1)',
   ),
 ), $fakelog->getLog(), 'end log');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');

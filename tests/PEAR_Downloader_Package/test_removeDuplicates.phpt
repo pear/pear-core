@@ -50,7 +50,7 @@ $phpunit->assertEquals(3, count($params), 'unsuccessful removal');
 $phpunit->assertEquals('test', $params[0]->getPackage(), 'first one');
 $phpunit->assertEquals('subgroup', $params[0]->getGroup(), 'first one group');
 $phpunit->assertEquals('test', $params[1]->getPackage(), 'second one');
-$phpunit->assertEquals('', $params[1]->getGroup(), 'second one group');
+$phpunit->assertEquals('default', $params[1]->getGroup(), 'second one group');
 $phpunit->assertEquals('test2', $params[2]->getPackage(), 'third one');
 echo 'tests done';
 ?>

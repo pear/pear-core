@@ -22,7 +22,7 @@ $result = $dep->validatePearinstallerDependency(
     ));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine is not compatible with PEAR Installer version 1.2.0')
+          'message' => 'pear/mine is not compatible with PEAR Installer version 1.2.0')
 ), 'exclude 1');
 $phpunit->assertIsa('PEAR_Error', $result, 'exclude 1');
 
@@ -33,7 +33,7 @@ $result = $dep->validatePearinstallerDependency(
     ));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine is not compatible with PEAR Installer version 1.2.0')
+          'message' => 'pear/mine is not compatible with PEAR Installer version 1.2.0')
 ), 'exclude 1');
 $phpunit->assertIsa('PEAR_Error', $result, 'exclude 1');
 // nodeps
@@ -49,7 +49,7 @@ $result = $dep->validatePearinstallerDependency(
         'exclude' => '1.2.0',
     ));
 $phpunit->assertNoErrors('nodeps');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PEAR Installer version 1.2.0'), $result, 'nodeps');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with PEAR Installer version 1.2.0'), $result, 'nodeps');
 
 $result = $dep->validatePearinstallerDependency(
     array(
@@ -57,7 +57,7 @@ $result = $dep->validatePearinstallerDependency(
         'exclude' => array('1.2.0', '1.2.1'),
     ));
 $phpunit->assertNoErrors('nodeps');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PEAR Installer version 1.2.0'), $result, 'nodeps');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with PEAR Installer version 1.2.0'), $result, 'nodeps');
 
 
 // force
@@ -73,7 +73,7 @@ $result = $dep->validatePearinstallerDependency(
         'exclude' => '1.2.0',
     ));
 $phpunit->assertNoErrors('nodeps');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PEAR Installer version 1.2.0'), $result, 'force');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with PEAR Installer version 1.2.0'), $result, 'force');
 
 $result = $dep->validatePearinstallerDependency(
     array(
@@ -81,7 +81,7 @@ $result = $dep->validatePearinstallerDependency(
         'exclude' => array('1.2.0', '1.2.1'),
     ));
 $phpunit->assertNoErrors('nodeps');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PEAR Installer version 1.2.0'), $result, 'force');
+$phpunit->assertEquals(array('warning: pear/mine is not compatible with PEAR Installer version 1.2.0'), $result, 'force');
 
 echo 'tests done';
 ?>

@@ -18,7 +18,7 @@ $phpunit->assertNoErrors('create 1');
 $dep->setArch('FreeBSD host.example.com 4.5-STABLE FreeBSD 4.5-STABLE #0: Wed Feb  6 23:59:23 CET 2002     root@example.com:/usr/src/sys/compile/CONFIG  i386', 'glibc1.2');
 $result = $dep->validateArchDependency(array('pattern' => 'aix-*-i386'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 'channel://pear.php.net/mine Architecture dependency failed, does not match "aix-*-i386"'),
+    array('package' => 'PEAR_Error', 'message' => 'pear/mine Architecture dependency failed, does not match "aix-*-i386"'),
 ), 'foo');
 $phpunit->assertIsa('PEAR_Error', $result, 'foo');
 
@@ -34,7 +34,7 @@ $phpunit->assertNoErrors('create 2');
 $dep->setArch('FreeBSD host.example.com 4.5-STABLE FreeBSD 4.5-STABLE #0: Wed Feb  6 23:59:23 CET 2002     root@example.com:/usr/src/sys/compile/CONFIG  i386', 'glibc1.2');
 $result = $dep->validateArchDependency(array('pattern' => 'aix-*-i386'));
 $phpunit->assertNoErrors('nodeps ');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine Architecture dependency failed, does not match "aix-*-i386"'), $result, 'nodeps');
+$phpunit->assertEquals(array('warning: pear/mine Architecture dependency failed, does not match "aix-*-i386"'), $result, 'nodeps');
 
 // force
 $dep = &new test_PEAR_Dependency2($config, array('force' => true),
@@ -44,7 +44,7 @@ $phpunit->assertNoErrors('create 2');
 $dep->setArch('FreeBSD host.example.com 4.5-STABLE FreeBSD 4.5-STABLE #0: Wed Feb  6 23:59:23 CET 2002     root@example.com:/usr/src/sys/compile/CONFIG  i386', 'glibc1.2');
 $result = $dep->validateArchDependency(array('pattern' => 'aix-*-i386'));
 $phpunit->assertNoErrors('force ');
-$phpunit->assertEquals(array('warning: channel://pear.php.net/mine Architecture dependency failed, does not match "aix-*-i386"'), $result, 'force');
+$phpunit->assertEquals(array('warning: pear/mine Architecture dependency failed, does not match "aix-*-i386"'), $result, 'force');
 echo 'tests done';
 ?>
 --EXPECT--

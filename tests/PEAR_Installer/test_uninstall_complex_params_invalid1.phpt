@@ -11,6 +11,8 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 require_once 'PEAR/PackageFile/v1.php';
 $package = new PEAR_PackageFile_v1;
+$package->setConfig($config);
+$package->setLogger($fakelog);
 $package->setPackage('foo');
 $package->setSummary('foo');
 $package->setDescription('foo');
@@ -46,13 +48,13 @@ $installer->setUninstallPackages($params);
 $installer->uninstall('foo');
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' =>
-        'channel://pear.php.net/foo cannot be uninstalled, other installed packages depend on this package')
+        'pear/foo cannot be uninstalled, other installed packages depend on this package')
 ), 'foo');
 $phpunit->assertEquals( array (
   0 => 
   array (
     0 => 0,
-    1 => 'channel://pear.php.net/foo (version >= 1.0) is required by package "channel://pear.php.net/next"',
+    1 => 'pear/foo (version >= 1.0) is required by package "pear/next"',
   ),
  ), $fakelog->getLog(), 'foo');
 echo 'tests done';

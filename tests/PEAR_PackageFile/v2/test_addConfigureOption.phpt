@@ -38,8 +38,6 @@ $result = $pf->validate(PEAR_VALIDATE_INSTALLING);
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'installing validate empty log');
 $result = $pf->validate(PEAR_VALIDATE_DOWNLOADING);
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'downloading validate empty log');
-$result = $pf->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertEquals(array(), $fakelog->getLog(), 'packaging validate full log');
 echo 'tests done';
 ?>
 --EXPECT--

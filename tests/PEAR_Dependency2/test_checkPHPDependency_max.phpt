@@ -22,7 +22,7 @@ $result = $dep->validatePhpDependency(
     ));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine requires PHP (version >= 5.0.0, version <= 6.0.0), installed version is 6.0.1')
+          'message' => 'pear/mine requires PHP (version >= 5.0.0, version <= 6.0.0), installed version is 6.0.1')
 ), 'max');
 $phpunit->assertIsa('PEAR_Error', $result, 'max');
 
@@ -39,7 +39,7 @@ $result = $dep->validatePhpDependency(
     ));
 $phpunit->assertNoErrors('max nodeps');
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires PHP (version >= 5.0.0, version <= 6.0.0), installed version is 6.0.1',
+  0 => 'warning: pear/mine requires PHP (version >= 5.0.0, version <= 6.0.0), installed version is 6.0.1',
 ), $result, 'max nodeps');
 
 /****************************** force *************************************/
@@ -55,7 +55,7 @@ $result = $dep->validatePhpDependency(
     ));
 $phpunit->assertNoErrors('max force');
 $phpunit->assertEquals(array (
-  0 => 'warning: channel://pear.php.net/mine requires PHP (version >= 5.0.0, version <= 6.0.0), installed version is 6.0.1',
+  0 => 'warning: pear/mine requires PHP (version >= 5.0.0, version <= 6.0.0), installed version is 6.0.1',
 ), $result, 'max force');
 echo 'tests done';
 ?>
