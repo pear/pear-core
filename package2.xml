@@ -166,6 +166,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
      <file name="Unixeol.php" role="php" />
      <file name="Windowseol.php" role="php" />
     </dir> <!-- /PEAR/Task -->
+    <dir name="Validator">
+     <file name="PECL.php" role="php" />
+    </dir> <!-- /PEAR/Validator -->
     <file name="Autoloader.php" role="php" />
     <file name="Builder.php" role="php">
      <tasks:replace from="@PEAR-VER@" to="version" type="package-info"/>

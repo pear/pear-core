@@ -176,6 +176,9 @@
      <file role="php" name="Unixeol.php"/>
      <file role="php" name="Windowseol.php"/>
     </dir>
+    <dir name="Validator">
+     <file role="php" name="PECL.php"/>
+    </dir>
     <file role="php" name="ChannelFile.php"/>
     <file role="php" name="Common.php"/>
     <file role="php" name="Config.php"/>
