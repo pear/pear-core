@@ -110,36 +110,12 @@ class PEAR_Remote extends PEAR
 
     // }}}
 
-    /**
-     * Call a REST-based method
-     */
-    function callRest($method, $args)
-    {
-        $server_channel = $this->config->get('default_channel');
-        $channel = $this->_registry->getChannel($server_channel);
-        if ($channel) {
-            if (!$channel->supports('rest', $method)) {
-                return $this->raiseError("Channel $server_channel does not support REST method $method");
-            }
-        }
-        array_unshift($_args, $channel); // cache by channel
-        $this->cache = $this->getCache($_args);
-        $cachettl = $this->config->get('cache_ttl');
-        // If cache is newer than $cachettl seconds, we use the cache!
-        if ($this->cache !== null && $this->cache['age'] < $cachettl) {
-            return $this->cache['content'];
-        }
-    }
-
     function callWithVersion($version, $method)
     {
         $_args = $args = func_get_args();
         $server_channel = $this->config->get('default_channel');
         $channel = $this->_registry->getChannel($server_channel);
         if ($channel) {
-            if ($channel->supports('rest', $method, $version)) {
-                return $this->callRest($method, $args);
-            }
             if (!$channel->supports('xmlrpc', $method, $version)) {
                 // check for channel.list, which is implicitly supported for the PEAR channel
                 if (!(strtolower($server_channel) == 'pear.php.net' && $method == 'channel.list')) {
@@ -159,9 +135,6 @@ class PEAR_Remote extends PEAR
         $server_channel = $this->config->get('default_channel');
         $channel = $this->_registry->getChannel($server_channel);
         if ($channel) {
-            if ($channel->supports('rest', $method)) {
-                return $this->callRest($method, $args);
-            }
             if (!$channel->supports('xmlrpc', $method)) {
                 return $this->raiseError("Channel $server_channel does not support xml-rpc method $method");
             }
