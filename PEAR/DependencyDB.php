@@ -20,20 +20,6 @@
 //
 // $Id$
 
-/**
-Experimental dependencies database handling functions (not yet in production)
-
-<?php
-include './DependencyDB.php';
-PEAR::setErrorHandling(PEAR_ERROR_DIE);
-$dep = PEAR_DependencyDB::singleton('./test.deps', '/home/cox/www/include/pear');
-//$dep->rebuildDB();
-$a = $dep->checkAction('uninstall', 'net_socket');
-print_r($a);
-?>
-
-**/
-
 require_once 'PEAR.php';
 require_once 'PEAR/Registry.php';
 require_once 'PEAR/Dependency2.php';
