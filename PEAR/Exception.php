@@ -21,9 +21,6 @@
 //
 // $Id$
 
-define('PEAR_EXCEPTION_PRINT',                -2);
-define('PEAR_EXCEPTION_TRIGGER',              -4);
-define('PEAR_EXCEPTION_DIE',                  -8);
 
 /**
  * Base PEAR_Exception Class
@@ -97,6 +94,9 @@ define('PEAR_EXCEPTION_DIE',                  -8);
  */
 class PEAR_Exception extends Exception
 {
+    const OBSERVER_PRINT = -2;
+    const OBSERVER_TRIGGER = -4;
+    const OBSERVER_DIE = -8;
     protected $cause;
     private static $_observers = array();
     private static $_uniqueid = 0;
@@ -133,11 +133,11 @@ class PEAR_Exception extends Exception
 
     /**
      * @param mixed $callback  - A valid php callback, see php func is_callable()
-     *                         - A PEAR_EXCEPTION_* constant
-     *                         - An array(const PEAR_EXCEPTION_*, mixed $options)
-     *
-     * @param string $label    - The name of the observer. Use this if you want
-     *                           to remove it later with removeObserver()
+     *                         - A PEAR_Exception::OBSERVER_* constant
+     *                         - An array(const PEAR_Exception::OBSERVER_*,
+     *                           mixed $options)
+     * @param string $label    The name of the observer. Use this if you want
+     *                         to remove it later with removeObserver()
      */
     public static function addObserver($callback, $label = 'default')
     {
@@ -166,15 +166,15 @@ class PEAR_Exception extends Exception
             }
             settype($func, 'array');
             switch ($func[0]) {
-                case PEAR_EXCEPTION_PRINT :
+                case self::OBSERVER_PRINT :
                     $f = (isset($func[1])) ? $func[1] : '%s';
                     printf($f, $this->getMessage());
                     break;
-                case PEAR_EXCEPTION_TRIGGER :
+                case self::OBSERVER_TRIGGER :
                     $f = (isset($func[1])) ? $func[1] : E_USER_NOTICE;
                     trigger_error($this->getMessage(), $f);
                     break;
-                case PEAR_EXCEPTION_DIE :
+                case self::OBSERVER_DIE :
                     $f = (isset($func[1])) ? $func[1] : '%s';
                     die(printf($f, $this->getMessage()));
                     break;
