@@ -43,6 +43,21 @@ $phpunit->assertErrors(array(
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'exclude 1 log');
 $phpunit->assertIsa('PEAR_Error', $result, 'exclude 1');
 
+$result = $dep->validatePackageDependency(
+    array(
+        'name' => 'foo',
+        'channel' => 'pear.php.net',
+        'min' => '0.9',
+        'max' => '1.9',
+        'exclude' => array('0.9','1.0'),
+    ), true, array());
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error',
+          'message' => 'channel://pear.php.net/mine is not compatible with installed package "channel://pear.php.net/foo" version 1.0')
+), 'exclude 1 multi');
+$phpunit->assertEquals(array(), $fakelog->getLog(), 'exclude 1 log multi');
+$phpunit->assertIsa('PEAR_Error', $result, 'exclude 1 multi');
+
 // nodeps
 $dep = &new test_PEAR_Dependency2($config, array('nodeps' => true), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
