@@ -161,6 +161,11 @@ class PEAR_Downloader_Package
         return $this->_packagefile;
     }
 
+    function &getDownloader()
+    {
+        return $this->_downloader;
+    }
+
     function getType() 
     {
         return $this->_type;
@@ -554,6 +559,15 @@ class PEAR_Downloader_Package
         }
     }
 
+    function isBundle()
+    {
+        if (isset($this->_packagefile)) {
+            return $this->_packagefile->getPackageType() == 'bundle';
+        } else {
+            return false;
+        }
+    }
+
     function getPackageXmlVersion()
     {
         if (isset($this->_packagefile)) {
@@ -778,6 +792,52 @@ class PEAR_Downloader_Package
     function mergeDependencies(&$params)
     {
         $newparams = array();
+        $bundles = array();
+        foreach ($params as $i => $param) {
+            if (!$param->isBundle()) {
+                continue;
+            }
+            $bundles[] = $i;
+            $pf = &$param->getPackageFile();
+            $newdeps = array();
+            $contents = $pf->BundledPackages();
+            if (!is_array($contents)) {
+                $contents = array($contents);
+            }
+            foreach ($contents as $file) {
+                $filecontents = $pf->getFileContents($file);
+                $dl = &$param->getDownloader();
+                $fp = @fopen($dl->getDownloadDir() . DIRECTORY_SEPARATOR . $file);
+                if (!$fp) {
+                    continue;
+                }
+                fwrite($fp, $filecontents, strlen($filecontents));
+                fclose($fp);
+                $obj = &new PEAR_Downloader_Package($params[$i]->getDownloader());
+                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                $e = $obj->_fromFile($dep);
+                PEAR::popErrorHandling();
+                if (PEAR::isError($e)) {
+                    $dl->log(0, $e->getMessage());
+                    continue;
+                }
+                $j = &$obj;
+                if (!PEAR_Downloader_Package::willDownload($j,
+                      array_merge($params, $newparams)) && !$param->isInstalled($j)) {
+                    $newparams[] = &$j;
+                }
+            }
+        }
+        foreach ($bundles as $i) {
+            unset($params[$i]); // remove bundles - only their contents matter for installation
+        }
+        PEAR_Downloader_Package::removeDuplicates($params); // strip any unset indices
+        if (count($newparams)) { // add in bundled packages for install
+            foreach ($newparams as $i => $unused) {
+                $params[] = &$newparams[$i];
+            }
+            $newparams = array();
+        }
         foreach ($params as $i => $param) {
             $newdeps = array();
             foreach ($param->_downloadDeps as $dep) {
@@ -792,12 +852,12 @@ class PEAR_Downloader_Package
             // around
             $params[$i]->_downloadDeps = array();
             foreach ($newdeps as $dep) {
-                $obj = &new PEAR_Downloader_Package($params[$i]->_downloader);
+                $obj = &new PEAR_Downloader_Package($params[$i]->getDownloader());
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                 $e = $obj->fromDepURL($dep);
                 PEAR::popErrorHandling();
                 if (PEAR::isError($e)) {
-                    $param->_downloader->log(0, $e->getMessage());
+                    $dl->log(0, $e->getMessage());
                     continue;
                 }
                 $obj->detectDependencies($params);

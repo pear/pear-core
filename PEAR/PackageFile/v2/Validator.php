@@ -468,7 +468,6 @@ class PEAR_PackageFile_v2_Validator
     {
         $structure = array(
             'name',
-            'channel',
             '*min',
             '*max',
             '*recommended',
@@ -476,7 +475,6 @@ class PEAR_PackageFile_v2_Validator
             '*conflicts',
         );
         $this->_stupidSchemaValidate($structure, $dep, '<dependencies><extension>');
-        $this->_stupidSchemaValidate($structure, $dep, '<dependencies><package>');
         if (isset($dep['min'])) {
             if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
                   $dep['min'])) {
@@ -637,6 +635,16 @@ class PEAR_PackageFile_v2_Validator
                     $groups = array($groups);
                 }
                 foreach ($groups as $group) {
+                    if (!isset($group['attribs'])) {
+                        $this->_tagHasNoAttribs('group', '<dependencies>');
+                    } else {
+                        if (!isset($group['attribs']['name'])) {
+                            $this->_tagMissingAttribute('group', 'name', '<dependencies>');
+                        }
+                        if (!isset($group['attribs']['hint'])) {
+                            $this->_tagMissingAttribute('group', 'hint', '<dependencies>');
+                        }
+                    }
                     foreach (array('package', 'subpackage', 'extension') as $type) {
                         if (isset($group[$type])) {
                             $iter = $group[$type];
@@ -644,17 +652,19 @@ class PEAR_PackageFile_v2_Validator
                                 $iter = array($iter);
                             }
                             foreach ($iter as $package) {
-                                if (isset($package['url'])) {
-                                    if (isset($package['channel'])) {
-                                        $this->_UrlOrChannelGroup($type,
-                                            $package['name'],
-                                            $group['name']);
-                                    }
-                                } else {
-                                    if (!isset($package['channel'])) {
-                                        $this->_NoChannelGroup($type,
-                                            $package['name'],
-                                            $group['name']);
+                                if ($type != 'extension') {
+                                    if (isset($package['uri'])) {
+                                        if (isset($package['channel'])) {
+                                            $this->_UrlOrChannelGroup($type,
+                                                $package['name'],
+                                                $group['name']);
+                                        }
+                                    } else {
+                                        if (!isset($package['channel'])) {
+                                            $this->_NoChannelGroup($type,
+                                                $package['name'],
+                                                $group['name']);
+                                        }
                                     }
                                 }
                                 $this->{"_validate{$type}Dep"}($package);
@@ -988,14 +998,14 @@ class PEAR_PackageFile_v2_Validator
     function _filelistCannotContainFile($filelist)
     {
         $this->_stack->push(__FUNCTION__, 'error', array('tag' => $filelist),
-            '<%filelist%> can only contain <dir>, contains <file>.  Use ' .
+            '<%tag%> can only contain <dir>, contains <file>.  Use ' .
             '<dir name="/"> as the first dir element');
     }
 
     function _filelistMustContainDir($filelist)
     {
         $this->_stack->push(__FUNCTION__, 'error', array('tag' => $filelist),
-            '<%filelist%> must contain <dir>.  Use <dir name="/"> as the ' .
+            '<%tag%> must contain <dir>.  Use <dir name="/"> as the ' .
             'first dir element');
     }
 
