@@ -38,19 +38,22 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
         if (PEAR::isError($file)) {
             PEAR::popErrorHandling();
             return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
-                $fileXml['name'] . '"is not valid: ' .
+                $fileXml['name'] . '" is not valid: ' .
                 $file->getMessage());
+        } elseif ($file === null) {
+            return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
+                $fileXml['name'] . '" could not be retrieved for processing!');
         } else {
             $analysis = $pkg->analyzeSourceCode($file, true);
             if (PEAR::isError($analysis)) {
                 PEAR::popErrorHandling();
                 return array(PEAR_TASK_ERROR_INVALID, 'Analysis of post-install script "' .
-                    $fileXml['name'] . '"failed');
+                    $fileXml['name'] . '" failed');
             }
             if (count($analysis['declared_classes']) != 1) {
                 PEAR::popErrorHandling();
                 return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
-                    $fileXml['name'] . '"must declare exactly 1 class');
+                    $fileXml['name'] . '" must declare exactly 1 class');
             }
             $class = $analysis['declared_classes'][0];
             if ($class != str_replace(array('/', '.php'), array('_', ''),
