@@ -594,7 +594,11 @@ http://pear.php.net/dtd/package-2.0.xsd',
                         'release' => $release['release_state'],
                         'api' => $release['release_state'],
                     );
-                $rel['date'] = $release['release_date'];
+                if (isset($rel['date'])) {
+                    $rel['date'] = $release['release_date'];
+                } else {
+                    $rel['date'] = date('Y-m-d');
+                }
                 if (isset($release['release_license'])) {
                     if (isset($licensemap[strtolower($release['release_license'])])) {
                         $uri = $licensemap[strtolower($release['release_license'])];
