@@ -958,7 +958,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
         }
         $found = false;
         foreach ($compatible as $info) {
-            if (strtolower($info['package']) == strtolower($pf->getPackage())) {
+            if (strtolower($info['name']) == strtolower($pf->getPackage())) {
                 if (strtolower($info['channel']) == strtolower($pf->getChannel())) {
                     $found = true;
                     break;
@@ -982,6 +982,28 @@ http://pear.php.net/dtd/package-2.0.xsd',
             return true;
         }
         return false;
+    }
+
+    function addCompatiblePackage($name, $channel, $min, $max, $exclude = false)
+    {
+        $set = array(
+            'name' => $name,
+            'channel' => $channel,
+            'min' => $min,
+            'max' => $max,
+        );
+        if ($exclude) {
+            $set['exclude'] = $exclude;
+        }
+        $this->_isValid = 0;
+        if (isset($this->_packageInfo['compatible'])) {
+            if (!isset($this->_packageInfo['compatible'][0])) {
+                $this->_packageInfo['compatible'] = array($this->_packageInfo['compatible']);
+            }
+            $this->_packageInfo['compatible'][] = $set;
+        } else {
+            $this->_packageInfo['compatible'] = $set;
+        }
     }
 
     function getCompatible()
@@ -2267,7 +2289,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
     function _validateCompatible()
     {
         $compat = $this->_packageInfo['compatible'];
-        if (isset($compat['name'])) {
+        if (!isset($compat[0])) {
             $compat = array($compat);
         }
         $required = array('name', 'channel', 'min', 'max', '*exclude');
