@@ -136,7 +136,7 @@ $phpunit->assertEquals(array (
           array (
             'name' => 'Conflicts',
             'channel' => 'badboys',
-            'conflicts' => 'yes',
+            'conflicts' => '',
           ),
           'type' => 'required',
           'group' => false,
