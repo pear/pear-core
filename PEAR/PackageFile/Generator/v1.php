@@ -255,7 +255,7 @@ class PEAR_PackageFile_Generator_v1
             unset($maintainer['handle']);
             $arr['maintainer'][] = array('attribs' => $maintainer);
         }
-        if (count($arr['maintainer']) == 1) {
+        if (isset($arr['maintainer']) && count($arr['maintainer']) == 1) {
             $arr['maintainer'] = $arr['maintainer'][0];
         }
         $arr['date'] = $this->_packagefile->getDate();
@@ -423,13 +423,9 @@ class PEAR_PackageFile_Generator_v1
                 do {
                     if (isset($deps['pkg'])) {
                         $pkg = array();
-                        if (count($deps['pkg']) > 1) {
-                            $pkg = $this->_processMultipleDepsName($deps['pkg']);
-                        } else {
-                            $pkg = $this->_processDep($deps['pkg'][0]);
-                            if (!$pkg) {
-                                break; // poor mans throw
-                            }
+                        $pkg = $this->_processMultipleDepsName($deps['pkg']);
+                        if (!$pkg) {
+                            break; // poor mans throw
                         }
                         $release['dependencies'][$arr]['package'] = $pkg;
                     }
@@ -437,14 +433,7 @@ class PEAR_PackageFile_Generator_v1
                 do {
                     if (isset($deps['ext'])) {
                         $pkg = array();
-                        if (count($deps['ext']) > 1) {
-                            $pkg = $this->_processMultipleDepsName($deps['ext']);
-                        } else {
-                            $pkg = $this->_processDep($deps['ext'][0]);
-                            if (!$pkg) {
-                                break; // poor mans throw
-                            }
-                        }
+                        $pkg = $this->_processMultipleDepsName($deps['ext']);
                         $release['dependencies'][$arr]['extension'] = $pkg;
                     }
                 } while (false);
@@ -504,6 +493,12 @@ class PEAR_PackageFile_Generator_v1
                         array('attribs' => 
                             array('name' => $file,
                                   'as' => $package['install-as'][$file]));
+                    }
+                    foreach ($package['osmap'] as $os => $files) {
+                        foreach ($files as $file) {
+                            $release[count($oses)]['filelist']['ignore'][]
+                                ['attribs']['name'] = $file;
+                        }
                     }
                 }
                 foreach ($package['osmap'] as $os => $files) {
@@ -565,9 +560,6 @@ class PEAR_PackageFile_Generator_v1
                 // are NOT pecl
                 $php['attribs']['channel'] = 'pear';
             }
-        }
-        if (isset($dep['optional'])) {
-            $php['attribs']['optional'] = $dep['optional'];
         }
         switch ($dep['rel']) {
             case 'gt' :
@@ -649,7 +641,7 @@ class PEAR_PackageFile_Generator_v1
 
     function _processMultipleDepsName($deps)
     {
-        $test = array();
+        $tests = array();
         foreach ($deps as $name => $dep) {
             foreach ($dep as $d) {
                 $tests[$name][] = $this->_processDep($d);
@@ -672,9 +664,6 @@ class PEAR_PackageFile_Generator_v1
             }
             if (isset($dep['attribs']['channel'])) {
                 $php['attribs']['channel'] = $dep['attribs']['channel'];
-            }
-            if (isset($dep['attribs']['optional'])) {
-                $php['attribs']['optional'] = $dep['attribs']['optional'];
             }
             $php['attribs']['name'] = $name;
             if (count($min) > 0) {
@@ -790,9 +779,10 @@ class PEAR_PackageFile_Generator_v1
 //$r = new PEAR_Registry('C:\Program Files\php\pear');
 //$a->setRegistry($r);
 //$p = &$a->parse(file_get_contents('C:\devel\pear_with_channels\package-PEAR.xml'), PEAR_VALIDATE_NORMAL,
+////$p = &$a->parse(file_get_contents('C:\devel\chiara\phpdoc\package.xml'), PEAR_VALIDATE_NORMAL,
 //    'C:\devel\pear_with_channels\package-PEAR.xml');
 //$g = &$p->getDefaultGenerator();
 //$v2 = &$g->toV2();
 //$g = &$v2->getDefaultGenerator();
 //echo $g->toXml();
-?>
+//?>
