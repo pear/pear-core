@@ -135,7 +135,7 @@ class PEAR_PackageFile_v2
      */
     function &getPEARDependency2(&$c, $o, $p, $s = PEAR_VALIDATE_INSTALLING)
     {
-        $z = &new PEAR_Dependency2(&$c, $o, $p, $s);
+        $z = &new PEAR_Dependency2($c, $o, $p, $s);
         return $z;
     }
 
