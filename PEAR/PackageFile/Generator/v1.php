@@ -114,7 +114,7 @@ class PEAR_PackageFile_Generator_v1
             }
             // ----- Add the content of the package
             if (!$tar->addModify($filelist, $pkgver, $pkgdir)) {
-                return PEAR::raiseError('PEAR_Packagefile::toTgz: tarball creation failed');
+                return PEAR::raiseError('PEAR_Packagefile_v1::toTgz: tarball creation failed');
             }
             return $dest_package;
         }
@@ -131,7 +131,8 @@ class PEAR_PackageFile_Generator_v1
                            $nofilechecking = false)
     {
         if (!$this->_packagefile->validate($state, $nofilechecking)) {
-            return PEAR::raiseError('PEAR_Packagefile_v1::toPackageFile: invalid packagefile');
+            return PEAR::raiseError('PEAR_Packagefile_v1::toPackageFile: invalid package.xml',
+                null, null, null, $this->_packagefile->getValidationWarnings());
         }
         include_once 'System.php';
         if ($where === null) {
@@ -567,6 +568,15 @@ http://pear.php.net/dtd/package-2.0.xsd',
             $arr['providesextension'] = strtolower($arr['name']); // assumption
         }
         $arr[$release] = array();
+        if ($this->_packagefile->getConfigureOptions()) {
+            $arr[$release]['configureoption'] = $this->_packagefile->getConfigureOptions();
+            foreach ($arr[$release]['configureoption'] as $i => $opt) {
+                $arr[$release]['configureoption'][$i] = array('attribs' => $opt);
+            }
+            if (count($arr[$release]['configureoption']) == 1) {
+                $arr[$release]['configureoption'] = $arr[$release]['configureoption'][0];
+            }
+        }
         $this->_convertRelease2_0($arr[$release], $temp);
         if ($cl = $this->_packagefile->getChangelog()) {
             foreach ($cl as $release) {
