@@ -133,6 +133,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
 
   Specific changes from 1.4.0a8:
   * add --package option to run-tests command, to run installed .phpt tests
+  * significantly drop pear's memory footprint for all commands except powerhouse commands like
+    &quot;pear package&quot;
+  * fix fatal errors when installing pecl packages
  </notes>
  <contents>
   <dir name="/">
@@ -148,34 +151,43 @@ http://pear.php.net/dtd/package-2.0.xsd">
      </file>
     </dir> <!-- /PEAR/ChannelFile -->
     <dir name="Command">
+     <file name="Auth-init.php" role="php"/>
      <file name="Auth.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="Build-init.php" role="php"/>
      <file name="Build.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="Channels-init.php" role="php"/>
      <file name="Channels.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="Common.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="Config-init.php" role="php"/>
      <file name="Config.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="Install-init.php" role="php"/>
      <file name="Install.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="Mirror-init.php" role="php"/>
      <file name="Mirror.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="Package-init.php" role="php"/>
      <file name="Package.php" role="php">
       <tasks:replace from="@DATA-DIR@" to="data_dir" type="pear-config" />
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="Registry-init.php" role="php"/>
      <file name="Registry.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="Remote-init.php" role="php"/>
      <file name="Remote.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
