@@ -48,13 +48,14 @@
     </maintainer>
   </maintainers>
   <release>
-    <version>1.3.3.1</version>
-    <date>2004-11-08</date>
+    <version>1.3.4</version>
+    <date>2004-12-30</date>
     <state>stable</state>
     <license>PHP License</license>
     <notes>
-     * fix Bug #3026: Dependency type &quot;ne&quot; is needed, &quot;not&quot; is not handled
-       properly
+ * fix Bug #3026: Dependency type &quot;ne&quot; is needed, &quot;not&quot; is not handled
+   properly
+ * make pear help listing more useful (put how-to-use info at the bottom of the listing)
     </notes>
     <provides type="class" name="OS_Guess" />
     <provides type="class" name="System" />
