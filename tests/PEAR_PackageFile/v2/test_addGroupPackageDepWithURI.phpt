@@ -15,7 +15,6 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'required' => 
   array (
@@ -227,6 +226,73 @@ $phpunit->assertEquals(array (
 
 $result = $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('after validation');
+
+$a = $pf->addGroupPackageDepWithURI('subpackage', 'blah', 'grooorg', 'http://www.example.com/oorg.tgz', 'bloba');
+$phpunit->assertFalse($a, 'subpackage bloba provides');
+$a = $pf->addGroupPackageDepWithURI('package', 'blah', 'grooorg', 'http://www.example.com/oorg.tgz', 'bloba');
+$phpunit->assertTrue($a, 'package bloba provides');
+$phpunit->assertEquals(array (
+  'required' => 
+  array (
+    'php' => 
+    array (
+      'min' => '4.3.6',
+      'max' => '6.0.0',
+    ),
+    'pearinstaller' => 
+    array (
+      'min' => '1.4.0a1',
+    ),
+  ),
+  'group' => 
+  array (
+    0 => 
+    array (
+      'attribs' => 
+      array (
+        'name' => 'frong',
+        'hint' => 'frong group',
+      ),
+      'package' => 
+      array (
+        0 => 
+        array (
+          'name' => 'first',
+          'uri' => 'http://www.example.com/blah.tgz',
+        ),
+        1 => 
+        array (
+          'name' => 'first2',
+          'uri' => 'http://www.example.com/blah2.tgz',
+        ),
+      ),
+      'subpackage' => 
+      array (
+        'name' => 'firstt',
+        'uri' => 'http://www.example.com/blaht.tgz',
+      ),
+    ),
+    1 => 
+    array (
+      'attribs' => 
+      array (
+        'name' => 'blah',
+        'hint' => 'blah',
+      ),
+      'package' => 
+      array (
+        'name' => 'grooorg',
+        'uri' => 'http://www.example.com/oorg.tgz',
+        'providesextension' => 'bloba',
+      ),
+      'subpackage' => 
+      array (
+        'name' => 'second',
+        'uri' => 'http://www.example.com/bla.tgz',
+      ),
+    ),
+  ),
+), $pf->getDependencies(), 'provides');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log');
 $result = $pf->validate(PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('after validation');
@@ -235,7 +301,6 @@ $result = $pf->validate(PEAR_VALIDATE_DOWNLOADING);
 $phpunit->assertNoErrors('after validation');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'downloading validate empty log');
 $result = $pf->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
