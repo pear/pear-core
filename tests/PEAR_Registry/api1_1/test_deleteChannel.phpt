@@ -56,8 +56,11 @@ $ret = $reg->deleteChannel('pear.php.net');
 $phpunit->assertFalse($ret, 'delete pear.php.net 2');
 
 $ch->setName('test.test.test');
-$reg->addChannel($ch);
+$ret = $reg->addChannel($ch);
 $phpunit->assertNoErrors('setup');
+$phpunit->assertTrue($ret, 'result add');
+$phpunit->assertFileExists($statedir . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.channels' . DIRECTORY_SEPARATOR .
+    'test.test.test.reg', 'pre-delete test.test.test.reg');
 
 $contents = unserialize(implode('', file($statedir . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.channels' . DIRECTORY_SEPARATOR .
     'test.test.test.reg')));
@@ -67,7 +70,7 @@ $phpunit->assertEquals($ch->toArray(), $contents, 'contents');
 
 $ret = $reg->deleteChannel('test.test.test');
 $phpunit->assertTrue($ret, 'test.test.test 1');
-$phpunit->assertFileNotExists($statedir . DIRECTORY_SEPARATOR . '.channels' . DIRECTORY_SEPARATOR .
+$phpunit->assertFileNotExists($statedir . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.channels' . DIRECTORY_SEPARATOR .
     'test.test.test.reg', 'test delete test.test.test.reg');
 $phpunit->assertFalse($reg->channelExists('test.test.test'), 'make sure reg says test.test.test is gone 1');
 
