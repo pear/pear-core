@@ -246,6 +246,10 @@ class System
                     $dir = dirname($dir);
                 }
                 while ($newdir = array_shift($dirstack)) {
+                    if (!is_writeable(dirname($newdir))) {
+                        $ret = false;
+                        break;
+                    }
                     if (!mkdir($newdir, $mode)) {
                         $ret = false;
                     }
