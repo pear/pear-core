@@ -276,7 +276,11 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
     {
         $result = array();
         if (is_array($prompts)) {
-            $fp = fopen("php://stdin", "r");
+            // php 5.0.0 inexplicably breaks BC with this behavior
+            // now reading from STDIN is the intended syntax
+            if (version_compare(phpversion(), '5.0.0', '<')) {
+                $fp = fopen("php://stdin", "r");
+            }
             foreach ($prompts as $key => $prompt) {
                 $type = $types[$key];
                 $default = @$defaults[$key];
@@ -288,7 +292,11 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                     print "[$default] ";
                 }
                 print ": ";
-                $line = fgets($fp, 2048);
+                if (version_compare(phpversion(), '5.0.0', '<')) {
+                    $line = fgets($fp, 2048);
+                } else {
+                    $line = fgets(STDIN, 2048);
+                }
                 if ($type == 'password') {
                     system('stty echo');
                     print "\n";
@@ -299,7 +307,9 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                     $result[$key] = trim($line);
                 }
             }
-            fclose($fp);
+            if (version_compare(phpversion(), '5.0.0', '<')) {
+                fclose($fp);
+            }
         }
         return $result;
     }
