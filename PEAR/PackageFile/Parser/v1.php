@@ -35,7 +35,7 @@ class PEAR_PackageFile_Parser_v1
      * @param string contents of package.xml file, version 1.0
      * @return bool success of parsing
      */
-    function parse($data, $state, $file, $archive = false)
+    function parse($data, $file, $archive = false)
     {
         require_once('PEAR/Dependency.php');
         if (PEAR_Dependency::checkExtension($error, 'xml')) {
