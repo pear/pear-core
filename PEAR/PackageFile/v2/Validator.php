@@ -425,8 +425,8 @@ class PEAR_PackageFile_v2_Validator
             $structure = array(
                 'name',
                 'uri',
-                '*providesextension',
                 '*conflicts',
+                '*providesextension',
             );
         } else {
             $structure = array(
@@ -474,7 +474,10 @@ class PEAR_PackageFile_v2_Validator
 
     function _validateSubpackageDep($dep)
     {
-        return $this->_validatePackageDep($dep, '<supackage>');
+        $this->_validatePackageDep($dep, '<subpackage>');
+        if (isset($dep['providesextension'])) {
+            $this->_subpackageCannotProvideExtension($dep['name']);
+        }
     }
 
     function _validateExtensionDep($dep)
@@ -1151,6 +1154,12 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array(),
             'Only one <extsrcrelease> tag may exist in a package.xml');
+    }
+
+    function _subpackageCannotProvideExtension($name)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('name' => $name),
+            'Subpackage dependency "%name%" cannot use <providesextension>, only package dependencies can use this tag');
     }
 
     function _cannotProvideExtension($release)
