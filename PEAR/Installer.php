@@ -490,7 +490,7 @@ class PEAR_Installer extends PEAR_Downloader
                 $task = "PEAR_Task_$tag";
                 $task = &new $task($this->config, $this, PEAR_TASK_INSTALL);
                 if (!$task->isScript()) { // scripts are only handled after installation
-                    $task->init($raw, $attribs);
+                    $task->init($raw, $attribs, $pkg->getLastInstalledVersion());
                     $res = $task->startSession($pkg, $contents, $final_dest_file);
                     if (!$res) {
                         continue; // skip this file
@@ -1068,6 +1068,8 @@ class PEAR_Installer extends PEAR_Downloader
                 $filelist = $pkg->getFileList();
             }
             $pkg->resetFilelist();
+            $pkg->setLastInstalledVersion($this->_registry->packageInfo($pkg->getPackage(),
+                'version', $pkg->getChannel()));
             foreach ($filelist as $file => $atts) {
                 if ($pkg->getPackagexmlVersion() == '1.0') {
                     $this->expectError(PEAR_INSTALLER_FAILED);
