@@ -241,10 +241,6 @@ function usage($error = null, $helpsubject = null)
         $put = cmdHelp($helpsubject);
     } else {
         $put =
-            "Usage: $progname [options] command [command-options] <parameters>\n".
-            "Type \"$progname help options\" to list all options.\n".
-            "Type \"$progname help shortcuts\" to list all command shortcuts.\n".
-            "Type \"$progname help <command>\" to get the help for the specified command.\n".
             "Commands:\n";
         $maxlen = max(array_map("strlen", $all_commands));
         $formatstr = "%-{$maxlen}s  %s\n";
@@ -252,6 +248,11 @@ function usage($error = null, $helpsubject = null)
         foreach ($all_commands as $cmd => $class) {
             $put .= sprintf($formatstr, $cmd, PEAR_Command::getDescription($cmd));
         }
+        $put .=
+            "Usage: $progname [options] command [command-options] <parameters>\n".
+            "Type \"$progname help options\" to list all options.\n".
+            "Type \"$progname help shortcuts\" to list all command shortcuts.\n".
+            "Type \"$progname help <command>\" to get the help for the specified command.";
     }
     fputs($stderr, "$put\n");
     fclose($stderr);
