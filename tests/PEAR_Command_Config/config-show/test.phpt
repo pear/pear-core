@@ -50,6 +50,12 @@ $phpunit->assertEquals(array (
           ),
           4 => 
           array (
+            0 => 'Default Channel Mirror',
+            1 => 'preferred_mirror',
+            2 => 'pear.php.net',
+          ),
+          5 => 
+          array (
             0 => 'Remote Configuration File',
             1 => 'remote_config',
             2 => '********',
@@ -232,6 +238,12 @@ $phpunit->assertEquals(array (
             2 => 'pear.Chiara',
           ),
           4 => 
+          array (
+            0 => 'Default Channel Mirror',
+            1 => 'preferred_mirror',
+            2 => 'pear.php.net',
+          ),
+          5 => 
           array (
             0 => 'Remote Configuration File',
             1 => 'remote_config',
@@ -416,6 +428,12 @@ $phpunit->assertEquals(array (
             2 => 'pear.Chiara',
           ),
           4 => 
+          array (
+            0 => 'Default Channel Mirror',
+            1 => 'preferred_mirror',
+            2 => 'pear.php.net',
+          ),
+          5 => 
           array (
             0 => 'Remote Configuration File',
             1 => 'remote_config',
