@@ -814,7 +814,9 @@ class PEAR_Error
         $this->mode      = $mode;
         $this->userinfo  = $userinfo;
         if (function_exists("debug_backtrace")) {
-            $this->backtrace = debug_backtrace();
+            if (@!PEAR::getStaticProperty('PEAR_Error', 'skiptrace')) {
+                $this->backtrace = debug_backtrace();
+            }
         }
         if ($mode & PEAR_ERROR_CALLBACK) {
             $this->level = E_USER_NOTICE;
