@@ -21,15 +21,36 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
     array(array('package' => 'test', 'channel' => 'pear.php.net'), 'stable'),
     array('version' => '1.0',
           'info' =>
-          array(
-            'package' => 'test',
-            'channel' => 'pear.php.net',
-            'license' => 'PHP License',
-            'summary' => 'test',
-            'description' => 'test',
-            'releasedate' => '2003-12-06 00:26:42',
-            'state' => 'stable',
-          ),
+          '<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
+<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
+ <name>test</name>
+ <summary>test</summary>
+ <description>test</description>
+ <maintainers>
+  <maintainer>
+   <user>cellog</user>
+   <role>lead</role>
+   <name>Greg Beaver</name>
+   <email>cellog@php.net</email>
+  </maintainer>
+ </maintainers>
+ <release>
+  <version>1.0</version>
+  <date>2004-10-21</date>
+  <license>PHP License</license>
+  <state>stable</state>
+  <notes>
+Installer Roles/Tasks:
+  </notes>
+  <filelist>
+   <dir name="/">
+    <file name="foo12.php" role="php"/>
+   </dir>
+  </filelist>
+ </release>
+</package>
+',
           'url' => 'http://www.example.com/test-1.0'));
 mkdir($temp_path . DIRECTORY_SEPARATOR . 'bloob');
 chdir($temp_path . DIRECTORY_SEPARATOR . 'bloob');
