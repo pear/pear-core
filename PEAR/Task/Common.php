@@ -141,7 +141,8 @@ class PEAR_Task_Common
     function runPrecommitTasks()
     {
         foreach ($GLOBALS['_PEAR_TASK_PREINSTANCES'] as $class => $tasks) {
-            $err = call_user_func(array($class, 'run'), $tasks);
+            $err = call_user_func(array($class, 'run'),
+                $GLOBALS['_PEAR_TASK_PREINSTANCES'][$class]);
             if ($err) {
                 return PEAR_Task_Common::throwError($err);
             }
@@ -165,7 +166,8 @@ class PEAR_Task_Common
     function runPostinstallTasks()
     {
         foreach ($GLOBALS['_PEAR_TASK_POSTINSTANCES'] as $class => $tasks) {
-            $err = call_user_func(array($class, 'run'), $tasks);
+            $err = call_user_func(array($class, 'run'),
+                $GLOBALS['_PEAR_TASK_POSTINSTANCES'][$class]);
             if ($err) {
                 return PEAR_Task_Common::throwError($err);
             }

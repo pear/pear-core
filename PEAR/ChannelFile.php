@@ -789,7 +789,9 @@ class PEAR_ChannelFile {
         $ret .= "  <primary host=\"$channelInfo[server]\">\n";
         $ret .= $this->_makeXmlrpcXml($channelInfo['protocols']['xmlrpc'], '   ');
         if (isset($channelInfo['protocols']['soap'])) {
-            $ret .= $this->_makeSoapXml($channelInfo['protocols']['soap'], '   ');
+            if (count($channelInfo['protocols']['soap']['functions'])) {
+                $ret .= $this->_makeSoapXml($channelInfo['protocols']['soap'], '   ');
+            }
         }
         $ret .= "  </primary>\n";
         if (isset($channelInfo['mirrors'])) {

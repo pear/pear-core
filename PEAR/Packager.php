@@ -85,7 +85,7 @@ class PEAR_Packager extends PEAR_Common
             return $this->raiseError("Cannot package, errors in package");
         } else {
             foreach ($pf->getValidationWarnings() as $warning) {
-                $this->log(1, 'Warning: ' . $warning);
+                $this->log(1, 'Warning: ' . $warning['message']);
             }
         }
 
