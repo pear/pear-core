@@ -109,31 +109,36 @@ echo "Test invalid package name:\n";
 $packages = array("/invalid+packagename");
 $a = $installer->doDownload($packages);
 $installpackages = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs(), $installpackages);
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs(), $installpackages);
 
 echo "Test download of a package with no releases:\n";
 $packages = array("noreleases");
 $a = $installer->doDownload($packages);
 $installpackages = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs(), $installpackages);
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs(), $installpackages);
 
 echo "Test download of a non-existing package version:\n";
 $packages = array("pkg1-1976.9.2");
 $a = $installer->doDownload($packages);
 $installpackages = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs(), $installpackages);
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs(), $installpackages);
 
 echo "Test download of a non-existing package release state:\n";
 $packages = array("pkg1-snapshot");
 $a = $installer->doDownload($packages);
 $installpackages = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs(), $installpackages);
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs(), $installpackages);
 
 echo "Test download of invalid release state:\n";
 $packages = array("pkg1-burgerking");
 $a = $installer->doDownload($packages);
 $installpackages = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs(), $installpackages);
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs(), $installpackages);
 
 $installer->configSet('preferred_state', 'stable');
 
@@ -141,14 +146,16 @@ echo "Test automatic version resolution (stable):\n";
 $packages = array("stabilitytoolow");
 $a = $installer->doDownload($packages);
 $installpackages = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs(), $installpackages);
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs(), $installpackages);
 
 echo "Test automatic version resolution (stable) with --force:\n";
 $packages = array("stabilitytoolow");
 $installer->setOptions(array('force' => true));
 $a = $installer->doDownload($packages);
 $installpackages = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs(), $installpackages[0]['info']['version']);
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs(), $installpackages[0]['info']['version']);
 
 $installer->configSet('preferred_state', 'beta');
 $installer->setOptions(array());
@@ -157,7 +164,8 @@ echo "Test automatic version resolution (beta):\n";
 $packages = array("stabilitytoolow");
 $a = $installer->doDownload($packages);
 $installpackages = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs(), $installpackages[0]['info']['version']);
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs(), $installpackages[0]['info']['version']);
 
 $installer->configSet('preferred_state', 'alpha');
 
@@ -165,7 +173,8 @@ echo "Test automatic version resolution (alpha):\n";
 $packages = array("stabilitytoolow");
 $a = $installer->doDownload($packages);
 $installpackages = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs(), $installpackages[0]['info']['version']);
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs(), $installpackages[0]['info']['version']);
 
 $installer->configSet('preferred_state', 'devel');
 
@@ -173,7 +182,8 @@ echo "Test automatic version resolution (devel):\n";
 $packages = array("stabilitytoolow");
 $a = $installer->doDownload($packages);
 $installpackages = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs(), $installpackages[0]['info']['version']);
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs(), $installpackages[0]['info']['version']);
 
 echo "Test download attempt if a version is already installed:\n";
 
@@ -184,64 +194,72 @@ $installer->setOptions(array());
 $installer->doDownload(array('pkg6'));
 $pkgs = $installer->getDownloadedPackages();
 $forinstall->install($pkgs[0]['file']);
-$installer->doDownload(array('pkg6'));
-var_dump(get_class($a), $installer->getErrorMsgs());
+$a = $installer->doDownload(array('pkg6'));
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs());
 
 echo "Test download attempt if a version is already installed with --force:\n";
 
 $installer->setOptions(array('force' => true));
 
-$installer->doDownload(array('pkg6'));
+$a = $installer->doDownload(array('pkg6'));
 $pkgs = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs(), $pkgs[0]['info']['version']);
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs(), $pkgs[0]['info']['version']);
 
 echo "Test download attempt if a version is already installed with upgrade, same version:\n";
 
 $installer->setOptions(array('upgrade' => true));
 
-$installer->doDownload(array('pkg6'));
+$a = $installer->doDownload(array('pkg6'));
 $pkgs = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs());
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs());
 
 echo "Test download attempt if a version is already installed with upgrade, lesser version:\n";
 
 $installer->setOptions(array('upgrade' => true));
 
-$installer->doDownload(array('pkg6-1.1'));
+$a = $installer->doDownload(array('pkg6-1.1'));
 $pkgs = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs());
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs());
 
 echo "Test download attempt with --alldeps, but dependency has no releases:\n";
 
 $installer->setOptions(array('alldeps' => true));
 
-$installer->doDownload(array('depnoreleases'));
+$a = $installer->doDownload(array('depnoreleases'));
 $pkgs = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs());
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs());
 
 echo "Test download attempt with --onlyreqdeps, but dependency has no releases:\n";
 
 $installer->setOptions(array('onlyreqdeps' => true));
 
-$installer->doDownload(array('depnoreleases'));
+$a = $installer->doDownload(array('depnoreleases'));
 $pkgs = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs());
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs());
 
 $installer->configSet('preferred_state', 'stable');
 echo "Test download attempt with --alldeps, but dependency is too unstable:\n";
 $installer->setOptions(array('alldeps' => true));
 
-$installer->doDownload(array('depunstable'));
+$a = $installer->doDownload(array('depunstable'));
 $pkgs = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs());
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs());
 
 echo "Test download attempt with --onlyreqdeps, but dependency is too unstable:\n";
 
 $installer->setOptions(array('onlyreqdeps' => true));
 
-$installer->doDownload(array('depunstable'));
+$a = $installer->doDownload(array('depunstable'));
 $pkgs = $installer->getDownloadedPackages();
-var_dump(get_class($a), $installer->getErrorMsgs());
+$f = is_object($a) ? strtolower(get_class($a)) : false;
+var_dump($f, $installer->getErrorMsgs());
 
 chdir($curdir);
 cleanall($temp_path);

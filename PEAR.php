@@ -929,14 +929,16 @@ class PEAR_Error
                         E_USER_ERROR   => 'error');
         if ($this->mode & PEAR_ERROR_CALLBACK) {
             if (is_array($this->callback)) {
-                $callback = get_class($this->callback[0]) . '::' .
+                $callback = (is_object($this->callback[0]) ?
+                    strtolower(get_class($this->callback[0])) :
+                    $this->callback[0]) . '::' .
                     $this->callback[1];
             } else {
                 $callback = $this->callback;
             }
             return sprintf('[%s: message="%s" code=%d mode=callback '.
                            'callback=%s prefix="%s" info="%s"]',
-                           get_class($this), $this->message, $this->code,
+                           strtolower(get_class($this)), $this->message, $this->code,
                            $callback, $this->error_message_prefix,
                            $this->userinfo);
         }
@@ -954,7 +956,7 @@ class PEAR_Error
         }
         return sprintf('[%s: message="%s" code=%d mode=%s level=%s '.
                        'prefix="%s" info="%s"]',
-                       get_class($this), $this->message, $this->code,
+                       strtolower(get_class($this)), $this->message, $this->code,
                        implode("|", $modes), $levels[$this->level],
                        $this->error_message_prefix,
                        $this->userinfo);

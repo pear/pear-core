@@ -15,7 +15,14 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 
 include_once "PEAR.php";
 
+if (!defined('E_STRICT')) {
+    define(E_STRICT, -1);
+}
+
 function test_error_handler($errno, $errmsg, $file, $line, $vars) {
+    if ($errno == E_STRICT) {
+        return;
+    }
 	$errortype = array (
 		1   =>  "Error",
 		2   =>  "Warning",

@@ -29,6 +29,7 @@ $chan->setName('oddball');
 $chan->setServer('example.com');
 $chan->setSummary('oddball');
 $chan->setValidationPackage('test_Validate', '1.0');
+$chan->setDefaultPEARProtocols();
 $reg->addChannel($chan);
 $installer = new PEAR_Installer($ui);
 $installer->config = &$config;

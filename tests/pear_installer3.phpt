@@ -72,8 +72,8 @@ echo "test addFileOperation():\n";
 echo "invalid input to addFileOperation():\n";
 $err = $installer->addFileOperation('rename', 2);
 echo 'Returned PEAR_Error?';
-echo (get_class($err) == 'pear_error' ? " yes\n" : " no\n");
-if (get_class($err) == 'pear_error') {
+echo (is_a($err, 'pear_error') ? " yes\n" : " no\n");
+if (is_a($err, 'pear_error')) {
     echo $err->getMessage() . "\n";
 }
 echo 'count($installer->file_operations) = ';

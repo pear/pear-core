@@ -76,7 +76,7 @@ class PEAR_Validate
         }
     }
 
-    function validateName()
+    function validatePackageName()
     {
         return $this->validPackageName($this->_packagexml->getPackage());
     }
