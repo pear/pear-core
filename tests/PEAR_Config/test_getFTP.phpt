@@ -10,8 +10,9 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+require_once 'PEAR/ChannelFile.php';
 ini_set('include_path', '####');
-$config = new PEAR_Config('', '', 'ftp://example.com/config.ini');
+$config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini', $temp_path . DIRECTORY_SEPARATOR . 'pear.ini', 'ftp://example.com/config.ini');
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error','message' => 'Net_FTP must be installed to use remote config'),
 ), 'no net_ftp');

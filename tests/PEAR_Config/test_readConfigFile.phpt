@@ -14,12 +14,14 @@ $config = new PEAR_Config(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     'ini' . DIRECTORY_SEPARATOR . 'user.input', 'ya');
 $config->setChannels(array('pear.php.net', '__uri', 'test2'));
 $ret = $config->readConfigFile('foo', 'foo');
+$config->set('php_dir', $temp_path); // use sandbox
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => 'unknown config layer `foo\''),
 ), 'unknown layer');
 $phpunit->assertIsa('PEAR_Error', $ret, 'err object');
 $ret = $config->readConfigFile(dirname(__FILE__) . DIRECTORY_SEPARATOR . 
     'ini' . DIRECTORY_SEPARATOR . 'toonew.conf');
+$config->set('php_dir', $temp_path); // use sandbox
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 
     'ini' . DIRECTORY_SEPARATOR . 'toonew.conf: unknown version `2.0\''),
@@ -31,6 +33,7 @@ $phpunit->assertNull($config->get('verbose', 'user'), '$config->get(verbose, use
 $phpunit->assertNull($config->get('verbose', 'system'), '$config->get(verbose, system)');
 $phpunit->assertTrue($config->readConfigFile(dirname(__FILE__) . DIRECTORY_SEPARATOR . 
     'ini' . DIRECTORY_SEPARATOR . 'user2.input'), 'read user2.input');
+$config->set('php_dir', $temp_path); // use sandbox
 
 $phpunit->assertEquals(2, $config->get('verbose'), '$config->get(verbose) after');
 $phpunit->assertEquals(2, $config->get('verbose', 'user'), '$config->get(verbose, user) after');
@@ -38,6 +41,7 @@ $phpunit->assertEquals(null, $config->get('verbose', 'system'), '$config->get(ve
 
 $phpunit->assertTrue($config->readConfigFile(dirname(__FILE__) . DIRECTORY_SEPARATOR . 
     'ini' . DIRECTORY_SEPARATOR . 'user3.input', 'system'), 'read user3.input');
+$config->set('php_dir', $temp_path); // use sandbox
 
 $phpunit->assertEquals(2, $config->get('verbose'), '$config->get(verbose) after system');
 $phpunit->assertEquals(2, $config->get('verbose', 'user'), '$config->get(verbose, user) after system');

@@ -10,7 +10,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$config = new PEAR_Config('nope', 'nope');
+$config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'nope', $temp_path . DIRECTORY_SEPARATOR . 'nope');
 $phpunit->assertFalse($config->getRegistry(), 'initial user');
 $phpunit->assertFalse($config->getRegistry('system'), 'initial system');
 

@@ -10,7 +10,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$config = new PEAR_Config;
+$config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini');
 $phpunit->assertEquals('string', $config->getType('default_channel'), 'default_channel');
 $phpunit->assertEquals('password', $config->getType('remote_config'), 'remote_config');
 $phpunit->assertEquals('integer', $config->getType('auto_discover'), 'auto_discover');

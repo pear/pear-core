@@ -21,7 +21,7 @@ $reg = &$config->getRegistry();
 $reg->addChannel($ch);
 $config->removeLayer('user');
 $phpunit->assertTrue($config->setChannels(array('pear.php.net', '__uri', 'mychannel')), 'set');
-$config->set('php_dir', 'hi', 'user', 'mychannel');
+$config->set('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'hi', 'user', 'mychannel');
 $phpunit->assertEquals(array (
   '__channels' => 
   array (
@@ -30,7 +30,7 @@ $phpunit->assertEquals(array (
     ),
     'mychannel' => 
     array (
-      'php_dir' => 'hi',
+      'php_dir' => $temp_path . DIRECTORY_SEPARATOR . 'hi',
     ),
   ),
 ), $config->configuration['user'], 'raw test');
