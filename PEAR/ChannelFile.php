@@ -223,22 +223,15 @@ class PEAR_ChannelFile {
     var $_isValid = false;
     // }}}
     // {{{ constructor
-    
-    /**
-     * @param bool determines whether to return a PEAR_Error object, or use the PEAR_ErrorStack
-     * @param string Name of Error Stack class to use.  This allows inheritance with stacks that have the
-     *        same constructor as the parent PEAR_ErrorStack class
-     */
-    function PEAR_ChannelFile($compatibility = false, $stackclass = 'PEAR_ErrorStack')
+
+    function PEAR_ChannelFile()
     {
         if (!class_exists('PEAR_ErrorStack')) {
             include_once 'PEAR/ErrorStack.php';
         }
-        $this->_stack = &PEAR_ErrorStack::singleton('PEAR_ChannelFile', false,
-            false, $compatibility, 'Exception', $stackclass);
+        $this->_stack = &PEAR_ErrorStack::singleton('PEAR_ChannelFile');
         $this->_stack->setErrorMessageTemplate($this->_getErrorMessage());
         $this->_isValid = false;
-        $this->_compatibility = $compatibility;
     }
 
     // }}}

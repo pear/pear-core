@@ -290,16 +290,14 @@ class PEAR_PackageFile_v1
      * @param bool determines whether to return a PEAR_Error object, or use the PEAR_ErrorStack
      * @param string Name of Error Stack class to use.
      */
-    function PEAR_PackageFile_v1($compatibility = false, $stackclass = 'PEAR_ErrorStack')
+    function PEAR_PackageFile_v1()
     {
         if (!class_exists('PEAR_ErrorStack')) {
             include_once 'PEAR/ErrorStack.php';
         }
-        $this->_stack = &new $stackclass('PEAR_PackageFile', false,
-            false, $compatibility, 'Exception');
+        $this->_stack = &new PEAR_ErrorStack('PEAR_PackageFile');
         $this->_stack->setErrorMessageTemplate($this->_getErrorMessage());
         $this->_isValid = false;
-        $this->_compatibility = $compatibility;
     }
 
     function installBinary($installer)
