@@ -495,6 +495,9 @@ used for automated conversion or learning the format.
         } else {
             $depth = 1;
         }
+        if (!count($params)) {
+            $params[] = '.';
+        }
         foreach ($params as $p) {
             if (is_dir($p)) {
                 $dir = System::find(array($p, '-type', 'f',
