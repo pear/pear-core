@@ -857,18 +857,24 @@ class test_PEAR_Config extends PEAR_Config
     }
 }
 
-class fake_log
+require_once 'PEAR/Frontend.php';
+class fake_log extends PEAR_Frontend
 {
     var $_log = array();
     var $_download = array();
+    function fake_log()
+    {
+        $GLOBALS['_PEAR_FRONTEND_SINGLETON'] = &$GLOBALS['fakelog'];
+    }
+
     function log($level, $message)
     {
-        $this->_log[] = array($level, $message);
+        $GLOBALS['fakelog']->_log[] = array($level, $message);
     }
 
     function outputData($info, $cmd = 'no command')
     {
-        $this->_log[] = array('info' => $info, 'cmd' => $cmd);
+        $GLOBALS['fakelog']->_log[] = array('info' => $info, 'cmd' => $cmd);
     }
 
     function _downloadCallback($msg, $params)
@@ -876,33 +882,33 @@ class fake_log
         if ($msg == 'setup') {
             $params = 'self';
         }
-        $this->_download[] = array($msg, $params);
+        $GLOBALS['fakelog']->_download[] = array($msg, $params);
     }
 
     function getLog()
     {
-        $log = $this->_log;
-        $this->_log = array();
+        $log = $GLOBALS['fakelog']->_log;
+        $GLOBALS['fakelog']->_log = array();
         return $log;
     }
 
     function getDownload()
     {
-        $log = $this->_download;
-        $this->_download = array();
+        $log = $GLOBALS['fakelog']->_download;
+        $GLOBALS['fakelog']->_download = array();
         return $log;
     }
 
     function setDialogOutput($input, $output)
     {
-        $this->_dialogInput[var_export($input, true)] = $output;
+        $GLOBALS['fakelog']->_dialogInput[var_export($input, true)] = $output;
     }
 
     function userDialog()
     {
         $input = func_get_args();
-        if (isset($this->_dialogInput[var_export($input, true)])) {
-            return $this->_dialogInput[var_export($input, true)];
+        if (isset($GLOBALS['fakelog']->_dialogInput[var_export($input, true)])) {
+            return $GLOBALS['fakelog']->_dialogInput[var_export($input, true)];
         }
     }
 }
