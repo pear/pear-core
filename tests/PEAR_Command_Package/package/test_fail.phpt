@@ -20,7 +20,11 @@ $phpunit->assertErrors(array(
 ), 'ret 1');
 $phpunit->assertIsa('PEAR_Error', $ret, 'bloob.xml');
 if (version_compare(phpversion(), '5.0.0', '>=')) {
-    $errmsg = 'XML error: XML_ERR_DOCUMENT_END at line 1';
+    if (version_compare(phpversion(), '5.0.3', '>=')) {
+        $errmsg = 'XML error: Invalid document end at line 1';
+    } else {
+        $errmsg = 'XML error: XML_ERR_DOCUMENT_END at line 1';
+    }
 } else {
     $errmsg = 'XML error: no element found at line 1';
 }
