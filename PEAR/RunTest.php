@@ -78,6 +78,7 @@ class PEAR_RunTest
             'ARGS'    => '',
         );
 
+        $file = realpath($file);
         if (!is_file($file) || !$fp = fopen($file, "r")) {
             return PEAR::raiseError("Cannot open test file: $file");
         }
@@ -91,7 +92,10 @@ class PEAR_RunTest
                 $section = $r[1];
                 $section_text[$section] = '';
                 continue;
-            }
+            } elseif (empty($section)) {
+                fclose($fp);
+                return PEAR::raiseError("Invalid sections formats in test file: $file");
+			}
 
             // Add to the section text.
             $section_text[$section] .= $line;
