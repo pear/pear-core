@@ -112,6 +112,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
 
   Specific changes from 1.4.0a5
   * fix Bug #3860 PEAR_Dependency2 not included in 1 case
+
+  Specific changes from 1.4.0a6
+  * fix Bug #3864 Invalid dependency relation
  </notes>
  <contents>
   <dir name="/">
