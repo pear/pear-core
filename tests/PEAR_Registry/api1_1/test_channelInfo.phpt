@@ -57,7 +57,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.listLatestReleases',
+            '_content' => 'logintest',
           ),
           1 => 
           array (
@@ -65,7 +65,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.listAll',
+            '_content' => 'package.listLatestReleases',
           ),
           2 => 
           array (
@@ -73,7 +73,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.info',
+            '_content' => 'package.listAll',
           ),
           3 => 
           array (
@@ -81,7 +81,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.getDownloadURL',
+            '_content' => 'package.info',
           ),
           4 => 
           array (
@@ -89,7 +89,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.getDepDownloadURL',
+            '_content' => 'package.getDownloadURL',
           ),
           5 => 
           array (
@@ -97,9 +97,17 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'channel.update',
+            '_content' => 'package.getDepDownloadURL',
           ),
           6 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.search',
+          ),
+          7 => 
           array (
             'attribs' => 
             array (
@@ -130,7 +138,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.listLatestReleases',
+            '_content' => 'logintest',
           ),
           1 => 
           array (
@@ -138,7 +146,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.listAll',
+            '_content' => 'package.listLatestReleases',
           ),
           2 => 
           array (
@@ -146,7 +154,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.info',
+            '_content' => 'package.listAll',
           ),
           3 => 
           array (
@@ -154,7 +162,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.getDownloadURL',
+            '_content' => 'package.info',
           ),
           4 => 
           array (
@@ -162,7 +170,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.getDepDownloadURL',
+            '_content' => 'package.getDownloadURL',
           ),
           5 => 
           array (
@@ -170,9 +178,17 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'channel.update',
+            '_content' => 'package.getDepDownloadURL',
           ),
           6 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.search',
+          ),
+          7 => 
           array (
             'attribs' => 
             array (
@@ -203,7 +219,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.listLatestReleases',
+            '_content' => 'logintest',
           ),
           1 => 
           array (
@@ -211,7 +227,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.listAll',
+            '_content' => 'package.listLatestReleases',
           ),
           2 => 
           array (
@@ -219,7 +235,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.info',
+            '_content' => 'package.listAll',
           ),
           3 => 
           array (
@@ -227,7 +243,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.getDownloadURL',
+            '_content' => 'package.info',
           ),
           4 => 
           array (
@@ -235,7 +251,7 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'package.getDepDownloadURL',
+            '_content' => 'package.getDownloadURL',
           ),
           5 => 
           array (
@@ -243,9 +259,17 @@ $phpunit->assertEquals(array (
             array (
               'version' => '1.0',
             ),
-            '_content' => 'channel.update',
+            '_content' => 'package.getDepDownloadURL',
           ),
           6 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.search',
+          ),
+          7 => 
           array (
             'attribs' => 
             array (
