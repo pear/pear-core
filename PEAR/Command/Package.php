@@ -438,6 +438,7 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
     {
         include_once 'PEAR/RunTest.php';
         $log = new PEAR_Common;
+        $log->ui = &$this->ui; // slightly hacky, but it will work
         $run = new PEAR_RunTest($log);
         $tests = array();
         if (isset($options['recur'])) {
@@ -457,6 +458,18 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
         }
         foreach ($tests as $t) {
             $run->run($t);
+        }
+        $failed = array();
+        foreach ($tests as $t) {
+            if ($run->run($t) == 'FAILED') {
+            	$failed[] = $t;
+            }
+        }
+        if (count($failed)) {
+    		$this->ui->outputData('FAILED TESTS:');
+        	foreach ($failed as $failure) {
+        		$this->ui->outputData($failure);
+        	}
         }
 
         return true;
