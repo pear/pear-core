@@ -66,6 +66,7 @@ class PEAR_PackageFile_Generator_v1
             $ret .= "
 <extends>$pkginfo[extends]</extends>";
         }
+        $ret .=
  "       
  <summary>".htmlspecialchars($pkginfo['summary'])."</summary>
  <description>".trim(htmlspecialchars($pkginfo['description']))."\n </description>
