@@ -1132,6 +1132,7 @@ class PEAR_Registry extends PEAR
     // {{{ isAlias()
 
     /**
+     * Determines whether the parameter is an alias of a channel
      * @param string
      * @return bool
      */
