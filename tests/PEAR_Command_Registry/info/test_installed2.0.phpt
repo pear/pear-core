@@ -107,6 +107,11 @@ PEAR installer version 1.4.0a1 or newer',
           0 => 'Last Modified',
           1 => date('Y-m-d H:m', $lastmodified),
         ),
+        14 => 
+        array (
+          0 => 'Last Installed Version',
+          1 => '- None -',
+        ),
       ),
       'raw' => 
       array (
@@ -311,6 +316,7 @@ short and long options.',
                 'Console' . DIRECTORY_SEPARATOR . 'Getopt.php',
           ),
         ),
+        '_lastversion' => null,
         '_lastmodified' => $lastmodified,
       ),
     ),
