@@ -21,7 +21,6 @@ $pf->setPackage('hello');
 $phpunit->assertEquals('hello', $pf->getName(), 'set alias failed');
 $phpunit->assertEquals('hello', $pf->getPackage(), 'set failed');
 $result = $pf->validate(PEAR_VALIDATE_NORMAL);
-$result = $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log');
 $phpunit->assertNoErrors('after validation');
 $result = $pf->validate(PEAR_VALIDATE_INSTALLING);
@@ -31,7 +30,6 @@ $result = $pf->validate(PEAR_VALIDATE_DOWNLOADING);
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'downloading validate empty log');
 $phpunit->assertNoErrors('after validation');
 $result = $pf->validate(PEAR_VALIDATE_PACKAGING);
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -54,6 +52,20 @@ $pf2 = new PEAR_PackageFile_v2;
 $pf2->setPackage('bye');
 $phpunit->assertEquals('bye', $pf2->getName(), 'set alias failed 2');
 $phpunit->assertEquals('bye', $pf2->getPackage(), 'set failed 2');
+$phpunit->assertEquals(array (
+  'name' => 'bye',
+  'attribs' => 
+  array (
+    'version' => '2.0',
+    'xmlns' => 'http://pear.php.net/dtd/package-2.0',
+    'xmlns:tasks' => 'http://pear.php.net/dtd/tasks-1.0',
+    'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+    'xsi:schemaLocation' => 'http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0
+    http://pear.php.net/dtd/package-2.0.xsd',
+  ),
+), $pf2->getArray(), 'verify atts');
 echo 'tests done';
 ?>
 --EXPECT--
