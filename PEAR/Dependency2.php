@@ -177,7 +177,7 @@ class PEAR_Dependency2
             break;
             default :
                 if ($not) {
-                    if ($dep['name'] == $this->_os->getSysname()) {
+                    if (strtolower($dep['name']) == strtolower($this->_os->getSysname())) {
                         if (!isset($this->_options['nodeps']) &&
                               !isset($this->_options['force'])) {
                             return $this->raiseError('Cannot install %s on ' . $dep['name'] .
@@ -188,7 +188,7 @@ class PEAR_Dependency2
                         }
                     }
                 } else {
-                    if ($dep['name'] != $this->_os->getSysname()) {
+                    if (strtolower($dep['name']) != strtolower($this->_os->getSysname())) {
                         if (!isset($this->_options['nodeps']) &&
                               !isset($this->_options['force'])) {
                             return $this->raiseError('Cannot install %s on ' .
