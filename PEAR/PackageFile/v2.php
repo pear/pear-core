@@ -459,6 +459,9 @@ class PEAR_PackageFile_v2
 
     function getChannel()
     {
+        if (isset($this->_packageInfo['uri'])) {
+            return '__private';
+        }
         if (isset($this->_packageInfo['channel'])) {
             return $this->_packageInfo['channel'];
         }
