@@ -104,6 +104,7 @@
        <file role="test" name="pear_common_buildProvidesArray.phpt"/>
        <file role="test" name="pear_common_downloadHttp.phpt"/>
        <file role="test" name="pear_common_infoFromString.phpt"/>
+       <file role="test" name="pear_common_infoFromString_php5.phpt"/>
        <file role="test" name="pear_common_sortPkgDeps.phpt"/>
        <file role="test" name="pear_common_validPackageVersion.phpt"/>
        <file role="test" name="pear_config.phpt"/>
