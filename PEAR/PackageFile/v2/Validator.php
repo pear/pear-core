@@ -859,7 +859,7 @@ class PEAR_PackageFile_v2_Validator
         }
     }
 
-    function _validateFilelist($list = false, $filetag = 'file', $allowignore = false)
+    function _validateFilelist($list = false, $allowignore = false)
     {
         $iscontents = false;
         if (!$list) {
@@ -881,17 +881,41 @@ class PEAR_PackageFile_v2_Validator
             );
         }
         if (!isset($list['attribs']) || !isset($list['attribs']['name'])) {
-            $dirname = $iscontents ? '<contents>' : '<dir name="*unknown*">';
+            $unknown = $allowignore ? '<filelist>' : '<dir name="*unknown*">';
+            $dirname = $iscontents ? '<contents>' : $unknown;
         } else {
             $dirname = '<dir name="' . $list['attribs']['name'] . '">';
         }
-        $this->_stupidSchemaValidate($struc, $list, $dirname);
-        if (!$allowignore && isset($list[$filetag])) {
-            if (!isset($list[$filetag][0])) {
-                // single file
-                $list[$filetag] = array($list[$filetag]);
+        $res = $this->_stupidSchemaValidate($struc, $list, $dirname);
+        if ($allowignore && $res) {
+            $filelist = $this->_pf->getFilelist();
+            if (isset($list['install'])) {
+                if (!isset($list['install'][0])) {
+                    $list['install'] = array($list['install']);
+                }
+                foreach ($list['install'] as $file) {
+                    if (!isset($filelist[$file['attribs']['name']])) {
+                        $this->_notInContents($file['attribs']['name'], 'install');
+                    }
+                }
             }
-            foreach ($list[$filetag] as $i => $file)
+            if (isset($list['ignore'])) {
+                if (!isset($list['ignore'][0])) {
+                    $list['ignore'] = array($list['ignore']);
+                }
+                foreach ($list['ignore'] as $file) {
+                    if (!isset($filelist[$file['attribs']['name']])) {
+                        $this->_notInContents($file['attribs']['name'], 'ignore');
+                    }
+                }
+            }
+        }
+        if (!$allowignore && isset($list['file'])) {
+            if (!isset($list['file'][0])) {
+                // single file
+                $list['file'] = array($list['file']);
+            }
+            foreach ($list['file'] as $i => $file)
             {
                 if (isset($file['attribs']) && isset($file['attribs']['role'])) {
                     if (!$this->_validateRole($file['attribs']['role'])) {
@@ -945,12 +969,21 @@ class PEAR_PackageFile_v2_Validator
                 $this->_ignoreNotAllowed('install');
             }
         }
-        if (isset($list['dir'])) {
-            if (!isset($list['dir'][0])) {
-                $list['dir'] = array($list['dir']);
+        if (isset($list['file'])) {
+            if ($allowignore) {
+                $this->_fileNotAllowed('file');
             }
-            foreach ($list['dir'] as $dir) {
-                $this->_validateFilelist($dir, $filetag, $allowignore);
+        }
+        if (isset($list['dir'])) {
+            if ($allowignore) {
+                $this->_fileNotAllowed('dir');
+            } else {
+                if (!isset($list['dir'][0])) {
+                    $list['dir'] = array($list['dir']);
+                }
+                foreach ($list['dir'] as $dir) {
+                    $this->_validateFilelist($dir, $allowignore);
+                }
             }
         }
     }
@@ -1066,7 +1099,8 @@ class PEAR_PackageFile_v2_Validator
             }
             if (isset($rel['filelist'])) {
                 if ($rel['filelist']) {
-                    $this->_validateFilelist($rel['filelist'], 'install', true);
+                    
+                    $this->_validateFilelist($rel['filelist'], true);
                 }
             }
         }
@@ -1092,7 +1126,14 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array('type' => $type),
             '<%type%> is not allowed inside global <contents>, only inside ' .
-            '<phprelease>/<extbinrelease>');
+            '<phprelease>/<extbinrelease>, use <dir> and <file> only');
+    }
+
+    function _fileNotAllowed($type)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('type' => $type),
+            '<%type%> is not allowed inside release <filelist>, only inside ' .
+            '<contents>, use <ignore> and <install> only');
     }
 
     function _tagMissingAttribute($tag, $attr, $context)
@@ -1348,6 +1389,12 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array('file' => $file),
             'cannot analyze file "%file%", file not found');
+    }
+
+    function _notInContents($file, $tag)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('file' => $file, 'tag' => $tag),
+            '<%tag% name="%file%"> is invalid, file is not in <contents>');
     }
 
     function _analyzePhpFiles()
