@@ -1,5 +1,5 @@
 --TEST--
-PEAR_PackageFile_Generator_v1->toXml() failure
+PEAR_PackageFile_Generator_v1->toXml() barebones test
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {

@@ -1,5 +1,5 @@
 --TEST--
-PEAR_PackageFile_Generator_v1->toXml() failure
+PEAR_PackageFile_Generator_v1->toXml() barebones test, packaging
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -31,7 +31,6 @@ $pf->addFile('', 'foo.php', array('role' => 'php'));
 $generator = &$pf->getDefaultGenerator();
 $e = $generator->toXml(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertNoErrors('errors');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
