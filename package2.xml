@@ -48,9 +48,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>yes</active>
  </developer>
- <date>2005-03-21</date>
+ <date>2005-03-28</date>
  <version>
-  <release>1.4.0a9</release>
+  <release>1.4.0a10</release>
   <api>1.4.0</api>
  </version>
  <stability>
@@ -140,6 +140,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
     attempt to &quot;upgrade&quot; to 1.3.6
   * split PEAR_PackageFile_v2 into two classes, read-only PEAR_PackageFile_v2, and read-write
     PEAR_PackageFile_v2_rw
+
+  Specific changes from 1.4.0a9:
+  * fix potential fatal errors in run-tests command, -p option
+  * fix Bug #3966 Improper path in PEAR/PackageFile/v2.php
  </notes>
  <contents>
   <dir name="/">
@@ -700,6 +704,29 @@ http://pear.php.net/dtd/package-2.0.xsd">
     package.xml version 1.0 packages are installed
   * add &quot;peardev&quot; command for those with memory_limit issue
   * make package-validate command work on packaged .tgz files
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.0a9</release>
+    <api>1.4.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2005-03-21</date>
+   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <notes>
+  Specific changes from 1.4.0a8:
+  * add --package option to run-tests command, to run installed .phpt tests
+  * significantly drop pear's memory footprint for all commands
+  * fix fatal errors when installing pecl packages
+  * make download command work for non-root in a shared environment
+  * make sure that if 1.4.0a8 (alpha) is installed, and 1.3.6 (newer) exists, pear will not
+    attempt to &quot;upgrade&quot; to 1.3.6
+  * split PEAR_PackageFile_v2 into two classes, read-only PEAR_PackageFile_v2, and read-write
+    PEAR_PackageFile_v2_rw
    </notes>
   </release>
  </changelog>
