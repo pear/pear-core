@@ -1,5 +1,5 @@
 --TEST--
-PEAR_ErrorStack->getErrorMessage() context callback set with setContextCallback
+PEAR_ErrorStack->push() context callback set with setContextCallback
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {

@@ -1,5 +1,5 @@
 --TEST--
-PEAR_ErrorStack->getErrorMessage() message callback set in constructor
+PEAR_ErrorStack->push() message callback set in constructor
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
