@@ -1598,8 +1598,9 @@ class PEAR_Registry extends PEAR
                 'registry', null, null, $param);
         }
         $validate = $chan->getValidationObject();
+        $vpackage = $chan->getValidationPackage();
         // validate package name
-        if (!$validate->validPackageName($param['package'])) {
+        if (!$validate->validPackageName($param['package'], $vpackage['name'])) {
             return PEAR::raiseError('parsePackageName(): invalid package name "' .
                 $param['package'] . '" in "' . $saveparam . '"',
                 'package', null, null, $param);
