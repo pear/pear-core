@@ -32,7 +32,7 @@ $phpunit->assertErrors(array(
 ), 'unknown channel as option');
 $e = $command->run('config-set', array(), array('__channels', 'gronk'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 'config-set (__channels, gronk) failed, channel pear.php.net'),
+    array('package' => 'PEAR_Error', 'message' => 'config-set (__channels, gronk, user) failed, channel pear.php.net'),
 ), 'unknown channel as option');
 echo 'tests done';
 ?>
