@@ -13,7 +13,7 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Author: Stig Sæther Bakken <ssb@php.net>                             |
+// | Author: Stig S?ther Bakken <ssb@php.net>                             |
 // +----------------------------------------------------------------------+
 //
 // $Id$
@@ -326,7 +326,7 @@ package if needed.
             $options['upgrade'] = true;
             $remote = &$this->config->getRemote($this->config);
             $savechannel = $this->config->get('default_channel');
-            foreach ($reg->listChannels as $channel) {
+            foreach ($reg->listChannels() as $channel) {
                 $this->config->set('default_channel', $channel);
                 $state = $this->config->get('preferred_state');
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
