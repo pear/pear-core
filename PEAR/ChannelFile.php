@@ -1005,7 +1005,7 @@ class PEAR_ChannelFile {
         }
         $channelInfo = $this->_channelInfo;
         $ret = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
-        $ret .= "<!DOCTYPE package SYSTEM \"http://pear.php.net/dtd/channel-1.0\">\n";
+        $ret .= "<!DOCTYPE channel SYSTEM \"http://pear.php.net/dtd/channel-1.0\">\n";
         $ret .= "<channel version=\"1.0\">
  <name>$channelInfo[name]</name>
  <summary>" . htmlspecialchars($channelInfo['summary'])."</summary>
