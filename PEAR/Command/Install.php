@@ -647,14 +647,14 @@ Run post-installation scripts in package <package>, if any exist.
         }
         $reg = &$this->config->getRegistry();
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        $parsed = $reg->parsePackageName($params[0]);
+        $parsed = $reg->parsePackageName($params[0], $this->config->get('default_channel'));
         PEAR::staticPopErrorHandling();
         if (PEAR::isError($parsed)) {
             return $this->raiseError($parsed);
         }
         $package = &$reg->getPackage($parsed['package'], $parsed['channel']);
-        $package->setConfig($this->config);
         if (is_object($package)) {
+            $package->setConfig($this->config);
             $package->runPostinstallScripts();
         } else {
             return $this->raiseError('Could not retrieve package "' . $params[0] . '" from registry');

@@ -428,8 +428,8 @@ class PEAR_PackageFile_v2
         foreach ($taskfiles as $name => $tasks) {
             $atts = $filelist[$name];
             foreach ($tasks as $tag => $raw) {
-                $task = $this->getTask($tag);
-                $task = &new $task($this->_config, $common, PEAR_TASK_INSTALL);
+                $taskname = $this->getTask($tag);
+                $task = &new $taskname($this->_config, $common, PEAR_TASK_INSTALL);
                 if (!$task->isScript()) {
                     continue; // scripts are only handled after installation
                 }
@@ -443,7 +443,8 @@ class PEAR_PackageFile_v2
                 if (PEAR::isError($res)) {
                     return $res;
                 }
-                $this->_scripts[] = &$task;
+                $assign = &$task;
+                $this->_scripts[] = &$assign;
             }
         }
         if (count($this->_scripts)) {

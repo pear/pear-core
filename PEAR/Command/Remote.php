@@ -282,6 +282,9 @@ parameter.
                 unset($local_pkgs[$pos]);
             }
 
+            if (is_array($installed['version'])) {
+                $installed['version'] = $installed['version']['release'];
+            }
             $data['data'][$info['category']][] = array(
                 $reg->channelAlias($channel) . '/' . $name,
                 @$info['stable'],
