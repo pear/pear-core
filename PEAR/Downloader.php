@@ -255,9 +255,9 @@ class PEAR_Downloader extends PEAR_Common
         // convert all parameters into PEAR_Downloader_Package objects
         foreach ($params as $i => $param) {
             $params[$i] = &$this->newDownloaderPackage($this);
-            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $err = $params[$i]->initialize($param);
-            PEAR::popErrorHandling();
+            PEAR::staticPopErrorHandling();
             if (PEAR::isError($err)) {
                 if (!isset($this->_options['soft'])) {
                     $this->log(0, $err->getMessage());
@@ -300,6 +300,9 @@ class PEAR_Downloader extends PEAR_Common
         }
         $ret = array();
         $newparams = array();
+        if (isset($this->_options['pretend'])) {
+            return $params;
+        }
         foreach ($params as $i => $package) {
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $pf = &$params[$i]->download();
