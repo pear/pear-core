@@ -1969,18 +1969,18 @@ class PEAR_PackageFile_v2
             foreach (array('required', 'optional', 'group') as $possible) {
                 if ($type == $possible) {
                     $new[$type] = array();
-                } elseif (isset($save[$type])) {
-                    $new[$type] = $save[$type];
+                } elseif (isset($save[$possible])) {
+                    $new[$possible] = $save[$possible];
                 }
             }
             $this->_packageInfo['dependencies'] = $new;
         }
-        if (!isset($this->_packageInfo['dependencies'][$type]['package'])) {
-            $this->_packageInfo['dependencies'][$type]['package'] =
+        if (!isset($this->_packageInfo['dependencies'][$type]['subpackage'])) {
+            $this->_packageInfo['dependencies'][$type]['subpackage'] =
                 $this->_constructPackageDep(array(), $name, $channel, false, $min,
                     $max, $recommended, $exclude);
         } else {
-            $this->_packageInfo['dependencies'][$type]['package'] =
+            $this->_packageInfo['dependencies'][$type]['subpackage'] =
                 $this->_constructPackageDep($this->_packageInfo['dependencies'][$type]['subpackage'],
                     $name, $channel, false, $min, $max, $recommended, $exclude);
         }
