@@ -54,6 +54,7 @@ class PEAR_PackageFile_Generator_v2
                          'doctype'            => null,                  // supply a string or an array with id and uri ({@see XML_Util::getDoctypeDeclaration()}
                          'rootName'           => 'package',                  // name of the root tag
                          'rootAttributes'     => array(
+                             'version' => '2.0',
                              'xmlns' => 'http://pear.php.net/dtd/package-2.0',
                              'xmlns:tasks' => 'http://pear.php.net/dtd/tasks-1.0',
                              'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
