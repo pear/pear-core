@@ -1720,6 +1720,8 @@ class PEAR_Config extends PEAR
     {
         if (isset($this->_registry[$layer])) {
             return $this->_registry[$layer];
+        } elseif ($layer == 'user' && isset($this->_registry['system'])) {
+            return $this->_registry['system'];
         } else {
             $a = false;
             return $a;
