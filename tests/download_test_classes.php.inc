@@ -475,7 +475,7 @@ class test_PEAR_Downloader extends PEAR_Downloader {
             $this->pushError('No valid packages found', PEAR_INSTALLER_FAILED);
         }
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-        $err = PEAR_Downloader_Package::analyzeDependencies($params);
+        $err = $this->analyzeDependencies($params);
         PEAR::popErrorHandling();
         if (PEAR::isError($err)) {
             $this->pushError($err->getMessage());

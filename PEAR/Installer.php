@@ -16,6 +16,7 @@
 // | Authors: Stig Bakken <ssb@php.net>                                   |
 // |          Tomas V.V.Cox <cox@idecnet.com>                             |
 // |          Martin Jansen <mj@php.net>                                  |
+// |          Greg Beaver <cellog@php.net>                                |
 // +----------------------------------------------------------------------+
 //
 // $Id$
@@ -127,18 +128,25 @@ class PEAR_Installer extends PEAR_Downloader
     }
     // }}}
 
+    function _removeBackups($files)
+    {
+        foreach ($files as $path) {
+            $this->addFileOperation('removebackup', array($path));
+        }
+    }
+
     // {{{ _deletePackageFiles()
 
     /**
      * Delete a package's installed files, does not remove empty directories.
      *
-     * @param string $package package name
-     *
+     * @param string package name
+     * @param string channel name
+     * @param bool if true, then files are backed up first
      * @return bool TRUE on success, or a PEAR error on failure
-     *
      * @access private
      */
-    function _deletePackageFiles($package, $channel = false)
+    function _deletePackageFiles($package, $channel = false, $backup = false)
     {
         if (!$channel) {
             $channel = 'pear.php.net';
@@ -148,14 +156,22 @@ class PEAR_Installer extends PEAR_Downloader
         }
         $filelist = $this->_registry->packageInfo($package, 'filelist', $channel);
         if ($filelist == null) {
-            return $this->raiseError("$channel::$package not installed");
+            return $this->raiseError("$channel/$package not installed");
         }
+        $ret = array();
         foreach ($filelist as $file => $props) {
             if (empty($props['installed_as'])) {
                 continue;
             }
             $path = $this->_prependPath($props['installed_as'], $this->installroot);
+            if ($backup) {
+                $this->addFileOperation('backup', array($path));
+                $ret[] = $path;
+            }
             $this->addFileOperation('delete', array($path));
+        }
+        if ($backup) {
+            return $ret;
         }
         return true;
     }
@@ -182,7 +198,14 @@ class PEAR_Installer extends PEAR_Downloader
                 include_once "OS/Guess.php";
                 $os = new OS_Guess();
             }
-            if (!$os->matchSignature($atts['platform'])) {
+            if (strlen($atts['platform']) && $atts['platform']{0} == '!') {
+                $negate = true;
+                $platform = substr($atts['platform'], 1);
+            } else {
+                $negate = false;
+                $platform = $atts['platform'];
+            }
+            if ((bool) $os->matchSignature($platform) === $negate) {
                 $this->log(3, "skipped $file (meant for $atts[platform], we are ".$os->getSignature().")");
                 return PEAR_INSTALLER_SKIPPED;
             }
@@ -506,6 +529,8 @@ class PEAR_Installer extends PEAR_Downloader
      * @see startFileTransaction()
      * @param string $type This can be one of:
      *    - rename:  rename a file ($data has 2 values)
+     *    - backup:  backup an existing file ($data has 1 value)
+     *    - removebackup:  clean up backups created during install ($data has 1 value)
      *    - chmod:   change permissions on a file ($data has 2 values)
      *    - delete:  delete a file ($data has 1 value)
      *    - rmdir:   delete a directory if empty ($data has 1 value)
@@ -580,8 +605,18 @@ class PEAR_Installer extends PEAR_Downloader
                         $this->log(2, "warning: file $data[0] doesn't exist, can't be deleted");
                     }
                     // check that directory is writable
-                    if (file_exists($data[0]) && !is_writable(dirname($data[0]))) {
-                        $errors[] = "permission denied ($type): $data[0]";
+                    if (file_exists($data[0])) {
+                        if (!is_writable(dirname($data[0]))) {
+                            $errors[] = "permission denied ($type): $data[0]";
+                        } else {
+                            // make sure the file to be deleted can be opened for writing
+                            $fp = false;
+                            if (!is_dir($data[0]) && !($fp = @fopen($data[0], 'a'))) {
+                                $errors[] = "permission denied ($type): $data[0]";
+                            } elseif ($fp) {
+                                fclose($fp);
+                            }
+                        }
                     }
                     break;
             }
@@ -600,8 +635,21 @@ class PEAR_Installer extends PEAR_Downloader
         foreach ($this->file_operations as $tr) {
             list($type, $data) = $tr;
             switch ($type) {
+                case 'backup':
+                    @copy($data[0], $data[0] . '.bak');
+                    $this->log(3, "+ backup $data[0] to $data[0].bak");
+                    break;
+                case 'removebackup':
+                    @unlink($data[0] . '.bak');
+                    $this->log(3, "+ rm backup of $data[0] ($data[0].bak)");
+                    break;
                 case 'rename':
-                    @unlink($data[1]);
+                    $test = @unlink($data[1]);
+                    if (!$test && file_exists($data[1])) {
+                        $this->log(1, 'Could not delete ' . $data[1] . ', cannot rename ' .
+                            $data[0]);
+                        return false;
+                    }
                     @rename($data[0], $data[1]);
                     $this->log(3, "+ mv $data[0] $data[1]");
                     break;
@@ -651,6 +699,13 @@ class PEAR_Installer extends PEAR_Downloader
         foreach ($this->file_operations as $tr) {
             list($type, $data) = $tr;
             switch ($type) {
+                case 'backup':
+                    if (file_exists($data[0] . '.bak')) {
+                        @unlink($data[0]);
+                        @copy($data[0] . '.bak', $data[0]);
+                        $this->log(3, "+ restore $data[0] from $data[0].bak");
+                    }
+                    break;
                 case 'rename':
                     @unlink($data[0]);
                     $this->log(3, "+ rm $data[0]");
@@ -765,6 +820,16 @@ class PEAR_Installer extends PEAR_Downloader
         if (PEAR::isError($err)) {
             return $err;
         }
+        $this->_downloadedPackages = &$pkgs;
+    }
+
+    /**
+     * Set the list of PEAR_Downloader_Package objects to allow more sane
+     * dependency validation
+     * @param array
+     */
+    function setUninstallPackages(&$pkgs)
+    {
         $this->_downloadedPackages = &$pkgs;
     }
 
@@ -914,8 +979,10 @@ class PEAR_Installer extends PEAR_Downloader
                 }
                 if (empty($options['register-only'])) {
                     // when upgrading, remove old release's files first:
-                    if (PEAR::isError($err = $this->_deletePackageFiles($pkgname, $channel))) {
+                    if (PEAR::isError($err = $this->_deletePackageFiles($pkgname, $channel, true))) {
                         return $this->raiseError($err);
+                    } else {
+                        $backedup = $err;
                     }
                 }
             }
@@ -989,6 +1056,9 @@ class PEAR_Installer extends PEAR_Downloader
             // }}}
         }
 
+        if (isset($backedup)) {
+            $this->_removeBackups($backedup);
+        }
         if (!$this->commitFileTransaction()) {
             $this->rollbackFileTransaction();
             $this->configSet('default_channel', $savechannel);
