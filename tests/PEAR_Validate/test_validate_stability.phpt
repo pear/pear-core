@@ -248,11 +248,9 @@ Installer:
    </package>
    <extension>
     <name>xml</name>
-    <channel>pear.php.net</channel>
    </extension>
    <extension>
     <name>pcre</name>
-    <channel>pear.php.net</channel>
    </extension>
   </required>
   <group name="remoteinstall" hint="adds the ability to install packages to a remote ftp server">
@@ -315,6 +313,7 @@ Other:
 $phpunit->assertNoErrors('parse');
 $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('validate');
+$pf->flattenFilelist();
 $val->setPackageFile($pf);
 
 $res = $val->validate(PEAR_VALIDATE_NORMAL);
