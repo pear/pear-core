@@ -42,7 +42,7 @@ $reg->addPackage2($package);
 $params[] = $reg->getPackage('foo');
 $params[] = $reg->getPackage('bar');
 
-$installer->setDownloadedPackages($params);
+$installer->setUninstallPackages($params);
 $installer->uninstall('foo');
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' =>

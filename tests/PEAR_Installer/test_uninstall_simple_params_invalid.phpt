@@ -41,7 +41,7 @@ $reg->addPackage2($package);
 $params[] = $reg->getPackage('next');
 
 $dl = &new PEAR_Installer($fakelog);
-$dl->setDownloadedPackages($params);
+$dl->setUninstallPackages($params);
 $dl->uninstall('next');
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' =>
@@ -50,7 +50,7 @@ $phpunit->assertErrors(array(
 $phpunit->assertEquals(array (
   0 => 
   array (
-    0 => 'channel://pear.php.net/next (version >= 1.0) is required by package "channel://pear.php.net/bar", installed version is 1.0',
+    0 => 'channel://pear.php.net/next (version >= 1.0) is required by package "channel://pear.php.net/bar"',
     1 => true,
   ),
 ), $fakelog->getLog(), 'next');

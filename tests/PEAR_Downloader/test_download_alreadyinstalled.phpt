@@ -27,7 +27,7 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
           ),
           'url' => 'http://www.example.com/test-1.0'));
 $dp = &new test_PEAR_Downloader($fakelog, array(), $config);
-$pkg = &new PEAR_PackageFile($config);
+$pkg = &new test_PEAR_PackageFile($config);
 $pf = $pkg->fromTgzFile($pathtopackagexml, PEAR_VALIDATE_NORMAL);
 $registry = &$config->getRegistry();
 $registry->addPackage2($pf);
