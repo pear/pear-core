@@ -80,7 +80,7 @@ channel.xml.
 ),
             'doc' => '[<channel.xml>|<channel name>]
 Update a channel in the channel list directly.  Note that all
-public channels should be synced using "update-channels".
+public channels can be synced using "update-channels".
 Parameter may be a local or remote channel.xml, or the name of
 an existing channel.
 '
