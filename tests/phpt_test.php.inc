@@ -351,6 +351,11 @@ class PEAR_PHPTest
         return true;
     }
 
+    function _sortRegEntries($a, $b)
+    {
+        return strnatcasecmp($a['name'], $b['name']);
+    }
+
     function dumpReg(&$reg)
     {
         ob_start();
@@ -359,7 +364,7 @@ class PEAR_PHPTest
         ksort($infos);
         foreach ($infos as $channel => $info) {
             echo "channel $channel:\n";
-            ksort($info);
+            usort($info, array($this, '_sortRegEntries'));
             foreach ($info as $pkg) {
                 print $pkg["name"] . ":";
                 unset($pkg["name"]);
