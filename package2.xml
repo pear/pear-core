@@ -646,7 +646,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <date>2005-03-17</date>
    <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
    <notes>
-  Specific changes from 1.4.0a5:
+  Specific changes from 1.4.0a6:
   * implement &lt;usesrole&gt;/&lt;usestask&gt; for custom role/task graceful failure
   * REALLY fix the debug_backtrace() issue (modified wrong pearcmd.php)
   * fix Bug #3864 Invalid dependency relation
