@@ -116,8 +116,8 @@ class PEAR_PackageFile_v2_Validator
             $this->_tagCannotBeEmpty($test);
         }
         if (is_array($this->_packageInfo['license']) &&
-              !isset($this->_packageInfo['license']['_content']) ||
-              empty($this->_packageInfo['license']['_content'])) {
+              (!isset($this->_packageInfo['license']['_content']) ||
+              empty($this->_packageInfo['license']['_content']))) {
             $this->_tagCannotBeEmpty('license');
         } elseif (empty($this->_packageInfo['license'])) {
             $this->_tagCannotBeEmpty('license');
