@@ -295,7 +295,7 @@ class PEAR_PackageFile_v1
         if (!class_exists('PEAR_ErrorStack')) {
             include_once 'PEAR/ErrorStack.php';
         }
-        $this->_stack = &new PEAR_ErrorStack('PEAR_PackageFile');
+        $this->_stack = &new PEAR_ErrorStack('PEAR_PackageFile_v1');
         $this->_stack->setErrorMessageTemplate($this->_getErrorMessage());
         $this->_isValid = false;
     }
@@ -853,11 +853,11 @@ class PEAR_PackageFile_v1
                 PEAR_PACKAGEFILE_ERROR_NO_FILEROLE =>
                     'File "%file%" has no role, expecting one of "%roles%"',
                 PEAR_PACKAGEFILE_ERROR_INVALID_PHPFILE =>
-                    'Parser error: Invalid PHP file "%file%"',
+                    'Parser error: invalid PHP found in file "%file%"',
                 PEAR_PACKAGEFILE_ERROR_NO_PNAME_PREFIX =>
                     'in %file%: %type% "%name%" not prefixed with package name "%package%"',
                 PEAR_PACKAGEFILE_ERROR_INVALID_FILE =>
-                    'Parser error: Invalid PHP file %file%',
+                    'Parser error: invalid PHP file "%file%"',
                 PEAR_PACKAGEFILE_ERROR_CHANNELVAL =>
                     'Channel validator error: field "%field%" - %reason%',
                 PEAR_PACKAGEFILE_ERROR_PHP5 =>
@@ -1186,7 +1186,8 @@ class PEAR_PackageFile_v1
                     $interface = true;
                 case T_CLASS:
                     if (($current_class_level != -1) || ($current_function_level != -1)) {
-                        $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILE, array('file' => $file));
+                        $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_PHPFILE,
+                            array('file' => $file));
                         return false;
                     }
                 case T_FUNCTION:
@@ -1248,7 +1249,8 @@ class PEAR_PackageFile_v1
                     continue 2;
                 case T_DOUBLE_COLON:
                     if (!($tokens[$i - 1][0] == T_WHITESPACE || $tokens[$i - 1][0] == T_STRING)) {
-                        $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILE, array('file' => $file));
+                        $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_PHPFILE,
+                            array('file' => $file));
                         return false;
                     }
                     $class = $tokens[$i - 1][1];
