@@ -9,6 +9,10 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+$pearweb->addXmlrpcConfig("pecl.php.net", "package.listLatestReleases", array (
+  0 => 'alpha',
+), array (
+));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.listLatestReleases", array (
   0 => 'alpha',
 ), array (
@@ -1630,7 +1634,7 @@ interface for handling CSV files.</description>
     </maintainer>
     <maintainer>
       <user>dufuz</user>
-      <name>Helgi ?ormar</name>
+      <name>Helgi Þormar</name>
       <email>dufuz@php.net</email>
       <role>developer</role>
     </maintainer>

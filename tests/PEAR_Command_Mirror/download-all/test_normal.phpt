@@ -94,36 +94,33 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
 ), array (
   'version' => '1.3.0',
   'info' => 
-            '<?xml version="1.0" encoding="ISO-8859-1"?>
-<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
-<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
- <name>APC</name>
- <summary>test</summary>
- <description>test</description>
+            '<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0" packagerversion="1.4.0a1">
+ <name>APC</name>       
+ <summary>APC pear</summary>
+ <description>APC pear
+ </description>
  <maintainers>
   <maintainer>
    <user>cellog</user>
-   <role>lead</role>
    <name>Greg Beaver</name>
    <email>cellog@php.net</email>
+   <role>lead</role>
   </maintainer>
- </maintainers>
+  </maintainers>
  <release>
   <version>1.3.0</version>
-  <date>2004-10-21</date>
+  <date>2004-12-31</date>
   <license>PHP License</license>
   <state>stable</state>
-  <notes>
-Installer Roles/Tasks:
+  <notes>hi
   </notes>
   <filelist>
-   <dir name="/">
-    <file name="foo12.php" role="php"/>
-   </dir>
+   <file role="php" md5sum="ed0384ad29e60110b310a02e95287ee6" name="foo.php"/>
   </filelist>
  </release>
-</package>
-',
+</package>',
   'url' => 'http://pear.php.net/get/APC-1.3.0',
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
