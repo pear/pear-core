@@ -1377,7 +1377,7 @@ class PEAR_PackageFile
                             }
                         } else {
                             if (isset($this->_packageInfo['package'])) {
-                                if (!$validate->validatePackage($this, 'name')) {
+                                if (!$validate->validatePackageName($this->_packageInfo['package'])) {
                                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_NAME,
                                         array('name' => $this->_packageInfo['package']));
                                 }
