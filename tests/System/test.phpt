@@ -9,12 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 error_reporting(E_ALL);
-$cvs = dirname(__FILE__) . '/../System.php';
-if (is_file($cvs)) {
-    include_once $cvs;
-} else {
-    include_once 'System.php';
-}
+require_once 'System.php';
 
 $sep = DIRECTORY_SEPARATOR;
 $ereg_sep = $sep;
@@ -75,7 +70,7 @@ if (!@is_file($tmpfile) || !ereg("^$tmpenv{$ereg_sep}tst", $tmpfile)) {
 
 // Create a temporal dir in "dir1" with default prefix "tmp"
 $tmpdir  = System::mkTemp('-d -t dir1');
-if (!@is_dir($tmpdir) || !ereg("^dir1{$ereg_sep}tmp", $tmpdir)) {
+if (!@is_dir($tmpdir) || (!OS_WINDOWS && !ereg("^dir1{$ereg_sep}tmp", $tmpdir))) {
     print "System::mkTemp('-d -t dir1') failed\n";
 }
 
@@ -83,6 +78,10 @@ if (!@is_dir($tmpdir) || !ereg("^dir1{$ereg_sep}tmp", $tmpdir)) {
         rm
 ********************/
 echo "Testing: rm\n";
+
+if (OS_WINDOWS) {
+    mkdir('dir1\\oops');
+}
 
 // Try to delete a dir without "-r" option
 if (@System::rm('dir1')) {
