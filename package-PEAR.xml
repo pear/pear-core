@@ -120,6 +120,8 @@
       requested from users
   * make error message when a user has no write access absolutely clear and unmistakable
   * update to new header comment block standard
+  * slight improvement to speed and possibly memory use of Installer when a lot of
+    package.xml version 1.0 packages are installed
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
