@@ -33,9 +33,15 @@ $phpunit->assertIsa('PEAR_ChannelFile', $ret[0], '$ret[0]');
 $phpunit->assertIsa('PEAR_ChannelFile', $ret[1], '$ret[1]');
 $phpunit->assertIsa('PEAR_ChannelFile', $ret[2], '$ret[2]');
 
-$phpunit->assertEquals('pear.php.net', $ret[0]->getName(), '0 name');
-$phpunit->assertEquals('test.test.test', $ret[1]->getName(), '1 name');
-$phpunit->assertEquals('__uri', $ret[2]->getName(), '2 name');
+function chsort($a, $b)
+{
+    return strcasecmp($a->getName(), $b->getName());
+}
+
+usort($ret, 'chsort');
+$phpunit->assertEquals('__uri', $ret[0]->getName(), '0 name');
+$phpunit->assertEquals('pear.php.net', $ret[1]->getName(), '1 name');
+$phpunit->assertEquals('test.test.test', $ret[2]->getName(), '2 name');
 echo 'tests done';
 ?>
 --EXPECT--

@@ -113,7 +113,6 @@ array(
 'handle' => 'cellog',
 'role' => 'lead')
 ), $ret, 'maintainers');
-$phpunit->showall();
 $ret = $reg->packageInfo($pf2->getPackage(), 'release_deps', $pf2->getChannel());
 $phpunit->assertEquals(array (
   0 => 
@@ -153,10 +152,11 @@ $phpunit->assertEquals(array($pf->getArray()), $ret, 'default');
 $ret = $reg->packageInfo(null, null, null);
 unset($ret['grob'][0]['_lastmodified']);
 unset($ret['pear.php.net'][0]['_lastmodified']);
+ksort($ret);
 $phpunit->assertEquals(array(
+'__uri' => array(),
 'grob' => array($pf2->getArray(true)),
-'pear.php.net' => array($pf->getArray()),
-'__uri' => array()), $ret, 'default whole shebang');
+'pear.php.net' => array($pf->getArray()),), $ret, 'default whole shebang');
 echo 'tests done';
 ?>
 --EXPECT--
