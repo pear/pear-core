@@ -196,7 +196,7 @@ class PEAR_Downloader_Package
             foreach ($deps as $dep) {
                 if (isset($dep['optional'])) {
                     if (!isset($this->_downloader->_options['alldeps'])) {
-                        if ($dep['optional'] == 'yes') {
+                        if ($dep['optional'] == 'yes' && $dep['type'] == 'pkg') {
                             $this->_downloader->log(0, 'Notice: package "pear.php.net/' .
                                 $this->getPackage() . '" optional dependency ' .
                                 '"pear.php.net/' . $dep['name'] . '" will not be downloaded, ' .
