@@ -1312,6 +1312,9 @@ class PEAR_Registry extends PEAR
         }
         $ret = $this->_deleteChannel($channel);
         $this->_unlock();
+        if ($ret && is_a($this->_config, 'PEAR_Config')) {
+            $this->_config->setChannels($this->listChannels());
+        }
         return $ret;
     }
 
@@ -1335,6 +1338,9 @@ class PEAR_Registry extends PEAR
         }
         $ret = $this->_addChannel($channel, $update);
         $this->_unlock();
+        if (!$update && $ret && is_a($this->_config, 'PEAR_Config')) {
+            $this->_config->setChannels($this->listChannels());
+        }
         return $ret;
     }
 

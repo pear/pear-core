@@ -37,7 +37,6 @@ $phpunit->assertEquals(array (
   'list-all' => 'PEAR_Command_Remote',
   'list-channels' => 'PEAR_Command_Channels',
   'list-files' => 'PEAR_Command_Registry',
-  'list-installed' => 'PEAR_Command_Registry',
   'list-upgrades' => 'PEAR_Command_Remote',
   'login' => 'PEAR_Command_Auth',
   'logout' => 'PEAR_Command_Auth',
@@ -56,8 +55,8 @@ $phpunit->assertEquals(array (
   'upgrade' => 'PEAR_Command_Install',
   'upgrade-all' => 'PEAR_Command_Install',
 ), PEAR_Command::getCommands(), 'getcommands');
-$phpunit->assertEquals(43, count(PEAR_Command::getCommands()), 'count commands');
-$phpunit->assertEquals(43, count(PEAR_Command::getShortcuts()), 'count shortcuts');
+$phpunit->assertEquals(42, count(PEAR_Command::getCommands()), 'count commands');
+$phpunit->assertEquals(42, count(PEAR_Command::getShortcuts()), 'count shortcuts');
 $phpunit->assertEquals(array (
   'b' => 'build',
   'bun' => 'bundle',
@@ -85,7 +84,6 @@ $phpunit->assertEquals(array (
   'la' => 'list-all',
   'lc' => 'list-channels',
   'li' => 'login',
-  'lin' => 'list-installed',
   'lo' => 'logout',
   'lu' => 'list-upgrades',
   'p' => 'package',
@@ -196,8 +194,8 @@ $phpunit->assertEquals(array (
   11 => 'offline',
 ), $l, 'long install');
 PEAR_Command::getGetoptArgs('list', $s, $l);
-$phpunit->assertEquals('c:', $s, 'short list'); 
-$phpunit->assertEquals(array('channel='), $l, 'long list');
+$phpunit->assertEquals('c:a', $s, 'short list'); 
+$phpunit->assertEquals(array('channel=', 'allchannels'), $l, 'long list');
 PEAR_Command::getGetoptArgs('list-all', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short list-all'); 
 $phpunit->assertEquals(array('channel='), $l, 'long list-all');
@@ -207,9 +205,6 @@ $phpunit->assertEquals(array(), $l, 'long list-channels');
 PEAR_Command::getGetoptArgs('list-files', $s, $l);
 $phpunit->assertEquals('', $s, 'short list-files'); 
 $phpunit->assertEquals(array(), $l, 'long list-files');
-PEAR_Command::getGetoptArgs('list-installed', $s, $l);
-$phpunit->assertEquals('', $s, 'short list-installed'); 
-$phpunit->assertEquals(array(), $l, 'long list-installed');
 PEAR_Command::getGetoptArgs('list-upgrades', $s, $l);
 $phpunit->assertEquals('', $s, 'short list-upgrades'); 
 $phpunit->assertEquals(array(), $l, 'long list-upgrades');
@@ -343,8 +338,6 @@ $phpunit->assertEquals('List Available Channels'
     , PEAR_Command::getDescription('list-channels'), 'list-channels');
 $phpunit->assertEquals('List Files In Installed Package'
     , PEAR_Command::getDescription('list-files'), 'list-files');
-$phpunit->assertEquals('List All Installed Packages In All Channels'
-    , PEAR_Command::getDescription('list-installed'), 'list-installed');
 $phpunit->assertEquals('List Available Upgrades'
     , PEAR_Command::getDescription('list-upgrades'), 'list-upgrades');
 $phpunit->assertEquals('Connects and authenticates to remote server'

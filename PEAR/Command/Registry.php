@@ -38,21 +38,16 @@ class PEAR_Command_Registry extends PEAR_Command_Common
                     'doc' => 'list installed packages from this channel',
                     'arg' => 'CHAN',
                     ),
+                'allchannels' => array(
+                    'shortopt' => 'a',
+                    'doc' => 'list installed packages from all channels',
+                    ),
                 ),
             'doc' => '<package>
 If invoked without parameters, this command lists the PEAR packages
 installed in your php_dir ({config php_dir}).  With a parameter, it
 lists the files in a package.
 ',
-            ),
-        'list-installed' => array(
-            'summary' => 'List All Installed Packages In All Channels',
-            'function' => 'doListAll',
-            'shortcut' => 'lin',
-            'options' => array(),
-            'doc' => '
-List all installed packages in all channels.
-'
             ),
         'list-files' => array(
             'summary' => 'List Files In Installed Package',
@@ -112,15 +107,18 @@ installed package.'
 
     function doList($command, $options, $params)
     {
+        if (isset($options['allchannels'])) {
+            return $this->doListAll($command, array(), $params);
+        }
         $reg = &$this->config->getRegistry();
-        if (sizeof($params) == 1) {
+        if (count($params) == 1) {
             return $this->doFileList($command, $options, $params);
         }
         if (isset($options['channel'])) {
             if ($reg->channelExists($options['channel'])) {
                 $channel = $reg->channelName($options['channel']);
             } else {
-                return $this->raiseError("Channel `$options[channel]' does not exist");
+                return $this->raiseError('Channel "' . $options['channel'] .'" does not exist');
             }
         } else {
             $channel = $this->config->get('default_channel');
@@ -141,7 +139,7 @@ installed package.'
                                     $pobj->getState() ? $pobj->getState() : null);
         }
         if (count($installed)==0) {
-            $data = '(no packages installed)';
+            $data = '(no packages installed from channel ' . $channel . ')';
         }
         $this->ui->outputData($data, $command);
         return true;
@@ -150,32 +148,28 @@ installed package.'
     function doListAll($command, $options, $params)
     {
         $reg = &$this->config->getRegistry();
-        if (sizeof($params) == 0) {
-            $installed = $reg->packageInfo(null, null, null);
-            foreach ($installed as $channel => $packages) {
-                usort($packages, array($this, '_sortinfo'));
-                $i = $j = 0;
+        $installed = $reg->packageInfo(null, null, null);
+        foreach ($installed as $channel => $packages) {
+            usort($packages, array($this, '_sortinfo'));
+            $i = $j = 0;
+            $data = array(
+                'caption' => 'Installed packages, channel ' . $channel . ':',
+                'border' => true,
+                'headline' => array('Package', 'Version', 'State')
+                );
+            foreach ($packages as $package) {
+                $pobj = $reg->getPackage(isset($package['package']) ?
+                                            $package['package'] : $package['name'], $channel);
+                $data['data'][] = array($pobj->getPackage(), $pobj->getVersion(),
+                                        $pobj->getState() ? $pobj->getState() : null);
+            }
+            if (count($packages)==0) {
                 $data = array(
                     'caption' => 'Installed packages, channel ' . $channel . ':',
                     'border' => true,
-                    'headline' => array('Channel', 'Package', 'Version', 'State')
+                    'data' => array(array('(no packages installed)')),
                     );
-                foreach ($packages as $package) {
-                    $data['data'][] = array($channel,
-                                              $package['package'],
-                                              $package['version'],
-                                              @$package['release_state']);
-                }
-                if (count($packages)==0) {
-                    $data = array(
-                        'caption' => 'Installed packages, channel ' . $channel . ':',
-                        'border' => true,
-                        'data' => array(array('(no packages installed)')),
-                        );
-                }
-                $this->ui->outputData($data, $command);
             }
-        } else {
             $this->ui->outputData($data, $command);
         }
         return true;
@@ -183,6 +177,9 @@ installed package.'
     
     function doFileList($command, $options, $params)
     {
+        if (count($params) != 1) {
+            return $this->raiseError('list-files expects 1 parameter');
+        }
         $reg = &$this->config->getRegistry();
         if ((file_exists($params[0]) && !is_dir($params[0])) || $fp = @fopen($params[0], 'r')) {
             @fclose($fp);
@@ -217,7 +214,7 @@ installed package.'
             'caption' => $caption,
             'border' => true,
             'headline' => $headings);
-        if ($info->getPackagexmlVersion() == '1.0') {
+        if ($info->getPackagexmlVersion() == '1.0' || $installed) {
             foreach ($list as $file => $att) {
                 if ($installed) {
                     if (empty($att['installed_as'])) {
@@ -248,43 +245,31 @@ installed package.'
                             $dest = $this->config->get('php_dir') . DIRECTORY_SEPARATOR .
                                 $dest;
                     }
-                    $dest = preg_replace('!/+!', '/', $dest);
+                    $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
+                    $dest = preg_replace(array('!\\\\+!', '!/!', "!$ds2+!"),
+                                                    array(DIRECTORY_SEPARATOR,
+                                                          DIRECTORY_SEPARATOR,
+                                                          DIRECTORY_SEPARATOR),
+                                                    $dest);
                     $file = preg_replace('!/+!', '/', $file);
                     $data['data'][] = array($file, $dest);
                 }
             }
         } else { // package.xml 2.0, not installed
-            if (isset($list['file']['attribs'])) {
-                $list['file'] = array($list['file']);
+            if (!isset($list['dir']['file'][0])) {
+                $list['dir']['file'] = array($list['dir']['file']);
             }
-            foreach ($list['file'] as $att) {
+            foreach ($list['dir']['file'] as $att) {
                 $att = $att['attribs'];
                 $file = $att['name'];
-                if (isset($att['baseinstalldir']) && !in_array($att['role'],
-                      array('test', 'data', 'doc'))) {
-                    $dest = $att['baseinstalldir'] . DIRECTORY_SEPARATOR .
-                        $file;
+                $role = &PEAR_Installer_Role::factory($info, $att['role'], $this->config);
+                $role->setup($this, $info, $att, $file);
+                if (!$role->isInstallable()) {
+                    $dest = '(not installable)';
                 } else {
-                    $dest = $file;
+                    list(,, $dest) =
+                        $role->processInstallation($info, $att, $file, '');
                 }
-                switch ($att['role']) {
-                    case 'test':
-                    case 'data':
-                    case 'doc':
-                        $role = $att['role'];
-                        if ($role == 'test') {
-                            $role .= 's';
-                        }
-                        $dest = $this->config->get($role . '_dir') . DIRECTORY_SEPARATOR .
-                            $info->getPackage() . DIRECTORY_SEPARATOR . $dest;
-                        break;
-                    case 'php':
-                    default:
-                        $dest = $this->config->get('php_dir') . DIRECTORY_SEPARATOR .
-                            $dest;
-                }
-                $dest = preg_replace('!/+!', '/', $dest);
-                $file = preg_replace('!/+!', '/', $file);
                 $data['data'][] = array($file, $dest);
             }
         }
