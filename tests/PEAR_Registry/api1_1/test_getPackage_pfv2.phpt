@@ -58,7 +58,6 @@ $pf2file = $statedir  . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . '.re
     DIRECTORY_SEPARATOR . '.channel.grob' . DIRECTORY_SEPARATOR . 'foo.reg';
 $phpunit->assertFileExists($pf2file, 'reg file of foop.reg');
 $contents = unserialize(implode('', file($pf2file)));
-$phpunit->showall();
 $phpunit->assertTrue(isset($contents['_lastmodified']), '_lastmodified not set pf2');
 unset($contents['_lastmodified']);
 $phpunit->assertEquals($pf2->getArray(true), $contents, 'pf2 file saved');
