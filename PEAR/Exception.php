@@ -15,7 +15,7 @@
 // +----------------------------------------------------------------------+
 // | Authors: Tomas V.V.Cox <cox@idecnet.com>                             |
 // |          Hans Lellelid <hans@velum.net>                              |
-// |                                                                      |
+// |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
 // $Id$
@@ -25,83 +25,77 @@ define('PEAR_OBSERVER_TRIGGER',    -4);
 define('PEAR_OBSERVER_DIE',        -8);
 
 /**
- * Base PEAR_Exception Class
- *
- * 1) Features:
- *
- * - Nestable exceptions (throw new PEAR_Exception($msg, $prev_exception))
- * - Definable triggers, shot when exceptions occur
- * - Pretty and informative error messages
- * - Added more context info avaible (like class, method or cause)
- *
- * 2) Ideas:
- *
- * - Maybe a way to define a 'template' for the output
- *
- * 3) Inherited properties from PHP Exception Class:
- *
- * protected $message
- * protected $code
- * protected $line
- * protected $file
- * private   $trace
- *
- * 4) Inherited methods from PHP Exception Class:
- *
- * __clone
- * __construct
- * getMessage
- * getCode
- * getFile
- * getLine
- * getTrace
- * getTraceAsString
- * __toString
- *
- * 5) Usage example
- *
- * <code>
- *  require_once 'PEAR/Exception.php';
- *
- *  class Test {
- *     function foo() {
- *         throw new PEAR_Exception('Error Message', ERROR_CODE);
- *     }
- *  }
- *
- *  function myLogger($pear_exception) {
- *     echo $pear_exception->getMessage();
- *  }
- *  // each time a exception is thrown the 'myLogger' will be called
- *  // (its use is completely optional)
- *  PEAR_Exception::addObserver('myLogger');
- *  $test = new Test;
- *  try {
- *     $test->foo();
- *  } catch (PEAR_Exception $e) {
- *     print $e;
- *  }
- * </code>
- *
- * @since PHP 5
- * @package PEAR
- * @version $Revision$
- * @author Tomas V.V.Cox <cox@idecnet.com>
- * @author Hans Lellelid <hans@velum.net>
- *
- */
+* Base PEAR_Exception Class
+*
+* 1) Features:
+*
+* - Nestable exceptions (throw new PEAR_Exception($msg, $prev_exception))
+* - Definable triggers, shot when exceptions occur
+* - Pretty and informative error messages
+* - Added more context info avaible (like class, method or cause)
+*
+* 2) Ideas:
+*
+* - Maybe a way to define a 'template' for the output
+*
+* 3) Inherited properties from PHP Exception Class:
+*
+* protected $message
+* protected $code
+* protected $line
+* protected $file
+* private   $trace
+*
+* 4) Inherited methods from PHP Exception Class:
+*
+* __clone
+* __construct
+* getMessage
+* getCode
+* getFile
+* getLine
+* getTraceSafe
+* getTraceSafeAsString
+* __toString
+*
+* 5) Usage example
+*
+* <code>
+*  require_once 'PEAR/Exception.php';
+*
+*  class Test {
+*     function foo() {
+*         throw new PEAR_Exception('Error Message', ERROR_CODE);
+*     }
+*  }
+*
+*  function myLogger($pear_exception) {
+*     echo $pear_exception->getMessage();
+*  }
+*  // each time a exception is thrown the 'myLogger' will be called
+*  // (its use is completely optional)
+*  PEAR_Exception::addObserver('myLogger');
+*  $test = new Test;
+*  try {
+*     $test->foo();
+*  } catch (PEAR_Exception $e) {
+*     print $e;
+*  }
+* </code>
+*
+* @since PHP 5
+* @package PEAR
+* @version $Revision$
+* @author Tomas V.V.Cox <cox@idecnet.com>
+* @author Hans Lellelid <hans@velum.net>
+* @author Bertrand Mansion <bmansion@mamasam.com>
+*
+*/
 class PEAR_Exception extends Exception
 {
     protected $cause;
-    protected $error_class;
-    protected $error_method;
-
-    private $_method;
     private static $_observers = array();
-
-    private static $_warnings  = array();
-    private static $_warnings_callback = null;
-    private static $_warnings_stack_l = 1;
+    private $_trace;
 
     /**
      * Supported signatures:
@@ -112,106 +106,68 @@ class PEAR_Exception extends Exception
      */
     public function __construct($message, $p2 = null, $p3 = null)
     {
-        $code = null;
-        $cause = null;
-        if (is_int($p3) && $p2 instanceof Exception) {
-            $code = $p3;
-            $cause = $p2;
-        } elseif (is_int($p2)) {
+        if (is_int($p2)) {
             $code = $p2;
+            $this->cause = null;
         } elseif ($p2 instanceof Exception) {
-            $cause = $p2;
+            $code = $p3;
+            $this->cause = $p2;
+        } else {
+            $code = null;
+            $this->cause = null;
         }
-        $this->cause = $cause;
-        $trace       = parent::getTrace();
-        $this->error_class  = $trace[0]['class'];
-        $this->error_method = $trace[0]['function'];
-        $this->_method = $this->error_class . $trace[0]['type'] . $this->error_method . '()';
         parent::__construct($message, $code);
-
-        $this->_signalObservers();
+        $this->_signal();
     }
 
     /**
      * @param mixed $callback  - A valid php callback, see php func is_callable()
-     *                         - A PEAR_OBSERVER_* constant
-     *                         - An array(const PEAR_OBSERVER_*, mixed $options)
+     *                         - A PEAR_EXCEPTION_* constant
+     *                         - An array(const PEAR_EXCEPTION_*, mixed $options)
      *
-     * @param string $context  The observer only runs for this class name
-     *                         (defaults to reserved word 'all').
-     *
-     * @param string $label    The name of the observer. Use this if you want
-     *                         to remove it later with delObserver()
-     *
-     * @return string $label   The label for the new observer (an internal name is set
-     *                         when no label is given)
-     *
+     * @param string $label    - The name of the observer. Use this if you want
+     *                           to remove it later with removeObserver()
      */
-    public static function addObserver($callback, $context = 'all', $label = null)
+    public static function addObserver($callback, $label = 'default')
     {
-        static $counter = 1;
-        if ($label == null) {
-            $label = 'default_' . $counter++;
-        }
-        self::$_observers[$label]['callback'] = $callback;
-        self::$_observers[$label]['context']  = $context;
-        return $label;
+        self::$_observers[$label] = $callback;
     }
 
-    public static function delObserver($label)
+    public static function removeObserver($label = 'default')
     {
         unset(self::$_observers[$label]);
     }
 
-    private function _signalObservers()
+    private function _signal()
     {
-        foreach (self::$_observers as $data) {
-            $context = $data['context'];
-            if ($context != 'all' &&
-                strcasecmp($context, $this->getErrorClass()) != 0)
-            {
+        foreach (self::$_observers as $func) {
+            if (is_callable($func)) {
+                call_user_func($func, $this);
                 continue;
             }
-            self::_signalOne($data['callback'], $this, $this->message, $this->code);
+            settype($func, 'array');
+            switch ($func[0]) {
+                case PEAR_EXCEPTION_PRINT:
+                    $f = (isset($func[1])) ? $func[1] : '%s';
+                    printf($f, $this->getMessage());
+                    break;
+                case PEAR_EXCEPTION_TRIGGER:
+                    $f = (isset($func[1])) ? $func[1] : E_USER_NOTICE;
+                    trigger_error($this->getMessage(), $f);
+                    break;
+                case PEAR_EXCEPTION_DIE:
+                    $f = (isset($func[1])) ? $func[1] : '%s';
+                    die(printf($f, $this->getMessage()));
+                    break;
+                default:
+                    trigger_error('invalid observer type', E_USER_WARNING);
+            }
         }
-    }
-
-    private static function _signalOne($func, $func_params, $message, $code)
-    {
-        if (is_callable($func)) {
-            call_user_func($func, $func_params);
-            continue;
-        }
-        settype($func, 'array');
-        switch ($func[0]) {
-            case PEAR_OBSERVER_PRINT:
-                $f = (isset($func[1])) ? $func[1] : '%s';
-                printf($f, $message);
-                break;
-            case PEAR_OBSERVER_TRIGGER:
-                $f = (isset($func[1])) ? $func[1] : E_USER_NOTICE;
-                trigger_error($message, $f);
-                break;
-            case PEAR_OBSERVER_DIE:
-                $f = (isset($func[1])) ? $func[1] : '%s';
-                die(printf($f, $message));
-                break;
-            default:
-                trigger_error('invalid observer type', E_USER_WARNING);
-        }
-    }
-
-    private function _getCauseMessage()
-    {
-        $msg = "    #{$this->_method} at {$this->file} ({$this->line})\n" .
-               "     {$this->message}\n";
-        if ($this->cause instanceof Exception) {
-            return $this->cause->_getCauseMessage() . $msg;
-        }
-        return $msg;
     }
 
     /**
+     * Returns the exception that caused this exception to be thrown
+     * @access public
      * @return Exception_object The context of the exception
      */
     public function getCause()
@@ -219,90 +175,113 @@ class PEAR_Exception extends Exception
         return $this->cause;
     }
 
-    /**
-     * Get the class name where the error occurred
-     *
-     * @return string The class name
-     */
+    private function _getCauseMessage(&$causes)
+    {
+        $trace = $this->getTraceSafe();
+        $causes[] = array('class'   => get_class($this),
+                          'message' => $this->message,
+                          'file'    => $trace[0]['file'],
+                          'line'    => $trace[0]['line']);
+        if ($this->cause instanceof PEAR_Exception) {
+            $this->cause->_getCauseMessage($causes);
+        }
+    }
+
+    public function getTraceSafe()
+    {   
+        if (!isset($this->_trace)) {
+            $this->_trace = $this->getTrace();
+            if (empty($this->_trace)) {
+                $backtrace = debug_backtrace();
+                $this->_trace = array($backtrace[count($backtrace)-1]);
+            }
+        }
+        return $this->_trace;
+    }
+
     public function getErrorClass()
     {
-        return $this->error_class;
+        $trace = $this->getTraceSafe();
+        return $trace[0]['class'];
     }
 
     public function getErrorMethod()
     {
-        return $this->error_method;
+        $trace = $this->getTraceSafe();
+        return $trace[0]['function'];
     }
 
     public function __toString()
     {
-        $str = get_class($this) . " occurred: \n" .
-               "  Error message: {$this->message}\n" .
-               "  Error code   : {$this->code}\n" .
-               "  File (Line)  : {$this->file} ({$this->line})\n" .
-               "  Method       : {$this->_method}\n";
-        if ($this->cause instanceof Exception) {
-            $str .= "  Nested Error :\n" . $this->_getCauseMessage();
-        }
         if (isset($_SERVER['REQUEST_URI'])) {
-            return nl2br('<pre>'.htmlentities($str).'</pre>');
+            return $this->toHtml();
         }
-        return $str;
+        return $this->toText();
     }
 
-    /**
-     *
-     * @param string|array $callback A callback called each time a new
-     *                               warning is added
-     * @param int $stack_length The number of warnings to store in the
-     *                          stack. -1 means max 99999999 warnings
-     */
-    public static function setWarningOptions($callback = null, $stack_length = 1)
+    public function toHtml()
     {
-        self::$_warnings_stack_l = ($stack_length == -1) ? 99999999 : $stack_length;
-        self::$_warnings_callback = $callback;
-    }
-
-    /**
-     *
-     * @param string     $message The warning descriptive message
-     * @param int        $code    The code of the warning
-     * @param int|string $context A place for the warning, it could be
-     *                            for ex. the class where it occurred (string)
-     *                            or a severity code (int)
-     */
-    public static function addWarning($message, $code = null, $context = 'all')
-    {
-         $w = array('message' => $message,
-                    'code'    => $code,
-                    'context' => $context);
-        self::$_warnings[] = $w;
-        // Stack size control
-        if (count(self::$_warnings) > self::$_warnings_stack_l) {
-            array_shift(self::$_warnings);
+        $trace = $this->getTraceSafe();
+        $causes = array();
+        $this->_getCauseMessage($causes);
+        $html =  '<table border="1" cellspacing="0">' . "\n";
+        foreach ($causes as $i => $cause) {
+            $html .= '<tr><td colspan="3" bgcolor="#ff9999">'
+               . str_repeat('-', $i) . ' <b>' . $cause['class'] . '</b>: '
+               . htmlspecialchars($cause['message']) . ' in <b>' . $cause['file'] . '</b> '
+               . 'on line <b>' . $cause['line'] . '</b>'
+               . "</td></tr>\n";
         }
-        // Warning observer triggering
-        if (self::$_warnings_callback) {
-            self::_signalOne(self::$_warnings_callback, $w, $message, $code);
-        }
-    }
+        $html .= '<tr><td colspan="3" bgcolor="#aaaaaa" align="center"><b>Exception trace</b></td></tr>' . "\n"
+               . '<tr><td align="center" bgcolor="#cccccc" width="20"><b>#</b></td>'
+               . '<td align="center" bgcolor="#cccccc"><b>Function</b></td>'
+               . '<td align="center" bgcolor="#cccccc"><b>Location</b></td></tr>' . "\n";
 
-    /**
-     * @param int|string $context see addWarning()
-     */
-    public static function getWarning($context = 'all')
-    {
-        $ret = false;
-        foreach(self::$_warnings as $k => $v) {
-            if ($context == 'all' ||
-                $v['context'] == $context ||
-                (is_int($v['context']) && is_int($context) && $v['context'] >= $context) )
-            {
-                $ret[] = $v;
-                unset(self::$_warnings[$k]);
+        foreach ($trace as $k => $v) {
+            $html .= '<tr><td align="center">' . $k . '</td>'
+                   . '<td>';
+            if (!empty($v['class'])) {
+                $html .= $v['class'] . $v['type'];
             }
+            $html .= $v['function'];
+            $args = array();
+            if (!empty($v['args'])) {
+                foreach ($v['args'] as $arg) {
+                    if (is_null($arg)) $args[] = 'null';
+                    elseif (is_array($arg)) $args[] = 'Array';
+                    elseif (is_object($arg)) $args[] = 'Object('.get_class($arg).')';
+                    elseif (is_bool($arg)) $args[] = $arg ? 'true' : 'false';
+                    elseif (is_int($arg) || is_double($arg)) $args[] = $arg;
+                    else {
+                        $arg = (string)$arg;
+                        $str = htmlspecialchars(substr($arg, 0, 16));
+                        if (strlen($arg) > 16) $str .= '&hellip;';
+                        $args[] = "'" . $str . "'";
+                    }
+                }
+            }
+            $html .= '(' . implode(', ',$args) . ')'
+                   . '</td>'
+                   . '<td>' . $v['file'] . ':' . $v['line'] . '</td></tr>' . "\n";
         }
-        return $ret;
+        $html .= '<tr><td align="center">' . ($k+1) . '</td>'
+               . '<td>{main}</td>'
+               . '<td>&nbsp;</td></tr>' . "\n"
+               . '</table>';
+        return $html;
+    }
+
+    public function toText()
+    {
+        $causes = array();
+        $this->_getCauseMessage($causes);
+        $causeMsg = '';
+        foreach ($causes as $i => $cause) {
+            $causeMsg .= str_repeat(' ', $i) . $cause['class'] . ': '
+                   . $cause['message'] . ' in ' . $cause['file']
+                   . ' on line ' . $cause['line'] . "\n";
+        }
+        return $causeMsg.$this->getTraceAsString();
     }
 }
 
