@@ -163,31 +163,30 @@ class PEAR_PackageFile_v2_Validator
                 $this->_unknownChannel($this->_pf->getChannel());
             } else {
                 $valpack = $chan->getValidationPackage();
-                $validator = $chan->getValidationObject();
-                if ($this->_pf->getPackage() != $valpack['_content']) {
-                    // only run these tests if we are not installing the validation package
-                    if (!$validator) {
-                        $this->_stack->push(__FUNCTION__, 'error',
-                            array_merge(
-                                array('channel' => $chan->getName(),
-                                      'package' => $this->_pf->getPackage()),
-                                  $valpack
-                                ),
-                            'package "%channel%/%package%" cannot be properly validated without ' .
-                            'validation package "%channel%/%name%-%version%"');
-                        return $this->_isValid = 0;
-                    }
-                    $validator->setPackageFile($this->_pf);
-                    $validator->validate($state);
-                    $failures = $validator->getFailures();
-                    foreach ($failures['errors'] as $error) {
-                        $this->_stack->push(__FUNCTION__, 'error', $error,
-                            'Channel validator error: field "%field%" - %reason%');
-                    }
-                    foreach ($failures['warnings'] as $warning) {
-                        $this->_stack->push(__FUNCTION__, 'warning', $warning,
-                            'Channel validator warning: field "%field%" - %reason%');
-                    }
+                // for channel validator packages, always use the default PEAR validator.
+                // otherwise, they can't be installed or packaged
+                $validator = $chan->getValidationObject($this->_pf->getPackage());
+                if (!$validator) {
+                    $this->_stack->push(__FUNCTION__, 'error',
+                        array_merge(
+                            array('channel' => $chan->getName(),
+                                  'package' => $this->_pf->getPackage()),
+                              $valpack
+                            ),
+                        'package "%channel%/%package%" cannot be properly validated without ' .
+                        'validation package "%channel%/%name%-%version%"');
+                    return $this->_isValid = 0;
+                }
+                $validator->setPackageFile($this->_pf);
+                $validator->validate($state);
+                $failures = $validator->getFailures();
+                foreach ($failures['errors'] as $error) {
+                    $this->_stack->push(__FUNCTION__, 'error', $error,
+                        'Channel validator error: field "%field%" - %reason%');
+                }
+                foreach ($failures['warnings'] as $warning) {
+                    $this->_stack->push(__FUNCTION__, 'warning', $warning,
+                        'Channel validator warning: field "%field%" - %reason%');
                 }
             }
         }
@@ -939,17 +938,6 @@ class PEAR_PackageFile_v2_Validator
                 if (count($file)) { // has tasks
                     foreach ($file as $task => $value) {
                         if ($tagClass = $this->_pf->getTask($task)) {
-                                if (!isset($value[0])) {
-                                    $value = array($value);
-                                }
-                                foreach ($value as $v) {
-                                    $ret = call_user_func(array($tagClass, 'validateXml'),
-                                        $this->_pf, $v, $this->_pf->_config, $save);
-                                    if (is_array($ret)) {
-                                        $this->_invalidTask($task, $ret,
-                                            @$save['name']);
-                                    }
-                                }
                             if (!isset($value[0])) {
                                 $value = array($value);
                             }
