@@ -508,6 +508,9 @@ class PEAR_Downloader_Package
             } else {
                 $oper = 'gt';
             }
+            // do not try to move this before getDepPackageDownloadURL
+            // we can't determine whether upgrade is necessary until we know what
+            // version would be downloaded
             if (!isset($options['force']) && $this->isInstalled($ret, $oper)) {
                 $version = $this->_registry->packageInfo($dep['name'], 'version',
                     $dep['channel']);
@@ -602,6 +605,9 @@ class PEAR_Downloader_Package
                 }
                 PEAR::popErrorHandling();
                 // check to see if a dep is already installed
+                // do not try to move this before getDepPackageDownloadURL
+                // we can't determine whether upgrade is necessary until we know what
+                // version would be downloaded
                 if (!isset($options['force']) && $this->isInstalled(
                         $url, $dep['rel'])) {
                     $group = (!isset($dep['optional']) || $dep['optional'] == 'no') ?
