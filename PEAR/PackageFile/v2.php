@@ -417,8 +417,6 @@ class PEAR_PackageFile_v2
         if (!isset($this->_packageInfo) || !is_array($this->_packageInfo)) {
             return false;
         }
-
-        $keys = array_keys($this->_packageInfo);
         $structure =
         array(
             'name->channel',
@@ -436,41 +434,9 @@ class PEAR_PackageFile_v2
             '*dependencies', //special validation needed
             '+phprelease|+extsrcrelease|+extbinrelease|+bundle' //special validation needed
         );
-        reset($keys);
-        $key = current($keys);
-        foreach ($structure as $struc) {
-            $tag = $this->_packageInfo[$key];
-            $test = $this->_processStructure($struc);
-            if (isset($test['choices'])) {
-                foreach ($test['choices'] as $choice) {
-                    if ($key == $choice['tag']) {
-                        if ($this->_processAttribs($choice, $tag, '<package>')) {
-                            $key = next($keys);
-                            continue 2;
-                        }
-                        return false;
-                    }
-                }
-                $this->_invalidTagOrder($test['choices'], $key);
-                return false;
-            } else {
-                if ($key != $test['tag']) {
-                    if (isset($test['multiple']) && $test['multiple'] != '*') {
-                        $this->_invalidTagOrder($test['tag'], $key);
-                        return false;
-                    }
-                    if (!isset($test['multiple'])) {
-                        $this->_invalidTagOrder($test['tag'], $key);
-                        return false;
-                    }
-                    continue;
-                }
-                if ($this->_processAttribs($test, $tag, '<package>')) {
-                    $key = next($keys);
-                    continue;
-                }
-                return false;
-            }
+        if (!$this->_stupidSchemaValidate($structure,
+                                          $this->_packageInfo, '<package>')) {
+            return false;
         }
         if (!isset($this->_packageInfo['name']['_content'])) {
             $this->_tagCannotBeEmpty('name');
@@ -493,6 +459,48 @@ class PEAR_PackageFile_v2
         $this->_validateFilelist();
         $this->_validateRelease();
         return !$this->_stack->hasErrors();
+    }
+
+    function _stupidSchemaValidate($structure, $xml, $root)
+    {
+        $keys = array_keys($xml);
+        reset($keys);
+        $key = current($keys);
+        foreach ($structure as $struc) {
+            $tag = $xml[$key];
+            $test = $this->_processStructure($struc);
+            if (isset($test['choices'])) {
+                foreach ($test['choices'] as $choice) {
+                    if ($key == $choice['tag']) {
+                        if ($this->_processAttribs($choice, $tag, $root)) {
+                            $key = next($keys);
+                            continue 2;
+                        }
+                        return false;
+                    }
+                }
+                $this->_invalidTagOrder($test['choices'], $key);
+                return false;
+            } else {
+                if ($key != $test['tag']) {
+                    if (isset($test['multiple']) && $test['multiple'] != '*') {
+                        $this->_invalidTagOrder($test['tag'], $key);
+                        return false;
+                    }
+                    if (!isset($test['multiple'])) {
+                        $this->_invalidTagOrder($test['tag'], $key);
+                        return false;
+                    }
+                    continue;
+                }
+                if ($this->_processAttribs($test, $tag, $root)) {
+                    $key = next($keys);
+                    continue;
+                }
+                return false;
+            }
+        }
+        return true;
     }
 
     function _processAttribs($choice, $tag, $context)
@@ -561,6 +569,88 @@ class PEAR_PackageFile_v2
 
     function _validateDependencies()
     {
+        $structure = array(
+            '*requires',
+            '*group->name->hint'
+        );
+        if (!$this->_stupidSchemaValidate($structure,
+              $this->_packageInfo['dependencies'], '<dependencies>')) {
+            return false;
+        }
+        if (isset($this->_packageInfo['dependencies']['required'])) {
+            $structure = array(
+                'php->?min->?max',
+                'pearinstaller->?min->?max->?recommended',
+                '*package->name->?min->?max->?recommended->?not',
+                '*extension->name->?min->?max->?recommended->?not',
+                '*os->name->?not',
+                '*arch->pattern->?not',
+            );
+            if ($this->_stupidSchemaValidate($structure,
+                  $this->_packageInfo['dependencies']['required'], '<required>')) {
+                foreach (array('package', 'extension') as $type) {
+                    if (isset($this->_packageInfo['dependencies']['required'][$type])) {
+                        $iter = $this->_packageInfo['dependencies']['required'][$type];
+                        if (!isset($iter[0])) {
+                            $iter = array($iter);
+                        }
+                        foreach ($iter as $package) {
+                            if (isset($package['attribs']['url'])) {
+                                if (isset($package['attribs']['channel'])) {
+                                    $this->_UrlOrChannel($type,
+                                        $package['attribs']['name']);
+                                }
+                            } else {
+                                if ($type == 'extension') {
+                                    continue;
+                                }
+                                if (!isset($package['attribs']['channel'])) {
+                                    $this->_NoChannel($type, $package['attribs']['name']);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (isset($this->_packageInfo['dependencies']['group'])) {
+            $structure = array(
+                '*package->name->?min->?max->?recommended->?not',
+                '*extension->name->?min->?max->?recommended->?not',
+            );
+            if ($this->_stupidSchemaValidate($structure,
+                  $this->_packageInfo['dependencies']['group'], '<group>')) {
+                $groups = $this->_packageInfo['dependencies']['group'];
+                if (!isset($groups[0])) {
+                    $groups = array($groups);
+                }
+                foreach ($groups as $group) {
+                    foreach (array('package', 'extension') as $type) {
+                        if (isset($group[$type])) {
+                            $iter = $group[$type];
+                            if (!isset($iter[0])) {
+                                $iter = array($iter);
+                            }
+                            foreach ($iter as $package) {
+                                if (isset($package['url'])) {
+                                    if (isset($package['attribs']['channel'])) {
+                                        $this->_UrlOrChannelGroup($type,
+                                            $package['attribs']['name'],
+                                            $group['attribs']['name']);
+                                    }
+                                } else {
+                                    if (!isset($package['attribs']['channel'])) {
+                                        $this->_NoChannelGroup($type,
+                                            $package['attribs']['name'],
+                                            $group['attribs']['name']);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     function _validateFilelist($list = false, $filetag = 'file', $allowignore = false)
@@ -783,6 +873,38 @@ class PEAR_PackageFile_v2
     {
         $this->_stack->push(__FUNCTION__, 'error', array('tag' => $tag),
             '<%tag%> cannot be empty (<%tag%/>)');
+    }
+
+    function _UrlOrChannel($type, $name)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('type' => $type,
+            'name' => $name),
+            'Required dependency <%type%> "%name%" can have either url OR ' .
+            'channel attributes, and not both');
+    }
+
+    function _NoChannel($type, $name)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('type' => $type,
+            'name' => $name),
+            'Required dependency <%type%> "%name%" must have either url OR ' .
+            'channel attributes');
+    }
+
+    function _UrlOrChannelGroup($type, $name, $group)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('type' => $type,
+            'name' => $name, 'group' => $group),
+            'Group "%group%" dependency <%type%> "%name%" can have either url OR ' .
+            'channel attributes, and not both');
+    }
+
+    function _NoChannelGroup($type, $name, $group)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('type' => $type,
+            'name' => $name, 'group' => $group),
+            'Group "%group%" dependency <%type%> "%name%" must have either url OR ' .
+            'channel attributes');
     }
 }
 ?>
