@@ -10,6 +10,8 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
     var $type = 'postinstall-multiple';
     var $_class;
     var $_obj;
+    var $_pkg;
+    var $_contents;
 
     /**
      * Validate the raw xml at parsing-time.
@@ -187,7 +189,7 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
         $this->_obj = new $this->_class;
         $this->installer->log(1, 'running post-install script "' . $this->_class . '->init()"');
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-        $res = $this->_obj->init($this->config, $this->installer->ui);
+        $res = $this->_obj->init($this->config, $this->installer->ui, $pkg);
         PEAR::popErrorHandling();
         if ($res) {
             $this->installer->log(0, 'init succeeded');
@@ -195,6 +197,8 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
             return $this->throwError('init of post-install script "' . $this->_class .
                 '->init()" failed');
         }
+        $this->_contents = $dest;
+        $this->_pkg = $pkg;
         return $orig; // unchanged
     }
 
@@ -209,7 +213,7 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
     {
         foreach ($tasks as $i => $task) {
             $tasks[$i]->installer->ui->runInstallScript($tasks[$i]->_params, $tasks[$i]->_obj,
-                $installphase);
+                $installphase, $tasks[$i]->_pkg, $tasks[$i]->_contents);
         }
     }
 }
