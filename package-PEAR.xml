@@ -122,6 +122,7 @@
   * update to new header comment block standard
   * slight improvement to speed and possibly memory use of Installer when a lot of
     package.xml version 1.0 packages are installed
+  * add &quot;peardev&quot; command for those with memory_limit issue
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -350,10 +351,21 @@
      <replace from="@pear_version@" to="version" type="package-info"/>
      <replace from="@include_path@" to="php_dir" type="pear-config"/>
     </file>
+    <file role="script" install-as="peardev" name="peardev.sh" platform="!windows">
+     <replace from="@php_bin@" to="php_bin" type="pear-config"/>
+     <replace from="@php_dir@" to="php_dir" type="pear-config"/>
+     <replace from="@pear_version@" to="version" type="package-info"/>
+     <replace from="@include_path@" to="php_dir" type="pear-config"/>
+    </file>
     <file role="script" install-as="pecl" name="pecl.sh" platform="!windows">
      <replace from="@php_bin@" to="php_bin" type="pear-config"/>
      <replace from="@php_dir@" to="php_dir" type="pear-config"/>
      <replace from="@pear_version@" to="version" type="package-info"/>
+     <replace from="@include_path@" to="php_dir" type="pear-config"/>
+    </file>
+    <file role="script" platform="windows" install-as="peardev.bat" name="peardev.bat">
+     <replace from="@bin_dir@" to="bin_dir" type="pear-config"/>
+     <replace from="@php_bin@" to="php_bin" type="pear-config"/>
      <replace from="@include_path@" to="php_dir" type="pear-config"/>
     </file>
     <file role="script" platform="windows" install-as="pear.bat" name="pear.bat">

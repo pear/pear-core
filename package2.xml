@@ -128,6 +128,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * update to new header comment block standard
   * slight improvement to speed and possibly memory use of Installer when a lot of
     package.xml version 1.0 packages are installed
+  * add &quot;peardev&quot; command for those with memory_limit issue
  </notes>
  <contents>
   <dir name="/">
@@ -326,6 +327,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
      <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
      <tasks:windowseol/>
     </file>
+    <file name="peardev.bat" role="script">
+     <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
+     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+     <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
+     <tasks:windowseol/>
+    </file>
     <file name="pecl.bat" role="script">
      <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
      <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
@@ -333,6 +340,13 @@ http://pear.php.net/dtd/package-2.0.xsd">
      <tasks:windowseol/>
     </file>
     <file name="pear.sh" role="script">
+     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+     <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
+     <tasks:replace from="@pear_version@" to="version" type="package-info" />
+     <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
+     <tasks:unixeol/>
+    </file>
+    <file name="peardev.sh" role="script">
      <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
      <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
      <tasks:replace from="@pear_version@" to="version" type="package-info" />
@@ -447,9 +461,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
   </installconditions>
   <filelist>
    <install as="pear.bat" name="scripts/pear.bat" />
+   <install as="peardev.bat" name="scripts/peardev.bat" />
    <install as="pecl.bat" name="scripts/pecl.bat" />
    <install as="pearcmd.php" name="scripts/pearcmd.php" />
    <install as="peclcmd.php" name="scripts/peclcmd.php" />
+   <ignore name="scripts/peardev.sh" />
    <ignore name="scripts/pear.sh" />
    <ignore name="scripts/pecl.sh" />
   </filelist>
@@ -457,10 +473,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <phprelease>
   <filelist>
    <install as="pear" name="scripts/pear.sh" />
+   <install as="peardev" name="scripts/peardev.sh" />
    <install as="pecl" name="scripts/pecl.sh" />
    <install as="pearcmd.php" name="scripts/pearcmd.php" />
    <install as="peclcmd.php" name="scripts/peclcmd.php" />
    <ignore name="scripts/pear.bat" />
+   <ignore name="scripts/peardev.bat" />
    <ignore name="scripts/pecl.bat" />
   </filelist>
  </phprelease>
