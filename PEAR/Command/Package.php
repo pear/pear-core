@@ -794,15 +794,19 @@ used for automated conversion or learning the format.
         if (file_exists("$tmpdir/package.sig")) {
             return $this->raiseError("package already signed");
         }
+        $packagexml = 'package.xml';
+        if (file_exists("$tmpdir/package2.xml")) {
+            $packagexml = 'package2.xml';
+        }
         @unlink("$tmpdir/package.sig");
         $input = $this->ui->userDialog($command,
                                        array('GnuPG Passphrase'),
                                        array('password'));
-        $gpg = popen("gpg --batch --passphrase-fd 0 --armor --detach-sign --output $tmpdir/package.sig $tmpdir/package.xml 2>/dev/null", "w");
+        $gpg = popen("gpg --batch --passphrase-fd 0 --armor --detach-sign --output $tmpdir/package.sig $tmpdir/$packagexml 2>/dev/null", "w");
         if (!$gpg) {
             return $this->raiseError("gpg command failed");
         }
-        fwrite($gpg, "$input[0]\r");
+        fwrite($gpg, "$input[0]\n");
         if (pclose($gpg) || !file_exists("$tmpdir/package.sig")) {
             return $this->raiseError("gpg sign failed");
         }
