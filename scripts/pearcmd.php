@@ -21,6 +21,10 @@
 // $Id$
 
 ob_end_clean();
+if (!defined('PEAR_RUNTYPE')) {
+    // this is defined in peclcmd.php as 'pecl'
+    define('PEAR_RUNTYPE', 'pear');
+}
 /**
  * @nodep Gtk
  */
@@ -58,8 +62,7 @@ PEAR_Command::setFrontendType('CLI');
 $all_commands = PEAR_Command::getCommands();
 
 $argv = Console_Getopt::readPHPArgv();
-/* $progname = basename($argv[0]); */
-$progname = 'pear';
+$progname = PEAR_RUNTYPE;
 if (in_array('getopt2', get_class_methods('Console_Getopt'))) {
     array_shift($argv);
     $options = Console_Getopt::getopt2($argv, "c:C:d:D:Gh?sSqu:vV");
@@ -102,6 +105,7 @@ foreach ($opts as $opt) {
 PEAR_Command::setFrontendType($fetype);
 $ui = &PEAR_Command::getFrontendObject();
 $config = &PEAR_Config::singleton($pear_user_config, $pear_system_config);
+// this is used in the error handler to retrieve a relative path
 $_PEAR_PHPDIR = $config->get('php_dir');
 $ui->setConfig($config);
 PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array($ui, "displayFatalError"));
