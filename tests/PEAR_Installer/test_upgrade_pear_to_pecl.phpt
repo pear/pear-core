@@ -5,15 +5,12 @@ PEAR_Installer->install() upgrade a pecl package when it switches from a pear ch
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
-if (substr('PHP_OS', 0, 3) == 'WIN') {
-    echo 'skip only unix can run this test';
-}
 ?>
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $_test_dep->setPEARVersion('1.4.0a1');
-$_test_dep->setPHPVersion('4.3.11');
+$_test_dep->setPHPVersion('5.0.3');
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_upgrade_pecl'. DIRECTORY_SEPARATOR . 'package.xml';
 $pathtopackagexml2 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
@@ -33,18 +30,18 @@ $result = $dp->download(array($pathtopackagexml2));
 $phpunit->assertEquals(1, count($result), 'return');
 $phpunit->assertIsa('test_PEAR_Downloader_Package', $result[0], 'right class');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf = $result[0]->getPackageFile(), 'right kind of pf');
-$phpunit->assertEquals('sqlite', $pf->getPackage(), 'right package');
+$phpunit->assertEquals('SQLite', $pf->getPackage(), 'right package');
 $phpunit->assertEquals('pecl.php.net', $pf->getChannel(), 'right channel');
 $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(1, count($dlpackages), 'downloaded packages count');
 $phpunit->assertEquals(3, count($dlpackages[0]), 'internals package count');
 $phpunit->assertEquals(array('file', 'info', 'pkg'), array_keys($dlpackages[0]), 'indexes');
-$phpunit->assertEquals($pathtopackagexml,
+$phpunit->assertEquals($pathtopackagexml2,
     $dlpackages[0]['file'], 'file');
 $phpunit->assertIsa('PEAR_PackageFile_v2',
     $dlpackages[0]['info'], 'info');
-$phpunit->assertEquals('PEAR',
-    $dlpackages[0]['pkg'], 'PEAR');
+$phpunit->assertEquals('SQLite',
+    $dlpackages[0]['pkg'], 'SQLite');
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
