@@ -877,19 +877,21 @@ class PEAR_Downloader extends PEAR_Common
      * @param string  $url       the URL to download
      * @param object  $ui        PEAR_Frontend_* instance
      * @param object  $config    PEAR_Config instance
-     * @param string  $save_dir  (optional) directory to save file in
-     * @param mixed   $callback  (optional) function/method to call for status
+     * @param string  $save_dir  directory to save file in
+     * @param mixed   $callback  function/method to call for status
      *                           updates
-     *
-     * @return string  Returns the full path of the downloaded file or a PEAR
-     *                 error on failure.  If the error is caused by
-     *                 socket-related errors, the error object will
-     *                 have the fsockopen error code available through
-     *                 getCode().
+     * @param false|string|array $lastmodified header values to check against for caching
+     *                           use false to return the header values from this download
+     * @return string|array  Returns the full path of the downloaded file or a PEAR
+     *                       error on failure.  If the error is caused by
+     *                       socket-related errors, the error object will
+     *                       have the fsockopen error code available through
+     *                       getCode().  If caching is requested, then return the header
+     *                       values.
      *
      * @access public
      */
-    function downloadHttp($url, &$ui, $save_dir = '.', $callback = null)
+    function downloadHttp($url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null)
     {
         if ($callback) {
             call_user_func($callback, 'setup', array(&$ui));
@@ -937,7 +939,11 @@ class PEAR_Downloader extends PEAR_Common
                 }
                 return PEAR::raiseError("Connection to `$proxy_host:$proxy_port' failed: $errstr", $errno);
             }
-            $request = "GET $url HTTP/1.0\r\n";
+            if ($lastmodified === false || $lastmodified) {
+                $request = "GET $url HTTP/1.1\r\n";
+            } else {
+                $request = "GET $url HTTP/1.0\r\n";
+            }
         } else {
             $fp = @fsockopen($host, $port, $errno, $errstr);
             if (!$fp) {
@@ -947,10 +953,20 @@ class PEAR_Downloader extends PEAR_Common
                 }
                 return PEAR::raiseError("Connection to `$host:$port' failed: $errstr", $errno);
             }
-            $request = "GET $path HTTP/1.0\r\n";
+            if ($lastmodified === false || $lastmodified) {
+                $request = "GET $path HTTP/1.1\r\n";
+            } else {
+                $request = "GET $path HTTP/1.0\r\n";
+            }
         }
-        $request .= "Host: $host:$port\r\n".
-            "User-Agent: PHP/".PHP_VERSION."\r\n";
+        if (is_array($lastmodified)) {
+            $ifmodifiedsince = 'If-Modified-Since: ' . $lastmodified['Last-Modified'] . "\r\n" .
+                "If-None-Match: $lastmodified[Etag]\r\n";
+        } else {
+            $ifmodifiedsince = ($lastmodified ? "If-Modified-Since: $lastmodified\r\n" : '');
+        }
+        $request .= "Host: $host:$port\r\n" . $ifmodifiedsince .
+            "User-Agent: PHP/" . PHP_VERSION . "\r\n";
         if ($proxy_host != '' && $proxy_user != '') {
             $request .= 'Proxy-Authorization: Basic ' .
                 base64_encode($proxy_user . ':' . $proxy_pass) . "\r\n";
@@ -962,6 +978,9 @@ class PEAR_Downloader extends PEAR_Common
             if (preg_match('/^([^:]+):\s+(.*)\s*$/', $line, $matches)) {
                 $headers[strtolower($matches[1])] = trim($matches[2]);
             } elseif (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
+                if ($matches[1] == 304 && ($lastmodified || ($lastmodified === false))) {
+                    return false;
+                }
                 if ($matches[1] != 200) {
                     return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)");
                 }
@@ -1013,6 +1032,19 @@ class PEAR_Downloader extends PEAR_Common
         fclose($wp);
         if ($callback) {
             call_user_func($callback, 'done', $bytes);
+        }
+        if ($lastmodified === false || $lastmodified) {
+            if (isset($headers['etag'])) {
+                $lastmodified = array('ETag' => $headers['etag']);
+            }
+            if (isset($headers['last-modified'])) {
+                if (is_array($lastmodified)) {
+                    $lastmodified['Last-Modified'] = $headers['last-modified'];
+                } else {
+                    $lastmodified = $headers['last-modified'];
+                }
+            }
+            return array($dest_file, $lastmodified);
         }
         return $dest_file;
     }

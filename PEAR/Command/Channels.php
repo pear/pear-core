@@ -20,8 +20,9 @@
 // $Id$
 
 require_once 'PEAR/Command/Common.php';
-require_once 'PEAR/Registry.php';
+require_once 'PEAR/Downloader.php';
 require_once 'PEAR/Config.php';
+require_once 'PEAR/ChannelFile.php';
 
 class PEAR_Command_Channels extends PEAR_Command_Common
 {
@@ -163,8 +164,7 @@ List the files in an installed package.
     function doUpdateAll($command, $options, $params)
     {
         $reg = &$this->config->getRegistry();
-        $chan = $this->config->get('default_channel');
-        if ($chan != 'pear.php.net') {
+        if ($this->config->get('default_channel') != 'pear.php.net') {
             $this->ui->outputData('WARNING: default channel is not pear.php.net');
         }
         $remote = &$this->config->getRemote();
@@ -178,38 +178,40 @@ List the files in an installed package.
         if (!count($channels)) {
             $data = 'no updates available';
         }
-        include_once 'PEAR/ChannelFile.php';
-        foreach ($channels as $info) {
-            $channel = $info[0];
-            $server = $info[1];
+        $dl = &$this->getDownloader();
+        require_once 'System.php';
+        $tmpdir = System::mktemp(array('-d'));
+        foreach ($channels as $channel) {
+            $save = $channel;
             if ($reg->channelExists($channel, true)) {
-                $this->ui->outputData("Updating channel '$channel'");
+                $this->ui->outputData("Updating channel \"$channel\"");
                 $test = $reg->getChannel($channel, true);
                 if (!$test) {
                     $this->ui->outputData("Channel '$channel' is corrupt in registry!");
-                    $lastmodified = null;
+                    $lastmodified = false;
                 } else {
-                    //$test->setServer($server);
-                    //$reg->updateChannel($test);
                     $lastmodified = $test->lastModified();
                     
                 }
-                $this->config->set('default_channel', $channel);
-                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                $info = $remote->call('channel.update', $lastmodified);
-                PEAR::popErrorHandling();
-                if (PEAR::isError($info)) {
-                    $this->ui->outputData($info->getMessage());
+                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                $contents = $dl->downloadHttp('http://' . $test->getName() . '/channel.xml',
+                    $this->ui, $tmpdir, null, $lastmodified);
+                PEAR::staticPopErrorHandling();
+                if (PEAR::isError($contents)) {
+                    $this->ui->outputData('ERROR: Cannot retrieve channel.xml for channel "' .
+                        $test->getName() . '"');
                     continue;
                 }
+                list($contents, $lastmodified) = $contents;
+                $info = implode('', file($contents));
                 if (!$info) {
-                    $this->ui->outputData("Channel '$channel' is up-to-date");
+                    $this->ui->outputData("Channel \"$channel\" is up-to-date");
                     continue;
                 }
                 $channelinfo = new PEAR_ChannelFile;
                 $channelinfo->fromXmlString($info);
                 if ($channelinfo->getErrors()) {
-                    $this->ui->outputData("Downloaded channel data from channel '$channel' " . 
+                    $this->ui->outputData("Downloaded channel data from channel \"$channel\" " . 
                         'is corrupt, skipping');
                     continue;
                 }
@@ -221,9 +223,8 @@ List the files in an installed package.
                         '".  To use anyway, use channel-update');
                     continue;
                 }
-                $reg->updateChannel($channel);
+                $reg->updateChannel($channel, $lastmodified);
             } else {
-                $this->ui->outputData("Adding new channel '$channel'");
                 if ($reg->isAlias($channel)) {
                     $temp = &$reg->getChannel($channel);
                     $temp->setAlias($temp->getName(), true); // set the alias to the channel name
@@ -231,29 +232,27 @@ List the files in an installed package.
                         $this->ui->outputData('ERROR: existing channel "' . $temp->getName() .
                             '" is aliased to "' . $channel . '" already and cannot be ' .
                             're-aliased to "' . $temp->getName() . '" because a channel with ' .
-                            'that name or alias already exists!  Please rename manually and try ' .
+                            'that name or alias already exists!  Please re-alias and try ' .
                             'again.');
                         continue;
                     }
                 }
-                $test = new PEAR_ChannelFile;
-                $test->setName($channel);
-                $test->setServer($server);
-                $test->setSummary($channel);
-                $test->addProtocol('xml-rpc', '1.0', 'channel.update');
-                $reg->addChannel($test);
-                $this->config->set('default_channel', $channel);
-                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                $info = $remote->call('channel.update');
-                PEAR::popErrorHandling();
-                if (PEAR::isError($info)) {
-                    $this->ui->outputData(array('data' => $info->getMessage()), $command);
+                $this->ui->outputData("Adding new channel \"$channel\"");
+                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                $contents = $dl->downloadHttp('http://' . $channel . '/channel.xml',
+                    $this->ui, $tmpdir, null, false);
+                PEAR::staticPopErrorHandling();
+                if (PEAR::isError($contents)) {
+                    $this->ui->outputData('ERROR: Cannot retrieve channel.xml for channel "' .
+                        $channel . '"');
                     continue;
                 }
+                list($contents, $lastmodified) = $contents;
+                $info = implode('', file($contents));
                 $channelinfo = new PEAR_Channelfile;
                 $channelinfo->fromXmlString($info);
                 if ($channelinfo->getErrors()) {
-                    $this->ui->outputData("Downloaded channel data from channel '$channel'" .
+                    $this->ui->outputData("Downloaded channel data from channel \"$channel\"" .
                         ' is corrupt, skipping');
                     continue;
                 }
@@ -261,14 +260,13 @@ List the files in an installed package.
                 if ($channel->getName() != $save) {
                     $this->ui->outputData('ERROR: Security risk - downloaded channel ' .
                         'definition file for channel "'
-                        . $channel->getName() . ' from channel "' . $save .
+                        . $channel->getName() . '" from channel "' . $save .
                         '".  To use anyway, use channel-update');
                     continue;
                 }
-                $reg->addChannel($channel);
+                $reg->addChannel($channel, $lastmodified);
             }
         }
-        $this->config->set('default_channel', $chan);
         return true;
     }
     
@@ -463,14 +461,16 @@ List the files in an installed package.
             require_once 'System.php';
             $tmpdir = System::mktemp(array('-d'));
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-            $loc = $downloader->downloadHttp($params[0], $this->ui, $tmpdir);
+            $loc = $downloader->downloadHttp($params[0], $this->ui, $tmpdir, null, false);
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($loc)) {
                 return $this->raiseError('channel-add: Cannot open "' . $params[0] . '"');
             } else {
+                list($loc, $lastmodified) = $loc;
                 $contents = implode('', file($loc));
             }
         } else {
+            $lastmodified = false;
             $fp = @fopen($params[0], 'r');
             if (!$fp) {
                 return $this->raiseError('channel-add: cannot open "' . $params[0] . '"');
@@ -501,7 +501,7 @@ List the files in an installed package.
             return $this->raiseError('channel-add: Channel "' . $channel->getName() .
                 '" exists, use channel-update to update entry');
         }
-        $ret = $reg->addChannel($channel);
+        $ret = $reg->addChannel($channel, $lastmodified);
         if (PEAR::isError($ret)) {
             return $ret;
         }
@@ -516,27 +516,34 @@ List the files in an installed package.
 
     function doUpdate($command, $options, $params)
     {
+        require_once 'System.php';
+        $tmpdir = System::mktemp(array('-d'));
         $reg = &$this->config->getRegistry();
         if (sizeof($params) != 1) {
             return $this->raiseError("No channel file specified");
         }
+        $lastmodified = false;
         if ((!file_exists($params[0]) || is_dir($params[0]))
               && $reg->channelExists(strtolower($params[0]))) {
             $c = $reg->getChannel(strtolower($params[0]));
             $this->ui->outputData('Retrieving channel.xml from remote server');
-            $chan = $this->config->get('default_channel');
-            $this->config->set('default_channel', strtolower($params[0]));
-            $remote = &$this->config->getRemote();
+            $dl = &$this->getDownloader(array());
             // if force is specified, use a timestamp of "1" to force retrieval
-            $lastmodified = isset($options['force']) ? 1 : $c->lastModified();
-            $contents = $remote->call('channel.update', $lastmodified);
+            $lastmodified = isset($options['force']) ? false : $c->lastModified();
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+            $contents = $dl->downloadHttp('http://' . $c->getName() . '/channel.xml',
+                $this->ui, $tmpdir, null, $lastmodified);
+            PEAR::staticPopErrorHandling();
             if (PEAR::isError($contents)) {
-                return $contents;
+                return $this->raiseError('Cannot retrieve channel.xml for channel "' .
+                    $c->getName() . '"');
             }
+            list($contents, $lastmodified) = $contents;
             if (!$contents) {
                 $this->ui->outputData("Channel $params[0] channel.xml is up to date");
                 return;
             }
+            $contents = implode('', file($contents));
             include_once 'PEAR/ChannelFile.php';
             $channel = new PEAR_ChannelFile;
             $channel->fromXmlString($contents);
@@ -556,15 +563,15 @@ List the files in an installed package.
             }
         } else {
             if (strpos($params[0], '://')) {
-                $downloader = &$this->getDownloader();
-                require_once 'System.php';
-                $tmpdir = System::mktemp(array('-d'));
+                $dl = &$this->getDownloader();
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-                $loc = $downloader->downloadHttp($params[0], $this->ui, $tmpdir);
+                $loc = $dl->downloadHttp($params[0],
+                    $this->ui, $tmpdir, null, $lastmodified);
                 PEAR::staticPopErrorHandling();
                 if (PEAR::isError($loc)) {
                     return $this->raiseError("Cannot open " . $params[0]);
                 } else {
+                    list($loc, $lastmodified) = $loc;
                     $contents = implode('', file($loc));
                 }
             } else {
@@ -598,22 +605,7 @@ List the files in an installed package.
             return $this->raiseError('Error: Channel "' . $channel->getName() .
                 '" does not exist, use channel-add to add an entry');
         }
-        $regchan = $reg->getChannel($channel->getName());
-        if ($regchan) {
-            // security check: is the primary server the same?
-            if ($channel->getServer() != $regchan->getServer()) {
-                if (isset($options['force'])) {
-                    $this->ui->log(0, 'WARNING: primary server "' . $regchan->getServer() .
-                        '" for channel "' . $channel->getName() . '" will be changed to "' .
-                        $channel->getServer() . '"');
-                } else {
-                    return $this->raiseError('ERROR: primary server "' . $regchan->getServer() .
-                        '" for channel "' . $channel->getName() . '" would be changed to "' .
-                        $channel->getServer() . '", use --force to update anyways');
-                }
-            }
-        }
-        $ret = $reg->updateChannel($channel);
+        $ret = $reg->updateChannel($channel, $lastmodified);
         if (PEAR::isError($ret)) {
             return $ret;
         }
