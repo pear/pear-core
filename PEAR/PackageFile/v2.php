@@ -89,7 +89,7 @@ class PEAR_PackageFile_v2
     {
         if ($this->getPackageType() == 'extsrc') {
             foreach ($installer->getInstallPackages() as $p) {
-                if ($p->isExtension($this->_packageInfo['extsrcrelease']['providesextension'])) {
+                if ($p->isExtension($this->_packageInfo['providesextension'])) {
                     if ($p->getPackage() != $this->getPackage() &&
                           $p->getChannel() != $this->getChannel()) {
                         return false; // the user probably downloaded it separately
@@ -98,7 +98,7 @@ class PEAR_PackageFile_v2
             }
             if (isset($this->_packageInfo['extsrcrelease']['binarypackage'])) {
                 $installer->log(0, 'Attempting to download binary version of extension "' .
-                    $this->_packageInfo['extsrcrelease']['providesextension'] . '"');
+                    $this->_packageInfo['providesextension'] . '"');
                 $params = $this->_packageInfo['extsrcrelease']['binarypackage'];
                 if (!isset($params[0])) {
                     $params = array($params);
@@ -153,8 +153,7 @@ class PEAR_PackageFile_v2
     function setProvidesExtension($extension)
     {
         if (in_array($this->getPackageType(), array('extsrc', 'extbin'))) {
-            $this->_packageInfo[$this->getPackageType() . 'release']
-                ['providesextension'] = $extension;
+            $this->_packageInfo['providesextension'] = $extension;
             return true;
         }
         return false;
@@ -166,9 +165,8 @@ class PEAR_PackageFile_v2
     function getProvidesExtension()
     {
         if (in_array($this->getPackageType(), array('extsrc', 'extbin'))) {
-            if (isset($this->_packageInfo[$this->getPackageType() . 'release']
-                  ['providesextension'])) {
-                return $this->_packageInfo[$this->getPackageType() . 'release']['providesextension'];
+            if (isset($this->_packageInfo['providesextension'])) {
+                return $this->_packageInfo['providesextension'];
             }
         }
         return false;
@@ -181,8 +179,7 @@ class PEAR_PackageFile_v2
     function isExtension($extension)
     {
         if (in_array($this->getPackageType(), array('extsrc', 'extbin'))) {
-            return $this->_packageInfo[$this->getPackageType() . 'release']
-                ['providesextension'] == $extension;
+            return $this->_packageInfo['providesextension'] == $extension;
         }
         return false;
     }
@@ -1900,7 +1897,6 @@ class PEAR_PackageFile_v2
             ));
     }
 
-
     /**
      * @param optional|required optional, required
      * @param string extension name
@@ -1967,6 +1963,9 @@ class PEAR_PackageFile_v2
             ));
     }
 
+    /**
+     * @return php|extsrc|extbin|bundle|false
+     */
     function getPackageType()
     {
         if (isset($this->_packageInfo['phprelease'])) {
@@ -1985,7 +1984,7 @@ class PEAR_PackageFile_v2
     }
 
     /**
-     * Set the kind of package
+     * Set the kind of package, and erase all release tags
      *
      * - a php package is a PEAR-style package
      * - an extbin package is a PECL-style extension binary
@@ -2004,9 +2003,7 @@ class PEAR_PackageFile_v2
             $type .= 'release';
         }
         foreach (array('phprelease', 'extbinrelease', 'extsrcrelease', 'bundle') as $test) {
-            if ($type != $test) {
-                unset($this->_packageInfo[$test]);
-            }
+            unset($this->_packageInfo[$test]);
         }
         if (!isset($this->_packageInfo[$type])) {
             // ensure that the release tag is set up
@@ -2014,6 +2011,145 @@ class PEAR_PackageFile_v2
         }
         $this->_packageInfo[$type] = array();
         return true;
+    }
+
+    /**
+     * @return bool true if package type is set up
+     */
+    function addRelease()
+    {
+        if ($type = $this->getPackageType()) {
+            $this->_mergeTag($this->_packageInfo, array(),
+                array($this->getPackageType() => array('changelog')));
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get the current release tag in order to add to it
+     * @param bool returns only releases that have installcondition if true
+     * @return array|null
+     */
+    function &_getCurrentRelease($strict = true)
+    {
+        if ($p = $this->getPackageType()) {
+            if ($strict) {
+                if ($p == 'extsrc' || $p == 'bundle') {
+                    $a = null;
+                    return $a;
+                }
+            }
+            $p .= 'release';
+            if (isset($this->_packageInfo[$p][0])) {
+                return $this->_packageInfo[$p][count($this->_packageInfo[$p]) - 1];
+            } else {
+                return $this->_packageInfo[$p];
+            }
+        } else {
+            $a = null;
+            return $a;
+        }
+    }
+
+    /**
+     * Set an installation condition based on php version for the current release set
+     * @param string minimum version
+     * @param string maximum version
+     * @param false|array incompatible versions of PHP
+     */
+    function setPhpInstallCondition($min, $max, $exclude = false)
+    {
+        $r = &$this->_getCurrentRelease();
+        if ($r === null) {
+            return false;
+        }
+        $this->_isValid = 0;
+        unset($r['installconditions']['php']);
+        $dep = array('min' => $min, 'max' => $max);
+        if ($exclude) {
+            if (is_array($exclude) && count($exclude) == 1) {
+                $exclude = $exclude[0];
+            }
+            $dep['exclude'] = $exclude;
+        }
+        $this->_mergeTag($r['installconditions'], $dep,
+            array(
+                'installconditions' => array('filelist'),
+                'php' => array('extension', 'os', 'arch')
+            ));
+    }
+
+    /**
+     * @param optional|required optional, required
+     * @param string extension name
+     * @param string minimum version
+     * @param string maximum version
+     * @param string recommended version
+     * @param array incompatible versions
+     */
+    function addExtensionInstallCondition($name, $min = false, $max = false, $recommended = false,
+                                          $exclude = false)
+    {
+        $r = &$this->_getCurrentRelease();
+        if ($r === null) {
+            return false;
+        }
+        $this->_isValid = 0;
+        $dep = $this->_constructDep($name, false, false, $min, $max, $recommended, $exclude);
+        $this->_mergeTag($r['installconditions'], $dep,
+            array(
+                'installconditions' => array('filelist'),
+                'extension' => array('os', 'arch')
+            ));
+    }
+
+    /**
+     * Set an installation condition based on operating system for the current release set
+     * @param string OS name
+     * @param bool whether this OS is incompatible with the current release
+     */
+    function setOsInstallCondition($name, $conflicts = false)
+    {
+        $r = &$this->_getCurrentRelease();
+        if ($r === null) {
+            return false;
+        }
+        $this->_isValid = 0;
+        unset($r['installconditions']['os']);
+        $dep = array('name' => $name);
+        if ($conflicts) {
+            $dep['conflicts'] = 'yes';
+        }
+        $this->_mergeTag($r['installconditions'], $dep,
+            array(
+                'installconditions' => array('filelist'),
+                'os' => array('arch')
+            ));
+    }
+
+    /**
+     * Set an installation condition based on architecture for the current release set
+     * @param string architecture pattern
+     * @param bool whether this arch is incompatible with the current release
+     */
+    function setArchInstallCondition($pattern, $conflicts = false)
+    {
+        $r = &$this->_getCurrentRelease();
+        if ($r === null) {
+            return false;
+        }
+        $this->_isValid = 0;
+        unset($r['installconditions']['arch']);
+        $dep = array('pattern' => $pattern);
+        if ($conflicts) {
+            $dep['conflicts'] = 'yes';
+        }
+        $this->_mergeTag($r['installconditions'], $dep,
+            array(
+                'installconditions' => array('filelist'),
+                'arch' => array()
+            ));
     }
 
     function hasDeps()
@@ -2029,8 +2165,8 @@ class PEAR_PackageFile_v2
     function getSourcePackage()
     {
         if (isset($this->_packageInfo['extbinrelease'])) {
-            return array('channel' => $this->_packageInfo['extbinrelease']['srcchannel'],
-                         'package' => $this->_packageInfo['extbinrelease']['srcpackage']);
+            return array('channel' => $this->_packageInfo['srcchannel'],
+                         'package' => $this->_packageInfo['srcpackage']);
         }
         return false;
     }
