@@ -363,7 +363,6 @@ package if needed.
         if (sizeof($params) < 1) {
             return $this->raiseError("Please supply the package(s) you want to uninstall");
         }
-        include_once 'PEAR/Registry.php';
         $reg = &$this->config->getRegistry();
         $newparams = array();
         $badparams = array();
