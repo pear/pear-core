@@ -178,7 +178,7 @@ class PEAR_PackageFile_v2
                     if (count($ret) == 1) {
                         $pf = $ret[0]->getPackageFile();
                         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                        $ret = $installer->install($pf);
+                        $ret = $installer->install($ret[0]);
                         PEAR::popErrorHandling();
                         if (is_array($ret)) {
                             $installer->log(0, 'Download and install of binary extension "' .

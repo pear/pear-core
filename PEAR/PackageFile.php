@@ -72,6 +72,15 @@ class PEAR_PackageFile
         return $a;
     }
 
+    /**
+     * For simpler unit-testing
+     * @return string
+     */
+    function getClassPrefix()
+    {
+        return 'PEAR_PackageFile_v';
+    }
+
     function &factory($version, $phpversion = false)
     {
         if (!in_array($version{0}, array('1', '2'))) {
@@ -91,7 +100,7 @@ class PEAR_PackageFile
         }
         include_once 'PEAR/PackageFile/v' . $version{0} . '.php';
         $version = $version{0};
-        $class = "PEAR_PackageFile_v$version";
+        $class = $this->getClassPrefix() . $version;
         $a = new $class;
         return $a;
     }
@@ -107,14 +116,14 @@ class PEAR_PackageFile
     function &fromArray($arr)
     {
         if (isset($arr['xsdversion'])) {
-            $obj = &PEAR_PackageFile::factory($arr['xsdversion']);
+            $obj = &$this->factory($arr['xsdversion']);
             $obj->fromArray($arr);
             return $obj;
         } else {
             if (isset($arr['package']['attribs']['version'])) {
-                $obj = &PEAR_PackageFile::factory($arr['package']['attribs']['version']);
+                $obj = &$this->factory($arr['package']['attribs']['version']);
             } else {
-                $obj = &PEAR_PackageFile::factory('1.0');
+                $obj = &$this->factory('1.0');
             }
             $obj->fromArray($arr);
             return $obj;
@@ -134,7 +143,7 @@ class PEAR_PackageFile
                 return PEAR::raiseError('package.xml version "' . $packageversion[1] .
                     '" is not supported, only 1.0 and 2.0 are supported.');
             }
-            $object = &PEAR_PackageFile::parserFactory($packageversion[1]);
+            $object = &$this->parserFactory($packageversion[1]);
             $object->setConfig($this->_config);
             $pf = $object->parse($data, $file, $archive);
             if (PEAR::isError($pf)) {
@@ -156,7 +165,7 @@ class PEAR_PackageFile
                 PEAR_PACKAGEFILE_ERROR_NO_PACKAGEVERSION,
                 'warning', array('xml' => $data), 'package.xml "' . $file .
                     '" has no package.xml <package> version');
-            $object = &PEAR_PackageFile::parserFactory('1.0');
+            $object = &$this->parserFactory('1.0');
             $object->setConfig($this->_config);
             $pf = $object->parse($data, $state, $file, $archive);
             if (PEAR::isError($pf)) {

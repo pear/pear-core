@@ -209,6 +209,39 @@ class PEAR_Downloader extends PEAR_Common
         return false;
     }
 
+    /**
+     * For simpler unit-testing
+     * @param PEAR_Downloader
+     * @return PEAR_Downloader_Package
+     */
+    function &newDownloaderPackage(&$t)
+    {
+        $a = new PEAR_Downloader_Package($t);
+        return $a;
+    }
+
+    /**
+     * For simpler unit-testing
+     * @param PEAR_Config
+     * @param array
+     * @param array
+     * @param int
+     */
+    function &getDependency2Object(&$c, $i, $p, $s)
+    {
+        $z = &new PEAR_Dependency2($c, $i, $p, $s);
+        return $z;
+    }
+
+    /**
+     * For simpler unit-testing
+     * @return string
+     */
+    function getDownloaderPackageClass()
+    {
+        return 'PEAR_Downloader_Package';
+    }
+
     function &download($params)
     {
         if (!isset($this->_registry)) {
@@ -219,7 +252,7 @@ class PEAR_Downloader extends PEAR_Common
         }
         // convert all parameters into PEAR_Downloader_Package objects
         foreach ($params as $i => $param) {
-            $params[$i] = &new PEAR_Downloader_Package($this);
+            $params[$i] = &$this->newDownloaderPackage($this);
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $err = $params[$i]->initialize($param);
             PEAR::popErrorHandling();
@@ -233,14 +266,17 @@ class PEAR_Downloader extends PEAR_Common
                     PEAR_INSTALLER_SKIPPED);
             }
         }
-        PEAR_Downloader_Package::removeDuplicates($params);
+        call_user_func_array(array($this->getDownloaderPackageClass(), 'removeDuplicates'),
+            array(&$params));
         if (!isset($this->_options['nodeps'])) {
             foreach ($params as $i => $param) {
                 $params[$i]->detectDependencies($params);
             }
         }
-        while (PEAR_Downloader_Package::mergeDependencies($params));
-        PEAR_Downloader_Package::removeInstalled($params);
+        while (call_user_func(array($this->getDownloaderPackageClass(), 'mergeDependencies'),
+              $params));
+        call_user_func_array(array($this->getDownloaderPackageClass(), 'removeInstalled'),
+            array(&$params));
         if (!count($params)) {
             $this->pushError('No valid packages found', PEAR_INSTALLER_FAILED);
         }
@@ -275,7 +311,6 @@ class PEAR_Downloader extends PEAR_Common
 
     /**
      * @param array all packages to be installed
-     * @static
      */
     function analyzeDependencies(&$params)
     {
@@ -285,7 +320,7 @@ class PEAR_Downloader extends PEAR_Common
                 continue;
             }
             if (count($deps)) {
-                $depchecker = &$params[$i]->getDependency2Object($this->config,
+                $depchecker = &$this->getDependency2Object($this->config,
                     $this->getOptions(), $param->getParsedPackage(),
                     PEAR_VALIDATE_DOWNLOADING);
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);

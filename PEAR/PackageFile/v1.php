@@ -331,6 +331,11 @@ class PEAR_PackageFile_v1
         return isset($this->_packageFile) ? $this->_packageFile : false;
     }
 
+    function getPackageType()
+    {
+        return 'php';
+    }
+
     function getArchiveFile()
     {
         return $this->_archiveFile;
