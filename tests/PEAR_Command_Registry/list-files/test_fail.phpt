@@ -25,7 +25,6 @@ $phpunit->assertErrors(array(
 $e = $command->run('list-files', array(), array('gronk/php_dir'));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => 'unknown channel "gronk" in "gronk/php_dir"'),
-    array('package' => 'PEAR_Error', 'message' => 'unknown channel "gronk" in "gronk/php_dir"'),
 ), 'unknown channel as option');
 echo 'tests done';
 ?>
