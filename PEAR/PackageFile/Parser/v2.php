@@ -74,6 +74,9 @@ class PEAR_PackageFile_Parser_v2
 
     function parse($data, $file, $archive = false)
     {
+        if (!extension_loaded('xml')) {
+            return PEAR::raiseError("XML Extension not found");
+        }
         $this->_valStack = array();
         $this->_dataStack = array();
         $this->_depth = 0;
