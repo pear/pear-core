@@ -525,7 +525,8 @@ class PEAR_Downloader_Package
             return $url;
         }
         $dep['package'] = $dep['name'];
-        $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params);
+        $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params, $group == 'optional' &&
+            !isset($options['alldeps']));
         PEAR::popErrorHandling();
         if (PEAR::isError($ret)) {
             if (!isset($options['soft'])) {
@@ -665,7 +666,9 @@ class PEAR_Downloader_Package
                 }
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                 $dep['package'] = $dep['name'];
-                $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params);
+                $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params,
+                    isset($dep['optional']) && $dep['optional'] == 'yes' &&
+                    !isset($options['alldeps']));
                 PEAR::popErrorHandling();
                 if (PEAR::isError($ret)) {
                     if (!isset($options['soft'])) {
@@ -1367,9 +1370,10 @@ class PEAR_Downloader_Package
      *                            for errors
      * @param array name information of the package
      * @param array|null packages to be downloaded
+     * @param bool is this an optional dependency?
      * @access private
      */
-    function _analyzeDownloadURL($info, $param, $pname, $params = null)
+    function _analyzeDownloadURL($info, $param, $pname, $params = null, $optional = false)
     {
         if (!is_string($param) && PEAR_Downloader_Package::willDownload($param, $params)) {
             return false;
@@ -1400,6 +1404,8 @@ class PEAR_Downloader_Package
             }
         }
         if (!isset($info['url'])) {
+            $instead =  ', will instead download version ' . $info['version'] .
+                        ', stability "' . $info['info']->getState() . '"';
             // releases exist, but we failed to get any
             if (isset($this->_downloader->_options['force'])) {
                 if (isset($pname['version'])) {
@@ -1407,19 +1413,41 @@ class PEAR_Downloader_Package
                 } elseif (isset($pname['state'])) {
                     $vs = ', stability "' . $pname['state'] . '"';
                 } elseif ($param == 'dependency') {
-                    if (!class_exists('PEAR_Dependency2')) {
-                        require_once 'PEAR/Dependency2.php';
+                    if (!class_exists('PEAR_Common')) {
+                        require_once 'PEAR/Common.php';
                     }
-                    $vs = PEAR_Dependency2::_getExtraString($pname);
+                    if (!in_array($info['info']->getState(),
+                          PEAR_Common::betterStates($this->_config->get('preferred_state'), true))) {
+                        if ($optional) {
+                            // don't spit out confusing error message
+                            return $this->_downloader->_getPackageDownloadUrl(
+                                array('package' => $pname['package'],
+                                      'channel' => $pname['channel'],
+                                      'version' => $info['version']));
+                        }
+                        $vs = ' within preferred state "' . $this->_config->get('preferred_state') .
+                            '"';
+                    } else {
+                        if (!class_exists('PEAR_Dependency2')) {
+                            require_once 'PEAR/Dependency2.php';
+                        }
+                        if ($optional) {
+                            // don't spit out confusing error message
+                            return $this->_downloader->_getPackageDownloadUrl(
+                                array('package' => $pname['package'],
+                                      'channel' => $pname['channel'],
+                                      'version' => $info['version']));
+                        }
+                        $vs = PEAR_Dependency2::_getExtraString($pname);
+                        $instead = '';
+                    }
                 } else {
                     $vs = ' within preferred state "' . $this->_config->get(
                         'preferred_state') . '"';
                 }
                 if (!isset($options['soft'])) {
                     $this->_downloader->log(1, 'WARNING: failed to download ' . $pname['channel'] .
-                        '/' . $pname['package'] . $vs .
-                        ', will instead download version ' . $info['version'] .
-                        ', stability "' . $info['info']->getState() . '"');
+                        '/' . $pname['package'] . $vs . $instead);
                 }
                 // download the latest release
                 return $this->_downloader->_getPackageDownloadUrl(
@@ -1433,10 +1461,35 @@ class PEAR_Downloader_Package
                 } elseif (isset($pname['state'])) {
                     $vs = ', stability "' . $pname['state'] . '"';
                 } elseif ($param == 'dependency') {
-                    if (!class_exists('PEAR_Dependency2')) {
-                        require_once 'PEAR/Dependency2.php';
+                    if (!class_exists('PEAR_Common')) {
+                        require_once 'PEAR/Common.php';
                     }
-                    $vs = PEAR_Dependency2::_getExtraString($pname);
+                    if (!in_array($info['info']->getState(),
+                          PEAR_Common::betterStates($this->_config->get('preferred_state'), true))) {
+                        if ($optional) {
+                            // don't spit out confusing error message, and don't die on
+                            // optional dep failure!
+                            return $this->_downloader->_getPackageDownloadUrl(
+                                array('package' => $pname['package'],
+                                      'channel' => $pname['channel'],
+                                      'version' => $info['version']));
+                        }
+                        $vs = ' within preferred state "' . $this->_config->get('preferred_state') .
+                            '"';
+                    } else {
+                        if (!class_exists('PEAR_Dependency2')) {
+                            require_once 'PEAR/Dependency2.php';
+                        }
+                        if ($optional) {
+                            // don't spit out confusing error message, and don't die on
+                            // optional dep failure!
+                            return $this->_downloader->_getPackageDownloadUrl(
+                                array('package' => $pname['package'],
+                                      'channel' => $pname['channel'],
+                                      'version' => $info['version']));
+                        }
+                        $vs = PEAR_Dependency2::_getExtraString($pname);
+                    }
                 } else {
                     $vs = ' within preferred state "' . $this->_downloader->config->get(
                         'preferred_state') . '"';
