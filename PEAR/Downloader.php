@@ -921,7 +921,7 @@ class PEAR_Downloader extends PEAR_Common
      *  'bytesread'   parameter is the number of bytes read so far
      *  'done'        download is complete, parameter is the total number
      *                of bytes read
-     *  'connfailed'  if the TCP connection fails, this callback is called
+     *  'connfailed'  if the TCP/SSL connection fails, this callback is called
      *                with array(host,port,errno,errmsg)
      *  'writefailed' if writing to disk fails, this callback is called
      *                with array(destfile,errmsg)
@@ -954,7 +954,7 @@ class PEAR_Downloader extends PEAR_Common
             call_user_func($callback, 'setup', array(&$ui));
         }
         $info = parse_url($url);
-        if (!isset($info['scheme']) || $info['scheme'] != 'http') {
+        if (!isset($info['scheme']) || !in_array($info['scheme'], array('http', 'https'))) {
             return PEAR::raiseError('Cannot download non-http URL "' . $url . '"');
         }
         if (!isset($info['host'])) {
@@ -973,6 +973,9 @@ class PEAR_Downloader extends PEAR_Common
         if ($config->get('http_proxy')&& 
               $proxy = parse_url($config->get('http_proxy'))) {
             $proxy_host = @$proxy['host'];
+            if (isset($proxy['scheme']) && $proxy['scheme'] == 'https') {
+                $proxy_host = 'ssl://' . $proxy_host;
+            }
             $proxy_port = @$proxy['port'];
             $proxy_user = @$proxy['user'];
             $proxy_pass = @$proxy['pass'];
@@ -985,7 +988,11 @@ class PEAR_Downloader extends PEAR_Common
             }
         }
         if (empty($port)) {
-            $port = 80;
+            if (isset($info['scheme']) && $info['scheme'] == 'https') {
+                $port = 443;
+            } else {
+                $port = 80;
+            }
         }
         if ($proxy_host != '') {
             $fp = @fsockopen($proxy_host, $proxy_port, $errno, $errstr);
@@ -1002,6 +1009,9 @@ class PEAR_Downloader extends PEAR_Common
                 $request = "GET $url HTTP/1.0\r\n";
             }
         } else {
+            if (isset($info['scheme']) && $info['scheme'] == 'https') {
+                $host = 'ssl://' . $host;
+            }
             $fp = @fsockopen($host, $port, $errno, $errstr);
             if (!$fp) {
                 if ($callback) {
@@ -1024,6 +1034,14 @@ class PEAR_Downloader extends PEAR_Common
         }
         $request .= "Host: $host:$port\r\n" . $ifmodifiedsince .
             "User-Agent: PHP/" . PHP_VERSION . "\r\n";
+        if (isset($this)) { // only pass in authentication for non-static calls
+            $username = $config->get('username');
+            $password = $config->get('password');
+            if ($username && $password) {
+                $tmp = base64_encode("$username:$password");
+                $req_headers .= "Authorization: Basic $tmp\r\n";
+            }
+        }
         if ($proxy_host != '' && $proxy_user != '') {
             $request .= 'Proxy-Authorization: Basic ' .
                 base64_encode($proxy_user . ':' . $proxy_pass) . "\r\n";

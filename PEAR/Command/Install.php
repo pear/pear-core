@@ -537,10 +537,8 @@ package if needed.
 
     function doBundle($command, $options, $params)
     {
-        if (empty($this->installer)) {
-            $this->installer = &$this->getInstaller($this->ui);
-        }
-        $installer = &$this->installer;
+        $downloader = &$this->getDownloader($this->ui, array('force' => true, 'nodeps' => true,
+            'soft' => true), $this->config);
         $reg = &$this->config->getRegistry();
         if (sizeof($params) < 1) {
             return $this->raiseError("Please supply the package you want to bundle");
@@ -559,10 +557,12 @@ package if needed.
                 $dest = $pwd;
             }
         }
-        $pkgfile = &$this->installer->bundle($params[0], $dest);
-        if (PEAR::isError($pkgfile)) {
-            return $pkgfile;
+        $downloader->setDownloadDir($dest);
+        $result = &$downloader->download(array($params[0]));
+        if (PEAR::isError($result)) {
+            return $result;
         }
+        $pkgfile = &$result[0]->getPackageFile();
         $pkgname = $pkgfile->getName();
         $pkgversion = $pkgfile->getVersion();
 
@@ -570,9 +570,9 @@ package if needed.
         $dest .= DIRECTORY_SEPARATOR . $pkgname;
         $orig = $pkgname . '-' . $pkgversion;
 
-        $tar = &new Archive_Tar($pkgfile->getArchive());
+        $tar = &new Archive_Tar($pkgfile->getArchiveFile());
         if (!@$tar->extractModify($dest, $orig)) {
-            return $this->raiseError('unable to unpack ' . $pkgfile->getArchive());
+            return $this->raiseError('unable to unpack ' . $pkgfile->getArchiveFile());
         }
         $this->ui->outputData("Package ready at '$dest'");
     // }}}
