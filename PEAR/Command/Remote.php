@@ -46,6 +46,7 @@ Get details on a package from the server.',
                     array(
                     'shortopt' => 'c',
                     'doc' => 'specify a channel other than the default channel',
+                    'arg' => 'CHAN',
                     )
                 ),
             'doc' => '[preferred_state]
@@ -62,6 +63,7 @@ or the state passed as the second parameter.'
                     array(
                     'shortopt' => 'c',
                     'doc' => 'specify a channel other than the default channel',
+                    'arg' => 'CHAN',
                     )
                 ),
             'doc' => '
@@ -72,8 +74,15 @@ latest stable release of each package.',
             'summary' => 'Search remote package database',
             'function' => 'doSearch',
             'shortcut' => 'sp',
-            'options' => array(),
-            'doc' => '[[channel/]packagename] [packageinfo]
+            'options' => array(
+                'channel' =>
+                    array(
+                    'shortopt' => 'c',
+                    'doc' => 'specify a channel other than the default channel',
+                    'arg' => 'CHAN',
+                    )
+                ),
+            'doc' => '[packagename] [packageinfo]
 Lists all packages which match the search parameters.  The first
 parameter is a fragment of a packagename.  The default channel
 will be used unless explicitly overridden.  The second parameter
@@ -88,6 +97,7 @@ will be used to match any portion of the summary/description',
                     array(
                     'shortopt' => 'c',
                     'doc' => 'specify a channel other than the default channel',
+                    'arg' => 'CHAN',
                     )
                 ),
             'doc' => '
@@ -146,15 +156,13 @@ parameter.
         $savechannel = $channel = $this->config->get('default_channel');
         $reg = &$this->config->getRegistry();
         $package = $params[0];
-        if (strpos($params[0], '/')) {
-            list($channel, $package) = explode('/', $params[0]);
-            if ($reg->channelExists($channel)) {
-                $this->config->set('default_channel', $channel);
-            } else {
-                return $this->raiseError("Channel '$channel' does not exist");
-            }
+        $channel = isset($options['channel']) ? $options['channel'] :
+            $this->config->get('default_channel');
+        if (!$reg->channelExists($channel)) {
+            return $this->raiseError('Channel "' . $channel . '" does not exist');
         }
-        $r = new PEAR_Remote($this->config);
+        $this->config->set('default_channel', $channel);
+        $r = &$this->config->getRemote();
         $info = $r->call('package.info', $package);
         if (PEAR::isError($info)) {
             $this->config->set('default_channel', $savechannel);
@@ -185,7 +193,7 @@ parameter.
                 return $this->raiseError("Channel '$channel' does not exist");
             }
         }
-        $r = new PEAR_Remote($this->config);
+        $r = &$this->config->getRemote();
         $list_options = false;
         if ($this->config->get('preferred_state') == 'stable')
             $list_options = true;
@@ -226,8 +234,8 @@ parameter.
                 return $this->raiseError("Channel '$channel' does not exist");
             }
         }
-        $r = new PEAR_Remote($this->config);
-        $reg = $this->config->getRegistry();
+        $r = &$this->config->getRemote();
+        $reg = &$this->config->getRegistry();
         $list_options = false;
         if ($this->config->get('preferred_state') == 'stable')
             $list_options = true;
@@ -311,15 +319,16 @@ parameter.
         $savechannel = $channel = $this->config->get('default_channel');
         $reg = &$this->config->getRegistry();
         $package = $params[0];
-        if (strpos($params[0], '/')) {
-            list($channel, $package) = explode('/', $params[0]);
+        if (isset($options['channel'])) {
+            $reg = &$this->config->getRegistry();
+            $channel = $options['channel'];
             if ($reg->channelExists($channel)) {
                 $this->config->set('default_channel', $channel);
             } else {
                 return $this->raiseError("Channel '$channel' does not exist");
             }
         }
-        $r = new PEAR_Remote($this->config);
+        $r = &$this->config->getRemote();
         $available = $r->call('package.listAll', true, true);
         if (PEAR::isError($available)) {
             $this->config->set('default_channel', $savechannel);
@@ -431,7 +440,7 @@ parameter.
                 return $this->raiseError("Channel '$channel' does not exist");
             }
         }
-        $remote = new PEAR_Remote($this->config);
+        $remote = &$this->config->getRemote();
         $reg = &$this->config->getRegistry();
         if (empty($params[1])) {
             $state = $this->config->get('preferred_state');
