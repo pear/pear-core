@@ -437,20 +437,20 @@ List the files in an installed package.
             return $this->raiseError('Cannot delete the __uri pseudo-channel');
         }
         if (!$reg->channelExists($channel)) {
-            return $this->raiseError('Channel `' . $channel . '\' does not exist');
+            return $this->raiseError('Channel "' . $channel . '" does not exist');
         }
         if (PEAR::isError($err = $reg->listPackages($channel))) {
             return $err;
         }
         if (count($err)) {
-            return $this->raiseError('Channel `' . $channel .
-                '\' has installed packages, cannot delete');
+            return $this->raiseError('Channel "' . $channel .
+                '" has installed packages, cannot delete');
         }
         if (!$reg->deleteChannel($channel)) {
-            return $this->raiseError('Channel deletion failed');
+            return $this->raiseError('Channel "' . $channel . '"deletion failed');
         } else {
             $this->config->deleteChannel($channel);
-            $this->ui->outputData('Channel `' . $channel . '\' deleted');
+            $this->ui->outputData('Channel "' . $channel . '" deleted');
         }
     }
 
