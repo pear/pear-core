@@ -86,6 +86,19 @@ Displays help for a configuration parameter.  Without arguments it
 displays help for all configuration parameters.
 ',
            ),
+        'config-create' => array(
+            'summary' => 'Create a Default configuration file',
+            'function' => 'doConfigCreate',
+            'shortcut' => 'cc',
+            'options' => array(),
+            'doc' => '<root path> <filename>
+Create a default configuration file with all directory configuration
+variables set to subdirectories of <root path>, and save it as <filename>.
+This is useful especially for creating a configuration file for a remote
+PEAR installation (using the --remoteconfig option of install, upgrade,
+and uninstall).
+',
+            ),
         );
 
     // }}}
@@ -206,6 +219,50 @@ displays help for all configuration parameters.
             $data['data'][] = array($name, $type, $docs);
         }
         $this->ui->outputData($data, $command);
+    }
+
+    // }}}
+    // {{{ doConfigCreate()
+
+    function doConfigCreate($command, $options, $params)
+    {
+        if (count($params) != 2) {
+            return PEAR::raiseError('There must be two parameters, root path and filename, for ' .
+                'config-create');
+        }
+        if (!file_exists($params[1])) {
+            if (!@touch($params[1])) {
+                return PEAR::raiseError('Could not create "' . $params[1] . '"');
+            }
+        }
+        $params[1] = realpath($params[1]);
+        $config = &new PEAR_Config($params[1]);
+        $root = $params[0];
+        // Clean up the DIRECTORY_SEPARATOR mess
+        $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
+        $root = preg_replace(array('!\\+!', '!/+!', "!$ds2+!"),
+                                                    '/',
+                                                    $root);
+        if ($root{0} != '/') {
+            return PEAR::raiseError('Root directory must be an absolute path beginning with "/", ' .
+                'was: "' . $root . '"');
+        }
+        if ($root{strlen($root) - 1} == '/') {
+            $root = substr($root, 0, strlen($root) - 1);
+        }
+        $config->set('php_dir', "$root/pear/php");
+        $config->set('data_dir', "$root/pear/data");
+        $config->set('ext_dir', "$root/pear/ext");
+        $config->set('doc_dir', "$root/pear/docs");
+        $config->set('test_dir', "$root/pear/tests");
+        $config->set('cache_dir', "$root/pear/cache");
+        $config->set('bin_dir', "$root/pear");
+        $save = $this->config;
+        $this->config = $config;
+        $this->doConfigShow('config-show', array(), array('user'));
+        $this->config = $save;
+        $this->ui->outputData('Successfully created default configuration file "' . $params[1] . '"',
+            $command);
     }
 
     // }}}
