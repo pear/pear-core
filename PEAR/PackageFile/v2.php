@@ -1665,6 +1665,10 @@ class PEAR_PackageFile_v2
         if (!isset($this->_packageInfo['dependencies']['required']['package'])) {
             $this->_packageInfo['dependencies']['required']['package'] = $dep;
         } else {
+            if (!isset($this->_packageInfo['dependencies']['required']['package'][0])) {
+                $this->_packageInfo['dependencies']['required']['package'] = array(
+                    $this->_packageInfo['dependencies']['required']['package']);
+            }
             $this->_packageInfo['dependencies']['required']['package'][] = $dep;
         }
     }
@@ -1695,6 +1699,10 @@ class PEAR_PackageFile_v2
         if (!isset($this->_packageInfo['dependencies']['required']['package'])) {
             $this->_packageInfo['dependencies']['required']['package'] = $dep;
         } else {
+            if (!isset($this->_packageInfo['dependencies']['required']['package'][0])) {
+                $this->_packageInfo['dependencies']['required']['package'] = array(
+                    $this->_packageInfo['dependencies']['required']['package']);
+            }
             $this->_packageInfo['dependencies']['required']['package'][] = $dep;
         }
     }
@@ -1788,6 +1796,10 @@ class PEAR_PackageFile_v2
         if (!isset($this->_packageInfo['dependencies'][$type]['package'])) {
             $this->_packageInfo['dependencies'][$type]['package'] = $dep;
         } else {
+            if (!isset($this->_packageInfo['dependencies']['required']['package'][0])) {
+                $this->_packageInfo['dependencies'][$type]['package'] = array(
+                    $this->_packageInfo['dependencies'][$type]['package']);
+            }
             $this->_packageInfo['dependencies'][$type]['package'][] = $dep;
         }
     }
@@ -1849,6 +1861,10 @@ class PEAR_PackageFile_v2
         if (!isset($this->_packageInfo['dependencies'][$type]['subpackage'])) {
             $this->_packageInfo['dependencies'][$type]['subpackage'] = $dep;
         } else {
+            if (!isset($this->_packageInfo['dependencies'][$type]['subpackage'][0])) {
+                $this->_packageInfo['dependencies'][$type]['subpackage'] = array(
+                    $this->_packageInfo['dependencies'][$type]['subpackage']);
+            }
             $this->_packageInfo['dependencies'][$type]['subpackage'][] = $dep;
         }
     }
@@ -1877,6 +1893,10 @@ class PEAR_PackageFile_v2
         if (!isset($this->_packageInfo['dependencies'][$type]['subpackage'])) {
             $this->_packageInfo['dependencies'][$type]['subpackage'] = $dep;
         } else {
+            if (!isset($this->_packageInfo['dependencies'][$type]['subpackage'][0])) {
+                $this->_packageInfo['dependencies'][$type]['subpackage'] = array(
+                    $this->_packageInfo['dependencies'][$type]['subpackage']);
+            }
             $this->_packageInfo['dependencies'][$type]['subpackage'][] = $dep;
         }
     }
