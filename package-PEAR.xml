@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0">
+<!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
+<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://pear.php.net/dtd/package-1.0.xsd">
  <name>PEAR</name>
  <summary>PEAR Base System</summary>
  <description>The PEAR package contains:
@@ -79,6 +79,14 @@ PEAR_ErrorStack:
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
   <provides type="function" name="md5_file"/>
+  <deps>
+   <dep type="php" rel="ge" version="4.2"/>
+   <dep type="pkg" rel="ge" version="1.1">Archive_Tar</dep>
+   <dep type="pkg" rel="ge" version="1.2">Console_Getopt</dep>
+   <dep type="pkg" rel="ge" version="1.0.4">XML_RPC</dep>
+   <dep type="ext" rel="has">xml</dep>
+   <dep type="ext" rel="has">pcre</dep>
+  </deps>
   <filelist>
    <file role="data" name="package.dtd"/>
    <file role="data" name="pearchannel.xml"/>
@@ -143,14 +151,6 @@ PEAR_ErrorStack:
     </file>
    </dir>
   </filelist>
-  <deps>
-   <dep type="php" rel="ge" version="4.2"/>
-   <dep type="pkg" rel="ge" version="1.1">Archive_Tar</dep>
-   <dep type="pkg" rel="ge" version="1.2">Console_Getopt</dep>
-   <dep type="pkg" rel="ge" version="1.0.4">XML_RPC</dep>
-   <dep type="ext" rel="has">xml</dep>
-   <dep type="ext" rel="has">pcre</dep>
-  </deps>
  </release>
  <changelog>
   <release>
