@@ -380,8 +380,9 @@ package if needed.
             $info = $this->installer->install($param, $options);
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($info)) {
+                $pkg = &$param->getPackageFile();
                 if ($info->getCode() != PEAR_INSTALLER_NOBINARY &&
-                      !$param->installBinary($this->installer)) {
+                      !$pkg->installBinary($this->installer)) {
                     $this->ui->outputData('ERROR: ' .$info->getMessage());
                     continue;
                 }
