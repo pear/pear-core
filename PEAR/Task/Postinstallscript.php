@@ -200,7 +200,7 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
         $this->_obj = new $this->_class;
         $this->logger->log(1, 'running post-install script "' . $this->_class . '->init()"');
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-        $res = $this->_obj->init($this->config, $pkg);
+        $res = $this->_obj->init($this->config, $pkg, $this->_lastversion);
         PEAR::popErrorHandling();
         if ($res) {
             $this->logger->log(0, 'init succeeded');
