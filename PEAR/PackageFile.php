@@ -193,7 +193,7 @@ class PEAR_PackageFile
                     '" has no package.xml <package> version');
             $object = &$this->parserFactory('1.0');
             $object->setConfig($this->_config);
-            $pf = $object->parse($data, $state, $file, $archive);
+            $pf = $object->parse($data, $file, $archive);
             if (PEAR::isError($pf)) {
                 return $pf;
             }
