@@ -21,16 +21,18 @@ $phpunit->assertErrors(array(
 touch($temp_path . DIRECTORY_SEPARATOR . 'smong.xml');
 $e = $command->run('info', array(), array($temp_path . DIRECTORY_SEPARATOR . 'smong.xml'));
 if (version_compare(phpversion(), '5.0.0', '>=')) {
-    $phpunit->assertErrors(array(
-        array('package' => 'PEAR_PackageFile', 'message' => 'package.xml "C:\devel\pear_with_channels\tests\PEAR_Command_Registry\testinstallertemp\smong.xml" has no package.xml <package> version'),
-        array('package' => 'PEAR_Error', 'message' => 'XML error: XML_ERR_DOCUMENT_END at line 1'),
-    ), 'invalid file');
+    if (version_compare(phpversion(), '5.0.3', '>=')) {
+        $err = 'Invalid document end';
+    } else {
+        $err = 'XML_ERR_DOCUMENT_END';
+    }
 } else {
-    $phpunit->assertErrors(array(
-        array('package' => 'PEAR_PackageFile', 'message' => 'package.xml "C:\devel\pear_with_channels\tests\PEAR_Command_Registry\testinstallertemp\smong.xml" has no package.xml <package> version'),
-        array('package' => 'PEAR_Error', 'message' => 'XML error: no element found at line 1'),
-    ), 'invalid file');
+    $err = 'no element found';
 }
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile', 'message' => 'package.xml "C:\devel\pear_with_channels\tests\PEAR_Command_Registry\testinstallertemp\smong.xml" has no package.xml <package> version'),
+    array('package' => 'PEAR_Error', 'message' => "XML error: $err at line 1"),
+), 'invalid file');
 $e = $command->run('info', array(), array('gronk/php_dir'));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => 'unknown channel "gronk" in "gronk/php_dir"'),
