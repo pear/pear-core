@@ -325,19 +325,18 @@ $phpunit->assertTrue($res, '$val->validate');
 
 $pf->setExtends('blah');
 $res = $val->validate(PEAR_VALIDATE_NORMAL);
-$phpunit->assertFalse($res, 'extends');
-$phpunit->showall();
+$phpunit->assertTrue($res, 'extends');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
       'field' => 'package',
-      'reason' => 'package PEAR extends package blah and so the name must have a postfix equal to the major version like "blah1"',
+      'reason' => 'package PEAR extends package blah and so the name should have a postfix equal to the major version like "blah1"',
     ),
+  ),
+  'errors' => 
+  array (
   ),
 ), $val->getFailures(), 'failures extends');
 
@@ -345,18 +344,18 @@ $pf->setReleaseVersion('2.0.0');
 $pf->setPackage('blah');
 $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('extends no postfix');
-$phpunit->assertFalse($res, 'extends no postfix');
+$phpunit->assertTrue($res, 'extends no postfix');
 $phpunit->assertEquals(array (
   'warnings' => 
-  array (
-  ),
-  'errors' => 
   array (
     0 => 
     array (
       'field' => 'package',
-      'reason' => 'package blah extends package blah and so the name must have a postfix equal to the major version like "blah2"',
+      'reason' => 'package blah extends package blah and so the name should have a postfix equal to the major version like "blah2"',
     ),
+  ),
+  'errors' => 
+  array (
   ),
 ), $val->getFailures(), 'failures extends no postfix');
 

@@ -15,7 +15,7 @@ $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
 $pf->validate();
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <package>, found <changelog> expected one of "providesextension, srcpackage, srcuri, phprelease, extsrcrelease, extbinrelease, bundle"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <package>, found <changelog> expected one of "usesrole, usestask, providesextension, srcpackage, srcuri, phprelease, extsrcrelease, extbinrelease, bundle"'),
 ), 'no release');
 echo 'tests done';
 ?>
