@@ -110,6 +110,6 @@ ECHO The current value is:
 ECHO %PHP_PEAR_PHP_BIN%
 GOTO END
 :RUN
-"%PHP_PEAR_PHP_BIN%" -C -n -d output_buffering=1 -d include_path="%PHP_PEAR_INSTALL_DIR%" -f "%PHP_PEAR_INSTALL_DIR%\pearcmd.php" -- %1 %2 %3 %4 %5 %6 %7 %8 %9
+"%PHP_PEAR_PHP_BIN%" -C -n -d output_buffering=1 -d include_path="%PHP_PEAR_INSTALL_DIR%" -f "%PHP_PEAR_INSTALL_DIR%\peclcmd.php" -- %1 %2 %3 %4 %5 %6 %7 %8 %9
 :END
 @ECHO ON
