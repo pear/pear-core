@@ -219,6 +219,8 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
 Converts a package.xml in 1.0 format into a package.xml
 in 2.0 format.  The new file will be named package2.xml by default,
 and package.xml will be used as the old file by default.
+This is not the most intelligent conversion, and should only be
+used for automated conversion or learning the format.
 '
             ),
         );
