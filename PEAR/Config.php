@@ -579,58 +579,62 @@ class PEAR_Config extends PEAR
 
     // }}}
 
+    /**
+     * @param string url to the remote config file, like ftp://www.example.com/pear/config.ini
+     * @return true|PEAR_Error
+     */
     function readFTPConfigFile($path)
     {
-        if (!class_exists('Net_FTP')) {
-            do {
+        do { // poor man's try
+            if (!class_exists('Net_FTP')) {
                 if (PEAR_Common::isIncludeable('Net/FTP.php')) {
                     include_once 'Net/FTP.php';
-                    if (class_exists('Net_FTP')) {
-                        include_once 'PEAR/FTP.php';
-                        $this->_ftp = &new PEAR_FTP;
-                        $this->_ftp->init($path);
-                        $tmp = System::mktemp('-d');
-                        $e = $this->_ftp->get(basename($path), $tmp . DIRECTORY_SEPARATOR .
-                            'pear.ini', false, FTP_BINARY);
-                        if (PEAR::isError($e)) {
-                            $this->_ftp->popErrorHandling();
-                            return $e;
-                        }
-                        PEAR_Common::addTempFile($tmp . DIRECTORY_SEPARATOR . 'pear.ini');
-                        $this->_ftp->disconnect();
-                        $this->_ftp->popErrorHandling();
-                        $this->files['ftp'] = $tmp . DIRECTORY_SEPARATOR . 'pear.ini';
-                        $e = $this->readConfigFile(null, 'ftp');
-                        if (PEAR::isError($e)) {
-                            return $e;
-                        }
-                        $fail = array();
-                        foreach ($this->configuration['default'] as $key => $val) {
-                            if (strpos($key, '_dir')) {
-                                // any directory configs must be set for this to work
-                                if (!isset($this->configuration['ftp'][$key])) {
-                                    $fail[] = $key;
-                                }
-                            }
-                        }
-                        if (count($fail)) {
-                            $fail = '"' . implode('", "', $fail) . '"';
-                            unset($this->files['ftp']);
-                            unset($this->configuration['ftp']);
-                            return PEAR::raiseError('ERROR: Ftp configuration file must set all ' .
-                                'directory configuration variables.  These variables were not set: ' .
-                                $fail);
-                        } else {
-                            return true;
+                }
+            }
+            if (class_exists('Net_FTP')) {
+                include_once 'PEAR/FTP.php';
+                $this->_ftp = &new PEAR_FTP;
+                $this->_ftp->init($path);
+                $tmp = System::mktemp('-d');
+                $e = $this->_ftp->get(basename($path), $tmp . DIRECTORY_SEPARATOR .
+                    'pear.ini', false, FTP_BINARY);
+                if (PEAR::isError($e)) {
+                    $this->_ftp->popErrorHandling();
+                    return $e;
+                }
+                PEAR_Common::addTempFile($tmp . DIRECTORY_SEPARATOR . 'pear.ini');
+                $this->_ftp->disconnect();
+                $this->_ftp->popErrorHandling();
+                $this->files['ftp'] = $tmp . DIRECTORY_SEPARATOR . 'pear.ini';
+                $e = $this->readConfigFile(null, 'ftp');
+                if (PEAR::isError($e)) {
+                    return $e;
+                }
+                $fail = array();
+                foreach ($this->configuration['default'] as $key => $val) {
+                    if (strpos($key, '_dir')) {
+                        // any directory configs must be set for this to work
+                        if (!isset($this->configuration['ftp'][$key])) {
+                            $fail[] = $key;
                         }
                     }
-                } else {
-                    return PEAR::raiseError('Net_FTP must be installed to use remote config');
                 }
-            } while (false);
-            unset($this->files['ftp']);
-            return PEAR::raiseError('no remote host specified');
-        }
+                if (count($fail)) {
+                    $fail = '"' . implode('", "', $fail) . '"';
+                    unset($this->files['ftp']);
+                    unset($this->configuration['ftp']);
+                    return PEAR::raiseError('ERROR: Ftp configuration file must set all ' .
+                        'directory configuration variables.  These variables were not set: ' .
+                        $fail);
+                } else {
+                    return true;
+                }
+            } else {
+                return PEAR::raiseError('Net_FTP must be installed to use remote config');
+            }
+        } while (false); // poor man's catch
+        unset($this->files['ftp']);
+        return PEAR::raiseError('no remote host specified');
     }
 
     // {{{ _setupChannels()
