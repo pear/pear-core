@@ -565,7 +565,7 @@ class PEAR_Dependency2
         if (isset($dep['uri'])) {
             $dep['channel'] = '__uri';
         }
-        $depname = $this->_registry->parsedPackageNameToString($dep);
+        $depname = $this->_registry->parsedPackageNameToString($dep, true);
         $found = false;
         foreach ($params as $param) {
             if ($param->isEqual(
@@ -671,7 +671,7 @@ class PEAR_Dependency2
         if ($fail) {
             $installed = $installed ? 'installed' : 'downloaded';
             $dep['package'] = $dep['name'];
-            $dep = $this->_registry->parsedPackageNameToString($dep);
+            $dep = $this->_registry->parsedPackageNameToString($dep, true);
             if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
                 return $this->raiseError('%s requires package "' . $depname . '"' .
                     $extra . ", $installed version is " . $version);
@@ -799,7 +799,7 @@ class PEAR_Dependency2
     function _validatePackageUninstall($dep, $required, $params, &$dl)
     {
         $dep['package'] = $dep['name'];
-        $depname = $this->_registry->parsedPackageNameToString($dep);
+        $depname = $this->_registry->parsedPackageNameToString($dep, true);
         $found = false;
         foreach ($params as $param) {
             if ($param->isEqual($this->_currentPackage)) {
@@ -1041,12 +1041,12 @@ class PEAR_Dependency2
 
     function raiseError($msg)
     {
-        return PEAR::raiseError(sprintf($msg, $this->_registry->parsedPackageNameToString($this->_currentPackage)));
+        return PEAR::raiseError(sprintf($msg, $this->_registry->parsedPackageNameToString($this->_currentPackage, true)));
     }
 
     function warning($msg)
     {
-        return array(sprintf($msg, $this->_registry->parsedPackageNameToString($this->_currentPackage)));
+        return array(sprintf($msg, $this->_registry->parsedPackageNameToString($this->_currentPackage, true)));
     }
 }
 ?>
