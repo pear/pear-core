@@ -696,9 +696,6 @@ class PEAR_Registry extends PEAR
      */
     function _deleteChannel($channel)
     {
-        if (strtolower($channel) == '__uri') {
-            return false;
-        }
         if (!is_string($channel)) {
             if (is_a($channel, 'PEAR_ChannelFile')) {
                 if (!$channel->validate()) {
@@ -709,14 +706,17 @@ class PEAR_Registry extends PEAR
                 return false;
             }
         }
+        if ($this->_getChannelFromAlias($channel) == '__uri') {
+            return false;
+        }
+        if (!$this->_channelExists($channel)) {
+            return false;
+        }
         if (!$channel || $this->_getChannelFromAlias($channel) == 'pear.php.net') {
             return false;
         }
         $channel = $this->_getChannelFromAlias($channel);
         if ($channel == 'pear.php.net') {
-            return false;
-        }
-        if (!$this->_channelExists($channel)) {
             return false;
         }
         $test = $this->_listChannelPackages($channel);
