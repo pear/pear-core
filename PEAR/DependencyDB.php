@@ -22,7 +22,7 @@
 
 require_once 'PEAR.php';
 require_once 'PEAR/Registry.php';
-require_once 'PEAR/Dependency2.php';
+require_once 'PEAR/Config.php';
 
 class PEAR_DependencyDB
 {
@@ -45,20 +45,31 @@ class PEAR_DependencyDB
      * @return PEAR_DependencyDB
      * @static
      */
-    function &singleton($depdb, &$config)
+    function &singleton(&$config, $depdb = false)
     {
-        $obj = new PEAR_DependencyDB;
-        $obj->setConfig($config);
-        $obj->_depdb = $depdb;
-        $obj->assertDepsDB();
-        return $obj;
+        if (!isset($GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE'])) {
+            $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE'] = new PEAR_DependencyDB;
+            $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE']->setConfig($config, $depdb);
+            $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE']->assertDepsDB();
+        }
+        return $GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE'];
     }
 
-    function setConfig(&$config)
+    function setConfig(&$config, $depdb)
     {
-        $this->_config = &$config;
+        if (!$config) {
+            $this->_config = &PEAR_Config::singleton();
+        } else {
+            $this->_config = &$config;
+        }
         $this->_registry = &$config->getRegistry();
         $this->lockfile = $this->_registry->lockfile;
+        if (!$depdb) {
+            $this->_depdb = $config->get('php_dir', null, 'pear.php.net') .
+                DIRECTORY_SEPARATOR . '.depdb';
+        } else {
+            $this->_depdb = $depdb;
+        }
     }
     // }}}
     // {{{ assertDepsDB()
@@ -76,26 +87,70 @@ class PEAR_DependencyDB
         }
     }
 
+    /**
+     * Get a list of installed packages that depend on this package
+     * @param PEAR_PackageFile|array
+     * @return array|false
+     */
     function getDependentPackages(&$pkg)
     {
         $data = $this->_getDepDB();
-        $channel = strtolower($pkg->getChannel());
-        $package = strtolower($pkg->getPackage());
+        if (is_object($pkg)) {
+            $channel = strtolower($pkg->getChannel());
+            $package = strtolower($pkg->getPackage());
+        } else {
+            $channel = strtolower($pkg['channel']);
+            $package = strtolower($pkg['package']);
+        }
         if (isset($data['packages'][$channel][$package])) {
             return $data['packages'][$channel][$package];
         }
         return false;
     }
 
-    function getDependencies($package, $channel = false)
+    /**
+     * Get a list of the actual dependencies of installed packages that depend on
+     * a package.
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2|array
+     * @return array
+     */
+    function getDependentPackageDependencies(&$pkg)
     {
-        if (is_object($package)) {
-            $channel = strtolower($package->getChannel());
-            $package = strtolower($package->getPackage());
+        $data = $this->_getDepDB();
+        if (is_object($pkg)) {
+            $channel = strtolower($pkg->getChannel());
+            $package = strtolower($pkg->getPackage());
         } else {
-            if (!$channel) {
-                $channel = 'pear.php.net';
+            $channel = strtolower($pkg['channel']);
+            $package = strtolower($pkg['package']);
+        }
+        $depend = $this->getDependentPackages($pkg);
+        if (!$depend) {
+            return false;
+        }
+        $dependencies = array();
+        foreach ($depend as $info) {
+            $temp = $this->getDependencies($info);
+            foreach ($temp as $dep) {
+                if ($dep['dep']['channel'] == $channel && $dep['dep']['name'] == $package) {
+                    $dependencies[$info['channel']][$info['package']] = $dep;
+                }
             }
+        }
+        return $dependencies;
+    }
+
+    /**
+     * Get a list of dependencies of this installed package
+     */
+    function getDependencies(&$pkg)
+    {
+        if (is_object($pkg)) {
+            $channel = strtolower($pkg->getChannel());
+            $package = strtolower($pkg->getPackage());
+        } else {
+            $channel = strtolower($pkg['channel']);
+            $package = strtolower($pkg['package']);
         }
         $data = $this->_getDepDB();
         if (isset($data['dependencies'][$channel][$package])) {
@@ -112,12 +167,17 @@ class PEAR_DependencyDB
         $this->_writeDepDB($data);
     }
 
-    function uninstallPackage(&$package)
+    function uninstallPackage(&$pkg)
     {
         $data = $this->_getDepDB();
         unset($this->_cache);
-        $channel = strtolower($package->getChannel());
-        $package = strtolower($package->getPackage());
+        if (is_object($pkg)) {
+            $channel = strtolower($pkg->getChannel());
+            $package = strtolower($pkg->getPackage());
+        } else {
+            $channel = strtolower($pkg['channel']);
+            $package = strtolower($pkg['package']);
+        }
         if (!isset($data['dependencies'][$channel][$package])) {
             return true;
         }
@@ -216,7 +276,7 @@ class PEAR_DependencyDB
         return $ret;
     }
 
-    function &_getDepDB()
+    function _getDepDB()
     {
         if (isset($this->_cache)) {
             return $this->_cache;
@@ -225,9 +285,13 @@ class PEAR_DependencyDB
             $err = PEAR::raiseError("Could not open dependencies file `".$this->_depdb."'");
             return $err;
         }
+        $rt = get_magic_quotes_runtime();
+        set_magic_quotes_runtime(0);
+        clearstatcache();
         $data = unserialize(fread($fp, filesize($this->_depdb)));
-        $this->_cache = $data;
+        set_magic_quotes_runtime($rt);
         fclose($fp);
+        $this->_cache = $data;
         return $data;
     }
 
@@ -238,11 +302,15 @@ class PEAR_DependencyDB
         }
         if (!$fp = fopen($this->_depdb, 'wb')) {
             $this->_unlock();
-            return PEAR::raiseError("Could not open dependencies file `".$this->depfile."' for writting");
+            return PEAR::raiseError("Could not open dependencies file `".$this->_depdb."' for writing");
         }
+        $rt = get_magic_quotes_runtime();
+        set_magic_quotes_runtime(0);
         fwrite($fp, serialize($deps));
+        set_magic_quotes_runtime($rt);
         fclose($fp);
         $this->_unlock();
+        $this->_cache = $deps;
         return true;
     }
 
