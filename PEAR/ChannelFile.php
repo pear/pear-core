@@ -1436,6 +1436,7 @@ class PEAR_ChannelFile {
                 $this->addProtocol('xml-rpc', '1.0', 'package.info', $mirror);
                 $this->addProtocol('xml-rpc', '1.0', 'package.getDownloadURL', $mirror);
                 $this->addProtocol('xml-rpc', '1.0', 'channel.update', $mirror);
+                $this->addProtocol('xml-rpc', '1.0', 'channel.listAll', $mirror);
                 return true;
             break;
             default :
