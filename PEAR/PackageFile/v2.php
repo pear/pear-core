@@ -1122,18 +1122,45 @@ class PEAR_PackageFile_v2
         }
     }
 
-    function setFileAttribute($file, $attr, $value, $index)
+    /**
+     * @param string full path to file
+     * @param string attribute name
+     * @param string attribute value
+     * @param int risky but fast - use this to choose a file based on its position in the list
+     *            of files.  Index is zero-based like PHP arrays.
+     * @return bool success of operation
+     */
+    function setFileAttribute($filename, $attr, $value, $index = false)
     {
         $this->_isValid = 0;
-        if (isset($this->_packageInfo['contents']['dir']['file']['attribs'])) {
-            if ($this->_packageInfo['contents']['dir']['file']['attribs']['name'] == $file) {
-                $this->_packageInfo['contents']['dir']['file']['attribs'][$attr] = $value;
-                return;
+        if ($index !== false &&
+              isset($this->_packageInfo['contents']['dir']['file'][$index]['attribs'])) {
+            $this->_packageInfo['contents']['dir']['file'][$index]['attribs'][$attr] = $value;
+            return true;
+        }
+        if (!isset($this->_packageInfo['contents']['dir']['file'])) {
+            return false;
+        }
+        $files = $this->_packageInfo['contents']['dir']['file'];
+        if (!isset($files[0])) {
+            $files = array($files);
+            $ind = false;
+        } else {
+            $ind = true;
+        }
+        foreach ($files as $i => $file) {
+            if (isset($file['attribs'])) {
+                if ($file['attribs']['name'] == $filename) {
+                    if ($ind) {
+                        $this->_packageInfo['contents']['dir']['file'][$i]['attribs'][$attr] = $value;
+                    } else {
+                        $this->_packageInfo['contents']['dir']['file']['attribs'][$attr] = $value;
+                    }
+                    return true;
+                }
             }
         }
-        if (isset($this->_packageInfo['contents']['dir']['file'][$index]['attribs'])) {
-            $this->_packageInfo['contents']['dir']['file'][$index]['attribs'][$attr] = $value;
-        }
+        return false;
     }
 
     function setDirtree($path)
