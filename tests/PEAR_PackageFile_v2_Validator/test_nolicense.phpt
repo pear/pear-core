@@ -17,6 +17,21 @@ $pf->validate();
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <package>, found <notes> expected one of "license"'),
 ), 'no license');
+$pf->setLicense('');
+$pf->validate();
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => '<license> cannot be empty (<license/>)'),
+), 'empty license');
+$pf->setLicense('', 'uri');
+$pf->validate();
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => '<license> cannot be empty (<license/>)'),
+), 'empty license 2');
+$pf->setLicense('', false, 'file');
+$pf->validate();
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => '<license> cannot be empty (<license/>)'),
+), 'empty license 3');
 echo 'tests done';
 ?>
 --EXPECT--
