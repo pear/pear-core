@@ -301,14 +301,6 @@ package if needed.
         return $a;
     }
 
-    /**
-     * For unit testing purposes
-     */
-    function &getRemote(&$config)
-    {
-        $a = &new PEAR_Remote($config);
-        return $a;
-    }
     // {{{ doInstall()
 
     function doInstall($command, $options, $params)
@@ -327,20 +319,19 @@ package if needed.
             $options['upgrade'] = true;
         }
         if ($command == 'upgrade-all') {
-            include_once "PEAR/Remote.php";
             $options['upgrade'] = true;
-            $remote = &$this->getRemote($this->config);
+            $remote = &$this->config->getRemote($this->config);
             $savechannel = $this->config->get('default_channel');
             foreach ($reg->listChannels as $channel) {
                 $this->config->set('default_channel', $channel);
                 $state = $this->config->get('preferred_state');
-                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
                 if (empty($state) || $state == 'any') {
                     $latest = $remote->call("package.listLatestReleases");
                 } else {
                     $latest = $remote->call("package.listLatestReleases", $state);
                 }
-                PEAR::popErrorHandling();
+                PEAR::staticPopErrorHandling();
                 if (PEAR::isError($latest)) {
                     continue;
                 }
@@ -357,7 +348,8 @@ package if needed.
                         // installed version is up-to-date
                         continue;
                     }
-                    $params[] = $reg->parsedPackageNameToString(array('package' => $package, 'channel' => $channel));
+                    $params[] = $reg->parsedPackageNameToString(array('package' => $package,
+                        'channel' => $channel));
                     $this->ui->outputData(array('data' => "Will upgrade $package"), $command);
                 }
             }
@@ -384,9 +376,9 @@ package if needed.
         }
         $reg = &$this->config->getRegistry();
         foreach ($downloaded as $param) {
-            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $info = $this->installer->install($param, $options);
-            PEAR::popErrorHandling();
+            PEAR::staticPopErrorHandling();
             if (PEAR::isError($info)) {
                 if ($info->getCode() != PEAR_INSTALLER_NOBINARY &&
                       !$param->installBinary($this->installer)) {
@@ -409,9 +401,9 @@ package if needed.
                     }
                     $this->ui->outputData($out, $command);
                     if (isset($options['remoteconfig'])) {
-                        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
                         $info = $this->installer->ftpInstall($param);
-                        PEAR::popErrorHandling();
+                        PEAR::staticPopErrorHandling();
                         if (PEAR::isError($info)) {
                             $this->ui->outputData($info->getMessage());
                             $this->ui->outputData("remote install failed: $label");
@@ -449,9 +441,9 @@ package if needed.
         $badparams = array();
         foreach ($params as $pkg) {
             $channel = $this->config->get('default_channel');
-            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $parsed = $reg->parsePackageName($pkg);
-            PEAR::popErrorHandling();
+            PEAR::staticPopErrorHandling();
             if (!$parsed || PEAR::isError($parsed)) {
                 $badparams[] = $pkg;
                 continue;
@@ -539,7 +531,7 @@ package if needed.
     function doBundle($command, $options, $params)
     {
         if (empty($this->installer)) {
-            $this->installer = &new PEAR_Downloader($this->ui);
+            $this->installer = &$this->getInstaller($this->ui);
         }
         $installer = &$this->installer;
         $reg = &$this->config->getRegistry();
@@ -571,7 +563,7 @@ package if needed.
         $dest .= DIRECTORY_SEPARATOR . $pkgname;
         $orig = $pkgname . '-' . $pkgversion;
 
-        $tar = new Archive_Tar($pkgfile->getArchive());
+        $tar = &new Archive_Tar($pkgfile->getArchive());
         if (!@$tar->extractModify($dest, $orig)) {
             return $this->raiseError('unable to unpack ' . $pkgfile->getArchive());
         }
