@@ -518,14 +518,24 @@ used for automated conversion or learning the format.
                 }
             }
         }
-        $failed = array();
+        $skipped = $passed = $failed = array();
+        $this->ui->outputData('Running ' . count($tests) . ' tests');
         foreach ($tests as $t) {
-            if ($run->run($t) == 'FAILED') {
+            $result = $run->run($t);
+            if ($result == 'FAILED') {
             	$failed[] = $t;
             }
+            if ($result == 'PASSED') {
+            	$passed[] = $t;
+            }
+            if ($result == 'SKIPPED') {
+            	$skipped[] = $t;
+            }
         }
+        $this->ui->outputData(count($passed) . ' PASSED TESTS');
+        $this->ui->outputData(count($skipped) . ' SKIPPED TESTS');
         if (count($failed)) {
-    		$this->ui->outputData('FAILED TESTS:');
+    		$this->ui->outputData(count($failed) . ' FAILED TESTS:');
         	foreach ($failed as $failure) {
         		$this->ui->outputData($failure);
         	}
