@@ -216,17 +216,15 @@ class PEAR_PackageFile_v2_Validator
                             continue 2;
                         }
                         return false;
+                    } else {
+                        $unfoundtags[] = $choice['tag'];
                     }
                     if (!isset($choice['multiple']) || $choice['multiple'] != '*') {
                         $loose = false;
                     }
                 }
                 if (!$loose) {
-                    $tags = $unfoundtags;
-                    foreach ($test['choices'] as $choice) {
-                        $tags[] = $choice['tag'];
-                    }
-                    $this->_invalidTagOrder($tags, $key, $root);
+                    $this->_invalidTagOrder($unfoundtags, $key, $root);
                     return false;
                 }
             } else {
