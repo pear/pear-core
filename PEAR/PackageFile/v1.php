@@ -294,7 +294,7 @@ class PEAR_PackageFile_v1
      * @var boolean
      * @access private
      */
-    var $_isValid = false;
+    var $_isValid = 0;
 
     /**
      * @param bool determines whether to return a PEAR_Error object, or use the PEAR_ErrorStack
@@ -307,7 +307,7 @@ class PEAR_PackageFile_v1
         }
         $this->_stack = &new PEAR_ErrorStack('PEAR_PackageFile_v1');
         $this->_stack->setErrorMessageTemplate($this->_getErrorMessage());
-        $this->_isValid = false;
+        $this->_isValid = 0;
     }
 
     function installBinary($installer)
@@ -1034,7 +1034,7 @@ class PEAR_PackageFile_v1
                 }
             }
         }
-        if (isset($this->_registry)) {
+        if (isset($this->_registry) && $this->_isValid) {
             $chan = $this->_registry->getChannel('pear.php.net');
             $validator = $chan->getValidationObject();
             $validator->setPackageFile($this);
