@@ -1408,6 +1408,10 @@ class PEAR_Registry extends PEAR
                     'must contain a valid package name in "' . $param . '"',
                     'package', null, null, $param);
             }
+            if (isset($components['host'])) {
+                // remove the leading "/"
+                $components['path'] = substr($components['path'], 1);
+            }
             if (!isset($components['scheme'])) {
                 if (strpos($components['path'], '/')) {
                     $parts = explode('/', $components['path']);
