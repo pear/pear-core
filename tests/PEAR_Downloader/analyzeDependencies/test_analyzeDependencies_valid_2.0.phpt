@@ -9,14 +9,18 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$mainpackage = dirname(dirname(__FILE__))  . DIRECTORY_SEPARATOR .
-    'test_mergeDependencies'. DIRECTORY_SEPARATOR . 'main-1.0.tgz';
-$requiredpackage = dirname(dirname(__FILE__))  . DIRECTORY_SEPARATOR .
-    'test_mergeDependencies'. DIRECTORY_SEPARATOR . 'required-1.1.tgz';
-$sub1package = dirname(dirname(__FILE__))  . DIRECTORY_SEPARATOR .
-    'test_mergeDependencies'. DIRECTORY_SEPARATOR . 'sub1-1.1.tgz';
-$sub2package = dirname(dirname(__FILE__))  . DIRECTORY_SEPARATOR .
-    'test_mergeDependencies'. DIRECTORY_SEPARATOR . 'sub2-1.1.tgz';
+
+$_test_dep->setPhpversion('4.3');
+$_test_dep->setPEARVersion('1.4.0dev13');
+
+$mainpackage = dirname(__FILE__) . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'main-1.0.tgz';
+$requiredpackage = dirname(__FILE__) . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'required-1.1.tgz';
+$sub1package = dirname(__FILE__) . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'sub1-1.1.tgz';
+$sub2package = dirname(__FILE__) . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'sub2-1.1.tgz';
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/main-1.0.tgz', $mainpackage);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/required-1.1.tgz', $requiredpackage);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/sub1-1.0.tgz', $sub1package);
@@ -169,9 +173,7 @@ $phpunit->assertEquals(1, count($params), 'detectDependencies');
 $result = PEAR_Downloader_Package::mergeDependencies($params);
 $phpunit->assertNoErrors('after merge 1');
 
-$checker = &test_PEAR_Dependency2::singleton();
-$checker->setPhpversion('4.3');
-$err = test_PEAR_Downloader_Package::analyzeDependencies($params);
+$err = $dp->_downloader->analyzeDependencies($params);
 $phpunit->assertNoErrors('end');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'end log');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');

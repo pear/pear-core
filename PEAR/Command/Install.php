@@ -318,11 +318,15 @@ package if needed.
             return $this->raiseError("$command failed");
         }
         $this->installer->sortPackagesForInstall($downloaded);
-        $this->installer->setDownloadedPackages($downloaded);
+        $this->installer->setOptions($options);
+        if (PEAR::isError($err = $this->installer->setDownloadedPackages($downloaded))) {
+            $this->ui->outputData($err->getMessage());
+            return;
+        }
         $reg = &$this->config->getRegistry();
         foreach ($downloaded as $param) {
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-            $info = $this->installer->install($param->getPackageFile(), $options,
+            $info = $this->installer->install($param, $options,
                 $this->config);
             PEAR::popErrorHandling();
             if (PEAR::isError($info)) {

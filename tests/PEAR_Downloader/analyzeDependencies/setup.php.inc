@@ -85,7 +85,6 @@ if (!empty($home)) {
     // for PEAR_Config initialization
     putenv('HOME="'.$temp_path);
 }
-require_once "PEAR/Downloader.php";
 require_once dirname(dirname(dirname(__FILE__))) . '/download_test_classes.php.inc';
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
 $phpunit = &new PEAR_PHPTest(true);

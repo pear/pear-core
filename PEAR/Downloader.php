@@ -246,7 +246,7 @@ class PEAR_Downloader extends PEAR_Common
             $this->pushError('No valid packages found', PEAR_INSTALLER_FAILED);
         }
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-        $err = PEAR_Downloader_Package::analyzeDependencies($params);
+        $err = $this->analyzeDependencies($params);
         PEAR::popErrorHandling();
         if (PEAR::isError($err)) {
             $this->pushError($err->getMessage());
@@ -272,6 +272,142 @@ class PEAR_Downloader extends PEAR_Common
         }
         $this->_downloadedPackages = $ret;
         return $newparams;
+    }
+
+    /**
+     * @param array all packages to be installed
+     * @static
+     */
+    function analyzeDependencies(&$params)
+    {
+        foreach ($params as $i => $param) {
+            if ($param->isAnalyzed()) {
+                continue;
+            }
+            $deps = $param->getDeps();
+            if (count($deps)) {
+                $depchecker = &$params[$i]->getDependency2Object($this->config,
+                    $this->getOptions(), $param->getParsedPackage(),
+                    PEAR_VALIDATE_DOWNLOADING);
+                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                if ($param->getType() == 'xmlrpc') {
+                    $send = $param->getDownloadURL();
+                } else {
+                    $send = $param->getPackageFile();
+                }
+                $installcheck = $depchecker->validatePackage($send,
+                    $this);
+                if (PEAR::isError($installcheck)) {
+                    $failed = true;
+                    $this->log(0, $installcheck->getMessage());
+                    continue;
+                }
+                $failed = false;
+                if (isset($deps['required'])) {
+                    foreach ($deps['required'] as $type => $dep) {
+                        if (!isset($dep[0])) {
+                            if (PEAR::isError($e =
+                                  $depchecker->{"validate{$type}Dependency"}($dep,
+                                  true, $params))) {
+                                $failed = true;
+                                $this->log(0, $e->getMessage());
+                            } elseif (is_array($e)) {
+                                $this->log(0, $e[0]);
+                            }
+                        } else {
+                            foreach ($dep as $d) {
+                                if (PEAR::isError($e =
+                                      $depchecker->{"validate{$type}Dependency"}($d,
+                                      true, $params))) {
+                                    $failed = true;
+                                    $this->log(0, $e->getMessage());
+                                } elseif (is_array($e)) {
+                                    $this->log(0, $e[0]);
+                                }
+                            }
+                        }
+                    }
+                    if (isset($deps['optional'])) {
+                        foreach ($deps['optional'] as $type => $dep) {
+                            if (!isset($dep[0])) {
+                                if (PEAR::isError($e =
+                                      $depchecker->{"validate{$type}Dependency"}($dep,
+                                      false, $params))) {
+                                    $failed = true;
+                                    $this->log(0, $e->getMessage());
+                                } elseif (is_array($e)) {
+                                    $this->log(0, $e[0]);
+                                }
+                            } else {
+                                foreach ($dep as $d) {
+                                    if (PEAR::isError($e =
+                                          $depchecker->{"validate{$type}Dependency"}($d,
+                                          false, $params))) {
+                                        $failed = true;
+                                        $this->log(0, $e->getMessage());
+                                    } elseif (is_array($e)) {
+                                        $this->log(0, $e[0]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $groupname = $param->getGroup();
+                    if (isset($deps['group']) && $groupname) {
+                        if (!isset($deps['group'][0])) {
+                            $deps['group'] = array($deps['group']);
+                        }
+                        $found = false;
+                        foreach ($deps['group'] as $group) {
+                            if ($group['attribs']['name'] == $groupname) {
+                                $found = true;
+                                break;
+                            }
+                        }
+                        if ($found) {
+                            unset($group['attribs']);
+                            foreach ($group as $type => $dep) {
+                                if (!isset($dep[0])) {
+                                    if (PEAR::isError($e =
+                                          $depchecker->{"validate{$type}Dependency"}($dep,
+                                          false, $params))) {
+                                        $failed = true;
+                                        $this->log(0, $e->getMessage());
+                                    } elseif (is_array($e)) {
+                                        $this->log(0, $e[0]);
+                                    }
+                                } else {
+                                    foreach ($dep as $d) {
+                                        if (PEAR::isError($e =
+                                              $depchecker->{"validate{$type}Dependency"}($d,
+                                              false, $params))) {
+                                            $failed = true;
+                                            $this->log(0, $e->getMessage());
+                                        } elseif (is_array($e)) {
+                                            $this->log(0, $e[0]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    foreach ($deps as $dep) {
+                        if (PEAR::isError($e = $depchecker->validateDependency1($dep, $params))) {
+                            $failed = true;
+                            $this->log(0, $e->getMessage());
+                        } elseif (is_array($e)) {
+                            $this->log(0, $e[0]);
+                        }
+                    }
+                }
+                PEAR::staticPopErrorHandling();
+                if ($failed) {
+                    return PEAR::raiseError("Cannot install, dependencies failed");
+                }
+            }
+            $params[$i]->setAnalyzed();
+        }
     }
 
     /**

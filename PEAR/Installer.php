@@ -121,6 +121,10 @@ class PEAR_Installer extends PEAR_Downloader
         $this->debug = $this->config->get('verbose');
     }
 
+    function setOptions($options)
+    {
+        $this->_options = $options;
+    }
     // }}}
 
     // {{{ _deletePackageFiles()
@@ -755,6 +759,12 @@ class PEAR_Installer extends PEAR_Downloader
      */
     function setDownloadedPackages(&$pkgs)
     {
+        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+        $err = $this->analyzeDependencies($pkgs);
+        PEAR::popErrorHandling();
+        if (PEAR::isError($err)) {
+            return $err;
+        }
         $this->_downloadedPackages = &$pkgs;
     }
 
@@ -788,7 +798,8 @@ class PEAR_Installer extends PEAR_Downloader
         $this->_options = $options;
         $this->_registry = &$this->config->getRegistry();
         if (is_object($pkgfile)) {
-            $pkg = $pkgfile;
+            $dlpkg = &$pkgfile;
+            $pkg = $pkgfile->getPackageFile();
             $pkgfile = $pkg->getArchiveFile();
             $descfile = $pkg->getPackageFile();
             $tmpdir = dirname($descfile);
@@ -820,30 +831,6 @@ class PEAR_Installer extends PEAR_Downloader
         } else {
             $this->installroot = '';
         }
-        // {{{ Check dependencies -------------------------------------------
-        if ($pkg->hasDeps() && empty($options['nodeps'])) {
-            if ($pkg->getPackagexmlVersion() == '1.0') {
-                $dep_errors = '';
-                $error = $this->checkDeps($pkg, $dep_errors);
-                if ($error == true) {
-                    if (empty($options['soft'])) {
-                        $this->log(0, substr($dep_errors, 1));
-                    }
-                    return $this->raiseError("$channel/$pkgname: Dependencies failed");
-                } else if (!empty($dep_errors)) {
-                    // Print optional dependencies
-                    if (empty($options['soft'])) {
-                        $this->log(0, $dep_errors);
-                    }
-                }
-            } else {
-                $err = $this->checkDeps2($pkg, $options);
-                if (PEAR::isError($err)) {
-                    return $err;
-                }
-            }
-        }
-        // }}}
 
         // {{{ checks to do when not in "force" mode
         if (empty($options['force'])) {
@@ -1231,215 +1218,6 @@ class PEAR_Installer extends PEAR_Downloader
     }
 
     // }}}
-    // {{{ checkDeps()
-
-    /**
-     * Check if the package meets all dependencies
-     *
-     * @param  PEAR_PackageFile_v1|PEAR_PackageFile_v2|array   Package information
-     * @param  string  Error message
-     * @return boolean False when no error occured, otherwise true
-     */
-    function checkDeps(&$pkginfo, &$errors)
-    {
-        if (!isset($this->_registry)) {
-            $this->_registry = &new PEAR_Registry($this->config->get('php_dir'));
-        }
-        $depchecker = &new PEAR_Dependency($this->_registry);
-        $error = $errors = '';
-        $failed_deps = $optional_deps = array();
-        $test = is_object($pkginfo) ?
-            $pkginfo->hasDeps() : count($pkginfo['release_deps']);
-        if ($test) {
-            $deps = is_object($pkginfo) ?
-                $pkginfo->getDeps() : $pkginfo['release_deps'];
-            foreach($deps as $dep) {
-                $code = $depchecker->callCheckMethod($error, $dep);
-                if ($code) {
-                    if (isset($dep['optional']) && $dep['optional'] == 'yes') {
-                        $optional_deps[] = array($dep, $code, $error);
-                    } else {
-                        $failed_deps[] = array($dep, $code, $error);
-                    }
-                }
-            }
-            // {{{ failed dependencies
-            $n = count($failed_deps);
-            if ($n > 0) {
-                for ($i = 0; $i < $n; $i++) {
-                    if (isset($failed_deps[$i]['type'])) {
-                        $type = $failed_deps[$i]['type'];
-                    } else {
-                        $type = 'pkg';
-                    }
-                    switch ($failed_deps[$i][1]) {
-                        case PEAR_DEPENDENCY_MISSING:
-                            if ($type == 'pkg') {
-                                // install
-                            }
-                            $errors .= "\n" . $failed_deps[$i][2];
-                            break;
-                        case PEAR_DEPENDENCY_UPGRADE_MINOR:
-                            if ($type == 'pkg') {
-                                // upgrade
-                            }
-                            $errors .= "\n" . $failed_deps[$i][2];
-                            break;
-                        default:
-                            $errors .= "\n" . $failed_deps[$i][2];
-                            break;
-                    }
-                }
-                return true;
-            }
-            // }}}
-
-            // {{{ optional dependencies
-            $count_optional = count($optional_deps);
-            if ($count_optional > 0) {
-                $errors = "Optional dependencies:";
-
-                for ($i = 0; $i < $count_optional; $i++) {
-                    if (isset($optional_deps[$i]['type'])) {
-                        $type = $optional_deps[$i]['type'];
-                    } else {
-                        $type = 'pkg';
-                    }
-                    switch ($optional_deps[$i][1]) {
-                        case PEAR_DEPENDENCY_MISSING:
-                        case PEAR_DEPENDENCY_UPGRADE_MINOR:
-                        default:
-                            $errors .= "\n" . $optional_deps[$i][2];
-                            break;
-                    }
-                }
-                return false;
-            }
-            // }}}
-        }
-        return false;
-    }
-
-    // }}}
-
-    function &getDependency2(&$c, $o, $p, $s)
-    {
-        include_once 'PEAR/Dependency2.php';
-        $a = &new PEAR_Dependency2($c, $o, $p, $s);
-        return $a;
-    }
-
-    function checkDeps2($pkginfo, $options, $state = PEAR_VALIDATE_INSTALLING)
-    {
-        $depchecker = &$this->getDependency2($this->config, $options,
-            array('channel' => $pkginfo->getChannel(), 'package' => $pkginfo->getPackage()),
-            PEAR_VALIDATE_INSTALLING);
-        $deps = $pkginfo->getDeps(true);
-        $params = array();
-        $failed = false;
-        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        foreach ($deps['required'] as $type => $dep) {
-            if (!isset($dep[0])) {
-                if (PEAR::isError($e =
-                      $depchecker->{"validate{$type}Dependency"}($dep,
-                      true, $params))) {
-                    $failed = true;
-                    $this->log(0, $e->getMessage());
-                } elseif (is_array($e)) {
-                    $this->log(0, $e[0]);
-                }
-            } else {
-                foreach ($dep as $d) {
-                    if (PEAR::isError($e =
-                          $depchecker->{"validate{$type}Dependency"}($d,
-                          true, $params))) {
-                        $failed = true;
-                        $this->log(0, $e->getMessage());
-                    } elseif (is_array($e)) {
-                        $this->log(0, $e[0]);
-                    }
-                }
-            }
-        }
-        if (isset($deps['optional'])) {
-            foreach ($deps['optional'] as $type => $dep) {
-                if (!isset($dep[0])) {
-                    if (PEAR::isError($e =
-                          $depchecker->{"validate{$type}Dependency"}($dep,
-                          false, $params))) {
-                        $failed = true;
-                        $this->log(0, $e->getMessage());
-                    } elseif (is_array($e)) {
-                        $this->log(0, $e[0]);
-                    }
-                } else {
-                    foreach ($dep as $d) {
-                        if (PEAR::isError($e =
-                              $depchecker->{"validate{$type}Dependency"}($d,
-                              false, $params))) {
-                            $failed = true;
-                            $this->log(0, $e->getMessage());
-                        } elseif (is_array($e)) {
-                            $this->log(0, $e[0]);
-                        }
-                    }
-                }
-            }
-        }
-        if ($group = $pkginfo->getRequestedGroup()) {
-            do { // poor man's try/throw/catch
-                if (isset($deps['group'][0])) {
-                    $found = false;
-                    foreach ($deps['group'] as $depgroup) {
-                        if ($depgroup['attribs']['name'] == $group) {
-                            $found = true;
-                            break;
-                        }
-                    }
-                    if (!$found) {
-                        break; // throw failure
-                    }
-                    foreach (array('package', 'extension') as $type) {
-                        if (isset($depgroup[$type])) {
-                            if (PEAR::isError($e =
-                                  $depchecker->{"validate{$type}Dependency"}
-                                  ($depgroup[$type],
-                                  true, $params))) {
-                                $failed = true;
-                                $this->log(0, $e->getMessage());
-                            } elseif (is_array($e)) {
-                                $this->log(0, $e[0]);
-                            }
-                        }
-                    }
-                } else {
-                    if ($dep['group']['attribs']['name'] != $group) {
-                        $this->log(0, "Dependency group '$group' " .
-                            'does not exist in this release of package ' .
-                            $this->getChannel() . '/' . $this->getPackage());
-                        break; // throw failure
-                    }
-                    foreach (array('package', 'extension') as $type) {
-                        if (isset($dep['group'][$type])) {
-                            if (PEAR::isError($e =
-                                  $depchecker->{"validate{$type}Dependency"}
-                                  ($dep['group'][$type],
-                                  true, $params))) {
-                                $failed = true;
-                                $this->log(0, $e->getMessage());
-                            } elseif (is_array($e)) {
-                                $this->log(0, $e[0]);
-                            }
-                        }
-                    }
-                }
-            } while (false);
-        }
-        PEAR::staticPopErrorHandling();
-        if ($failed) {
-            return PEAR::raiseError("Cannot install, dependencies failed");
-        }
-    }
 
     // {{{ _buildCallback()
 
