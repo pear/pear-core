@@ -71,15 +71,19 @@ class PEAR_Installer_Role
      * For instance, src files serve no purpose in regular php releases.  php files
      * serve no purpose in extsrc or extbin releases
      * @param string
+     * @param bool clear cache
      * @return array
      * @static
      */
-    function getValidRoles($release)
+    function getValidRoles($release, $clear = false)
     {
         if (!isset($GLOBALS['_PEAR_INSTALLER_ROLES'])) {
             PEAR_Installer_Role::registerRoles();
         }
         static $ret = array();
+        if ($clear) {
+            $ret = array();
+        }
         if (isset($ret[$release])) {
             return $ret[$release];
         }
@@ -98,15 +102,19 @@ class PEAR_Installer_Role
      * Most roles must be installed, but src and package roles, for instance
      * are pseudo-roles.  src files are compiled into a new extension.  Package
      * roles are actually fully bundled releases of a package
+     * @param bool clear cache
      * @return array
      * @static
      */
-    function getInstallableRoles()
+    function getInstallableRoles($clear = false)
     {
         if (!isset($GLOBALS['_PEAR_INSTALLER_ROLES'])) {
             PEAR_Installer_Role::registerRoles();
         }
         static $ret;
+        if ($clear) {
+            unset($ret);
+        }
         if (!isset($ret)) {
             foreach ($GLOBALS['_PEAR_INSTALLER_ROLES'] as $role => $okreleases) {
                 if ($okreleases['installable']) {
@@ -123,14 +131,19 @@ class PEAR_Installer_Role
      * Most roles ignore this attribute, and instead install directly into:
      * PackageName/filepath
      * so a tests file tests/file.phpt is installed into PackageName/tests/filepath.php
+     * @param bool clear cache
+     * @return array
      * @static
      */
-    function getBaseinstallRoles()
+    function getBaseinstallRoles($clear = false)
     {
         if (!isset($GLOBALS['_PEAR_INSTALLER_ROLES'])) {
             PEAR_Installer_Role::registerRoles();
         }
         static $ret;
+        if ($clear) {
+            unset($ret);
+        }
         if (!isset($ret)) {
             foreach ($GLOBALS['_PEAR_INSTALLER_ROLES'] as $role => $okreleases) {
                 if ($okreleases['honorsbaseinstall']) {
@@ -144,15 +157,19 @@ class PEAR_Installer_Role
     /**
      * Return an array of file roles that should be analyzed for PHP content at package time,
      * like the "php" role.
+     * @param bool clear cache
      * @return array
      * @static
      */
-    function getPhpRoles()
+    function getPhpRoles($clear = false)
     {
         if (!isset($GLOBALS['_PEAR_INSTALLER_ROLES'])) {
             PEAR_Installer_Role::registerRoles();
         }
         static $ret;
+        if ($clear) {
+            unset($ret);
+        }
         if (!isset($ret)) {
             foreach ($GLOBALS['_PEAR_INSTALLER_ROLES'] as $role => $okreleases) {
                 if ($okreleases['phpfile']) {
@@ -198,6 +215,10 @@ class PEAR_Installer_Role
             }
         }
         @closedir($dp);
+        PEAR_Installer_Role::getBaseinstallRoles(true);
+        PEAR_Installer_Role::getInstallableRoles(true);
+        PEAR_Installer_Role::getPhpRoles(true);
+        PEAR_Installer_Role::getValidRoles('****', true);
         return true;
     }
 }
