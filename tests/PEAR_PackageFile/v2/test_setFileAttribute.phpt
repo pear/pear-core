@@ -17,6 +17,7 @@ $pf->flattenFilelist();
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
 $pf->clearContents();
+$pf->setPackageType('php');
 $pf->addFile('foo\\test/me', 'file.php', array('role' => 'php'));
 $pf->setFileAttribute('foo/test/me/file.php', 'baseinstalldir', 'boor');
 $pf->addFile('foo', 'file.php', array('role' => 'php'));

@@ -37,7 +37,8 @@ $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
 $pf->validate();
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<extbinrelease> packages must specify a source code package with <srcuri>'),
-), '2');
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <installcondition><os>, found <> expected one of "name"'),
+), '3');
 echo 'tests done';
 ?>
 --EXPECT--

@@ -132,7 +132,7 @@ $phpunit->assertEquals(array (
 ), $pf->getReleases(), 'foo releases');
 $phpunit->assertTrue($pf->setPackageType('php'), 'php');
 $phpunit->assertEquals('php', $pf->getPackageType(), 'php');
-$pf->addIgnore('blah.php');
+$pf->addIgnore('test/test.php');
 $pf->addRelease();
 $phpunit->assertEquals(array (
   0 => 
@@ -143,7 +143,7 @@ $phpunit->assertEquals(array (
       array (
         'attribs' => 
         array (
-          'name' => 'blah.php',
+          'name' => 'test/test.php',
         ),
       ),
     ),
@@ -185,7 +185,7 @@ $phpunit->assertNoErrors('after validation');
 
 $phpunit->assertTrue($pf->setPackageType('extbin'), 'extbin');
 $phpunit->assertEquals('extbin', $pf->getPackageType(), 'extbin');
-$pf->addIgnore('foo.php');
+$pf->addIgnore('test/test2.php');
 $pf->addRelease();
 $phpunit->assertEquals(array (
   0 => 
@@ -196,7 +196,7 @@ $phpunit->assertEquals(array (
       array (
         'attribs' => 
         array (
-          'name' => 'foo.php',
+          'name' => 'test/test2.php',
         ),
       ),
     ),
@@ -221,7 +221,7 @@ $phpunit->assertEquals(array (
 $phpunit->assertTrue($pf->setPackageType('bundle'), 'bundle');
 $phpunit->assertEquals(array(), $pf->getReleases(), 'bundle releases');
 $phpunit->assertEquals('bundle', $pf->getPackageType(), 'bundle');
-$pf->addIgnore('foo.php');
+$pf->addIgnore('test/test3.php');
 $pf->addRelease();
 $phpunit->assertEquals(array (
   0 => 
@@ -232,7 +232,7 @@ $phpunit->assertEquals(array (
       array (
         'attribs' => 
         array (
-          'name' => 'foo.php',
+          'name' => 'test/test3.php',
         ),
       ),
     ),

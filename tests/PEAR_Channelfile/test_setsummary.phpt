@@ -42,63 +42,92 @@ if (!$chf->validate()) {
     var_export($chf->toXml());
 } else {
     $phpt->assertEquals(array (
-  'mirrors' => 
+  'attribs' => 
   array (
+    'version' => '1.0',
+    'xmlns' => 'http://pear.php.net/channel-1.0',
+    'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+    'xsi:schemaLocation' => 'http://pear.php.net/dtd/channel-1.0.xsd',
   ),
-  'subchannels' => 
-  array (
-  ),
-  'version' => '1.0',
   'name' => 'pear.php.net',
   'suggestedalias' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
-  'validatepackage' =>
-  array(
-    'version' => '1.0',
-    'name' => 'PEAR_Validate',
-  ),
-  'server' => 'pear.php.net',
-  'port' => 80,
-  'protocols' => 
+  'validatepackage' => 
   array (
-    'xmlrpc' => 
+    'attribs' => 
     array (
-      'functions' => 
+      'version' => '1.0',
+    ),
+    '_content' => 'PEAR_Validate',
+  ),
+  'servers' => 
+  array (
+    'primary' => 
+    array (
+      'attribs' => 
       array (
-        1 => 
+        'host' => 'pear.php.net',
+      ),
+      'xmlrpc' => 
+      array (
+        'function' => 
         array (
-          'version' => '1.0',
-          'name' => 'logintest',
-        ),
-        2 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listLatestReleases',
-        ),
-        3 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listAll',
-        ),
-        4 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.info',
-        ),
-        5 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.getDownloadURL',
-        ),
-        6 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.listAll',
-        ),
-        7 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.update',
+          0 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'logintest',
+          ),
+          1 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listLatestReleases',
+          ),
+          2 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listAll',
+          ),
+          3 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.info',
+          ),
+          4 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.getDownloadURL',
+          ),
+          5 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.listAll',
+          ),
+          6 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.update',
+          ),
         ),
       ),
     ),
@@ -114,63 +143,92 @@ if (!$chf->validate()) {
     var_export($chf->toXml());
 } else {
     $phpt->assertEquals(array (
-  'mirrors' => 
+  'attribs' => 
   array (
+    'version' => '1.0',
+    'xmlns' => 'http://pear.php.net/channel-1.0',
+    'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+    'xsi:schemaLocation' => 'http://pear.php.net/dtd/channel-1.0.xsd',
   ),
-  'subchannels' => 
-  array (
-  ),
-  'version' => '1.0',
   'name' => 'pear.php.net',
   'suggestedalias' => 'pear',
   'summary' => 'foobar',
-  'validatepackage' =>
-  array(
-    'version' => '1.0',
-    'name' => 'PEAR_Validate',
-  ),
-  'server' => 'pear.php.net',
-  'port' => 80,
-  'protocols' => 
+  'validatepackage' => 
   array (
-    'xmlrpc' => 
+    'attribs' => 
     array (
-      'functions' => 
+      'version' => '1.0',
+    ),
+    '_content' => 'PEAR_Validate',
+  ),
+  'servers' => 
+  array (
+    'primary' => 
+    array (
+      'attribs' => 
       array (
-        1 => 
+        'host' => 'pear.php.net',
+      ),
+      'xmlrpc' => 
+      array (
+        'function' => 
         array (
-          'version' => '1.0',
-          'name' => 'logintest',
-        ),
-        2 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listLatestReleases',
-        ),
-        3 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.listAll',
-        ),
-        4 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.info',
-        ),
-        5 => 
-        array (
-          'version' => '1.0',
-          'name' => 'package.getDownloadURL',
-        ),
-        6 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.listAll',
-        ),
-        7 => 
-        array (
-          'version' => '1.0',
-          'name' => 'channel.update',
+          0 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'logintest',
+          ),
+          1 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listLatestReleases',
+          ),
+          2 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.listAll',
+          ),
+          3 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.info',
+          ),
+          4 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'package.getDownloadURL',
+          ),
+          5 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.listAll',
+          ),
+          6 => 
+          array (
+            'attribs' => 
+            array (
+              'version' => '1.0',
+            ),
+            '_content' => 'channel.update',
+          ),
         ),
       ),
     ),

@@ -117,25 +117,7 @@ Installer:
    </pearinstaller>
   </required>
  </dependencies>
- <phprelease>
-  <installconditions>
-   <os>
-    <name>windows</name>
-   </os>
-  </installconditions>
-  <filelist>
-   <install as="pear.bat" name="scripts/pear.bat" />
-   <install as="pearcmd.php" name="scripts/pearcmd.php" />
-   <ignore name="scripts/pear.sh" />
-  </filelist>
- </phprelease>
- <phprelease>
-  <filelist>
-   <install as="pear" name="scripts/pear.sh" />
-   <install as="pearcmd.php" name="scripts/pearcmd.php" />
-   <ignore name="scripts/pear.bat" />
-  </filelist>
- </phprelease>
+ <phprelease/>
  <changelog>
   <release>
    <version>
