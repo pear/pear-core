@@ -330,6 +330,7 @@ package if needed.
         if ($command == 'upgrade') {
             $options['upgrade'] = true;
         }
+        $reg = &$this->config->getRegistry();
         if ($command == 'upgrade-all') {
             $options['upgrade'] = true;
             $remote = &$this->config->getRemote($this->config);
@@ -383,7 +384,6 @@ package if needed.
         $data = array(
             'headline' => 'Packages that would be Installed'
         );
-        $reg = &$this->config->getRegistry();
         if (isset($options['pretend'])) {
             foreach ($downloaded as $package) {
                 $data['data'][] = array($reg->parsedPackageNameToString($package->getParsedPackage()));
