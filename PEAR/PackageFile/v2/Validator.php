@@ -713,7 +713,13 @@ class PEAR_PackageFile_v2_Validator
             '*conflicts',
         );
         $type = $installcondition ? '<installcondition><os>' : '<dependencies><required><os>';
-        $this->_stupidSchemaValidate($structure, $dep, $type);
+        if ($this->_stupidSchemaValidate($structure, $dep, $type)) {
+            if ($dep['name'] == '*') {
+                if (array_key_exists('conflicts', $dep)) {
+                    $this->_cannotConflictWithAllOs($type);
+                }
+            }
+        }
     }
 
     function _validateArchDep($dep, $installcondition = false)
@@ -1552,6 +1558,12 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array('tag' => $tag, 'type' => $type),
             '<%tag%> must contain <%type%> defining the %type% to be used');
+    }
+
+    function _cannotConflictWithAllOs($type)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('tag' => $tag),
+            '%tag% cannot conflict with all OSes');
     }
 
     function _analyzeBundledPackages()

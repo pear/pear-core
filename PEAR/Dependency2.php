@@ -173,6 +173,9 @@ class PEAR_Dependency2
         } else {
             $not = false;
         }
+        if ($dep['name'] == '*') {
+            return true;
+        }
         switch (strtolower($dep['name'])) {
             case 'windows' :
                 if ($not) {
