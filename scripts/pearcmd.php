@@ -48,9 +48,6 @@ $_PEAR_PHPDIR = '#$%^&*';
 set_error_handler('error_handler');
 
 $pear_package_version = "@pear_version@";
-if ($raw) {
-    $pear_package_version = '1.4.0a1';
-}
 
 require_once 'PEAR.php';
 require_once 'PEAR/Frontend.php';
