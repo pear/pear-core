@@ -122,7 +122,7 @@ $phpunit->assertEquals(array (
     ),
   ),
 ), $pf->getDeps(true), 'add required with the works');
-$pf->addPackageDepWithChannel('optional', 'gronko', 'fooo', '1.0', '2.0', '1.3', array('2.4'));
+$pf->addPackageDepWithChannel('optional', 'gronko', 'fooo', '1.0', '2.0', '1.3', array('2.4'), 'bloba');
 $phpunit->assertEquals(array (
   'required' => 
   array (
@@ -170,6 +170,7 @@ $phpunit->assertEquals(array (
         'max' => '2.0',
         'recommended' => '1.3',
         'exclude' => '2.4',
+        'providesextension' => 'bloba',
       ),
     ),
   ),
