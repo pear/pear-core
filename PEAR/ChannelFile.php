@@ -628,6 +628,12 @@ class PEAR_ChannelFile {
                     array('tag' => 'suggestedalias', 'name' =>$info['suggestedalias']));
             }
         }
+        if (isset($info['localalias'])) {
+            if (!$this->validChannelName($info['localalias'])) {
+                $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME,
+                    array('tag' => 'localalias', 'name' =>$info['localalias']));
+            }
+        }
         if (isset($info['validatepackage'])) {
             if (!isset($info['validatepackage']['_content'])) {
                 $this->_validateError(PEAR_CHANNELFILE_ERROR_NOVALIDATE_NAME);
