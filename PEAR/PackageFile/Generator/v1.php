@@ -45,6 +45,104 @@ class PEAR_PackageFile_Generator_v1
     }
 
     /**
+     * @param PEAR_Packager
+     * @param bool if true, a .tgz is written, otherwise a .tar is written
+     * @param string|null directory in which to save the .tgz
+     * @return string|PEAR_Error location of package or error object
+     */
+    function toTgz(&$packager, $compress = true, $where = null)
+    {
+        include_once 'System.php';
+        if ($where === null) {
+            if (!($where = System::mktemp(array('-d')))) {
+                return PEAR::raiseError('PEAR_Packagefile_v1::toTgz mktemp failed');
+            }
+        } elseif (PEAR::isError($e = System::mkDir(array('-p', $where)))) {
+            return $e;
+        }
+        if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING)) {
+            return PEAR::raiseError('PEAR_Packagefile_v1::toTgz invalid package file');
+        }
+        if ($pkgfile = $this->_packagefile->getPackageFile()) {
+            $pkgdir = dirname(realpath($pkgfile));
+            $pkgfile = basename($pkgfile);
+        } else {
+            return PEAR::raiseError('PEAR_Packagefile_v1::toTgz package file object must ' .
+                'be created from a real file');
+        }
+        $pkginfo = $this->_packagefile->getArray();
+        $pkgver = $pkginfo['package'] . '-' . $pkginfo['version'];
+        // {{{ Create the package file list
+        $filelist = array();
+        $i = 0;
+
+        foreach ($this->_packagefile->getFilelist() as $fname => $atts) {
+            $file = $pkgdir . DIRECTORY_SEPARATOR . $fname;
+            if (!file_exists($file)) {
+                return PEAR::raiseError("File does not exist: $fname");
+            } else {
+                $filelist[$i++] = $file;
+                if (!isset($atts['md5sum'])) {
+                    $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($file));
+                }
+                $packager->log(2, "Adding file $fname");
+            }
+        }
+        // }}}
+        $packagexml = $this->toPackageFile($where, PEAR_VALIDATE_PACKAGING, 'package.xml', true);
+        if ($packagexml) {
+            $ext = $compress ? '.tgz' : '.tar';
+            $dest_package = getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext;
+            $tar =& new Archive_Tar($dest_package, $compress);
+            $tar->setErrorHandling(PEAR_ERROR_RETURN); // XXX Don't print errors
+            // ----- Creates with the package.xml file
+            $ok = $tar->createModify(array($packagexml), '', $where);
+            if (PEAR::isError($ok)) {
+                return $ok;
+            } elseif (!$ok) {
+                return PEAR::raiseError('PEAR_Packagefile_v1::toTgz(): tarball creation failed');
+            }
+            // ----- Add the content of the package
+            if (!$tar->addModify($filelist, $pkgver, $pkgdir)) {
+                return PEAR::raiseError('PEAR_Packagefile::toTgz(): tarball creation failed');
+            }
+            return $dest_package;
+        }
+    }
+
+    /**
+     * @param string|null directory to place the package.xml in, or null for a temporary dir
+     * @param int one of the PEAR_VALIDATE_* constants
+     * @param string name of the generated file
+     * @param bool if true, then no analysis will be performed on role="php" files
+     * @return string|PEAR_Error path to the created file on success
+     */
+    function toPackageFile($where = null, $state = PEAR_VALIDATE_NORMAL, $name = 'package.xml',
+                           $nofilechecking = false)
+    {
+        if (!$this->_packagefile->validate($state, $nofilechecking)) {
+            return PEAR::raiseError('PEAR_Packagefile_v1::toPackageFile: invalid packagefile');
+        }
+        include_once 'System.php';
+        if ($where === null) {
+            if (!($where = System::mktemp(array('-d')))) {
+                return PEAR::raiseError("PEAR_Packagefile_v1::toPackageFile: mktemp failed");
+            }
+        } elseif (PEAR::isError($e = System::mkDir(array('-p', $where)))) {
+            return $e;
+        }
+        $newpkgfile = $where . DIRECTORY_SEPARATOR . $name;
+        $np = @fopen($newpkgfile, 'wb');
+        if (!$np) {
+            return PEAR::raiseError('PEAR_Packagefile_v1::toPackageFile: unable to save ' .
+               "$name as $newpkgfile");
+        }
+        fwrite($np, $this->toXml($state, true));
+        fclose($np);
+        return $newpkgfile;
+    }
+
+    /**
      * Return an XML document based on the package info (as returned
      * by the PEAR_Common::infoFrom* methods).
      *
@@ -347,104 +445,6 @@ class PEAR_PackageFile_Generator_v1
             }
         }
         return $data;
-    }
-
-    /**
-     * @param PEAR_Packager
-     * @param bool if true, a .tgz is written, otherwise a .tar is written
-     * @param string|null directory in which to save the .tgz
-     * @return string|PEAR_Error location of package or error object
-     */
-    function toTgz(&$packager, $compress = true, $where = null)
-    {
-        include_once 'System.php';
-        if ($where === null) {
-            if (!($where = System::mktemp(array('-d')))) {
-                return PEAR::raiseError('PEAR_Packagefile_v1::toTgz mktemp failed');
-            }
-        } elseif (PEAR::isError($e = System::mkDir(array('-p', $where)))) {
-            return $e;
-        }
-        if (!$this->_packagefile->validate(PEAR_VALIDATE_PACKAGING)) {
-            return PEAR::raiseError('PEAR_Packagefile_v1::toTgz invalid package file');
-        }
-        if ($pkgfile = $this->_packagefile->getPackageFile()) {
-            $pkgdir = dirname(realpath($pkgfile));
-            $pkgfile = basename($pkgfile);
-        } else {
-            return PEAR::raiseError('PEAR_Packagefile_v1::toTgz package file object must ' .
-                'be created from a real file');
-        }
-        $pkginfo = $this->_packagefile->getArray();
-        $pkgver = $pkginfo['package'] . '-' . $pkginfo['version'];
-        // {{{ Create the package file list
-        $filelist = array();
-        $i = 0;
-
-        foreach ($this->_packagefile->getFilelist() as $fname => $atts) {
-            $file = $pkgdir . DIRECTORY_SEPARATOR . $fname;
-            if (!file_exists($file)) {
-                return PEAR::raiseError("File does not exist: $fname");
-            } else {
-                $filelist[$i++] = $file;
-                if (!isset($atts['md5sum'])) {
-                    $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($file));
-                }
-                $packager->log(2, "Adding file $fname");
-            }
-        }
-        // }}}
-        $packagexml = $this->toPackageFile($where, PEAR_VALIDATE_PACKAGING, 'package.xml', true);
-        if ($packagexml) {
-            $ext = $compress ? '.tgz' : '.tar';
-            $dest_package = getcwd() . DIRECTORY_SEPARATOR . $pkgver . $ext;
-            $tar =& new Archive_Tar($dest_package, $compress);
-            $tar->setErrorHandling(PEAR_ERROR_RETURN); // XXX Don't print errors
-            // ----- Creates with the package.xml file
-            $ok = $tar->createModify(array($packagexml), '', $where);
-            if (PEAR::isError($ok)) {
-                return $ok;
-            } elseif (!$ok) {
-                return PEAR::raiseError('PEAR_Packagefile_v1::toTgz(): tarball creation failed');
-            }
-            // ----- Add the content of the package
-            if (!$tar->addModify($filelist, $pkgver, $pkgdir)) {
-                return PEAR::raiseError('PEAR_Packagefile::toTgz(): tarball creation failed');
-            }
-            return $dest_package;
-        }
-    }
-
-    /**
-     * @param string|null directory to place the package.xml in, or null for a temporary dir
-     * @param int one of the PEAR_VALIDATE_* constants
-     * @param string name of the generated file
-     * @param bool if true, then no analysis will be performed on role="php" files
-     * @return string|PEAR_Error path to the created file on success
-     */
-    function toPackageFile($where = null, $state = PEAR_VALIDATE_NORMAL, $name = 'package.xml',
-                           $nofilechecking = false)
-    {
-        if (!$this->_packagefile->validate($state, $nofilechecking)) {
-            return PEAR::raiseError('PEAR_Packagefile_v1::toPackageFile: invalid packagefile');
-        }
-        include_once 'System.php';
-        if ($where === null) {
-            if (!($where = System::mktemp(array('-d')))) {
-                return PEAR::raiseError("PEAR_Packagefile_v1::toPackageFile: mktemp failed");
-            }
-        } elseif (PEAR::isError($e = System::mkDir(array('-p', $where)))) {
-            return $e;
-        }
-        $newpkgfile = $where . DIRECTORY_SEPARATOR . $name;
-        $np = @fopen($newpkgfile, 'wb');
-        if (!$np) {
-            return PEAR::raiseError('PEAR_Packagefile_v1::toPackageFile: unable to save ' .
-               "$name as $newpkgfile");
-        }
-        fwrite($np, $this->toXml($state, true));
-        fclose($np);
-        return $newpkgfile;
     }
 
     /**
