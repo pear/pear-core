@@ -17,6 +17,16 @@ $pf->validate();
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <package>, found <summary> expected one of "channel, uri"'),
 ), 'no channel or uri');
+$pf->setChannel('');
+$pf->validate();
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => '<channel> cannot be empty (<channel/>)'),
+), 'empty channel');
+$pf->setUri('');
+$pf->validate();
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => '<uri> cannot be empty (<uri/>)'),
+), 'empty channel');
 echo 'tests done';
 ?>
 --EXPECT--
