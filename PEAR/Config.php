@@ -1675,6 +1675,10 @@ class PEAR_Config extends PEAR
     }
     // }}}
 
+    /**
+     * @param string|false installation directory to prepend to all _dir variables, or false to
+     *                     disable
+     */
     function setInstallRoot($root)
     {
         if (substr($root, -1) == DIRECTORY_SEPARATOR) {
