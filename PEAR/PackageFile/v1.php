@@ -432,6 +432,11 @@ class PEAR_PackageFile_v1
         $this->_isValid = false;
     }
 
+    function clearMaintainers()
+    {
+        unset($this->_packageInfo['maintainers']);
+    }
+
     function getMaintainers()
     {
         if (isset($this->_packageInfo['maintainers'])) {
@@ -833,7 +838,7 @@ class PEAR_PackageFile_v1
                 PEAR_PACKAGEFILE_ERROR_NO_DEPNAME =>
                     'Dependency %index% is not a php dependency, and has no name',
                 PEAR_PACKAGEFILE_ERROR_NO_DEPREL =>
-                    'Dependency %index% has no relation',
+                    'Dependency %index% has no relation (rel)',
                 PEAR_PACKAGEFILE_ERROR_NO_DEPTYPE =>
                     'Dependency %index% has no type',
                 PEAR_PACKAGEFILE_ERROR_NO_DEPVERSION =>
@@ -848,6 +853,8 @@ class PEAR_PackageFile_v1
                     'No files in <filelist> section of package.xml',
                 PEAR_PACKAGEFILE_ERROR_NO_FILEROLE =>
                     'File "%file%" has no role, expecting one of "%roles%"',
+                PEAR_PACKAGEFILE_ERROR_INVALID_FILEROLE =>
+                    'File "%file%" has invalid role "%role%", expecting one of "%roles%"',
                 PEAR_PACKAGEFILE_ERROR_INVALID_PHPFILE =>
                     'Parser error: invalid PHP found in file "%file%"',
                 PEAR_PACKAGEFILE_ERROR_NO_PNAME_PREFIX =>
@@ -933,13 +940,15 @@ class PEAR_PackageFile_v1
         if (!empty($info['release_deps'])) {
             $i = 1;
             foreach ($info['release_deps'] as $d) {
-                if (empty($d['type'])) {
+                if (!isset($d['type']) || empty($d['type'])) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_DEPTYPE,
                         array('index' => $i, 'types' => PEAR_Common::getDependencyTypes()));
+                    continue;
                 }
-                if (empty($d['rel'])) {
+                if (!isset($d['rel']) || empty($d['rel'])) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_DEPREL,
                         array('index' => $i, 'rels' => PEAR_Common::getDependencyRelations()));
+                    continue;
                 }
                 if (!empty($d['optional'])) {
                     if (!in_array($d['optional'], array('yes', 'no'))) {
@@ -985,7 +994,7 @@ class PEAR_PackageFile_v1
             foreach ($info['filelist'] as $file => $fa) {
                 if (empty($fa['role'])) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_FILEROLE,
-                        array('file' => $file));
+                        array('file' => $file, 'roles' => PEAR_Common::getFileRoles()));
                     continue;
                 } elseif (!in_array($fa['role'], PEAR_Common::getFileRoles())) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILEROLE,
