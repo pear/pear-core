@@ -142,32 +142,42 @@ class PEAR_Registry extends PEAR
 
     function _initializeChannelDirs()
     {
-        $ds = DIRECTORY_SEPARATOR;
-        if (!is_dir($this->channelsdir) ||
-              !file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
-            $pear_channel = $this->_pearChannel;
-            if (!is_a($pear_channel, 'PEAR_ChannelFile') || !$pear_channel->validate()) {
-                if (!class_exists('PEAR_ChannelFile')) {
-                    include_once 'PEAR/ChannelFile.php';
+        static $running = false;
+        if (!$running) {
+            $running = true;
+            $ds = DIRECTORY_SEPARATOR;
+            if (!is_dir($this->channelsdir) ||
+                  !file_exists($this->channelsdir . $ds . 'pear.php.net.reg') ||
+                  !file_exists($this->channelsdir . $ds . '__uri.reg')) {
+                if (!file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
+                    $pear_channel = $this->_pearChannel;
+                    if (!is_a($pear_channel, 'PEAR_ChannelFile') || !$pear_channel->validate()) {
+                        if (!class_exists('PEAR_ChannelFile')) {
+                            include_once 'PEAR/ChannelFile.php';
+                        }
+                        $pear_channel = new PEAR_ChannelFile;
+                        $pear_channel->setName('pear.php.net');
+                        $pear_channel->setAlias('pear');
+                        $pear_channel->setServer('pear.php.net');
+                        $pear_channel->setSummary('PHP Extension and Application Repository');
+                        $pear_channel->setDefaultPEARProtocols();
+                    } else {
+                        $pear_channel->setName('pear.php.net');
+                        $pear_channel->setAlias('pear');
+                    }
+                    $pear_channel->validate();
+                    $this->_addChannel($pear_channel);
                 }
-                $pear_channel = new PEAR_ChannelFile;
-                $pear_channel->setName('pear.php.net');
-                $pear_channel->setAlias('pear');
-                $pear_channel->setServer('pear.php.net');
-                $pear_channel->setSummary('PHP Extension and Application Repository');
-                $pear_channel->setDefaultPEARProtocols();
-            } else {
-                $pear_channel->setName('pear.php.net');
-                $pear_channel->setAlias('pear');
+                if (!file_exists($this->channelsdir . $ds . '__uri.reg')) {
+                    $private = new PEAR_ChannelFile;
+                    $private->setName('__uri');
+                    $private->addFunction('xmlrpc', '1.0', '****');
+                    $private->setSummary('Pseudo-channel for static packages');
+                    $this->_addChannel($private);
+                }
+                $this->_rebuildFileMap();
             }
-            $pear_channel->validate();
-            $this->_addChannel($pear_channel);
-            $private = new PEAR_ChannelFile;
-            $private->setName('__uri');
-            $private->addFunction('xmlrpc', '1.0', '****');
-            $private->setSummary('Pseudo-channel for static packages');
-            $this->_addChannel($private);
-            $this->_rebuildFileMap();
+            $running = false;
         }
     }
 
@@ -264,6 +274,12 @@ class PEAR_Registry extends PEAR
             }
             $init = true;
         }
+        $ds = DIRECTORY_SEPARATOR;
+        if (!@is_dir($this->channelsdir) ||
+              !file_exists($this->channelsdir . $ds . 'pear.php.net.reg') ||
+              !file_exists($this->channelsdir . $ds . '__uri.reg')) {
+            $init = true;
+        }
         if ($init) {
             static $running = false;
             if (!$running) {
@@ -292,15 +308,23 @@ class PEAR_Registry extends PEAR
      */
     function _assertChannelStateDir($channel)
     {
+        $ds = DIRECTORY_SEPARATOR;
         if (!$channel || $this->_getChannelFromAlias($channel) == 'pear.php.net') {
+            if (!file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
+                $this->_initializeChannelDirs();
+            }
             return $this->_assertStateDir($channel);
         }
         $channelDir = $this->_channelDirectoryName($channel);
-        if (!@is_dir($channelDir)) {
-            if (!System::mkdir(array('-p', $channelDir))) {
-                return $this->raiseError("could not create directory '" . $channelDir . "'");
+        if (!is_dir($this->channelsdir) ||
+              !file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
+            if (!@is_dir($channelDir)) {
+                if (!System::mkdir(array('-p', $channelDir))) {
+                    return $this->raiseError("could not create directory '" . $channelDir .
+                        "'");
+                }
+                $this->_initializeChannelDirs();
             }
-            $this->_initializeChannelDirs();
         }
         return true;
     }
@@ -697,7 +721,7 @@ class PEAR_Registry extends PEAR
                 @unlink($this->_getChannelAliasFileName($checker->getAlias()));
             }
         } else {
-            if ($update) {
+            if ($update && $channel->getName() != 'pear.php.net') {
                 return false;
             }
         }
