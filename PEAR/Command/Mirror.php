@@ -93,7 +93,7 @@ class PEAR_Command_Mirror extends PEAR_Command_Common
         }
         $this->config->set('default_channel', $channel);
         $this->ui->outputData('Using Channel ' . $this->config->get('default_channel'));
-        $remote = &new PEAR_Remote($this->config);
+        $remote = &$this->config->getRemote();
         $remoteInfo = $remote->call("package.listAll");
         if (PEAR::isError($remoteInfo)) {
             return $remoteInfo;
