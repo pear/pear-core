@@ -18,7 +18,8 @@ $ret = $common->infoFromString('\\goober');
 $message = $php5 ? 'XML error: Empty document at line 1' :
     'XML error: not well-formed (invalid token) at line 1';
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => $message)), 'error message');
+    array('package' => 'PEAR_Error', 'message' => $message),
+    array('package' => 'PEAR_PackageFile', 'message' => 'package.xml "" has no package.xml <package> version')), 'error message');
 $phpunit->assertIsa('PEAR_Error', $ret, 'return');
 
 echo 'tests done';
