@@ -988,7 +988,7 @@ class PEAR_Dependency2
                 $newdep['name'] = $dep['name'];
             break;
         }
-        $dep['rel'] = $this->signOperator($dep['rel']);
+        $dep['rel'] = PEAR_Dependency2::signOperator($dep['rel']);
         switch ($dep['rel']) {
             case 'has' :
                 return array($newdep, $type);
@@ -1005,7 +1005,7 @@ class PEAR_Dependency2
             break;
             case '<=' :
             case '<' :
-                $newdep['min'] = $dep['version'];
+                $newdep['max'] = $dep['version'];
                 if ($dep['rel'] == '<') {
                     $newdep['exclude'] = $dep['version'];
                 }
