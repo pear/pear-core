@@ -1407,7 +1407,8 @@ class PEAR_Registry extends PEAR
         } else {
             $components = parse_url($param);
             if (isset($components['scheme']) && $components['scheme'] != 'channel') {
-                return false;
+                return PEAR::raiseError('parsePackageName(): only channel:// uris may ' .
+                    'be downloaded, not "' . $param . '"', 'invalid', null, null, $param);
             }
             if (!isset($components['path'])) {
                 return PEAR::raiseError('parsePackageName(): array $param ' .
