@@ -179,7 +179,7 @@ class PEAR_Remote extends PEAR
             $proxy_pass = @urldecode(@$proxy['pass']);
         }
         $c = new XML_RPC_Client($channel->getPath('xmlrpc') . $channel->getFileName('xmlrpc')
-            .$maxAge, $server_host, 80, $proxy_host, $proxy_port, $proxy_user, $proxy_pass);
+            .$maxAge, $server_host, $channel->getPort(), $proxy_host, $proxy_port, $proxy_user, $proxy_pass);
         if ($username && $password) {
             $c->setCredentials($username, $password);
         }
@@ -248,7 +248,7 @@ class PEAR_Remote extends PEAR
         if (empty($server_host)) {
             return $this->raiseError("PEAR_Remote::call: no master_server configured");
         }
-        $server_port = 80;
+        $server_port = $channel->getPort();
         if ($http_proxy = $this->config->get('http_proxy')) {
             $proxy = parse_url($http_proxy);
             $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
