@@ -39,7 +39,8 @@ $phpunit->assertErrors(array(
 ), 'exclude 2');
 $phpunit->assertIsa('PEAR_Error', $result, 'exclude 2');
 
-$dep = &new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
+// nodeps
+$dep = &new test_PEAR_Dependency2($config, array('nodeps' => true), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_DOWNLOADING);
 $phpunit->assertNoErrors('create 1');
 
@@ -51,11 +52,8 @@ $result = $dep->validatePhpDependency(
         'max' => '5.0.0',
         'exclude' => '4.3.9'
     ));
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine is not compatible with PHP version 4.3.9')
-), 'exclude 1');
-$phpunit->assertIsa('PEAR_Error', $result, 'exclude 1');
+$phpunit->assertNoErrors('nodeps');
+$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PHP version 4.3.9'), $result, 'nodeps');
 
 $result = $dep->validatePhpDependency(
     array(
@@ -63,12 +61,34 @@ $result = $dep->validatePhpDependency(
         'max' => '5.0.0',
         'exclude' => array('4.3.9','4.3.10')
     ));
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error',
-          'message' => 'channel://pear.php.net/mine is not compatible with PHP version 4.3.9')
-), 'exclude 2');
-$phpunit->assertIsa('PEAR_Error', $result, 'exclude 2');
-echo 'tests done';
+$phpunit->assertNoErrors('nodeps');
+$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PHP version 4.3.9'), $result, 'nodeps');
+
+
+// force
+$dep = &new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
+    'package' => 'mine'), PEAR_VALIDATE_DOWNLOADING);
+$phpunit->assertNoErrors('create 1');
+
+$dep->setPHPversion('4.3.9');
+
+$result = $dep->validatePhpDependency(
+    array(
+        'min' => '4.0.0',
+        'max' => '5.0.0',
+        'exclude' => '4.3.9'
+    ));
+$phpunit->assertNoErrors('nodeps');
+$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PHP version 4.3.9'), $result, 'nodeps');
+
+$result = $dep->validatePhpDependency(
+    array(
+        'min' => '4.0.0',
+        'max' => '5.0.0',
+        'exclude' => array('4.3.9','4.3.10')
+    ));
+$phpunit->assertNoErrors('nodeps');
+$phpunit->assertEquals(array('warning: channel://pear.php.net/mine is not compatible with PHP version 4.3.9'), $result, 'nodeps');echo 'tests done';
 ?>
 --EXPECT--
 tests done
