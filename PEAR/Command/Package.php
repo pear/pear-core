@@ -690,6 +690,7 @@ used for automated conversion or learning the format.
         include_once "Archive/Tar.php";
         include_once "PEAR/Installer.php";
         include_once "System.php";
+        $reg = &$this->config->getRegistry();
         $pkg = &new PEAR_PackageFile($this->config, $this->_debug);
         $pf = &$pkg->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($pf)) {
