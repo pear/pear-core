@@ -491,7 +491,7 @@ class PEAR_PackageFile_v1
 
     function setState($state)
     {
-        $this->_packageInfo['state'] = $state;
+        $this->_packageInfo['release_state'] = $state;
         $this->_isValid = false;
     }
 
