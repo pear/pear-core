@@ -15,7 +15,7 @@ $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
 $pf->validate();
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <package>, found <version> expected one of "contributor, helper, date"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <package>, found <version> expected one of "developer, contributor, helper, date"'),
 ), 'no date');
 $pf->setDate('');
 $pf->validate();

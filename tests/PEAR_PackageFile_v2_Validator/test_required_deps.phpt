@@ -43,7 +43,16 @@ $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
 $pf->validate();
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <required>, found <package> expected one of "extension, os, arch"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <required>, found <package> expected one of "subpackage, extension, os, arch"'),
+), 'after subpackage');
+
+$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
+    'test_dependencies'. DIRECTORY_SEPARATOR . 'package5.xml';
+$pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
+$phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
+$pf->validate();
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <required>, found <subpackage> expected one of "extension, os, arch"'),
 ), 'after subpackage');
 
 echo 'tests done';
