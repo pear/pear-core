@@ -310,7 +310,9 @@ package if needed.
         $this->downloader->download($params);
         $errors = $this->downloader->getErrorMsgs();
         if (count($errors)) {
-            $err['data'] = array($errors);
+            foreach ($errors as $error) {
+                $err['data'][] = array($error);
+            }
             $err['headline'] = 'Install Errors';
             $this->ui->outputData($err);
             return $this->raiseError("$command failed");

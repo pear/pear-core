@@ -516,7 +516,7 @@ class PEAR_Downloader_Package
     function _fromFile($param)
     {
         if (@is_file($param)) {
-            $pkg = new PEAR_PackageFile($this->_registry, $this->_downloader->_debug,
+            $pkg = new PEAR_PackageFile($this->_config, $this->_downloader->_debug,
                 $this->_downloader->getDownloadDir());
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $pf = &$pkg->fromAnyFile($param, PEAR_VALIDATE_INSTALLING);
@@ -548,7 +548,7 @@ class PEAR_Downloader_Package
                     '"' . $saveparam);
             }
             // whew, download worked!
-            $pkg = new PEAR_PackageFile($this->_registry, $this->_downloader->debug,
+            $pkg = new PEAR_PackageFile($this->_config, $this->_downloader->debug,
                 $this->_downloader->getDownloadDir());
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $pf = &$pkg->fromAnyFile($param, PEAR_VALIDATE_INSTALLING);

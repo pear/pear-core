@@ -527,7 +527,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
         }
         include_once 'PEAR/PackageFile/v2.php';
         $ret = new PEAR_PackageFile_v2;
-        $ret->setRegistry($this->_packagefile->_registry);
+        $ret->setConfig($this->_packagefile->_config);
         $ret->fromArray($arr);
         return $ret;
     }
@@ -687,8 +687,6 @@ http://pear.php.net/dtd/package-2.0.xsd',
                     }
                 }
                 if (count($generic)) {
-                    $release[count($oses)]['installconditions']['os']
-                        ['name'] = '*';
                     foreach ($generic as $file) {
                         $release[count($oses)]['filelist']['install'][] =
                         array('attribs' => 
