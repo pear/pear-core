@@ -77,6 +77,9 @@ class PEAR_Dependency2
     function _getExtraString($dep)
     {
         $extra = ' (';
+        if (isset($dep['uri'])) {
+            return ' (' . $dep['uri'] . ')';
+        }
         if (isset($dep['recommended'])) {
             $extra .= 'recommended version ' . $dep['recommended'];
         } else {
@@ -559,6 +562,9 @@ class PEAR_Dependency2
     function _validatePackageDownload($dep, $required, $params)
     {
         $dep['package'] = $dep['name'];
+        if (isset($dep['uri'])) {
+            $dep['channel'] = '__private';
+        }
         $depname = $this->_registry->parsedPackageNameToString($dep);
         $found = false;
         foreach ($params as $param) {
