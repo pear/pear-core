@@ -141,7 +141,7 @@ class PEAR_test_mock_pearweb {
             $args = new PHP_Dump($args);
             if (!isset($this->_pearweb->_config['xmlrpc'][$server][$method][serialize($args)]))
             $GLOBALS['totalPHP'][$method . serialize($args)] = '$pearweb->addXmlrpcConfig("' .
-                $server . '", ' .
+                $server . '", "' .
                 $method . '", ' .
                 $args->toPHP() . ', ' .
                 $dump->toPHP() .");";
