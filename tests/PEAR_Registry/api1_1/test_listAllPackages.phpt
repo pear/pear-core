@@ -19,15 +19,16 @@ if (PEAR_Registry::apiVersion() != '1.1') {
 <?php
 error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-
+$a = $reg->listAllPackages();
+uksort($a, 'strcasecmp');
 $phpunit->assertEquals(array(
-  'pear.php.net' =>
-  array (
-  ),
   '__uri' =>
   array (
   ),
-), $reg->listAllPackages(), 'startout');
+  'pear.php.net' =>
+  array (
+  ),
+), $a, 'startout');
 $pf = new PEAR_PackageFile_v1;
 $pf->setConfig($config);
 $pf->setSummary('sum');
@@ -79,7 +80,13 @@ $phpunit->assertNoErrors('channel add');
 $ret = $reg->addPackage2($pf2);
 $phpunit->assertTrue($ret, 'valid pf2');
 
+$a = $reg->listAllPackages();
+uksort($a, 'strcasecmp');
+
 $phpunit->assertEquals(array(
+  '__uri' =>
+  array (
+  ),
   'grob' =>
   array (
     0 => 'foo',
@@ -88,10 +95,7 @@ $phpunit->assertEquals(array(
   array (
     0 => 'foop',
   ),
-  '__uri' =>
-  array (
-  ),
-), $reg->listAllPackages(), 'startout');
+), $a, 'startout');
 echo 'tests done';
 ?>
 --EXPECT--
