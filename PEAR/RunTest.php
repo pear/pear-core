@@ -45,14 +45,16 @@ putenv("PHP_PEAR_RUNTESTS=1");
 class PEAR_RunTest
 {
     var $_logger;
+    var $_options;
 
     /**
      * An object that supports the PEAR_Common->log() signature, or null
      * @param PEAR_Common|null
      */
-    function PEAR_RunTest($logger = null)
+    function PEAR_RunTest($logger = null, $options = array())
     {
         $this->_logger = $logger;
+        $this->_options = $options;
     }
 
     //
@@ -138,7 +140,9 @@ class PEAR_RunTest
                     if ($reason) {
                         $skipreason .= " (reason: $reason)";
                     }
-                    $this->_logger->log(0, $skipreason);
+                    if (!$this->_options['quiet']) {
+                        $this->_logger->log(0, $skipreason);
+                    }
                     if (isset($old_php)) {
                         $php = $old_php;
                     }
@@ -213,7 +217,9 @@ class PEAR_RunTest
     */
             if (!$returnfail && preg_match("/^$wanted_re\$/s", $output)) {
                 @unlink($tmp_file);
-                $this->_logger->log(0, "PASS $tested$info");
+                if (!$this->_options['quiet']) {
+                    $this->_logger->log(0, "PASS $tested$info");
+                }
                 if (isset($old_php)) {
                     $php = $old_php;
                 }
@@ -227,7 +233,9 @@ class PEAR_RunTest
             $ok = (0 == strcmp($output,$wanted));
             if (!$returnfail && $ok) {
                 @unlink($tmp_file);
-                $this->_logger->log(0, "PASS $tested$info");
+                if (!$this->_options['quiet']) {
+                    $this->_logger->log(0, "PASS $tested$info");
+                }
                 if (isset($old_php)) {
                     $php = $old_php;
                 }

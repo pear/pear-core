@@ -181,6 +181,10 @@ use the "slide" option to move the release tag.
                     'shortopt' => 'l',
                     'doc' => 'Log test runs/results as they are run',
                 ),
+                'quiet' => array(
+                    'shortopt' => 'q',
+                    'doc' => 'Only display detail for failed tests',
+                ),
             ),
             'doc' => '[testfile|dir ...]
 Run regression tests with PHP\'s regression testing script (run-tests.php).',
@@ -519,7 +523,7 @@ used for automated conversion or learning the format.
     {
         $log = new PEAR_Common;
         $log->ui = &$this->ui; // slightly hacky, but it will work
-        $run = new PEAR_RunTest($log);
+        $run = new PEAR_RunTest($log, $options);
         $tests = array();
         if (isset($options['recur'])) {
             $depth = 4;
