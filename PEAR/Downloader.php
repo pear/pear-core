@@ -590,6 +590,9 @@ class PEAR_Downloader extends PEAR_Common
         // array(version, info, download url string)
         $state = isset($parr['state']) ? $parr['state'] : $this->config->get('preferred_state');
         $url = $this->_remote->call('package.getDownloadURL', $parr, $state);
+        if (PEAR::isError($url)) {
+            return $url;
+        }
         if ($parr['channel'] != $curchannel) {
             $this->configSet('default_channel', $curchannel);
         }
