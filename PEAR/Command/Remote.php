@@ -224,7 +224,7 @@ parameter.
             if ($reg->channelExists($channel)) {
                 $this->config->set('default_channel', $channel);
             } else {
-                return $this->raiseError("Channel '$channel' does not exist");
+                return $this->raiseError("Channel \"$channel\" does not exist");
             }
         }
         $r = &$this->config->getRemote();
@@ -237,14 +237,14 @@ parameter.
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($available);
         }
-        if (!is_array($available)) {
+        if (PEAR::isError($available)) {
             $this->config->set('default_channel', $savechannel);
-            return $this->raiseError('The package list could not be fetched from the remote server. Please try again. (Debug info: "'.$available.'")');
+            return $this->raiseError('The package list could not be fetched from the remote server. Please try again. (Debug info: "' . $available->getMessage() . '")');
         }
         $data = array(
             'caption' => 'All packages:',
             'border' => true,
-            'headline' => array('Channel', 'Package', 'Latest', 'Local'),
+            'headline' => array('Package', 'Latest', 'Local'),
             );
         $local_pkgs = $reg->listPackages($channel);
 
@@ -272,8 +272,7 @@ parameter.
             }
 
             $data['data'][$info['category']][] = array(
-                $channel,
-                $name,
+                $reg->channelAlias($channel) . '/' . $name,
                 @$info['stable'],
                 @$installed['version'],
                 @$desc,
@@ -284,8 +283,7 @@ parameter.
         foreach ($local_pkgs as $name) {
             $info = $reg->packageInfo($name, null, $channel);
             $data['data']['Local'][] = array(
-                $channel,
-                $info['package'],
+                $reg->channelAlias($channel) . '/' . $info['package'],
                 '',
                 $info['version'],
                 $info['summary'],

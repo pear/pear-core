@@ -407,6 +407,23 @@ class PEAR_Registry extends PEAR
         }
     }    
     // }}}
+    // {{{ _getChannelFromAlias()
+
+    /**
+     * Get the alias of a channel from its alias or its name
+     */
+    function _getAlias($channel)
+    {
+        if (!$this->_channelExists($channel)) {
+            if ($channel == 'pear.php.net') {
+                return 'pear';
+            }
+            return false;
+        }
+        $channel = $this->_getChannel($channel);
+        return $channel->getAlias();
+    }    
+    // }}}
     // {{{ _channelDirectoryName()
 
     /**
@@ -1192,9 +1209,11 @@ class PEAR_Registry extends PEAR
     }
 
     // }}}
-    // {{{ packageInfo()
 
-    function channelName($channel = null)
+    /**
+     * @param string
+     */
+    function channelName($channel)
     {
         if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
             return $e;
@@ -1204,7 +1223,18 @@ class PEAR_Registry extends PEAR
         return $ret;
     }
 
-    // }}}
+    /**
+     * @param string
+     */
+    function channelAlias($channel)
+    {
+        if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
+            return $e;
+        }
+        $ret = $this->_getAlias($channel);
+        $this->_unlock();
+        return $ret;
+    }
     // {{{ listPackages()
 
     function listPackages($channel = false)
