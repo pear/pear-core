@@ -138,6 +138,19 @@ class PEAR_PHPTest
         return false;
     }
 
+    function assertIsa($control, $test, $message)
+    {
+        $this->assertNoErrors($message, debug_backtrace());
+        if (is_a($test, $control)) {
+            return true;
+        }
+        $this->_failTest(debug_backtrace(), $message);
+        echo "Unexpected non-$control object: \n";
+        var_export($test);
+        echo "\n'$message'\n";
+        return false;
+    }
+
     function assertNull($test, $message)
     {
         $this->assertNoErrors($message, debug_backtrace());
