@@ -197,6 +197,7 @@ class PEAR_PackageFile_v2_Validator
         $keys = array_keys($xml);
         reset($keys);
         $key = current($keys);
+        $unfoundtags = array();
         foreach ($structure as $struc) {
             $test = $this->_processStructure($struc);
             if (!$key && @$struc['multiple'] == '*') {
@@ -209,6 +210,7 @@ class PEAR_PackageFile_v2_Validator
                     if ($key == $choice['tag']) {
                         if ($this->_processAttribs($choice, $tag, $root)) {
                             $key = next($keys);
+                            $unfoundtags = array();
                             continue 2;
                         }
                         return false;
@@ -218,7 +220,7 @@ class PEAR_PackageFile_v2_Validator
                     }
                 }
                 if (!$loose) {
-                    $tags = array();
+                    $tags = $unfoundtags;
                     foreach ($test['choices'] as $choice) {
                         $tags[] = $choice['tag'];
                     }
@@ -228,14 +230,19 @@ class PEAR_PackageFile_v2_Validator
             } else {
                 if ($key != $test['tag']) {
                     if (isset($test['multiple']) && $test['multiple'] != '*') {
-                        $this->_invalidTagOrder($test['tag'], $key, $root);
+                        $unfoundtags[] = $test['tag'];
+                        $this->_invalidTagOrder($unfoundtags, $key, $root);
                         return false;
+                    } else {
+                        $unfoundtags[] = $test['tag'];
                     }
                     if (!isset($test['multiple'])) {
-                        $this->_invalidTagOrder($test['tag'], $key, $root);
+                        $this->_invalidTagOrder($unfoundtags, $key, $root);
                         return false;
                     }
                     continue;
+                } else {
+                    $unfoundtags = array();
                 }
                 if ($this->_processAttribs($test, $tag, $root)) {
                     $key = next($keys);
