@@ -64,8 +64,9 @@ class PEAR_Packager extends PEAR_Common
             $pkgfile = 'package.xml';
         }
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        $pkg = new PEAR_PackageFile($this->config, $this->debug);
+        $pkg = &new PEAR_PackageFile($this->config, $this->debug);
         $pf = &$pkg->fromPackageFile($pkgfile, PEAR_VALIDATE_NORMAL);
+        $main = &$pf;
         PEAR::staticPopErrorHandling();
         if (PEAR::isError($pf)) {
             foreach ($pf->getUserInfo() as $error) {
@@ -112,26 +113,32 @@ class PEAR_Packager extends PEAR_Common
                     'only package together a package.xml 1.0 and package.xml 2.0');
             }
         }
-        $pf->setLogger($this);
-        if (!$pf->validate(PEAR_VALIDATE_PACKAGING)) {
-            foreach ($pf->getValidationWarnings() as $warning) {
+        $main->setLogger($this);
+        if (!$main->validate(PEAR_VALIDATE_PACKAGING)) {
+            foreach ($main->getValidationWarnings() as $warning) {
                 $this->log(0, 'Error: ' . $warning['message']);
             }
             return $this->raiseError("Cannot package, errors in package");
         } else {
-            foreach ($pf->getValidationWarnings() as $warning) {
+            foreach ($main->getValidationWarnings() as $warning) {
                 $this->log(1, 'Warning: ' . $warning['message']);
             }
         }
         if ($pkg2) {
-            $pf2->setLogger($this);
-            if (!$pf2->validate(PEAR_VALIDATE_PACKAGING)) {
-                foreach ($pf2->getValidationWarnings() as $warning) {
+            $other->setLogger($this);
+            if (!$other->validate(PEAR_VALIDATE_NORMAL) || $a = !$main->isEquivalent($other)) {
+                foreach ($other->getValidationWarnings() as $warning) {
                     $this->log(0, 'Error: ' . $warning['message']);
+                }
+                foreach ($main->getValidationWarnings() as $warning) {
+                    $this->log(0, 'Error: ' . $warning['message']);
+                }
+                if ($a) {
+                    return $this->raiseError('The two package.xml files are not equivalent!');
                 }
                 return $this->raiseError("Cannot package, errors in package");
             } else {
-                foreach ($pf2->getValidationWarnings() as $warning) {
+                foreach ($other->getValidationWarnings() as $warning) {
                     $this->log(1, 'Warning: ' . $warning['message']);
                 }
             }

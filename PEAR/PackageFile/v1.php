@@ -915,7 +915,7 @@ class PEAR_PackageFile_v1
      * @access public
      * @return boolean
      */
-    function validate($state = PEAR_VALIDATE_NORMAL)
+    function validate($state = PEAR_VALIDATE_NORMAL, $nofilechecking = false)
     {
         if (($this->_isValid & $state) == $state) {
             return true;
@@ -1056,7 +1056,7 @@ class PEAR_PackageFile_v1
                 $this->_validateWarning(PEAR_PACKAGEFILE_ERROR_CHANNELVAL, $warning);
             }
         }
-        if ($this->_isValid && $state == PEAR_VALIDATE_PACKAGING) {
+        if ($this->_isValid && $state == PEAR_VALIDATE_PACKAGING && !$nofilechecking) {
             if ($this->_analyzePhpFiles()) {
                 $this->_isValid = true;
             }

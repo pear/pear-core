@@ -50,6 +50,8 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_pf = &$pf;
         $this->_packageInfo = $this->_pf->getArray();
+        $this->_isValid = $this->_pf->_isValid;
+        $this->_filesValid = $this->_pf->_filesValid;
         $this->_stack = &$pf->_stack;
         $this->_stack->getErrors(true);
         if (($this->_isValid & $state) == $state) {
@@ -176,16 +178,18 @@ class PEAR_PackageFile_v2_Validator
                 }
             }
         }
-        $this->_isValid = !$this->_stack->hasErrors('error');
-        if ($this->_isValid && $state == PEAR_VALIDATE_PACKAGING) {
+        $this->_pf->_isValid = $this->_isValid = !$this->_stack->hasErrors('error');
+        if ($this->_isValid && $state == PEAR_VALIDATE_PACKAGING && !$this->_filesValid) {
             if (!$this->_analyzePhpFiles()) {
-                $this->_isValid = 0;
+                $this->_pf->_isValid = $this->_isValid = 0;
+            } else {
+                $this->_filesValid = $this->_pf->_filesValid = true;
             }
         }
         if ($this->_isValid) {
-            return $this->_isValid = $state;
+            return $this->_pf->_isValid = $this->_isValid = $state;
         }
-        return $this->_isValid = 0;
+        return $this->_pf->_isValid = $this->_isValid = 0;
     }
 
     function _stupidSchemaValidate($structure, $xml, $root)

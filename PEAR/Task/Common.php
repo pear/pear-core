@@ -3,6 +3,10 @@ define('PEAR_TASK_ERROR_NOATTRIBS', 1);
 define('PEAR_TASK_ERROR_MISSING_ATTRIB', 2);
 define('PEAR_TASK_ERROR_WRONG_ATTRIB_VALUE', 3);
 define('PEAR_TASK_ERROR_INVALID', 4);
+
+define('PEAR_TASK_PACKAGE', 1);
+define('PEAR_TASK_INSTALL', 2);
+define('PEAR_TASK_PACKAGEANDINSTALL', 3);
 /**
  * A task is an operation that manipulates the contents of a file.
  *
@@ -39,6 +43,10 @@ class PEAR_Task_Common
      */
     var $type = 'simple';
     /**
+     * Determines which install phase this task is executed under
+     */
+    var $phase = PEAR_TASK_INSTALL;
+    /**
      * @access protected
      */
     var $config;
@@ -51,14 +59,19 @@ class PEAR_Task_Common
      */
     var $installer;
     /**
+     * @access protected
+     */
+    var $installphase;
+    /**
      * @param PEAR_Config
      * @param PEAR_Installer
      */
-    function PEAR_Task_Common(&$config, &$installer)
+    function PEAR_Task_Common(&$config, &$installer, $phase)
     {
         $this->config = &$config;
         $this->registry = &$config->getRegistry();
         $this->installer = &$installer;
+        $this->installphase = $phase;
         if ($this->type == 'multiple') {
             $GLOBALS['_PEAR_TASK_PREINSTANCES'][get_class($this)][] = &$this;
         }
