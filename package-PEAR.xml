@@ -125,7 +125,9 @@ PEAR_ErrorStack:
     </file>
     <dir name="PackageFile">
      <dir name="Generator">
-      <file role="php" name="v1.php"/>
+      <file role="php" name="v1.php">
+       <replace from="@PEAR-VER@" to="version" type="package-info"/>
+      </file>
       <file role="php" name="v2.php"/>
      </dir>
      <dir name="Parser">

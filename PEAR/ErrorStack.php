@@ -597,7 +597,7 @@ class PEAR_ErrorStack {
             if (is_string($msg) && is_numeric($code)) {
                 $code = $code + 0;
             }
-            $ret = new $exception($msg, $code);
+            $ret = new $exception($msg, (int) $code);
             $ret->errorData = $err;
             return $ret;
         }
