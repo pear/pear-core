@@ -140,7 +140,7 @@ class PEAR_RunTest
                     if ($reason) {
                         $skipreason .= " (reason: $reason)";
                     }
-                    if (!$this->_options['quiet']) {
+                    if (!isset($this->_options['quiet'])) {
                         $this->_logger->log(0, $skipreason);
                     }
                     if (isset($old_php)) {
@@ -217,7 +217,7 @@ class PEAR_RunTest
     */
             if (!$returnfail && preg_match("/^$wanted_re\$/s", $output)) {
                 @unlink($tmp_file);
-                if (!$this->_options['quiet']) {
+                if (!isset($this->_options['quiet'])) {
                     $this->_logger->log(0, "PASS $tested$info");
                 }
                 if (isset($old_php)) {
@@ -233,7 +233,7 @@ class PEAR_RunTest
             $ok = (0 == strcmp($output,$wanted));
             if (!$returnfail && $ok) {
                 @unlink($tmp_file);
-                if (!$this->_options['quiet']) {
+                if (!isset($this->_options['quiet'])) {
                     $this->_logger->log(0, "PASS $tested$info");
                 }
                 if (isset($old_php)) {
