@@ -47,6 +47,7 @@ class PEAR_PackageFile_Generator_v1
      */
     function toXml($state = PEAR_VALIDATE_NORMAL)
     {
+        $this->_packagefile->setDate(date('Y-m-d'));
         if (!$this->_packagefile->validate($state)) {
             return false;
         }
@@ -60,7 +61,12 @@ class PEAR_PackageFile_Generator_v1
         $ret = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
         $ret .= "<!DOCTYPE package SYSTEM \"http://pear.php.net/dtd/package-1.0\">\n";
         $ret .= "<package version=\"1.0\" packagerversion=\"@PEAR-VER@\">
- <name>$pkginfo[package]</name>
+ <name>$pkginfo[package]</name>";
+        if (isset($pkginfo['extends'])) {
+            $ret .= "
+<extends>$pkginfo[extends]</extends>";
+        }
+ "       
  <summary>".htmlspecialchars($pkginfo['summary'])."</summary>
  <description>".trim(htmlspecialchars($pkginfo['description']))."\n </description>
  <maintainers>
