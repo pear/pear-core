@@ -282,7 +282,7 @@ class PEAR_Downloader extends PEAR_Common
                 $this->pushError('Package "' . $param . '" is not valid',
                     PEAR_INSTALLER_SKIPPED);
             }
-            if ($params[$i]) {
+            if ($params[$i] && !isset($this->_options['downloadonly'])) {
                 $checkdir = $this->config->get('php_dir', null, $params[$i]->getChannel());
                 while ($checkdir && $checkdir != '/' && !file_exists($checkdir)) {
                     $checkdir = dirname($checkdir);
