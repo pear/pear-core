@@ -16,6 +16,7 @@ $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v1', $pf, 'return of valid parse');
 $phpunit->assertEquals('stable', $pf->getState(), 'pre-set');
+$pf->setVersion('0.1.0');
 $pf->setState('alpha');
 $phpunit->assertEquals('alpha', $pf->getState(), 'set failed');
 $result = $pf->validate(PEAR_VALIDATE_NORMAL);
