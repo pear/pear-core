@@ -31,6 +31,11 @@ $pearweb->addXmlrpcConfig("empty", "package.listLatestReleases",     array(
         'stable',
     ),     array(
     ));
+$pearweb->addXmlrpcConfig("pecl.php.net", "package.listLatestReleases",     array(
+    0 =>
+        'stable',
+    ),     array(
+    ));
 $pearweb->addXmlrpcConfig("smoog", "package.listLatestReleases",     array(
     0 =>
         'stable',
@@ -88,6 +93,11 @@ $workingcopy = array (
   'empty' => 
   array (
     'info' => 'Channel empty: No upgrades available',
+    'cmd' => 'no command',
+  ),
+  'pecl.php.net' => 
+  array (
+    'info' => 'Channel pecl.php.net: No upgrades available',
     'cmd' => 'no command',
   ),
   'pear.php.net' => 
