@@ -538,6 +538,19 @@ class PEAR_Downloader extends PEAR_Common
     }
 
     // }}}
+
+    /**
+     * For simpler unit-testing
+     * @param PEAR_Config
+     * @param int
+     * @param string
+     */
+    function &getPackagefileObject(&$c, $d, $dir)
+    {
+        $a = &new PEAR_PackageFile($c, $d, $dir);
+        return $a;
+    }
+
     // {{{ _getPackageDownloadUrl()
 
     /**
@@ -559,6 +572,20 @@ class PEAR_Downloader extends PEAR_Common
         if (isset($url['__PEAR_ERROR_CLASS__'])) {
             return PEAR::raiseError($url['message']);
         }
+        if (!is_array($url)) {
+            return $url;
+        }
+        $pkg = &$this->getPackagefileObject($this->config, $this->debug, $this->getDownloadDir());
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+        $pinfo = &$pkg->fromXmlString($url['info'], PEAR_VALIDATE_DOWNLOADING, 'remote');
+        PEAR::staticPopErrorHandling();
+        if (PEAR::isError($pinfo)) {
+            if (!isset($this->_options['soft'])) {
+                $this->log(0, $pinfo->getMessage());
+            }
+            return PEAR::raiseError('Remote package.xml is not valid - this should never happen');
+        }
+        $url['info'] = &$pinfo;
         if (!extension_loaded("zlib") || isset($this->_options['nocompress'])) {
             $ext = '.tar';
         } else {
@@ -596,6 +623,23 @@ class PEAR_Downloader extends PEAR_Common
         if ($parr['channel'] != $curchannel) {
             $this->configSet('default_channel', $curchannel);
         }
+        if (!is_array($url)) {
+            return $url;
+        }
+        if (isset($url['__PEAR_ERROR_CLASS__'])) {
+            return PEAR::raiseError($url['message']);
+        }
+        $pkg = &$this->getPackagefileObject($this->config, $this->debug, $this->getDownloadDir());
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+        $pinfo = &$pkg->fromXmlString($url['info'], PEAR_VALIDATE_DOWNLOADING, 'remote');
+        PEAR::staticPopErrorHandling();
+        if (PEAR::isError($pinfo)) {
+            if (!isset($this->_options['soft'])) {
+                $this->log(0, $pinfo->getMessage());
+            }
+            return PEAR::raiseError('Remote package.xml is not valid - this should never happen');
+        }
+        $url['info'] = &$pinfo;
         if (is_array($url)) {
             if (!extension_loaded("zlib") || isset($this->_options['nocompress'])) {
                 $ext = '.tar';
