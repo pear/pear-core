@@ -134,12 +134,13 @@ if (System::which('i_am_not_a_command')) {
  ********************/
 echo "Testing: cat\n";
 
-function file_put_contents($file, $text) {
-    $fd = fopen($file, 'w');
-    fputs($fd, $text);
-    fclose($fd);
+if (!function_exists('file_put_contents')) {
+    function file_put_contents($file, $text) {
+        $fd = fopen($file, 'w');
+        fputs($fd, $text);
+        fclose($fd);
+    }
 }
-
 $catfile = System::mktemp('tst');
 
 // Create temp files

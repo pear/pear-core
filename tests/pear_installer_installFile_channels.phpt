@@ -149,7 +149,7 @@ $installer->rollbackFileTransaction();
 echo "install as invalid role=\"klingon\":\n";
 $err = $installer->_installFile('installer2.phpt.testfile.php', array('role' => 'klingon'),
     $temp_path . DIRECTORY_SEPARATOR . 'tmp', array());
-echo 'returned PEAR_Error: ' . (get_class($err) == 'pear_error' ? "yes\n" : "no\n");
+echo 'returned PEAR_Error: ' . (is_a($err, 'pear_error') ? "yes\n" : "no\n");
 if (is_object($err)) {
     echo 'message: ' . $err->getMessage() . "\n\n";
 }
@@ -161,7 +161,7 @@ echo (file_exists($temp_path . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR
 echo "install non-existent file:\n";
 $err = $installer->_installFile('....php', array('role' => 'php'),
     $temp_path . DIRECTORY_SEPARATOR . 'tmp', array());
-echo 'returned PEAR_Error: ' . (get_class($err) == 'pear_error' ? "yes\n" : "no\n");
+echo 'returned PEAR_Error: ' . (is_a($err, 'pear_error') ? "yes\n" : "no\n");
 if (is_object($err)) {
     echo 'message: ' . $err->getMessage() . "\n";
 }
@@ -187,7 +187,7 @@ $installer->rollbackFileTransaction();
 echo "test invalid md5sum:\n";
 $err = $installer->_installFile('installer2.phpt.testfile.php', array('role' => 'script', 'md5sum' => md5('oops stuff')),
     $temp_path . DIRECTORY_SEPARATOR . 'tmp', array());
-echo 'returned PEAR_Error: ' . (get_class($err) == 'pear_error' ? "yes\n" : "no\n");
+echo 'returned PEAR_Error: ' . (is_a($err, 'pear_error') ? "yes\n" : "no\n");
 if (is_object($err)) {
     echo 'message: ' . ($err->getMessage() == 'bad md5sum for file ' . $temp_path . DIRECTORY_SEPARATOR . 'bin' .
     DIRECTORY_SEPARATOR . 'test'
@@ -208,7 +208,7 @@ echo 'warning : ';
 echo ($warning == 'warning : bad md5sum for file ' . $temp_path . DIRECTORY_SEPARATOR . 'bin' .
     DIRECTORY_SEPARATOR . 'test'
     . DIRECTORY_SEPARATOR . "installer2.phpt.testfile.php\n" ? "match\n" : "no match\n");
-echo 'returned PEAR_Error: ' . (get_class($err) == 'pear_error' ? "yes\n" : "no\n");
+echo 'returned PEAR_Error: ' . (is_a($err, 'pear_error') ? "yes\n" : "no\n");
 if (is_object($err)) {
     echo 'message: ' . ($err->getMessage() == 'bad md5sum for file ' . $temp_path . DIRECTORY_SEPARATOR . 'bin' .
     DIRECTORY_SEPARATOR . 'test'
@@ -259,7 +259,7 @@ $installer->rollbackFileTransaction();
 var_dump($installer->_installFile('installer2.phpt.testfile.php', array('role' => 'script',
     'replacements' => array(array('type' => 'pear-config', 'from' => '@TEST@', 'to' => 'master_server'))),
     $temp_path . DIRECTORY_SEPARATOR . 'tmp', array()));
-echo "==>test pear-config replacement: equals 'test stuff'? => ";
+echo "==>test pear-config replacement: equals 'pear.php.net stuff'? => ";
 if (file_exists($temp_path . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'test'
     . DIRECTORY_SEPARATOR .
     '.tmpinstaller2.phpt.testfile.php'))
@@ -425,7 +425,7 @@ int(1)
 invalid php-const replacement: %PEARINSTALLERTEST2_FAKE_FOO_CONST
 @TEST@ stuff
 int(1)
-==>test pear-config replacement: equals 'test stuff'? => test stuff
+==>test pear-config replacement: equals 'pear.php.net stuff'? => pear.php.net stuff
 ==>test invalid pear-config replacement
 invalid pear-config replacement: blahblahblah
 int(1)

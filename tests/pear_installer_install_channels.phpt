@@ -72,6 +72,7 @@ $chan = new PEAR_ChannelFile;
 $chan->setName('frob');
 $chan->setSummary('test');
 $chan->setServer('test');
+$chan->setDefaultPEARProtocols();
 $reg->addChannel($chan);
 $chan->setName('groob');
 $reg->addChannel($chan);

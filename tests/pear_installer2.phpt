@@ -121,7 +121,7 @@ $installer->rollbackFileTransaction();
 echo "install as invalid role=\"klingon\":\n";
 $err = $installer->_installFile('installer2.phpt.testfile.php', array('role' => 'klingon'),
     $temp_path . DIRECTORY_SEPARATOR . 'tmp', array());
-echo 'returned PEAR_Error: ' . (get_class($err) == 'pear_error' ? "yes\n" : "no\n");
+echo 'returned PEAR_Error: ' . (is_a($err, 'pear_error') ? "yes\n" : "no\n");
 if (is_object($err)) {
     echo 'message: ' . $err->getMessage() . "\n\n";
 }
@@ -132,7 +132,7 @@ echo (file_exists($temp_path . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR
 echo "install non-existent file:\n";
 $err = $installer->_installFile('....php', array('role' => 'php'),
     $temp_path . DIRECTORY_SEPARATOR . 'tmp', array());
-echo 'returned PEAR_Error: ' . (get_class($err) == 'pear_error' ? "yes\n" : "no\n");
+echo 'returned PEAR_Error: ' . (is_a($err, 'pear_error') ? "yes\n" : "no\n");
 if (is_object($err)) {
     echo 'message: ' . $err->getMessage() . "\n";
 }
@@ -156,7 +156,7 @@ $installer->rollbackFileTransaction();
 echo "test invalid md5sum:\n";
 $err = $installer->_installFile('installer2.phpt.testfile.php', array('role' => 'script', 'md5sum' => md5('oops stuff')),
     $temp_path . DIRECTORY_SEPARATOR . 'tmp', array());
-echo 'returned PEAR_Error: ' . (get_class($err) == 'pear_error' ? "yes\n" : "no\n");
+echo 'returned PEAR_Error: ' . (is_a($err, 'pear_error') ? "yes\n" : "no\n");
 if (is_object($err)) {
     echo 'message: ' . ($err->getMessage() == 'bad md5sum for file ' . $temp_path . DIRECTORY_SEPARATOR . 'bin' .
     DIRECTORY_SEPARATOR . 'installer2.phpt.testfile.php' ? 'match' : 'no match') . "\n";
@@ -174,7 +174,7 @@ ob_end_clean();
 echo 'warning : ';
 echo ($warning == 'warning : bad md5sum for file ' . $temp_path . DIRECTORY_SEPARATOR . 'bin' .
     DIRECTORY_SEPARATOR . "installer2.phpt.testfile.php\n" ? "match\n" : "no match\n");
-echo 'returned PEAR_Error: ' . (get_class($err) == 'pear_error' ? "yes\n" : "no\n");
+echo 'returned PEAR_Error: ' . (is_a($err, 'pear_error') ? "yes\n" : "no\n");
 if (is_object($err)) {
     echo 'message: ' . ($err->getMessage() == 'bad md5sum for file ' . $temp_path . DIRECTORY_SEPARATOR . 'bin' .
     DIRECTORY_SEPARATOR . 'installer2.phpt.testfile.php' ? 'match' : 'no match') . "\n";

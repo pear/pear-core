@@ -81,10 +81,15 @@ chdir(dirname(__FILE__));
 
 PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'catchit');
 set_error_handler('catchphp');
-
+if (!defined('E_STRICT')) {
+    define(E_STRICT, -1);
+}
 function catchphp($errno, $errmsg)
 {
     if (error_reporting() == 0) {
+        return;
+    }
+    if ($errno == E_STRICT) {
         return;
     }
     $errlevel = array(
@@ -122,7 +127,7 @@ $chan->setServer($server);
 $chan->setDefaultPEARProtocols();
 $reg = new PEAR_Registry($config->get('php_dir'), $chan);
 $packages = array("http://$server/get/pkg6-1.1.tgz");
-$a = $installer->download($packages, array(), &$config, &$installpackages, &$errors);
+$a = $installer->download($packages, array(), $config, $installpackages, $errors);
 var_dump($a, $errors);
 
 echo "File exists? ";
@@ -138,7 +143,7 @@ var_dump($installpackages);
 echo "Test simple package name download:\n";
 $installpackages = $errors = array();
 $packages = array('pkg6');
-$a = $installer->download($packages, array(), &$config, &$installpackages, &$errors);
+$a = $installer->download($packages, array(), $config, $installpackages, $errors);
 var_dump($a, $errors);
 
 echo "File exists? ";
@@ -154,7 +159,7 @@ var_dump($installpackages);
 echo "Test package name with version download:\n";
 $installpackages = $errors = array();
 $packages = array('pkg6-1.1');
-$a = $installer->download($packages, array(), &$config, &$installpackages, &$errors);
+$a = $installer->download($packages, array(), $config, $installpackages, $errors);
 var_dump($a, $errors);
 
 echo "File exists? ";
@@ -168,7 +173,7 @@ unlink($installpackages[0]['file']);
 echo "Test package name with state stable download:\n";
 $installpackages = $errors = array();
 $packages = array('pkg6-stable');
-$a = $installer->download($packages, array(), &$config, &$installpackages, &$errors);
+$a = $installer->download($packages, array(), $config, $installpackages, $errors);
 var_dump($a, $errors);
 
 echo "File exists? ";
@@ -182,7 +187,7 @@ unlink($installpackages[0]['file']);
 echo "Test package name with state beta download:\n";
 $installpackages = $errors = array();
 $packages = array('pkg6-beta');
-$a = $installer->download($packages, array(), &$config, &$installpackages, &$errors);
+$a = $installer->download($packages, array(), $config, $installpackages, $errors);
 var_dump($a, $errors);
 
 echo "File exists? ";
@@ -199,7 +204,7 @@ $config->set('preferred_state', 'beta');
 echo "Test simple package name download:\n";
 $installpackages = $errors = array();
 $packages = array('pkg6');
-$a = $installer->download($packages, array(), &$config, &$installpackages, &$errors);
+$a = $installer->download($packages, array(), $config, $installpackages, $errors);
 var_dump($a, $errors);
 
 echo "File exists? ";
@@ -216,14 +221,14 @@ $config->set('preferred_state', 'stable');
 
 $config = &PEAR_Config::singleton();
 $packages = array("http://$server/get/pkg1-1.1.tgz");
-$a = $installer->download($packages, array('alldeps' => true), &$config, &$installpackages, &$errors);
+$a = $installer->download($packages, array('alldeps' => true), $config, $installpackages, $errors);
 var_dump($a, $errors);
 echo "Packages downloaded and version:\n";
 foreach ($installpackages as $package) {
     echo $package['pkg'] . '-' . $package['info']['version'] . "\n";
 }
 $packages = array("pkg1");
-$a = $installer->download($packages, array('alldeps' => true), &$config, &$installpackages, &$errors);
+$a = $installer->download($packages, array('alldeps' => true), $config, $installpackages, $errors);
 var_dump($a, $errors);
 echo "Packages downloaded and version:\n";
 foreach ($installpackages as $package) {
@@ -235,7 +240,7 @@ $config->set('preferred_state', 'beta');
 
 $config = &PEAR_Config::singleton();
 $packages = array("pkg1");
-$a = $installer->download($packages, array('alldeps' => true), &$config, &$installpackages, &$errors);
+$a = $installer->download($packages, array('alldeps' => true), $config, $installpackages, $errors);
 var_dump($a, $errors);
 echo "Packages downloaded and version:\n";
 foreach ($installpackages as $package) {
@@ -247,7 +252,7 @@ $config->set('preferred_state', 'alpha');
 
 $config = &PEAR_Config::singleton();
 $packages = array("pkg1");
-$a = $installer->download($packages, array('alldeps' => true), &$config, &$installpackages, &$errors);
+$a = $installer->download($packages, array('alldeps' => true), $config, $installpackages, $errors);
 var_dump($a, $errors);
 echo "Packages downloaded and version:\n";
 foreach ($installpackages as $package) {
@@ -258,14 +263,14 @@ $config->set('preferred_state', 'stable');
 
 $config = &PEAR_Config::singleton();
 $packages = array("http://$server/get/pkg1-1.1.tgz");
-$a = $installer->download($packages, array('onlyreqdeps' => true), &$config, &$installpackages, &$errors);
+$a = $installer->download($packages, array('onlyreqdeps' => true), $config, $installpackages, $errors);
 var_dump($a, $errors);
 echo "Packages downloaded and version:\n";
 foreach ($installpackages as $package) {
     echo $package['pkg'] . '-' . $package['info']['version'] . "\n";
 }
 $packages = array("pkg1");
-$a = $installer->download($packages, array('onlyreqdeps' => true), &$config, &$installpackages, &$errors);
+$a = $installer->download($packages, array('onlyreqdeps' => true), $config, $installpackages, $errors);
 var_dump($a, $errors);
 echo "Packages downloaded and version:\n";
 foreach ($installpackages as $package) {
@@ -277,7 +282,7 @@ $config->set('preferred_state', 'beta');
 
 $config = &PEAR_Config::singleton();
 $packages = array("pkg1");
-$a = $installer->download($packages, array('onlyreqdeps' => true), &$config, &$installpackages, &$errors);
+$a = $installer->download($packages, array('onlyreqdeps' => true), $config, $installpackages, $errors);
 var_dump($a, $errors);
 echo "Packages downloaded and version:\n";
 foreach ($installpackages as $package) {
@@ -289,7 +294,7 @@ $config->set('preferred_state', 'alpha');
 
 $config = &PEAR_Config::singleton();
 $packages = array("pkg1");
-$a = $installer->download($packages, array('onlyreqdeps' => true), &$config, &$installpackages, &$errors);
+$a = $installer->download($packages, array('onlyreqdeps' => true), $config, $installpackages, $errors);
 var_dump($a, $errors);
 echo "Packages downloaded and version:\n";
 foreach ($installpackages as $package) {

@@ -1016,6 +1016,9 @@ class PEAR_Config extends PEAR
         $this->_channels = $channels;
         foreach ($channels as $channel) {
             $channel = strtolower($channel);
+            if ($channel == 'pear') {
+                continue;
+            }
             foreach ($this->layers as $layer) {
                 if (!isset($this->configuration[$layer]['__channels'][$channel])
                       || !is_array($this->configuration[$layer]['__channels'][$channel])) {
