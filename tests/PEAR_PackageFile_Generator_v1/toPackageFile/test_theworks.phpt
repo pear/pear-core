@@ -1,5 +1,5 @@
 --TEST--
-PEAR_PackageFile_Generator_v1->toXml() all bells and whistles package.xml
+PEAR_PackageFile_Generator_v1->toPackageFile() all bells and whistles package.xml
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -14,15 +14,10 @@ $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     DIRECTORY_SEPARATOR . 'theworks.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'theworks.xml');
 $generator = &$pf->getDefaultGenerator();
-$e = $generator->toXml(PEAR_VALIDATE_PACKAGING);
+$e = $generator->toPackageFile($temp_path, PEAR_VALIDATE_NORMAL, 'tub.xml');
 $phpunit->assertNoErrors('errors');
-$phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 1,
-    1 => 'Analyzing foo.php',
-  ),
-), $fakelog->getLog(), 'packaging log');
+$phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'tub.xml', $e, 'filename');
+$e = implode('', file($e));
 $phpunit->assertEquals(str_replace(array("\r\n", "\r"), array("\n", "\n"), '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="' . $generator->getPackagerVersion() . '">
@@ -57,9 +52,11 @@ release notes
    <configureoption name="one" default="three" prompt="two"/>
   </configureoptions>
   <filelist>
-   <file role="data" baseinstalldir="freeb" md5sum="8332264d2e0e3c3091ebd6d8cee5d3a3" install-as="merbl.dat" name="sunger/foo.dat">
-    <replace from="@pv@" to="version" type="package-info"/>
-   </file>
+   <dir name="sunger">
+    <file role="data" baseinstalldir="freeb" md5sum="8332264d2e0e3c3091ebd6d8cee5d3a3" install-as="merbl.dat" name="foo.dat">
+     <replace from="@pv@" to="version" type="package-info"/>
+    </file>
+   </dir> <!-- /sunger -->
    <file role="php" baseinstalldir="freeb" md5sum="8332264d2e0e3c3091ebd6d8cee5d3a3" install-as="merbl.php" name="foo.php">
     <replace from="@pv@" to="version" type="package-info"/>
    </file>
