@@ -82,8 +82,13 @@ $phpunit->assertNoErrors('after detect');
 $phpunit->assertEquals(array (
   0 => 
   array (
+    0 => 3,
+    1 => 'Notice: package "pear.php.net/main" optional dependency "pear.php.net/required" will not be automatically downloaded',
+  ),
+  1 =>
+  array (
     0 => 1,
-    1 => 'Notice: package "pear.php.net/main" optional dependency "pear.php.net/required" will not be automatically downloaded, use --alldeps to automatically download optional dependencies',
+    1 => 'Did not download optional dependencies: channel://pear.php.net/required, use --alldeps to download automatically'
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');

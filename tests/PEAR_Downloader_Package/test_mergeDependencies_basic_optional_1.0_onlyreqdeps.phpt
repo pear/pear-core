@@ -41,8 +41,23 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
           ),
           'url' => 'http://www.example.com/mainold-1.1'));
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
-    array('1.0', array('name' => 'required', 'channel' => 'pear.php.net', 'min' => '1.1'),
-        array('channel' => 'pear.php.net', 'package' => 'main', 'version' => '1.1'), 'stable'),
+    array('1.0', array(
+        'type' =>
+            "pkg",
+        'rel' =>
+            "ge",
+        'name' =>
+            "required",
+        'version' =>
+            "1.1",
+        'optional' =>
+            "yes",
+        'channel' =>
+            "pear.php.net",
+        'package' =>
+            "required",
+        ),
+        array('channel' => 'pear.php.net', 'package' => 'mainold', 'version' => '1.1'), 'stable'),
     array('version' => '1.1',
           'info' =>
           array(
@@ -67,8 +82,13 @@ $phpunit->assertNoErrors('after detect');
 $phpunit->assertEquals(array (
   0 => 
   array (
-    0 => 0,
-    1 => 'Notice: package "pear.php.net/mainold" optional dependency "channel://pear.php.net/required" will not be automatically downloaded, use --alldeps to automatically download required and optional dependencies',
+    0 => 3,
+    1 => 'Notice: package "pear.php.net/mainold" optional dependency "channel://pear.php.net/required" will not be automatically downloaded',
+  ),
+  1 =>
+  array (
+    0 => 1,
+    1 => 'Did not download dependencies: channel://pear.php.net/required, use --alldeps or --onlyreqdeps to download automatically',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');
