@@ -1121,6 +1121,9 @@ class PEAR_Config extends PEAR
         if ($key == '__channels') {
             return false;
         }
+        if (!isset($this->configuration[$layer])) {
+            return false;
+        }
         if ($key == 'default_channel') {
             // can only set this value globally
             $channel = 'pear.php.net';

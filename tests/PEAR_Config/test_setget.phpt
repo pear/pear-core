@@ -14,6 +14,7 @@ $config = new PEAR_Config;
 // failures
 $phpunit->assertFalse($config->set('__channels', 'oops'), '__channels');
 $phpunit->assertFalse($config->set('###', 'oops'), '###');
+$phpunit->assertFalse($config->set('php_dir', 'hi', 'gronk'), 'gronk layer');
 // successes
 $phpunit->assertTrue($config->set('data_dir', 'hi'), 'data_dir=hi');
 $phpunit->assertEquals('hi', $config->get('data_dir', 'user', 'pear.php.net'),
