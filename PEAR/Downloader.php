@@ -432,16 +432,8 @@ class PEAR_Downloader extends PEAR_Common
             $ext = '.tgz';
         }
         if (is_array($url)) {
-            if (!isset($url['multiple'])) { // multiple urls returned for a bundle
-                if (isset($url['url'])) {
-                    $url['url'] .= $ext;
-                }
-            } else {
-                foreach ($url as $i => $u) {
-                    if (isset($u['url'])) {
-                        $url[$i]['url'] .= $ext;
-                    }
-                }
+            if (isset($url['url'])) {
+                $url['url'] .= $ext;
             }
         }
         return $url;
@@ -469,16 +461,8 @@ class PEAR_Downloader extends PEAR_Common
             } else {
                 $ext = '.tgz';
             }
-            if (!isset($url['multiple'])) { // multiple urls returned for a bundle
-                if (count($url) == 3) {
-                    $url['url'] .= $ext;
-                }
-            } else {
-                foreach ($url as $i => $u) {
-                    if (count($u) == 3) {
-                        $url[$i]['url'] .= $ext;
-                    }
-                }
+            if (count($url) == 3) {
+                $url['url'] .= $ext;
             }
         }
         return $url;
