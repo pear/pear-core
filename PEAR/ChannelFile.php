@@ -121,6 +121,10 @@ define('PEAR_CHANNELFILE_ERROR_NO_STATICVERSION', 34);
  * Error code when <function> contains no uri attribute in a <rest> protocol definition
  */
 define('PEAR_CHANNELFILE_ERROR_NORESTURI', 35);
+/** 
+ * Error code when a mirror is defined and the channel.xml represents the __uri pseudo-channel
+ */
+define('PEAR_CHANNELFILE_URI_CANT_MIRROR', 36);
 /**@#-*/
 
 /**
@@ -240,6 +244,8 @@ class PEAR_ChannelFile {
                     'Port "%port%" must be numeric',
                 PEAR_CHANNELFILE_ERROR_NO_STATICVERSION =>
                     '<static> tag must contain version attribute',
+                PEAR_CHANNELFILE_URI_CANT_MIRROR =>
+                    'The __uri pseudo-channel cannot have mirrors',
             );
     }
     
@@ -656,6 +662,9 @@ class PEAR_ChannelFile {
             $this->validateFunctions('rest', $info['servers']['primary']['rest']['function']);
         }
         if (isset($info['servers']['mirror'])) {
+            if ($this->_channelInfo['name'] == '__uri') {
+                $this->_validateError(PEAR_CHANNELFILE_URI_CANT_MIRROR);
+            }
             if (!isset($info['servers']['mirror'][0])) {
                 $info['servers']['mirror'] = array($info['servers']['mirror']);
             }
@@ -915,7 +924,64 @@ class PEAR_ChannelFile {
     }
 
     /**
+     * Determines whether a channel supports Representational State Transfer (REST) protocols
+     * for retrieving channel information
+     * @param string
+     * @return bool
+     */
+    function supportsREST($mirror = false)
+    {
+        if ($mirror) {
+            if ($mir = $this->getMirror($mirror)) {
+                return isset($mir['rest']);
+            }
+        }
+        return isset($this->_channelInfo['servers']['primary']['rest']);
+    }
+
+    /**
+     * Get the URL to access a base resource.
+     *
+     * Hyperlinks in the returned xml will be used to retrieve the proper information
+     * needed.  This allows extreme extensibility and flexibility in implementation
+     * @param string Resource Type to retrieve
+     */
+    function getBaseURL($resourceType, $mirror = false)
+    {
+        if ($mirror) {
+            if ($mir = $this->getMirror($mirror)) {
+                $rest = $mir['rest'];
+            } else {
+                return false;
+            }
+        } else {
+            $rest = $this->_channelInfo['servers']['primary']['rest'];
+        }
+        if (!isset($rest['baseurl'][0])) {
+            $rest['baseurl'] = array($rest['baseurl']);
+        }
+        foreach ($rest['baseurl'] as $baseurl) {
+            if (strtolower($baseurl['attribs']['type']) == strtolower($resourceType)) {
+                return $baseurl['_content'];
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Since REST does not implement RPC, provide this as a logical wrapper around
+     * resetFunctions for REST
+     * @param string|false mirror name, if any
+     */
+    function resetREST($mirror = false)
+    {
+        return $this->resetFunctions('rest', $mirror);
+    }
+
+    /**
      * Empty all protocol definitions
+     * @param string protocol type (xmlrpc, soap)
+     * @param string|false mirror name, if any
      */
     function resetFunctions($type, $mirror = false)
     {
@@ -954,14 +1020,18 @@ class PEAR_ChannelFile {
             case '1.0' :
                 $this->resetFunctions('xmlrpc', $mirror);
                 $this->resetFunctions('soap', $mirror);
-                $this->resetFunctions('rest', $mirror);
+                $this->resetREST($mirror);
+                $this->addFunction('xmlrpc', '1.0', 'logintest', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.listLatestReleases', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.listAll', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.info', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.getDownloadURL', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.getDepDownloadURL', $mirror);
-                $this->addFunction('xmlrpc', '1.0', 'channel.update', $mirror);
+                $this->addFunction('xmlrpc', '1.0', 'package.search', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'channel.listAll', $mirror);
+//                $this->setBaseURL('package', 'http://' . $this->getName() . '/rest/1.0/package');
+//                $this->setBaseURL('category', 'http://' . $this->getName() . '/rest/1.0/category');
+//                $this->setBaseURL('maintainer', 'http://' . $this->getName() . '/rest/1.0/maintainer');
                 return true;
             break;
             default :
@@ -1186,7 +1256,50 @@ class PEAR_ChannelFile {
         $this->_isValid = false;
         return true;
     }
-    
+
+    /**
+     * @param string Resource Type this url links to
+     * @param string URL
+     * @param string|false mirror name, if this is not a primary server REST base URL
+     */
+    function setBaseURL($resourceType, $url, $mirror = false)
+    {
+        if ($mirror) {
+            $found = false;
+            if (!isset($this->_channelInfo['servers']['mirror'])) {
+                $this->_validateError(PEAR_CHANNELFILE_ERROR_MIRROR_NOT_FOUND,
+                    array('mirror' => $mirror));
+                return false;
+            }
+            $setmirror = false;
+            if (isset($this->_channelInfo['servers']['mirror'][0])) {
+                foreach ($this->_channelInfo['servers']['mirror'] as $i => $mir) {
+                    if ($mirror == $mir['attribs']['host']) {
+                        $setmirror = &$this->_channelInfo['servers']['mirror'][$i];
+                        break;
+                    }
+                }
+            } else {
+                if ($this->_channelInfo['servers']['mirror']['attribs']['host'] == $mirror) {
+                    $setmirror = &$this->_channelInfo['servers']['mirror'];
+                }
+            }
+        } else {
+            $setmirror = &$this->_channelInfo;
+        }
+        $set = array('attribs' => array('type' => $resourceType), '_content' => $url);
+        if (!isset($setmirror['rest']['baseurl'])) {
+            $setmirror['rest']['baseurl'] = $set;
+            $this->_isValid = false;
+            return true;
+        } elseif (!isset($setmirror['rest']['baseurl'][0])) {
+            $setmirror['rest']['baseurl'] = array($setmirror['rest']['baseurl']);
+        }
+        $setmirror['rest']['baseurl'][] = $set;
+        $this->_isValid = false;
+        return true;
+    }
+
     /**
      * @param string mirror server
      * @param int mirror http port
@@ -1195,6 +1308,9 @@ class PEAR_ChannelFile {
      */
     function addMirror($server, $port = null, $path = null)
     {
+        if ($this->_channelInfo['name'] == '__uri') {
+            return false; // the __uri channel cannot have mirrors by definition
+        }
         $set = array('attribs' => array('host' => $server));
         if (!isset($this->_channelInfo['servers']['mirror'])) {
             $this->_channelInfo['servers']['mirror'] = $set;
