@@ -894,9 +894,6 @@ class PEAR_Registry extends PEAR
         if ($this->_packageExists($package)) {
             return false;
         }
-        if (!$this->_channelExists($channel)) {
-            return false;
-        }
         $fp = $this->_openPackageFile($package, 'wb');
         if ($fp === null) {
             return false;
