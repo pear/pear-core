@@ -60,6 +60,7 @@ Installer:
  * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
  * fix Bug #1420 Parser bug for T_DOUBLE_COLON
  * fix Request #2220 pear5 build fails on dual php4/php5 system
+ * fix Bug #1163  pear makerpm fails with packages that supply role="doc"
 
 Other:
  * add PEAR_Exception class for PHP5 users
