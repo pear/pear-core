@@ -86,7 +86,8 @@ class PEAR_PackageFile_v2_Validator
             'dependencies', //special validation needed
             '*providesextension',
             '*srcpackage|*srcuri',
-            '+phprelease|extsrcrelease|+extbinrelease|bundle' //special validation needed
+            '+phprelease|extsrcrelease|+extbinrelease|bundle', //special validation needed
+            '*changelog',
         );
         $test = $this->_packageInfo;
         unset($test['attribs']);
@@ -201,12 +202,14 @@ class PEAR_PackageFile_v2_Validator
         while ($key == 'attribs' || $key == '_contents') {
             $key = next($keys);
         }
+        $test = false;
+        $possiblemismatch = true;
         $unfoundtags = array();
         foreach ($structure as $struc) {
-            $test = $this->_processStructure($struc);
             if (!$key && @$struc['multiple'] == '*') {
                 continue;
             }
+            $test = $this->_processStructure($struc);
             if ($key) {
                 $tag = $xml[$key];
             }
@@ -220,6 +223,9 @@ class PEAR_PackageFile_v2_Validator
                                 $key = next($keys);
                             }
                             $unfoundtags = array();
+                            if ($key && $key != $choice['tag'] && isset($choice['multiple'])) {
+                                $unfoundtags[] = $choice['tag'];
+                            }
                             continue 2;
                         }
                         return false;
@@ -255,6 +261,9 @@ class PEAR_PackageFile_v2_Validator
                     $key = next($keys);
                     while ($key == 'attribs' || $key == '_contents') {
                         $key = next($keys);
+                    }
+                    if ($key && $key != $test['tag'] && isset($test['multiple'])) {
+                        $unfoundtags[] = $test['tag'];
                     }
                     continue;
                 }
