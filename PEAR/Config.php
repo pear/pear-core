@@ -534,7 +534,7 @@ class PEAR_Config extends PEAR
         foreach ($this->configuration_info as $key => $info) {
             $this->configuration['default'][$key] = $info['default'];
         }
-        $this->_registry['default'] = &new PEAR_Registry($phpdir);
+        $this->_registry['default'] = &new PEAR_Registry($this->configuration['default']['php_dir']);
         $this->_registry['default']->setConfig($this);
         $this->_regInitialized['default'] = false;
         //$GLOBALS['_PEAR_Config_instance'] = &$this;
@@ -1044,9 +1044,6 @@ class PEAR_Config extends PEAR
     }
 
     // }}}
-    // {{{ get(key, [layer])
-
-    // }}}
     // {{{ getDefaultChannel([layer])
     /**
      * Retrieve the default channel.
@@ -1081,6 +1078,7 @@ class PEAR_Config extends PEAR
         return PEAR_CONFIG_DEFAULT_CHANNEL;
     }
 
+    // {{{ get(key, [layer])
     /**
      * Returns a configuration value, prioritizing layers as per the
      * layers property.
