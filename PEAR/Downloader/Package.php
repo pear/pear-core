@@ -861,6 +861,9 @@ class PEAR_Downloader_Package
 
     function isInstalled($dep, $oper = '==')
     {
+        if (!$dep) {
+            return false;
+        }
         if ($oper != 'ge' && $oper != 'gt' && $oper != 'has' && $oper != '==') {
             return false;
         }
@@ -1043,7 +1046,12 @@ class PEAR_Downloader_Package
                     }
                     continue;
                 }
-                $obj->detectDependencies($params);
+                $e = $obj->detectDependencies($params);
+                if (PEAR::isError($e)) {
+                    if (!isset($options['soft'])) {
+                        $obj->_downloader->log(0, $e->getMessage());
+                    }
+                }
                 $j = &$obj;
                 $newparams[] = &$j;
             }
@@ -1235,6 +1243,9 @@ class PEAR_Downloader_Package
             $this->_explicitGroup = false;
         }
         $info = $this->_downloader->_getPackageDownloadUrl($pname);
+        if (PEAR::isError($info)) {
+            return $info;
+        }
         $ret = $this->_analyzeDownloadURL($info, $param, $pname);
         if (PEAR::isError($ret)) {
             return $ret;

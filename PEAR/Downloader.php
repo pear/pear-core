@@ -272,11 +272,17 @@ class PEAR_Downloader extends PEAR_Common
         }
         PEAR_Downloader_Package::removeDuplicates($params);
         if (!count($params)) {
-            return array();
+            $a = array();
+            return $a;
         }
         if (!isset($this->_options['nodeps'])) {
             foreach ($params as $i => $param) {
-                $params[$i]->detectDependencies($params);
+                $ret = $params[$i]->detectDependencies($params);
+                if (PEAR::isError($ret)) {
+                    if (!isset($this->_options['soft'])) {
+                        $this->log(0, $ret->getMessage());
+                    }
+                }
             }
         }
         while(PEAR_Downloader_Package::mergeDependencies($params));
@@ -289,7 +295,8 @@ class PEAR_Downloader extends PEAR_Common
         PEAR::popErrorHandling();
         if (PEAR::isError($err)) {
             $this->pushError($err->getMessage());
-            return;
+            $a = array();
+            return $a;
         }
         $ret = array();
         $newparams = array();
@@ -473,7 +480,7 @@ class PEAR_Downloader extends PEAR_Common
                 }
                 PEAR::staticPopErrorHandling();
                 if ($failed) {
-                    if (isset($this->_options['ignore-errors'])) {
+                    if (isset($this->_options['ignore-errors']) || isset($this->_options['nodeps'])) {
                         // this is probably not needed, but just in case
                         if (!isset($this->_options['soft'])) {
                             $this->log(0, 'WARNING: dependencies failed');
