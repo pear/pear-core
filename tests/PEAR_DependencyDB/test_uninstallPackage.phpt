@@ -18,7 +18,7 @@ $db = &new PEAR_DependencyDB;
 $db->setConfig($config);
 $db->assertDepsDB();
 $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'setup');
-$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'setup')));
+$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb')));
 $phpunit->assertEquals(array('_version' => '1.0'), $contents, 'initial create');
 
 require_once 'PEAR/PackageFile/v1.php';
@@ -81,7 +81,7 @@ $ret = $pf2->validate();
 $phpunit->assertNotFalse($ret, 'validate v2');
 
 $db->installPackage($pf2);
-$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'setup')));
+$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb')));
 $phpunit->assertEquals(array (
   '_version' => '1.0',
   'dependencies' => 
@@ -239,7 +239,7 @@ $phpunit->assertEquals(array (
 ), $contents, 'complex setup');
 
 $db->uninstallPackage($pf);
-$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'setup')));
+$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb')));
 $phpunit->assertEquals(array (
   '_version' => '1.0',
   'dependencies' => 
@@ -341,7 +341,7 @@ $phpunit->assertEquals(array (
 
 
 $db->uninstallPackage($pf2);
-$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'setup')));
+$contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb')));
 $phpunit->assertEquals(array (
   '_version' => '1.0',
 ), $contents, 'uninstall pf2');
