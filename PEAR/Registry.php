@@ -896,15 +896,15 @@ class PEAR_Registry extends PEAR
         return $ret;
     }
 
-    function _addPackage($package, $info, $channel = false)
+    function _addPackage($package, $info)
     {
-        if ($this->_packageExists($package, $channel)) {
+        if ($this->_packageExists($package)) {
             return false;
         }
         if (!$this->_channelExists($channel)) {
             return false;
         }
-        $fp = $this->_openPackageFile($package, 'wb', $channel);
+        $fp = $this->_openPackageFile($package, 'wb');
         if ($fp === null) {
             return false;
         }
@@ -1199,7 +1199,7 @@ class PEAR_Registry extends PEAR
     // }}}
     // {{{ addPackage()
 
-    function addPackage($package, $info, $channel = false)
+    function addPackage($package, $info)
     {
         if (is_object($info)) {
             return $this->addPackage2($info);
@@ -1207,7 +1207,7 @@ class PEAR_Registry extends PEAR
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
-        $ret = $this->_addPackage($package, $info, $channel);
+        $ret = $this->_addPackage($package, $info);
         $this->_unlock();
         if ($ret) {
             include_once 'PEAR/PackageFile/v1.php';
@@ -1447,7 +1447,7 @@ class PEAR_Registry extends PEAR
     // {{{ getChannels()
     /**
      * @param string channel name
-     * @return PEAR_ChannelFile|false
+     * @return array an array of PEAR_ChannelFile objects representing every installed channel
      */
     function &getChannels()
     {
