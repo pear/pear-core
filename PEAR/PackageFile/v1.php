@@ -583,6 +583,16 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function isSubpackageOf($p)
+    {
+        return $p->isSubpackage($this);
+    }
+
+    function isSubpackage($p)
+    {
+        return false;
+    }
+
     function dependsOn($package, $channel)
     {
         if (strtolower($channel) != 'pear.php.net') {

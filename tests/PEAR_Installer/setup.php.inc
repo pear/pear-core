@@ -112,4 +112,5 @@ function &newDownloader($options)
     $downloader = &new test_PEAR_Downloader($fakelog, $options, $config);
     return $downloader;
 }
+$installer = &new test_PEAR_Installer($fakelog);
 ?>
