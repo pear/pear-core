@@ -101,6 +101,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 
   Specific changes from 1.4.0a4:
   * upgrade suggested XML_RPC version to 1.2.2
+  * upgrade suggested Archive_Tar version to 1.3.0
   * attempt to address memory issues
   * relax validation further
  </notes>
@@ -266,7 +267,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>Archive_Tar</name>
     <channel>pear.php.net</channel>
     <min>1.1</min>
-    <recommended>1.2</recommended>
+    <recommended>1.3.0</recommended>
    </package>
    <package>
     <name>Console_Getopt</name>
