@@ -259,6 +259,9 @@ class PEAR_PackageFile_v2
         if (!$pf1) {
             return true;
         }
+        if ($this->getPackageType() == 'bundle') {
+            return false;
+        }
         $this->_stack->getErrors(true);
         if (!$pf1->validate(PEAR_VALIDATE_NORMAL)) {
             return true;
@@ -332,6 +335,9 @@ class PEAR_PackageFile_v2
      */
     function flattenFilelist()
     {
+        if (isset($this->_packageInfo['bundle'])) {
+            return;
+        }
         $filelist = array();
         if (isset($this->_packageInfo['contents']['dir']['dir'])) {
             $this->_getFlattenedFilelist($filelist, $this->_packageInfo['contents']['dir']);
@@ -1700,7 +1706,7 @@ class PEAR_PackageFile_v2
                                 }
                             } elseif (isset($dep['max'])) {
                                 $s['rel'] = 'le';
-                                $s['version'] = $dep['min'];
+                                $s['version'] = $dep['max'];
                                 $s['optional'] = $optional;
                                 if ($dtype != 'php') {
                                     $s['name'] = $dep['name'];
