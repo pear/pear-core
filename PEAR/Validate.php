@@ -88,7 +88,7 @@ class PEAR_Validate
      */
     function validState($state)
     {
-        return in_array($state, array('alpha', 'beta', 'stable', 'snapshot', 'devel'));
+        return in_array($state, array('snapshot', 'devel', 'alpha', 'beta', 'stable'));
     }
 
     /**
@@ -99,7 +99,7 @@ class PEAR_Validate
      */
     function getValidStates()
     {
-        return array('alpha', 'beta', 'stable', 'snapshot', 'devel');
+        return array('snapshot', 'devel', 'alpha', 'beta', 'stable');
     }
 
     /**
