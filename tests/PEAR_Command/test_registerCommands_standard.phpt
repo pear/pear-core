@@ -10,8 +10,6 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-
-$phpunit->showall();
 PEAR_Command::registerCommands();
 $phpunit->assertEquals(array (
   'build' => 'PEAR_Command_Build',
