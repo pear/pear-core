@@ -559,6 +559,22 @@ class PEAR_Config extends PEAR
     // }}}
     // {{{ readConfigFile([file], [layer])
 
+    // }}}
+    // {{{ validConfiguration()
+    /**
+     * Determine whether any configuration files have been detected, and whether a
+     * registry object can be retrieved from this configuration.
+     * @return bool
+     * @since PEAR 1.4.0a1
+     */
+    function validConfiguration()
+    {
+        if ($this->isDefinedLayer('user') || $this->isDefinedLayer('system')) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Reads configuration data from a file.  All existing values in
      * the config layer are discarded and replaced with data from the
