@@ -190,13 +190,13 @@ class PEAR_PackageFile_v2
                             $installer->log(0, 'Download and install of binary extension "' .
                                 $this->_registry->parsedPackageNameToString(
                                     array('channel' => $pf->getChannel(),
-                                          'package' => $pf->getPackage())) . '" successful');
+                                          'package' => $pf->getPackage()), true) . '" successful');
                             return true;
                         }
                         $installer->log(0, 'Download and install of binary extension "' .
                             $this->_registry->parsedPackageNameToString(
                                     array('channel' => $pf->getChannel(),
-                                          'package' => $pf->getPackage())) . '" failed');
+                                          'package' => $pf->getPackage()), true) . '" failed');
                     }
                 }
             }
@@ -264,7 +264,7 @@ class PEAR_PackageFile_v2
         }
         $this->_stack->getErrors(true);
         if (!$pf1->validate(PEAR_VALIDATE_NORMAL)) {
-            return true;
+            return false;
         }
         $pass = true;
         if ($pf1->getPackage() != $this->getPackage()) {
@@ -293,21 +293,21 @@ class PEAR_PackageFile_v2
     {
         $this->_stack->push(__FUNCTION__, 'error', array('package' => $package,
             'self' => $this->getPackage()),
-            'package.xml 1.0 Package "%package%" does not match "%self$"');
+            'package.xml 1.0 package "%package%" does not match "%self%"');
     }
 
     function _differentVersion($version)
     {
         $this->_stack->push(__FUNCTION__, 'error', array('version' => $version,
             'self' => $this->getVersion()),
-            'package.xml 1.0 version "%version%" does not match "%self$"');
+            'package.xml 1.0 version "%version%" does not match "%self%"');
     }
 
     function _differentState($state)
     {
         $this->_stack->push(__FUNCTION__, 'error', array('state' => $state,
             'self' => $this->getState()),
-            'package.xml 1.0 state "%state%" does not match "%state$"');
+            'package.xml 1.0 state "%state%" does not match "%self%"');
     }
 
     function _missingFile($file)
@@ -405,7 +405,7 @@ class PEAR_PackageFile_v2
 
     function setLogger(&$logger)
     {
-        if (!is_object($logger) || !method_exists($logger, 'log')) {
+        if ($logger && (!is_object($logger) || !method_exists($logger, 'log'))) {
             return PEAR::raiseError('Logger must be compatible with PEAR_Common::log');
         }
         $this->_logger = &$logger;
