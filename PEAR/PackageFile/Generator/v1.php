@@ -609,6 +609,10 @@ http://pear.php.net/dtd/package-2.0.xsd',
         return $ret;
     }
 
+    /**
+     * @param array
+     * @access private
+     */
     function _convertFilelist2_0(&$package)
     {
         $ret = array('dir' =>
@@ -651,6 +655,11 @@ http://pear.php.net/dtd/package-2.0.xsd',
         return $ret;
     }
 
+    /**
+     * @param array
+     * @param bool
+     * @access private
+     */
     function _convertDependencies2_0(&$release, $internal = false)
     {
         $peardep = array('pearinstaller' =>
@@ -682,7 +691,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                     if (isset($deps['php'])) {
                         $php = array();
                         if (count($deps['php']) > 1) {
-                            $php = $this->_processMultipleDeps($deps['php']);
+                            $php = $this->_processPhpDeps($deps['php']);
                         } else {
                             if (!isset($deps['php'][0])) {
                                 list($key, $blah) = each ($deps['php']); // stupid buggy versions
@@ -739,6 +748,11 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $release['dependencies']['required'] = $order;
     }
 
+    /**
+     * @param array
+     * @param array
+     * @access private
+     */
     function _convertRelease2_0(&$release, $package)
     {
         if (count($package['platform']) || count($package['install-as'])) {
@@ -824,6 +838,11 @@ http://pear.php.net/dtd/package-2.0.xsd',
         }
     }
 
+    /**
+     * @param array
+     * @return array
+     * @access private
+     */
     function _processDep($dep)
     {
         if ($dep['type'] == 'php') {
@@ -865,14 +884,21 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 $php['min'] = $dep['version'];
                 $php['max'] = $dep['version'];
             break;
-            case 'not' :
+            case 'ne' :
                 $php['exclude'] = $dep['version'];
+            break;
+            case 'not' :
+                $php['conflicts'] = 'yes';
             break;
         }
         return $php;
     }
 
-    function _processMultipleDeps($deps)
+    /**
+     * @param array
+     * @return array
+     */
+    function _processPhpDeps($deps)
     {
         $test = array();
         foreach ($deps as $dep) {
@@ -881,7 +907,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $min = array();
         $max = array();
         foreach ($test as $dep) {
-            if (!dep) {
+            if (!$dep) {
                 continue;
             }
             if (isset($dep['min'])) {
@@ -928,6 +954,12 @@ http://pear.php.net/dtd/package-2.0.xsd',
         return $php;
     }
 
+    /**
+     * process multiple dependencies that have a name, like package deps
+     * @param array
+     * @return array
+     * @access private
+     */
     function _processMultipleDepsName($deps)
     {
         $tests = array();
@@ -941,10 +973,15 @@ http://pear.php.net/dtd/package-2.0.xsd',
             $min = array();
             $max = array();
             $php['name'] = $name;
-            $php['channel'] = 'pear.php.net';
             foreach ($test as $dep) {
                 if (!$dep) {
                     continue;
+                }
+                if (isset($dep['channel'])) {
+                    $php['channel'] = 'pear.php.net';
+                }
+                if (isset($dep['conflicts']) && $dep['conflicts'] == 'yes') {
+                    $php['conflicts'] = 'yes';
                 }
                 if (isset($dep['min'])) {
                     $min[$dep['min']] = count($min);
