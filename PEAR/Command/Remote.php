@@ -161,6 +161,10 @@ parameter.
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($info);
         }
+        if (!isset($info['name'])) {
+            $this->ui->outputData('No remote package "' . $package . '" was found');
+            return true;
+        }
 
         $installed = $reg->packageInfo($info['name'], null, $channel);
         $info['installed'] = $installed['version'] ? $installed['version'] : '- no -';
