@@ -133,13 +133,29 @@ class PEAR_Exception extends Exception
      *                         - A PEAR_OBSERVER_* constant
      *                         - An array(const PEAR_OBSERVER_*, mixed $options)
      *
-     * @param string $label    - The name of the observer. Use this if you want
-     *                           to remove it later with delObserver()
+     * @param string|int $context  The observer only runs for this class name
+     *                           (defaults to reserved word 'all'). There is
+     *                           reserved context 'main', for triggering observers
+     *                           only for errors caught in the main code block. Integer
+     *                           contexts means the minimum depth level on the errors stack,
+     *                           the observer should be called ('main' == 1).
+     *
+     * @param string $label    The name of the observer. Use this if you want
+     *                         to remove it later with delObserver()
+     *
+     * @return string $label   The label for the new observer (an internal name is set
+     *                         when no label is given)
+     *
      */
-
-    public static function addObserver($callback, $label = 'default')
+    public static function addObserver($callback, $context = 'all', $label = null)
     {
-        self::$_observers[$label] = $callback;
+        static $counter = 1;
+        if ($label == null) {
+            $label = 'default_' . $counter++;
+        }
+        self::$_observers[$label]['callback'] = $callback;
+        self::$_observers[$label]['context']  = $context;
+        return $label;
     }
 
     public static function delObserver($label = 'default')
@@ -149,7 +165,18 @@ class PEAR_Exception extends Exception
 
     private function _signal()
     {
-        foreach (self::$_observers as $func) {
+        foreach (self::$_observers as $data) {
+            $func = $data['callback'];
+            $context = $data['context'];
+            if ($context != 'all') {
+                if ($context == 'main' && count(parent::getTrace()) != 1) {
+                    continue;
+                } elseif (is_int($context) && count(parent::getTrace()) > $context) {
+                    continue;
+                } elseif (!is_int($context) && strcasecmp($context, $this->getErrorClass()) != 0) {
+                    continue;
+                }
+            }
             if (is_callable($func)) {
                 call_user_func($func, $this);
                 continue;
@@ -192,6 +219,11 @@ class PEAR_Exception extends Exception
         return $this->cause;
     }
 
+    /**
+     * Get the class name where the error occurred
+     *
+     * @return string The class name
+     */
     public function getErrorClass()
     {
         return $this->error_class;
@@ -217,6 +249,7 @@ class PEAR_Exception extends Exception
         }
         return $str;
     }
+
 }
 
 ?>
