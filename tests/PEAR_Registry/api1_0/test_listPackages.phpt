@@ -10,8 +10,8 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $phpunit->assertRegEquals('dumping registry...
-channel pear.php.net:
 channel __uri:
+channel pear.php.net:
 dump done
 ', $reg, 'Initial dump is incorrect');
 $phpunit->assertEquals(array (
