@@ -13,6 +13,7 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_initialize_downloadurl'. DIRECTORY_SEPARATOR . 'test-1.0.tgz';
 $pathtochannelxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_initialize_abstractpackage_discover'. DIRECTORY_SEPARATOR . 'channel.xml';
+$csize = filesize($pathtochannelxml);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.0.tgz', $pathtopackagexml);
 $GLOBALS['pearweb']->addHtmlConfig('http://pear.foo.com/channel.xml', $pathtochannelxml);
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.foo.com', 'package.getDownloadURL',
@@ -51,7 +52,7 @@ $phpunit->assertEquals(array (
   2 =>
   array (
     0 => 1,
-    1 => 'Starting to download channel.xml (947 bytes)',
+    1 => 'Starting to download channel.xml (' . $csize . ' bytes)',
   ),
   3 =>
   array (
@@ -61,7 +62,7 @@ $phpunit->assertEquals(array (
   4 =>
   array (
     0 => 1,
-    1 => '...done: 947 bytes',
+    1 => '...done: ' . $csize . ' bytes',
   ),
   5 =>
   array (
@@ -101,18 +102,18 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       0 => 'channel.xml',
-      1 => '947',
+      1 => "$csize",
     ),
   ),
   3 => 
   array (
     0 => 'bytesread',
-    1 => 947,
+    1 => $csize,
   ),
   4 => 
   array (
     0 => 'done',
-    1 => 947,
+    1 => $csize,
   ),
 ), $fakelog->getDownload(), 'download callback messages');
 $phpunit->assertIsa('PEAR_Error', $result, 'after initialize');
