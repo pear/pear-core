@@ -21,6 +21,7 @@
 // $Id$
 
 require_once 'PEAR/Common.php';
+require_once 'PEAR/Packager.php';
 require_once 'PEAR/Command/Common.php';
 
 class PEAR_Command_Package extends PEAR_Command_Common
@@ -272,16 +273,25 @@ used for automated conversion or learning the format.
     }
 
     // }}}
+    function &getPackager()
+    {
+        $a = &new PEAR_Packager;
+        return $a;
+    }
+
+    function getPackageFile($config, $debug = false, $tmpdir = null)
+    {
+        $a = &new PEAR_PackageFile($config, $debug, $tmpdir);
+        return $a;
+    }
     // {{{ doPackage()
 
     function doPackage($command, $options, $params)
     {
         $this->output = '';
-        include_once 'PEAR/Packager.php';
-        include_once 'PEAR/Registry.php';
         $pkginfofile = isset($params[0]) ? $params[0] : 'package.xml';
         $pkg2 = isset($params[1]) ? $params[1] : null;
-        $packager =& new PEAR_Packager();
+        $packager = &$this->getPackager();
         $reg = &$this->config->getRegistry();
         $err = $warn = array();
         $dir = dirname($pkginfofile);
@@ -311,8 +321,7 @@ used for automated conversion or learning the format.
         if (sizeof($params) < 1) {
             $params[0] = "package.xml";
         }
-        include_once 'PEAR/PackageFile.php';
-        $obj = &new PEAR_PackageFile($this->config, $this->_debug);
+        $obj = &$this->getPackageFile($this->config, $this->_debug);
         $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_PACKAGE);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
@@ -344,8 +353,7 @@ used for automated conversion or learning the format.
             $help = $this->getHelp($command);
             return $this->raiseError("$command: missing parameter: $help[0]");
         }
-        include_once 'PEAR/PackageFile.php';
-        $obj = &new PEAR_PackageFile($this->config, $this->_debug);
+        $obj = &$this->getPackageFile($this->config, $this->_debug);
         $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
@@ -411,8 +419,7 @@ used for automated conversion or learning the format.
             $help = $this->getHelp($command);
             return $this->raiseError("$command: missing parameter: $help[0]");
         }
-        include_once 'PEAR/PackageFile.php';
-        $obj = &new PEAR_PackageFile($this->config, $this->_debug);
+        $obj = &$this->getPackageFile($this->config, $this->_debug);
         $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
@@ -542,37 +549,6 @@ used for automated conversion or learning the format.
         }
 
         return true;
-        /*
-        $cwd = getcwd();
-        $php = $this->config->get('php_bin');
-        putenv("TEST_PHP_EXECUTABLE=$php");
-        // all core PEAR tests use this constant to determine whether they should be run or not
-        putenv("PHP_PEAR_RUNTESTS=1");
-        $ip = ini_get("include_path");
-        $ps = OS_WINDOWS ? ';' : ':';
-        $run_tests = $rtsts = $this->config->get('php_dir') . DIRECTORY_SEPARATOR . 'run-tests.php';
-        if (!file_exists($run_tests)) {
-            $run_tests = PEAR_INSTALL_DIR . DIRECTORY_SEPARATOR . 'run-tests.php';
-            if (!file_exists($run_tests)) {
-                return $this->raiseError("No run-tests.php file found. Please copy this ".
-                                                "file from the sources of your PHP distribution to $rtsts");
-            }
-        }
-        if (OS_WINDOWS) {
-            // note, this requires a slightly modified version of run-tests.php
-            // for some setups
-            // unofficial download location is in the pear-dev archives
-            $argv = $params;
-            array_unshift($argv, $run_tests);
-            $argc = count($argv);
-            include $run_tests;
-        } else {
-            $plist = implode(' ', $params);
-            $cmd = "$php -d include_path=$cwd$ps$ip -f $run_tests -- $plist";
-            system($cmd);
-        }
-        return true;
-        */
     }
 
     // }}}
@@ -584,8 +560,7 @@ used for automated conversion or learning the format.
         if (sizeof($params) != 1) {
             return $this->raiseError("bad parameter(s), try \"help $command\"");
         }
-        include_once 'PEAR/PackageFile.php';
-        $obj = &new PEAR_PackageFile($this->config, $this->_debug);
+        $obj = &$this->getPackageFile($this->config, $this->_debug);
         $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
@@ -672,8 +647,10 @@ used for automated conversion or learning the format.
         include_once "System.php";
         $tar = new Archive_Tar($params[0]);
         $tmpdir = System::mktemp('-d pearsign');
-        if (!$tar->extractList('package.xml package.sig', $tmpdir)) {
-            return $this->raiseError("failed to extract tar file");
+        if (!$tar->extractList('package2.xml package.sig', $tmpdir)) {
+            if (!$tar->extractList('package.xml package.sig', $tmpdir)) {
+                return $this->raiseError("failed to extract tar file");
+            }
         }
         if (file_exists("$tmpdir/package.sig")) {
             return $this->raiseError("package already signed");
@@ -702,19 +679,14 @@ used for automated conversion or learning the format.
     (cox)
 
     TODO:
-
         - Fill the rpm dependencies in the template file.
+        - Make this work for package.xml 2.0
 
     IDEAS:
-
         - Instead of mapping the role to rpm vars, perhaps it's better
-
           to use directly the pear cmd to install the files by itself
-
           in %postrun so:
-
           pear -d php_dir=%{_libdir}/php/pear -d test_dir=.. <package>
-
     */
 
     function doMakeRPM($command, $options, $params)
@@ -729,7 +701,7 @@ used for automated conversion or learning the format.
         include_once "PEAR/Installer.php";
         include_once "System.php";
         $reg = &$this->config->getRegistry();
-        $pkg = &new PEAR_PackageFile($this->config, $this->_debug);
+        $pkg = &$this->getPackageFile($this->config, $this->_debug);
         $pf = &$pkg->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($pf)) {
             $u = $pf->getUserinfo();
@@ -743,29 +715,30 @@ used for automated conversion or learning the format.
             }
             return $this->raiseError("$params[0] is not a valid package");
         }
-        $tar = new Archive_Tar($params[0]);
+        $tar = &new Archive_Tar($params[0]);
         $tmpdir = System::mktemp('-d pear2rpm');
         $instroot = System::mktemp('-d pear2rpm');
         $tmp = $this->config->get('verbose');
         $this->config->set('verbose', 0);
-        $installer = new PEAR_Installer($this->ui);
+        $installer = $this->getInstaller($this->ui);
         $info = $installer->install($params[0],
                                     array('installroot' => $instroot,
                                           'nodeps' => true));
         $pkgdir = "$info[package]-$info[version]";
         $info['rpm_xml_dir'] = '/var/lib/pear';
         $this->config->set('verbose', $tmp);
-        if (!$tar->extractList("package.xml", $tmpdir, $pkgdir)) {
-            return $this->raiseError("failed to extract $params[0]");
+        if (!$tar->extractList('package2.xml', $tmpdir, $pkgdir)) {
+            if (!$tar->extractList('package.xml', $tmpdir, $pkgdir)) {
+                return $this->raiseError("failed to extract $params[0]");
+            }
         }
-        if (!file_exists("$tmpdir/package.xml")) {
-            return $this->raiseError("no package.xml found in $params[0]");
+        if (!file_exists("$tmpdir/package2.xml") && !file_exists("$tmpdir/package.xml")) {
+            return $this->raiseError("no package2.xml or package.xml found in $params[0]");
         }
         if (isset($options['spec-template'])) {
             $spec_template = $options['spec-template'];
         } else {
-            $spec_template = $this->config->get('data_dir') .
-                '/PEAR/template.spec';
+            $spec_template = '@DATA-DIR@/PEAR/template.spec';
         }
         if (isset($options['rpm-pkgname'])) {
             $rpm_pkgname_format = $options['rpm-pkgname'];
