@@ -757,6 +757,15 @@ class test_PEAR_PackageFile_v1 extends PEAR_PackageFile_v1
     }
 }
 
+class test_PEAR_Config extends PEAR_Config
+{
+    function getRemote()
+    {
+        $remote = &new test_PEAR_Remote($this);
+        return $remote;
+    }
+}
+
 class fake_log
 {
     var $_log = array();
@@ -766,7 +775,7 @@ class fake_log
         $this->_log[] = array($level, $message);
     }
 
-    function outputData($info, $cmd)
+    function outputData($info, $cmd = 'no command')
     {
         $this->_log[] = array('info' => $info, 'cmd' => $cmd);
     }
