@@ -574,6 +574,11 @@ used for automated conversion or learning the format.
                 }
             }
             $result = $run->run($t, $ini_settings);
+            if (OS_WINDOWS) {
+                for($i=0;$i<2000;$i++) {
+                    $i = $i; // delay - race conditions on windows
+                }
+            }
             if (isset($options['realtimelog'])) {
                 $fp = @fopen('run-tests.log', 'a');
                 if ($fp) {
