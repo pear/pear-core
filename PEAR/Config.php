@@ -534,6 +534,9 @@ class PEAR_Config extends PEAR
         foreach ($this->configuration_info as $key => $info) {
             $this->configuration['default'][$key] = $info['default'];
         }
+        $this->_registry['default'] = &new PEAR_Registry($phpdir);
+        $this->_registry['default']->setConfig($this);
+        $this->_regInitialized['default'] = false;
         //$GLOBALS['_PEAR_Config_instance'] = &$this;
     }
 
@@ -1752,6 +1755,8 @@ class PEAR_Config extends PEAR
             return $this->_registry[$layer];
         } elseif ($layer == 'user' && isset($this->_registry['system'])) {
             return $this->_registry['system'];
+        } elseif ($layer == 'user' && isset($this->_registry['default'])) {
+            return $this->_registry['default'];
         } else {
             $a = false;
             return $a;
