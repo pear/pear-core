@@ -255,6 +255,9 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
     {
         $this->output = '';
         include_once 'PEAR/Packager.php';
+        if (sizeof($params) < 1) {
+            $params[0] = "package.xml";
+        }
         $pkginfofile = isset($params[0]) ? $params[0] : 'package.xml';
         $packager =& new PEAR_Packager();
         $err = $warn = array();
