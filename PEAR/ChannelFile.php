@@ -1413,8 +1413,10 @@ class PEAR_ChannelFile {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_NAME);
             return false;
         } elseif (!$this->validChannelName($name)) {
-            $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME, array('tag' => 'name', 'name' => $name));
-            return false;
+            if ($name != '__private') {
+                $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME, array('tag' => 'name', 'name' => $name));
+                return false;
+            }
         }
         $this->_channelInfo['name'] = $name;
         return true;
