@@ -57,7 +57,7 @@ Greg Beaver <cellog@php.net> (helper)',
         6 => 
         array (
           0 => 'Release Date',
-          1 => '2004-11-27',
+          1 => '2004-12-06',
         ),
         7 => 
         array (
@@ -96,7 +96,7 @@ short and long options.',
 Stig Bakken <stig@php.net> (developer)
 Greg Beaver <cellog@php.net> (helper)',
         'version' => '1.2.0',
-        'release_date' => '2004-11-27',
+        'release_date' => '2004-12-06',
         'release_license' => 'PHP License',
         'release_state' => 'stable',
         'release_notes' => 'Fix to preserve BC with 1.0 and allow correct behaviour for new users',
