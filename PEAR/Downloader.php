@@ -259,7 +259,9 @@ class PEAR_Downloader extends PEAR_Common
             $err = $params[$i]->initialize($param);
             PEAR::popErrorHandling();
             if (PEAR::isError($err)) {
-                $this->log(0, $err->getMessage());
+                if (!isset($this->_options['soft'])) {
+                    $this->log(0, $err->getMessage());
+                }
                 $params[$i] = false;
                 if (is_object($param)) {
                     $param = $param->getChannel() . '/' . $param->getPackage();
@@ -280,8 +282,7 @@ class PEAR_Downloader extends PEAR_Common
         }
         while (call_user_func_array(array($this->getDownloaderPackageClass(), 'mergeDependencies'),
               array(&$params)));
-        call_user_func_array(array($this->getDownloaderPackageClass(), 'removeInstalled'),
-            array(&$params));
+        PEAR_Downloader_Package::removeInstalled($params);
         if (!count($params)) {
             $this->pushError('No valid packages found', PEAR_INSTALLER_FAILED);
         }
@@ -299,11 +300,13 @@ class PEAR_Downloader extends PEAR_Common
             $pf = &$params[$i]->download();
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($pf)) {
-                $this->log(1, $pf->getMessage());
-                $this->log(0, 'Error: cannot download "' .
-                    $this->_registry->parsedPackageNameToString($package->getParsedPackage(),
-                        true) .
-                    '"');
+                if (!isset($options['soft'])) {
+                    $this->log(1, $pf->getMessage());
+                    $this->log(0, 'Error: cannot download "' .
+                        $this->_registry->parsedPackageNameToString($package->getParsedPackage(),
+                            true) .
+                        '"');
+                }
                 continue;
             }
             $newparams[] = &$params[$i];
@@ -326,33 +329,38 @@ class PEAR_Downloader extends PEAR_Common
                 continue;
             }
             if (count($deps)) {
-                $depchecker = &$this->getDependency2Object($this->config,
-                    $this->getOptions(), $param->getParsedPackage(),
-                    PEAR_VALIDATE_DOWNLOADING);
+                $depchecker = &$this->getDependency2Object($this->config, $this->getOptions(),
+                    $param->getParsedPackage(), PEAR_VALIDATE_DOWNLOADING);
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
                 if ($param->getType() == 'xmlrpc') {
                     $send = $param->getDownloadURL();
                 } else {
                     $send = $param->getPackageFile();
                 }
-                $installcheck = $depchecker->validatePackage($send,
-                    $this);
+                $installcheck = $depchecker->validatePackage($send, $this);
                 if (PEAR::isError($installcheck)) {
                     $failed = true;
-                    $this->log(0, $installcheck->getMessage());
+                    if (!isset($this->_options['soft'])) {
+                        $this->log(0, $installcheck->getMessage());
+                    }
                     continue;
                 }
                 $failed = false;
                 if (isset($deps['required'])) {
                     foreach ($deps['required'] as $type => $dep) {
+                        // note: Dependency2 will never return a PEAR_Error if ignore-errors
+                        // is specified, so soft is needed to turn off logging
                         if (!isset($dep[0])) {
-                            if (PEAR::isError($e =
-                                  $depchecker->{"validate{$type}Dependency"}($dep,
+                            if (PEAR::isError($e = $depchecker->{"validate{$type}Dependency"}($dep,
                                   true, $params))) {
                                 $failed = true;
-                                $this->log(0, $e->getMessage());
+                                if (!isset($this->_options['soft'])) {
+                                    $this->log(0, $e->getMessage());
+                                }
                             } elseif (is_array($e)) {
-                                $this->log(0, $e[0]);
+                                if (!isset($this->_options['soft'])) {
+                                    $this->log(0, $e[0]);
+                                }
                             }
                         } else {
                             foreach ($dep as $d) {
@@ -360,9 +368,13 @@ class PEAR_Downloader extends PEAR_Common
                                       $depchecker->{"validate{$type}Dependency"}($d,
                                       true, $params))) {
                                     $failed = true;
-                                    $this->log(0, $e->getMessage());
+                                    if (!isset($this->_options['soft'])) {
+                                        $this->log(0, $e->getMessage());
+                                    }
                                 } elseif (is_array($e)) {
-                                    $this->log(0, $e[0]);
+                                    if (!isset($this->_options['soft'])) {
+                                        $this->log(0, $e[0]);
+                                    }
                                 }
                             }
                         }
@@ -374,9 +386,13 @@ class PEAR_Downloader extends PEAR_Common
                                       $depchecker->{"validate{$type}Dependency"}($dep,
                                       false, $params))) {
                                     $failed = true;
-                                    $this->log(0, $e->getMessage());
+                                    if (!isset($this->_options['soft'])) {
+                                        $this->log(0, $e->getMessage());
+                                    }
                                 } elseif (is_array($e)) {
-                                    $this->log(0, $e[0]);
+                                    if (!isset($this->_options['soft'])) {
+                                        $this->log(0, $e[0]);
+                                    }
                                 }
                             } else {
                                 foreach ($dep as $d) {
@@ -384,9 +400,13 @@ class PEAR_Downloader extends PEAR_Common
                                           $depchecker->{"validate{$type}Dependency"}($d,
                                           false, $params))) {
                                         $failed = true;
-                                        $this->log(0, $e->getMessage());
+                                        if (!isset($this->_options['soft'])) {
+                                            $this->log(0, $e->getMessage());
+                                        }
                                     } elseif (is_array($e)) {
-                                        $this->log(0, $e[0]);
+                                        if (!isset($this->_options['soft'])) {
+                                            $this->log(0, $e[0]);
+                                        }
                                     }
                                 }
                             }
@@ -412,9 +432,13 @@ class PEAR_Downloader extends PEAR_Common
                                           $depchecker->{"validate{$type}Dependency"}($dep,
                                           false, $params))) {
                                         $failed = true;
-                                        $this->log(0, $e->getMessage());
+                                        if (!isset($this->_options['soft'])) {
+                                            $this->log(0, $e->getMessage());
+                                        }
                                     } elseif (is_array($e)) {
-                                        $this->log(0, $e[0]);
+                                        if (!isset($this->_options['soft'])) {
+                                            $this->log(0, $e[0]);
+                                        }
                                     }
                                 } else {
                                     foreach ($dep as $d) {
@@ -422,9 +446,13 @@ class PEAR_Downloader extends PEAR_Common
                                               $depchecker->{"validate{$type}Dependency"}($d,
                                               false, $params))) {
                                             $failed = true;
-                                            $this->log(0, $e->getMessage());
+                                            if (!isset($this->_options['soft'])) {
+                                                $this->log(0, $e->getMessage());
+                                            }
                                         } elseif (is_array($e)) {
-                                            $this->log(0, $e[0]);
+                                            if (!isset($this->_options['soft'])) {
+                                                $this->log(0, $e[0]);
+                                            }
                                         }
                                     }
                                 }
@@ -435,14 +463,25 @@ class PEAR_Downloader extends PEAR_Common
                     foreach ($deps as $dep) {
                         if (PEAR::isError($e = $depchecker->validateDependency1($dep, $params))) {
                             $failed = true;
-                            $this->log(0, $e->getMessage());
+                            if (!isset($this->_options['soft'])) {
+                                $this->log(0, $e->getMessage());
+                            }
                         } elseif (is_array($e)) {
-                            $this->log(0, $e[0]);
+                            if (!isset($this->_options['soft'])) {
+                                $this->log(0, $e[0]);
+                            }
                         }
                     }
                 }
                 PEAR::staticPopErrorHandling();
                 if ($failed) {
+                    if (isset($this->_options['ignore-errors'])) {
+                        // this is probably not needed, but just in case
+                        if (!isset($this->_options['soft'])) {
+                            $this->log(0, 'WARNING: dependencies failed');
+                        }
+                        return;
+                    }
                     return PEAR::raiseError("Cannot install, dependencies failed");
                 }
             }
@@ -514,8 +553,8 @@ class PEAR_Downloader extends PEAR_Common
         // getDownloadURL returns an array.  On error, it only contains information
         // on the latest release as array(version, info).  On success it contains
         // array(version, info, download url string)
-        $url = $this->_remote->call('package.getDownloadURL', $parr,
-            $this->config->get('preferred_state'));
+        $state = isset($parr['state']) ? $parr['state'] : $this->config->get('preferred_state');
+        $url = $this->_remote->call('package.getDownloadURL', $parr, $state);
         if ($parr['channel'] != $curchannel) {
             $this->configSet('default_channel', $curchannel);
         }
@@ -546,13 +585,13 @@ class PEAR_Downloader extends PEAR_Common
         $xsdversion = isset($dep['rel']) ? '1.0' : '2.0';
         $curchannel = $this->config->get('default_channel');
         $this->configSet('default_channel', $parr['channel']);
-        $url = $this->_remote->call('package.getDepDownloadURL', $xsdversion, $dep,
-            $parr, $this->config->get('preferred_state'));
+        $state = isset($parr['state']) ? $parr['state'] : $this->config->get('preferred_state');
+        $url = $this->_remote->call('package.getDepDownloadURL', $xsdversion, $dep, $parr, $state);
         if ($parr['channel'] != $curchannel) {
             $this->configSet('default_channel', $curchannel);
         }
         if (is_array($url)) {
-            if (!extension_loaded("zlib")) {
+            if (!extension_loaded("zlib") || isset($this->_options['nocompress'])) {
                 $ext = '.tar';
             } else {
                 $ext = '.tgz';
