@@ -388,11 +388,11 @@ List the files in an installed package.
     function doAdd($command, $options, $params)
     {
         if (sizeof($params) != 1) {
-            return $this->raiseError("No channel file specified");
+            return $this->raiseError('channel-add: no channel file specified');
         }
         $fp = @fopen($params[0], 'r');
         if (!$fp) {
-            return $this->raiseError("Cannot open " . $params[0]);
+            return $this->raiseError('channel-add: cannot open "' . $params[0] . '"');
         }
         $contents = '';
         while (!feof($fp)) {
@@ -411,25 +411,25 @@ List the files in an installed package.
                 }
             }
             if ($exit) {
-                return $this->raiseError('Invalid channel.xml file');
+                return $this->raiseError('channel-add: invalid channel.xml file');
             }
         }
         $reg = &$this->config->getRegistry();
         if ($reg->channelExists($channel->getName())) {
-            return $this->raiseError('Error: Channel `' . $channel->getName() .
-                "' exists, use channel-update to update entry");
+            return $this->raiseError('channel-add: Channel "' . $channel->getName() .
+                '" exists, use channel-update to update entry');
         }
         $ret = $reg->addChannel($channel);
         if (PEAR::isError($ret)) {
             return $ret;
         }
         if (!$ret) {
-            return $this->raiseError("Adding Channel `" . $channel->getName() .
-                "' to registry failed");
+            return $this->raiseError('channel-add: adding Channel "' . $channel->getName() .
+                '" to registry failed');
         }
         $this->config->setChannels($reg->listChannels());
         $this->config->writeConfigFile();
-        $this->ui->outputData('Adding Channel `' . $channel->getName() . '\' succeeded');
+        $this->ui->outputData('Adding Channel "' . $channel->getName() . '" succeeded');
     }
 
     function doUpdate($command, $options, $params)
