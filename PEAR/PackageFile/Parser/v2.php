@@ -59,9 +59,10 @@ class PEAR_PackageFile_Parser_v2
      */
     var $_depth = 0;
 
-    function setRegistry($r)
+    function setConfig(&$c)
     {
-        $this->_registry = $r;
+        $this->_config = &$c;
+        $this->_registry = &$c->getRegistry();
     }
 
     function parse($data, $state, $file, $archive = false)
@@ -75,11 +76,16 @@ class PEAR_PackageFile_Parser_v2
         xml_set_object($xp, $this);
         xml_set_element_handler($xp, 'startHandler', 'endHandler');
         xml_set_character_data_handler($xp, 'cdataHandler');
-        xml_parse($xp, $data);
+        if (!xml_parse($xp, $data)) {
+            $msg = xml_error_string(xml_get_error_code($xp));
+            $line = xml_get_current_line_number($xp);
+            xml_parser_free($xp);
+            return PEAR::raiseError("XML Error: '$msg' on line '$line'", 2);
+        }
         xml_parser_free($xp);
         include_once 'PEAR/PackageFile/v2.php';
         $ret = new PEAR_PackageFile_v2;
-        $ret->setRegistry($this->_registry);
+        $ret->setConfig($this->_config);
         $ret->fromArray($this->_unserializedData);
         // make sure the filelist is in the easy to read format needed
         $ret->flattenFilelist();

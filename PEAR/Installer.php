@@ -21,6 +21,7 @@
 // $Id$
 
 require_once 'PEAR/Downloader.php';
+require_once 'PEAR/Task/Common.php';
 
 /**
  * Administration class used to install PEAR packages and maintain the
@@ -352,6 +353,159 @@ class PEAR_Installer extends PEAR_Downloader
     }
 
     // }}}
+    // {{{ _installFile2()
+
+    /**
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     * @param string filename
+     * @param array attributes from <file> tag in package.xml
+     * @param string path to install the file in
+     * @param array options from command-line
+     * @access private
+     */
+    function _installFile2(&$pkg, $file, $atts, $tmp_path, $options)
+    {
+        if (!isset($this->_registry)) {
+            $this->_registry = &$this->config->getRegistry();
+        }
+
+        $channel = $pkg->getChannel();
+        // {{{ assemble the destination paths
+        switch ($atts['role']) {
+            case 'doc':
+            case 'data':
+            case 'test':
+                $dest_dir = $this->config->get($atts['role'] . '_dir',
+                    null, $channel) . DIRECTORY_SEPARATOR . $this->pkginfo->getPackage();
+                unset($atts['baseinstalldir']);
+                break;
+            case 'ext':
+            case 'php':
+                $dest_dir = $this->config->get($atts['role'] . '_dir',
+                    null, $channel);
+                break;
+            case 'script':
+                $dest_dir = $this->config->get('bin_dir', null, $channel);
+                break;
+            case 'src':
+            case 'extsrc':
+                $this->source_files++;
+                return;
+            default:
+                return $this->raiseError('Invalid role `' . $atts['role'] .
+                    "' for file $file");
+        }
+        $save_destdir = $dest_dir;
+        if (!empty($atts['baseinstalldir'])) {
+            $dest_dir .= DIRECTORY_SEPARATOR . $atts['baseinstalldir'];
+        }
+        if (dirname($file) != '.' && empty($atts['install-as'])) {
+            $dest_dir .= DIRECTORY_SEPARATOR . dirname($file);
+        }
+        if (empty($atts['install-as'])) {
+            $dest_file = $dest_dir . DIRECTORY_SEPARATOR . basename($file);
+        } else {
+            $dest_file = $dest_dir . DIRECTORY_SEPARATOR . $atts['install-as'];
+        }
+        $orig_file = $tmp_path . DIRECTORY_SEPARATOR . $file;
+
+        // Clean up the DIRECTORY_SEPARATOR mess
+        $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
+        list($dest_file, $orig_file) = preg_replace(array('!\\\\+!', '!/!', "!$ds2+!"),
+                                                    DIRECTORY_SEPARATOR,
+                                                    array($dest_file, $orig_file));
+        $installed_as = $dest_file;
+        $final_dest_file = $this->_prependPath($dest_file, $this->installroot);
+        $dest_dir = dirname($final_dest_file);
+        $dest_file = $dest_dir . DIRECTORY_SEPARATOR . '.tmp' . basename($final_dest_file);
+        // }}}
+
+        if (!@is_dir($dest_dir)) {
+            if (!$this->mkDirHier($dest_dir)) {
+                return $this->raiseError("failed to mkdir $dest_dir",
+                                         PEAR_INSTALLER_FAILED);
+            }
+            $this->log(3, "+ mkdir $dest_dir");
+        }
+        unset($file['attribs']);
+        if (!count($file)) { // no tasks
+            if (!file_exists($orig_file)) {
+                return $this->raiseError("file $orig_file does not exist",
+                                         PEAR_INSTALLER_FAILED);
+            }
+            if (!@copy($orig_file, $dest_file)) {
+                return $this->raiseError("failed to write $dest_file",
+                                         PEAR_INSTALLER_FAILED);
+            }
+            $this->log(3, "+ cp $orig_file $dest_file");
+            if (isset($atts['md5sum'])) {
+                $md5sum = md5_file($dest_file);
+            }
+        } else { // file with tasks
+            if (!file_exists($orig_file)) {
+                return $this->raiseError("file does not exist",
+                                         PEAR_INSTALLER_FAILED);
+            }
+            $fp = fopen($orig_file, "r");
+            $contents = fread($fp, filesize($orig_file));
+            fclose($fp);
+            if (isset($atts['md5sum'])) {
+                $md5sum = md5($contents);
+            }
+            foreach ($file as $tag => $raw) {
+                $tag = str_replace($pkg->getTasksNs(), '', $tag);
+                $task = "PEAR_Task_$tag";
+                $task = new $task($this->config);
+                $task->init($raw);
+                $res = $task->startSession($pkg, $dest_file, $final_dest_file);
+                if (!$res) {
+                    continue; // skip this file
+                }
+                if (PEAR::isError($res)) {
+                    return $res;
+                }
+            }
+        }
+        // {{{ check the md5
+        if (isset($md5sum)) {
+            if (strtolower($md5sum) == strtolower($atts['md5sum'])) {
+                $this->log(2, "md5sum ok: $final_dest_file");
+            } else {
+                if (empty($options['force'])) {
+                    // delete the file
+                    @unlink($dest_file);
+                    return $this->raiseError("bad md5sum for file $final_dest_file",
+                                             PEAR_INSTALLER_FAILED);
+                } else {
+                    $this->log(0, "warning : bad md5sum for file $final_dest_file");
+                }
+            }
+        }
+        // }}}
+        // {{{ set file permissions
+        if (!OS_WINDOWS) {
+            if ($atts['role'] == 'script') {
+                $mode = 0777 & ~(int)octdec($this->config->get('umask'));
+                $this->log(3, "+ chmod +x $dest_file");
+            } else {
+                $mode = 0666 & ~(int)octdec($this->config->get('umask'));
+            }
+            $this->addFileOperation("chmod", array($mode, $dest_file));
+            if (!@chmod($dest_file, $mode)) {
+                $this->log(0, "failed to change mode of $dest_file");
+            }
+        }
+        // }}}
+        $this->addFileOperation("rename", array($dest_file, $final_dest_file));
+        // Store the full path where the file was installed for easy unistall
+        $this->addFileOperation("installed_as", array($file, $installed_as,
+                                $save_destdir, dirname(substr($dest_file, strlen($save_destdir)))));
+
+        //$this->log(2, "installed: $dest_file");
+        return PEAR_INSTALLER_OK;
+    }
+
+    // }}}
     // {{{ addFileOperation()
 
     /**
@@ -591,7 +745,7 @@ class PEAR_Installer extends PEAR_Downloader
             // }}}
         }
         // Parse xml file -----------------------------------------------
-        $pkg = new PEAR_PackageFile($this->_registry, $this->debug, $tmpdir);
+        $pkg = new PEAR_PackageFile($this->config, $this->debug, $tmpdir);
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         if (PEAR::isError($p = &$pkg->fromAnyFile($descfile, PEAR_VALIDATE_INSTALLING))) {
             PEAR::popErrorHandling();
@@ -664,17 +818,24 @@ class PEAR_Installer extends PEAR_Downloader
         }
         // {{{ Check dependencies -------------------------------------------
         if ($pkg->hasDeps() && empty($options['nodeps'])) {
-            $dep_errors = '';
-            $error = $this->checkDeps($pkg, $dep_errors);
-            if ($error == true) {
-                if (empty($options['soft'])) {
-                    $this->log(0, substr($dep_errors, 1));
+            if ($pkg->getPackagexmlVersion() == '1.0') {
+                $dep_errors = '';
+                $error = $this->checkDeps($pkg, $dep_errors);
+                if ($error == true) {
+                    if (empty($options['soft'])) {
+                        $this->log(0, substr($dep_errors, 1));
+                    }
+                    return $this->raiseError("$channel/$pkgname: Dependencies failed");
+                } else if (!empty($dep_errors)) {
+                    // Print optional dependencies
+                    if (empty($options['soft'])) {
+                        $this->log(0, $dep_errors);
+                    }
                 }
-                return $this->raiseError("$channel/$pkgname: Dependencies failed");
-            } else if (!empty($dep_errors)) {
-                // Print optional dependencies
-                if (empty($options['soft'])) {
-                    $this->log(0, $dep_errors);
+            } else {
+                $err = $this->checkDeps2($pkg, $options);
+                if (PEAR::isError($err)) {
+                    return $err;
                 }
             }
         }
@@ -759,27 +920,39 @@ class PEAR_Installer extends PEAR_Downloader
             $this->configSet('default_channel', $channel);
             // {{{ install files
             
-            $filelist = $pkg->getFileList();
+            if ($pkg->getPackagexmlVersion() == '2.0') {
+                $filelist = $pkg->getInstallationFilelist();
+            } else {
+                $filelist = $pkg->getFileList();
+            }
             $pkg->resetFilelist();
             foreach ($filelist as $file => $atts) {
-                $this->expectError(PEAR_INSTALLER_FAILED);
-                $res = $this->_installFile($file, $atts, $tmp_path, $options);
-                $this->popExpect();
-                if (PEAR::isError($res)) {
-                    if (empty($options['ignore-errors'])) {
-                        $this->rollbackFileTransaction();
-                        if ($res->getMessage() == "file does not exist") {
-                            $this->raiseError("file $file in package.xml does not exist");
+                if ($pkg->getPackagexmlVersion() == '1.0') {
+                    $this->expectError(PEAR_INSTALLER_FAILED);
+                    $res = $this->_installFile($file, $atts, $tmp_path, $options);
+                    $this->popExpect();
+                    if (PEAR::isError($res)) {
+                        if (empty($options['ignore-errors'])) {
+                            $this->rollbackFileTransaction();
+                            if ($res->getMessage() == "file does not exist") {
+                                $this->raiseError("file $file in package.xml does not exist");
+                            }
+                            return $this->raiseError($res);
+                        } else {
+                            $this->log(0, "Warning: " . $res->getMessage());
                         }
-                        return $this->raiseError($res);
-                    } else {
-                        $this->log(0, "Warning: " . $res->getMessage());
                     }
+                } else {
+                    $this->expectError(PEAR_INSTALLER_FAILED);
+                    $res = $this->_installFile2($pkg, $file, $atts, $tmp_path, $options);
                 }
                 if ($res == PEAR_INSTALLER_OK) {
                     // Register files that were installed
                     $pkg->installedFile($file, $atts);
                 }
+            }
+            if (PEAR_Task_Common::hasTasks()) {
+                PEAR_Task_Common::runTasks();
             }
             // }}}
 
@@ -1065,6 +1238,120 @@ class PEAR_Installer extends PEAR_Downloader
     }
 
     // }}}
+
+    function checkDeps2($pkginfo, $options, $state = PEAR_VALIDATE_INSTALLING)
+    {
+        include_once 'PEAR/Dependency2.php';
+        $depchecker = &new PEAR_Dependency2($this->config, $options,
+            $pkginfo->getChannel() . '/' . $pkginfo->getPackage(),
+            PEAR_VALIDATE_INSTALLING);
+        $deps = $pkginfo->getDeps(true);
+        $params = array();
+        $failed = false;
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+        foreach ($deps['required'] as $type => $dep) {
+            if (!isset($dep[0])) {
+                if (PEAR::isError($e =
+                      $depchecker->{"validate{$type}Dependency"}($dep,
+                      true, $params))) {
+                    $failed = true;
+                    $this->log(0, $e->getMessage());
+                } elseif (is_array($e)) {
+                    $this->log(0, $e[0]);
+                }
+            } else {
+                foreach ($dep as $d) {
+                    if (PEAR::isError($e =
+                          $depchecker->{"validate{$type}Dependency"}($d,
+                          true, $params))) {
+                        $failed = true;
+                        $this->log(0, $e->getMessage());
+                    } elseif (is_array($e)) {
+                        $this->log(0, $e[0]);
+                    }
+                }
+            }
+        }
+        if (isset($deps['optional'])) {
+            foreach ($deps['optional'] as $type => $dep) {
+                if (!isset($dep[0])) {
+                    if (PEAR::isError($e =
+                          $depchecker->{"validate{$type}Dependency"}($dep,
+                          false, $params))) {
+                        $failed = true;
+                        $this->log(0, $e->getMessage());
+                    } elseif (is_array($e)) {
+                        $this->log(0, $e[0]);
+                    }
+                } else {
+                    foreach ($dep as $d) {
+                        if (PEAR::isError($e =
+                              $depchecker->{"validate{$type}Dependency"}($d,
+                              false, $params))) {
+                            $failed = true;
+                            $this->log(0, $e->getMessage());
+                        } elseif (is_array($e)) {
+                            $this->log(0, $e[0]);
+                        }
+                    }
+                }
+            }
+        }
+        if ($group = $pkginfo->getRequestedGroup()) {
+            do { // poor man's try/throw/catch
+                if (isset($deps['group'][0])) {
+                    $found = false;
+                    foreach ($deps['group'] as $depgroup) {
+                        if ($depgroup['attribs']['name'] == $group) {
+                            $found = true;
+                            break;
+                        }
+                    }
+                    if (!$found) {
+                        break; // throw failure
+                    }
+                    foreach (array('package', 'extension') as $type) {
+                        if (isset($depgroup[$type])) {
+                            if (PEAR::isError($e =
+                                  $depchecker->{"validate{$type}Dependency"}
+                                  ($depgroup[$type],
+                                  true, $params))) {
+                                $failed = true;
+                                $this->log(0, $e->getMessage());
+                            } elseif (is_array($e)) {
+                                $this->log(0, $e[0]);
+                            }
+                        }
+                    }
+                } else {
+                    if ($dep['group']['attribs']['name'] != $group) {
+                        $this->log(0, "Dependency group '$group' " .
+                            'does not exist in this release of package ' .
+                            $this->getChannel() . '/' . $this->getPackage());
+                        break; // throw failure
+                    }
+                    foreach (array('package', 'extension') as $type) {
+                        if (isset($dep['group'][$type])) {
+                            if (PEAR::isError($e =
+                                  $depchecker->{"validate{$type}Dependency"}
+                                  ($dep['group'][$type],
+                                  true, $params))) {
+                                $failed = true;
+                                $this->log(0, $e->getMessage());
+                            } elseif (is_array($e)) {
+                                $this->log(0, $e[0]);
+                            }
+                        }
+                    }
+                }
+            } while (false);
+        }
+        PEAR::staticPopErrorHandling();
+        if ($failed) {
+            return PEAR::raiseError("Cannot install, dependencies failed");
+        }
+    }
+
     // {{{ _buildCallback()
 
     function _buildCallback($what, $data)

@@ -46,10 +46,6 @@ class PEAR_Packager extends PEAR_Common
     }
 
     // }}}
-    function setRegistry(&$reg)
-    {
-        $this->_registry = $reg;
-    }
     // {{{ destructor
 
     function _PEAR_Packager()
@@ -67,10 +63,7 @@ class PEAR_Packager extends PEAR_Common
         if (empty($pkgfile)) {
             $pkgfile = 'package.xml';
         }
-        if (!isset($this->_registry)) {
-            return $this->raiseError("Cannot package without registry, use PEAR_Packager::setRegistry() first");
-        }
-        $pkg = new PEAR_PackageFile($this->_registry, $this->debug);
+        $pkg = new PEAR_PackageFile($this->config, $this->debug);
         if (PEAR::isError($pf = &$pkg->fromPackageFile($pkgfile, PEAR_VALIDATE_NORMAL))) {
             foreach ($pf->getUserInfo() as $error) {
                 $this->log(0, 'Error: ' . $error['message']);

@@ -214,6 +214,11 @@ class PEAR_Downloader extends PEAR_Common
             if (PEAR::isError($err)) {
                 $this->log(0, $err->getMessage());
                 $params[$i] = false;
+                if (is_object($param)) {
+                    $param = $param->getChannel() . '/' . $param->getPackage();
+                }
+                $this->pushError('Package "' . $param . '" is not valid',
+                    PEAR_INSTALLER_SKIPPED);
             }
         }
         PEAR_Downloader_Package::removeDuplicates($params);
@@ -225,6 +230,9 @@ class PEAR_Downloader extends PEAR_Common
         do {
             $err = PEAR_Downloader_Package::mergeDependencies($params);
         } while ($err && !PEAR::isError($err));
+        if (!count($params)) {
+            $this->pushError('No valid packages found', PEAR_INSTALLER_FAILED);
+        }
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         $err = PEAR_Downloader_Package::analyzeDependencies($params);
         PEAR::popErrorHandling();
@@ -607,7 +615,7 @@ class PEAR_Downloader extends PEAR_Common
                 }
             } // end is_file()
 
-            $pkg = new PEAR_PackageFile($this->_registry, $this->debug);
+            $pkg = new PEAR_PackageFile($this->config, $this->debug);
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $test = $pkg->fromAnyFile($pkgfile, PEAR_VALIDATE_INSTALLING);
             PEAR::popErrorHandling();
@@ -984,7 +992,7 @@ class PEAR_Downloader extends PEAR_Common
         } else {
             foreach($packages as $packagefile) {
                 if (!is_array($packagefile)) {
-                    $a = new PEAR_PackageFile($this->_registry, $this->_debug);
+                    $a = new PEAR_PackageFile($this->config, $this->_debug);
                     $a = &$a->fromAnyFile($packagefile, PEAR_VALIDATE_INSTALLING);
                     $ret[] = array('file' => $packagefile,
                                    'info' => $a,

@@ -272,7 +272,8 @@ used for automated conversion or learning the format.
         include_once 'PEAR/Registry.php';
         $pkginfofile = isset($params[0]) ? $params[0] : 'package.xml';
         $packager =& new PEAR_Packager();
-        $packager->setRegistry($reg = &$this->config->getRegistry());
+        $reg = &$this->config->getRegistry();
+        $packager->setConfig($this->config);
         $err = $warn = array();
         $dir = dirname($pkginfofile);
         $compress = empty($options['nocompress']) ? true : false;
@@ -302,8 +303,7 @@ used for automated conversion or learning the format.
             $params[0] = "package.xml";
         }
         include_once 'PEAR/PackageFile.php';
-        $reg = &$this->config->getRegistry();
-        $obj = &new PEAR_PackageFile($reg, $this->_debug);
+        $obj = &new PEAR_PackageFile($this->config, $this->_debug);
         $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_PACKAGE);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
@@ -336,8 +336,7 @@ used for automated conversion or learning the format.
             return $this->raiseError("$command: missing parameter: $help[0]");
         }
         include_once 'PEAR/PackageFile.php';
-        $reg = &$this->config->getRegistry();
-        $obj = &new PEAR_PackageFile($reg, $this->_debug);
+        $obj = &new PEAR_PackageFile($this->config, $this->_debug);
         $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
@@ -404,8 +403,7 @@ used for automated conversion or learning the format.
             return $this->raiseError("$command: missing parameter: $help[0]");
         }
         include_once 'PEAR/PackageFile.php';
-        $reg = &$this->config->getRegistry();
-        $obj = &new PEAR_PackageFile($reg, $this->_debug);
+        $obj = &new PEAR_PackageFile($this->config, $this->_debug);
         $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
@@ -539,8 +537,7 @@ used for automated conversion or learning the format.
             return $this->raiseError("bad parameter(s), try \"help $command\"");
         }
         include_once 'PEAR/PackageFile.php';
-        $reg = &$this->config->getRegistry();
-        $obj = &new PEAR_PackageFile($reg, $this->_debug);
+        $obj = &new PEAR_PackageFile($this->config, $this->_debug);
         $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
@@ -803,8 +800,7 @@ used for automated conversion or learning the format.
         $newpackagexml = isset($params[1]) ? $params[1] : dirname($packagexml) .
             DIRECTORY_SEPARATOR . 'package2.xml';
         include_once 'PEAR/PackageFile.php';
-        $reg = &$this->config->getRegistry();
-        $pkg = new PEAR_PackageFile($reg, $this->_debug);
+        $pkg = &new PEAR_PackageFile($this->config, $this->_debug);
         $pf = $pkg->fromPackageFile($packagexml, PEAR_VALIDATE_NORMAL);
         if (!PEAR::isError($pf)) {
             $gen = &$pf->getDefaultGenerator();

@@ -49,14 +49,41 @@ class PEAR_PackageFile_v2
     
     var $_isValid = false;
 
+    var $_registry;
+
+    /**
+     * Optional Dependency group requested for installation
+     * @var string
+     * @access private
+     */
+    var $_requestedGroup = false;
+
     /**
      * @var PEAR_ErrorStack
      */
     var $_stack;
+
+    /**
+     * Namespace prefix used for tasks in this package.xml - use tasks: whenever possible
+     */
+    var $_tasksNs;
     function PEAR_PackageFile_v2()
     {
         $this->_stack = new PEAR_ErrorStack('PEAR_PackageFile_v2', false, null);
         $this->_isValid = false;
+    }
+
+    function setRequestedGroup($group)
+    {
+        $this->_requestedGroup = $group;
+    }
+
+    function getRequestedGroup()
+    {
+        if (isset($this->_requestedGroup)) {
+            return $this->_requestedGroup;
+        }
+        return false;
     }
 
     function flattenFilelist()
@@ -117,9 +144,18 @@ class PEAR_PackageFile_v2
         }
     }
 
-    function setRegistry(&$registry)
+    function setConfig(&$config)
     {
-        $this->_registry = &$registry;
+        $this->_config = &$config;
+        $this->_registry = &$config->getRegistry();
+    }
+
+    function setLogger(&$logger)
+    {
+        if (!is_object($logger) || !method_exists($logger, 'log')) {
+            return PEAR::raiseError('Logger must be compatible with PEAR_Common::log');
+        }
+        $this->_logger = &$logger;
     }
 
     function setLogger(&$logger)
@@ -159,23 +195,59 @@ class PEAR_PackageFile_v2
 
     function packageInfo($field)
     {
+        $map = array(
+            'release_notes' => 'notes',
+            'release-license' => 'license',
+            'release_date' => 'date');
+        $field = isset($map[$field]) ? $map[$field] : $field;
+        if (!in_array($field, 
+            array('name', 'summary', 'channel', 'notes', 'extends', 'description',
+                    'release_notes', 'license', 'license-uri',
+                    'version', 'api-version', 'state', 'api-state',
+                    'date', 'time'))) {
+            return false;
+        }
         if (method_exists($this, $field)) {
             $test = $this->{"get$field"}();
             if (is_string($test)) {
                 return $test;
             }
         }
+        if ($field == 'license-uri') {
+            if (isset($this->_packageInfo['license']['attribs']['uri'])) {
+                return $this->_packageInfo['license']['attribs']['uri'];
+            }
+        }
+        if ($field == 'api-state') {
+            return $this->getState('api');
+        }
+        if ($field == 'api-version') {
+            return $this->getVersion('api');
+        }
         return false;
     }
 
     /**
-     * This is only useful at install-time, after all serialization
-     * is over.
+     * This should only be used to retrieve filenames and install attributes
      */
-    function getFilelist()
+    function getFilelist($preserve = false)
     {
         if (isset($this->_packageInfo['filelist'])) {
             return $this->_packageInfo['filelist'];
+        }
+        if ($contents = $this->getContents()) {
+            $ret = array();
+            foreach ($contents['dir']['file'] as $file) {
+                $name = $file['attribs']['name'];
+                if (!$preserve) {
+                    $file = $file['attribs'];
+                }
+                $ret[$name] = $file;
+            }
+            if (!$preserve) {
+                $this->_packageInfo['filelist'] = $ret;
+            }
+            return $ret;
         }
         return false;
     }
@@ -187,6 +259,89 @@ class PEAR_PackageFile_v2
     function resetFilelist()
     {
         $this->_packageInfo['filelist'] = array();
+    }
+
+    /**
+     * Retrieve a list of files that should be installed on this computer
+     */
+    function getInstallationFilelist()
+    {
+        $contents = $this->getFilelist(true);
+        if (isset($contents['dir']['attribs']['baseinstalldir'])) {
+            $base = $contents['dir']['attribs']['baseinstalldir'];
+        }
+        $contents = $contents['dir']['file'];
+        if (!isset($contents[0])) {
+            $contents = array($contents);
+        }
+        if (isset($this->_packageInfo['phprelease'])) {
+            $release = $this->_packageInfo['phprelease'];
+        } elseif (isset($this->_packageInfo['extsrcrelease'])) {
+            $release = $this->_packageInfo['extsrcrelease'];
+        } elseif (isset($this->_packageInfo['extbinrelease'])) {
+            $release = $this->_packageInfo['extbinrelease'];
+        } // bundles should never reach this point
+        if (isset($this->_packageInfo['bundle'])) {
+            return PEAR::raiseError(
+                'Exception: bundles should be handled in download code only');
+        }
+        if (!isset($release[0])) {
+            if (!isset($release['installconditions']) && !isset($release['filelist'])) {
+                return $contents;
+            }
+            $release = array($release);
+        }
+        include_once 'PEAR/Dependency2.php';
+        $depchecker = &new PEAR_Dependency2($this->_registry, array(),
+            array('channel' => $this->getChannel(), 'package' => $this->getPackage()),
+            PEAR_VALIDATE_INSTALLING);
+        foreach ($release as $instance) {
+            if (isset($instance['installconditions'])) {
+                $installconditions = $instance['installconditions'];
+                if (is_array($installconditions)) {
+                    PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                    foreach ($installconditions as $type => $conditions) {
+                        if (!isset($conditions[0])) {
+                            $conditions = array($conditions);
+                        }
+                        foreach ($conditions as $condition) {
+                            $ret = $depchecker->{"validate{$type}Dependency"}($condition);
+                            if (PEAR::isError($ret)) {
+                                PEAR::popErrorHandling();
+                                continue 3; // skip this release
+                            }
+                        }
+                    }
+                    PEAR::popErrorHandling();
+                }
+            }
+            // this is the release to use
+            if (isset($instance['filelist'])) {
+                // ignore files
+                if (isset($instance['filelist']['ignore'])) {
+                    $ignore = isset($instance['filelist']['ignore'][0]) ?
+                        $instance['filelist']['ignore'] :
+                        array($instance['filelist']['ignore']);
+                    foreach ($ignore as $ig) {
+                        unset ($contents[$ig['attribs']['name']]);
+                    }
+                }
+                // install files as this name
+                if (isset($instance['filelist']['installas'])) {
+                    $installas = isset($instance['filelist']['installas'][0]) ?
+                        $instance['filelist']['installas'] :
+                        array($instance['filelist']['installas']);
+                    foreach ($installas as $as) {
+                        $contents[$as['attribs']['name']]['attribs']['install-as'] =
+                            $as['attribs']['as'];
+                    }
+                }
+            }
+            return $contents;
+        }
+        // no releases matched
+        return PEAR::raiseError('No releases in package.xml matched the existing operating ' .
+            'system, extensions installed, or architecture, cannot install');
     }
 
     /**
@@ -722,7 +877,7 @@ class PEAR_PackageFile_v2
         $structure =
         array(
             'name',
-            'channel',
+            'channel|uri',
             '*extends', // can't be multiple, but this works fine
             'summary',
             'description',
@@ -1311,6 +1466,49 @@ class PEAR_PackageFile_v2
         }
     }
 
+    function getTasksNs()
+    {
+        return $this->_tasksNs;
+    }
+
+    /**
+     * Determine whether a task name is a valid task.  Custom tasks may be defined
+     * using subdirectories by putting a "-" in the name, as in <tasks:mycustom-task>
+     *
+     * Note that this method will auto-load the task class file and test for the existence
+     * of the name with "-" replaced by "_" as in PEAR/Task/mycustom/task.php makes class
+     * PEAR_Task_mycustom_task
+     * @param string
+     * @return boolean
+     */
+    function getTask($task)
+    {
+        if (!isset($this->_tasksNs)) {
+            if (isset($this->_packageInfo['attribs'])) {
+                foreach ($this->_packageInfo['attribs'] as $name => $value) {
+                    if ($value == 'http://pear.php.net/dtd/tasks-1.0') {
+                        $this->_tasksNs = str_replace('xmlns:', '', $name);
+                        break;
+                    }
+                }
+            }
+        }
+        // transform all '-' to '/' and 'tasks:' to '' so tasks:replace becomes replace
+        $task = str_replace(array($this->_tasksNs . ':', '-'), array('', ' '), $task);
+        $task = str_replace(' ', '/', ucwords($task));
+        $ps = (strtolower(substr(PHP_OS, 0, 3)) == 'win') ? ';' : ':';
+        foreach (explode($ps, ini_get('include_path')) as $path) {
+            if (file_exists($path . "/PEAR/Task/$task.php")) {
+                include_once "PEAR/Task/$task.php";
+                $task = str_replace('/', '_', $task);
+                if (class_exists("PEAR_Task_$task")) {
+                    return "PEAR_Task_$task";
+                }
+            }
+        }
+        return false;
+    }
+
     function _validateFilelist($list = false, $filetag = 'file', $allowignore = false)
     {
         if (!$list) {
@@ -1360,6 +1558,38 @@ class PEAR_PackageFile_v2
                     return $this->_invalidFileRole($list[$filetag]['attribs']['name'],
                         $list['attribs']['name']);
                 }
+                $file = $list[$filetag];
+                unset($list[$filetag]['attribs']);
+                if (count($list[$filetag])) { // has tasks
+                    foreach ($list[$filetag] as $task => $value) {
+                        if ($tagClass = $this->getTask($task)) {
+                                if (!isset($value[0])) {
+                                    $value = array($value);
+                                }
+                                foreach ($value as $v) {
+                                    $ret = call_user_func(array($tagClass, 'validateXml'),
+                                        $v, $this->_config);
+                                    if (is_array($ret)) {
+                                        return $this->_invalidTask($task, $ret,
+                                            $file['attribs']['name']);
+                                    }
+                                }
+                            if (!isset($value[0])) {
+                                $value = array($value);
+                            }
+                            foreach ($value as $v) {
+                                $ret = call_user_func(array($tagClass, 'validateXml'),
+                                    $v, $this->_config);
+                                if (is_array($ret)) {
+                                    return $this->_invalidTask($task, $ret,
+                                        $list[$filetag]['attribs']['name']);
+                                }
+                            }
+                        } else {
+                            $this->_unknownTask($task, $list[$filetag]['attribs']['name']);
+                        }
+                    }
+                }
             } else {
                 if (!is_array($list[$filetag])) {
                     return $this->_tagHasNoAttribs($filetag,
@@ -1382,6 +1612,27 @@ class PEAR_PackageFile_v2
                     if (!$allowignore && !$this->_validateRole($file['attribs']['role'])) {
                         return $this->_invalidFileRole($list[$filetag]['attribs']['name'],
                             $list['attribs']['name']);
+                    }
+                    $f = $file;
+                    unset($f['attribs']);
+                    if (count($f)) { // has tasks
+                        foreach ($f as $task => $value) {
+                            if ($tagClass = $this->getTask($task)) {
+                                if (!isset($value[0])) {
+                                    $value = array($value);
+                                }
+                                foreach ($value as $v) {
+                                    $ret = call_user_func(array($tagClass, 'validateXml'),
+                                        $v, $this->_config);
+                                    if (is_array($ret)) {
+                                        return $this->_invalidTask($task, $ret,
+                                            $file['attribs']['name']);
+                                    }
+                                }
+                            } else {
+                                $this->_unknownTask($task, $file['attribs']['name']);
+                            }
+                        }
                     }
                 }
             }
@@ -1467,9 +1718,15 @@ class PEAR_PackageFile_v2
         if (isset($this->_packageInfo['bundle'])) {
             $release = 'bundle';
         }
-        if (isset($this->_packageInfo[$release][0])) {
+        if (is_array($this->_packageInfo[$release]) &&
+              isset($this->_packageInfo[$release][0])) { 
             foreach ($this->_packageInfo[$release] as $rel) {
-                $this->_validateInstallConditions($rel['installconditions'], "<$rel>");
+                if (isset($rel['installconditions'])) {
+                    $this->_validateInstallConditions($rel['installconditions'], "<$rel>");
+                } elseif ($release == 'extbinrelease') {
+                    $this->_invalidTagOrder(array('installconditions'), 'filelist',
+                        '<extbinrelease>');
+                }
                 if (isset($rel['filelist'])) {
                     $this->_validateFilelist($rel['filelist'], 'install', true);
                 }
@@ -1642,6 +1899,32 @@ class PEAR_PackageFile_v2
             'types' => $states),
             'Stability type <%type%> is not a valid stability (%value%), must be one of ' .
             '%types%');
+    }
+
+    function _invalidTask($task, $ret, $file)
+    {
+        switch ($ret[0]) {
+            case PEAR_TASK_ERROR_MISSING_ATTRIB :
+                $info = array('attrib' => $ret[1]);
+                $msg = 'task <%task%> is missing attribute "%attrib%" in file %file%';
+            break;
+            case PEAR_TASK_ERROR_NOATTRIBS :
+                $info = array();
+                $msg = 'task <%task%> has no attributes in file %file%';
+            break;
+            case PEAR_TASK_ERROR_WRONG_ATTRIB_VALUE :
+                $info = array('attrib' => $ret[1], 'values' => $ret[3], 'was' => $ret[2]);
+                $msg = 'task <%task%> attribute "%attrib%" has the wrong value "%was%" '.
+                    'in file %file%, expecting one of "%values%"';
+            break;
+        }
+        $this->_stack->push(__FUNCTION__, 'error', $info, $msg);
+    }
+
+    function _unknownTask($task, $file)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('task' => $task),
+            'Unknown task "%task%" passed in file "%file%"');
     }
 
     function _analyzePhpFiles()

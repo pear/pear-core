@@ -288,8 +288,7 @@ class PEAR_PackageFile_v1
 
     /**
      * @param bool determines whether to return a PEAR_Error object, or use the PEAR_ErrorStack
-     * @param string Name of Error Stack class to use.  This allows inheritance with stacks that have the
-     *        same constructor as the parent PEAR_ErrorStack class
+     * @param string Name of Error Stack class to use.
      */
     function PEAR_PackageFile_v1($compatibility = false, $stackclass = 'PEAR_ErrorStack')
     {
@@ -303,9 +302,15 @@ class PEAR_PackageFile_v1
         $this->_compatibility = $compatibility;
     }
 
-    function setRegistry(&$registry)
+    function setConfig(&$config)
     {
-        $this->_registry = &$registry;
+        $this->_config = &$config;
+        $this->_registry = &$config->getRegistry();
+    }
+
+    function setRequestedGroup()
+    {
+        // placeholder
     }
 
     function setLogger(&$logger)

@@ -29,12 +29,12 @@ require_once 'PEAR/Validate.php';
  */
 class PEAR_PackageFile
 {
-    var $_registry;
+    var $_config;
     var $_debug;
     var $_tmpdir;
-    function PEAR_PackageFile(&$registry, $debug = false, $tmpdir = false)
+    function PEAR_PackageFile(&$config, $debug = false, $tmpdir = false)
     {
-        $this->_registry = $registry;
+        $this->_config = $config;
         $this->_debug = $debug;
         $this->_tmpdir = $tmpdir;
     }
@@ -126,25 +126,33 @@ class PEAR_PackageFile
                     '" is not supported, only 1.0 and 2.0 are supported.');
             }
             $object = &PEAR_PackageFile::parserFactory($packageversion[1]);
-            $object->setRegistry($this->_registry);
+            $object->setConfig($this->_config);
             $pf = $object->parse($data, $state, $file, $archive);
+            if (PEAR::isError($pf)) {
+                return $pf;
+            }
             if ($pf->validate($state)) {
                 return $pf;
             } else {
                 $a = PEAR::raiseError('Parsing of package.xml from file "' . $file . '" failed',
-                    null, null, null, $pf->getValidationWarnings());
+                    2, null, null, $pf->getValidationWarnings());
                 return $a;
             }
         } else {
-            $this->_stack->push(PEAR_PACKAGEFILE_ERROR_NO_PACKAGEVERSION, 'warning', array('xml' => $data));
+//            PEAR_Error_Stack::staticPush('PEAR_PackageFile', 
+//                PEAR_PACKAGEFILE_ERROR_NO_PACKAGEVERSION,
+//                'warning', array('xml' => $data));
             $object = &PEAR_PackageFile::parserFactory('1.0');
-            $object->setRegistry($this->_registry);
+            $object->setConfig($this->_config);
             $pf = $object->parse($data, $state, $file, $archive);
+            if (PEAR::isError($pf)) {
+                return $pf;
+            }
             if ($pf->validate($state)) {
                 return $pf;
             } else {
                 $a = PEAR::raiseError('Parsing of package.xml from file "' . $file . '" failed',
-                    null, null, null, $pf->getValidationWarnings());
+                    2, null, null, $pf->getValidationWarnings());
                 return $a;
             }
         }

@@ -36,18 +36,25 @@ class PEAR_Dependency2
      * @var OS_Guess
      */
     var $_os;
-    var $_config;
     var $_registry;
     /**
      * Output of PEAR_Registry::parsedPackageName()
      * @var array
      */
     var $_currentPackage;
-    function PEAR_Dependency2(&$config, $installoptions, $state = PEAR_VALIDATE_INSTALLING,
-                              $package)
+    /**
+     * @param PEAR_Config|PEAR_Registry
+     * @param array installation options
+     * @param array format of PEAR_Registry::parsedPackageName()
+     * @param int installation state (one of PEAR_VALIDATE_*)
+     */
+    function PEAR_Dependency2($configOrRegistry, $installoptions, $package,
+                              $state = PEAR_VALIDATE_INSTALLING)
     {
-        $this->_config = &$config;
-        $this->_registry = &$config->getRegistry();
+        if (is_a($configOrRegistry, 'PEAR_Config')) {
+            $configOrRegistry = $configOrRegistry->getRegistry();
+        }
+        $this->_registry = $configOrRegistry;
         $this->_options = $installoptions;
         $this->_state = $state;
         $this->_os = new OS_Guess;
@@ -65,7 +72,7 @@ class PEAR_Dependency2
         if ($this->_state != PEAR_VALIDATE_INSTALLING) {
             return true;
         }
-        if (isset($dep['not']) && $dep['not'] == 'yes') {
+        if (isset($dep['conflicts']) && $dep['conflicts'] == 'yes') {
             $not = true;
         }
         switch (strtolower($dep['name'])) {
@@ -119,7 +126,7 @@ class PEAR_Dependency2
         if ($this->_state != PEAR_VALIDATE_INSTALLING) {
             return true;
         }
-        if (isset($dep['not']) && $dep['not'] == 'yes') {
+        if (isset($dep['conflicts']) && $dep['conflicts'] == 'yes') {
             $not = true;
         }
         if (!$this->_os->matchSignature($dep['pattern'])) {
@@ -144,7 +151,7 @@ class PEAR_Dependency2
             return true;
         }
         $loaded = extension_loaded($dep['name']);
-        if (isset($dep['not']) && $dep['not'] == 'yes') {
+        if (isset($dep['conflicts']) && $dep['conflicts'] == 'yes') {
             if ($loaded) {
                 if ($required) {
                     if (!isset($this->_options['nodeps'])) {
@@ -331,7 +338,20 @@ class PEAR_Dependency2
         }
     }
 
-    function validatePackageDependency($dep, $required, $params)
+    function validatePearinstallerDependency($dep, $required, $params)
+    {
+        $dep['channel'] = 'pear.php.net';
+        $dep['name'] = 'PEAR';
+        return $this->validatePackageDependency($dep, $required, $params, true);
+    }
+
+    /**
+     * @param array dependency information (2.0 format)
+     * @param boolean whether this is a required dependency
+     * @param array a list of downloaded packages to be installed, if any
+     * @param boolean internal parameter, do not use
+     */
+    function validatePackageDependency($dep, $required, $params, $mustbeinstalled = false)
     {
         if ($this->_state != PEAR_VALIDATE_INSTALLING &&
               $this->_state != PEAR_VALIDATE_DOWNLOADING) {
@@ -341,19 +361,21 @@ class PEAR_Dependency2
             return $this->_validatePackageInstall($dep, $required);
         }
         if ($this->_state == PEAR_VALIDATE_DOWNLOADING) {
-            return $this->_validatePackageDownload($dep, $required, $params);
+            return $this->_validatePackageDownload($dep, $required, $params, $mustbeinstalled);
         }
     }
 
-    function _validatePackageDownload($dep, $required, $params)
+    function _validatePackageDownload($dep, $required, $params, $mustbeinstalled = false)
     {
         $found = false;
-        foreach ($params as $param) {
-            if ($param->isEqual(
-                  array('package' => $dep['name'],
-                        'channel' => $dep['channel']))) {
-                $found = true;
-                break;
+        if (!$mustbeinstalled) {
+            foreach ($params as $param) {
+                if ($param->isEqual(
+                      array('package' => $dep['name'],
+                            'channel' => $dep['channel']))) {
+                    $found = true;
+                    break;
+                }
             }
         }
         $name = $this->_registry->parsedPackageNameToString(
@@ -371,9 +393,13 @@ class PEAR_Dependency2
                 $version = $this->_registry->packageinfo($dep['name'], 'version',
                     $dep['channel']);
             } else {
+                if ($mustbeinstalled) {
+                    return $this->raiseError('%s must be installed');
+                } else {
+                    $version = 'not installed or downloaded';
+                }
                 $installed = false;
                 $downloaded = false;
-                $version = 'not installed or downloaded';
             }
         }
         if (isset($dep['conflicts']) && $dep['conflicts'] == 'yes') {
