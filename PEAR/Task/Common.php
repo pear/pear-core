@@ -86,7 +86,7 @@ class PEAR_Task_Common
     /**
      * @access protected
      */
-    var $installer;
+    var $logger;
     /**
      * @access protected
      */
