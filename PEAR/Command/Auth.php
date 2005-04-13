@@ -24,8 +24,8 @@
 /**
  * base class
  */
-require_once "PEAR/Command/Common.php";
-require_once "PEAR/Config.php";
+require_once 'PEAR/Command/Common.php';
+require_once 'PEAR/Config.php';
 
 /**
  * PEAR commands for login/logout

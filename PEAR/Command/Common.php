@@ -24,7 +24,7 @@
 /**
  * base class
  */
-require_once "PEAR.php";
+require_once 'PEAR.php';
 
 /**
  * PEAR commands base class
