@@ -26,7 +26,7 @@
 /**
  * Used for installation groups in package.xml 2.0 and platform exceptions
  */
-require_once "OS/Guess.php";
+require_once 'OS/Guess.php';
 require_once 'PEAR/Downloader.php';
 
 define('PEAR_INSTALLER_NOBINARY', -240);

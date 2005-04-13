@@ -24,7 +24,7 @@
 /**
  * base class
  */
-require_once "PEAR/Command/Common.php";
+require_once 'PEAR/Command/Common.php';
 
 /**
  * PEAR commands for installation or deinstallation/upgrading of

@@ -666,8 +666,8 @@ used for automated conversion or learning the format.
 
     function doSign($command, $options, $params)
     {
-        require_once "System.php";
-        require_once "Archive/Tar.php";
+        require_once 'System.php';
+        require_once 'Archive/Tar.php';
         // should move most of this code into PEAR_Packager
         // so it'll be easy to implement "pear package --sign"
         if (sizeof($params) != 1) {
@@ -744,8 +744,8 @@ used for automated conversion or learning the format.
 
     function doMakeRPM($command, $options, $params)
     {
-        require_once "System.php";
-        require_once "Archive/Tar.php";
+        require_once 'System.php';
+        require_once 'Archive/Tar.php';
         if (sizeof($params) != 1) {
             return $this->raiseError("bad parameter(s), try \"help $command\"");
         }

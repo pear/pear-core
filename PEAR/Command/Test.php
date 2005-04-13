@@ -105,7 +105,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
     {
         require_once 'PEAR/Common.php';
         require_once 'PEAR/RunTest.php';
-        require_once "System.php";
+        require_once 'System.php';
         $log = new PEAR_Common;
         $log->ui = &$this->ui; // slightly hacky, but it will work
         $run = new PEAR_RunTest($log, $options);
