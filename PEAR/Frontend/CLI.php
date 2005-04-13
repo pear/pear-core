@@ -23,7 +23,7 @@
 /**
  * base class
  */
-require_once "PEAR/Frontend.php";
+require_once 'PEAR/Frontend.php';
 
 /**
  * Command-line Frontend for the PEAR Installer
