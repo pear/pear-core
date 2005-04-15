@@ -158,6 +158,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   Specific changes from 1.4.0a10:
   * Add new &quot;unusualbaseinstall&quot; role type that allows custom roles similar
     data/test/doc to honor the baseinstalldir attribute
+  * fix Bug #4095: System::rm does not handle links correctly
   * fix Bug #4097: Wrong logging in PEAR_Command_Test
  </notes>
  <contents>

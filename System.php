@@ -128,7 +128,7 @@ class System
         }
         $struct['dirs'][] = $sPath = realpath($sPath); // XXX don't add if '.' or '..' ?
         $list = array();
-        while ($file = readdir($dir)) {
+        while (false !== ($file = readdir($dir))) {
             if ($file != '.' && $file != '..') {
                 $list[] = $file;
             }
@@ -161,7 +161,7 @@ class System
         $struct = array('dirs' => array(), 'files' => array());
         settype($files, 'array');
         foreach ($files as $file) {
-            if (is_dir($file)) {
+            if (is_dir($file) && !is_link($file)) {
                 $tmp = System::_dirToStruct($file, 0);
                 $struct = array_merge_recursive($tmp, $struct);
             } else {
