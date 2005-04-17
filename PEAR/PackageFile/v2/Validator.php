@@ -486,7 +486,7 @@ class PEAR_PackageFile_v2_Validator
     {
         $structure = array(
             'min',
-            'max',
+            '*max',
             '*exclude',
         );
         $type = $installcondition ? '<installcondition><php>' : '<dependencies><required><php>';

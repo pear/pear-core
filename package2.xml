@@ -164,6 +164,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #4161: pear download always leaves a package.xml in the dir
   * make PEAR_Remote messages more helpful (include server name)
   * make list-upgrades only search channels from which we have installed packages
+  * remove &lt;max&gt; tag requirement for php dependency
  </notes>
  <contents>
   <dir name="/">
@@ -477,7 +478,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <max>6.0.0</max>
    </php>
    <pearinstaller>
-    <min>1.4.0dev13</min>
+    <min>1.4.0a1</min>
    </pearinstaller>
    <package>
     <name>Archive_Tar</name>
