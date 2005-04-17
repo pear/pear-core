@@ -18,7 +18,6 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <installcondition><os>, found <> expected one of "name"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <installcondition><arch>, found <name> expected one of "pattern"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <extbinrelease><installconditions>, found <php> expected one of "arch"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <installcondition><php>, found <> expected one of "max"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Version type <installcondition><extension><name>test</name><min> is not a valid version (1.$0)'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <extbinrelease><installconditions>, found <extension> expected one of "os, arch"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <extbinrelease><installconditions>, found <package> expected one of "php, extension, os, arch"'),
