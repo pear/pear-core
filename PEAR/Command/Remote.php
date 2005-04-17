@@ -452,6 +452,10 @@ parameter.
         $savechannel = $channel = $this->config->get('default_channel');
         $reg = &$this->config->getRegistry();
         foreach ($reg->listChannels() as $channel) {
+            $inst = array_flip($reg->listPackages($channel));
+            if (!count($inst)) {
+                continue;
+            }
             if ($channel == '__uri') {
                 continue;
             }
@@ -486,7 +490,6 @@ parameter.
                 $this->config->set('default_channel', $savechannel);
                 return $latest;
             }
-            $inst = array_flip($reg->listPackages($channel));
             $data = array(
                 'caption' => $caption,
                 'border' => 1,
