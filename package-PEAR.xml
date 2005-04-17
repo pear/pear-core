@@ -156,6 +156,7 @@
   * fix Bug #4097: Wrong logging in PEAR_Command_Test
   * make pear/pecl commands list only pear/pecl packages
   * fix Bug #4161: pear download always leaves a package.xml in the dir
+  * make list-upgrades only search channels from which we have installed packages
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
