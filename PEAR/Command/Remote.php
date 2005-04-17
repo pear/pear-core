@@ -260,7 +260,12 @@ parameter.
         $list_options = false;
         if ($this->config->get('preferred_state') == 'stable')
             $list_options = true;
-        $available = $r->call('package.listAll', true, $list_options);
+        if ($channel == 'pear.php.net') {
+            // hack because of poor pearweb design
+            $available = $r->call('package.listAll', true, $list_options, false);
+        } else {
+            $available = $r->call('package.listAll', true, $list_options);
+        }
         if (PEAR::isError($available)) {
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($available);
