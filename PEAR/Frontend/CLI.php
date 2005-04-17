@@ -178,7 +178,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
      */
     function skipParamgroup($id)
     {
-        $this->_skipSections[$sectionName] = true;
+        $this->_skipSections[$id] = true;
     }
 
     function runPostinstallScripts(&$scripts)
