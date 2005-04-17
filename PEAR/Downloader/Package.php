@@ -1186,9 +1186,9 @@ class PEAR_Downloader_Package
      * @param int
      * @param string
      */
-    function &getPackagefileObject(&$c, $d)
+    function &getPackagefileObject(&$c, $d, $t = false)
     {
-        $a = &new PEAR_PackageFile($c, $d);
+        $a = &new PEAR_PackageFile($c, $d, $t);
         return $a;
     }
 
@@ -1196,7 +1196,14 @@ class PEAR_Downloader_Package
     {
         if (@is_file($param)) {
             $this->_type = 'local';
-            $pkg = &$this->getPackagefileObject($this->_config, $this->_downloader->_debug);
+            $options = $this->_downloader->getOptions();
+            if (isset($options['downloadonly'])) {
+                $pkg = &$this->getPackagefileObject($this->_config,
+                    $this->_downloader->_debug);
+            } else {
+                $pkg = &$this->getPackagefileObject($this->_config,
+                    $this->_downloader->_debug, $this->_downloader->getDownloadDir());
+            }
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $pf = &$pkg->fromAnyFile($param, PEAR_VALIDATE_INSTALLING);
             PEAR::popErrorHandling();
@@ -1255,7 +1262,12 @@ class PEAR_Downloader_Package
                 }
             }
             // whew, download worked!
-            $pkg = &$this->getPackagefileObject($this->_config, $this->_downloader->debug);
+            if (isset($options['downloadonly'])) {
+                $pkg = &$this->getPackagefileObject($this->_config, $this->_downloader->debug);
+            } else {
+                $pkg = &$this->getPackagefileObject($this->_config, $this->_downloader->debug,
+                    $this->_downloader->getDownloadDir());
+            }
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $pf = &$pkg->fromAnyFile($file, PEAR_VALIDATE_INSTALLING);
             PEAR::popErrorHandling();

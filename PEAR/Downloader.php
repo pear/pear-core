@@ -593,12 +593,12 @@ class PEAR_Downloader extends PEAR_Common
      * @param int
      * @param string
      */
-    function &getPackagefileObject(&$c, $d)
+    function &getPackagefileObject(&$c, $d, $t = false)
     {
         if (!class_exists('PEAR_PackageFile')) {
             require_once 'PEAR/PackageFile.php';
         }
-        $a = &new PEAR_PackageFile($c, $d);
+        $a = &new PEAR_PackageFile($c, $d, $t);
         return $a;
     }
 
@@ -645,7 +645,12 @@ class PEAR_Downloader extends PEAR_Common
             return $url;
         }
         $url['raw'] = $url['info'];
-        $pkg = &$this->getPackagefileObject($this->config, $this->debug);
+        if (isset($this->_options['downloadonly'])) {
+            $pkg = &$this->getPackagefileObject($this->config, $this->debug);
+        } else {
+            $pkg = &$this->getPackagefileObject($this->config, $this->debug,
+                $this->getDownloadDir());
+        }
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         $pinfo = &$pkg->fromXmlString($url['info'], PEAR_VALIDATE_DOWNLOADING, 'remote');
         PEAR::staticPopErrorHandling();
