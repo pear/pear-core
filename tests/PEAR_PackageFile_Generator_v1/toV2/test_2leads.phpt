@@ -72,7 +72,6 @@ release notes
   <required>
    <php>
     <min>4.3.0</min>
-    <max>6.0.0</max>
    </php>
    <pearinstaller>
     <min>1.4.0a1</min>
