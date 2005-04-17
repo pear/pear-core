@@ -1,5 +1,5 @@
 --TEST--
-remote-list command
+list-upgrades command
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -89,18 +89,7 @@ $ch->setName('empty');
 $reg->addChannel($ch);
 $e = $command->run('list-upgrades', array(), array());
 $phpunit->assertNoErrors('pear.php.net');
-$workingcopy = array (
-  'empty' => 
-  array (
-    'info' => 'Channel empty: No upgrades available',
-    'cmd' => 'no command',
-  ),
-  'pecl.php.net' => 
-  array (
-    'info' => 'Channel pecl.php.net: No upgrades available',
-    'cmd' => 'no command',
-  ),
-  'pear.php.net' => 
+$actual = array (
   array (
     'info' => 
     array (
@@ -128,21 +117,7 @@ $workingcopy = array (
     ),
     'cmd' => 'list-upgrades',
   ),
-  'smoog' => 
-  array (
-    'info' => 'Channel smoog: No upgrades available',
-    'cmd' => 'no command',
-  ),
 );
-$actual = array();
-// this is because channels are queried in the order returned from listChannels(),
-// which differs between windows and linux
-foreach ($reg->listChannels() as $chan) {
-    if ($chan == '__uri') {
-        continue;
-    }
-    $actual[] = $workingcopy[$chan];
-}
 $phpunit->assertEquals($actual
 , $fakelog->getLog(), 'pear log');
 echo 'tests done';

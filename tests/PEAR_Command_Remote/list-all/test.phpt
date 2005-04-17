@@ -27,10 +27,10 @@ $pf->addPhpDep('4.0.0', 'ge');
 $pf->validate();
 $phpunit->assertNoErrors('setup');
 $reg->addPackage2($pf);
-$pearweb->addXmlrpcConfig("empty", "package.listAll",     array(true, true, true),
+$pearweb->addXmlrpcConfig("empty", "package.listAll",     array(true, true),
      array(
     ));
-$pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true, true, true),
+$pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true, true),
      array(
     'APC' =>
         array(
@@ -59,7 +59,7 @@ $pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true, true, true
             ),
         ),
     ));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.listAll",     array(true, true, true),     array(
+$pearweb->addXmlrpcConfig("pear.php.net", "package.listAll",     array(true, true, false),     array(
     'APC' =>
         array(
         'packageid' =>

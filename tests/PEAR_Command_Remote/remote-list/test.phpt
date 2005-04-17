@@ -27,13 +27,12 @@ $pf->validate();
 $phpunit->assertNoErrors('setup');
 $reg->addPackage2($pf);
 $pearweb->addXmlrpcConfig("empty", "package.listAll",     array(
-    0 =>
-        true,
+        true, true,
     ),     array(
     ));
 $pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(
     0 =>
-        true,
+        true, true,
     ),     array(
     'APC' =>
         array(
@@ -63,8 +62,7 @@ $pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(
         ),
     ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.listAll",     array(
-    0 =>
-        true,
+        true, true, false,
     ),     array(
     'APC' =>
         array(

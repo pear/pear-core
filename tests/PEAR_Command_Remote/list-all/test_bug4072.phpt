@@ -41,7 +41,7 @@ $pf->addRelease();
 $pf->validate();
 $phpunit->assertNoErrors('setup');
 $reg->addPackage2($pf);
-$pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true, true, true),
+$pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true, true),
      array(
     'APC' =>
         array(
