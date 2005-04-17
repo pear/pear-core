@@ -251,7 +251,7 @@ class test_PEAR_Installer extends PEAR_Installer {
      * @param int
      * @param string
      */
-    function &getPackagefileObject(&$c, $d, $dir)
+    function &getPackagefileObject(&$c, $d, $dir = null)
     {
         $a = &new test_PEAR_PackageFile($c, $d, $dir);
         return $a;
@@ -406,7 +406,7 @@ class test_PEAR_Downloader extends PEAR_Downloader {
      * @param int
      * @param string
      */
-    function &getPackagefileObject(&$c, $d, $dir)
+    function &getPackagefileObject(&$c, $d, $dir = null)
     {
         $a = &new test_PEAR_PackageFile($c, $d, $dir);
         return $a;
@@ -582,7 +582,7 @@ class test_PEAR_Downloader_Package extends PEAR_Downloader_Package
      * @param int
      * @param string
      */
-    function &getPackagefileObject(&$c, $d, $dir)
+    function &getPackagefileObject(&$c, $d, $dir = null)
     {
         $a = &new test_PEAR_PackageFile($c, $d, $dir);
         return $a;
