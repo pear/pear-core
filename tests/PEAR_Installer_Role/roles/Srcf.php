@@ -7,6 +7,7 @@ class PEAR_Installer_Role_Srcf extends PEAR_Installer_Role_Common
             'installable' => false,
             'locationconfig' => false,
             'honorsbaseinstall' => false,
+            'unusualbaseinstall' => false,
             'phpfile' => false,
             'executable' => false,
         );
@@ -17,6 +18,7 @@ class PEAR_Installer_Role_Srcf extends PEAR_Installer_Role_Common
             'installable' => false,
             'locationconfig' => false,
             'honorsbaseinstall' => false,
+            'unusualbaseinstall' => false,
             'phpfile' => false,
             'executable' => false,
         );
