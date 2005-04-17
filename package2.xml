@@ -160,6 +160,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
     data/test/doc to honor the baseinstalldir attribute
   * fix Bug #4095: System::rm does not handle links correctly
   * fix Bug #4097: Wrong logging in PEAR_Command_Test
+  * make pear/pecl commands list only pear/pecl packages
+  * fix Bug #4161: pear download always leaves a package.xml in the dir
  </notes>
  <contents>
   <dir name="/">
