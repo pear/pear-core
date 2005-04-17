@@ -724,10 +724,7 @@ class PEAR_PackageFile_Generator_v1
         }
         if (!isset($release['dependencies']['required']['php'])) {
             $release['dependencies']['required']['php'] =
-                array('min' => '4.0.0', 'max' => '6.0.0');
-        }
-        if (!isset($release['dependencies']['required']['php']['max'])) {
-            $release['dependencies']['required']['php']['max'] = '6.0.0';
+                array('min' => '4.0.0');
         }
         $order = array();
         $bewm = $release['dependencies']['required'];

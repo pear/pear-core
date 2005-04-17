@@ -158,6 +158,7 @@
   * fix Bug #4161: pear download always leaves a package.xml in the dir
   * make PEAR_Remote messages more helpful (include server name)
   * make list-upgrades only search channels from which we have installed packages
+  * remove &lt;max&gt; tag requirement for php dependency
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
