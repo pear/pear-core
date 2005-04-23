@@ -964,6 +964,9 @@ class PEAR_ChannelFile {
      */
     function supportsREST($mirror = false)
     {
+        if ($mirror == $this->_channelInfo['name']) {
+            $mirror = false;
+        }
         if ($mirror) {
             if ($mir = $this->getMirror($mirror)) {
                 return isset($mir['rest']);
