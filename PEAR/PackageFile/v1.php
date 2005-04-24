@@ -310,10 +310,23 @@ class PEAR_PackageFile_v1
     var $_archiveFile;
 
     /**
-     * @var boolean
+     * @var int
      * @access private
      */
     var $_isValid = 0;
+
+    /**
+     * Determines whether this packagefile was initialized only with partial package info
+     *
+     * If this package file was constructed via parsing REST, it will only contain
+     *
+     * - package name
+     * - channel name
+     * - dependencies 
+     * @var boolean
+     * @access private
+     */
+    var $_incomplete = true;
 
     /**
      * @param bool determines whether to return a PEAR_Error object, or use the PEAR_ErrorStack
@@ -437,7 +450,13 @@ class PEAR_PackageFile_v1
 
     function fromArray($pinfo)
     {
+        $this->_incomplete = false;
         $this->_packageInfo = $pinfo;
+    }
+
+    function isIncomplete()
+    {
+        return $this->_incomplete;
     }
 
     function getChannel()
@@ -490,6 +509,14 @@ class PEAR_PackageFile_v1
             return $this->_packageInfo['package'];
         }
         return false;
+    }
+
+    /**
+     * WARNING - don't use this unless you know what you are doing
+     */
+    function setRawPackage($package)
+    {
+        $this->_packageInfo['package'] = $package;
     }
 
     function setPackage($package)
@@ -707,6 +734,14 @@ class PEAR_PackageFile_v1
                   'rel' => $rel,
                   'version' => $version,
                   'optional' => $optional);
+    }
+
+    /**
+     * WARNING - do not use this function directly unless you know what you're doing
+     */
+    function setDeps($deps)
+    {
+        $this->_packageInfo['release_deps'] = $deps;
     }
 
     function hasDeps()
