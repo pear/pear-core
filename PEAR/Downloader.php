@@ -617,9 +617,49 @@ class PEAR_Downloader extends PEAR_Common
         // array(version, info, download url string)
         $state = isset($parr['state']) ? $parr['state'] : $this->config->get('preferred_state');
         $chan = &$this->_registry->getChannel($parr['channel']);
-        if ($chan->supports('xmlrpc', 'package.getDownloadURL', false, '1.1')) {
-            $version = $this->_registry->packageInfo($parr['package'], 'version',
-                $parr['channel']);
+        $version = $this->_registry->packageInfo($parr['package'], 'version',
+            $parr['channel']);
+        if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
+              $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
+            $rest = &$this->config->getREST($this->ui, $this->_options);
+            $url = $rest->getDownloadURL($base, $parr, $state, $version);
+            if (PEAR::isError($url)) {
+                return $url;
+            }
+            if ($parr['channel'] != $curchannel) {
+                $this->configSet('default_channel', $curchannel);
+            }
+            if (!is_array($url)) {
+                return $url;
+            }
+            $url['raw'] = false; // no checking is necessary for REST
+            if (!is_array($url['info'])) {
+                return PEAR::raiseError('Invalid remote dependencies retrieved from REST - ' .
+                    'this should never happen');
+            }
+            if (isset($url['info']['required'])) {
+                require_once 'PEAR/PackageFile/v2.php';
+                $pf = new PEAR_PackageFile_v2;
+                $pf->setRawChannel($parr['channel']);
+            } else {
+                require_once 'PEAR/PackageFile/v1.php';
+                $pf = new PEAR_PackageFile_v1;
+            }
+            $pf->setRawPackage($url['package']);
+            $pf->setDeps($url['info']);
+            $url['info'] = &$pf;
+            if (!extension_loaded("zlib") || isset($this->_options['nocompress'])) {
+                $ext = '.tar';
+            } else {
+                $ext = '.tgz';
+            }
+            if (is_array($url)) {
+                if (isset($url['url'])) {
+                    $url['url'] .= $ext;
+                }
+            }
+            return $url;
+        } elseif ($chan->supports('xmlrpc', 'package.getDownloadURL', false, '1.1')) {
             // don't install with the old version information unless we're doing a plain
             // vanilla simple installation.  If the user says to install a particular
             // version or state, ignore the current installed version
@@ -1163,8 +1203,8 @@ class PEAR_Downloader extends PEAR_Common
             if (isset($lastmodified['Last-Modified'])) {
                 $ifmodifiedsince = 'If-Modified-Since: ' . $lastmodified['Last-Modified'] . "\r\n";
             }
-            if (isset($lastmodified['Etag'])) {
-                $ifmodifiedsince .= "If-None-Match: $lastmodified[Etag]\r\n";
+            if (isset($lastmodified['ETag'])) {
+                $ifmodifiedsince .= "If-None-Match: $lastmodified[ETag]\r\n";
             }
         } else {
             $ifmodifiedsince = ($lastmodified ? "If-Modified-Since: $lastmodified\r\n" : '');
