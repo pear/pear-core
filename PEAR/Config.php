@@ -1190,6 +1190,10 @@ class PEAR_Config extends PEAR
         } elseif (isset($this->configuration[$layer]['__channels'][$channel][$key])) {
             return $this->configuration[$layer]['__channels'][$channel][$key];
         }
+        if ($key == 'preferred_mirror') {
+            return $channel; // we must use the channel name as the preferred mirror
+                             // if the user has not chosen an alternate
+        }
         return null;
     }
 
@@ -1826,12 +1830,12 @@ class PEAR_Config extends PEAR
     /**
      * @return PEAR_REST
      */
-    function &getREST($ui = null)
+    function &getREST($ui = null, $options = array())
     {
         if (!class_exists('PEAR_REST')) {
             require_once 'PEAR/REST.php';
         }
-        $remote = &new PEAR_REST($ui, $this);
+        $remote = &new PEAR_REST($ui, $this, $options);
         return $remote;
     }
 
