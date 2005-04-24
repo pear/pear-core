@@ -109,6 +109,19 @@ class PEAR_PackageFile_v2
     var $_tasksNs;
 
     /**
+     * Determines whether this packagefile was initialized only with partial package info
+     *
+     * If this package file was constructed via parsing REST, it will only contain
+     *
+     * - package name
+     * - channel name
+     * - dependencies 
+     * @var boolean
+     * @access private
+     */
+    var $_incomplete = true;
+
+    /**
      * The constructor merely sets up the private error stack
      */
     function PEAR_PackageFile_v2()
@@ -308,6 +321,22 @@ class PEAR_PackageFile_v2
     {
         $this->_stack->push(__FUNCTION__, 'error', array('file' => $file),
             'package.xml 1.0 file "%file%" is not present in <contents>');
+    }
+
+    /**
+     * WARNING - do not use this function unless you know what you're doing
+     */
+    function setRawPackage($package)
+    {
+        $this->_packageInfo['name'] = $package;
+    }
+
+    /**
+     * WARNING - do not use this function unless you know what you're doing
+     */
+    function setRawChannel($channel)
+    {
+        $this->_packageInfo['channel'] = $channel;
     }
 
     function setRequestedGroup($group)
@@ -536,6 +565,14 @@ class PEAR_PackageFile_v2
         $this->_logger = &$logger;
     }
 
+    /**
+     * WARNING - do not use this function directly unless you know what you're doing
+     */
+    function setDeps($deps)
+    {
+        $this->_packageInfo['dependencies'] = $deps;
+    }
+
     function setPackagefile($file, $archive = false)
     {
         $this->_packageFile = $file;
@@ -574,7 +611,13 @@ class PEAR_PackageFile_v2
     {
         unset($pinfo['old']);
         unset($pinfo['xsdversion']);
+        $this->_incomplete = false;
         $this->_packageInfo = $pinfo;
+    }
+
+    function isIncomplete()
+    {
+        return $this->_incomplete;
     }
 
     /**
