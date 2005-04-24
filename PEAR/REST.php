@@ -40,15 +40,20 @@ require_once 'PEAR/XMLParser.php';
  */
 class PEAR_REST extends PEAR_Downloader
 {
-    function PEAR_REST(&$ui, &$config)
+    function PEAR_REST(&$ui, &$config, $options = array())
     {
-        parent::PEAR_Downloader($ui, array(), $config);
+        parent::PEAR_Downloader($ui, $options, $config);
     }
 
-    function retrieveData($url, $accept = false)
+    function retrieveData($url, $accept = false, $forcestring = false)
     {
         $cacheId = $this->getCacheId($url);
-        $file = $this->downloadHttp($url, $this->ui, $this->getDownloadDir(), null, $cacheId,
+        if (isset($this->_options['downloadonly'])) {
+            $dldir = System::mktemp(array('-d', 'rest'));
+        } else {
+            $dldir = $this->getDownloadDir();
+        }
+        $file = $this->downloadHttp($url, $this->ui, $dldir, null, $cacheId,
             $accept);
         if (PEAR::isError($file)) {
             return $file;
@@ -59,11 +64,15 @@ class PEAR_REST extends PEAR_Downloader
         $headers = $file[2];
         $lastmodified = $file[1];
         $content = implode('', file($file[0]));
+        if ($forcestring) {
+            $this->saveCache($url, $content, $lastmodified);
+            return $content;
+        }
         if (isset($headers['content-type'])) {
             switch ($headers['content-type']) {
                 case 'text/xml' :
                     $parser = new PEAR_XMLParser;
-                    $parser->parse($file);
+                    $parser->parse($content);
                     $content = $parser->getData();
                 case 'text/html' :
                 default :
@@ -75,8 +84,8 @@ class PEAR_REST extends PEAR_Downloader
             $parser->parse($file);
             $content = $parser->getData();
         }
-        $this->saveCache($url, $contents, $lastmodified);
-        return $contents;
+        $this->saveCache($url, $content, $lastmodified);
+        return $content;
     }
 
     function getCacheId($url)
@@ -95,7 +104,7 @@ class PEAR_REST extends PEAR_Downloader
         $cachefile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
             md5($url) . 'rest.cachefile';
         if (@file_exists($cachefile)) {
-            return implode('', file($cachefile));
+            return unserialize(implode('', file($cachefile)));
         }
     }
 
@@ -109,6 +118,7 @@ class PEAR_REST extends PEAR_Downloader
         if (!$fp) {
             return false;
         }
+        fwrite($fp, serialize($lastmodified));
         fclose($fp);
         $fp = @fopen($cachefile, 'wb');
         if (!$fp) {
@@ -118,6 +128,89 @@ class PEAR_REST extends PEAR_Downloader
         fwrite($fp, serialize($contents));
         fclose($fp);
         return true;
+    }
+
+    function getDownloadURL($base, $packageinfo, $prefstate, $installed)
+    {
+        $channel = $packageinfo['channel'];
+        $package = $packageinfo['package'];
+        $states = $this->betterStates($prefstate, true);
+        if (!$states) {
+            return PEAR::raiseError('"' . $prefstate . '" is not a valid state');
+        }
+        $state = $version = null;
+        if (isset($packageinfo['state'])) {
+            $state = $packageinfo['state'];
+        }
+        if (isset($packageinfo['version'])) {
+            $version = $packageinfo['version'];
+        }
+        $info = $this->retrieveData($base . 'r/' . strtolower($package) . '/allreleases.xml');
+        if (PEAR::isError($info)) {
+            return $info;
+        }
+        if (!isset($info['r'])) {
+            return false;
+        }
+        $found = false;
+        $release = false;
+        if (!is_array($info['r'])) {
+            $info['r'] = array($info['r']);
+        }
+        foreach ($info['r'] as $release) {
+            if ($installed && version_compare($release['v'], $installed, '<')) {
+                continue;
+            }
+            if (isset($state)) {
+                if ($release['s'] == $state) {
+                    $found = true;
+                    break;
+                }
+            } elseif (isset($version)) {
+                if ($release['v'] == $version) {
+                    $found = true;
+                    break;
+                }
+            } else {
+                if (in_array($release['s'], $states)) {
+                    $found = true;
+                    break;
+                }
+            }
+        }
+        if ($found) {
+            $releaseinfo = $this->retrieveData($base . 'r/' . strtolower($package) . '/' . 
+                $release['v'] . '.xml');
+            if (PEAR::isError($releaseinfo)) {
+                return $releaseinfo;
+            }
+            $packagexml = $this->retrieveData($base . 'r/' . strtolower($package) . '/' .
+                'deps.' . $release['v'] . '.txt', false, true);
+            if (PEAR::isError($packagexml)) {
+                return $packagexml;
+            }
+            return 
+                array('version' => $releaseinfo['v'],
+                      'info' => unserialize($packagexml),
+                      'package' => $releaseinfo['p']['_content'],
+                      'url' => $releaseinfo['g']);
+        } else {
+            $release = $info['r'][0];
+            $releaseinfo = $this->retrieveData($base . 'r/' . strtolower($package) . '/' . 
+                $release['v'] . '.xml');
+            if (PEAR::isError($releaseinfo)) {
+                return $releaseinfo;
+            }
+            $packagexml = unserialize($this->retrieveData($base . 'r/' . strtolower($package) . '/' .
+                'deps.' . $release['v'] . '.txt', false, true));
+            if (PEAR::isError($packagexml)) {
+                return $packagexml;
+            }
+            return
+                array('version' => $releaseinfo['v'],
+                      'package' => $releaseinfo['p']['_content'],
+                      'info' => unserialize($packagexml));
+        }
     }
 }
 ?>
