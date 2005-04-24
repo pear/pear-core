@@ -1287,6 +1287,9 @@ class PEAR_Config extends PEAR
             if ($key == 'default_channel') {
                 if (!isset($reg)) {
                     $reg = &$this->getRegistry($layer);
+                    if (!$reg) {
+                        $reg = &$this->getRegistry();
+                    }
                 }
                 if ($reg) {
                     $value = $reg->channelName($value);
