@@ -529,7 +529,13 @@ class PEAR_ChannelFile {
     function _makeRestXml($info, $indent)
     {
         $ret = $indent . "<rest>\n";
-        $ret .= $this->_makeFunctionsXml($info['function'], "$indent ", true);
+        if (!isset($info['baseurl'][0])) {
+            $info['baseurl'] = array($info['baseurl']);
+        }
+        foreach ($info['baseurl'] as $url) {
+            $ret .= "$indent <baseurl type=\"" . $url['attribs']['type'] . "\"";
+            $ret .= ">" . $url['_content'] . "</baseurl>\n";
+        }
         $ret .= $indent . "</rest>\n";
         return $ret;
     }
@@ -984,6 +990,9 @@ class PEAR_ChannelFile {
      */
     function getBaseURL($resourceType, $mirror = false)
     {
+        if ($mirror == $this->_channelInfo['name']) {
+            $mirror = false;
+        }
         if ($mirror) {
             if ($mir = $this->getMirror($mirror)) {
                 $rest = $mir['rest'];
@@ -1447,7 +1456,7 @@ class PEAR_ChannelFile {
                 }
             }
         } else {
-            $setmirror = &$this->_channelInfo;
+            $setmirror = &$this->_channelInfo['servers']['primary'];
         }
         $set = array('attribs' => array('type' => $resourceType), '_content' => $url);
         if (!isset($setmirror['rest']['baseurl'])) {
@@ -1456,6 +1465,12 @@ class PEAR_ChannelFile {
             return true;
         } elseif (!isset($setmirror['rest']['baseurl'][0])) {
             $setmirror['rest']['baseurl'] = array($setmirror['rest']['baseurl']);
+        }
+        foreach ($setmirror['rest']['baseurl'] as $i => $url) {
+            if ($url['type'] == $resourceType) {
+                $this->_isValid = false;
+                $setmirror['rest']['baseurl'][$i] = $set;
+            }
         }
         $setmirror['rest']['baseurl'][] = $set;
         $this->_isValid = false;
