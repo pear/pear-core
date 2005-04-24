@@ -1830,12 +1830,13 @@ class PEAR_Config extends PEAR
     /**
      * @return PEAR_REST
      */
-    function &getREST($ui = null, $options = array())
+    function &getREST($version, $options = array())
     {
-        if (!class_exists('PEAR_REST')) {
-            require_once 'PEAR/REST.php';
+        $version = str_replace('.', '', $version);
+        if (!class_exists($class = 'PEAR_REST_' . $version)) {
+            require_once 'PEAR/REST/' . $version . '.php';
         }
-        $remote = &new PEAR_REST($ui, $this, $options);
+        $remote = &new $class($this, $options);
         return $remote;
     }
 

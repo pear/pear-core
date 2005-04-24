@@ -23,7 +23,7 @@
 /**
  * For downloading xml files
  */
-require_once 'PEAR/Downloader.php';
+require_once 'PEAR.php';
 require_once 'PEAR/XMLParser.php';
 
 /**
@@ -38,32 +38,37 @@ require_once 'PEAR/XMLParser.php';
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
-class PEAR_REST extends PEAR_Downloader
+class PEAR_REST
 {
-    function PEAR_REST(&$ui, &$config, $options = array())
+    var $config;
+    var $_options;
+    function PEAR_REST(&$config, $options = array())
     {
-        parent::PEAR_Downloader($ui, $options, $config);
+        $this->config = &$config;
+        $this->_options = $options;
     }
 
     function retrieveData($url, $accept = false, $forcestring = false)
     {
         $cacheId = $this->getCacheId($url);
-        if (isset($this->_options['downloadonly'])) {
-            $dldir = System::mktemp(array('-d', 'rest'));
+        if (!isset($this->_options['offline'])) {
+            $file = $this->downloadHttp($url, $cacheId, $accept);
         } else {
-            $dldir = $this->getDownloadDir();
+            $file = false;
         }
-        $file = $this->downloadHttp($url, $this->ui, $dldir, null, $cacheId,
-            $accept);
         if (PEAR::isError($file)) {
-            return $file;
+            if ($file->getCode() == -9276) {
+                $file = false; // use local copy if available on socket connect error
+            } else {
+                return $file;
+            }
         }
         if (!$file) {
             return $this->getCache($url);
         }
         $headers = $file[2];
         $lastmodified = $file[1];
-        $content = implode('', file($file[0]));
+        $content = $file[0];
         if ($forcestring) {
             $this->saveCache($url, $content, $lastmodified);
             return $content;
@@ -105,6 +110,8 @@ class PEAR_REST extends PEAR_Downloader
             md5($url) . 'rest.cachefile';
         if (@file_exists($cachefile)) {
             return unserialize(implode('', file($cachefile)));
+        } else {
+            return PEAR::raiseError('No cached content available for "' . $url . '"');
         }
     }
 
@@ -130,87 +137,150 @@ class PEAR_REST extends PEAR_Downloader
         return true;
     }
 
-    function getDownloadURL($base, $packageinfo, $prefstate, $installed)
+    /**
+     * Efficiently Download a file through HTTP.  Returns downloaded file as a string in-memory
+     * This is best used for small files
+     *
+     * If an HTTP proxy has been configured (http_proxy PEAR_Config
+     * setting), the proxy will be used.
+     *
+     * @param string  $url       the URL to download
+     * @param string  $save_dir  directory to save file in
+     * @param false|string|array $lastmodified header values to check against for caching
+     *                           use false to return the header values from this download
+     * @param false|array $accept Accept headers to send
+     * @return string|array  Returns the contents of the downloaded file or a PEAR
+     *                       error on failure.  If the error is caused by
+     *                       socket-related errors, the error object will
+     *                       have the fsockopen error code available through
+     *                       getCode().  If caching is requested, then return the header
+     *                       values.
+     *
+     * @access public
+     */
+    function downloadHttp($url, $lastmodified = null, $accept = false)
     {
-        $channel = $packageinfo['channel'];
-        $package = $packageinfo['package'];
-        $states = $this->betterStates($prefstate, true);
-        if (!$states) {
-            return PEAR::raiseError('"' . $prefstate . '" is not a valid state');
+        $info = parse_url($url);
+        if (!isset($info['scheme']) || !in_array($info['scheme'], array('http', 'https'))) {
+            return PEAR::raiseError('Cannot download non-http URL "' . $url . '"');
         }
-        $state = $version = null;
-        if (isset($packageinfo['state'])) {
-            $state = $packageinfo['state'];
-        }
-        if (isset($packageinfo['version'])) {
-            $version = $packageinfo['version'];
-        }
-        $info = $this->retrieveData($base . 'r/' . strtolower($package) . '/allreleases.xml');
-        if (PEAR::isError($info)) {
-            return $info;
-        }
-        if (!isset($info['r'])) {
-            return false;
-        }
-        $found = false;
-        $release = false;
-        if (!is_array($info['r'])) {
-            $info['r'] = array($info['r']);
-        }
-        foreach ($info['r'] as $release) {
-            if ($installed && version_compare($release['v'], $installed, '<')) {
-                continue;
-            }
-            if (isset($state)) {
-                if ($release['s'] == $state) {
-                    $found = true;
-                    break;
-                }
-            } elseif (isset($version)) {
-                if ($release['v'] == $version) {
-                    $found = true;
-                    break;
-                }
-            } else {
-                if (in_array($release['s'], $states)) {
-                    $found = true;
-                    break;
-                }
-            }
-        }
-        if ($found) {
-            $releaseinfo = $this->retrieveData($base . 'r/' . strtolower($package) . '/' . 
-                $release['v'] . '.xml');
-            if (PEAR::isError($releaseinfo)) {
-                return $releaseinfo;
-            }
-            $packagexml = $this->retrieveData($base . 'r/' . strtolower($package) . '/' .
-                'deps.' . $release['v'] . '.txt', false, true);
-            if (PEAR::isError($packagexml)) {
-                return $packagexml;
-            }
-            return 
-                array('version' => $releaseinfo['v'],
-                      'info' => unserialize($packagexml),
-                      'package' => $releaseinfo['p']['_content'],
-                      'url' => $releaseinfo['g']);
+        if (!isset($info['host'])) {
+            return PEAR::raiseError('Cannot download from non-URL "' . $url . '"');
         } else {
-            $release = $info['r'][0];
-            $releaseinfo = $this->retrieveData($base . 'r/' . strtolower($package) . '/' . 
-                $release['v'] . '.xml');
-            if (PEAR::isError($releaseinfo)) {
-                return $releaseinfo;
-            }
-            $packagexml = unserialize($this->retrieveData($base . 'r/' . strtolower($package) . '/' .
-                'deps.' . $release['v'] . '.txt', false, true));
-            if (PEAR::isError($packagexml)) {
-                return $packagexml;
-            }
-            return
-                array('version' => $releaseinfo['v'],
-                      'package' => $releaseinfo['p']['_content'],
-                      'info' => unserialize($packagexml));
+            $host = @$info['host'];
+            $port = @$info['port'];
+            $path = @$info['path'];
         }
+        $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
+        if ($this->config->get('http_proxy')&& 
+              $proxy = parse_url($this->config->get('http_proxy'))) {
+            $proxy_host = @$proxy['host'];
+            if (isset($proxy['scheme']) && $proxy['scheme'] == 'https') {
+                $proxy_host = 'ssl://' . $proxy_host;
+            }
+            $proxy_port = @$proxy['port'];
+            $proxy_user = @$proxy['user'];
+            $proxy_pass = @$proxy['pass'];
+
+            if ($proxy_port == '') {
+                $proxy_port = 8080;
+            }
+        }
+        if (empty($port)) {
+            if (isset($info['scheme']) && $info['scheme'] == 'https') {
+                $port = 443;
+            } else {
+                $port = 80;
+            }
+        }
+        $request = "GET $path HTTP/1.1\r\n";
+        $ifmodifiedsince = '';
+        if (is_array($lastmodified)) {
+            if (isset($lastmodified['Last-Modified'])) {
+                $ifmodifiedsince = 'If-Modified-Since: ' . $lastmodified['Last-Modified'] . "\r\n";
+            }
+            if (isset($lastmodified['ETag'])) {
+                $ifmodifiedsince .= "If-None-Match: $lastmodified[ETag]\r\n";
+            }
+        } else {
+            $ifmodifiedsince = ($lastmodified ? "If-Modified-Since: $lastmodified\r\n" : '');
+        }
+        $request .= "Host: $host:$port\r\n" . $ifmodifiedsince .
+            "User-Agent: PHP/" . PHP_VERSION . "\r\n";
+        $username = $this->config->get('username');
+        $password = $this->config->get('password');
+        if ($username && $password) {
+            $tmp = base64_encode("$username:$password");
+            $request .= "Authorization: Basic $tmp\r\n";
+        }
+        if ($proxy_host != '' && $proxy_user != '') {
+            $request .= 'Proxy-Authorization: Basic ' .
+                base64_encode($proxy_user . ':' . $proxy_pass) . "\r\n";
+        }
+        if ($accept) {
+            $request .= 'Accept: ' . implode(', ', $accept) . "\r\n";
+        }
+        $request .= "\r\n";
+        if ($proxy_host != '') {
+            $fp = @fsockopen($proxy_host, $proxy_port, $errno, $errstr, 15);
+            if (!$fp) {
+                return PEAR::raiseError("Connection to `$proxy_host:$proxy_port' failed: $errstr",
+                    -9276);
+            }
+        } else {
+            if (isset($info['scheme']) && $info['scheme'] == 'https') {
+                $host = 'ssl://' . $host;
+            }
+            $fp = @fsockopen($host, $port, $errno, $errstr);
+            if (!$fp) {
+                return PEAR::raiseError("Connection to `$host:$port' failed: $errstr", $errno);
+            }
+        }
+        fwrite($fp, $request);
+        $headers = array();
+        while (trim($line = fgets($fp, 1024))) {
+            if (preg_match('/^([^:]+):\s+(.*)\s*$/', $line, $matches)) {
+                $headers[strtolower($matches[1])] = trim($matches[2]);
+            } elseif (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
+                if ($matches[1] == 304 && ($lastmodified || ($lastmodified === false))) {
+                    return false;
+                }
+                if ($matches[1] != 200) {
+                    return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)");
+                }
+            }
+        }
+        if (isset($headers['content-disposition']) &&
+            preg_match('/\sfilename=\"([^;]*\S)\"\s*(;|$)/', $headers['content-disposition'],
+              $matches)) {
+            $save_as = basename($matches[1]);
+        } else {
+            $save_as = basename($url);
+        }
+        if (isset($headers['content-length'])) {
+            $length = $headers['content-length'];
+        } else {
+            $length = -1;
+        }
+        $data = '';
+        while ($chunk = @fread($fp, 8192)) {
+            $data .= $chunk;
+        }
+        fclose($fp);
+        if ($lastmodified === false || $lastmodified) {
+            if (isset($headers['etag'])) {
+                $lastmodified = array('ETag' => $headers['etag']);
+            }
+            if (isset($headers['last-modified'])) {
+                if (is_array($lastmodified)) {
+                    $lastmodified['Last-Modified'] = $headers['last-modified'];
+                } else {
+                    $lastmodified = $headers['last-modified'];
+                }
+            }
+            return array($data, $lastmodified, $headers);
+        }
+        return $data;
     }
 }
 ?>

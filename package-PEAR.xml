@@ -306,6 +306,11 @@
       <replace from="@package_version@" to="version" type="package-info" />
      </file>
     </dir>
+    <dir name="REST">
+     <file role="php" name="10.php">
+      <replace from="@package_version@" to="version" type="package-info" />
+     </file>
+    </dir>
     <dir name="Task">
      <dir name="Postinstallscript">
       <file role="php" name="rw.php">
