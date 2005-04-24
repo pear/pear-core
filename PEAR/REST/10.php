@@ -245,6 +245,78 @@ class PEAR_REST_10
         }
     }
 
+    function listAll($base, $stable, $basic = true)
+    {
+        $packagelist = $this->_rest->retrieveData($base . 'p/packages.xml');
+        if (PEAR::isError($packagelist)) {
+            return $packagelist;
+        }
+        $ret = array();
+        if (!is_array($packagelist['p'])) {
+            $packagelist['p'] = array($packagelist['p']);
+        }
+        foreach ($packagelist['p'] as $package) {
+            if ($basic) { // remote-list command
+                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                if ($stable) {
+                    $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
+                        '/stable.txt');
+                } else {
+                    $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
+                        '/latest.txt');
+                }
+                PEAR::popErrorHandling();
+                if (PEAR::isError($latest)) {
+                    $latest = false;
+                }
+                $info = array('stable' => $latest);
+            } else { // list-all command
+                $inf = $this->_rest->retrieveData($base . 'p/' . strtolower($package) . '/info.xml');
+                if (PEAR::isError($inf)) {
+                    return $inf;
+                }
+                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                if ($stable) {
+                    $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
+                        '/stable.txt');
+                } else {
+                    $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
+                        '/latest.txt');
+                }
+                PEAR::popErrorHandling();
+                $deps = array();
+                if (PEAR::isError($latest)) {
+                    $latest = false;
+                } else {
+                    $d = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/deps.' .
+                        $latest . '.txt');
+                    if (PEAR::isError($d)) {
+                        return $d;
+                    }
+                    $d = unserialize($d);
+                    if (isset($d['required'])) {
+                        require_once 'PEAR/PackageFile/v2.php';
+                        $pf = new PEAR_PackageFile_v2;
+                        $pf->setDeps($d);
+                        $tdeps = $pf->getDeps();
+                    } else {
+                        $tdeps = $d;
+                    }
+                    foreach ($tdeps as $dep) {
+                        if ($dep['type'] !== 'pkg') {
+                            continue;
+                        }
+                        $deps[] = $dep;
+                    }
+                }
+                $info = array('stable' => $latest, 'summary' => $inf['s'], 'description' =>
+                    $inf['d'], 'deps' => $deps, 'category' => $inf['ca']['_content']);
+            }
+            $ret[$package] = $info;
+        }
+        return $ret;
+    }
+
     /**
      * Return an array containing all of the states that are more stable than
      * or equal to the passed in state

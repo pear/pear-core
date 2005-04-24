@@ -207,16 +207,23 @@ parameter.
                 return $this->raiseError('Channel "' . $channel . '" does not exist');
             }
         }
-        $r = &$this->config->getRemote();
+        $chan = $reg->getChannel($channel);
         $list_options = false;
         if ($this->config->get('preferred_state') == 'stable') {
             $list_options = true;
         }
-        if ($channel == 'pear.php.net') {
-            // hack because of poor pearweb design
-            $available = $r->call('package.listAll', true, $list_options, false);
+        if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
+              $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
+            $rest = &$this->config->getREST('1.0', array());
+            $available = $rest->listAll($base, $list_options);
         } else {
-            $available = $r->call('package.listAll', true, $list_options);
+            $r = &$this->config->getRemote();
+            if ($channel == 'pear.php.net') {
+                // hack because of poor pearweb design
+                $available = $r->call('package.listAll', true, $list_options, false);
+            } else {
+                $available = $r->call('package.listAll', true, $list_options);
+            }
         }
         if (PEAR::isError($available)) {
             $this->config->set('default_channel', $savechannel);
@@ -255,16 +262,24 @@ parameter.
                 return $this->raiseError("Channel \"$channel\" does not exist");
             }
         }
-        $r = &$this->config->getRemote();
         $reg = &$this->config->getRegistry();
         $list_options = false;
-        if ($this->config->get('preferred_state') == 'stable')
+        if ($this->config->get('preferred_state') == 'stable') {
             $list_options = true;
-        if ($channel == 'pear.php.net') {
-            // hack because of poor pearweb design
-            $available = $r->call('package.listAll', true, $list_options, false);
+        }
+        $chan = $reg->getChannel($channel);
+        if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
+              $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
+            $rest = &$this->config->getREST('1.0', array());
+            $available = $rest->listAll($base, $list_options, false);
         } else {
-            $available = $r->call('package.listAll', true, $list_options);
+            $r = &$this->config->getRemote();
+            if ($channel == 'pear.php.net') {
+                // hack because of poor pearweb design
+                $available = $r->call('package.listAll', true, $list_options, false);
+            } else {
+                $available = $r->call('package.listAll', true, $list_options);
+            }
         }
         if (PEAR::isError($available)) {
             $this->config->set('default_channel', $savechannel);
@@ -287,9 +302,9 @@ parameter.
                 $installed['version'] = $installed['version']['release'];
             }
             $desc = $info['summary'];
-            if (isset($params[$name]))
+            if (isset($params[$name])) {
                 $desc .= "\n\n".$info['description'];
-
+            }
             if (isset($options['mode']))
             {
                 if ($options['mode'] == 'installed' && !isset($installed['version']))
