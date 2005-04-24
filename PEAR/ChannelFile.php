@@ -1470,6 +1470,7 @@ class PEAR_ChannelFile {
             if ($url['attribs']['type'] == $resourceType) {
                 $this->_isValid = false;
                 $setmirror['rest']['baseurl'][$i] = $set;
+                return true;
             }
         }
         $setmirror['rest']['baseurl'][] = $set;
