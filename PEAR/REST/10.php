@@ -37,8 +37,14 @@ require_once 'PEAR/REST.php';
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a12
  */
-class PEAR_REST_10 extends PEAR_REST
+class PEAR_REST_10
 {
+    var $_rest;
+    function PEAR_REST_10($config, $options = array())
+    {
+        $this->_rest = &new PEAR_REST($config, $options);
+    }
+
     function getDownloadURL($base, $packageinfo, $prefstate, $installed)
     {
         $channel = $packageinfo['channel'];
@@ -54,7 +60,7 @@ class PEAR_REST_10 extends PEAR_REST
         if (isset($packageinfo['version'])) {
             $version = $packageinfo['version'];
         }
-        $info = $this->retrieveData($base . 'r/' . strtolower($package) . '/allreleases.xml');
+        $info = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/allreleases.xml');
         if (PEAR::isError($info)) {
             return $info;
         }
@@ -106,7 +112,7 @@ class PEAR_REST_10 extends PEAR_REST
         if (isset($packageinfo['version'])) {
             $version = $packageinfo['version'];
         }
-        $info = $this->retrieveData($base . 'r/' . strtolower($package) . '/allreleases.xml');
+        $info = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/allreleases.xml');
         if (PEAR::isError($info)) {
             return $info;
         }
@@ -205,12 +211,12 @@ class PEAR_REST_10 extends PEAR_REST
     function _returnDownloadURL($base, $package, $release, $info, $found)
     {
         if ($found) {
-            $releaseinfo = $this->retrieveData($base . 'r/' . strtolower($package) . '/' . 
+            $releaseinfo = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/' . 
                 $release['v'] . '.xml');
             if (PEAR::isError($releaseinfo)) {
                 return $releaseinfo;
             }
-            $packagexml = $this->retrieveData($base . 'r/' . strtolower($package) . '/' .
+            $packagexml = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/' .
                 'deps.' . $release['v'] . '.txt', false, true);
             if (PEAR::isError($packagexml)) {
                 return $packagexml;
@@ -222,12 +228,12 @@ class PEAR_REST_10 extends PEAR_REST
                       'url' => $releaseinfo['g']);
         } else {
             $release = $info['r'][0];
-            $releaseinfo = $this->retrieveData($base . 'r/' . strtolower($package) . '/' . 
+            $releaseinfo = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/' . 
                 $release['v'] . '.xml');
             if (PEAR::isError($releaseinfo)) {
                 return $releaseinfo;
             }
-            $packagexml = unserialize($this->retrieveData($base . 'r/' . strtolower($package) . '/' .
+            $packagexml = unserialize($this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/' .
                 'deps.' . $release['v'] . '.txt', false, true));
             if (PEAR::isError($packagexml)) {
                 return $packagexml;
