@@ -1467,7 +1467,7 @@ class PEAR_ChannelFile {
             $setmirror['rest']['baseurl'] = array($setmirror['rest']['baseurl']);
         }
         foreach ($setmirror['rest']['baseurl'] as $i => $url) {
-            if ($url['type'] == $resourceType) {
+            if ($url['attribs']['type'] == $resourceType) {
                 $this->_isValid = false;
                 $setmirror['rest']['baseurl'][$i] = $set;
             }
