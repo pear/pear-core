@@ -621,7 +621,7 @@ class PEAR_Downloader extends PEAR_Common
             $parr['channel']);
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
               $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
-            $rest = &$this->config->getREST($this->ui, $this->_options);
+            $rest = &$this->config->getREST('1.0', $this->_options);
             $url = $rest->getDownloadURL($base, $parr, $state, $version);
             if (PEAR::isError($url)) {
                 return $url;
@@ -735,9 +735,50 @@ class PEAR_Downloader extends PEAR_Common
             unset($parr['state']);
         }
         $chan = &$this->_registry->getChannel($parr['channel']);
-        if ($chan->supports('xmlrpc', 'package.getDepDownloadURL', false, '1.1')) {
-            $version = $this->_registry->packageInfo($dep['name'], 'version',
-                $remotechannel);
+        $version = $this->_registry->packageInfo($dep['name'], 'version',
+            $remotechannel);
+        if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
+              $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
+            $rest = &$this->config->getREST('1.0', $this->_options);
+            $url = $rest->getDepDownloadURL($base, $xsdversion, $dep, $parr,
+                    $state, $version);
+            if (PEAR::isError($url)) {
+                return $url;
+            }
+            if ($parr['channel'] != $curchannel) {
+                $this->configSet('default_channel', $curchannel);
+            }
+            if (!is_array($url)) {
+                return $url;
+            }
+            $url['raw'] = false; // no checking is necessary for REST
+            if (!is_array($url['info'])) {
+                return PEAR::raiseError('Invalid remote dependencies retrieved from REST - ' .
+                    'this should never happen');
+            }
+            if (isset($url['info']['required'])) {
+                require_once 'PEAR/PackageFile/v2.php';
+                $pf = new PEAR_PackageFile_v2;
+                $pf->setRawChannel($parr['channel']);
+            } else {
+                require_once 'PEAR/PackageFile/v1.php';
+                $pf = new PEAR_PackageFile_v1;
+            }
+            $pf->setRawPackage($url['package']);
+            $pf->setDeps($url['info']);
+            $url['info'] = &$pf;
+            if (!extension_loaded("zlib") || isset($this->_options['nocompress'])) {
+                $ext = '.tar';
+            } else {
+                $ext = '.tgz';
+            }
+            if (is_array($url)) {
+                if (isset($url['url'])) {
+                    $url['url'] .= $ext;
+                }
+            }
+            return $url;
+        } elseif ($chan->supports('xmlrpc', 'package.getDepDownloadURL', false, '1.1')) {
             if ($version) {
                 $url = $this->_remote->call('package.getDepDownloadURL', $xsdversion, $dep, $parr,
                     $state, $version);

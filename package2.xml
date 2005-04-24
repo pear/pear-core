@@ -298,6 +298,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
     </dir> <!-- /PEAR/PackageFile -->
+    <dir name="REST">
+     <file name="10.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+    </dir> <!-- /PEAR/REST -->
     <dir name="Task">
      <dir name="Postinstallscript">
       <file name="rw.php" role="php">
