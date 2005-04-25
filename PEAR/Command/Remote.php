@@ -417,10 +417,12 @@ parameter.
             if (!isset($info['stable']) || !$info['stable']) {
                 $info['stable'] = 'none';
             }
+            $version = is_array($installed['version']) ? $installed['version']['release'] :
+                $installed['version'];
             $data['data'][$info['category']][] = array(
                 $name,
                 $info['stable'] . $unstable,
-                $installed['version'],
+                $version,
                 $desc,
                 );
         }
