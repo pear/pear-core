@@ -275,13 +275,15 @@ class PEAR_REST_10
                 if (PEAR::isError($inf)) {
                     return $inf;
                 }
-                $found = (!empty($searchpackage) && stristr($package, $searchpackage) !== false);
-                if (!$found && !(isset($searchsummary) && !empty($searchsummary)
-                    && (stristr($inf['s'], $searchsummary) !== false
-                        || stristr($info['d'], $searchsummary) !== false)))
-                {
-                    continue;
-                };
+                if ($searchpackage) {
+                    $found = (!empty($searchpackage) && stristr($package, $searchpackage) !== false);
+                    if (!$found && !(isset($searchsummary) && !empty($searchsummary)
+                        && (stristr($inf['s'], $searchsummary) !== false
+                            || stristr($info['d'], $searchsummary) !== false)))
+                    {
+                        continue;
+                    };
+                }
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                 if ($stable) {
                     $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
@@ -294,12 +296,17 @@ class PEAR_REST_10
                 }
                 PEAR::popErrorHandling();
                 $deps = array();
+                if (PEAR::isError($unstable)) {
+                    $unstable = false;
+                    $state = 'stable';
+                } else {
+                    $releaseinf = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
+                        '/' . $unstable . '.xml');
+                }
                 if (PEAR::isError($latest)) {
                     $latest = false;
                     $state = 'stable';
                 } else {
-                    $releaseinf = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
-                        '/' . $latest . '.xml');
                     $state = $releaseinf['st'];
                     $d = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/deps.' .
                         $latest . '.txt');
