@@ -379,6 +379,49 @@ class PEAR_REST_10
         return $ret;
     }
 
+    function packageInfo($base, $package)
+    {
+        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+        $info = $this->_rest->retrieveData($base . 'p/' . strtolower($package) . '/info.xml');
+        $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/latest.txt');
+        $d = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/deps.' .
+            $latest . '.txt');
+        PEAR::popErrorHandling();
+        if (PEAR::isError($info)) {
+            return PEAR::raiseError('Unknown package: "' . $package . '"');
+        }
+        if (PEAR::isError($latest)) {
+            return $latest;
+        }
+        if (PEAR::isError($d)) {
+            return $d;
+        }
+        $d = unserialize($d);
+        if (isset($d['required'])) {
+            require_once 'PEAR/PackageFile/v2.php';
+            $pf = new PEAR_PackageFile_v2;
+            $pf->setDeps($d);
+            $d = $pf->getDeps();
+        }
+        $deps = array();
+        foreach ($d as $dep) {
+            if ($dep['type'] != 'pkg') {
+                continue;
+            }
+            $deps[] = $dep;
+        }
+        return array(
+            'name' => $info['n'],
+            'channel' => $info['c'],
+            'category' => $info['ca']['_content'],
+            'stable' => $latest,
+            'license' => $info['l'],
+            'summary' => $info['s'],
+            'description' => $info['d'],
+            'deps' => $deps,
+            );
+    }
+
     /**
      * Return an array containing all of the states that are more stable than
      * or equal to the passed in state

@@ -173,8 +173,14 @@ parameter.
         $channel = $parsed['channel'];
         $this->config->set('default_channel', $channel);
         $chan = $reg->getChannel($channel);
-        $r = &$this->config->getRemote();
-        $info = $r->call('package.info', $parsed['package']);
+        if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
+              $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
+            $rest = &$this->config->getREST('1.0', array());
+            $info = $rest->packageInfo($base, $parsed['package']);
+        } else {
+            $r = &$this->config->getRemote();
+            $info = $r->call('package.info', $parsed['package']);
+        }
         if (PEAR::isError($info)) {
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($info);
