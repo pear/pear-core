@@ -77,7 +77,7 @@ class PEAR_REST_10
                 continue;
             }
             if (isset($state)) {
-                if ($release['s'] == $state) {
+                if ($release['st'] == $state) {
                     $found = true;
                     break;
                 }
@@ -87,7 +87,7 @@ class PEAR_REST_10
                     break;
                 }
             } else {
-                if (in_array($release['s'], $states)) {
+                if (in_array($release['st'], $states)) {
                     $found = true;
                     break;
                 }
@@ -184,7 +184,7 @@ class PEAR_REST_10
                     // version, then skip all others
                     continue;
                 } else {
-                    if (!in_array($release['s'], $states)) {
+                    if (!in_array($release['st'], $states)) {
                         // the stability is too low, but we must return the
                         // recommended version if possible
                     return $this->_returnDownloadURL($base, $package, $release, $info, true);
@@ -200,7 +200,7 @@ class PEAR_REST_10
             if ($installed && version_compare($release['v'], $installed, '<')) {
                 continue;
             }
-            if (in_array($release['s'], $states)) { // if in the preferred state...
+            if (in_array($release['st'], $states)) { // if in the preferred state...
                 $found = true; // ... then use it
                 break;
             }
@@ -245,7 +245,7 @@ class PEAR_REST_10
         }
     }
 
-    function listAll($base, $stable, $basic = true)
+    function listAll($base, $stable, $basic = true, $searchpackage = false, $searchsummary = false)
     {
         $packagelist = $this->_rest->retrieveData($base . 'p/packages.xml');
         if (PEAR::isError($packagelist)) {
@@ -275,19 +275,32 @@ class PEAR_REST_10
                 if (PEAR::isError($inf)) {
                     return $inf;
                 }
+                $found = (!empty($searchpackage) && stristr($package, $searchpackage) !== false);
+                if (!$found && !(isset($searchsummary) && !empty($searchsummary)
+                    && (stristr($inf['s'], $searchsummary) !== false
+                        || stristr($info['d'], $searchsummary) !== false)))
+                {
+                    continue;
+                };
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                 if ($stable) {
                     $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
                         '/stable.txt');
+                    $unstable = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
+                        '/latest.txt');
                 } else {
-                    $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
+                    $unstable = $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
                         '/latest.txt');
                 }
                 PEAR::popErrorHandling();
                 $deps = array();
                 if (PEAR::isError($latest)) {
                     $latest = false;
+                    $state = 'stable';
                 } else {
+                    $releaseinf = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
+                        '/' . $latest . '.xml');
+                    $state = $releaseinf['st'];
                     $d = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/deps.' .
                         $latest . '.txt');
                     if (PEAR::isError($d)) {
@@ -310,7 +323,8 @@ class PEAR_REST_10
                     }
                 }
                 $info = array('stable' => $latest, 'summary' => $inf['s'], 'description' =>
-                    $inf['d'], 'deps' => $deps, 'category' => $inf['ca']['_content']);
+                    $inf['d'], 'deps' => $deps, 'category' => $inf['ca']['_content'],
+                    'unstable' => $unstable, 'state' => $state);
             }
             $ret[$package] = $info;
         }
@@ -353,7 +367,7 @@ class PEAR_REST_10
                     continue;
                 }
                 if ($state) {
-                    if (in_array($release['s'], $states)) {
+                    if (in_array($release['st'], $states)) {
                         $found = true;
                         break;
                     }
@@ -372,7 +386,7 @@ class PEAR_REST_10
             }
             $ret[$package] = array(
                     'version' => $release['v'],
-                    'state' => $release['s'],
+                    'state' => $release['st'],
                     'filesize' => $relinfo['f'],
                 );
         }
