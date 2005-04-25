@@ -167,9 +167,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * remove &lt;max&gt; tag requirement for php dependency
 
   Specific changes from 1.4.0a11:
-  * Implement REST 1.0
-  * Fix bugs in PEAR_ChannelFile REST handling
+  * Implement REST 1.0 as per Request #2781
+  * fix bugs in PEAR_ChannelFile REST handling
   * fix Bug #4069: pear list-all -c &lt;ChannelAlias&gt; does not work
+  * implement Request #2781: support for static channel releases.xml summary
  </notes>
  <contents>
   <dir name="/">
