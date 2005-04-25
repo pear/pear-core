@@ -220,6 +220,7 @@ class PEAR_REST
         if ($accept) {
             $request .= 'Accept: ' . implode(', ', $accept) . "\r\n";
         }
+        $request .= "Connection: close\r\n";
         $request .= "\r\n";
         if ($proxy_host != '') {
             $fp = @fsockopen($proxy_host, $proxy_port, $errno, $errstr, 15);
