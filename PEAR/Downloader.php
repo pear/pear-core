@@ -647,6 +647,7 @@ class PEAR_Downloader extends PEAR_Common
             }
             $pf->setRawPackage($url['package']);
             $pf->setDeps($url['info']);
+            $pf->setRawState($url['stability']);
             $url['info'] = &$pf;
             if (!extension_loaded("zlib") || isset($this->_options['nocompress'])) {
                 $ext = '.tar';
@@ -766,6 +767,7 @@ class PEAR_Downloader extends PEAR_Common
             }
             $pf->setRawPackage($url['package']);
             $pf->setDeps($url['info']);
+            $pf->setRawState($url['stability']);
             $url['info'] = &$pf;
             if (!extension_loaded("zlib") || isset($this->_options['nocompress'])) {
                 $ext = '.tar';

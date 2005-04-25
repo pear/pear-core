@@ -73,7 +73,8 @@ class PEAR_REST_10
             $info['r'] = array($info['r']);
         }
         foreach ($info['r'] as $release) {
-            if ($installed && version_compare($release['v'], $installed, '<')) {
+            if (!isset($this->_rest->_options['force']) && ($installed &&
+                  version_compare($release['v'], $installed, '<'))) {
                 continue;
             }
             if (isset($state)) {
@@ -164,7 +165,8 @@ class PEAR_REST_10
             $info['r'] = array($info['r']);
         }
         foreach ($info['r'] as $release) {
-            if ($installed && version_compare($release['v'], $installed, '<')) {
+            if (!isset($this->_rest->_options['force']) && ($installed &&
+                  version_compare($release['v'], $installed, '<'))) {
                 continue;
             }
             if (in_array($release['v'], $exclude)) { // skip excluded versions
@@ -225,6 +227,7 @@ class PEAR_REST_10
                 array('version' => $releaseinfo['v'],
                       'info' => unserialize($packagexml),
                       'package' => $releaseinfo['p']['_content'],
+                      'stability' => $releaseinfo['st'],
                       'url' => $releaseinfo['g']);
         } else {
             $release = $info['r'][0];
@@ -233,14 +236,15 @@ class PEAR_REST_10
             if (PEAR::isError($releaseinfo)) {
                 return $releaseinfo;
             }
-            $packagexml = unserialize($this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/' .
-                'deps.' . $release['v'] . '.txt', false, true));
+            $packagexml = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/' .
+                'deps.' . $release['v'] . '.txt', false, true);
             if (PEAR::isError($packagexml)) {
                 return $packagexml;
             }
             return
                 array('version' => $releaseinfo['v'],
                       'package' => $releaseinfo['p']['_content'],
+                      'stability' => $releaseinfo['st'],
                       'info' => unserialize($packagexml));
         }
     }

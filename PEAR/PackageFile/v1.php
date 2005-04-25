@@ -610,6 +610,11 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function setRawState($state)
+    {
+        $this->_packageInfo['release_state'] = $state;
+    }
+
     function setState($state)
     {
         $this->_packageInfo['release_state'] = $state;
