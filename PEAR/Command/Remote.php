@@ -288,10 +288,6 @@ parameter.
         }
         if (PEAR::isError($available)) {
             $this->config->set('default_channel', $savechannel);
-            return $this->raiseError($available);
-        }
-        if (PEAR::isError($available)) {
-            $this->config->set('default_channel', $savechannel);
             return $this->raiseError('The package list could not be fetched from the remote server. Please try again. (Debug info: "' . $available->getMessage() . '")');
         }
         $data = array(
