@@ -356,14 +356,16 @@ class PEAR_REST_10
             $states = $this->betterStates($state, true);
         }
         foreach ($packagelist['p'] as $package) {
-            if (!isset($installed[$package])) {
+            if (!isset($installed[strtolower($package)])) {
                 continue;
             }
             $inst_version = $reg->packageInfo($package, 'version', $channel);
+            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $info = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
                 '/allreleases.xml');
+            PEAR::popErrorHandling();
             if (PEAR::isError($info)) {
-                return $info;
+                continue; // no remote releases
             }
             if (!isset($info['r'])) {
                 continue;
@@ -378,7 +380,7 @@ class PEAR_REST_10
                     continue;
                 }
                 if ($state) {
-                    if (in_array($release['st'], $states)) {
+                    if (in_array($release['s'], $states)) {
                         $found = true;
                         break;
                     }
@@ -397,7 +399,7 @@ class PEAR_REST_10
             }
             $ret[$package] = array(
                     'version' => $release['v'],
-                    'state' => $release['st'],
+                    'state' => $release['s'],
                     'filesize' => $relinfo['f'],
                 );
         }
