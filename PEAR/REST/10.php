@@ -317,6 +317,68 @@ class PEAR_REST_10
         return $ret;
     }
 
+    function listLatestUpgrades($base, $state, $installed, $channel, &$reg)
+    {
+        $packagelist = $this->_rest->retrieveData($base . 'p/packages.xml');
+        if (PEAR::isError($packagelist)) {
+            return $packagelist;
+        }
+        $ret = array();
+        if (!is_array($packagelist['p'])) {
+            $packagelist['p'] = array($packagelist['p']);
+        }
+        if ($state) {
+            $states = $this->betterStates($state, true);
+        }
+        foreach ($packagelist['p'] as $package) {
+            if (!isset($installed[$package])) {
+                continue;
+            }
+            $inst_version = $reg->packageInfo($package, 'version', $channel);
+            $info = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
+                '/allreleases.xml');
+            if (PEAR::isError($info)) {
+                return $info;
+            }
+            if (!isset($info['r'])) {
+                continue;
+            }
+            $found = false;
+            $release = false;
+            if (!is_array($info['r'])) {
+                $info['r'] = array($info['r']);
+            }
+            foreach ($info['r'] as $release) {
+                if ($inst_version && version_compare($release['v'], $inst_version, '<')) {
+                    continue;
+                }
+                if ($state) {
+                    if (in_array($release['s'], $states)) {
+                        $found = true;
+                        break;
+                    }
+                } else {
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                continue;
+            }
+            $relinfo = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/' . 
+                $release['v'] . '.xml');
+            if (PEAR::isError($relinfo)) {
+                return $relinfo;
+            }
+            $ret[$package] = array(
+                    'version' => $release['v'],
+                    'state' => $release['s'],
+                    'filesize' => $relinfo['f'],
+                );
+        }
+        return $ret;
+    }
+
     /**
      * Return an array containing all of the states that are more stable than
      * or equal to the passed in state

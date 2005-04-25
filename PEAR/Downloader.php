@@ -1267,6 +1267,7 @@ class PEAR_Downloader extends PEAR_Common
         if ($accept) {
             $request .= 'Accept: ' . implode(', ', $accept) . "\r\n";
         }
+        $request .= "Connection: close\r\n";
         $request .= "\r\n";
         fwrite($fp, $request);
         $headers = array();
