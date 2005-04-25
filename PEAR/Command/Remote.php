@@ -253,8 +253,8 @@ parameter.
     function doListAll($command, $options, $params)
     {
         $savechannel = $channel = $this->config->get('default_channel');
+        $reg = &$this->config->getRegistry();
         if (isset($options['channel'])) {
-            $reg = &$this->config->getRegistry();
             $channel = $options['channel'];
             if ($reg->channelExists($channel)) {
                 $this->config->set('default_channel', $channel);
@@ -262,7 +262,6 @@ parameter.
                 return $this->raiseError("Channel \"$channel\" does not exist");
             }
         }
-        $reg = &$this->config->getRegistry();
         $list_options = false;
         if ($this->config->get('preferred_state') == 'stable') {
             $list_options = true;
@@ -480,30 +479,36 @@ parameter.
                 continue;
             }
             $this->config->set('default_channel', $channel);
-            $remote = &$this->config->getRemote();
             if (empty($params[0])) {
                 $state = $this->config->get('preferred_state');
             } else {
                 $state = $params[0];
             }
             $caption = $channel . ' Available Upgrades';
-            if (empty($state) || $state == 'any') {
-                $remote->pushErrorHandling(PEAR_ERROR_RETURN);
-                $latest = $remote->call("package.listLatestReleases");
-                $remote->popErrorHandling();
-                if (PEAR::isError($latest)) {
-                    $this->ui->outputData($latest->getMessage());
-                    continue;
+            $chan = $reg->getChannel($channel);
+            if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
+                  $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
+                $rest = &$this->config->getREST('1.0', array());
+                if (empty($state) || $state == 'any') {
+                    $state = false;
+                } else {
+                    $caption .= ' (' . implode(', ', PEAR_Common::betterStates($state, true)) . ')';
                 }
+                $latest = $rest->listLatestUpgrades($base, $state, $inst, $channel, $reg);
             } else {
+                $remote = &$this->config->getRemote();
                 $remote->pushErrorHandling(PEAR_ERROR_RETURN);
-                $latest = $remote->call("package.listLatestReleases", $state);
-                $remote->popErrorHandling();
-                if (PEAR::isError($latest)) {
-                    $this->ui->outputData($latest->getMessage());
-                    continue;
+                if (empty($state) || $state == 'any') {
+                    $latest = $remote->call("package.listLatestReleases");
+                } else {
+                    $latest = $remote->call("package.listLatestReleases", $state);
+                    $caption .= ' (' . implode(', ', PEAR_Common::betterStates($state, true)) . ')';
                 }
-                $caption .= ' (' . implode(', ', PEAR_Common::betterStates($state, true)) . ')';
+                $remote->popErrorHandling();
+            }
+            if (PEAR::isError($latest)) {
+                $this->ui->outputData($latest->getMessage());
+                continue;
             }
             $caption .= ':';
             if (PEAR::isError($latest)) {

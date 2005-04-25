@@ -973,7 +973,7 @@ class PEAR_PackageFile_v2
      * Retrieve a list of files that should be installed on this computer
      * @return array
      */
-    function getInstallationFilelist()
+    function getInstallationFilelist($forfilecheck = false)
     {
         $contents = $this->getFilelist(true);
         if (isset($contents['dir']['attribs']['baseinstalldir'])) {
@@ -987,6 +987,9 @@ class PEAR_PackageFile_v2
         if ($release) {
             if (!isset($release[0])) {
                 if (!isset($release['installconditions']) && !isset($release['filelist'])) {
+                    if ($forfilecheck) {
+                        return $this->getFilelist();
+                    }
                     return $contents;
                 }
                 $release = array($release);
@@ -1036,9 +1039,17 @@ class PEAR_PackageFile_v2
                         }
                     }
                 }
+                if ($forfilecheck) {
+                    foreach ($contents as $file => $attrs) {
+                        $contents[$file] = $attrs['attribs'];
+                    }
+                }
                 return $contents;
             }
         } else { // simple release - no installconditions or install-as
+            if ($forfilecheck) {
+                return $this->getFilelist();
+            }
             return $contents;
         }
         // no releases matched
