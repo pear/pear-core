@@ -382,9 +382,16 @@ parameter.
                 return $this->raiseError('Channel "' . $channel . '" does not exist');
             }
         }
-        $r = &$this->config->getRemote();
-        $available = $r->call('package.search', $package, $summary, true, 
-            $this->config->get('preferred_state') == 'stable', true);
+        $chan = $reg->getChannel($channel);
+        if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
+              $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
+            $rest = &$this->config->getREST('1.0', array());
+            $available = $rest->listAll($base, false, false, $package, $summary);
+        } else {
+            $r = &$this->config->getRemote();
+            $available = $r->call('package.search', $package, $summary, true, 
+                $this->config->get('preferred_state') == 'stable', true);
+        }
         if (PEAR::isError($available)) {
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($available);
