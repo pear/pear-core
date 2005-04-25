@@ -976,7 +976,7 @@ class PEAR_Installer extends PEAR_Downloader
         // {{{ checks to do when not in "force" mode
         if (empty($options['force'])) {
             $testp = $channel == 'pear.php.net' ? $pkgname : array($channel, $pkgname);
-            $test = $this->_registry->checkFileMap($pkg->getFileList(), $testp, '1.1');
+            $test = $this->_registry->checkFileMap($pkg->getInstallationFileList(true), $testp, '1.1');
             if (sizeof($test)) {
                 $pkgs = $this->getInstallPackages();
                 $found = false;

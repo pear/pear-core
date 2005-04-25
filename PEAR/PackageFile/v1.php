@@ -841,6 +841,11 @@ class PEAR_PackageFile_v1
         $this->_packageInfo['filelist'][$file] = $attrs;
     }
 
+    function getInstallationFilelist()
+    {
+        return $this->getFilelist();
+    }
+
     function getFilelist()
     {
         if (isset($this->_packageInfo['filelist'])) {

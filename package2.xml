@@ -48,9 +48,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>yes</active>
  </developer>
- <date>2005-04-17</date>
+ <date>2005-04-24</date>
  <version>
-  <release>1.4.0a11</release>
+  <release>1.4.0a12</release>
   <api>1.4.0</api>
  </version>
  <stability>
@@ -165,6 +165,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * make PEAR_Remote messages more helpful (include server name)
   * make list-upgrades only search channels from which we have installed packages
   * remove &lt;max&gt; tag requirement for php dependency
+
+  Specific changes from 1.4.0a11:
+  * Implement REST 1.0
+  * Fix bugs in PEAR_ChannelFile REST handling
+  * fix Bug #4069: pear list-all -c &lt;ChannelAlias&gt; does not work
  </notes>
  <contents>
   <dir name="/">
@@ -818,6 +823,30 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #4038: Array to string conversion in PEAR/Frontend/CLI.php
   * fix Bug #4060: pear upgrade Auth_HTTP fails
   * fix Bug #4072: pear list-all -c channel does not list installed packages
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.0a11</release>
+    <api>1.4.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2005-04-17</date>
+   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <notes>
+  Specific changes from 1.4.0a10:
+  * Add new &quot;unusualbaseinstall&quot; role type that allows custom roles similar
+    data/test/doc to honor the baseinstalldir attribute
+  * fix Bug #4095: System::rm does not handle links correctly
+  * fix Bug #4097: Wrong logging in PEAR_Command_Test
+  * make pear/pecl commands list only pear/pecl packages
+  * fix Bug #4161: pear download always leaves a package.xml in the dir
+  * make PEAR_Remote messages more helpful (include server name)
+  * make list-upgrades only search channels from which we have installed packages
+  * remove &lt;max&gt; tag requirement for php dependency
    </notes>
   </release>
  </changelog>
