@@ -1800,6 +1800,9 @@ class PEAR_Registry extends PEAR
             $pkgs = array();
             foreach ($path as $name => $attrs) {
                 if (is_array($attrs)) {
+                    if (isset($attrs['install-as'])) {
+                        $name = $attrs['install-as'];
+                    }
                     if (!in_array($attrs['role'], PEAR_Installer_Role::getInstallableRoles())) {
                         // these are not installed
                         continue;
