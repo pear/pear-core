@@ -76,6 +76,7 @@ class PEAR_REST
         if (isset($headers['content-type'])) {
             switch ($headers['content-type']) {
                 case 'text/xml' :
+                case 'application/xml' :
                     $parser = new PEAR_XMLParser;
                     $parser->parse($content);
                     $content = $parser->getData();
