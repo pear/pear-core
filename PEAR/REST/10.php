@@ -78,7 +78,7 @@ class PEAR_REST_10
                 continue;
             }
             if (isset($state)) {
-                if ($release['st'] == $state) {
+                if ($release['s'] == $state) {
                     $found = true;
                     break;
                 }
@@ -88,7 +88,7 @@ class PEAR_REST_10
                     break;
                 }
             } else {
-                if (in_array($release['st'], $states)) {
+                if (in_array($release['s'], $states)) {
                     $found = true;
                     break;
                 }
@@ -202,7 +202,7 @@ class PEAR_REST_10
             if ($installed && version_compare($release['v'], $installed, '<')) {
                 continue;
             }
-            if (in_array($release['st'], $states)) { // if in the preferred state...
+            if (in_array($release['s'], $states)) { // if in the preferred state...
                 $found = true; // ... then use it
                 break;
             }
