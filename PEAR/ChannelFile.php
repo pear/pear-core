@@ -125,9 +125,9 @@ define('PEAR_CHANNELFILE_ERROR_INVALID_PORT', 33);
  */
 define('PEAR_CHANNELFILE_ERROR_NO_STATICVERSION', 34);
 /**
- * Error code when <function> contains no uri attribute in a <rest> protocol definition
+ * Error code when <baseurl> contains no type attribute in a <rest> protocol definition
  */
-define('PEAR_CHANNELFILE_ERROR_NORESTURI', 35);
+define('PEAR_CHANNELFILE_ERROR_NOBASEURLTYPE', 35);
 /** 
  * Error code when a mirror is defined and the channel.xml represents the __uri pseudo-channel
  */
@@ -248,8 +248,8 @@ class PEAR_ChannelFile {
                     '%parent% %protocol% function has no version',
                 PEAR_CHANNELFILE_ERROR_NO_FUNCTIONNAME =>
                     '%parent% %protocol% function has no name',
-                PEAR_CHANNELFILE_ERROR_NORESTURI =>
-                    '%parent% rest function has no uri',
+                PEAR_CHANNELFILE_ERROR_NOBASEURLTYPE =>
+                    '%parent% rest baseurl has no type',
                 PEAR_CHANNELFILE_ERROR_NOVALIDATE_NAME =>
                     'Validation package has no name in <validatepackage> tag',
                 PEAR_CHANNELFILE_ERROR_NOVALIDATE_VERSION =>
@@ -685,8 +685,8 @@ class PEAR_ChannelFile {
             $this->validateFunctions('soap', $info['servers']['primary']['soap']['function']);
         }
         if (isset($info['servers']['primary']['rest']) &&
-              isset($info['servers']['primary']['rest']['function'])) {
-            $this->validateFunctions('rest', $info['servers']['primary']['rest']['function']);
+              isset($info['servers']['primary']['rest']['baseurl'])) {
+            $this->validateFunctions('rest', $info['servers']['primary']['rest']['baseurl']);
         }
         if (isset($info['servers']['mirror'])) {
             if ($this->_channelInfo['name'] == '__uri') {
@@ -717,7 +717,7 @@ class PEAR_ChannelFile {
                         $mirror['attribs']['host']);
                 }
                 if (isset($mirror['rest'])) {
-                    $this->validateFunctions('rest', $mirror['rest']['function'],
+                    $this->validateFunctions('rest', $mirror['rest']['baseurl'],
                         $mirror['attribs']['host']);
                 }
             }
@@ -740,16 +740,17 @@ class PEAR_ChannelFile {
                 $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_FUNCTIONNAME,
                     array('parent' => $parent, 'protocol' => $protocol));
             }
-            if (!isset($function['attribs']['version']) ||
-                  empty($function['attribs']['version'])) {
-                $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_FUNCTIONVERSION,
-                    array('parent' => $parent, 'protocol' => $protocol));
-            }
             if ($protocol == 'rest') {
-                if (!isset($function['attribs']['uri']) ||
-                      empty($function['attribs']['uri'])) {
-                    $this->_validateError(PEAR_CHANNELFILE_ERROR_NORESTURI,
-                        array('parent' => $parent));
+                if (!isset($function['attribs']['type']) ||
+                      empty($function['attribs']['type'])) {
+                    $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_BASEURLTYPE,
+                        array('parent' => $parent, 'protocol' => $protocol));
+                }
+            } else {
+                if (!isset($function['attribs']['version']) ||
+                      empty($function['attribs']['version'])) {
+                    $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_FUNCTIONVERSION,
+                        array('parent' => $parent, 'protocol' => $protocol));
                 }
             }
         }
@@ -894,16 +895,21 @@ class PEAR_ChannelFile {
         if ($this->getName() == '__uri') {
             return false;
         }
+        if ($protocol == 'rest') {
+            $function = 'baseurl';
+        } else {
+            $function = 'function';
+        }
         if ($mirror) {
             if ($mir = $this->getMirror($mirror)) {
-                if (isset($mir[$protocol]['function'])) {
-                    return $mir[$protocol]['function'];
+                if (isset($mir[$protocol][$function])) {
+                    return $mir[$protocol][$function];
                 }
             }
             return false;
         }
-        if (isset($this->_channelInfo['servers']['primary'][$protocol]['function'])) {
-            return $this->_channelInfo['servers']['primary'][$protocol]['function'];
+        if (isset($this->_channelInfo['servers']['primary'][$protocol][$function])) {
+            return $this->_channelInfo['servers']['primary'][$protocol][$function];
         } else {
             return false;
         }
