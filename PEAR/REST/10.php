@@ -318,19 +318,21 @@ class PEAR_REST_10
                         return $d;
                     }
                     $d = unserialize($d);
-                    if (isset($d['required'])) {
-                        require_once 'PEAR/PackageFile/v2.php';
-                        $pf = new PEAR_PackageFile_v2;
-                        $pf->setDeps($d);
-                        $tdeps = $pf->getDeps();
-                    } else {
-                        $tdeps = $d;
-                    }
-                    foreach ($tdeps as $dep) {
-                        if ($dep['type'] !== 'pkg') {
-                            continue;
+                    if ($d) {
+                        if (isset($d['required'])) {
+                            require_once 'PEAR/PackageFile/v2.php';
+                            $pf = new PEAR_PackageFile_v2;
+                            $pf->setDeps($d);
+                            $tdeps = $pf->getDeps();
+                        } else {
+                            $tdeps = $d;
                         }
-                        $deps[] = $dep;
+                        foreach ($tdeps as $dep) {
+                            if ($dep['type'] !== 'pkg') {
+                                continue;
+                            }
+                            $deps[] = $dep;
+                        }
                     }
                 }
                 $info = array('stable' => $latest, 'summary' => $inf['s'], 'description' =>
