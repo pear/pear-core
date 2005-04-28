@@ -386,17 +386,17 @@ List the files in an installed package.
 
             $data['data'] = array();
             $data['caption'] = 'Server Capabilities';
-            $data['headline'] = array('Type', 'Version', 'Function Name', 'URI');
+            $data['headline'] = array('Type', 'Version/REST type', 'Function Name/REST base');
             $capabilities = $chan->getFunctions('xmlrpc');
             $soaps = $chan->getFunctions('soap');
-            if ($capabilities || $soaps) {
+            if ($capabilities || $soaps || $chan->supportsREST()) {
                 if ($capabilities) {
                     if (!isset($capabilities[0])) {
                         $capabilities = array($capabilities);
                     }
                     foreach ($capabilities as $protocol) {
                         $data['data'][] = array('xmlrpc', $protocol['attribs']['version'],
-                            $protocol['_content'], '');
+                            $protocol['_content']);
                     }
                 }
                 if ($soaps) {
@@ -405,7 +405,17 @@ List the files in an installed package.
                     }
                     foreach ($soaps as $protocol) {
                         $data['data'][] = array('soap', $protocol['attribs']['version'],
-                            $protocol['_content'], '');
+                            $protocol['_content']);
+                    }
+                }
+                if ($chan->supportsREST()) {
+                    $funcs = $chan->getFunctions('rest');
+                    if (!isset($funcs[0])) {
+                        $funcs = array($funcs);
+                    }
+                    foreach ($funcs as $protocol) {
+                        $data['data'][] = array('rest', $protocol['attribs']['type'],
+                            $protocol['_content']); 
                     }
                 }
             } else {
@@ -424,10 +434,10 @@ List the files in an installed package.
                 foreach ($mirrors as $mirror) {
                     $data['data'] = array();
                     $data['caption'] = 'Mirror ' . $mirror['attribs']['host'] . ' Capabilities';
-                    $data['headline'] = array('Type', 'Version', 'Function Name', 'URI');
+                    $data['headline'] = array('Type', 'Version/REST type', 'Function Name/REST base');
                     $capabilities = $chan->getFunctions('xmlrpc', $mirror['attribs']['host']);
                     $soaps = $chan->getFunctions('soap', $mirror['attribs']['host']);
-                    if ($capabilities || $soaps) {
+                    if ($capabilities || $soaps || $chan->supportsREST($mirror['attribs']['host'])) {
                         if ($capabilities) {
                             if (!isset($capabilities[0])) {
                                 $capabilities = array($capabilities);
@@ -444,6 +454,16 @@ List the files in an installed package.
                             foreach ($soaps as $protocol) {
                                 $data['data'][] = array('soap', $protocol['attribs']['version'],
                                     $protocol['_content'], '');
+                            }
+                        }
+                        if ($chan->supportsREST($mirror['attribs']['host'])) {
+                            $funcs = $chan->getFunctions('rest', $mirror['attribs']['host']);
+                            if (!isset($funcs[0])) {
+                                $funcs = array($funcs);
+                            }
+                            foreach ($funcs as $protocol) {
+                                $data['data'][] = array('rest', $protocol['attribs']['type'],
+                                    $protocol['_content']); 
                             }
                         }
                     } else {
