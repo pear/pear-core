@@ -161,7 +161,7 @@ class PEAR_REST_10
         }
         $found = false;
         $release = false;
-        if (!is_array($info['r'])) {
+        if (!is_array($info['r']) || !isset($info['r'][0])) {
             $info['r'] = array($info['r']);
         }
         foreach ($info['r'] as $release) {
@@ -173,10 +173,10 @@ class PEAR_REST_10
                 continue;
             }
             // allow newer releases to say "I'm OK with the dependent package"
-            if ($xsdversion == '2.0' && isset($release['c'])) {
-                if (isset($release['c'][$deppackage['channel']]
+            if ($xsdversion == '2.0' && isset($release['co'])) {
+                if (isset($release['co'][$deppackage['channel']]
                       [$deppackage['p']]) && in_array($release['v'],
-                        $release['c'][$deppackage['channel']]
+                        $release['co'][$deppackage['channel']]
                         [$deppackage['package']])) {
                     $recommended = $release['v'];
                 }
