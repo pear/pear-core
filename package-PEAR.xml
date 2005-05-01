@@ -164,6 +164,7 @@
   * Implement REST 1.0 as per Request #2781
   * fix bugs in PEAR_ChannelFile REST handling
   * fix Bug #4069: pear list-all -c &lt;ChannelAlias&gt; does not work
+  * fix Bug #4257: if rel="has" is used with a version="" attribute, the warning does not work
   * implement Request #2781: support for static channel releases.xml summary
   </notes>
   <provides type="class" name="OS_Guess"/>
