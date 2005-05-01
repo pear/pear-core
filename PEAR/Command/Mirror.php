@@ -114,7 +114,7 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
         $this->ui->outputData('Using Channel ' . $this->config->get('default_channel'));
         $remote = &$this->config->getRemote();
         $stable = ($this->config->get('preferred_state') == 'stable');
-        $remoteInfo = $remote->call("package.listAll", true, $stable, true);
+        $remoteInfo = $remote->call("package.listAll", true, $stable, false);
         if (PEAR::isError($remoteInfo)) {
             return $remoteInfo;
         }
