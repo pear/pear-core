@@ -182,6 +182,13 @@ class PEAR_PackageFile
                 return $pf;
             }
             if ($pf->validate($state)) {
+                if ($this->_logger) {
+                    if ($pf->getValidationWarnings(false)) {
+                        foreach ($pf->getValidationWarnings() as $warning) {
+                            $this->_logger->log(0, 'WARNING: ' . $warning['message']);
+                        }
+                    }
+                }
                 if (method_exists($pf, 'flattenFilelist')) {
                     $pf->flattenFilelist(); // for v2
                 }
@@ -213,6 +220,16 @@ class PEAR_PackageFile
                 return $pf;
             }
             if ($pf->validate($state)) {
+                if ($this->_logger) {
+                    if ($pf->getValidationWarnings(false)) {
+                        foreach ($pf->getValidationWarnings() as $warning) {
+                            $this->_logger->log(0, 'WARNING: ' . $warning['message']);
+                        }
+                    }
+                }
+                if (method_exists($pf, 'flattenFilelist')) {
+                    $pf->flattenFilelist(); // for v2
+                }
                 return $pf;
             } else {
                 $a = PEAR::raiseError('Parsing of package.xml from file "' . $file . '" failed',
