@@ -1102,7 +1102,7 @@ class PEAR_PackageFile_v1
                         array('index' => $i));
                 } elseif (($d['rel'] == 'has' || $d['rel'] == 'not') && !empty($d['version'])) {
                     $this->_validateWarning(PEAR_PACKAGEFILE_ERROR_DEPVERSION_IGNORED,
-                        array('index' => $i, 'rel' => $de['rel']));
+                        array('index' => $i, 'rel' => $d['rel']));
                 }
                 if ($d['type'] == 'php' && !empty($d['name'])) {
                     $this->_validateWarning(PEAR_PACKAGEFILE_ERROR_DEPNAME_IGNORED,
