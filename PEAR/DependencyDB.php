@@ -411,7 +411,7 @@ class PEAR_DependencyDB
                 $this->_lockFp = @fopen($this->_lockfile, $open_mode);
             }
             if (!is_resource($this->_lockFp)) {
-                return PEAR::raiseError("could not create lock file" .
+                return PEAR::raiseError("could not create Dependency lock file" .
                                          (isset($php_errormsg) ? ": " . $php_errormsg : ""));
             }
             if (!(int)flock($this->_lockFp, $mode)) {
