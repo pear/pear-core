@@ -289,9 +289,10 @@ class PEAR_REST_10
                     };
                 }
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                if ($stable) {
-                    $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
-                        '/stable.txt');
+                $stable = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
+                    '/stable.txt');
+                if (!PEAR::isError($stable)) {
+                    $latest = $stable;
                     $unstable = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
                         '/latest.txt');
                 } else {
