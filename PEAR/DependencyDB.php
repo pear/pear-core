@@ -135,6 +135,26 @@ class PEAR_DependencyDB
         $this->_lockfile = dirname($this->_depdb) . DIRECTORY_SEPARATOR . '.depdblock';
     }
     // }}}
+
+    function hasWriteAccess()
+    {
+        if (!@file_exists($this->_depdb)) {
+            $dir = $this->_depdb;
+            while ($dir && $dir != '.') {
+                $dir = dirname($dir); // cd ..
+                if ($dir != '.' && @file_exists($dir)) {
+                    if (@is_writeable($dir)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+        return @is_writeable($this->_depdb);
+    }
+
     // {{{ assertDepsDB()
 
     /**
@@ -370,6 +390,10 @@ class PEAR_DependencyDB
     function rebuildDB()
     {
         $depdb = array('_version' => $this->_version);
+        if (!$this->hasWriteAccess()) {
+            // allow startup for read-only with older Registry
+            return $depdb;
+        }
         $packages = $this->_registry->listAllPackages();
         foreach ($packages as $channel => $ps) {
             foreach ($ps as $package) {
@@ -448,6 +472,9 @@ class PEAR_DependencyDB
      */
     function _getDepDB()
     {
+        if (!$this->hasWriteAccess()) {
+            return array('version' => $this->_version);
+        }
         if (isset($this->_cache)) {
             return $this->_cache;
         }
