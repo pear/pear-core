@@ -50,21 +50,32 @@ class PEAR_REST
 
     function retrieveData($url, $accept = false, $forcestring = false)
     {
+        if ($ret = $this->useLocalCache($url)) {
+            return $ret;
+        }
         $cacheId = $this->getCacheId($url);
         if (!isset($this->_options['offline'])) {
+            $trieddownload = true;
             $file = $this->downloadHttp($url, $cacheId, $accept);
         } else {
+            $trieddownload = false;
             $file = false;
         }
         if (PEAR::isError($file)) {
             if ($file->getCode() == -9276) {
+                $trieddownload = false;
                 $file = false; // use local copy if available on socket connect error
             } else {
                 return $file;
             }
         }
         if (!$file) {
-            return $this->getCache($url);
+            $ret = $this->getCache($url);
+            if (!PEAR::isError($ret) && $trieddownload) {
+                // reset the age of the cache if the server says it was unmodified
+                $this->saveCache($url, $ret, null, true);
+            }
+            return $ret;
         }
         $headers = $file[2];
         $lastmodified = $file[1];
@@ -78,7 +89,13 @@ class PEAR_REST
                 case 'text/xml' :
                 case 'application/xml' :
                     $parser = new PEAR_XMLParser;
-                    $parser->parse($content);
+                    PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                    $err = $parser->parse($content);
+                    PEAR::popErrorHandling();
+                    if (PEAR::isError($err)) {
+                        return PEAR::raiseError('Invalid xml downloaded from "' . $url . '": ' .
+                            $err->getMessage());
+                    }
                     $content = $parser->getData();
                 case 'text/html' :
                 default :
@@ -94,12 +111,30 @@ class PEAR_REST
         return $content;
     }
 
+    function useLocalCache($url)
+    {
+        $cacheidfile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
+            md5($url) . 'rest.cacheid';
+        if (@file_exists($cacheidfile)) {
+            $ret = unserialize(implode('', file($cacheidfile)));
+        } else {
+            return false;
+        }
+        $cachettl = $this->config->get('cache_ttl');
+        // If cache is newer than $cachettl seconds, we use the cache!
+        if ($ret['age'] < $cachettl) {
+            return $this->getCache($url);
+        }
+        return false;
+    }
+
     function getCacheId($url)
     {
         $cacheidfile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
             md5($url) . 'rest.cacheid';
         if (@file_exists($cacheidfile)) {
-            return unserialize(implode('', file($cacheidfile)));
+            $ret = unserialize(implode('', file($cacheidfile)));
+            return $ret['lastChange'];
         } else {
             return false;
         }
@@ -116,7 +151,7 @@ class PEAR_REST
         }
     }
 
-    function saveCache($url, $contents, $lastmodified)
+    function saveCache($url, $contents, $lastmodified, $nochange = false)
     {
         $cacheidfile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
             md5($url) . 'rest.cacheid';
@@ -126,7 +161,20 @@ class PEAR_REST
         if (!$fp) {
             return false;
         }
-        fwrite($fp, serialize($lastmodified));
+        if ($nochange) {
+            $contents = unserialize(implode('', file($cacheidfile)));
+            fwrite($fp, serialize(array(
+                'age'        => time() - filemtime($cachefile),
+                'lastChange' => $contents['lastChange'],
+                )));
+            fclose($fp);
+            return true;
+        } else {
+            fwrite($fp, serialize(array(
+                'age'        => 0,
+                'lastChange' => $lastmodified,
+                )));
+        }
         fclose($fp);
         $fp = @fopen($cachefile, 'wb');
         if (!$fp) {
