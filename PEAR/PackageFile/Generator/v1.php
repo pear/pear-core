@@ -560,6 +560,7 @@ class PEAR_PackageFile_Generator_v1
             );
         $licensemap =
             array(
+                'php' => 'http://www.php.net/license',
                 'php license' => 'http://www.php.net/license',
                 'lgpl' => 'http://www.gnu.org/copyleft/lesser.html',
                 'bsd' => 'http://www.opensource.org/licenses/bsd-license.php',
