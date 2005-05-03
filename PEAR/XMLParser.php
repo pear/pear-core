@@ -73,12 +73,21 @@ class PEAR_XMLParser
         return $this->_unserializedData;
     }
 
+    function preProcessStupidSaxon($data)
+    {
+        return strtr($data,
+            array(
+                '&nbsp;' => ' ',
+            ));
+    }
+
     /**
      * @param string xml content
      * @return true|PEAR_Error
      */
     function parse($data)
     {
+        $data = $this->preProcessStupidSaxon($data);
         if (!extension_loaded('xml')) {
             include_once 'PEAR.php';
             return PEAR::raiseError("XML Extension not found", 1);
