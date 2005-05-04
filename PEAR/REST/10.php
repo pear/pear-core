@@ -186,10 +186,10 @@ class PEAR_REST_10
                     // version, then skip all others
                     continue;
                 } else {
-                    if (!in_array($release['st'], $states)) {
+                    if (!in_array($release['s'], $states)) {
                         // the stability is too low, but we must return the
                         // recommended version if possible
-                    return $this->_returnDownloadURL($base, $package, $release, $info, true);
+                        return $this->_returnDownloadURL($base, $package, $release, $info, true);
                     }
                 }
             }
@@ -249,7 +249,7 @@ class PEAR_REST_10
         }
     }
 
-    function listAll($base, $stable, $basic = true, $searchpackage = false, $searchsummary = false)
+    function listAll($base, $dostable, $basic = true, $searchpackage = false, $searchsummary = false)
     {
         $packagelist = $this->_rest->retrieveData($base . 'p/packages.xml');
         if (PEAR::isError($packagelist)) {
@@ -262,7 +262,7 @@ class PEAR_REST_10
         foreach ($packagelist['p'] as $package) {
             if ($basic) { // remote-list command
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                if ($stable) {
+                if ($dostable) {
                     $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
                         '/stable.txt');
                 } else {
@@ -299,43 +299,51 @@ class PEAR_REST_10
                     $unstable = $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
                         '/latest.txt');
                 }
-                PEAR::popErrorHandling();
                 $deps = array();
                 if (PEAR::isError($unstable)) {
                     $unstable = false;
                     $state = 'stable';
+                    if (!PEAR::isError($stable)) {
+                        $latest = $stable;
+                        $releaseinf = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
+                            '/' . $stable . '.xml');
+                    } else {
+                        $releaseinf = false;
+                    }
                 } else {
+                    $latest = $unstable;
                     $releaseinf = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
                         '/' . $unstable . '.xml');
                 }
                 if (PEAR::isError($latest)) {
                     $latest = false;
                     $state = 'stable';
-                } else {
+                }
+                if (!PEAR::isError($releaseinf) && $releaseinf) {
                     $state = $releaseinf['st'];
                     $d = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/deps.' .
                         $latest . '.txt');
-                    if (PEAR::isError($d)) {
-                        return $d;
-                    }
-                    $d = unserialize($d);
-                    if ($d) {
-                        if (isset($d['required'])) {
-                            require_once 'PEAR/PackageFile/v2.php';
-                            $pf = new PEAR_PackageFile_v2;
-                            $pf->setDeps($d);
-                            $tdeps = $pf->getDeps();
-                        } else {
-                            $tdeps = $d;
-                        }
-                        foreach ($tdeps as $dep) {
-                            if ($dep['type'] !== 'pkg') {
-                                continue;
+                    if (!PEAR::isError($d)) {
+                        $d = unserialize($d);
+                        if ($d) {
+                            if (isset($d['required'])) {
+                                require_once 'PEAR/PackageFile/v2.php';
+                                $pf = new PEAR_PackageFile_v2;
+                                $pf->setDeps($d);
+                                $tdeps = $pf->getDeps();
+                            } else {
+                                $tdeps = $d;
                             }
-                            $deps[] = $dep;
+                            foreach ($tdeps as $dep) {
+                                if ($dep['type'] !== 'pkg') {
+                                    continue;
+                                }
+                                $deps[] = $dep;
+                            }
                         }
                     }
                 }
+                PEAR::popErrorHandling();
                 $info = array('stable' => $latest, 'summary' => $inf['s'], 'description' =>
                     $inf['d'], 'deps' => $deps, 'category' => $inf['ca']['_content'],
                     'unstable' => $unstable, 'state' => $state);
