@@ -112,9 +112,16 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
         }
         $this->config->set('default_channel', $channel);
         $this->ui->outputData('Using Channel ' . $this->config->get('default_channel'));
-        $remote = &$this->config->getRemote();
-        $stable = ($this->config->get('preferred_state') == 'stable');
-        $remoteInfo = $remote->call("package.listAll", true, $stable, false);
+        $chan = $reg->getChannel($channel);
+        if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
+              $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
+            $rest = &$this->config->getREST('1.0', array());
+            $remoteInfo = array_flip($rest->listPackages($base));
+        } else {
+            $remote = &$this->config->getRemote();
+            $stable = ($this->config->get('preferred_state') == 'stable');
+            $remoteInfo = $remote->call("package.listAll", true, $stable, false);
+        }
         if (PEAR::isError($remoteInfo)) {
             return $remoteInfo;
         }
