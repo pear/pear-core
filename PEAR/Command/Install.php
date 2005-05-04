@@ -361,7 +361,6 @@ Run post-installation scripts in package <package>, if any exist.
         $reg = &$this->config->getRegistry();
         if ($command == 'upgrade-all') {
             $options['upgrade'] = true;
-            $remote = &$this->config->getRemote($this->config);
             $reg = &$this->config->getRegistry();
             $savechannel = $this->config->get('default_channel');
             $params = array();
@@ -370,18 +369,32 @@ Run post-installation scripts in package <package>, if any exist.
                     continue;
                 }
                 $this->config->set('default_channel', $channel);
-                $state = $this->config->get('preferred_state');
-                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-                if (empty($state) || $state == 'any') {
-                    $latest = $remote->call("package.listLatestReleases");
+                $chan = &$reg->getChannel($channel);
+                if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
+                      $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
+                    $dorest = true;
+                    unset($remote);
                 } else {
-                    $latest = $remote->call("package.listLatestReleases", $state);
+                    $dorest = false;
+                    $remote = &$this->config->getRemote($this->config);
+                }
+                $state = $this->config->get('preferred_state');
+                $installed = array_flip($reg->listPackages($channel));
+                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                if ($dorest) {
+                    $rest = &$this->config->getREST('1.0', array());
+                    $latest = $rest->listLatestUpgrades($base, $state, $installed, $channel, $reg);
+                } else {
+                    if (empty($state) || $state == 'any') {
+                        $latest = $remote->call("package.listLatestReleases");
+                    } else {
+                        $latest = $remote->call("package.listLatestReleases", $state);
+                    }
                 }
                 PEAR::staticPopErrorHandling();
                 if (PEAR::isError($latest)) {
                     continue;
                 }
-                $installed = array_flip($reg->listPackages($channel));
                 foreach ($latest as $package => $info) {
                     $package = strtolower($package);
                     if (!isset($installed[$package])) {
