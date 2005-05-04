@@ -254,6 +254,11 @@ define('PEAR_PACKAGEFILE_ERROR_FILE_NOTFOUND', 47);
  * Error code when a <dep type="php" rel="not"... is encountered (use rel="ne")
  */
 define('PEAR_PACKAGEFILE_PHP_NO_NOT', 48);
+
+/**
+ * Error code when a package.xml contains non-ISO-8859-1 characters
+ */
+define('PEAR_PACKAGEFILE_ERROR_NON_ISO_CHARS', 49);
 /**
  * package.xml encapsulator
  * @category   pear
@@ -1007,6 +1012,8 @@ class PEAR_PackageFile_v1
                     'Error, PHP5 token encountered, analysis should be in PHP5',
                 PEAR_PACKAGEFILE_ERROR_FILE_NOTFOUND =>
                     'File "%file%" in package.xml does not exist',
+                PEAR_PACKAGEFILE_ERROR_NON_ISO_CHARS =>
+                    'Package.xml contains non-ISO-8859-1 characters, and may not validate',
             );
     }
 

@@ -62,10 +62,15 @@ class PEAR_PackageFile_Parser_v2 extends PEAR_XMLParser
      */
     function parse($data, $file, $archive = false, $class = 'PEAR_PackageFile_v2')
     {
+        $test = $this->preProcessStupidSaxon($data);
         if (PEAR::isError($err = parent::parse($data, $file))) {
             return $err;
         }
         $ret = new $class;
+        if ($test != $data) {
+            $ret->_stack->push('_warningNonIsoChars', 'warning', array(),
+                'Non-ISO-8859-1 character detected, validation may fail');
+        }
         $ret->setConfig($this->_config);
         if (isset($this->_logger)) {
             $ret->setLogger($this->_logger);

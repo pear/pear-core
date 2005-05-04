@@ -62,6 +62,17 @@ class PEAR_PackageFile_Parser_v1
         $this->_logger = &$l;
     }
 
+    function preProcessStupidSaxon($data)
+    {
+        $data = strtr($data,
+            array(
+                '&nbsp;' => ' ',
+            ));
+        // convert non-ISO-8859-1 chars to ? for safety (parser dies otherwise)
+        $data = preg_replace('/[\x7F-\xFF]/', '?', $data);
+        return $data;
+    }
+
     /**
      * @param string contents of package.xml file, version 1.0
      * @return bool success of parsing
@@ -71,6 +82,10 @@ class PEAR_PackageFile_Parser_v1
         if (!extension_loaded('xml')) {
             $this->_stack->push(PEAR_PACKAGEFILE_ERROR_NO_XML_EXT, 'exception', array('error' => $error));
             return $this->_isValid = false;
+        }
+        $test = $this->preProcessStupidSaxon($data);
+        if ($test != $data) {
+            $this->_stack->push(PEAR_PACKAGEFILE_ERROR_NON_ISO_CHARS, 'warning');
         }
         $xp = @xml_parser_create();
         if (!$xp) {
