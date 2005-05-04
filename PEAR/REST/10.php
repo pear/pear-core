@@ -249,6 +249,15 @@ class PEAR_REST_10
         }
     }
 
+    function listPackages($base)
+    {
+        $packagelist = $this->_rest->retrieveData($base . 'p/packages.xml');
+        if (PEAR::isError($packagelist)) {
+            return $packagelist;
+        }
+        return $packagelist['p'];
+    }
+
     function listAll($base, $dostable, $basic = true, $searchpackage = false, $searchsummary = false)
     {
         $packagelist = $this->_rest->retrieveData($base . 'p/packages.xml');
@@ -387,7 +396,7 @@ class PEAR_REST_10
                 $info['r'] = array($info['r']);
             }
             foreach ($info['r'] as $release) {
-                if ($inst_version && version_compare($release['v'], $inst_version, '<')) {
+                if ($inst_version && version_compare($release['v'], $inst_version, '<=')) {
                     continue;
                 }
                 if ($state) {
