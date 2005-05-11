@@ -758,11 +758,15 @@ class PEAR_Downloader extends PEAR_Common
                     'this should never happen');
             }
             if (isset($url['info']['required'])) {
-                require_once 'PEAR/PackageFile/v2.php';
+                if (!class_exists('PEAR_PackageFile_v2')) {
+                    require_once 'PEAR/PackageFile/v2.php';
+                }
                 $pf = new PEAR_PackageFile_v2;
-                $pf->setRawChannel($parr['channel']);
+                $pf->setRawChannel($remotechannel);
             } else {
-                require_once 'PEAR/PackageFile/v1.php';
+                if (!class_exists('PEAR_PackageFile_v1')) {
+                    require_once 'PEAR/PackageFile/v1.php';
+                }
                 $pf = new PEAR_PackageFile_v1;
             }
             $pf->setRawPackage($url['package']);
