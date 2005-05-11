@@ -21,6 +21,119 @@ class test_XML_RPC_Client extends XML_RPC_Client {
         return $resp;
     }
 }
+require_once 'PEAR/REST.php';
+class test_PEAR_REST extends PEAR_REST {
+    function downloadHttp($url, $lastmodified = null, $accept = false)
+    {
+        $info = parse_url($url);
+        if (!isset($info['scheme']) || !in_array($info['scheme'], array('http', 'https'))) {
+            return PEAR::raiseError('Cannot download non-http URL "' . $url . '"');
+        }
+        if (!isset($info['host'])) {
+            return PEAR::raiseError('Cannot download from non-URL "' . $url . '"');
+        } else {
+            $host = @$info['host'];
+            $port = @$info['port'];
+            $path = @$info['path'];
+        }
+        $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
+        if ($this->config->get('http_proxy')&& 
+              $proxy = parse_url($this->config->get('http_proxy'))) {
+            $proxy_host = @$proxy['host'];
+            if (isset($proxy['scheme']) && $proxy['scheme'] == 'https') {
+                $proxy_host = 'ssl://' . $proxy_host;
+            }
+            $proxy_port = @$proxy['port'];
+            $proxy_user = @$proxy['user'];
+            $proxy_pass = @$proxy['pass'];
+
+            if ($proxy_port == '') {
+                $proxy_port = 8080;
+            }
+        }
+        if (empty($port)) {
+            if (isset($info['scheme']) && $info['scheme'] == 'https') {
+                $port = 443;
+            } else {
+                $port = 80;
+            }
+        }
+        $request = "GET $path HTTP/1.1\r\n";
+        $ifmodifiedsince = '';
+        if (is_array($lastmodified)) {
+            if (isset($lastmodified['Last-Modified'])) {
+                $ifmodifiedsince = 'If-Modified-Since: ' . $lastmodified['Last-Modified'] . "\r\n";
+            }
+            if (isset($lastmodified['ETag'])) {
+                $ifmodifiedsince .= "If-None-Match: $lastmodified[ETag]\r\n";
+            }
+        } else {
+            $ifmodifiedsince = ($lastmodified ? "If-Modified-Since: $lastmodified\r\n" : '');
+        }
+        $request .= "Host: $host:$port\r\n" . $ifmodifiedsince .
+            "User-Agent: PHP/" . PHP_VERSION . "\r\n";
+        $username = $this->config->get('username');
+        $password = $this->config->get('password');
+        if ($username && $password) {
+            $tmp = base64_encode("$username:$password");
+            $request .= "Authorization: Basic $tmp\r\n";
+        }
+        if ($proxy_host != '' && $proxy_user != '') {
+            $request .= 'Proxy-Authorization: Basic ' .
+                base64_encode($proxy_user . ':' . $proxy_pass) . "\r\n";
+        }
+        if ($accept) {
+            $request .= 'Accept: ' . implode(', ', $accept) . "\r\n";
+        }
+        $request .= "Connection: close\r\n";
+        $request .= "\r\n";
+        $headers = array();
+        $retrieved = explode("\n", $GLOBALS['pearweb']->receiveREST($url));
+        $headers = array();
+        $line = array_shift($retrieved);
+        while (strlen(trim($line))) {
+            if (preg_match('/^([^:]+):\s+(.*)\s*$/', $line, $matches)) {
+                $headers[strtolower($matches[1])] = trim($matches[2]);
+            } elseif (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
+                if ($matches[1] == 304 && ($lastmodified || ($lastmodified === false))) {
+                    return false;
+                }
+                if ($matches[1] != 200) {
+                    return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)");
+                }
+            }
+            $line = array_shift($retrieved);
+        }
+        $retrieved = join("\n", $retrieved);
+        if (isset($headers['content-length'])) {
+            $length = $headers['content-length'];
+        } else {
+            $length = -1;
+        }
+        $data = '';
+        if ($lastmodified === false || $lastmodified) {
+            if (isset($headers['etag'])) {
+                $lastmodified = array('ETag' => $headers['etag']);
+            }
+            if (isset($headers['last-modified'])) {
+                if (is_array($lastmodified)) {
+                    $lastmodified['Last-Modified'] = $headers['last-modified'];
+                } else {
+                    $lastmodified = $headers['last-modified'];
+                }
+            }
+            return array($data, $lastmodified, $headers);
+        }
+        return $data;
+    }
+}
+require_once 'PEAR/REST/10.php';
+class test_PEAR_REST_10 extends PEAR_REST_10 {
+    function test_PEAR_REST_10($config, $options = array())
+    {
+        $this->_rest = &new test_PEAR_REST($config, $options);
+    }
+}
 require_once 'PEAR/Remote.php';
 
 class test_PEAR_Remote extends PEAR_Remote {
@@ -843,9 +956,17 @@ class test_PEAR_PackageFile_v1 extends PEAR_PackageFile_v1
 
 class test_PEAR_Config extends PEAR_Config
 {
-    function getRemote()
+    function &getRemote()
     {
         $remote = &new test_PEAR_Remote($this);
+        return $remote;
+    }
+
+    function &getREST($version, $options = array())
+    {
+        $version = str_replace('.', '', $version);
+        $class = 'test_PEAR_REST_' . $version;
+        $remote = &new $class($this, $options);
         return $remote;
     }
 
