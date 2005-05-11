@@ -431,7 +431,7 @@ $phpunit->assertEquals(array (
           array (
             0 => 'Default Channel Mirror',
             1 => 'preferred_mirror',
-            2 => 'pear.php.net',
+            2 => '__uri',
           ),
           5 => 
           array (
