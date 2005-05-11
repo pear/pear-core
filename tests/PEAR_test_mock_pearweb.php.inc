@@ -77,10 +77,10 @@ class PEAR_test_mock_pearweb {
         PEAR::popErrorHandling();
         if (!PEAR::isError($ret)) {
             if (!$ret) {
-                echo '$pearweb->addRESTConfig("' . $address . "\", true);\n";
+                echo '$pearweb->addRESTConfig("' . $address . "\", true, 'text/xml');\n";
             } else {
                 echo '$pearweb->addRESTConfig("' . $address . '", ' . var_export($ret[0], true)
-                    . ");\n";
+                    . ", 'text/xml');\n";
             }
         }
     }
