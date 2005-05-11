@@ -38,294 +38,9 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/packages.xml", '<?xml versio
  <p>Archive_Tar</p>
  <p>Archive_Zip</p>
  <p>Auth</p>
- <p>Auth_Enterprise</p>
- <p>Auth_HTTP</p>
- <p>Auth_PrefManager</p>
- <p>Auth_PrefManager2</p>
- <p>Auth_RADIUS</p>
- <p>Auth_SASL</p>
- <p>Benchmark</p>
- <p>Cache</p>
- <p>Cache_Lite</p>
- <p>Calendar</p>
- <p>Config</p>
- <p>Console_Color</p>
- <p>Console_Getargs</p>
- <p>Console_Getopt</p>
- <p>Console_ProgressBar</p>
- <p>Console_Table</p>
- <p>Contact_AddressBook</p>
- <p>Contact_Vcard_Build</p>
- <p>Contact_Vcard_Parse</p>
- <p>Crypt_Blowfish</p>
- <p>Crypt_CBC</p>
- <p>Crypt_CHAP</p>
- <p>Crypt_Crypt</p>
- <p>Crypt_HMAC</p>
- <p>Crypt_RC4</p>
- <p>Crypt_RSA</p>
- <p>Crypt_Xtea</p>
- <p>Date</p>
- <p>Date_Holidays</p>
- <p>DB</p>
- <p>DBA</p>
- <p>DBA_Relational</p>
- <p>DB_ado</p>
- <p>DB_DataObject</p>
- <p>DB_DataObject_FormBuilder</p>
- <p>DB_ldap</p>
- <p>DB_ldap2</p>
- <p>DB_NestedSet</p>
- <p>DB_odbtp</p>
- <p>DB_Pager</p>
- <p>DB_QueryTool</p>
- <p>DB_Sqlite_Tools</p>
- <p>DB_Table</p>
- <p>Event_Dispatcher</p>
- <p>File</p>
- <p>File_Archive</p>
- <p>File_Bittorrent</p>
- <p>File_DICOM</p>
- <p>File_DNS</p>
- <p>File_Find</p>
- <p>File_Fstab</p>
- <p>File_Gettext</p>
- <p>File_HtAccess</p>
- <p>File_IMC</p>
- <p>File_Ogg</p>
- <p>File_Passwd</p>
- <p>File_PDF</p>
- <p>File_SearchReplace</p>
- <p>File_SMBPasswd</p>
- <p>FSM</p>
- <p>Games_Chess</p>
- <p>Genealogy_Gedcom</p>
- <p>Gtk_FileDrop</p>
- <p>Gtk_MDB_Designer</p>
- <p>Gtk_ScrollingLabel</p>
- <p>Gtk_Styled</p>
- <p>Gtk_VarDump</p>
- <p>HTML_BBCodeParser</p>
- <p>HTML_Common</p>
- <p>HTML_Common2</p>
- <p>HTML_Crypt</p>
- <p>HTML_CSS</p>
- <p>HTML_Form</p>
- <p>HTML_Javascript</p>
- <p>HTML_Menu</p>
- <p>HTML_Page</p>
- <p>HTML_Page2</p>
- <p>HTML_Progress</p>
- <p>HTML_Progress2</p>
- <p>HTML_QuickForm</p>
- <p>HTML_QuickForm_Controller</p>
- <p>HTML_QuickForm_SelectFilter</p>
- <p>HTML_Select</p>
- <p>HTML_Select_Common</p>
- <p>HTML_Table</p>
- <p>HTML_Table_Matrix</p>
- <p>HTML_Template_Flexy</p>
- <p>HTML_Template_IT</p>
- <p>HTML_Template_PHPLIB</p>
- <p>HTML_Template_Sigma</p>
- <p>HTML_Template_Xipe</p>
- <p>HTML_TreeMenu</p>
- <p>HTTP</p>
- <p>HTTP_Client</p>
- <p>HTTP_Download</p>
- <p>HTTP_Header</p>
- <p>HTTP_Request</p>
- <p>HTTP_Server</p>
- <p>HTTP_Session</p>
- <p>HTTP_Session2</p>
- <p>HTTP_SessionServer</p>
- <p>HTTP_Upload</p>
- <p>HTTP_WebDAV_Client</p>
- <p>HTTP_WebDAV_Server</p>
- <p>I18N</p>
- <p>I18Nv2</p>
- <p>I18N_UnicodeString</p>
- <p>Image_Barcode</p>
- <p>Image_Color</p>
- <p>Image_GIS</p>
- <p>Image_Graph</p>
- <p>Image_GraphViz</p>
- <p>Image_IPTC</p>
- <p>Image_Remote</p>
- <p>Image_Text</p>
- <p>Image_Tools</p>
- <p>Image_Transform</p>
- <p>Image_XBM</p>
- <p>Inline_C</p>
- <p>LiveUser</p>
- <p>LiveUser_Admin</p>
- <p>Log</p>
- <p>Mail</p>
- <p>Mail_IMAP</p>
- <p>Mail_IMAPv2</p>
- <p>Mail_Mbox</p>
- <p>Mail_Mime</p>
- <p>Mail_Queue</p>
- <p>Math_Basex</p>
- <p>Math_BinaryUtils</p>
- <p>Math_Complex</p>
- <p>Math_Fibonacci</p>
- <p>Math_Fraction</p>
- <p>Math_Histogram</p>
- <p>Math_Integer</p>
- <p>Math_Matrix</p>
- <p>Math_Numerical_RootFinding</p>
- <p>Math_Quaternion</p>
- <p>Math_RPN</p>
- <p>Math_Stats</p>
- <p>Math_TrigOp</p>
- <p>Math_Vector</p>
- <p>MDB</p>
- <p>MDB2</p>
- <p>MDB2_Schema</p>
- <p>MDB_QueryTool</p>
- <p>Message</p>
- <p>MIME_Type</p>
- <p>MP3_ID</p>
- <p>MP3_Playlist</p>
- <p>Net_CheckIP</p>
- <p>Net_Curl</p>
- <p>Net_Cyrus</p>
- <p>Net_Dict</p>
- <p>Net_Dig</p>
- <p>Net_DIME</p>
- <p>Net_DNS</p>
- <p>Net_DNSBL</p>
- <p>Net_Finger</p>
  <p>Net_FTP</p>
- <p>Net_FTP2</p>
- <p>Net_GameServerQuery</p>
- <p>Net_Geo</p>
- <p>Net_GeoIP</p>
- <p>Net_HL7</p>
- <p>Net_Ident</p>
- <p>Net_IDNA</p>
- <p>Net_IMAP</p>
- <p>Net_IPv4</p>
- <p>Net_IPv6</p>
- <p>Net_IRC</p>
- <p>Net_LDAP</p>
- <p>Net_LMTP</p>
- <p>Net_Monitor</p>
- <p>Net_NNTP</p>
- <p>Net_Ping</p>
- <p>Net_POP3</p>
- <p>Net_Portscan</p>
- <p>Net_Server</p>
- <p>Net_Sieve</p>
- <p>Net_SmartIRC</p>
- <p>Net_SMS</p>
- <p>Net_SMTP</p>
- <p>Net_Socket</p>
- <p>Net_Traceroute</p>
- <p>Net_URL</p>
- <p>Net_UserAgent_Detect</p>
- <p>Net_UserAgent_Mobile</p>
- <p>Net_Whois</p>
- <p>Numbers_Roman</p>
- <p>Numbers_Words</p>
- <p>OLE</p>
- <p>Pager</p>
- <p>Pager_Sliding</p>
- <p>Payment_Clieop</p>
- <p>Payment_DTA</p>
- <p>Payment_Process</p>
  <p>PEAR</p>
- <p>PEAR_Delegator</p>
- <p>PEAR_ErrorStack</p>
- <p>PEAR_Frontend_Gtk</p>
- <p>PEAR_Frontend_Web</p>
- <p>PEAR_Info</p>
- <p>PEAR_PackageFileManager</p>
- <p>PEAR_PackageFileManager_GUI_Gtk</p>
- <p>PHPDoc</p>
- <p>PhpDocumentor</p>
- <p>PHPUnit</p>
- <p>PHPUnit2</p>
  <p>PHP_Archive</p>
- <p>PHP_Beautifier</p>
- <p>PHP_Compat</p>
- <p>PHP_CompatInfo</p>
- <p>PHP_Fork</p>
- <p>PHP_Parser</p>
- <p>RDF</p>
- <p>RDF_N3</p>
- <p>RDF_NTriple</p>
- <p>RDF_RDQL</p>
- <p>Science_Chemistry</p>
- <p>Search_Mnogosearch</p>
- <p>Services_Amazon</p>
- <p>Services_Delicious</p>
- <p>Services_Ebay</p>
- <p>Services_ExchangeRates</p>
- <p>Services_Google</p>
- <p>Services_Technorati</p>
- <p>Services_Trackback</p>
- <p>Services_Weather</p>
- <p>Services_Yahoo</p>
- <p>SOAP</p>
- <p>SOAP_Interop</p>
- <p>Spreadsheet_Excel_Writer</p>
- <p>SQL_Parser</p>
- <p>Stream_SHM</p>
- <p>Stream_Var</p>
- <p>Structures_DataGrid</p>
- <p>Structures_Graph</p>
- <p>System_Command</p>
- <p>System_Mount</p>
- <p>System_ProcWatch</p>
- <p>System_Socket</p>
- <p>Text_CAPTCHA</p>
- <p>Text_Diff</p>
- <p>Text_Figlet</p>
- <p>Text_Highlighter</p>
- <p>Text_Huffman</p>
- <p>Text_Password</p>
- <p>Text_Statistics</p>
- <p>Text_TeXHyphen</p>
- <p>Text_Wiki</p>
- <p>Translation</p>
- <p>Translation2</p>
- <p>Tree</p>
- <p>UDDI</p>
- <p>Validate</p>
- <p>Var_Dump</p>
- <p>VersionControl_SVN</p>
- <p>VFS</p>
- <p>XML_Beautifier</p>
- <p>XML_CSSML</p>
- <p>XML_DTD</p>
- <p>XML_FastCreate</p>
- <p>XML_fo2pdf</p>
- <p>XML_FOAF</p>
- <p>XML_HTMLSax</p>
- <p>XML_HTMLSax3</p>
- <p>XML_image2svg</p>
- <p>XML_Indexing</p>
- <p>XML_MXML</p>
- <p>XML_NITF</p>
- <p>XML_Parser</p>
- <p>XML_RDDL</p>
- <p>XML_RPC</p>
- <p>XML_RSS</p>
- <p>XML_SaxFilters</p>
- <p>XML_Serializer</p>
- <p>XML_sql2xml</p>
- <p>XML_Statistics</p>
- <p>XML_SVG</p>
- <p>XML_svg2image</p>
- <p>XML_Transformer</p>
- <p>XML_Tree</p>
- <p>XML_Util</p>
- <p>XML_Wddx</p>
- <p>XML_XPath</p>
- <p>XML_XSLT_Wrapper</p>
- <p>XML_XUL</p>
 </a>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/p/archive_tar/info.xml", '<?xml version="1.0"?>
 <p xmlns="http://pear.php.net/dtd/rest.package"
@@ -372,7 +87,511 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/archive_zip/info.xml", '<?xm
 It supports creating, listing, extracting and adding to zip files.</d>
  <r xlink:href="/rest/r/archive_zip"/>
 </p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/archive_zip/allreleases.xml", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/auth/info.xml", '<?xml version="1.0"?>
+<p xmlns="http://pear.php.net/dtd/rest.package"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.package
+    http://pear.php.net/dtd/rest.package.xsd">
+ <n>Auth</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/Authentication">Authentication</ca>
+ <l>PHP License</l>
+ <s>Creating an authentication system.</s>
+ <d>The PEAR::Auth package provides methods for creating an authentication
+system using PHP.
+
+Currently it supports the following storage containers to read/write
+the login data:
+
+* All databases supported by the PEAR database layer
+* All databases supported by the MDB database layer
+* All databases supported by the MDB2 database layer
+* Plaintext files
+* LDAP servers
+* POP3 servers
+* IMAP servers
+* vpopmail accounts
+* RADIUS
+* SAMBA password files
+* SOAP</d>
+ <r xlink:href="/rest/r/auth"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/auth/allreleases.xml", '<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>Auth</p>
+ <c>pear.php.net</c>
+ <r><v>1.3.0r3</v><s>beta</s></r>
+ <r><v>1.3.0r2</v><s>beta</s></r>
+ <r><v>1.3.0r1</v><s>beta</s></r>
+ <r><v>1.2.3</v><s>stable</s></r>
+ <r><v>1.2.2</v><s>stable</s></r>
+ <r><v>1.2.1</v><s>stable</s></r>
+ <r><v>1.2.0</v><s>stable</s></r>
+ <r><v>1.1.1</v><s>stable</s></r>
+ <r><v>1.1.0</v><s>stable</s></r>
+ <r><v>1.0.2</v><s>stable</s></r>
+ <r><v>1.0.1</v><s>stable</s></r>
+ <r><v>1.0</v><s></s></r>
+</a>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/auth/deps.1.3.0r3.txt", 'a:7:{i:1;a:5:{s:4:"type";s:3:"pkg";s:3:"rel";s:2:"ge";s:7:"version";s:5:"0.9.5";s:8:"optional";s:3:"yes";s:4:"name";s:11:"File_Passwd";}i:2;a:5:{s:4:"type";s:3:"pkg";s:3:"rel";s:2:"ge";s:7:"version";s:3:"1.3";s:8:"optional";s:3:"yes";s:4:"name";s:8:"Net_POP3";}i:3;a:4:{s:4:"type";s:3:"pkg";s:3:"rel";s:3:"has";s:8:"optional";s:3:"yes";s:4:"name";s:2:"DB";}i:4;a:4:{s:4:"type";s:3:"pkg";s:3:"rel";s:3:"has";s:8:"optional";s:3:"yes";s:4:"name";s:3:"MDB";}i:5;a:4:{s:4:"type";s:3:"pkg";s:3:"rel";s:3:"has";s:8:"optional";s:3:"yes";s:4:"name";s:4:"MDB2";}i:6;a:4:{s:4:"type";s:3:"pkg";s:3:"rel";s:3:"has";s:8:"optional";s:3:"yes";s:4:"name";s:11:"Auth_RADIUS";}i:7;a:4:{s:4:"type";s:3:"pkg";s:3:"rel";s:3:"has";s:8:"optional";s:3:"yes";s:4:"name";s:14:"File_SMBPasswd";}}', 'text/plain');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/net_ftp/info.xml", '<?xml version="1.0"?>
+<p xmlns="http://pear.php.net/dtd/rest.package"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.package
+    http://pear.php.net/dtd/rest.package.xsd">
+ <n>Net_FTP</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/Networking">Networking</ca>
+ <l>PHP License</l>
+ <s>Net_FTP provides an OO interface to the PHP FTP functions and some more advanced features in addition.</s>
+ <d>Net_FTP allows you to communicate with FTP servers in a more comfortable way
+than the native FTP functions of PHP do. The class implements everything nativly
+supported by PHP and additionally features like recursive up- and downloading,
+dircreation and chmodding. It although implements an observer pattern to allow
+for example the view of a progress bar.</d>
+ <r xlink:href="/rest/r/net_ftp"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_ftp/allreleases.xml", '<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>Net_FTP</p>
+ <c>pear.php.net</c>
+ <r><v>1.3.1</v><s>stable</s></r>
+ <r><v>1.3.0</v><s>stable</s></r>
+ <r><v>1.3.0RC2</v><s>beta</s></r>
+ <r><v>1.3.0RC1</v><s>stable</s></r>
+ <r><v>1.3.0beta4</v><s>beta</s></r>
+ <r><v>1.3.0beta3</v><s>beta</s></r>
+ <r><v>1.3.0beta2</v><s>beta</s></r>
+ <r><v>1.3.0beta1</v><s>beta</s></r>
+ <r><v>1.2</v><s>stable</s></r>
+ <r><v>1.1</v><s>stable</s></r>
+ <r><v>1.0</v><s>stable</s></r>
+ <r><v>0.9</v><s>beta</s></r>
+ <r><v>0.5</v><s>alpha</s></r>
+</a>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_ftp/deps.1.3.1.txt", 'a:1:{s:8:"required";a:3:{s:3:"php";a:2:{s:3:"min";s:5:"4.2.0";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}s:9:"extension";a:1:{s:4:"name";s:3:"ftp";}}}', 'text/plain');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/pear/info.xml", '<?xml version="1.0"?>
+<p xmlns="http://pear.php.net/dtd/rest.package"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.package
+    http://pear.php.net/dtd/rest.package.xsd">
+ <n>PEAR</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License</l>
+ <s>PEAR Base System</s>
+ <d>The PEAR package contains:
+ * the PEAR installer, for creating, distributing
+   and installing packages
+ * the alpha-quality PEAR_Exception PHP5 error handling mechanism
+ * the beta-quality PEAR_ErrorStack advanced error handling mechanism
+ * the PEAR_Error error handling mechanism
+ * the OS_Guess class for retrieving info about the OS
+   where PHP is running on
+ * the System class for quick handling of common operations
+   with files and directories
+ * the PEAR base class</d>
+ <r xlink:href="/rest/r/pear"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/allreleases.xml", '<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>PEAR</p>
+ <c>pear.php.net</c>
+ <r><v>1.4.0a11</v><s>alpha</s></r>
+ <r><v>1.4.0a10</v><s>alpha</s></r>
+ <r><v>1.4.0a9</v><s>alpha</s></r>
+ <r><v>1.4.0a8</v><s>alpha</s></r>
+ <r><v>1.4.0a7</v><s>alpha</s></r>
+ <r><v>1.4.0a6</v><s>alpha</s></r>
+ <r><v>1.4.0a5</v><s>alpha</s></r>
+ <r><v>1.4.0a4</v><s>alpha</s></r>
+ <r><v>1.4.0a3</v><s>alpha</s></r>
+ <r><v>1.4.0a2</v><s>alpha</s></r>
+ <r><v>1.4.0a1</v><s>alpha</s></r>
+ <r><v>1.3.5</v><s>stable</s></r>
+ <r><v>1.3.4</v><s>stable</s></r>
+ <r><v>1.3.3.1</v><s>stable</s></r>
+ <r><v>1.3.3</v><s>stable</s></r>
+ <r><v>1.3.1</v><s>stable</s></r>
+ <r><v>1.3</v><s>stable</s></r>
+ <r><v>1.3b6</v><s>beta</s></r>
+ <r><v>1.3b5</v><s>beta</s></r>
+ <r><v>1.3b3</v><s>beta</s></r>
+ <r><v>1.3b2</v><s>beta</s></r>
+ <r><v>1.3b1</v><s>beta</s></r>
+ <r><v>1.2.1</v><s>stable</s></r>
+ <r><v>1.2</v><s>stable</s></r>
+ <r><v>1.2b5</v><s>beta</s></r>
+ <r><v>1.2b4</v><s>beta</s></r>
+ <r><v>1.2b3</v><s>beta</s></r>
+ <r><v>1.2b2</v><s>beta</s></r>
+ <r><v>1.2b1</v><s>beta</s></r>
+ <r><v>1.1</v><s>stable</s></r>
+ <r><v>1.0.1</v><s>stable</s></r>
+ <r><v>1.0</v><s>stable</s></r>
+ <r><v>1.0b3</v><s>stable</s></r>
+ <r><v>1.0b2</v><s>stable</s></r>
+ <r><v>1.0b1</v><s>stable</s></r>
+ <r><v>0.91-dev</v><s>beta</s></r>
+ <r><v>0.90</v><s>beta</s></r>
+ <r><v>0.11</v><s>beta</s></r>
+ <r><v>0.10</v><s>beta</s></r>
+ <r><v>0.9</v><s>stable</s></r>
+</a>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/deps.1.4.0a11.txt", 'a:3:{s:8:"required";a:4:{s:3:"php";a:2:{s:3:"min";s:3:"4.2";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}s:7:"package";a:3:{i:0;a:5:{s:4:"name";s:11:"Archive_Tar";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.1";s:11:"recommended";s:5:"1.3.1";s:7:"exclude";s:5:"1.3.0";}i:1;a:4:{s:4:"name";s:14:"Console_Getopt";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.2";s:11:"recommended";s:3:"1.2";}i:2;a:4:{s:4:"name";s:7:"XML_RPC";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:8:"1.2.0RC1";s:11:"recommended";s:5:"1.2.2";}}s:9:"extension";a:2:{i:0;a:1:{s:4:"name";s:3:"xml";}i:1;a:1:{s:4:"name";s:4:"pcre";}}}s:8:"optional";a:1:{s:7:"package";a:2:{i:0;a:3:{s:4:"name";s:17:"PEAR_Frontend_Web";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:5:"0.5.0";}i:1;a:3:{s:4:"name";s:17:"PEAR_Frontend_Gtk";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:5:"0.4.0";}}}s:5:"group";a:3:{i:0;a:2:{s:7:"attribs";a:2:{s:4:"hint";s:59:"adds the ability to install packages to a remote ftp server";s:4:"name";s:13:"remoteinstall";}s:7:"package";a:4:{s:4:"name";s:7:"Net_FTP";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:8:"1.3.0RC1";s:11:"recommended";s:5:"1.3.0";}}i:1;a:2:{s:7:"attribs";a:2:{s:4:"hint";s:26:"PEAR\'s web-based installer";s:4:"name";s:12:"webinstaller";}s:7:"package";a:3:{s:4:"name";s:17:"PEAR_Frontend_Web";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:5:"0.5.0";}}i:2;a:2:{s:7:"attribs";a:2:{s:4:"hint";s:30:"PEAR\'s PHP-GTK-based installer";s:4:"name";s:12:"gtkinstaller";}s:7:"package";a:3:{s:4:"name";s:17:"PEAR_Frontend_Gtk";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:5:"0.4.0";}}}}', 'text/plain');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/php_archive/info.xml", '<?xml version="1.0"?>
+<p xmlns="http://pear.php.net/dtd/rest.package"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.package
+    http://pear.php.net/dtd/rest.package.xsd">
+ <n>PHP_Archive</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PHP">PHP</ca>
+ <l>PHP License</l>
+ <s>Create and Use PHP Archive files</s>
+ <d>PHP_Archive allows you to create a single .phar file containing an entire application.</d>
+ <r xlink:href="/rest/r/php_archive"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_archive/allreleases.xml", '<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>PHP_Archive</p>
+ <c>pear.php.net</c>
+ <r><v>0.5.0</v><s>alpha</s></r>
+</a>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_archive/deps.0.5.0.txt", 'a:3:{i:1;a:4:{s:4:"type";s:3:"php";s:3:"rel";s:2:"ge";s:7:"version";s:5:"4.3.0";s:8:"optional";s:2:"no";}i:2;a:5:{s:4:"type";s:3:"pkg";s:3:"rel";s:2:"ge";s:7:"version";s:5:"1.3.5";s:8:"optional";s:2:"no";s:4:"name";s:4:"PEAR";}i:3;a:5:{s:4:"type";s:3:"pkg";s:3:"rel";s:2:"ge";s:7:"version";s:5:"1.3.1";s:8:"optional";s:2:"no";s:4:"name";s:11:"Archive_Tar";}}', 'text/plain');
 $command->run('list-all', array(), array());
+$phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 'http://pear.php.net/rest/p/packages.xml',
+    1 => '200',
+  ),
+  1 => 
+  array (
+    0 => 'http://pear.php.net/rest/p/archive_tar/info.xml',
+    1 => '200',
+  ),
+  2 => 
+  array (
+    0 => 'http://pear.php.net/rest/r/archive_tar/allreleases.xml',
+    1 => '200',
+  ),
+  3 => 
+  array (
+    0 => 'http://pear.php.net/rest/r/archive_tar/deps.1.3.1.txt',
+    1 => '200',
+  ),
+  4 => 
+  array (
+    0 => 'http://pear.php.net/rest/p/archive_zip/info.xml',
+    1 => '200',
+  ),
+  5 => 
+  array (
+    0 => 'http://pear.php.net/rest/r/archive_zip/allreleases.xml',
+    1 => '404',
+  ),
+  6 => 
+  array (
+    0 => 'http://pear.php.net/rest/p/auth/info.xml',
+    1 => '200',
+  ),
+  7 => 
+  array (
+    0 => 'http://pear.php.net/rest/r/auth/allreleases.xml',
+    1 => '200',
+  ),
+  8 => 
+  array (
+    0 => 'http://pear.php.net/rest/r/auth/deps.1.3.0r3.txt',
+    1 => '200',
+  ),
+  9 => 
+  array (
+    0 => 'http://pear.php.net/rest/p/net_ftp/info.xml',
+    1 => '200',
+  ),
+  10 => 
+  array (
+    0 => 'http://pear.php.net/rest/r/net_ftp/allreleases.xml',
+    1 => '200',
+  ),
+  11 => 
+  array (
+    0 => 'http://pear.php.net/rest/r/net_ftp/deps.1.3.1.txt',
+    1 => '200',
+  ),
+  12 => 
+  array (
+    0 => 'http://pear.php.net/rest/p/pear/info.xml',
+    1 => '200',
+  ),
+  13 => 
+  array (
+    0 => 'http://pear.php.net/rest/r/pear/allreleases.xml',
+    1 => '200',
+  ),
+  14 => 
+  array (
+    0 => 'http://pear.php.net/rest/r/pear/deps.1.4.0a11.txt',
+    1 => '200',
+  ),
+  15 => 
+  array (
+    0 => 'http://pear.php.net/rest/p/php_archive/info.xml',
+    1 => '200',
+  ),
+  16 => 
+  array (
+    0 => 'http://pear.php.net/rest/r/php_archive/allreleases.xml',
+    1 => '200',
+  ),
+  17 => 
+  array (
+    0 => 'http://pear.php.net/rest/r/php_archive/deps.0.5.0.txt',
+    1 => '200',
+  ),
+), $pearweb->getRESTCalls(), 'REST calls');
+$phpunit->assertEquals(array (
+  0 => 
+  array (
+    'info' => 
+    array (
+      'caption' => 'All packages:',
+      'border' => true,
+      'headline' => 
+      array (
+        0 => 'Package',
+        1 => 'Latest',
+        2 => 'Local',
+      ),
+      'data' => 
+      array (
+        'File Formats' => 
+        array (
+          0 => 
+          array (
+            0 => 'pear/Archive_Tar',
+            1 => '1.3.1',
+            2 => NULL,
+            3 => 'Tar file management class',
+            4 => 
+            array (
+            ),
+          ),
+        ),
+        'Authentication' => 
+        array (
+          0 => 
+          array (
+            0 => 'pear/Auth',
+            1 => '1.3.0r3',
+            2 => NULL,
+            3 => 'Creating an authentication system.',
+            4 => 
+            array (
+              0 => 
+              array (
+                'type' => 'pkg',
+                'rel' => 'ge',
+                'version' => '0.9.5',
+                'optional' => 'yes',
+                'name' => 'File_Passwd',
+              ),
+              1 => 
+              array (
+                'type' => 'pkg',
+                'rel' => 'ge',
+                'version' => '1.3',
+                'optional' => 'yes',
+                'name' => 'Net_POP3',
+              ),
+              2 => 
+              array (
+                'type' => 'pkg',
+                'rel' => 'has',
+                'optional' => 'yes',
+                'name' => 'DB',
+              ),
+              3 => 
+              array (
+                'type' => 'pkg',
+                'rel' => 'has',
+                'optional' => 'yes',
+                'name' => 'MDB',
+              ),
+              4 => 
+              array (
+                'type' => 'pkg',
+                'rel' => 'has',
+                'optional' => 'yes',
+                'name' => 'MDB2',
+              ),
+              5 => 
+              array (
+                'type' => 'pkg',
+                'rel' => 'has',
+                'optional' => 'yes',
+                'name' => 'Auth_RADIUS',
+              ),
+              6 => 
+              array (
+                'type' => 'pkg',
+                'rel' => 'has',
+                'optional' => 'yes',
+                'name' => 'File_SMBPasswd',
+              ),
+            ),
+          ),
+        ),
+        'Networking' => 
+        array (
+          0 => 
+          array (
+            0 => 'pear/Net_FTP',
+            1 => '1.3.1',
+            2 => NULL,
+            3 => 'Net_FTP provides an OO interface to the PHP FTP functions and some more advanced features in addition.',
+            4 => 
+            array (
+              0 => 
+              array (
+                'type' => 'pkg',
+                'channel' => 'pear.php.net',
+                'name' => 'PEAR',
+                'rel' => 'ge',
+                'version' => '1.4.0a1',
+                'optional' => 'no',
+              ),
+            ),
+          ),
+        ),
+        'PEAR' => 
+        array (
+          0 => 
+          array (
+            0 => 'pear/PEAR',
+            1 => '1.4.0a11',
+            2 => NULL,
+            3 => 'PEAR Base System',
+            4 => 
+            array (
+              0 => 
+              array (
+                'type' => 'pkg',
+                'channel' => 'pear.php.net',
+                'name' => 'PEAR',
+                'rel' => 'ge',
+                'version' => '1.4.0a1',
+                'optional' => 'no',
+              ),
+              1 => 
+              array (
+                'type' => 'pkg',
+                'channel' => 'pear.php.net',
+                'name' => 'Archive_Tar',
+                'rel' => 'ge',
+                'version' => '1.1',
+                'optional' => 'no',
+              ),
+              2 => 
+              array (
+                'type' => 'pkg',
+                'channel' => 'pear.php.net',
+                'name' => 'Console_Getopt',
+                'rel' => 'ge',
+                'version' => '1.2',
+                'optional' => 'no',
+              ),
+              3 => 
+              array (
+                'type' => 'pkg',
+                'channel' => 'pear.php.net',
+                'name' => 'XML_RPC',
+                'rel' => 'ge',
+                'version' => '1.2.0RC1',
+                'optional' => 'no',
+              ),
+              4 => 
+              array (
+                'type' => 'pkg',
+                'channel' => 'pear.php.net',
+                'name' => 'PEAR_Frontend_Web',
+                'rel' => 'ge',
+                'version' => '0.5.0',
+                'optional' => 'yes',
+              ),
+              5 => 
+              array (
+                'type' => 'pkg',
+                'channel' => 'pear.php.net',
+                'name' => 'PEAR_Frontend_Gtk',
+                'rel' => 'ge',
+                'version' => '0.4.0',
+                'optional' => 'yes',
+              ),
+            ),
+          ),
+        ),
+        'PHP' => 
+        array (
+          0 => 
+          array (
+            0 => 'pear/PHP_Archive',
+            1 => '0.5.0',
+            2 => NULL,
+            3 => 'Create and Use PHP Archive files',
+            4 => 
+            array (
+              0 => 
+              array (
+                'type' => 'pkg',
+                'rel' => 'ge',
+                'version' => '1.3.5',
+                'optional' => 'no',
+                'name' => 'PEAR',
+              ),
+              1 => 
+              array (
+                'type' => 'pkg',
+                'rel' => 'ge',
+                'version' => '1.3.1',
+                'optional' => 'no',
+                'name' => 'Archive_Tar',
+              ),
+            ),
+          ),
+        ),
+        'Local' => 
+        array (
+          0 => 
+          array (
+            0 => 'pear/Archive_Zip',
+            1 => '',
+            2 => '1.0.0',
+            3 => 'foo',
+            4 => 
+            array (
+              0 => 
+              array (
+                'type' => 'php',
+                'rel' => 'ge',
+                'version' => '4.0.0',
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+    'cmd' => 'list-all',
+  ),
+)
+, $fakelog->getLog(), 'log');
 echo 'tests done';
 ?>
 --EXPECT--
