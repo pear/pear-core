@@ -329,13 +329,6 @@ class PEAR_REST
                 }
             }
         }
-        if (isset($headers['content-disposition']) &&
-            preg_match('/\sfilename=\"([^;]*\S)\"\s*(;|$)/', $headers['content-disposition'],
-              $matches)) {
-            $save_as = basename($matches[1]);
-        } else {
-            $save_as = basename($url);
-        }
         if (isset($headers['content-length'])) {
             $length = $headers['content-length'];
         } else {
