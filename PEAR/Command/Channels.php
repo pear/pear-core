@@ -444,7 +444,7 @@ List the files in an installed package.
                             }
                             foreach ($capabilities as $protocol) {
                                 $data['data'][] = array('xmlrpc', $protocol['attribs']['version'],
-                                    $protocol['_content'], '');
+                                    $protocol['_content']);
                             }
                         }
                         if ($soaps) {
@@ -453,7 +453,7 @@ List the files in an installed package.
                             }
                             foreach ($soaps as $protocol) {
                                 $data['data'][] = array('soap', $protocol['attribs']['version'],
-                                    $protocol['_content'], '');
+                                    $protocol['_content']);
                             }
                         }
                         if ($chan->supportsREST($mirror['attribs']['host'])) {
