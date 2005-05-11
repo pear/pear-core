@@ -14,6 +14,11 @@ class PEAR_test_mock_pearweb {
     {
         $this->_config['html'][$address] = array(basename($filename), file_get_contents($filename));
     }
+
+    function addRESTConfig($address, $content, $content_type)
+    {
+        $this->_config['rest'][$address] = array($content, $content_type);
+    }
     
     function addXmlrpcConfig($server, $method, $params, $return)
     {
@@ -26,7 +31,40 @@ class PEAR_test_mock_pearweb {
         $ser = new XML_RPC_Response($val);
         return $ser->serialize();
     }
-    
+
+    function receiveREST($address)
+    {
+        if (!isset($this->_config) || !is_array($this->_config)) {
+            die('No REST config for URL ' . $address);
+        }
+        if (!isset($this->_config['rest'][$address])) {
+            die('No REST config for URL ' . $address);
+        } else {
+            if (!$this->_config['rest'][$address][0]) {
+                $this->_restCalls[] = array($address, '404');
+                return $this->do404($address);
+            }
+            if ($this->_config['rest'][$address][0] === true) {
+                $this->_restCalls[] = array($address, '304');
+                return $this->do304($address);
+            }
+            $this->_restCalls[] = array($address, '200');
+            return $this->do200() .
+                "ETag: 12345678910\n\n" .
+                "Last-Modified: 12345678910\n\n" .
+                'Content-Type: ' . $this->_config['rest'][$address][1] . "\n\n" .
+                'Content-Length: ' . strlen($this->_config['rest'][$address][0]) . "\n\n" .
+                $this->_config['rest'][$address][0];
+        }
+    }
+
+    function getRESTCalls()
+    {
+        $ret = $this->_restCalls;
+        $this->_restCalls = array();
+        return $ret;
+    }
+
     function receiveHttp($address)
     {
         if (!isset($this->_config) || !is_array($this->_config)) {
