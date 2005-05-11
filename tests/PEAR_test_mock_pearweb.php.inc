@@ -52,9 +52,9 @@ class PEAR_test_mock_pearweb {
             }
             $this->_restCalls[] = array($address, '200');
             return $this->do200() .
-                "ETag: 12345678910\n\n" .
-                "Last-Modified: 12345678910\n\n" .
-                'Content-Type: ' . $this->_config['rest'][$address][1] . "\n\n" .
+                "ETag: 12345678910\n" .
+                "Last-Modified: 12345678910\n" .
+                'Content-Type: ' . $this->_config['rest'][$address][1] . "\n" .
                 'Content-Length: ' . strlen($this->_config['rest'][$address][0]) . "\n\n" .
                 $this->_config['rest'][$address][0];
         }
