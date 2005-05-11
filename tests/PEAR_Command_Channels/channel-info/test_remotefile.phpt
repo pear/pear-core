@@ -100,72 +100,62 @@ $phpunit->assertEquals(array (
             0 => 'xmlrpc',
             1 => '1.0',
             2 => 'logintest',
-            3 => '',
           ),
           1 => 
           array (
             0 => 'xmlrpc',
             1 => '1.0',
             2 => 'package.listLatestReleases',
-            3 => '',
           ),
           2 => 
           array (
             0 => 'xmlrpc',
             1 => '1.0',
             2 => 'package.listAll',
-            3 => '',
           ),
           3 => 
           array (
             0 => 'xmlrpc',
             1 => '1.0',
             2 => 'package.info',
-            3 => '',
           ),
           4 => 
           array (
             0 => 'xmlrpc',
             1 => '1.0',
             2 => 'package.getDownloadURL',
-            3 => '',
           ),
           5 => 
           array (
             0 => 'xmlrpc',
             1 => '1.0',
             2 => 'channel.listAll',
-            3 => '',
           ),
           6 => 
           array (
             0 => 'xmlrpc',
             1 => '1.0',
             2 => 'channel.update',
-            3 => '',
           ),
           7 => 
           array (
             0 => 'soap',
             1 => '1.0',
             2 => 'package.listLatestReleases',
-            3 => '',
           ),
           8 => 
           array (
             0 => 'soap',
             1 => '1.0',
             2 => 'package.listAll',
-            3 => '',
           ),
         ),
         'caption' => 'Server Capabilities',
         'headline' => 
         array (
           0 => 'Type',
-          1 => 'Version',
-          2 => 'Function Name',
-          3 => 'URI',
+          1 => 'Version/REST type',
+          2 => 'Function Name/REST base',
         ),
       ),
       'mirrors' => 
@@ -188,72 +178,62 @@ $phpunit->assertEquals(array (
             0 => 'xmlrpc',
             1 => '1.0',
             2 => 'logintest',
-            3 => '',
           ),
           1 => 
           array (
             0 => 'xmlrpc',
             1 => '1.0',
             2 => 'package.listLatestReleases',
-            3 => '',
           ),
           2 => 
           array (
             0 => 'xmlrpc',
             1 => '1.0',
             2 => 'package.listAll',
-            3 => '',
           ),
           3 => 
           array (
             0 => 'xmlrpc',
             1 => '1.0',
             2 => 'package.info',
-            3 => '',
           ),
           4 => 
           array (
             0 => 'xmlrpc',
             1 => '1.0',
             2 => 'package.getDownloadURL',
-            3 => '',
           ),
           5 => 
           array (
             0 => 'xmlrpc',
             1 => '1.0',
             2 => 'channel.listAll',
-            3 => '',
           ),
           6 => 
           array (
             0 => 'xmlrpc',
             1 => '1.0',
             2 => 'channel.update',
-            3 => '',
           ),
           7 => 
           array (
             0 => 'soap',
             1 => '1.0',
             2 => 'package.listLatestReleases',
-            3 => '',
           ),
           8 => 
           array (
             0 => 'soap',
             1 => '1.0',
             2 => 'package.listAll',
-            3 => '',
           ),
         ),
         'caption' => 'Mirror poor.php.net Capabilities',
         'headline' => 
         array (
           0 => 'Type',
-          1 => 'Version',
-          2 => 'Function Name',
-          3 => 'URI',
+          1 => 'Version/REST type',
+          2 => 'Function Name/REST base',
         ),
       ),
     ),

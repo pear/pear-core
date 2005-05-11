@@ -34,10 +34,8 @@ $c = '<?xml version="1.0" encoding="ISO-8859-1" ?>
     <function version="1.0">package.listAll</function>
    </soap>
    <rest>
-    <function version="1.0" uri="package/listLatestReleases">package.listLatestReleases</function>
-    <function version="1.0" uri="package/listAll">package.listAll</function>
+    <baseurl type="REST1.0">http://pear.php.net/rest/</baseurl>
    </rest>
-   <static version="1.0"/>
   </primary>
   <mirror host="poor.php.net">
    <xmlrpc>
@@ -54,10 +52,8 @@ $c = '<?xml version="1.0" encoding="ISO-8859-1" ?>
     <function version="1.0">package.listAll</function>
    </soap>
    <rest>
-    <function version="1.0" uri="package/listLatestReleases">package.listLatestReleases</function>
-    <function version="1.0" uri="package/listAll">package.listAll</function>
+    <baseurl type="REST1.0">http://poor.php.net/rest/</baseurl>
    </rest>
-   <static version="1.0"/>
   </mirror>
  </servers>
 </channel>';

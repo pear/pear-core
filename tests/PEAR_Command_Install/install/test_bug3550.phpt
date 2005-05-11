@@ -731,7 +731,9 @@ $_test_dep->setPEARVersion('1.4.0a1');
 $_test_dep->setPHPVersion('4.3.10');
 $_test_dep->setExtensions(array('xml' => '1.0', 'pcre' => '1.0'));
 $res = $command->run('install', array(), array($nu, $hi, $at, $cg, $xr, $pe));
-$phpunit->assertNoErrors('setup install');
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Package.xml contains non-ISO-8859-1 characters, and may not validate'),
+), 'after install');
 $phpunit->assertTrue($res, 'result');
 $fakelog->getLog();
 $fakelog->getDownload();

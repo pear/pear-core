@@ -2531,7 +2531,9 @@ the login data:
   'url' => 'http://pear.php.net/get/Auth-1.3.0r3',
 ));
 $res = $command->run('install', array(), array($p1, $p2));
-$phpunit->assertNoErrors('setup install');
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Package.xml contains non-ISO-8859-1 characters, and may not validate'),
+), 'setup install');
 $fakelog->getDownload();
 $fakelog->getLog();
 $config->set('preferred_state', 'alpha');
