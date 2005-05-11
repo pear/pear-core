@@ -223,9 +223,13 @@ class PEAR_REST_10
             if (PEAR::isError($packagexml)) {
                 return $packagexml;
             }
+            $packagexml = unserialize($packagexml);
+            if (!$packagexml) {
+                $packagexml = array();
+            }
             return 
                 array('version' => $releaseinfo['v'],
-                      'info' => unserialize($packagexml),
+                      'info' => $packagexml,
                       'package' => $releaseinfo['p']['_content'],
                       'stability' => $releaseinfo['st'],
                       'url' => $releaseinfo['g']);
@@ -241,11 +245,15 @@ class PEAR_REST_10
             if (PEAR::isError($packagexml)) {
                 return $packagexml;
             }
+            $packagexml = unserialize($packagexml);
+            if (!$packagexml) {
+                $packagexml = array();
+            }
             return
                 array('version' => $releaseinfo['v'],
                       'package' => $releaseinfo['p']['_content'],
                       'stability' => $releaseinfo['st'],
-                      'info' => unserialize($packagexml));
+                      'info' => $packagexml);
         }
     }
 
