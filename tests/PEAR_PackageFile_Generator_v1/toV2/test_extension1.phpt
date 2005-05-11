@@ -68,7 +68,7 @@ http://snaps.php.net/win32/PECL_4_3/php_sqlite.dll
   <release>stable</release>
   <api>stable</api>
  </stability>
- <license uri="http://www.example.com">PHP</license>
+ <license uri="http://www.php.net/license">PHP</license>
  <notes>Upgraded libsqlite to version 2.8.14
 
 &quot;Fixed&quot; the bug where calling sqlite_query() with multiple SQL statements in a
@@ -181,7 +181,7 @@ this case is to use the new sqlite_exec() function instead. (Stas)
     <api>stable</api>
    </stability>
    <date>2004-01-17</date>
-   <license uri="http://www.example.com">PHP</license>
+   <license uri="http://www.php.net/license">PHP</license>
    <notes>Upgraded libsqlite to version 2.8.11
 Fixed crash bug in module shutdown
 Fixed crash with empty queries
@@ -200,7 +200,7 @@ Fixed column name mangling bug
     <api>stable</api>
    </stability>
    <date>2003-06-21</date>
-   <license uri="http://www.example.com">PHP</license>
+   <license uri="http://www.php.net/license">PHP</license>
    <notes>Added:
 	sqlite_udf_encode_binary() and sqlite_udf_decode_binary() for
 	handling binary data in UDF callbacks.
