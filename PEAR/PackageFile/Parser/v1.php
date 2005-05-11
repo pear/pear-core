@@ -80,17 +80,12 @@ class PEAR_PackageFile_Parser_v1
     function parse($data, $file, $archive = false)
     {
         if (!extension_loaded('xml')) {
-            $this->_stack->push(PEAR_PACKAGEFILE_ERROR_NO_XML_EXT, 'exception', array('error' => $error));
-            return $this->_isValid = false;
+            return PEAR::raiseError('Cannot create xml parser for parsing package.xml, no xml extension');
         }
         $test = $this->preProcessStupidSaxon($data);
-        if ($test != $data) {
-            $this->_stack->push(PEAR_PACKAGEFILE_ERROR_NON_ISO_CHARS, 'warning');
-        }
         $xp = @xml_parser_create();
         if (!$xp) {
-            $this->_stack->push(PEAR_PACKAGEFILE_ERROR_CANT_MAKE_PARSER, 'exception');
-            return $this->_isValid = false;
+            return PEAR::raiseError('Cannot create xml parser for parsing package.xml');
         }
         xml_set_object($xp, $this);
         xml_set_element_handler($xp, '_element_start_1_0', '_element_end_1_0');
@@ -121,6 +116,9 @@ class PEAR_PackageFile_Parser_v1
 
         $pf = new PEAR_PackageFile_v1;
         $pf->setConfig($this->_config);
+        if ($test != $data) {
+            $pf->_stack->push(PEAR_PACKAGEFILE_ERROR_NON_ISO_CHARS, 'warning');
+        }
         if (isset($this->_logger)) {
             $pf->setLogger($this->_logger);
         }
