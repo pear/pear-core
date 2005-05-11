@@ -74,6 +74,10 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.i
 $phpunit = &new PEAR_PHPTest(true);
 $fakelog = new fake_log;
 $config = &test_PEAR_Config::singleton($temp_path . '/pear.ini', $temp_path . '/pear.conf');
+$reg = &$config->getRegistry();
+$chan = $reg->getChannel('pear.php.net');
+$chan->resetFunctions('rest');
+$reg->updateChannel($chan);
 require_once 'PEAR/Command/Remote.php';
 class test_PEAR_Command_Remote extends PEAR_Command_Remote
 {

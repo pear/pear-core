@@ -70,6 +70,10 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.i
 $phpunit = &new PEAR_PHPTest(true);
 $fakelog = new fake_log;
 $config = &PEAR_Config::singleton($temp_path . '/pear.ini');
+$reg = &$config->getRegistry();
+$chan = $reg->getChannel('pear.php.net');
+$chan->resetFunctions('rest');
+$reg->updateChannel($chan);
 test_PEAR_Dependency2::singleton($config);
 require_once 'PEAR/Downloader/Package.php';
 /**
