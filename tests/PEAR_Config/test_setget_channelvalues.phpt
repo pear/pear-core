@@ -47,7 +47,7 @@ $reg->addChannel($ch);
 $config->setChannels($reg->listChannels());
 
 $phpunit->assertTrue($config->set('default_channel', 'foo'), 'set default channel to foo');
-$phpunit->assertEquals('pear.php.net', $config->get('preferred_mirror', null, 'foo'), 'before set to foo.example.com');
+$phpunit->assertEquals('foo', $config->get('preferred_mirror', null, 'foo'), 'before set to foo.example.com');
 $phpunit->assertTrue($config->set('preferred_mirror', 'foo.example.com', 'user', 'foo'), 'set to foo.example.com');
 $phpunit->assertEquals('pear.php.net', $config->get('preferred_mirror', null, 'pear.php.net'), 'after set to foo.example.com, pear');
 $phpunit->assertEquals('foo.example.com', $config->get('preferred_mirror', null, 'foo'), 'after set to foo.example.com, foo');
