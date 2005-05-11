@@ -35,9 +35,11 @@ class PEAR_test_mock_pearweb {
     function receiveREST($address)
     {
         if (!isset($this->_config) || !is_array($this->_config)) {
+            $this->tryParentREST($address);
             die('No REST config for URL ' . $address);
         }
         if (!isset($this->_config['rest'][$address])) {
+            $this->tryParentREST($address);
             die('No REST config for URL ' . $address);
         } else {
             if (!$this->_config['rest'][$address][0]) {
@@ -63,6 +65,24 @@ class PEAR_test_mock_pearweb {
         $ret = $this->_restCalls;
         $this->_restCalls = array();
         return $ret;
+    }
+
+    function tryParentREST($address)
+    {
+        require_once 'PEAR/REST.php';
+        $a = new PEAR_Config;
+        $rest = &new PEAR_REST($a, array());
+        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+        $ret = $rest->downloadHttp($address, false);
+        PEAR::popErrorHandling();
+        if (!PEAR::isError($ret)) {
+            if (!$ret) {
+                echo '$pearweb->addRESTConfig("' . $address . "\", true);\n";
+            } else {
+                echo '$pearweb->addRESTConfig("' . $address . '", ' . var_export($ret[0], true)
+                    . ");\n";
+            }
+        }
     }
 
     function receiveHttp($address)
