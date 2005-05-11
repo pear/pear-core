@@ -735,7 +735,7 @@ class PEAR_Downloader extends PEAR_Common
         if (isset($parr['state']) && isset($parr['version'])) {
             unset($parr['state']);
         }
-        $chan = &$this->_registry->getChannel($parr['channel']);
+        $chan = &$this->_registry->getChannel($remotechannel);
         $version = $this->_registry->packageInfo($dep['name'], 'version',
             $remotechannel);
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
