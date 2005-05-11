@@ -788,7 +788,9 @@ class test_PEAR_Command_Install extends PEAR_Command_Install
 }
 $command = &new test_PEAR_Command_Install($fakelog, $config);
 $command->run('install', array(), $packages);
-$phpunit->assertNoErrors('after install');
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Package.xml contains non-ISO-8859-1 characters, and may not validate'),
+),'after install');
 $fakelog->getLog();
 $paramnames = array('Mail_Mime', 'SOAP', 'Net_DIME', 'HTTP_Request', 'Net_URL', 'Net_Socket');
 $reg = &$config->getRegistry();
