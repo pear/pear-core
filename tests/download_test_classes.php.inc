@@ -104,13 +104,12 @@ class test_PEAR_REST extends PEAR_REST {
             }
             $line = array_shift($retrieved);
         }
-        $retrieved = join("\n", $retrieved);
+        $data = join("\n", $retrieved);
         if (isset($headers['content-length'])) {
             $length = $headers['content-length'];
         } else {
             $length = -1;
         }
-        $data = '';
         if ($lastmodified === false || $lastmodified) {
             if (isset($headers['etag'])) {
                 $lastmodified = array('ETag' => $headers['etag']);
