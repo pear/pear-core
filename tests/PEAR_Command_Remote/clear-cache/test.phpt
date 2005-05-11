@@ -11,7 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 error_reporting(E_ALL);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $remote = &$config->getRemote();
-$rest = &$config->getREST();
+$rest = &new test_PEAR_REST($config);
 $remote->saveCache(array('blah', 'blah'), 'hi');
 $remote->saveCache(array('blah1', 'blah1'), 'hi');
 $remote->saveCache(array('blah2', 'blah2'), 'hi');

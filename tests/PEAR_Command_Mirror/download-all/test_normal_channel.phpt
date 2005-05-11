@@ -28,9 +28,9 @@ $pearweb->addHtmlConfig('http://pear.php.net/get/APC-1.3.0.tgz', $pathtoStableAP
 $pearweb->addHtmlConfig('http://pear.php.net/get/APC-1.4.0a1.tgz', $pathtoAlphaAPC);
 $pearweb->addHtmlConfig('http://pear.php.net/get/Archive_Tar-1.5.0a1.tgz', $pathtoAT);
 $pearweb->addHtmlConfig('http://smoog/get/APC-1.5.0a1.tgz', $pathtoSmoogAPC);
-$pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true,true,true),     array(
+$pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true,true,false),     array(
     ));
-$pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true,false,true),     array(
+$pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true,false,false),     array(
     'APC' =>
         array(
         'packageid' =>
@@ -58,7 +58,7 @@ $pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true,false,true)
             ),
         ),
     ));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.listAll",     array(true,true,true),     array(
+$pearweb->addXmlrpcConfig("pear.php.net", "package.listAll",     array(true,true,false),     array(
     'APC' =>
         array(
         'packageid' =>
