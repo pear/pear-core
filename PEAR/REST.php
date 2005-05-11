@@ -48,6 +48,35 @@ class PEAR_REST
         $this->_options = $options;
     }
 
+    /**
+     * Retrieve REST data, but always retrieve the local cache if it is available.
+     *
+     * This is useful for elements that should never change, such as information on a particular
+     * release
+     * @param string full URL to this resource
+     * @param array|false contents of the accept-encoding header
+     * @param boolean     if true, xml will be returned as a string, otherwise, xml will be
+     *                    parsed using PEAR_XMLParser
+     * @return string|array
+     */
+    function retrieveCacheFirst($url, $accept = false, $forcestring = false)
+    {
+        $cachefile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
+            md5($url) . 'rest.cachefile';
+        if (@file_exists($cachefile)) {
+            return unserialize(implode('', file($cachefile)));
+        }
+        return $this->retrieveData($url, $accept, $forcestring);
+    }
+
+    /**
+     * Retrieve a remote REST resource
+     * @param string full URL to this resource
+     * @param array|false contents of the accept-encoding header
+     * @param boolean     if true, xml will be returned as a string, otherwise, xml will be
+     *                    parsed using PEAR_XMLParser
+     * @return string|array
+     */
     function retrieveData($url, $accept = false, $forcestring = false)
     {
         if ($ret = $this->useLocalCache($url)) {
