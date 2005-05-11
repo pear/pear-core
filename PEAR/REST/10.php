@@ -213,12 +213,12 @@ class PEAR_REST_10
     function _returnDownloadURL($base, $package, $release, $info, $found)
     {
         if ($found) {
-            $releaseinfo = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/' . 
+            $releaseinfo = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' . 
                 $release['v'] . '.xml');
             if (PEAR::isError($releaseinfo)) {
                 return $releaseinfo;
             }
-            $packagexml = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/' .
+            $packagexml = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' .
                 'deps.' . $release['v'] . '.txt', false, true);
             if (PEAR::isError($packagexml)) {
                 return $packagexml;
@@ -231,12 +231,12 @@ class PEAR_REST_10
                       'url' => $releaseinfo['g']);
         } else {
             $release = $info['r'][0];
-            $releaseinfo = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/' . 
+            $releaseinfo = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' . 
                 $release['v'] . '.xml');
             if (PEAR::isError($releaseinfo)) {
                 return $releaseinfo;
             }
-            $packagexml = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/' .
+            $packagexml = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' .
                 'deps.' . $release['v'] . '.txt', false, true);
             if (PEAR::isError($packagexml)) {
                 return $packagexml;
@@ -298,46 +298,72 @@ class PEAR_REST_10
                     };
                 }
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                $stable = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
-                    '/stable.txt');
-                if (!PEAR::isError($stable)) {
-                    $latest = $stable;
-                    $unstable = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
-                        '/latest.txt');
-                } else {
-                    $unstable = $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
-                        '/latest.txt');
+                $releases = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
+                    '/allreleases.xml');
+                if (PEAR::isError($releases)) {
+                    continue;
+                }
+                if (!isset($releases['r'][0])) {
+                    $releases['r'] = array($releases['r']);
+                }
+                unset($latest);
+                unset($unstable);
+                unset($stable);
+                unset($state);
+                foreach ($releases['r'] as $release) {
+                    if (!isset($latest)) {
+                        if ($dostable && $release['s'] == 'stable') {
+                            $latest = $release['v'];
+                            $state = 'stable';
+                        }
+                        if (!$dostable) {
+                            $latest = $release['v'];
+                            $state = $release['s'];
+                        }
+                    }
+                    if (!isset($stable) && $release['s'] == 'stable') {
+                        $stable = $release['v'];
+                        if (!isset($unstable)) {
+                            $unstable = $stable;
+                        }
+                    }
+                    if (!isset($unstable) && $release['s'] != 'stable') {
+                        $latest = $unstable = $release['v'];
+                        $state = $release['s'];
+                    }
+                    if (isset($latest) && !isset($state)) {
+                        $state = $release['s'];
+                    }
+                    if (isset($latest) && isset($stable) && isset($unstable)) {
+                        break;
+                    }
                 }
                 $deps = array();
-                if (PEAR::isError($unstable)) {
+                if (!isset($unstable)) {
                     $unstable = false;
                     $state = 'stable';
-                    if (!PEAR::isError($stable)) {
-                        $latest = $stable;
-                        $releaseinf = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
-                            '/' . $stable . '.xml');
-                    } else {
-                        $releaseinf = false;
+                    if (isset($stable)) {
+                        $latest = $unstable = $stable;
                     }
                 } else {
                     $latest = $unstable;
-                    $releaseinf = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
-                        '/' . $unstable . '.xml');
                 }
-                if (PEAR::isError($latest)) {
+                if (!isset($latest)) {
                     $latest = false;
-                    $state = 'stable';
                 }
-                if (!PEAR::isError($releaseinf) && $releaseinf) {
-                    $state = $releaseinf['st'];
-                    $d = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/deps.' .
+                if ($latest) {
+                    $d = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/deps.' .
                         $latest . '.txt');
                     if (!PEAR::isError($d)) {
                         $d = unserialize($d);
                         if ($d) {
                             if (isset($d['required'])) {
-                                require_once 'PEAR/PackageFile/v2.php';
-                                $pf = new PEAR_PackageFile_v2;
+                                if (!class_exists('PEAR_PackageFile_v2')) {
+                                    require_once 'PEAR/PackageFile/v2.php';
+                                }
+                                if (!isset($pf)) {
+                                    $pf = new PEAR_PackageFile_v2;
+                                }
                                 $pf->setDeps($d);
                                 $tdeps = $pf->getDeps();
                             } else {
@@ -412,7 +438,7 @@ class PEAR_REST_10
             if (!$found) {
                 continue;
             }
-            $relinfo = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/' . 
+            $relinfo = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' . 
                 $release['v'] . '.xml');
             if (PEAR::isError($relinfo)) {
                 return $relinfo;
@@ -431,7 +457,7 @@ class PEAR_REST_10
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         $info = $this->_rest->retrieveData($base . 'p/' . strtolower($package) . '/info.xml');
         $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/latest.txt');
-        $d = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/deps.' .
+        $d = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/deps.' .
             $latest . '.txt');
         PEAR::popErrorHandling();
         if (PEAR::isError($info)) {
