@@ -571,6 +571,9 @@ class PEAR_PackageFile_v2_Validator
                 $structure = array(
                     'name',
                     'channel',
+                    '*min',
+                    '*max',
+                    '*exclude',
                     'conflicts',
                     '*providesextension',
                 );
@@ -594,10 +597,6 @@ class PEAR_PackageFile_v2_Validator
         if (isset($dep['uri']) && (isset($dep['min']) || isset($dep['max']) ||
               isset($dep['recommended']) || isset($dep['exclude']))) {
             $this->_uriDepsCannotHaveVersioning('<dependencies>' . $group . $type);
-        }
-        if (isset($dep['conflicts']) && (isset($dep['min']) || isset($dep['max']) ||
-              isset($dep['recommended']) || isset($dep['exclude']))) {
-            $this->_conflictingDepsCannotHaveVersioning('<dependencies>' . $group . $type);
         }
         if (isset($dep['channel']) && strtolower($dep['channel']) == '__uri') {
             $this->_DepchannelCannotBeUri('<dependencies>' . $group . $type);
@@ -651,6 +650,9 @@ class PEAR_PackageFile_v2_Validator
         if (isset($dep['conflicts'])) {
             $structure = array(
                 'name',
+                '*min',
+                '*max',
+                '*exclude',
                 'conflicts',
             );
         } else {
@@ -671,10 +673,6 @@ class PEAR_PackageFile_v2_Validator
             $type .= '<name>' . $dep['name'] . '</name>';
         }
         $this->_stupidSchemaValidate($structure, $dep, $type);
-        if (isset($dep['conflicts']) && (isset($dep['min']) || isset($dep['max']) ||
-              isset($dep['recommended']) || isset($dep['exclude']))) {
-            $this->_conflictingDepsCannotHaveVersioning($type);
-        }
         if (isset($dep['min'])) {
             if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
                   $dep['min'])) {
