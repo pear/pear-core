@@ -302,10 +302,10 @@ class PEAR_Downloader extends PEAR_Common
             return $a;
         }
         if (!isset($this->_options['nodeps'])) {
-            $reverify = false;
+            $reverify = true;
             while ($reverify) {
+                $reverify = false;
                 foreach ($params as $i => $param) {
-                    $reverify = true;
                     $ret = $params[$i]->detectDependencies($params);
                     if (PEAR::isError($ret)) {
                         $reverify = true;
