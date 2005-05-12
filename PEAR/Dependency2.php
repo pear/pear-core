@@ -955,15 +955,15 @@ class PEAR_Dependency2
             }
             if ($required) {
                 if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                    return $this->raiseError('%s' . $extra . ' is required by installed package "' .
-                        $depname . '"');
+                    return $this->raiseError($depname . $extra . ' is required by installed package' .
+                        ' "%s"');
                 } else {
-                    return $this->warning('warning: %s' . $extra .
-                        ' is required by installed package "' . $depname . '"');
+                    return $this->warning('warning: ' . $depname . $extra .
+                        ' is required by installed package "%s"');
                 }
             } else {
-                return $this->warning('%s' . $extra .
-                    ' can be optionally used by installed package "' . $depname . '"');
+                return $this->warning('%s' . $depname . $extra . ' is required by installed package' .
+                        ' "%s"');
             }
         }
         return true;
