@@ -302,17 +302,23 @@ class PEAR_Downloader extends PEAR_Common
             return $a;
         }
         if (!isset($this->_options['nodeps'])) {
-            foreach ($params as $i => $param) {
-                $ret = $params[$i]->detectDependencies($params);
-                if (PEAR::isError($ret)) {
-                    $params[$i] = false;
-                    if (!isset($this->_options['soft'])) {
-                        $this->log(0, $ret->getMessage());
+            $reverify = true;
+            while ($reverify) {
+                foreach ($params as $i => $param) {
+                    $reverify = true;
+                    $ret = $params[$i]->detectDependencies($params);
+                    if (PEAR::isError($ret)) {
+                        $reverify = true;
+                        $params[$i] = false;
+                        PEAR_Downloader_Package::removeDuplicates($params);
+                        if (!isset($this->_options['soft'])) {
+                            $this->log(0, $ret->getMessage());
+                        }
+                        break;
                     }
                 }
             }
         }
-        PEAR_Downloader_Package::removeDuplicates($params);
         if (!count($params)) {
             $a = array();
             return $a;
