@@ -75,10 +75,13 @@ class PEAR_XMLParser
 
     function preProcessStupidSaxon($data)
     {
-        return strtr($data,
+        $data = strtr($data,
             array(
                 '&nbsp;' => ' ',
             ));
+        // convert non-ISO-8859-1 chars to ? for safety (parser dies otherwise)
+        $data = preg_replace('/[\x7F-\xFF]/', '?', $data);
+        return $data;
     }
 
     /**
