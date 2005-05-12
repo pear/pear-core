@@ -58,6 +58,27 @@ $phpunit->assertErrors(array(
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'exclude 1 log multi');
 $phpunit->assertIsa('PEAR_Error', $result, 'exclude 1 multi');
 
+// conflicts
+$result = $dep->validatePackageDependency(
+    array(
+        'name' => 'foo',
+        'channel' => 'pear.php.net',
+        'exclude' => '1.0',
+        'conflicts' => true
+    ), false, array());
+$phpunit->assertNoErrors('versioned conflicts 1');
+$result = $dep->validatePackageDependency(
+    array(
+        'name' => 'foo',
+        'channel' => 'pear.php.net',
+        'exclude' => array('2.0'),
+        'conflicts' => true
+    ), false, array());
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error',
+          'message' => 'pear/mine conflicts with package "pear/foo" (excluded versions: 2.0), installed version is 1.0')
+), 'versioned conflicts 2');
+
 // nodeps
 $dep = &new test_PEAR_Dependency2($config, array('nodeps' => true), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
