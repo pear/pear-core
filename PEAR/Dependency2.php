@@ -962,7 +962,7 @@ class PEAR_Dependency2
                         ' is required by installed package "%s"');
                 }
             } else {
-                return $this->warning('%s' . $depname . $extra . ' is required by installed package' .
+                return $this->warning($depname . $extra . ' can be optionally used by installed package' .
                         ' "%s"');
             }
         }
