@@ -170,9 +170,14 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Implement REST 1.0 as per Request #2781
   * fix bugs in PEAR_ChannelFile REST handling
   * fix Bug #4069: pear list-all -c &lt;ChannelAlias&gt; does not work
-  * fix Bug #4257: if rel="has" is used with a version="" attribute, the warning does not work
   * fix Bug #4249: download-all broken in 1.4.0a11
+  * fix Bug #4257: if rel="has" is used with a version="" attribute, the warning does not work
+  * fix Bug #4278: Parser V1: error handling borked !
+  * fix Bug #4279: Typo in DependencyDB (_version)
   * implement Request #2781: support for static channel releases.xml summary
+  * implement versioned conflicting dependencies
+  * fix major problems in subpackages
+  * The next version will split off PEAR_ErrorStack into its own package
  </notes>
  <contents>
   <dir name="/">
@@ -512,6 +517,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <min>1.2.0RC1</min>
     <recommended>1.2.2</recommended>
    </package>
+   <!--<subpackage>
+    <name>PEAR_ErrorStack</name>
+    <channel>pear.php.net</channel>
+    <min>0.8.0</min>
+    <recommended>0.8.0</recommended>
+   </subpackage>-->
    <extension>
     <name>xml</name>
    </extension>
@@ -569,6 +580,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <ignore name="scripts/peardev.sh" />
    <ignore name="scripts/pear.sh" />
    <ignore name="scripts/pecl.sh" />
+   <!-- <ignore name="PEAR/ErrorStack.php" />-->
   </filelist>
  </phprelease>
  <phprelease>
@@ -581,6 +593,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <ignore name="scripts/pear.bat" />
    <ignore name="scripts/peardev.bat" />
    <ignore name="scripts/pecl.bat" />
+   <!-- <ignore name="PEAR/ErrorStack.php" />-->
   </filelist>
  </phprelease>
  <changelog>

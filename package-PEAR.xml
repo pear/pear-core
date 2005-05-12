@@ -164,9 +164,14 @@
   * Implement REST 1.0 as per Request #2781
   * fix bugs in PEAR_ChannelFile REST handling
   * fix Bug #4069: pear list-all -c &lt;ChannelAlias&gt; does not work
-  * fix Bug #4257: if rel="has" is used with a version="" attribute, the warning does not work
   * fix Bug #4249: download-all broken in 1.4.0a11
+  * fix Bug #4257: if rel="has" is used with a version="" attribute, the warning does not work
+  * fix Bug #4278: Parser V1: error handling borked !
+  * fix Bug #4279: Typo in DependencyDB (_version)
   * implement Request #2781: support for static channel releases.xml summary
+  * implement versioned conflicting dependencies
+  * fix major problems in subpackages
+  * The next version will split off PEAR_ErrorStack into its own package
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
