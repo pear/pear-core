@@ -1007,7 +1007,7 @@ class PEAR_Installer extends PEAR_Downloader
                             }
                         }
                     }
-                    $pfk = new PEAR_PackageFile($this->config);
+                    $pfk = &new PEAR_PackageFile($this->config);
                     $parentpkg = &$pfk->fromArray($parentreg);
                     $this->_registry->updatePackage2($parentpkg);
                 }
