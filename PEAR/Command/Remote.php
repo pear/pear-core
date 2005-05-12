@@ -207,8 +207,8 @@ parameter.
     function doRemoteList($command, $options, $params)
     {
         $savechannel = $channel = $this->config->get('default_channel');
+        $reg = &$this->config->getRegistry();
         if (isset($options['channel'])) {
-            $reg = &$this->config->getRegistry();
             $channel = $options['channel'];
             if ($reg->channelExists($channel)) {
                 $this->config->set('default_channel', $channel);
