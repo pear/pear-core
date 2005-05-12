@@ -471,20 +471,24 @@ class PEAR_REST_10
         if (!PEAR::isError($latest)) {
             $d = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/deps.' .
                 $latest . '.txt');
+        } else {
+            $d = serialize(array());
         }
         PEAR::popErrorHandling();
         if (PEAR::isError($info)) {
             return PEAR::raiseError('Unknown package: "' . $package . '"');
         }
         if (PEAR::isError($latest)) {
-            return $latest;
+            $latest = '';
         }
         if (PEAR::isError($d)) {
             return $d;
         }
         $d = unserialize($d);
         if (isset($d['required'])) {
-            require_once 'PEAR/PackageFile/v2.php';
+            if (!class_exists('PEAR_PackageFile_v2')) {
+                require_once 'PEAR/PackageFile/v2.php';
+            }
             $pf = new PEAR_PackageFile_v2;
             $pf->setDeps($d);
             $d = $pf->getDeps();
