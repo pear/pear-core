@@ -1230,7 +1230,7 @@ class PEAR_Registry extends PEAR
             return false;
         }
         $save = $info;
-        $info = $save->toArray(true);
+        $info = $save->getArray(true);
         $info['_lastmodified'] = time();
         fwrite($fp, serialize($info));
         $this->_closePackageFile($fp);
@@ -1645,6 +1645,9 @@ class PEAR_Registry extends PEAR
     {
         if (!is_object($info)) {
             return $this->updatePackage($info['package'], $info, $merge);
+        }
+        if (!$info->validate(PEAR_VALIDATE_DOWNLOADING)) {
+            return false;
         }
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
