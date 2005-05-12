@@ -508,7 +508,7 @@ class PEAR_REST_10
             $latest = '';
         }
         PEAR::popErrorHandling();
-        if (PEAR::isError($info)) {
+        if (PEAR::isError($pinfo)) {
             return PEAR::raiseError('Unknown package: "' . $package . '"');
         }
         return array(
