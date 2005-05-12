@@ -305,11 +305,17 @@ class PEAR_Downloader extends PEAR_Common
             foreach ($params as $i => $param) {
                 $ret = $params[$i]->detectDependencies($params);
                 if (PEAR::isError($ret)) {
+                    $params[$i] = false;
                     if (!isset($this->_options['soft'])) {
                         $this->log(0, $ret->getMessage());
                     }
                 }
             }
+        }
+        PEAR_Downloader_Package::removeDuplicates($params);
+        if (!count($params)) {
+            $a = array();
+            return $a;
         }
         while (PEAR_Downloader_Package::mergeDependencies($params));
         PEAR_Downloader_Package::removeInstalled($params);
