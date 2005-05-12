@@ -468,8 +468,10 @@ class PEAR_REST_10
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         $info = $this->_rest->retrieveData($base . 'p/' . strtolower($package) . '/info.xml');
         $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/latest.txt');
-        $d = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/deps.' .
-            $latest . '.txt');
+        if (!PEAR::isError($latest)) {
+            $d = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/deps.' .
+                $latest . '.txt');
+        }
         PEAR::popErrorHandling();
         if (PEAR::isError($info)) {
             return PEAR::raiseError('Unknown package: "' . $package . '"');
