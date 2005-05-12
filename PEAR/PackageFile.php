@@ -143,6 +143,10 @@ class PEAR_PackageFile
     {
         if (isset($arr['xsdversion'])) {
             $obj = &$this->factory($arr['xsdversion']);
+            if ($this->_logger) {
+                $object->setLogger($this->_logger);
+            }
+            $object->setConfig($this->_config);
             $obj->fromArray($arr);
             return $obj;
         } else {
@@ -151,6 +155,10 @@ class PEAR_PackageFile
             } else {
                 $obj = &$this->factory('1.0');
             }
+            if ($this->_logger) {
+                $object->setLogger($this->_logger);
+            }
+            $object->setConfig($this->_config);
             $obj->fromArray($arr);
             return $obj;
         }
