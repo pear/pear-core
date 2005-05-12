@@ -370,6 +370,7 @@ class PEAR_Downloader_Package
 
     function _detect2($deps, $pname, $options, $params)
     {
+        $this->_downloadDeps = array();
         foreach (array('package', 'subpackage') as $packagetype) {
             // get required dependency group
             if (isset($deps['required'][$packagetype])) {
@@ -572,6 +573,7 @@ class PEAR_Downloader_Package
 
     function _detect1($deps, $pname, $options, $params)
     {
+        $this->_downloadDeps = array();
         $skipnames = array();
         foreach ($deps as $dep) {
             $nodownload = false;
