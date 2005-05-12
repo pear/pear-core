@@ -302,7 +302,7 @@ class PEAR_Downloader extends PEAR_Common
             return $a;
         }
         if (!isset($this->_options['nodeps'])) {
-            $reverify = true;
+            $reverify = false;
             while ($reverify) {
                 foreach ($params as $i => $param) {
                     $reverify = true;
