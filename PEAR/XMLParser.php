@@ -173,13 +173,9 @@ class PEAR_XMLParser
           '&yacute;' => '&#253;',
           '&thorn;' => '&#254;',
           '&yuml;' => '&#255;',
-          '&quot;' => '&#34;',
-          '&lt;' => '&#60;',
-          '&gt;' => '&#62;',
-          '&amp;' => '&#38;',
         ));
         // convert non-ISO-8859-1 chars to ? for safety (parser dies otherwise)
-        $data = preg_replace('/[\x7F-\xFF]/', '?', $data);
+        $data = preg_replace('/[\xA0-\xFF]/', '?', $data);
         return $data;
     }
 
