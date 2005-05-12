@@ -28,8 +28,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
  Initial release separate from PEAR base package
  </notes>
  <contents>
-  <dir name="/" baseinstalldir="PEAR">
-   <file name="ErrorStack.php" role="php">
+  <dir name="/">
+   <file name="PEAR/ErrorStack.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
   </dir> <!-- / -->
