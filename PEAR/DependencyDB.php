@@ -473,7 +473,7 @@ class PEAR_DependencyDB
     function _getDepDB()
     {
         if (!$this->hasWriteAccess()) {
-            return array('version' => $this->_version);
+            return array('_version' => $this->_version);
         }
         if (isset($this->_cache)) {
             return $this->_cache;
