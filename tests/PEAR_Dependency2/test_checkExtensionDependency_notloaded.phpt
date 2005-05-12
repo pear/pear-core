@@ -16,6 +16,22 @@ $phpunit->assertNoErrors('create 1');
 $result = $dep->validateExtensionDependency(
     array(
         'name' => 'foo',
+        'conflicts' => true,
+    ));
+$phpunit->assertNoErrors('conflicts 1');
+
+$result = $dep->validateExtensionDependency(
+    array(
+        'name' => 'foo',
+        'min' => '1.1',
+        'max' => '1.9',
+        'conflicts' => true,
+    ));
+$phpunit->assertNoErrors('conflicts 2');
+
+$result = $dep->validateExtensionDependency(
+    array(
+        'name' => 'foo',
         'min' => '1.1',
         'max' => '1.9',
     ));
