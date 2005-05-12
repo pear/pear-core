@@ -34,6 +34,29 @@ $phpunit->assertErrors(array(
 ), 'min');
 $phpunit->assertIsa('PEAR_Error', $result, 'min');
 
+// conflicts
+$result = $dep->validatePackageDependency(
+    array(
+        'name' => 'foo',
+        'channel' => 'pear.php.net',
+        'min' => '1.1',
+        'max' => '1.9',
+        'conflicts' => true
+    ), true, $params);
+$phpunit->assertNoErrors('versioned conflicts 1');
+$result = $dep->validatePackageDependency(
+    array(
+        'name' => 'foo',
+        'channel' => 'pear.php.net',
+        'min' => '1.0',
+        'max' => '1.1',
+        'conflicts' => true
+    ), true, $params);
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error',
+          'message' => 'pear/mine conflicts with package "pear/foo" (version >= 1.0, version <= 1.1), downloaded version is 1.0')
+), 'versioned conflicts 2');
+
 // optional
 $result = $dep->validatePackageDependency(
     array(

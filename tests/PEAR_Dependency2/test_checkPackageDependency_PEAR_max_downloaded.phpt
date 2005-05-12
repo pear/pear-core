@@ -31,8 +31,31 @@ $result = $dep->validatePackageDependency(
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
           'message' => 'pear/mine requires package "pear/foo" (version >= 0.1, version <= 0.9), downloaded version is 1.0')
-), 'min');
+), 'max');
 $phpunit->assertIsa('PEAR_Error', $result, 'min');
+
+// conflicts
+$result = $dep->validatePackageDependency(
+    array(
+        'name' => 'foo',
+        'channel' => 'pear.php.net',
+        'min' => '1.1',
+        'max' => '1.9',
+        'conflicts' => true
+    ), true, $params);
+$phpunit->assertNoErrors('versioned conflicts 1');
+$result = $dep->validatePackageDependency(
+    array(
+        'name' => 'foo',
+        'channel' => 'pear.php.net',
+        'min' => '0.9',
+        'max' => '1.0',
+        'conflicts' => true
+    ), true, $params);
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error',
+          'message' => 'pear/mine conflicts with package "pear/foo" (version >= 0.9, version <= 1.0), downloaded version is 1.0')
+), 'versioned conflicts 2');
 
 // optional
 $result = $dep->validatePackageDependency(
@@ -45,7 +68,7 @@ $result = $dep->validatePackageDependency(
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
           'message' => 'pear/mine requires package "pear/foo" (version >= 0.1, version <= 0.9), downloaded version is 1.0')
-), 'min optional');
+), 'max optional');
 $phpunit->assertIsa('PEAR_Error', $result, 'min optional');
 
 echo 'tests done';
