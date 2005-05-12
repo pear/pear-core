@@ -27,6 +27,29 @@ $phpunit->assertErrors(array(
 ), 'min');
 $phpunit->assertIsa('PEAR_Error', $result, 'min');
 
+// conflicts
+
+$result = $dep->validateExtensionDependency(
+    array(
+        'name' => 'foo',
+        'min' => '1.1',
+        'max' => '1.9',
+        'conflicts' => true,
+    ));
+$phpunit->assertNoErrors('conflicts 1');
+
+$result = $dep->validateExtensionDependency(
+    array(
+        'name' => 'foo',
+        'min' => '1.0',
+        'max' => '1.9',
+        'conflicts' => true,
+    ));
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error',
+          'message' => 'pear/mine conflicts with PHP extension "foo" (version >= 1.0, version <= 1.9), installed version is 1.0')
+), 'min');
+
 // optional
 $result = $dep->validateExtensionDependency(
     array(

@@ -40,6 +40,26 @@ $phpunit->assertErrors(array(
           'message' => 'pear/mine is not compatible with PHP extension "foo" version 1.0')
 ), 'exclude 1');
 $phpunit->assertIsa('PEAR_Error', $result, 'exclude 1');
+// conflicts
+
+$result = $dep->validateExtensionDependency(
+    array(
+        'name' => 'foo',
+        'exclude' => '1.0',
+        'conflicts' => true,
+    ));
+$phpunit->assertNoErrors('conflicts 1');
+
+$result = $dep->validateExtensionDependency(
+    array(
+        'name' => 'foo',
+        'exclude' => '1.9',
+        'conflicts' => true,
+    ));
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error',
+          'message' => 'pear/mine conflicts with PHP extension "foo" (excluded versions: 1.9), installed version is 1.0')
+), 'min');
 
 // optional
 $result = $dep->validateExtensionDependency(
