@@ -443,7 +443,7 @@ class PEAR_Downloader_Package
                 if ($this->canDefault()) {
                     $groupname = 'default'; // try the default dependency group
                 } else {
-                    return;
+                    continue;
                 }
             }
             if (isset($deps['group'])) {
@@ -456,7 +456,7 @@ class PEAR_Downloader_Package
                                 $this->_registry->parsedPackageNameToString($pname, true) .
                                 '" has no dependency ' . 'group named "' . $groupname . '"');
                         }
-                        return;
+                        continue;
                     }
                 } else {
                     $found = false;
@@ -474,7 +474,7 @@ class PEAR_Downloader_Package
                                     '" has no dependency ' . 'group named "' . $groupname . '"');
                             }
                         }
-                        return;
+                        continue;
                     }
                 }
             }
