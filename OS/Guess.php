@@ -197,6 +197,10 @@ class OS_Guess
 
     function _detectGlibcVersion()
     {
+        static $glibc = false;
+        if ($glibc) {
+            return $glibc; // no need to run this multiple times
+        }
         // Use glibc's <features.h> header file to
         // get major and minor version number:
         include_once "System.php";
@@ -225,7 +229,7 @@ class OS_Guess
         if (!($major && $minor)) {
             return '';
         }
-        return "glibc{$major}.{$minor}";
+        return $glibc = "glibc{$major}.{$minor}";
     }
 
     function getSignature()
