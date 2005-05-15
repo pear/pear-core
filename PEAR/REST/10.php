@@ -62,8 +62,8 @@ class PEAR_REST_10
         }
         $info = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/allreleases.xml');
         if (PEAR::isError($info)) {
-            return PEAR::raiseError('No releases avialable for package "' .
-                $channel . '/' . $package);
+            return PEAR::raiseError('No releases available for package "' .
+                $channel . '/' . $package . '"');
         }
         if (!isset($info['r'])) {
             return false;
