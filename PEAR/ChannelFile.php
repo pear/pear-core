@@ -983,6 +983,7 @@ class PEAR_ChannelFile {
             if ($mir = $this->getMirror($mirror)) {
                 return isset($mir['rest']);
             }
+            return false;
         }
         return isset($this->_channelInfo['servers']['primary']['rest']);
     }
