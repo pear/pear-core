@@ -1035,10 +1035,24 @@ class PEAR_Downloader_Package
             }
         }
         $pnames = array_unique($pnames);
-        for ($i = 0, $count = count($params); $i < $count; $i++) {
-            if (!isset($pnames[$i])) {
-                unset($params[$i]);
+        $testp = array_flip($pnames);
+        $unset = array();
+        foreach ($params as $i => $param) {
+            if (!$param) {
+                $unset[] = $i;
+                continue;
             }
+            if (!is_a($param, 'PEAR_Downloader_Package')) {
+                $unset[] = $i;
+                continue;
+            }
+            if (!isset($testp[$param->getChannel() . '/' . $param->getPackage() . '-' .
+                  $param->getVersion() . '#' . $param->getGroup()])) {
+                $unset[] = $i;
+            }
+        }
+        foreach ($unset as $i) {
+            unset($params[$i]);
         }
         $ret = array();
         foreach ($params as $i => $param) {
