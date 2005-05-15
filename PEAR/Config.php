@@ -1147,6 +1147,15 @@ class PEAR_Config extends PEAR
                             return $this->_prependPath($test, $this->_installRoot);
                         }
                     }
+                    if ($key == 'preferred_mirror') {
+                        $reg = &$this->getRegistry();
+                        if (is_object($reg)) {
+                            $chan = &$reg->getChannel($channel);
+                            if (!$chan->getMirror($test) && $chan->getName() != $test) {
+                                return $channel; // mirror does not exist
+                            }
+                        }
+                    }
                     return $test;
                 }
             }
@@ -1157,6 +1166,15 @@ class PEAR_Config extends PEAR
                       array('File Locations', 'File Locations (Advanced)')) &&
                       $this->getType($key) == 'directory') {
                     return $this->_prependPath($test, $this->_installRoot);
+                }
+            }
+            if ($key == 'preferred_mirror') {
+                $reg = &$this->getRegistry();
+                if (is_object($reg)) {
+                    $chan = &$reg->getChannel($channel);
+                    if (!$chan->getMirror($test) && $chan->getName() != $test) {
+                        return $channel; // mirror does not exist
+                    }
                 }
             }
             return $test;
@@ -1196,7 +1214,7 @@ class PEAR_Config extends PEAR
                 $reg = &$this->getRegistry($layer);
                 if (is_object($reg)) {
                     $chan = &$reg->getChannel($channel);
-                    if (!$chan->getMirror($value) && $chan->getName() != $value) {
+                    if (!$chan->getMirror($ret) && $chan->getName() != $ret) {
                         return $channel; // mirror does not exist
                     }
                 }
