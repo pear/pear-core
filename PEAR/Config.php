@@ -1181,16 +1181,26 @@ class PEAR_Config extends PEAR
         if ($key == '__channels' || $channel == 'pear.php.net') {
             return null;
         }
+        $ret = null;
         if ($layer === null) {
             foreach ($this->layers as $ilayer) {
                 if (isset($this->configuration[$ilayer]['__channels'][$channel][$key])) {
-                    return $this->configuration[$ilayer]['__channels'][$channel][$key];
+                    $ret = $this->configuration[$ilayer]['__channels'][$channel][$key];
                 }
             }
         } elseif (isset($this->configuration[$layer]['__channels'][$channel][$key])) {
-            return $this->configuration[$layer]['__channels'][$channel][$key];
+            $ret = $this->configuration[$layer]['__channels'][$channel][$key];
         }
         if ($key == 'preferred_mirror') {
+            if ($ret !== null) {
+                $reg = &$this->getRegistry($layer);
+                if (is_object($reg)) {
+                    $chan = &$reg->getChannel($channel);
+                    if (!$chan->getMirror($value) && $chan->getName() != $value) {
+                        return $channel; // mirror does not exist
+                    }
+                }
+            }
             if ($channel == $this->getDefaultChannel($layer)) {
                 return $channel; // we must use the channel name as the preferred mirror
                                  // if the user has not chosen an alternate
