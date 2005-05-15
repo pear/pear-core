@@ -239,12 +239,14 @@ class PEAR_REST_10
             $releaseinfo = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' . 
                 $release['v'] . '.xml');
             if (PEAR::isError($releaseinfo)) {
-                return $releaseinfo;
+                return PEAR::raiseError('Package "' . $package . '" Version "' . $release['v'] .
+                    '" does not have REST xml available');
             }
             $packagexml = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' .
                 'deps.' . $release['v'] . '.txt', false, true);
             if (PEAR::isError($packagexml)) {
-                return $packagexml;
+                return PEAR::raiseError('Package "' . $package . '" Version "' . $release['v'] .
+                    '" does not have REST dependency information available');
             }
             $packagexml = unserialize($packagexml);
             if (!$packagexml) {
