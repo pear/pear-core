@@ -116,7 +116,8 @@ class PEAR_REST_10
         }
         $info = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/allreleases.xml');
         if (PEAR::isError($info)) {
-            return $info;
+            return PEAR::raiseError('Package "' . $deppackage['channel'] . '/' . $deppackage['package']
+                . ' dependency "' . $channel . '/' . $package . '" has no releases');
         }
         if (!isset($info['r'])) {
             return false;
