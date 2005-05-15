@@ -175,7 +175,7 @@ class PEAR_XMLParser
           '&yuml;' => '&#255;',
         ));
         // convert non-ISO-8859-1 chars to ? for safety (parser dies otherwise)
-        $data = preg_replace('/[\xA0-\xFF]/', '?', $data);
+        $data = preg_replace('/[\x9E-\xFF]/', '?', $data);
         return $data;
     }
 
