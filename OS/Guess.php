@@ -198,7 +198,7 @@ class OS_Guess
     function _detectGlibcVersion()
     {
         static $glibc = false;
-        if ($glibc) {
+        if ($glibc !== false) {
             return $glibc; // no need to run this multiple times
         }
         // Use glibc's <features.h> header file to
@@ -227,7 +227,7 @@ class OS_Guess
             }
         }
         if (!($major && $minor)) {
-            return '';
+            return $glibc = '';
         }
         return $glibc = "glibc{$major}.{$minor}";
     }
