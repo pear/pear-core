@@ -1,4 +1,4 @@
-<?php
+fun<?php
 /**
  * PEAR_PackageFile_v2, package.xml version 2.0
  *
@@ -89,6 +89,12 @@ class PEAR_PackageFile_v2
      * @access protected
      */
     var $_registry;
+
+    /**
+     * @var PEAR_Config
+     * @access protected
+     */
+    var $_config;
 
     /**
      * Optional Dependency group requested for installation
