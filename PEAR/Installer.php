@@ -1242,6 +1242,9 @@ class PEAR_Installer extends PEAR_Downloader
 
     // }}}
 
+    /**
+     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     */
     function ftpUninstall($pkg)
     {
         $ftp = &$this->config->getFTP();
@@ -1262,7 +1265,7 @@ class PEAR_Installer extends PEAR_Downloader
                     case 'data':
                     case 'test':
                         $dest_dir = $this->config->get($atts['role'] . '_dir', 'ftp', $channel) .
-                                    DIRECTORY_SEPARATOR . $this->pkginfo->getPackage();
+                                    DIRECTORY_SEPARATOR . $pkg->getPackage();
                         unset($atts['baseinstalldir']);
                         break;
                     case 'ext':

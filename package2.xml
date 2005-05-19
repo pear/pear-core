@@ -175,6 +175,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #4278: Parser V1: error handling borked !
   * fix Bug #4279: Typo in DependencyDB (_version)
   * fix Bug #4353: fatal error if using remote_config variable
+  * fix Bug #4354: Remote PEAR upgrade and uninstall operation fail
   * implement Request #2781: support for static channel releases.xml summary
   * implement versioned conflicting dependencies
   * fix major problems in subpackages
