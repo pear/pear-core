@@ -1,4 +1,4 @@
-fun<?php
+<?php
 /**
  * PEAR_PackageFile_v2, package.xml version 2.0
  *
