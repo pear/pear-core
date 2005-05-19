@@ -613,14 +613,16 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
      * @param string maximum PHP version allowed
      * @param array $exclude incompatible PHP versions
      */
-    function setPhpDep($min, $max, $exclude = false)
+    function setPhpDep($min, $max = false, $exclude = false)
     {
         $this->_isValid = 0;
         $dep =
             array(
                 'min' => $min,
-                'max' => $max
             );
+        if ($max) {
+            $dep['max'] = $max;
+        }
         if ($exclude) {
             if (count($exclude) == 1) {
                 $exclude = $exclude[0];
