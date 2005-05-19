@@ -917,9 +917,12 @@ class PEAR_PackageFile_v2
         return false;
     }
 
-    function getLicense()
+    function getLicense($raw = false)
     {
         if (isset($this->_packageInfo['license'])) {
+            if ($raw) {
+                return $this->_packageInfo['license'];
+            }
             if (is_array($this->_packageInfo['license'])) {
                 return $this->_packageInfo['license']['_content'];
             } else {
