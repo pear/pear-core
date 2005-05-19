@@ -1376,7 +1376,7 @@ class PEAR_Installer extends PEAR_Downloader
                     continue; // this shouldn't happen
                 }
                 list($save_destdir, $dest_dir, $dest_file, $orig_file) =
-                    $role->processInstallation($pkg, $atts['attribs'], $file, $tmp_path, 'ftp');
+                    $role->processInstallation($pkg, $atts, $file, $file /* not used */, 'ftp');
                 $dest_file = str_replace(DIRECTORY_SEPARATOR, '/', $dest_file);
             }
             $installedas = $atts['installed_as'];
