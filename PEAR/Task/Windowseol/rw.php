@@ -49,6 +49,11 @@ class PEAR_Task_Windowseol_rw extends PEAR_Task_Windowseol
         return true;
     }
 
+    function getName()
+    {
+        return 'windowseol';
+    }
+
     function getXml()
     {
         return '';

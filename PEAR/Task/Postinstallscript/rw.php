@@ -49,6 +49,11 @@ class PEAR_Task_Postinstallscript_rw extends PEAR_Task_Postinstallscript
         return $this->validateXml($this->_pkg, $this->_params, $this->config, $this->_contents);
     }
 
+    function getName()
+    {
+        return 'postinstallscript';
+    }
+
     function addParamGroup($id, $params)
     {
         if (isset($params[0]) && !isset($params[1])) {
