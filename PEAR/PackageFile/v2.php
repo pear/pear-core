@@ -1653,6 +1653,16 @@ class PEAR_PackageFile_v2
 
     function getTasksNs()
     {
+        if (!isset($this->_tasksNs)) {
+            if (isset($this->_packageInfo['attribs'])) {
+                foreach ($this->_packageInfo['attribs'] as $name => $value) {
+                    if ($value == 'http://pear.php.net/dtd/tasks-1.0') {
+                        $this->_tasksNs = str_replace('xmlns:', '', $name);
+                        break;
+                    }
+                }
+            }
+        }
         return $this->_tasksNs;
     }
 
@@ -1668,16 +1678,7 @@ class PEAR_PackageFile_v2
      */
     function getTask($task)
     {
-        if (!isset($this->_tasksNs)) {
-            if (isset($this->_packageInfo['attribs'])) {
-                foreach ($this->_packageInfo['attribs'] as $name => $value) {
-                    if ($value == 'http://pear.php.net/dtd/tasks-1.0') {
-                        $this->_tasksNs = str_replace('xmlns:', '', $name);
-                        break;
-                    }
-                }
-            }
-        }
+        $this->getTasksNs();
         // transform all '-' to '/' and 'tasks:' to '' so tasks:replace becomes replace
         $task = str_replace(array($this->_tasksNs . ':', '-'), array('', ' '), $task);
         $task = str_replace(' ', '/', ucwords($task));
