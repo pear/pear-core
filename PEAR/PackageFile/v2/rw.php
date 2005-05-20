@@ -477,6 +477,7 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
         if (!isset($this->_packageInfo['contents']['dir']['file'])) {
             return false;
         }
+        $this->getTasksNs(); // discover the tasks namespace if not done already
         $files = $this->_packageInfo['contents']['dir']['file'];
         if (!isset($files[0])) {
             $files = array($files);
