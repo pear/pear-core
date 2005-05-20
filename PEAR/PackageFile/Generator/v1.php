@@ -484,7 +484,7 @@ class PEAR_PackageFile_Generator_v1
      * features like bundles and multiple releases
      * @return PEAR_PackageFile_v2
      */
-    function &toV2()
+    function &toV2($class = 'PEAR_PackageFile_v2')
     {
         $arr = array(
             'attribs' => array(
@@ -639,7 +639,7 @@ class PEAR_PackageFile_Generator_v1
                 $arr['changelog']['release'][] = $rel;
             }
         }
-        $ret = new PEAR_PackageFile_v2;
+        $ret = new $class;
         $ret->setConfig($this->_packagefile->_config);
         $ret->setLogger($this->_packagefile->_logger);
         $ret->fromArray($arr);
