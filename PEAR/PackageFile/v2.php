@@ -514,7 +514,20 @@ class PEAR_PackageFile_v2
             }
             $this->_packageInfo['contents']['dir']['file'] = $filelist;
             unset($this->_packageInfo['contents']['dir']['dir']);
-        }   // else already flattened
+        } else {
+            // else already flattened but check for baseinstalldir propagation
+            if (isset($this->_packageInfo['contents']['dir']['attribs']['baseinstalldir'])) {
+                if (isset($this->_packageInfo['contents']['dir']['file'][0])) {
+                    foreach ($this->_packageInfo['contents']['dir']['file'] as $i => $file) {
+                        $this->_packageInfo['contents']['dir']['file'][$i]['attribs']['baseinstalldir']
+                            = $this->_packageInfo['contents']['dir']['attribs']['baseinstalldir'];
+                    }
+                } else {
+                    $this->_packageInfo['contents']['dir']['file']['attribs']['baseinstalldir']
+                        = $this->_packageInfo['contents']['dir']['attribs']['baseinstalldir'];
+                }
+            }
+        }
     }
 
     /**
