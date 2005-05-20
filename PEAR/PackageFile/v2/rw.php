@@ -460,7 +460,7 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
      * @param string file name
      * @param PEAR_Task_Common a read/write task
      */
-    function addTaskToFile($file, $task)
+    function addTaskToFile($filename, $task)
     {
         if (!method_exists($task, 'getXml')) {
             return false;
