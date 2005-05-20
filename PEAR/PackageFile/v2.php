@@ -1398,7 +1398,7 @@ class PEAR_PackageFile_v2
      * @param boolean return package.xml 2.0 <dependencies> tag
      * @return array|false
      */
-    function getDeps($raw = false)
+    function getDeps($raw = false, $nopearinstaller = false)
     {
         if (isset($this->_packageInfo['dependencies'])) {
             if ($raw) {
@@ -1419,6 +1419,9 @@ class PEAR_PackageFile_v2
                     continue;
                 }
                 foreach ($this->_packageInfo['dependencies'][$type] as $dtype => $deps) {
+                    if ($dtype == 'pearinstaller' && $nopearinstaller) {
+                        continue;
+                    }
                     if (!isset($deps[0])) {
                         $deps = array($deps);
                     }
