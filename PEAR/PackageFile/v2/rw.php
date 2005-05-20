@@ -1395,5 +1395,75 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
                 'extsrcrelease', 'extbinrelease', 'bundle', 'changelog'), $packageOrUri, 'srcuri');
         }
     }
+
+    /**
+     * Generate a valid change log entry from the current package.xml
+     * @param string|false
+     */
+    function generateChangeLogEntry($notes = false)
+    {
+        return array(
+            'version' => 
+                array(
+                    'release' => $this->getVersion('release'),
+                    'api' => $this->getVersion('api'),
+                    ),
+            'stability' =>
+                $this->getStability(),
+            'date' => $this->getDate(),
+            'license' => $this->getLicense(),
+            'notes' => $notes ? $notes : $this->getNotes()
+            );
+    }
+
+    /**
+     * @param string release version to set change log notes for
+     * @param array output of {@link generateChangeLogEntry()}
+     */
+    function setChangelogEntry($releaseversion, $contents)
+    {
+        if (!isset($this->_packageInfo['changelog'])) {
+            $this->_packageInfo['changelog']['release'] = $contents;
+            return;
+        }
+        if (count($this->_packageInfo['changelog']['release']) == 1) {
+            if ($this->_packageInfo['changelog']['release']['version']['release'] == $releaseversion) {
+                $this->_packageInfo['changelog']['release'] = array(
+                    $this->_packageInfo['changelog']['release']);
+            } else {
+                $this->_packageInfo['changelog']['release'] = array(
+                    $this->_packageInfo['changelog']['release']);
+                return $this->_packageInfo['changelog']['release'][] = $contents;
+            }
+        }
+        foreach($this->_packageInfo['changelog']['release'] as $index => $changelog) {
+            if (isset($changelog['version']) &&
+                  strnatcasecmp($changelog['version']['release'], $releaseversion) == 0) {
+                $curlog = $index;
+            }
+        }
+        if (isset($curlog)) {
+            $this->_packageInfo['changelog']['release'][$curlog] = $contents;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    function getChangelog()
+    {
+        if (isset($this->_packageInfo['changelog'])) {
+            return $this->_packageInfo['changelog'];
+        }
+        return false;
+    }
+
+    /**
+     * Remove the changelog entirely
+     */
+    function clearChangeLog()
+    {
+        unset($this->_packageInfo['changelog']);
+    }
 }
 ?>
