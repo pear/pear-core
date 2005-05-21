@@ -652,8 +652,10 @@ class PEAR_Downloader_Package
                     $newdep['channel'] = 'pecl.php.net';
                     $url =
                         $this->_downloader->_getDepPackageDownloadUrl($newdep, $pname);
-                    PEAR::popErrorHandling();
-                    return $url;
+                    if (PEAR::isError($url)) {
+                        PEAR::popErrorHandling();
+                        return $url;
+                    }
                 }
                 PEAR::popErrorHandling();
                 // check to see if a dep is already installed
@@ -666,7 +668,12 @@ class PEAR_Downloader_Package
                         'required' :
                         'optional';
                     $dep['package'] = $dep['name'];
-                    $version = $this->_registry->packageInfo($dep['name'], 'version');
+                    if (isset($newdep)) {
+                        $version = $this->_registry->packageInfo($newdep['name'], 'version',
+                            $newdep['channel']);
+                    } else {
+                        $version = $this->_registry->packageInfo($dep['name'], 'version');
+                    }
                     $dep['version'] = $url['version'];
                     if (!isset($options['soft'])) {
                         $this->_downloader->log(3, 'Skipping ' . $group . ' dependency "' .
@@ -674,9 +681,7 @@ class PEAR_Downloader_Package
                             '", already installed as version ' . $version);
                     }
                     if (@$skipnames[count($skipnames) - 1] ==
-                          $this->_registry->parsedPackageNameToString(
-                                array('channel' => 'pear.php.net', 'package' =>
-                                $dep['name']), true)) {
+                          $this->_registry->parsedPackageNameToString($dep, true)) {
                         array_pop($skipnames);
                     }
                     continue;
@@ -685,6 +690,9 @@ class PEAR_Downloader_Package
                     continue;
                 }
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                if (isset($newdep)) {
+                    $dep = $newdep;
+                }
                 $dep['package'] = $dep['name'];
                 $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params,
                     isset($dep['optional']) && $dep['optional'] == 'yes' &&
@@ -953,23 +961,23 @@ class PEAR_Downloader_Package
                     $channel = 'pear.php.net';
                 }
             }
-            return ($package == $this->getPackage() &&
+            return (strtolower($package) == strtolower($this->getPackage()) &&
                 $channel == $this->getChannel() &&
                 version_compare($newdep['min'], $this->getVersion(), '<=') &&
                 version_compare($newdep['max'], $this->getVersion(), '>='));
         }
         // use magic to support pecl packages suddenly jumping to the pecl channel
         if ($channel == 'pecl.php.net' && $this->getChannel() == 'pear.php.net') {
-            if ($package == $this->getPackage()) {
+            if (strtolower($package) == strtolower($this->getPackage())) {
                 $channel = 'pear.php.net';
             }
         }
         if (isset($param['version'])) {
-            return ($package == $this->getPackage() &&
+            return (strtolower($package) == strtolower($this->getPackage()) &&
                 $channel == $this->getChannel() &&
                 $param['version'] == $this->getVersion());
         } else {
-            return $package == $this->getPackage() &&
+            return strtolower($package) == strtolower($this->getPackage()) &&
                 $channel == $this->getChannel();
         }
     }
