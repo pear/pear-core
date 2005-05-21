@@ -642,6 +642,16 @@ class PEAR_Downloader_Package
                 $url =
                     $this->_downloader->_getDepPackageDownloadUrl($dep, $pname);
                 if (PEAR::isError($url)) {
+                    // check to see if this is a pecl package that has jumped
+                    // from pear.php.net to pecl.php.net channel
+                    if (!class_exists('PEAR_Dependency2')) {
+                        require_once 'PEAR/Dependency2.php';
+                    }
+                    $newdep = PEAR_Dependency2::normalizeDep($dep);
+                    $newdep = $newdep[0];
+                    $newdep['channel'] = 'pecl.php.net';
+                    $url =
+                        $this->_downloader->getDepPackageDownloadUrl($newdep, $pname);
                     PEAR::popErrorHandling();
                     return $url;
                 }
@@ -930,6 +940,18 @@ class PEAR_Downloader_Package
             }
             if (!isset($newdep['max'])) {
                 $newdep['max'] = '100000000000000000000';
+            }
+            // use magic to support pecl packages suddenly jumping to the pecl channel
+            // we need to support both dependency possibilities
+            if ($channel == 'pear.php.net' && $this->getChannel() == 'pecl.php.net') {
+                if ($package == $this->getPackage()) {
+                    $channel = 'pecl.php.net';
+                }
+            }
+            if ($channel == 'pecl.php.net' && $this->getChannel() == 'pear.php.net') {
+                if ($package == $this->getPackage()) {
+                    $channel = 'pear.php.net';
+                }
             }
             return ($package == $this->getPackage() &&
                 $channel == $this->getChannel() &&
