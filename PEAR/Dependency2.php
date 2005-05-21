@@ -578,8 +578,11 @@ class PEAR_Dependency2
      * @param array dependency information (2.0 format)
      * @param boolean whether this is a required dependency
      * @param array a list of downloaded packages to be installed, if any
+     * @param boolean if true, then deps on pear.php.net that fail will also check
+     *                against pecl.php.net packages to accomodate extensions that have
+     *                moved to pecl.php.net from pear.php.net
      */
-    function validatePackageDependency($dep, $required, $params)
+    function validatePackageDependency($dep, $required, $params, $depv1 = false)
     {
         if ($this->_state != PEAR_VALIDATE_INSTALLING &&
               $this->_state != PEAR_VALIDATE_DOWNLOADING) {
@@ -599,14 +602,14 @@ class PEAR_Dependency2
             }
         }
         if ($this->_state == PEAR_VALIDATE_INSTALLING) {
-            return $this->_validatePackageInstall($dep, $required);
+            return $this->_validatePackageInstall($dep, $required, $depv1);
         }
         if ($this->_state == PEAR_VALIDATE_DOWNLOADING) {
-            return $this->_validatePackageDownload($dep, $required, $params);
+            return $this->_validatePackageDownload($dep, $required, $params, $depv1);
         }
     }
 
-    function _validatePackageDownload($dep, $required, $params)
+    function _validatePackageDownload($dep, $required, $params, $depv1 = false)
     {
         $dep['package'] = $dep['name'];
         if (isset($dep['uri'])) {
@@ -620,6 +623,14 @@ class PEAR_Dependency2
                         'channel' => $dep['channel']))) {
                 $found = true;
                 break;
+            }
+            if ($depv1 && $dep['channel'] == 'pear.php.net') {
+                if ($param->isEqual(
+                  array('package' => $dep['name'],
+                        'channel' => 'pecl.php.net'))) {
+                    $found = true;
+                    break;
+                }
             }
         }
         if (!$found && isset($dep['providesextension'])) {
@@ -814,9 +825,9 @@ class PEAR_Dependency2
         return true;
     }
 
-    function _validatePackageInstall($dep, $required)
+    function _validatePackageInstall($dep, $required, $depv1 = false)
     {
-        return $this->_validatePackageDownload($dep, $required, array());
+        return $this->_validatePackageDownload($dep, $required, array(), $depv1);
     }
 
     function validatePackageUninstall(&$dl)
@@ -1025,7 +1036,8 @@ class PEAR_Dependency2
             return $this->raiseError("Invalid Dependency");
         }
         if (method_exists($this, "validate{$type}Dependency")) {
-            return $this->{"validate{$type}Dependency"}($newdep, $dep['optional'] == 'no', $params);
+            return $this->{"validate{$type}Dependency"}($newdep, $dep['optional'] == 'no',
+                $params, true);
         }
     }
 
