@@ -314,7 +314,7 @@ class PEAR_Downloader extends PEAR_Common
                         if (!isset($this->_options['soft'])) {
                             $this->log(0, $ret->getMessage());
                         }
-                        break;
+                        continue 2;
                     }
                 }
             }
@@ -331,8 +331,8 @@ class PEAR_Downloader extends PEAR_Common
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         $err = $this->analyzeDependencies($params);
         PEAR::popErrorHandling();
-        if (PEAR::isError($err)) {
-            $this->pushError($err->getMessage());
+        if (!count($params)) {
+            $this->pushError('No valid packages found', PEAR_INSTALLER_FAILED);
             $a = array();
             return $a;
         }
@@ -374,76 +374,48 @@ class PEAR_Downloader extends PEAR_Common
             return;
         }
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        foreach ($params as $i => $param) {
-            $deps = $param->getDeps();
-            if (!$deps) {
-                continue;
-            }
-            if ($param->alreadyValidated()) {
-                continue;
-            }
-            if (count($deps)) {
-                $depchecker = &$this->getDependency2Object($this->config, $this->getOptions(),
-                    $param->getParsedPackage(), PEAR_VALIDATE_DOWNLOADING);
-                if ($param->getType() == 'xmlrpc') {
-                    $send = $param->getDownloadURL();
-                } else {
-                    $send = $param->getPackageFile();
-                }
-                $installcheck = $depchecker->validatePackage($send, $this);
-                if (PEAR::isError($installcheck)) {
-                    $failed = true;
-                    if (!isset($this->_options['soft'])) {
-                        $this->log(0, $installcheck->getMessage());
-                    }
-                    $params[$i]->setValidated();
+        $redo = true;
+        $reset = false;
+        while ($redo) {
+            $redo = false;
+            foreach ($params as $i => $param) {
+                $deps = $param->getDeps();
+                if (!$deps) {
                     continue;
                 }
-                $failed = false;
-                if (isset($deps['required'])) {
-                    foreach ($deps['required'] as $type => $dep) {
-                        // note: Dependency2 will never return a PEAR_Error if ignore-errors
-                        // is specified, so soft is needed to turn off logging
-                        if (!isset($dep[0])) {
-                            if (PEAR::isError($e = $depchecker->{"validate{$type}Dependency"}($dep,
-                                  true, $params))) {
-                                $failed = true;
-                                if (!isset($this->_options['soft'])) {
-                                    $this->log(0, $e->getMessage());
-                                }
-                            } elseif (is_array($e)) {
-                                if (!isset($this->_options['soft'])) {
-                                    $this->log(0, $e[0]);
-                                }
-                            }
-                        } else {
-                            foreach ($dep as $d) {
-                                if (PEAR::isError($e =
-                                      $depchecker->{"validate{$type}Dependency"}($d,
+                if (!$reset && $param->alreadyValidated()) {
+                    continue;
+                }
+                if (count($deps)) {
+                    $depchecker = &$this->getDependency2Object($this->config, $this->getOptions(),
+                        $param->getParsedPackage(), PEAR_VALIDATE_DOWNLOADING);
+                    if ($param->getType() == 'xmlrpc') {
+                        $send = $param->getDownloadURL();
+                    } else {
+                        $send = $param->getPackageFile();
+                    }
+                    $installcheck = $depchecker->validatePackage($send, $this);
+                    if (PEAR::isError($installcheck)) {
+                        $failed = true;
+                        if (!isset($this->_options['soft'])) {
+                            $this->log(0, $installcheck->getMessage());
+                        }
+                        $params[$i] = false;
+                        break;
+                    }
+                    $failed = false;
+                    if (isset($deps['required'])) {
+                        foreach ($deps['required'] as $type => $dep) {
+                            // note: Dependency2 will never return a PEAR_Error if ignore-errors
+                            // is specified, so soft is needed to turn off logging
+                            if (!isset($dep[0])) {
+                                if (PEAR::isError($e = $depchecker->{"validate{$type}Dependency"}($dep,
                                       true, $params))) {
                                     $failed = true;
                                     if (!isset($this->_options['soft'])) {
                                         $this->log(0, $e->getMessage());
                                     }
-                                } elseif (is_array($e)) {
-                                    if (!isset($this->_options['soft'])) {
-                                        $this->log(0, $e[0]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (isset($deps['optional'])) {
-                        foreach ($deps['optional'] as $type => $dep) {
-                            if (!isset($dep[0])) {
-                                if (PEAR::isError($e =
-                                      $depchecker->{"validate{$type}Dependency"}($dep,
-                                      false, $params))) {
-                                    $failed = true;
-                                    if (!isset($this->_options['soft'])) {
-                                        $this->log(0, $e->getMessage());
-                                    }
-                                } elseif (is_array($e)) {
+                                } elseif (is_array($e) && !$param->alreadyValidated()) {
                                     if (!isset($this->_options['soft'])) {
                                         $this->log(0, $e[0]);
                                     }
@@ -452,12 +424,12 @@ class PEAR_Downloader extends PEAR_Common
                                 foreach ($dep as $d) {
                                     if (PEAR::isError($e =
                                           $depchecker->{"validate{$type}Dependency"}($d,
-                                          false, $params))) {
+                                          true, $params))) {
                                         $failed = true;
                                         if (!isset($this->_options['soft'])) {
                                             $this->log(0, $e->getMessage());
                                         }
-                                    } elseif (is_array($e)) {
+                                    } elseif (is_array($e) && !$param->alreadyValidated()) {
                                         if (!isset($this->_options['soft'])) {
                                             $this->log(0, $e[0]);
                                         }
@@ -465,22 +437,8 @@ class PEAR_Downloader extends PEAR_Common
                                 }
                             }
                         }
-                    }
-                    $groupname = $param->getGroup();
-                    if (isset($deps['group']) && $groupname) {
-                        if (!isset($deps['group'][0])) {
-                            $deps['group'] = array($deps['group']);
-                        }
-                        $found = false;
-                        foreach ($deps['group'] as $group) {
-                            if ($group['attribs']['name'] == $groupname) {
-                                $found = true;
-                                break;
-                            }
-                        }
-                        if ($found) {
-                            unset($group['attribs']);
-                            foreach ($group as $type => $dep) {
+                        if (isset($deps['optional'])) {
+                            foreach ($deps['optional'] as $type => $dep) {
                                 if (!isset($dep[0])) {
                                     if (PEAR::isError($e =
                                           $depchecker->{"validate{$type}Dependency"}($dep,
@@ -489,7 +447,7 @@ class PEAR_Downloader extends PEAR_Common
                                         if (!isset($this->_options['soft'])) {
                                             $this->log(0, $e->getMessage());
                                         }
-                                    } elseif (is_array($e)) {
+                                    } elseif (is_array($e) && !$param->alreadyValidated()) {
                                         if (!isset($this->_options['soft'])) {
                                             $this->log(0, $e[0]);
                                         }
@@ -503,7 +461,7 @@ class PEAR_Downloader extends PEAR_Common
                                             if (!isset($this->_options['soft'])) {
                                                 $this->log(0, $e->getMessage());
                                             }
-                                        } elseif (is_array($e)) {
+                                        } elseif (is_array($e) && !$param->alreadyValidated()) {
                                             if (!isset($this->_options['soft'])) {
                                                 $this->log(0, $e[0]);
                                             }
@@ -512,34 +470,86 @@ class PEAR_Downloader extends PEAR_Common
                                 }
                             }
                         }
-                    }
-                } else {
-                    foreach ($deps as $dep) {
-                        if (PEAR::isError($e = $depchecker->validateDependency1($dep, $params))) {
-                            $failed = true;
-                            if (!isset($this->_options['soft'])) {
-                                $this->log(0, $e->getMessage());
+                        $groupname = $param->getGroup();
+                        if (isset($deps['group']) && $groupname) {
+                            if (!isset($deps['group'][0])) {
+                                $deps['group'] = array($deps['group']);
                             }
-                        } elseif (is_array($e)) {
-                            if (!isset($this->_options['soft'])) {
-                                $this->log(0, $e[0]);
+                            $found = false;
+                            foreach ($deps['group'] as $group) {
+                                if ($group['attribs']['name'] == $groupname) {
+                                    $found = true;
+                                    break;
+                                }
+                            }
+                            if ($found) {
+                                unset($group['attribs']);
+                                foreach ($group as $type => $dep) {
+                                    if (!isset($dep[0])) {
+                                        if (PEAR::isError($e =
+                                              $depchecker->{"validate{$type}Dependency"}($dep,
+                                              false, $params))) {
+                                            $failed = true;
+                                            if (!isset($this->_options['soft'])) {
+                                                $this->log(0, $e->getMessage());
+                                            }
+                                        } elseif (is_array($e) && !$param->alreadyValidated()) {
+                                            if (!isset($this->_options['soft'])) {
+                                                $this->log(0, $e[0]);
+                                            }
+                                        }
+                                    } else {
+                                        foreach ($dep as $d) {
+                                            if (PEAR::isError($e =
+                                                  $depchecker->{"validate{$type}Dependency"}($d,
+                                                  false, $params))) {
+                                                $failed = true;
+                                                if (!isset($this->_options['soft'])) {
+                                                    $this->log(0, $e->getMessage());
+                                                }
+                                            } elseif (is_array($e) && !$param->alreadyValidated()) {
+                                                if (!isset($this->_options['soft'])) {
+                                                    $this->log(0, $e[0]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        foreach ($deps as $dep) {
+                            if (PEAR::isError($e = $depchecker->validateDependency1($dep, $params))) {
+                                $failed = true;
+                                if (!isset($this->_options['soft'])) {
+                                    $this->log(0, $e->getMessage());
+                                }
+                            } elseif (is_array($e) && !$param->alreadyValidated()) {
+                                if (!isset($this->_options['soft'])) {
+                                    $this->log(0, $e[0]);
+                                }
                             }
                         }
                     }
+                    $params[$i]->setValidated();
                 }
-                $params[$i]->setValidated();
+                if ($failed) {
+                    $params[$i] = false;
+                    $reset = true;
+                    $redo = true;
+                    $failed = false;
+                    PEAR_Downloader_Package::removeDuplicates($params);
+                    continue 2;
+                }
             }
         }
         PEAR::staticPopErrorHandling();
-        if ($failed) {
-            if (isset($this->_options['ignore-errors']) || isset($this->_options['nodeps'])) {
-                // this is probably not needed, but just in case
-                if (!isset($this->_options['soft'])) {
-                    $this->log(0, 'WARNING: dependencies failed');
-                }
-                return;
+        if (isset($this->_options['ignore-errors']) ||
+              isset($this->_options['nodeps'])) {
+            // this is probably not needed, but just in case
+            if (!isset($this->_options['soft'])) {
+                $this->log(0, 'WARNING: dependencies failed');
             }
-            return PEAR::raiseError("Cannot install, dependencies failed");
         }
     }
 
