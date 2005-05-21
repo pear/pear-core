@@ -644,7 +644,12 @@ class PEAR_Downloader extends PEAR_Common
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
               $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
             $rest = &$this->config->getREST('1.0', $this->_options);
-            $url = $rest->getDownloadURL($base, $parr, $state, $version);
+            if (!isset($parr['version']) && !isset($parr['state']) && $version
+                  && !isset($this->_options['downloadonly'])) {
+                $url = $rest->getDownloadURL($base, $parr, $state, $version);
+            } else {
+                $url = $rest->getDownloadURL($base, $parr, $state, false);
+            }
             if (PEAR::isError($url)) {
                 return $url;
             }
