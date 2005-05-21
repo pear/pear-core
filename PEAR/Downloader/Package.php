@@ -651,7 +651,7 @@ class PEAR_Downloader_Package
                     $newdep = $newdep[0];
                     $newdep['channel'] = 'pecl.php.net';
                     $url =
-                        $this->_downloader->getDepPackageDownloadUrl($newdep, $pname);
+                        $this->_downloader->_getDepPackageDownloadUrl($newdep, $pname);
                     PEAR::popErrorHandling();
                     return $url;
                 }
