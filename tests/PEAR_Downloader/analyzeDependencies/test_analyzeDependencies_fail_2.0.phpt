@@ -195,10 +195,7 @@ $result = PEAR_Downloader_Package::mergeDependencies($params);
 $phpunit->assertNoErrors('after merge 1');
 
 $err = $dp->_downloader->analyzeDependencies($params);
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' =>
-        'Cannot install, dependencies failed')
-), 'end');
+$phpunit->assertEquals(array(), $params, 'empty array');
 $phpunit->assertEquals(array (
   0 => 
   array (

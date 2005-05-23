@@ -193,15 +193,13 @@ PEAR_Downloader_Package::mergeDependencies($params);
 $phpunit->assertNoErrors('setup');
 
 $_test_dep->setExtensions(array('bar' => '1.0'));
-$err = $dp->_downloader->analyzeDependencies($params);
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' =>
-        'Cannot install, dependencies failed')
-), 'end');
+$dldir = $dp->_downloader->getDownloadDir();
+$dp->_downloader->analyzeDependencies($params);
+$phpunit->assertEquals(array(), $params, 'empty array');
 $phpunit->assertEquals(array (
   array (
     0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
+    1 => '+ tmp dir created at ' . $dldir,
   ),
 ), $fakelog->getLog(), 'end log');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');
