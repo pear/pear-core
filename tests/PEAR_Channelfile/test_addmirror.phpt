@@ -322,6 +322,8 @@ $phpt->assertEquals(array (
         'attribs' => 
         array (
           'host' => 'mirror.php2.net',
+          'port' => 7900,
+          'path' => '/something/',
         ),
       ),
     ),
