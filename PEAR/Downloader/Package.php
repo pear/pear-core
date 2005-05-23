@@ -376,6 +376,7 @@ class PEAR_Downloader_Package
     function _detect2($deps, $pname, $options, $params)
     {
         $this->_downloadDeps = array();
+        $groupnotfound = false;
         foreach (array('package', 'subpackage') as $packagetype) {
             // get required dependency group
             if (isset($deps['required'][$packagetype])) {
@@ -452,6 +453,9 @@ class PEAR_Downloader_Package
                     continue;
                 }
             }
+            if ($groupnotfound) {
+                continue;
+            }
             if (isset($deps['group'])) {
                 if (isset($deps['group']['attribs'])) {
                     if (strtolower($deps['group']['attribs']['name']) == strtolower($groupname)) {
@@ -462,6 +466,7 @@ class PEAR_Downloader_Package
                                 $this->_registry->parsedPackageNameToString($pname, true) .
                                 '" has no dependency ' . 'group named "' . $groupname . '"');
                         }
+                        $groupnotfound = true;
                         continue;
                     }
                 } else {
@@ -480,6 +485,7 @@ class PEAR_Downloader_Package
                                     '" has no dependency ' . 'group named "' . $groupname . '"');
                             }
                         }
+                        $groupnotfound = true;
                         continue;
                     }
                 }
