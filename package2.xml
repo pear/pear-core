@@ -500,7 +500,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <min>4.2</min>
    </php>
    <pearinstaller>
-    <min>1.4.0a1</min>
+    <min>1.4.0a11</min>
    </pearinstaller>
    <package>
     <name>Archive_Tar</name>
