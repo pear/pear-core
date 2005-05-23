@@ -392,7 +392,7 @@ Run post-installation scripts in package <package>, if any exist.
                     }
                 }
                 PEAR::staticPopErrorHandling();
-                if (PEAR::isError($latest)) {
+                if (PEAR::isError($latest) || !is_array($latest)) {
                     continue;
                 }
                 foreach ($latest as $package => $info) {
