@@ -42,7 +42,7 @@ $phpunit->assertNoErrors('foo');
 $phpunit->assertEquals( array (
   0 => 
   array (
-    0 => 'pear/bar (version >= 1.0) can be optionally used by installed package "pear/foo"',
+    0 => 'pear/foo (version >= 1.0) can be optionally used by installed package "pear/bar"',
     1 => true,
   ),
  )
