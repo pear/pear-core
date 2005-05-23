@@ -1221,6 +1221,7 @@ class PEAR_Config extends PEAR
                         return $channel; // mirror does not exist
                     }
                 }
+                return $ret;
             }
             if ($channel == $this->getDefaultChannel($layer)) {
                 return $channel; // we must use the channel name as the preferred mirror
@@ -1229,7 +1230,7 @@ class PEAR_Config extends PEAR
                 return $this->getDefaultChannel($layer);
             }
         }
-        return null;
+        return $ret;
     }
 
 
