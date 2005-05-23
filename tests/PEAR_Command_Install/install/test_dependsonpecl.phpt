@@ -96,8 +96,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
              'url' => 'http://pecl.php.net/get/peclpackage-1.3.0')
 );
 $res = $command->run('install', array(), array($pathtopackagexml));
-$phpunit->assertNoErrors('after install');
-$phpunit->assertTrue($res, 'result');
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' => 'install failed')
+), 'after install');
 $dl = &$command->getDownloader(1, array());
 $phpunit->assertEquals(array (
   0 => 
