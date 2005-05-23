@@ -749,7 +749,7 @@ $phpunit->assertEquals( array (
   1 => 
   array (
     0 => 3,
-    1 => 'Skipping required dependency "pear/Net_UserAgent_Detect", already installed as version 2.0.1',
+    1 => 'pear/PEAR_Frontend_Web: Skipping required dependency "pear/Net_UserAgent_Detect", already installed as version 2.0.1',
   ),
   2 => 
   array (
@@ -759,7 +759,7 @@ $phpunit->assertEquals( array (
   3 => 
   array (
     0 => 3,
-    1 => 'Skipping required dependency "pear/HTML_Template_IT", already installed as version 1.1',
+    1 => 'pear/PEAR_Frontend_Web: Skipping required dependency "pear/HTML_Template_IT", already installed as version 1.1',
   ),
   4 => 
   array (
@@ -779,7 +779,7 @@ $phpunit->assertEquals( array (
       array (
         0 => 
         array (
-          0 => 'Cannot install, dependencies failed',
+          0 => 'No valid packages found',
         ),
       ),
       'headline' => 'Install Errors',
