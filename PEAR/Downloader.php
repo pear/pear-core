@@ -404,12 +404,16 @@ class PEAR_Downloader extends PEAR_Common
                     }
                     $installcheck = $depchecker->validatePackage($send, $this);
                     if (PEAR::isError($installcheck)) {
-                        $failed = true;
                         if (!isset($this->_options['soft'])) {
                             $this->log(0, $installcheck->getMessage());
                         }
+                        $hasfailed = true;
                         $params[$i] = false;
-                        break;
+                        $reset = true;
+                        $redo = true;
+                        $failed = false;
+                        PEAR_Downloader_Package::removeDuplicates($params);
+                        continue 2;
                     }
                     $failed = false;
                     if (isset($deps['required'])) {
