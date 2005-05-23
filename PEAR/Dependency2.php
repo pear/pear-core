@@ -676,12 +676,17 @@ class PEAR_Dependency2
             if ($installed || $downloaded) {
                 $installed = $installed ? 'installed' : 'downloaded';
                 if (isset($dep['conflicts'])) {
+                    if ($version) {
+                        $rest = ", $installed version is " . $version;
+                    } else {
+                        $rest = '';
+                    }
                     if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
                         return $this->raiseError('%s conflicts with package "' . $depname . '"' .
-                            $extra . ", $installed version is " . $version);
+                            $extra . $rest);
                     } else {
                         return $this->warning('warning: %s conflicts with package "' . $depname . '"' .
-                            $extra . ", $installed version is " . $version);
+                            $extra . $rest);
                     }
                 }
                 return true;
