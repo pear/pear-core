@@ -1207,6 +1207,7 @@ class PEAR_Config extends PEAR
             foreach ($this->layers as $ilayer) {
                 if (isset($this->configuration[$ilayer]['__channels'][$channel][$key])) {
                     $ret = $this->configuration[$ilayer]['__channels'][$channel][$key];
+                    break;
                 }
             }
         } elseif (isset($this->configuration[$layer]['__channels'][$channel][$key])) {
