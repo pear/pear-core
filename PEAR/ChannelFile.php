@@ -666,14 +666,15 @@ class PEAR_ChannelFile {
             }
         }
         if (isset($info['servers']['primary']['attribs']['port']) &&
-              !is_int($info['servers']['primary']['attribs']['host'])) {
+              !is_numeric($info['servers']['primary']['attribs']['port'])) {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_PORT,
-                array('port' => $info['port']));
+                array('port' => $info['servers']['primary']['attribs']['port']));
         }
         if (isset($info['servers']['primary']['attribs']['ssl']) &&
               $info['servers']['primary']['attribs']['ssl'] != 'yes') {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_SSL,
-                array('ssl' => $info['ssl'], 'server' => $info['name']));
+                array('ssl' => $info['servers']['primary']['attribs']['ssl'],
+                    'server' => $info['name']));
         }
 
         if (isset($info['servers']['primary']['xmlrpc']) &&
@@ -881,6 +882,8 @@ class PEAR_ChannelFile {
             } else {
                 return $protocol . '.php';
             }
+        } elseif (isset($this->_channelInfo['servers']['primary'][$protocol]['attribs']['path'])) {
+            return $this->_channelInfo['servers']['primary'][$protocol]['attribs']['path'];
         }
         return $protocol . '.php';
     }
@@ -1085,9 +1088,6 @@ class PEAR_ChannelFile {
                 $this->addFunction('xmlrpc', '1.1', 'package.getDepDownloadURL', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'package.search', $mirror);
                 $this->addFunction('xmlrpc', '1.0', 'channel.listAll', $mirror);
-//                $this->setBaseURL('package', 'rest/1.0/package');
-//                $this->setBaseURL('category', 'rest/1.0/category');
-//                $this->setBaseURL('maintainer', 'rest/1.0/maintainer');
                 return true;
             break;
             default :
@@ -1496,6 +1496,12 @@ class PEAR_ChannelFile {
             return false; // the __uri channel cannot have mirrors by definition
         }
         $set = array('attribs' => array('host' => $server));
+        if (is_numeric($port)) {
+            $set['attribs']['port'] = $port;
+        }
+        if ($path) {
+            $set['attribs']['path'] = $path;
+        }
         if (!isset($this->_channelInfo['servers']['mirror'])) {
             $this->_channelInfo['servers']['mirror'] = $set;
             return true;
