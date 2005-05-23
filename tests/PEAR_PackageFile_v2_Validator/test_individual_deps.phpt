@@ -25,8 +25,7 @@ $phpunit->assertErrors(array(
 // subpackage
 
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><subpackage><name>blh</name>, found <moo> expected one of "exclude, nodefault, providesextension"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><subpackage><name>blh3</name>, found <min> expected one of "conflicts"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><required><subpackage><name>blh3</name>: conflicting dependencies cannot have versioning info, use <exclude> to exclude specific versions of a dependency'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><subpackage><name>blh3</name>, found <recommended> expected one of "max, exclude, conflicts"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Subpackage dependency "blh3" cannot use <conflicts/>, only package dependencies can use this tag'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><subpackage><name>blh2</name>, found <min> expected one of "providesextension"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><required><subpackage><name>blh2</name>: dependencies with a <uri> tag cannot have any versioning information'),
@@ -34,8 +33,7 @@ $phpunit->assertErrors(array(
 // extension
 
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><extension><name>blh</name>, found <moo> expected one of "exclude"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><extension><name>blh2</name>, found <min> expected one of "conflicts"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><required><extension><name>blh2</name>: conflicting dependencies cannot have versioning info, use <exclude> to exclude specific versions of a dependency'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><required><extension><name>blh2</name>, found <recommended> expected one of "max, exclude, conflicts"'),
 
 // php
 
@@ -63,8 +61,7 @@ $phpunit->assertErrors(array(
 // subpackage
 
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional><subpackage><name>blh</name>, found <moo> expected one of "exclude, nodefault, providesextension"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional><subpackage><name>blh3</name>, found <min> expected one of "conflicts"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><optional><subpackage><name>blh3</name>: conflicting dependencies cannot have versioning info, use <exclude> to exclude specific versions of a dependency'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional><subpackage><name>blh3</name>, found <recommended> expected one of "max, exclude, conflicts"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Subpackage dependency "blh3" cannot use <conflicts/>, only package dependencies can use this tag'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional><subpackage><name>blh2</name>, found <min> expected one of "providesextension"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><optional><subpackage><name>blh2</name>: dependencies with a <uri> tag cannot have any versioning information'),
@@ -72,8 +69,7 @@ $phpunit->assertErrors(array(
 // extension
 
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional><extension><name>blh</name>, found <moo> expected one of "exclude"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional><extension><name>blh2</name>, found <min> expected one of "conflicts"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><optional><extension><name>blh2</name>: conflicting dependencies cannot have versioning info, use <exclude> to exclude specific versions of a dependency'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><optional><extension><name>blh2</name>, found <recommended> expected one of "max, exclude, conflicts"'),
 
 // group
 // package
@@ -85,8 +81,7 @@ $phpunit->assertErrors(array(
 // subpackage
 
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><group name="remoteinstall"><subpackage><name>blh</name>, found <moo> expected one of "exclude, nodefault, providesextension"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><group name="remoteinstall"><subpackage><name>blh3</name>, found <min> expected one of "conflicts"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><group name="remoteinstall"><subpackage><name>blh3</name>: conflicting dependencies cannot have versioning info, use <exclude> to exclude specific versions of a dependency'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><group name="remoteinstall"><subpackage><name>blh3</name>, found <recommended> expected one of "max, exclude, conflicts"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Subpackage dependency "blh3" cannot use <conflicts/>, only package dependencies can use this tag'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><group name="remoteinstall"><subpackage><name>blh2</name>, found <min> expected one of "providesextension"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><group name="remoteinstall"><subpackage><name>blh2</name>: dependencies with a <uri> tag cannot have any versioning information'),
@@ -94,8 +89,7 @@ $phpunit->assertErrors(array(
 // extension
 
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><group name="remoteinstall"><extension><name>blh</name>, found <moo> expected one of "exclude"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><group name="remoteinstall"><extension><name>blh2</name>, found <min> expected one of "conflicts"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => '<dependencies><group name="remoteinstall"><extension><name>blh2</name>: conflicting dependencies cannot have versioning info, use <exclude> to exclude specific versions of a dependency'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <dependencies><group name="remoteinstall"><extension><name>blh2</name>, found <recommended> expected one of "max, exclude, conflicts"'),
 
 
 ), '1');
