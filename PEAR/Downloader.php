@@ -187,6 +187,12 @@ class PEAR_Downloader extends PEAR_Common
         }
     }
 
+    /**
+     * Attempt to discover a channel's remote capabilities from
+     * its server name
+     * @param string
+     * @return boolean
+     */
     function discover($channel)
     {
         $this->log(1, 'Attempting to discover channel "' . $channel . '"...');
@@ -369,7 +375,7 @@ class PEAR_Downloader extends PEAR_Common
      */
     function analyzeDependencies(&$params)
     {
-        $failed = false;
+        $hasfailed = $failed = false;
         if (isset($this->_options['downloadonly'])) {
             return;
         }
@@ -534,6 +540,7 @@ class PEAR_Downloader extends PEAR_Common
                     $params[$i]->setValidated();
                 }
                 if ($failed) {
+                    $hasfailed = true;
                     $params[$i] = false;
                     $reset = true;
                     $redo = true;
@@ -544,8 +551,8 @@ class PEAR_Downloader extends PEAR_Common
             }
         }
         PEAR::staticPopErrorHandling();
-        if (isset($this->_options['ignore-errors']) ||
-              isset($this->_options['nodeps'])) {
+        if ($hasfailed && (isset($this->_options['ignore-errors']) ||
+              isset($this->_options['nodeps']))) {
             // this is probably not needed, but just in case
             if (!isset($this->_options['soft'])) {
                 $this->log(0, 'WARNING: dependencies failed');
@@ -638,6 +645,16 @@ class PEAR_Downloader extends PEAR_Common
         // on the latest release as array(version, info).  On success it contains
         // array(version, info, download url string)
         $state = isset($parr['state']) ? $parr['state'] : $this->config->get('preferred_state');
+        if (!$this->_registry->channelExists($parr['channel'])) {
+            do {
+                if ($this->config->get('auto_discover')) {
+                    if ($this->discover($parr['channel'])) {
+                        break;
+                    }
+                }
+                return PEAR::raiseError('Unknown remote channel: ' . $remotechannel);
+            } while (false);
+        }
         $chan = &$this->_registry->getChannel($parr['channel']);
         $version = $this->_registry->packageInfo($parr['package'], 'version',
             $parr['channel']);
@@ -756,6 +773,16 @@ class PEAR_Downloader extends PEAR_Common
             $remotechannel = $dep['channel'];
         } else {
             $remotechannel = 'pear.php.net';
+        }
+        if (!$this->_registry->channelExists($remotechannel)) {
+            do {
+                if ($this->config->get('auto_discover')) {
+                    if ($this->discover($remotechannel)) {
+                        break;
+                    }
+                }
+                return PEAR::raiseError('Unknown remote channel: ' . $remotechannel);
+            } while (false);
         }
         $this->configSet('default_channel', $remotechannel);
         $state = isset($parr['state']) ? $parr['state'] : $this->config->get('preferred_state');
