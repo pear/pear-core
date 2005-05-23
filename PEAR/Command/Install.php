@@ -424,7 +424,9 @@ Run post-installation scripts in package <package>, if any exist.
             }
             $err['headline'] = 'Install Errors';
             $this->ui->outputData($err);
-            return $this->raiseError("$command failed");
+            if (!count($downloaded)) {
+                return $this->raiseError("$command failed");
+            }
         }
         $data = array(
             'headline' => 'Packages that would be Installed'
