@@ -160,7 +160,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 3,
-    1 => 'Skipping required dependency "pear/required", already installed as version 1.0',
+    1 => 'pear/mainold: Skipping required dependency "pear/required", already installed as version 1.0',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');
