@@ -44,14 +44,13 @@ $pkg2->setPackage('bar');
 $pkg2->setChannel('pear.php.net');
 $dl = &new PEAR_Downloader($fakelog, array(), $config);
 $result = $dep->validatePackage($pkg2, $dl);
-$phpunit->showall();
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
           'message' => 'pear/foo cannot be installed, conflicts with installed packages')), 'vp');
 $phpunit->assertEquals(array (
   0 => 
   array (
-    0 => 'pear/foo conflicts with  package "pear/bar"',
+    0 => 'pear/foo conflicts with package "pear/bar"',
     1 => true,
   ),
 ), $fakelog->getLog(), 'vp');
