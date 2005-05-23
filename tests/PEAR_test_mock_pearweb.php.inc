@@ -4,6 +4,7 @@ require_once 'XML/RPC/Server.php';
 class PEAR_test_mock_pearweb {
     var $_config;
     var $_remote;
+    var $_xmlrpcCalls = array();
     
     function setRemote(&$r)
     {
@@ -67,6 +68,13 @@ class PEAR_test_mock_pearweb {
         return $ret;
     }
 
+    function getXmlrpcCalls()
+    {
+        $ret = $this->_xmlrpcCalls;
+        $this->_xmlrpcCalls = array();
+        return $ret;
+    }
+
     function tryParentREST($address)
     {
         require_once 'PEAR/REST.php';
@@ -121,6 +129,7 @@ class PEAR_test_mock_pearweb {
     
     function call($server, $method, $params = null)
     {
+        $this->_xmlrpcCalls[] = array($server, $method, $params);
         if (!isset($this->_config['xmlrpc'][$server][$method])) {
             include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'php_dump.php.inc';
             $args = $params;

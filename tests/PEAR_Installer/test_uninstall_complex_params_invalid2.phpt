@@ -54,7 +54,7 @@ $phpunit->assertEquals( array (
   0 => 
   array (
     0 => 0,
-    1 => 'pear/next (version >= 1.0) is required by installed package "pear/foo"',
+    1 => 'pear/foo (version >= 1.0) is required by installed package "pear/next"',
   ),
  ), $fakelog->getLog(), 'foo');
 echo 'tests done';

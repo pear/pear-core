@@ -388,7 +388,7 @@ $phpunit->assertEquals(array (
   1 => 
   array (
     0 => 3,
-    1 => 'Skipping required dependency "pear/Bar" version 1.5.2, already installed as version 1.4.0a1',
+    1 => 'pear/PEAR1: Skipping required dependency "pear/Bar" version 1.5.2, already installed as version 1.4.0a1',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (

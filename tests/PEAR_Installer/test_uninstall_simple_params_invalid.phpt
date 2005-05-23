@@ -52,7 +52,7 @@ $phpunit->assertErrors(array(
 $phpunit->assertEquals(array (
   0 => 
   array (
-    0 => 'pear/bar (version >= 1.0) is required by installed package "pear/next"',
+    0 => 'pear/next (version >= 1.0) is required by installed package "pear/bar"',
     1 => true,
   ),
 ), $fakelog->getLog(), 'next');

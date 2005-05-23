@@ -80,12 +80,12 @@ $phpunit->assertEquals(array (
   1 => 
   array (
     0 => 2,
-    1 => 'Skipping required dependency "pear/Bar", will be installed',
+    1 => 'pear/PEAR1: Skipping required dependency "pear/Bar", will be installed',
   ),
   2 => 
   array (
     0 => 2,
-    1 => 'Skipping required dependency "smork/Foobar", will be installed',
+    1 => 'pear/Bar: Skipping required dependency "smork/Foobar", will be installed',
    ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
