@@ -1084,8 +1084,8 @@ class PEAR_Downloader_Package
             }
         }
         $pnames = array_unique($pnames);
+        $unset = array_diff(array_keys($params), array_keys($pnames));
         $testp = array_flip($pnames);
-        $unset = array();
         foreach ($params as $i => $param) {
             if (!$param) {
                 $unset[] = $i;
