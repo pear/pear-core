@@ -333,6 +333,8 @@ class PEAR_Downloader extends PEAR_Common
         PEAR_Downloader_Package::removeInstalled($params);
         if (!count($params)) {
             $this->pushError('No valid packages found', PEAR_INSTALLER_FAILED);
+            $a = array();
+            return $a;
         }
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         $err = $this->analyzeDependencies($params);
