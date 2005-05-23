@@ -2551,7 +2551,7 @@ if (OS_WINDOWS) {
       1 =>
       array (
         0 => 3,
-        1 => 'Skipping required dependency "pear/Auth" version 1.3.0r3, already installed as version 1.3.0r3',
+        1 => 'pear/Auth_HTTP: Skipping required dependency "pear/Auth" version 1.3.0r3, already installed as version 1.3.0r3',
       ),
       2 => 
       array (
@@ -2937,7 +2937,7 @@ if (OS_WINDOWS) {
   1 => 
   array (
     0 => 3,
-    1 => 'Skipping required dependency "pear/Auth" version 1.3.0r3, already installed as version 1.3.0r3',
+    1 => 'pear/Auth_HTTP: Skipping required dependency "pear/Auth" version 1.3.0r3, already installed as version 1.3.0r3',
   ),
   2 => 
   array (
