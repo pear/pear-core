@@ -1247,6 +1247,8 @@ class PEAR_ChannelFile {
                         return true;
                     }
                 }
+                $this->_validateError(PEAR_CHANNELFILE_ERROR_MIRROR_NOT_FOUND,
+                    array('mirror' => $mirror));
                 return false;
             } elseif ($this->_channelInfo['servers']['mirror']['attribs']['host'] == $mirror) {
                 $this->_channelInfo['servers']['mirror'][$protocol]['attribs']['path'] = $path;
@@ -1490,7 +1492,7 @@ class PEAR_ChannelFile {
      * @param int mirror http port
      * @return boolean
      */
-    function addMirror($server, $port = null, $path = null)
+    function addMirror($server, $port = null)
     {
         if ($this->_channelInfo['name'] == '__uri') {
             return false; // the __uri channel cannot have mirrors by definition
@@ -1498,9 +1500,6 @@ class PEAR_ChannelFile {
         $set = array('attribs' => array('host' => $server));
         if (is_numeric($port)) {
             $set['attribs']['port'] = $port;
-        }
-        if ($path) {
-            $set['attribs']['path'] = $path;
         }
         if (!isset($this->_channelInfo['servers']['mirror'])) {
             $this->_channelInfo['servers']['mirror'] = $set;
