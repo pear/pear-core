@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Channelfile->getPath()
+PEAR_Channelfile->setPort()
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
