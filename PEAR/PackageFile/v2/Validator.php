@@ -950,6 +950,20 @@ class PEAR_PackageFile_v2_Validator
                 '*dir->name->?baseinstalldir',
                 '*file->name->role->?baseinstalldir->?md5sum'
             );
+            // do a quick test for better error message
+            if (isset($list['dir']) && isset($list['file'])) {
+                $first = false;
+                foreach ($list as $key => $tag) {
+                    if ($key == 'attribs') {
+                        continue;
+                    }
+                    $first = $key;
+                    break;
+                }
+                if ($first == 'file') {
+                    $this->_dirMustBeFirst($dirs);
+                }
+            }
         }
         if (!isset($list['attribs']) || !isset($list['attribs']['name'])) {
             $unknown = $allowignore ? '<filelist>' : '<dir name="*unknown*">';
@@ -1562,6 +1576,15 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array('tag' => $tag),
             '%tag% cannot conflict with all OSes');
+    }
+
+    function _dirsMustBeFirst($dir)
+    {
+        if (!$dir) {
+            $dir = '/';
+        }
+        $this->_stack->push(__FUNCTION__, 'error', array('dir' => $dir),
+            'In <dir name="%dir%">, child <dir> tags must precede child <file> tags');
     }
 
     function _analyzeBundledPackages()
