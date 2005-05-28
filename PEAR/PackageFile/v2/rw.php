@@ -1445,6 +1445,8 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
         }
         if (isset($curlog)) {
             $this->_packageInfo['changelog']['release'][$curlog] = $contents;
+        } else {
+            $this->_packageInfo['changelog']['release'][] = $contents;
         }
     }
 
