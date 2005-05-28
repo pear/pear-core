@@ -173,6 +173,7 @@
   * fix Bug #4354: Remote PEAR upgrade and uninstall operation fail
   * fix Bug #4355: PEAR 1.4.0a11 ftpInstall chokes on package2.xml packages
   * fix Bug #4400: pear download chiara/Chiara_XML_RPC5-alpha fails
+  * fix Bug #4458: packaging error message better description
   * implement Request #2781: support for static channel releases.xml summary
   * implement versioned conflicting dependencies
   * fix major problems in subpackages
