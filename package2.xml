@@ -168,6 +168,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 
   Specific changes from 1.4.0a11:
   * Implement REST 1.0 as per Request #2781
+  * REST is the default connection method if available
   * fix bugs in PEAR_ChannelFile REST handling
   * fix Bug #4069: pear list-all -c &lt;ChannelAlias&gt; does not work
   * fix Bug #4249: download-all broken in 1.4.0a11
@@ -184,6 +185,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * implement versioned conflicting dependencies
   * fix major problems in subpackages
   * The next version will split off PEAR_ErrorStack into its own package
+  * fix problems with zero-length files that have tasks on installation
+  * add a check for channel.xml up-to-dateness and gentle warning to users on
+    installing a package from that channel
  </notes>
  <contents>
   <dir name="/">
