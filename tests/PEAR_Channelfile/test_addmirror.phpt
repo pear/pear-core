@@ -220,7 +220,7 @@ $phpt->assertEquals(array (
     ),
   ),
 ), $chf->toArray(), 'addMirror() did not work as expected');
-$chf->addMirror('mirror.php2.net', 7900, '/something/');
+$chf->addMirror('mirror.php2.net', 7900);
 $phpt->assertTrue($chf->validate(), 'after add mirror 2');
 $phpt->assertEquals(array (
   'attribs' => 
@@ -323,7 +323,6 @@ $phpt->assertEquals(array (
         array (
           'host' => 'mirror.php2.net',
           'port' => 7900,
-          'path' => '/something/',
         ),
       ),
     ),
