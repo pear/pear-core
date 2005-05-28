@@ -11,9 +11,10 @@ class PEAR_test_mock_pearweb {
         $this->_remote = &$r;
     }
 
-    function addHtmlConfig($address, $filename)
+    function addHtmlConfig($address, $filename, $lastmodified = false)
     {
-        $this->_config['html'][$address] = array(basename($filename), file_get_contents($filename));
+        $this->_config['html'][$address] = array(basename($filename), file_get_contents($filename),
+            $lastmodified);
     }
 
     function addRESTConfig($address, $content, $content_type)
@@ -102,9 +103,14 @@ class PEAR_test_mock_pearweb {
         }
         if (!isset($this->_config['html'][$address])) {
             return $this->do404($address);
+        } elseif (isset($this->_config['html'][$address][2])) {
+            return $this->do200() .
+                $this->_config['html'][$address][2] .
+                'Content-Length: ' . strlen($this->_config['html'][$address][1]) . "\n\n" .
+                $this->_config['html'][$address][1];
         } else {
             return $this->do200() .
-                'content-length: ' . strlen($this->_config['html'][$address][1]) . "\n\n" .
+                'Content-Length: ' . strlen($this->_config['html'][$address][1]) . "\n\n" .
                 $this->_config['html'][$address][1];
         }
     }
