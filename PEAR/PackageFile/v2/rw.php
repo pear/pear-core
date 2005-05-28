@@ -1427,7 +1427,7 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
             $this->_packageInfo['changelog']['release'] = $contents;
             return;
         }
-        if (count($this->_packageInfo['changelog']['release']) == 1) {
+        if (!isset($this->_packageInfo['changelog']['release'][0])) {
             if ($this->_packageInfo['changelog']['release']['version']['release'] == $releaseversion) {
                 $this->_packageInfo['changelog']['release'] = array(
                     $this->_packageInfo['changelog']['release']);
