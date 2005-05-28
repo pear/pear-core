@@ -271,6 +271,7 @@ class PEAR_Downloader extends PEAR_Common
         if (!isset($this->_remote)) {
             $this->_remote = &$this->config->getRemote();
         }
+        $channelschecked = array();
         // convert all parameters into PEAR_Downloader_Package objects
         foreach ($params as $i => $param) {
             $params[$i] = &$this->newDownloaderPackage($this);
@@ -287,21 +288,42 @@ class PEAR_Downloader extends PEAR_Common
                 }
                 $this->pushError('Package "' . $param . '" is not valid',
                     PEAR_INSTALLER_SKIPPED);
-            }
-            if ($params[$i] && !isset($this->_options['downloadonly'])) {
-                $checkdir = $this->config->get('php_dir', null, $params[$i]->getChannel());
-                while ($checkdir && $checkdir != '/' && !file_exists($checkdir)) {
-                    $checkdir = dirname($checkdir);
+            } else {
+                if ($params[$i] && !isset($channelschecked[$params[$i]->getChannel()]) &&
+                      !isset($this->_options['offline'])) {
+                    $channelschecked[$params[$i]->getChannel()] = true;
+                    PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                    if (!class_exists('System')) {
+                        require_once 'System.php';
+                    }
+                    $curchannel = &$this->_registry->getChannel($params[$i]->getChannel());
+                    $a = $this->downloadHttp('http://' . $params[$i]->getChannel() .
+                        '/channel.xml', $this->ui,
+                        System::mktemp(array('-d')), null, $curchannel->lastModified());
+                    PEAR::staticPopErrorHandling();
+                    if (PEAR::isError($a) || !$a) {
+                        continue;
+                    }
+                    $this->log(0, 'WARNING: channel "' . $params[$i]->getChannel() . '" has ' .
+                        'updated its protocols, use "channel-update ' . $params[$i]->getChannel() .
+                        '" to update');
                 }
-                if ($checkdir == '.') {
-                    $checkdir = '/';
-                }
-                if (!@is_writeable($checkdir)) {
-                    return PEAR::raiseError('Cannot install, php_dir for channel "' .
-                        $params[$i]->getChannel() . '" is not writeable by the current user');
+                if ($params[$i] && !isset($this->_options['downloadonly'])) {
+                    $checkdir = $this->config->get('php_dir', null, $params[$i]->getChannel());
+                    while ($checkdir && $checkdir != '/' && !file_exists($checkdir)) {
+                        $checkdir = dirname($checkdir);
+                    }
+                    if ($checkdir == '.') {
+                        $checkdir = '/';
+                    }
+                    if (!@is_writeable($checkdir)) {
+                        return PEAR::raiseError('Cannot install, php_dir for channel "' .
+                            $params[$i]->getChannel() . '" is not writeable by the current user');
+                    }
                 }
             }
         }
+        unset($channelschecked);
         PEAR_Downloader_Package::removeDuplicates($params);
         if (!count($params)) {
             $a = array();
