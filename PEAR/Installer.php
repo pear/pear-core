@@ -317,7 +317,10 @@ class PEAR_Installer extends PEAR_Downloader
                                          PEAR_INSTALLER_FAILED);
             }
             $fp = fopen($orig_file, "r");
-            $contents = fread($fp, filesize($orig_file));
+            $contents = @fread($fp, filesize($orig_file));
+            if ($contents === false) {
+                $contents = '';
+            }
             fclose($fp);
             if (isset($atts['md5sum'])) {
                 $md5sum = md5($contents);
@@ -375,7 +378,7 @@ class PEAR_Installer extends PEAR_Downloader
                 return $this->raiseError("failed to create $dest_file: $php_errormsg",
                                          PEAR_INSTALLER_FAILED);
             }
-            if (!fwrite($wp, $contents)) {
+            if (fwrite($wp, $contents) === false) {
                 return $this->raiseError("failed writing to $dest_file: $php_errormsg",
                                          PEAR_INSTALLER_FAILED);
             }
@@ -496,7 +499,10 @@ class PEAR_Installer extends PEAR_Downloader
                                          PEAR_INSTALLER_FAILED);
             }
             $fp = fopen($orig_file, "r");
-            $contents = fread($fp, filesize($orig_file));
+            $contents = @fread($fp, filesize($orig_file)); // filesize can be 0
+            if ($contents === false) {
+                $contents = '';
+            }
             fclose($fp);
             if (isset($attribs['md5sum'])) {
                 $md5sum = md5($contents);
@@ -508,7 +514,7 @@ class PEAR_Installer extends PEAR_Downloader
                 if (!$task->isScript()) { // scripts are only handled after installation
                     $task->init($raw, $attribs, $pkg->getLastInstalledVersion());
                     $res = $task->startSession($pkg, $contents, $final_dest_file);
-                    if (!$res) {
+                    if ($res === false) {
                         continue; // skip this file
                     }
                     if (PEAR::isError($res)) {
@@ -521,7 +527,7 @@ class PEAR_Installer extends PEAR_Downloader
                     return $this->raiseError("failed to create $dest_file: $php_errormsg",
                                              PEAR_INSTALLER_FAILED);
                 }
-                if (!fwrite($wp, $contents)) {
+                if (fwrite($wp, $contents) === false) {
                     return $this->raiseError("failed writing to $dest_file: $php_errormsg",
                                              PEAR_INSTALLER_FAILED);
                 }
