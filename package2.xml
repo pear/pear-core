@@ -80,56 +80,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
-  Specific changes from 1.4.0a1:
-  * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
-  * Fix Bug #3612: fatal error in PEAR_Downloader_Package
-  * Use 1.2.0 as recommended version of XML_RPC
-  
-  Specific changes from 1.4.0a2:
- BC BREAK FOR PECL DEVS ONLY:
- In order to circumvent strict package-validation, use
- "pear channel-update pecl.php.net" prior to packaging
- a pecl release.
-  * Fix package.xml version 2.0 generation from package.xml 1.0
-  * Fix Bug #3634: still too many pear-specific restrictions on package valid
-  * Implement Request #3647: "pear package" only includes one package.xml
-  * Fix Bug #3677: Post-Install script message needs to display channel name
-  
-  Specific changes from 1.4.0a3:
-  * upgrade suggested XML_RPC version to 1.2.1
-
-  Specific changes from 1.4.0a4:
-  * upgrade suggested XML_RPC version to 1.2.2
-  * attempt to address memory issues
-  * relax validation further
-  * disable debug_backtrace() in PEAR_Error constructor of PEAR installer
-  * fix a strange version number condition when two packages were upgraded at the same time.
-  * fix Bug #3808 channel packages with non-baseinstalldir files will conflict on upgrade
-  * fix Bug #3801 [PATCH] analyzeSourceCode() reports PHP4 code as PHP5
-  * fix Bug #3671 Installing package features doesn't work as expected
-  * implement Request #3717 [Patch] Implement Simple run-tests output
-
-  Specific changes from 1.4.0a5:
-  * fix Bug #3860 PEAR_Dependency2 not included in 1 case
-
-  Specific changes from 1.4.0a6:
-  * implement &lt;usesrole&gt;/&lt;usestask&gt; for custom role/task graceful failure
-  * REALLY fix the debug_backtrace() issue (modified wrong pearcmd.php)
-  * fix Bug #3864 Invalid dependency relation
-  * fix Bug #3863 illogical warning about PEAR_Frontend_Gtk 0.4.0 with PEAR 1.4.0a6
-
-  Specific changes from 1.4.0a7:
-  * greatly improve the flexibility of post-install scripts
-    - &lt;param&gt; is no longer required
-    - skipParamgroup() method in Frontends allows dynamic manipulation of what input is
-      requested from users
-  * make error message when a user has no write access absolutely clear and unmistakable
-  * update to new header comment block standard
-  * slight improvement to speed and possibly memory use of Installer when a lot of
-    package.xml version 1.0 packages are installed
-  * add &quot;peardev&quot; command for those with memory_limit issue
-  * make package-validate command work on packaged .tgz files
 
   Specific changes from 1.4.0a8:
   * add --package option to run-tests command, to run installed .phpt tests
@@ -188,6 +138,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix problems with zero-length files that have tasks on installation
   * add a check for channel.xml up-to-dateness and gentle warning to users on
     installing a package from that channel
+
+  Specific changes from 1.4.0a12:
+  * remove old notes (prior to 1.4.0a8)
+  * implement conflicts tags for frontend packages
+  * implement separation of PEAR_ErrorStack package
+  * add default install for PEAR_Delegator package
  </notes>
  <contents>
   <dir name="/">
@@ -527,7 +483,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <min>1.2.0RC1</min>
     <recommended>1.2.2</recommended>
    </package>
-   <!--<package>
+   <package>
     <name>PEAR_Frontend_Web</name>
     <channel>pear.php.net</channel>
     <max>0.5.0</max>
@@ -546,7 +502,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <channel>pear.php.net</channel>
     <min>0.8.0</min>
     <recommended>0.8.0</recommended>
-   </subpackage>-->
+   </subpackage>
    <extension>
     <name>xml</name>
    </extension>
@@ -604,7 +560,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <ignore name="scripts/peardev.sh" />
    <ignore name="scripts/pear.sh" />
    <ignore name="scripts/pecl.sh" />
-   <!-- <ignore name="PEAR/ErrorStack.php" />-->
+   <ignore name="PEAR/ErrorStack.php" />
   </filelist>
  </phprelease>
  <phprelease>
@@ -617,7 +573,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <ignore name="scripts/pear.bat" />
    <ignore name="scripts/peardev.bat" />
    <ignore name="scripts/pecl.bat" />
-   <!-- <ignore name="PEAR/ErrorStack.php" />-->
+   <ignore name="PEAR/ErrorStack.php" />
   </filelist>
  </phprelease>
  <changelog>
@@ -887,6 +843,42 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * make PEAR_Remote messages more helpful (include server name)
   * make list-upgrades only search channels from which we have installed packages
   * remove &lt;max&gt; tag requirement for php dependency
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.0a12</release>
+    <api>1.4.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2005-05-28</date>
+   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <notes>
+  Specific changes from 1.4.0a11:
+  * Implement REST 1.0 as per Request #2781
+  * REST is the default connection method if available
+  * fix bugs in PEAR_ChannelFile REST handling
+  * fix Bug #4069: pear list-all -c &lt;ChannelAlias&gt; does not work
+  * fix Bug #4249: download-all broken in 1.4.0a11
+  * fix Bug #4257: if rel="has" is used with a version="" attribute, the warning does not work
+  * fix Bug #4278: Parser V1: error handling borked !
+  * fix Bug #4279: Typo in DependencyDB (_version)
+  * fix Bug #4285: pear install *.tgz miss dependencies
+  * fix Bug #4353: fatal error if using remote_config variable
+  * fix Bug #4354: Remote PEAR upgrade and uninstall operation fail
+  * fix Bug #4355: PEAR 1.4.0a11 ftpInstall chokes on package2.xml packages
+  * fix Bug #4400: pear download chiara/Chiara_XML_RPC5-alpha fails
+  * fix Bug #4458: packaging error message better description
+  * implement Request #2781: support for static channel releases.xml summary
+  * implement versioned conflicting dependencies
+  * fix major problems in subpackages
+  * The next version will split off PEAR_ErrorStack into its own package
+  * fix problems with zero-length files that have tasks on installation
+  * add a check for channel.xml up-to-dateness and gentle warning to users on
+    installing a package from that channel
    </notes>
   </release>
  </changelog>
