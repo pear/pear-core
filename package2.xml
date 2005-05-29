@@ -503,9 +503,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <required>
    <php>
     <min>4.2</min>
+    <max>6.0.0</max>
    </php>
    <pearinstaller>
-    <min>1.4.0a11</min>
+    <min>1.4.0a1</min>
    </pearinstaller>
    <package>
     <name>Archive_Tar</name>
@@ -526,7 +527,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <min>1.2.0RC1</min>
     <recommended>1.2.2</recommended>
    </package>
-   <package>
+   <!--<package>
     <name>PEAR_Frontend_Web</name>
     <channel>pear.php.net</channel>
     <max>0.5.0</max>
@@ -540,7 +541,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <exclude>0.4.0</exclude>
     <conflicts/>
    </package>
-   <!--<subpackage>
+   <subpackage>
     <name>PEAR_ErrorStack</name>
     <channel>pear.php.net</channel>
     <min>0.8.0</min>
