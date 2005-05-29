@@ -41,12 +41,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <max>6.0.0</max>
    </php>
    <pearinstaller>
-    <min>1.4.0a12</min>
+    <min>1.4.0a13</min>
    </pearinstaller>
    <package>
     <name>PEAR</name>
     <channel>pear.php.net</channel>
-    <min>1.4.0a12</min>
+    <min>1.4.0a13</min>
    </package>
   </required>
  </dependencies>
