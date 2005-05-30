@@ -136,7 +136,7 @@ define('PEAR_CHANNELFILE_URI_CANT_MIRROR', 36);
  * Error code when ssl attribute is present and is not "yes"
  */
 define('PEAR_CHANNELFILE_ERROR_INVALID_SSL', 37);
-/**@#-*/
+/**#@-*/
 
 /**
  * Mirror types allowed.  Currently only internet servers are recognized.
