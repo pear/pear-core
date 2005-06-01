@@ -355,7 +355,9 @@ class PEAR_Downloader_Package
                             if (!isset($options['soft'])) {
                                 $param->_downloader->log(1, 'Skipping package "' .
                                     $param->getShortName() .
-                                    '", already installed as version ' . $param->getVersion());
+                                    '", already installed as version ' .
+                                    $param->_registry->packageInfo($param->getPackage(),
+                                        'version', $param->getChannel()));
                             }
                             $params[$i] = false;
                         }
@@ -364,7 +366,9 @@ class PEAR_Downloader_Package
                         $info = $param->getParsedPackage();
                         $param->_downloader->log(1, 'Skipping package "' .
                             $param->getShortName() .
-                            '", already installed as version ' . $param->getVersion());
+                            '", already installed as version ' .
+                            $param->_registry->packageInfo($param->getPackage(), 'version',
+                                $param->getChannel()));
                         $params[$i] = false;
                     }
                 }
