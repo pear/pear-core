@@ -654,7 +654,7 @@ class PEAR_PackageFile_Generator_v1
     function _convertDependencies2_0(&$release, $internal = false)
     {
         $peardep = array('pearinstaller' =>
-            array('min' => '1.4.0a1')); // this is a lot safer
+            array('min' => '1.4.0a11')); // this is a lot safer
         $required = $optional = array();
         $release['dependencies'] = array();
         if ($this->_packagefile->hasDeps()) {
