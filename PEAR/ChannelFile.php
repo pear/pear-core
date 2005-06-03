@@ -372,11 +372,7 @@ class PEAR_ChannelFile {
      * a channel xml file as input.
      *
      * @param string  $descfile  name of channel xml file
-     *
-     * @return array  array with package information
-     *
-     * @access public
-     *
+     * @return bool success of parsing
      */
     function fromXmlFile($descfile)
     {
