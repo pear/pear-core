@@ -393,18 +393,18 @@ class PEAR_ChannelFile {
     }
 
     /**
-     * Returns channel information from different sources
+     * Parse channel information from different sources
      *
-     * This method is able to extract information about a package
-     * from a .tgz archive or from a XML package definition file.
+     * This method is able to extract information about a channel
+     * from an .xml file or a string
      *
      * @access public
-     * @param  string Filename of the source ('channel.xml', '<package>.tgz')
-     * @return string
+     * @param  string Filename of the source or the source itself
+     * @return bool
      */
     function fromAny($info)
     {
-        if (is_string($info) && file_exists($info)) {
+        if (is_string($info) && file_exists($info) && strlen($info) < 255) {
             $tmp = substr($info, -4);
             if ($tmp == '.xml') {
                 $info = $this->fromXmlFile($info);
