@@ -1374,6 +1374,7 @@ class PEAR_ChannelFile {
      * @param string protocol version
      * @param string protocol name, if any
      * @param string mirror name, if this is a mirror's protocol
+     * @return bool
      */
     function addFunction($type, $version, $name = '', $mirror = false)
     {
@@ -1384,12 +1385,13 @@ class PEAR_ChannelFile {
         if (!isset($this->_channelInfo['servers']['primary'][$type]['function'])) {
             $this->_channelInfo['servers']['primary'][$type]['function'] = $set;
             $this->_isValid = false;
-            return;
+            return true;
         } elseif (!isset($this->_channelInfo['servers']['primary'][$type]['function'][0])) {
             $this->_channelInfo['servers']['primary'][$type]['function'] = array(
                 $this->_channelInfo['servers']['primary'][$type]['function']);
         }
         $this->_channelInfo['servers']['primary'][$type]['function'][] = $set;
+        return true;
     }
     /**
      * Add a protocol to a mirror's provides section
