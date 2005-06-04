@@ -641,13 +641,13 @@ class PEAR_ChannelFile {
                 array('summary' => $info['summary']));
         }
         if (isset($info['suggestedalias'])) {
-            if (!$this->validChannelName($info['suggestedalias'])) {
+            if (!$this->validChannelServer($info['suggestedalias'])) {
                 $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME,
                     array('tag' => 'suggestedalias', 'name' =>$info['suggestedalias']));
             }
         }
         if (isset($info['localalias'])) {
-            if (!$this->validChannelName($info['localalias'])) {
+            if (!$this->validChannelServer($info['localalias'])) {
                 $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME,
                     array('tag' => 'localalias', 'name' =>$info['localalias']));
             }
@@ -675,15 +675,15 @@ class PEAR_ChannelFile {
 
         if (isset($info['servers']['primary']['xmlrpc']) &&
               isset($info['servers']['primary']['xmlrpc']['function'])) {
-            $this->validateFunctions('xmlrpc', $info['servers']['primary']['xmlrpc']['function']);
+            $this->_validateFunctions('xmlrpc', $info['servers']['primary']['xmlrpc']['function']);
         }
         if (isset($info['servers']['primary']['soap']) &&
               isset($info['servers']['primary']['soap']['function'])) {
-            $this->validateFunctions('soap', $info['servers']['primary']['soap']['function']);
+            $this->_validateFunctions('soap', $info['servers']['primary']['soap']['function']);
         }
         if (isset($info['servers']['primary']['rest']) &&
               isset($info['servers']['primary']['rest']['baseurl'])) {
-            $this->validateFunctions('rest', $info['servers']['primary']['rest']['baseurl']);
+            $this->_validateFunctions('rest', $info['servers']['primary']['rest']['baseurl']);
         }
         if (isset($info['servers']['mirror'])) {
             if ($this->_channelInfo['name'] == '__uri') {
@@ -706,15 +706,15 @@ class PEAR_ChannelFile {
                         array('ssl' => $info['ssl'], 'server' => $mirror['attribs']['host']));
                 }
                 if (isset($mirror['xmlrpc'])) {
-                    $this->validateFunctions('xmlrpc',
+                    $this->_validateFunctions('xmlrpc',
                         $mirror['xmlrpc']['function'], $mirror['attribs']['host']);
                 }
                 if (isset($mirror['soap'])) {
-                    $this->validateFunctions('soap', $mirror['soap']['function'],
+                    $this->_validateFunctions('soap', $mirror['soap']['function'],
                         $mirror['attribs']['host']);
                 }
                 if (isset($mirror['rest'])) {
-                    $this->validateFunctions('rest', $mirror['rest']['baseurl'],
+                    $this->_validateFunctions('rest', $mirror['rest']['baseurl'],
                         $mirror['attribs']['host']);
                 }
             }
@@ -727,7 +727,7 @@ class PEAR_ChannelFile {
      * @param array the functions
      * @param string the name of the parent element (mirror name, for instance)
      */
-    function validateFunctions($protocol, $functions, $parent = '')
+    function _validateFunctions($protocol, $functions, $parent = '')
     {
         if (!isset($functions[0])) {
             $functions = array($functions);
@@ -751,16 +751,6 @@ class PEAR_ChannelFile {
                 }
             }
         }
-    }
-
-    /**
-     * Tests whether a string contains a valid channel name
-     * @param string $ver the package version to test
-     * @return bool
-     */
-    function validChannelName($name)
-    {
-        return $this->validChannelServer($name);
     }
 
     /**
@@ -1319,7 +1309,7 @@ class PEAR_ChannelFile {
      */
     function setAlias($alias, $local = false)
     {
-        if (!$this->validChannelName($alias)) {
+        if (!$this->validChannelServer($alias)) {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_NAME,
                 array('tag' => 'suggestedalias', 'name' => $alias));
             return false;
@@ -1530,6 +1520,8 @@ class PEAR_ChannelFile {
 
     /**
      * Retrieve the object that can be used for custom validation
+     * @param string|false the name of the package to validate.  If the package is
+     *                     the channel validation package, PEAR_Validate is returned
      * @return PEAR_Validate|false false is returned if the validation package
      *         cannot be located
      */
