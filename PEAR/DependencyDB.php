@@ -91,7 +91,6 @@ class PEAR_DependencyDB
 
     /**
      * Get a raw dependency database.  Calls setConfig() and assertDepsDB()
-     * @param string
      * @param PEAR_Config
      * @param string|false full path to the dependency database, or false to use default
      * @return PEAR_DependencyDB|PEAR_Error
