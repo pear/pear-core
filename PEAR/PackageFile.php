@@ -107,22 +107,11 @@ class PEAR_PackageFile
         return 'PEAR_PackageFile_v';
     }
 
-    function &factory($version, $phpversion = false)
+    function &factory($version)
     {
         if (!in_array($version{0}, array('1', '2'))) {
             $a = false;
             return $a;
-        }
-        if ($phpversion) {
-            if (!in_array((int) $phpversion, array(4, 5))) {
-                $phpversion = 'PHP4';
-            }
-        } else {
-            $v = phpversion();
-            if (!in_array((int) $v{0}, array(4, 5))) {
-                $v = 5;
-            }
-            $phpversion = 'PHP' . $v{0};
         }
         include_once 'PEAR/PackageFile/v' . $version{0} . '.php';
         $version = $version{0};
