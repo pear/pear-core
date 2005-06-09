@@ -175,6 +175,9 @@ class PEAR_PackageFile_v2
      */
     function installBinary(&$installer)
     {
+        if (!OS_WINDOWS) {
+            return false;
+        }
         if ($this->getPackageType() == 'extsrc') {
             if (!is_array($installer->getInstallPackages())) {
                 return false;
