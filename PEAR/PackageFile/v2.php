@@ -199,7 +199,7 @@ class PEAR_PackageFile_v2
                 if (isset($this->_packageInfo['channel'])) {
                     foreach ($params as $i => $param) {
                         $params[$i] = array('channel' => $this->_packageInfo['channel'],
-                            'package' => $param);
+                            'package' => $param, 'version' => $this->getVersion());
                     }
                 }
                 $dl = &$this->getPEARDownloader($installer->ui, $installer->getOptions(),
