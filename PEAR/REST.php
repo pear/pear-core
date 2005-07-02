@@ -151,7 +151,7 @@ class PEAR_REST
         }
         $cachettl = $this->config->get('cache_ttl');
         // If cache is newer than $cachettl seconds, we use the cache!
-        if ($ret['age'] < $cachettl) {
+        if (time() - $ret['age'] < $cachettl) {
             return $this->getCache($url);
         }
         return false;
@@ -193,14 +193,14 @@ class PEAR_REST
         if ($nochange) {
             $contents = unserialize(implode('', file($cacheidfile)));
             fwrite($fp, serialize(array(
-                'age'        => time() - filemtime($cachefile),
+                'age'        => filemtime($cachefile),
                 'lastChange' => $contents['lastChange'],
                 )));
             fclose($fp);
             return true;
         } else {
             fwrite($fp, serialize(array(
-                'age'        => 0,
+                'age'        => time(),
                 'lastChange' => $lastmodified,
                 )));
         }
