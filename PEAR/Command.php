@@ -112,7 +112,7 @@ class PEAR_Command
      * @access public
      * @static
      */
-    function factory($command, &$config)
+    function &factory($command, &$config)
     {
         if (empty($GLOBALS['_PEAR_Command_commandlist'])) {
             PEAR_Command::registerCommands();
@@ -137,7 +137,7 @@ class PEAR_Command
 
     // }}}
     // {{{ & getObject()
-    function getObject($command)
+    function &getObject($command)
     {
         $class = $GLOBALS['_PEAR_Command_commandlist'][$command];
         if (!class_exists($class)) {
