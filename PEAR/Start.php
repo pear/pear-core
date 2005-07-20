@@ -122,6 +122,9 @@ class PEAR_Start extends PEAR
             }
         } else {
             $this->prefix = dirname(PHP_BINDIR);
+            if (get_current_user() != 'root') {
+                $this->prefix = $this->safeGetenv('HOME') . '/pear';
+            }
             $this->bin_dir   = '$prefix/bin';
             $this->php_dir   = '$prefix/share/pear';
             $this->doc_dir   = '$php_dir/docs';
