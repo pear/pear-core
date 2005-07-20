@@ -48,8 +48,8 @@
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.0a12</version>
-  <date>2005-05-28</date>
+  <version>1.4.0a13</version>
+  <date>2005-07-19</date>
   <license>PHP License</license>
   <state>alpha</state>
   <notes>
@@ -138,6 +138,8 @@
   * implement conflicts tags for frontend packages
   * implement separation of PEAR_ErrorStack package
   * add default install for PEAR_Delegator package
+  * fix Bug #4817: Fix warning with corrupt cache
+  * fix Bug #4818: References fix
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
