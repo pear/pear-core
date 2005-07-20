@@ -119,7 +119,7 @@ class PEAR_REST_10
             return PEAR::raiseError('Package "' . $deppackage['channel'] . '/' . $deppackage['package']
                 . '" dependency "' . $channel . '/' . $package . '" has no releases');
         }
-        if (!isset($info['r'])) {
+        if (!is_array($info) || !isset($info['r'])) {
             return false;
         }
         $exclude = array();
