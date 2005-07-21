@@ -362,7 +362,8 @@ class PEAR_PackageFile
                 }
             }
         } else {
-            return PEAR::raiseError("Cannot open '$info' for parsing");
+            $info = PEAR::raiseError("Cannot open '$info' for parsing");
+            return $info;
         }
         return $info;
     }
