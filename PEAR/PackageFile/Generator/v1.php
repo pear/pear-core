@@ -1075,13 +1075,13 @@ class PEAR_PackageFile_Generator_v1
             }
             if (count($min)) {
                 // get the highest minimum
-                $min = array_pop(array_flip($min));
+                $min = array_pop($a = array_flip($min));
             } else {
                 $min = false;
             }
             if (count($max)) {
                 // get the lowest maximum
-                $max = array_shift(array_flip($max));
+                $max = array_shift($a = array_flip($max));
             } else {
                 $max = false;
             }
