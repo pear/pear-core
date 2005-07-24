@@ -144,9 +144,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * implement conflicts tags for frontend packages
   * implement separation of PEAR_ErrorStack package
   * add default install for PEAR_Delegator package
+  * fix PEAR_Common::validatePackageInfo() so it accepts the contents of a package.xml
   * fix Bug #4741: Newest Pager won't install (no upgrade available)
   * fix Bug #4817: Fix warning with corrupt cache
   * fix Bug #4818: References fix
+  * fix Bug #4825: pear behind a proxy using REST dosnt work
  </notes>
  <contents>
   <dir name="/">

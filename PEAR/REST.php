@@ -271,7 +271,12 @@ class PEAR_REST
                 $port = 80;
             }
         }
-        $request = "GET $path HTTP/1.1\r\n";
+        If (isset($proxy['host'])) {
+            $request = "GET $url HTTP/1.1\r\n";
+        } else {
+            $request = "GET $path HTTP/1.1\r\n";
+        }
+
         $ifmodifiedsince = '';
         if (is_array($lastmodified)) {
             if (isset($lastmodified['Last-Modified'])) {
