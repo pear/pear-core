@@ -317,7 +317,8 @@ class PEAR_PackageFile
         if (is_string($descfile) && strlen($descfile) < 255 &&
              !@is_file($descfile) || !is_readable($descfile) ||
              (!$fp = @fopen($descfile, 'r'))) {
-            return PEAR::raiseError("Unable to open $descfile");
+            $a = PEAR::raiseError("Unable to open $descfile");
+            return $a;
         }
 
         // read the whole thing so we only get one cdata callback
