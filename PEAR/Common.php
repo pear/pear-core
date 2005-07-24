@@ -543,7 +543,11 @@ class PEAR_Common extends PEAR
         $config = &PEAR_Config::singleton();
         $packagefile = &new PEAR_PackageFile($config);
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        $pf = &$packagefile->fromAnyFile($info, PEAR_VALIDATE_NORMAL);
+        if (strpos($info, '<?xml') !== false) {
+            $pf = &$packagefile->fromXmlString($info, PEAR_VALIDATE_NORMAL, '');
+        } else {
+            $pf = &$packagefile->fromAnyFile($info, PEAR_VALIDATE_NORMAL);
+        }
         PEAR::staticPopErrorHandling();
         if (PEAR::isError($pf)) {
             $errs = $pf->getUserinfo();
