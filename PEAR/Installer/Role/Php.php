@@ -34,7 +34,7 @@ class PEAR_Installer_Role_Php extends PEAR_Installer_Role_Common
 {
     var $_setup =
         array(
-            'releasetypes' => array('php'),
+            'releasetypes' => array('php', 'extsrc', 'extbin'),
             'installable' => true,
             'locationconfig' => 'php_dir',
             'honorsbaseinstall' => true,
@@ -46,7 +46,7 @@ class PEAR_Installer_Role_Php extends PEAR_Installer_Role_Common
     function getInfo()
     {
         return array(
-            'releasetypes' => array('php'),
+            'releasetypes' => array('php', 'extsrc', 'extbin'),
             'installable' => true,
             'locationconfig' => 'php_dir',
             'honorsbaseinstall' => true,
