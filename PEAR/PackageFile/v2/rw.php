@@ -1380,17 +1380,14 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
      * static URI to a source package, or the package name and channel of the extsrc
      * package it is based on.
      * @param string Package name, or full URI to source package (extsrc type)
-     * @param string|false channel name
      */
-    function setSourcePackage($packageOrUri, $channel = false)
+    function setSourcePackage($packageOrUri)
     {
         $this->_isValid = 0;
-        if ($channel) {
+        if (isset($this->_packageInfo['channel'])) {
             $this->_packageInfo = $this->_insertBefore($this->_packageInfo, array('phprelease',
                 'extsrcrelease', 'extbinrelease', 'bundle', 'changelog'),
                 $packageOrUri, 'srcpackage');
-            $this->_packageInfo = $this->_insertBefore($this->_packageInfo, array('phprelease',
-                'extsrcrelease', 'extbinrelease', 'bundle', 'changelog'), $channel, 'srcchannel');
         } else {
             $this->_packageInfo = $this->_insertBefore($this->_packageInfo, array('phprelease',
                 'extsrcrelease', 'extbinrelease', 'bundle', 'changelog'), $packageOrUri, 'srcuri');
