@@ -106,7 +106,7 @@ class PEAR_PackageFile_v2_Validator
         if (array_key_exists('_lastmodified', $test)) {
             unset($test['_lastmodified']);
         }
-        if (array_key_exists($test['#binarypackage'])) {
+        if (array_key_exists('#binarypackage', $test)) {
             unset($test['#binarypackage']);
         }
         if (array_key_exists('old', $test)) {
