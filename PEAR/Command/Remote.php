@@ -248,7 +248,8 @@ parameter.
             $data = '(no packages available yet)';
         } else {
             foreach ($available as $name => $info) {
-                $data['data'][] = array($name, isset($info['stable']) ? $info['stable'] : '-n/a-');
+                $data['data'][] = array($name, (isset($info['stable']) && $info['stable'])
+                    ? $info['stable'] : '-n/a-');
             }
         }
         $this->ui->outputData($data, $command);
@@ -327,6 +328,9 @@ parameter.
                 unset($local_pkgs[$pos]);
             }
 
+            if (isset($info['stable']) && !$info['stable']) {
+                $info['stable'] = null;
+            }
             $data['data'][$info['category']][] = array(
                 $reg->channelAlias($channel) . '/' . $name,
                 @$info['stable'],
