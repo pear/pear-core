@@ -1945,6 +1945,4 @@ class PEAR_PackageFile_v2_Validator
         return $providesret;
     }
 }
-$a = new PEAR_PackageFile_v2_Validator;
-$a->analyzeSourceCode('C:/php4/pear_pkgs/Translation2/Decorator/UTF8.php');
 ?>
