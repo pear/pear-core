@@ -329,7 +329,7 @@ class PEAR_Downloader extends PEAR_Common
             $a = array();
             return $a;
         }
-        if (!isset($this->_options['nodeps'])) {
+        if (!isset($this->_options['nodeps']) && !isset($this->_options['offline'])) {
             $reverify = true;
             while ($reverify) {
                 $reverify = false;
