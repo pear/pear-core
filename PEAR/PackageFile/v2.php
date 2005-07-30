@@ -168,24 +168,34 @@ class PEAR_PackageFile_v2
         return $z;
     }
 
+    function getInstalledBinary()
+    {
+        return isset($this->_packageInfo['#binarypackage']) ? $this->_packageInfo['#binarypackage'] :
+            false;
+    }
+
     /**
      * Installation of source package has failed, attempt to download and install the
      * binary version of this package.
      * @param PEAR_Installer
+     * @return array|false
      */
-    function installBinary(&$installer)
+    function &installBinary(&$installer)
     {
         if (!OS_WINDOWS) {
-            return false;
+            $a = false;
+            return $a;
         }
         if ($this->getPackageType() == 'extsrc') {
             if (!is_array($installer->getInstallPackages())) {
-                return false;
+                $a = false;
+                return $a;
             }
             foreach ($installer->getInstallPackages() as $p) {
                 if ($p->isExtension($this->_packageInfo['providesextension'])) {
                     if ($p->getPackageType() != 'extsrc') {
-                        return false; // the user probably downloaded it separately
+                        $a = false;
+                        return $a; // the user probably downloaded it separately
                     }
                 }
             }
@@ -219,14 +229,18 @@ class PEAR_PackageFile_v2
                     if (count($ret) == 1) {
                         $pf = $ret[0]->getPackageFile();
                         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                        $ret = $installer->install($ret[0]);
+                        $err = $installer->install($ret[0]);
                         PEAR::popErrorHandling();
-                        if (is_array($ret)) {
+                        if (is_array($err)) {
+                            $this->_packageInfo['#binarypackage'] = $ret[0]->getPackage();
+                            // "install" self, so all dependencies will work transparently
+                            $this->_registry->addPackage2($this);
                             $installer->log(0, 'Download and install of binary extension "' .
                                 $this->_registry->parsedPackageNameToString(
                                     array('channel' => $pf->getChannel(),
                                           'package' => $pf->getPackage()), true) . '" successful');
-                            return $ret;
+                            $a = array($ret[0], $err);
+                            return $a;
                         }
                         $installer->log(0, 'Download and install of binary extension "' .
                             $this->_registry->parsedPackageNameToString(
@@ -236,7 +250,8 @@ class PEAR_PackageFile_v2
                 }
             }
         }
-        return false;
+        $a = false;
+        return $a;
     }
 
     /**
@@ -680,6 +695,9 @@ class PEAR_PackageFile_v2
             unset($info['dirtree']);
             if (isset($info['_lastversion'])) {
                 unset($info['_lastversion']);
+            }
+            if (isset($info['#binarypackage'])) {
+                unset($info['#binarypackage']);
             }
             return $info;
         }

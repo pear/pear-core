@@ -387,6 +387,11 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function getInstalledBinary()
+    {
+        return false;
+    }
+
     function listPostinstallScripts()
     {
         return false;
