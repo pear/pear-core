@@ -106,6 +106,9 @@ class PEAR_PackageFile_v2_Validator
         if (array_key_exists('_lastmodified', $test)) {
             unset($test['_lastmodified']);
         }
+        if (array_key_exists($test['#binarypackage'])) {
+            unset($test['#binarypackage']);
+        }
         if (array_key_exists('old', $test)) {
             unset($test['old']);
         }
@@ -1942,4 +1945,6 @@ class PEAR_PackageFile_v2_Validator
         return $providesret;
     }
 }
+$a = new PEAR_PackageFile_v2_Validator;
+$a->analyzeSourceCode('C:/php4/pear_pkgs/Translation2/Decorator/UTF8.php');
 ?>
