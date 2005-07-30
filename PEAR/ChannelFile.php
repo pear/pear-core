@@ -314,12 +314,13 @@ class PEAR_ChannelFile {
      * @static
      * @return PEAR_ChannelFile|false false if invalid
      */
-    function fromArray($data, $compatibility = false, $stackClass = 'PEAR_ErrorStack')
+    function &fromArray($data, $compatibility = false, $stackClass = 'PEAR_ErrorStack')
     {
         $a = new PEAR_ChannelFile($compatibility, $stackClass);
         $a->_fromArray($data);
         if (!$a->validate()) {
-            return false;
+            $a = false;
+            return $a;
         }
         return $a;
     }
