@@ -268,8 +268,10 @@ class PEAR_ErrorStack {
                 'stack class "%stackclass%" is not a valid class name (should be like PEAR_ErrorStack)',
                 false, $trace);
         }
-        return $GLOBALS['_PEAR_ERRORSTACK_SINGLETON'][$package] =
+        $GLOBALS['_PEAR_ERRORSTACK_SINGLETON'][$package] =
             &new $stackClass($package, $msgCallback, $contextCallback, $throwPEAR_Error);
+
+        return $GLOBALS['_PEAR_ERRORSTACK_SINGLETON'][$package];
     }
 
     /**
