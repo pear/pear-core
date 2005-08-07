@@ -342,7 +342,9 @@ class PEAR_Exception extends Exception
             }
             $html .= '(' . implode(', ',$args) . ')'
                    . '</td>'
-                   . '<td>' . $v['file'] . ':' . $v['line'] . '</td></tr>' . "\n";
+                   . '<td>' . (isset($v['file']) ? $v['file'] : 'unknown')
+                   . ':' . (isset($v['line']) ? $v['line'] : 'unknown')
+                   . '</td></tr>' . "\n";
         }
         $html .= '<tr><td align="center">' . ($k+1) . '</td>'
                . '<td>{main}</td>'

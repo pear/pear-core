@@ -150,6 +150,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #4817: Fix warning with corrupt cache
   * fix Bug #4818: References fix
   * fix Bug #4825: pear behind a proxy using REST dosnt work
+  * fix Bug #4952: PEAR_Exception::toHTML() spits notices
  </notes>
  <contents>
   <dir name="/">
