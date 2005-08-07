@@ -469,7 +469,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <max>6.0.0</max>
    </php>
    <pearinstaller>
-    <min>1.4.0a10</min>
+    <min>1.4.0a12</min>
    </pearinstaller>
    <package>
     <name>Archive_Tar</name>
@@ -487,7 +487,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <package>
     <name>XML_RPC</name>
     <channel>pear.php.net</channel>
-    <min>1.2.0RC1</min>
+    <min>1.3.3</min>
     <recommended>1.3.3</recommended>
    </package>
    <package>
@@ -517,18 +517,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>pcre</name>
    </extension>
   </required>
-  <optional>
-   <package>
-    <name>PEAR_Frontend_Web</name>
-    <channel>pear.php.net</channel>
-    <min>0.5.0</min>
-   </package>
-   <package>
-    <name>PEAR_Frontend_Gtk</name>
-    <channel>pear.php.net</channel>
-    <min>0.4.0</min>
-   </package>
-  </optional>
   <group name="remoteinstall" hint="adds the ability to install packages to a remote ftp server">
    <package>
     <name>Net_FTP</name>
