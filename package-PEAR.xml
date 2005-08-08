@@ -140,6 +140,7 @@
   * add default install for PEAR_Delegator package
   * fix PEAR_PackageFile_v2_rw::setSourcePackage() to match newer package.xml 2.0 format
   * fix PEAR_Common::validatePackageInfo() so it accepts the contents of a package.xml
+  * implement Feature #4464: ability to modify a post-install script prompt at runtime
   * fix Bug #4741: Newest Pager won't install (no upgrade available)
   * fix Bug #4817: Fix warning with corrupt cache
   * fix Bug #4818: References fix
