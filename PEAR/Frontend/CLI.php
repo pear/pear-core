@@ -242,6 +242,9 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                     }
                 }
                 $lastgroup = $group;
+                if (isset($group['instructions'])) {
+                    $this->_display($group['instructions']);
+                }
                 if (!isset($group['param'][0])) {
                     $group['param'] = array($group['param']);
                 }
