@@ -85,7 +85,7 @@ class PEAR_REST
         }
         if (!isset($this->_options['offline'])) {
             $trieddownload = true;
-            $file = $this->downloadHttp($url, $cacheId['lastChange'], $accept);
+            $file = $this->downloadHttp($url, $cacheId ? $cacheId['lastChange'] : false, $accept);
         } else {
             $trieddownload = false;
             $file = false;
