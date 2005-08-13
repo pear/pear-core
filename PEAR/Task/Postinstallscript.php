@@ -148,6 +148,13 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
                             '" must have a <value> tag containing expected parameter value');
                     }
                 }
+                if (isset($param['instructions'])) {
+                    if (!is_string($param['instructions'])) {
+                        return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .
+                            $fileXml['name'] . '" <paramgroup> id "' . $param['id'] .
+                            '" <instructions> must be simple text');
+                    }
+                }
                 if (!isset($param['param'])) {
                     continue; // <param> is no longer required
                 }
