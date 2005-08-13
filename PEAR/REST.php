@@ -79,13 +79,13 @@ class PEAR_REST
      */
     function retrieveData($url, $accept = false, $forcestring = false)
     {
-        if ($ret = $this->useLocalCache($url)) {
+        $cacheId = $this->getCacheId($url);
+        if ($ret = $this->useLocalCache($url, $cacheId)) {
             return $ret;
         }
-        $cacheId = $this->getCacheId($url);
         if (!isset($this->_options['offline'])) {
             $trieddownload = true;
-            $file = $this->downloadHttp($url, $cacheId, $accept);
+            $file = $this->downloadHttp($url, $cacheId['lastChange'], $accept);
         } else {
             $trieddownload = false;
             $file = false;
@@ -102,7 +102,7 @@ class PEAR_REST
             $ret = $this->getCache($url);
             if (!PEAR::isError($ret) && $trieddownload) {
                 // reset the age of the cache if the server says it was unmodified
-                $this->saveCache($url, $ret, null, true);
+                $this->saveCache($url, $ret, null, true, $cacheId);
             }
             return $ret;
         }
@@ -110,7 +110,7 @@ class PEAR_REST
         $lastmodified = $file[1];
         $content = $file[0];
         if ($forcestring) {
-            $this->saveCache($url, $content, $lastmodified);
+            $this->saveCache($url, $content, $lastmodified, false, $cacheId);
             return $content;
         }
         if (isset($headers['content-type'])) {
@@ -136,22 +136,24 @@ class PEAR_REST
             $parser->parse($file);
             $content = $parser->getData();
         }
-        $this->saveCache($url, $content, $lastmodified);
+        $this->saveCache($url, $content, $lastmodified, false, $cacheId);
         return $content;
     }
 
-    function useLocalCache($url)
+    function useLocalCache($url, $cacheid = null)
     {
-        $cacheidfile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
-            md5($url) . 'rest.cacheid';
-        if (@file_exists($cacheidfile)) {
-            $ret = unserialize(implode('', file($cacheidfile)));
-        } else {
-            return false;
+        if ($cacheid === null) {
+            $cacheidfile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
+                md5($url) . 'rest.cacheid';
+            if (@file_exists($cacheidfile)) {
+                $cacheid = unserialize(implode('', file($cacheidfile)));
+            } else {
+                return false;
+            }
         }
         $cachettl = $this->config->get('cache_ttl');
         // If cache is newer than $cachettl seconds, we use the cache!
-        if (time() - $ret['age'] < $cachettl) {
+        if (time() - $cacheid['age'] < $cachettl) {
             return $this->getCache($url);
         }
         return false;
@@ -163,7 +165,7 @@ class PEAR_REST
             md5($url) . 'rest.cacheid';
         if (@file_exists($cacheidfile)) {
             $ret = unserialize(implode('', file($cacheidfile)));
-            return $ret['lastChange'];
+            return $ret;
         } else {
             return false;
         }
@@ -180,21 +182,30 @@ class PEAR_REST
         }
     }
 
-    function saveCache($url, $contents, $lastmodified, $nochange = false)
+    /**
+     * @param string full URL to REST resource
+     * @param string original contents of the REST resource
+     * @param array  HTTP Last-Modified and ETag headers
+     * @param bool   if true, then the cache id file should be regenerated to
+     *               trigger a new time-to-live value
+     */
+    function saveCache($url, $contents, $lastmodified, $nochange = false, $cacheid = null)
     {
         $cacheidfile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
             md5($url) . 'rest.cacheid';
         $cachefile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
             md5($url) . 'rest.cachefile';
+        if ($cacheid === null && $nochange) {
+            $cacheid = unserialize(implode('', file($cacheidfile)));
+        }
         $fp = @fopen($cacheidfile, 'wb');
         if (!$fp) {
             return false;
         }
         if ($nochange) {
-            $contents = unserialize(implode('', file($cacheidfile)));
             fwrite($fp, serialize(array(
-                'age'        => filemtime($cachefile),
-                'lastChange' => $contents['lastChange'],
+                'age'        => time(),
+                'lastChange' => $cacheid['lastChange'],
                 )));
             fclose($fp);
             return true;
