@@ -54,16 +54,20 @@ class PEAR_Task_Postinstallscript_rw extends PEAR_Task_Postinstallscript
         return 'postinstallscript';
     }
 
-    function addParamGroup($id, $params)
+    function addParamGroup($id, $params, $instructions = false)
     {
         if (isset($params[0]) && !isset($params[1])) {
             $params = $params[0];
         }
-        $this->_params[] =
+        $stuff =
             array(
                 'id' => $id,
-                'param' => $params,
             );
+        if ($instructions) {
+            $stuff['instructions'] = $instructions;
+        }
+        $stuff['param'] = $params;
+        $this->_params[] = $stuff;
     }
 
     function addConditionTypeGroup($id, $oldgroup, $param, $value, $conditiontype = '=')
