@@ -7,7 +7,7 @@ ini_set('include_path', $pear_dir);
 include_once 'PEAR.php';
 include_once 'PEAR/Installer.php';
 include_once 'PEAR/Registry.php';
-include_once 'PEAR/Frontend/CLI.php';
+include_once 'PEAR/Frontend.php';
 
 $a = true;
 if (!PEAR::loadExtension('xml')) {
@@ -83,8 +83,8 @@ if (!empty($install_root)) {
     $reg_dir = $php_dir;
 }
 
-$reg = &new PEAR_Registry($reg_dir);
-$ui = &new PEAR_Frontend_CLI();
+$reg = &$config->getRegistry('default');
+$ui = &PEAR_Frontend::singleton('PEAR_Frontend_CLI');
 $installer = &new PEAR_Installer($ui);
 //$installer->registry = &$reg; // This should be changed in Installer/Registry
 
