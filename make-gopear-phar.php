@@ -27,6 +27,7 @@ $pearver = $pf->getVersion();
 
 $creator = new PHP_Archive_Creator('index.php', true);
 foreach ($packages as $package) {
+    echo "adding PEAR/go-pear-tarballs/$package\n";
     $creator->addFile("PEAR/go-pear-tarballs/$package", "PEAR/go-pear-tarballs/$package");
 }
 $commandcontents = file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'go-pear-phar.php');
@@ -147,6 +148,23 @@ $commandcontents = str_replace(
 $creator->addString($commandcontents, 'PEAR/PackageFile/Generator/v1.php');
 
 $commandcontents = file_get_contents($peardir . DIRECTORY_SEPARATOR . 'PEAR' .
+    DIRECTORY_SEPARATOR . 'PackageFile' . DIRECTORY_SEPARATOR . 'Generator' .
+    DIRECTORY_SEPARATOR . 'v2.php');
+$commandcontents = str_replace(
+    array(
+        "require_once '",
+        "include_once '",
+        "@PEAR-VER@",
+    ),
+    array(
+        "require_once 'phar://go-pear.phar/",
+        "include_once 'phar://go-pear.phar/",
+        $pearver,
+    ),
+    $commandcontents);
+$creator->addString($commandcontents, 'PEAR/PackageFile/Generator/v2.php');
+
+$commandcontents = file_get_contents($peardir . DIRECTORY_SEPARATOR . 'PEAR' .
     DIRECTORY_SEPARATOR . 'Dependency2.php');
 $commandcontents = str_replace(
     array(
@@ -161,6 +179,20 @@ $commandcontents = str_replace(
     ),
     $commandcontents);
 $creator->addString($commandcontents, 'PEAR/Dependency2.php');
+
+$commandcontents = file_get_contents($peardir . DIRECTORY_SEPARATOR . 'OS' .
+    DIRECTORY_SEPARATOR . 'Guess.php');
+$commandcontents = str_replace(
+    array(
+        "include_once \"",
+        "@package_version@",
+    ),
+    array(
+        "include_once \"phar://go-pear.phar/",
+        $pearver,
+    ),
+    $commandcontents);
+$creator->addString($commandcontents, 'OS/Guess.php');
 
 $commandcontents = file_get_contents($peardir . DIRECTORY_SEPARATOR . 'PEAR' .
     DIRECTORY_SEPARATOR . 'PackageFile.php');
@@ -182,6 +214,7 @@ $creator->addFile($xmlrpcdir . DIRECTORY_SEPARATOR . 'RPC.php', 'XML/RPC.php', t
 $creator->addDir($peardir, array('tests/',
     'scripts/',
     'go-pear-phar.php',
+    '*OS/Guess.php',
     '*PEAR/Command.php',
     '*PEAR/Dependency2.php',
     '*PEAR/PackageFile/Generator/v1.php',
@@ -237,7 +270,6 @@ $creator->addDir($peardir, array('tests/',
         '*PEAR/Validate.php',
         '*PEAR/XMLParser.php',
         'PEAR.php',
-        '*OS/Guess.php',
         '*Archive/Tar.php',
         '*Console/Getopt.php',
         'System.php',
