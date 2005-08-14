@@ -180,9 +180,13 @@ class PEAR_PackageFile
                 }
                 return $pf;
             } else {
-                if (true || $this->_config->get('verbose') > 0) {
-                    foreach ($pf->getValidationWarnings(false) as $warning) {
-                        $this->_logger->log(0, 'ERROR: ' . $warning['message']);
+                if ($this->_config->get('verbose') > 0) {
+                    if ($this->_logger) {
+                        if ($pf->getValidationWarnings(false)) {
+                            foreach ($pf->getValidationWarnings(false) as $warning) {
+                                $this->_logger->log(0, 'ERROR: ' . $warning['message']);
+                            }
+                        }
                     }
                 }
                 $a = PEAR::raiseError('Parsing of package.xml from file "' . $file . '" failed',
