@@ -180,6 +180,11 @@ class PEAR_PackageFile
                 }
                 return $pf;
             } else {
+                if (true || $this->_config->get('verbose') > 0) {
+                    foreach ($pf->getValidationWarnings(false) as $warning) {
+                        $this->_logger->log(0, 'ERROR: ' . $warning['message']);
+                    }
+                }
                 $a = PEAR::raiseError('Parsing of package.xml from file "' . $file . '" failed',
                     2, null, null, $pf->getValidationWarnings());
                 return $a;
@@ -323,7 +328,16 @@ class PEAR_PackageFile
 
         // read the whole thing so we only get one cdata callback
         // for each block of cdata
-        $data = @fread($fp, filesize($descfile));
+        if (function_exists('file_get_contents')) {
+            @fclose($fp);
+            $data = file_get_contents($descfile);
+        } else {
+            $data = '';
+            while (!feof($fp)) {
+                $data .= @fread($fp, 8192);
+            }
+            fclose($fp);
+        }
         $ret = &PEAR_PackageFile::fromXmlString($data, $state, $descfile, $archive);
         return $ret;
     }

@@ -316,12 +316,16 @@ class PEAR_Installer extends PEAR_Downloader
                 return $this->raiseError("file does not exist",
                                          PEAR_INSTALLER_FAILED);
             }
-            $fp = fopen($orig_file, "r");
-            $contents = @fread($fp, filesize($orig_file));
+            if (function_exists('file_get_contents')) {
+                $contents = file_get_contents($orig_file);
+            } else {
+                $fp = fopen($orig_file, "r");
+                $contents = @fread($fp, filesize($orig_file));
+                fclose($fp);
+            }
             if ($contents === false) {
                 $contents = '';
             }
-            fclose($fp);
             if (isset($atts['md5sum'])) {
                 $md5sum = md5($contents);
             }
@@ -498,12 +502,16 @@ class PEAR_Installer extends PEAR_Downloader
                 return $this->raiseError("file $orig_file does not exist",
                                          PEAR_INSTALLER_FAILED);
             }
-            $fp = fopen($orig_file, "r");
-            $contents = @fread($fp, filesize($orig_file)); // filesize can be 0
+            if (function_exists('file_get_contents')) {
+                $contents = file_get_contents($orig_file);
+            } else {
+                $fp = fopen($orig_file, "r");
+                $contents = @fread($fp, filesize($orig_file)); // filesize can be 0
+                fclose($fp);
+            }
             if ($contents === false) {
                 $contents = '';
             }
-            fclose($fp);
             if (isset($attribs['md5sum'])) {
                 $md5sum = md5($contents);
             }
@@ -1650,8 +1658,13 @@ if (!function_exists("md5_file")) {
     function md5_file($filename) {
         $fp = fopen($filename, "r");
         if (!$fp) return null;
-        $contents = fread($fp, filesize($filename));
-        fclose($fp);
+        if (function_exists('file_get_contents')) {
+            fclose($fp);
+            $contents = file_get_contents($filename);
+        } else {
+            $contents = fread($fp, filesize($filename));
+            fclose($fp);
+        }
         return md5($contents);
     }
 }
