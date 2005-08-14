@@ -62,7 +62,8 @@ class PEAR_Start_CLI extends PEAR_Start
     {
         if (OS_WINDOWS) {
             print "
-Are you installing a system-wide PEAR or a local copy? (system|local) [system] : ";
+Are you installing a system-wide PEAR or a local copy?
+(system|local) [system] : ";
             $tmp = trim(fgets($this->tty, 1024));
             if (!empty($tmp)) {
                 if (strtolower($tmp) !== 'system') {

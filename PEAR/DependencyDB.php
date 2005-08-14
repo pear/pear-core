@@ -484,9 +484,14 @@ class PEAR_DependencyDB
         $rt = get_magic_quotes_runtime();
         set_magic_quotes_runtime(0);
         clearstatcache();
-        $data = unserialize(fread($fp, filesize($this->_depdb)));
+        if (function_exists('file_get_contents')) {
+            fclose($fp);
+            $data = unserialize(file_get_contents($this->_depdb));
+        } else {
+            $data = unserialize(fread($fp, filesize($this->_depdb)));
+            fclose($fp);
+        }
         set_magic_quotes_runtime($rt);
-        fclose($fp);
         $this->_cache = $data;
         return $data;
     }

@@ -987,9 +987,14 @@ class PEAR_Registry extends PEAR
         $rt = get_magic_quotes_runtime();
         set_magic_quotes_runtime(0);
         clearstatcache();
-        $data = fread($fp, filesize($this->_packageFileName($package, $channel)));
+        if (function_exists('file_get_contents')) {
+            $this->_closePackageFile($fp);
+            $data = file_get_contents($this->_packageFileName($package, $channel));
+        } else {
+            $data = fread($fp, filesize($this->_packageFileName($package, $channel)));
+            $this->_closePackageFile($fp);
+        }
         set_magic_quotes_runtime($rt);
-        $this->_closePackageFile($fp);
         $data = unserialize($data);
         if ($key === null) {
             return $data;

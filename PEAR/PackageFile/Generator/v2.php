@@ -216,9 +216,13 @@ http://pear.php.net/dtd/package-2.0.xsd',
                     unset($orig['attribs']);
                     if (count($orig)) { // file with tasks
                         // run any package-time tasks
-                        $fp = fopen($file, "r");
-                        $contents = @fread($fp, filesize($file));
-                        fclose($fp);
+                        if (function_exists('file_get_contents')) {
+                            $contents = file_get_contents($file);
+                        } else {
+                            $fp = fopen($file, "r");
+                            $contents = @fread($fp, filesize($file));
+                            fclose($fp);
+                        }
                         foreach ($orig as $tag => $raw) {
                             $tag = str_replace($this->_packagefile->getTasksNs() . ':', '', $tag);
                             $task = "PEAR_Task_$tag";
