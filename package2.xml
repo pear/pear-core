@@ -42,12 +42,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>cellog@php.net</email>
   <active>yes</active>
  </lead>
- <developer>
+ <helper>
   <name>Martin Jansen</name>
   <user>mj</user>
   <email>mj@php.net</email>
-  <active>yes</active>
- </developer>
+  <active>no</active>
+ </helper>
  <date>2005-07-19</date>
  <version>
   <release>1.4.0a13</release>
