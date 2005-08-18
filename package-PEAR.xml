@@ -146,6 +146,8 @@
   * fix Bug #4818: References fix
   * fix Bug #4825: pear behind a proxy using REST dosnt work
   * fix Bug #4952: PEAR_Exception::toHTML() spits notices
+  * fix Bug #5073: cache fatal error if no cached content
+  * fix Bug #5132: pear info Blah.tgz reports optional deps as required
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

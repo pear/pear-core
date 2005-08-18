@@ -152,6 +152,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #4818: References fix
   * fix Bug #4825: pear behind a proxy using REST dosnt work
   * fix Bug #4952: PEAR_Exception::toHTML() spits notices
+  * fix Bug #5073: cache fatal error if no cached content
+  * fix Bug #5132: pear info Blah.tgz reports optional deps as required
  </notes>
  <contents>
   <dir name="/">
@@ -467,7 +469,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <required>
    <php>
     <min>4.2</min>
-    <max>6.0.0</max>
    </php>
    <pearinstaller>
     <min>1.4.0a12</min>

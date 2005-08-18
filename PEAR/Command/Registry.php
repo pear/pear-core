@@ -458,7 +458,12 @@ installed package.'
                             } else {
                                 $version = '';
                             }
-                            $dstr .= "$type $name$rel $version\n";
+                            if (isset($d['optional']) && $d['optional'] == 'yes') {
+                                $optional = ' (optional)';
+                            } else {
+                                $optional = '';
+                            }
+                            $dstr .= "$type $name$rel $version$optional\n";
                         }
                         $info[$key] = $dstr;
                         break;
