@@ -549,6 +549,7 @@ installed package.'
      */
     function _doList2($command, $options, $params, &$obj, $installed)
     {
+        $reg = &$this->config->getRegistry();
         $caption = 'About ' . $obj->getChannel() . '/' .$obj->getPackage() . '-' .
             $obj->getVersion();
         $data = array(
@@ -685,7 +686,7 @@ installed package.'
                     $deps['required'][$index] = array($deps['required'][$index]);
                 }
                 foreach ($deps['required'][$index] as $package) {
-                    if (isset($package['conflicts']) && $package['conflicts'] == 'yes') {
+                    if (isset($package['conflicts'])) {
                         $infoindex = 'Not Compatible with';
                         if (!isset($info['Not Compatible with'])) {
                             $info['Not Compatible with'] = '';
@@ -710,10 +711,6 @@ installed package.'
                         $info[$infoindex] .= "\n  Download URI: $package[uri]";
                         continue;
                     }
-                    if ($infoindex == 'Not Compatible with') {
-                        // conflicts is only used to say that all versions conflict
-                        continue;
-                    }
                     if (isset($package['max']) && isset($package['min'])) {
                         $info[$infoindex] .= " \n  Versions " .
                             $package['min'] . '-' . $package['max'];
@@ -722,7 +719,7 @@ installed package.'
                             $package['min'] . ' or newer';
                     } elseif (isset($package['max'])) {
                         $info[$infoindex] .= " \n  Version " .
-                            $package['min'] . ' or older';
+                            $package['max'] . ' or older';
                     }
                     if (isset($package['recommended'])) {
                         $info[$infoindex] .= "\n  Recommended version: $package[recommended]";
@@ -736,8 +733,13 @@ installed package.'
                         if (is_array($package['exclude'])) {
                             $package['exclude'] = implode(', ', $package['exclude']);
                         }
-                        $info['Not Compatible with'] .= "Package $package\n  Versions " .
-                            $package['exclude'];
+                        $package['package'] = $package['name']; // for parsedPackageNameToString
+                         if (isset($package['conflicts'])) {
+                            $info['Not Compatible with'] .= '=> except ';
+                        }
+                       $info['Not Compatible with'] .= 'Package ' .
+                            $reg->parsedPackageNameToString($package, true);
+                        $info['Not Compatible with'] .= "\n  Versions " . $package['exclude'];
                     }
                 }
             }

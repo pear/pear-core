@@ -147,6 +147,7 @@
   * fix Bug #4825: pear behind a proxy using REST dosnt work
   * fix Bug #4952: PEAR_Exception::toHTML() spits notices
   * fix Bug #5073: cache fatal error if no cached content
+  * fix Bug #5131: pear info PEAR shows "Array" with installed PEAR 1.4.0a13 (CVS)
   * fix Bug #5132: pear info Blah.tgz reports optional deps as required
   * fix Bug #5135: pear info PEAR has notice with a13 installed
   </notes>
