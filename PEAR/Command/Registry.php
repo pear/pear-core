@@ -637,8 +637,12 @@ installed package.'
             }
         }
         $deps = $obj->getDependencies();
-        $info['Required Dependencies'] = 'PHP version ' . $deps['required']['php']['min'] .
-            '-' . $deps['required']['php']['max'] . "\n";
+        $info['Required Dependencies'] = 'PHP version ' . $deps['required']['php']['min'];
+        if (isset($deps['required']['php']['max'])) {
+            $info['Required Dependencies'] .= '-' . $deps['required']['php']['max'] . "\n";
+        } else {
+            $info['Required Dependencies'] .= "\n";
+        }
         if (isset($deps['required']['php']['exclude'])) {
             if (!isset($info['Not Compatible with'])) {
                 $info['Not Compatible with'] = '';
