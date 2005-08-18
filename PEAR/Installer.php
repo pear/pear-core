@@ -991,6 +991,9 @@ class PEAR_Installer extends PEAR_Downloader
         if (empty($options['force'])) {
             $testp = $channel == 'pear.php.net' ? $pkgname : array($channel, $pkgname);
             $test = $this->_registry->checkFileMap($pkg->getInstallationFileList(true), $testp, '1.1');
+            if (PEAR::isError($test)) {
+                return $test;
+            }
             if (sizeof($test)) {
                 $pkgs = $this->getInstallPackages();
                 $found = false;
