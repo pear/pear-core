@@ -253,6 +253,12 @@ class PEAR_Start extends PEAR
     function doInstall()
     {
         print "Beginning install...\n";
+        // finish php_bin config
+        if (OS_WINDOWS) {
+            $this->php_bin .= '\\php.exe';
+        } else {
+            $this->php_bin .= '/php';
+        }
         $this->PEARConfig = &PEAR_Config::singleton($this->pear_conf, $this->pear_conf);
         $this->PEARConfig->set('preferred_state', 'stable');
         foreach ($this->config as $var) {
