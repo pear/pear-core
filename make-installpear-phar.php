@@ -273,6 +273,6 @@ $creator->addDir($peardir, array('tests/',
         '*Archive/Tar.php',
         '*Console/Getopt.php',
         'System.php',
-    ), 'go-pear.phar');
+    ), 'install-pear.phar');
 $creator->savePhar(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'install-pear.phar');
 ?>
