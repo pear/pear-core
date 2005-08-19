@@ -90,11 +90,6 @@ class PEAR_Command_Install extends PEAR_Command_Common
                     'shortopt' => 'o',
                     'doc' => 'install all required dependencies',
                     ),
-                'remoteconfig' => array(
-                    'shortopt' => 'F',
-                    'arg' => 'URL',
-                    'doc' => 'also install to ftp site using remote config file (ftp://host.com/pear.conf)'
-                    ),
                 'offline' => array(
                     'shortopt' => 'O',
                     'doc' => 'do not attempt to download any urls or contact channels',
@@ -172,11 +167,6 @@ four ways of specifying packages.
                     'shortopt' => 'o',
                     'doc' => 'install all required dependencies',
                     ),
-                'remoteconfig' => array(
-                    'shortopt' => 'F',
-                    'arg' => 'URL',
-                    'doc' => 'also upgrade on ftp site using remote config file (ftp://host.com/pear.conf)'
-                    ),
                 'offline' => array(
                     'shortopt' => 'O',
                     'doc' => 'do not attempt to download any urls or contact channels',
@@ -225,11 +215,6 @@ More than one package may be specified at once.
                 'ignore-errors' => array(
                     'doc' => 'force install even if there were errors',
                     ),
-                'remoteconfig' => array(
-                    'shortopt' => 'F',
-                    'arg' => 'URL',
-                    'doc' => 'also upgrade on ftp site using remote config file (ftp://host.com/pear.conf)'
-                    ),
                 ),
             'doc' => '
 Upgrades all packages that have a newer release available.  Upgrades are
@@ -257,11 +242,6 @@ more stable.
                     ),
                 'ignore-errors' => array(
                     'doc' => 'force install even if there were errors',
-                    ),
-                'remoteconfig' => array(
-                    'shortopt' => 'F',
-                    'arg' => 'URL',
-                    'doc' => 'also uninstall on ftp site using remote config file (ftp://host.com/pear.conf)'
                     ),
                 'offline' => array(
                     'shortopt' => 'O',
@@ -348,12 +328,6 @@ Run post-installation scripts in package <package>, if any exist.
     {
         if (empty($this->installer)) {
             $this->installer = &$this->getInstaller($this->ui);
-        }
-        if (isset($options['remoteconfig'])) {
-            $e = $this->config->readFTPConfigFile($options['remoteconfig']);
-            if (!PEAR::isError($e)) {
-                $this->installer->setConfig($this->config);
-            }
         }
         if ($command == 'upgrade') {
             $options['upgrade'] = true;
@@ -627,7 +601,8 @@ Run post-installation scripts in package <package>, if any exist.
                     }
                     $this->ui->outputData("uninstall ok: $pkg", $command);
                 }
-                if (!isset($options['offline']) && is_object($savepkg)) {
+                if (!isset($options['offline']) && is_object($savepkg) &&
+                      defined('PEAR_REMOTEINSTALL_OK')) {
                     if ($this->config->isDefinedLayer('ftp')) {
                         $this->installer->pushErrorHandling(PEAR_ERROR_RETURN);
                         $info = $this->installer->ftpUninstall($savepkg);
