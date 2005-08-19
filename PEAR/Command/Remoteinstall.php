@@ -1,10 +1,54 @@
 <?php
-// quick-load, small memory footprint command configuration
-$implements = array(
-        'install' => array(
+/**
+ * PEAR_Command_Install (remote-install, remote-upgrade, remote-upgrade-all, remote-uninstall commands)
+ *
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.0 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_0.txt.  If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category   pear
+ * @package    PEAR
+ * @author     Stig Bakken <ssb@php.net>
+ * @author     Greg Beaver <cellog@php.net>
+ * @copyright  1997-2005 The PHP Group
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @version    CVS: $Id$
+ * @link       http://pear.php.net/package/PEAR
+ * @since      File available since Release 0.1
+ */
+
+/**
+ * base class
+ */
+require_once 'PEAR/Command/Install.php';
+
+/**
+ * PEAR commands for installation or deinstallation/upgrading of
+ * packages.
+ *
+ * @category   pear
+ * @package    PEAR
+ * @author     Stig Bakken <ssb@php.net>
+ * @author     Greg Beaver <cellog@php.net>
+ * @copyright  1997-2005 The PHP Group
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @version    Release: @package_version@
+ * @link       http://pear.php.net/package/PEAR
+ * @since      Class available since Release 0.1
+ */
+class PEAR_Command_RemoteInstall extends PEAR_Command_Install
+{
+    // {{{ properties
+
+    var $commands = array(
+        'remote-install' => array(
             'summary' => 'Install Package',
             'function' => 'doInstall',
-            'shortcut' => 'i',
+            'shortcut' => 'inr',
             'options' => array(
                 'force' => array(
                     'shortopt' => 'f',
@@ -46,6 +90,11 @@ $implements = array(
                     'shortopt' => 'o',
                     'doc' => 'install all required dependencies',
                     ),
+                'remoteconfig' => array(
+                    'shortopt' => 'F',
+                    'arg' => 'URL',
+                    'doc' => 'also install to ftp site using remote config file (ftp://host.com/pear.conf)'
+                    ),
                 'offline' => array(
                     'shortopt' => 'O',
                     'doc' => 'do not attempt to download any urls or contact channels',
@@ -82,10 +131,10 @@ To download a package from another channel, prefix with the channel name like
 More than one package may be specified at once.  It is ok to mix these
 four ways of specifying packages.
 '),
-        'upgrade' => array(
+        'remote-upgrade' => array(
             'summary' => 'Upgrade Package',
             'function' => 'doInstall',
-            'shortcut' => 'up',
+            'shortcut' => 'upr',
             'options' => array(
                 'force' => array(
                     'shortopt' => 'f',
@@ -123,6 +172,11 @@ four ways of specifying packages.
                     'shortopt' => 'o',
                     'doc' => 'install all required dependencies',
                     ),
+                'remoteconfig' => array(
+                    'shortopt' => 'F',
+                    'arg' => 'URL',
+                    'doc' => 'also upgrade on ftp site using remote config file (ftp://host.com/pear.conf)'
+                    ),
                 'offline' => array(
                     'shortopt' => 'O',
                     'doc' => 'do not attempt to download any urls or contact channels',
@@ -142,10 +196,10 @@ upgrade anyway).
 
 More than one package may be specified at once.
 '),
-        'upgrade-all' => array(
+        'remote-upgrade-all' => array(
             'summary' => 'Upgrade All Packages',
             'function' => 'doInstall',
-            'shortcut' => 'ua',
+            'shortcut' => 'uar',
             'options' => array(
                 'nodeps' => array(
                     'shortopt' => 'n',
@@ -171,6 +225,11 @@ More than one package may be specified at once.
                 'ignore-errors' => array(
                     'doc' => 'force install even if there were errors',
                     ),
+                'remoteconfig' => array(
+                    'shortopt' => 'F',
+                    'arg' => 'URL',
+                    'doc' => 'also upgrade on ftp site using remote config file (ftp://host.com/pear.conf)'
+                    ),
                 ),
             'doc' => '
 Upgrades all packages that have a newer release available.  Upgrades are
@@ -178,10 +237,10 @@ done only if there is a release available of the state specified in
 "preferred_state" (currently {config preferred_state}), or a state considered
 more stable.
 '),
-        'uninstall' => array(
+        'remote-uninstall' => array(
             'summary' => 'Un-install Package',
             'function' => 'doUninstall',
-            'shortcut' => 'un',
+            'shortcut' => 'unr',
             'options' => array(
                 'nodeps' => array(
                     'shortopt' => 'n',
@@ -199,6 +258,11 @@ more stable.
                 'ignore-errors' => array(
                     'doc' => 'force install even if there were errors',
                     ),
+                'remoteconfig' => array(
+                    'shortopt' => 'F',
+                    'arg' => 'URL',
+                    'doc' => 'also uninstall on ftp site using remote config file (ftp://host.com/pear.conf)'
+                    ),
                 'offline' => array(
                     'shortopt' => 'O',
                     'doc' => 'do not attempt to uninstall remotely',
@@ -209,33 +273,88 @@ Uninstalls one or more PEAR packages.  More than one package may be
 specified at once.  Prefix with channel name to uninstall from a
 channel not in your default channel ({config default_channel})
 '),
-        'bundle' => array(
-            'summary' => 'Unpacks a Pecl Package',
-            'function' => 'doBundle',
-            'shortcut' => 'bun',
-            'options' => array(
-                'destination' => array(
-                   'shortopt' => 'd',
-                    'arg' => 'DIR',
-                    'doc' => 'Optional destination directory for unpacking (defaults to current path or "ext" if exists)',
-                    ),
-                'force' => array(
-                    'shortopt' => 'f',
-                    'doc' => 'Force the unpacking even if there were errors in the package',
-                ),
-            ),
-            'doc' => '<package>
-Unpacks a Pecl Package into the selected location. It will download the
-package if needed.
-'),
-        'run-scripts' => array(
-            'summary' => 'Run Post-Install Scripts bundled with a package',
-            'function' => 'doRunScripts',
-            'shortcut' => 'rs',
-            'options' => array(
-            ),
-            'doc' => '<package>
-Run post-installation scripts in package <package>, if any exist.
-'),
     );
+
+    // }}}
+    // {{{ constructor
+
+    /**
+     * PEAR_Command_Install constructor.
+     *
+     * @access public
+     */
+    function PEAR_Command_Remoteinstall(&$ui, &$config)
+    {
+        parent::PEAR_Command_Install($ui, $config);
+    }
+
+    // }}}
+
+    /**
+     * For unit testing purposes
+     */
+    function &getDownloader(&$ui, $options, &$config)
+    {
+        if (!class_exists('PEAR_Downloader')) {
+            require_once 'PEAR/Downloader.php';
+        }
+        $a = &new PEAR_Downloader($ui, $options, $config);
+        return $a;
+    }
+
+    /**
+     * For unit testing purposes
+     */
+    function &getInstaller(&$ui)
+    {
+        if (!class_exists('PEAR_RemoteInstaller')) {
+            require_once 'PEAR/RemoteInstaller.php';
+        }
+        $a = &new PEAR_RemoteInstaller($ui);
+        return $a;
+    }
+
+    // {{{ doInstall()
+
+    function doInstall($command, $options, $params)
+    {
+        if (empty($this->installer)) {
+            $this->installer = &$this->getInstaller($this->ui);
+        }
+        if (isset($options['remoteconfig'])) {
+            $e = $this->config->readFTPConfigFile($options['remoteconfig']);
+            if (!PEAR::isError($e)) {
+                $this->installer->setConfig($this->config);
+            }
+        } elseif (!$this->config->get('remote_config')) {
+            return $this->raiseError('Error: ' . $command . ' expects either option ' .
+                '"remoteconfig" be set, or remote_config configuration variable be used');
+        }
+        $command = str_replace('remote-', '', $command); // fool parent
+        return parent::doInstall($command, $options, $params);
+    }
+
+    // }}}
+    // {{{ doUninstall()
+
+    function doUninstall($command, $options, $params)
+    {
+        if (empty($this->installer)) {
+            $this->installer = &$this->getInstaller($this->ui);
+        }
+        if (isset($options['remoteconfig'])) {
+            $e = $this->config->readFTPConfigFile($options['remoteconfig']);
+            if (!PEAR::isError($e)) {
+                $this->installer->setConfig($this->config);
+            }
+        } elseif (!$this->config->get('remote_config')) {
+            return $this->raiseError('Error: ' . $command . ' expects either option ' .
+                '"remoteconfig" be set, or remote_config configuration variable be used');
+        }
+        $command = 'uninstall'; // fool parent
+        return parent::doUninstall($command, $options, $params);
+    }
+
+    // }}}
+}
 ?>

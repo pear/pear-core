@@ -541,7 +541,7 @@ class PEAR_Config extends PEAR
         if (!$ftp_file) {
             $ftp_file = $this->get('remote_config');
         }
-        if ($ftp_file) {
+        if ($ftp_file && defined('PEAR_REMOTEINSTALL_OK')) {
             $this->readFTPConfigFile($ftp_file);
         }
         foreach ($this->configuration_info as $key => $info) {
