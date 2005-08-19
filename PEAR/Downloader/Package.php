@@ -1263,6 +1263,14 @@ class PEAR_Downloader_Package
 
     function _fromFile($param)
     {
+        if (!@is_file($param)) {
+            $test = explode('#', $param);
+            $group = array_pop($test);
+            if (@is_file(implode('#', $test))) {
+                $this->setGroup($group);
+                $param = implode('#', $test);
+            }
+        }
         if (@is_file($param)) {
             $this->_type = 'local';
             $options = $this->_downloader->getOptions();
@@ -1281,7 +1289,9 @@ class PEAR_Downloader_Package
                 return $pf;
             }
             $this->_packagefile = &$pf;
-            $this->setGroup('default'); // install the default dependency group
+            if (!$this->getGroup()) {
+                $this->setGroup('default'); // install the default dependency group
+            }
             return $this->_valid = true;
         }
         return $this->_valid = false;
