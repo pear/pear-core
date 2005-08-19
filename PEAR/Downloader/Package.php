@@ -1261,7 +1261,14 @@ class PEAR_Downloader_Package
         return $a;
     }
 
-    function _fromFile($param)
+
+    /**
+     * This will retrieve from a local file if possible, and parse out
+     * a group name as well.  The original parameter will be modified to reflect this.
+     * @param string
+     * @access private
+     */
+    function _fromFile(&$param)
     {
         if (!@is_file($param)) {
             $test = explode('#', $param);
@@ -1269,6 +1276,7 @@ class PEAR_Downloader_Package
             if (@is_file(implode('#', $test))) {
                 $this->setGroup($group);
                 $param = implode('#', $test);
+                $this->_explicitGroup = true;
             }
         }
         if (@is_file($param)) {
