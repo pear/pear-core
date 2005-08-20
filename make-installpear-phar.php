@@ -31,7 +31,7 @@ foreach ($packages as $package) {
     $creator->addFile("PEAR/go-pear-tarballs/$package", "PEAR/go-pear-tarballs/$package");
 }
 $commandcontents = file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'install-pear.php');
-$commandcontents = str_replace('require_once \'', 'require_once \'phar://go-pear.phar/', $commandcontents);
+$commandcontents = str_replace('include_once \'', 'include_once \'phar://install-pear.phar/', $commandcontents);
 $creator->addString($commandcontents, 'index.php');
 
 $commandcontents = file_get_contents($peardir . DIRECTORY_SEPARATOR . 'PEAR' .
