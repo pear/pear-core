@@ -15,6 +15,8 @@ class PEAR_Start extends PEAR
             'Archive_Tar',
             'Console_Getopt',
             'PEAR',
+            'XML_RPC',
+            'PEAR_Delegator',
         );
     var $local_dir = array();
     var $origpwd;
