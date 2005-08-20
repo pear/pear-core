@@ -374,9 +374,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <file name="Frontend.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
-    <file name="FTP.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
     <file name="Installer.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>

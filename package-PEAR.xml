@@ -381,9 +381,6 @@
     <file role="php" name="Frontend.php">
      <replace from="@package_version@" to="version" type="package-info" />
     </file>
-    <file role="php" name="FTP.php">
-     <replace from="@package_version@" to="version" type="package-info" />
-    </file>
     <file role="php" name="Installer.php">
      <replace from="@package_version@" to="version" type="package-info" />
     </file>
