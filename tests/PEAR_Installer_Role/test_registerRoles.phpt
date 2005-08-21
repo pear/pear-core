@@ -110,6 +110,8 @@ $phpunit->assertEquals(array (
     'releasetypes' => 
     array (
       0 => 'php',
+      'extsrc',
+      'extbin'
     ),
     'installable' => true,
     'locationconfig' => 'php_dir',
