@@ -955,7 +955,12 @@ class PEAR_PackageFile_v2_Validator
             );
             if (isset($list['dir']) && isset($list['file'])) {
                 // stave off validation errors without requiring a set order.
-                $list = array('dir' => $list['dir'], $list['file']);
+                $_old = $list;
+                if (isset($list['attribs'])) {
+                    $list = array('attribs' => $_old['attribs']);
+                }
+                $list['dir'] = $_old['dir'];
+                $list['file'] = $_old['file'];
             }
         }
         if (!isset($list['attribs']) || !isset($list['attribs']['name'])) {
