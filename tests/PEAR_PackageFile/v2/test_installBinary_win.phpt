@@ -16,7 +16,7 @@ $pathtopackagexml2 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_installBinary'. DIRECTORY_SEPARATOR . 'foo_linux-1.1.0.tgz';
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/foo_win-1.1.0.tgz', $pathtopackagexml);
 $GLOBALS['pearweb']->addXmlrpcConfig('grob', 'package.getDownloadURL',
-    array(array('channel' => 'grob', 'package' => 'foo_win', ), 'stable'),
+    array(array('channel' => 'grob', 'package' => 'foo_win', 'version' => '1.1.0'), 'stable'),
     array('version' => '1.1.0',
           'info' =>
           '<?xml version="1.0"?>
@@ -72,7 +72,7 @@ $GLOBALS['pearweb']->addXmlrpcConfig('grob', 'package.getDownloadURL',
           'url' => 'http://www.example.com/foo_win-1.1.0'));
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/foo_linux-1.1.0.tgz', $pathtopackagexml2);
 $GLOBALS['pearweb']->addXmlrpcConfig('grob', 'package.getDownloadURL',
-    array(array('channel' => 'grob', 'package' => 'foo_linux', ), 'stable'),
+    array(array('channel' => 'grob', 'package' => 'foo_linux', 'version' => '1.1.0'), 'stable'),
     array('version' => '1.1.0',
           'info' =>
           '<?xml version="1.0"?>
@@ -149,7 +149,7 @@ $pf->setChannel('grob');
 $pf->setAPIStability('stable');
 $pf->setReleaseStability('stable');
 $pf->setAPIVersion('1.0.0');
-$pf->setReleaseVersion('1.0.0');
+$pf->setReleaseVersion('1.1.0');
 $pf->setDate('2004-11-12');
 $pf->setDescription('foo source');
 $pf->setSummary('foo');
