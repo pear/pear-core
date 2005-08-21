@@ -71,7 +71,7 @@ release notes
     <min>4.0.0</min>
    </php>
    <pearinstaller>
-    <min>1.4.0a1</min>
+    <min>1.4.0b1</min>
    </pearinstaller>
   </required>
  </dependencies>
