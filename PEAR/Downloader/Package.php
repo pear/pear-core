@@ -1160,7 +1160,7 @@ class PEAR_Downloader_Package
                 }
                 $obj = &new PEAR_Downloader_Package($params[$i]->getDownloader());
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                $e = $obj->_fromFile($dl->getDownloadDir() . DIRECTORY_SEPARATOR . $file);
+                $e = $obj->_fromFile($a = $dl->getDownloadDir() . DIRECTORY_SEPARATOR . $file);
                 PEAR::popErrorHandling();
                 if (PEAR::isError($e)) {
                     if (!isset($options['soft'])) {
