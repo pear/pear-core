@@ -71,7 +71,7 @@ release notes
     <exclude>6.0.0</exclude>
    </php>
    <pearinstaller>
-    <min>1.4.0a1</min>
+    <min>1.4.0b1</min>
    </pearinstaller>
    <package>
     <name>xmlrpc1</name>

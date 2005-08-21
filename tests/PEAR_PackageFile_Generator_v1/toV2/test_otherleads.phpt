@@ -86,7 +86,7 @@ release notes
     <min>4.3.0</min>
    </php>
    <pearinstaller>
-    <min>1.4.0a1</min>
+    <min>1.4.0b1</min>
    </pearinstaller>
    <package>
     <name>Console_Getopt</name>
@@ -170,7 +170,8 @@ Other:
    </notes>
   </release>
  </changelog>
-</package>', $xml, 'xml');
+</package>
+', $xml, 'xml');
 
 $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'test_othermaintainersmultiple.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
@@ -266,7 +267,7 @@ release notes
     <min>4.3.0</min>
    </php>
    <pearinstaller>
-    <min>1.4.0a1</min>
+    <min>1.4.0b1</min>
    </pearinstaller>
    <package>
     <name>Console_Getopt</name>
