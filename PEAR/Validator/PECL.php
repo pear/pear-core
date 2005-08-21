@@ -34,5 +34,19 @@ class PEAR_Validator_PECL extends PEAR_Validate
     {
         return true;
     }
+
+    function validatePackageName()
+    {
+        $ret = parent::validatePackageName();
+        if ($this->_packagexml->getPackageType() == 'extsrc') {
+            if (strtolower($this->_packagexml->getPackage()) !=
+                  strtolower($this->_packagexml->getProvidesExtension())) {
+                $this->_addWarning('providesextension', 'package name "' .
+                    $this->_packagexml->getPackage() . '" is different from extension name "' .
+                    $this->_packagexml->getProvidesExtension());
+            }
+        }
+        return $ret;
+    }
 }
 ?>
