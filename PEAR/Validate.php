@@ -46,7 +46,7 @@ class PEAR_Validate
 {
     var $packageregex = _PEAR_COMMON_PACKAGE_NAME_PREG;
     /**
-     * @var PEAR_PackageFile
+     * @var PEAR_PackageFile_v1|PEAR_PackageFile_v2
      */
     var $_packagexml;
     /**
