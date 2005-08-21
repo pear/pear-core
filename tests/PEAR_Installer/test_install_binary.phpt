@@ -28,7 +28,7 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_install_binary'. DIRECTORY_SEPARATOR . 'test-1.1.0.tgz';
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.1.0.tgz', $pathtopackagexml);
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
-    array(array('channel' => 'pear.php.net', 'package' => 'test', ), 'stable'),
+    array(array('channel' => 'pear.php.net', 'package' => 'test', 'version' => '1.1.0'), 'stable'),
     array('version' => '1.1.0',
           'info' =>
           '<?xml version="1.0"?>
@@ -83,8 +83,8 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
 </package>',
           'url' => 'http://www.example.com/test-1.1.0'));
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
-    array(array('channel' => 'pear.php.net','package' => 'fail'), 'stable'),
-    array('version' => '1.0',
+    array(array('channel' => 'pear.php.net','package' => 'fail', 'version' => '1.1.0'), 'stable'),
+    array('version' => '1.1.0',
           'info' =>
           '<?xml version="1.0"?>
 <package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
@@ -104,7 +104,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </lead>
  <date>2004-09-30</date>
  <version>
-  <release>1.0</release>
+  <release>1.1.0</release>
   <api>1.1.0</api>
  </version>
  <stability>
@@ -135,7 +135,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </dependencies>
  <phprelease/>
 </package>',
-          'url' => 'http://www.example.com/fail-1.0'));
+          'url' => 'http://www.example.com/fail-1.1.0'));
 
 
 $phpunit->assertNoErrors('setup');
