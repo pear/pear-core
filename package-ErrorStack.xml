@@ -46,7 +46,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <package>
     <name>PEAR</name>
     <channel>pear.php.net</channel>
-    <min>1.4.0b1</min>
+    <min>1.4.0a12</min>
    </package>
   </required>
  </dependencies>
