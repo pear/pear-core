@@ -17,18 +17,20 @@ $phpunit->assertEquals(array (
   4 => 'test',
 ), PEAR_Installer_Role::getValidRoles('php'), 'php');
 $phpunit->assertEquals(array (
-  0 => 'data',
-  1 => 'doc',
-  2 => 'script',
-  3 => 'src',
-  4 => 'test',
+  'data',
+  'doc',
+  'php',
+  'script',
+  'src',
+  'test',
 ), PEAR_Installer_Role::getValidRoles('extsrc'), 'extsrc');
 $phpunit->assertEquals(array (
-  0 => 'data',
-  1 => 'doc',
-  2 => 'ext',
-  3 => 'script',
-  4 => 'test',
+  'data',
+  'doc',
+  'ext',
+  'php',
+  'script',
+  'test',
 ), PEAR_Installer_Role::getValidRoles('extbin'), 'extbin');
 $phpunit->assertEquals(array(), PEAR_Installer_Role::getValidRoles('bundle'), 'bundle');
 
@@ -55,9 +57,10 @@ $phpunit->assertEquals(array (
   5 => 'nohonorsbaseinstall',
   6 => 'nophp',
   7 => 'notphp',
-  8 => 'script',
-  9 => 'src',
-  10 => 'test',
+  8 => 'php',
+  9 => 'script',
+  10 => 'src',
+  11 => 'test',
 ), PEAR_Installer_Role::getValidRoles('extsrc'), 'extsrc');
 $phpunit->assertEquals(array (
   0 => 'data',
@@ -69,8 +72,9 @@ $phpunit->assertEquals(array (
   6 => 'nohonorsbaseinstall',
   7 => 'nophp',
   8 => 'notphp',
-  9 => 'script',
-  10 => 'test',
+  9 => 'php',
+  10 => 'script',
+  11 => 'test',
 ), PEAR_Installer_Role::getValidRoles('extbin'), 'extbin');
 echo 'tests done';
 ?>
