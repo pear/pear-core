@@ -1559,7 +1559,8 @@ class PEAR_ChannelFile {
                         $this->_channelInfo['validatepackage']['_content']);
                     $val = &new $vclass;
                 } else {
-                    return false;
+                    $a = false;
+                    return $a;
                 }
             } else {
                 $vclass = str_replace('.', '_',
