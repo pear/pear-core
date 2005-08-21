@@ -653,7 +653,7 @@ class PEAR_Config extends PEAR
                     include_once 'Net/FTP.php';
                 }
             }
-            if (class_exists('Net_FTP')) {
+            if (class_exists('Net_FTP') && PEAR_Common::isIncludeable('Net/FTP.php')) {
                 require_once 'PEAR/FTP.php';
                 $this->_ftp = &new PEAR_FTP;
                 $this->_ftp->pushErrorHandling(PEAR_ERROR_RETURN);
