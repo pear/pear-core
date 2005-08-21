@@ -1265,12 +1265,12 @@ class PEAR_Downloader_Package
     /**
      * This will retrieve from a local file if possible, and parse out
      * a group name as well.  The original parameter will be modified to reflect this.
-     * @param string
+     * @param string|array can be a parsed package name as well
      * @access private
      */
     function _fromFile(&$param)
     {
-        if (!@is_file($param)) {
+        if (is_string($param) && !@is_file($param)) {
             $test = explode('#', $param);
             $group = array_pop($test);
             if (@is_file(implode('#', $test))) {
