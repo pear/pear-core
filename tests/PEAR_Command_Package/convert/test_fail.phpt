@@ -18,8 +18,6 @@ copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' . DIRECTORY_SEPARA
     $temp_path . DIRECTORY_SEPARATOR . 'nosummary.xml');
 $e = $command->run('convert', array(), array($temp_path . DIRECTORY_SEPARATOR . 'invalid.xml'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "foo.php" in directory "<dir name="/">" has invalid role "php", should be one of data, doc, script, src, test'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "validv1.xml" in directory "<dir name="/">" has invalid role "php", should be one of data, doc, script, src, test'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <extsrcrelease>, found <installconditions> expected one of "configureoption, binarypackage"'),
 ), 'invalid packagexml 1');
 $phpunit->assertEquals(array (
@@ -29,16 +27,6 @@ $phpunit->assertEquals(array (
     'cmd' => 'no command',
   ),
   1 => 
-  array (
-    'info' => 'File "validv1.xml" in directory "<dir name="/">" has invalid role "php", should be one of data, doc, script, src, test',
-    'cmd' => 'no command',
-  ),
-  2 => 
-  array (
-    'info' => 'File "foo.php" in directory "<dir name="/">" has invalid role "php", should be one of data, doc, script, src, test',
-    'cmd' => 'no command',
-  ),
-  3 => 
   array (
     'info' => 'PEAR_Packagefile_v2::toPackageFile: invalid package.xml',
     'cmd' => 'no command',
@@ -53,6 +41,11 @@ $phpunit->assertErrors(array(
 ), 'invalid packagexml 2');
 $phpunit->assertEquals(array (
   0 => 
+  array (
+    0 => 0,
+    1 => 'ERROR: No summary found',
+  ),
+  1 => 
   array (
     'info' => 'No summary found',
     'cmd' => 'no command',

@@ -33,7 +33,13 @@ $phpunit->assertErrors(array(
         . '" failed'),
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'No summary found'),
 ), 'validation errors');
-$phpunit->assertEquals(array (), $fakelog->getLog(), 'log 2');
+$phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 0,
+    1 => 'ERROR: No summary found',
+  ),
+), $fakelog->getLog(), 'log 2');
 echo 'tests done';
 ?>
 --EXPECT--
