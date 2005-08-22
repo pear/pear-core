@@ -347,6 +347,9 @@ class PEAR_Downloader extends PEAR_Common
                 }
             }
         }
+        if (isset($this->_options['offline'])) {
+            $this->log(3, 'Skipping dependency download check, --offline specified');
+        }
         if (!count($params)) {
             $a = array();
             return $a;
