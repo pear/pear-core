@@ -5,6 +5,9 @@ PEAR_Installer->uninstall() with simple local package.xml, remote ftp uninstall
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
+if (!(include_once 'Net/FTP.php') || !(include_once 'PEAR/FTP.php')) {
+    die('skip requires PEAR_RemoteInstall to work');
+}
 ?>
 --FILE--
 <?php
@@ -19,6 +22,7 @@ if (defined('PATH_SEPARATOR')) {
 }
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 include_once dirname(__FILE__) . '/ftp_test_files/FTP.php.inc';
+$installer = &new test_PEAR_RemoteInstaller($fakelog);
 $ftp = &Net_FTP::singleton();
 $ftp->addRemoteFile('remote.ini', dirname(__FILE__) . DIRECTORY_SEPARATOR .
     'ftp_test_files' . DIRECTORY_SEPARATOR . 'remote.ini');
