@@ -5,8 +5,12 @@ PEAR_Config->getFTP()
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
-if (!(include_once 'Net/FTP.php') || !(include_once 'PEAR/FTP.php')) {
-    die('skip requires PEAR_RemoteInstall to work');
+include_once 'PEAR/Common.php';
+if (!class_exists('PEAR_Common')) {
+    die('skip must have PEAR_Common');
+}
+if (!PEAR_Common::isIncludeable('Net/FTP.php') || !PEAR_Common::isIncludeable('PEAR/FTP.php')) {
+    die('skip requires PEAR_RemoteInstaller to work');
 }
 ?>
 --FILE--
