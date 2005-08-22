@@ -9,6 +9,13 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+$reg = &$config->getRegistry();
+$chan = &$reg->getChannel('pear.php.net');
+$chan->resetREST();
+$reg->updateChannel($chan);
+$chan = &$reg->getChannel('pecl.php.net');
+$chan->resetREST();
+$reg->updateChannel($chan);
 $pearweb->addXmlrpcConfig("pecl.php.net", "package.listLatestReleases", array (
   0 => 'alpha',
 ), array (
