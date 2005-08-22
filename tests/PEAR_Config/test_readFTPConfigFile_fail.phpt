@@ -5,12 +5,16 @@ PEAR_Config->readFTPConfigFile() (failure)
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
+if (!(include_once 'Net/FTP.php') || !(include_once 'PEAR/FTP.php')) {
+    die('skip requires PEAR_RemoteInstall to work');
+}
 ?>
 --FILE--
 <?php
 error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini');
+require_once 'PEAR/Command/Remoteinstall-init.php';
+$config = &new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini');
 ini_set('include_path', './#####');
 $config->readFTPConfigFile('ftp://example.com');
 $phpunit->assertErrors(array(
