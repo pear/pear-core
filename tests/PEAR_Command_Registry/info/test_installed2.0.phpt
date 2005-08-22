@@ -20,7 +20,7 @@ $installer->setOptions(array());
 $installer->setDownloadedPackages($downloaded);
 $installer->install($downloaded[0], array());
 $phpunit->assertNoErrors('setup');
-$phpunit->assertEquals(array(), $fakelog->getLog(), 'log setup');
+$fakelog->getLog();
 $e = $command->run('info', array(), array('Console_Getopt'));
 $reg = &$config->getRegistry();
 $lastmodified = $reg->packageInfo('Console_Getopt', '_lastmodified');
