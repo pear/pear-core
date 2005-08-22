@@ -10,6 +10,10 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(E_ALL);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+$reg = &$config->getRegistry();
+$chan = $reg->getChannel('pecl.php.net');
+$chan->resetREST();
+$reg->updateChannel($chan);
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'dependsonpecl.xml';
 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
