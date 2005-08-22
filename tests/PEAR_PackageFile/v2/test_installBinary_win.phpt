@@ -139,7 +139,7 @@ $reg = &$config->getRegistry();
 $reg->addChannel($cf);
 $phpunit->assertNoErrors('channel add');
 
-$a = new test_PEAR_Installer($fakelog);
+$a = &new test_PEAR_Installer($fakelog);
 $pf = new test_PEAR_PackageFile_v2;
 $pf->setConfig($config);
 $pf->setPackageType('extsrc');
@@ -173,8 +173,8 @@ $a->setDownloadedPackages($b);
 $_test_dep->setOs('windows');
 $pf->installBinary($a);
 $phpunit->assertNoErrors('post-install');
-$dld = $last_dl->getDownloadDir();
-$cleandld = str_replace('\\\\', '\\', $last_dl->getDownloadDir());
+$dld = $GLOBALS['last_dl']->getDownloadDir();
+$cleandld = str_replace('\\\\', '\\', $GLOBALS['last_dl']->getDownloadDir());
 if (OS_WINDOWS) {
     $phpunit->assertEquals(array (
       0 => 
