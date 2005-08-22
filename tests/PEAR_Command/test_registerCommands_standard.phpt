@@ -3,7 +3,10 @@ PEAR_Command::factory()
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
-    echo 'skip';
+    die('skip');
+}
+if (@include_once 'PEAR/Command/Remoteinstall-init.php') {
+    die('skip remoteinstall test will be used');
 }
 ?>
 --FILE--
