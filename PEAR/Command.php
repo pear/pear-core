@@ -121,14 +121,16 @@ class PEAR_Command
             $command = $GLOBALS['_PEAR_Command_shortcuts'][$command];
         }
         if (!isset($GLOBALS['_PEAR_Command_commandlist'][$command])) {
-            return PEAR::raiseError("unknown command `$command'");
+            $a = PEAR::raiseError("unknown command `$command'");
+            return $a;
         }
         $class = $GLOBALS['_PEAR_Command_commandlist'][$command];
         if (!class_exists($class)) {
             require_once $GLOBALS['_PEAR_Command_objects'][$class];
         }
         if (!class_exists($class)) {
-            return PEAR::raiseError("unknown command `$command'");
+            $a = PEAR::raiseError("unknown command `$command'");
+            return $a;
         }
         $ui =& PEAR_Command::getFrontendObject();
         $obj = &new $class($ui, $config);
