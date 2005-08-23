@@ -5,6 +5,13 @@ PEAR_Installer->install() (binary package)
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
+@include_once 'PEAR.php';
+if (!class_exists('PEAR')) {
+    die('skip PEAR.php must be in include_path');
+}
+if (!OS_WINDOWS) {
+    echo 'skip can only run test on Windows OS';
+}
 ?>
 --FILE--
 <?php
@@ -157,7 +164,7 @@ $phpunit->assertEquals(array (
       1 => 
       array (
         0 => 3,
-        1 => '+ tmp dir created at ' . $last_dl->getDownloadDir(),
+        1 => '+ tmp dir created at ' . $GLOBALS['last_dl']->getDownloadDir(),
       ),
       2 => 
       array (
@@ -187,7 +194,7 @@ $phpunit->assertEquals(array (
       7 => 
       array (
         0 => 3,
-        1 => '+ cp ' . str_replace('\\\\', '\\', $last_dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'test-1.1.0' .
+        1 => '+ cp ' . str_replace('\\\\', '\\', $GLOBALS['last_dl']->getDownloadDir()) . DIRECTORY_SEPARATOR . 'test-1.1.0' .
             DIRECTORY_SEPARATOR . 'foo.dll ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll',
       ),
       8 => 
@@ -239,7 +246,7 @@ $phpunit->assertEquals(array (
       1 => 
       array (
         0 => 3,
-        1 => '+ tmp dir created at ' . $last_dl->getDownloadDir(),
+        1 => '+ tmp dir created at ' . $GLOBALS['last_dl']->getDownloadDir(),
       ),
       2 => 
       array (
@@ -269,7 +276,7 @@ $phpunit->assertEquals(array (
       7 => 
       array (
         0 => 3,
-        1 => '+ cp ' . str_replace('\\\\', '\\', $last_dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'test-1.1.0' .
+        1 => '+ cp ' . str_replace('\\\\', '\\', $GLOBALS['last_dl']->getDownloadDir()) . DIRECTORY_SEPARATOR . 'test-1.1.0' .
             DIRECTORY_SEPARATOR . 'foo.dll ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll',
       ),
       8 => 
