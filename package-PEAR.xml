@@ -17,16 +17,16 @@
  </description>
  <maintainers>
   <maintainer>
-   <user>ssb</user>
-   <role>lead</role>
-   <name>Stig Bakken</name>
-   <email>stig@php.net</email>
-  </maintainer>
-  <maintainer>
    <user>cellog</user>
    <role>lead</role>
    <name>Greg Beaver</name>
    <email>cellog@php.net</email>
+  </maintainer>
+  <maintainer>
+   <user>ssb</user>
+   <role>lead</role>
+   <name>Stig Bakken</name>
+   <email>stig@php.net</email>
   </maintainer>
   <maintainer>
    <user>cox</user>
@@ -49,13 +49,13 @@
  </maintainers>
  <release>
   <version>1.4.0b1</version>
-  <date>2005-08-20</date>
+  <date>2005-08-25</date>
   <license>PHP License</license>
   <state>beta</state>
   <notes>
   This is a major milestone release for PEAR.  In addition to several killer features,
   every single element of PEAR has a regression test, and so stability is much higher
-  than any previous PEAR release, even with the alpha label.
+  than any previous PEAR release, even with the beta label.
 
   New features in a nutshell:
   * full support for channels
@@ -64,80 +64,19 @@
   * support for optional dependency groups and limited support for sub-packaging
   * robust dependency support
   * full dependency validation on uninstall
-  * support for binary PECL packages
   * remote install for hosts with only ftp access - no more problems with
     restricted host installation
   * full support for mirroring
   * support for bundling several packages into a single tarball
   * support for static dependencies on a url-based package
-
-  Specific changes from 1.3.5:
-  * Implement request #1789: SSL support for xml-rpc and download
-  * Everything above here that you just read
-
-  Specific changes from 1.4.0a8:
-  * add --package option to run-tests command, to run installed .phpt tests
-  * significantly drop pear's memory footprint for all commands
-  * fix fatal errors when installing pecl packages
-  * make download command work for non-root in a shared environment
-  * make sure that if 1.4.0a8 (alpha) is installed, and 1.3.6 (newer) exists, pear will not
-    attempt to &quot;upgrade&quot; to 1.3.6
-  * split PEAR_PackageFile_v2 into two classes, read-only PEAR_PackageFile_v2, and read-write
-    PEAR_PackageFile_v2_rw
-
-  Specific changes from 1.4.0a9:
-  * add support for writeable tasks
-  * fix potential fatal errors in run-tests command, -p option
-  * fix --installroot option for installation
-  * fix fatal error if package.xml has no version=&quot;X.0&quot;
-  * move run-tests command into its own file (testing may expand)
-  * fix Bug #3966: Improper path in PEAR/PackageFile/v2.php
-  * fix Bug #3990: PEAR_Error PEAR_EXCEPTION broken
-  * fix Bug #4021: PEAR_Config file_exists can cause warnings
-  * fix Bug #1870: pear makerpm dependancies
-  * fix Bug #4038: Array to string conversion in PEAR/Frontend/CLI.php
-  * fix Bug #4060: pear upgrade Auth_HTTP fails
-  * fix Bug #4072: pear list-all -c channel does not list installed packages
-
-  Specific changes from 1.4.0a10:
-  * Add new &quot;unusualbaseinstall&quot; role type that allows custom roles similar
-    data/test/doc to honor the baseinstalldir attribute
-  * fix Bug #4095: System::rm does not handle links correctly
-  * fix Bug #4097: Wrong logging in PEAR_Command_Test
-  * make pear/pecl commands list only pear/pecl packages
-  * fix Bug #4161: pear download always leaves a package.xml in the dir
-  * make PEAR_Remote messages more helpful (include server name)
-  * make list-upgrades only search channels from which we have installed packages
-  * remove &lt;max&gt; tag requirement for php dependency
-
-  Specific changes from 1.4.0a11:
-  * Implement REST 1.0 as per Request #2781
-  * REST is the default connection method if available
-  * fix bugs in PEAR_ChannelFile REST handling
-  * fix Bug #4069: pear list-all -c &lt;ChannelAlias&gt; does not work
-  * fix Bug #4249: download-all broken in 1.4.0a11
-  * fix Bug #4257: if rel="has" is used with a version="" attribute, the warning does not work
-  * fix Bug #4278: Parser V1: error handling borked !
-  * fix Bug #4279: Typo in DependencyDB (_version)
-  * fix Bug #4285: pear install *.tgz miss dependencies
-  * fix Bug #4353: fatal error if using remote_config variable
-  * fix Bug #4354: Remote PEAR upgrade and uninstall operation fail
-  * fix Bug #4355: PEAR 1.4.0a11 ftpInstall chokes on package2.xml packages
-  * fix Bug #4400: pear download chiara/Chiara_XML_RPC5-alpha fails
-  * fix Bug #4458: packaging error message better description
-  * implement Request #2781: support for static channel releases.xml summary
-  * implement versioned conflicting dependencies
-  * fix major problems in subpackages
-  * The next version will split off PEAR_ErrorStack into its own package
-  * fix problems with zero-length files that have tasks on installation
-  * add a check for channel.xml up-to-dateness and gentle warning to users on
-    installing a package from that channel
+  * support for custom file roles and installation tasks
 
   Specific changes from 1.4.0a12:
-  * remove old notes (prior to 1.4.0a8)
+  * remove old notes (prior to 1.4.0a11)
   * implement conflicts tags for frontend packages
   * implement separation of PEAR_ErrorStack package
-  * add default install for PEAR_Delegator package
+  * implement separation of PEAR_RemoteInstall package
+  * add default install for PEAR_Delegator package (if installing via PEAR 1.4.0 only)
   * fix PEAR_PackageFile_v2_rw::setSourcePackage() to match newer package.xml 2.0 format
   * fix PEAR_Common::validatePackageInfo() so it accepts the contents of a package.xml
   * implement Feature #4464: ability to modify a post-install script prompt at runtime
