@@ -3,7 +3,7 @@
 http://pear.php.net/dtd/tasks-1.0.xsd
 http://pear.php.net/dtd/package-2.0
 http://pear.php.net/dtd/package-2.0.xsd">
- <name>PEAR_RemoteInstall</name>
+ <name>PEAR_RemoteInstaller</name>
  <channel>pear.php.net</channel>
  <summary>PEAR Remote installation plugin through FTP</summary>
  <description>Originally part of the 1.4.0 new features,
