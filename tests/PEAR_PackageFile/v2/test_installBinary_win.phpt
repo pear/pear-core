@@ -5,6 +5,13 @@ PEAR_PackageFile_Parser_v2->installBinary()
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
+@include_once 'PEAR.php';
+if (!class_exists('PEAR')) {
+    die('skip PEAR.php must be in include_path');
+}
+if (!OS_WINDOWS) {
+    echo 'skip can only run test on Windows OS';
+}
 ?>
 --FILE--
 <?php
