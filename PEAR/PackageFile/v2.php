@@ -983,6 +983,30 @@ class PEAR_PackageFile_v2
     }
 
     /**
+     * Return the <usesrole> tag contents, if any
+     * @return array|false
+     */
+    function getUsesrole()
+    {
+        if (isset($this->_packageInfo['usesrole'])) {
+            return $this->_packageInfo['usesrole'];
+        }
+        return false;
+    }
+
+    /**
+     * Return the <usestask> tag contents, if any
+     * @return array|false
+     */
+    function getUsestask()
+    {
+        if (isset($this->_packageInfo['usestask'])) {
+            return $this->_packageInfo['usestask'];
+        }
+        return false;
+    }
+
+    /**
      * This should only be used to retrieve filenames and install attributes
      */
     function getFilelist($preserve = false)
