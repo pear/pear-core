@@ -13,7 +13,7 @@ if (strtolower(substr(PHP_OS, 0, 3)) == 'win') {
 `touch /tmp/system_link_test/1`;
 `mkdir /tmp/system_link_test/sub1`;
 `mkdir /tmp/system_link_test/sub1/sub2`;
-`cp -la /tmp/system_link_test/sub1 /tmp/system_link_test/link2`;
+`ln -s /tmp/system_link_test/sub1 /tmp/system_link_test/link2`;
 
 require_once 'System.php';
 System::rm(array('-r','/tmp/system_link_test'));
