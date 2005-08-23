@@ -19,6 +19,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
 PEAR indirectly contains PEAR_ErrorStack, now a separate package
  </description>
  <lead>
+  <name>Greg Beaver</name>
+  <user>cellog</user>
+  <email>cellog@php.net</email>
+  <active>yes</active>
+ </lead>
+ <lead>
   <name>Stig Bakken</name>
   <user>ssb</user>
   <email>stig@php.net</email>
@@ -34,12 +40,6 @@ PEAR indirectly contains PEAR_ErrorStack, now a separate package
   <name>Pierre-Alain Joye</name>
   <user>pajoye</user>
   <email>pajoye@pearfr.org</email>
-  <active>yes</active>
- </lead>
- <lead>
-  <name>Greg Beaver</name>
-  <user>cellog</user>
-  <email>cellog@php.net</email>
   <active>yes</active>
  </lead>
  <helper>
@@ -82,7 +82,7 @@ PEAR indirectly contains PEAR_ErrorStack, now a separate package
   * implement conflicts tags for frontend packages
   * implement separation of PEAR_ErrorStack package
   * implement separation of PEAR_RemoteInstall package
-  * add default install for PEAR_Delegator package
+  * add default install for PEAR_Delegator package (if installing via PEAR 1.4.0 only)
   * fix PEAR_PackageFile_v2_rw::setSourcePackage() to match newer package.xml 2.0 format
   * fix PEAR_Common::validatePackageInfo() so it accepts the contents of a package.xml
   * implement Feature #4464: ability to modify a post-install script prompt at runtime
