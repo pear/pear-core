@@ -378,7 +378,7 @@ installed package.'
             if ($obj->getPackagexmlVersion() == '1.0') {
                 $info = $obj->toArray();
             } else {
-                return $this->_doList2($command, $options, $params, $obj, false);
+                return $this->_doInfo2($command, $options, $params, $obj, false);
             }
         } else {
             $parsed = $reg->parsePackageName($params[0], $this->config->get('default_channel'));
@@ -390,7 +390,7 @@ installed package.'
             $info = $reg->packageInfo($package, null, $channel);
             if (isset($info['old'])) {
                 $obj = $reg->getPackage($package, $channel);
-                return $this->_doList2($command, $options, $params, $obj, true);
+                return $this->_doInfo2($command, $options, $params, $obj, true);
             }
         }
         if (PEAR::isError($info)) {
@@ -547,7 +547,7 @@ installed package.'
     /**
      * @access private
      */
-    function _doList2($command, $options, $params, &$obj, $installed)
+    function _doInfo2($command, $options, $params, &$obj, $installed)
     {
         $reg = &$this->config->getRegistry();
         $caption = 'About ' . $obj->getChannel() . '/' .$obj->getPackage() . '-' .
@@ -635,6 +635,44 @@ installed package.'
                     $info['Not Compatible with'] .= $package['channel'] . '/' .
                         $package['package'] . "\nVersions " . $package['exclude'];
                 }
+            }
+        }
+        $usesrole = $obj->getUsesrole();
+        if ($usesrole) {
+            if (!isset($usesrole[0])) {
+                $usesrole = array($usesrole);
+            }
+            foreach ($usesrole as $roledata) {
+                if (isset($info['Uses Custom Roles'])) {
+                    $info['Uses Custom Roles'] .= "\n";
+                } else {
+                    $info['Uses Custom Roles'] = '';
+                }
+                if (isset($roledata['package'])) {
+                    $rolepackage = $reg->parsedPackageNameToString($roledata, true);
+                } else {
+                    $rolepackage = $roledata['uri'];
+                }
+                $info['Uses Custom Roles'] .= $roledata['role'] . ' (' . $rolepackage . ')';
+            }
+        }
+        $usestask = $obj->getUsestask();
+        if ($usestask) {
+            if (!isset($usestask[0])) {
+                $usestask = array($usestask);
+            }
+            foreach ($usestask as $taskdata) {
+                if (isset($info['Uses Custom Tasks'])) {
+                    $info['Uses Custom Tasks'] .= "\n";
+                } else {
+                    $info['Uses Custom Tasks'] = '';
+                }
+                if (isset($taskdata['package'])) {
+                    $taskpackage = $reg->parsedPackageNameToString($taskdata, true);
+                } else {
+                    $taskpackage = $taskdata['uri'];
+                }
+                $info['Uses Custom Tasks'] .= $taskdata['task'] . ' (' . $taskpackage . ')';
             }
         }
         $deps = $obj->getDependencies();
