@@ -10,13 +10,13 @@ http://pear.php.net/dtd/package-2.0.xsd">
  * the PEAR installer, for creating, distributing
    and installing packages
  * the alpha-quality PEAR_Exception PHP5 error handling mechanism
+ * the beta-quality PEAR_ErrorStack advanced error handling class
  * the PEAR_Error error handling mechanism
  * the OS_Guess class for retrieving info about the OS
    where PHP is running on
  * the System class for quick handling of common operations
    with files and directories
  * the PEAR base class
-PEAR indirectly contains PEAR_ErrorStack, now a separate package
  </description>
  <lead>
   <name>Greg Beaver</name>
@@ -80,7 +80,6 @@ PEAR indirectly contains PEAR_ErrorStack, now a separate package
   Specific changes from 1.4.0a12:
   * remove old notes (prior to 1.4.0a11)
   * implement conflicts tags for frontend packages
-  * implement separation of PEAR_ErrorStack package
   * implement separation of PEAR_RemoteInstall package
   * add default install for PEAR_Delegator package (if installing via PEAR 1.4.0 only)
   * fix PEAR_PackageFile_v2_rw::setSourcePackage() to match newer package.xml 2.0 format
@@ -444,12 +443,6 @@ PEAR indirectly contains PEAR_ErrorStack, now a separate package
     <exclude>0.4.0</exclude>
     <conflicts/>
    </package>
-   <subpackage>
-    <name>PEAR_ErrorStack</name>
-    <channel>pear.php.net</channel>
-    <min>0.8.0</min>
-    <recommended>0.8.0</recommended>
-   </subpackage>
    <extension>
     <name>xml</name>
    </extension>
@@ -501,7 +494,6 @@ PEAR indirectly contains PEAR_ErrorStack, now a separate package
    <ignore name="scripts/peardev.sh" />
    <ignore name="scripts/pear.sh" />
    <ignore name="scripts/pecl.sh" />
-   <ignore name="PEAR/ErrorStack.php" />
   </filelist>
  </phprelease>
  <phprelease>
@@ -514,7 +506,6 @@ PEAR indirectly contains PEAR_ErrorStack, now a separate package
    <ignore name="scripts/pear.bat" />
    <ignore name="scripts/peardev.bat" />
    <ignore name="scripts/pecl.bat" />
-   <ignore name="PEAR/ErrorStack.php" />
   </filelist>
  </phprelease>
  <changelog>
