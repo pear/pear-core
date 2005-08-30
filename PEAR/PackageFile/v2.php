@@ -180,7 +180,7 @@ class PEAR_PackageFile_v2
      * @param PEAR_Installer
      * @return array|false
      */
-    function &installBinary(&$installer)
+    function installBinary(&$installer)
     {
         if (!OS_WINDOWS) {
             $a = false;
