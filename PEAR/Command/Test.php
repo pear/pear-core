@@ -134,7 +134,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                 }
                 $filelist = $package->getFilelist();
                 foreach ($filelist as $name => $atts) {
-                    if ($atts['role'] != 'test') {
+                    if (isset($atts['role'] && $atts['role'] != 'test') {
                         continue;
                     }
                     if (!preg_match('/\.phpt$/', $name)) {
