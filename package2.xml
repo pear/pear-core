@@ -50,7 +50,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </helper>
  <date>2005-08-25</date>
  <version>
-  <release>1.4.0b1</release>
+  <release>1.4.0b2</release>
   <api>1.4.0</api>
  </version>
  <stability>
@@ -77,23 +77,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * support for static dependencies on a uri-based package
   * support for custom file roles and installation tasks
 
-  Specific changes from 1.4.0a12:
-  * remove old notes (prior to 1.4.0a11)
-  * implement conflicts tags for frontend packages
-  * implement separation of PEAR_RemoteInstall package
-  * add default install for PEAR_Delegator package (if installing via PEAR 1.4.0 only)
-  * fix PEAR_PackageFile_v2_rw::setSourcePackage() to match newer package.xml 2.0 format
-  * fix PEAR_Common::validatePackageInfo() so it accepts the contents of a package.xml
-  * implement Feature #4464: ability to modify a post-install script prompt at runtime
-  * fix Bug #4741: Newest Pager won't install (no upgrade available)
-  * fix Bug #4817: Fix warning with corrupt cache
-  * fix Bug #4818: References fix
-  * fix Bug #4825: pear behind a proxy using REST dosnt work
-  * fix Bug #4952: PEAR_Exception::toHTML() spits notices
-  * fix Bug #5073: cache fatal error if no cached content
-  * fix Bug #5131: pear info PEAR shows "Array" with installed PEAR 1.4.0a13 (CVS)
-  * fix Bug #5132: pear info Blah.tgz reports optional deps as required
-  * fix Bug #5135: pear info PEAR has notice with a13 installed
+  Specific changes from 1.4.0b1:
+  * fix Bug #5285: Incorrect dependency on PEAR_RemoteInstall should be PEAR_RemoteInstaller
  </notes>
  <contents>
   <dir name="/">
@@ -458,7 +443,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   </group>
   <group name="remoteinstall" hint="adds the ability to install packages to a remote ftp server">
    <subpackage>
-    <name>PEAR_RemoteInstall</name>
+    <name>PEAR_RemoteInstaller</name>
     <channel>pear.php.net</channel>
     <min>0.1.0</min>
     <recommended>0.1.0</recommended>
@@ -809,6 +794,37 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix problems with zero-length files that have tasks on installation
   * add a check for channel.xml up-to-dateness and gentle warning to users on
     installing a package from that channel
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.0b1</release>
+    <api>1.4.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beat</api>
+   </stability>
+   <date>2005-08-25</date>
+   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <notes>
+  Specific changes from 1.4.0a12:
+  * remove old notes (prior to 1.4.0a11)
+  * implement conflicts tags for frontend packages
+  * implement separation of PEAR_RemoteInstall package
+  * add default install for PEAR_Delegator package (if installing via PEAR 1.4.0 only)
+  * fix PEAR_PackageFile_v2_rw::setSourcePackage() to match newer package.xml 2.0 format
+  * fix PEAR_Common::validatePackageInfo() so it accepts the contents of a package.xml
+  * implement Feature #4464: ability to modify a post-install script prompt at runtime
+  * fix Bug #4741: Newest Pager won't install (no upgrade available)
+  * fix Bug #4817: Fix warning with corrupt cache
+  * fix Bug #4818: References fix
+  * fix Bug #4825: pear behind a proxy using REST dosnt work
+  * fix Bug #4952: PEAR_Exception::toHTML() spits notices
+  * fix Bug #5073: cache fatal error if no cached content
+  * fix Bug #5131: pear info PEAR shows "Array" with installed PEAR 1.4.0a13 (CVS)
+  * fix Bug #5132: pear info Blah.tgz reports optional deps as required
+  * fix Bug #5135: pear info PEAR has notice with a13 installed
    </notes>
   </release>
  </changelog>
