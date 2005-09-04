@@ -269,7 +269,7 @@ class PEAR_ErrorStack {
                 false, $trace);
         }
         $GLOBALS['_PEAR_ERRORSTACK_SINGLETON'][$package] =
-            &new $stackClass($package, $msgCallback, $contextCallback, $throwPEAR_Error);
+            new $stackClass($package, $msgCallback, $contextCallback, $throwPEAR_Error);
 
         return $GLOBALS['_PEAR_ERRORSTACK_SINGLETON'][$package];
     }
