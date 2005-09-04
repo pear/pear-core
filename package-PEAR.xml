@@ -48,7 +48,7 @@
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.0b1</version>
+  <version>1.4.0b2</version>
   <date>2005-08-25</date>
   <license>PHP License</license>
   <state>beta</state>
@@ -71,24 +71,8 @@
   * support for static dependencies on a url-based package
   * support for custom file roles and installation tasks
 
-  Specific changes from 1.4.0a12:
-  * remove old notes (prior to 1.4.0a11)
-  * implement conflicts tags for frontend packages
-  * implement separation of PEAR_ErrorStack package
-  * implement separation of PEAR_RemoteInstall package
-  * add default install for PEAR_Delegator package (if installing via PEAR 1.4.0 only)
-  * fix PEAR_PackageFile_v2_rw::setSourcePackage() to match newer package.xml 2.0 format
-  * fix PEAR_Common::validatePackageInfo() so it accepts the contents of a package.xml
-  * implement Feature #4464: ability to modify a post-install script prompt at runtime
-  * fix Bug #4741: Newest Pager won't install (no upgrade available)
-  * fix Bug #4817: Fix warning with corrupt cache
-  * fix Bug #4818: References fix
-  * fix Bug #4825: pear behind a proxy using REST dosnt work
-  * fix Bug #4952: PEAR_Exception::toHTML() spits notices
-  * fix Bug #5073: cache fatal error if no cached content
-  * fix Bug #5131: pear info PEAR shows "Array" with installed PEAR 1.4.0a13 (CVS)
-  * fix Bug #5132: pear info Blah.tgz reports optional deps as required
-  * fix Bug #5135: pear info PEAR has notice with a13 installed
+  Specific changes from 1.4.0b1:
+  * fix Bug #5285: Incorrect dependency on PEAR_RemoteInstall should be PEAR_RemoteInstaller
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -616,6 +600,30 @@
   * fix problems with zero-length files that have tasks on installation
   * add a check for channel.xml up-to-dateness and gentle warning to users on
     installing a package from that channel
+   </notes>
+  </release>
+  <release>
+   <version>1.4.0b1</version>
+   <date>2005-08-25</date>
+   <state>beta</state>
+   <notes>
+  * remove old notes (prior to 1.4.0a11)
+  * implement conflicts tags for frontend packages
+  * implement separation of PEAR_ErrorStack package
+  * implement separation of PEAR_RemoteInstall package
+  * add default install for PEAR_Delegator package (if installing via PEAR 1.4.0 only)
+  * fix PEAR_PackageFile_v2_rw::setSourcePackage() to match newer package.xml 2.0 format
+  * fix PEAR_Common::validatePackageInfo() so it accepts the contents of a package.xml
+  * implement Feature #4464: ability to modify a post-install script prompt at runtime
+  * fix Bug #4741: Newest Pager won't install (no upgrade available)
+  * fix Bug #4817: Fix warning with corrupt cache
+  * fix Bug #4818: References fix
+  * fix Bug #4825: pear behind a proxy using REST dosnt work
+  * fix Bug #4952: PEAR_Exception::toHTML() spits notices
+  * fix Bug #5073: cache fatal error if no cached content
+  * fix Bug #5131: pear info PEAR shows "Array" with installed PEAR 1.4.0a13 (CVS)
+  * fix Bug #5132: pear info Blah.tgz reports optional deps as required
+  * fix Bug #5135: pear info PEAR has notice with a13 installed
    </notes>
   </release>
  </changelog>
