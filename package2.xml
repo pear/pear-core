@@ -78,6 +78,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * support for custom file roles and installation tasks
 
   Specific changes from 1.4.0b1:
+  * fix Bug #5240: Unnecessary assign by reference in PEAR_ErrorStack
   * fix Bug #5285: Incorrect dependency on PEAR_RemoteInstall should be PEAR_RemoteInstaller
  </notes>
  <contents>
