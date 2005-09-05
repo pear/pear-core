@@ -1,4 +1,37 @@
 <?php
+/**
+ * go-pear.phar creator.  Requires PHP_Archive version 0.6.0 or newer
+ *
+ * PHP version 5.1+
+ *
+ * To use, modify the $xmlrpcdir to point to the installed PEAR directory where RPC.php
+ * from the XML_RPC package can be located.  In pear-core/PEAR create a directory
+ * named go-pear-tarballs, and run these commands in the directory
+ *
+ * <pre>
+ * $ pear download -Z PEAR
+ * $ pear download -Z Archive_Tar
+ * $ pear download -Z Console_Getopt
+ * $ pear download -Z XML_RPC
+ * $ pear download -Z PEAR_Delegator
+ * </pre>
+ *
+ * finally, run this script using PHP 5.1's cli php
+ *
+ * LICENSE: This source file is subject to version 3.0 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_0.txt.  If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category   pear
+ * @package    PEAR
+ * @author     Greg Beaver <cellog@php.net>
+ * @copyright  2005 The PHP Group
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @version    CVS: $Id$
+ */
+
 $peardir = dirname(__FILE__);
 $xmlrpcdir = 'C:\php5\pear\XML';
 
