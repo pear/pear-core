@@ -7,6 +7,8 @@ ini_set('include_path', $pear_dir);
 include_once 'PEAR.php';
 include_once 'PEAR/Installer.php';
 include_once 'PEAR/Registry.php';
+include_once 'PEAR/PackageFile.php';
+include_once 'PEAR/Downloader/Package.php';
 include_once 'PEAR/Frontend.php';
 
 $a = true;
@@ -25,6 +27,7 @@ if (!$a) {
 $force = false;
 $install_files = array();
 array_shift($argv);
+$debug = false;
 for ($i = 0; $i < sizeof($argv); $i++) {
     $arg = $argv[$i];
     $bn = basename($arg);
@@ -39,10 +42,14 @@ for ($i = 0; $i < sizeof($argv); $i++) {
     } elseif ($arg == '-b') {
         $bin_dir = $argv[$i+1];
         $i++;
+    } elseif ($arg == '--debug') {
+        $debug = 1;
+    } elseif ($arg == '--extremedebug') {
+        $debug = 2;
     }
 }
 
-$config = &PEAR_Config::singleton();
+$config = PEAR_Config::singleton();
 
 // make sure we use only default values
 $config_layers = $config->getLayers();
@@ -51,7 +58,11 @@ foreach ($config_layers as $layer) {
     $config->removeLayer($layer);
 }
 $keys = $config->getKeys();
-$config->set('verbose', 0, 'default');
+if ($debug) {
+    $config->set('verbose', 5, 'default');
+} else {
+    $config->set('verbose', 0, 'default');
+}
 // PEAR executables
 if (!empty($bin_dir)) {
     $config->set('bin_dir', $bin_dir, 'default');
@@ -64,17 +75,21 @@ if (!empty($with_dir)) {
     $config->set('data_dir', $with_dir . $ds . 'data', 'default');
     $config->set('test_dir', $with_dir . $ds . 'test', 'default');
 }
-/* Print PEAR Conf (useful for debuging do NOT REMOVE)
-sort($keys);
-foreach ($keys as $key) {
-    echo $config->getPrompt($key) . ": " . $config->get($key) . "\n";
+/* Print PEAR Conf (useful for debuging do NOT REMOVE) */
+if ($debug) {
+    sort($keys);
+    foreach ($keys as $key) {
+        echo $config->getPrompt($key) . ": " . $config->get($key) . "\n";
+    }
+    if ($debug == 2) { // extreme debugging
+        exit;
+    }
 }
-exit;
 // end print
-//*/
 
 $php_dir = $config->get('php_dir');
 $options = array();
+$options['upgrade'] = true;
 $install_root = getenv('INSTALL_ROOT');
 if (!empty($install_root)) {
     $options['installroot'] = $install_root;
@@ -83,23 +98,30 @@ if (!empty($install_root)) {
     $reg_dir = $php_dir;
 }
 
-$reg = &$config->getRegistry('default');
-$ui = &PEAR_Frontend::singleton('PEAR_Frontend_CLI');
-$installer = &new PEAR_Installer($ui);
-//$installer->registry = &$reg; // This should be changed in Installer/Registry
+$reg = $config->getRegistry('default');
+$ui = PEAR_Frontend::singleton('PEAR_Frontend_CLI');
+$installer = new PEAR_Installer($ui);
+$pkg = new PEAR_PackageFile($config, $debug);
 
 foreach ($install_files as $package => $instfile) {
+    $info = $pkg->fromAnyFile($instfile, PEAR_VALIDATE_INSTALLING);
+    $new_ver = $info->getVersion();
+    if (PEAR::isError($info)) {
+        $ui->outputData(sprintf("[PEAR] %s: %s", $package, $info->getMessage()));
+        continue;
+    }
+    $downloaderpackage = new PEAR_Downloader_Package($installer);
+    $err = $downloaderpackage->initialize($instfile);
+    if (PEAR::isError($err)) {
+        $ui->outputData(sprintf("[PEAR] %s: %s", $package, $err->getMessage()));
+        continue;
+    }
     if ($reg->packageExists($package)) {
-        $info = $installer->infoFromAny($instfile);
-        if (PEAR::isError($info)) {
-            $ui->outputData(sprintf("[PEAR] %s: %s", $package, $info->getMessage()));
-            continue;
-        }
-        $new_ver = $info['version'];
         $old_ver = $reg->packageInfo($package, 'version');
         if (version_compare($new_ver, $old_ver, 'gt')) {
-            $options['upgrade'] = true;
-            $err = $installer->install($instfile, $options);
+            $installer->setOptions($options);
+            $installer->setDownloadedPackages(array($downloaderpackage));
+            $err = $installer->install($downloaderpackage, $options);
             if (PEAR::isError($err)) {
                 $ui->outputData(sprintf("[PEAR] %s: %s", $package, $err->getMessage()));
                 continue;
@@ -108,7 +130,9 @@ foreach ($install_files as $package => $instfile) {
         } else {
             if ($force) {
                 $options['force'] = true;
-                $err = $installer->install($instfile, $options);
+                $installer->setOptions($options);
+                $installer->setDownloadedPackages(array($downloaderpackage));
+                $err = $installer->install($downloaderpackage, $options);
                 if (PEAR::isError($err)) {
                     $ui->outputData(sprintf("[PEAR] %s: %s", $package, $err->getMessage()));
                     continue;
@@ -120,12 +144,13 @@ foreach ($install_files as $package => $instfile) {
         }
     } else {
         $options['nodeps'] = true;
-        $err = $installer->install($instfile, $options);
+        $installer->setOptions($options);
+        $installer->setDownloadedPackages(array($downloaderpackage));
+        $err = $installer->install($downloaderpackage, $options);
         if (PEAR::isError($err)) {
             $ui->outputData(sprintf("[PEAR] %s: %s", $package, $err->getMessage()));
             continue;
         }
-        $new_ver = $reg->packageInfo($package, 'version');
         $ui->outputData(sprintf("[PEAR] %-15s- installed: %s", $package, $new_ver));
     }
     if ($package == 'PEAR') {
