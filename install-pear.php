@@ -3,14 +3,13 @@
 /* $Id$ */
 
 $pear_dir = dirname(__FILE__);
-ini_set('include_path', $pear_dir);
+ini_set('include_path', '');
 include_once 'PEAR.php';
 include_once 'PEAR/Installer.php';
 include_once 'PEAR/Registry.php';
 include_once 'PEAR/PackageFile.php';
 include_once 'PEAR/Downloader/Package.php';
 include_once 'PEAR/Frontend.php';
-
 $a = true;
 if (!PEAR::loadExtension('xml')) {
     $a = false;
@@ -79,7 +78,8 @@ if (!empty($with_dir)) {
 if ($debug) {
     sort($keys);
     foreach ($keys as $key) {
-        echo $config->getPrompt($key) . ": " . $config->get($key) . "\n";
+        echo $key . '    ' .
+            $config->getPrompt($key) . ": " . $config->get($key, null, 'default') . "\n";
     }
     if ($debug == 2) { // extreme debugging
         exit;
@@ -120,7 +120,8 @@ foreach ($install_files as $package => $instfile) {
         $old_ver = $reg->packageInfo($package, 'version');
         if (version_compare($new_ver, $old_ver, 'gt')) {
             $installer->setOptions($options);
-            $installer->setDownloadedPackages(array($downloaderpackage));
+            $dp = array($downloaderpackage);
+            $installer->setDownloadedPackages($dp);
             $err = $installer->install($downloaderpackage, $options);
             if (PEAR::isError($err)) {
                 $ui->outputData(sprintf("[PEAR] %s: %s", $package, $err->getMessage()));
@@ -131,7 +132,8 @@ foreach ($install_files as $package => $instfile) {
             if ($force) {
                 $options['force'] = true;
                 $installer->setOptions($options);
-                $installer->setDownloadedPackages(array($downloaderpackage));
+                $dp = array($downloaderpackage);
+                $installer->setDownloadedPackages($dp);
                 $err = $installer->install($downloaderpackage, $options);
                 if (PEAR::isError($err)) {
                     $ui->outputData(sprintf("[PEAR] %s: %s", $package, $err->getMessage()));
@@ -145,7 +147,8 @@ foreach ($install_files as $package => $instfile) {
     } else {
         $options['nodeps'] = true;
         $installer->setOptions($options);
-        $installer->setDownloadedPackages(array($downloaderpackage));
+        $dp = array($downloaderpackage);
+        $installer->setDownloadedPackages($dp);
         $err = $installer->install($downloaderpackage, $options);
         if (PEAR::isError($err)) {
             $ui->outputData(sprintf("[PEAR] %s: %s", $package, $err->getMessage()));
