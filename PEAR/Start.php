@@ -11,12 +11,10 @@ class PEAR_Start extends PEAR
     var $install_pfc;
     var $corePackages =
         array(
-            'PEAR_ErrorStack',
             'Archive_Tar',
             'Console_Getopt',
             'PEAR',
             'XML_RPC',
-            'PEAR_Delegator',
         );
     var $local_dir = array();
     var $origpwd;
