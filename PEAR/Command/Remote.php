@@ -312,14 +312,15 @@ parameter.
             }
             if (isset($options['mode']))
             {
-                if ($options['mode'] == 'installed' && !isset($installed['version']))
+                if ($options['mode'] == 'installed' && !isset($installed['version'])) {
                     continue;
-                if ($options['mode'] == 'notinstalled' && isset($installed['version']))
+                }
+                if ($options['mode'] == 'notinstalled' && isset($installed['version'])) {
                     continue;
+                }
                 if ($options['mode'] == 'upgrades'
                       && (!isset($installed['version']) || version_compare($installed['version'],
-                      $info['stable'], '>=')))
-                {
+                      $info['stable'], '>='))) {
                     continue;
                 }
             }
