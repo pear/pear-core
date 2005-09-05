@@ -1,4 +1,36 @@
 <?php
+/**
+ * install-pear.phar creator.  Requires PHP_Archive version 0.6.0 or newer
+ *
+ * PHP version 5.1+
+ *
+ * To use, modify the $xmlrpcdir to point to the installed PEAR directory where RPC.php
+ * from the XML_RPC package can be located.  In pear-core/PEAR create a directory
+ * named go-pear-tarballs, and run these commands in the directory
+ *
+ * <pre>
+ * $ pear download -Z PEAR
+ * $ pear download -Z Archive_Tar
+ * $ pear download -Z Console_Getopt
+ * $ pear download -Z XML_RPC
+ * $ pear download -Z PEAR_Delegator
+ * </pre>
+ *
+ * finally, run this script using PHP 5.1's cli php
+ *
+ * LICENSE: This source file is subject to version 3.0 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_0.txt.  If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category   pear
+ * @package    PEAR
+ * @author     Greg Beaver <cellog@php.net>
+ * @copyright  2005 The PHP Group
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @version    CVS: $Id$
+ */
 $peardir = dirname(__FILE__);
 $xmlrpcdir = 'C:\php5\pear\XML';
 
@@ -12,7 +44,8 @@ while (false !== ($entry = readdir($dp))) {
     if ($entry{0} == '.' || !in_array(substr($entry, -4), array('.tar'))) {
         continue;
     }
-    $packages[] = $entry;
+    ereg('([A-Za-z0-9_:]+)-.*\.tar$', $entry, $matches);
+    $packages[$matches[1]] = $entry;
 }
 require_once 'PEAR/PackageFile.php';
 require_once 'PEAR/Config.php';
@@ -26,12 +59,24 @@ $pf = $pkg->fromPackageFile($peardir . DIRECTORY_SEPARATOR . 'package2.xml', PEA
 $pearver = $pf->getVersion();
 
 $creator = new PHP_Archive_Creator('index.php', true);
-foreach ($packages as $package) {
-    echo "adding PEAR/go-pear-tarballs/$package\n";
-    $creator->addFile("PEAR/go-pear-tarballs/$package", "PEAR/go-pear-tarballs/$package");
+$install_files = '$install_files = array(';
+foreach ($packages as $name => $package) {
+    echo "$name => $package\n";
+    $install_files .= "'$name' => 'phar://install-pear.phar/$package'," . "\n";
+    $creator->addFile("PEAR/go-pear-tarballs/$package", "$package");
 }
+$install_files .= ');';
+echo "install_files is $install_files";
 $commandcontents = file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'install-pear.php');
-$commandcontents = str_replace('include_once \'', 'include_once \'phar://install-pear.phar/', $commandcontents);
+$commandcontents = str_replace(
+    array(
+        'include_once \'',
+        '$install_files = array();'
+    ),
+    array(
+        'include_once \'phar://install-pear.phar/',
+        $install_files
+    ), $commandcontents);
 $creator->addString($commandcontents, 'index.php');
 
 $commandcontents = file_get_contents($peardir . DIRECTORY_SEPARATOR . 'PEAR' .
@@ -42,8 +87,8 @@ $commandcontents = str_replace(
         "include_once '",
     ),
     array(
-        "require_once 'phar://go-pear.phar/",
-        "include_once 'phar://go-pear.phar/",
+        "require_once 'phar://install-pear.phar/",
+        "include_once 'phar://install-pear.phar/",
     ),
     $commandcontents);
 $creator->addString($commandcontents, 'PEAR/Command.php');
@@ -58,10 +103,10 @@ $commandcontents = str_replace(
         "include_once \"PEAR/Task/\$task.php",
     ),
     array(
-        "require_once 'phar://go-pear.phar/",
-        "include_once 'phar://go-pear.phar/",
+        "require_once 'phar://install-pear.phar/",
+        "include_once 'phar://install-pear.phar/",
         'if (true) {', // we're self-contained, so this should work
-        "include_once \"phar://go-pear.phar/PEAR/Task/\$task.php",
+        "include_once \"phar://install-pear.phar/PEAR/Task/\$task.php",
     ),
     $commandcontents);
 $creator->addString($commandcontents, 'PEAR/PackageFile/v2.php');
@@ -74,7 +119,7 @@ $commandcontents = str_replace(
         'PEAR_Frontend::isIncludeable($file)',
     ),
     array(
-        "include_once 'phar://go-pear.phar/' . ",
+        "include_once 'phar://install-pear.phar/' . ",
         'true',
     ),
     $commandcontents);
@@ -89,8 +134,8 @@ $commandcontents = str_replace(
         "@PEAR-VER@",
     ),
     array(
-        "require_once 'phar://go-pear.phar/",
-        "include_once 'phar://go-pear.phar/",
+        "require_once 'phar://install-pear.phar/",
+        "include_once 'phar://install-pear.phar/",
         $pearver,
     ),
     $commandcontents);
@@ -106,8 +151,8 @@ $commandcontents = str_replace(
         "@PEAR-VER@",
     ),
     array(
-        "require_once 'phar://go-pear.phar/",
-        "include_once 'phar://go-pear.phar/",
+        "require_once 'phar://install-pear.phar/",
+        "include_once 'phar://install-pear.phar/",
         $pearver,
     ),
     $commandcontents);
@@ -123,8 +168,8 @@ $commandcontents = str_replace(
         "@package_version@",
     ),
     array(
-        "require_once 'phar://go-pear.phar/",
-        "include_once 'phar://go-pear.phar/",
+        "require_once 'phar://install-pear.phar/",
+        "include_once 'phar://install-pear.phar/",
         $pearver,
     ),
     $commandcontents);
@@ -140,8 +185,8 @@ $commandcontents = str_replace(
         "@PEAR-VER@",
     ),
     array(
-        "require_once 'phar://go-pear.phar/",
-        "include_once 'phar://go-pear.phar/",
+        "require_once 'phar://install-pear.phar/",
+        "include_once 'phar://install-pear.phar/",
         $pearver,
     ),
     $commandcontents);
@@ -157,26 +202,12 @@ $commandcontents = str_replace(
         "@PEAR-VER@",
     ),
     array(
-        "require_once 'phar://go-pear.phar/",
-        "include_once 'phar://go-pear.phar/",
+        "require_once 'phar://install-pear.phar/",
+        "include_once 'phar://install-pear.phar/",
         $pearver,
     ),
     $commandcontents);
 $creator->addString($commandcontents, 'PEAR/PackageFile/Generator/v2.php');
-
-$commandcontents = file_get_contents($peardir . DIRECTORY_SEPARATOR . 'OS' .
-    DIRECTORY_SEPARATOR . 'Guess.php');
-$commandcontents = str_replace(
-    array(
-        "include_once \"",
-        "@package_version@",
-    ),
-    array(
-        "include_once \"phar://go-pear.phar/",
-        $pearver,
-    ),
-    $commandcontents);
-$creator->addString($commandcontents, 'OS/Guess.php');
 
 $commandcontents = file_get_contents($peardir . DIRECTORY_SEPARATOR . 'PEAR' .
     DIRECTORY_SEPARATOR . 'Dependency2.php');
@@ -187,12 +218,26 @@ $commandcontents = str_replace(
         "@PEAR-VER@",
     ),
     array(
-        "require_once 'phar://go-pear.phar/",
-        "include_once 'phar://go-pear.phar/",
+        "require_once 'phar://install-pear.phar/",
+        "include_once 'phar://install-pear.phar/",
         $pearver,
     ),
     $commandcontents);
 $creator->addString($commandcontents, 'PEAR/Dependency2.php');
+
+$commandcontents = file_get_contents($peardir . DIRECTORY_SEPARATOR . 'OS' .
+    DIRECTORY_SEPARATOR . 'Guess.php');
+$commandcontents = str_replace(
+    array(
+        "include_once \"",
+        "@package_version@",
+    ),
+    array(
+        "include_once \"phar://install-pear.phar/",
+        $pearver,
+    ),
+    $commandcontents);
+$creator->addString($commandcontents, 'OS/Guess.php');
 
 $commandcontents = file_get_contents($peardir . DIRECTORY_SEPARATOR . 'PEAR' .
     DIRECTORY_SEPARATOR . 'PackageFile.php');
@@ -203,8 +248,8 @@ $commandcontents = str_replace(
         "@PEAR-VER@",
     ),
     array(
-        "require_once 'phar://go-pear.phar/",
-        "include_once 'phar://go-pear.phar/",
+        "require_once 'phar://install-pear.phar/",
+        "include_once 'phar://install-pear.phar/",
         $pearver,
     ),
     $commandcontents);
@@ -266,7 +311,6 @@ $creator->addDir($peardir, array('tests/',
         '*PEAR/ErrorStack.php',
         '*PEAR/Frontend.php',
         '*PEAR/Installer.php',
-        '*PEAR/PackageFile.php',
         '*PEAR/Registry.php',
         '*PEAR/Remote.php',
         '*PEAR/Validate.php',
