@@ -13,7 +13,6 @@
  * $ pear download -Z Archive_Tar
  * $ pear download -Z Console_Getopt
  * $ pear download -Z XML_RPC
- * $ pear download -Z PEAR_Delegator
  * </pre>
  *
  * finally, run this script using PHP 5.1's cli php
