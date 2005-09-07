@@ -256,9 +256,15 @@ class PEAR_REST
         if (!isset($info['host'])) {
             return PEAR::raiseError('Cannot download from non-URL "' . $url . '"');
         } else {
-            $host = @$info['host'];
-            $port = @$info['port'];
-            $path = @$info['path'];
+            $host = $info['host'];
+            if (!array_key_exists('port', $info)) {
+                $info['port'] = null;
+            }
+            if (!array_key_exists('path', $info)) {
+                $info['path'] = null;
+            }
+            $port = $info['port'];
+            $path = $info['path'];
         }
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
         if ($this->config->get('http_proxy')&& 
