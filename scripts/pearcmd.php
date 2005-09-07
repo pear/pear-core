@@ -346,7 +346,12 @@ function cmdHelp($command)
 
 function error_handler($errno, $errmsg, $file, $line, $vars) {
     if ((defined('E_STRICT') && $errno & E_STRICT) || !error_reporting()) {
-        return; // @silenced error
+        if (defined('E_STRICT') && $errno & E_STRICT) {
+            return; // E_STRICT
+        }
+        if ($GLOBALS['config']->get('verbose') < 4) {
+            return; // @silenced error, show all if debug is high enough
+        }
     }
     $errortype = array (
         E_ERROR   =>  "Error",
