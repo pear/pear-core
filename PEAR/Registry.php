@@ -1035,9 +1035,14 @@ class PEAR_Registry extends PEAR
         $rt = get_magic_quotes_runtime();
         set_magic_quotes_runtime(0);
         clearstatcache();
-        $data = fread($fp, filesize($this->_channelFileName($channel)));
+        if (function_exists('file_get_contents')) {
+            $this->_closeChannelFile($fp);
+            $data = file_get_contents($this->_channelFileName($channel));
+        } else {
+            $data = fread($fp, filesize($this->_channelFileName($channel)));
+            $this->_closeChannelFile($fp);
+        }
         set_magic_quotes_runtime($rt);
-        $this->_closeChannelFile($fp);
         $data = unserialize($data);
         return $data;
     }

@@ -91,8 +91,13 @@ class PEAR_Remote extends PEAR
         if (!$fp) {
             return null;
         }
-        $content  = fread($fp, filesize($filename));
-        fclose($fp);
+        if (function_exists('file_get_contents')) {
+            fclose($fp);
+            $content = file_get_contents($filename);
+        } else {
+            $content  = fread($fp, filesize($filename));
+            fclose($fp);
+        }
         $result   = array(
             'age'        => time() - filemtime($filename),
             'lastChange' => filemtime($filename),
