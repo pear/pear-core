@@ -979,9 +979,15 @@ used for automated conversion or learning the format.
             }
         }
 
-        $spec_contents = preg_replace('/@([a-z0-9_-]+)@/e', '$info["\1"]',
-            fread($fp, filesize($spec_template)));
-        fclose($fp);
+        if (function_exists('file_get_contents')) {
+            fclose($fp);
+            $spec_contents = preg_replace('/@([a-z0-9_-]+)@/e', '$info["\1"]',
+                file_get_contents($spec_template));
+        } else {
+            $spec_contents = preg_replace('/@([a-z0-9_-]+)@/e', '$info["\1"]',
+                fread($fp, filesize($spec_template)));
+            fclose($fp);
+        }
         $spec_file = "$info[rpm_package]-$info[version].spec";
         $wp = fopen($spec_file, "wb");
         if (!$wp) {
