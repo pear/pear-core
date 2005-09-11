@@ -6,7 +6,7 @@
  <description>The PEAR package contains:
  * the PEAR installer, for creating, distributing
    and installing packages
- * the alpha-quality PEAR_Exception PHP5 error handling mechanism
+ * the beta-quality PEAR_Exception PHP5 error handling mechanism
  * the beta-quality PEAR_ErrorStack advanced error handling mechanism
  * the PEAR_Error error handling mechanism
  * the OS_Guess class for retrieving info about the OS
@@ -72,8 +72,13 @@
   * support for custom file roles and installation tasks
 
   Specific changes from 1.4.0b1:
+  * configure options were not being prompted for packages like pecl/PDO
+  * use file_get_contents() wherever possible in favor of fread($fp, filesize($file))
+    as this is deprecated behavior and won't work with streams at all in PHP 5.1
+  * fix CLI frontend in PHP 5.0+ with CGI version
   * fix Bug #5240: Unnecessary assign by reference in PEAR_ErrorStack
   * fix Bug #5285: Incorrect dependency on PEAR_RemoteInstall should be PEAR_RemoteInstaller
+  * fix Bug #5322: Clean up docs and handling of exceptions
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
