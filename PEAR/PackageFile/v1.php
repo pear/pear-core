@@ -433,8 +433,8 @@ class PEAR_PackageFile_v1
 
     function packageInfo($field)
     {
-        if (!isset($this->_packageInfo[$field]) ||
-              !is_string($this->_packageInfo[$field])) {
+        if (!is_string($field) || empty($field) ||
+            !isset($this->_packageInfo[$field])) {
             return false;
         }
         return $this->_packageInfo[$field];
