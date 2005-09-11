@@ -587,7 +587,13 @@ class PEAR_PackageFile_PHP5_v1 extends PEAR_PackageFile_v1
         if (!$fp = @fopen($file, "r")) {
             return false;
         }
-        $contents = @fread($fp, filesize($file));
+        if (function_exists('file_get_contents')) {
+            fclose($fp);
+            $contents = file_get_contents($file);
+        } else {
+            $contents = @fread($fp, filesize($file));
+            fclose($fp);
+        }
         if (!$contents) {
             return false;
         }
