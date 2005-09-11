@@ -357,6 +357,9 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 if (version_compare(phpversion(), '5.0.0', '<')) {
                     $line = fgets($fp, 2048);
                 } else {
+                    if (!defined('STDIN')) {
+                        define('STDIN', fopen('php://stdin', 'r'));
+                    }
                     $line = fgets(STDIN, 2048);
                 }
                 if ($type == 'password') {
