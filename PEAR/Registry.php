@@ -691,17 +691,17 @@ class PEAR_Registry extends PEAR
             return $this->raiseError('PEAR_Registry: could not open filemap', PEAR_REGISTRY_ERROR_FILE, null, null, $php_errormsg);
         }
         clearstatcache();
+        $rt = get_magic_quotes_runtime();
+        set_magic_quotes_runtime(0);
         if (function_exists('file_get_contents')) {
             fclose($fp);
             $data = file_get_contents($this->filemap);
         } else {
             $fsize = filesize($this->filemap);
-            $rt = get_magic_quotes_runtime();
-            set_magic_quotes_runtime(0);
             $data = fread($fp, $fsize);
-            set_magic_quotes_runtime($rt);
             fclose($fp);
         }
+        set_magic_quotes_runtime($rt);
         $tmp = unserialize($data);
         if (!$tmp && $fsize > 7) {
             return $this->raiseError('PEAR_Registry: invalid filemap data', PEAR_REGISTRY_ERROR_FORMAT, null, null, $data);
