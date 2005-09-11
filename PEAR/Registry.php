@@ -693,11 +693,11 @@ class PEAR_Registry extends PEAR
         clearstatcache();
         $rt = get_magic_quotes_runtime();
         set_magic_quotes_runtime(0);
+        $fsize = filesize($this->filemap);
         if (function_exists('file_get_contents')) {
             fclose($fp);
             $data = file_get_contents($this->filemap);
         } else {
-            $fsize = filesize($this->filemap);
             $data = fread($fp, $fsize);
             fclose($fp);
         }
