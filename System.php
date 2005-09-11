@@ -461,6 +461,9 @@ class System
             // Honor safe mode
             if (!ini_get('safe_mode') || !$path = ini_get('safe_mode_exec_dir')) {
                 $path = getenv('PATH');
+                if (!$path) {
+                    $path = getenv('Path'); // some OSes are just stupid enough to do this
+                }
             }
             $path_elements = explode($path_delim, $path);
         }
