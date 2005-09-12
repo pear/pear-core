@@ -28,10 +28,6 @@
 /**
  * Base PEAR_Exception Class
  *
- * WARNING: This code should be considered stable, but the API is
- * subject to immediate and drastic change, so API stability is
- * at best alpha
- *
  * 1) Features:
  *
  * - Nestable exceptions (throw new PEAR_Exception($msg, $prev_exception))
