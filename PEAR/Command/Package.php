@@ -288,7 +288,7 @@ used for automated conversion or learning the format.
         return $a;
     }
 
-    function getPackageFile($config, $debug = false, $tmpdir = null)
+    function &getPackageFile($config, $debug = false, $tmpdir = null)
     {
         if (!class_exists('PEAR_Common')) {
             require_once 'PEAR/Common.php';
