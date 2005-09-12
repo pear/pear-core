@@ -4,6 +4,7 @@
 
 $pear_dir = dirname(__FILE__);
 ini_set('include_path', '');
+set_time_limit(0);
 include_once 'PEAR.php';
 include_once 'PEAR/Installer.php';
 include_once 'PEAR/Registry.php';
