@@ -48,7 +48,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2005-08-25</date>
+ <date>2005-09-11</date>
  <version>
   <release>1.4.0b2</release>
   <api>1.4.0</api>
@@ -441,6 +441,14 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>pcre</name>
    </extension>
   </required>
+  <group name="remoteinstall" hint="adds the ability to install packages to a remote ftp server">
+   <subpackage>
+    <name>PEAR_RemoteInstaller</name>
+    <channel>pear.php.net</channel>
+    <min>0.1.0</min>
+    <recommended>0.1.0</recommended>
+   </subpackage>
+  </group>
   <group name="webinstaller" hint="PEAR's web-based installer">
    <package>
     <name>PEAR_Frontend_Web</name>
