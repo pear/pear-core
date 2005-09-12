@@ -441,20 +441,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>pcre</name>
    </extension>
   </required>
-  <group name="default" hint="PEAR_Delegator">
-   <package>
-    <name>PEAR_Delegator</name>
-    <channel>pear.php.net</channel>
-   </package>
-  </group>
-  <group name="remoteinstall" hint="adds the ability to install packages to a remote ftp server">
-   <subpackage>
-    <name>PEAR_RemoteInstaller</name>
-    <channel>pear.php.net</channel>
-    <min>0.1.0</min>
-    <recommended>0.1.0</recommended>
-   </subpackage>
-  </group>
   <group name="webinstaller" hint="PEAR's web-based installer">
    <package>
     <name>PEAR_Frontend_Web</name>
