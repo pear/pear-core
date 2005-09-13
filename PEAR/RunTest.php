@@ -114,7 +114,7 @@ class PEAR_RunTest
         }
         fclose($fp);
 
-        $shortname = str_replace($cwd.'/', '', $file);
+        $shortname = str_replace($cwd . DIRECTORY_SEPARATOR, '', $file);
         if (!isset($this->_options['simple'])) {
             $tested = trim($section_text['TEST']) . "[$shortname]";
         } else {
