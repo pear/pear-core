@@ -241,11 +241,21 @@ class PEAR_Exception extends Exception
         $causes[] = $cause;
         if ($this->cause instanceof PEAR_Exception) {
             $this->cause->getCauseMessage($causes);
-        }
-        if (is_array($this->cause)) {
+        } elseif ($this->cause instanceof Exception) {
+            $causes[] = array('class'   => get_class($cause),
+                           'message' => $cause->getMessage(),
+                           'file' => $cause->getFile(),
+                           'line' => $cause->getLine());
+
+        } elseif (is_array($this->cause)) {
             foreach ($this->cause as $cause) {
                 if ($cause instanceof PEAR_Exception) {
                     $cause->getCauseMessage($causes);
+                } elseif ($cause instanceof Exception) {
+                    $causes[] = array('class'   => get_class($cause),
+                                   'message' => $cause->getMessage(),
+                                   'file' => $cause->getFile(),
+                                   'line' => $cause->getLine());
                 } elseif (is_array($cause) && isset($cause['message'])) {
                     // PEAR_ErrorStack warning
                     $causes[] = array(

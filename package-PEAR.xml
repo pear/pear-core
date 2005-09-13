@@ -79,6 +79,7 @@
   * fix Bug #5240: Unnecessary assign by reference in PEAR_ErrorStack
   * fix Bug #5285: Incorrect dependency on PEAR_RemoteInstall should be PEAR_RemoteInstaller
   * fix Bug #5322: Clean up docs and handling of exceptions
+  * fix Bug #5331: PEAR_Exception should take any Exception as cause
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
