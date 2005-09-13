@@ -310,13 +310,11 @@ used for automated conversion or learning the format.
         $pkginfofile = isset($params[0]) ? $params[0] : 'package.xml';
         $pkg2 = isset($params[1]) ? $params[1] : null;
         if (!$pkg2 && !isset($params[0])) {
-            if (@file_exists('package2.xml')) {
+            if (file_exists('package2.xml')) {
                 $pkg2 = 'package2.xml';
             }
         }
         $packager = &$this->getPackager();
-        $reg = &$this->config->getRegistry();
-        $dir = dirname($pkginfofile);
         $compress = empty($options['nocompress']) ? true : false;
         $result = $packager->package($pkginfofile, $compress, $pkg2);
         if (PEAR::isError($result)) {
