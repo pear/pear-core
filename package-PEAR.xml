@@ -81,6 +81,7 @@
   * fix Bug #5322: Clean up docs and handling of exceptions
   * fix Bug #5331: PEAR_Exception should take any Exception as cause
   * fix Bug #5385: small fix to PEAR/Command/Package.php and RunTest.php
+  * fix Bug #5374: package.dtd is broken, package-1.0 is not synced
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
