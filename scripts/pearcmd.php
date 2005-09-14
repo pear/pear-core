@@ -103,6 +103,24 @@ foreach ($opts as $opt) {
 PEAR_Command::setFrontendType($fetype);
 $ui = &PEAR_Command::getFrontendObject();
 $config = &PEAR_Config::singleton($pear_user_config, $pear_system_config);
+
+if (PEAR::isError($config)) {
+    $_file = '';
+    if ($pear_user_config !== false) {
+       $_file .= $pear_user_config;
+    }
+    if ($pear_system_config !== false) {
+       $_file .= '/' . $pear_system_config;
+    }
+    if ($_file == '/') {
+        $_file = 'The default config file';
+    }
+    $config->getMessage();
+    $ui->outputData("ERROR: $_file is not a valid config file or is corrupted.");
+    // We stop, we have no idea where we are :)
+    exit();    
+}
+
 // this is used in the error handler to retrieve a relative path
 $_PEAR_PHPDIR = $config->get('php_dir');
 $ui->setConfig($config);
