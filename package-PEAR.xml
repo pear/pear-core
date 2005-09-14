@@ -78,6 +78,7 @@
   * fix CLI frontend in PHP 5.0+ with CGI version
   * fix Bug #5240: Unnecessary assign by reference in PEAR_ErrorStack
   * fix Bug #5285: Incorrect dependency on PEAR_RemoteInstall should be PEAR_RemoteInstaller
+  * fix Bug #5319: broken .pearrc or pear.conf are correctly detected
   * fix Bug #5322: Clean up docs and handling of exceptions
   * fix Bug #5331: PEAR_Exception should take any Exception as cause
   * fix Bug #5385: small fix to PEAR/Command/Package.php and RunTest.php
