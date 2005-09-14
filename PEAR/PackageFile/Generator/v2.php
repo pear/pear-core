@@ -76,6 +76,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                          'attributesArray'    => 'attribs',                  // all values in this key will be treated as attributes
                          'contentName'        => '_content',                   // this value will be used directly as content, instead of creating a new tag, may only be used in conjuction with attributesArray
                          'beautifyFilelist'   => false,
+                         'encoding' => 'UTF-8',
                         );
 
    /**
@@ -844,7 +845,12 @@ http://pear.php.net/dtd/package-2.0.xsd',
         }
     
         if (is_scalar($tag['content']) || is_null($tag['content'])) {
-            $tag = XML_Util::createTagFromArray($tag, $replaceEntities, $multiline, $indent, $this->options['linebreak']);
+            if ($this->options['encoding'] == 'UTF-8') {
+                $encoding = XML_UTIL_ENTITIES_UTF8_XML;
+            } else {
+                $encoding = XML_UTIL_ENTITIES_XML;
+            }
+            $tag = XML_Util::createTagFromArray($tag, $replaceEntities, $multiline, $indent, $this->options['linebreak'], $encoding);
         } elseif (is_array($tag['content'])) {
             $tag    =   $this->_serializeArray($tag['content'], $tag['qname'], $tag['attributes']);
         } elseif (is_object($tag['content'])) {
@@ -857,14 +863,14 @@ http://pear.php.net/dtd/package-2.0.xsd',
     }
 }
 
-foreach (explode(PATH_SEPARATOR, ini_get('include_path')) as $path) {
-    $t = $path . DIRECTORY_SEPARATOR . 'XML' . DIRECTORY_SEPARATOR .
-          'Util';
-    if (file_exists($t) && is_readable($t)) {
-        include_once 'XML/Util';
-    }
-}
-if (!class_exists('XML_Util')) {
+//foreach (explode(PATH_SEPARATOR, ini_get('include_path')) as $path) {
+//    $t = $path . DIRECTORY_SEPARATOR . 'XML' . DIRECTORY_SEPARATOR .
+//          'Util';
+//    if (file_exists($t) && is_readable($t)) {
+//        include_once 'XML/Util';
+//    }
+//}
+//if (!class_exists('XML_Util')) {
 // well, it's one way to do things without extra deps ...
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 // +----------------------------------------------------------------------+
@@ -939,6 +945,12 @@ define("XML_UTIL_ENTITIES_XML_REQUIRED", 2);
 define("XML_UTIL_ENTITIES_HTML", 3);
 
 /**
+ * replace all XML entitites, and encode from ISO-8859-1 to UTF-8
+ * This setting will replace <, >, ", ' and &
+ */
+define("XML_UTIL_ENTITIES_UTF8_XML", 4);
+
+/**
  * utility class for working with XML documents
  *
  * @category XML
@@ -982,6 +994,14 @@ class XML_Util {
     function replaceEntities($string, $replaceEntities = XML_UTIL_ENTITIES_XML)
     {
         switch ($replaceEntities) {
+            case XML_UTIL_ENTITIES_UTF8_XML:
+                return strtr(utf8_encode($string),array(
+                                          '&'  => '&amp;',
+                                          '>'  => '&gt;',
+                                          '<'  => '&lt;',
+                                          '"'  => '&quot;',
+                                          '\'' => '&apos;' ));
+                break;
             case XML_UTIL_ENTITIES_XML:
                 return strtr($string,array(
                                           '&'  => '&amp;',
@@ -1177,11 +1197,12 @@ class XML_Util {
     * @param    boolean $multiline         whether to create a multiline tag where each attribute gets written to a single line
     * @param    string  $indent            string used to indent attributes (_auto indents attributes so they start at the same column)
     * @param    string  $linebreak         string used for linebreaks
+    * @param    string  $encoding          encoding that should be used to translate content
     * @return   string  $string            XML tag
     * @see      XML_Util::createTagFromArray()
     * @uses     XML_Util::createTagFromArray() to create the tag
     */
-    function createTag($qname, $attributes = array(), $content = null, $namespaceUri = null, $replaceEntities = XML_UTIL_REPLACE_ENTITIES, $multiline = false, $indent = "_auto", $linebreak = "\n")
+    function createTag($qname, $attributes = array(), $content = null, $namespaceUri = null, $replaceEntities = XML_UTIL_REPLACE_ENTITIES, $multiline = false, $indent = "_auto", $linebreak = "\n", $encoding = XML_UTIL_ENTITIES_XML)
     {
         $tag = array(
                      "qname"      => $qname,
@@ -1198,7 +1219,7 @@ class XML_Util {
             $tag["namespaceUri"] = $namespaceUri;
         }
 
-        return XML_Util::createTagFromArray($tag, $replaceEntities, $multiline, $indent, $linebreak);
+        return XML_Util::createTagFromArray($tag, $replaceEntities, $multiline, $indent, $linebreak, $encoding);
     }
 
    /**
@@ -1240,7 +1261,7 @@ class XML_Util {
     * @uses     XML_Util::attributesToString() to serialize the attributes of the tag
     * @uses     XML_Util::splitQualifiedName() to get local part and namespace of a qualified name
     */
-    function createTagFromArray($tag, $replaceEntities = XML_UTIL_REPLACE_ENTITIES, $multiline = false, $indent = "_auto", $linebreak = "\n" )
+    function createTagFromArray($tag, $replaceEntities = XML_UTIL_REPLACE_ENTITIES, $multiline = false, $indent = "_auto", $linebreak = "\n", $encoding = XML_UTIL_ENTITIES_XML)
     {
         if (isset($tag["content"]) && !is_scalar($tag["content"])) {
             return XML_Util::raiseError( "Supplied non-scalar value as tag content", XML_UTIL_ERROR_NON_SCALAR_CONTENT );
@@ -1295,7 +1316,7 @@ class XML_Util {
             $tag    =   sprintf("<%s%s />", $tag["qname"], $attList);
         } else {
             if ($replaceEntities == XML_UTIL_REPLACE_ENTITIES) {
-                $tag["content"] = XML_Util::replaceEntities($tag["content"]);
+                $tag["content"] = XML_Util::replaceEntities($tag["content"], $encoding);
             } elseif ($replaceEntities == XML_UTIL_CDATA_SECTION) {
                 $tag["content"] = XML_Util::createCDataSection($tag["content"]);
             }
@@ -1518,5 +1539,5 @@ class XML_Util {
         return PEAR::raiseError($msg, $code);
     }
 }
-}
+//} // if (!class_exists('XML_Util'))
 ?>
