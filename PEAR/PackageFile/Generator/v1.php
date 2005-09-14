@@ -184,7 +184,7 @@ class PEAR_PackageFile_Generator_v1
             "email" => "email",
             "role" => "role",
             );
-        $ret = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
+        $ret = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
         $ret .= "<!DOCTYPE package SYSTEM \"http://pear.php.net/dtd/package-1.0\">\n";
         $ret .= "<package version=\"1.0\" packagerversion=\"@PEAR-VER@\">\n" .
 " <name>$pkginfo[package]</name>";
@@ -192,14 +192,14 @@ class PEAR_PackageFile_Generator_v1
             $ret .= "\n<extends>$pkginfo[extends]</extends>";
         }
         $ret .=
- "\n <summary>".htmlentities($pkginfo['summary'])."</summary>\n" .
-" <description>".trim(htmlentities($pkginfo['description']))."\n </description>\n" .
+ "\n <summary>".utf8_encode($pkginfo['summary'])."</summary>\n" .
+" <description>".trim(utf8_encode($pkginfo['description']))."\n </description>\n" .
 " <maintainers>\n";
         foreach ($pkginfo['maintainers'] as $maint) {
             $ret .= "  <maintainer>\n";
             foreach ($maint_map as $idx => $elm) {
                 $ret .= "   <$elm>";
-                $ret .= htmlentities($maint[$idx]);
+                $ret .= utf8_encode($maint[$idx]);
                 $ret .= "</$elm>\n";
             }
             $ret .= "  </maintainer>\n";
@@ -248,11 +248,11 @@ class PEAR_PackageFile_Generator_v1
             $ret .= "$indent  <state>$pkginfo[release_state]</state>\n";
         }
         if (!empty($pkginfo['release_notes'])) {
-            $ret .= "$indent  <notes>".trim(htmlentities($pkginfo['release_notes']))
+            $ret .= "$indent  <notes>".trim(utf8_encode($pkginfo['release_notes']))
             ."\n$indent  </notes>\n";
         }
         if (!empty($pkginfo['release_warnings'])) {
-            $ret .= "$indent  <warnings>".htmlentities($pkginfo['release_warnings'])."</warnings>\n";
+            $ret .= "$indent  <warnings>".utf8_encode($pkginfo['release_warnings'])."</warnings>\n";
         }
         if (isset($pkginfo['release_deps']) && sizeof($pkginfo['release_deps']) > 0) {
             $ret .= "$indent  <deps>\n";
@@ -276,11 +276,11 @@ class PEAR_PackageFile_Generator_v1
             $ret .= "$indent  <configureoptions>\n";
             foreach ($pkginfo['configure_options'] as $c) {
                 $ret .= "$indent   <configureoption name=\"".
-                    htmlentities($c['name']) . "\"";
+                    utf8_encode($c['name']) . "\"";
                 if (isset($c['default'])) {
-                    $ret .= " default=\"" . htmlentities($c['default']) . "\"";
+                    $ret .= " default=\"" . utf8_encode($c['default']) . "\"";
                 }
-                $ret .= " prompt=\"" . htmlentities($c['prompt']) . "\"";
+                $ret .= " prompt=\"" . utf8_encode($c['prompt']) . "\"";
                 $ret .= "/>\n";
             }
             $ret .= "$indent  </configureoptions>\n";
@@ -304,7 +304,7 @@ class PEAR_PackageFile_Generator_v1
                     @$ret .= "$indent   <file role=\"$fa[role]\"";
                     if (isset($fa['baseinstalldir'])) {
                         $ret .= ' baseinstalldir="' .
-                            htmlentities($fa['baseinstalldir']) . '"';
+                            utf8_encode($fa['baseinstalldir']) . '"';
                     }
                     if (isset($fa['md5sum'])) {
                         $ret .= " md5sum=\"$fa[md5sum]\"";
@@ -314,9 +314,9 @@ class PEAR_PackageFile_Generator_v1
                     }
                     if (!empty($fa['install-as'])) {
                         $ret .= ' install-as="' .
-                            htmlentities($fa['install-as']) . '"';
+                            utf8_encode($fa['install-as']) . '"';
                     }
-                    $ret .= ' name="' . htmlentities($file) . '"';
+                    $ret .= ' name="' . utf8_encode($file) . '"';
                     if (empty($fa['replacements'])) {
                         $ret .= "/>\n";
                     } else {
@@ -324,7 +324,7 @@ class PEAR_PackageFile_Generator_v1
                         foreach ($fa['replacements'] as $r) {
                             $ret .= "$indent    <replace";
                             foreach ($r as $k => $v) {
-                                $ret .= " $k=\"" . htmlentities($v) .'"';
+                                $ret .= " $k=\"" . utf8_encode($v) .'"';
                             }
                             $ret .= "/>\n";
                         }
@@ -412,7 +412,7 @@ class PEAR_PackageFile_Generator_v1
         $ret = "$indent   <file role=\"$attributes[role]\"";
         if (isset($attributes['baseinstalldir'])) {
             $ret .= ' baseinstalldir="' .
-                htmlentities($attributes['baseinstalldir']) . '"';
+                utf8_encode($attributes['baseinstalldir']) . '"';
         }
         if (isset($attributes['md5sum'])) {
             $ret .= " md5sum=\"$attributes[md5sum]\"";
@@ -422,9 +422,9 @@ class PEAR_PackageFile_Generator_v1
         }
         if (!empty($attributes['install-as'])) {
             $ret .= ' install-as="' .
-                htmlentities($attributes['install-as']) . '"';
+                utf8_encode($attributes['install-as']) . '"';
         }
-        $ret .= ' name="' . htmlentities($file) . '"';
+        $ret .= ' name="' . utf8_encode($file) . '"';
         if (empty($attributes['replacements'])) {
             $ret .= "/>\n";
         } else {
@@ -432,7 +432,7 @@ class PEAR_PackageFile_Generator_v1
             foreach ($attributes['replacements'] as $r) {
                 $ret .= "$indent    <replace";
                 foreach ($r as $k => $v) {
-                    $ret .= " $k=\"" . htmlentities($v) .'"';
+                    $ret .= " $k=\"" . utf8_encode($v) .'"';
                 }
                 $ret .= "/>\n";
             }
@@ -823,13 +823,13 @@ class PEAR_PackageFile_Generator_v1
                         ['os']['name'] = $os;
                     if (isset($package['install-as'][$file])) {
                         $release[$oses[$os]]['filelist']['install'][] =
-                            array('attribs' => 
+                            array('attribs' =>
                                 array('name' => $file,
                                       'as' => $package['install-as'][$file]));
                     }
                     foreach ($generic as $file) {
                         $release[$oses[$os]]['filelist']['install'][] =
-                            array('attribs' => 
+                            array('attribs' =>
                                 array('name' => $file,
                                       'as' => $package['install-as'][$file]));
                     }
@@ -853,7 +853,7 @@ class PEAR_PackageFile_Generator_v1
                                     $file;
                             } elseif (isset($package['install-as'][$file])) {
                                 $release[$index]['filelist']['install'][] =
-                                    array('attribs' => 
+                                    array('attribs' =>
                                         array('name' => $file,
                                               'as' => $package['install-as'][$file]));
                             }
@@ -862,7 +862,7 @@ class PEAR_PackageFile_Generator_v1
                         if (isset($package['install-as'][$file])) {
                             foreach ($oses as $index) {
                                 $release[$index]['filelist']['install'][] =
-                                    array('attribs' => 
+                                    array('attribs' =>
                                         array('name' => $file,
                                               'as' => $package['install-as'][$file]));
                             }
@@ -875,7 +875,7 @@ class PEAR_PackageFile_Generator_v1
                         ['os']['name'] = '*';
                     foreach ($generic as $file) {
                         $release[count($oses)]['filelist']['install'][] =
-                            array('attribs' => 
+                            array('attribs' =>
                                 array('name' => $file,
                                       'as' => $package['install-as'][$file]));
                     }
