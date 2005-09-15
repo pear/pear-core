@@ -48,8 +48,8 @@
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.0b2</version>
-  <date>2005-09-11</date>
+  <version>1.4.0RC1</version>
+  <date>2005-09-14</date>
   <license>PHP License</license>
   <state>beta</state>
   <notes>
@@ -71,18 +71,12 @@
   * support for static dependencies on a url-based package
   * support for custom file roles and installation tasks
 
-  Specific changes from 1.4.0b1:
-  * configure options were not being prompted for packages like pecl/PDO
-  * use file_get_contents() wherever possible in favor of fread($fp, filesize($file))
-    as this is deprecated behavior and won't work with streams at all in PHP 5.1
-  * fix CLI frontend in PHP 5.0+ with CGI version
-  * fix Bug #5240: Unnecessary assign by reference in PEAR_ErrorStack
-  * fix Bug #5285: Incorrect dependency on PEAR_RemoteInstall should be PEAR_RemoteInstaller
+  Specific changes from 1.4.0b2:
   * fix Bug #5319: broken .pearrc or pear.conf are correctly detected
-  * fix Bug #5322: Clean up docs and handling of exceptions
   * fix Bug #5331: PEAR_Exception should take any Exception as cause
   * fix Bug #5385: small fix to PEAR/Command/Package.php and RunTest.php
   * fix Bug #5374: package.dtd is broken, package-1.0 is not synced
+  * fix Bug #5394: postinstallscript sub-tags need namespace prefix
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -633,6 +627,21 @@
   * fix Bug #5131: pear info PEAR shows "Array" with installed PEAR 1.4.0a13 (CVS)
   * fix Bug #5132: pear info Blah.tgz reports optional deps as required
   * fix Bug #5135: pear info PEAR has notice with a13 installed
+   </notes>
+  </release>
+  <release>
+   <version>1.4.0b2</version>
+   <date>2005-09-11</date>
+   <state>beta</state>
+   <notes>
+   Specific changes from 1.4.0b1:
+   * configure options were not being prompted for packages like pecl/PDO
+   * use file_get_contents() wherever possible in favor of fread($fp, filesize($file))
+     as this is deprecated behavior and won't work with streams at all in PHP 5.1
+   * fix CLI frontend in PHP 5.0+ with CGI version
+   * fix Bug #5240: Unnecessary assign by reference in PEAR_ErrorStack
+   * fix Bug #5285: Incorrect dependency on PEAR_RemoteInstall should be PEAR_RemoteInstaller
+   * fix Bug #5322: Clean up docs and handling of exceptions
    </notes>
   </release>
  </changelog>
