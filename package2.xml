@@ -80,6 +80,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   Specific changes from 1.4.0RC1:
   * fix Bug #5417: generation of package.xml 1.0 must escape &lt; &gt; &amp; &quot;
   * fix package.xml within PEAR package (because of Bug #5417)
+  * fix Bug #5412: if a package has no dependencies, no validation against
+    installed package deps
  </notes>
  <contents>
   <dir name="/">
