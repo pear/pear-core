@@ -434,4 +434,3 @@ class PEAR_PackageFile
 }
 
 ?>
-
