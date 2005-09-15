@@ -82,7 +82,7 @@ class PEAR_Task_Postinstallscript_rw extends PEAR_Task_Postinstallscript
             $stuff[$this->_pkg->getTasksNs() . ':instructions'] = $instructions;
         }
         $stuff[$this->_pkg->getTasksNs() . ':param'] = $params;
-        $this->_params[] = $stuff;
+        $this->_params[$this->_pkg->getTasksNs() . ':paramgroup'][] = $stuff;
     }
 
     function addConditionTypeGroup($id, $oldgroup, $param, $value, $conditiontype = '=')
