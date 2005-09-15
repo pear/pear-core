@@ -166,6 +166,22 @@ class PEAR_PackageFile_Generator_v1
     }
 
     /**
+     * fix both XML encoding to be UTF8, and replace standard XML entities < > " & '
+     *
+     * @param string $string
+     * @return string
+     * @access private
+     */
+    function _fixXmlEncoding($string)
+    {
+        return strtr(utf8_encode($string),array(
+                                          '&'  => '&amp;',
+                                          '>'  => '&gt;',
+                                          '<'  => '&lt;',
+                                          '"'  => '&quot;',
+                                          '\'' => '&apos;' ));
+    }
+    /**
      * Return an XML document based on the package info (as returned
      * by the PEAR_Common::infoFrom* methods).
      *
@@ -192,14 +208,14 @@ class PEAR_PackageFile_Generator_v1
             $ret .= "\n<extends>$pkginfo[extends]</extends>";
         }
         $ret .=
- "\n <summary>".utf8_encode($pkginfo['summary'])."</summary>\n" .
-" <description>".trim(utf8_encode($pkginfo['description']))."\n </description>\n" .
+ "\n <summary>".$this->_fixXmlEncoding($pkginfo['summary'])."</summary>\n" .
+" <description>".trim($this->_fixXmlEncoding($pkginfo['description']))."\n </description>\n" .
 " <maintainers>\n";
         foreach ($pkginfo['maintainers'] as $maint) {
             $ret .= "  <maintainer>\n";
             foreach ($maint_map as $idx => $elm) {
                 $ret .= "   <$elm>";
-                $ret .= utf8_encode($maint[$idx]);
+                $ret .= $this->_fixXmlEncoding($maint[$idx]);
                 $ret .= "</$elm>\n";
             }
             $ret .= "  </maintainer>\n";
@@ -248,11 +264,11 @@ class PEAR_PackageFile_Generator_v1
             $ret .= "$indent  <state>$pkginfo[release_state]</state>\n";
         }
         if (!empty($pkginfo['release_notes'])) {
-            $ret .= "$indent  <notes>".trim(utf8_encode($pkginfo['release_notes']))
+            $ret .= "$indent  <notes>".trim($this->_fixXmlEncoding($pkginfo['release_notes']))
             ."\n$indent  </notes>\n";
         }
         if (!empty($pkginfo['release_warnings'])) {
-            $ret .= "$indent  <warnings>".utf8_encode($pkginfo['release_warnings'])."</warnings>\n";
+            $ret .= "$indent  <warnings>".$this->_fixXmlEncoding($pkginfo['release_warnings'])."</warnings>\n";
         }
         if (isset($pkginfo['release_deps']) && sizeof($pkginfo['release_deps']) > 0) {
             $ret .= "$indent  <deps>\n";
@@ -276,11 +292,11 @@ class PEAR_PackageFile_Generator_v1
             $ret .= "$indent  <configureoptions>\n";
             foreach ($pkginfo['configure_options'] as $c) {
                 $ret .= "$indent   <configureoption name=\"".
-                    utf8_encode($c['name']) . "\"";
+                    $this->_fixXmlEncoding($c['name']) . "\"";
                 if (isset($c['default'])) {
-                    $ret .= " default=\"" . utf8_encode($c['default']) . "\"";
+                    $ret .= " default=\"" . $this->_fixXmlEncoding($c['default']) . "\"";
                 }
-                $ret .= " prompt=\"" . utf8_encode($c['prompt']) . "\"";
+                $ret .= " prompt=\"" . $this->_fixXmlEncoding($c['prompt']) . "\"";
                 $ret .= "/>\n";
             }
             $ret .= "$indent  </configureoptions>\n";
@@ -304,7 +320,7 @@ class PEAR_PackageFile_Generator_v1
                     @$ret .= "$indent   <file role=\"$fa[role]\"";
                     if (isset($fa['baseinstalldir'])) {
                         $ret .= ' baseinstalldir="' .
-                            utf8_encode($fa['baseinstalldir']) . '"';
+                            $this->_fixXmlEncoding($fa['baseinstalldir']) . '"';
                     }
                     if (isset($fa['md5sum'])) {
                         $ret .= " md5sum=\"$fa[md5sum]\"";
@@ -314,9 +330,9 @@ class PEAR_PackageFile_Generator_v1
                     }
                     if (!empty($fa['install-as'])) {
                         $ret .= ' install-as="' .
-                            utf8_encode($fa['install-as']) . '"';
+                            $this->_fixXmlEncoding($fa['install-as']) . '"';
                     }
-                    $ret .= ' name="' . utf8_encode($file) . '"';
+                    $ret .= ' name="' . $this->_fixXmlEncoding($file) . '"';
                     if (empty($fa['replacements'])) {
                         $ret .= "/>\n";
                     } else {
@@ -324,7 +340,7 @@ class PEAR_PackageFile_Generator_v1
                         foreach ($fa['replacements'] as $r) {
                             $ret .= "$indent    <replace";
                             foreach ($r as $k => $v) {
-                                $ret .= " $k=\"" . utf8_encode($v) .'"';
+                                $ret .= " $k=\"" . $this->_fixXmlEncoding($v) .'"';
                             }
                             $ret .= "/>\n";
                         }
@@ -412,7 +428,7 @@ class PEAR_PackageFile_Generator_v1
         $ret = "$indent   <file role=\"$attributes[role]\"";
         if (isset($attributes['baseinstalldir'])) {
             $ret .= ' baseinstalldir="' .
-                utf8_encode($attributes['baseinstalldir']) . '"';
+                $this->_fixXmlEncoding($attributes['baseinstalldir']) . '"';
         }
         if (isset($attributes['md5sum'])) {
             $ret .= " md5sum=\"$attributes[md5sum]\"";
@@ -422,9 +438,9 @@ class PEAR_PackageFile_Generator_v1
         }
         if (!empty($attributes['install-as'])) {
             $ret .= ' install-as="' .
-                utf8_encode($attributes['install-as']) . '"';
+                $this->_fixXmlEncoding($attributes['install-as']) . '"';
         }
-        $ret .= ' name="' . utf8_encode($file) . '"';
+        $ret .= ' name="' . $this->_fixXmlEncoding($file) . '"';
         if (empty($attributes['replacements'])) {
             $ret .= "/>\n";
         } else {
@@ -432,7 +448,7 @@ class PEAR_PackageFile_Generator_v1
             foreach ($attributes['replacements'] as $r) {
                 $ret .= "$indent    <replace";
                 foreach ($r as $k => $v) {
-                    $ret .= " $k=\"" . utf8_encode($v) .'"';
+                    $ret .= " $k=\"" . $this->_fixXmlEncoding($v) .'"';
                 }
                 $ret .= "/>\n";
             }
