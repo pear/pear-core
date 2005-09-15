@@ -76,7 +76,7 @@ class PEAR_Task_Postinstallscript_rw extends PEAR_Task_Postinstallscript
         }
         $stuff =
             array(
-                'id' => $id,
+                $this->_pkg->getTasksNs() . ':id' => $id,
             );
         if ($instructions) {
             $stuff[$this->_pkg->getTasksNs() . ':instructions'] = $instructions;
