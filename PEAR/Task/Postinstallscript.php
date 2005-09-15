@@ -284,6 +284,7 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
             return false;
         }
         // remove the tasks: namespace if present
+        $this->_pkg = $pkg;
         $this->_stripNamespace();
         $this->logger->log(0, 'Including external post-installation script "' .
             $contents . '" - any errors are in this script');
@@ -306,7 +307,6 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
                 '->init()" failed');
         }
         $this->_contents = $contents;
-        $this->_pkg = $pkg;
         return true;
     }
 
