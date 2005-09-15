@@ -49,7 +49,7 @@
  </maintainers>
  <release>
   <version>1.4.0RC2</version>
-  <date>2005-09-14</date>
+  <date>2005-09-15</date>
   <license>PHP License</license>
   <state>beta</state>
   <notes>
@@ -72,12 +72,9 @@
   * support for static dependencies on a url-based package
   * support for custom file roles and installation tasks
 
-  Specific changes from 1.4.0b2:
-  * fix Bug #5319: broken .pearrc or pear.conf are correctly detected
-  * fix Bug #5331: PEAR_Exception should take any Exception as cause
-  * fix Bug #5385: small fix to PEAR/Command/Package.php and RunTest.php
-  * fix Bug #5374: package.dtd is broken, package-1.0 is not synced
-  * fix Bug #5394: postinstallscript sub-tags need namespace prefix
+  Specific changes from 1.4.0RC1:
+  * fix Bug #5417: generation of package.xml 1.0 must escape &lt; &gt; &amp; &quot;
+  * fix package.xml within PEAR package (because of Bug #5417)
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -451,11 +448,11 @@
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
- "pear channel-update pecl.php.net" prior to packaging
+ &quot;pear channel-update pecl.php.net&quot; prior to packaging
  a pecl release.
   * Fix package.xml version 2.0 generation from package.xml 1.0
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
-  * Implement Request #3647: "pear package" only includes one package.xml
+  * Implement Request #3647: &quot;pear package&quot; only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
    </notes>
   </release>
@@ -500,7 +497,7 @@
    <state>alpha</state>
    <notes>
   Specific changes from 1.4.0a6:
-  * implement the tags usesrole and usestask for custom role/task graceful failure
+  * implement the tags &lt;usesrole&gt; and &lt;usestask&gt; for custom role/task graceful failure
   * REALLY fix the debug_backtrace() issue (modified wrong pearcmd.php)
   * fix Bug #3864 Invalid dependency relation
   * fix Bug #3863 illogical warning about PEAR_Frontend_Gtk 0.4.0 with PEAR 1.4.0a6
@@ -513,7 +510,7 @@
    <notes>
   Specific changes from 1.4.0a7:
   * greatly improve the flexibility of post-install scripts
-    - param tag is no longer required
+    - &lt;param&gt; tag is no longer required
     - skipParamgroup() method in Frontends allows dynamic manipulation of what input is
       requested from users
   * make error message when a user has no write access absolutely clear and unmistakable
@@ -625,7 +622,7 @@
   * fix Bug #4825: pear behind a proxy using REST dosnt work
   * fix Bug #4952: PEAR_Exception::toHTML() spits notices
   * fix Bug #5073: cache fatal error if no cached content
-  * fix Bug #5131: pear info PEAR shows "Array" with installed PEAR 1.4.0a13 (CVS)
+  * fix Bug #5131: pear info PEAR shows &quot;Array&quot; with installed PEAR 1.4.0a13 (CVS)
   * fix Bug #5132: pear info Blah.tgz reports optional deps as required
   * fix Bug #5135: pear info PEAR has notice with a13 installed
    </notes>
@@ -643,6 +640,19 @@
    * fix Bug #5240: Unnecessary assign by reference in PEAR_ErrorStack
    * fix Bug #5285: Incorrect dependency on PEAR_RemoteInstall should be PEAR_RemoteInstaller
    * fix Bug #5322: Clean up docs and handling of exceptions
+   </notes>
+  </release>
+  <release>
+   <version>1.4.0RC1</version>
+   <date>2005-09-14</date>
+   <state>beta</state>
+   <notes>
+   Specific changes from 1.4.0b2:
+   * fix Bug #5319: broken .pearrc or pear.conf are correctly detected
+   * fix Bug #5331: PEAR_Exception should take any Exception as cause
+   * fix Bug #5385: small fix to PEAR/Command/Package.php and RunTest.php
+   * fix Bug #5374: package.dtd is broken, package-1.0 is not synced
+   * fix Bug #5394: postinstallscript sub-tags need namespace prefix
    </notes>
   </release>
  </changelog>

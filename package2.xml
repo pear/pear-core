@@ -48,7 +48,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2005-09-14</date>
+ <date>2005-09-15</date>
  <version>
   <release>1.4.0RC2</release>
   <api>1.4.0</api>
@@ -59,7 +59,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  RC2 fixes a bad package xml used by PEAR 1.3.x, this changelog remains unchanged. 
   This is a major milestone release for PEAR.  In addition to several killer features,
   every single element of PEAR has a regression test, and so stability is much higher
   than any previous PEAR release.
@@ -78,12 +77,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * support for static dependencies on a uri-based package
   * support for custom file roles and installation tasks
 
-  Specific changes from 1.4.0b2:
-  * fix Bug #5319: broken .pearrc or pear.conf are correctly detected
-  * fix Bug #5331: PEAR_Exception should take any Exception as cause
-  * fix Bug #5385: small fix to PEAR/Command/Package.php and RunTest.php
-  * fix Bug #5374: package.dtd is broken, package-1.0 is not synced
-  * fix Bug #5394: postinstallscript sub-tags need namespace prefix
+  Specific changes from 1.4.0RC1:
+  * fix Bug #5417: generation of package.xml 1.0 must escape &lt; &gt; &amp; &quot;
+  * fix package.xml within PEAR package (because of Bug #5417)
  </notes>
  <contents>
   <dir name="/">
@@ -846,6 +842,26 @@ http://pear.php.net/dtd/package-2.0.xsd">
    * fix Bug #5240: Unnecessary assign by reference in PEAR_ErrorStack
    * fix Bug #5285: Incorrect dependency on PEAR_RemoteInstall should be PEAR_RemoteInstaller
    * fix Bug #5322: Clean up docs and handling of exceptions
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.0RC1</release>
+    <api>1.4.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2005-09-14</date>
+   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <notes>
+   Specific changes from 1.4.0b2:
+   * fix Bug #5319: broken .pearrc or pear.conf are correctly detected
+   * fix Bug #5331: PEAR_Exception should take any Exception as cause
+   * fix Bug #5385: small fix to PEAR/Command/Package.php and RunTest.php
+   * fix Bug #5374: package.dtd is broken, package-1.0 is not synced
+   * fix Bug #5394: postinstallscript sub-tags need namespace prefix
    </notes>
   </release>
  </changelog>
