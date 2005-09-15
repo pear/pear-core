@@ -55,13 +55,13 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </version>
  <stability>
   <release>beta</release>
-  <api>beta</api>
+  <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
   This is a major milestone release for PEAR.  In addition to several killer features,
   every single element of PEAR has a regression test, and so stability is much higher
-  than any previous PEAR release, even with the beta label.
+  than any previous PEAR release.
 
   New features in a nutshell:
   * full support for channels
