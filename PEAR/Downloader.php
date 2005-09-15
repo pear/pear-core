@@ -414,6 +414,26 @@ class PEAR_Downloader extends PEAR_Common
             foreach ($params as $i => $param) {
                 $deps = $param->getDeps();
                 if (!$deps) {
+                    $depchecker = &$this->getDependency2Object($this->config, $this->getOptions(),
+                        $param->getParsedPackage(), PEAR_VALIDATE_DOWNLOADING);
+                    if ($param->getType() == 'xmlrpc') {
+                        $send = $param->getDownloadURL();
+                    } else {
+                        $send = $param->getPackageFile();
+                    }
+                    $installcheck = $depchecker->validatePackage($send, $this);
+                    if (PEAR::isError($installcheck)) {
+                        if (!isset($this->_options['soft'])) {
+                            $this->log(0, $installcheck->getMessage());
+                        }
+                        $hasfailed = true;
+                        $params[$i] = false;
+                        $reset = true;
+                        $redo = true;
+                        $failed = false;
+                        PEAR_Downloader_Package::removeDuplicates($params);
+                        continue 2;
+                    }
                     continue;
                 }
                 if (!$reset && $param->alreadyValidated()) {
