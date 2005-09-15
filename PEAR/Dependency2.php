@@ -747,7 +747,8 @@ class PEAR_Dependency2
                 return $this->warning('warning: %s requires package "' . $depname . '"' .
                     $extra . ", $installed version is " . $version);
             }
-        } elseif ((isset($dep['min']) || isset($dep['max'])) && !$fail && isset($dep['conflicts'])) {
+        } elseif ((isset($dep['min']) || isset($dep['max'])) && !$fail &&
+              isset($dep['conflicts']) && !isset($dep['exclude'])) {
             $installed = $installed ? 'installed' : 'downloaded';
             if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
                 return $this->raiseError('%s conflicts with package "' . $depname . '"' . $extra .
