@@ -48,13 +48,13 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2005-09-15</date>
+ <date>2005-09-18</date>
  <version>
-  <release>1.4.0RC2</release>
+  <release>1.4.0</release>
   <api>1.4.0</api>
  </version>
  <stability>
-  <release>beta</release>
+  <release>stable</release>
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
@@ -76,12 +76,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * support for bundling several packages into a single tarball
   * support for static dependencies on a uri-based package
   * support for custom file roles and installation tasks
-
-  Specific changes from 1.4.0RC1:
-  * fix Bug #5417: generation of package.xml 1.0 must escape &lt; &gt; &amp; &quot;
-  * fix package.xml within PEAR package (because of Bug #5417)
-  * fix Bug #5412: if a package has no dependencies, no validation against
-    installed package deps
  </notes>
  <contents>
   <dir name="/">
@@ -864,6 +858,25 @@ http://pear.php.net/dtd/package-2.0.xsd">
    * fix Bug #5385: small fix to PEAR/Command/Package.php and RunTest.php
    * fix Bug #5374: package.dtd is broken, package-1.0 is not synced
    * fix Bug #5394: postinstallscript sub-tags need namespace prefix
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.0RC2</release>
+    <api>1.4.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2005-09-15</date>
+   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <notes>
+  Specific changes from 1.4.0RC1:
+  * fix Bug #5417: generation of package.xml 1.0 must escape &lt; &gt; &amp; &quot;
+  * fix package.xml within PEAR package (because of Bug #5417)
+  * fix Bug #5412: if a package has no dependencies, no validation against
+    installed package deps
    </notes>
   </release>
  </changelog>
