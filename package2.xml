@@ -652,7 +652,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
    <notes>
   Specific changes from 1.4.0a6:
-  * implement &lt;usesrole&gt;/&lt;usestask&gt; for custom role/task graceful failure
+  * implement |usesrole|/|usestask| tags for custom role/task graceful failure
   * REALLY fix the debug_backtrace() issue (modified wrong pearcmd.php)
   * fix Bug #3864 Invalid dependency relation
   * fix Bug #3863 illogical warning about PEAR_Frontend_Gtk 0.4.0 with PEAR 1.4.0a6
@@ -672,7 +672,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <notes>
   Specific changes from 1.4.0a7:
   * greatly improve the flexibility of post-install scripts
-    - &lt;param&gt; is no longer required
+    - |param| is no longer required
     - skipParamgroup() method in Frontends allows dynamic manipulation of what input is
       requested from users
   * make error message when a user has no write access absolutely clear and unmistakable
@@ -754,7 +754,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #4161: pear download always leaves a package.xml in the dir
   * make PEAR_Remote messages more helpful (include server name)
   * make list-upgrades only search channels from which we have installed packages
-  * remove &lt;max&gt; tag requirement for php dependency
+  * remove |max| tag requirement for php dependency
    </notes>
   </release>
   <release>
@@ -773,7 +773,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Implement REST 1.0 as per Request #2781
   * REST is the default connection method if available
   * fix bugs in PEAR_ChannelFile REST handling
-  * fix Bug #4069: pear list-all -c &lt;ChannelAlias&gt; does not work
+  * fix Bug #4069: pear list-all -c ChannelAlias does not work
   * fix Bug #4249: download-all broken in 1.4.0a11
   * fix Bug #4257: if rel="has" is used with a version="" attribute, the warning does not work
   * fix Bug #4278: Parser V1: error handling borked !
