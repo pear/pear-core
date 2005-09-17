@@ -71,6 +71,9 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * support for bundling several packages into a single tarball
   * support for static dependencies on a url-based package
   * support for custom file roles and installation tasks
+
+  NOTE: users of PEAR_Frontend_Web/PEAR_Frontend_Gtk must upgrade their installations
+  to the latest version, or PEAR will not upgrade properly
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
