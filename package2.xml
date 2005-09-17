@@ -71,7 +71,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * robust dependency support
   * full dependency validation on uninstall
   * remote install for hosts with only ftp access - no more problems with
-    restricted host installation
+    restricted host installation [through PEAR_RemoteInstaller package]
   * full support for mirroring
   * support for bundling several packages into a single tarball
   * support for static dependencies on a uri-based package
@@ -412,7 +412,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>XML_RPC</name>
     <channel>pear.php.net</channel>
     <min>1.4.0</min>
-    <recommended>1.4.1</recommended>
+    <recommended>1.4.2</recommended>
    </package>
    <package>
     <name>PEAR_Frontend_Web</name>
@@ -435,14 +435,14 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>pcre</name>
    </extension>
   </required>
-  <group name="remoteinstall" hint="adds the ability to install packages to a remote ftp server">
+<!--  <group name="remoteinstall" hint="adds the ability to install packages to a remote ftp server">
    <subpackage>
     <name>PEAR_RemoteInstaller</name>
     <channel>pear.php.net</channel>
     <min>0.1.0</min>
     <recommended>0.1.0</recommended>
    </subpackage>
-  </group>
+  </group> -->
   <group name="webinstaller" hint="PEAR's web-based installer">
    <package>
     <name>PEAR_Frontend_Web</name>
