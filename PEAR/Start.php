@@ -131,7 +131,7 @@ class PEAR_Start extends PEAR
             $this->test_dir  = '$php_dir/tests';
             // check if the user has installed PHP with PHP or GNU layout
             if (@is_dir("$this->prefix/lib/php/.registry")) {
-                $this->php_dir = '$this->prefix/lib/php';
+                $this->php_dir = '$prefix/lib/php';
             } elseif (@is_dir("$this->prefix/share/pear/lib/.registry")) {
                 $this->php_dir = '$prefix/share/pear/lib';
                 $this->doc_dir   = '$prefix/share/pear/docs';
