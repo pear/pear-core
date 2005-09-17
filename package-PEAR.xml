@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
-<package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
+<package version="1.0" xmlns="http://pear.php.net/dtd/package-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0
+http://pear.php.net/dtd/package-1.0.xsd">
  <name>PEAR</name>
  <summary>PEAR Base System</summary>
  <description>The PEAR package contains:
@@ -88,59 +89,59 @@
   <filelist>
    <dir name="OS">
     <file role="php" name="Guess.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
    </dir>
    <dir name="PEAR">
     <dir name="ChannelFile">
      <file name="Parser.php" role="php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
     </dir>
     <dir name="Command">
      <file role="php" name="Auth-init.php"/>
      <file role="php" name="Auth.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Build-init.php"/>
      <file role="php" name="Build.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Channels-init.php"/>
      <file role="php" name="Channels.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Common.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Config-init.php"/>
      <file role="php" name="Config.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Install-init.php"/>
      <file role="php" name="Install.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Package-init.php"/>
      <file role="php" name="Package.php">
-      <replace from="@DATA-DIR@" to="data_dir" type="pear-config" />
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@DATA-DIR@" to="data_dir" type="pear-config"/>
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Registry-init.php"/>
      <file role="php" name="Registry.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Remote-init.php"/>
      <file role="php" name="Remote.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Mirror-init.php"/>
      <file role="php" name="Mirror.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Test-init.php"/>
      <file role="php" name="Test.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
     </dir>
     <dir name="Downloader">
@@ -150,38 +151,38 @@
     </dir>
     <dir name="Frontend">
      <file role="php" name="CLI.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
     </dir>
     <dir name="Installer">
      <dir name="Role">
       <file role="php" name="Common.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
       <file role="php" name="Data.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
       <file role="php" name="Doc.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
       <file role="php" name="Ext.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
       <file role="php" name="Php.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
       <file role="php" name="Script.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
       <file role="php" name="Src.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
       <file role="php" name="Test.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
      </dir>
      <file role="php" name="Role.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
     </dir>
     <dir name="PackageFile">
@@ -195,137 +196,137 @@
      </dir>
      <dir name="Parser">
       <file role="php" name="v1.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
       <file role="php" name="v2.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
      </dir>
      <dir name="v2">
       <file role="php" name="rw.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
       <file role="php" name="Validator.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
      </dir>
      <file role="php" name="v1.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="v2.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
     </dir>
     <dir name="REST">
      <file role="php" name="10.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
     </dir>
     <dir name="Task">
      <dir name="Postinstallscript">
       <file role="php" name="rw.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
      </dir>
      <dir name="Replace">
       <file role="php" name="rw.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
      </dir>
      <dir name="Unixeol">
       <file role="php" name="rw.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
      </dir>
      <dir name="Windowseol">
       <file role="php" name="rw.php">
-       <replace from="@package_version@" to="version" type="package-info" />
+       <replace from="@package_version@" to="version" type="package-info"/>
       </file>
      </dir>
      <file role="php" name="Common.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Postinstallscript.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Replace.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Unixeol.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Windowseol.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
     </dir>
     <dir name="Validator">
      <file role="php" name="PECL.php">
-      <replace from="@package_version@" to="version" type="package-info" />
+      <replace from="@package_version@" to="version" type="package-info"/>
      </file>
     </dir>
     <file role="php" name="Autoloader.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="Builder.php">
      <replace from="@PEAR-VER@" to="version" type="package-info"/>
     </file>
     <file role="php" name="ChannelFile.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="Command.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="Common.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="Config.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="Dependency.php"/>
     <file role="php" name="DependencyDB.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="Dependency2.php">
      <replace from="@PEAR-VER@" to="version" type="package-info"/>
     </file>
     <file role="php" name="Downloader.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="ErrorStack.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="Exception.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="Frontend.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="Installer.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="Packager.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="PackageFile.php">
      <replace from="@PEAR-VER@" to="version" type="package-info"/>
     </file>
     <file role="php" name="Registry.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="Remote.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="REST.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="RunTest.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="Validate.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="XMLParser.php">
-     <replace from="@package_version@" to="version" type="package-info" />
+     <replace from="@package_version@" to="version" type="package-info"/>
     </file>
    </dir>
    <dir name="scripts" baseinstalldir="/">
@@ -378,10 +379,10 @@
    <file role="data" name="package.dtd"/>
    <file role="data" name="template.spec"/>
    <file role="php" name="PEAR.php">
-    <replace from="@package_version@" to="version" type="package-info" />
+    <replace from="@package_version@" to="version" type="package-info"/>
    </file>
    <file role="php" name="System.php">
-    <replace from="@package_version@" to="version" type="package-info" />
+    <replace from="@package_version@" to="version" type="package-info"/>
    </file>
   </filelist>
  </release>
@@ -389,8 +390,8 @@
   <release>
    <version>1.3.6</version>
    <date>2005-08-18</date>
-   <state>stable</state>
    <license>PHP License</license>
+   <state>stable</state>
    <notes>
  * Bump XML_RPC dependency to 1.4.0
  * return by reference from PEAR::raiseError()
@@ -399,6 +400,7 @@
   <release>
    <version>1.4.0a1</version>
    <date>2005-02-26</date>
+   <license>PHP License</license>
    <state>alpha</state>
    <notes>
   This is a major milestone release for PEAR.  In addition to several killer features,
@@ -427,6 +429,7 @@
   <release>
    <version>1.4.0a2</version>
    <date>2005-02-27</date>
+   <license>PHP License</license>
    <state>alpha</state>
    <notes>
   Specific changes from 1.4.0a1:
@@ -438,6 +441,7 @@
   <release>
    <version>1.4.0a3</version>
    <date>2005-03-02</date>
+   <license>PHP License</license>
    <state>alpha</state>
    <notes>
   Specific changes from 1.4.0a2:
@@ -454,6 +458,7 @@
   <release>
    <version>1.4.0a4</version>
    <date>2005-03-02</date>
+   <license>PHP License</license>
    <state>alpha</state>
    <notes>
   Specific changes from 1.4.0a3:
@@ -463,6 +468,7 @@
   <release>
    <version>1.4.0a5</version>
    <date>2005-03-17</date>
+   <license>PHP License</license>
    <state>alpha</state>
    <notes>
   Specific changes from 1.4.0a4:
@@ -480,6 +486,7 @@
   <release>
    <version>1.4.0a6</version>
    <date>2005-03-17</date>
+   <license>PHP License</license>
    <state>alpha</state>
    <notes>
   Specific changes from 1.4.0a5:
@@ -489,6 +496,7 @@
   <release>
    <version>1.4.0a7</version>
    <date>2005-03-17</date>
+   <license>PHP License</license>
    <state>alpha</state>
    <notes>
   Specific changes from 1.4.0a6:
@@ -501,6 +509,7 @@
   <release>
    <version>1.4.0a8</version>
    <date>2005-03-21</date>
+   <license>PHP License</license>
    <state>alpha</state>
    <notes>
   Specific changes from 1.4.0a7:
@@ -519,6 +528,7 @@
   <release>
    <version>1.4.0a9</version>
    <date>2005-03-21</date>
+   <license>PHP License</license>
    <state>alpha</state>
    <notes>
   Specific changes from 1.4.0a8:
@@ -535,6 +545,7 @@
   <release>
    <version>1.4.0a10</version>
    <date>2005-04-06</date>
+   <license>PHP License</license>
    <state>alpha</state>
    <notes>
   Specific changes from 1.4.0a9:
@@ -555,6 +566,7 @@
   <release>
    <version>1.4.0a11</version>
    <date>2005-04-17</date>
+   <license>PHP License</license>
    <state>alpha</state>
    <notes>
   Specific changes from 1.4.0a10:
@@ -572,6 +584,7 @@
   <release>
    <version>1.4.0a12</version>
    <date>2005-05-28</date>
+   <license>PHP License</license>
    <state>alpha</state>
    <notes>
   Specific changes from 1.4.0a11:
@@ -601,6 +614,7 @@
   <release>
    <version>1.4.0b1</version>
    <date>2005-08-25</date>
+   <license>PHP License</license>
    <state>beta</state>
    <notes>
   * remove old notes (prior to 1.4.0a11)
@@ -625,6 +639,7 @@
   <release>
    <version>1.4.0b2</version>
    <date>2005-09-11</date>
+   <license>PHP License</license>
    <state>beta</state>
    <notes>
    Specific changes from 1.4.0b1:
@@ -640,6 +655,7 @@
   <release>
    <version>1.4.0RC1</version>
    <date>2005-09-14</date>
+   <license>PHP License</license>
    <state>beta</state>
    <notes>
    Specific changes from 1.4.0b2:
@@ -653,6 +669,7 @@
   <release>
    <version>1.4.0RC2</version>
    <date>2005-09-15</date>
+   <license>PHP License</license>
    <state>beta</state>
    <notes>
   Specific changes from 1.4.0RC1:
