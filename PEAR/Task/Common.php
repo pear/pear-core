@@ -129,6 +129,7 @@ class PEAR_Task_Common
      * Initialize a task instance with the parameters
      * @param array raw, parsed xml
      * @param array attributes from the <file> tag containing this task
+     * @param string|null last installed version of this package
      * @abstract
      */
     function init($xml, $fileAttributes)
