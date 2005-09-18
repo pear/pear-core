@@ -141,7 +141,7 @@ class PEAR_Task_Common
      * return any errors using the custom throwError() method to allow forward compatibility
      *
      * This method MUST NOT write out any changes to disk
-     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     * @param PEAR_PackageFile_v2
      * @param string file contents
      * @param string the eventual final file location (informational only)
      * @return string|false|PEAR_Error false to skip this file, PEAR_Error to fail
