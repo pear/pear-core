@@ -18,7 +18,7 @@ $e = $generator->toPackageFile($temp_path, PEAR_VALIDATE_NORMAL, 'tub.xml');
 $phpunit->assertNoErrors('errors');
 $phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'tub.xml', $e, 'filename');
 $e = implode('', file($e));
-$phpunit->assertEquals(str_replace(array("\r\n", "\r"), array("\n", "\n"), '<?xml version="1.0" encoding="ISO-8859-1" ?>
+$phpunit->assertEquals(str_replace(array("\r\n", "\r"), array("\n", "\n"), '<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="' . $generator->getPackagerVersion() . '">
  <name>foo</name>

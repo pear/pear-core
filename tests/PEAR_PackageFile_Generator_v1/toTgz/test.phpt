@@ -32,7 +32,7 @@ $newpf = &$pkg->fromTgzFile($e, PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('errors');
 $newg = &$newpf->getDefaultGenerator();
 $phpunit->assertEquals(str_replace(array("\r\n", "\r"), array("\n", "\n"),
-    '<?xml version="1.0" encoding="ISO-8859-1" ?>
+    '<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="' . $newg->getPackagerVersion() . '">
  <name>foo</name>
