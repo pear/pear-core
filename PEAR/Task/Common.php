@@ -132,7 +132,7 @@ class PEAR_Task_Common
      * @param string|null last installed version of this package
      * @abstract
      */
-    function init($xml, $fileAttributes)
+    function init($xml, $fileAttributes, $lastVersion)
     {
     }
 
