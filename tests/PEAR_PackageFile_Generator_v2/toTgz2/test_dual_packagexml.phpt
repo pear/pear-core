@@ -53,7 +53,7 @@ $newpf = &$pkg->fromTgzFile($e, PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('errors');
 $xml = $newpf->getFileContents('package2.xml');
 $xml2 = $newpf->getFileContents('package.xml');
-$phpunit->assertEquals('<?xml version="1.0"?>
+$phpunit->assertEquals('<?xml version="1.0" encoding="UTF-8"?>
 <package packagerversion="' . $generator->getPackagerVersion() . '" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>foo</name>
  <channel>pear.php.net</channel>
@@ -181,7 +181,7 @@ Other:
  </changelog>
 </package>', $xml, 'xml');
 
-$phpunit->assertEquals('<?xml version="1.0" encoding="ISO-8859-1" ?>
+$phpunit->assertEquals('<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="' . $v1generator->getPackagerVersion() . '">
  <name>foo</name>
