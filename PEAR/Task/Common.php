@@ -131,7 +131,7 @@ class PEAR_Task_Common
      * @param array attributes from the <file> tag containing this task
      * @abstract
      */
-    function init($xml, $fileattribs)
+    function init($xml, $fileAttributes)
     {
     }
 
