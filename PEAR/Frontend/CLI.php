@@ -250,7 +250,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 }
                 if (isset($group['param'])) {
                     if (method_exists($script, 'postProcessPrompts')) {
-                        $prompts = $script->postProcessPrompts($group['param'], $group['name']);
+                        $prompts = $script->postProcessPrompts($group['param'], $group['id']);
                         if (!is_array($prompts) || count($prompts) != count($group['param'])) {
                             $this->outputData('postinstall', 'Error: post-install script did not ' .
                                 'return proper post-processed prompts');
