@@ -174,6 +174,22 @@ class PEAR_Task_Common
     }
 
     /**
+     * @static
+     * @final
+     */
+     function runPostinstallTasks()
+     {
+         foreach ($GLOBALS['_PEAR_TASK_POSTINSTANCES'] as $class => $tasks) {
+             $err = call_user_func(array($class, 'run'),
+                  $GLOBALS['_PEAR_TASK_POSTINSTANCES'][$class]);
+             if ($err) {
+                 return PEAR_Task_Common::throwError($err);
+             }
+         }
+         unset($GLOBALS['_PEAR_TASK_POSTINSTANCES']);
+    }
+
+    /**
      * Determines whether a role is a script
      * @return bool
      */
