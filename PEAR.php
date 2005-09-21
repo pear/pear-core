@@ -509,7 +509,7 @@ class PEAR
      * @see PEAR::setErrorHandling
      * @since PHP 4.0.5
      */
-    function raiseError($message = null,
+    function &raiseError($message = null,
                          $code = null,
                          $mode = null,
                          $options = null,
@@ -554,9 +554,11 @@ class PEAR
             $ec = 'PEAR_Error';
         }
         if ($skipmsg) {
-            return new $ec($code, $mode, $options, $userinfo);
+            $a = &new $ec($code, $mode, $options, $userinfo);
+            return $a;
         } else {
-            return new $ec($message, $code, $mode, $options, $userinfo);
+            $a = &new $ec($message, $code, $mode, $options, $userinfo);
+            return $a;
         }
     }
 
@@ -570,14 +572,16 @@ class PEAR
      * @param string $message
      *
      */
-    function throwError($message = null,
+    function &throwError($message = null,
                          $code = null,
                          $userinfo = null)
     {
         if (isset($this) && is_a($this, 'PEAR')) {
-            return $this->raiseError($message, $code, null, null, $userinfo);
+            $a = &$this->raiseError($message, $code, null, null, $userinfo);
+            return $a;
         } else {
-            return PEAR::raiseError($message, $code, null, null, $userinfo);
+            $a = &PEAR::raiseError($message, $code, null, null, $userinfo);
+            return $a;
         }
     }
 
@@ -757,6 +761,9 @@ function _PEAR_call_destructors()
         sizeof($_PEAR_destructor_object_list))
     {
         reset($_PEAR_destructor_object_list);
+        if (@PEAR::getStaticProperty('PEAR', 'destructlifo')) {
+            $_PEAR_destructor_object_list = array_reverse($_PEAR_destructor_object_list);
+        }
         while (list($k, $objref) = each($_PEAR_destructor_object_list)) {
             $classname = get_class($objref);
             while ($classname) {
@@ -845,8 +852,10 @@ class PEAR_Error
         $this->code      = $code;
         $this->mode      = $mode;
         $this->userinfo  = $userinfo;
-        if (function_exists("debug_backtrace") && !defined('PEAR_IGNORE_BACKTRACE')) {
-            $this->backtrace = debug_backtrace();
+        if (function_exists("debug_backtrace")) {
+            if (@!PEAR::getStaticProperty('PEAR_Error', 'skiptrace')) {
+                $this->backtrace = debug_backtrace();
+            }
         }
         if ($mode & PEAR_ERROR_CALLBACK) {
             $this->level = E_USER_NOTICE;
