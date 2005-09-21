@@ -403,10 +403,19 @@ class PEAR_REST_10
                         }
                     }
                 }
+                if (!isset($stable)) {
+                    $stable = '-n/a-';
+                }
                 PEAR::popErrorHandling();
-                $info = array('stable' => $latest, 'summary' => $inf['s'], 'description' =>
-                    $inf['d'], 'deps' => $deps, 'category' => $inf['ca']['_content'],
-                    'unstable' => $unstable, 'state' => $state);
+                if (!$searchpackage) {
+                    $info = array('stable' => $latest, 'summary' => $inf['s'], 'description' =>
+                        $inf['d'], 'deps' => $deps, 'category' => $inf['ca']['_content'],
+                        'unstable' => $unstable, 'state' => $state);
+                } else {
+                    $info = array('stable' => $stable, 'summary' => $inf['s'], 'description' =>
+                        $inf['d'], 'deps' => $deps, 'category' => $inf['ca']['_content'],
+                        'unstable' => $unstable, 'state' => $state);
+                }
             }
             $ret[$package] = $info;
         }

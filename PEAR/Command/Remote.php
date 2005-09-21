@@ -417,7 +417,7 @@ parameter.
 
             $unstable = '';
             if ($info['unstable']) {
-                $unstable = '/(' . $info['unstable'] . $info['state'] . ')';
+                $unstable = '/(' . $info['unstable'] . ' ' . $info['state'] . ')';
             }
             if (!isset($info['stable']) || !$info['stable']) {
                 $info['stable'] = 'none';
