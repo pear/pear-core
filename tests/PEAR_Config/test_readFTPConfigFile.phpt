@@ -18,7 +18,8 @@ if (!PEAR_Common::isIncludeable('Net/FTP.php') || !PEAR_Common::isIncludeable('P
 error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 require_once 'PEAR/Command/Remoteinstall-init.php';
-$config = &new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini');
+$config = &new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini', $temp_path .
+    DIRECTORY_SEPARATOR . 'nofile');
 include_once dirname(__FILE__) . '/test_readFTPConfigFile/FTP.php.inc';
 $ftp = &Net_FTP::singleton();
 $ftp->addRemoteFile('/path/to/pear/config.ini', dirname(__FILE__) . DIRECTORY_SEPARATOR .

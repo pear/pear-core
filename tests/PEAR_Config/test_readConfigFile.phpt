@@ -11,7 +11,8 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $config = new PEAR_Config(dirname(__FILE__) . DIRECTORY_SEPARATOR . 
-    'ini' . DIRECTORY_SEPARATOR . 'user.input', 'ya');
+    'ini' . DIRECTORY_SEPARATOR . 'user.input', $temp_path .
+    DIRECTORY_SEPARATOR . 'nofile');
 $config->setChannels(array('pear.php.net', '__uri', 'test2'));
 $ret = $config->readConfigFile('foo', 'foo');
 $config->set('php_dir', $temp_path); // use sandbox

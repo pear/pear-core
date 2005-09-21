@@ -11,14 +11,16 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 error_reporting(E_ALL);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $config = new PEAR_Config(dirname(__FILE__) . DIRECTORY_SEPARATOR . 
-    'ini' . DIRECTORY_SEPARATOR . 'user2.input', 'ya');
+    'ini' . DIRECTORY_SEPARATOR . 'user2.input', $temp_path .
+    DIRECTORY_SEPARATOR . 'nofile');
 $phpunit->assertTrue($config->mergeConfigFile(dirname(__FILE__) . DIRECTORY_SEPARATOR . 
     'ini' . DIRECTORY_SEPARATOR . 'merge.input', true), 'first merge');
 $phpunit->assertEquals(100, $config->get('verbose'), '$config->get(verbose)');
 $phpunit->assertEquals(100, $config->get('verbose', 'user'), '$config->get(verbose, user)');
 $phpunit->assertNull($config->get('verbose', 'system'), '$config->get(verbose, system)');
 $config = new PEAR_Config(dirname(__FILE__) . DIRECTORY_SEPARATOR . 
-    'ini' . DIRECTORY_SEPARATOR . 'user.input', 'ya');
+    'ini' . DIRECTORY_SEPARATOR . 'user.input', $temp_path .
+    DIRECTORY_SEPARATOR . 'nofile');
 
 $config->set('php_dir', $temp_path); // use sandbox
 $config->setChannels(array('pear.php.net', '__uri', 'test2'));
