@@ -766,12 +766,17 @@ $phpunit->assertEquals( array (
     0 => 0,
     1 => 'pear/pear requires package "pear/PEAR_Frontend_Web" (version >= 0.5.0), downloaded version is 0.4',
   ),
-  5 => 
+  5 =>
+  array (
+    0 => 0,
+    1 => 'pear/pear requires package "pear/PEAR_Frontend_Web" (version >= 0.5.0), downloaded version is 0.4',
+  ),
+  6 => 
   array (
     0 => 0,
     1 => 'pear/PEAR_Frontend_Web cannot be installed, conflicts with installed packages',
   ),
-  6 => 
+  7 => 
   array (
     'info' => 
     array (
