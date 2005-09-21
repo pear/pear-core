@@ -75,6 +75,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   
   * fix prompt processing in post-install scripts
   * fix Bug #5462: raiseError method does not return by ref anymore
+  * fix Bug #5465: pear install --offline fails to display error
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
