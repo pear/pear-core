@@ -144,7 +144,7 @@ class PEAR_Downloader_Package
             if (isset($options['offline'])) {
                 if (PEAR::isError($origErr)) {
                     if (!isset($options['soft'])) {
-                        $this->log(0, $origErr->getMessage());
+                        $this->_downloader->log(0, $origErr->getMessage());
                     }
                 }
                 return PEAR::raiseError('Cannot download non-local package "' . $param . '"');
