@@ -168,12 +168,15 @@ of a specific release.
                     'doc' => 'Don\'t do anything, just pretend',
                     ),
                 ),
-            'doc' => '<package.xml>
+            'doc' => '<package.xml> [files...]
 Sets a CVS tag on all files in a package.  Use this command after you have
 packaged a distribution tarball with the "package" command to tag what
 revisions of what files were in that release.  If need to fix something
 after running cvstag once, but before the tarball is released to the public,
 use the "slide" option to move the release tag.
+
+to include files (such as a second package.xml, or tests not included in the
+release), pass them as additional parameters.
 ',
             ),
         'package-dependencies' => array(
@@ -431,6 +434,11 @@ used for automated conversion or learning the format.
             $command .= ' -d';
         }
         $command .= ' ' . $cvstag . ' ' . escapeshellarg($params[0]);
+        array_shift($params);
+        if (count($params)) {
+            // add in additional files to be tagged
+            $files = array_merge($files, $params);
+        }
         foreach ($files as $file) {
             $command .= ' ' . escapeshellarg($file);
         }
