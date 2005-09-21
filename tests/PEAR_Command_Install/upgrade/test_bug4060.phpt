@@ -2542,6 +2542,7 @@ $res = $command->run('upgrade', array(), array('Auth_HTTP'));
 
 $dl = &$command->getDownloader(1, array());
 if (OS_WINDOWS) {
+    $nicedldir = str_replace('\\\\', '\\', $dl->getDownloadDir());
     $phpunit->assertEquals(array (
       0 =>
       array (
@@ -2641,7 +2642,7 @@ if (OS_WINDOWS) {
       19 => 
       array (
         0 => 3,
-        1 => '+ cp ' . $dl->getDownloadDir() . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmpsample.sql',
+        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmpsample.sql',
       ),
       20 => 
       array (
@@ -2661,7 +2662,7 @@ if (OS_WINDOWS) {
       23 => 
       array (
         0 => 3,
-        1 => '+ cp ' . $dl->getDownloadDir() . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_basic_simple.php',
+        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_basic_simple.php',
       ),
       24 => 
       array (
@@ -2681,7 +2682,7 @@ if (OS_WINDOWS) {
       27 => 
       array (
         0 => 3,
-        1 => '+ cp ' . $dl->getDownloadDir() . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_get.php',
+        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_get.php',
       ),
       28 => 
       array (
@@ -2701,7 +2702,7 @@ if (OS_WINDOWS) {
       31 => 
       array (
         0 => 3,
-        1 => '+ cp ' . $dl->getDownloadDir() . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_post.php',
+        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_post.php',
       ),
       32 => 
       array (
@@ -2721,7 +2722,7 @@ if (OS_WINDOWS) {
       35 => 
       array (
         0 => 3,
-        1 => '+ cp ' . $dl->getDownloadDir() . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_simple.php',
+        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_simple.php',
       ),
       36 => 
       array (
@@ -2741,7 +2742,7 @@ if (OS_WINDOWS) {
       39 => 
       array (
         0 => 3,
-        1 => '+ cp ' . $dl->getDownloadDir() . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'Auth_HTTP.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . '.tmpHTTP.php',
+        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'Auth_HTTP.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . '.tmpHTTP.php',
       ),
       40 => 
       array (
