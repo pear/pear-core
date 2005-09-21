@@ -76,6 +76,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix prompt processing in post-install scripts
   * fix Bug #5323: pear search returns odd version numbers
   * fix Bug #5428: pear cvstag package2.xml does not include the package.xml
+  * fix Bug #5449: pear makerpm completely broken for package.xml 2.0
   * fix Bug #5462: raiseError method does not return by ref anymore
   * fix Bug #5465: pear install --offline fails to display error
   </notes>

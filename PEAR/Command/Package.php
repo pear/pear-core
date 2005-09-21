@@ -739,7 +739,6 @@ used for automated conversion or learning the format.
 
     TODO:
         - Fill the rpm dependencies in the template file.
-        - Make this work for package.xml 2.0
 
     IDEAS:
         - Instead of mapping the role to rpm vars, perhaps it's better
@@ -797,6 +796,7 @@ used for automated conversion or learning the format.
             $spec_template = '@DATA-DIR@/PEAR/template.spec';
         }
         $info['possible_channel'] = '';
+        $info['extra_config'] = '';
         if (isset($options['rpm-pkgname'])) {
             $rpm_pkgname_format = $options['rpm-pkgname'];
         } else {
@@ -814,6 +814,7 @@ used for automated conversion or learning the format.
         $info['extra_headers'] = '';
         $info['doc_files'] = '';
         $info['files'] = '';
+        $info['package2xml'] = '';
         $info['rpm_package'] = sprintf($rpm_pkgname_format, $pf->getPackage());
         $srcfiles = 0;
         foreach ($info['filelist'] as $name => $attr) {
@@ -848,6 +849,8 @@ used for automated conversion or learning the format.
                     break;
                     default: // non-standard roles
                         $prefix = "$c_prefix/$attr[role]/" . $pf->getPackage();
+                        $info['extra_config'] .=
+                        "\n        -d {$attr[role]}_dir=$c_prefix/{$attr[role]} \\";
                         $this->ui->outputData('WARNING: role "' . $attr['role'] . '" used, ' .
                             'and will be installed in "' . $c_prefix . '/' . $attr['role'] .
                             '/' . $pf->getPackage() .
@@ -923,12 +926,13 @@ used for automated conversion or learning the format.
                     }
                 }
                 if (count($requires)) {
-                    $info['extra_headers'] .= 'Requires: ' . implode(', ', $requires);
+                    $info['extra_headers'] .= 'Requires: ' . implode(', ', $requires) . "\n";
                 }
                 if (count($conflicts)) {
-                    $info['extra_headers'] .= 'Conflicts: ' . implode(', ', $conflicts);
+                    $info['extra_headers'] .= 'Conflicts: ' . implode(', ', $conflicts) . "\n";
                 }
             } else {
+                $info['package2xml'] = '2'; // tell the spec to use package2.xml
                 $requires = $conflicts = array();
                 $deps = $pf->getDeps(true);
                 if (isset($deps['required']['package'])) {
@@ -942,49 +946,65 @@ used for automated conversion or learning the format.
                         } else {
                             $package = 'PEAR::' . $dep['name'];
                         }
-                    }
-                    if (!isset($dep['min']) && !isset($dep['max']) && !isset($dep['exclude'])) {
-                        if (isset($dep['conflicts'])) {
-                            $conflicts[] = $package;
+                        if (!isset($dep['min']) && !isset($dep['max']) &&
+                              !isset($dep['exclude'])) {
+                            if (isset($dep['conflicts'])) {
+                                $conflicts[] = $package;
+                            } else {
+                                $requires[] = $package;
+                            }
                         } else {
-                            $requires[] = $package;
-                        }
-                    } else {
-                        if (isset($dep['min'])) {
-                            $requires[] = $package . ' >= ' . $dep['min'];
-                        }
-                        if (isset($dep['max'])) {
-                            $requires[] = $package . ' <= ' . $dep['max'];
-                        }
-                        if (isset($dep['exclude'])) {
-                            $ex = $dep['exclude'];
-                            if (!is_array($ex)) {
-                                $ex = array($ex);
+                            if (isset($dep['min'])) {
+                                if (isset($dep['conflicts'])) {
+                                    $conflicts[] = $package . ' >= ' . $dep['min'];
+                                } else {
+                                    $requires[] = $package . ' >= ' . $dep['min'];
+                                }
                             }
-                            foreach ($ex as $ver) {
-                                $conflicts[] = $package . ' = ' . $ver;
+                            if (isset($dep['max'])) {
+                                if (isset($dep['conflicts'])) {
+                                    $conflicts[] = $package . ' <= ' . $dep['max'];
+                                } else {
+                                    $requires[] = $package . ' <= ' . $dep['max'];
+                                }
+                            }
+                            if (isset($dep['exclude'])) {
+                                $ex = $dep['exclude'];
+                                if (!is_array($ex)) {
+                                    $ex = array($ex);
+                                }
+                                foreach ($ex as $ver) {
+                                    if (isset($dep['conflicts'])) {
+                                        $conflicts[] = $package . ' != ' . $ver;
+                                    } else {
+                                        $conflicts[] = $package . ' = ' . $ver;
+                                    }
+                                }
                             }
                         }
-                    }
-                    require_once 'Archive/Tar.php';
-                    $tar = new Archive_Tar($pf->getArchiveFile());
-                    $tar->pushErrorHandling(PEAR_ERROR_RETURN);
-                    $a = $tar->extractInString('package2.xml');
-                    $tar->popErrorHandling();
-                    if ($a === null || PEAR::isError($a)) {
-                        // this doesn't have a package.xml version 1.0
-                        $requires[] = 'PEAR::PEAR >= ' . $deps['required']['pearinstaller']['min'];
+                        require_once 'Archive/Tar.php';
+                        $tar = new Archive_Tar($pf->getArchiveFile());
+                        $tar->pushErrorHandling(PEAR_ERROR_RETURN);
+                        $a = $tar->extractInString('package2.xml');
+                        $tar->popErrorHandling();
+                        if ($a === null || PEAR::isError($a)) {
+                            // this doesn't have a package.xml version 1.0
+                            $requires[] = 'PEAR::PEAR >= ' .
+                                $deps['required']['pearinstaller']['min'] . "\n";
+                        }
                     }
                     if (count($requires)) {
-                        $info['extra_headers'] .= 'Requires: ' . implode(', ', $requires);
+                        $info['extra_headers'] .= 'Requires: ' . implode(', ', $requires) . "\n";
                     }
                     if (count($conflicts)) {
-                        $info['extra_headers'] .= 'Conflicts: ' . implode(', ', $conflicts);
+                        $info['extra_headers'] .= 'Conflicts: ' . implode(', ', $conflicts) . "\n";
                     }
                 }
             }
         }
 
+        // remove the trailing newline
+        $info['extra_headers'] = trim($info['extra_headers']);
         if (function_exists('file_get_contents')) {
             fclose($fp);
             $spec_contents = preg_replace('/@([a-z0-9_-]+)@/e', '$info["\1"]',
