@@ -76,7 +76,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  Minor bugfix release.
+  Minor bugfix release.  Mostly pecl-related issues
   
   * fix prompt processing in post-install scripts
   * fix Bug #5323: pear search returns odd version numbers
@@ -89,6 +89,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #5482: installation of PECL packages should say add extensions to php.ini
   * fix Bug #5483: pecl uninstall crack fatal error
   * fix Bug #5487: PECL: compiled files are not uninstalled via the uninstall command
+  * fix Bug #5488: pecl uninstall package fails if package has a package.xml 1.0
  </notes>
  <contents>
   <dir name="/">
