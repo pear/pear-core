@@ -439,10 +439,20 @@ Run post-installation scripts in package <package>, if any exist.
             }
             if (is_array($info)) {
                 if ($param->getPackageType() == 'extsrc' || $param->getPackageType() == 'extbin') {
-                    $pkg = &$param->getPackageFile();
-                    foreach ($pkg->getFilelist() as $name => $unused) {
-                        if (strpos($name, 'php_') === 0) {
-                            $extrainfo[] = 'You must add "extension=' . $name . '" to php.ini';
+                    if ($instbin = $pkg->getInstalledBinary()) {
+                        $instpkg = &$reg->getPackage($instbin, $pkg->getChannel());
+                    } else {
+                        $instpkg = &$reg->getPackage($pkg->getPackage(), $pkg->getChannel());
+                    }
+                    foreach ($instpkg->getFilelist() as $name => $atts) {
+                        $pinfo = pathinfo($atts['installed_as']);
+                        if (!isset($pinfo['extension']) ||
+                              in_array($pinfo['extension'], array('c', 'h'))) {
+                            continue; // make sure we don't match php_blah.h
+                        }
+                        if (strpos($pinfo['basename'], 'php_') === 0) {
+                            $extrainfo[] = 'You must add "extension=' . $pinfo['basename']
+                                . '" to php.ini';
                             break;
                         }
                     }
@@ -560,6 +570,9 @@ Run post-installation scripts in package <package>, if any exist.
                 $newparams[] = &$info;
                 // check for binary packages (this is an alias for those packages if so)
                 if ($installedbinary = $info->getInstalledBinary()) {
+                    $this->ui->log(3, 'adding binary package ' .
+                        $reg->parsedPackageNameToString(array('channel' => $channel,
+                            'package' => $installedbinary), true));
                     $newparams[] = &$reg->getPackage($installedbinary, $channel);
                 }
                 // add the contents of a dependency group to the list of installed packages
