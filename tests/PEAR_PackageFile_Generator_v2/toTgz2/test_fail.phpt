@@ -1,5 +1,5 @@
 --TEST--
-PEAR_PackageFile_Generator_v2->toPackageFile() failure
+PEAR_PackageFile_Generator_v2->toTgz2() failure
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
