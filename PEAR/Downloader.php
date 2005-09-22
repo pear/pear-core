@@ -239,7 +239,7 @@ class PEAR_Downloader extends PEAR_Common
         if (!class_exists('PEAR_Downloader_Package')) {
             require_once 'PEAR/Downloader/Package.php';
         }
-        $a = new PEAR_Downloader_Package($t);
+        $a = &new PEAR_Downloader_Package($t);
         return $a;
     }
 
