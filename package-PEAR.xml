@@ -81,6 +81,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #5465: pear install --offline fails to display error
   * fix Bug #5477: Bug in Downloader.php and Dependency2.php
   * fix Bug #5482: installation of PECL packages should say add extensions to php.ini
+  * fix Bug #5483: pecl uninstall crack fatal error
+  * fix Bug #5487: PECL: compiled files are not uninstalled via the uninstall command
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
