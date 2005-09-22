@@ -1461,6 +1461,18 @@ class PEAR_Downloader_Package
         }
         $info = $this->_downloader->_getPackageDownloadUrl($pname);
         if (PEAR::isError($info)) {
+            if ($pname['channel'] == 'pear.php.net') {
+                // try pecl
+                $pname['channel'] = 'pecl.php.net';
+                if ($test = $this->_downloader->_getPackageDownloadUrl($pname)) {
+                    if (!PEAR::isError($test)) {
+                        $info = PEAR::raiseError($info->getMessage() . ' - package ' .
+                            $this->_registry->parsedPackageNameToString($pname, true) .
+                            ' can be installed with "pecl install ' . $pname['package'] .
+                            '"');
+                    }
+                }
+            }
             return $info;
         }
         $this->_rawpackagefile = $info['raw'];
