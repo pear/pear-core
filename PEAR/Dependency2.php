@@ -836,6 +836,12 @@ class PEAR_Dependency2
         return $this->_validatePackageDownload($dep, $required, array(), $depv1);
     }
 
+    /**
+     * Verify that uninstalling packages passed in to command line is OK.
+     *
+     * @param PEAR_Installer $dl
+     * @return PEAR_Error|true
+     */
     function validatePackageUninstall(&$dl)
     {
         if (PEAR::isError($this->_dependencydb)) {

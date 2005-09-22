@@ -1321,7 +1321,7 @@ class PEAR_Installer extends PEAR_Downloader
     }
 
     // }}}
-    function getUninstallPackages()
+    function &getUninstallPackages()
     {
         return $this->_downloadedPackages;
     }
