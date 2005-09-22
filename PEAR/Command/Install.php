@@ -564,6 +564,16 @@ Run post-installation scripts in package <package>, if any exist.
             $package = $parsed['package'];
             $channel = $parsed['channel'];
             $info = &$reg->getPackage($package, $channel);
+            if ($info === null &&
+                 ($channel == 'pear.php.net' || $channel == 'pecl.php.net')) {
+                // make sure this isn't a package that has flipped from pear to pecl but
+                // used a package.xml 1.0
+                $testc = ($channel == 'pear.php.net') ? 'pecl.php.net' : 'pear.php.net';
+                $info = &$reg->getPackage($package, $testc);
+                if ($info !== null) {
+                    $channel = $testc;
+                }
+            }
             if ($info === null) {
                 $badparams[] = $pkg;
             } else {
