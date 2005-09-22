@@ -570,7 +570,7 @@ Run post-installation scripts in package <package>, if any exist.
                 $newparams[] = &$info;
                 // check for binary packages (this is an alias for those packages if so)
                 if ($installedbinary = $info->getInstalledBinary()) {
-                    $this->ui->log(3, 'adding binary package ' .
+                    $this->ui->log('adding binary package ' .
                         $reg->parsedPackageNameToString(array('channel' => $channel,
                             'package' => $installedbinary), true));
                     $newparams[] = &$reg->getPackage($installedbinary, $channel);
