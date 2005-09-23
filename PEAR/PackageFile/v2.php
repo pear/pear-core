@@ -324,8 +324,8 @@ class PEAR_PackageFile_v2
         }
         $mymaintainers = $this->getMaintainers();
         $yourmaintainers = $pf1->getMaintainers();
-        $reset = false;
         for ($i1 = 0; $i1 < count($yourmaintainers); $i1++) {
+            $reset = false;
             for ($i2 = 0; $i2 < count($mymaintainers); $i2++) {
                 if ($mymaintainers[$i2]['handle'] == $yourmaintainers[$i1]['handle']) {
                     if ($mymaintainers[$i2]['role'] != $yourmaintainers[$i1]['role']) {
