@@ -513,12 +513,14 @@ class PEAR_Config extends PEAR
      * @param bool   determines whether a registry object "follows"
      *               the value of php_dir (is automatically created
      *               and moved when php_dir is changed)
+     * @param bool   if true, fails if configuration files cannot be loaded
      *
      * @access public
      *
      * @see PEAR_Config::singleton
      */
-    function PEAR_Config($user_file = '', $system_file = '', $ftp_file = false)
+    function PEAR_Config($user_file = '', $system_file = '', $ftp_file = false,
+                         $strict = true)
     {
         $this->PEAR();
         PEAR_Installer_Role::initializeConfig($this);
@@ -542,14 +544,14 @@ class PEAR_Config extends PEAR
         $this->files['user'] = $user_file;
         $this->files['system'] = $system_file;
         if ($user_file && @file_exists($user_file)) {
-            $this->readConfigFile($user_file);
+            $this->readConfigFile($user_file, 'user', $strict);
             if ($this->_errorsFound > 0) {
                 return;
             }
         }
 
         if ($system_file && @file_exists($system_file)) {
-            $this->mergeConfigFile($system_file, false, 'system');
+            $this->mergeConfigFile($system_file, false, 'system', $strict);
             if ($this->_errorsFound > 0) {
                 return;
             }
@@ -592,13 +594,13 @@ class PEAR_Config extends PEAR
      *
      * @see PEAR_Config::PEAR_Config
      */
-    function &singleton($user_file = '', $system_file = '')
+    function &singleton($user_file = '', $system_file = '', $strict = true)
     {
         if (is_object($GLOBALS['_PEAR_Config_instance'])) {
             return $GLOBALS['_PEAR_Config_instance'];
         }
 
-        $t_conf = &new PEAR_Config($user_file, $system_file);
+        $t_conf = &new PEAR_Config($user_file, $system_file, false, $strict);
         if ($t_conf->_errorsFound > 0) {
              return $t_conf->lastError;
         }
@@ -636,7 +638,7 @@ class PEAR_Config extends PEAR
      * @param string config layer to insert data into ('user' or 'system')
      * @return bool TRUE on success or a PEAR error on failure
      */
-    function readConfigFile($file = null, $layer = 'user')
+    function readConfigFile($file = null, $layer = 'user', $strict = true)
     {
         if (empty($this->files[$layer])) {
             return $this->raiseError("unknown config layer `$layer'");
@@ -649,10 +651,14 @@ class PEAR_Config extends PEAR
         $data = $this->_readConfigDataFrom($file);
 
         if (PEAR::isError($data)) {
-            $this->_errorsFound++;
-            $this->lastError = $data;
+            if ($strict) {
+                $this->_errorsFound++;
+                $this->lastError = $data;
 
-            return $data;
+                return $data;
+            } else {
+                return true;
+            }
         } else {
             $this->files[$layer] = $file;
         }
@@ -789,9 +795,10 @@ class PEAR_Config extends PEAR
      * @param string file to read from
      * @param bool whether to overwrite existing data (default TRUE)
      * @param string config layer to insert data into ('user' or 'system')
+     * @param string if true, errors are returned if file opening fails
      * @return bool TRUE on success or a PEAR error on failure
      */
-    function mergeConfigFile($file, $override = true, $layer = 'user')
+    function mergeConfigFile($file, $override = true, $layer = 'user', $strict = true)
     {
         if (empty($this->files[$layer])) {
             return $this->raiseError("unknown config layer `$layer'");
@@ -801,10 +808,14 @@ class PEAR_Config extends PEAR
         }
         $data = $this->_readConfigDataFrom($file);
         if (PEAR::isError($data)) {
-            $this->_errorsFound++;
-            $this->lastError = $data;
+            if ($strict) {
+                $this->_errorsFound++;
+                $this->lastError = $data;
 
-            return $data;
+                return $data;
+            } else {
+                return true;
+            }
         }
         $this->_decodeInput($data);
         if ($override) {
@@ -934,6 +945,9 @@ class PEAR_Config extends PEAR
             $contents = @fread($fp, $size);
             fclose($fp);
         }
+        if (empty($contents)) {
+            return $this->raiseError('Configuration file "' . $file . '" is empty');
+        }
         
         set_magic_quotes_runtime($rt);
 
@@ -954,7 +968,7 @@ class PEAR_Config extends PEAR
             // STDOUT if a '@' is used and a notice is raise
             $data = unserialize($contents);
 
-            if (!$data) {
+            if (!is_array($data) && !$data) {
                 if ($contents == serialize(false)) {
                     $data = array();
                 } else {
