@@ -1146,6 +1146,29 @@ class PEAR_PackageFile_v2
     }
 
     /**
+     * Return configure options array, if any
+     *
+     * @return array|false
+     */
+    function getConfigureOptions()
+    {
+        if ($this->getPackageType() != 'extsrc') {
+            return false;
+        }
+        $releases = $this->getReleases();
+        if (isset($releases[0])) {
+            $releases = $release[0];
+        }
+        if (isset($release['configureoption'])) {
+            if (!isset($release['configureoption'][0])) {
+                $release['configureoption'] = array($release['configureoption']);
+            }
+            return $release['configureoption'];
+        }
+        return false;
+    }
+
+    /**
      * This is only used at install-time, after all serialization
      * is over.
      */
