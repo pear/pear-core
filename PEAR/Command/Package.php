@@ -519,7 +519,7 @@ used for automated conversion or learning the format.
             }
         }
         foreach ($files as $file) {
-            $cmd .= ' ' . escapeshellarg($file);
+            $cmd .= ' ' . escapeshellarg($file['name']);
         }
         if ($this->config->get('verbose') > 1) {
             $this->output .= "+ $cmd\n";

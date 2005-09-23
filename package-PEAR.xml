@@ -81,6 +81,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
     slip through unnoticed
   * re-enable php-const replacements
   * PEAR_PackageFile_v2::getConfigureOptions() was missing!!
+  * fix cvsdiff command
+  * fix xml encoding issues finally
   * fix Bug #5323: pear search returns odd version numbers
   * fix Bug #5428: pear cvstag package2.xml does not include the package.xml
   * fix Bug #5449: pear makerpm completely broken for package.xml 2.0
