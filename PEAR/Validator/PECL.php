@@ -43,7 +43,7 @@ class PEAR_Validator_PECL extends PEAR_Validate
                   strtolower($this->_packagexml->getProvidesExtension())) {
                 $this->_addWarning('providesextension', 'package name "' .
                     $this->_packagexml->getPackage() . '" is different from extension name "' .
-                    $this->_packagexml->getProvidesExtension());
+                    $this->_packagexml->getProvidesExtension() . '"');
             }
         }
         return $ret;
