@@ -174,6 +174,7 @@ $ret = $command->run('package', array(), array(dirname(__FILE__) . DIRECTORY_SEP
 ));
 $ds = DIRECTORY_SEPARATOR;
 $phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'package.xml 1.0 summary "foo" does not match "fakebar"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'package.xml 1.0 package "foo" does not match "fakebar"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'package.xml 1.0 version "1.2.0a1" does not match "1.9.0"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'package.xml 1.0 state "alpha" does not match "stable"'),
@@ -199,10 +200,15 @@ $phpunit->assertEquals(array (
   ),
   3 =>
   array (
-    0 => 'Error: package.xml 1.0 version "1.2.0a1" does not match "1.9.0"',
+    0 => 'Error: package.xml 1.0 summary "foo" does not match "fakebar"',
     1 => true,
   ),
   4 =>
+  array (
+    0 => 'Error: package.xml 1.0 version "1.2.0a1" does not match "1.9.0"',
+    1 => true,
+  ),
+  5 =>
   array (
     0 => 'Error: package.xml 1.0 package "foo" does not match "fakebar"',
     1 => true,

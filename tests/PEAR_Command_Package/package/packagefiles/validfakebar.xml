@@ -5,7 +5,7 @@ http://pear.php.net/dtd/package-2.0
 http://pear.php.net/dtd/package-2.0.xsd">
  <name>fakebar</name>
  <channel>pear.php.net</channel>
- <summary>foo</summary>
+ <summary>fakebar</summary>
  <description>foo
 hi there
  
