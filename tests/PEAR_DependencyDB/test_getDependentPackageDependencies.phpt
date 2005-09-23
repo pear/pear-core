@@ -20,120 +20,111 @@ $phpunit->assertEquals(array (
   array (
     'db' => 
     array (
-      'dep' => 
+      0 => 
       array (
-        'name' => 'PEAR',
-        'channel' => 'pear.php.net',
-        'min' => '1.0b1',
+        'dep' => 
+        array (
+          'name' => 'PEAR',
+          'channel' => 'pear.php.net',
+          'min' => '1.0b1',
+        ),
+        'type' => 'required',
+        'group' => false,
       ),
-      'type' => 'required',
-      'group' => false,
+    ),
+    'http' => 
+    array (
+      0 => 
+      array (
+        'dep' => 
+        array (
+          'name' => 'PEAR',
+          'channel' => 'pear.php.net',
+        ),
+        'type' => 'required',
+        'group' => false,
+      ),
     ),
     'liveuser' => 
     array (
-      'dep' => 
+      0 => 
       array (
-        'name' => 'PEAR',
-        'channel' => 'pear.php.net',
+        'dep' => 
+        array (
+          'name' => 'PEAR',
+          'channel' => 'pear.php.net',
+          'min' => '1.3.3',
+        ),
+        'type' => 'required',
+        'group' => false,
       ),
-      'type' => 'required',
-      'group' => false,
     ),
     'mdb2' => 
     array (
-      'dep' => 
+      0 => 
       array (
-        'name' => 'PEAR',
-        'channel' => 'pear.php.net',
-        'min' => '1.0b1',
+        'dep' => 
+        array (
+          'name' => 'PEAR',
+          'channel' => 'pear.php.net',
+          'min' => '1.0b1',
+        ),
+        'type' => 'required',
+        'group' => false,
       ),
-      'type' => 'required',
-      'group' => false,
     ),
-    'pear' => 
+    'php_archive' => 
     array (
-      'dep' => 
+      0 => 
       array (
-        'name' => 'PEAR',
-        'channel' => 'pear.php.net',
-        'min' => '1.3.2',
+        'dep' => 
+        array (
+          'name' => 'PEAR',
+          'channel' => 'pear.php.net',
+          'min' => '1.3.5',
+        ),
+        'type' => 'required',
+        'group' => false,
       ),
-      'type' => 'required',
-      'group' => false,
-    ),
-    'pear_info' => 
-    array (
-      'dep' => 
-      array (
-        'name' => 'PEAR',
-        'channel' => 'pear.php.net',
-        'min' => '1.0.1',
-      ),
-      'type' => 'required',
-      'group' => false,
-    ),
-    'pear_packagefilemanager' => 
-    array (
-      'dep' => 
-      array (
-        'name' => 'PEAR',
-        'channel' => 'pear.php.net',
-        'min' => '1.1',
-      ),
-      'type' => 'required',
-      'group' => false,
-    ),
-    'peartests' => 
-    array (
-      'dep' => 
-      array (
-        'name' => 'PEAR',
-        'channel' => 'pear.php.net',
-        'min' => '1.4.0dev11',
-      ),
-      'type' => 'required',
-      'group' => false,
-    ),
-    'php_parser' => 
-    array (
-      'dep' => 
-      array (
-        'name' => 'PEAR',
-        'channel' => 'pear.php.net',
-        'min' => '1.3.1dev',
-      ),
-      'type' => 'required',
-      'group' => false,
     ),
     'xml_parser' => 
     array (
-      'dep' => 
+      0 => 
       array (
-        'name' => 'PEAR',
-        'channel' => 'pear.php.net',
+        'dep' => 
+        array (
+          'name' => 'PEAR',
+          'channel' => 'pear.php.net',
+        ),
+        'type' => 'required',
+        'group' => false,
       ),
-      'type' => 'required',
-      'group' => false,
     ),
     'xml_serializer' => 
     array (
-      'dep' => 
+      0 => 
       array (
-        'name' => 'PEAR',
-        'channel' => 'pear.php.net',
+        'dep' => 
+        array (
+          'name' => 'PEAR',
+          'channel' => 'pear.php.net',
+        ),
+        'type' => 'required',
+        'group' => false,
       ),
-      'type' => 'required',
-      'group' => false,
     ),
     'xml_util' => 
     array (
-      'dep' => 
+      0 => 
       array (
-        'name' => 'PEAR',
-        'channel' => 'pear.php.net',
+        'dep' => 
+        array (
+          'name' => 'PEAR',
+          'channel' => 'pear.php.net',
+        ),
+        'type' => 'required',
+        'group' => false,
       ),
-      'type' => 'required',
-      'group' => false,
     ),
   ),
 ), $app, 'PEAR');

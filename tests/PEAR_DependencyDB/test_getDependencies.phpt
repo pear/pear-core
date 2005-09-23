@@ -18,9 +18,11 @@ $phpunit->assertEquals(array (
   array (
     'dep' => 
     array (
-      'name' => 'PEAR',
+      'name' => 'Archive_Tar',
       'channel' => 'pear.php.net',
-      'min' => '1.3.2',
+      'min' => '1.1',
+      'recommended' => '1.3.1',
+      'exclude' => '1.3.0',
     ),
     'type' => 'required',
     'group' => false,
@@ -29,9 +31,10 @@ $phpunit->assertEquals(array (
   array (
     'dep' => 
     array (
-      'name' => 'Archive_Tar',
+      'name' => 'Console_Getopt',
       'channel' => 'pear.php.net',
-      'min' => '1.1',
+      'min' => '1.2',
+      'recommended' => '1.2',
     ),
     'type' => 'required',
     'group' => false,
@@ -40,9 +43,10 @@ $phpunit->assertEquals(array (
   array (
     'dep' => 
     array (
-      'name' => 'Console_Getopt',
+      'name' => 'XML_RPC',
       'channel' => 'pear.php.net',
-      'min' => '1.2',
+      'min' => '1.4.0',
+      'recommended' => '1.4.1',
     ),
     'type' => 'required',
     'group' => false,
@@ -51,9 +55,11 @@ $phpunit->assertEquals(array (
   array (
     'dep' => 
     array (
-      'name' => 'XML_RPC',
+      'name' => 'PEAR_Frontend_Web',
       'channel' => 'pear.php.net',
-      'min' => '1.0.4',
+      'max' => '0.5.0',
+      'exclude' => '0.5.0',
+      'conflicts' => '',
     ),
     'type' => 'required',
     'group' => false,
@@ -62,12 +68,36 @@ $phpunit->assertEquals(array (
   array (
     'dep' => 
     array (
-      'name' => 'Net_FTP',
+      'name' => 'PEAR_Frontend_Gtk',
       'channel' => 'pear.php.net',
-      'min' => '1.3.0RC1',
+      'max' => '0.4.0',
+      'exclude' => '0.4.0',
+      'conflicts' => '',
+    ),
+    'type' => 'required',
+    'group' => false,
+  ),
+  5 => 
+  array (
+    'dep' => 
+    array (
+      'name' => 'PEAR_Frontend_Web',
+      'channel' => 'pear.php.net',
+      'min' => '0.5.0',
     ),
     'type' => 'optional',
-    'group' => false,
+    'group' => 'webinstaller',
+  ),
+  6 => 
+  array (
+    'dep' => 
+    array (
+      'name' => 'PEAR_Frontend_Gtk',
+      'channel' => 'pear.php.net',
+      'min' => '0.4.0',
+    ),
+    'type' => 'optional',
+    'group' => 'gtkinstaller',
   ),
 ), $db->getDependencies($p), 'PEAR');
 $p = array('package' => 'LiveUser', 'channel' => 'pear.php.net');
@@ -78,6 +108,7 @@ $phpunit->assertEquals(array (
     array (
       'name' => 'PEAR',
       'channel' => 'pear.php.net',
+      'min' => '1.3.3',
     ),
     'type' => 'required',
     'group' => false,
@@ -86,14 +117,35 @@ $phpunit->assertEquals(array (
   array (
     'dep' => 
     array (
-      'name' => 'DB',
+      'name' => 'Event_Dispatcher',
       'channel' => 'pear.php.net',
-      'min' => '1.6',
+    ),
+    'type' => 'required',
+    'group' => false,
+  ),
+  2 => 
+  array (
+    'dep' => 
+    array (
+      'name' => 'Log',
+      'channel' => 'pear.php.net',
+      'min' => '1.7.0',
     ),
     'type' => 'optional',
     'group' => false,
   ),
-  2 => 
+  3 => 
+  array (
+    'dep' => 
+    array (
+      'name' => 'DB',
+      'channel' => 'pear.php.net',
+      'min' => '1.6.0',
+    ),
+    'type' => 'optional',
+    'group' => false,
+  ),
+  4 => 
   array (
     'dep' => 
     array (
@@ -104,7 +156,28 @@ $phpunit->assertEquals(array (
     'type' => 'optional',
     'group' => false,
   ),
-  3 => 
+  5 => 
+  array (
+    'dep' => 
+    array (
+      'name' => 'MDB2',
+      'channel' => 'pear.php.net',
+      'min' => '2.0.0beta4',
+    ),
+    'type' => 'optional',
+    'group' => false,
+  ),
+  6 => 
+  array (
+    'dep' => 
+    array (
+      'name' => 'MDB2_Schema',
+      'channel' => 'pear.php.net',
+    ),
+    'type' => 'optional',
+    'group' => false,
+  ),
+  7 => 
   array (
     'dep' => 
     array (
@@ -114,23 +187,12 @@ $phpunit->assertEquals(array (
     'type' => 'optional',
     'group' => false,
   ),
-  4 => 
+  8 => 
   array (
     'dep' => 
     array (
       'name' => 'Crypt_RC4',
       'channel' => 'pear.php.net',
-    ),
-    'type' => 'optional',
-    'group' => false,
-  ),
-  5 => 
-  array (
-    'dep' => 
-    array (
-      'name' => 'MDB2',
-      'channel' => 'pear.php.net',
-      'min' => '2.0.0beta2',
     ),
     'type' => 'optional',
     'group' => false,
