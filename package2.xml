@@ -10,7 +10,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  * the PEAR installer, for creating, distributing
    and installing packages
  * the beta-quality PEAR_Exception PHP5 error handling mechanism
- * the beta-quality PEAR_ErrorStack advanced error handling class
+ * the beta-quality PEAR_ErrorStack advanced error handling mechanism
  * the PEAR_Error error handling mechanism
  * the OS_Guess class for retrieving info about the OS
    where PHP is running on
@@ -79,6 +79,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   Minor bugfix release.  Mostly pecl-related issues
   
   * fix prompt processing in post-install scripts
+  * make dual package.xml equivalency stricter when using package.xml/package2.xml
   * fix Bug #5323: pear search returns odd version numbers
   * fix Bug #5428: pear cvstag package2.xml does not include the package.xml
   * fix Bug #5449: pear makerpm completely broken for package.xml 2.0

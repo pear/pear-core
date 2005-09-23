@@ -2,9 +2,9 @@
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="@PEAR-VER@">
  <name>foo</name>       
- <summary>foo</summary>
+ <summary>foo1</summary>
  <description>foo
-hi there
+hi there1
  </description>
  <maintainers>
   <maintainer>
@@ -13,14 +13,20 @@ hi there
    <email>joe@example.com</email>
    <role>lead</role>
   </maintainer>
+  <maintainer>
+   <user>double</user>
+   <name>people</name>
+   <email>joe@example.com</email>
+   <role>lead</role>
+  </maintainer>
   </maintainers>
  <release>
-  <version>1.2.0a1</version>
+  <version>1.2.0a11</version>
   <date>2004-11-27</date>
   <license>PHP License</license>
-  <state>alpha</state>
+  <state>beta</state>
   <notes>here are the
-multi-line
+multi-1ine
 release notes
   </notes>
   <deps>

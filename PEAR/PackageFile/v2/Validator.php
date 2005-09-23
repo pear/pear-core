@@ -95,7 +95,7 @@ class PEAR_PackageFile_v2_Validator
                          // needs a certain package installed in order to implement a role or task
             '*providesextension',
             '*srcpackage|*srcuri',
-            '+phprelease|extsrcrelease|+extbinrelease|bundle', //special validation needed
+            '+phprelease|+extsrcrelease|+extbinrelease|bundle', //special validation needed
             '*changelog',
         );
         $test = $this->_packageInfo;
@@ -1163,10 +1163,6 @@ class PEAR_PackageFile_v2_Validator
             if (isset($this->_packageInfo['srcpackage']) || isset($this->_packageInfo['srcuri'])) {
                 $this->_cannotHaveSrcpackage($release);
             }
-            if (is_array($this->_packageInfo['extsrcrelease']) &&
-                  isset($this->_packageInfo['extsrcrelease'][0])) {
-                return $this->_extsrcCanOnlyHaveOneRelease();
-            }
             $releases = $this->_packageInfo['extsrcrelease'];
             if (!is_array($releases)) {
                 return true;
@@ -1176,8 +1172,10 @@ class PEAR_PackageFile_v2_Validator
             }
             foreach ($releases as $rel) {
                 $this->_stupidSchemaValidate(array(
+                    '*installconditions',
                     '*configureoption->name->prompt->?default',
                     '*binarypackage',
+                    '*filelist',
                 ), $rel, '<extsrcrelease>');
                 if (isset($rel['binarypackage'])) {
                     if (!is_array($rel['binarypackage']) || !isset($rel['binarypackage'][0])) {
@@ -1448,12 +1446,6 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array('task' => $task, 'file' => $file),
             'Unknown task "%task%" passed in file <file name="%file%">');
-    }
-
-    function _extsrcCanOnlyHaveOneRelease()
-    {
-        $this->_stack->push(__FUNCTION__, 'error', array(),
-            'Only one <extsrcrelease> tag may exist in a package.xml');
     }
 
     function _subpackageCannotProvideExtension($name)

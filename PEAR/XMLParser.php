@@ -246,6 +246,17 @@ class PEAR_XMLParser
     }
 
     /**
+     * post-process data
+     *
+     * @param string $data
+     * @param string $element element name
+     */
+    function postProcess($data, $element)
+    {
+        return trim($data);
+    }
+
+    /**
      * End element handler for XML parser
      *
      * @access private
@@ -256,7 +267,7 @@ class PEAR_XMLParser
     function endHandler($parser, $element)
     {
         $value = array_pop($this->_valStack);
-        $data  = trim($this->_dataStack[$this->_depth]);
+        $data  = $this->postProcess($this->_dataStack[$this->_depth], $element);
 
         // adjust type of the value
         switch(strtolower($value['type'])) {

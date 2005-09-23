@@ -224,7 +224,7 @@ class PEAR_PackageFile_Parser_v1
     // {{{ _unIndent()
 
     /**
-     * Unindent given string (?)
+     * Unindent given string
      *
      * @param string $str The string that has to be unindented.
      * @return string

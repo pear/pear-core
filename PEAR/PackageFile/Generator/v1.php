@@ -498,10 +498,22 @@ class PEAR_PackageFile_Generator_v1
      *
      * Note that this does a basic conversion, to allow more advanced
      * features like bundles and multiple releases
-     * @return PEAR_PackageFile_v2
+     * @param string the classname to instantiate and return.  This must be
+     *               PEAR_PackageFile_v2 or a descendant
+     * @param boolean if true, only valid, deterministic package.xml 1.0 as defined by the
+     *                strictest parameters will be converted
+     * @return PEAR_PackageFile_v2|PEAR_Error
      */
-    function &toV2($class = 'PEAR_PackageFile_v2')
+    function &toV2($class = 'PEAR_PackageFile_v2', $strict = false)
     {
+        if ($strict) {
+            if (!$this->_packagefile->validate()) {
+                $a = PEAR::raiseError('invalid package.xml version 1.0 cannot be converted' .
+                    ' to version 2.0', null, null, null,
+                    $this->_packagefile->getValidationWarnings(true));
+                return $a;
+            }
+        }
         $arr = array(
             'attribs' => array(
                              'version' => '2.0',
