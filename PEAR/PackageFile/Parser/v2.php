@@ -84,7 +84,7 @@ class PEAR_PackageFile_Parser_v2 extends PEAR_XMLParser
     function postProcess($data, $element)
     {
         if ($element == 'notes') {
-            return $this->_unIndent($data);
+            return trim($this->_unIndent($data));
         }
         return trim($data);
     }
