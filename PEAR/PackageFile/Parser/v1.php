@@ -281,7 +281,7 @@ class PEAR_PackageFile_Parser_v1
                         $attribs['name'] = substr($attribs['name'], 0,
                             strlen($attribs['name']) - 1);
                     }
-                    if (strpos($attribs['name'], '/') == 0) {
+                    if (strpos($attribs['name'], '/') === 0) {
                         $attribs['name'] = substr($attribs['name'], 1);
                     }
                     $this->dir_names[] = $attribs['name'];
