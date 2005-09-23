@@ -259,6 +259,12 @@ define('PEAR_PACKAGEFILE_PHP_NO_NOT', 48);
  * Error code when a package.xml contains non-ISO-8859-1 characters
  */
 define('PEAR_PACKAGEFILE_ERROR_NON_ISO_CHARS', 49);
+
+/**
+ * Error code when a dependency is not a 'has' relation, but has no version
+ */
+define('PEAR_PACKAGEFILE_ERROR_NO_DEPPHPVERSION', 50);
+
 /**
  * package.xml encapsulator
  * @category   pear
@@ -985,8 +991,14 @@ class PEAR_PackageFile_v1
                     'Dependency %index% has no relation (rel)',
                 PEAR_PACKAGEFILE_ERROR_NO_DEPTYPE =>
                     'Dependency %index% has no type',
+                PEAR_PACKAGEFILE_ERROR_DEPNAME_IGNORED =>
+                    'PHP Dependency %index% has a name attribute of "%name%" which will be' .
+                        ' ignored!',
                 PEAR_PACKAGEFILE_ERROR_NO_DEPVERSION =>
                     'Dependency %index% is not a rel="has" or rel="not" dependency, ' .
+                        'and has no version',
+                PEAR_PACKAGEFILE_ERROR_NO_DEPPHPVERSION =>
+                    'Dependency %index% is a type="php" dependency, ' .
                         'and has no version',
                 PEAR_PACKAGEFILE_ERROR_DEPVERSION_IGNORED =>
                     'Dependency %index% is a rel="%rel%" dependency, versioning is ignored',
@@ -1121,6 +1133,10 @@ class PEAR_PackageFile_v1
                         array('index' => $i, 'name' => $d['name']));
                 } elseif ($d['type'] != 'php' && empty($d['name'])) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_DEPNAME,
+                        array('index' => $i));
+                }
+                if ($d['type'] == 'php' && empty($d['version'])) {
+                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_DEPPHPVERSION,
                         array('index' => $i));
                 }
                 if (($d['rel'] == 'not') && ($d['type'] == 'php')) {
