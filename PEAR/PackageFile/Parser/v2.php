@@ -51,6 +51,43 @@ class PEAR_PackageFile_Parser_v2 extends PEAR_XMLParser
     {
         $this->_logger = &$l;
     }
+    /**
+     * Unindent given string
+     *
+     * @param string $str The string that has to be unindented.
+     * @return string
+     * @access private
+     */
+    function _unIndent($str)
+    {
+        // remove leading newlines
+        $str = preg_replace('/^[\r\n]+/', '', $str);
+        // find whitespace at the beginning of the first line
+        $indent_len = strspn($str, " \t");
+        $indent = substr($str, 0, $indent_len);
+        $data = '';
+        // remove the same amount of whitespace from following lines
+        foreach (explode("\n", $str) as $line) {
+            if (substr($line, 0, $indent_len) == $indent) {
+                $data .= substr($line, $indent_len) . "\n";
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * post-process data
+     *
+     * @param string $data
+     * @param string $element element name
+     */
+    function postProcess($data, $element)
+    {
+        if ($element == 'notes') {
+            return $this->_unIndent($data);
+        }
+        return trim($data);
+    }
 
     /**
      * @param string
