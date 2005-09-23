@@ -626,6 +626,10 @@ class PEAR_PackageFile_Generator_v1
             }
         }
         $this->_convertRelease2_0($arr[$release], $temp);
+        if ($release == 'extsrcrelease' && count($arr[$release]) > 1) {
+            // multiple extsrcrelease tags added in PEAR 1.4.1
+            $arr['dependencies']['pearinstaller']['min'] = '1.4.1';
+        }
         if ($cl = $this->_packagefile->getChangelog()) {
             foreach ($cl as $release) {
                 $rel = array();
@@ -906,6 +910,11 @@ class PEAR_PackageFile_Generator_v1
                             array('attribs' =>
                                 array('name' => $file,
                                       'as' => $package['install-as'][$file]));
+                    }
+                    foreach ($package['platform'] as $file => $os) {
+                        $release[count($oses)]['filelist']['ignore'][] =
+                            array('attribs' =>
+                                array('name' => $file));
                     }
                 }
                 // cleanup
