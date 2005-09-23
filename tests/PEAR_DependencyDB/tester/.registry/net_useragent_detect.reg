@@ -1,8 +1,0 @@
-a:14:{s:8:"provides";a:0:{}s:8:"filelist";a:2:{s:10:"Detect.php";a:4:{s:4:"role";s:3:"php";s:14:"baseinstalldir";s:13:"Net/UserAgent";s:6:"md5sum";s:32:"8c64b0f7e5a34c3bf0962c6767e38628";s:12:"installed_as";s:50:"C:\Program Files\php\pear\Net\UserAgent\Detect.php";}s:7:"dirtree";a:2:{s:39:"C:\Program Files\php\pear\Net\UserAgent";b:1;s:29:"C:\Program Files\php\pear\Net";b:1;}}s:7:"package";s:20:"Net_UserAgent_Detect";s:7:"summary";s:101:"Net_UserAgent_Detect determines the Web browser, version, and platform from an HTTP user agent string";s:11:"description";s:422:"The Net_UserAgent object does a number of tests on an HTTP user
-      agent string.  The results of these tests are available via methods of
-      the object.
-      
-      This module is based upon the JavaScript browser detection code
-      available at http://www.mozilla.org/docs/web-developer/sniffer/browser_type.html.
-      This module had many influences from the lib/Browser.php code in
-      version 1.3 of Horde.";s:11:"maintainers";a:1:{i:0;a:4:{s:6:"handle";s:6:"dallen";s:4:"name";s:9:"Dan Allen";s:5:"email";s:14:"dallen@php.net";s:4:"role";s:4:"lead";}}s:7:"version";s:3:"1.0";s:12:"majorversion";s:1:"1";s:12:"release_date";s:10:"2002-05-21";s:15:"release_license";s:8:"PHP 2.01";s:13:"release_state";s:6:"stable";s:13:"release_notes";s:45:"This is the initial independent PEAR release.";s:12:"release_deps";a:1:{i:1;a:3:{s:4:"type";s:3:"php";s:3:"rel";s:2:"ge";s:7:"version";s:5:"4.1.0";}}s:13:"_lastmodified";i:1066864935;}
