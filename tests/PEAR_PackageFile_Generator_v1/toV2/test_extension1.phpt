@@ -168,7 +168,7 @@ this case is to use the new sqlite_exec() function instead. (Stas)
    </pearinstaller>
   </required>
  </dependencies>
- <providesextension>sqlite</providesextension>
+ <providesextension>SQLite</providesextension>
  <extsrcrelease />
  <changelog>
   <release>
