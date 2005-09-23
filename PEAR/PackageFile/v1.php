@@ -266,6 +266,10 @@ define('PEAR_PACKAGEFILE_ERROR_NON_ISO_CHARS', 49);
 define('PEAR_PACKAGEFILE_ERROR_NO_DEPPHPVERSION', 50);
 
 /**
+ * Error code when a package has no lead developer
+ */
+define('PEAR_PACKAGEFILE_ERROR_NO_LEAD', 51);
+/**
  * package.xml encapsulator
  * @category   pear
  * @package    PEAR
@@ -975,6 +979,8 @@ class PEAR_PackageFile_v1
                     'No release date found',
                 PEAR_PACKAGEFILE_ERROR_NO_NOTES =>
                     'No release notes found',
+                PEAR_PACKAGEFILE_ERROR_NO_LEAD =>
+                    'Package must have at least one lead maintainer',
                 PEAR_PACKAGEFILE_ERROR_NO_MAINTAINERS =>
                     'No maintainers found, at least one must be defined',
                 PEAR_PACKAGEFILE_ERROR_NO_MAINTHANDLE =>
@@ -1081,6 +1087,7 @@ class PEAR_PackageFile_v1
         if (empty($info['maintainers'])) {
             $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_MAINTAINERS);
         } else {
+            $haslead = false;
             $i = 1;
             foreach ($info['maintainers'] as $m) {
                 if (empty($m['handle'])) {
@@ -1090,6 +1097,8 @@ class PEAR_PackageFile_v1
                 if (empty($m['role'])) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_MAINTROLE,
                         array('index' => $i, 'roles' => PEAR_Common::getUserRoles()));
+                } elseif ($m['role'] == 'lead') {
+                    $haslead = true;
                 }
                 if (empty($m['name'])) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_MAINTNAME,
@@ -1100,6 +1109,9 @@ class PEAR_PackageFile_v1
                         array('index' => $i));
                 }
                 $i++;
+            }
+            if (!$haslead) {
+                $this->_validateError(PEAR_PACKAGEFILE_ERROR_NO_LEAD);
             }
         }
         if (!empty($info['release_deps'])) {
