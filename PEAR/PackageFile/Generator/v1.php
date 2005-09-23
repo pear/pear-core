@@ -628,7 +628,7 @@ class PEAR_PackageFile_Generator_v1
         $this->_convertRelease2_0($arr[$release], $temp);
         if ($release == 'extsrcrelease' && count($arr[$release]) > 1) {
             // multiple extsrcrelease tags added in PEAR 1.4.1
-            $arr['dependencies']['pearinstaller']['min'] = '1.4.1';
+            $arr['dependencies']['required']['pearinstaller']['min'] = '1.4.1';
         }
         if ($cl = $this->_packagefile->getChangelog()) {
             foreach ($cl as $release) {
