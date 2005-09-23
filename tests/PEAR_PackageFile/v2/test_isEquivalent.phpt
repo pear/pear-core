@@ -11,7 +11,8 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 require_once 'PEAR/PackageFile/v1.php';
 $pf1 = &new test_PEAR_PackageFile_v1;
-$pf2 = &new test_PEAR_PackageFile_v2;
+$pf2 = &new PEAR_PackageFile_v2_rw;
+$pf2->setConfig($config);
 $pf2->setPackageType('bundle');
 $phpunit->assertFalse($pf2->isEquivalent($pf1), 'bundle');
 $pf2->setPackageType('php');
@@ -60,6 +61,16 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' =>
         'package.xml 1.0 package "foo" does not match "bar"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' =>
+        'package.xml 1.0 summary "fpp" does not match ""'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' =>
+        'package.xml 1.0 description "fpp" does not match ""'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' =>
+        'package.xml 1.0 release notes "foo" do not match ""'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' =>
+        'Invalid tag order in <package>, found <date> expected one of "channel, uri"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' =>
+        'package.xml 1.0 has unmatched extra maintainers "cellog"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' =>
         'package.xml 1.0 version "1.0.0" does not match "1.0.1"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' =>
         'package.xml 1.0 state "stable" does not match "beta"'),
@@ -71,7 +82,16 @@ $pf2->setPackage('foo');
 $pf2->setReleaseVersion('1.0.0');
 $pf2->setReleaseStability('stable');
 $pf2->clearContents();
+$pf2->setSummary('fpp');
+$pf2->setDescription('fpp');
+$pf2->setNotes('foo');
+$pf2->setChannel('pear.php.net');
 $pf2->addFile('', 'file.php', array('role' => 'php'));
+$pf2->addMaintainer('lead', 'cellog', 'Greg Beaver', 'cellog@php.net');
+$pf2->setLicense('PHP');
+$pf2->clearDeps();
+$pf2->setPhpDep('4.3');
+$pf2->setPearinstallerDep('1.4.1');
 $ret = $pf2->isEquivalent($pf1);
 $phpunit->assertNoErrors('valid');
 echo 'tests done';
