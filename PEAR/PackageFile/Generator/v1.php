@@ -613,7 +613,7 @@ class PEAR_PackageFile_Generator_v1
             'extsrcrelease' : 'phprelease';
         if ($release == 'extsrcrelease') {
             $arr['channel'] = 'pecl.php.net';
-            $arr['providesextension'] = strtolower($arr['name']); // assumption
+            $arr['providesextension'] = $arr['name']; // assumption
         }
         $arr[$release] = array();
         if ($this->_packagefile->getConfigureOptions()) {
