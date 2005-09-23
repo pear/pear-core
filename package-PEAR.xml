@@ -79,6 +79,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
     This error has existed for every PEAR version, and allows dependencies like:
     &lt;dep type=&quot;php&quot; rel=&quot;has&quot;&gt;4.3.0&lt;/dep&gt; to
     slip through unnoticed
+  * re-enable php-const replacements
   * fix Bug #5323: pear search returns odd version numbers
   * fix Bug #5428: pear cvstag package2.xml does not include the package.xml
   * fix Bug #5449: pear makerpm completely broken for package.xml 2.0
