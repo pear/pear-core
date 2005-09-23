@@ -28,49 +28,34 @@ $phpunit->assertEquals(array (
   1 => 
   array (
     'channel' => 'pear.php.net',
-    'package' => 'liveuser',
+    'package' => 'http',
   ),
   2 => 
   array (
     'channel' => 'pear.php.net',
-    'package' => 'mdb2',
+    'package' => 'liveuser',
   ),
   3 => 
   array (
     'channel' => 'pear.php.net',
-    'package' => 'pear',
+    'package' => 'mdb2',
   ),
   4 => 
   array (
     'channel' => 'pear.php.net',
-    'package' => 'pear_info',
+    'package' => 'php_archive',
   ),
   5 => 
   array (
     'channel' => 'pear.php.net',
-    'package' => 'pear_packagefilemanager',
+    'package' => 'xml_parser',
   ),
   6 => 
   array (
     'channel' => 'pear.php.net',
-    'package' => 'peartests',
-  ),
-  7 => 
-  array (
-    'channel' => 'pear.php.net',
-    'package' => 'php_parser',
-  ),
-  8 => 
-  array (
-    'channel' => 'pear.php.net',
-    'package' => 'xml_parser',
-  ),
-  9 => 
-  array (
-    'channel' => 'pear.php.net',
     'package' => 'xml_serializer',
   ),
-  10 => 
+  7 => 
   array (
     'channel' => 'pear.php.net',
     'package' => 'xml_util',
