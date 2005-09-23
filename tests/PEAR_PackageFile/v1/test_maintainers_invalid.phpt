@@ -28,19 +28,21 @@ $result = $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v1',
         'message' => 'Maintainer 1 has no handle (user ID at channel server)')
-        ), 'after validation 1');
-$phpunit->assertNotTrue($result, 'return 1' );
-$phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log 1');
+        ), 'after validation 2');
+$phpunit->assertNotTrue($result, 'return 2' );
+$phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log 2');
 $pf->clearMaintainers();
 
 $pf->addMaintainer('', 'foo', 'greg', 'greg@example.com');
 $result = $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v1',
-        'message' => 'Maintainer 1 has no role')
-        ), 'after validation 1');
-$phpunit->assertNotTrue($result, 'return 1' );
-$phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log 1');
+        'message' => 'Maintainer 1 has no role'),
+    array('package' => 'PEAR_PackageFile_v1',
+        'message' => 'Package must have at least one lead maintainer')
+        ), 'after validation 3');
+$phpunit->assertNotTrue($result, 'return 3' );
+$phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log 3');
 $pf->clearMaintainers();
 
 $pf->addMaintainer('lead', 'foo', '', 'greg@example.com');
@@ -48,9 +50,9 @@ $result = $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v1',
         'message' => 'Maintainer 1 has no name')
-        ), 'after validation 1');
-$phpunit->assertNotTrue($result, 'return 1' );
-$phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log 1');
+        ), 'after validation 4');
+$phpunit->assertNotTrue($result, 'return 4' );
+$phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log 4');
 $pf->clearMaintainers();
 
 $pf->addMaintainer('lead', 'foo', 'greg', '');
@@ -58,9 +60,9 @@ $result = $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v1',
         'message' => 'Maintainer 1 has no email')
-        ), 'after validation 1');
-$phpunit->assertNotTrue($result, 'return 1' );
-$phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log 1');
+        ), 'after validation 5');
+$phpunit->assertNotTrue($result, 'return 5' );
+$phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log 5');
 $pf->clearMaintainers();
 echo 'tests done';
 ?>

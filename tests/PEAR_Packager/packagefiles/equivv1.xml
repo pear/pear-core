@@ -2,7 +2,7 @@
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="@PEAR-VER@">
  <name>fakebar</name>
- <summary>fakebar</summary>
+ <summary>foo</summary>
  <description>foo
 hi there
  </description>
