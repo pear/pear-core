@@ -275,7 +275,16 @@ class PEAR_PackageFile_Parser_v1
                     break;
                 }
                 if ($attribs['name'] != '/') {
-                    $this->dir_names[] = str_replace('\\', '/', $attribs['name']);
+                    $attribs['name'] = preg_replace(array('!\\\\+!', '!/+!'), array('/', '/'),
+                        $attribs['name']);
+                    if (strrpos($attribs['name'], '/') == strlen($attribs['name']) - 1) {
+                        $attribs['name'] = substr($attribs['name'], 0,
+                            strlen($attribs['name']) - 1);
+                    }
+                    if (strpos($attribs['name'], '/') == 0) {
+                        $attribs['name'] = substr($attribs['name'], 1);
+                    }
+                    $this->dir_names[] = $attribs['name'];
                 }
                 if (isset($attribs['baseinstalldir'])) {
                     $this->dir_install = $attribs['baseinstalldir'];
@@ -295,7 +304,8 @@ class PEAR_PackageFile_Parser_v1
                             $path .= $dir . '/';
                         }
                     }
-                    $path .= str_replace('\\', '/', $attribs['name']);
+                    $path .= preg_replace(array('!\\\\+!', '!/+!'), array('/', '/'),
+                        $attribs['name']);
                     unset($attribs['name']);
                     $this->current_path = $path;
                     $this->filelist[$path] = $attribs;
@@ -497,7 +507,7 @@ class PEAR_PackageFile_Parser_v1
                     $path = '';
                     if (count($this->dir_names)) {
                         foreach ($this->dir_names as $dir) {
-                            $path .= $dir . DIRECTORY_SEPARATOR;
+                            $path .= $dir . '/';
                         }
                     }
                     $path .= $data;
