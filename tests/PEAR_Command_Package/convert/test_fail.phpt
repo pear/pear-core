@@ -18,12 +18,12 @@ copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' . DIRECTORY_SEPARA
     $temp_path . DIRECTORY_SEPARATOR . 'nosummary.xml');
 $e = $command->run('convert', array(), array($temp_path . DIRECTORY_SEPARATOR . 'invalid.xml'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <extsrcrelease>, found <installconditions> expected one of "configureoption, binarypackage"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <extsrcrelease>, found <installconditions> expected one of "configureoption, binarypackage, filelist"'),
 ), 'invalid packagexml 1');
 $phpunit->assertEquals(array (
   0 => 
   array (
-    'info' => 'Invalid tag order in <extsrcrelease>, found <installconditions> expected one of "configureoption, binarypackage"',
+    'info' => 'Invalid tag order in <extsrcrelease>, found <installconditions> expected one of "configureoption, binarypackage, filelist"',
     'cmd' => 'no command',
   ),
   1 => 

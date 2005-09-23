@@ -102,7 +102,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 $res = $command->run('install', array(), array($pathtopackagexml));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => 'install failed'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "providesextension" - package name "peclpkg" is different from extension name "extpkg'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "providesextension" - package name "peclpkg" is different from extension name "extpkg"'),
 ), 'after install');
 $dl = &$command->getDownloader(1, array());
 $phpunit->assertEquals(array (
