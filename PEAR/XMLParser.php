@@ -185,7 +185,6 @@ class PEAR_XMLParser
      */
     function parse($data)
     {
-        $data = $this->preProcessStupidSaxon($data);
         if (!extension_loaded('xml')) {
             include_once 'PEAR.php';
             return PEAR::raiseError("XML Extension not found", 1);
@@ -194,6 +193,9 @@ class PEAR_XMLParser
         $this->_dataStack = array();
         $this->_depth = 0;
 
+        if (strpos($data, 'encoding="UTF-8"')) {
+            $data = utf8_decode($data);
+        }
         $xp = @xml_parser_create('ISO-8859-1');
         xml_parser_set_option($xp, XML_OPTION_CASE_FOLDING, 0);
         xml_set_object($xp, $this);
