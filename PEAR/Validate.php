@@ -237,8 +237,8 @@ class PEAR_Validate
             }
         }
         if (!$this->validPackageName($this->_packagexml->getPackage())) {
-            $this->_addFailure('name', 'package name ' .
-                $this->_packagexml->getPackage() . ' is invalid');
+            $this->_addFailure('name', 'package name "' .
+                $this->_packagexml->getPackage() . '" is invalid');
             return false;
         }
     }
