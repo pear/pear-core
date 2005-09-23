@@ -274,7 +274,7 @@ class PEAR_PackageFile_Parser_v1
                 if ($this->in_changelog) {
                     break;
                 }
-                if ($attribs['name'] != '/') {
+                if (array_key_exists('name', $attribs) && $attribs['name'] != '/') {
                     $attribs['name'] = preg_replace(array('!\\\\+!', '!/+!'), array('/', '/'),
                         $attribs['name']);
                     if (strrpos($attribs['name'], '/') == strlen($attribs['name']) - 1) {
