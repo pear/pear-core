@@ -781,8 +781,6 @@ class PEAR_PackageFile_Generator_v1
                         )
                     );
         $package['platform'] =
-        $package['osmap'] =
-        $package['notosmap'] =
         $package['install-as'] = array();
         $this->_isExtension = false;
         foreach ($this->_packagefile->getFilelist() as $name => $file) {
@@ -801,11 +799,6 @@ class PEAR_PackageFile_Generator_v1
                 unset($file['install-as']);
             }
             if (isset($file['platform'])) {
-                if ($file['platform']{0} == '!') {
-                    $package['notosmap'][substr($file['platform'], 1)][] = $name;
-                } else {
-                    $package['osmap'][$file['platform']][] = $name;
-                }
                 $package['platform'][$name] = $file['platform'];
                 unset($file['platform']);
             }
@@ -824,97 +817,219 @@ class PEAR_PackageFile_Generator_v1
     }
 
     /**
+     * Post-process special files with install-as/platform attributes and
+     * make the release tag.
+     * 
+     * This complex method follows this work-flow to create the release tags:
+     * 
+     * <pre>
+     * - if any install-as/platform exist, create a generic release and fill it with
+     *   o <install as=..> tags for <file name=... install-as=...>
+     *   o <install as=..> tags for <file name=... platform=!... install-as=..>
+     *   o <ignore> tags for <file name=... platform=...>
+     *   o <ignore> tags for <file name=... platform=... install-as=..>
+     * - create a release for each platform encountered and fill with
+     *   o <install as..> tags for <file name=... install-as=...>
+     *   o <install as..> tags for <file name=... platform=this platform install-as=..>
+     *   o <install as..> tags for <file name=... platform=!other platform install-as=..>
+     *   o <ignore> tags for <file name=... platform=!this platform>
+     *   o <ignore> tags for <file name=... platform=other platform>
+     *   o <ignore> tags for <file name=... platform=other platform install-as=..>
+     *   o <ignore> tags for <file name=... platform=!this platform install-as=..>
+     * </pre>
+     * 
+     * It does this by accessing the $package parameter, which contains an array with
+     * indices:
+     * 
+     *  - platform: mapping of file => OS the file should be installed on
+     *  - install-as: mapping of file => installed name
+     *  - osmap: mapping of OS => list of files that should be installed
+     *    on that OS
+     *  - notosmap: mapping of OS => list of files that should not be
+     *    installed on that OS
+     *
      * @param array
      * @param array
      * @access private
      */
     function _convertRelease2_0(&$release, $package)
     {
+        //- if any install-as/platform exist, create a generic release and fill it with 
         if (count($package['platform']) || count($package['install-as'])) {
             $generic = array();
+            $genericIgnore = array();
             foreach ($package['install-as'] as $file => $as) {
+                //o <install as=..> tags for <file name=... install-as=...>
                 if (!isset($package['platform'][$file])) {
                     $generic[] = $file;
+                    continue;
+                }
+                //o <install as=..> tags for <file name=... platform=!... install-as=..>
+                if (isset($package['platform'][$file]) &&
+                      $package['platform'][$file]{0} == '!') {
+                    $generic[] = $file;
+                    continue;
+                }
+                //o <ignore> tags for <file name=... platform=... install-as=..>
+                if (isset($package['platform'][$file]) &&
+                      $package['platform'][$file]{0} != '!') {
+                    $genericIgnore[] = $file;
+                    continue;
+                }
+            }
+            foreach ($package['platform'] as $file => $platform) {
+                if (isset($package['install-as'][$file])) {
+                    continue;
+                }
+                if ($platform{0} != '!') {
+                    //o <ignore> tags for <file name=... platform=...>
+                    $genericIgnore[] = $file;
                 }
             }
             if (count($package['platform'])) {
-                $notplatform = $platform = array();
+                $oses = $notplatform = $platform = array();
                 foreach ($package['platform'] as $file => $os) {
-                    // pre-process for !platform
+                    // get a list of oses
                     if ($os{0} == '!') {
-                        $notplatform[$file] = $os;
-                    } else {
-                        $platform[$file] = $os;
-                    }
-                }
-                $oses = array();
-                // add install-as
-                foreach ($platform as $file => $os) {
-                    $oses[$os] = count($oses);
-                    $release[$oses[$os]]['installconditions']
-                        ['os']['name'] = $os;
-                    if (isset($package['install-as'][$file])) {
-                        $release[$oses[$os]]['filelist']['install'][] =
-                            array('attribs' =>
-                                array('name' => $file,
-                                      'as' => $package['install-as'][$file]));
-                    }
-                    foreach ($generic as $file) {
-                        $release[$oses[$os]]['filelist']['install'][] =
-                            array('attribs' =>
-                                array('name' => $file,
-                                      'as' => $package['install-as'][$file]));
-                    }
-                }
-                // add ignore for platform atts
-                foreach ($package['osmap'] as $os => $files) {
-                    foreach ($oses as $osname => $os2) {
-                        if ($os == $osname) {
+                        if (isset($oses[substr($os, 1)])) {
                             continue;
                         }
-                        foreach ($files as $file) {
-                            $release[$os2]['filelist']['ignore'][]['attribs']['name'] = $file;
-                        }
-                    }
-                }
-                foreach ($notplatform as $file => $os) {
-                    if (isset($oses[substr($os, 1)])) {
-                        foreach ($oses as $name => $index) {
-                            if ($name == substr($os, 1)) {
-                                $release[$index]['filelist']['ignore'][]['attribs']['name'] =
-                                    $file;
-                            } elseif (isset($package['install-as'][$file])) {
-                                $release[$index]['filelist']['install'][] =
-                                    array('attribs' =>
-                                        array('name' => $file,
-                                              'as' => $package['install-as'][$file]));
-                            }
-                        }
+                        $oses[substr($os, 1)] = count($oses);
                     } else {
-                        if (isset($package['install-as'][$file])) {
-                            foreach ($oses as $index) {
-                                $release[$index]['filelist']['install'][] =
-                                    array('attribs' =>
-                                        array('name' => $file,
-                                              'as' => $package['install-as'][$file]));
-                            }
+                        if (isset($oses[$os])) {
+                            continue;
                         }
+                        $oses[$os] = count($oses);
                     }
                 }
-                // add generic release
-                if (count($generic)) {
-                    $release[count($oses)]['installconditions']
-                        ['os']['name'] = '*';
-                    foreach ($generic as $file) {
-                        $release[count($oses)]['filelist']['install'][] =
-                            array('attribs' =>
-                                array('name' => $file,
-                                      'as' => $package['install-as'][$file]));
+                //- create a release for each platform encountered and fill with
+                foreach ($oses as $os => $releaseNum) {
+                    $release[$releaseNum]['installconditions']['os']['name'] = $os;
+                    $release[$releaseNum]['filelist'] = array('install' => array(),
+                        'ignore' => array());
+                    foreach ($package['install-as'] as $file => $as) {
+                        //o <install as=..> tags for <file name=... install-as=...>
+                        if (!isset($package['platform'][$file])) {
+                            $release[$releaseNum]['filelist']['install'][] =
+                                array(
+                                    'attribs' => array(
+                                        'name' => $file,
+                                        'as' => $as,
+                                    ),
+                                );
+                            continue;
+                        }
+                        //o <install as..> tags for
+                        //  <file name=... platform=this platform install-as=..>
+                        if (isset($package['platform'][$file]) &&
+                              $package['platform'][$file] == $os) {
+                            $release[$releaseNum]['filelist']['install'][] =
+                                array(
+                                    'attribs' => array(
+                                        'name' => $file,
+                                        'as' => $as,
+                                    ),
+                                );
+                            continue;
+                        }
+                        //o <install as..> tags for
+                        //  <file name=... platform=!other platform install-as=..>
+                        if (isset($package['platform'][$file]) &&
+                              $package['platform'][$file] != "!$os" &&
+                              $package['platform'][$file]{0} == '!') {
+                            $release[$releaseNum]['filelist']['install'][] =
+                                array(
+                                    'attribs' => array(
+                                        'name' => $file,
+                                        'as' => $as,
+                                    ),
+                                );
+                            continue;
+                        }
+                        //o <ignore> tags for
+                        //  <file name=... platform=!this platform install-as=..>
+                        if (isset($package['platform'][$file]) &&
+                              $package['platform'][$file] == "!$os") {
+                            $release[$releaseNum]['filelist']['ignore'][] =
+                                array(
+                                    'attribs' => array(
+                                        'name' => $file,
+                                    ),
+                                );
+                            continue;
+                        }
+                        //o <ignore> tags for
+                        //  <file name=... platform=other platform install-as=..>
+                        if (isset($package['platform'][$file]) &&
+                              $package['platform'][$file]{0} != '!' &&
+                              $package['platform'][$file] != $os) {
+                            $release[$releaseNum]['filelist']['ignore'][] =
+                                array(
+                                    'attribs' => array(
+                                        'name' => $file,
+                                    ),
+                                );
+                            continue;
+                        }
                     }
-                    foreach ($package['platform'] as $file => $os) {
-                        $release[count($oses)]['filelist']['ignore'][] =
-                            array('attribs' =>
-                                array('name' => $file));
+                    foreach ($package['platform'] as $file => $platform) {
+                        if (isset($package['install-as'][$file])) {
+                            continue;
+                        }
+                        //o <ignore> tags for <file name=... platform=!this platform>
+                        if ($platform == "!$os") {
+                            $release[$releaseNum]['filelist']['ignore'][] =
+                                array(
+                                    'attribs' => array(
+                                        'name' => $file,
+                                    ),
+                                );
+                            continue;
+                        }
+                        //o <ignore> tags for <file name=... platform=other platform>
+                        if ($platform{0} != '!' && $platform != $os) {
+                            $release[$releaseNum]['filelist']['ignore'][] =
+                                array(
+                                    'attribs' => array(
+                                        'name' => $file,
+                                    ),
+                                );
+                        }
+                    }
+                    if (!count($release[$releaseNum]['filelist']['install'])) {
+                        unset($release[$releaseNum]['filelist']['install']);
+                    }
+                    if (!count($release[$releaseNum]['filelist']['ignore'])) {
+                        unset($release[$releaseNum]['filelist']['ignore']);
+                    }
+                }
+                if (count($generic) || count($genericIgnore)) {
+                    $release[count($oses)] = array();
+                    if (count($generic)) {
+                        foreach ($generic as $file) {
+                            if (isset($package['install-as'][$file])) {
+                                $installas = $package['install-as'][$file];
+                            } else {
+                                $installas = $file;
+                            }
+                            $release[count($oses)]['filelist']['install'][] =
+                                array(
+                                    'attribs' => array(
+                                        'name' => $file,
+                                        'as' => $installas,
+                                    )
+                                );
+                        }
+                    }
+                    if (count($genericIgnore)) {
+                        foreach ($genericIgnore as $file) {
+                            $release[count($oses)]['filelist']['ignore'][] =
+                                array(
+                                    'attribs' => array(
+                                        'name' => $file,
+                                    )
+                                );
+                        }
                     }
                 }
                 // cleanup
@@ -934,19 +1049,18 @@ class PEAR_PackageFile_Generator_v1
                     $release = $release[0];
                 }
             } else {
-                $release['installconditions']['os']['name'] = '*';
+                // no platform atts, but some install-as atts
                 foreach ($package['install-as'] as $file => $value) {
-                    if (count($package['install-as']) > 1) {
-                        $release['filelist']['install'][] =
-                            array('attribs' =>
-                                array('name' => $file,
-                                      'as' => $value));
-                    } else {
-                        $release['filelist']['install'] =
-                            array('attribs' =>
-                                array('name' => $file,
-                                      'as' => $value));
-                    }
+                    $release['filelist']['install'][] =
+                        array(
+                            'attribs' => array(
+                                'name' => $file,
+                                'as' => $value
+                            )
+                        );
+                }
+                if (count($release['filelist']['install']) == 1) {
+                    $release['filelist']['install'] = $release['filelist']['install'][0];
                 }
             }
         }
