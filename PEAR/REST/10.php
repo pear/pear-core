@@ -293,9 +293,9 @@ class PEAR_REST_10
         if (!is_array($packagelist['p'])) {
             $packagelist['p'] = array($packagelist['p']);
         }
+        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         foreach ($packagelist['p'] as $package) {
             if ($basic) { // remote-list command
-                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                 if ($dostable) {
                     $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
                         '/stable.txt');
@@ -303,7 +303,6 @@ class PEAR_REST_10
                     $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
                         '/latest.txt');
                 }
-                PEAR::popErrorHandling();
                 if (PEAR::isError($latest)) {
                     $latest = false;
                 }
@@ -311,6 +310,7 @@ class PEAR_REST_10
             } else { // list-all command
                 $inf = $this->_rest->retrieveData($base . 'p/' . strtolower($package) . '/info.xml');
                 if (PEAR::isError($inf)) {
+                    PEAR::popErrorHandling();
                     return $inf;
                 }
                 if ($searchpackage) {
@@ -322,7 +322,6 @@ class PEAR_REST_10
                         continue;
                     };
                 }
-                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                 $releases = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
                     '/allreleases.xml');
                 if (PEAR::isError($releases)) {
@@ -406,7 +405,6 @@ class PEAR_REST_10
                 if (!isset($stable)) {
                     $stable = '-n/a-';
                 }
-                PEAR::popErrorHandling();
                 if (!$searchpackage) {
                     $info = array('stable' => $latest, 'summary' => $inf['s'], 'description' =>
                         $inf['d'], 'deps' => $deps, 'category' => $inf['ca']['_content'],
@@ -419,6 +417,7 @@ class PEAR_REST_10
             }
             $ret[$package] = $info;
         }
+        PEAR::popErrorHandling();
         return $ret;
     }
 
@@ -490,6 +489,11 @@ class PEAR_REST_10
     {
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         $pinfo = $this->_rest->retrieveData($base . 'p/' . strtolower($package) . '/info.xml');
+        if (PEAR::isError($pinfo)) {
+            PEAR::popErrorHandling();
+            return PEAR::raiseError('Unknown package: "' . $package . '" (Debug: ' .
+                $pinfo->getMessage() . ')');
+        }
         $releases = array();
         $allreleases = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
             '/allreleases.xml');
@@ -512,8 +516,11 @@ class PEAR_REST_10
                 }
                 $pf->setDeps(unserialize($ds));
                 $ds = $pf->getDeps();
-                $info = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' .
-                    $release['v'] . '.xml');
+                $info = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package)
+                    . '/' . $release['v'] . '.xml');
+                if (PEAR::isError($info)) {
+                    continue;
+                }
                 $releases[$release['v']] = array(
                     'doneby' => $info['m'],
                     'license' => $info['l'],
@@ -525,15 +532,10 @@ class PEAR_REST_10
                     'deps' => $ds ? $ds : array(),
                 );
             }
-            $relinfo = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' . 
-                $release['v'] . '.xml');
         } else {
             $latest = '';
         }
         PEAR::popErrorHandling();
-        if (PEAR::isError($pinfo)) {
-            return PEAR::raiseError('Unknown package: "' . $package . '"');
-        }
         return array(
             'name' => $pinfo['n'],
             'channel' => $pinfo['c'],
