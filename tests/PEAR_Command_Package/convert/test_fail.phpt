@@ -18,12 +18,12 @@ copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' . DIRECTORY_SEPARA
     $temp_path . DIRECTORY_SEPARATOR . 'nosummary.xml');
 $e = $command->run('convert', array(), array($temp_path . DIRECTORY_SEPARATOR . 'invalid.xml'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Invalid tag order in <extsrcrelease>, found <installconditions> expected one of "configureoption, binarypackage, filelist"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "validv1.xml" in directory "<dir name="/">" has invalid role "ext", should be one of data, doc, php, script, src, test'),
 ), 'invalid packagexml 1');
 $phpunit->assertEquals(array (
   0 => 
   array (
-    'info' => 'Invalid tag order in <extsrcrelease>, found <installconditions> expected one of "configureoption, binarypackage, filelist"',
+    'info' => 'File "validv1.xml" in directory "<dir name="/">" has invalid role "ext", should be one of data, doc, php, script, src, test',
     'cmd' => 'no command',
   ),
   1 => 
