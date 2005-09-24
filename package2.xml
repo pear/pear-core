@@ -91,6 +91,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * clean up package.xml 1.0 dir/file parsing
   * fix invalid PEAR_Config generation
   * change the user agent from PHP/phpversion to PEAR/pearversion/PHP/phpversion
+  * don't use a bogus uri for licenses on running convert command
   * fix Bug #5323: pear search returns odd version numbers
   * fix Bug #5428: pear cvstag package2.xml does not include the package.xml
   * fix Bug #5449: pear makerpm completely broken for package.xml 2.0

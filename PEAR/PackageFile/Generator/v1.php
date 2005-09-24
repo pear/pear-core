@@ -592,19 +592,22 @@ class PEAR_PackageFile_Generator_v1
                 'php license' => 'http://www.php.net/license',
                 'lgpl' => 'http://www.gnu.org/copyleft/lesser.html',
                 'bsd' => 'http://www.opensource.org/licenses/bsd-license.php',
+                'bsd style' => 'http://www.opensource.org/licenses/bsd-license.php',
+                'bsd-style' => 'http://www.opensource.org/licenses/bsd-license.php',
                 'mit' => 'http://www.opensource.org/licenses/mit-license.php',
                 'gpl' => 'http://www.gnu.org/copyleft/gpl.html',
                 'apache' => 'http://www.opensource.org/licenses/apache2.0.php'
             );
         if (isset($licensemap[strtolower($this->_packagefile->getLicense())])) {
-            $uri = $licensemap[strtolower($this->_packagefile->getLicense())];
+            $arr['license'] = array(
+                'attribs' => array('uri' =>
+                    $licensemap[strtolower($this->_packagefile->getLicense())]),
+                '_content' => $this->_packagefile->getLicense()
+                );
         } else {
-            $uri = 'http://www.example.com';
+            // don't use bogus uri
+            $arr['license'] = $this->_packagefile->getLicense();
         }
-        $arr['license'] = array(
-            'attribs' => array('uri' => $uri),
-            '_content' => $this->_packagefile->getLicense()
-            );
         $arr['notes'] = $this->_packagefile->getNotes();
         $temp = array();
         $arr['contents'] = $this->_convertFilelist2_0($temp);
