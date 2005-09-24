@@ -40,7 +40,7 @@ release notes
    <file role="php" baseinstalldir="freeb" md5sum="8332264d2e0e3c3091ebd6d8cee5d3a3" install-as="merbl.php" name="foo.php">
     <replace from="@pv@" to="version" type="package-info"/>
    </file>
-   <file role="php" baseinstalldir="freeb" name="validv1.xml">
+   <file role="ext" baseinstalldir="freeb" name="validv1.xml">
     <replace from="@pv@" to="version" type="package-info"/>
    </file>
   </filelist>
