@@ -16,6 +16,10 @@ if ($temp_path2{0} != '/') {
 }
 $e = $command->run('config-create', array(), array($temp_path2 . '/nomake', $temp_path . DIRECTORY_SEPARATOR
     . 'remote.ini'));
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' => 'Configuration file "' .$temp_path . DIRECTORY_SEPARATOR .
+    'remote.ini" is empty')
+), 'log errors');
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -214,15 +218,6 @@ $contents = explode("\n", implode('', file($temp_path . DIRECTORY_SEPARATOR . 'r
 $contents = unserialize($contents[1]);
 $config->readConfigFile($temp_path . DIRECTORY_SEPARATOR . 'remote.ini');
 $phpunit->assertEquals(array (
-  '__channels' => 
-  array (
-    'pecl.php.net' =>
-    array (
-    ),
-    '__uri' => 
-    array (
-    ),
-  ),
   'php_dir' => $temp_path2 . '/nomake/pear/php',
   'data_dir' => $temp_path2 . '/nomake/pear/data',
   'ext_dir' => $temp_path2 . '/nomake/pear/ext',
