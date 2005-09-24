@@ -306,7 +306,7 @@ class PEAR_REST
             $ifmodifiedsince = ($lastmodified ? "If-Modified-Since: $lastmodified\r\n" : '');
         }
         $request .= "Host: $host:$port\r\n" . $ifmodifiedsince .
-            "User-Agent: PHP/" . PHP_VERSION . "\r\n";
+            "User-Agent: PEAR/@package_version@/PHP/" . PHP_VERSION . "\r\n";
         $username = $this->config->get('username');
         $password = $this->config->get('password');
         if ($username && $password) {
