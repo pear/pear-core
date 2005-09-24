@@ -84,9 +84,8 @@ release notes
   <filelist>
    <install as="hope" name="sunger/foo.dat" />
    <install as="merbl.php" name="foo.php" />
-   <install as="foo.doc" name="foo.doc" />
-   <ignore name="foo.phpt" />
    <ignore name="sunger/foo.tst" />
+   <ignore name="foo.phpt" />
   </filelist>
  </phprelease>
  <phprelease>
@@ -97,21 +96,13 @@ release notes
   </installconditions>
   <filelist>
    <install as="merbl.php" name="foo.php" />
-   <install as="foo.tst" name="foo.tst" />
    <ignore name="sunger/foo.dat" />
    <ignore name="sunger/foo.doc" />
   </filelist>
  </phprelease>
  <phprelease>
-  <installconditions>
-   <os>
-    <name>*</name>
-   </os>
-  </installconditions>
   <filelist>
    <install as="merbl.php" name="foo.php" />
-   <install as="foo.doc" name="foo.doc" />
-   <install as="foo.tst" name="foo.tst" />
    <ignore name="sunger/foo.dat" />
    <ignore name="foo.phpt" />
   </filelist>
