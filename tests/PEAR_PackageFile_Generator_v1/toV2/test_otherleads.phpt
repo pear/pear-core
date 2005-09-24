@@ -103,11 +103,6 @@ release notes
   </optional>
  </dependencies>
  <phprelease>
-  <installconditions>
-   <os>
-    <name>*</name>
-   </os>
-  </installconditions>
   <filelist>
    <install as="merbl.php" name="foo.php" />
   </filelist>
@@ -284,11 +279,6 @@ release notes
   </optional>
  </dependencies>
  <phprelease>
-  <installconditions>
-   <os>
-    <name>*</name>
-   </os>
-  </installconditions>
   <filelist>
    <install as="merbl.php" name="foo.php" />
   </filelist>
