@@ -280,6 +280,10 @@ if ($fetype == 'Gtk') {
     if ($ok === false) {
         PEAR::raiseError("unknown command `$command'");
     }
+    if (PEAR::isError($ok)) {
+        PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array($ui, "displayFatalError"));
+        PEAR::raiseError($ok);
+    }
 } while (false);
 
 // {{{ usage()
