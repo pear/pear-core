@@ -88,6 +88,11 @@ generate both package.xml.
     }
 
 
+    /**
+     * For unit-testing ease
+     *
+     * @return PEAR_Packager
+     */
     function &getPackager()
     {
         if (!class_exists('PEAR_Packager')) {
@@ -129,7 +134,8 @@ generate both package.xml.
             return $err;
         }
         $compress = empty($options['nocompress']) ? true : false;
-        $result = $packager->package($pkginfofile, $compress, $pkg2, 'package.xml');
+        var_dump($pkginfofile, 'package.xml');
+        $result = $packager->package($pkginfofile, $compress, 'package.xml');
         if (PEAR::isError($result)) {
             return $this->raiseError($result);
         }
@@ -344,7 +350,7 @@ generate both package.xml.
                     }
                 }
             }
-            $pf->addFile('/', $file['attribs']['name'], $atts);
+            $pf->addFile('/', $file['attribs']['name'], $file['attribs']);
         }
         if ($pf2->getChangeLog()) {
             $this->ui->outputData('WARNING: changelog is not translated to package.xml ' .
