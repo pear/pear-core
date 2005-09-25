@@ -336,6 +336,10 @@ $phpunit->assertEquals(array (
       'field' => 'version',
       'reason' => 'A version number should have 3 decimals (x.y.z)',
     ),
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -352,6 +356,10 @@ $phpunit->assertEquals(array (
     array (
       'field' => 'version',
       'reason' => 'A version number should have 3 decimals (x.y.z)',
+    ),
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
     ),
   ),
   'errors' => 

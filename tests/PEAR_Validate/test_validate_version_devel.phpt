@@ -337,6 +337,11 @@ $phpunit->assertEquals(array (
       'field' => 'version',
       'reason' => 'packages with devel stability must be < version 1.0.0',
     ),
+    1 => 
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -355,6 +360,11 @@ $phpunit->assertEquals(array (
       'field' => 'version',
       'reason' => 'version "000.4.3" should be "0.4.3"',
     ),
+    1 => 
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -368,6 +378,10 @@ $phpunit->assertTrue($res, 'attempt 0.4.5 devel');
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (

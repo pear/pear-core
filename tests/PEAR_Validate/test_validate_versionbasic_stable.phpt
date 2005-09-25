@@ -337,6 +337,11 @@ $phpunit->assertEquals(array (
       'field' => 'version',
       'reason' => 'version "1.4.0a1" or any RC/beta/alpha version cannot be stable',
     ),
+    1 => 
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -353,6 +358,11 @@ $phpunit->assertEquals(array (
     array (
       'field' => 'version',
       'reason' => 'versions less than 1.0.0 cannot be stable',
+    ),
+    1 => 
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
     ),
   ),
   'errors' => 
@@ -372,6 +382,11 @@ $phpunit->assertEquals(array (
       'reason' => 'major version x in x.y.z may not be greater than ' .
                   '1 for any package that does not have an <extends> tag',
     ),
+    1 => 
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -385,6 +400,10 @@ $phpunit->assertTrue($res, 'attempt 1.0.0 stable');
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -398,6 +417,10 @@ $phpunit->assertTrue($res, 'attempt 1.0.0pl1 stable');
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
