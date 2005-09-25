@@ -25,9 +25,7 @@ $ret = $packager->package($temp_path . DIRECTORY_SEPARATOR . 'validv2.xml', true
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25"is not today'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25"is not today'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2005-09-25"is not today'),
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2004-11-27"is not today'),
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2005-09-25"is not today'),
 ), '1');
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'fakebar-1.9.0.tgz', 'fakebar-1.9.0.tgz');
 $phpunit->assertEquals(array (
@@ -57,9 +55,7 @@ $ret = $packager->package($temp_path . DIRECTORY_SEPARATOR . 'validv2.xml', fals
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25"is not today'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25"is not today'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2005-09-25"is not today'),
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2004-11-27"is not today'),
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2005-09-25"is not today'),
 ), '1.5');
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'fakebar-1.9.0.tar', 'fakebar-1.9.0.tar');
 $phpunit->assertEquals(array (
@@ -91,9 +87,7 @@ $ret = $packager->package($temp_path . DIRECTORY_SEPARATOR . 'validv2.xml', true
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25"is not today'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25"is not today'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2005-09-25"is not today'),
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2004-11-27"is not today'),
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2005-09-25"is not today'),
 ), '2');
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'fakebar-1.9.0.tgz', 'fakebar-1.9.0.tgz 2');
 $phpunit->assertEquals(array (
