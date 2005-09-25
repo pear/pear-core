@@ -91,6 +91,7 @@ mkdir($temp_path . DIRECTORY_SEPARATOR . 'foo-1.2.0a1.tgz');
 touch($temp_path . DIRECTORY_SEPARATOR . 'foo.php');
 $e = $generator->toTgz($packager, true, $temp_path . DIRECTORY_SEPARATOR . 'floub');
 $phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2004-12-25"is not today'),
     array('package' => 'PEAR_Error', 'message' => 'PEAR_Packagefile_v1::toTgz: cannot create tgz file "' .
     $temp_path . DIRECTORY_SEPARATOR . 'foo-1.2.0a1.tgz"'),
 ), 'bad');
