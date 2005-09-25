@@ -39,6 +39,9 @@ require_once 'PEAR/REST.php';
  */
 class PEAR_REST_10
 {
+    /**
+     * @var PEAR_REST
+     */
     var $_rest;
     function PEAR_REST_10($config, $options = array())
     {
@@ -289,12 +292,27 @@ class PEAR_REST_10
         if (PEAR::isError($packagelist)) {
             return $packagelist;
         }
+        if ($this->_rest->config->get('verbose') > 0) {
+            $ui = &PEAR_Frontend::singleton();
+            $ui->log('Retrieving data...0%', false);
+        }
         $ret = array();
         if (!is_array($packagelist['p'])) {
             $packagelist['p'] = array($packagelist['p']);
         }
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-        foreach ($packagelist['p'] as $package) {
+        $next = .1;
+        foreach ($packagelist['p'] as $progress => $package) {
+            if ($this->_rest->config->get('verbose') > 0) {
+                if ($progress / count($packagelist['p']) >= $next) {
+                    if ($next == .5) {
+                        $ui->log('50%', false);
+                    } else {
+                        $ui->log('.', false);
+                    }
+                    $next += .1;
+                }
+            }
             if ($basic) { // remote-list command
                 if ($dostable) {
                     $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .

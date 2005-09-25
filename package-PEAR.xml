@@ -89,6 +89,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * don't use a bogus uri for licenses on running convert command
   * add &quot;pickle&quot; command for PECL packaging
   * add validation warning if the release date in package.xml is not today when packaging
+  * implement progress bar for list-all/remote-list
   * fix Bug #5323: pear search returns odd version numbers
   * fix Bug #5428: pear cvstag package2.xml does not include the package.xml
   * fix Bug #5449: pear makerpm completely broken for package.xml 2.0
