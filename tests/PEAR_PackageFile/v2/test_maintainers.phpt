@@ -27,7 +27,9 @@ function assertValidation(&$pf)
     $phpunit->assertEquals(array(), $fakelog->getLog(), 'downloading validate empty log');
     $phpunit->assertNoErrors('after validation');
     $result = $pf->validate(PEAR_VALIDATE_PACKAGING);
-    $phpunit->showall();
+    $phpunit->assertErrors(array(
+        array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-10-10"is not today')
+    ), 'after full packaging validation');
     $phpunit->assertEquals(array (
       0 => 
       array (
@@ -45,7 +47,6 @@ function assertValidation(&$pf)
         1 => 'Analyzing test/test3.php',
       ),
     ), $fakelog->getLog(), 'packaging validate full log');
-    $phpunit->assertNoErrors('after validation');
 }
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
