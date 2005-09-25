@@ -65,7 +65,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2005-09-18</date>
+ <date>2005-09-26</date>
  <version>
   <release>1.4.1</release>
   <api>1.4.0</api>
