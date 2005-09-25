@@ -23,6 +23,7 @@ copy(dirname(__FILE__) . '/packagefiles/sunger/foo.dat', $temp_path . DIRECTORY_
 // test warnings, v1
 $ret = $command->run('package', array(), array($temp_path . DIRECTORY_SEPARATOR . 'validwarnv1.xml'));
 $phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2004-11-27"is not today'),
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'in foo.php: class "gronk" not prefixed with package name "foo"'),
 ), 'warning v1');
 $phpunit->assertTrue($ret, 'return warning v1');
@@ -37,7 +38,10 @@ $phpunit->assertEquals(array (
     0 => 'Warning: in foo.php: class "gronk" not prefixed with package name "foo"',
     1 => true,
   ),
-  2 =>
+  array (
+    0 => 'Warning: Channel validator error: field "date" - Release Date "2004-11-27"is not today',
+    1 => true,
+  ),
   array (
     0 => 'Package foo-1.2.0a1.tgz done',
     1 => true,
@@ -46,8 +50,10 @@ $phpunit->assertEquals(array (
 // test warnings, v2
 $ret = $command->run('package', array(), array($temp_path . DIRECTORY_SEPARATOR . 'validwarnfakebar.xml'));
 $phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25"is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25"is not today'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'in foo.php: class "gronk" not prefixed with package name "fakebar"'),
-), 'warning v1');
+), 'warning v2');
 $phpunit->assertTrue($ret, 'return warning v2');
 $phpunit->assertEquals(array (
   0 => 
@@ -60,7 +66,10 @@ $phpunit->assertEquals(array (
     0 => 'Warning: in foo.php: class "gronk" not prefixed with package name "fakebar"',
     1 => true,
   ),
-  2 =>
+  array (
+    0 => 'Warning: Channel validator warning: field "date" - Release Date "2004-12-25"is not today',
+    1 => true,
+  ),
   array (
     0 => 'Package fakebar-1.9.0.tgz done',
     1 => true,
