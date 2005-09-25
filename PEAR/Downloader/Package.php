@@ -634,9 +634,28 @@ class PEAR_Downloader_Package
                     $chan = 'pecl.php.net';
                     $url =
                         $this->_downloader->_getDepPackageDownloadUrl($newdep, $pname);
+                    $obj = &$this->_registry->getPackage($dep['name']);
                     if (PEAR::isError($url)) {
                         PEAR::popErrorHandling();
-                        return $url;
+                        if ($obj !== null && $this->isInstalled($obj, $dep['rel'])) {
+                            $group = (!isset($dep['optional']) || $dep['optional'] == 'no') ?
+                                'required' :
+                                'optional';
+                            $dep['package'] = $dep['name'];
+                            if (!isset($options['soft'])) {
+                                $this->_downloader->log(3, $this->getShortName() .
+                                    ': Skipping ' . $group . ' dependency "' .
+                                    $this->_registry->parsedPackageNameToString($dep, true) .
+                                    '", already installed as version ' . $obj->getVersion());
+                            }
+                            if (@$skipnames[count($skipnames) - 1] ==
+                                  $this->_registry->parsedPackageNameToString($dep, true)) {
+                                array_pop($skipnames);
+                            }
+                            continue;
+                        } else {
+                            return $url;
+                        }
                     }
                 }
                 PEAR::popErrorHandling();

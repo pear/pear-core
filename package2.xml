@@ -108,6 +108,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #5488: pecl uninstall package fails if package has a package.xml 1.0
   * fix Bug #5501: the commands list mentions XML-RPC
   * fix Bug #5509: addDependecyGroup does not validate group name
+  * fix Bug #5513: PEAR 1.4 does not install non-pear.php.net packages
  </notes>
  <contents>
   <dir name="/">
