@@ -847,6 +847,9 @@ class PEAR_PackageFile_v2_Validator
             );
             foreach ($groups as $group) {
                 if ($this->_stupidSchemaValidate($structure, $group, '<group>')) {
+                    if (!PEAR_Validate::validGroupName($group['attribs']['name'])) {
+                        $this->_invalidDepGroupName($group['attribs']['name']);
+                    }
                     foreach (array('package', 'subpackage', 'extension') as $type) {
                         if (isset($group[$type])) {
                             $iter = $group[$type];
@@ -1566,6 +1569,12 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array('tag' => $tag),
             '%tag% cannot conflict with all OSes');
+    }
+
+    function _invalidDepGroupName($name)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('group' => $name),
+            'Invalid dependency group name "%name%"');
     }
 
     function _analyzeBundledPackages()
