@@ -452,8 +452,12 @@ Run post-installation scripts in package <package>, if any exist.
                               in_array($pinfo['extension'], array('c', 'h'))) {
                             continue; // make sure we don't match php_blah.h
                         }
-                        if (strpos($pinfo['basename'], 'php_') === 0 ||
-                              $pinfo['extension'] == 'so') {
+                        if ((strpos($pinfo['basename'], 'php_') === 0 &&
+                              $pinfo['extension'] == 'dll') ||
+                              // most unices
+                              $pinfo['extension'] == 'so' ||
+                              // hp-ux
+                              $pinfo['extension'] == 'sl') {
                             $extrainfo[] = 'You should add "extension=' . $pinfo['basename']
                                 . '" to php.ini';
                             break;
