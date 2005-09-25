@@ -845,7 +845,8 @@ http://pear.php.net/dtd/package-2.0.xsd',
         }
     
         if (is_scalar($tag['content']) || is_null($tag['content'])) {
-            if ($this->options['encoding'] == 'UTF-8') {
+            if ($this->options['encoding'] == 'UTF-8' &&
+                  version_compare(phpversion(), '5.0.0', 'lt')) {
                 $encoding = XML_UTIL_ENTITIES_UTF8_XML;
             } else {
                 $encoding = XML_UTIL_ENTITIES_XML;

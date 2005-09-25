@@ -1708,6 +1708,17 @@ class PEAR_PackageFile_v2
         return false;
     }
 
+    /**
+     * @return array
+     */
+    function getChangelog()
+    {
+        if (isset($this->_packageInfo['changelog'])) {
+            return $this->_packageInfo['changelog'];
+        }
+        return false;
+    }
+
     function hasDeps()
     {
         return isset($this->_packageInfo['dependencies']);

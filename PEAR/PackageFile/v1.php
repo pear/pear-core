@@ -1266,6 +1266,11 @@ class PEAR_PackageFile_v1
         return $this->_isValid;
     }
 
+    /**
+     * Get the default xml generator object
+     *
+     * @return PEAR_PackageFile_Generator_v1
+     */
     function &getDefaultGenerator()
     {
         if (!class_exists('PEAR_PackageFile_Generator_v1')) {
