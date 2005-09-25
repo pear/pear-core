@@ -1387,7 +1387,7 @@ class PEAR_Installer extends PEAR_Downloader
         }
         if ($pkg->getInstalledBinary()) {
             // this is just an alias for a binary package
-            $this->_registry->deletePackage($package, $channel);
+            return $this->_registry->deletePackage($package, $channel);
         }
         $filelist = $pkg->getFilelist();
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
