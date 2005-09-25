@@ -67,12 +67,15 @@ http://pear.php.net/dtd/package-1.0.xsd">
  </maintainers>
  <release>
   <version>1.4.1</version>
-  <date>2005-09-26</date>
+  <date>2005-09-25</date>
   <license>PHP License</license>
   <state>stable</state>
   <notes>
   Major bugfix release.  This is a recommended download for ALL PEAR users
   
+  UPGRADING FROM 1.4.0 WILL CAUSE A SERIES OF NOTICES.  IGNORE THEM.
+  THIS IS CAUSED BY A BUG IN 1.4.0 THAT IS FIXED IN 1.4.1
+
   * fix prompt processing in post-install scripts
   * make dual package.xml equivalency stricter when using package.xml/package2.xml
   * fix critical error in validating bogus php dependencies of package.xml 1.0
