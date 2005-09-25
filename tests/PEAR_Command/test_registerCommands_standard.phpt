@@ -3,10 +3,10 @@ PEAR_Command::factory()
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
-    die('skip');
+ //   die('skip');
 }
 if (@include_once 'PEAR/Command/Remoteinstall-init.php') {
-    die('skip remoteinstall test will be used');
+   // die('skip remoteinstall test will be used');
 }
 ?>
 --FILE--
@@ -47,6 +47,7 @@ $phpunit->assertEquals(array (
   'package' => 'PEAR_Command_Package',
   'package-dependencies' => 'PEAR_Command_Package',
   'package-validate' => 'PEAR_Command_Package',
+  'pickle' => 'PEAR_Command_Pickle',
   'remote-info' => 'PEAR_Command_Remote',
   'remote-list' => 'PEAR_Command_Remote',
   'run-scripts' => 'PEAR_Command_Install',
@@ -59,8 +60,8 @@ $phpunit->assertEquals(array (
   'upgrade' => 'PEAR_Command_Install',
   'upgrade-all' => 'PEAR_Command_Install',
 ), PEAR_Command::getCommands(), 'getcommands');
-$phpunit->assertEquals(43, count(PEAR_Command::getCommands()), 'count commands');
-$phpunit->assertEquals(43, count(PEAR_Command::getShortcuts()), 'count shortcuts');
+$phpunit->assertEquals(44, count(PEAR_Command::getCommands()), 'count commands');
+$phpunit->assertEquals(44, count(PEAR_Command::getShortcuts()), 'count shortcuts');
 $phpunit->assertEquals(array (
   'b' => 'build',
   'bun' => 'bundle',
@@ -92,6 +93,7 @@ $phpunit->assertEquals(array (
   'lu' => 'list-upgrades',
   'p' => 'package',
   'pd' => 'package-dependencies',
+  'pi' => 'pickle',
   'pv' => 'package-validate',
   'ri' => 'remote-info',
   'rl' => 'remote-list',
@@ -308,7 +310,7 @@ $phpunit->assertEquals('Retrieve Information on a Channel'
     , PEAR_Command::getDescription('channel-info'), 'channel-info');
 $phpunit->assertEquals('Update an Existing Channel'
     , PEAR_Command::getDescription('channel-update'), 'channel-update');
-$phpunit->assertEquals('Clear XML-RPC Cache'
+$phpunit->assertEquals('Clear Web Services Cache'
     , PEAR_Command::getDescription('clear-cache'), 'clear-cache');
 $phpunit->assertEquals('Create a Default configuration file'
     , PEAR_Command::getDescription('config-create'), 'config-create');
