@@ -179,17 +179,19 @@ class PEAR_REST_10
             }
             // allow newer releases to say "I'm OK with the dependent package"
             if ($xsdversion == '2.0' && isset($release['co'])) {
-                if (!is_array($release['co'])) {
+                if (!isset($release['co'][0])) {
                     $release['co'] = array($release['co']);
                 }
                 foreach ($release['co'] as $entry) {
                     if (isset($entry['x']) && !is_array($entry['x'])) {
                         $entry['x'] = array($entry['x']);
+                    } elseif (!isset($entry['x'])) {
+                        $entry['x'] = array();
                     }
                     if ($entry['c'] == $deppackage['channel'] &&
-                          $entry['p'] == $deppackage['package'] &&
-                          version_compare($release['v'], $entry['min'], '>=') &&
-                          version_compare($release['v'], $entry['max'], '<=') &&
+                          strtolower($entry['p']) == strtolower($deppackage['package']) &&
+                          version_compare($deppackage['version'], $entry['min'], '>=') &&
+                          version_compare($deppackage['version'], $entry['max'], '<=') &&
                           !in_array($release['v'], $entry['x'])) {
                         $recommended = $release['v'];
                         break;
