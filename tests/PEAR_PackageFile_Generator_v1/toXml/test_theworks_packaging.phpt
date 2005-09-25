@@ -15,7 +15,9 @@ $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     DIRECTORY_SEPARATOR . 'theworks.xml');
 $generator = &$pf->getDefaultGenerator();
 $e = $generator->toXml(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertNoErrors('errors');
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2005-09-25"is not today'),
+),'errors');
 $phpunit->assertEquals(array (
   0 => 
   array (
