@@ -438,7 +438,9 @@ Run post-installation scripts in package <package>, if any exist.
                 }
             }
             if (is_array($info)) {
-                if ($param->getPackageType() == 'extsrc' || $param->getPackageType() == 'extbin') {
+                if ($param->getPackageType() == 'extsrc' ||
+                      $param->getPackageType() == 'extbin') {
+                    $pkg = &$param->getPackageFile();
                     if ($instbin = $pkg->getInstalledBinary()) {
                         $instpkg = &$reg->getPackage($instbin, $pkg->getChannel());
                     } else {
