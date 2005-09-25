@@ -134,7 +134,6 @@ generate both package.xml.
             return $err;
         }
         $compress = empty($options['nocompress']) ? true : false;
-        var_dump($pkginfofile, 'package.xml');
         $result = $packager->package($pkginfofile, $compress, 'package.xml');
         if (PEAR::isError($result)) {
             return $this->raiseError($result);

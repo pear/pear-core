@@ -112,7 +112,6 @@ copy(dirname(__FILE__) . '/packagefiles/sunger/foo.dat', $temp_path . DIRECTORY_
     'sunger' . DIRECTORY_SEPARATOR . 'foo.dat');
 $contents = file_get_contents($temp_path . DIRECTORY_SEPARATOR . 'validv2.xml');
 $contents = str_replace('2004-12-25', date('Y-m-d'), $contents);
-var_dump($contents);
 $fp = fopen($temp_path . DIRECTORY_SEPARATOR . 'validv2.xml', 'wb');
 fwrite($fp, $contents);
 fclose($fp);
