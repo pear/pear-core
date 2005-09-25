@@ -23,7 +23,6 @@ mkdir($temp_path . DIRECTORY_SEPARATOR . 'gron');
 $e = $generator->toTgz2($packager, $null, true, $temp_path . DIRECTORY_SEPARATOR . 'gron');
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-10"is not today'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2005-09-25"is not today'),
 ), 'errors');
 $phpunit->assertEquals(array (
   0 => 

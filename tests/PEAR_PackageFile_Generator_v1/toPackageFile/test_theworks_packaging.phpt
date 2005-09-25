@@ -17,7 +17,6 @@ $generator = &$pf->getDefaultGenerator();
 $e = $generator->toPackageFile($temp_path, PEAR_VALIDATE_PACKAGING, 'tub.xml');
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2004-11-27"is not today'),
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2005-09-25"is not today'),
 ), 'errors');
 $phpunit->assertEquals(array (
   0 => 

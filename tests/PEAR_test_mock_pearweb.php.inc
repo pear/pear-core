@@ -5,6 +5,7 @@ class PEAR_test_mock_pearweb {
     var $_config;
     var $_remote;
     var $_xmlrpcCalls = array();
+    var $_continue = false;
     
     function setRemote(&$r)
     {
@@ -37,11 +38,33 @@ class PEAR_test_mock_pearweb {
     function receiveREST($address)
     {
         if (!isset($this->_config) || !is_array($this->_config)) {
-            $this->tryParentREST($address);
+            $ret = $this->tryParentREST($address);
+            if ($this->_continue) {
+                if (!$ret) {
+                    return $this->do304($address);
+                }
+                return $this->do200() .
+                "ETag: 12345678910\n" .
+                "Last-Modified: 12345678910\n" .
+                'Content-Type: ' . $ret[2]['content-type'] . "\n" .
+                'Content-Length: ' . $ret[2]['content-length'] . "\n\n" .
+                $ret[0];
+            }
             die('No REST config for URL ' . $address);
         }
         if (!isset($this->_config['rest'][$address])) {
-            $this->tryParentREST($address);
+            $ret = $this->tryParentREST($address);
+            if ($this->_continue) {
+                if (!$ret) {
+                    return $this->do304($address);
+                }
+                return $this->do200() .
+                "ETag: 12345678910\n" .
+                "Last-Modified: 12345678910\n" .
+                'Content-Type: ' . $ret[2]['content-type'] . "\n" .
+                'Content-Length: ' . $ret[2]['content-length'] . "\n\n" .
+                $ret[0];
+            }
             die('No REST config for URL ' . $address);
         } else {
             if (!$this->_config['rest'][$address][0]) {
@@ -91,8 +114,10 @@ class PEAR_test_mock_pearweb {
                 echo '$pearweb->addRESTConfig("' . $address . '", ' . var_export($ret[0], true)
                     . ", 'text/xml');\n";
             }
+            return $ret;
         } else {
                 echo '$pearweb->addRESTConfig("' . $address . "\", false, false);\n";
+            return false;
         }
     }
 
@@ -246,6 +271,11 @@ class PEAR_test_mock_pearweb {
     function do404($address)
     {
         return 'HTTP/1.1 404 ' . $address . ' Is not valid';
+    }
+
+    function do304($address)
+    {
+        return 'HTTP/1.1 304 ' . $address . ' Unmodified';
     }
 
     /**

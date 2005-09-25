@@ -30,9 +30,7 @@ $pf->addMaintainer('lead', 'single', 'person', 'joe@example.com');
 $pf->addFile('', 'foo.php', array('role' => 'php'));
 $generator = &$pf->getDefaultGenerator();
 $e = $generator->toXml(PEAR_VALIDATE_PACKAGING);
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2005-09-25"is not today'),
-), 'errors');
+$phpunit->assertNoErrors('errors');
 $phpunit->assertEquals(array (
   0 => 
   array (
