@@ -85,12 +85,12 @@ server, for example if you download the DB package and the latest stable
 version of DB is 1.6.5, the downloaded file will be DB-1.6.5.tgz.',
             ),
         'clear-cache' => array(
-            'summary' => 'Clear XML-RPC Cache',
+            'summary' => 'Clear Web Services Cache',
             'function' => 'doClearCache',
             'shortcut' => 'cc',
             'options' => array(),
             'doc' => '
-Clear the XML-RPC cache.  See also the cache_ttl configuration
+Clear the XML-RPC/REST cache.  See also the cache_ttl configuration
 parameter.
 ',
             ),
