@@ -95,6 +95,7 @@ $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR .
 $generator = &$pf->getDefaultGenerator();
 $e = $generator->toPackageFile($temp_path, PEAR_VALIDATE_PACKAGING, 'tub.xml');
 $phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-10"is not today'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "' .
     dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'nosuchpackage-1.9.0.tgz" in package.xml does not exist'),
@@ -119,6 +120,7 @@ $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR .
 $generator = &$pf->getDefaultGenerator();
 $e = $generator->toPackageFile($temp_path, PEAR_VALIDATE_PACKAGING, 'tub.xml');
 $phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-10"is not today'),
     array('package' => 'PEAR_Error', 'message' => 'PEAR_Packagefile_v2::toPackageFile: invalid package.xml'),
 ), 'bad bundle 1.5');
 $phpunit->assertEquals(array (

@@ -131,7 +131,10 @@ Other:
 </package>', $e, 'xml');
 
 $e = $generator->toPackageFile($temp_path, PEAR_VALIDATE_PACKAGING, 'tub.xml');
-$phpunit->assertNoErrors('errors');
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2005-09-25"is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2005-09-25"is not today'),
+), 'errors');
 $phpunit->assertEquals(array(
     array(1, 'Analyzing bundled package fakefoo-1.9.0.tgz'),
     array(1, 'Analyzing bundled package fakebar-1.9.0.tgz'),
