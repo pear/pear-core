@@ -76,7 +76,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  Major bugfix release.  Mostly pecl-related issues
+  Major bugfix release.  This is a recommended download for ALL PEAR users
   
   * fix prompt processing in post-install scripts
   * make dual package.xml equivalency stricter when using package.xml/package2.xml
