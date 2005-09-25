@@ -271,27 +271,22 @@ $phpunit->assertEquals(array (
     0 => 'http://pear.php.net/rest/p/packages.xml',
     1 => '200',
   ),
-  1 => 
   array (
     0 => 'http://pear.php.net/rest/p/archive_tar/info.xml',
     1 => '200',
   ),
-  2 => 
   array (
     0 => 'http://pear.php.net/rest/r/archive_tar/allreleases.xml',
     1 => '200',
   ),
-  3 => 
   array (
     0 => 'http://pear.php.net/rest/r/archive_tar/deps.1.3.1.txt',
     1 => '200',
   ),
-  4 => 
   array (
     0 => 'http://pear.php.net/rest/p/archive_zip/info.xml',
     1 => '200',
   ),
-  5 => 
   array (
     0 => 'http://pear.php.net/rest/r/archive_zip/allreleases.xml',
     1 => '404',
@@ -358,7 +353,30 @@ $phpunit->assertEquals(array (
   ),
 ), $pearweb->getRESTCalls(), 'REST calls');
 $phpunit->assertEquals(array (
-  0 => 
+  array (
+    0 => 'Retrieving data...0%',
+    1 => false,
+  ),
+  array (
+    0 => '.',
+    1 => false,
+  ),
+  array (
+    0 => '.',
+    1 => false,
+  ),
+  array (
+    0 => '.',
+    1 => false,
+  ),
+  array (
+    0 => '.',
+    1 => false,
+  ),
+  array (
+    0 => '50%',
+    1 => false,
+  ),
   array (
     'info' => 
     array (
