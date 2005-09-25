@@ -3414,12 +3414,7 @@ $config->set('preferred_state', 'alpha');
 $_test_dep->setPHPVersion('4.3.10');
 $_test_dep->setExtensions(array('xml' => '1.0', 'pcre' => '1.0'));
 $command->run('install', array(), $packages);
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Package.xml contains non-ISO-8859-1 characters, and may not validate'),
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Package.xml contains non-ISO-8859-1 characters, and may not validate'),
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Package.xml contains non-ISO-8859-1 characters, and may not validate'),
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Package.xml contains non-ISO-8859-1 characters, and may not validate'),
-), 'after install');
+$phpunit->assertNoErrors('after install');
 $fakelog->getLog();
 $command->_reset_downloader();
 $command->run('upgrade-all', array(), array());

@@ -765,9 +765,7 @@ for ($i = 1; $i <= 6; $i++) {
 $_test_dep->setPHPVersion('4.3.10');
 $_test_dep->setExtensions(array('pcre' => '1.0'));
 $command->run('install', array(), $packages);
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Package.xml contains non-ISO-8859-1 characters, and may not validate'),
-), 'after install');
+$phpunit->assertNoErrors('after install');
 $fakelog->getLog();
 $paramnames = array('Mail_Mime', 'SOAP', 'Net_DIME', 'HTTP_Request', 'Net_URL', 'Net_Socket');
 $command->run('uninstall', array(), $paramnames);
