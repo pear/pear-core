@@ -86,6 +86,7 @@ $ret = $packager->package(dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packagefil
     DIRECTORY_SEPARATOR . 'packageinvalidv1.xml');
 $ds = DIRECTORY_SEPARATOR;
 $phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2004-11-27"is not today'),
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'File "' . dirname(__FILE__) . $ds . 'packagefiles' .$ds . 'unknown.php" in package.xml does not exist'),
     array('package' => 'PEAR_Error', 'message' => 'Cannot package, errors in package'),
 ), 'ret');
@@ -96,12 +97,18 @@ $phpunit->assertEquals(array (
     0 => 'Error: File "' . dirname(__FILE__) . $ds . 'packagefiles' .$ds . 'unknown.php" in package.xml does not exist',
     1 => true,
   ),
+  1 => 
+  array (
+    0 => 'Error: Channel validator error: field "date" - Release Date "2004-11-27"is not today',
+     1 => true,
+   ),
 ), $fakelog->getLog(), 'log');
 // v2 with invalid, package-time validation
 $ret = $packager->package(dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'packageinvalidv2.xml');
 $ds = DIRECTORY_SEPARATOR;
 $phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25"is not today'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "' . dirname(__FILE__) . $ds . 'packagefiles' .$ds . 'unknown.php" in package.xml does not exist'),
     array('package' => 'PEAR_Error', 'message' => 'Cannot package, errors in package'),
 ), 'ret');
@@ -112,6 +119,11 @@ $phpunit->assertEquals(array (
     0 => 'Error: File "' . dirname(__FILE__) . $ds . 'packagefiles' .$ds . 'unknown.php" in package.xml does not exist',
     1 => true,
   ),
+  1 => 
+  array (
+    0 => 'Error: Channel validator warning: field "date" - Release Date "2004-12-25"is not today',
+     1 => true,
+   ),
 ), $fakelog->getLog(), 'log');
 chdir($savedir);
 echo 'tests done';
