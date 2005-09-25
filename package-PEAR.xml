@@ -101,6 +101,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #5483: pecl uninstall crack fatal error
   * fix Bug #5487: PECL: compiled files are not uninstalled via the uninstall command
   * fix Bug #5488: pecl uninstall package fails if package has a package.xml 1.0
+  * fix Bug #5501: the commands list mentions XML-RPC
   * fix Bug #5509: addDependecyGroup does not validate group name
   </notes>
   <provides type="class" name="OS_Guess"/>
