@@ -450,7 +450,7 @@ class PEAR_Validate
                 return false;
             }
             if ($this->_state == PEAR_VALIDATE_PACKAGING &&
-                  strtotime($this->_packagexml->getDate()) != strtotime('today')) {
+                  $this->_packagexml->getDate() != date('Y-m-d')) {
                 $this->_addWarning('date', 'Release Date "' .
                     $this->_packagexml->getDate() . '"is not today');
             }
