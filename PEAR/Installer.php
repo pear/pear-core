@@ -1310,13 +1310,14 @@ class PEAR_Installer extends PEAR_Downloader
             }
             $this->addFileOperation('rename', array($ext['file'], $copyto));
 
-            $filelist->installedFile($bn, array(
+            $filelist->installedFile($bn, array('attribs' => array(
                 'role' => $role,
+                'name' => $bn,
                 'installed_as' => $dest,
                 'php_api' => $ext['php_api'],
                 'zend_mod_api' => $ext['zend_mod_api'],
                 'zend_ext_api' => $ext['zend_ext_api'],
-                ));
+                )));
         }
     }
 
