@@ -334,6 +334,10 @@ $phpunit->assertTrue($res, 'attempt 2.4.0a1 alpha');
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -346,6 +350,10 @@ $phpunit->assertTrue($res, 'attempt 0.2.5 alpha');
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -362,6 +370,11 @@ $phpunit->assertEquals(array (
     array (
       'field' => 'version',
       'reason' => 'bugfix versions (2.x.y where y > 0) should not be alpha or beta',
+    ),
+    1 => 
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
     ),
   ),
   'errors' => 
@@ -380,6 +393,11 @@ $phpunit->assertEquals(array (
       'field' => 'version',
       'reason' => 'version 2.4.0 probably should not be alpha or beta',
     ),
+    1 => 
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -397,6 +415,11 @@ $phpunit->assertEquals(array (
       'field' => 'version',
       'reason' => 'version 2.4.0 probably should not be alpha or beta',
     ),
+    1 => 
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -413,6 +436,11 @@ $phpunit->assertEquals(array (
     array (
       'field' => 'version',
       'reason' => 'version "000.2.5" should be "0.2.5"',
+    ),
+    1 => 
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
     ),
   ),
   'errors' => 
@@ -436,6 +464,11 @@ $phpunit->assertEquals(array (
       'field' => 'version',
       'reason' => 'first version number "1" must match the postfix of package name "PEAR2" (2)',
     ),
+    2 => 
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -458,6 +491,10 @@ $phpunit->assertEquals(array (
     array (
       'field' => 'version',
       'reason' => 'first version number "10" must match the postfix of package name "PEAR9" (9)',
+    ),
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
     ),
   ),
   'errors' => 

@@ -332,6 +332,10 @@ $phpunit->assertTrue($res, 'attempt 1.4.0a1 alpha');
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -344,6 +348,10 @@ $phpunit->assertTrue($res, 'attempt 0.2.5 alpha');
 $phpunit->assertEquals(array (
   'warnings' => 
   array (
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -360,6 +368,10 @@ $phpunit->assertEquals(array (
     array (
       'field' => 'version',
       'reason' => 'bugfix versions (1.3.x where x > 0) probably should not be alpha or beta',
+    ),
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
     ),
   ),
   'errors' => 
@@ -378,6 +390,10 @@ $phpunit->assertEquals(array (
       'field' => 'version',
       'reason' => 'version 1.4.0 probably should not be alpha or beta',
     ),
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -394,6 +410,10 @@ $phpunit->assertEquals(array (
     array (
       'field' => 'version',
       'reason' => 'version 1.4.0 probably should not be alpha or beta',
+    ),
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
     ),
   ),
   'errors' => 
@@ -412,6 +432,10 @@ $phpunit->assertEquals(array (
       'field' => 'version',
       'reason' => 'version "000.2.5" should be "0.2.5"',
     ),
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
+    ),
   ),
   'errors' => 
   array (
@@ -429,6 +453,10 @@ $phpunit->assertEquals(array (
       'field' => 'version',
       'reason' => 'major versions greater than 1 are not allowed for packages ' .
                   'without an <extends> tag or an identical postfix (foo2 v2.0.0)',
+    ),
+    array (
+      'field' => 'date',
+      'reason' => 'Release Date "2004-09-30"is not today',
     ),
   ),
   'errors' => 
