@@ -436,9 +436,8 @@ class PEAR_Validate
      */
     function validateDate()
     {
-        // packager automatically sets date, so only validate if
-        // pear validate is called
-        if ($this->_state = PEAR_VALIDATE_NORMAL) {
+        if ($this->_state == PEAR_VALIDATE_NORMAL ||
+              $this->_state == PEAR_VALIDATE_PACKAGING) {
             if (!preg_match('/\d\d\d\d\-\d\d\-\d\d/',
                   $this->_packagexml->getDate())) {
                 $this->_addFailure('date', 'invalid release date "' .
@@ -449,6 +448,11 @@ class PEAR_Validate
                 $this->_addFailure('date', 'invalid release date "' .
                     $this->_packagexml->getDate() . '"');
                 return false;
+            }
+            if ($this->_state == PEAR_VALIDATE_PACKAGING &&
+                  strtotime($this->_packagexml->getDate()) != strtotime('today')) {
+                $this->_addWarning('date', 'Release Date "' .
+                    $this->_packagexml->getDate() . '"is not today');
             }
         }
         return true;
