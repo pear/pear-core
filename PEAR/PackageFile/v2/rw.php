@@ -1511,17 +1511,6 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
     }
 
     /**
-     * @return array
-     */
-    function getChangelog()
-    {
-        if (isset($this->_packageInfo['changelog'])) {
-            return $this->_packageInfo['changelog'];
-        }
-        return false;
-    }
-
-    /**
      * Remove the changelog entirely
      */
     function clearChangeLog()
