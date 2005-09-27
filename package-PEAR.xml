@@ -66,47 +66,14 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.1</version>
+  <version>1.4.2</version>
   <date>2005-09-25</date>
   <license>PHP License</license>
   <state>stable</state>
   <notes>
-  Major bugfix release.  This is a recommended download for ALL PEAR users
-  
-  UPGRADING FROM 1.4.0 WILL CAUSE A SERIES OF NOTICES.  IGNORE THEM.
-  THIS IS CAUSED BY A BUG IN 1.4.0 THAT IS FIXED IN 1.4.1
+  Minor bugfix release
 
-  * fix prompt processing in post-install scripts
-  * make dual package.xml equivalency stricter when using package.xml/package2.xml
-  * fix critical error in validating bogus php dependencies of package.xml 1.0
-    This error has existed for every PEAR version, and allows dependencies like:
-    &lt;dep type=&quot;php&quot; rel=&quot;has&quot;&gt;4.3.0&lt;/dep&gt; to
-    slip through unnoticed
-  * re-enable php-const replacements
-  * PEAR_PackageFile_v2::getConfigureOptions() was missing!!
-  * fix cvsdiff command
-  * fix xml encoding issues finally
-  * clean up package.xml 1.0 dir/file parsing
-  * fix invalid PEAR_Config generation
-  * change the user agent from PHP/phpversion to PEAR/pearversion/PHP/phpversion
-  * don't use a bogus uri for licenses on running convert command
-  * add &quot;pickle&quot; command for PECL packaging
-  * add validation warning if the release date in package.xml is not today when packaging
-  * implement progress bar for list-all/remote-list
-  * fix Bug #5323: pear search returns odd version numbers
-  * fix Bug #5428: pear cvstag package2.xml does not include the package.xml
-  * fix Bug #5449: pear makerpm completely broken for package.xml 2.0
-  * fix Bug #5462: raiseError method does not return by ref anymore
-  * fix Bug #5465: pear install --offline fails to display error
-  * fix Bug #5477: Bug in Downloader.php and Dependency2.php
-  * fix Bug #5481: &quot;pear install PECLextension&quot; should display warning to use pecl command
-  * fix Bug #5482: installation of PECL packages should say add extensions to php.ini
-  * fix Bug #5483: pecl uninstall crack fatal error
-  * fix Bug #5487: PECL: compiled files are not uninstalled via the uninstall command
-  * fix Bug #5488: pecl uninstall package fails if package has a package.xml 1.0
-  * fix Bug #5501: the commands list mentions XML-RPC
-  * fix Bug #5509: addDependecyGroup does not validate group name
-  * fix Bug #5513: PEAR 1.4 does not install non-pear.php.net packages
+  * fix Bug #5527: No need for cpp
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -453,6 +420,50 @@ http://pear.php.net/dtd/package-1.0.xsd">
 
   NOTE: users of PEAR_Frontend_Web/PEAR_Frontend_Gtk must upgrade their installations
   to the latest version, or PEAR will not upgrade properly
+   </notes>
+  </release>
+  <release>
+   <version>1.4.1</version>
+   <date>2005-09-25</date>
+   <license>PHP License</license>
+   <state>stable</state>
+   <notes>
+  Major bugfix release.  This is a recommended download for ALL PEAR users
+  
+  UPGRADING FROM 1.4.0 WILL CAUSE A SERIES OF NOTICES.  IGNORE THEM.
+  THIS IS CAUSED BY A BUG IN 1.4.0 THAT IS FIXED IN 1.4.1
+
+  * fix prompt processing in post-install scripts
+  * make dual package.xml equivalency stricter when using package.xml/package2.xml
+  * fix critical error in validating bogus php dependencies of package.xml 1.0
+    This error has existed for every PEAR version, and allows dependencies like:
+    &lt;dep type=&quot;php&quot; rel=&quot;has&quot;&gt;4.3.0&lt;/dep&gt; to
+    slip through unnoticed
+  * re-enable php-const replacements
+  * PEAR_PackageFile_v2::getConfigureOptions() was missing!!
+  * fix cvsdiff command
+  * fix xml encoding issues finally
+  * clean up package.xml 1.0 dir/file parsing
+  * fix invalid PEAR_Config generation
+  * change the user agent from PHP/phpversion to PEAR/pearversion/PHP/phpversion
+  * don't use a bogus uri for licenses on running convert command
+  * add &quot;pickle&quot; command for PECL packaging
+  * add validation warning if the release date in package.xml is not today when packaging
+  * implement progress bar for list-all/remote-list
+  * fix Bug #5323: pear search returns odd version numbers
+  * fix Bug #5428: pear cvstag package2.xml does not include the package.xml
+  * fix Bug #5449: pear makerpm completely broken for package.xml 2.0
+  * fix Bug #5462: raiseError method does not return by ref anymore
+  * fix Bug #5465: pear install --offline fails to display error
+  * fix Bug #5477: Bug in Downloader.php and Dependency2.php
+  * fix Bug #5481: &quot;pear install PECLextension&quot; should display warning to use pecl command
+  * fix Bug #5482: installation of PECL packages should say add extensions to php.ini
+  * fix Bug #5483: pecl uninstall crack fatal error
+  * fix Bug #5487: PECL: compiled files are not uninstalled via the uninstall command
+  * fix Bug #5488: pecl uninstall package fails if package has a package.xml 1.0
+  * fix Bug #5501: the commands list mentions XML-RPC
+  * fix Bug #5509: addDependecyGroup does not validate group name
+  * fix Bug #5513: PEAR 1.4 does not install non-pear.php.net packages
    </notes>
   </release>
  </changelog>
