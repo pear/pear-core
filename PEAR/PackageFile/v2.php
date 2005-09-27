@@ -1164,6 +1164,9 @@ class PEAR_PackageFile_v2
             if (!isset($release['configureoption'][0])) {
                 $release['configureoption'] = array($release['configureoption']);
             }
+            for ($i = 0; $i < count($release['configureoption']); $i++) {
+                $release['configureoption'][$i] = $release['configureoption'][$i]['attribs'];
+            }
             return $release['configureoption'];
         }
         return false;
