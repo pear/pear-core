@@ -1160,14 +1160,14 @@ class PEAR_PackageFile_v2
         if (isset($releases[0])) {
             $releases = $release[0];
         }
-        if (isset($release['configureoption'])) {
-            if (!isset($release['configureoption'][0])) {
-                $release['configureoption'] = array($release['configureoption']);
+        if (isset($releases['configureoption'])) {
+            if (!isset($releases['configureoption'][0])) {
+                $releases['configureoption'] = array($releases['configureoption']);
             }
-            for ($i = 0; $i < count($release['configureoption']); $i++) {
-                $release['configureoption'][$i] = $release['configureoption'][$i]['attribs'];
+            for ($i = 0; $i < count($releases['configureoption']); $i++) {
+                $releases['configureoption'][$i] = $releases['configureoption'][$i]['attribs'];
             }
-            return $release['configureoption'];
+            return $releases['configureoption'];
         }
         return false;
     }

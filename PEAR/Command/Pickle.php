@@ -209,8 +209,10 @@ generate both package.xml.
         if (isset($deps['required']['php']['max'])) {
             $pf->addPhpDep($deps['required']['php']['max'], 'le');
         }
-        if (isset($deps['required']['package']) && !isset($deps['required']['package'][0])) {
-            $deps['required']['package'][0] = array($deps['required']['package']);
+        if (isset($deps['required']['package'])) {
+            if (!isset($deps['required']['package'][0])) {
+                $deps['required']['package'] = array($deps['required']['package']);
+            }
             foreach ($deps['required']['package'] as $dep) {
                 if (!isset($dep['channel'])) {
                     return $this->raiseError('Cannot safely convert "' . $packagexml . '"' .
@@ -238,9 +240,10 @@ generate both package.xml.
                 }
             }
         }
-        if (isset($deps['required']['extension']) &&
-              !isset($deps['required']['extension'][0])) {
-            $deps['required']['extension'][0] = array($deps['required']['extension']);
+        if (isset($deps['required']['extension'])) {
+            if (!isset($deps['required']['extension'][0])) {
+                $deps['required']['extension'] = array($deps['required']['extension']);
+            }
             foreach ($deps['required']['extension'] as $dep) {
                 if (isset($dep['conflicts'])) {
                     return $this->raiseError('Cannot safely convert "' . $packagexml . '"' .
@@ -258,8 +261,10 @@ generate both package.xml.
                 }
             }
         }
-        if (isset($deps['optional']['package']) && !isset($deps['optional']['package'][0])) {
-            $deps['optional']['package'][0] = array($deps['optional']['package']);
+        if (isset($deps['optional']['package'])) {
+            if (!isset($deps['optional']['package'][0])) {
+                $deps['optional']['package'] = array($deps['optional']['package']);
+            }
             foreach ($deps['optional']['package'] as $dep) {
                 if (!isset($dep['channel'])) {
                     return $this->raiseError('Cannot safely convert "' . $packagexml . '"' .
@@ -282,9 +287,10 @@ generate both package.xml.
                 }
             }
         }
-        if (isset($deps['optional']['extension']) &&
-              !isset($deps['optional']['extension'][0])) {
-            $deps['optional']['extension'][0] = array($deps['optional']['extension']);
+        if (isset($deps['optional']['extension'])) {
+            if (!isset($deps['optional']['extension'][0])) {
+                $deps['optional']['extension'] = array($deps['optional']['extension']);
+            }
             foreach ($deps['optional']['extension'] as $dep) {
                 if (isset($dep['exclude'])) {
                     $this->ui->outputData('WARNING: exclude tags are ignored in conversion');
@@ -303,6 +309,12 @@ generate both package.xml.
             return $this->raiseError('Cannot safely process "' . $packagexml . '" contains ' 
             . 'multiple extsrcrelease tags.  Using a PEAR_PackageFileManager-based script ' .
             'or the convert command is an option');
+        }
+        if ($configoptions = $pf2->getConfigureOptions()) {
+            foreach ($configoptions as $option) {
+                $pf->addConfigureOption($option['name'], $option['prompt'],
+                    isset($option['default']) ? $option['default'] : false);
+            }
         }
         if (isset($release['filelist']['ignore'])) {
             return $this->raiseError('Cannot safely process "' . $packagexml . '" contains ' 
