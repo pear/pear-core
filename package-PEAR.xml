@@ -74,6 +74,10 @@ http://pear.php.net/dtd/package-1.0.xsd">
   Minor bugfix release
 
   * fix Bug #5527: No need for cpp
+  * fix Bug #5529: configure options in package.xml 2.0 will be ignored
+  * fix Bug #5530: PEAR_PackageFile_v2->getConfigureOptions() API incompatible with v1
+  * fix Bug #5531: adding of installconditions/binarypackage/configure options
+                   to extsrc may fail
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

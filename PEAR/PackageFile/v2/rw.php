@@ -1302,7 +1302,7 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
         $this->_isValid = 0;
         $r = $this->_mergeTag($r, $package,
             array(
-                'binarypackage' => array(),
+                'binarypackage' => array('filelist'),
             ));
     }
 
@@ -1328,7 +1328,7 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
         $this->_isValid = 0;
         $r = $this->_mergeTag($r, $opt,
             array(
-                'configureoption' => array('binarypackage'),
+                'configureoption' => array('binarypackage', 'filelist'),
             ));
     }
 
@@ -1355,11 +1355,20 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
             }
             $dep['exclude'] = $exclude;
         }
-        $r = $this->_mergeTag($r, $dep,
-            array(
-                'installconditions' => array('filelist'),
-                'php' => array('extension', 'os', 'arch')
-            ));
+        if ($this->getPackageType() == 'extsrc') {
+            $r = $this->_mergeTag($r, $dep,
+                array(
+                    'installconditions' => array('configureoption', 'binarypackage',
+                        'filelist'),
+                    'php' => array('extension', 'os', 'arch')
+                ));
+        } else {
+            $r = $this->_mergeTag($r, $dep,
+                array(
+                    'installconditions' => array('filelist'),
+                    'php' => array('extension', 'os', 'arch')
+                ));
+        }
     }
 
     /**
@@ -1379,11 +1388,20 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
         }
         $this->_isValid = 0;
         $dep = $this->_constructDep($name, false, false, $min, $max, $recommended, $exclude);
-        $r = $this->_mergeTag($r, $dep,
-            array(
-                'installconditions' => array('filelist'),
-                'extension' => array('os', 'arch')
-            ));
+        if ($this->getPackageType() == 'extsrc') {
+            $r = $this->_mergeTag($r, $dep,
+                array(
+                    'installconditions' => array('configureoption', 'binarypackage',
+                        'filelist'),
+                    'extension' => array('os', 'arch')
+                ));
+        } else {
+            $r = $this->_mergeTag($r, $dep,
+                array(
+                    'installconditions' => array('filelist'),
+                    'extension' => array('os', 'arch')
+                ));
+        }
     }
 
     /**
@@ -1405,11 +1423,20 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
         if ($conflicts) {
             $dep['conflicts'] = '';
         }
-        $r = $this->_mergeTag($r, $dep,
-            array(
-                'installconditions' => array('filelist'),
-                'os' => array('arch')
-            ));
+        if ($this->getPackageType() == 'extsrc') {
+            $r = $this->_mergeTag($r, $dep,
+                array(
+                    'installconditions' => array('configureoption', 'binarypackage',
+                        'filelist'),
+                    'os' => array('arch')
+                ));
+        } else {
+            $r = $this->_mergeTag($r, $dep,
+                array(
+                    'installconditions' => array('filelist'),
+                    'os' => array('arch')
+                ));
+        }
     }
 
     /**
@@ -1431,11 +1458,20 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
         if ($conflicts) {
             $dep['conflicts'] = '';
         }
-        $r = $this->_mergeTag($r, $dep,
-            array(
-                'installconditions' => array('filelist'),
-                'arch' => array()
-            ));
+        if ($this->getPackageType() == 'extsrc') {
+            $r = $this->_mergeTag($r, $dep,
+                array(
+                    'installconditions' => array('configureoption', 'binarypackage',
+                        'filelist'),
+                    'arch' => array()
+                ));
+        } else {
+            $r = $this->_mergeTag($r, $dep,
+                array(
+                    'installconditions' => array('filelist'),
+                    'arch' => array()
+                ));
+        }
     }
 
     /**

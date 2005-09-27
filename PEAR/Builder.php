@@ -280,7 +280,7 @@ class PEAR_Builder extends PEAR_Common
 
         // {{{ start of interactive part
         $configure_command = "$dir/configure";
-        $configure_options = $pkg->packageInfo('configure_options');
+        $configure_options = $pkg->getConfigureOptions();
         if ($configure_options) {
             foreach ($configure_options as $o) {
                 list($r) = $this->ui->userDialog('build',
