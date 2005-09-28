@@ -179,7 +179,7 @@ class PEAR_REST_10
             }
             // allow newer releases to say "I'm OK with the dependent package"
             if ($xsdversion == '2.0' && isset($release['co'])) {
-                if (!isset($release['co'][0])) {
+                if (!is_array($release['co']) || !isset($release['co'][0])) {
                     $release['co'] = array($release['co']);
                 }
                 foreach ($release['co'] as $entry) {
