@@ -85,6 +85,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #5530: PEAR_PackageFile_v2->getConfigureOptions() API incompatible with v1
   * fix Bug #5531: adding of installconditions/binarypackage/configure options
                    to extsrc may fail
+  * fix Bug #5550: PHP notices/warnings/errors are 1 file off in trace
  </notes>
  <contents>
   <dir name="/">

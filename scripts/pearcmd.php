@@ -389,16 +389,11 @@ function error_handler($errno, $errmsg, $file, $line, $vars) {
         E_USER_NOTICE =>  "User Notice"
     );
     $prefix = $errortype[$errno];
-    $file = basename($file);
-    if (function_exists('debug_backtrace')) {
-        $trace = debug_backtrace();
-        if (isset($trace[1]) && isset($trace[1]['file'])) {
-            $dir = $trace[1]['file'];
-            global $_PEAR_PHPDIR;
-            if (stristr($dir, $_PEAR_PHPDIR)) {
-                $file = substr($dir, strlen($_PEAR_PHPDIR) + 1);
-            }
-        }
+    global $_PEAR_PHPDIR;
+    if (stristr($file, $_PEAR_PHPDIR)) {
+        $file = substr($file, strlen($_PEAR_PHPDIR) + 1);
+    } else {
+        $file = basename($file);
     }
     print "\n$prefix: $errmsg in $file on line $line\n";
 }
