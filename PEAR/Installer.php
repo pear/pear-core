@@ -460,7 +460,10 @@ class PEAR_Installer extends PEAR_Downloader
                     "' for file $file");
         }
         $role = &PEAR_Installer_Role::factory($pkg, $atts['attribs']['role'], $this->config);
-        $role->setup($this, $pkg, $atts['attribs'], $file);
+        $err = $role->setup($this, $pkg, $atts['attribs'], $file);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
         if (!$role->isInstallable()) {
             return;
         }
