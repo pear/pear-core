@@ -2,6 +2,7 @@
 
 /* $Id$ */
 
+error_reporting(E_ALL);
 $pear_dir = dirname(__FILE__);
 ini_set('include_path', '');
 set_time_limit(0);
