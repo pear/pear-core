@@ -390,7 +390,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
     function _addDir(&$dirs, $dir, $file = null, $attributes = null, $tasks = null)
     {
         if (!$tasks) {
-            $tasks = null;
+            $tasks = array();
         }
         if ($dir == array() || $dir == array('.')) {
             $dirs['file'][basename($file)] = $tasks;
