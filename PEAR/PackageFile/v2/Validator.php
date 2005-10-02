@@ -891,23 +891,23 @@ class PEAR_PackageFile_v2_Validator
         $required = array('name', 'channel', 'min', 'max', '*exclude');
         foreach ($compat as $package) {
             $type = '<compatible>';
-            if (isset($package['name'])) {
+            if (is_array($package) && array_key_exists('name', $package)) {
                 $type .= '<name>' . $package['name'] . '</name>';
             }
             $this->_stupidSchemaValidate($required, $package, $type);
-            if (isset($package['min'])) {
+            if (is_array($package) && array_key_exists('min', $package)) {
                 if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
                       $package['min'])) {
                     $this->_invalidVersion(substr($type, 1) . '<min', $package['min']);
                 }
             }
-            if (isset($package['max'])) {
+            if (is_array($package) && array_key_exists('max', $package)) {
                 if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
                       $package['max'])) {
                     $this->_invalidVersion(substr($type, 1) . '<max', $package['max']);
                 }
             }
-            if (isset($package['exclude'])) {
+            if (is_array($package) && array_key_exists('exclude', $package)) {
                 if (!is_array($package['exclude'])) {
                     $package['exclude'] = array($package['exclude']);
                 }
