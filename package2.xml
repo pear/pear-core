@@ -78,6 +78,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <notes>
   Minor bugfix release
 
+  * fix issues with API for adding tasks to package2.xml
   * fix Bug #5520: pecl pickle fails on pecl pickle fails on extension/package deps
   * fix Bug #5523: pecl pickle misses to put configureoptions into package.xml v1
   * fix Bug #5527: No need for cpp
