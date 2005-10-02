@@ -166,7 +166,7 @@ class PEAR_Installer_Role_Common
     /**
      * Do any unusual setup here
      * @param PEAR_Installer
-     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     * @param PEAR_PackageFile_v2
      * @param array file attributes
      * @param string file name
      */
