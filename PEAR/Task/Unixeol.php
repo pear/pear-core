@@ -52,6 +52,7 @@ class PEAR_Task_Unixeol extends PEAR_Task_Common
         if ($xml != '') {
             return array(PEAR_TASK_ERROR_INVALID, 'no attributes allowed');
         }
+        return true;
     }
 
     /**
