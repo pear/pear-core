@@ -923,7 +923,7 @@ class PEAR_PackageFile_v2_Validator
 
     function _validateBundle($list)
     {
-        if (!isset($list['bundledpackage'])) {
+        if (!is_array($list) || !isset($list['bundledpackage'])) {
             return $this->_NoBundledPackages();
         }
         if (!is_array($list['bundledpackage']) || !isset($list['bundledpackage'][0])) {
@@ -1238,11 +1238,11 @@ class PEAR_PackageFile_v2_Validator
             }
         }
         foreach ($releases as $rel) {
-            if (isset($rel['installconditions'])) {
+            if (is_array($rel) && array_key_exists('installconditions', $rel)) {
                 $this->_validateInstallConditions($rel['installconditions'],
                     "<$release><installconditions>");
             }
-            if (isset($rel['filelist'])) {
+            if (is_array($rel) && array_key_exists('filelist', $rel)) {
                 if ($rel['filelist']) {
                     
                     $this->_validateFilelist($rel['filelist'], true);
