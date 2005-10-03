@@ -87,6 +87,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #5531: adding of installconditions/binarypackage/configure options
                    to extsrc may fail
   * fix Bug #5550: PHP notices/warnings/errors are 1 file off in trace
+  * fix Bug #5580: pear makerpm XML_sql2xml-0.3.2.tgz error
  </notes>
  <contents>
   <dir name="/">

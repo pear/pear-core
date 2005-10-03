@@ -1028,6 +1028,8 @@ class PEAR_PackageFile_v1
                     'File "%file%" has no role, expecting one of "%roles%"',
                 PEAR_PACKAGEFILE_ERROR_INVALID_FILEROLE =>
                     'File "%file%" has invalid role "%role%", expecting one of "%roles%"',
+                PEAR_PACKAGEFILE_ERROR_INVALID_FILENAME =>
+                    'File "%file%" cannot start with ".", cannot package or install',
                 PEAR_PACKAGEFILE_ERROR_INVALID_PHPFILE =>
                     'Parser error: invalid PHP found in file "%file%"',
                 PEAR_PACKAGEFILE_ERROR_NO_PNAME_PREFIX =>
@@ -1190,11 +1192,9 @@ class PEAR_PackageFile_v1
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILEROLE,
                         array('file' => $file, 'role' => $fa['role'], 'roles' => PEAR_Common::getFileRoles()));
                 }
-                if ($state == PEAR_VALIDATE_PACKAGING) {
-                    if ($file{0} == '.') {
-                        $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILENAME,
-                            array('file' => $file));
-                    }
+                if ($file{0} == '.') {
+                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILENAME,
+                        array('file' => $file));
                 }
             }
         }

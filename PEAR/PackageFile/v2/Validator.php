@@ -1011,8 +1011,7 @@ class PEAR_PackageFile_v2_Validator
             }
             foreach ($list['file'] as $i => $file)
             {
-                if ($this->_curState == PEAR_VALIDATE_PACKAGING &&
-                      isset($file['attribs']) && isset($file['attribs']['name']) &&
+                if (isset($file['attribs']) && isset($file['attribs']['name']) &&
                       $file['attribs']['name']{0} == '.') {
                     // name is something like "./doc/whatever.txt"
                     $this->_invalidFileName($file['attribs']['name']);
