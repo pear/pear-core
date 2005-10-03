@@ -1011,6 +1011,12 @@ class PEAR_PackageFile_v2_Validator
             }
             foreach ($list['file'] as $i => $file)
             {
+                if ($this->_curState == PEAR_VALIDATE_PACKAGING &&
+                      isset($file['attribs']) && isset($file['attribs']['name']) &&
+                      $file['attribs']['name']{0} == '.') {
+                    // name is something like "./doc/whatever.txt"
+                    $this->_invalidFileName($file['attribs']['name']);
+                }
                 if (isset($file['attribs']) && isset($file['attribs']['role'])) {
                     if (!$this->_validateRole($file['attribs']['role'])) {
                         if (isset($this->_packageInfo['usesrole'])) {
@@ -1307,6 +1313,13 @@ class PEAR_PackageFile_v2_Validator
             'file' => $file, 'dir' => $dir, 'role' => $role,
             'roles' => PEAR_Installer_Role::getValidRoles($this->_pf->getPackageType())),
             'File "%file%" in directory "%dir%" has invalid role "%role%", should be one of %roles%');
+    }
+
+    function _invalidFileName($file, $dir)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array(
+            'file' => $file, 'dir' => $dir),
+            'File "%file%" in directory "%dir%" cannot begin with "."');
     }
 
     function _filelistCannotContainFile($filelist)
