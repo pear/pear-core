@@ -269,6 +269,11 @@ define('PEAR_PACKAGEFILE_ERROR_NO_DEPPHPVERSION', 50);
  * Error code when a package has no lead developer
  */
 define('PEAR_PACKAGEFILE_ERROR_NO_LEAD', 51);
+
+/**
+ * Error code when a filename begins with "."
+ */
+define('PEAR_PACKAGEFILE_ERROR_INVALID_FILENAME', 52);
 /**
  * package.xml encapsulator
  * @category   pear
@@ -1184,6 +1189,12 @@ class PEAR_PackageFile_v1
                 } elseif (!in_array($fa['role'], PEAR_Common::getFileRoles())) {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILEROLE,
                         array('file' => $file, 'role' => $fa['role'], 'roles' => PEAR_Common::getFileRoles()));
+                }
+                if ($state == PEAR_VALIDATE_PACKAGING) {
+                    if ($file{0} == '.') {
+                        $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILENAME,
+                            array('file' => $file));
+                    }
                 }
             }
         }
