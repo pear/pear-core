@@ -946,6 +946,68 @@ used for automated conversion or learning the format.
                         } else {
                             $package = 'PEAR::' . $dep['name'];
                         }
+                        if (isset($dep['conflicts']) && (isset($dep['min']) ||
+                              isset($dep['max']))) {
+                            $deprange = array();
+                            if (isset($dep['min'])) {
+                                $deprange[] = array($dep['min'],'>=');
+                            }
+                            if (isset($dep['max'])) {
+                                $deprange[] = array($dep['max'], '<=');
+                            }
+                            if (isset($dep['exclude'])) {
+                                if (!is_array($dep['exclude']) ||
+                                      !isset($dep['exclude'][0])) {
+                                    $dep['exclude'] = array($dep['exclude']);
+                                }
+                                if (count($deprange)) {
+                                    $excl = $dep['exclude'];
+                                    // change >= to > if excluding the min version
+                                    // change <= to < if excluding the max version
+                                    for($i = 0; $i < count($excl); $i++) {
+                                        if (isset($deprange[0]) &&
+                                              $excl[$i] == $deprange[0][0]) {
+                                            $deprange[0][1] = '>';
+                                            unset($dep['exclude'][$i]);
+                                        }
+                                        if (isset($deprange[1]) &&
+                                              $excl[$i] == $deprange[1][0]) {
+                                            $deprange[1][1] = '<';
+                                            unset($dep['exclude'][$i]);
+                                        }
+                                    }
+                                }
+                                if (count($dep['exclude'])) {
+                                    $dep['exclude'] = array_values($dep['exclude']);
+                                    $newdeprange = array();
+                                    // remove excludes that are outside the existing range
+                                    for ($i = 0; $i < count($dep['exclude']); $i++) {
+                                        if ($dep['exclude'][$i] < $dep['min'] ||
+                                              $dep['exclude'][$i] > $dep['max']) {
+                                            unset($dep['exclude'][$i]);
+                                        }
+                                    }
+                                    $dep['exclude'] = array_values($dep['exclude']);
+                                    usort($dep['exclude'], 'version_compare');
+                                    // take the remaining excludes and
+                                    // split the dependency into sub-ranges
+                                    $lastmin = $deprange[0];
+                                    for ($i = 0; $i < count($dep['exclude']) - 1; $i++) {
+                                        $newdeprange[] = '(' .
+                                            $package . " $lastmin[1] $lastmin[0] and " .
+                                            $package . ' < ' . $dep[exclude][$i] . ')';
+                                        $lastmin = array($dep['exclude'][$i], '>');
+                                    }
+                                    if (isset($dep['max'])) {
+                                        $newdeprange[] = '(' . $package .
+                                            " $lastmin[1] $lastmin[0] and " .
+                                            $package . ' < ' . $dep['max'] . ')';
+                                    }
+                                    $conflicts[] = implode(' or ', $newdeprange);
+                                    continue;
+                                }
+                            }
+                        }
                         if (!isset($dep['min']) && !isset($dep['max']) &&
                               !isset($dep['exclude'])) {
                             if (isset($dep['conflicts'])) {
@@ -955,18 +1017,10 @@ used for automated conversion or learning the format.
                             }
                         } else {
                             if (isset($dep['min'])) {
-                                if (isset($dep['conflicts'])) {
-                                    $conflicts[] = $package . ' >= ' . $dep['min'];
-                                } else {
-                                    $requires[] = $package . ' >= ' . $dep['min'];
-                                }
+                                $requires[] = $package . ' >= ' . $dep['min'];
                             }
                             if (isset($dep['max'])) {
-                                if (isset($dep['conflicts'])) {
-                                    $conflicts[] = $package . ' <= ' . $dep['max'];
-                                } else {
-                                    $requires[] = $package . ' <= ' . $dep['max'];
-                                }
+                                $requires[] = $package . ' <= ' . $dep['max'];
                             }
                             if (isset($dep['exclude'])) {
                                 $ex = $dep['exclude'];
@@ -974,24 +1028,21 @@ used for automated conversion or learning the format.
                                     $ex = array($ex);
                                 }
                                 foreach ($ex as $ver) {
-                                    if (isset($dep['conflicts'])) {
-                                        $conflicts[] = $package . ' != ' . $ver;
-                                    } else {
-                                        $conflicts[] = $package . ' = ' . $ver;
-                                    }
+                                    $conflicts[] = $package . ' = ' . $ver;
                                 }
                             }
                         }
-                        require_once 'Archive/Tar.php';
-                        $tar = new Archive_Tar($pf->getArchiveFile());
-                        $tar->pushErrorHandling(PEAR_ERROR_RETURN);
-                        $a = $tar->extractInString('package2.xml');
-                        $tar->popErrorHandling();
-                        if ($a === null || PEAR::isError($a)) {
-                            // this doesn't have a package.xml version 1.0
-                            $requires[] = 'PEAR::PEAR >= ' .
-                                $deps['required']['pearinstaller']['min'] . "\n";
-                        }
+                    }
+                    require_once 'Archive/Tar.php';
+                    $tar = new Archive_Tar($pf->getArchiveFile());
+                    $tar->pushErrorHandling(PEAR_ERROR_RETURN);
+                    $a = $tar->extractInString('package2.xml');
+                    $tar->popErrorHandling();
+                    if ($a === null || PEAR::isError($a)) {
+                        $info['package2xml'] = '';
+                        // this doesn't have a package.xml version 1.0
+                        $requires[] = 'PEAR::PEAR >= ' .
+                            $deps['required']['pearinstaller']['min'];
                     }
                     if (count($requires)) {
                         $info['extra_headers'] .= 'Requires: ' . implode(', ', $requires) . "\n";
