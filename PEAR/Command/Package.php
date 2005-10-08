@@ -967,12 +967,12 @@ used for automated conversion or learning the format.
                                     for($i = 0; $i < count($excl); $i++) {
                                         if (isset($deprange[0]) &&
                                               $excl[$i] == $deprange[0][0]) {
-                                            $deprange[0][1] = '>';
+                                            $deprange[0][1] = '<';
                                             unset($dep['exclude'][$i]);
                                         }
                                         if (isset($deprange[1]) &&
                                               $excl[$i] == $deprange[1][0]) {
-                                            $deprange[1][1] = '<';
+                                            $deprange[1][1] = '>';
                                             unset($dep['exclude'][$i]);
                                         }
                                     }
@@ -994,19 +994,25 @@ used for automated conversion or learning the format.
                                     $lastmin = $deprange[0];
                                     for ($i = 0; $i < count($dep['exclude']) - 1; $i++) {
                                         $newdeprange[] = '(' .
-                                            $package . " $lastmin[1] $lastmin[0] and " .
+                                            $package . " {$lastmin[1]} {$lastmin[0]} and " .
                                             $package . ' < ' . $dep[exclude][$i] . ')';
                                         $lastmin = array($dep['exclude'][$i], '>');
                                     }
                                     if (isset($dep['max'])) {
                                         $newdeprange[] = '(' . $package .
-                                            " $lastmin[1] $lastmin[0] and " .
+                                            " {$lastmin[1]} {$lastmin[0]} and " .
                                             $package . ' < ' . $dep['max'] . ')';
                                     }
-                                    $conflicts[] = implode(' or ', $newdeprange);
-                                    continue;
+                                    $conflicts[] = implode(' or ', $deprange);
+                                } else {
+                                    $conflicts[] = $package .
+                                        " {$deprange[0][1]} {$deprange[0][0]}" .
+                                        (isset($deprange[1]) ? 
+                                        " and $package {$deprange[1][1]} {$deprange[1][0]}"
+                                        : '');
                                 }
                             }
+                            continue;
                         }
                         if (!isset($dep['min']) && !isset($dep['max']) &&
                               !isset($dep['exclude'])) {
