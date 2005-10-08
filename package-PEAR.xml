@@ -83,6 +83,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
                    to extsrc may fail
   * fix Bug #5550: PHP notices/warnings/errors are 1 file off in trace
   * fix Bug #5580: pear makerpm XML_sql2xml-0.3.2.tgz error
+  * fix Bug #5629: pear install http_download dies with bad error message
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
