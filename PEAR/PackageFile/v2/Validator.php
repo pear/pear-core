@@ -1436,22 +1436,22 @@ class PEAR_PackageFile_v2_Validator
     {
         switch ($ret[0]) {
             case PEAR_TASK_ERROR_MISSING_ATTRIB :
-                $info = array('attrib' => $ret[1], 'task' => $task);
+                $info = array('attrib' => $ret[1], 'task' => $task, 'file' => $file);
                 $msg = 'task <%task%> is missing attribute "%attrib%" in file %file%';
             break;
             case PEAR_TASK_ERROR_NOATTRIBS :
-                $info = array('task' => $task);
+                $info = array('task' => $task, 'file' => $file);
                 $msg = 'task <%task%> has no attributes in file %file%';
             break;
             case PEAR_TASK_ERROR_WRONG_ATTRIB_VALUE :
                 $info = array('attrib' => $ret[1], 'values' => $ret[3],
-                    'was' => $ret[2], 'task' => $task);
+                    'was' => $ret[2], 'task' => $task, 'file' => $file);
                 $msg = 'task <%task%> attribute "%attrib%" has the wrong value "%was%" '.
                     'in file %file%, expecting one of "%values%"';
             break;
             case PEAR_TASK_ERROR_INVALID :
-                $info = array('reason' => $ret[1], 'task' => $task);
-                $msg = 'task <%task%> is invalid because of "%reason%"';
+                $info = array('reason' => $ret[1], 'task' => $task, 'file' => $file);
+                $msg = 'task <%task%> in file %file% is invalid because of "%reason%"';
             break;
         }
         $this->_stack->push(__FUNCTION__, 'error', $info, $msg);
