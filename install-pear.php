@@ -95,9 +95,7 @@ $options['upgrade'] = true;
 $install_root = getenv('INSTALL_ROOT');
 if (!empty($install_root)) {
     $options['installroot'] = $install_root;
-    $reg_dir = $install_root . $php_dir;
-} else {
-    $reg_dir = $php_dir;
+    $config->setInstallRoot($install_root);
 }
 
 $reg = $config->getRegistry('default');
