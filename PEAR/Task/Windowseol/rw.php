@@ -22,7 +22,7 @@
 /**
  * Base class
  */
-require_once 'PEAR/Task/Replace.php';
+require_once 'PEAR/Task/Windowseol.php';
 /**
  * Abstracts the windowseol task xml.
  * @category   pear
