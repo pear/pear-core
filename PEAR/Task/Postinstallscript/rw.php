@@ -142,7 +142,7 @@ class PEAR_Task_Postinstallscript_rw extends PEAR_Task_Postinstallscript
         if ($params) {
             $stuff[$this->_pkg->getTasksNs() . ':param'] = $params;
         }
-        $this->_params[] = $stuff;
+        $this->_params[$this->_pkg->getTasksNs() . ':paramgroup'][] = $stuff;
     }
 
     function getXml()
