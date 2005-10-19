@@ -1012,7 +1012,8 @@ class PEAR_PackageFile_v2_Validator
             foreach ($list['file'] as $i => $file)
             {
                 if (isset($file['attribs']) && isset($file['attribs']['name']) &&
-                      $file['attribs']['name']{0} == '.') {
+                      $file['attribs']['name']{0} == '.' &&
+                        $file['attribs']['name']{1} == '/') {
                     // name is something like "./doc/whatever.txt"
                     $this->_invalidFileName($file['attribs']['name']);
                 }
@@ -1317,8 +1318,8 @@ class PEAR_PackageFile_v2_Validator
     function _invalidFileName($file, $dir)
     {
         $this->_stack->push(__FUNCTION__, 'error', array(
-            'file' => $file, 'dir' => $dir),
-            'File "%file%" in directory "%dir%" cannot begin with "."');
+            'file' => $file),
+            'File "%file%" cannot begin with "."');
     }
 
     function _filelistCannotContainFile($filelist)

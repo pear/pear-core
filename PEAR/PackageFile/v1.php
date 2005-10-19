@@ -1192,7 +1192,7 @@ class PEAR_PackageFile_v1
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILEROLE,
                         array('file' => $file, 'role' => $fa['role'], 'roles' => PEAR_Common::getFileRoles()));
                 }
-                if ($file{0} == '.') {
+                if ($file{0} == '.' && $file{1} == '/') {
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILENAME,
                         array('file' => $file));
                 }
