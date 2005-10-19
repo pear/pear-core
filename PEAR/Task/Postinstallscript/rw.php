@@ -121,9 +121,10 @@ class PEAR_Task_Postinstallscript_rw extends PEAR_Task_Postinstallscript
      * @param string $value value to match of the parameter
      * @param string $conditiontype one of '=', '!=', 'preg_match'
      * @param array|false $params array of getParam() calls, or false for no params
+     * @param string|false $instructions
      */
     function addConditionTypeGroup($id, $oldgroup, $param, $value, $conditiontype = '=',
-                                   $params = false)
+                                   $params = false, $instructions = false)
     {
         if ($params && isset($params[0]) && !isset($params[1])) {
             $params = $params[0];
@@ -131,10 +132,13 @@ class PEAR_Task_Postinstallscript_rw extends PEAR_Task_Postinstallscript
         $stuff =
             array(
                 $this->_pkg->getTasksNs() . ':id' => $id,
-                $this->_pkg->getTasksNs() . ':name' => $oldgroup . '::' . $param,
-                $this->_pkg->getTasksNs() . ':conditiontype' => $conditiontype,
-                $this->_pkg->getTasksNs() . ':value' => $value,
             );
+        if ($instructions) {
+            $stuff[$this->_pkg->getTasksNs() . ':instructions'] = $instructions;
+        }
+        $stuff[$this->_pkg->getTasksNs() . ':name'] = $oldgroup . '::' . $param;
+        $stuff[$this->_pkg->getTasksNs() . ':conditiontype'] = $conditiontype;
+        $stuff[$this->_pkg->getTasksNs() . ':value'] = $value;
         if ($params) {
             $stuff[$this->_pkg->getTasksNs() . ':param'] = $params;
         }
