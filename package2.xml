@@ -81,6 +81,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix base class for writeable unixeol/windowseol classes
   * fix running of post-install scripts with empty or no paramgroup
     in CLI frontend
+  * fix validation of &lt;postinstallscript&gt;
+  * fix writeable PEAR_Task_Postinstallscript_rw class
   * fix Bug #5717: analyzeSourceCode() fails to process certain
     quote situations properly
  </notes>
