@@ -216,7 +216,7 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
                             $param[$tasksNamespace . 'id'] .
                             '" must have a ' . $tasksNamespace . 'type> tag');
                     }
-                    $definedparams[] = $param[$tasksNamespace . 'id'] . ':' .
+                    $definedparams[] = $param[$tasksNamespace . 'id'] . '::' .
                     $subparam[$tasksNamespace . 'name'];
                 }
             }
