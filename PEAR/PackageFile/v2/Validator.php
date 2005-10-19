@@ -1779,6 +1779,7 @@ class PEAR_PackageFile_v2_Validator
                     continue;
                 } else {
                     $inquote = false;
+                    continue;
                 }
             }
             switch ($token) {

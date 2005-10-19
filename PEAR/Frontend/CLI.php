@@ -273,7 +273,10 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                         $answers = $this->confirmDialog($group['param']);
                     }
                 }
-                if ($answers) {
+                if ((isset($answers) && $answers) || !isset($group['param'])) {
+                    if (!isset($answers)) {
+                        $answers = array();
+                    }
                     array_unshift($completedPhases, $group['id']);
                     if (!$script->run($answers, $group['id'])) {
                         $script->run($completedPhases, '_undoOnError');

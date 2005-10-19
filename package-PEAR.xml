@@ -66,25 +66,18 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.2</version>
-  <date>2005-10-08</date>
+  <version>1.4.3</version>
+  <date>2005-10-18</date>
   <license>PHP License</license>
   <state>stable</state>
   <notes>
   Minor bugfix release
-
-  * fix issues with API for adding tasks to package2.xml
-  * fix Bug #5520: pecl pickle fails on pecl pickle fails on extension/package deps
-  * fix Bug #5523: pecl pickle misses to put configureoptions into package.xml v1
-  * fix Bug #5527: No need for cpp
-  * fix Bug #5529: configure options in package.xml 2.0 will be ignored
-  * fix Bug #5530: PEAR_PackageFile_v2->getConfigureOptions() API incompatible with v1
-  * fix Bug #5531: adding of installconditions/binarypackage/configure options
-                   to extsrc may fail
-  * fix Bug #5550: PHP notices/warnings/errors are 1 file off in trace
-  * fix Bug #5580: pear makerpm XML_sql2xml-0.3.2.tgz error
-  * fix Bug #5619: pear makerpm produces invalid .spec dependancy code
-  * fix Bug #5629: pear install http_download dies with bad error message
+  * fix installation of files named like &quot;.test&quot;
+  * fix base class for writeable unixeol/windowseol classes
+  * fix running of post-install scripts with empty or no paramgroup
+    in CLI frontend
+  * fix Bug #5717: analyzeSourceCode() fails to process certain
+    quote situations properly
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -475,6 +468,28 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #5501: the commands list mentions XML-RPC
   * fix Bug #5509: addDependecyGroup does not validate group name
   * fix Bug #5513: PEAR 1.4 does not install non-pear.php.net packages
+   </notes>
+  </release>
+  <release>
+   <version>1.4.2</version>
+   <date>2005-10-08</date>
+   <license>PHP License</license>
+   <state>stable</state>
+   <notes>
+  Minor bugfix release
+
+  * fix issues with API for adding tasks to package2.xml
+  * fix Bug #5520: pecl pickle fails on pecl pickle fails on extension/package deps
+  * fix Bug #5523: pecl pickle misses to put configureoptions into package.xml v1
+  * fix Bug #5527: No need for cpp
+  * fix Bug #5529: configure options in package.xml 2.0 will be ignored
+  * fix Bug #5530: PEAR_PackageFile_v2->getConfigureOptions() API incompatible with v1
+  * fix Bug #5531: adding of installconditions/binarypackage/configure options
+                   to extsrc may fail
+  * fix Bug #5550: PHP notices/warnings/errors are 1 file off in trace
+  * fix Bug #5580: pear makerpm XML_sql2xml-0.3.2.tgz error
+  * fix Bug #5619: pear makerpm produces invalid .spec dependancy code
+  * fix Bug #5629: pear install http_download dies with bad error message
    </notes>
   </release>
  </changelog>

@@ -1401,6 +1401,7 @@ class PEAR_PackageFile_v1
                     continue;
                 } else {
                     $inquote = false;
+                    continue;
                 }
             }
             switch ($token) {
