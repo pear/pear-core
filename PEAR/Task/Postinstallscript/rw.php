@@ -69,6 +69,17 @@ class PEAR_Task_Postinstallscript_rw extends PEAR_Task_Postinstallscript
         return 'postinstallscript';
     }
 
+    /**
+     * add a <paramgroup> to the post-install script
+     * 
+     * Order is significant, so call this method in the same
+     * sequence the users should see the paramgroups.  The $params
+     * parameter should either be the result of a call to {@link getParam()}
+     * or an array of calls to getParam().
+     * @param string $id
+     * @param array $params
+     * @param string|false $instructions
+     */
     function addParamGroup($id, $params, $instructions = false)
     {
         if (isset($params[0]) && !isset($params[1])) {
