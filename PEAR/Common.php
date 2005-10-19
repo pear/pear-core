@@ -712,6 +712,7 @@ class PEAR_Common extends PEAR
                     continue;
                 } else {
                     $inquote = false;
+                    continue;
                 }
             }
             switch ($token) {
