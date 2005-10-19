@@ -70,19 +70,22 @@ class PEAR_Task_Postinstallscript_rw extends PEAR_Task_Postinstallscript
     }
 
     /**
-     * add a <paramgroup> to the post-install script
-     * 
+     * add a simple <paramgroup> to the post-install script
+     *
      * Order is significant, so call this method in the same
      * sequence the users should see the paramgroups.  The $params
      * parameter should either be the result of a call to {@link getParam()}
      * or an array of calls to getParam().
-     * @param string $id
-     * @param array $params
+     * 
+     * Use {@link addConditionTypeGroup()} to add a <paramgroup> containing
+     * a <conditiontype> tag
+     * @param string $id <paramgroup> id as seen by the script
+     * @param array|false $params array of getParam() calls, or false for no params
      * @param string|false $instructions
      */
-    function addParamGroup($id, $params, $instructions = false)
+    function addParamGroup($id, $params = false, $instructions = false)
     {
-        if (isset($params[0]) && !isset($params[1])) {
+        if ($params && isset($params[0]) && !isset($params[1])) {
             $params = $params[0];
         }
         $stuff =
@@ -92,23 +95,50 @@ class PEAR_Task_Postinstallscript_rw extends PEAR_Task_Postinstallscript
         if ($instructions) {
             $stuff[$this->_pkg->getTasksNs() . ':instructions'] = $instructions;
         }
-        $stuff[$this->_pkg->getTasksNs() . ':param'] = $params;
+        if ($params) {
+            $stuff[$this->_pkg->getTasksNs() . ':param'] = $params;
+        }
         $this->_params[$this->_pkg->getTasksNs() . ':paramgroup'][] = $stuff;
     }
 
-    function addConditionTypeGroup($id, $oldgroup, $param, $value, $conditiontype = '=')
+    /**
+     * add a complex <paramgroup> to the post-install script with conditions
+     *
+     * This inserts a <paramgroup> with
+     *
+     * Order is significant, so call this method in the same
+     * sequence the users should see the paramgroups.  The $params
+     * parameter should either be the result of a call to {@link getParam()}
+     * or an array of calls to getParam().
+     * 
+     * Use {@link addParamGroup()} to add a simple <paramgroup>
+     *
+     * @param string $id <paramgroup> id as seen by the script
+     * @param string $oldgroup <paramgroup> id of the section referenced by
+     *                         <conditiontype>
+     * @param string $param name of the <param> from the older section referenced
+     *                      by <contitiontype>
+     * @param string $value value to match of the parameter
+     * @param string $conditiontype one of '=', '!=', 'preg_match'
+     * @param array|false $params array of getParam() calls, or false for no params
+     */
+    function addConditionTypeGroup($id, $oldgroup, $param, $value, $conditiontype = '=',
+                                   $params = false)
     {
-        if (isset($params[0]) && !isset($params[1])) {
+        if ($params && isset($params[0]) && !isset($params[1])) {
             $params = $params[0];
         }
-        $this->_params[] =
+        $stuff =
             array(
                 $this->_pkg->getTasksNs() . ':id' => $id,
                 $this->_pkg->getTasksNs() . ':name' => $oldgroup . '::' . $param,
                 $this->_pkg->getTasksNs() . ':conditiontype' => $conditiontype,
                 $this->_pkg->getTasksNs() . ':value' => $value,
-                $this->_pkg->getTasksNs() . ':param' => $params,
             );
+        if ($params) {
+            $stuff[$this->_pkg->getTasksNs() . ':param'] = $params;
+        }
+        $this->_params[] = $stuff;
     }
 
     function getXml()
