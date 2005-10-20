@@ -1837,6 +1837,9 @@ class PEAR_Registry extends PEAR
                     }
                 }
                 $pkgs[$name] = $this->checkFileMap($name, $package, $api, $attrs);
+                if (PEAR::isError($pkgs[$name])) {
+                    return $pkgs[$name];
+                }
             }
             return array_filter($pkgs, $notempty);
         }
