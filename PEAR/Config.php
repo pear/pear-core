@@ -544,7 +544,9 @@ class PEAR_Config extends PEAR
         $this->files['user'] = $user_file;
         $this->files['system'] = $system_file;
         if ($user_file && @file_exists($user_file)) {
+            $this->pushErrorHandling(PEAR_ERROR_RETURN);
             $this->readConfigFile($user_file, 'user', $strict);
+            $this->popErrorHandling();
             if ($this->_errorsFound > 0) {
                 return;
             }
