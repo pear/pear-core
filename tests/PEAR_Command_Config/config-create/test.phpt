@@ -16,10 +16,7 @@ if ($temp_path2{0} != '/') {
 }
 $e = $command->run('config-create', array(), array($temp_path2 . '/nomake', $temp_path . DIRECTORY_SEPARATOR
     . 'remote.ini'));
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 'Configuration file "' .$temp_path . DIRECTORY_SEPARATOR .
-    'remote.ini" is empty')
-), 'log errors');
+$phpunit->assertNoErrors('log errors');
 $phpunit->assertEquals(array (
   0 => 
   array (
