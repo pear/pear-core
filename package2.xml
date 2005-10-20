@@ -87,6 +87,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     quote situations properly
   * fix Bug #5736: if registry can't lock registry or open filemap,
     checkFileMap(), no error
+  * fix Bug #5676: pear config-create broken
  </notes>
  <contents>
   <dir name="/">
