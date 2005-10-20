@@ -80,6 +80,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix writeable PEAR_Task_Postinstallscript_rw class
   * fix Bug #5717: analyzeSourceCode() fails to process certain
     quote situations properly
+  * fix Bug #5736: if registry can't lock registry or open filemap,
+    checkFileMap(), no error
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
