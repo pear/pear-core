@@ -337,7 +337,7 @@ class PEAR_REST_10
                     $found = (!empty($searchpackage) && stristr($package, $searchpackage) !== false);
                     if (!$found && !(isset($searchsummary) && !empty($searchsummary)
                         && (stristr($inf['s'], $searchsummary) !== false
-                            || stristr($info['d'], $searchsummary) !== false)))
+                            || stristr($inf['d'], $searchsummary) !== false)))
                     {
                         continue;
                     };
