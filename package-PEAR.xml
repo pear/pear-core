@@ -78,6 +78,10 @@ http://pear.php.net/dtd/package-1.0.xsd">
     in CLI frontend
   * fix validation of &lt;postinstallscript&gt;
   * fix writeable PEAR_Task_Postinstallscript_rw class
+  * fix error in REST-based search command if searching through description
+    as well
+  * implement SERIOUS improvement in list-all/remote-list speed.  From 6 minutes
+    down to about 16-30 seconds
   * fix Bug #5717: analyzeSourceCode() fails to process certain
     quote situations properly
   * fix Bug #5736: if registry can't lock registry or open filemap,
@@ -235,6 +239,9 @@ http://pear.php.net/dtd/package-1.0.xsd">
     </dir>
     <dir name="REST">
      <file role="php" name="10.php">
+      <replace from="@package_version@" to="version" type="package-info"/>
+     </file>
+     <file role="php" name="11.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
     </dir>
