@@ -222,6 +222,11 @@ parameter.
             $list_options = true;
         }
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
+              $base = $chan->getBaseURL('REST1.1', $this->config->get('preferred_mirror'))) {
+            // use faster list-all if available
+            $rest = &$this->config->getREST('1.1', array());
+            $available = $rest->listAll($base, $list_options);
+        } elseif ($chan->supportsREST($this->config->get('preferred_mirror')) &&
               $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
             $rest = &$this->config->getREST('1.0', array());
             $available = $rest->listAll($base, $list_options);
@@ -278,6 +283,11 @@ parameter.
         }
         $chan = $reg->getChannel($channel);
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
+              $base = $chan->getBaseURL('REST1.1', $this->config->get('preferred_mirror'))) {
+            // use faster list-all if available
+            $rest = &$this->config->getREST('1.1', array());
+            $available = $rest->listAll($base, $list_options, false);
+        } elseif ($chan->supportsREST($this->config->get('preferred_mirror')) &&
               $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
             $rest = &$this->config->getREST('1.0', array());
             $available = $rest->listAll($base, $list_options, false);
