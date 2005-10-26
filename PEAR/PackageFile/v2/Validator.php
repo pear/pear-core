@@ -1831,7 +1831,7 @@ class PEAR_PackageFile_v2_Validator
                     if (version_compare(zend_version(), '2.0', '<')) {
                         if (in_array(strtolower($data),
                             array('public', 'private', 'protected', 'abstract',
-                                  'interface', 'implements', 'clone', 'throw') 
+                                  'interface', 'implements', 'throw') 
                                  )) {
                             $this->_stack->push(__FUNCTION__, 'warning', array(),
                                 'Error, PHP5 token encountered, analysis should be in PHP5');

@@ -1453,7 +1453,7 @@ class PEAR_PackageFile_v1
                     if (version_compare(zend_version(), '2.0', '<')) {
                         if (in_array(strtolower($data),
                             array('public', 'private', 'protected', 'abstract',
-                                  'interface', 'implements', 'clone', 'throw') 
+                                  'interface', 'implements', 'throw') 
                                  )) {
                             $this->_validateWarning(PEAR_PACKAGEFILE_ERROR_PHP5);
                         }

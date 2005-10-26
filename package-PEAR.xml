@@ -87,6 +87,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #5736: if registry can't lock registry or open filemap,
     checkFileMap(), no error
   * fix Bug #5676: pear config-create broken
+  * fix Bug #5725: PHP5 warnings need improvement
   * fix Bug #5789: small typo
   </notes>
   <provides type="class" name="OS_Guess"/>
