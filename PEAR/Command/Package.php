@@ -995,7 +995,7 @@ used for automated conversion or learning the format.
                                     for ($i = 0; $i < count($dep['exclude']) - 1; $i++) {
                                         $newdeprange[] = '(' .
                                             $package . " {$lastmin[1]} {$lastmin[0]} and " .
-                                            $package . ' < ' . $dep[exclude][$i] . ')';
+                                            $package . ' < ' . $dep['exclude'][$i] . ')';
                                         $lastmin = array($dep['exclude'][$i], '>');
                                     }
                                     if (isset($dep['max'])) {
