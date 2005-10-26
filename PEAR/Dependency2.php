@@ -816,7 +816,8 @@ class PEAR_Dependency2
                         }
                     }
                 }
-                if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
+                if (!isset($this->_options['nodeps']) && !isset($this->_options['force']) &&
+                      !isset($this->_options['loose'])) {
                     return $this->raiseError('%s dependency package "' . $depname .
                         '" ' . $installed . ' version ' . $version . 
                         ' is not the recommended version ' . $dep['recommended'] .

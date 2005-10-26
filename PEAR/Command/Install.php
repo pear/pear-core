@@ -54,6 +54,10 @@ class PEAR_Command_Install extends PEAR_Command_Common
                     'shortopt' => 'f',
                     'doc' => 'will overwrite newer installed packages',
                     ),
+                'loose' => array(
+                    'shortopt' => 'l',
+                    'doc' => 'do not check for recommended dependency version',
+                    ),
                 'nodeps' => array(
                     'shortopt' => 'n',
                     'doc' => 'ignore dependencies, install anyway',
@@ -135,6 +139,10 @@ four ways of specifying packages.
                     'shortopt' => 'f',
                     'doc' => 'overwrite newer installed packages',
                     ),
+                'loose' => array(
+                    'shortopt' => 'l',
+                    'doc' => 'do not check for recommended dependency version',
+                    ),
                 'nodeps' => array(
                     'shortopt' => 'n',
                     'doc' => 'ignore dependencies, upgrade anyway',
@@ -214,6 +222,9 @@ More than one package may be specified at once.
                     ),
                 'ignore-errors' => array(
                     'doc' => 'force install even if there were errors',
+                    ),
+                'loose' => array(
+                    'doc' => 'do not check for recommended dependency version',
                     ),
                 ),
             'doc' => '
