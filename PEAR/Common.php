@@ -763,7 +763,7 @@ class PEAR_Common extends PEAR
                     if (version_compare(zend_version(), '2.0', '<')) {
                         if (in_array(strtolower($data),
                             array('public', 'private', 'protected', 'abstract',
-                                  'interface', 'implements', 'clone', 'throw') 
+                                  'interface', 'implements', 'throw') 
                                  )) {
                             PEAR::raiseError('Error: PHP5 packages must be packaged by php 5 PEAR');
                             return false;
