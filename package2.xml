@@ -87,6 +87,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     as well
   * implement SERIOUS improvement in list-all/remote-list speed.  From 6 minutes
     down to about 16-30 seconds
+  * implement --loose option to avoid recommended version validation
   * implement Request #5527: alternative approach to determining glibc version
   * fix Bug #5717: analyzeSourceCode() fails to process certain
     quote situations properly
