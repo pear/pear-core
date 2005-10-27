@@ -81,7 +81,7 @@ class PEAR_REST_11
                 unset($unstable);
                 unset($stable);
                 unset($state);
-                if ($release) {
+                if ($releases) {
                     if (!isset($releases['r'][0])) {
                         $releases['r'] = array($releases['r']);
                     }
