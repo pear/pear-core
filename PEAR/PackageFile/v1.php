@@ -1039,7 +1039,7 @@ class PEAR_PackageFile_v1
                 PEAR_PACKAGEFILE_ERROR_CHANNELVAL =>
                     'Channel validator error: field "%field%" - %reason%',
                 PEAR_PACKAGEFILE_ERROR_PHP5 =>
-                    'Error, PHP5 token encountered, analysis should be in PHP5',
+                    'Error, PHP5 token encountered in %file%, analysis should be in PHP5',
                 PEAR_PACKAGEFILE_ERROR_FILE_NOTFOUND =>
                     'File "%file%" in package.xml does not exist',
                 PEAR_PACKAGEFILE_ERROR_NON_ISO_CHARS =>
@@ -1455,7 +1455,8 @@ class PEAR_PackageFile_v1
                             array('public', 'private', 'protected', 'abstract',
                                   'interface', 'implements', 'throw') 
                                  )) {
-                            $this->_validateWarning(PEAR_PACKAGEFILE_ERROR_PHP5);
+                            $this->_validateWarning(PEAR_PACKAGEFILE_ERROR_PHP5,
+                                array($file));
                         }
                     }
                     if ($look_for == T_CLASS) {

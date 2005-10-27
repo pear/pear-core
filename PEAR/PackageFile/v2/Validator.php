@@ -1833,8 +1833,10 @@ class PEAR_PackageFile_v2_Validator
                             array('public', 'private', 'protected', 'abstract',
                                   'interface', 'implements', 'throw') 
                                  )) {
-                            $this->_stack->push(__FUNCTION__, 'warning', array(),
-                                'Error, PHP5 token encountered, analysis should be in PHP5');
+                            $this->_stack->push(__FUNCTION__, 'warning', array(
+                                'file' => $file),
+                                'Error, PHP5 token encountered in %file%,' .
+                                ' analysis should be in PHP5');
                         }
                     }
                     if ($look_for == T_CLASS) {

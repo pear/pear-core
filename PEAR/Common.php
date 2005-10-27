@@ -765,7 +765,8 @@ class PEAR_Common extends PEAR
                             array('public', 'private', 'protected', 'abstract',
                                   'interface', 'implements', 'throw') 
                                  )) {
-                            PEAR::raiseError('Error: PHP5 packages must be packaged by php 5 PEAR');
+                            PEAR::raiseError('Error: PHP5 token encountered in ' . $file . 
+                            'packaging should be done in PHP 5');
                             return false;
                         }
                     }
