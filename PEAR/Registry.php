@@ -199,6 +199,7 @@ class PEAR_Registry extends PEAR
                         $pear_channel->setSummary('PHP Extension and Application Repository');
                         $pear_channel->setDefaultPEARProtocols();
                         $pear_channel->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
+                        $pear_channel->setBaseURL('REST1.1', 'http://pear.php.net/rest/');
                     } else {
                         $pear_channel->setName('pear.php.net');
                         $pear_channel->setAlias('pear');
@@ -1308,6 +1309,7 @@ class PEAR_Registry extends PEAR
             $pear_channel->setSummary('PHP Extension and Application Repository');
             $pear_channel->setDefaultPEARProtocols();
             $pear_channel->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
+            $pear_channel->setBaseURL('REST1.1', 'http://pear.php.net/rest/');
             return $pear_channel;
         }
         if ($this->_getChannelFromAlias($channel) == 'pecl.php.net') {
