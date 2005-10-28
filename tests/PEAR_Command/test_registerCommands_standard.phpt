@@ -185,20 +185,21 @@ PEAR_Command::getGetoptArgs('info', $s, $l);
 $phpunit->assertEquals('', $s, 'short info'); 
 $phpunit->assertEquals(array(), $l, 'long info');
 PEAR_Command::getGetoptArgs('install', $s, $l);
-$phpunit->assertEquals('fnrsBZR:aoOp', $s, 'short install'); 
+$phpunit->assertEquals('flnrsBZR:aoOp', $s, 'short install'); 
 $phpunit->assertEquals(array (
   0 => 'force',
-  1 => 'nodeps',
-  2 => 'register-only',
-  3 => 'soft',
-  4 => 'nobuild',
-  5 => 'nocompress',
-  6 => 'installroot=',
-  7 => 'ignore-errors',
-  8 => 'alldeps',
-  9 => 'onlyreqdeps',
-  10 => 'offline',
-  11 => 'pretend',
+  1 => 'loose',
+  2 => 'nodeps',
+  3 => 'register-only',
+  4 => 'soft',
+  5 => 'nobuild',
+  6 => 'nocompress',
+  7 => 'installroot=',
+  8 => 'ignore-errors',
+  9 => 'alldeps',
+  10 => 'onlyreqdeps',
+  11 => 'offline',
+  12 => 'pretend',
 ), $l, 'long install');
 PEAR_Command::getGetoptArgs('list', $s, $l);
 $phpunit->assertEquals('c:a', $s, 'short list'); 
@@ -270,19 +271,20 @@ PEAR_Command::getGetoptArgs('update-channels', $s, $l);
 $phpunit->assertEquals('', $s, 'short update-channels'); 
 $phpunit->assertEquals(array (), $l, 'long update-channels');
 PEAR_Command::getGetoptArgs('upgrade', $s, $l);
-$phpunit->assertEquals('fnrBZR:aoOp', $s, 'short upgrade'); 
+$phpunit->assertEquals('f1nrBZR:aoOp', $s, 'short upgrade'); 
 $phpunit->assertEquals(array (
   0 => 'force',
-  1 => 'nodeps',
-  2 => 'register-only',
-  3 => 'nobuild',
-  4 => 'nocompress',
-  5 => 'installroot=',
-  6 => 'ignore-errors',
-  7 => 'alldeps',
-  8 => 'onlyreqdeps',
-  9 => 'offline',
-  10 => 'pretend',
+  1 => 'loose',
+  2 => 'nodeps',
+  3 => 'register-only',
+  4 => 'nobuild',
+  5 => 'nocompress',
+  6 => 'installroot=',
+  7 => 'ignore-errors',
+  8 => 'alldeps',
+  9 => 'onlyreqdeps',
+  10 => 'offline',
+  11 => 'pretend',
 ), $l, 'long upgrade');
 PEAR_Command::getGetoptArgs('upgrade-all', $s, $l);
 $phpunit->assertEquals('nrBZR:', $s, 'short upgrade-all'); 
@@ -293,6 +295,7 @@ $phpunit->assertEquals(array (
   3 => 'nocompress',
   4 => 'installroot=',
   5 => 'ignore-errors',
+  6 => 'loose',
 ), $l, 'long upgrade-all');
 $phpunit->assertEquals('Build an Extension From C Source'
     , PEAR_Command::getDescription('build'), 'build');
