@@ -229,50 +229,73 @@ class PEAR_REST_10
 
     function _returnDownloadURL($base, $package, $release, $info, $found)
     {
+        if (!$found) {
+            $release = $info['r'][0];
+        }
+        $releaseinfo = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' . 
+            $release['v'] . '.xml');
+        if (PEAR::isError($releaseinfo)) {
+            return PEAR::raiseError('Package "' . $package . '" Version "' . $release['v'] .
+                '" does not have REST xml available');
+        }
+        $packagexml = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' .
+            'deps.' . $release['v'] . '.txt', false, true);
+        if (PEAR::isError($packagexml)) {
+            return PEAR::raiseError('Package "' . $package . '" Version "' . $release['v'] .
+                '" does not have REST dependency information available');
+        }
+        $packagexml = unserialize($packagexml);
+        if (!$packagexml) {
+            $packagexml = array();
+        }
+        $allinfo = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
+            '/allreleases.xml');
+        if (!is_array($allinfo['r']) || !isset($allinfo['r'][0])) {
+            $allinfo['r'] = array($allinfo['r']);
+        }
+        $compatible = false;
+        foreach ($allinfo['r'] as $release) {
+            if ($release['v'] != $releaseinfo['v']) {
+                continue;
+            }
+            if (!isset($release['co'])) {
+                break;
+            }
+            $compatible = array();
+            if (!is_array($release['co']) || !isset($release['co'][0])) {
+                $release['co'] = array($release['co']);
+            }
+            foreach ($release['co'] as $entry) {
+                $comp = array();
+                $comp['name'] = $entry['p'];
+                $comp['channel'] = $entry['c'];
+                $comp['min'] = $entry['min'];
+                $comp['max'] = $entry['max'];
+                if (isset($entry['x']) && !is_array($entry['x'])) {
+                    $comp['exclude'] = $entry['x'];
+                }
+                $compatible[] = $comp;
+            }
+            if (count($compatible) == 1) {
+                $compatible = $compatible[0];
+            }
+            break;
+        }
         if ($found) {
-            $releaseinfo = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' . 
-                $release['v'] . '.xml');
-            if (PEAR::isError($releaseinfo)) {
-                return $releaseinfo;
-            }
-            $packagexml = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' .
-                'deps.' . $release['v'] . '.txt', false, true);
-            if (PEAR::isError($packagexml)) {
-                return $packagexml;
-            }
-            $packagexml = unserialize($packagexml);
-            if (!$packagexml) {
-                $packagexml = array();
-            }
             return 
                 array('version' => $releaseinfo['v'],
                       'info' => $packagexml,
                       'package' => $releaseinfo['p']['_content'],
                       'stability' => $releaseinfo['st'],
-                      'url' => $releaseinfo['g']);
+                      'url' => $releaseinfo['g'],
+                      'compatible' => $compatible);
         } else {
-            $release = $info['r'][0];
-            $releaseinfo = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' . 
-                $release['v'] . '.xml');
-            if (PEAR::isError($releaseinfo)) {
-                return PEAR::raiseError('Package "' . $package . '" Version "' . $release['v'] .
-                    '" does not have REST xml available');
-            }
-            $packagexml = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' .
-                'deps.' . $release['v'] . '.txt', false, true);
-            if (PEAR::isError($packagexml)) {
-                return PEAR::raiseError('Package "' . $package . '" Version "' . $release['v'] .
-                    '" does not have REST dependency information available');
-            }
-            $packagexml = unserialize($packagexml);
-            if (!$packagexml) {
-                $packagexml = array();
-            }
             return
                 array('version' => $releaseinfo['v'],
                       'package' => $releaseinfo['p']['_content'],
                       'stability' => $releaseinfo['st'],
-                      'info' => $packagexml);
+                      'info' => $packagexml,
+                      'compatible' => $compatible);
         }
     }
 

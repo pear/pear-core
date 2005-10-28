@@ -469,6 +469,14 @@ class PEAR_PackageFile_v2
     /**
      * WARNING - do not use this function unless you know what you're doing
      */
+    function setRawCompatible($compatible)
+    {
+        $this->_packageInfo['compatible'] = $compatible;
+    }
+
+    /**
+     * WARNING - do not use this function unless you know what you're doing
+     */
     function setRawPackage($package)
     {
         $this->_packageInfo['name'] = $package;

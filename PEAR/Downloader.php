@@ -732,10 +732,13 @@ class PEAR_Downloader extends PEAR_Common
                 return PEAR::raiseError('Invalid remote dependencies retrieved from REST - ' .
                     'this should never happen');
             }
-            if (isset($url['info']['required'])) {
+            if (isset($url['info']['required']) || $url['compatible']) {
                 require_once 'PEAR/PackageFile/v2.php';
                 $pf = new PEAR_PackageFile_v2;
                 $pf->setRawChannel($parr['channel']);
+                if ($url['compatible']) {
+                    $pf->setRawCompatible($url['compatible']);
+                }
             } else {
                 require_once 'PEAR/PackageFile/v1.php';
                 $pf = new PEAR_PackageFile_v1;
