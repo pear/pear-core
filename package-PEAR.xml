@@ -71,6 +71,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>PHP License</license>
   <state>stable</state>
   <notes>
+  Run "pear channel-update" after upgrading!!
   Minor bugfix release
   * fix installation of files named like &quot;.test&quot;
   * fix base class for writeable unixeol/windowseol classes

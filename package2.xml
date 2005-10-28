@@ -76,6 +76,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
+  Run "pear channel-update" after upgrading!!
   Minor bugfix release
   * fix installation of files named like &quot;.test&quot;
   * fix base class for writeable unixeol/windowseol classes
