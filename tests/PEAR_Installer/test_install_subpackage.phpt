@@ -49,7 +49,13 @@ $params = array(&$dp1, &$dp2);
 $installer->setOptions(array());
 $installer->sortPackagesForInstall($params);
 $err = $installer->setDownloadedPackages($params);
-$phpunit->assertEquals(array(), $fakelog->getLog(), 'log');
+$phpunit->assertEquals(array(
+  0 => 
+  array (
+    0 => 3,
+    1 => 'skipping installed package check of "pear/foo", version "1.1" will be downloaded and installed',
+  ),
+), $fakelog->getLog(), 'log');
 $phpunit->assertNoErrors('dl setup');
 $installer->install($dp2, array('upgrade' => true));
 $phpunit->assertNoErrors('install');
