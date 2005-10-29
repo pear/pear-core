@@ -271,7 +271,7 @@ PEAR_Command::getGetoptArgs('update-channels', $s, $l);
 $phpunit->assertEquals('', $s, 'short update-channels'); 
 $phpunit->assertEquals(array (), $l, 'long update-channels');
 PEAR_Command::getGetoptArgs('upgrade', $s, $l);
-$phpunit->assertEquals('f1nrBZR:aoOp', $s, 'short upgrade'); 
+$phpunit->assertEquals('flnrBZR:aoOp', $s, 'short upgrade'); 
 $phpunit->assertEquals(array (
   0 => 'force',
   1 => 'loose',
