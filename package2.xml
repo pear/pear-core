@@ -76,8 +76,14 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  Run "pear channel-update" after upgrading!!
-  Minor bugfix release
+  Major bugfix release
+
+  **NOTE: PEAR 1.4.0-1.4.2 may complain about XML_RPC recommended version.
+          this is a bug fixed in PEAR 1.4.3, use the --force option to
+          upgrade successfully
+  Run "pear channel-update" after upgrading for exponentially
+  faster list-all/remote-list!!
+
   * fix installation of files named like &quot;.test&quot;
   * fix base class for writeable unixeol/windowseol classes
   * fix running of post-install scripts with empty or no paramgroup

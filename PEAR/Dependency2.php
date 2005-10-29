@@ -997,7 +997,20 @@ class PEAR_Dependency2
         return true;
     }
 
-    function validatePackage($pkg, &$dl)
+    /**
+     * validate a downloaded package against installed packages
+     * 
+     * As of PEAR 1.4.3, this will only validate
+     *
+     * @param array|PEAR_Downloader_Package|PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     *              $pkg package identifier (either
+     *                   array('package' => blah, 'channel' => blah) or an array with
+     *                   index 'info' referencing an object)
+     * @param PEAR_Downloader $dl
+     * @param array $params full list of packages to install
+     * @return true|PEAR_Error
+     */
+    function validatePackage($pkg, &$dl, $params = array())
     {
         if (is_array($pkg) && isset($pkg['info'])) {
             $deps = $this->_dependencydb->getDependentPackageDependencies($pkg['info']);
@@ -1018,6 +1031,18 @@ class PEAR_Dependency2
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             foreach ($deps as $channel => $info) {
                 foreach ($info as $package => $ds) {
+                    foreach ($params as $packd) {
+                        if (strtolower($packd->getPackage()) == strtolower($package) &&
+                              $packd->getChannel() == $channel) {
+                            $dl->log(3, 'skipping installed package check of "' .
+                                        $this->_registry->parsedPackageNameToString(
+                                            array('channel' => $channel, 'package' => $package),
+                                            true) .
+                                        '", version "' . $packd->getVersion() . '" will be ' .
+                                        'downloaded and installed');
+                            continue 2; // jump to next package
+                        }
+                    }
                     foreach ($ds as $d) {
                         $checker = &new PEAR_Dependency2($this->_config, $this->_options,
                             array('channel' => $channel, 'package' => $package), $this->_state);
