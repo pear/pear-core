@@ -421,7 +421,7 @@ class PEAR_Downloader extends PEAR_Common
                     } else {
                         $send = $param->getPackageFile();
                     }
-                    $installcheck = $depchecker->validatePackage($send, $this);
+                    $installcheck = $depchecker->validatePackage($send, $this, $params);
                     if (PEAR::isError($installcheck)) {
                         if (!isset($this->_options['soft'])) {
                             $this->log(0, $installcheck->getMessage());
@@ -447,7 +447,7 @@ class PEAR_Downloader extends PEAR_Common
                     } else {
                         $send = $param->getPackageFile();
                     }
-                    $installcheck = $depchecker->validatePackage($send, $this);
+                    $installcheck = $depchecker->validatePackage($send, $this, $params);
                     if (PEAR::isError($installcheck)) {
                         if (!isset($this->_options['soft'])) {
                             $this->log(0, $installcheck->getMessage());
