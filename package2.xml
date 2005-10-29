@@ -65,7 +65,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2005-10-31</date>
+ <date>2005-11-03</date>
  <version>
   <release>1.4.3</release>
   <api>1.4.0</api>
@@ -104,6 +104,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #5683: Deadlock with (almost) circular dependency
   * fix Bug #5725: PHP5 warnings need improvement
   * fix Bug #5789: small typo
+  * fix Bug #5810: internet should not be contacted on install if dependencies are installed
  </notes>
  <contents>
   <dir name="/">
