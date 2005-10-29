@@ -75,6 +75,16 @@ if (!empty($with_dir)) {
     $config->set('doc_dir', $with_dir . $ds . 'doc', 'default');
     $config->set('data_dir', $with_dir . $ds . 'data', 'default');
     $config->set('test_dir', $with_dir . $ds . 'test', 'default');
+    if (!is_writable($config->get('cache_dir'))) {
+        include_once 'System.php';
+        $cdir = System::mktemp(array('-d', 'pear'));
+        if (PEAR::isError($cdir)) {
+            $ui->outputData("[PEAR] cannot make new temporary directory: " . $cdir);
+            die(1);
+        }
+        $oldcachedir = $config->get('cache_dir');
+        $config->set('cache_dir', $cdir);
+    }
 }
 /* Print PEAR Conf (useful for debuging do NOT REMOVE) */
 if ($debug) {
@@ -163,6 +173,9 @@ foreach ($install_files as $package => $instfile) {
                             "'$ufile'. You may probably want to remove it.");
         }
         $config->set('verbose', 1, 'default');
+        if (isset($oldcachedir)) {
+            $config->set('cache_dir', $oldcachedir);
+        }
         foreach ($config->getKeys() as $key) {
             $data[$key] = $config->get($key);
         }
