@@ -604,14 +604,25 @@ class PEAR_Downloader_Package
                     case 'eq' :
                     case 'gt' :
                     case 'has' :
+                        $group = (!isset($dep['optional']) || $dep['optional'] == 'no') ?
+                            'required' :
+                            'optional';
                         if (PEAR_Downloader_Package::willDownload($dep, $params)) {
-                            $group = (!isset($dep['optional']) || $dep['optional'] == 'no') ?
-                                'required' :
-                                'optional';
                             $this->_downloader->log(2, $this->getShortName() . ': Skipping ' . $group
                                 . ' dependency "' .
                                 $this->_registry->parsedPackageNameToString($dep, true) .
                                 '", will be installed');
+                            continue 2;
+                        }
+                        $fakedp = new PEAR_PackageFile_v1;
+                        $fakedp->setPackage($dep['name']);
+                        // skip internet check if we are not upgrading (bug #5810)
+                        if (!isset($options['upgrade']) && $this->isInstalled(
+                              $fakedp, $dep['rel'])) {
+                            $this->_downloader->log(2, $this->getShortName() . ': Skipping ' . $group
+                                . ' dependency "' .
+                                $this->_registry->parsedPackageNameToString($dep, true) .
+                                '", is already installed');
                             continue 2;
                         }
                 }

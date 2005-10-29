@@ -67,7 +67,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
  </maintainers>
  <release>
   <version>1.4.3</version>
-  <date>2005-10-31</date>
+  <date>2005-11-03</date>
   <license>PHP License</license>
   <state>stable</state>
   <notes>
@@ -99,6 +99,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #5683: Deadlock with (almost) circular dependency
   * fix Bug #5725: PHP5 warnings need improvement
   * fix Bug #5789: small typo
+  * fix Bug #5810: internet should not be contacted on install if dependencies are installed
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
