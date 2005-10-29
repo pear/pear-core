@@ -159,8 +159,8 @@ $phpunit->assertEquals(array (
     1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
   ),
   array (
-    0 => 3,
-    1 => 'pear/mainold: Skipping required dependency "pear/required", already installed as version 1.0',
+    0 => 2,
+    1 => 'pear/mainold: Skipping required dependency "pear/required", is already installed',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');

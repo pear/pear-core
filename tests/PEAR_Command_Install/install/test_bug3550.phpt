@@ -740,40 +740,30 @@ $phpunit->assertErrors(array(array('package' => 'PEAR_Error', 'message' => 'inst
 $phpunit->assertEquals( array (
   0 => 
   array (
-    0 => 3,
-    1 => 'Notice: package "pear/PEAR_Frontend_Web" required dependency "pear/Net_UserAgent_Detect" will not be automatically downloaded',
+    0 => 2,
+    1 => 'pear/PEAR_Frontend_Web: Skipping required dependency "pear/Net_UserAgent_Detect", is already installed',
   ),
   1 => 
   array (
-    0 => 3,
-    1 => 'pear/PEAR_Frontend_Web: Skipping required dependency "pear/Net_UserAgent_Detect", already installed as version 2.0.1',
+    0 => 2,
+    1 => 'pear/PEAR_Frontend_Web: Skipping required dependency "pear/HTML_Template_IT", is already installed',
   ),
   2 => 
   array (
-    0 => 3,
-    1 => 'Notice: package "pear/PEAR_Frontend_Web" required dependency "pear/HTML_Template_IT" will not be automatically downloaded',
+    0 => 0,
+    1 => 'pear/pear requires package "pear/PEAR_Frontend_Web" (version >= 0.5.0), downloaded version is 0.4',
   ),
-  3 => 
+  3 =>
   array (
-    0 => 3,
-    1 => 'pear/PEAR_Frontend_Web: Skipping required dependency "pear/HTML_Template_IT", already installed as version 1.1',
+    0 => 0,
+    1 => 'pear/pear requires package "pear/PEAR_Frontend_Web" (version >= 0.5.0), downloaded version is 0.4',
   ),
   4 => 
   array (
     0 => 0,
-    1 => 'pear/pear requires package "pear/PEAR_Frontend_Web" (version >= 0.5.0), downloaded version is 0.4',
-  ),
-  5 =>
-  array (
-    0 => 0,
-    1 => 'pear/pear requires package "pear/PEAR_Frontend_Web" (version >= 0.5.0), downloaded version is 0.4',
-  ),
-  6 => 
-  array (
-    0 => 0,
     1 => 'pear/PEAR_Frontend_Web cannot be installed, conflicts with installed packages',
   ),
-  7 => 
+  5 => 
   array (
     'info' => 
     array (
