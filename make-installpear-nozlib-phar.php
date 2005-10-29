@@ -4,8 +4,7 @@
  *
  * PHP version 5.1+
  *
- * To use, modify the $xmlrpcdir to point to the installed PEAR directory where RPC.php
- * from the XML_RPC package can be located.  In pear-core/PEAR create a directory
+ * To use, in pear-core/PEAR create a directory
  * named go-pear-tarballs, and run these commands in the directory
  *
  * <pre>
@@ -31,7 +30,6 @@
  * @version    CVS: $Id$
  */
 $peardir = dirname(__FILE__);
-$xmlrpcdir = 'C:\php5\pear\XML';
 
 $dp = @opendir(dirname(__FILE__) . '/PEAR/go-pear-tarballs');
 if (empty($dp)) {
@@ -44,8 +42,13 @@ while (false !== ($entry = readdir($dp))) {
         continue;
     }
     ereg('([A-Za-z0-9_:]+)-.*\.tar$', $entry, $matches);
+    if ($matches[1] == 'PEAR') {
+    	$pearentry = $entry;
+    	continue;
+    }
     $packages[$matches[1]] = $entry;
 }
+$packages['PEAR'] = $pearentry;
 require_once 'PEAR/PackageFile.php';
 require_once 'PEAR/Config.php';
 require_once 'PHP/Archive/Creator.php';
@@ -254,7 +257,6 @@ $commandcontents = str_replace(
     $commandcontents);
 $creator->addString($commandcontents, 'PEAR/PackageFile.php');
 
-$creator->addFile($xmlrpcdir . DIRECTORY_SEPARATOR . 'RPC.php', 'XML/RPC.php', true);
 $creator->addDir($peardir, array('tests/',
     'scripts/',
     'go-pear-phar.php',
