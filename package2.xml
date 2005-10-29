@@ -442,12 +442,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <recommended>1.2</recommended>
    </package>
    <package>
-    <name>XML_RPC</name>
-    <channel>pear.php.net</channel>
-    <min>1.4.0</min>
-    <recommended>1.4.4</recommended>
-   </package>
-   <package>
     <name>PEAR_Frontend_Web</name>
     <channel>pear.php.net</channel>
     <max>0.5.0</max>
@@ -468,6 +462,13 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>pcre</name>
    </extension>
   </required>
+  <optional>
+   <package>
+    <name>XML_RPC</name>
+    <channel>pear.php.net</channel>
+    <min>1.4.0</min>
+   </package>
+  </optional>
 <!--  <group name="remoteinstall" hint="adds the ability to install packages to a remote ftp server">
    <subpackage>
     <name>PEAR_RemoteInstaller</name>
