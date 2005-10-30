@@ -310,7 +310,8 @@ class PEAR_PackageFile_v2
             $this->_differentSummary($pf1->getSummary());
             $pass = false;
         }
-        if (trim($pf1->getDescription()) != $this->getDescription()) {
+        if (preg_replace('/\s+/', '', $pf1->getDescription()) !=
+              preg_replace('/\s+/', '', $this->getDescription())) {
             $this->_differentDescription($pf1->getDescription());
             $pass = false;
         }
@@ -318,7 +319,8 @@ class PEAR_PackageFile_v2
             $this->_differentState($pf1->getState());
             $pass = false;
         }
-        if (!strstr(trim($this->getNotes()), trim($pf1->getNotes()))) {
+        if (!strstr(preg_replace('/\s+/', '', $this->getNotes()),
+              preg_replace('/\s+/', '', $pf1->getNotes()))) {
             $this->_differentNotes($pf1->getNotes());
             $pass = false;
         }
