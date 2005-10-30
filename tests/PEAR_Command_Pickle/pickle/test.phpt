@@ -21,6 +21,9 @@ $res = $command->run('pickle', array(), array());
 chdir($savedir);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2005-00-00"is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2005-00-00"is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "providesextension" - package name "pecl_http" is different from extension name "http"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "providesextension" - package name "pecl_http" is different from extension name "http"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "providesextension" - package name "pecl_http" is different from extension name "http"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "providesextension" - package name "pecl_http" is different from extension name "http"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "providesextension" - package name "pecl_http" is different from extension name "http"'),
@@ -54,8 +57,18 @@ $phpunit->assertEquals(array (
   5 => 
   array (
     0 => 'Package pecl_http-0.16.0.tgz done',
-     1 => true,
-   ),
+    1 => true,
+  ),
+  6 => 
+  array (
+    0 => 'Tag the released code with "pear cvstag package2.xml"',
+    1 => true,
+  ),
+  7 => 
+  array (
+    0 => '(or set the CVS tag RELEASE_0_16_0 by hand)',
+    1 => true,
+  ),
 ), $fakelog->getLog(), 'log');
 echo 'tests done';
 ?>
