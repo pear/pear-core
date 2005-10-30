@@ -1,0 +1,143 @@
+--TEST--
+request methods
+--SKIPIF--
+<?php
+include 'skip.inc';
+?>
+--FILE--
+<?php
+echo "-TEST\n";
+
+for ($i = 0; $i <= HTTP_METH_ACL+1; ++$i) {
+	var_dump(http_request_method_exists($i));
+	echo $name = http_request_method_name($i), "\n";
+	var_dump(http_request_method_exists($name));
+}
+
+for ($i = 0; $i < 5; ++$i) {
+	$n = http_request_method_register("M$i");
+	var_dump(http_request_method_exists($n));
+	var_dump(http_request_method_exists("M$i"));
+}
+for ($i = 0; $i < 5; ++$i) {
+	var_dump(http_request_method_unregister("M$i"));
+	var_dump(http_request_method_exists("M$i"));
+	var_dump(http_request_method_exists($i+HTTP_METH_ACL+1));
+}
+
+echo "Done\n";
+--EXPECTF--
+%sTEST
+int(0)
+UNKNOWN
+int(0)
+int(1)
+GET
+int(1)
+int(2)
+HEAD
+int(2)
+int(3)
+POST
+int(3)
+int(4)
+PUT
+int(4)
+int(5)
+DELETE
+int(5)
+int(6)
+OPTIONS
+int(6)
+int(7)
+TRACE
+int(7)
+int(8)
+CONNECT
+int(8)
+int(9)
+PROPFIND
+int(9)
+int(10)
+PROPPATCH
+int(10)
+int(11)
+MKCOL
+int(11)
+int(12)
+COPY
+int(12)
+int(13)
+MOVE
+int(13)
+int(14)
+LOCK
+int(14)
+int(15)
+UNLOCK
+int(15)
+int(16)
+VERSION-CONTROL
+int(16)
+int(17)
+REPORT
+int(17)
+int(18)
+CHECKOUT
+int(18)
+int(19)
+CHECKIN
+int(19)
+int(20)
+UNCHECKOUT
+int(20)
+int(21)
+MKWORKSPACE
+int(21)
+int(22)
+UPDATE
+int(22)
+int(23)
+LABEL
+int(23)
+int(24)
+MERGE
+int(24)
+int(25)
+BASELINE-CONTROL
+int(25)
+int(26)
+MKACTIVITY
+int(26)
+int(27)
+ACL
+int(27)
+int(0)
+UNKNOWN
+int(0)
+int(28)
+int(28)
+int(29)
+int(29)
+int(30)
+int(30)
+int(31)
+int(31)
+int(32)
+int(32)
+bool(true)
+int(0)
+int(0)
+bool(true)
+int(0)
+int(0)
+bool(true)
+int(0)
+int(0)
+bool(true)
+int(0)
+int(0)
+bool(true)
+int(0)
+int(0)
+Done
