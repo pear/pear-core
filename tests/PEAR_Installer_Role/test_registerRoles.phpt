@@ -15,216 +15,286 @@ PEAR_Installer_Role::registerRoles(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ro
 $phpunit->assertEquals(array (
   'PEAR_Installer_Role_Data' => 
   array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
     'releasetypes' => 
     array (
       0 => 'php',
       1 => 'extsrc',
       2 => 'extbin',
     ),
-    'installable' => true,
+    'installable' => '1',
     'locationconfig' => 'data_dir',
-    'honorsbaseinstall' => false,
-    'unusualbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => false,
-    'phpextension' => false,
+    'honorsbaseinstall' => '',
+    'unusualbaseinstall' => '',
+    'phpfile' => '',
+    'executable' => '',
+    'phpextension' => '',
+    'config_vars' => '',
   ),
   'PEAR_Installer_Role_Dataf' => 
   array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
     'releasetypes' => 
     array (
       0 => 'php',
       1 => 'extsrc',
       2 => 'extbin',
     ),
-    'installable' => true,
+    'installable' => '1',
     'locationconfig' => 'data_dir',
-    'honorsbaseinstall' => false,
-    'unusualbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => false,
-    'phpextension' => false,
+    'honorsbaseinstall' => '',
+    'unusualbaseinstall' => '',
+    'phpfile' => '',
+    'executable' => '',
+    'phpextension' => '',
+    'config_vars' => '',
   ),
   'PEAR_Installer_Role_Doc' => 
   array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
     'releasetypes' => 
     array (
       0 => 'php',
       1 => 'extsrc',
       2 => 'extbin',
     ),
-    'installable' => true,
+    'installable' => '1',
     'locationconfig' => 'doc_dir',
-    'honorsbaseinstall' => false,
-    'unusualbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => false,
-    'phpextension' => false,
+    'honorsbaseinstall' => '',
+    'unusualbaseinstall' => '',
+    'phpfile' => '',
+    'executable' => '',
+    'phpextension' => '',
+    'config_vars' => '',
   ),
   'PEAR_Installer_Role_Docf' => 
   array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
     'releasetypes' => 
     array (
       0 => 'php',
       1 => 'extsrc',
       2 => 'extbin',
     ),
-    'installable' => true,
+    'installable' => '1',
     'locationconfig' => 'doc_dir',
-    'honorsbaseinstall' => false,
-    'unusualbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => false,
-    'phpextension' => false,
+    'honorsbaseinstall' => '',
+    'unusualbaseinstall' => '',
+    'phpfile' => '',
+    'executable' => '',
+    'phpextension' => '',
+    'config_vars' => '',
   ),
   'PEAR_Installer_Role_Ext' => 
   array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
     'releasetypes' => 
     array (
       0 => 'extbin',
     ),
-    'installable' => true,
+    'installable' => '1',
     'locationconfig' => 'ext_dir',
-    'honorsbaseinstall' => true,
-    'unusualbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => false,
-    'phpextension' => true,
+    'honorsbaseinstall' => '1',
+    'unusualbaseinstall' => '',
+    'phpfile' => '',
+    'executable' => '',
+    'phpextension' => '1',
+    'config_vars' => '',
   ),
   'PEAR_Installer_Role_Extf' => 
   array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
     'releasetypes' => 
     array (
       0 => 'extbin',
     ),
-    'installable' => true,
+    'installable' => '1',
     'locationconfig' => 'ext_dir',
-    'honorsbaseinstall' => true,
-    'unusualbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => false,
-    'phpextension' => true,
+    'honorsbaseinstall' => '1',
+    'unusualbaseinstall' => '',
+    'phpfile' => '',
+    'executable' => '',
+    'phpextension' => '1',
+    'config_vars' => '',
   ),
   'PEAR_Installer_Role_Php' => 
   array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
     'releasetypes' => 
     array (
       0 => 'php',
-      'extsrc',
-      'extbin'
+      1 => 'extsrc',
+      2 => 'extbin',
     ),
-    'installable' => true,
+    'installable' => '1',
     'locationconfig' => 'php_dir',
-    'honorsbaseinstall' => true,
-    'unusualbaseinstall' => false,
-    'phpfile' => true,
-    'executable' => false,
-    'phpextension' => false,
+    'honorsbaseinstall' => '1',
+    'unusualbaseinstall' => '',
+    'phpfile' => '1',
+    'executable' => '',
+    'phpextension' => '',
+    'config_vars' => '',
   ),
   'PEAR_Installer_Role_Phpf' => 
   array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
     'releasetypes' => 
     array (
       0 => 'php',
     ),
-    'installable' => true,
+    'installable' => '1',
     'locationconfig' => 'php_dir',
-    'honorsbaseinstall' => true,
-    'unusualbaseinstall' => false,
-    'phpfile' => true,
-    'executable' => false,
-    'phpextension' => false,
+    'honorsbaseinstall' => '1',
+    'unusualbaseinstall' => '',
+    'phpfile' => '1',
+    'executable' => '',
+    'phpextension' => '',
+    'config_vars' => '',
   ),
   'PEAR_Installer_Role_Script' => 
   array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
     'releasetypes' => 
     array (
       0 => 'php',
       1 => 'extsrc',
       2 => 'extbin',
     ),
-    'installable' => true,
+    'installable' => '1',
     'locationconfig' => 'bin_dir',
-    'honorsbaseinstall' => true,
-    'unusualbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => true,
-    'phpextension' => false,
+    'honorsbaseinstall' => '1',
+    'unusualbaseinstall' => '',
+    'phpfile' => '',
+    'executable' => '1',
+    'phpextension' => '',
+    'config_vars' => '',
   ),
   'PEAR_Installer_Role_Scriptf' => 
   array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
     'releasetypes' => 
     array (
       0 => 'php',
       1 => 'extsrc',
       2 => 'extbin',
     ),
-    'installable' => true,
+    'installable' => '1',
     'locationconfig' => 'bin_dir',
-    'honorsbaseinstall' => true,
-    'unusualbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => true,
-    'phpextension' => false,
+    'honorsbaseinstall' => '1',
+    'unusualbaseinstall' => '',
+    'phpfile' => '',
+    'executable' => '1',
+    'phpextension' => '',
+    'config_vars' => '',
   ),
   'PEAR_Installer_Role_Src' => 
   array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
     'releasetypes' => 
     array (
       0 => 'extsrc',
     ),
-    'installable' => false,
-    'locationconfig' => false,
-    'honorsbaseinstall' => false,
-    'unusualbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => false,
-    'phpextension' => false,
+    'installable' => '',
+    'locationconfig' => '',
+    'honorsbaseinstall' => '',
+    'unusualbaseinstall' => '',
+    'phpfile' => '',
+    'executable' => '',
+    'phpextension' => '',
+    'config_vars' => '',
   ),
   'PEAR_Installer_Role_Srcf' => 
   array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
     'releasetypes' => 
     array (
       0 => 'extsrc',
     ),
-    'installable' => false,
-    'locationconfig' => false,
-    'honorsbaseinstall' => false,
-    'unusualbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => false,
+    'installable' => '',
+    'locationconfig' => '',
+    'honorsbaseinstall' => '',
+    'unusualbaseinstall' => '',
+    'phpfile' => '',
+    'executable' => '',
+    'config_vars' => '',
   ),
   'PEAR_Installer_Role_Test' => 
   array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
     'releasetypes' => 
     array (
       0 => 'php',
       1 => 'extsrc',
       2 => 'extbin',
     ),
-    'installable' => true,
+    'installable' => '1',
     'locationconfig' => 'test_dir',
-    'honorsbaseinstall' => false,
-    'unusualbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => false,
-    'phpextension' => false,
+    'honorsbaseinstall' => '',
+    'unusualbaseinstall' => '',
+    'phpfile' => '',
+    'executable' => '',
+    'phpextension' => '',
+    'config_vars' => '',
   ),
   'PEAR_Installer_Role_Testf' => 
   array (
+    'attribs' => 
+    array (
+      'version' => '1.0',
+    ),
     'releasetypes' => 
     array (
       0 => 'php',
       1 => 'extsrc',
       2 => 'extbin',
     ),
-    'installable' => true,
+    'installable' => '1',
     'locationconfig' => 'test_dir',
-    'honorsbaseinstall' => false,
-    'unusualbaseinstall' => false,
-    'phpfile' => false,
-    'executable' => false,
-    'phpextension' => false,
+    'honorsbaseinstall' => '',
+    'unusualbaseinstall' => '',
+    'phpfile' => '',
+    'executable' => '',
+    'phpextension' => '',
+    'config_vars' => '',
   ),
 ), $GLOBALS['_PEAR_INSTALLER_ROLES'], 'registered');
 echo 'tests done';
