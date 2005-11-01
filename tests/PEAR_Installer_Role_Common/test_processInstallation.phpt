@@ -30,19 +30,27 @@ $pf2->setNotes('blah');
 $pf2->setPearinstallerDep('1.4.0a1');
 $pf2->setPhpDep('4.2.0', '5.0.0');
 $pf2->addPackageDepWithChannel('optional', 'frong', 'floop');
-class Monkey extends PEAR_Installer_Role_Common
+class Php extends PEAR_Installer_Role_Common
 {
+    var $_setup = array();
+
+    function resetInfo($role)
+    {
+        $GLOBALS['_PEAR_INSTALLER_ROLES'][$role] = array();
+    }
+
     function setSetupField($field, $value)
     {
         if ($value === null) {
-            unset($this->_setup[$field]);
+            unset($GLOBALS['_PEAR_INSTALLER_ROLES']['PEAR_Installer_Role_Php'][$field]);
             return;
         }
-        $this->_setup[$field] = $value;
+        $GLOBALS['_PEAR_INSTALLER_ROLES']['PEAR_Installer_Role_Php'][$field] = $value;
     }
 }
 
-$m = new Monkey($config);
+$m = new Php($config);
+$m->resetInfo('PEAR_Installer_Role_Php');
 $m->setSetupField('locationconfig', false);
 $phpunit->assertFalse($m->processInstallation($pf2, array(), '', ''), 'no locationconfig');
 $m->setSetupField('locationconfig', 'data_dir');

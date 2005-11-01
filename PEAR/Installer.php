@@ -467,8 +467,12 @@ class PEAR_Installer extends PEAR_Downloader
         if (!$role->isInstallable()) {
             return;
         }
-        list($save_destdir, $dest_dir, $dest_file, $orig_file) =
-            $role->processInstallation($pkg, $atts['attribs'], $file, $tmp_path);
+        $info = $role->processInstallation($pkg, $atts['attribs'], $file, $tmp_path);
+        if (PEAR::isError($info)) {
+            return $info;
+        } else {
+            list($save_destdir, $dest_dir, $dest_file, $orig_file) = $info;
+        }
         $final_dest_file = $installed_as = $dest_file;
         $dest_dir = dirname($final_dest_file);
         $dest_file = $dest_dir . DIRECTORY_SEPARATOR . '.tmp' . basename($final_dest_file);

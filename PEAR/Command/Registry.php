@@ -290,8 +290,12 @@ installed package.'
                 if (!$role->isInstallable()) {
                     $dest = '(not installable)';
                 } else {
-                    list(,, $dest) =
-                        $role->processInstallation($info, $att, $file, '');
+                    $dest = $role->processInstallation($info, $att, $file, '');
+                    if (PEAR::isError($dest)) {
+                        $dest = '(Unknown role "' . $att['role'] . ')';
+                    } else {
+                        list(,, $dest) = $dest;
+                    }
                 }
                 $data['data'][] = array($file, $dest);
             }

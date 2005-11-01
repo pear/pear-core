@@ -30,35 +30,5 @@
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
-class PEAR_Installer_Role_Data extends PEAR_Installer_Role_Common
-{
-    var $_setup =
-        array(
-            'releasetypes' => array('php', 'extsrc', 'extbin'),
-            'installable' => true,
-            'locationconfig' => 'data_dir',
-            'honorsbaseinstall' => false,
-            'unusualbaseinstall' => false,
-            'phpfile' => false,
-            'executable' => false,
-            'phpextension' => false,
-        );
-    function getInfo()
-    {
-        return array(
-            'releasetypes' => array('php', 'extsrc', 'extbin'),
-            'installable' => true,
-            'locationconfig' => 'data_dir',
-            'honorsbaseinstall' => false,
-            'unusualbaseinstall' => false,
-            'phpfile' => false,
-            'executable' => false,
-            'phpextension' => false,
-        );
-    }
-
-    function setup(&$installer, $pkg, $atts, $file)
-    {
-    }
-}
+class PEAR_Installer_Role_Data extends PEAR_Installer_Role_Common {}
 ?>
