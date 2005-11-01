@@ -4,8 +4,7 @@
  *
  * PHP version 5.1+
  *
- * To use, modify the $xmlrpcdir to point to the installed PEAR directory where RPC.php
- * from the XML_RPC package can be located.  In pear-core/PEAR create a directory
+ * To use, in pear-core/PEAR create a directory
  * named go-pear-tarballs, and run these commands in the directory
  *
  * <pre>
@@ -13,7 +12,6 @@
  * $ pear download -Z Archive_Tar
  * $ pear download -Z Console_Getopt
  * $ pear download -Z XML_RPC
- * $ pear download -Z PEAR_Delegator
  * </pre>
  *
  * finally, run this script using PHP 5.1's cli php
@@ -33,7 +31,6 @@
  */
 
 $peardir = dirname(__FILE__);
-$xmlrpcdir = 'C:\php5\pear\XML';
 
 $dp = @opendir(dirname(__FILE__) . '/PEAR/go-pear-tarballs');
 if (empty($dp)) {
@@ -243,7 +240,6 @@ $commandcontents = str_replace(
     $commandcontents);
 $creator->addString($commandcontents, 'PEAR/PackageFile.php');
 
-$creator->addFile($xmlrpcdir . DIRECTORY_SEPARATOR . 'RPC.php', 'XML/RPC.php', true);
 $creator->addDir($peardir, array('tests/',
     'scripts/',
     'go-pear-phar.php',
@@ -258,7 +254,7 @@ $creator->addDir($peardir, array('tests/',
     '*PEAR/Frontend.php'),
     array(
         '*PEAR/ChannelFile/Parser.php',
-        '*PEAR/Command/Install-init.php',
+        '*PEAR/Command/Install.xml',
         '*PEAR/Command/Install.php',
         '*PEAR/Downloader/Package.php',
         '*PEAR/Frontend/CLI.php',
@@ -269,6 +265,11 @@ $creator->addDir($peardir, array('tests/',
         '*PEAR/Installer/Role/Php.php',
         '*PEAR/Installer/Role/Script.php',
         '*PEAR/Installer/Role/Test.php',
+        '*PEAR/Installer/Role/Data.xml',
+        '*PEAR/Installer/Role/Doc.xml',
+        '*PEAR/Installer/Role/Php.xml',
+        '*PEAR/Installer/Role/Script.xml',
+        '*PEAR/Installer/Role/Test.xml',
         '*PEAR/PackageFile/v1.php',
         '*PEAR/PackageFile/v2.php',
         '*PEAR/PackageFile/Parser/v1.php',
