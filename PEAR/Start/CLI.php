@@ -466,6 +466,7 @@ Thanks for using go-pear!
      */
     function alterPhpIni($pathIni='')
     {
+        $foundAt = array();
         $iniSep = OS_WINDOWS ? ';' : ':';
 
         if ($pathIni=='') {
@@ -480,7 +481,7 @@ Thanks for using go-pear!
         foreach ($arrayIni as $iniLine) {
             $iniLine = trim($iniLine);
             $iniLine = str_replace(array("\n", "\r"), array('', ''), $iniLine);
-            if (preg_match("/^include_path/", $iniLine)) {
+            if (preg_match("/^\s*include_path/", $iniLine)) {
                 $foundAt[] = $i;
                 $found++;
             }
@@ -511,7 +512,7 @@ Thanks for using go-pear!
         } else {
             $newPath[0] = '.';
             $newPath[1] = $this->php_dir;
-
+            $foundAt[] = count($arrayIni); // add a new line if none is present
         }
         $nl = OS_WINDOWS ? "\r\n" : "\n";
         $includepath = 'include_path="' . implode($iniSep,$newPath) . '"';
