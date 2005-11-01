@@ -1011,13 +1011,12 @@ class PEAR_Config extends PEAR
     // }}}
 
     /**
-     * @param PEAR_Installer_Role_Common
+     * @param array information on a role as parsed from its xml file
      * @return true|PEAR_Error
      * @access private
      */
-    function _addConfigVars($role)
+    function _addConfigVars($vars)
     {
-        $vars = call_user_func(array($role, 'getSupportingConfigVars'));
         if (count($vars) > 3) {
             return $this->raiseError('Roles can only define 3 new config variables or less');
         }

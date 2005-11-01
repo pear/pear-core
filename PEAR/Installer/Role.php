@@ -24,6 +24,7 @@
  * base class for installer roles
  */
 require_once 'PEAR/Installer/Role/Common.php';
+require_once 'PEAR/XMLParser.php';
 //$GLOBALS['_PEAR_INSTALLER_ROLES'] = array();
 /**
  * @category   pear
@@ -50,8 +51,11 @@ class PEAR_Installer_Role
         if (!isset($GLOBALS['_PEAR_INSTALLER_ROLES'])) {
             PEAR_Installer_Role::registerRoles();
         }
-        foreach ($GLOBALS['_PEAR_INSTALLER_ROLES'] as $class => $unused) {
-            $config->_addConfigVars($class);
+        foreach ($GLOBALS['_PEAR_INSTALLER_ROLES'] as $class => $info) {
+            if (!$info['config_vars']) {
+                continue;
+            }
+            $config->_addConfigVars($info['config_vars']);
         }
     }
 
@@ -72,6 +76,9 @@ class PEAR_Installer_Role
             return $a;
         }
         $a = "PEAR_Installer_Role_$role";
+        if (!class_exists($a)) {
+            require_once str_replace('_', '/', $a) . '.php';
+        }
         $b = new $a($config);
         return $b;
     }
@@ -205,6 +212,7 @@ class PEAR_Installer_Role
      */
     function registerRoles($dir = null)
     {
+        $parser = new PEAR_XMLParser;
         if ($dir === null) {
             $dir = dirname(__FILE__) . '/Role';
         }
@@ -213,16 +221,19 @@ class PEAR_Installer_Role
             return PEAR::raiseError("registerRoles: opendir($dir) failed");
         }
         while ($entry = readdir($dp)) {
-            if ($entry{0} == '.' || substr($entry, -4) != '.php' || $entry == 'Common.php') {
+            if ($entry{0} == '.' || substr($entry, -4) != '.xml') {
                 continue;
             }
             $class = "PEAR_Installer_Role_".substr($entry, 0, -4);
-            $file = "$dir/$entry";
-            include_once $file;
             // List of roles
             if (empty($GLOBALS['_PEAR_INSTALLER_ROLES'][$class])) {
-                $GLOBALS['_PEAR_INSTALLER_ROLES'][$class] =
-                    call_user_func(array($class, 'getInfo'));
+                $file = "$dir/$entry";
+                $parser->parse(file_get_contents($file));
+                $data = $parser->getData();
+                if (!is_array($data['releasetypes'])) {
+                    $data['releasetypes'] = array($data['releasetypes']);
+                }
+                $GLOBALS['_PEAR_INSTALLER_ROLES'][$class] = $data;
             }
         }
         @closedir($dp);

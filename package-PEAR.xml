@@ -71,11 +71,12 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>PHP License</license>
   <state>stable</state>
   <notes>
-  Major bugfix release
+  MINOR SECURITY FIX release
 
-  **NOTE: PEAR 1.4.0-1.4.2 may complain about XML_RPC recommended version.
-          this is a bug fixed in PEAR 1.4.3, use the --force option to
-          upgrade successfully
+  A security vulnerability has been discovered in all
+  PEAR versions (1.0 to 1.4.2).  This vulnerability has been fixed, 
+  and this is a recommended upgrade for all users.
+
   Run "pear channel-update" after upgrading for exponentially
   faster list-all/remote-list!!
 
@@ -128,51 +129,51 @@ http://pear.php.net/dtd/package-1.0.xsd">
      </file>
     </dir>
     <dir name="Command">
-     <file role="php" name="Auth-init.php"/>
+     <file role="php" name="Auth.xml"/>
      <file role="php" name="Auth.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
-     <file role="php" name="Build-init.php"/>
+     <file role="php" name="Build.xml"/>
      <file role="php" name="Build.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
-     <file role="php" name="Channels-init.php"/>
+     <file role="php" name="Channels.xml"/>
      <file role="php" name="Channels.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="Common.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
-     <file role="php" name="Config-init.php"/>
+     <file role="php" name="Config.xml"/>
      <file role="php" name="Config.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
-     <file role="php" name="Install-init.php"/>
+     <file role="php" name="Install.xml"/>
      <file role="php" name="Install.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
-     <file role="php" name="Package-init.php"/>
+     <file role="php" name="Package.xml"/>
      <file role="php" name="Package.php">
       <replace from="@DATA-DIR@" to="data_dir" type="pear-config"/>
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
-     <file role="php" name="Pickle-init.php"/>
+     <file role="php" name="Pickle.xml"/>
      <file role="php" name="Pickle.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
-     <file role="php" name="Registry-init.php"/>
+     <file role="php" name="Registry.xml"/>
      <file role="php" name="Registry.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
-     <file role="php" name="Remote-init.php"/>
+     <file role="php" name="Remote.xml"/>
      <file role="php" name="Remote.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
-     <file role="php" name="Mirror-init.php"/>
+     <file role="php" name="Mirror.xml"/>
      <file role="php" name="Mirror.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
-     <file role="php" name="Test-init.php"/>
+     <file role="php" name="Test.xml"/>
      <file role="php" name="Test.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
@@ -192,24 +193,31 @@ http://pear.php.net/dtd/package-1.0.xsd">
       <file role="php" name="Common.php">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
+      <file role="php" name="Data.xml"/>
       <file role="php" name="Data.php">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
+      <file role="php" name="Doc.xml"/>
       <file role="php" name="Doc.php">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
+      <file role="php" name="Ext.xml"/>
       <file role="php" name="Ext.php">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
+      <file role="php" name="Php.xml"/>
       <file role="php" name="Php.php">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
+      <file role="php" name="Script.xml"/>
       <file role="php" name="Script.php">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
+      <file role="php" name="Src.xml"/>
       <file role="php" name="Src.php">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
+      <file role="php" name="Test.xml"/>
       <file role="php" name="Test.php">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
