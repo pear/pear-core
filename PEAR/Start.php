@@ -14,7 +14,6 @@ class PEAR_Start extends PEAR
             'Archive_Tar',
             'Console_Getopt',
             'PEAR',
-            'XML_RPC',
         );
     var $local_dir = array();
     var $origpwd;
@@ -24,6 +23,7 @@ class PEAR_Start extends PEAR
             'Net_SMTP',
             'Mail',
             'XML_Parser',
+            'XML_RPC',
             'PHPUnit'
         );
     var $php_dir;
