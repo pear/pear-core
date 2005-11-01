@@ -75,7 +75,7 @@ class PEAR_Installer_Role
             $a = false;
             return $a;
         }
-        $a = "PEAR_Installer_Role_$role";
+        $a = 'PEAR_Installer_Role_' . ucfirst($role);
         if (!class_exists($a)) {
             require_once str_replace('_', '/', $a) . '.php';
         }
