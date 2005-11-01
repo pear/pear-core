@@ -76,11 +76,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  Major bugfix release
+  MINOR SECURITY FIX release
 
-  **NOTE: PEAR 1.4.0-1.4.2 may complain about XML_RPC recommended version.
-          this is a bug fixed in PEAR 1.4.3, use the --force option to
-          upgrade successfully
+  A security vulnerability has been discovered in all
+  PEAR versions (1.0 to 1.4.2).  This vulnerability has been fixed, 
+  and this is a recommended upgrade for all users.
+
   Run "pear channel-update" after upgrading for exponentially
   faster list-all/remote-list!!
 
@@ -120,51 +121,51 @@ http://pear.php.net/dtd/package-2.0.xsd">
      </file>
     </dir> <!-- /PEAR/ChannelFile -->
     <dir name="Command">
-     <file name="Auth-init.php" role="php"/>
+     <file name="Auth.xml" role="php"/>
      <file name="Auth.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="Build-init.php" role="php"/>
+     <file name="Build.xml" role="php"/>
      <file name="Build.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="Channels-init.php" role="php"/>
+     <file name="Channels.xml" role="php"/>
      <file name="Channels.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="Common.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="Config-init.php" role="php"/>
+     <file name="Config.xml" role="php"/>
      <file name="Config.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="Install-init.php" role="php"/>
+     <file name="Install.xml" role="php"/>
      <file name="Install.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="Mirror-init.php" role="php"/>
+     <file name="Mirror.xml" role="php"/>
      <file name="Mirror.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="Package-init.php" role="php"/>
+     <file name="Package.xml" role="php"/>
      <file name="Package.php" role="php">
       <tasks:replace from="@DATA-DIR@" to="data_dir" type="pear-config" />
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="Pickle-init.php" role="php"/>
+     <file name="Pickle.xml" role="php"/>
      <file name="Pickle.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="Registry-init.php" role="php"/>
+     <file name="Registry.xml" role="php"/>
      <file name="Registry.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="Remote-init.php" role="php"/>
+     <file name="Remote.xml" role="php"/>
      <file name="Remote.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="Test-init.php" role="php"/>
+     <file name="Test.xml" role="php"/>
      <file name="Test.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
@@ -184,24 +185,31 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file name="Common.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="Data.xml" role="php"/>
       <file name="Data.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="Doc.xml" role="php"/>
       <file name="Doc.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="Ext.xml" role="php"/>
       <file name="Ext.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="Php.xml" role="php"/>
       <file name="Php.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="Script.xml" role="php"/>
       <file name="Script.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="Src.xml" role="php"/>
       <file name="Src.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="Test.xml" role="php"/>
       <file name="Test.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>

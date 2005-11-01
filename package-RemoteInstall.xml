@@ -44,9 +44,9 @@ remote* commands as if they were local.
   <email>pajoye@pearfr.org</email>
   <active>yes</active>
  </lead>
- <date>2005-08-20</date>
+ <date>2005-11-03</date>
  <version>
-  <release>0.1.0</release>
+  <release>0.2.0</release>
   <api>0.1.0</api>
  </version>
  <stability>
@@ -61,7 +61,7 @@ remote* commands as if they were local.
   <dir name="/">
    <dir name="PEAR">
     <dir name="Command">
-     <file name="Remoteinstall-init.php" role="php"/>
+     <file name="Remoteinstall.xml" role="php"/>
      <file name="Remoteinstall.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
@@ -86,7 +86,7 @@ remote* commands as if they were local.
    <package>
     <name>PEAR</name>
     <channel>pear.php.net</channel>
-    <min>1.4.0b1</min>
+    <min>1.4.3</min>
    </package>
    <package>
     <name>Net_FTP</name>

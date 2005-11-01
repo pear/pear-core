@@ -26,6 +26,7 @@
  */
 require_once 'PEAR.php';
 require_once 'PEAR/Frontend.php';
+require_once 'PEAR/XMLParser.php';
 
 /**
  * List of commands and what classes they are implemented in.
@@ -226,6 +227,7 @@ class PEAR_Command
      */
     function registerCommands($merge = false, $dir = null)
     {
+        $parser = new PEAR_XMLParser;
         if ($dir === null) {
             $dir = dirname(__FILE__) . '/Command';
         }
@@ -237,18 +239,22 @@ class PEAR_Command
             $GLOBALS['_PEAR_Command_commandlist'] = array();
         }
         while ($entry = readdir($dp)) {
-            if ($entry{0} == '.' || substr($entry, -4) != '.php' || $entry == 'Common.php' ||
-                  strpos($entry, '-init.php')) {
+            if ($entry{0} == '.' || substr($entry, -4) != '.xml') {
                 continue;
             }
             $class = "PEAR_Command_".substr($entry, 0, -4);
-            $file = "$dir/" . substr($entry, 0, -4) . '-init.php';
-            include_once $file;
+            $file = "$dir/$entry";
+            $parser->parse(file_get_contents($file));
+            $implements = $parser->getData();
             // List of commands
             if (empty($GLOBALS['_PEAR_Command_objects'][$class])) {
-                $GLOBALS['_PEAR_Command_objects'][$class] = "$dir/$entry";
+                $GLOBALS['_PEAR_Command_objects'][$class] = "$dir/" . substr($entry, 0, -4) .
+                    '.php';
             }
             foreach ($implements as $command => $desc) {
+                if ($command == 'attribs') {
+                    continue;
+                }
                 if (isset($GLOBALS['_PEAR_Command_commandlist'][$command])) {
                     return PEAR::raiseError('Command "' . $command . '" already registered in ' .
                         'class "' . $GLOBALS['_PEAR_Command_commandlist'][$command] . '"');
@@ -264,7 +270,7 @@ class PEAR_Command
                     }
                     $GLOBALS['_PEAR_Command_shortcuts'][$shortcut] = $command;
                 }
-                if (isset($desc['options'])) {
+                if (isset($desc['options']) && $desc['options']) {
                     foreach ($desc['options'] as $oname => $option) {
                         if (isset($option['shortopt']) && strlen($option['shortopt']) > 1) {
                             return PEAR::raiseError('Option "' . $oname . '" short option "' .
