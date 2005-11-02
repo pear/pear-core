@@ -322,6 +322,9 @@ class PEAR_REST_10
             $ui->log('Retrieving data...0%', false);
         }
         $ret = array();
+        if (!is_array($packagelist) || !isset($packagelist['p'])) {
+            return $ret;
+        }
         if (!is_array($packagelist['p'])) {
             $packagelist['p'] = array($packagelist['p']);
         }
@@ -471,6 +474,9 @@ class PEAR_REST_10
             return $packagelist;
         }
         $ret = array();
+        if (!is_array($packagelist) || !isset($packagelist['p'])) {
+            return $ret;
+        }
         if (!is_array($packagelist['p'])) {
             $packagelist['p'] = array($packagelist['p']);
         }
