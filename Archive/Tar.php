@@ -703,7 +703,7 @@ class Archive_Tar extends PEAR
               for ($i=0; $i<$p_len; $i++)
                   $this->_readBlock();
           } else if ($this->_compress_type == 'none')
-              @fseek($this->_file, @ftell($this->_file)+($p_len*512));
+              @fseek($this->_file, ftell($this->_file)+($p_len*512));
           else
               $this->_error('Unknown or missing compression type ('.$this->_compress_type.')');
 

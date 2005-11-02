@@ -93,6 +93,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix writeable PEAR_Task_Postinstallscript_rw class
   * fix error in REST-based search command if searching through description
     as well
+  * silence warning on list-upgrades/upgrade-all if no releases exist at a channel
+  * add checks for updated channel.xml in all remote commands
+  * fix pecl script if safe_mode is enabled by default
   * implement SERIOUS improvement in list-all/remote-list speed.  From 6 minutes
     down to about 16-30 seconds
   * implement --loose option to avoid recommended version validation
