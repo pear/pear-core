@@ -164,7 +164,7 @@ parameter.
             '/channel.xml', $chan->lastModified());
         PEAR::staticPopErrorHandling();
         if (!PEAR::isError($a) && $a) {
-            $this->ouputData('WARNING: channel "' . $channel . '" has ' .
+            $this->ui->outputData('WARNING: channel "' . $channel . '" has ' .
                 'updated its protocols, use "channel-update ' . $channel .
                 '" to update');
         }
