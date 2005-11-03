@@ -1041,9 +1041,9 @@ class PEAR_Config extends PEAR
                 if (is_array($var['default'])) {
                     $real_default = '';
                     foreach ($var['default'] as $config_var => $val) {
-                        if (is_numeric($config_var)) {
+                        if (strpos($config_var, 'text') === 0) {
                             $real_default .= $val;
-                        } elseif ($config_var == 'constant') {
+                        } elseif (strpos($config_var, 'constant') === 0) {
                             if (defined($val)) {
                                 $real_default .= constant($val);
                             } else {
