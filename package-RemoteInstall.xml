@@ -55,7 +55,7 @@ remote* commands as if they were local.
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  Initial release
+  Update to new format needed by PEAR 1.4.3
  </notes>
  <contents>
   <dir name="/">
