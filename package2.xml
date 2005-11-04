@@ -65,10 +65,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2005-11-03</date>
+ <date>2005-11-04</date>
  <version>
-  <release>1.4.3</release>
-  <api>1.4.0</api>
+  <release>1.4.4</release>
+  <api>1.4.1</api>
  </version>
  <stability>
   <release>stable</release>
@@ -76,39 +76,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  MINOR SECURITY FIX release
-
-  A security vulnerability has been discovered in all
-  PEAR versions (1.0 to 1.4.2).  This vulnerability has been fixed, 
-  and this is a recommended upgrade for all users.
-
-  Run "pear channel-update" after upgrading for exponentially
-  faster list-all/remote-list!!
-
-  * fix installation of files named like &quot;.test&quot;
-  * fix base class for writeable unixeol/windowseol classes
-  * fix running of post-install scripts with empty or no paramgroup
-    in CLI frontend
-  * fix validation of &lt;postinstallscript&gt;
-  * fix writeable PEAR_Task_Postinstallscript_rw class
-  * fix error in REST-based search command if searching through description
-    as well
-  * silence warning on list-upgrades/upgrade-all if no releases exist at a channel
-  * add checks for updated channel.xml in all remote commands
-  * fix pecl script if safe_mode is enabled by default
-  * implement SERIOUS improvement in list-all/remote-list speed.  From 6 minutes
-    down to about 16-30 seconds
-  * implement --loose option to avoid recommended version validation
-  * implement Request #5527: alternative approach to determining glibc version
-  * fix Bug #5717: analyzeSourceCode() fails to process certain
-    quote situations properly
-  * fix Bug #5736: if registry can't lock registry or open filemap,
-    checkFileMap(), no error
-  * fix Bug #5676: pear config-create broken
-  * fix Bug #5683: Deadlock with (almost) circular dependency
-  * fix Bug #5725: PHP5 warnings need improvement
-  * fix Bug #5789: small typo
-  * fix Bug #5810: internet should not be contacted on install if dependencies are installed
+ * fix Bug #5865: doesn't work with PHP4.2.x
  </notes>
  <contents>
   <dir name="/">
@@ -643,6 +611,53 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #5580: pear makerpm XML_sql2xml-0.3.2.tgz error
   * fix Bug #5619: pear makerpm produces invalid .spec dependancy code
   * fix Bug #5629: pear install http_download dies with bad error message
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.3</release>
+    <api>1.4.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2005-11-03</date>
+   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <notes>
+  MINOR SECURITY FIX release
+
+  A security vulnerability has been discovered in all
+  PEAR versions (1.0 to 1.4.2).  This vulnerability has been fixed, 
+  and this is a recommended upgrade for all users.
+
+  Run "pear channel-update" after upgrading for exponentially
+  faster list-all/remote-list!!
+
+  * fix installation of files named like &quot;.test&quot;
+  * fix base class for writeable unixeol/windowseol classes
+  * fix running of post-install scripts with empty or no paramgroup
+    in CLI frontend
+  * fix validation of &lt;postinstallscript&gt;
+  * fix writeable PEAR_Task_Postinstallscript_rw class
+  * fix error in REST-based search command if searching through description
+    as well
+  * silence warning on list-upgrades/upgrade-all if no releases exist at a channel
+  * add checks for updated channel.xml in all remote commands
+  * fix pecl script if safe_mode is enabled by default
+  * implement SERIOUS improvement in list-all/remote-list speed.  From 6 minutes
+    down to about 16-30 seconds
+  * implement --loose option to avoid recommended version validation
+  * implement Request #5527: alternative approach to determining glibc version
+  * fix Bug #5717: analyzeSourceCode() fails to process certain
+    quote situations properly
+  * fix Bug #5736: if registry can't lock registry or open filemap,
+    checkFileMap(), no error
+  * fix Bug #5676: pear config-create broken
+  * fix Bug #5683: Deadlock with (almost) circular dependency
+  * fix Bug #5725: PHP5 warnings need improvement
+  * fix Bug #5789: small typo
+  * fix Bug #5810: internet should not be contacted on install if dependencies are installed
    </notes>
   </release>
  </changelog>
