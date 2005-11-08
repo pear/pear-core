@@ -208,7 +208,26 @@ $commandcontents = str_replace(
         $pearver,
     ),
     $commandcontents);
+
 $creator->addString($commandcontents, 'PEAR/PackageFile/Generator/v2.php');
+$commandcontents = file_get_contents($peardir . DIRECTORY_SEPARATOR . 'PEAR' .
+    DIRECTORY_SEPARATOR . 'Installer' .
+    DIRECTORY_SEPARATOR . 'Role.php');
+$commandcontents = str_replace(
+    array(
+        "require_once '",
+        "include_once '",
+        "require_once str_replace('_', '/', $a)",
+        "@PEAR-VER@",
+    ),
+    array(
+        "require_once 'phar://install-pear-nozlib.phar/",
+        "include_once 'phar://install-pear-nozlib.phar/",
+        "require_once 'phar://install-pear-nozlib.phar/' . str_replace('_', '/', $a)",
+        $pearver,
+    ),
+    $commandcontents);
+$creator->addString($commandcontents, 'PEAR/Installer/Role.php');
 
 $commandcontents = file_get_contents($peardir . DIRECTORY_SEPARATOR . 'PEAR' .
     DIRECTORY_SEPARATOR . 'Dependency2.php');
@@ -269,6 +288,7 @@ $creator->addDir($peardir, array('tests/',
     '*PEAR/Downloader/Package.php',
     '*PEAR/Start.php',
     '*PEAR/Start/CLI.php',
+    '*PEAR/Installer/Role.php',
     '*PEAR/Frontend.php'),
     array(
         '*PEAR/ChannelFile/Parser.php',
@@ -276,7 +296,6 @@ $creator->addDir($peardir, array('tests/',
         '*PEAR/Command/Install.php',
         '*PEAR/Downloader/Package.php',
         '*PEAR/Frontend/CLI.php',
-        '*PEAR/Installer/Role.php',
         '*PEAR/Installer/Role/Common.php',
         '*PEAR/Installer/Role/Data.php',
         '*PEAR/Installer/Role/Doc.php',
