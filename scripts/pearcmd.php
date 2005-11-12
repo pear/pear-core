@@ -26,6 +26,17 @@ if (!defined('PEAR_RUNTYPE')) {
     define('PEAR_RUNTYPE', 'pear');
 }
 define('PEAR_IGNORE_BACKTRACE', 1);
+if (!function_exists('file_get_contents')) {
+    function file_get_contents($filename)
+    {
+        $fp = fopen($filename, 'rb');
+        $ret = '';
+        while (!feof($fp)) {
+            $ret .= fread($fp, 8092);;
+        }
+        return $ret;
+    }
+}
 /**
  * @nodep Gtk
  */

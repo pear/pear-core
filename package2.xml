@@ -65,9 +65,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2005-11-04</date>
+ <date>2005-11-14</date>
  <version>
-  <release>1.4.4</release>
+  <release>1.4.5</release>
   <api>1.4.1</api>
  </version>
  <stability>
@@ -76,7 +76,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
- * fix Bug #5865: doesn't work with PHP4.2.x
+ * REALLY fix Bug #5865: doesn't work with PHP4.2.x
  </notes>
  <contents>
   <dir name="/">
@@ -658,6 +658,21 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #5725: PHP5 warnings need improvement
   * fix Bug #5789: small typo
   * fix Bug #5810: internet should not be contacted on install if dependencies are installed
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.4</release>
+    <api>1.4.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2005-11-04</date>
+   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <notes>
+ * fix Bug #5865: doesn't work with PHP4.2.x
    </notes>
   </release>
  </changelog>

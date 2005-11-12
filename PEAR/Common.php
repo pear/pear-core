@@ -1126,15 +1126,4 @@ class PEAR_Common extends PEAR
 }
 require_once 'PEAR/Config.php';
 require_once 'PEAR/PackageFile.php';
-if (!function_exists('file_get_contents')) {
-    function file_get_contents($filename)
-    {
-        $fp = fopen($filename, 'rb');
-        $ret = '';
-        while (!feof($fp)) {
-            $ret .= fread($fp, 8092);;
-        }
-        return $ret;
-    }
-}
 ?>
