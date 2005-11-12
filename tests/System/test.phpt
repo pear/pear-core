@@ -104,11 +104,12 @@ if (!@System::rm("-r $del")) {
 echo "Testing: which\n";
 
 if (OS_UNIX) {
-    if (System::which('ls') != '/bin/ls') {
+    $ls = trim(`which ls`);
+    if (System::which('ls') != $ls) {
         print "System::which('ls') failed\n";
     }
-    if (System::which('/bin/ls') != '/bin/ls') {
-        print "System::which('/bin/ls') failed\n";
+    if (System::which($ls) != $ls) {
+        print "System::which('$ls') failed\n";
     }
 } elseif (OS_WINDOWS) {
     $sysroot = getenv('SystemRoot') . '\\system32\\';
