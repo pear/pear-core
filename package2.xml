@@ -77,6 +77,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
  * REALLY fix Bug #5865: doesn't work with PHP4.2.x
+ * fix Bug #5854: if no installconditions match, no error is raised
  </notes>
  <contents>
   <dir name="/">
