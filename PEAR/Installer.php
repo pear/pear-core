@@ -995,7 +995,11 @@ class PEAR_Installer extends PEAR_Downloader
         // {{{ checks to do when not in "force" mode
         if (empty($options['force']) && @is_dir($this->config->get('php_dir'))) {
             $testp = $channel == 'pear.php.net' ? $pkgname : array($channel, $pkgname);
-            $test = $this->_registry->checkFileMap($pkg->getInstallationFileList(true), $testp, '1.1');
+            $instfilelist = $pkg->getInstallationFileList(true);
+            if (PEAR::isError($instfilelist)) {
+                return $instfilelist;
+            }
+            $test = $this->_registry->checkFileMap($instfilelist, $testp, '1.1');
             if (PEAR::isError($test)) {
                 return $test;
             }
@@ -1144,6 +1148,9 @@ class PEAR_Installer extends PEAR_Downloader
             
             if ($pkg->getPackagexmlVersion() == '2.0') {
                 $filelist = $pkg->getInstallationFilelist();
+                if (PEAR::isError($filelist)) {
+                    return $filelist;
+                }
             } else {
                 $filelist = $pkg->getFileList();
             }
