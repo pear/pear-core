@@ -217,13 +217,13 @@ $commandcontents = str_replace(
     array(
         "require_once '",
         "include_once '",
-        "require_once str_replace('_', '/', $a)",
+        "require_once str_replace('_', '/', \$a)",
         "@PEAR-VER@",
     ),
     array(
         "require_once 'phar://install-pear-nozlib.phar/",
         "include_once 'phar://install-pear-nozlib.phar/",
-        "require_once 'phar://install-pear-nozlib.phar/' . str_replace('_', '/', $a)",
+        "require_once 'phar://install-pear-nozlib.phar/' . str_replace('_', '/', \$a)",
         $pearver,
     ),
     $commandcontents);
