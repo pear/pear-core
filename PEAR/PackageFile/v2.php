@@ -1268,9 +1268,6 @@ class PEAR_PackageFile_v2
                 }
                 return $contents;
             }
-            return PEAR::raiseError('No valid installgroups were matched for ' .
-                'installation - contact the maintainer of "' . $this->getPackage() . '"' .
-                ' and tell them this error message');
         } else { // simple release - no installconditions or install-as
             if ($forfilecheck) {
                 return $this->getFilelist();
