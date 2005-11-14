@@ -78,6 +78,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <notes>
  * REALLY fix Bug #5865: doesn't work with PHP4.2.x
  * fix Bug #5854: if no installconditions match, no error is raised
+ * fix Bug #5945: installer should auto-skip to the next channel on timeout
  * fix Bug #5947: Some package-info not handled by PEAR_PackageFile_v2
  * fix Bug #5948: Minor typo in PEAR_Validate
  </notes>
