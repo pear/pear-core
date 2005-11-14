@@ -827,8 +827,14 @@ class PEAR_PackageFile_v2
     function packageInfo($field)
     {
         $arr = $this->getArray(true);
-        if ($field == 'apiversion') {
+        if ($field == 'state') {
+            return $arr['stability']['release'];
+        }
+        if ($field == 'api-version') {
             return $arr['version']['api'];
+        }
+        if ($field == 'api-state') {
+            return $arr['stability']['api'];
         }
         if (isset($arr['old'][$field])) {
             if (!is_string($arr['old'][$field])) {
