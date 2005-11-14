@@ -543,7 +543,9 @@ parameter.
                 } else {
                     $caption .= ' (' . implode(', ', PEAR_Common::betterStates($state, true)) . ')';
                 }
+                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
                 $latest = $rest->listLatestUpgrades($base, $state, $inst, $channel, $reg);
+                PEAR::staticPopErrorHandling();
             } else {
                 $remote = &$this->config->getRemote();
                 $remote->pushErrorHandling(PEAR_ERROR_RETURN);
