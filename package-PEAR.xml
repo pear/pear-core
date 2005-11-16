@@ -76,6 +76,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
  * fix Bug #5945: installer should auto-skip to the next channel on timeout
  * fix Bug #5947: Some package-info not handled by PEAR_PackageFile_v2
  * fix Bug #5948: Minor typo in PEAR_Validate
+ * fix Bug #5958: strange error on mistyping
+ * fix Bug #5959: patch: pear makerpm produces RPMs that do not uninstall/upgrade cleanly
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

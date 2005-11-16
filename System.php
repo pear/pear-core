@@ -544,6 +544,8 @@ class System
                             // prepend drive
                             $args[$i+1] = addslashes(substr(getcwd(), 0, 2) . $args[$i + 1]);
                         }
+                        // escape path separators to avoid PCRE problems
+                        $args[$i+1] = str_replace('\\', '\\\\', $args[$i+1]);
                     }
                     $patterns[] = "(" . preg_replace(array('/\./', '/\*/'),
                                                      array('\.', '.*', ),

@@ -31,11 +31,20 @@ pear -v -c %{buildroot}/pearrc \
 echo BuildRoot=%{buildroot}
 
 %postun
-pear uninstall --nodeps -r @possible_channel@@package@
-rm @rpm_xml_dir@/@package@.xml
+# if refcount = 0 then package has been removed (not upgraded)
+if [ "$1" -eq "0" ]; then
+    pear uninstall --nodeps -r @possible_channel@@package@
+    rm @rpm_xml_dir@/@package@.xml
+fi
+
 
 %post
-pear install --nodeps -r @rpm_xml_dir@/@package@.xml
+# if refcount = 2 then package has been upgraded
+if [ "$1" -ge "2" ]; then
+    pear upgrade --nodeps -r @rpm_xml_dir@/@package@.xml
+else
+    pear install --nodeps -r @rpm_xml_dir@/@package@.xml
+fi
 
 %install
 pear -c %{buildroot}/pearrc install --nodeps -R %{buildroot} \
