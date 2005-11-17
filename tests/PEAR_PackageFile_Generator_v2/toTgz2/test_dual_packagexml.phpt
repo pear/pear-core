@@ -29,9 +29,9 @@ $packager = &new PEAR_Packager;
 mkdir($temp_path . DIRECTORY_SEPARATOR . 'gron');
 $e = $generator->toTgz2($packager, $pf1, true, $temp_path . DIRECTORY_SEPARATOR . 'gron');
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-10"is not today'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-10"is not today'),
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2004-11-27"is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-10" is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-10" is not today'),
+    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2004-11-27" is not today'),
 ), 'errors');
 $phpunit->assertEquals(array (
   0 => 

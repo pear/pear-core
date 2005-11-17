@@ -167,7 +167,7 @@ Other:
 ', $contents, 'contents 1');
 $e = $command->run('convert', array('flat' => true), array());
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-11-27"is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-11-27" is not today'),
 ), '1.1');
 $phpunit->assertEquals(array (
   0 => 

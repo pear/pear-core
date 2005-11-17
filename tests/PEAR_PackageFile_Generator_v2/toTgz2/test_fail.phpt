@@ -98,7 +98,7 @@ mkdir($temp_path . DIRECTORY_SEPARATOR . 'floub' . DIRECTORY_SEPARATOR . 'foo-1.
 chdir($temp_path . DIRECTORY_SEPARATOR . 'floub');
 $e = $generator->toTgz2($packager, $pf1, true, $temp_path . DIRECTORY_SEPARATOR . 'floub');
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25"is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25" is not today'),
     array('package' => 'PEAR_Error', 'message' => 'PEAR_Packagefile_v2::toTgz: cannot create tgz file "' .
     $temp_path . DIRECTORY_SEPARATOR . 'floub' . DIRECTORY_SEPARATOR . 'foo-1.2.0.tgz"'),
 ), 'bad 3');
@@ -113,7 +113,7 @@ $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR .
 $generator = &$pf->getDefaultGenerator();
 $e = $generator->toTgz2($packager, $pf1);
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-10"is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-10" is not today'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "' .
     dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'nosuchpackage-1.9.0.tgz" in package.xml does not exist'),
@@ -139,7 +139,7 @@ $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR .
 $generator = &$pf->getDefaultGenerator();
 $e = $generator->toPackageFile($temp_path, PEAR_VALIDATE_PACKAGING, 'tub.xml');
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-10"is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-10" is not today'),
     array('package' => 'PEAR_Error', 'message' => 'PEAR_Packagefile_v2::toPackageFile: invalid package.xml'),
 ), 'bad bundle 2');
 $phpunit->assertEquals(array (
