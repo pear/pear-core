@@ -20,8 +20,8 @@ chdir($temp_path);
 $res = $command->run('pickle', array(), array());
 chdir($savedir);
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2005-00-00"is not today'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2005-00-00"is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2005-00-00" is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2005-00-00" is not today'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "providesextension" - package name "pecl_http" is different from extension name "http"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "providesextension" - package name "pecl_http" is different from extension name "http"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "providesextension" - package name "pecl_http" is different from extension name "http"'),
@@ -46,7 +46,7 @@ $phpunit->assertEquals(array (
   ),
   3 => 
   array (
-    0 => 'Warning: Channel validator warning: field "date" - Release Date "2005-00-00"is not today',
+    0 => 'Warning: Channel validator warning: field "date" - Release Date "2005-00-00" is not today',
     1 => true,
   ),
   4 => 

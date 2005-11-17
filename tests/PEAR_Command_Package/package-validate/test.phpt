@@ -18,7 +18,7 @@ copy(dirname(__FILE__) . '/packagefiles/validv1.xml', $temp_path . DIRECTORY_SEP
 // 1.0
 $ret = $command->run('package-validate', array(), array($temp_path . DIRECTORY_SEPARATOR . 'validv1.xml'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2004-11-27"is not today'),
+    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2004-11-27" is not today'),
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'File "' . $temp_path . DIRECTORY_SEPARATOR .
         'foo1.php" in package.xml does not exist'),
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'File "' . $temp_path . DIRECTORY_SEPARATOR .
@@ -31,7 +31,7 @@ $phpunit->assertEquals(array (
         'foo1.php" in package.xml does not exist
 Error: File "' . $temp_path . DIRECTORY_SEPARATOR .
         'sunger/foo.dat" in package.xml does not exist
-Warning: Channel validator error: field "date" - Release Date "2004-11-27"is not today
+Warning: Channel validator error: field "date" - Release Date "2004-11-27" is not today
 Validation: 2 error(s), 1 warning(s)
 ',
     'cmd' => 'package-validate',
@@ -40,7 +40,7 @@ Validation: 2 error(s), 1 warning(s)
 
 $ret = $command->run('package-validate', array(), array());
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2004-11-27"is not today'),
+    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2004-11-27" is not today'),
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'File "' . $temp_path . DIRECTORY_SEPARATOR .
         'foo1.php" in package.xml does not exist'),
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'File "' . $temp_path . DIRECTORY_SEPARATOR .
@@ -53,7 +53,7 @@ $phpunit->assertEquals(array (
         'foo1.php" in package.xml does not exist
 Error: File "' . $temp_path . DIRECTORY_SEPARATOR .
         'sunger/foo.dat" in package.xml does not exist
-Warning: Channel validator error: field "date" - Release Date "2004-11-27"is not today
+Warning: Channel validator error: field "date" - Release Date "2004-11-27" is not today
 Validation: 2 error(s), 1 warning(s)
 ',
     'cmd' => 'package-validate',
@@ -62,7 +62,7 @@ Validation: 2 error(s), 1 warning(s)
 // 2.0
 $ret = $command->run('package-validate', array(), array($temp_path . DIRECTORY_SEPARATOR . 'validv2.xml'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25"is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25" is not today'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "' . $temp_path . DIRECTORY_SEPARATOR .
         'foo1.php" in package.xml does not exist'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "' . $temp_path . DIRECTORY_SEPARATOR .
@@ -75,7 +75,7 @@ $phpunit->assertEquals(array (
         'foo1.php" in package.xml does not exist
 Error: File "' . $temp_path . DIRECTORY_SEPARATOR .
         'sunger/foo.dat" in package.xml does not exist
-Warning: Channel validator warning: field "date" - Release Date "2004-12-25"is not today
+Warning: Channel validator warning: field "date" - Release Date "2004-12-25" is not today
 Validation: 2 error(s), 1 warning(s)
 ',
     'cmd' => 'package-validate',
@@ -86,7 +86,7 @@ copy(dirname(__FILE__) . '/packagefiles/foo1.php', $temp_path . DIRECTORY_SEPARA
 
 $ret = $command->run('package-validate', array(), array($temp_path . DIRECTORY_SEPARATOR . 'validv2.xml'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25"is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25" is not today'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "' . $temp_path . DIRECTORY_SEPARATOR .
         'sunger/foo.dat" in package.xml does not exist'),
 ), 'ret 2.1');
@@ -100,7 +100,7 @@ $phpunit->assertEquals(array (
   array (
     'info' => 'Error: File "' . $temp_path . DIRECTORY_SEPARATOR .
         'sunger/foo.dat" in package.xml does not exist
-Warning: Channel validator warning: field "date" - Release Date "2004-12-25"is not today
+Warning: Channel validator warning: field "date" - Release Date "2004-12-25" is not today
 Validation: 1 error(s), 1 warning(s)
 ',
     'cmd' => 'package-validate',

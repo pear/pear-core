@@ -334,7 +334,7 @@ $phpunit->assertEquals(array (
   array (
     array (
       'field' => 'date',
-      'reason' => 'Release Date "2004-09-30"is not today',
+      'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
   'errors' => 
@@ -350,7 +350,7 @@ $phpunit->assertEquals(array (
   array (
     array (
       'field' => 'date',
-      'reason' => 'Release Date "2004-09-30"is not today',
+      'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
   'errors' => 
@@ -372,7 +372,7 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       'field' => 'date',
-      'reason' => 'Release Date "2004-09-30"is not today',
+      'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
   'errors' => 
@@ -394,7 +394,7 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       'field' => 'date',
-      'reason' => 'Release Date "2004-09-30"is not today',
+      'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
   'errors' => 
@@ -416,7 +416,7 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       'field' => 'date',
-      'reason' => 'Release Date "2004-09-30"is not today',
+      'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
   'errors' => 
@@ -438,7 +438,7 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       'field' => 'date',
-      'reason' => 'Release Date "2004-09-30"is not today',
+      'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
   'errors' => 
@@ -461,7 +461,7 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       'field' => 'date',
-      'reason' => 'Release Date "2004-09-30"is not today',
+      'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
   'errors' => 

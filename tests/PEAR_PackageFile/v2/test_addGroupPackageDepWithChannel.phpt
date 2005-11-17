@@ -336,7 +336,7 @@ $phpunit->assertNoErrors('after validation');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'downloading validate empty log');
 $result = $pf->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-10-10"is not today')
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-10-10" is not today')
 ), 'after full packaging validation');
 $phpunit->assertEquals(array (
   0 => 

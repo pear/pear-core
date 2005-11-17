@@ -149,7 +149,7 @@ $ret = $command->run('package', array(), array(dirname(__FILE__) . DIRECTORY_SEP
 ));
 $ds = DIRECTORY_SEPARATOR;
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25"is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25" is not today'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "' . dirname(__FILE__) . $ds . 'packagefiles' .$ds . 'unknown.php" in package.xml does not exist'),
     array('package' => 'PEAR_Error', 'message' => 'Cannot package, errors in package'),
     array('package' => 'PEAR_Error', 'message' => 'Cannot package, errors in package'),
@@ -167,7 +167,7 @@ $phpunit->assertEquals(array (
     1 => true,
   ),
   array (
-    0 => 'Error: Channel validator warning: field "date" - Release Date "2004-12-25"is not today',
+    0 => 'Error: Channel validator warning: field "date" - Release Date "2004-12-25" is not today',
      1 => true,
    ),
 ), $fakelog->getLog(), 'invalid v2 log');
@@ -179,7 +179,7 @@ $ret = $command->run('package', array(), array(dirname(__FILE__) . DIRECTORY_SEP
 ));
 $ds = DIRECTORY_SEPARATOR;
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25"is not today'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25" is not today'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'package.xml 1.0 summary "foo" does not match "fakebar"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'package.xml 1.0 package "foo" does not match "fakebar"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'package.xml 1.0 version "1.2.0a1" does not match "1.9.0"'),
@@ -200,7 +200,7 @@ $phpunit->assertEquals(array (
     1 => true,
   ),
   array (
-    0 => 'Warning: Channel validator warning: field "date" - Release Date "2004-12-25"is not today',
+    0 => 'Warning: Channel validator warning: field "date" - Release Date "2004-12-25" is not today',
     1 => true,
   ),
   array (
