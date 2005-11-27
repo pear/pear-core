@@ -980,7 +980,7 @@ installed package.'
         $info['package.xml version'] = '2.0';
         if ($installed) {
             if ($obj->getLastModified()) {
-                $info['Last Modified'] = date('Y-m-d H:m', $obj->getLastModified());
+                $info['Last Modified'] = date('Y-m-d H:i', $obj->getLastModified());
             }
             $v = $obj->getLastInstalledVersion();
             $info['Last Installed Version'] = $v ? $v : '- None -';
