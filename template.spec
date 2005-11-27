@@ -8,7 +8,6 @@ Source: http://@master_server@/get/@package@-%{version}.tgz
 BuildRoot: %{_tmppath}/%{name}-root
 URL: http://@master_server@/package/@package@
 Prefix: %{_prefix}
-#Docdir: @doc_dir@/@package@
 BuildArchitectures: @arch@
 @extra_headers@
 
@@ -17,6 +16,7 @@ BuildArchitectures: @arch@
 
 %prep
 rm -rf %{buildroot}/*
+%setup -c -T
 # XXX Source files location is missing here in pear cmd
 pear -v -c %{buildroot}/pearrc \
         -d php_dir=%{_libdir}/php/pear \
@@ -53,10 +53,9 @@ rm %{buildroot}/pearrc
 rm %{buildroot}/%{_libdir}/php/pear/.filemap
 rm %{buildroot}/%{_libdir}/php/pear/.lock
 rm -rf %{buildroot}/%{_libdir}/php/pear/.registry
-if [ -d "%{buildroot}/docs/@package@/doc" ]; then
-    rm -rf $RPM_BUILD_DIR/doc
-    mv %{buildroot}/docs/@package@/doc $RPM_BUILD_DIR
-    rm -rf %{buildroot}/docs
+if [ "@doc_files@" != "" ]; then
+     mv %{buildroot}/docs/@package@/* .
+     rm -rf %{buildroot}/docs
 fi
 mkdir -p %{buildroot}@rpm_xml_dir@
 tar -xzf $RPM_SOURCE_DIR/@package@-%{version}.tgz package@package2xml@.xml

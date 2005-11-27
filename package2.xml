@@ -65,9 +65,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2005-11-21</date>
+ <date>2005-12-15</date>
  <version>
-  <release>1.4.5</release>
+  <release>1.4.6</release>
   <api>1.4.1</api>
  </version>
  <stability>
@@ -76,13 +76,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
- * REALLY fix Bug #5865: doesn't work with PHP4.2.x
- * fix Bug #5854: if no installconditions match, no error is raised
- * fix Bug #5945: installer should auto-skip to the next channel on timeout
- * fix Bug #5947: Some package-info not handled by PEAR_PackageFile_v2
- * fix Bug #5948: Minor typo in PEAR_Validate
- * fix Bug #5958: strange error on mistyping
- * fix Bug #5959: patch: pear makerpm produces RPMs that do not uninstall/upgrade cleanly
+  Minor bugfix release
+  * fix Bug #6034: date format bug
+  * fix Bug #6047: pear makerpm fails to handle docs in root directory
  </notes>
  <contents>
   <dir name="/">
@@ -679,6 +675,27 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
    <notes>
  * fix Bug #5865: doesn't work with PHP4.2.x
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.5</release>
+    <api>1.4.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2005-11-21</date>
+   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <notes>
+ * REALLY fix Bug #5865: doesn't work with PHP4.2.x
+ * fix Bug #5854: if no installconditions match, no error is raised
+ * fix Bug #5945: installer should auto-skip to the next channel on timeout
+ * fix Bug #5947: Some package-info not handled by PEAR_PackageFile_v2
+ * fix Bug #5948: Minor typo in PEAR_Validate
+ * fix Bug #5958: strange error on mistyping
+ * fix Bug #5959: patch: pear makerpm produces RPMs that do not uninstall/upgrade cleanly
    </notes>
   </release>
  </changelog>
