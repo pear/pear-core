@@ -178,6 +178,25 @@ $commandcontents = str_replace(
 $creator->addString($commandcontents, 'PEAR/PackageFile/Generator/v1.php');
 
 $commandcontents = file_get_contents($peardir . DIRECTORY_SEPARATOR . 'PEAR' .
+    DIRECTORY_SEPARATOR . 'Installer' .
+    DIRECTORY_SEPARATOR . 'Role.php');
+$commandcontents = str_replace(
+    array(
+        "require_once '",
+        "include_once '",
+        "require_once str_replace('_', '/', \$a)",
+        "@PEAR-VER@",
+    ),
+    array(
+        "require_once 'phar://go-pear.phar/",
+        "include_once 'phar://go-pear.phar/",
+        "require_once 'phar://go-pear.phar/' . str_replace('_', '/', \$a)",
+        $pearver,
+    ),
+    $commandcontents);
+$creator->addString($commandcontents, 'PEAR/Installer/Role.php');
+
+$commandcontents = file_get_contents($peardir . DIRECTORY_SEPARATOR . 'PEAR' .
     DIRECTORY_SEPARATOR . 'PackageFile' . DIRECTORY_SEPARATOR . 'Generator' .
     DIRECTORY_SEPARATOR . 'v2.php');
 $commandcontents = str_replace(
