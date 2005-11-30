@@ -72,6 +72,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <state>stable</state>
   <notes>
   Minor bugfix release
+  * fix problem with -options when using CGI version of PHP
   * fix Bug #6034: date format bug
   * fix Bug #6047: pear makerpm fails to handle docs in root directory
   </notes>

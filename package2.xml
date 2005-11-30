@@ -77,6 +77,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
   Minor bugfix release
+  * fix problem with -options when using CGI version of PHP
   * fix Bug #6034: date format bug
   * fix Bug #6047: pear makerpm fails to handle docs in root directory
  </notes>
