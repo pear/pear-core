@@ -106,9 +106,15 @@ class PEAR_REST
             }
             return $ret;
         }
-        $headers = $file[2];
-        $lastmodified = $file[1];
-        $content = $file[0];
+        if (is_array($file)) {
+            $headers = $file[2];
+            $lastmodified = $file[1];
+            $content = $file[0];
+        } else {
+            $content = $file;
+            $lastmodified = false;
+            $headers = array();
+        }
         if ($forcestring) {
             $this->saveCache($url, $content, $lastmodified, false, $cacheId);
             return $content;
