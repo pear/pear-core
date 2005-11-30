@@ -71,6 +71,14 @@ PEAR_Command::setFrontendType('CLI');
 $all_commands = PEAR_Command::getCommands();
 
 $argv = Console_Getopt::readPHPArgv();
+if (count($argv)) {
+    for ($i = 0; $i < count($argv); $i++) {
+        if ($argv[$i] == '--') {
+            unset($argv[$i]);
+        }
+    }
+    $argv = array_values($argv);
+}
 $progname = PEAR_RUNTYPE;
 if (in_array('getopt2', get_class_methods('Console_Getopt'))) {
     array_shift($argv);
