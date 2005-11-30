@@ -71,12 +71,9 @@ PEAR_Command::setFrontendType('CLI');
 $all_commands = PEAR_Command::getCommands();
 
 $argv = Console_Getopt::readPHPArgv();
-if (count($argv)) {
-    for ($i = 0; $i < count($argv); $i++) {
-        if ($argv[$i] == '--') {
-            unset($argv[$i]);
-        }
-    }
+// fix CGI sapi oddity - the -- in pear.bat/pear is not removed
+if (php_sapi_name() != 'cli' && isset($argv[1]) && $argv[1] == '--') {
+    unset($argv[1]);
     $argv = array_values($argv);
 }
 $progname = PEAR_RUNTYPE;
