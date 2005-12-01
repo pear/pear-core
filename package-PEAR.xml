@@ -73,6 +73,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <notes>
   Minor bugfix release
   * fix problem with -options when using CGI version of PHP
+  * fix Critical Bug #5999: support for baseinstalldir broken in package2.xml format
   * fix Bug #6034: date format bug
   * fix Bug #6047: pear makerpm fails to handle docs in root directory
   * fix Bug #6106: Notices by list-upgrades (caused by time-outs ?)
