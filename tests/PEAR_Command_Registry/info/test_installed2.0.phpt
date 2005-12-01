@@ -105,7 +105,7 @@ PEAR installer version 1.4.0a1 or newer',
         13 => 
         array (
           0 => 'Last Modified',
-          1 => date('Y-m-d H:m', $lastmodified),
+          1 => date('Y-m-d H:i', $lastmodified),
         ),
         14 => 
         array (
