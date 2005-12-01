@@ -77,6 +77,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #6034: date format bug
   * fix Bug #6047: pear makerpm fails to handle docs in root directory
   * fix Bug #6106: Notices by list-upgrades (caused by time-outs ?)
+  * fix Request #6119: Add PEAR_Frontend_Gtk2 support to PEAR
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
