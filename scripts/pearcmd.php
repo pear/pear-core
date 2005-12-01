@@ -99,6 +99,11 @@ if ($progname == 'gpear' || $progname == 'pear-gtk') {
         }
     }
 }
+//Check if Gtk and PHP >= 5.1.0
+if ($fetype == 'Gtk' && version_compare(phpversion(), '5.1.0', '>=')) {
+    $fetype = 'Gtk2';
+}
+
 $pear_user_config = '';
 $pear_system_config = '';
 $store_user_config = false;
@@ -237,7 +242,7 @@ if (empty($command) && ($store_user_config || $store_system_config)) {
     exit;
 }
 
-if ($fetype == 'Gtk') {
+if ($fetype == 'Gtk' || $fetype == 'Gtk2') {
     if (!$config->validConfiguration()) {
         PEAR::raiseError('CRITICAL ERROR: no existing valid configuration files found in files ' .
             "'$pear_user_config' or '$pear_system_config', please copy an existing configuration" .
