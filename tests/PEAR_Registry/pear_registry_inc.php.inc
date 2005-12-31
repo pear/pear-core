@@ -45,5 +45,4 @@ function dump_error($err)
     echo "code: ". $err['code'] . "\n";
 }
 PEAR_ErrorStack::setDefaultCallback('dump_error');
-register_shutdown_function('cleanall');
 ?>
