@@ -230,11 +230,6 @@ More than one package may be specified at once.
                     'arg' => 'DIR',
                     'doc' => 'root directory used when installing files (ala PHP\'s INSTALL_ROOT), use packagingroot for RPM',
                     ),
-                'packagingroot' => array(
-                    'shortopt' => 'P',
-                    'arg' => 'DIR',
-                    'doc' => 'root directory used when packaging files, like RPM packaging',
-                    ),
                 'ignore-errors' => array(
                     'doc' => 'force install even if there were errors',
                     ),
