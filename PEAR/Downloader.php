@@ -1277,6 +1277,10 @@ class PEAR_Downloader extends PEAR_Common
     function downloadHttp($url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null,
                           $accept = false)
     {
+        static $redirect = 0;
+        // allways reset , so we are clean case of error
+        $wasredirect = $redirect;
+        $redirect = 0;
         if ($callback) {
             call_user_func($callback, 'setup', array(&$ui));
         }
@@ -1385,16 +1389,31 @@ class PEAR_Downloader extends PEAR_Common
         $request .= "\r\n";
         fwrite($fp, $request);
         $headers = array();
+        $reply = 0;
         while (trim($line = fgets($fp, 1024))) {
             if (preg_match('/^([^:]+):\s+(.*)\s*$/', $line, $matches)) {
                 $headers[strtolower($matches[1])] = trim($matches[2]);
             } elseif (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
-                if ($matches[1] == 304 && ($lastmodified || ($lastmodified === false))) {
+                $reply = (int) $matches[1];
+                if ($reply == 304 && ($lastmodified || ($lastmodified === false))) {
                     return false;
                 }
-                if ($matches[1] != 200) {
+                if (! in_array($reply, array(200, 301, 302, 303, 305, 307))) {
                     return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)");
                 }
+            }
+        }
+        if ($reply != 200) {
+            if (isset($headers['location'])) {
+                if ($wasredirect < 5) {
+                    $redirect = $wasredirect + 1;
+                    return $this->downloadHttp($headers['location'],
+                            $ui, $save_dir, $callback, $lastmodified, $accept);
+                } else {
+                    return PEAR::raiseError("File http://$host:$port$path not valid (redirection looped more than 5 times)");
+                }
+            } else {
+                return PEAR::raiseError("File http://$host:$port$path not valid (redirected but no location)");
             }
         }
         if (isset($headers['content-disposition']) &&

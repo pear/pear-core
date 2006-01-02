@@ -60,6 +60,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <active>yes</active>
  </lead>
  <helper>
+  <name>Bertrand Gugger</name>
+  <user>toggg</user>
+  <email>toggg@php.net</email>
+  <active>yes</active>
+ </helper>
+ <helper>
   <name>Martin Jansen</name>
   <user>mj</user>
   <email>mj@php.net</email>
@@ -82,6 +88,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #6034: date format bug
   * fix Bug #6047: pear makerpm fails to handle docs in root directory
   * fix Bug #6106: Notices by list-upgrades (caused by time-outs ?)
+  * fix Bug #6145: Can't install PEAR with INSTALL_ROOT environment
+  * fix Bug #6322: Installer fails to follow redirects [patch by Bertrand]
   * fix Request #6119: Add PEAR_Frontend_Gtk2 support to PEAR
  </notes>
  <contents>
