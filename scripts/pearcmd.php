@@ -70,6 +70,10 @@ require_once 'Console/Getopt.php';
 PEAR_Command::setFrontendType('CLI');
 $all_commands = PEAR_Command::getCommands();
 
+// remove this next part when we stop supporting that crap-ass PHP 4.2
+if (!isset($_SERVER['argv']) && !isset($argv) && !isset($HTTP_SERVER_VARS['argv'])) {
+    die('ERROR: either use the CLI php executable, or set register_argc_argv=On in php.ini');
+}
 $argv = Console_Getopt::readPHPArgv();
 // fix CGI sapi oddity - the -- in pear.bat/pear is not removed
 if (php_sapi_name() != 'cli' && isset($argv[1]) && $argv[1] == '--') {
