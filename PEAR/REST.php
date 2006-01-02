@@ -353,7 +353,7 @@ class PEAR_REST
                     return false;
                 }
                 if ($matches[1] != 200) {
-                    return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)");
+                    return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)", (int) $matches[1]);
                 }
             }
         }
