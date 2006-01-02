@@ -139,7 +139,7 @@ class PEAR_REST
         } else {
             // assume XML
             $parser = new PEAR_XMLParser;
-            $parser->parse($file);
+            $parser->parse($content);
             $content = $parser->getData();
         }
         $this->saveCache($url, $content, $lastmodified, false, $cacheId);
