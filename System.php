@@ -447,7 +447,12 @@ class System
     */
     function which($program, $fallback = false)
     {
-        // avaible since 4.3.0RC2
+        // enforce API
+        if (!is_string($program) || '' == $program) {
+            return $fallback;
+        }
+
+        // available since 4.3.0RC2
         if (defined('PATH_SEPARATOR')) {
             $path_delim = PATH_SEPARATOR;
         } else {
