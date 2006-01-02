@@ -82,6 +82,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #6048: PEAR_Frontend::log parameters are wrong
   * fix Bug #6106: Notices by list-upgrades (caused by time-outs ?)
   * fix Bug #6145: Can't install PEAR with INSTALL_ROOT environment
+  * fix Bug #6218: the "pear" command does nothing
   * fix Bug #6269: System::which() returns silliness if passed null
   * fix Bug #6322: Installer fails to follow redirects [patch by Bertrand Gugger]
   * fix Request #6119: Add PEAR_Frontend_Gtk2 support to PEAR
