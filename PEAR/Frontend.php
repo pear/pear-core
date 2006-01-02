@@ -147,7 +147,7 @@ class PEAR_Frontend extends PEAR
         $GLOBALS['_PEAR_Common_tempfiles'][] = $file;
     }
 
-    function log($level, $msg, $append_crlf = true)
+    function log($msg, $append_crlf = true)
     {
     }
 }
