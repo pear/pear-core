@@ -34,6 +34,9 @@ $GLOBALS['_PEAR_FRONTEND_SINGLETON'] = null;
 
 /**
  * Singleton-based frontend for PEAR user input/output
+ * 
+ * Note that frontend classes must implement userConfirm(), and shoul implement
+ * displayFatalError() and outputData()
  * @category   pear
  * @package    PEAR
  * @author     Greg Beaver <cellog@php.net>
@@ -64,6 +67,15 @@ class PEAR_Frontend extends PEAR
         }
     }
 
+    /**
+     * Set the frontend class that will be used by calls to {@link singleton()}
+     *
+     * Frontends are expected to conform to the PEAR naming standard of
+     * _ => DIRECTORY_SEPARATOR (PEAR_Frontend_CLI is in PEAR/Frontend/CLI.php)
+     * @param string $uiclass full class name
+     * @return PEAR_Frontend
+     * @static
+     */
     function &setFrontendClass($uiclass)
     {
         if (is_object($GLOBALS['_PEAR_FRONTEND_SINGLETON']) &&

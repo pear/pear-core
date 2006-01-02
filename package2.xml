@@ -80,6 +80,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix problem with -options when using CGI version of PHP
   * fix Critical Bug #5999: support for baseinstalldir broken in package2.xml format
   * fix Bug #6034: date format bug
+  * fix Bug #6040: PEAR_Frontend#setFrontendClass has no docblock;
+    PEAR_Frontend not documented
   * fix Bug #6047: pear makerpm fails to handle docs in root directory
   * fix Bug #6106: Notices by list-upgrades (caused by time-outs ?)
   * fix Bug #6145: Can't install PEAR with INSTALL_ROOT environment
