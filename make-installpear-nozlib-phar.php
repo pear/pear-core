@@ -59,7 +59,7 @@ $pkg = &new PEAR_PackageFile($config);
 $pf = $pkg->fromPackageFile($peardir . DIRECTORY_SEPARATOR . 'package2.xml', PEAR_VALIDATE_NORMAL);
 $pearver = $pf->getVersion();
 
-$creator = new PHP_Archive_Creator('index.php', false); // no compression
+$creator = new PHP_Archive_Creator('index.php', false, 'install-pear-nozlib.phar'); // no compression
 $install_files = '$install_files = array(';
 foreach ($packages as $name => $package) {
     echo "$name => $package\n";

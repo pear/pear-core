@@ -1,5 +1,5 @@
 --TEST--
-PEAR_Installer->install() with simple local package.xml [installroot]
+PEAR_Installer->install() with simple local package.xml [packagingroot]
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -11,7 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'packagingroot.xml';
-$dp = &new test_PEAR_Downloader($fakelog, array('installroot' => $temp_path . DIRECTORY_SEPARATOR .
+$dp = &new test_PEAR_Downloader($fakelog, array('packagingroot' => $temp_path . DIRECTORY_SEPARATOR .
 'installroot'), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($pathtopackagexml));
@@ -66,7 +66,7 @@ $phpunit->assertEquals(array (
           'to' => 'php_dir',
         ),
       ),
-      'installed_as' => $config->_prependPath($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'proot.php', $temp_path . DIRECTORY_SEPARATOR . 'installroot'),
+      'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'proot.php',
     ),
   ),
   'xsdversion' => '1.0',
@@ -103,13 +103,16 @@ $phpunit->assertEquals(array (
   '_lastversion' => null,
   'dirtree' => 
   array (
-    $config->_prependPath($temp_path . DIRECTORY_SEPARATOR . 'php', $temp_path . DIRECTORY_SEPARATOR . 'installroot') => true,
+    $php_dir => true,
   ),
 ), $ret, 'return of install');
 $phpunit->assertFileExists($config->_prependPath($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'proot.php', $temp_path . DIRECTORY_SEPARATOR . 'installroot'),
     'installed file');
-$phpunit->assertEquals("<?php \$a = '" . $config->_prependPath($temp_path . DIRECTORY_SEPARATOR . 'php', $temp_path . DIRECTORY_SEPARATOR . 'installroot') . "'; ?>", file_get_contents($config->_prependPath($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'proot.php', $temp_path . DIRECTORY_SEPARATOR . 'installroot')), 'file contents');
+$phpunit->assertEquals("<?php \$a = '$php_dir'; ?>", file_get_contents($config->_prependPath($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'proot.php', $temp_path . DIRECTORY_SEPARATOR . 'installroot')), 'file contents');
 $reg = &$config->getRegistry();
+$info = $reg->packageInfo('PEAR');
+$phpunit->assertNull($info, 'should not exist in default reg');
+$reg = &new PEAR_Registry($config->_prependPath($temp_path . DIRECTORY_SEPARATOR . 'php', $temp_path . DIRECTORY_SEPARATOR . 'installroot'));
 $info = $reg->packageInfo('PEAR');
 $phpunit->assertTrue(isset($info['_lastmodified']), 'lastmodified is set?');
 unset($info['_lastmodified']);
