@@ -1329,7 +1329,11 @@ class PEAR_Installer extends PEAR_Downloader
             }
             $dest = $ext['dest'];
             $this->log(1, "Installing '$ext[file]'");
-            $copyto = $this->_prependPath($dest, $this->installroot);
+            $packagingroot = '';
+            if (isset($this->_options['packagingroot'])) {
+                $packagingroot = $this->_options['packagingroot'];
+            }
+            $copyto = $this->_prependPath($dest, $packagingroot);
             $copydir = dirname($copyto);
             if (!@is_dir($copydir)) {
                 if (!$this->mkDirHier($copydir)) {
