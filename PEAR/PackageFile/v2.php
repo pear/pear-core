@@ -914,9 +914,6 @@ class PEAR_PackageFile_v2
 
     function getMaintainers($raw = false)
     {
-        if (!$this->_isValid && !$this->validate()) {
-            return false;
-        }
         if ($raw) {
             $ret = array('lead' => $this->_packageInfo['lead']);
             (isset($this->_packageInfo['developer'])) ?
