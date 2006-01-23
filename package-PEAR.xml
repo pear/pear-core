@@ -79,6 +79,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <notes>
   Minor bugfix release
   * fix Bug #6383: incomplete PEAR::Error message on addReplacement()
+  * fix Bug #6445: PEAR::registerShutdownFunc doesn't work in static calls
   * fix Bug #6480: pear install --installroot option fails for pecl packages [timj]
   * fix Bug #6510: status active of a maintainer cannot be change
   </notes>
