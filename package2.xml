@@ -88,6 +88,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #6075: unnecessary validation of maintainers can break PEAR_PFM
   * fix Bug #6076: optional is not set for conversion of package2.xml to "has" rel
   * fix Bug #6077: PEAR_PackageFile_Parser_v2 should return by reference
+  * fix Bug #6273: pear download-all fails
   * fix Bug #6383: incomplete PEAR::Error message on addReplacement()
   * fix Bug #6445: PEAR::registerShutdownFunc doesn't work in static calls
   * fix Bug #6480: pear install --installroot option fails for pecl packages [timj]

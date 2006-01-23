@@ -129,6 +129,9 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
         if (PEAR::isError($cmd)) {
             return $cmd;
         }
+        $this->ui->outputData('Using Preferred State of ' .
+            $this->config->get('preferred_state'));
+        $this->ui->outputData('Gathering release information, please wait...');
         /**
          * Error handling not necessary, because already done by 
          * the download command

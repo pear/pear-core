@@ -278,6 +278,10 @@ class PEAR_Downloader extends PEAR_Common
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $err = $params[$i]->initialize($param);
             PEAR::staticPopErrorHandling();
+            if (!$err) {
+                // skip parameters that were missed by preferred_state
+                continue;
+            }
             if (PEAR::isError($err)) {
                 if (!isset($this->_options['soft'])) {
                     $this->log(0, $err->getMessage());
@@ -703,6 +707,7 @@ class PEAR_Downloader extends PEAR_Common
                         break;
                     }
                 }
+                $this->configSet('default_channel', $curchannel);
                 return PEAR::raiseError('Unknown remote channel: ' . $remotechannel);
             } while (false);
         }
@@ -719,6 +724,7 @@ class PEAR_Downloader extends PEAR_Common
                 $url = $rest->getDownloadURL($base, $parr, $state, false);
             }
             if (PEAR::isError($url)) {
+                $this->configSet('default_channel', $curchannel);
                 return $url;
             }
             if ($parr['channel'] != $curchannel) {
