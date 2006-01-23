@@ -97,7 +97,7 @@ class PEAR_PackageFile_Parser_v2 extends PEAR_XMLParser
      *               a subclass
      * @return PEAR_PackageFile_v2
      */
-    function parse($data, $file, $archive = false, $class = 'PEAR_PackageFile_v2')
+    function &parse($data, $file, $archive = false, $class = 'PEAR_PackageFile_v2')
     {
         if (PEAR::isError($err = parent::parse($data, $file))) {
             return $err;
