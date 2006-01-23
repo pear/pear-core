@@ -1669,14 +1669,24 @@ class PEAR_PackageFile_v2
                                 $s1['optional'] = $optional;
                                 $ret[] = $s1;
                             } elseif (isset($dep['min'])) {
-                                $s['rel'] = 'ge';
+                                if (isset($dep['exclude']) &&
+                                      $dep['exclude'] == $dep['min']) {
+                                    $s['rel'] = 'gt';
+                                } else {
+                                    $s['rel'] = 'ge';
+                                }
                                 $s['version'] = $dep['min'];
                                 $s['optional'] = $optional;
                                 if ($dtype != 'php') {
                                     $s['name'] = $dep['name'];
                                 }
                             } elseif (isset($dep['max'])) {
-                                $s['rel'] = 'le';
+                                if (isset($dep['exclude']) &&
+                                      $dep['exclude'] == $dep['max']) {
+                                    $s['rel'] = 'lt';
+                                } else {
+                                    $s['rel'] = 'le';
+                                }
                                 $s['version'] = $dep['max'];
                                 $s['optional'] = $optional;
                                 if ($dtype != 'php') {
