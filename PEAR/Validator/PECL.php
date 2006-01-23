@@ -32,6 +32,15 @@ class PEAR_Validator_PECL extends PEAR_Validate
 {
     function validateVersion()
     {
+        if ($this->_state == PEAR_VALIDATE_PACKAGING) {
+            $versioncomponents = explode('.', $version);
+            $last = array_pop($versioncomponents);
+            if (substr($last, 1, 2) == 'rc') {
+                $this->_addFailure('version', 'Release Candidate versions must have ' .
+                'upper-case RC, not lower-case rc');
+                return false;
+            }
+        }
         return true;
     }
 
