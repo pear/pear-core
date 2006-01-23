@@ -60,14 +60,20 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <active>yes</active>
  </lead>
  <helper>
+  <name>Tim Jackson</name>
+  <user>timj</user>
+  <email>timj@php.net</email>
+  <active>yes</active>
+ </helper>
+ <helper>
   <name>Martin Jansen</name>
   <user>mj</user>
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2006-01-06</date>
+ <date>2006-02-06</date>
  <version>
-  <release>1.4.6</release>
+  <release>1.4.7</release>
   <api>1.4.1</api>
  </version>
  <stability>
@@ -77,20 +83,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
   Minor bugfix release
-  * fix problem with -options when using CGI version of PHP
-  * fix Critical Bug #5999: support for baseinstalldir broken in package2.xml format
-  * fix Bug #6034: date format bug
-  * fix Bug #6040: PEAR_Frontend#setFrontendClass has no docblock;
-    PEAR_Frontend not documented
-  * fix Bug #6044: PEAR_REST::retrieveCacheFirst doesn't return error codes
-  * fix Bug #6047: pear makerpm fails to handle docs in root directory
-  * fix Bug #6048: PEAR_Frontend::log parameters are wrong
-  * fix Bug #6106: Notices by list-upgrades (caused by time-outs ?)
-  * fix Bug #6145: Can't install PEAR with INSTALL_ROOT environment
-  * fix Bug #6218: the "pear" command does nothing
-  * fix Bug #6269: System::which() returns silliness if passed null
-  * fix Bug #6322: Installer fails to follow redirects [patch by Bertrand Gugger]
-  * fix Request #6119: Add PEAR_Frontend_Gtk2 support to PEAR
+  * fix Bug #6480: pear install --installroot option fails for pecl packages [timj]
+  * fix Bug #6510: status active of a maintainer cannot be change
  </notes>
  <contents>
   <dir name="/">
@@ -708,6 +702,35 @@ http://pear.php.net/dtd/package-2.0.xsd">
  * fix Bug #5948: Minor typo in PEAR_Validate
  * fix Bug #5958: strange error on mistyping
  * fix Bug #5959: patch: pear makerpm produces RPMs that do not uninstall/upgrade cleanly
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.6</release>
+    <api>1.4.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-01-06</date>
+   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <notes>
+  Minor bugfix release
+  * fix problem with -options when using CGI version of PHP
+  * fix Critical Bug #5999: support for baseinstalldir broken in package2.xml format
+  * fix Bug #6034: date format bug
+  * fix Bug #6040: PEAR_Frontend#setFrontendClass has no docblock;
+    PEAR_Frontend not documented
+  * fix Bug #6044: PEAR_REST::retrieveCacheFirst doesn't return error codes
+  * fix Bug #6047: pear makerpm fails to handle docs in root directory
+  * fix Bug #6048: PEAR_Frontend::log parameters are wrong
+  * fix Bug #6106: Notices by list-upgrades (caused by time-outs ?)
+  * fix Bug #6145: Can't install PEAR with INSTALL_ROOT environment
+  * fix Bug #6218: the "pear" command does nothing
+  * fix Bug #6269: System::which() returns silliness if passed null
+  * fix Bug #6322: Installer fails to follow redirects [patch by Bertrand Gugger]
+  * fix Request #6119: Add PEAR_Frontend_Gtk2 support to PEAR
    </notes>
   </release>
  </changelog>
