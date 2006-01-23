@@ -490,10 +490,9 @@ parameter.
         }
         $errors = $downloader->getErrorMsgs();
         if (count($errors)) {
-            $errinfo = array();
-            $errinfo['data'] = array($errors);
-            $errinfo['headline'] = 'Download Errors';
-            $this->ui->outputData($errinfo);
+            foreach ($errors as $error) {
+                $this->ui->outputData($error);
+            }
             return $this->raiseError("$command failed");
         }
         $downloaded = $downloader->getDownloadedPackages();
