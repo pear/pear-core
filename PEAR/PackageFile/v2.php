@@ -1653,6 +1653,7 @@ class PEAR_PackageFile_v2
                             if (!isset($dep['min']) &&
                                   !isset($dep['max'])) {
                                 $s['rel'] = 'has';
+                                $s['optional'] = $optional;
                             } elseif (isset($dep['min']) &&
                                   isset($dep['max'])) {
                                 $s['rel'] = 'ge';
