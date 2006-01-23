@@ -82,6 +82,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #6445: PEAR::registerShutdownFunc doesn't work in static calls
   * fix Bug #6480: pear install --installroot option fails for pecl packages [timj]
   * fix Bug #6510: status active of a maintainer cannot be change
+  * fix Bug #6559: pear should ignore safemode/open_basedir
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
