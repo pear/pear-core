@@ -77,6 +77,10 @@ class PEAR_Command_Test extends PEAR_Command_Common
                     'shortopt' => 'p',
                     'doc' => 'Treat parameters as installed packages from which to run tests',
                 ),
+                'phpunit' => array(
+                    'shortopt' => 'u',
+                    'doc' => 'Search parameters for AllTests.php, and use that to run phpunit-based tests',
+                ),
             ),
             'doc' => '[testfile|dir ...]
 Run regression tests with PHP\'s regression testing script (run-tests.php).',
@@ -137,8 +141,14 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                     if (isset($atts['role']) && $atts['role'] != 'test') {
                         continue;
                     }
-                    if (!preg_match('/\.phpt$/', $name)) {
-                        continue;
+                    if (isset($options['phpunit'])) {
+                        if (!preg_match('/AllTests\.php$/i', $name)) {
+                            continue;
+                        }
+                    } else {
+                        if (!preg_match('/\.phpt$/', $name)) {
+                            continue;
+                        }
                     }
                     $params[] = $atts['installed_as'];
                 }
@@ -146,21 +156,33 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
         }
         foreach ($params as $p) {
             if (is_dir($p)) {
-                $dir = System::find(array($p, '-type', 'f',
-                                            '-maxdepth', $depth,
-                                            '-name', '*.phpt'));
+                if (isset($options['phpunit'])) {
+                    $dir = System::find(array($p, '-type', 'f',
+                                                '-maxdepth', $depth,
+                                                '-name', 'AllTests.php'));
+                } else {
+                    $dir = System::find(array($p, '-type', 'f',
+                                                '-maxdepth', $depth,
+                                                '-name', '*.phpt'));
+                }
                 $tests = array_merge($tests, $dir);
             } else {
-                if (!@file_exists($p)) {
-                    if (!preg_match('/\.phpt$/', $p)) {
-                        $p .= '.phpt';
+                if (isset($options['phpunit'])) {
+                    if (!preg_match('/AllTests\.php$/i', $p)) {
+                        continue;
                     }
-                    $dir = System::find(array(dirname($p), '-type', 'f',
-                                                '-maxdepth', $depth,
-                                                '-name', $p));
-                    $tests = array_merge($tests, $dir);
                 } else {
-                    $tests[] = $p;
+                    if (!@file_exists($p)) {
+                        if (!preg_match('/\.phpt$/', $p)) {
+                            $p .= '.phpt';
+                        }
+                        $dir = System::find(array(dirname($p), '-type', 'f',
+                                                    '-maxdepth', $depth,
+                                                    '-name', $p));
+                        $tests = array_merge($tests, $dir);
+                    } else {
+                        $tests[] = $p;
+                    }
                 }
             }
         }

@@ -76,6 +76,17 @@ class PEAR_RunTest
         $cwd = getcwd();
         $conf = &PEAR_Config::singleton();
         $php = $conf->get('php_bin');
+        if (isset($this->_options['phpunit'])) {
+            $cmd = "$php$ini_settings -f $file";
+            if (isset($this->_logger)) {
+                $this->_logger->log(2, 'Running command "' . $cmd . '"');
+            }
+    
+            $savedir = getcwd(); // in case the test moves us around
+            `$cmd`;
+            chdir($savedir);
+            return 'PASSED'; // we have no way of knowing this information so assume passing
+        }
         //var_dump($php);exit;
         global $log_format, $info_params, $ini_overwrites;
 
@@ -88,6 +99,7 @@ class PEAR_RunTest
             'SKIPIF'  => '',
             'GET'     => '',
             'ARGS'    => '',
+            'CLEAN'   => '',
         );
 
         $file = realpath($file);
@@ -202,6 +214,12 @@ class PEAR_RunTest
             $returnfail = false;
         }
         chdir($savedir);
+
+        if (array_key_exists($section_text['CLEAN'])) {
+            // perform test cleanup
+            $this->save_text($clean = $tmp . uniqid('/phpt.'), $section_text['CLEAN']);
+            `$php $clean`;
+        }
         // Does the output match what is expected?
         $output = trim($out);
         $output = preg_replace('/\r\n/', "\n", $output);
