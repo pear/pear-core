@@ -45,6 +45,10 @@ class PEAR_PackageFile_v2_Validator
     /**
      * @var int
      */
+    var $_filesValid = 0;
+    /**
+     * @var int
+     */
     var $_curState = 0;
     /**
      * @param PEAR_PackageFile_v2
