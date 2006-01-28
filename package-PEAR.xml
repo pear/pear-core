@@ -90,6 +90,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #6510: status active of a maintainer cannot be change
   * fix Bug #6537: wrong export compatible v1 dependencies list with exclude limit
   * fix Bug #6559: pear should ignore safemode/open_basedir
+  * fix Bug #6576: PFM2 run in trouble with sessions
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

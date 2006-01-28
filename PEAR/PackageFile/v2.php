@@ -1850,7 +1850,8 @@ class PEAR_PackageFile_v2
 
     function analyzeSourceCode($file, $string = false)
     {
-        if (!isset($this->_v2Validator)) {
+        if (!isset($this->_v2Validator) &&
+              !is_a($this->_v2Validator, 'PEAR_PackageFile_v2_Validator')) {
             if (!class_exists('PEAR_PackageFile_v2_Validator')) {
                 require_once 'PEAR/PackageFile/v2/Validator.php';
             }
