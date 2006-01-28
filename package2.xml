@@ -96,6 +96,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #6537: wrong export compatible v1 dependencies list with exclude limit
   * fix Bug #6559: pear should ignore safemode/open_basedir
   * fix Bug #6576: PFM2 run in trouble with sessions
+  * fix Bug #6579: PFM2 changelog and license with uri
  </notes>
  <contents>
   <dir name="/">
