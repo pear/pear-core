@@ -1508,7 +1508,7 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
             'stability' =>
                 $this->getStability(),
             'date' => $this->getDate(),
-            'license' => $this->getLicense(),
+            'license' => $this->getLicense(true),
             'notes' => $notes ? $notes : $this->getNotes()
             );
     }
