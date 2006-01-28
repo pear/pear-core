@@ -106,6 +106,38 @@ class PEAR_Frontend extends PEAR
     }
 
     /**
+     * Set the frontend class that will be used by calls to {@link singleton()}
+     *
+     * Frontends are expected to be a descendant of PEAR_Frontend
+     * @param PEAR_Frontend
+     * @return PEAR_Frontend
+     * @static
+     */
+    function &setFrontendObject($uiobject)
+    {
+        if (is_object($GLOBALS['_PEAR_FRONTEND_SINGLETON']) &&
+              is_a($GLOBALS['_PEAR_FRONTEND_SINGLETON'], get_class($uiobject))) {
+            return $GLOBALS['_PEAR_FRONTEND_SINGLETON'];
+        }
+        if (!is_a($uiobject, 'PEAR_Frontend')) {
+            $err = PEAR::raiseError('not a valid frontend class: (' .
+                get_class($uiobject) . ')');
+            return $err;
+        }
+        // quick test to see if this class implements a few of the most
+        // important frontend methods
+        if (method_exists($uiobject, 'userConfirm')) {
+            $GLOBALS['_PEAR_FRONTEND_SINGLETON'] = &$obj;
+            $GLOBALS['_PEAR_FRONTEND_CLASS'] = get_class($uiobject);
+            return $uiobject;
+        } else {
+            $err = PEAR::raiseError("not a value frontend class: (" . get_class($uiobject)
+                . ')');
+            return $err;
+        }
+    }
+
+    /**
      * @param string $path relative or absolute include path
      * @return boolean
      * @static
