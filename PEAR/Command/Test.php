@@ -171,6 +171,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                     if (!preg_match('/AllTests\.php$/i', $p)) {
                         continue;
                     }
+                    $tests[] = $p;
                 } else {
                     if (!@file_exists($p)) {
                         if (!preg_match('/\.phpt$/', $p)) {

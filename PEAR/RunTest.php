@@ -83,7 +83,8 @@ class PEAR_RunTest
             }
     
             $savedir = getcwd(); // in case the test moves us around
-            `$cmd`;
+            chdir(dirname($file));
+            echo `$cmd`;
             chdir($savedir);
             return 'PASSED'; // we have no way of knowing this information so assume passing
         }
