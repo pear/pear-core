@@ -85,6 +85,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   Minor bugfix release
   * Prevent packaging of release candidate releases with versions like 1.0.0rc1
     version_compare() only understands upper-case 1.0.0RC1
+  * implement CLEAN section in .phpt tests
+  * implement run-tests command for phpunit-based tests
   * implement Request #6039: setFrontendObject needed to allow objects passed
   * fix Bug #6075: unnecessary validation of maintainers can break PEAR_PFM
   * fix Bug #6076: optional is not set for conversion of package2.xml to "has" rel
