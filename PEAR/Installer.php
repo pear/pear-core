@@ -995,7 +995,7 @@ class PEAR_Installer extends PEAR_Downloader
         $channel = $pkg->getChannel();
         if (isset($this->_options['packagingroot'])) {
             $packrootphp_dir = $this->_prependPath(
-                $this->config->get('php_dir', null, 'pear.php.net'),
+                $this->config->get('php_dir', null, $channel),
                 $this->_options['packagingroot']);
         }
 
