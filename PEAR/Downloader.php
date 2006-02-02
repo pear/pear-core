@@ -313,7 +313,14 @@ class PEAR_Downloader extends PEAR_Common
                         '" to update');
                 }
                 if ($params[$i] && !isset($this->_options['downloadonly'])) {
-                    $checkdir = $this->config->get('php_dir', null, $params[$i]->getChannel());
+                    if (isset($this->_options['packagingroot'])) {
+                        $checkdir = $this->_prependPath(
+                            $this->config->get('php_dir', null, $params[$i]->getChannel()),
+                            $this->_options['packagingroot']);
+                    } else {
+                        $checkdir = $this->config->get('php_dir',
+                            null, $params[$i]->getChannel());
+                    }
                     while ($checkdir && $checkdir != '/' && !file_exists($checkdir)) {
                         $checkdir = dirname($checkdir);
                     }
