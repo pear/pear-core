@@ -476,12 +476,12 @@ $phpunit->assertEquals(array (
   ),
   10 => 
   array (
-    'info' => 'File /home/cellog/pear-core/tests/PEAR_Command_Mirror/testinstallertemp/APC-1.4.0a1.tgz downloaded',
+    'info' => 'File ' . $temp_path . DIRECTORY_SEPARATOR . 'APC-1.4.0a1.tgz downloaded',
     'cmd' => 'download',
   ),
   11 => 
   array (
-    'info' => 'File /home/cellog/pear-core/tests/PEAR_Command_Mirror/testinstallertemp/Archive_Tar-1.5.0a1.tgz downloaded',
+    'info' => 'File ' . $temp_path . DIRECTORY_SEPARATOR . 'Archive_Tar-1.5.0a1.tgz downloaded',
     'cmd' => 'download',
   ),
 ), $fakelog->getLog(), 'log');

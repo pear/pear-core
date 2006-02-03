@@ -367,7 +367,7 @@ $phpunit->assertEquals(array (
   ),
   7 => 
   array (
-    'info' => 'File /home/cellog/pear-core/tests/PEAR_Command_Mirror/testinstallertemp/APC-1.3.0.tgz downloaded',
+    'info' => 'File ' . $temp_path . DIRECTORY_SEPARATOR . 'APC-1.3.0.tgz downloaded',
     'cmd' => 'download',
   ),
 ), $fakelog->getLog(), 'log');
