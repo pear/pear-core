@@ -144,6 +144,7 @@ $phpunit->assertEquals(array (
     'channel' => 'floop',
     'name' => 'frong',
     'rel' => 'has',
+    'optional' => 'yes',
   ),
 ), $ret, 'deps');
 $ret = $reg->packageInfo();
