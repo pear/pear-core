@@ -41,5 +41,9 @@ $phpunit->assertEquals('Signature Key Id', $config->getPrompt('sig_keyid'), 'sig
 $phpunit->assertEquals('Signature Key Directory', $config->getPrompt('sig_keydir'), 'sig_keydir');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

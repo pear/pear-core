@@ -25,5 +25,9 @@ $phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'systemhello', $config
 $phpunit->assertEquals(PEAR_CONFIG_DEFAULT_DATA_DIR, $config->get('data_dir'), 'user data_dir after remove');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

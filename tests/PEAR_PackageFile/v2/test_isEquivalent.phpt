@@ -98,5 +98,9 @@ $ret = $pf2->isEquivalent($pf1);
 $phpunit->assertNoErrors('valid');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

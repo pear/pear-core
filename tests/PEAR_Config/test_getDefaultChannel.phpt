@@ -30,5 +30,9 @@ $phpunit->assertEquals('mychannel', $config->getDefaultChannel(), 'user');
 $phpunit->assertEquals('pear.php.net', $config->getDefaultChannel('system'), 'system 2');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

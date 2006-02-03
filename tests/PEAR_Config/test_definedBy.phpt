@@ -27,5 +27,9 @@ $phpunit->assertEquals('default', $config->definedBy('doc_dir'), 'doc_dir');
 $phpunit->assertEquals('', $config->definedBy('fooblha'), 'fooblha');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

@@ -5,7 +5,6 @@ $statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 
 
-register_shutdown_function('cleanall');
 cleanall($statedir);
 if (!is_dir($statedir)) {
     mkdir($statedir);

@@ -61,5 +61,9 @@ $phpunit->assertEquals(false, PEAR_Installer_Role::factory($pf2, 'ext', $config)
 $phpunit->assertEquals(false, PEAR_Installer_Role::factory($pf2, 'src', $config), 'src bundle');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

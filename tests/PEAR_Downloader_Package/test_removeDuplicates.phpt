@@ -88,5 +88,9 @@ $phpunit->assertEquals('default', $params[1]->getGroup(), 'second one group');
 $phpunit->assertEquals('test2', $params[2]->getPackage(), 'third one');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

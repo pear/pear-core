@@ -27,5 +27,9 @@ $phpunit->assertEquals('this is php!', $pf->getFileContents('test.php'), 'wrong 
 $phpunit->assertEquals('hello there girly-man', $pf->getFileContents('template.spec'), 'wrong contents');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

@@ -160,5 +160,9 @@ $phpunit->assertNoErrors('nodeps');
 $phpunit->assertEquals(array('warning: pear/mine requires PHP extension "foo" (version <= 1.9, excluded versions: 1.8)'), $result, 'nodeps');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

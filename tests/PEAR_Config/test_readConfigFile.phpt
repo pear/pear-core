@@ -52,5 +52,9 @@ $phpunit->assertEquals(71, $config->get('verbose', 'system', 'test2'), '$config-
 
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

@@ -263,5 +263,9 @@ $phpunit->assertNoErrors('after ftp uninstall');
 $phpunit->assertEquals(array('/path/to/pear/pear/php/foo.php'), $ftp->_rmfiles, 'deleted files');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

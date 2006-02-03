@@ -145,5 +145,9 @@ $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback mess
 $phpunit->assertFalse($result, 'second return');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

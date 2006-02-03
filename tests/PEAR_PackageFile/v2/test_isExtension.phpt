@@ -35,5 +35,9 @@ $phpunit->assertTrue($a, 'good set s');
 $phpunit->assertTrue($pf2->isExtension('blah'), 'extsrc, good');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

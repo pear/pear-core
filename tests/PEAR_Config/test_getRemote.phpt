@@ -16,5 +16,9 @@ $config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini', $temp_p
 $phpunit->assertIsa('PEAR_Remote', $config->getRemote(), 'test');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

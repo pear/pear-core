@@ -34,5 +34,9 @@ $phpunit->assertFalse($db->dependsOn(array('channel' => 'pear.php.net',
     'shallow bad');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

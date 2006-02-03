@@ -117,9 +117,58 @@ $ret = $val->analyzeSourceCode($testdir . DIRECTORY_SEPARATOR . 'test5.php');
 echo "sixth test: returns false with valid PHP? ";
 echo $ret ? "no\n" : "yes\n";
 $ret['source_file'] = str_replace(array(dirname(__FILE__),DIRECTORY_SEPARATOR), array('', '/'), $ret['source_file']);
-var_dump($ret);
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Parser error: invalid PHP found in file "' .
+     $temp_path . DIRECTORY_SEPARATOR . 'test1.php"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Parser error: invalid PHP found in file "' .
+     $temp_path . DIRECTORY_SEPARATOR . 'test3.php"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'Parser error: invalid PHP found in file "' .
+     $temp_path . DIRECTORY_SEPARATOR . 'test4.php"'),
+), 'pre-errors');
+$phpunit->assertEquals(array (
+  'source_file' => '/testinstallertemp/test5.php',
+  'declared_classes' => 
+  array (
+    0 => 'test2',
+    1 => 'blah',
+  ),
+  'declared_interfaces' => 
+  array (
+  ),
+  'declared_methods' => 
+  array (
+    'test2' => 
+    array (
+      0 => 'test2',
+    ),
+    'blah' => 
+    array (
+      0 => 'blah',
+    ),
+  ),
+  'declared_functions' => 
+  array (
+    0 => 'test',
+    1 => 'fool',
+  ),
+  'used_classes' => 
+  array (
+    0 => 'Greg',
+    1 => 'Pierre',
+  ),
+  'inheritance' => 
+  array (
+    'blah' => 'test2',
+  ),
+  'implements' => 
+  array (
+  ),
+), $ret, 'ret');
 
-cleanall($testdir);
+?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
 ?>
 --EXPECT--
 first test: returns false with non-existing filename? yes
@@ -127,52 +176,3 @@ second test: returns false with invalid PHP? yes
 fourth test: returns false with invalid PHP? yes
 fifth test: returns false with invalid PHP? yes
 sixth test: returns false with valid PHP? no
-array(8) {
-  ["source_file"]=>
-  string(26) "/registry_tester/test5.php"
-  ["declared_classes"]=>
-  array(2) {
-    [0]=>
-    string(5) "test2"
-    [1]=>
-    string(4) "blah"
-  }
-  ["declared_interfaces"]=>
-  array(0) {
-  }
-  ["declared_methods"]=>
-  array(2) {
-    ["test2"]=>
-    array(1) {
-      [0]=>
-      string(5) "test2"
-    }
-    ["blah"]=>
-    array(1) {
-      [0]=>
-      string(4) "blah"
-    }
-  }
-  ["declared_functions"]=>
-  array(2) {
-    [0]=>
-    string(4) "test"
-    [1]=>
-    string(4) "fool"
-  }
-  ["used_classes"]=>
-  array(2) {
-    [0]=>
-    string(4) "Greg"
-    [1]=>
-    string(6) "Pierre"
-  }
-  ["inheritance"]=>
-  array(1) {
-    ["blah"]=>
-    string(5) "test2"
-  }
-  ["implements"]=>
-  array(0) {
-  }
-}

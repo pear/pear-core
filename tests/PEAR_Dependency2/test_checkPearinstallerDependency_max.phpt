@@ -55,5 +55,9 @@ $phpunit->assertEquals(array (
   0 => 'warning: pear/mine requires PEAR Installer (version >= 1.0, version <= 1.1.0), installed version is 1.2.0'), $result, 'max force');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

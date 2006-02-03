@@ -58,5 +58,9 @@ $phpunit->assertNoErrors('force');
 $phpunit->assertEquals(array('warning: Cannot install pear/mine on bar operating system, can only install on foo'), $result, 'force');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

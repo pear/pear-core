@@ -38,5 +38,9 @@ $phpunit->assertEquals($bin_dir, $config->get('bin_dir'), 'bin_dir');
 $phpunit->assertEquals('abogado', $config->get('sig_keydir'), 'sig_keydir');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

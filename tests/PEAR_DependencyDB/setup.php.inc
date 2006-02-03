@@ -80,8 +80,7 @@ function copyItem($name, $nested = false)
     }
 }
 
-register_shutdown_function('cleanall');
-$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'registry_tester';
+$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
 cleanall();
 $temp_path = $statedir;
 if (!is_dir($temp_path)) {

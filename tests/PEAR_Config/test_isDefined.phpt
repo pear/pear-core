@@ -43,5 +43,9 @@ $phpunit->assertEquals(true, $config->isDefined('sig_keydir'), 'sig_keydir');
 $phpunit->assertEquals(false, $config->isDefined('blahblhablha'),'blahblhablha');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

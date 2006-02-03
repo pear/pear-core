@@ -36,5 +36,9 @@ $phpunit->assertEquals('/path/to/pear/pear/docs', $config->get('doc_dir', 'ftp')
 $phpunit->assertEquals('/path/to/pear/pear/tests', $config->get('test_dir', 'ftp'), 'test_dir');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

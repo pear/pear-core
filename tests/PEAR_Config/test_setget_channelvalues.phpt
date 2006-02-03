@@ -54,5 +54,9 @@ $phpunit->assertEquals('foo.example.com', $config->get('preferred_mirror', null,
 $phpunit->assertFalse($config->set('preferred_mirror', 'foor.example.com', 'user', 'foo'), 'set to foor.example.com');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

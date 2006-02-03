@@ -76,5 +76,9 @@ $result = $dep->validatePackageDependency(
 $phpunit->assertEquals(array('pear/mine can optionally use package "http://www.example.com/foo-1.0.tgz"'), $result, 'force optional');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

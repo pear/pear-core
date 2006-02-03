@@ -299,5 +299,9 @@ $phpunit->assertEquals(array (
 ), $GLOBALS['_PEAR_INSTALLER_ROLES'], 'registered');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

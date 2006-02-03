@@ -75,5 +75,9 @@ $phpunit->assertTrue($result, 'after initialize');
 $phpunit->assertNull($dp->getPackageFile(), 'downloadable test');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

@@ -189,5 +189,9 @@ $phpunit->assertNoErrors('after merge 2');
 $phpunit->assertFalse($result, 'second return');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

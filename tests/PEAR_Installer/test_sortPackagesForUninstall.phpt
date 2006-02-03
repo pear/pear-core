@@ -51,5 +51,9 @@ $phpunit->assertEquals('bar', $params[1]->getPackage(), 'bar');
 $phpunit->assertEquals('next', $params[2]->getPackage(), 'foo');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

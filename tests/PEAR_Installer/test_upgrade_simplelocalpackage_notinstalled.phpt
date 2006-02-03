@@ -218,5 +218,9 @@ unset($info['_lastmodified']);
 $phpunit->assertEquals($ret, $info, 'test installation');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

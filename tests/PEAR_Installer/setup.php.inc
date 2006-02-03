@@ -6,7 +6,6 @@ $temp_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 
 
-register_shutdown_function('cleanall');
 cleanall($temp_path);
 $statedir = $temp_path;
 if (!is_dir($temp_path)) {
