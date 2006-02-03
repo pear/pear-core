@@ -218,11 +218,6 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                 $this->ui->log(0, $result->getMessage());
                 continue;
             }
-            if (OS_WINDOWS) {
-                for($i=0;$i<2000;$i++) {
-                    $i = $i; // delay - race conditions on windows
-                }
-            }
             if (isset($options['realtimelog'])) {
                 $fp = @fopen('run-tests.log', 'a');
                 if ($fp) {
