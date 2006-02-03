@@ -38,9 +38,7 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'package.xml 1.0 maintainer "single" email "joe@example.com" does not match "joz@example.com"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'package.xml 1.0 maintainer "single" name "person" does not match "personally"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'package.xml 1.0 version "1.2.0a11" does not match "1.2.0a1"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'package.xml 1.0 description "foo
-hi there1" does not match "foo
-hi there"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => "package.xml 1.0 description \"foo\nhi there1\" does not match \"foo\nhi there\""),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'package.xml 1.0 release notes "here are the
 multi-1ine
 ..." do not match "here are the
