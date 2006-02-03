@@ -538,5 +538,9 @@ $phpunit->assertEquals(array (
 ), $pf->getDeps(), 'barz works');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

@@ -805,5 +805,9 @@ $phpunit->assertEquals('HTTP_Request', $params[1]->getPackage(), '1');
 $phpunit->assertEquals('SOAP', $params[0]->getPackage(), '0');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

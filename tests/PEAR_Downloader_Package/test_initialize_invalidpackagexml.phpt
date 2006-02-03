@@ -67,5 +67,9 @@ $phpunit->assertEquals("Cannot initialize '$pathtopackagexml', invalid or missin
     $result->getMessage(), 'wrong error message');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

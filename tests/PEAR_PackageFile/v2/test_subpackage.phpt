@@ -81,5 +81,9 @@ $phpunit->assertTrue($pf->isSubpackageOf($pf2), 'ok 4 case-insensitive');
 
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

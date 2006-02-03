@@ -22,5 +22,9 @@ $c->hi = 1;
 $phpunit->assertEquals(1, @$a->hi, 'singleton 2');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

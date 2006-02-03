@@ -85,5 +85,9 @@ $phpunit->assertEquals(array('warning: pear/mine is not compatible with PEAR Ins
 
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

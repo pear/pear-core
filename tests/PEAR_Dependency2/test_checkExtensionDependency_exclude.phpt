@@ -185,5 +185,9 @@ $phpunit->assertNoErrors('nodeps exclude 2 optional');
 $phpunit->assertEquals(array('warning: pear/mine is not compatible with PHP extension "foo" version 1.0'), $result, 'exclude 2 nodeps optional');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

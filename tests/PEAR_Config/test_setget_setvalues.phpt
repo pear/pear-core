@@ -19,5 +19,9 @@ $phpunit->assertTrue($config->set('preferred_state', 'devel'), 'set devel');
 $phpunit->assertEquals('devel', $config->get('preferred_state'), 'get set value');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

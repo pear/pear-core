@@ -46,5 +46,9 @@ $phpunit->assertEquals('directory where signature keys are located', $config->ge
 
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

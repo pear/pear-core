@@ -19,5 +19,9 @@ $phpunit->assertTrue($config->remove('umask'), 'umask');
 $phpunit->assertEquals(PEAR_CONFIG_DEFAULT_UMASK, $config->get('umask'), 'after remove');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

@@ -58,5 +58,9 @@ $phpunit->assertNoErrors('nodeps conflict');
 $phpunit->assertEquals(array('warning: Cannot install pear/mine on Windows'), $result, 'nodeps conflict');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

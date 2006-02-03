@@ -370,5 +370,9 @@ $phpunit->assertEquals(array (
 $phpunit->assertFileExists($ext_dir . DIRECTORY_SEPARATOR . 'foo.so', 'not installed');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

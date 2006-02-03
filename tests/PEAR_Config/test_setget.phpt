@@ -33,5 +33,9 @@ $phpunit->assertEquals('poo.example.com', $config->get('preferred_mirror', 'user
     'confirm preferred_mirror=poo.example.com 1');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

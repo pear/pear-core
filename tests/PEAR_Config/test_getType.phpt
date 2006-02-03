@@ -41,5 +41,9 @@ $phpunit->assertEquals('string', $config->getType('sig_keyid'), 'sig_keyid');
 $phpunit->assertEquals('directory', $config->getType('sig_keydir'), 'sig_keydir');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

@@ -38,5 +38,9 @@ $phpunit->assertNoErrors('good ftp');
 $phpunit->assertIsa('Net_FTP', $config->getFTP(), 'good ftp');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

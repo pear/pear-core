@@ -82,5 +82,9 @@ $phpunit->assertEquals($dp->_downloader->getDownloadDir() . DIRECTORY_SEPARATOR 
     $file->getArchiveFile(), 'package archive location test');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

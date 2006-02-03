@@ -90,5 +90,9 @@ $result = $dep->validatePhpDependency(
 $phpunit->assertNoErrors('nodeps');
 $phpunit->assertEquals(array('warning: pear/mine is not compatible with PHP version 4.3.9'), $result, 'nodeps');echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

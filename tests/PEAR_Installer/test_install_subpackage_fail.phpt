@@ -64,5 +64,9 @@ array('package' => 'PEAR_Error', 'message' =>
 "bar.php (pear.php.net/foo)\n")), 'install 2');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

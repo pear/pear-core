@@ -24,5 +24,9 @@ $phpunit->assertNoErrors('windows/darwin conflicts');
 $phpunit->assertTrue($result, 'windows/darwin conflicts');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

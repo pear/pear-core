@@ -75,5 +75,9 @@ $phpunit->assertErrors(array(
 $phpunit->assertIsa('PEAR_Error', $e, 'ftp://example.com/config.ini no dir vars');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

@@ -57,5 +57,9 @@ $phpunit->assertEquals(array (
 $phpunit->assertIsa('PEAR_Error', $result, 'vp');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

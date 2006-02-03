@@ -47,5 +47,9 @@ $phpunit->assertNoErrors('force ');
 $phpunit->assertEquals(array('warning: pear/mine Architecture dependency failed, does not match "aix-*-i386"'), $result, 'force');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

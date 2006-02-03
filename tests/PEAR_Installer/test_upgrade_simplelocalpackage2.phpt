@@ -393,5 +393,9 @@ $phpunit->assertFileNotExists($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTO
     'old installed file');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

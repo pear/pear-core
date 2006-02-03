@@ -65,5 +65,9 @@ $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . 'foo.php', 'foo.php'
 $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . 'bar.php', 'bar.php');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

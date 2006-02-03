@@ -51,5 +51,9 @@ $phpunit->assertEquals(array (
 ), $fakelog->getLog(), 'packaging validate full log');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

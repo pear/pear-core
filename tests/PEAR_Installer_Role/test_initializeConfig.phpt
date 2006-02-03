@@ -17,5 +17,9 @@ $phpunit->assertNoErrors('after');
 $phpunit->assertEquals('hey baby', $conf->get('smonk'), 'get smonk');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done
