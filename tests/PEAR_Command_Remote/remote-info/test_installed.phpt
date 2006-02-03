@@ -258,5 +258,9 @@ It supports creating, listing, extracting and adding to zip files.',
 ), $fakelog->getLog(), 'Archive_Zip log');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

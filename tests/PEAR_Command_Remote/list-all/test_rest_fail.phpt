@@ -8144,7 +8144,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/services_amazon/info.xml", '
  <ca xlink:href="/rest/c/Web+Services">Web Services</ca>
  <l>BSD</l>
  <s>Provides access to Amazon.com\'s retail and associate web services</s>
- <d>Services_Amazon uses Amazon.com’s web services to allow developers to search and provide associate links for specific ISBN numbers, authors, artist, directors, and publishers among other things.</d>
+ <d>Services_Amazon uses Amazon.com?s web services to allow developers to search and provide associate links for specific ISBN numbers, authors, artist, directors, and publishers among other things.</d>
  <r xlink:href="/rest/r/services_amazon"/>
 </p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/services_amazon/allreleases.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
@@ -9447,6 +9447,10 @@ $phpunit->assertEquals(array (
 )
 , $fakelog->getLog(), 'log');
 echo 'tests done';
+?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
 ?>
 --EXPECT--
 tests done

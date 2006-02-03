@@ -796,7 +796,7 @@ MSSQL</description>
     </maintainer>
     <maintainer>
       <user>ssb</user>
-      <name>Stig Sæther Bakken</name>
+      <name>Stig S?ther Bakken</name>
       <email>stig@php.net</email>
       <role>contributor</role>
     </maintainer>
@@ -3375,6 +3375,10 @@ if (OS_WINDOWS) {
 , $fakelog->getLog(), 'log messages');
 }
 echo 'tests done';
+?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
 ?>
 --EXPECT--
 tests done

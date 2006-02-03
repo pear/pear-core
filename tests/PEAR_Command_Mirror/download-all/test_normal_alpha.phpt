@@ -490,5 +490,9 @@ $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'Archive_Tar-1.5.0
 chdir($save);
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

@@ -56,5 +56,9 @@ $info = unserialize($info[1]);
 $phpunit->assertEquals($configinfo, $info, 'saved 2');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

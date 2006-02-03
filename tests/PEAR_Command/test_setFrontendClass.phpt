@@ -27,5 +27,9 @@ $ok = &PEAR_Command::setFrontendClass('PEAR_Frontend_CLI');
 $phpunit->assertIsa('PEAR_Frontend_CLI', $ok, 'ok');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

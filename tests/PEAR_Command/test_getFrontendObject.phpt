@@ -20,5 +20,9 @@ $phpunit->assertIsa('PEAR_Frontend_CLI', $ok, 'ok');
 $phpunit->assertIsa('PEAR_Error', $err, 'invalid');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

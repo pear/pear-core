@@ -1185,7 +1185,7 @@ interface for handling CSV files.",
         'description' =>
             "File_Find, created as a replacement for its Perl counterpart, also named 
 File_Find, is a directory searcher, which handles, globbing, recursive 
-directory searching, as well as a slew of other cool features. ",
+directory searching, as well as a slew of other cool features.?",
         'lead' =>
             "tuupola",
         'stable' =>
@@ -3387,7 +3387,7 @@ Morgan Christiansson <mog@linux.nu>, Contributor
 - A few new methods
 
 Alexander Merz <alexmerz@php.net>, Contributor
-- PEAR’ifing of original code
+- PEAR?ifing of original code
 - Documentation (v0.1)
 
 Heino H. Gehlsen <heino@php.net>, Lead
@@ -6381,6 +6381,10 @@ $phpunit->assertEquals(array (
 ), $fakelog->getLog(), 'empty log');
 $phpunit->assertNoErrors('empty');
 echo 'tests done';
+?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
 ?>
 --EXPECT--
 tests done
