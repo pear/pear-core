@@ -18,6 +18,10 @@ $info = $pkg->fromPackageFile(dirname(__FILE__) . DIRECTORY_SEPARATOR .
 $reg->addPackage2($info);
 $e = $command->run('shell-test', array(), array('PEAR', 'eq', '1.4.0'));
 ?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
+?>
 --RETURNS--
 1
 --EXPECT--

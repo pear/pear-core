@@ -446,5 +446,9 @@ $phpunit->assertEquals('Upgrade All Packages'
     , PEAR_Command::getDescription('upgrade-all'), 'upgrade-all');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

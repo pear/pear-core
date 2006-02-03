@@ -26,5 +26,9 @@ $phpunit->assertTrue($reg->isAlias('foo'), 'test alias foo after');
 $phpunit->assertFalse($reg->isAlias('pear'), 'test alias pear after');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

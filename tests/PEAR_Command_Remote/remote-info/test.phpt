@@ -3018,5 +3018,9 @@ though it claimed to be.  This version finally is self-hosting
 ), $fakelog->getLog(), 'PEAR log');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

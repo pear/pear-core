@@ -60,5 +60,9 @@ $phpunit->assertEquals('pear.php.net', $chan->getName(), 'name ok?');
 $phpunit->assertEquals('PHP Extension and Application Repository', $chan->getSummary(), 'summary ok?');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

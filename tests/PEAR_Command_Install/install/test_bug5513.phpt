@@ -590,5 +590,9 @@ $phpunit->assertNoErrors('after install');
 $phpunit->assertTrue($res, 'result');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

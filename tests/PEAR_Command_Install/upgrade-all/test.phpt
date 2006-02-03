@@ -3428,5 +3428,9 @@ $phpunit->assertEquals('0.25.0', $reg->packageInfo('Text_Wiki', 'version'), 'Tex
 $phpunit->assertEquals('1.2.0RC6', $reg->packageInfo('XML_RPC', 'version'), 'XML_RPC');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

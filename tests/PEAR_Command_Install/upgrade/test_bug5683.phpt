@@ -174,5 +174,9 @@ $phpunit->assertEquals('1.4.4', $reg->packageInfo('PEAR', 'version'), 'PEAR vers
 $phpunit->assertEquals('1.4.4', $reg->packageInfo('XML_RPC', 'version'), 'XML_RPC version 2');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

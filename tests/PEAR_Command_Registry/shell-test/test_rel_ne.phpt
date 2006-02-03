@@ -22,6 +22,10 @@ $e = $command->run('shell-test', array(), array('PEAR', 'ne', '1.4.0a2'));
 $phpunit->assertNoErrors('ok 2');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
+?>
 --RETURNS--
 0
 --EXPECT--
