@@ -71,7 +71,7 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
-$phpunit->assertNull($result, 'after initialize');
+$phpunit->assertTrue($result, 'after initialize');
 $phpunit->assertNull($dp->getPackageFile(), 'downloadable test');
 echo 'tests done';
 ?>

@@ -73,7 +73,7 @@ $phpunit->assertEquals(array (
     1 => 785,
   ),
 ), $fakelog->getDownload(), 'download callback messages');
-$phpunit->assertNull($result, 'after initialize');
+$phpunit->assertTrue($result, 'after initialize');
 $phpunit->assertNotNull($file = &$dp->getPackageFile(), 'downloadable test');
 $phpunit->assertEquals('test', $file->getPackage(), 'package name test');
 $phpunit->assertEquals($dp->_downloader->getDownloadDir() . '/package.xml',
