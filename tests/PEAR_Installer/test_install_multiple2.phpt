@@ -732,6 +732,7 @@ Installer:
         'channel' => 'smork',
         'name' => 'Foobar',
         'rel' => 'has',
+        'optional' => 'no',
       ),
     ),
     'maintainers' => 

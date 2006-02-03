@@ -232,7 +232,7 @@ $phpunit->assertEquals(array (
     1 => $csize,
   ),
 ), $fakelog->getDownload(), 'download callback messages');
-$phpunit->assertNull($result, 'after initialize');
+$phpunit->assertTrue($result, 'after initialize');
 $phpunit->assertNull($dp->getPackageFile(), 'downloadable test');
 echo 'tests done';
 ?>

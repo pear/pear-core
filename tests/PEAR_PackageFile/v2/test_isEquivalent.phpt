@@ -56,6 +56,7 @@ $pf2->setReleaseVersion('1.0.1');
 $pf2->setAPIVersion('1.0.0');
 $pf2->setReleaseStability('beta');
 $pf2->setAPIStability('stable');
+$pf2->addMaintainer('lead', 'cello', 'Greg Beaver', 'cellog@php.net');
 $ret = $pf2->isEquivalent($pf1);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' =>
@@ -67,9 +68,9 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' =>
         'package.xml 1.0 release notes "foo" do not match ""'),
     array('package' => 'PEAR_PackageFile_v2', 'message' =>
-        'Invalid tag order in <package>, found <date> expected one of "channel, uri"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' =>
         'package.xml 1.0 has unmatched extra maintainers "cellog"'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' =>
+        'package.xml 2.0 has unmatched extra maintainers "cello"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' =>
         'package.xml 1.0 version "1.0.0" does not match "1.0.1"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' =>
@@ -78,6 +79,7 @@ $phpunit->assertErrors(array(
         'package.xml 1.0 file "file.php" is not present in <contents>'),
 ), 'invalid matches');
 $phpunit->assertFalse($ret, 'invalid pf1');
+$pf2->deleteMaintainer('cello');
 $pf2->setPackage('foo');
 $pf2->setReleaseVersion('1.0.0');
 $pf2->setReleaseStability('stable');

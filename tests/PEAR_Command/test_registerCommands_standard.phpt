@@ -248,8 +248,15 @@ PEAR_Command::getGetoptArgs('remote-list', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short remote-list'); 
 $phpunit->assertEquals(array ('channel='), $l, 'long remote-list');
 PEAR_Command::getGetoptArgs('run-tests', $s, $l);
-$phpunit->assertEquals('ri:lqsp', $s, 'short run-tests'); 
-$phpunit->assertEquals(array ('recur', 'ini=', 'realtimelog', 'quiet', 'simple', 'package'), $l, 'long run-tests');
+$phpunit->assertEquals('ri:lqspu', $s, 'short run-tests'); 
+$phpunit->assertEquals(array (
+    'recur',
+    'ini=',
+    'realtimelog',
+    'quiet',
+    'simple',
+    'package',
+    'phpunit',), $l, 'long run-tests');
 PEAR_Command::getGetoptArgs('search', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short search'); 
 $phpunit->assertEquals(array ('channel='), $l, 'long search');
@@ -289,16 +296,15 @@ $phpunit->assertEquals(array (
   12 => 'pretend',
 ), $l, 'long upgrade');
 PEAR_Command::getGetoptArgs('upgrade-all', $s, $l);
-$phpunit->assertEquals('nrBZR:P:', $s, 'short upgrade-all'); 
+$phpunit->assertEquals('nrBZR:', $s, 'short upgrade-all'); 
 $phpunit->assertEquals(array (
   0 => 'nodeps',
   1 => 'register-only',
   2 => 'nobuild',
   3 => 'nocompress',
   4 => 'installroot=',
-  5 => 'packagingroot=',
-  6 => 'ignore-errors',
-  7 => 'loose',
+  5 => 'ignore-errors',
+  6 => 'loose',
 ), $l, 'long upgrade-all');
 $phpunit->assertEquals('Build an Extension From C Source'
     , PEAR_Command::getDescription('build'), 'build');

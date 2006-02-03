@@ -2337,12 +2337,14 @@ $phpunit->assertEquals(array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             7 => 
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             8 => 
             array (
@@ -2534,12 +2536,14 @@ $phpunit->assertEquals(array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             7 => 
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             8 => 
             array (
@@ -2717,12 +2721,14 @@ $phpunit->assertEquals(array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             7 => 
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             8 => 
             array (
@@ -2890,12 +2896,14 @@ $phpunit->assertEquals(array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             7 => 
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             8 => 
             array (
@@ -3051,12 +3059,14 @@ $phpunit->assertEquals(array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             7 => 
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             8 => 
             array (
@@ -3206,12 +3216,14 @@ $phpunit->assertEquals(array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             7 => 
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             8 => 
             array (
@@ -3359,12 +3371,14 @@ $phpunit->assertEquals(array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             7 => 
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             8 => 
             array (
@@ -3500,12 +3514,14 @@ $phpunit->assertEquals(array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             7 => 
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             8 => 
             array (
@@ -3638,12 +3654,14 @@ $phpunit->assertEquals(array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             7 => 
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             8 => 
             array (
@@ -3766,12 +3784,14 @@ $phpunit->assertEquals(array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             7 => 
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             8 => 
             array (
@@ -3889,12 +3909,14 @@ $phpunit->assertEquals(array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             7 => 
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
+              'optional' => 'no',
             ),
             8 => 
             array (

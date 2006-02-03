@@ -28,17 +28,7 @@ $phpunit->assertEquals( array (
   ),
   2 => 
   array (
-    'info' => 
-    array (
-      'data' => 
-      array (
-        0 => 
-        array (
-          0 => 'Package "http://www.example.com/bloo.tgz" is not valid',
-        ),
-      ),
-      'headline' => 'Download Errors',
-    ),
+    'info' => 'Package "http://www.example.com/bloo.tgz" is not valid',
     'cmd' => 'no command',
   ),
  )
