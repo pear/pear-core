@@ -9,8 +9,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'phpt_t
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 
 
-register_shutdown_function('cleanall');
-$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'registry_tester';
+$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
 cleanall();
 
 $files1 = array(

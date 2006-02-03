@@ -428,5 +428,9 @@ $phpunit->assertEquals(array (
 ), $val->getFailures(), 'failures attempt 1.0.0pl1 stable');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

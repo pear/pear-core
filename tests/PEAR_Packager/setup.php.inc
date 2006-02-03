@@ -4,7 +4,6 @@ require_once 'PEAR/Packager.php';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 
 $temp_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
-register_shutdown_function('cleanall');
 cleanall($temp_path);
 $statedir = $temp_path;
 if (!is_dir($temp_path)) {

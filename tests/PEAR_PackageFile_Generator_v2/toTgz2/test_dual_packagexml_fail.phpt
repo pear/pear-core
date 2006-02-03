@@ -52,5 +52,9 @@ $phpunit->assertEquals(array (), $fakelog->getLog(), 'packaging log');
 chdir($save____dir);
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

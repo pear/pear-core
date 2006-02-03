@@ -78,5 +78,9 @@ $phpunit->assertEquals('PHP License', $newpf->getLicense(), 'license');
 // etc. - I think by here we've proven our point
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done
