@@ -2469,5 +2469,9 @@ $phpunit->assertEquals(array(), $reg->listPackages(), 'pear');
 $phpunit->assertEquals(array('sqlite'), $reg->listPackages('pecl'), 'pecl');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

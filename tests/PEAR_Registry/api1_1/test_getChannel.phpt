@@ -42,5 +42,9 @@ $phpunit->assertIsa('PEAR_ChannelFile', $ret, 'class 3');
 $phpunit->assertEquals('test.test.test', $ret->getName(), 'test.test.test strict');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

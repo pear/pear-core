@@ -42,5 +42,9 @@ $phpunit->assertErrors(array(
 ), 'test the out of order stuff');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

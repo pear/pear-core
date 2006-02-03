@@ -225,5 +225,9 @@ Increase the default busy timeout interval to 60 seconds.
 ', $xml, 'xml');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

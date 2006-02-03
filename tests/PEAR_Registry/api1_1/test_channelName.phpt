@@ -35,5 +35,9 @@ $ret = $reg->channelName('test.test.test');
 $phpunit->assertEquals('test.test.test', $ret, 'test.test.test');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

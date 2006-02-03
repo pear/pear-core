@@ -270,5 +270,9 @@ $phpunit->assertPackageinfoEquals(array (
   ), $subreg->packageInfo('pkg3'), 'packageinfo pkg3 specific, another object');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

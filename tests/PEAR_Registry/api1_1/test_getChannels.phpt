@@ -46,5 +46,9 @@ $phpunit->assertEquals('pecl.php.net', $ret[2]->getName(), '2 name');
 $phpunit->assertEquals('test.test.test', $ret[3]->getName(), '3 name');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

@@ -50,5 +50,9 @@ $ret = $reg->getChannelValidator('foo'); // test after the class is included too
 $phpunit->assertIsa('Tester', $ret, 'foo post-"install"');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

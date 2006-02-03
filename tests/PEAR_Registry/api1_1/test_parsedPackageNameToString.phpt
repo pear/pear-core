@@ -57,5 +57,9 @@ $phpunit->assertEquals('http://pear.php.net/Glom.tgz',
     'package' => 'Glom', 'extension' => 'tgz')), 'uri test');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

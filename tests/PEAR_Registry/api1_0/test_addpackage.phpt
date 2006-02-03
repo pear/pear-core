@@ -60,5 +60,9 @@ dump done
 $phpunit->assertFalse($reg->addPackage('pkg1', array()), 'bad addpackage');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

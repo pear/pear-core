@@ -30,5 +30,9 @@ $res = PEAR_Validate::validGroupName('foo.com_Validate');
 $phpunit->assertFalse($res, 'foo.com_Validate');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

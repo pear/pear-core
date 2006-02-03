@@ -101,5 +101,9 @@ $phpunit->assertEquals(array('package' => 'hello', 'channel' => 'pear.php.net',
  $reg->parsePackageName('channel://user@pear.php.net/hello?frong=gloop&blong=foop+group#boop'), 'channel://user@pear.php.net/hello?frong=gloop&blong=foop+group#boop');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

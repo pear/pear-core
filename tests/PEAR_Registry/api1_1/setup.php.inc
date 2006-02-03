@@ -9,7 +9,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'downlo
 
 // ------------------------------------------------------------------------- //
 
-$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'registry_tester';
+$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
 cleanall();
 
 $files1 = array(
@@ -68,7 +68,6 @@ $files3_new = array(
     );
 mkdir($statedir);
 $phpunit = &new PEAR_PHPTest(true);
-register_shutdown_function('cleanall');
 $temp_path = $statedir;
 if (!is_dir($temp_path)) {
     mkdir($temp_path);

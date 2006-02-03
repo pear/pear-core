@@ -83,5 +83,9 @@ $phpunit->assertFileNotExists($statedir . DIRECTORY_SEPARATOR . '.channels' . DI
 $phpunit->assertFalse($reg->channelExists('test.test.test'), 'make sure reg says test.test.test is gone 2');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

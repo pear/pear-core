@@ -31,5 +31,9 @@ $res = PEAR_Validate::validVersion('1231.0a');
 $phpunit->assertTrue($res, '1231.0a');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

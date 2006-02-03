@@ -75,5 +75,9 @@ $phpunit->assertEquals(array('foo'), $reg->listPackages('grob'), 'grob');
 $phpunit->assertEquals(array(), $reg->listPackages('frob'), 'frob');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done
