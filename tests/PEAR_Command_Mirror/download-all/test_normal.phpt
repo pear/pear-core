@@ -329,7 +329,6 @@ $save = getcwd();
 chdir($temp_path);
 $e = $command->run('download-all', array(), array());
 $phpunit->assertNoErrors('after');
-$phpunit->showAll();
 $phpunit->assertEquals(array (
   0 => 
   array (

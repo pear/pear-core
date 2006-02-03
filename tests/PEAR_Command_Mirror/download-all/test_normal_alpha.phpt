@@ -431,47 +431,57 @@ $phpunit->assertEquals(array (
   ),
   1 => 
   array (
-    0 => 1,
-    1 => 'downloading APC-1.4.0a1.tgz ...',
+    'info' => 'Using Preferred State of alpha',
+    'cmd' => 'no command',
   ),
   2 => 
   array (
-    0 => 1,
-    1 => 'Starting to download APC-1.4.0a1.tgz (513 bytes)',
+    'info' => 'Gathering release information, please wait...',
+    'cmd' => 'no command',
   ),
   3 => 
   array (
     0 => 1,
-    1 => '.',
+    1 => 'downloading APC-1.4.0a1.tgz ...',
   ),
   4 => 
   array (
     0 => 1,
-    1 => '...done: 513 bytes',
+    1 => 'Starting to download APC-1.4.0a1.tgz (513 bytes)',
   ),
   5 => 
   array (
     0 => 1,
-    1 => 'downloading Archive_Tar-1.5.0a1.tgz ...',
+    1 => '.',
   ),
   6 => 
   array (
     0 => 1,
-    1 => 'Starting to download Archive_Tar-1.5.0a1.tgz (686 bytes)',
+    1 => '...done: 513 bytes',
   ),
   7 => 
   array (
     0 => 1,
-    1 => '...done: 686 bytes',
+    1 => 'downloading Archive_Tar-1.5.0a1.tgz ...',
   ),
   8 => 
   array (
-    'info' => 'File ' . $temp_path . DIRECTORY_SEPARATOR . 'APC-1.4.0a1.tgz downloaded',
-    'cmd' => 'download',
+    0 => 1,
+    1 => 'Starting to download Archive_Tar-1.5.0a1.tgz (686 bytes)',
   ),
   9 => 
   array (
-    'info' => 'File ' . $temp_path . DIRECTORY_SEPARATOR . 'Archive_Tar-1.5.0a1.tgz downloaded',
+    0 => 1,
+    1 => '...done: 686 bytes',
+  ),
+  10 => 
+  array (
+    'info' => 'File /home/cellog/pear-core/tests/PEAR_Command_Mirror/testinstallertemp/APC-1.4.0a1.tgz downloaded',
+    'cmd' => 'download',
+  ),
+  11 => 
+  array (
+    'info' => 'File /home/cellog/pear-core/tests/PEAR_Command_Mirror/testinstallertemp/Archive_Tar-1.5.0a1.tgz downloaded',
     'cmd' => 'download',
   ),
 ), $fakelog->getLog(), 'log');

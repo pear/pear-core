@@ -14,7 +14,7 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
 $dp = &newDownloaderPackage(array('offline' => true));
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize($pathtopackagexml);
-$phpunit->assertNull($result, 'after initialize');
+$phpunit->assertTrue($result, 'after initialize');
 $phpunit->assertNotNull($file = &$dp->getPackageFile(), 'packagefile test');
 $phpunit->assertEquals('test', $file->getPackage(), 'package name test');
 $phpunit->assertEquals($pathtopackagexml, $file->getPackageFile(), 'package location test');

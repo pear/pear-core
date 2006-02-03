@@ -413,13 +413,24 @@ chdir($temp_path);
 $config->set('preferred_state', 'stable');
 $e = $command->run('download-all', array('channel' => 'smoog'), array());
 $phpunit->assertNoErrors('after 1');
-$phpunit->assertEquals(array(
+$phpunit->assertEquals(array (
   0 => 
   array (
     'info' => 'Using Channel smoog',
     'cmd' => 'no command',
   ),
-), $fakelog->getLog(), 'log 1');
+  1 => 
+  array (
+    'info' => 'Using Preferred State of stable',
+    'cmd' => 'no command',
+  ),
+  2 => 
+  array (
+    'info' => 'Gathering release information, please wait...',
+    'cmd' => 'no command',
+  ),
+)
+, $fakelog->getLog(), 'log 1');
 $config->set('preferred_state', 'alpha');
 $e = $command->run('download-all', array('channel' => 'smoog'), array());
 $phpunit->assertNoErrors('after');
@@ -431,27 +442,37 @@ $phpunit->assertEquals(array (
   ),
   1 => 
   array (
-    0 => 1,
-    1 => 'downloading APC-1.5.0a1.tgz ...',
+    'info' => 'Using Preferred State of alpha',
+    'cmd' => 'no command',
   ),
   2 => 
   array (
-    0 => 1,
-    1 => 'Starting to download APC-1.5.0a1.tgz (685 bytes)',
+    'info' => 'Gathering release information, please wait...',
+    'cmd' => 'no command',
   ),
   3 => 
   array (
     0 => 1,
-    1 => '.',
+    1 => 'downloading APC-1.5.0a1.tgz ...',
   ),
   4 => 
   array (
     0 => 1,
-    1 => '...done: 685 bytes',
+    1 => 'Starting to download APC-1.5.0a1.tgz (685 bytes)',
   ),
   5 => 
   array (
-    'info' => 'File ' . $temp_path . DIRECTORY_SEPARATOR . 'APC-1.5.0a1.tgz downloaded',
+    0 => 1,
+    1 => '.',
+  ),
+  6 => 
+  array (
+    0 => 1,
+    1 => '...done: 685 bytes',
+  ),
+  7 => 
+  array (
+    'info' => 'File /home/cellog/pear-core/tests/PEAR_Command_Mirror/testinstallertemp/APC-1.5.0a1.tgz downloaded',
     'cmd' => 'download',
   ),
 ), $fakelog->getLog(), 'log');

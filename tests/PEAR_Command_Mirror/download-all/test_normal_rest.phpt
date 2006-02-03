@@ -104,6 +104,7 @@ $save = getcwd();
 chdir($temp_path);
 $e = $command->run('download-all', array(), array());
 $phpunit->assertNoErrors('after');
+$phpunit->showall();
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -112,27 +113,37 @@ $phpunit->assertEquals(array (
   ),
   1 => 
   array (
-    0 => 1,
-    1 => 'downloading APC-1.3.0.tgz ...',
+    'info' => 'Using Preferred State of stable',
+    'cmd' => 'no command',
   ),
   2 => 
   array (
-    0 => 1,
-    1 => 'Starting to download APC-1.3.0.tgz (516 bytes)',
+    'info' => 'Gathering release information, please wait...',
+    'cmd' => 'no command',
   ),
   3 => 
   array (
     0 => 1,
-    1 => '.',
+    1 => 'downloading APC-1.3.0.tgz ...',
   ),
   4 => 
   array (
     0 => 1,
-    1 => '...done: 516 bytes',
+    1 => 'Starting to download APC-1.3.0.tgz (516 bytes)',
   ),
   5 => 
   array (
-    'info' => 'File ' . $temp_path . DIRECTORY_SEPARATOR . 'APC-1.3.0.tgz downloaded',
+    0 => 1,
+    1 => '.',
+  ),
+  6 => 
+  array (
+    0 => 1,
+    1 => '...done: 516 bytes',
+  ),
+  7 => 
+  array (
+    'info' => 'File /home/cellog/pear-core/tests/PEAR_Command_Mirror/testinstallertemp/APC-1.3.0.tgz downloaded',
     'cmd' => 'download',
   ),
 ), $fakelog->getLog(), 'log');
