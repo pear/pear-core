@@ -216,10 +216,11 @@ class PEAR_RunTest
         }
         chdir($savedir);
 
-        if (array_key_exists('CLEAN', $section_text)) {
+        if ($section_text['CLEAN']) {
             // perform test cleanup
             $this->save_text($clean = $tmp . uniqid('/phpt.'), $section_text['CLEAN']);
             `$php $clean`;
+            @unlink($clean);
         }
         // Does the output match what is expected?
         $output = trim($out);
