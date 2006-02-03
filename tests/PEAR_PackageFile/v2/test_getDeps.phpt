@@ -73,6 +73,7 @@ $phpunit->assertEquals(array (
     'type' => 'os',
     'name' => 'windows',
     'rel' => 'has',
+    'optional' => 'no',
   ),
 ), $pf->getDeps(), 'windows');
 $pf->addOsDep('linux', true);
@@ -105,6 +106,7 @@ $phpunit->assertEquals(array (
     'type' => 'os',
     'name' => 'windows',
     'rel' => 'has',
+    'optional' => 'no',
   ),
   4 =>
   array (
@@ -150,6 +152,7 @@ $phpunit->assertEquals(array (
     'type' => 'os',
     'name' => 'windows',
     'rel' => 'has',
+    'optional' => 'no',
   ),
   5 =>
   array (
@@ -194,6 +197,7 @@ $phpunit->assertEquals(array (
     'type' => 'os',
     'name' => 'windows',
     'rel' => 'has',
+    'optional' => 'no',
   ),
   array (
     'type' => 'os',
@@ -254,11 +258,13 @@ $phpunit->assertEquals(array (
     'uri' => 'arnk.example.com/arnk.tgz',
     'name' => 'arnk',
     'rel' => 'has',
+    'optional' => 'no',
   ),
   array (
     'type' => 'os',
     'name' => 'windows',
     'rel' => 'has',
+    'optional' => 'no',
   ),
   array (
     'type' => 'os',
@@ -319,11 +325,13 @@ $phpunit->assertEquals(array (
     'uri' => 'arnk.example.com/arnk.tgz',
     'name' => 'arnk',
     'rel' => 'has',
+    'optional' => 'no',
   ),
   array (
     'type' => 'os',
     'name' => 'windows',
     'rel' => 'has',
+    'optional' => 'no',
   ),
   array (
     'type' => 'os',
@@ -335,6 +343,7 @@ $phpunit->assertEquals(array (
     'uri' => 'zarnk.example.com/zarnk.tgz',
     'name' => 'zarnk',
     'rel' => 'has',
+    'optional' => 'yes',
   ),
   array (
     'type' => 'pkg',
@@ -390,16 +399,19 @@ $phpunit->assertEquals(array (
     'uri' => 'arnk.example.com/arnk.tgz',
     'name' => 'arnk',
     'rel' => 'has',
+    'optional' => 'no',
   ),
   array (
     'type' => 'ext',
     'name' => 'fooz',
     'rel' => 'has',
+    'optional' => 'no',
   ),
   array (
     'type' => 'os',
     'name' => 'windows',
     'rel' => 'has',
+    'optional' => 'no',
   ),
   array (
     'type' => 'os',
@@ -411,6 +423,7 @@ $phpunit->assertEquals(array (
     'uri' => 'zarnk.example.com/zarnk.tgz',
     'name' => 'zarnk',
     'rel' => 'has',
+    'optional' => 'yes',
   ),
   array (
     'type' => 'pkg',
@@ -466,16 +479,19 @@ $phpunit->assertEquals(array (
     'uri' => 'arnk.example.com/arnk.tgz',
     'name' => 'arnk',
     'rel' => 'has',
+    'optional' => 'no',
   ),
   array (
     'type' => 'ext',
     'name' => 'fooz',
     'rel' => 'has',
+    'optional' => 'no',
   ),
   array (
     'type' => 'os',
     'name' => 'windows',
     'rel' => 'has',
+    'optional' => 'no',
   ),
   array (
     'type' => 'os',
@@ -487,6 +503,7 @@ $phpunit->assertEquals(array (
     'uri' => 'zarnk.example.com/zarnk.tgz',
     'name' => 'zarnk',
     'rel' => 'has',
+    'optional' => 'yes',
   ),
   array (
     'type' => 'pkg',
