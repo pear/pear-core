@@ -102,6 +102,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #6579: PFM2 changelog and license with uri
   * fix Bug #6673: pear install --offline --packagingroot=/blah does not work
   * fix Bug #6674: --packagingroot always uses channel pear.php.net configuration
+  * fix Bug #6690: channel with / will not allow upgrade
  </notes>
  <contents>
   <dir name="/">
@@ -493,6 +494,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>PEAR_Frontend_Gtk</name>
     <channel>pear.php.net</channel>
     <min>0.4.0</min>
+   </package>
+  </group>
+  <group name="gtk2installer" hint="PEAR's PHP-GTK2-based installer">
+   <package>
+    <name>PEAR_Frontend_Gtk2</name>
+    <channel>pear.php.net</channel>
    </package>
   </group>
  </dependencies>
