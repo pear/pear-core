@@ -1063,7 +1063,7 @@ class PEAR_Registry extends PEAR
             if ($ent{0} == '.' || substr($ent, -4) != '.reg') {
                 continue;
             }
-            $channellist[] = substr($ent, 0, -4);
+            $channellist[] = str_replace('_', '/', substr($ent, 0, -4));
         }
         closedir($dp);
         if (!in_array('pear.php.net', $channellist)) {
