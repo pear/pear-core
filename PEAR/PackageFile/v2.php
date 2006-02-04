@@ -128,6 +128,11 @@ class PEAR_PackageFile_v2
     var $_incomplete = true;
 
     /**
+     * @var PEAR_PackageFile_v2_Validator
+     */
+    var $_v2Validator;
+
+    /**
      * The constructor merely sets up the private error stack
      */
     function PEAR_PackageFile_v2()
@@ -1865,7 +1870,8 @@ class PEAR_PackageFile_v2
         if (!isset($this->_packageInfo) || !is_array($this->_packageInfo)) {
             return false;
         }
-        if (!isset($this->_v2Validator)) {
+        if (!isset($this->_v2Validator) ||
+              !is_a($this->_v2Validator, 'PEAR_PackageFile_v2_Validator')) {
             if (!class_exists('PEAR_PackageFile_v2_Validator')) {
                 require_once 'PEAR/PackageFile/v2/Validator.php';
             }
