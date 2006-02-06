@@ -536,7 +536,10 @@ Run post-installation scripts in package <package>, if any exist.
                                 $group['attribs']['hint'] . ')');
                         }
                         $extrainfo[] = 'To install use "pear install ' .
-                            $param->getPackage() . '#featurename"';
+                            $reg->parsedPackageNameToString(
+                                array('package' => $param->getPackage(),
+                                      'channel' => $param->getChannel()), true) .
+                                  '#featurename"';
                     }
                 }
                 if (isset($options['installroot'])) {

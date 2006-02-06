@@ -66,5 +66,9 @@ $phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log 5
 $pf->clearMaintainers();
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

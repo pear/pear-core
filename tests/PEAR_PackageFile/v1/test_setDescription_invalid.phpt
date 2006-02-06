@@ -27,5 +27,9 @@ $phpunit->assertNotTrue($result, 'return 1' );
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'normal validate empty log 1');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

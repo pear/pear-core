@@ -130,5 +130,9 @@ $phpunit->assertEquals(array (
 assertValidation($pf);
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done

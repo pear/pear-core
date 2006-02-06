@@ -16,5 +16,9 @@ $phpunit->assertFalse($pf->dependsOn('TesT', 'pear.poop.net'), 'second test');
 $phpunit->assertFalse($pf->dependsOn('foo', 'pear.php.net'), 'last test');
 echo 'tests done';
 ?>
+--CLEAN--
+<?php
+require_once dirname(__FILE__) . '/teardown.php.inc';
+?>
 --EXPECT--
 tests done
