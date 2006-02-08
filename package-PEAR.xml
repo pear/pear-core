@@ -97,6 +97,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #6579: PFM2 changelog and license with uri
   * fix Bug #6673: pear install --offline --packagingroot=/blah does not work
   * fix Bug #6674: --packagingroot always uses channel pear.php.net configuration
+  * fix Bug #6675: postinstallscript validation fails
   * fix Bug #6690: channel with / will not allow upgrade
   * fix Bug #6692: Optional feature install message needs channel name
   </notes>
