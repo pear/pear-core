@@ -74,6 +74,7 @@ $phpunit->assertEquals(array (
     'foo.php' => 
     array (
       'role' => 'php',
+      'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
     ),
   ),
   'xsdversion' => '1.0',
@@ -201,6 +202,11 @@ Other:
    
 ',
     ),
+  ),
+  '_lastversion' => null,
+  'dirtree' => 
+  array (
+    $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
   ),
 ), $ret, 'return of install');
 $phpunit->assertFileNotExists($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
