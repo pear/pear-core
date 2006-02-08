@@ -100,6 +100,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #6675: postinstallscript validation fails
   * fix Bug #6690: channel with / will not allow upgrade
   * fix Bug #6692: Optional feature install message needs channel name
+  * fix Bug #6716: &quot;pear install -r&quot; errors after install when
+                   attempting &quot;pear list &lt;pkgname&gt;&quot;
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
