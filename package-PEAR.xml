@@ -65,6 +65,12 @@ http://pear.php.net/dtd/package-1.0.xsd">
    <email>timj@php.net</email>
   </maintainer>
   <maintainer>
+   <user>toggg</user>
+   <role>helper</role>
+   <name>Bertrand Gugger</name>
+   <email>toggg@php.net</email>
+  </maintainer>
+  <maintainer>
    <user>mj</user>
    <role>helper</role>
    <name>Martin Jansen</name>
