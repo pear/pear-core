@@ -113,6 +113,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #6692: Optional feature install message needs channel name
   * fix Bug #6716: &quot;pear install -r&quot; errors after install when
                    attempting &quot;pear list &lt;pkgname&gt;&quot;
+  * fix Bug #6735: PEAR_PackageFile::fromTgzFile doesn't work with package.xml
+                   not in root dir
  </notes>
  <contents>
   <dir name="/">
