@@ -66,6 +66,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <active>yes</active>
  </helper>
  <helper>
+  <name>Bertrand Gugge</name>
+  <user>toggg</user>
+  <email>toggg@php.net</email>
+  <active>yes</active>
+ </helper>
+ <helper>
   <name>Martin Jansen</name>
   <user>mj</user>
   <email>mj@php.net</email>
