@@ -733,20 +733,6 @@ used for automated conversion or learning the format.
 
     // {{{ doMakeRPM()
 
-    /*
-
-    (cox)
-
-    TODO:
-        - Fill the rpm dependencies in the template file.
-
-    IDEAS:
-        - Instead of mapping the role to rpm vars, perhaps it's better
-          to use directly the pear cmd to install the files by itself
-          in %postrun so:
-          pear -d php_dir=%{_libdir}/php/pear -d test_dir=.. <package>
-    */
-
     function doMakeRPM($command, $options, $params)
     {
         require_once 'System.php';
