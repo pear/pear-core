@@ -730,6 +730,23 @@ used for automated conversion or learning the format.
         $a = &new PEAR_Installer($ui);
         return $a;
     }
+    
+    /**
+     * For unit testing purposes
+     */
+    function &getCommandPackaging(&$ui, &$config)
+    {
+        if (!class_exists('PEAR_Command_Packaging')) {
+            @include_once 'PEAR/Command/Packaging.php';
+        }
+        
+        if (class_exists('PEAR_Command_Packaging')) {
+            $a = &new PEAR_Command_Packaging($ui, $config);
+        } else {
+            $a = null;
+        }
+        return $a;
+    }
 
     // {{{ doMakeRPM()
 
@@ -737,6 +754,22 @@ used for automated conversion or learning the format.
     {
         require_once 'System.php';
         require_once 'Archive/Tar.php';
+
+        // Check to see if PEAR_Command_Packaging is installed, and
+        // transparently switch to use the "make-rpm-spec" command from it
+        // instead, if it does. Otherwise, continue to use the old version
+        // of "makerpm" supplied with this package (PEAR).
+        $packaging_cmd = $this->getCommandPackaging($this->ui, $this->config);
+        if ($packaging_cmd !== null) {
+            $this->ui->outputData('PEAR_Command_Packaging is installed; using '.
+                'newer "make-rpm-spec" command instead');
+            return $packaging_cmd->run('make-rpm-spec', $options, $params);
+        } else {
+            $this->ui->outputData('WARNING: "pear makerpm" is now deprecated; an '.
+              'improved version is available via "pear make-rpm-spec", which '.
+              'is part of PEAR_Command_Packaging');
+        }
+        
         if (sizeof($params) != 1) {
             return $this->raiseError("bad parameter(s), try \"help $command\"");
         }
