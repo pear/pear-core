@@ -5,6 +5,9 @@ makerpm with fall-through to PEAR_Command_Packaging
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
+if (!@include_once 'PEAR/Command/Packaging.php') {
+    echo 'skip: requires PEAR_Command_Packaging package';
+}
 ?>
 --FILE--
 <?php
