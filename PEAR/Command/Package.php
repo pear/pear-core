@@ -767,7 +767,7 @@ used for automated conversion or learning the format.
         } else {
             $this->ui->outputData('WARNING: "pear makerpm" is now deprecated; an '.
               'improved version is available via "pear make-rpm-spec", which '.
-              'is part of PEAR_Command_Packaging');
+              'is available by installing PEAR_Command_Packaging');
         }
         
         if (sizeof($params) != 1) {
