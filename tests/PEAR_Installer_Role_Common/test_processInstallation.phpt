@@ -55,7 +55,7 @@ $m->setSetupField('locationconfig', false);
 $phpunit->assertFalse($m->processInstallation($pf2, array(), '', ''), 'no locationconfig');
 $m->setSetupField('locationconfig', 'data_dir');
 $m->setSetupField('honorsbaseinstall', false);
-$phpunit->showall();
+$m->setSetupField('unusualbaseinstall', false);
 $ds = DIRECTORY_SEPARATOR;
 $phpunit->assertEquals(array (
   0 => $temp_path . $ds . 'data' . $ds . 'foo',
