@@ -171,4 +171,166 @@ class Net_FTP extends PEAR
         $f->_dirsExisting = array_flip($dirs);
     }
 }
+require_once 'PEAR/RemoteInstaller.php';
+class test_PEAR_RemoteInstaller extends PEAR_RemoteInstaller {
+    function download($packages, $options, &$config, &$installpackages,
+                      &$errors, $installed = false, $willinstall = false, $state = false)
+    {
+        // trickiness: initialize here
+        $this->PEAR_Downloader($this->ui, $options, $config);
+        $this->_remote = &new test_PEAR_Remote($config);
+        $ret = PEAR_Downloader::download($packages);
+        $errors = $this->getErrorMsgs();
+        $installpackages = $this->getDownloadedPackages();
+        trigger_error("PEAR Warning: PEAR_Installer::download() is deprecated " .
+                      "in favor of PEAR_Downloader class", E_USER_WARNING);
+        return $ret;
+    }
+
+    /**
+     * For simpler unit-testing
+     * @param PEAR_Config
+     * @param int
+     * @param string
+     */
+    function &getPackagefileObject(&$c, $d, $dir = null)
+    {
+        $a = &new test_PEAR_PackageFile($c, $d, $dir);
+        return $a;
+    }
+    
+    function downloadHttp($url, &$ui, $save_dir = '.', $callback = null)
+    {
+//        return parent::downloadHttp($url, $ui, $save_dir, $callback);
+        if ($callback) {
+            call_user_func($callback, 'setup', array(&$ui));
+        }
+        $info = parse_url($url);
+        if (!isset($info['scheme']) || $info['scheme'] != 'http') {
+            return PEAR::raiseError('Cannot download non-http URL "' . $url . '"');
+        }
+        if (!isset($info['host'])) {
+            return PEAR::raiseError('Cannot download from non-URL "' . $url . '"');
+        } else {
+            $host = @$info['host'];
+            $port = @$info['port'];
+            $path = @$info['path'];
+        }
+        if (isset($this)) {
+            $config = &$this->config;
+        } else {
+            $config = &PEAR_Config::singleton();
+        }
+        $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
+        if ($proxy = parse_url($config->get('http_proxy'))) {
+            $proxy_host = @$proxy['host'];
+            $proxy_port = @$proxy['port'];
+            $proxy_user = @$proxy['user'];
+            $proxy_pass = @$proxy['pass'];
+
+            if ($proxy_port == '') {
+                $proxy_port = 8080;
+            }
+            if ($callback) {
+                call_user_func($callback, 'message', "Using HTTP proxy $host:$port");
+            }
+        }
+        if (empty($port)) {
+            $port = 80;
+        }
+        // use _pearweb to get file
+        $retrieved = explode("\n", $this->_remote->_pearweb->receiveHttp($url));
+        $headers = array();
+        $line = array_shift($retrieved);
+        while (strlen(trim($line))) {
+            if (preg_match('/^([^:]+):\s+(.*)\s*$/', $line, $matches)) {
+                $headers[strtolower($matches[1])] = trim($matches[2]);
+            } elseif (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
+                if ($matches[1] != 200) {
+                    return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)");
+                }
+            }
+            $line = array_shift($retrieved);
+        }
+        $retrieved = join("\n", $retrieved);
+        if (isset($headers['content-disposition']) &&
+            preg_match('/\sfilename=\"([^;]*\S)\"\s*(;|$)/', $headers['content-disposition'], $matches)) {
+            $save_as = basename($matches[1]);
+        } else {
+            $save_as = basename($url);
+        }
+        if ($callback) {
+            $tmp = call_user_func($callback, 'saveas', $save_as);
+            if ($tmp) {
+                $save_as = $tmp;
+            }
+        }
+        $dest_file = $save_dir . DIRECTORY_SEPARATOR . $save_as;
+        if (!$wp = @fopen($dest_file, 'wb')) {
+            fclose($fp);
+            if ($callback) {
+                call_user_func($callback, 'writefailed', array($dest_file, $php_errormsg));
+            }
+            return PEAR::raiseError("could not open $dest_file for writing");
+        }
+        if (isset($headers['content-length'])) {
+            $length = $headers['content-length'];
+        } else {
+            $length = -1;
+        }
+        $bytes = 0;
+        if ($callback) {
+            call_user_func($callback, 'start', array(basename($dest_file), $length));
+        }
+        $start = 0;
+        while ($start < strlen($retrieved) - 1) {
+            $data = substr($retrieved, $start, 1024);
+            $start += 1024;
+            $bytes += strlen($data);
+            if ($callback) {
+                call_user_func($callback, 'bytesread', $bytes);
+            }
+            if (!@fwrite($wp, $data)) {
+                if ($callback) {
+                    call_user_func($callback, 'writefailed', array($dest_file, $php_errormsg));
+                }
+                return PEAR::raiseError("$dest_file: write failed ($php_errormsg)");
+            }
+        }
+        fclose($wp);
+        if ($callback) {
+            call_user_func($callback, 'done', $bytes);
+        }
+        return $dest_file;
+    }
+
+    function log($level, $msg)
+    {
+        global $fakelog;
+        if (isset($fakelog)) {
+            $fakelog->log($level, $msg);
+        } else {
+            return parent::log($level, $msg);
+        }
+    }
+
+    function &getDependency2($c, $i, $p, $s)
+    {
+        $a = &test_PEAR_Dependency2::singleton($c, $i, $p, $s);
+        return $a;
+    }
+
+    /**
+     * For simpler unit-testing
+     * @param PEAR_Config
+     * @param array
+     * @param array
+     * @param int
+     */
+    function &getDependency2Object(&$c, $i, $p, $s)
+    {
+        $z = &test_PEAR_Dependency2::singleton($c, $i, $p, $s);
+        return $z;
+    }
+}
 ?>
