@@ -155,8 +155,14 @@ and uninstall).
 
     function doConfigShow($command, $options, $params)
     {
+        if (is_array($params)) {
+            $layer = isset($params[0]) ? $params[0] : NULL;
+        } else {
+            $layer = NULL;
+        }
+
         // $params[0] -> the layer
-        if ($error = $this->_checkLayer(@$params[0])) {
+        if ($error = $this->_checkLayer($layer)) {
             return $this->raiseError("config-show:$error");
         }
         $keys = $this->config->getKeys();
@@ -170,7 +176,7 @@ and uninstall).
         $data = array('caption' => 'Configuration (channel ' . $channel . '):');
         foreach ($keys as $key) {
             $type = $this->config->getType($key);
-            $value = $this->config->get($key, @$params[0], $channel);
+            $value = $this->config->get($key, $layer, $channel);
             if ($type == 'password' && $value) {
                 $value = '********';
             }
