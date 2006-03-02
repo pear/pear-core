@@ -126,7 +126,7 @@ class PEAR_Task_Replace extends PEAR_Task_Common
                 }
                 if ($a['to'] == 'master_server') {
                     $chan = $this->registry->getChannel($pkg->getChannel());
-                    if ($chan) {
+                    if (!PEAR::isError($chan)) {
                         $to = $chan->getServer();
                     } else {
                         $this->logger->log(0, "$dest: invalid pear-config replacement: $a[to]");

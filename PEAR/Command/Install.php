@@ -371,6 +371,9 @@ Run post-installation scripts in package <package>, if any exist.
                 }
                 $this->config->set('default_channel', $channel);
                 $chan = &$reg->getChannel($channel);
+                if (PEAR::isError($chan)) {
+                    return $this->raiseError($chan);
+                }
                 if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
                       $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
                     $dorest = true;

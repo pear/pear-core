@@ -536,6 +536,9 @@ class PEAR_Registry extends PEAR
             return false;
         }
         $channel = $this->_getChannel($channel);
+        if (PEAR::isError($channel)) {
+            return $channel;
+        }
         return $channel->getAlias();
     }    
     // }}}
@@ -836,6 +839,9 @@ class PEAR_Registry extends PEAR
                 return false;
             }
             $checker = $this->_getChannel($channel->getName());
+            if (PEAR::isError($channel)) {
+                return $channel;
+            }
             if ($channel->getAlias() != $checker->getAlias()) {
                 @unlink($this->_getChannelAliasFileName($checker->getAlias()));
             }
@@ -1288,7 +1294,7 @@ class PEAR_Registry extends PEAR
     /**
      * @param string channel name
      * @param bool whether to strictly retrieve channel names
-     * @return PEAR_ChannelFile|false
+     * @return PEAR_ChannelFile|PEAR_Error
      * @access private
      */
     function &_getChannel($channel, $noaliases = false)
@@ -1298,9 +1304,9 @@ class PEAR_Registry extends PEAR
             if (!class_exists('PEAR_ChannelFile')) {
                 require_once 'PEAR/ChannelFile.php';
             }
-            $ch = &PEAR_ChannelFile::fromArray($this->_channelInfo($channel, $noaliases));
+            $ch = &PEAR_ChannelFile::fromArrayWithErrors($this->_channelInfo($channel, $noaliases));
         }
-        if ($ch) {
+        if ($ch->validate()) {
             return $ch;
         }
         if ($this->_getChannelFromAlias($channel) == 'pear.php.net') {
@@ -1343,6 +1349,10 @@ class PEAR_Registry extends PEAR
             $private->setSummary('Pseudo-channel for static packages');
             return $private;
         }
+        foreach ($ch->getErrors(true) as $err) {
+            $message = $err['message'] . "\n";
+        }
+        $ch = PEAR::raiseError($message);
         return $ch;
     }
 
@@ -1654,6 +1664,9 @@ class PEAR_Registry extends PEAR
         $ret = $this->_updatePackage($package, $info, $merge);
         $this->_unlock();
         if ($ret) {
+            if (!class_exists('PEAR_PackageFile_v1')) {
+                require_once 'PEAR/PackageFile/v1.php';
+            }
             $pf = new PEAR_PackageFile_v1;
             $pf->setConfig($this->_config);
             $pf->fromArray($this->packageInfo($package));
@@ -1691,7 +1704,7 @@ class PEAR_Registry extends PEAR
     /**
      * @param string channel name
      * @param bool whether to strictly return raw channels (no aliases)
-     * @return PEAR_ChannelFile|false
+     * @return PEAR_ChannelFile|PEAR_Error
      */
     function &getChannel($channel, $noaliases = false)
     {
@@ -1792,7 +1805,11 @@ class PEAR_Registry extends PEAR
             return $e;
         }
         foreach ($this->_listChannels() as $channel) {
-            $ret[] = &$this->_getChannel($channel);
+            $e = &$this->_getChannel($channel);
+            if (PEAR::isError($e)) {
+                continue;
+            }
+            $ret[] = $e;
         }
         $this->_unlock();
         return $ret;

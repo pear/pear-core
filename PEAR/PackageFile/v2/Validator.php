@@ -226,7 +226,7 @@ class PEAR_PackageFile_v2_Validator
         $this->_validateRelease();
         if (!$this->_stack->hasErrors()) {
             $chan = $this->_pf->_registry->getChannel($this->_pf->getChannel(), true);
-            if (!$chan) {
+            if (PEAR::isError($chan)) {
                 $this->_unknownChannel($this->_pf->getChannel());
             } else {
                 $valpack = $chan->getValidationPackage();

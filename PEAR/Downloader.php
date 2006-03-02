@@ -301,6 +301,10 @@ class PEAR_Downloader extends PEAR_Common
                         require_once 'System.php';
                     }
                     $curchannel = &$this->_registry->getChannel($params[$i]->getChannel());
+                    if (PEAR::isError($curchannel)) {
+                        PEAR::staticPopErrorHandling();
+                        return $this->raiseError($curchannel);
+                    }
                     $a = $this->downloadHttp('http://' . $params[$i]->getChannel() .
                         '/channel.xml', $this->ui,
                         System::mktemp(array('-d')), null, $curchannel->lastModified());
@@ -719,6 +723,9 @@ class PEAR_Downloader extends PEAR_Common
             } while (false);
         }
         $chan = &$this->_registry->getChannel($parr['channel']);
+        if (PEAR::isError($chan)) {
+            return $chan;
+        }
         $version = $this->_registry->packageInfo($parr['package'], 'version',
             $parr['channel']);
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
@@ -857,6 +864,9 @@ class PEAR_Downloader extends PEAR_Common
             unset($parr['state']);
         }
         $chan = &$this->_registry->getChannel($remotechannel);
+        if (PEAR::isError($chan)) {
+            return $chan;
+        }
         $version = $this->_registry->packageInfo($dep['name'], 'version',
             $remotechannel);
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
@@ -964,6 +974,9 @@ class PEAR_Downloader extends PEAR_Common
             $package = "http://pear.php.net/get/$package";
         } else {
             $chan = $this->_registry->getChannel($channel);
+            if (PEAR::isError($chan)) {
+                return '';
+            }
             $package = "http://" . $chan->getServer() . "/get/$package";
         }
         if (!extension_loaded("zlib")) {
