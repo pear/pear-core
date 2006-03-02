@@ -108,6 +108,9 @@ password from your user configuration.',
         $reg = &$this->config->getRegistry();
         $channel = $this->config->get('default_channel');
         $chan = $reg->getChannel($channel);
+        if (PEAR::isError($chan)) {
+            return $this->raiseError($chan);
+        }
         $server = $this->config->get('preferred_mirror');
         $remote = &$this->config->getRemote();
         $username = $this->config->get('username');
@@ -166,6 +169,9 @@ password from your user configuration.',
         $reg = &$this->config->getRegistry();
         $channel = $this->config->get('default_channel');
         $chan = $reg->getChannel($channel);
+        if (PEAR::isError($chan)) {
+            return $this->raiseError($chan);
+        }
         $server = $this->config->get('preferred_mirror');
         $this->ui->outputData("Logging out from $server.", $command);
         $this->config->remove('username');

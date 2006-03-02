@@ -25,7 +25,7 @@ $phpunit->assertErrors(array(
 ), 'pear');
 $e = $command->run('channel-discover', array(), array('zornk.net'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 'Discovery of channel "zornk.net" failed'),
+    array('package' => 'PEAR_Error', 'message' => 'Discovery of channel "zornk.net" failed (channel-add: Cannot open "http://zornk.net/channel.xml")'),
 ), 'zornk');
 echo 'tests done';
 ?>

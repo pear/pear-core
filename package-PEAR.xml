@@ -78,38 +78,18 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.7</version>
-  <date>2006-02-27</date>
+  <version>1.4.8</version>
+  <date>2006-03-06</date>
   <license>PHP License</license>
   <state>stable</state>
   <notes>
-  Minor bugfix release
-  * Prevent packaging of release candidate releases with versions like 1.0.0rc1
-    version_compare() only understands upper-case 1.0.0RC1
-  * implement CLEAN section in .phpt tests
-  * implement run-tests command for phpunit-based tests
-  * implement Request #6039: setFrontendObject needed to allow objects passed
-  * fix Bug #6075: unnecessary validation of maintainers can break PEAR_PFM
-  * fix Bug #6076: optional is not set for conversion of package2.xml to "has" rel
-  * fix Bug #6077: PEAR_PackageFile_Parser_v2 should return by reference
-  * fix Bug #6273: pear download-all fails
-  * fix Bug #6383: incomplete PEAR::Error message on addReplacement()
-  * fix Bug #6445: PEAR::registerShutdownFunc doesn't work in static calls
-  * fix Bug #6480: pear install --installroot option fails for pecl packages [timj]
-  * fix Bug #6510: status active of a maintainer cannot be change
-  * fix Bug #6537: wrong export compatible v1 dependencies list with exclude limit
-  * fix Bug #6559: pear should ignore safemode/open_basedir
-  * fix Bug #6576: PFM2 run in trouble with sessions
-  * fix Bug #6579: PFM2 changelog and license with uri
-  * fix Bug #6673: pear install --offline --packagingroot=/blah does not work
-  * fix Bug #6674: --packagingroot always uses channel pear.php.net configuration
-  * fix Bug #6675: postinstallscript validation fails
-  * fix Bug #6690: channel with / will not allow upgrade
-  * fix Bug #6692: Optional feature install message needs channel name
-  * fix Bug #6716: &quot;pear install -r&quot; errors after install when
-                   attempting &quot;pear list &lt;pkgname&gt;&quot;
-  * fix Bug #6735: PEAR_PackageFile::fromTgzFile doesn't work with package.xml
-                   not in root dir
+  CRITICAL BUGFIX RELEASE
+  
+  Channels with &quot;-&quot; in their name were suddenly invalid, and
+  caused crashes in many places due to improper error handling
+  * fix Bug #6960: channels are not allowed to have &quot;-&quot; in their name
+  * fix critical Bug #6969: PEAR list-upgrades crashes
+  * fix Bug #6991: Class 'PEAR_PackageFile_v1' not found in Registry.php at line 1657
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -620,6 +600,41 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #6269: System::which() returns silliness if passed null
   * fix Bug #6322: Installer fails to follow redirects [patch by Bertrand Gugger]
   * fix Request #6119: Add PEAR_Frontend_Gtk2 support to PEAR
+   </notes>
+  </release>
+  <release>
+   <version>1.4.7</version>
+   <date>2006-02-27</date>
+   <license>PHP License</license>
+   <state>stable</state>
+   <notes>
+  Minor bugfix release
+  * Prevent packaging of release candidate releases with versions like 1.0.0rc1
+    version_compare() only understands upper-case 1.0.0RC1
+  * implement CLEAN section in .phpt tests
+  * implement run-tests command for phpunit-based tests
+  * implement Request #6039: setFrontendObject needed to allow objects passed
+  * fix Bug #6075: unnecessary validation of maintainers can break PEAR_PFM
+  * fix Bug #6076: optional is not set for conversion of package2.xml to "has" rel
+  * fix Bug #6077: PEAR_PackageFile_Parser_v2 should return by reference
+  * fix Bug #6273: pear download-all fails
+  * fix Bug #6383: incomplete PEAR::Error message on addReplacement()
+  * fix Bug #6445: PEAR::registerShutdownFunc doesn't work in static calls
+  * fix Bug #6480: pear install --installroot option fails for pecl packages [timj]
+  * fix Bug #6510: status active of a maintainer cannot be change
+  * fix Bug #6537: wrong export compatible v1 dependencies list with exclude limit
+  * fix Bug #6559: pear should ignore safemode/open_basedir
+  * fix Bug #6576: PFM2 run in trouble with sessions
+  * fix Bug #6579: PFM2 changelog and license with uri
+  * fix Bug #6673: pear install --offline --packagingroot=/blah does not work
+  * fix Bug #6674: --packagingroot always uses channel pear.php.net configuration
+  * fix Bug #6675: postinstallscript validation fails
+  * fix Bug #6690: channel with / will not allow upgrade
+  * fix Bug #6692: Optional feature install message needs channel name
+  * fix Bug #6716: &quot;pear install -r&quot; errors after install when
+                   attempting &quot;pear list &lt;pkgname&gt;&quot;
+  * fix Bug #6735: PEAR_PackageFile::fromTgzFile doesn't work with package.xml
+                   not in root dir
    </notes>
   </release>
  </changelog>

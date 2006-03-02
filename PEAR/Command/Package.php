@@ -823,6 +823,9 @@ used for automated conversion or learning the format.
                 $alias = 'PEAR';
             } else {
                 $chan = &$reg->getChannel($pf->getChannel());
+                if (PEAR::isError($chan)) {
+                    return $this->raiseError($chan);
+                }
                 $alias = $chan->getAlias();
                 $alias = strtoupper($alias);
                 $info['possible_channel'] = $pf->getChannel() . '/';
@@ -892,6 +895,9 @@ used for automated conversion or learning the format.
         foreach ($cfg as $k) {
             if ($k == 'master_server') {
                 $chan = $reg->getChannel($pf->getChannel());
+                if (PEAR::isError($chan)) {
+                    return $this->raiseError($chan);
+                }
                 $info[$k] = $chan->getServer();
                 continue;
             }
@@ -918,6 +924,9 @@ used for automated conversion or learning the format.
                     if (isset($dep['channel']) && $dep['channel'] != 'pear.php.net' &&
                           $dep['channel'] != 'pecl.php.net') {
                         $chan = &$reg->getChannel($dep['channel']);
+                        if (PEAR::isError($chan)) {
+                            return $this->raiseError($chan);
+                        }
                         $package = strtoupper($chan->getAlias()) . '::' . $dep['name'];
                     } else {
                         $package = 'PEAR::' . $dep['name'];
@@ -961,6 +970,9 @@ used for automated conversion or learning the format.
                     foreach ($deps['required']['package'] as $dep) {
                         if ($dep['channel'] != 'pear.php.net' &&  $dep['channel'] != 'pecl.php.net') {
                             $chan = &$reg->getChannel($dep['channel']);
+                            if (PEAR::isError($chan)) {
+                                return $this->raiseError($chan);
+                            }
                             $package = strtoupper($chan->getAlias()) . '::' . $dep['name'];
                         } else {
                             $package = 'PEAR::' . $dep['name'];
