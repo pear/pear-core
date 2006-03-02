@@ -190,7 +190,7 @@ and uninstall).
         foreach ($this->config->getLayers() as $layer) {
             $data['data']['Config Files'][] = array(ucfirst($layer) . ' Configuration File', 'Filename' , $this->config->getConfFile($layer));
         }
-        
+
         $this->ui->outputData($data, $command);
         return true;
     }
@@ -200,27 +200,38 @@ and uninstall).
 
     function doConfigGet($command, $options, $params)
     {
-        // $params[0] -> the parameter
-        // $params[1] -> the layer
-        if ($error = $this->_checkLayer(@$params[1])) {
-            return $this->raiseError("config-get:$error");
+        if (!is_array($params)) {
+            $args_cnt = 0;
+        } else {
+            $args_cnt  = count($params);
         }
-        $channel = isset($options['channel']) ? $options['channel'] :
-            $this->config->get('default_channel');
+
+        switch ($args_cnt) {
+            case 1:
+                $config_key = $params[0];
+                $layer = NULL;
+                break;
+            case 2:
+                $config_key = $params[0];
+                $layer = $params[1];
+                if ($error = $this->_checkLayer($layer)) {
+                    return $this->raiseError("config-get:$error");
+                }
+                break;
+            case 0:
+            default:
+                return $this->raiseError("config-get expects 1 or 2 parameters");
+        }
+
+        $channel = isset($options['channel']) ? $options['channel'] : $this->config->get('default_channel');
         $reg = &$this->config->getRegistry();
+
         if (!$reg->channelExists($channel)) {
             return $this->raiseError('Channel "' . $channel . '" does not exist');
         }
-        if (sizeof($params) < 1 || sizeof($params) > 2) {
-            return $this->raiseError("config-get expects 1 or 2 parameters");
-        } else {
-            if (count($params) == 1) {
-                $layer = null;
-            } else {
-                $layer = $params[1];
-            }
-            $this->ui->outputData($this->config->get($params[0], $layer, $channel), $command);
-        }
+
+        $this->ui->outputData($this->config->get($config_key, $layer, $channel), $command);
+
         return true;
     }
 
@@ -378,7 +389,7 @@ and uninstall).
                 array(ucfirst($layer) . ' Configuration File', 'Filename' ,
                     $config->getConfFile($layer));
         }
-        
+
         $this->ui->outputData($data, 'config-show');
         return true;
     }
