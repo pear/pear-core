@@ -258,7 +258,6 @@ class PEAR_Command_Common extends PEAR
             // look for shortcuts
             foreach (array_keys($this->commands) as $cmd) {
                 if (isset($this->commands[$cmd]['shortcut']) && $this->commands[$cmd]['shortcut'] == $command) {
-
                     if (empty($this->commands[$cmd]['function'])) {
                         return $this->raiseError("unknown command `$command'");
                     } else {
@@ -268,6 +267,8 @@ class PEAR_Command_Common extends PEAR
                     break;
                 }
             }
+        } else {
+            $func = $this->commands[$command]['function'];
         }
         return $this->$func($command, $options, $params);
     }
