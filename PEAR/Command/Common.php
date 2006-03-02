@@ -254,16 +254,17 @@ class PEAR_Command_Common extends PEAR
 
     function run($command, $options, $params)
     {
-        $func = @$this->commands[$command]['function'];
-        if (empty($func)) {
+        if (empty($this->commands[$command]['function'])) {
             // look for shortcuts
             foreach (array_keys($this->commands) as $cmd) {
-                if (@$this->commands[$cmd]['shortcut'] == $command) {
-                    $command = $cmd;
-                    $func = @$this->commands[$command]['function'];
-                    if (empty($func)) {
+                if (isset($this->commands[$cmd]['shortcut']) && $this->commands[$cmd]['shortcut'] == $command) {
+
+                    if (empty($this->commands[$cmd]['function'])) {
                         return $this->raiseError("unknown command `$command'");
+                    } else {
+                        $func = $this->commands[$cmd]['function'];
                     }
+                    $command = $cmd;
                     break;
                 }
             }
