@@ -204,10 +204,21 @@ class PEAR_REST
         if ($cacheid === null && $nochange) {
             $cacheid = unserialize(implode('', file($cacheidfile)));
         }
+
         $fp = @fopen($cacheidfile, 'wb');
         if (!$fp) {
-            return false;
+            $cache_dir = $this->config->get('cache_dir');
+            if (!is_dir($cache_dir)) {
+                System::mkdir(array('-p', $cache_dir));
+                $fp = @fopen($cacheidfile, 'wb');
+                if (!$fp) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         }
+
         if ($nochange) {
             fwrite($fp, serialize(array(
                 'age'        => time(),
