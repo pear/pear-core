@@ -1306,7 +1306,14 @@ class PEAR_Registry extends PEAR
             }
             $ch = &PEAR_ChannelFile::fromArrayWithErrors($this->_channelInfo($channel, $noaliases));
         }
-        if ($ch->validate()) {
+        if ($ch) {
+            if ($ch->validate()) {
+                return $ch;
+            }
+            foreach ($ch->getErrors(true) as $err) {
+                $message = $err['message'] . "\n";
+            }
+            $ch = PEAR::raiseError($message);
             return $ch;
         }
         if ($this->_getChannelFromAlias($channel) == 'pear.php.net') {
@@ -1349,10 +1356,6 @@ class PEAR_Registry extends PEAR
             $private->setSummary('Pseudo-channel for static packages');
             return $private;
         }
-        foreach ($ch->getErrors(true) as $err) {
-            $message = $err['message'] . "\n";
-        }
-        $ch = PEAR::raiseError($message);
         return $ch;
     }
 
@@ -1712,6 +1715,9 @@ class PEAR_Registry extends PEAR
             return $e;
         }
         $ret = &$this->_getChannel($channel, $noaliases);
+        if (!$ret) {
+            return PEAR::raiseError('Unknown channel: ' . $channel);
+        }
         $this->_unlock();
         return $ret;
     }

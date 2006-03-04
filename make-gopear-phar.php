@@ -55,7 +55,7 @@ $pkg = &new PEAR_PackageFile($config);
 $pf = $pkg->fromPackageFile($peardir . DIRECTORY_SEPARATOR . 'package2.xml', PEAR_VALIDATE_NORMAL);
 $pearver = $pf->getVersion();
 
-$creator = new PHP_Archive_Creator('index.php', true);
+$creator = new PHP_Archive_Creator('index.php', true, 'go-pear.phar');
 foreach ($packages as $package) {
     echo "adding PEAR/go-pear-tarballs/$package\n";
     $creator->addFile("PEAR/go-pear-tarballs/$package", "PEAR/go-pear-tarballs/$package");
@@ -185,7 +185,7 @@ $commandcontents = str_replace(
         "require_once '",
         "include_once '",
         "require_once str_replace('_',",
-        "@ackage_version@",
+        "@package_version@",
     ),
     array(
         "require_once 'phar://go-pear.phar/",

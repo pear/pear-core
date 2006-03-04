@@ -96,6 +96,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix critical Bug #6969: PEAR list-upgrades crashes
   * fix Bug #6991: Class 'PEAR_PackageFile_v1' not found in Registry.php at line 1657
   * fix Bug #7008: PEAR_Frontend::setFrontendObject doesn't set the object
+  * fix Bug #7015: install a package.tgz with unknown channel, fatal error in PEAR/Registry.php
  </notes>
  <contents>
   <dir name="/">
