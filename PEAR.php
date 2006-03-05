@@ -230,6 +230,12 @@ class PEAR
     function &getStaticProperty($class, $var)
     {
         static $properties;
+        if (!isset($properties[$class])) {
+            $properties[$class] = array();
+        }
+        if (!array_key_exists($properties[$class][$var])) {
+            $properties[$class][$var] = null;
+        }
         return $properties[$class][$var];
     }
 
@@ -767,7 +773,7 @@ function _PEAR_call_destructors()
         sizeof($_PEAR_destructor_object_list))
     {
         reset($_PEAR_destructor_object_list);
-        if (@PEAR::getStaticProperty('PEAR', 'destructlifo')) {
+        if (PEAR::getStaticProperty('PEAR', 'destructlifo')) {
             $_PEAR_destructor_object_list = array_reverse($_PEAR_destructor_object_list);
         }
         while (list($k, $objref) = each($_PEAR_destructor_object_list)) {
@@ -859,7 +865,7 @@ class PEAR_Error
         $this->mode      = $mode;
         $this->userinfo  = $userinfo;
         if (function_exists("debug_backtrace")) {
-            if (@!PEAR::getStaticProperty('PEAR_Error', 'skiptrace')) {
+            if (!PEAR::getStaticProperty('PEAR_Error', 'skiptrace')) {
                 $this->backtrace = debug_backtrace();
             }
         }
