@@ -115,7 +115,7 @@ password from your user configuration.',
         $remote = &$this->config->getRemote();
         $username = $this->config->get('username');
         if (empty($username)) {
-            $username = @$_ENV['USER'];
+            $username = isset($_ENV['USER']) ? $_ENV['USER'] : null;
         }
         $this->ui->outputData("Logging in to $server.", $command);
         

@@ -345,13 +345,13 @@ List the files in an installed package.
                     $contents = implode('', file($loc));
                 }
             } else {
-                $fp = @fopen($params[0], 'r');
-                if (!$fp) {
-                    if (@file_exists($params[0])) {
+                if (file_exists($params[0])) {
+                    $fp = fopen($params[0], 'r');
+                    if (!$fp) {
                         return $this->raiseError('Cannot open "' . $params[0] . '"');
-                    } else {
-                        return $this->raiseError('Unknown channel "' . $channel . '"');
                     }
+                } else {
+                    return $this->raiseError('Unknown channel "' . $channel . '"');
                 }
                 $contents = '';
                 while (!feof($fp)) {
@@ -542,8 +542,10 @@ List the files in an installed package.
                 $contents = implode('', file($loc));
             }
         } else {
-            $lastmodified = false;
-            $fp = @fopen($params[0], 'r');
+            $lastmodified = $fp = false;
+            if (file_exists($params[0])) {
+                $fp = fopen($params[0], 'r');
+            }
             if (!$fp) {
                 return $this->raiseError('channel-add: cannot open "' . $params[0] . '"');
             }
@@ -660,7 +662,10 @@ List the files in an installed package.
                     $contents = implode('', file($loc));
                 }
             } else {
-                $fp = @fopen($params[0], 'r');
+                $fp = false;
+                if (file_exists($params[0])) {
+                    $fp = fopen($params[0], 'r');
+                }
                 if (!$fp) {
                     return $this->raiseError("Cannot open " . $params[0]);
                 }
