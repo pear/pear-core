@@ -35,7 +35,9 @@ $GLOBALS['_System_temp_files'] = array();
 * Unix and Windows. The names and usage has been taken from its respectively
 * GNU commands. The functions will return (bool) false on error and will
 * trigger the error with the PHP trigger_error() function (you can silence
-* the error by prefixing a '@' sign after the function call).
+* the error by prefixing a '@' sign after the function call, but this
+* is not recommended practice.  Instead use an error handler with
+* {@link set_error_handler()}).
 *
 * Documentation on this class you can find in:
 * http://pear.php.net/manual/
@@ -248,7 +250,8 @@ class System
         if (isset($create_parents)) {
             foreach($opts[1] as $dir) {
                 $dirstack = array();
-                while (!@is_dir($dir) && $dir != DIRECTORY_SEPARATOR) {
+                while ((!file_exists($dir) || !is_dir($dir)) &&
+                        $dir != DIRECTORY_SEPARATOR) {
                     array_unshift($dirstack, $dir);
                     $dir = dirname($dir);
                 }
@@ -264,7 +267,7 @@ class System
             }
         } else {
             foreach($opts[1] as $dir) {
-                if (!@is_dir($dir) && !mkdir($dir, $mode)) {
+                if ((@file_exists($dir) || !is_dir($dir)) && !mkdir($dir, $mode)) {
                     $ret = false;
                 }
             }
@@ -306,6 +309,7 @@ class System
                 $files[] = $args[$i];
             }
         }
+        $outputfd = false;
         if (isset($mode)) {
             if (!$outputfd = fopen($outputfile, $mode)) {
                 $err = System::raiseError("Could not open $outputfile");
@@ -319,7 +323,7 @@ class System
                 continue;
             }
             while ($cont = fread($fd, 2048)) {
-                if (isset($outputfd)) {
+                if (is_resource($outputfd)) {
                     fwrite($outputfd, $cont);
                 } else {
                     $ret .= $cont;
@@ -327,7 +331,7 @@ class System
             }
             fclose($fd);
         }
-        if (@is_resource($outputfd)) {
+        if (is_resource($outputfd)) {
             fclose($outputfd);
         }
         return $ret;
