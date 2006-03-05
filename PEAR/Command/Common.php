@@ -145,7 +145,12 @@ class PEAR_Command_Common extends PEAR
         if (isset($shortcuts[$command])) {
             $command = $shortcuts[$command];
         }
-        return @$this->commands[$command]['options'];
+        if (isset($this->commands[$command]) &&
+              isset($this->commands[$command]['options'])) {
+            return $this->commands[$command]['options'];
+        } else {
+            return null;
+        }
     }
 
     // }}}
@@ -192,12 +197,19 @@ class PEAR_Command_Common extends PEAR
     function getHelp($command)
     {
         $config = &PEAR_Config::singleton();
-        $help = @$this->commands[$command]['doc'];
+        if (!isset($this->commands[$command])) {
+            return "No such command \"$command\"";
+        }
+        $help = null;
+        if (isset($this->_commands[$command]['doc'])) {
+            $help = $this->commands[$command]['doc'];
+        }
         if (empty($help)) {
             // XXX (cox) Fallback to summary if there is no doc (show both?)
-            if (!$help = @$this->commands[$command]['summary']) {
+            if (!isset($this->commands[$command]['summary'])) {
                 return "No help for command \"$command\"";
             }
+            $help = $this->commands[$command]['summary'];
         }
         if (preg_match_all('/{config\s+([^\}]+)}/e', $help, $matches)) {
             foreach($matches[0] as $k => $v) {
@@ -223,7 +235,7 @@ class PEAR_Command_Common extends PEAR
             $help = "Options:\n";
             foreach ($this->commands[$command]['options'] as $k => $v) {
                 if (isset($v['arg'])) {
-                    if ($v['arg']{0} == '(') {
+                    if ($v['arg'][0] == '(') {
                         $arg = substr($v['arg'], 1, -1);
                         $sapp = " [$arg]";
                         $lapp = "[=$arg]";
@@ -236,9 +248,9 @@ class PEAR_Command_Common extends PEAR
                 }
                 if (isset($v['shortopt'])) {
                     $s = $v['shortopt'];
-                    @$help .= "  -$s$sapp, --$k$lapp\n";
+                    $help .= "  -$s$sapp, --$k$lapp\n";
                 } else {
-                    @$help .= "  --$k$lapp\n";
+                    $help .= "  --$k$lapp\n";
                 }
                 $p = "        ";
                 $doc = rtrim(str_replace("\n", "\n$p", $v['doc']));
