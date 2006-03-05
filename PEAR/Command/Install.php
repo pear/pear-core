@@ -738,7 +738,7 @@ Run post-installation scripts in package <package>, if any exist.
         $orig = $pkgname . '-' . $pkgversion;
 
         $tar = &new Archive_Tar($pkgfile->getArchiveFile());
-        if (!@$tar->extractModify($dest, $orig)) {
+        if (!$tar->extractModify($dest, $orig)) {
             return $this->raiseError('unable to unpack ' . $pkgfile->getArchiveFile());
         }
         $this->ui->outputData("Package ready at '$dest'");

@@ -248,7 +248,7 @@ and uninstall).
             $failmsg .= "config-set expects 2 or 3 parameters";
             return PEAR::raiseError($failmsg);
         }
-        if ($error = $this->_checkLayer(@$params[2])) {
+        if (isset($params[2]) && ($error = $this->_checkLayer($params[2]))) {
             $failmsg .= $error;
             return PEAR::raiseError("config-set:$failmsg");
         }
