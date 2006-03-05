@@ -351,7 +351,7 @@ class PEAR_Installer extends PEAR_Downloader
                     } elseif ($a['type'] == 'pear-config') {
                         if ($a['to'] == 'master_server') {
                             $chan = $this->_registry->getChannel($channel);
-                            if ($chan) {
+                            if (!PEAR::isError($chan)) {
                                 $to = $chan->getServer();
                             } else {
                                 $to = $this->config->get($a['to'], null, $channel);

@@ -839,8 +839,8 @@ class PEAR_Registry extends PEAR
                 return false;
             }
             $checker = $this->_getChannel($channel->getName());
-            if (PEAR::isError($channel)) {
-                return $channel;
+            if (PEAR::isError($checker)) {
+                return $checker;
             }
             if ($channel->getAlias() != $checker->getAlias()) {
                 @unlink($this->_getChannelAliasFileName($checker->getAlias()));
@@ -1812,7 +1812,7 @@ class PEAR_Registry extends PEAR
         }
         foreach ($this->_listChannels() as $channel) {
             $e = &$this->_getChannel($channel);
-            if (PEAR::isError($e)) {
+            if (!$e || PEAR::isError($e)) {
                 continue;
             }
             $ret[] = $e;
