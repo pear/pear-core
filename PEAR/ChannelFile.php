@@ -391,8 +391,8 @@ class PEAR_ChannelFile {
      */
     function fromXmlFile($descfile)
     {
-        if (!@is_file($descfile) || !is_readable($descfile) ||
-             (!$fp = @fopen($descfile, 'r'))) {
+        if (!file_exists($descfile) || !is_file($descfile) || !is_readable($descfile) ||
+             (!$fp = fopen($descfile, 'r'))) {
             require_once 'PEAR.php';
             return PEAR::raiseError("Unable to open $descfile");
         }
@@ -678,8 +678,11 @@ class PEAR_ChannelFile {
                 $this->_validateError(PEAR_CHANNELFILE_ERROR_NOVALIDATE_NAME);
             }
             if (!isset($info['validatepackage']['attribs']['version'])) {
+                $content = isset($info['validatepackage']['_content']) ?
+                    $info['validatepackage']['_content'] :
+                    null;
                 $this->_validateError(PEAR_CHANNELFILE_ERROR_NOVALIDATE_VERSION,
-                    array('package' => @$info['validatepackage']['_content']));
+                    array('package' => $content));
             }
         }
         if (isset($info['servers']['primary']['attribs']['port']) &&
