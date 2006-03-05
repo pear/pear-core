@@ -28,7 +28,9 @@ $reg->addChannel($ch);
 $phpunit->assertNoErrors('setup');
 
 $ret = $reg->getChannelValidator('snark');
-$phpunit->assertFalse($ret, 'snark');
+$phpunit->assertErrors(array(
+        array('package' => 'PEAR_Error', 'message' => 'Unknown channel: snark'),
+    ), 'snark');
 $ret = $reg->getChannelValidator('foo');
 $phpunit->assertIsa('PEAR_Validate', $ret, 'foo');
 $ret = $reg->getChannelValidator('test.test.test');

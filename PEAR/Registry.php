@@ -1792,7 +1792,7 @@ class PEAR_Registry extends PEAR
     function &getChannelValidator($channel)
     {
         $chan = $this->getChannel($channel);
-        if (!$chan) {
+        if (PEAR::isError($chan)) {
             return $chan;
         }
         $val = $chan->getValidationObject();
