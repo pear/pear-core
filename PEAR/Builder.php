@@ -93,13 +93,13 @@ class PEAR_Builder extends PEAR_Common
         $dir = dirname($pkg->getArchiveFile());
         $old_cwd = getcwd();
 
-        if (!@chdir($dir)) {
+        if (!file_exists($dir) || !is_dir($dir) || !chdir($dir)) {
             return $this->raiseError("could not chdir to $dir");
         }
         $this->log(2, "building in $dir");
 
         $dsp = $pkg->getPackage().'.dsp';
-        if (!@is_file("$dir/$dsp")) {
+        if (!file_exists("$dir/$dsp")) {
             return $this->raiseError("The DSP $dsp does not exist.");
         }
         // XXX TODO: make release build type configurable
@@ -147,7 +147,8 @@ class PEAR_Builder extends PEAR_Common
         } else {
             return $this->raiseError("Could not retrieve output information from $dsp.");
         }
-        if (@copy($outfile, "$dir/$out")) {
+        // realpath returns false if the file doesn't exist
+        if ($outfile && copy($outfile, "$dir/$out")) {
             $outfile = "$dir/$out";
         }
 
