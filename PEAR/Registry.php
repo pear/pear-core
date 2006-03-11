@@ -1301,10 +1301,13 @@ class PEAR_Registry extends PEAR
     {
         $ch = false;
         if ($this->_channelExists($channel, $noaliases)) {
-            if (!class_exists('PEAR_ChannelFile')) {
-                require_once 'PEAR/ChannelFile.php';
+            $chinfo = $this->_channelInfo($channel, $noaliases);
+            if ($chinfo) {
+                if (!class_exists('PEAR_ChannelFile')) {
+                    require_once 'PEAR/ChannelFile.php';
+                }
+                $ch = &PEAR_ChannelFile::fromArrayWithErrors($chinfo);
             }
-            $ch = &PEAR_ChannelFile::fromArrayWithErrors($this->_channelInfo($channel, $noaliases));
         }
         if ($ch) {
             if ($ch->validate()) {
