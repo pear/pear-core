@@ -28,9 +28,15 @@ $reg->addChannel($ch);
 $phpunit->assertNoErrors('setup');
 
 $ret = $reg->getChannel('snark');
-$phpunit->assertFalse($ret, 'snark');
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' => 'Unknown channel: snark')
+), 'after snark');
+$phpunit->assertIsa('PEAR_Error', $ret, 'snark');
 $ret = $reg->getChannel('foo', true);
-$phpunit->assertFalse($ret, 'foo strict');
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' => 'Unknown channel: foo')
+), 'after foo strict');
+$phpunit->assertIsa('PEAR_Error', $ret, 'foo strict');
 $ret = $reg->getChannel('foo');
 $phpunit->assertIsa('PEAR_ChannelFile', $ret, 'class 1');
 $phpunit->assertEquals('test.test.test', $ret->getName(), 'foo');

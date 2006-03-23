@@ -78,7 +78,8 @@ $pf2->addPackageDepWithChannel('optional', 'frong', 'floop');
 
 $ret = $reg->addPackage2($pf2);
 $phpunit->assertErrors(array(
-array('package' => 'PEAR_PackageFile_v2', 'message' => 'Unknown channel "grob"')
+array('package' => 'PEAR_PackageFile_v2', 'message' => 'Unknown channel "grob"'),
+array('package' => 'PEAR_Error', 'message' => 'Unknown channel: grob'),
 ), 'invalid pf2');
 $phpunit->assertFalse($ret, 'invalid pf2');
 
