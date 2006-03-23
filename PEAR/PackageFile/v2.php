@@ -735,7 +735,7 @@ class PEAR_PackageFile_v2
 
     function setLogger(&$logger)
     {
-        if ($logger && (!is_object($logger) || !method_exists($logger, 'log'))) {
+        if (!is_object($logger) || !method_exists($logger, 'log')) {
             return PEAR::raiseError('Logger must be compatible with PEAR_Common::log');
         }
         $this->_logger = &$logger;
