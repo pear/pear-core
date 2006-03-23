@@ -1,4 +1,7 @@
 <?php
+if (!defined('FTP_BINARY')) {
+    define('FTP_BINARY', 1);
+}
 
 define('NET_FTP_ERR_OVERWRITELOCALFILE_FAILED', -14);
 define('NET_FTP_ERR_DIRCHANGE_FAILED', 2); // Compatibillity reasons!
