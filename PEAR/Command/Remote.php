@@ -532,6 +532,9 @@ parameter.
     function doListUpgrades($command, $options, $params)
     {
         require_once 'PEAR/Common.php';
+        if (!PEAR_Common::betterStates($params[0])) {
+            return $this->raiseError($params[0] . ' is not a valid state (stable/beta/alpha/devel/etc.) try "pear help list-upgrades"');
+        }
         $savechannel = $channel = $this->config->get('default_channel');
         $reg = &$this->config->getRegistry();
         foreach ($reg->listChannels() as $channel) {
