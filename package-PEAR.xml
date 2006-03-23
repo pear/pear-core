@@ -88,6 +88,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   users who use --packagingroot may find that installation fails
   * fix Bug #7093: if pear channel does not exist, it cannot be retrieved
   * fix Bug #7165: warnings in pear
+  * fix Bug #7075: PEAR_PackageFile_v2 :: setLogger failed on autodetection
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
