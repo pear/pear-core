@@ -32,7 +32,10 @@ $phpunit->assertEquals(array (
 ), $fakelog->getLog(), 'log');
 
 $chan = $reg->getChannel('fake');
-$phpunit->assertFalse($chan, 'after delete');
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' => 'Unknown channel: fake')
+), 'after delete');
+$phpunit->assertIsa('PEAR_Error', $chan, 'after delete');
 echo 'tests done';
 ?>
 --CLEAN--
