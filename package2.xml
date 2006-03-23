@@ -92,6 +92,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   users upgrading from PEAR 1.3.x cannot upgrade to 1.4.8
   users who use --packagingroot may find that installation fails
   * fix Bug #7093: if pear channel does not exist, it cannot be retrieved
+  * fix Bug #7165: warnings in pear
  </notes>
  <contents>
   <dir name="/">
