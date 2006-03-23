@@ -80,6 +80,11 @@ $reg->updateChannel($chan);
 require_once 'PEAR/Command/Remote.php';
 class test_PEAR_Command_Remote extends PEAR_Command_Remote
 {
+    function _checkChannelForStatus($channel, $chan)
+    {
+        return;
+    }
+
     function &getDownloader($options)
     {
         $a = &new test_PEAR_Downloader($this->ui, $options, $this->config);
