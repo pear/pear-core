@@ -201,7 +201,7 @@ class PEAR_Command_Common extends PEAR
             return "No such command \"$command\"";
         }
         $help = null;
-        if (isset($this->_commands[$command]['doc'])) {
+        if (isset($this->commands[$command]['doc'])) {
             $help = $this->commands[$command]['doc'];
         }
         if (empty($help)) {
