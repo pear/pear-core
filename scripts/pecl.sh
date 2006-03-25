@@ -25,4 +25,4 @@ else
   fi
 fi
 
-exec $PHP -C -n -q $INCARG -d output_buffering=1 -d safe_mode=0 $INCDIR/peclcmd.php "$@"
+exec $PHP -C -n -q $INCARG -d output_buffering=1 -d safe_mode=0 -d register_argc_argv="On" $INCDIR/peclcmd.php "$@"

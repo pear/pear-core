@@ -88,16 +88,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  CRITICAL BUGFIX RELEASE
-  
-  Channels with &quot;-&quot; in their name were suddenly invalid, and
-  caused crashes in many places due to improper error handling
-  * fix Bug #6960: channels are not allowed to have &quot;-&quot; in their name
-  * fix critical Bug #6969: PEAR list-upgrades crashes
-  * fix Bug #6991: Class 'PEAR_PackageFile_v1' not found in Registry.php at line 1657
-  * fix Bug #7008: PEAR_Frontend::setFrontendObject doesn't set the object
-  * fix Bug #7015: install a package.tgz with unknown channel, fatal error in PEAR/Registry.php
-  * fix Bug #7020: tests/PEAR_Registry/api1_1/test_getChannelValidator.phpt crashes PEAR
+  Minor feature addition/bugfixes
+  * fix Bug #7196: PEAR crashes when using autoload_prepend_file
  </notes>
  <contents>
   <dir name="/">
