@@ -187,13 +187,8 @@ if (!function_exists('md5_file')) {
         if (!$fd = @fopen($file, 'r')) {
             return false;
         }
-        if (function_exists('file_get_contents')) {
-            fclose($fd);
-            $md5 = md5(file_get_contents($file));
-        } else {
-            $md5 = md5(fread($fd, filesize($file)));
-            fclose($fd);
-        }
+        fclose($fd);
+        $md5 = md5(file_get_contents($file));
         return $md5;
     }
 }

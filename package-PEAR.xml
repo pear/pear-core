@@ -78,27 +78,17 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.8</version>
-  <date>2006-03-06</date>
+  <version>1.5.0a1</version>
+  <date>2006-05-01</date>
   <license>PHP License</license>
-  <state>stable</state>
+  <state>alpha</state>
   <notes>
-  CRITICAL BUGFIX RELEASE
-  
-  Channels with &quot;-&quot; in their name were suddenly invalid, and
-  caused crashes in many places due to improper error handling
-  * fix Bug #6960: channels are not allowed to have &quot;-&quot; in their name
-  * fix critical Bug #6969: PEAR list-upgrades crashes
-  * fix Bug #6991: Class 'PEAR_PackageFile_v1' not found in Registry.php at line 1657
-  * fix Bug #7008: PEAR_Frontend::setFrontendObject doesn't set the object
-  * fix Bug #7015: install a package.tgz with unknown channel, fatal error in PEAR/Registry.php
-  * fix Bug #7020: tests/PEAR_Registry/api1_1/test_getChannelValidator.phpt crashes PEAR
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
   <provides type="function" name="md5_file"/>
   <deps>
-   <dep type="php" rel="ge" version="4.2"/>
+   <dep type="php" rel="ge" version="4.3.0"/>
    <dep type="pkg" rel="ge" version="1.3.3">PEAR</dep>
    <dep type="pkg" rel="ge" version="1.3.1">Archive_Tar</dep>
    <dep type="pkg" rel="ge" version="1.2">Console_Getopt</dep>
@@ -638,6 +628,39 @@ http://pear.php.net/dtd/package-1.0.xsd">
                    attempting &quot;pear list &lt;pkgname&gt;&quot;
   * fix Bug #6735: PEAR_PackageFile::fromTgzFile doesn't work with package.xml
                    not in root dir
+   </notes>
+  </release>
+  <release>
+   <version>1.4.8</version>
+   <date>2006-03-05</date>
+   <license>PHP License</license>
+   <state>stable</state>
+   <notes>
+  CRITICAL BUGFIX RELEASE
+  
+  Channels with &quot;-&quot; in their name were suddenly invalid, and
+  caused crashes in many places due to improper error handling
+  * fix Bug #6960: channels are not allowed to have &quot;-&quot; in their name
+  * fix critical Bug #6969: PEAR list-upgrades crashes
+  * fix Bug #6991: Class 'PEAR_PackageFile_v1' not found in Registry.php at line 1657
+  * fix Bug #7008: PEAR_Frontend::setFrontendObject doesn't set the object
+  * fix Bug #7015: install a package.tgz with unknown channel, fatal error in PEAR/Registry.php
+  * fix Bug #7020: tests/PEAR_Registry/api1_1/test_getChannelValidator.phpt crashes PEAR
+   </notes>
+  </release>
+  <release>
+   <version>1.4.9</version>
+   <date>2006-03-29</date>
+   <license>PHP License</license>
+   <state>stable</state>
+   <notes>
+  CRITICAL BUGFIX RELEASE
+  users upgrading from PEAR 1.3.x cannot upgrade to 1.4.8
+  users who use --packagingroot may find that installation fails
+  * fix Bug #7093: if pear channel does not exist, it cannot be retrieved
+  * fix Bug #7165: warnings in pear
+  * fix Bug #7075: PEAR_PackageFile_v2 :: setLogger failed on autodetection
+   </notes>
    </notes>
   </release>
  </changelog>

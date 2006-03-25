@@ -399,13 +399,8 @@ class PEAR_ChannelFile {
 
         // read the whole thing so we only get one cdata callback
         // for each block of cdata
-        if (function_exists('file_get_contents')) {
-            fclose($fp);
-            $data = file_get_contents($descfile);
-        } else {
-            $data = fread($fp, filesize($descfile));
-            fclose($fp);
-        }
+        fclose($fp);
+        $data = file_get_contents($descfile);
         return $this->fromXmlString($data);
     }
 
