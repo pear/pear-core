@@ -1732,13 +1732,8 @@ class PEAR_PackageFile_v2_Validator
             if (!$fp = @fopen($file, "r")) {
                 return false;
             }
-            if (function_exists('file_get_contents')) {
-                fclose($fp);
-                $contents = file_get_contents($file);
-            } else {
-                $contents = @fread($fp, filesize($file));
-                fclose($fp);
-            }
+            fclose($fp);
+            $contents = file_get_contents($file);
         }
         $tokens = token_get_all($contents);
 /*

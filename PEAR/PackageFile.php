@@ -374,16 +374,8 @@ class PEAR_PackageFile
 
         // read the whole thing so we only get one cdata callback
         // for each block of cdata
-        if (function_exists('file_get_contents')) {
-            @fclose($fp);
-            $data = file_get_contents($descfile);
-        } else {
-            $data = '';
-            while (!feof($fp)) {
-                $data .= @fread($fp, 8192);
-            }
-            fclose($fp);
-        }
+        fclose($fp);
+        $data = file_get_contents($descfile);
         $ret = &PEAR_PackageFile::fromXmlString($data, $state, $descfile, $archive);
         return $ret;
     }

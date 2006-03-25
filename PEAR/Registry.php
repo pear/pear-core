@@ -699,13 +699,8 @@ class PEAR_Registry extends PEAR
         $rt = get_magic_quotes_runtime();
         set_magic_quotes_runtime(0);
         $fsize = filesize($this->filemap);
-        if (function_exists('file_get_contents')) {
-            fclose($fp);
-            $data = file_get_contents($this->filemap);
-        } else {
-            $data = fread($fp, $fsize);
-            fclose($fp);
-        }
+        fclose($fp);
+        $data = file_get_contents($this->filemap);
         set_magic_quotes_runtime($rt);
         $tmp = unserialize($data);
         if (!$tmp && $fsize > 7) {
@@ -1001,13 +996,8 @@ class PEAR_Registry extends PEAR
         $rt = get_magic_quotes_runtime();
         set_magic_quotes_runtime(0);
         clearstatcache();
-        if (function_exists('file_get_contents')) {
-            $this->_closePackageFile($fp);
-            $data = file_get_contents($this->_packageFileName($package, $channel));
-        } else {
-            $data = fread($fp, filesize($this->_packageFileName($package, $channel)));
-            $this->_closePackageFile($fp);
-        }
+        $this->_closePackageFile($fp);
+        $data = file_get_contents($this->_packageFileName($package, $channel));
         set_magic_quotes_runtime($rt);
         $data = unserialize($data);
         if ($key === null) {
@@ -1043,13 +1033,8 @@ class PEAR_Registry extends PEAR
         $rt = get_magic_quotes_runtime();
         set_magic_quotes_runtime(0);
         clearstatcache();
-        if (function_exists('file_get_contents')) {
-            $this->_closeChannelFile($fp);
-            $data = file_get_contents($this->_channelFileName($channel));
-        } else {
-            $data = fread($fp, filesize($this->_channelFileName($channel)));
-            $this->_closeChannelFile($fp);
-        }
+        $this->_closeChannelFile($fp);
+        $data = file_get_contents($this->_channelFileName($channel));
         set_magic_quotes_runtime($rt);
         $data = unserialize($data);
         return $data;

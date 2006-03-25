@@ -323,13 +323,7 @@ class PEAR_Installer extends PEAR_Downloader
                     return $this->raiseError("file does not exist",
                                              PEAR_INSTALLER_FAILED);
                 }
-                if (function_exists('file_get_contents')) {
-                    $contents = file_get_contents($orig_file);
-                } else {
-                    $fp = fopen($orig_file, "r");
-                    $contents = @fread($fp, filesize($orig_file));
-                    fclose($fp);
-                }
+                $contents = file_get_contents($orig_file);
                 if ($contents === false) {
                     $contents = '';
                 }
@@ -525,13 +519,7 @@ class PEAR_Installer extends PEAR_Downloader
                     return $this->raiseError("file $orig_file does not exist",
                                              PEAR_INSTALLER_FAILED);
                 }
-                if (function_exists('file_get_contents')) {
-                    $contents = file_get_contents($orig_file);
-                } else {
-                    $fp = fopen($orig_file, "r");
-                    $contents = @fread($fp, filesize($orig_file)); // filesize can be 0
-                    fclose($fp);
-                }
+                $contents = file_get_contents($orig_file);
                 if ($contents === false) {
                     $contents = '';
                 }
@@ -1575,16 +1563,11 @@ class PEAR_Installer extends PEAR_Downloader
 // {{{ md5_file() utility function
 if (!function_exists("md5_file")) {
     function md5_file($filename) {
-        $fp = fopen($filename, "r");
-        if (!$fp) return null;
-        if (function_exists('file_get_contents')) {
-            fclose($fp);
-            $contents = file_get_contents($filename);
-        } else {
-            $contents = fread($fp, filesize($filename));
-            fclose($fp);
+        if (!$fd = @fopen($file, 'r')) {
+            return false;
         }
-        return md5($contents);
+        fclose($fd);
+        return md5(file_get_contents($filename));
     }
 }
 // }}}
