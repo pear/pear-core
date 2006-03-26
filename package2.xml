@@ -90,6 +90,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <notes>
   Minor feature addition/bugfixes
   * fix Bug #7196: PEAR crashes when using autoload_prepend_file
+  * fix Bug #7207: proxy user/pass is not urldecoded in download
  </notes>
  <contents>
   <dir name="/">
