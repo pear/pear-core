@@ -84,7 +84,7 @@ if (getenv('PHP_PEAR_HTTP_PROXY')) {
 if (getenv('PHP_PEAR_INSTALL_DIR')) {
     define('PEAR_CONFIG_DEFAULT_PHP_DIR', getenv('PHP_PEAR_INSTALL_DIR'));
 } else {
-    if (@is_dir($PEAR_INSTALL_DIR)) {
+    if (file_exists($PEAR_INSTALL_DIR) && is_dir($PEAR_INSTALL_DIR)) {
         define('PEAR_CONFIG_DEFAULT_PHP_DIR',
                $PEAR_INSTALL_DIR);
     } else {
@@ -98,7 +98,8 @@ if (getenv('PHP_PEAR_EXTENSION_DIR')) {
 } else {
     if (ini_get('extension_dir')) {
         define('PEAR_CONFIG_DEFAULT_EXT_DIR', ini_get('extension_dir'));
-    } elseif (defined('PEAR_EXTENSION_DIR') && @is_dir(PEAR_EXTENSION_DIR)) {
+    } elseif (defined('PEAR_EXTENSION_DIR') &&
+              file_exists(PEAR_EXTENSION_DIR) && is_dir(PEAR_EXTENSION_DIR)) {
         define('PEAR_CONFIG_DEFAULT_EXT_DIR', PEAR_EXTENSION_DIR);
     } elseif (defined('PHP_EXTENSION_DIR')) {
         define('PEAR_CONFIG_DEFAULT_EXT_DIR', PHP_EXTENSION_DIR);
@@ -543,7 +544,7 @@ class PEAR_Config extends PEAR
         $this->layers = array_keys($this->configuration);
         $this->files['user'] = $user_file;
         $this->files['system'] = $system_file;
-        if ($user_file && @file_exists($user_file)) {
+        if ($user_file && file_exists($user_file)) {
             $this->pushErrorHandling(PEAR_ERROR_RETURN);
             $this->readConfigFile($user_file, 'user', $strict);
             $this->popErrorHandling();
@@ -552,7 +553,7 @@ class PEAR_Config extends PEAR
             }
         }
 
-        if ($system_file && @file_exists($system_file)) {
+        if ($system_file && file_exists($system_file)) {
             $this->mergeConfigFile($system_file, false, 'system', $strict);
             if ($this->_errorsFound > 0) {
                 return;
@@ -904,16 +905,16 @@ class PEAR_Config extends PEAR
         if (!@System::mkDir($opt)) {
             return $this->raiseError("could not create directory: " . dirname($file));
         }
-        if (@is_file($file) && !@is_writeable($file)) {
+        if (file_exists($file) && is_file($file) && !is_writeable($file)) {
             return $this->raiseError("no write access to $file!");
         }
         $fp = @fopen($file, "w");
         if (!$fp) {
-            return $this->raiseError("PEAR_Config::writeConfigFile fopen('$file','w') failed");
+            return $this->raiseError("PEAR_Config::writeConfigFile fopen('$file','w') failed ($php_errormsg)");
         }
         $contents = "#PEAR_Config 0.9\n" . serialize($data);
         if (!@fwrite($fp, $contents)) {
-            return $this->raiseError("PEAR_Config::writeConfigFile: fwrite failed");
+            return $this->raiseError("PEAR_Config::writeConfigFile: fwrite failed ($php_errormsg)");
         }
         return true;
     }
@@ -933,7 +934,10 @@ class PEAR_Config extends PEAR
      */
     function _readConfigDataFrom($file)
     {
-        $fp = @fopen($file, "r");
+        $fp = false;
+        if (file_exists($file)) {
+            $fp = @fopen($file, "r");
+        }
         if (!$fp) {
             return $this->raiseError("PEAR_Config::readConfigFile fopen('$file','r') failed");
         }
