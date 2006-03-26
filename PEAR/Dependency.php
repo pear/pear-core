@@ -365,7 +365,7 @@ class PEAR_Dependency
         $path_elements = explode(PATH_SEPARATOR, getenv('PATH'));
         foreach ($path_elements as $dir) {
             $file = $dir . DIRECTORY_SEPARATOR . $program . $exe_suffix;
-            if (@file_exists($file) && @is_executable($file)) {
+            if (file_exists($file) && is_executable($file)) {
                 return false;
             }
         }
