@@ -1363,250 +1363,240 @@ $phpunit->assertEquals(array (
   ),
   118 => 
   array (
-    0 => 3,
-    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net',
-  ),
-  119 => 
-  array (
     0 => 2,
     1 => 'successfully committed 1 file operations',
   ),
-  120 => 
+  119 => 
   array (
     'info' => 'uninstall ok: channel://pear.php.net/Net_Socket-1.0.5',
     'cmd' => 'uninstall',
   ),
-  121 => 
+  120 => 
   array (
     0 => 3,
     1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net' . DIRECTORY_SEPARATOR . 'URL.php',
   ),
-  122 => 
+  121 => 
   array (
     0 => 3,
     1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'Net_URL' . DIRECTORY_SEPARATOR . 'docs' . DIRECTORY_SEPARATOR . 'example.php',
   ),
-  123 => 
+  122 => 
   array (
     0 => 2,
     1 => 'about to commit 2 file operations',
   ),
-  124 => 
+  123 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net' . DIRECTORY_SEPARATOR . 'URL.php',
   ),
-  125 => 
+  124 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'Net_URL' . DIRECTORY_SEPARATOR . 'docs' . DIRECTORY_SEPARATOR . 'example.php',
   ),
-  126 => 
+  125 => 
   array (
     0 => 2,
     1 => 'successfully committed 2 file operations',
+  ),
+  126 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net',
   ),
   127 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net',
-  ),
-  128 => 
-  array (
-    0 => 3,
     1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'Net_URL' . DIRECTORY_SEPARATOR . 'docs',
   ),
-  129 => 
+  128 => 
   array (
     0 => 2,
     1 => 'about to commit 2 file operations',
   ),
-  130 => 
-  array (
-    0 => 3,
-    1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net',
-  ),
-  131 => 
+  129 => 
   array (
     0 => 3,
     1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR . 'Net_URL' . DIRECTORY_SEPARATOR . 'docs',
   ),
-  132 => 
+  130 => 
   array (
     0 => 2,
     1 => 'successfully committed 2 file operations',
   ),
-  133 => 
+  131 => 
   array (
     'info' => 'uninstall ok: channel://pear.php.net/Net_URL-1.0.14',
     'cmd' => 'uninstall',
   ),
-  134 => 
+  132 => 
   array (
     0 => 3,
     1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net' . DIRECTORY_SEPARATOR . 'DIME.php',
   ),
-  135 => 
+  133 => 
   array (
     0 => 3,
     1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Net_DIME' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'dime_message_test.php',
   ),
-  136 => 
+  134 => 
   array (
     0 => 3,
     1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Net_DIME' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'dime_record_test.php',
   ),
-  137 => 
+  135 => 
   array (
     0 => 2,
     1 => 'about to commit 3 file operations',
   ),
-  138 => 
+  136 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net' . DIRECTORY_SEPARATOR . 'DIME.php',
   ),
-  139 => 
+  137 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Net_DIME' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'dime_message_test.php',
   ),
-  140 => 
+  138 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Net_DIME' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'dime_record_test.php',
   ),
-  141 => 
+  139 => 
   array (
     0 => 2,
     1 => 'successfully committed 3 file operations',
   ),
-  142 => 
+  140 => 
   array (
     0 => 3,
     1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Net_DIME' . DIRECTORY_SEPARATOR . 'test',
   ),
-  143 => 
+  141 => 
   array (
     0 => 3,
     1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net',
   ),
-  144 => 
+  142 => 
   array (
     0 => 2,
     1 => 'about to commit 2 file operations',
   ),
-  145 => 
+  143 => 
   array (
     0 => 3,
     1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Net_DIME' . DIRECTORY_SEPARATOR . 'test',
   ),
-  146 => 
+  144 => 
   array (
     0 => 3,
     1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Net',
   ),
-  147 => 
+  145 => 
   array (
     0 => 2,
     1 => 'successfully committed 2 file operations',
   ),
-  148 => 
+  146 => 
   array (
     'info' => 'uninstall ok: channel://pear.php.net/Net_DIME-0.3',
     'cmd' => 'uninstall',
   ),
-  149 => 
+  147 => 
   array (
     0 => 3,
     1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail' . DIRECTORY_SEPARATOR . 'mime.php',
   ),
-  150 => 
+  148 => 
   array (
     0 => 3,
     1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail' . DIRECTORY_SEPARATOR . 'mimeDecode.php',
   ),
-  151 => 
+  149 => 
   array (
     0 => 3,
     1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail' . DIRECTORY_SEPARATOR . 'mimePart.php',
   ),
-  152 => 
+  150 => 
   array (
     0 => 3,
     1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Mail_Mime' . DIRECTORY_SEPARATOR . 'xmail.dtd',
   ),
-  153 => 
+  151 => 
   array (
     0 => 3,
     1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Mail_Mime' . DIRECTORY_SEPARATOR . 'xmail.xsl',
   ),
-  154 => 
+  152 => 
   array (
     0 => 2,
     1 => 'about to commit 5 file operations',
   ),
-  155 => 
+  153 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail' . DIRECTORY_SEPARATOR . 'mime.php',
   ),
-  156 => 
+  154 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail' . DIRECTORY_SEPARATOR . 'mimeDecode.php',
   ),
-  157 => 
+  155 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail' . DIRECTORY_SEPARATOR . 'mimePart.php',
   ),
-  158 => 
+  156 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Mail_Mime' . DIRECTORY_SEPARATOR . 'xmail.dtd',
   ),
-  159 => 
+  157 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Mail_Mime' . DIRECTORY_SEPARATOR . 'xmail.xsl',
   ),
-  160 => 
+  158 => 
   array (
     0 => 2,
     1 => 'successfully committed 5 file operations',
   ),
-  161 => 
+  159 => 
   array (
     0 => 3,
     1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail',
   ),
-  162 => 
+  160 => 
   array (
     0 => 3,
     1 => 'adding to transaction: rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Mail_Mime',
   ),
-  163 => 
+  161 => 
   array (
     0 => 2,
     1 => 'about to commit 2 file operations',
   ),
-  164 => 
+  162 => 
   array (
     0 => 3,
     1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Mail',
   ),
-  165 => 
+  163 => 
   array (
     0 => 3,
     1 => '+ rmdir ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Mail_Mime',
   ),
-  166 => 
+  164 => 
   array (
     0 => 2,
     1 => 'successfully committed 2 file operations',
   ),
-  167 => 
+  165 => 
   array (
     'info' => 'uninstall ok: channel://pear.php.net/Mail_Mime-1.2.1',
     'cmd' => 'uninstall',
