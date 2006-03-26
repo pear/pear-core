@@ -1337,8 +1337,8 @@ class PEAR_Downloader extends PEAR_Common
                 $proxy_host = 'ssl://' . $proxy_host;
             }
             $proxy_port = isset($proxy['port']) ? $proxy['port'] : null;
-            $proxy_user = isset($proxy['user']) ? $proxy['user'] : null;
-            $proxy_pass = isset($proxy['pass']) ? $proxy['pass'] : null;
+            $proxy_user = isset($proxy['user']) ? urldecode($proxy['user']) : null;
+            $proxy_pass = isset($proxy['pass']) ? urldecode($proxy['pass']) : null;
 
             if ($proxy_port == '') {
                 $proxy_port = 8080;
