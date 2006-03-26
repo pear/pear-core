@@ -17,7 +17,7 @@ $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('http://www.example.com/test-1.1.tgz');
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
-          'message' => 'Could not download from "http://www.example.com/test-1.1.tgz"'),
+          'message' => 'Could not download from "http://www.example.com/test-1.1.tgz" (File http://www.example.com:80/test-1.1.tgz not valid (received: HTTP/1.1 404 http://www.example.com/test-1.1.tgz Is not valid))'),
     array('package' => 'PEAR_Error',
           'message' => 'Invalid or missing remote package file'),
 ), 'expected errors');
@@ -30,7 +30,7 @@ $phpunit->assertEquals(array (
   1 => 
   array (
     0 => 0,
-    1 => 'Could not download from "http://www.example.com/test-1.1.tgz"',
+    1 => 'Could not download from "http://www.example.com/test-1.1.tgz" (File http://www.example.com:80/test-1.1.tgz not valid (received: HTTP/1.1 404 http://www.example.com/test-1.1.tgz Is not valid))',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (

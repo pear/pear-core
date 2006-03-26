@@ -1384,7 +1384,7 @@ class PEAR_Downloader_Package
                     $saveparam = ", cannot download \"$saveparam\"";
                 }
                 $err = PEAR::raiseError('Could not download from "' . $param .
-                    '"' . $saveparam);
+                    '"' . $saveparam . ' (' . $file->getMessage() . ')');
                     return $err;
             }
             if ($this->_rawpackagefile) {
