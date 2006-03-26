@@ -182,7 +182,8 @@ class PEAR_Downloader extends PEAR_Common
                 if (!count($unused)) {
                     continue;
                 }
-                @array_walk($this->_installed[$key], 'strtolower');
+                $strtolower = create_function('$a','return strtolower($a);');
+                array_walk($this->_installed[$key], $strtolower);
             }
         }
     }
@@ -213,7 +214,7 @@ class PEAR_Downloader extends PEAR_Common
         }
         $b = new PEAR_ChannelFile;
         if ($b->fromXmlFile($a)) {
-            @unlink($a);
+            unlink($a);
             if ($this->config->get('auto_discover')) {
                 $this->_registry->addChannel($b, $lastmodified);
                 $alias = $b->getName();
@@ -225,7 +226,7 @@ class PEAR_Downloader extends PEAR_Common
             }
             return true;
         }
-        @unlink($a);
+        unlink($a);
         return false;
     }
 
@@ -293,29 +294,31 @@ class PEAR_Downloader extends PEAR_Common
                 $this->pushError('Package "' . $param . '" is not valid',
                     PEAR_INSTALLER_SKIPPED);
             } else {
-                if ($params[$i] && !isset($channelschecked[$params[$i]->getChannel()]) &&
-                      !isset($this->_options['offline'])) {
-                    $channelschecked[$params[$i]->getChannel()] = true;
-                    PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-                    if (!class_exists('System')) {
-                        require_once 'System.php';
-                    }
-                    $curchannel = &$this->_registry->getChannel($params[$i]->getChannel());
-                    if (PEAR::isError($curchannel)) {
+                do {
+                    if ($params[$i] && !isset($channelschecked[$params[$i]->getChannel()]) &&
+                          !isset($this->_options['offline'])) {
+                        $channelschecked[$params[$i]->getChannel()] = true;
+                        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                        if (!class_exists('System')) {
+                            require_once 'System.php';
+                        }
+                        $curchannel = &$this->_registry->getChannel($params[$i]->getChannel());
+                        if (PEAR::isError($curchannel)) {
+                            PEAR::staticPopErrorHandling();
+                            return $this->raiseError($curchannel);
+                        }
+                        $a = $this->downloadHttp('http://' . $params[$i]->getChannel() .
+                            '/channel.xml', $this->ui,
+                            System::mktemp(array('-d')), null, $curchannel->lastModified());
                         PEAR::staticPopErrorHandling();
-                        return $this->raiseError($curchannel);
+                        if (PEAR::isError($a) || !$a) {
+                            break;
+                        }
+                        $this->log(0, 'WARNING: channel "' . $params[$i]->getChannel() . '" has ' .
+                            'updated its protocols, use "channel-update ' . $params[$i]->getChannel() .
+                            '" to update');
                     }
-                    $a = $this->downloadHttp('http://' . $params[$i]->getChannel() .
-                        '/channel.xml', $this->ui,
-                        System::mktemp(array('-d')), null, $curchannel->lastModified());
-                    PEAR::staticPopErrorHandling();
-                    if (PEAR::isError($a) || !$a) {
-                        continue;
-                    }
-                    $this->log(0, 'WARNING: channel "' . $params[$i]->getChannel() . '" has ' .
-                        'updated its protocols, use "channel-update ' . $params[$i]->getChannel() .
-                        '" to update');
-                }
+                } while (false);
                 if ($params[$i] && !isset($this->_options['downloadonly'])) {
                     if (isset($this->_options['packagingroot'])) {
                         $checkdir = $this->_prependPath(
@@ -331,7 +334,7 @@ class PEAR_Downloader extends PEAR_Common
                     if ($checkdir == '.') {
                         $checkdir = '/';
                     }
-                    if (!@is_writeable($checkdir)) {
+                    if (!is_writeable($checkdir)) {
                         return PEAR::raiseError('Cannot install, php_dir for channel "' .
                             $params[$i]->getChannel() . '" is not writeable by the current user');
                     }
@@ -1317,9 +1320,9 @@ class PEAR_Downloader extends PEAR_Common
         if (!isset($info['host'])) {
             return PEAR::raiseError('Cannot download from non-URL "' . $url . '"');
         } else {
-            $host = @$info['host'];
-            $port = @$info['port'];
-            $path = @$info['path'];
+            $host = isset($info['host']) ? $info['host'] : null;
+            $port = isset($info['port']) ? $info['port'] : null;
+            $path = isset($info['path']) ? $info['path'] : null;
         }
         if (isset($this)) {
             $config = &$this->config;
@@ -1327,15 +1330,15 @@ class PEAR_Downloader extends PEAR_Common
             $config = &PEAR_Config::singleton();
         }
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
-        if ($config->get('http_proxy')&& 
+        if ($config->get('http_proxy') && 
               $proxy = parse_url($config->get('http_proxy'))) {
-            $proxy_host = @$proxy['host'];
+            $proxy_host = isset($proxy['host']) ? $proxy['host'] : null;
             if (isset($proxy['scheme']) && $proxy['scheme'] == 'https') {
                 $proxy_host = 'ssl://' . $proxy_host;
             }
-            $proxy_port = @$proxy['port'];
-            $proxy_user = @$proxy['user'];
-            $proxy_pass = @$proxy['pass'];
+            $proxy_port = isset($proxy['port']) ? $proxy['port'] : null;
+            $proxy_user = isset($proxy['user']) ? $proxy['user'] : null;
+            $proxy_pass = isset($proxy['pass']) ? $proxy['pass'] : null;
 
             if ($proxy_port == '') {
                 $proxy_port = 8080;
@@ -1471,7 +1474,7 @@ class PEAR_Downloader extends PEAR_Common
         if ($callback) {
             call_user_func($callback, 'start', array(basename($dest_file), $length));
         }
-        while ($data = @fread($fp, 1024)) {
+        while ($data = fread($fp, 1024)) {
             $bytes += strlen($data);
             if ($callback) {
                 call_user_func($callback, 'bytesread', $bytes);
