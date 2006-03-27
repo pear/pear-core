@@ -63,7 +63,7 @@ class PEAR_REST
     {
         $cachefile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
             md5($url) . 'rest.cachefile';
-        if (@file_exists($cachefile)) {
+        if (file_exists($cachefile)) {
             return unserialize(implode('', file($cachefile)));
         }
         return $this->retrieveData($url, $accept, $forcestring);
@@ -151,7 +151,7 @@ class PEAR_REST
         if ($cacheid === null) {
             $cacheidfile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
                 md5($url) . 'rest.cacheid';
-            if (@file_exists($cacheidfile)) {
+            if (file_exists($cacheidfile)) {
                 $cacheid = unserialize(implode('', file($cacheidfile)));
             } else {
                 return false;
@@ -169,7 +169,7 @@ class PEAR_REST
     {
         $cacheidfile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
             md5($url) . 'rest.cacheid';
-        if (@file_exists($cacheidfile)) {
+        if (file_exists($cacheidfile)) {
             $ret = unserialize(implode('', file($cacheidfile)));
             return $ret;
         } else {
@@ -181,7 +181,7 @@ class PEAR_REST
     {
         $cachefile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
             md5($url) . 'rest.cachefile';
-        if (@file_exists($cachefile)) {
+        if (file_exists($cachefile)) {
             return unserialize(implode('', file($cachefile)));
         } else {
             return PEAR::raiseError('No cached content available for "' . $url . '"');
@@ -235,7 +235,9 @@ class PEAR_REST
         fclose($fp);
         $fp = @fopen($cachefile, 'wb');
         if (!$fp) {
-            @unlink($cacheidfile);
+            if (file_exists($cacheidfile)) {
+                @unlink($cacheidfile);
+            }
             return false;
         }
         fwrite($fp, serialize($contents));
@@ -286,17 +288,13 @@ class PEAR_REST
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
         if ($this->config->get('http_proxy')&& 
               $proxy = parse_url($this->config->get('http_proxy'))) {
-            $proxy_host = @$proxy['host'];
+            $proxy_host = isset($proxy['host']) ? $proxy['host'] : null;
             if (isset($proxy['scheme']) && $proxy['scheme'] == 'https') {
                 $proxy_host = 'ssl://' . $proxy_host;
             }
-            $proxy_port = @$proxy['port'];
-            $proxy_user = @$proxy['user'];
-            $proxy_pass = @$proxy['pass'];
-
-            if ($proxy_port == '') {
-                $proxy_port = 8080;
-            }
+            $proxy_port = isset($proxy['port']) ? $proxy['port'] : 8080;
+            $proxy_user = isset($proxy['user']) ? urldecode($proxy['user']) : null;
+            $proxy_pass = isset($proxy['pass']) ? urldecode($proxy['pass']) : null;
         }
         if (empty($port)) {
             if (isset($info['scheme']) && $info['scheme'] == 'https') {
