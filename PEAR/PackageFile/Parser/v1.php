@@ -71,7 +71,7 @@ class PEAR_PackageFile_Parser_v1
         if (!extension_loaded('xml')) {
             return PEAR::raiseError('Cannot create xml parser for parsing package.xml, no xml extension');
         }
-        $xp = @xml_parser_create();
+        $xp = xml_parser_create();
         if (!$xp) {
             return PEAR::raiseError('Cannot create xml parser for parsing package.xml');
         }

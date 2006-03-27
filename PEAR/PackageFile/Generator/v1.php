@@ -321,7 +321,10 @@ class PEAR_PackageFile_Generator_v1
                 $ret .= $this->recursiveXmlFilelist($pkginfo['filelist']);
             } else {
                 foreach ($pkginfo['filelist'] as $file => $fa) {
-                    @$ret .= "$indent   <file role=\"$fa[role]\"";
+                    if (!isset($fa['role'])) {
+                        $fa['role'] = '';
+                    }
+                    $ret .= "$indent   <file role=\"$fa[role]\"";
                     if (isset($fa['baseinstalldir'])) {
                         $ret .= ' baseinstalldir="' .
                             $this->_fixXmlEncoding($fa['baseinstalldir']) . '"';
@@ -348,7 +351,7 @@ class PEAR_PackageFile_Generator_v1
                             }
                             $ret .= "/>\n";
                         }
-                        @$ret .= "$indent   </file>\n";
+                        $ret .= "$indent   </file>\n";
                     }
                 }
             }
