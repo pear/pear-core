@@ -576,7 +576,7 @@ class PEAR_Downloader_Package
         }
         $dep['package'] = $dep['name'];
         $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params, $group == 'optional' &&
-            !isset($options['alldeps']));
+            !isset($options['alldeps']), true);
         PEAR::popErrorHandling();
         if (PEAR::isError($ret)) {
             if (!isset($options['soft'])) {
@@ -781,7 +781,7 @@ class PEAR_Downloader_Package
                 $dep['package'] = $dep['name'];
                 $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params,
                     isset($dep['optional']) && $dep['optional'] == 'yes' &&
-                    !isset($options['alldeps']));
+                    !isset($options['alldeps']), true);
                 PEAR::popErrorHandling();
                 if (PEAR::isError($ret)) {
                     if (!isset($options['soft'])) {
@@ -1567,9 +1567,11 @@ class PEAR_Downloader_Package
      * @param array name information of the package
      * @param array|null packages to be downloaded
      * @param bool is this an optional dependency?
+     * @param bool is this any kind of dependency?
      * @access private
      */
-    function _analyzeDownloadURL($info, $param, $pname, $params = null, $optional = false)
+    function _analyzeDownloadURL($info, $param, $pname, $params = null, $optional = false,
+                                 $isdependency = false)
     {
         if (!is_string($param) && PEAR_Downloader_Package::willDownload($param, $params)) {
             return false;
@@ -1604,6 +1606,16 @@ class PEAR_Downloader_Package
             }
         }
         if (!isset($info['url'])) {
+            if ($this->isInstalled($info)) {
+                if ($isdependency && version_compare($info['version'],
+                      $this->_registry->packageInfo($info['info']->getPackage(),
+                            'version', $info['info']->getChannel()), '<=')) {
+                    // ignore bogus errors of "failed to download dependency"
+                    // if it is already installed and the one that would be
+                    // downloaded is older or the same version (Bug #7219)
+                    return false;
+                }
+            }
             $instead =  ', will instead download version ' . $info['version'] .
                         ', stability "' . $info['info']->getState() . '"';
             // releases exist, but we failed to get any
