@@ -91,12 +91,12 @@ class PEAR_XMLParser
             if (strpos($data, 'encoding="UTF-8"')) {
                 $data = utf8_decode($data);
             }
-            $xp = @xml_parser_create('ISO-8859-1');
+            $xp = xml_parser_create('ISO-8859-1');
         } else {
             if (strpos($data, 'encoding="UTF-8"')) {
-                $xp = @xml_parser_create('UTF-8');
+                $xp = xml_parser_create('UTF-8');
             } else {
-                $xp = @xml_parser_create('ISO-8859-1');
+                $xp = xml_parser_create('ISO-8859-1');
             }
         }
         xml_parser_set_option($xp, XML_OPTION_CASE_FOLDING, 0);
