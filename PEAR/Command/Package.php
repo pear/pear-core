@@ -511,8 +511,11 @@ used for automated conversion or learning the format.
         $cmd .= ' diff';
         // the rest of the options are passed right on to "cvs diff"
         foreach ($options as $option => $optarg) {
-            $arg = @$this->commands[$command]['options'][$option]['arg'];
-            $short = @$this->commands[$command]['options'][$option]['shortopt'];
+            $arg = $short = false;
+            if (isset($this->commands[$command]['options'][$option])) {
+                $arg = $this->commands[$command]['options'][$option]['arg'];
+                $short = $this->commands[$command]['options'][$option]['shortopt'];
+            }
             $cmd .= $short ? " -$short" : " --$option";
             if ($arg && $optarg) {
                 $cmd .= ($short ? '' : '=') . escapeshellarg($optarg);
@@ -701,7 +704,9 @@ used for automated conversion or learning the format.
         if (file_exists("$tmpdir/package2.xml")) {
             $packagexml = 'package2.xml';
         }
-        @unlink("$tmpdir/package.sig");
+        if (file_exists("$tmpdir/package.sig")) {
+            unlink("$tmpdir/package.sig");
+        }
         $input = $this->ui->userDialog($command,
                                        array('GnuPG Passphrase'),
                                        array('password'));
