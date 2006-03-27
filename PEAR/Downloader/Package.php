@@ -453,7 +453,9 @@ class PEAR_Downloader_Package
                     }
                     if (!($ret = $this->_detect2Dep($dep, $pname, 'optional', $params))) {
                         $dep['package'] = $dep['name'];
-                        if (@$skipnames[count($skipnames) - 1] ==
+                        $skip = count($skipnames) ?
+                            $skipnames[count($skipnames) - 1] : '';
+                        if ($skip ==
                               $this->_registry->parsedPackageNameToString($dep, true)) {
                             array_pop($skipnames);
                         }
@@ -682,7 +684,9 @@ class PEAR_Downloader_Package
                                     $this->_registry->parsedPackageNameToString($dep, true) .
                                     '", already installed as version ' . $obj->getVersion());
                             }
-                            if (@$skipnames[count($skipnames) - 1] ==
+                            $skip = count($skipnames) ?
+                                $skipnames[count($skipnames) - 1] : '';
+                            if ($skip ==
                                   $this->_registry->parsedPackageNameToString($dep, true)) {
                                 array_pop($skipnames);
                             }
@@ -759,7 +763,9 @@ class PEAR_Downloader_Package
                             $this->_registry->parsedPackageNameToString($dep, true) .
                             '", already installed as version ' . $version);
                     }
-                    if (@$skipnames[count($skipnames) - 1] ==
+                    $skip = count($skipnames) ?
+                        $skipnames[count($skipnames) - 1] : '';
+                    if ($skip ==
                           $this->_registry->parsedPackageNameToString($dep, true)) {
                         array_pop($skipnames);
                     }
@@ -1332,37 +1338,39 @@ class PEAR_Downloader_Package
      */
     function _fromFile(&$param)
     {
-        if (is_string($param) && !@is_file($param)) {
-            $test = explode('#', $param);
-            $group = array_pop($test);
-            if (@is_file(implode('#', $test))) {
-                $this->setGroup($group);
-                $param = implode('#', $test);
-                $this->_explicitGroup = true;
+        if (is_string($param)) {
+            if (!file_exists($param)) {
+                $test = explode('#', $param);
+                $group = array_pop($test);
+                if (file_exists(implode('#', $test))) {
+                    $this->setGroup($group);
+                    $param = implode('#', $test);
+                    $this->_explicitGroup = true;
+                }
             }
-        }
-        if (@is_file($param)) {
-            $this->_type = 'local';
-            $options = $this->_downloader->getOptions();
-            if (isset($options['downloadonly'])) {
-                $pkg = &$this->getPackagefileObject($this->_config,
-                    $this->_downloader->_debug);
-            } else {
-                $pkg = &$this->getPackagefileObject($this->_config,
-                    $this->_downloader->_debug, $this->_downloader->getDownloadDir());
+            if (is_file($param)) {
+                $this->_type = 'local';
+                $options = $this->_downloader->getOptions();
+                if (isset($options['downloadonly'])) {
+                    $pkg = &$this->getPackagefileObject($this->_config,
+                        $this->_downloader->_debug);
+                } else {
+                    $pkg = &$this->getPackagefileObject($this->_config,
+                        $this->_downloader->_debug, $this->_downloader->getDownloadDir());
+                }
+                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                $pf = &$pkg->fromAnyFile($param, PEAR_VALIDATE_INSTALLING);
+                PEAR::popErrorHandling();
+                if (PEAR::isError($pf)) {
+                    $this->_valid = false;
+                    return $pf;
+                }
+                $this->_packagefile = &$pf;
+                if (!$this->getGroup()) {
+                    $this->setGroup('default'); // install the default dependency group
+                }
+                return $this->_valid = true;
             }
-            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-            $pf = &$pkg->fromAnyFile($param, PEAR_VALIDATE_INSTALLING);
-            PEAR::popErrorHandling();
-            if (PEAR::isError($pf)) {
-                $this->_valid = false;
-                return $pf;
-            }
-            $this->_packagefile = &$pf;
-            if (!$this->getGroup()) {
-                $this->setGroup('default'); // install the default dependency group
-            }
-            return $this->_valid = true;
         }
         return $this->_valid = false;
     }
