@@ -143,7 +143,19 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                                 continue;
                             }
                         }
-                        @$this->_displayLine("#$i: $frame[class]$frame[type]$frame[function] $frame[line]");
+                        if (!isset($frame['class'])) {
+                            $frame['class'] = '';
+                        }
+                        if (!isset($frame['type'])) {
+                            $frame['type'] = '';
+                        }
+                        if (!isset($frame['function'])) {
+                            $frame['function'] = '';
+                        }
+                        if (!isset($frame['line'])) {
+                            $frame['line'] = '';
+                        }
+                        $this->_displayLine("#$i: $frame[class]$frame[type]$frame[function] $frame[line]");
                     }
                 }
             }
@@ -348,7 +360,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             }
             foreach ($prompts as $key => $prompt) {
                 $type = $types[$key];
-                $default = @$defaults[$key];
+                $default = isset($defaults[$key]) ? $defaults[$key] : null;
                 if ($type == 'password') {
                     system('stty -echo');
                 }
