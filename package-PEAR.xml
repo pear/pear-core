@@ -87,6 +87,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #7021: Everything must be within &lt;dir name=&quot;/&quot;&gt;
   * fix Bug #7196: PEAR crashes when using autoload_prepend_file
   * fix Bug #7207: proxy user/pass is not urldecoded in download
+  * implement Request #7090: PEAR_Downloader mustn't contact pear server
+    when installing local package file
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
