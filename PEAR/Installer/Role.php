@@ -216,6 +216,9 @@ class PEAR_Installer_Role
         if ($dir === null) {
             $dir = dirname(__FILE__) . '/Role';
         }
+        if (!file_exists($dir) || !is_dir($dir)) {
+            return PEAR::raiseError("registerRoles: opendir($dir) failed");
+        }
         $dp = @opendir($dir);
         if (empty($dp)) {
             return PEAR::raiseError("registerRoles: opendir($dir) failed");
@@ -236,7 +239,7 @@ class PEAR_Installer_Role
                 $GLOBALS['_PEAR_INSTALLER_ROLES'][$class] = $data;
             }
         }
-        @closedir($dp);
+        closedir($dp);
         ksort($GLOBALS['_PEAR_INSTALLER_ROLES']);
         PEAR_Installer_Role::getBaseinstallRoles(true);
         PEAR_Installer_Role::getInstallableRoles(true);
