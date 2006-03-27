@@ -173,7 +173,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                     }
                     $tests[] = $p;
                 } else {
-                    if (!@file_exists($p)) {
+                    if (!file_exists($p)) {
                         if (!preg_match('/\.phpt$/', $p)) {
                             $p .= '.phpt';
                         }
@@ -201,7 +201,9 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
         $this->ui->outputData('Running ' . count($tests) . ' tests', $command);
         $start = time();
         if (isset($options['realtimelog'])) {
-            @unlink('run-tests.log');
+            if (file_exists('run-tests.log')) {
+                unlink('run-tests.log');
+            }
         }
         foreach ($tests as $t) {
             if (isset($options['realtimelog'])) {
@@ -254,7 +256,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                 fclose($fp);
                 $this->ui->outputData('wrote log to "' . realpath('run-tests.log') . '"', $command);
             }
-        } elseif (@file_exists('run-tests.log') && !@is_dir('run-tests.log')) {
+        } elseif (file_exists('run-tests.log') && !is_dir('run-tests.log')) {
             @unlink('run-tests.log');
         }
         $this->ui->outputData('TOTAL TIME: ' . $total);

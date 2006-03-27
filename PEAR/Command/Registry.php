@@ -197,9 +197,12 @@ installed package.'
             return $this->raiseError('list-files expects 1 parameter');
         }
         $reg = &$this->config->getRegistry();
+        $fp = false;
         if (!is_dir($params[0]) && (file_exists($params[0]) || $fp = @fopen($params[0],
               'r'))) {
-            @fclose($fp);
+            if ($fp) {
+                fclose($fp);
+            }
             if (!class_exists('PEAR_PackageFile')) {
                 require_once 'PEAR/PackageFile.php';
             }
@@ -356,10 +359,12 @@ installed package.'
         if (count($params) != 1) {
             return $this->raiseError('pear info expects 1 parameter');
         }
-        $info = false;
+        $info = $fp = false;
         $reg = &$this->config->getRegistry();
-        if ((@is_file($params[0]) && !is_dir($params[0])) || $fp = @fopen($params[0], 'r')) {
-            @fclose($fp);
+        if ((file_exists($params[0]) && is_file($params[0]) && !is_dir($params[0])) || $fp = @fopen($params[0], 'r')) {
+            if ($fp) {
+                fclose($fp);
+            }
             if (!class_exists('PEAR_PackageFile')) {
                 require_once 'PEAR/PackageFile.php';
             }

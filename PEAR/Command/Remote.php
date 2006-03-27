@@ -375,10 +375,10 @@ parameter.
             }
             $data['data'][$info['category']][] = array(
                 $reg->channelAlias($channel) . '/' . $name,
-                @$info['stable'],
-                @$installed['version'],
-                @$desc,
-                @$info['deps'],
+                isset($info['stable']) ? $info['stable'] : null,
+                isset($installed['version']) ? $installed['version'] : null,
+                isset($desc) ? $desc : null,
+                isset($info['deps']) ? $info['deps'] : null,
                 );
         }
 
@@ -634,6 +634,9 @@ parameter.
         $cache_dir = $this->config->get('cache_dir');
         $verbose = $this->config->get('verbose');
         $output = '';
+        if (!file_exists($cache_dir) || !is_dir($cache_dir)) {
+            return $this->raiseError("$cache_dir does not exist or is not a directory");
+        }
         if (!($dp = @opendir($cache_dir))) {
             return $this->raiseError("opendir($cache_dir) failed: $php_errormsg");
         }
@@ -645,14 +648,19 @@ parameter.
             if (preg_match('/^xmlrpc_cache_[a-z0-9]{32}$/', $ent) ||
                   preg_match('/rest.cache(file|id)$/', $ent)) {
                 $path = $cache_dir . DIRECTORY_SEPARATOR . $ent;
-                $ok = @unlink($path);
+                if (file_exists($path)) {
+                    $ok = @unlink($path);
+                } else {
+                    $ok = false;
+                    $php_errormsg = '';
+                }
                 if ($ok) {
                     if ($verbose >= 2) {
                         $output .= "deleted $path\n";
                     }
                     $num++;
                 } elseif ($verbose >= 1) {
-                    $output .= "failed to delete $path\n";
+                    $output .= "failed to delete $path $php_errormsg\n";
                 }
             }
         }
