@@ -295,6 +295,11 @@ class PEAR_Downloader extends PEAR_Common
                     PEAR_INSTALLER_SKIPPED);
             } else {
                 do {
+                    if ($params[$i] && $params[$i]->getType() == 'local') {
+                        // bug #7090
+                        // skip channel.xml check for local packages
+                        break;
+                    }
                     if ($params[$i] && !isset($channelschecked[$params[$i]->getChannel()]) &&
                           !isset($this->_options['offline'])) {
                         $channelschecked[$params[$i]->getChannel()] = true;
