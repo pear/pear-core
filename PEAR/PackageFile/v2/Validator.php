@@ -222,6 +222,11 @@ class PEAR_PackageFile_v2_Validator
         if ($fail) {
             return false;
         }
+        $list = $this->_packageInfo['contents'];
+        if (isset($list['dir']) && is_array($list['dir']) && isset($list['dir'][0])) {
+            $this->_multipleToplevelDirNotAllowed();
+            return $this->_isValid = 0;
+        }
         $this->_validateFilelist();
         $this->_validateRelease();
         if (!$this->_stack->hasErrors()) {
@@ -1593,6 +1598,13 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array('group' => $name),
             'Invalid dependency group name "%name%"');
+    }
+
+    function _multipleToplevelDirNotAllowed()
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array(),
+            'Multiple top-level <dir> tags are not allowed.  Enclose them ' .
+                'in a <dir name="/">');
     }
 
     function _analyzeBundledPackages()
