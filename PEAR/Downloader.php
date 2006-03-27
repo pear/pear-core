@@ -1336,13 +1336,10 @@ class PEAR_Downloader extends PEAR_Common
             if (isset($proxy['scheme']) && $proxy['scheme'] == 'https') {
                 $proxy_host = 'ssl://' . $proxy_host;
             }
-            $proxy_port = isset($proxy['port']) ? $proxy['port'] : null;
+            $proxy_port = isset($proxy['port']) ? $proxy['port'] : 8080;
             $proxy_user = isset($proxy['user']) ? urldecode($proxy['user']) : null;
             $proxy_pass = isset($proxy['pass']) ? urldecode($proxy['pass']) : null;
 
-            if ($proxy_port == '') {
-                $proxy_port = 8080;
-            }
             if ($callback) {
                 call_user_func($callback, 'message', "Using HTTP proxy $host:$port");
             }
