@@ -139,15 +139,29 @@ class PEAR_RunTest
         $tmp_file   = ereg_replace('\.phpt$','.php',$file);
         $tmp_post   = $tmp . uniqid('/phpt.');
 
-        @unlink($tmp_skipif);
-        @unlink($tmp_file);
-        @unlink($tmp_post);
+        if (file_exists($tmp_skipif)) {
+            unlink($tmp_skipif);
+        }
+        if (file_exists($tmp_file)) {
+            unlink($tmp_file);
+        }
+        if (file_exists($tmp_post)) {
+            unlink($tmp_post);
+        }
 
         // unlink old test results
-        @unlink(ereg_replace('\.phpt$','.diff',$file));
-        @unlink(ereg_replace('\.phpt$','.log',$file));
-        @unlink(ereg_replace('\.phpt$','.exp',$file));
-        @unlink(ereg_replace('\.phpt$','.out',$file));
+        if (file_exists(ereg_replace('\.phpt$','.diff',$file))) {
+            unlink(ereg_replace('\.phpt$','.diff',$file));
+        }
+        if (file_exists(ereg_replace('\.phpt$','.log',$file))) {
+            unlink(ereg_replace('\.phpt$','.log',$file));
+        }
+        if (file_exists(ereg_replace('\.phpt$','.exp',$file))) {
+            unlink(ereg_replace('\.phpt$','.exp',$file));
+        }
+        if (file_exists(ereg_replace('\.phpt$','.out',$file))) {
+            unlink(ereg_replace('\.phpt$','.out',$file));
+        }
 
         // Check if test should be skipped.
         $info = '';
@@ -207,7 +221,9 @@ class PEAR_RunTest
             system($cmd, $return_value);
             $out = ob_get_contents();
             ob_end_clean();
-            @unlink($tmp_post);
+            if (file_exists($tmp_post)) {
+                unlink($tmp_post);
+            }
             $section_text['RETURNS'] = (int) trim($section_text['RETURNS']);
             $returnfail = ($return_value != $section_text['RETURNS']);
         } else {
@@ -220,7 +236,9 @@ class PEAR_RunTest
             // perform test cleanup
             $this->save_text($clean = $tmp . uniqid('/phpt.'), $section_text['CLEAN']);
             `$php $clean`;
-            @unlink($clean);
+            if (file_exists($clean)) {
+                unlink($clean);
+            }
         }
         // Does the output match what is expected?
         $output = trim($out);
@@ -250,7 +268,9 @@ class PEAR_RunTest
             var_dump($output);
     */
             if (!$returnfail && preg_match("/^$wanted_re\$/s", $output)) {
-                @unlink($tmp_file);
+                if (file_exists($tmp_file)) {
+                    unlink($tmp_file);
+                }
                 if (!isset($this->_options['quiet'])) {
                     $this->_logger->log(0, "PASS $tested$info");
                 }
@@ -266,7 +286,9 @@ class PEAR_RunTest
         // compare and leave on success
             $ok = (0 == strcmp($output,$wanted));
             if (!$returnfail && $ok) {
-                @unlink($tmp_file);
+                if (file_exists($tmp_file)) {
+                    unlink($tmp_file);
+                }
                 if (!isset($this->_options['quiet'])) {
                     $this->_logger->log(0, "PASS $tested$info");
                 }
