@@ -81,6 +81,10 @@ class PEAR_Command_Test extends PEAR_Command_Common
                     'shortopt' => 'u',
                     'doc' => 'Search parameters for AllTests.php, and use that to run phpunit-based tests',
                 ),
+                'tapoutput' => array(
+                    'shortopt' => 't',
+                    'doc' => 'Output run-tests.log in TAP-compliant format',
+                ),
             ),
             'doc' => '[testfile|dir ...]
 Run regression tests with PHP\'s regression testing script (run-tests.php).',
@@ -107,6 +111,9 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
 
     function doRunTests($command, $options, $params)
     {
+        if (isset($options['phpunit']) && isset($options['tapoutput'])) {
+            return $this->raiseError('ERROR: cannot use both --phpunit and --tapoutput at the same time');
+        }
         require_once 'PEAR/Common.php';
         require_once 'PEAR/RunTest.php';
         require_once 'System.php';
@@ -205,6 +212,10 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                 unlink('run-tests.log');
             }
         }
+        if (isset($options['tapoutput'])) {
+            $tap = '1..' . count($tests) . "\n";
+        }
+        $i = 1;
         foreach ($tests as $t) {
             if (isset($options['realtimelog'])) {
                 $fp = @fopen('run-tests.log', 'a');
@@ -218,6 +229,11 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($result)) {
                 $this->ui->log(0, $result->getMessage());
+                continue;
+            }
+            if (isset($options['tapoutput'])) {
+                $tap .= $result[0] . ' ' . $i . $result[1] . "\n";
+                $i++;
                 continue;
             }
             if (isset($options['realtimelog'])) {
@@ -238,26 +254,36 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
             }
         }
         $total = date('i:s', time() - $start);
-        if (count($failed)) {
-            $output = "TOTAL TIME: $total\n";
-            $output .= count($passed) . " PASSED TESTS\n";
-            $output .= count($skipped) . " SKIPPED TESTS\n";
-    		$output .= count($failed) . " FAILED TESTS:\n";
-        	foreach ($failed as $failure) {
-        		$output .= $failure . "\n";
-        	}
-            if (isset($options['realtimelog'])) {
-                $fp = @fopen('run-tests.log', 'a');
-            } else {
-                $fp = @fopen('run-tests.log', 'w');
-            }
+        if (isset($options['tapoutput'])) {
+            $fp = @fopen('run-tests.log', 'w');
             if ($fp) {
-                fwrite($fp, $output, strlen($output));
+                fwrite($fp, $tap, strlen($tap));
                 fclose($fp);
-                $this->ui->outputData('wrote log to "' . realpath('run-tests.log') . '"', $command);
+                $this->ui->outputData('wrote TAP-format log to "' .realpath('run-tests.log') .
+                    '"', $command);
             }
-        } elseif (file_exists('run-tests.log') && !is_dir('run-tests.log')) {
-            @unlink('run-tests.log');
+        } else {
+            if (count($failed)) {
+                $output = "TOTAL TIME: $total\n";
+                $output .= count($passed) . " PASSED TESTS\n";
+                $output .= count($skipped) . " SKIPPED TESTS\n";
+        		$output .= count($failed) . " FAILED TESTS:\n";
+            	foreach ($failed as $failure) {
+            		$output .= $failure . "\n";
+            	}
+                if (isset($options['realtimelog'])) {
+                    $fp = @fopen('run-tests.log', 'a');
+                } else {
+                    $fp = @fopen('run-tests.log', 'w');
+                }
+                if ($fp) {
+                    fwrite($fp, $output, strlen($output));
+                    fclose($fp);
+                    $this->ui->outputData('wrote log to "' . realpath('run-tests.log') . '"', $command);
+                }
+            } elseif (file_exists('run-tests.log') && !is_dir('run-tests.log')) {
+                @unlink('run-tests.log');
+            }
         }
         $this->ui->outputData('TOTAL TIME: ' . $total);
         $this->ui->outputData(count($passed) . ' PASSED TESTS', $command);

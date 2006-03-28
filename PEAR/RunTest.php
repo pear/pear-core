@@ -187,6 +187,9 @@ class PEAR_RunTest
                     if (isset($old_php)) {
                         $php = $old_php;
                     }
+                    if (isset($this->_options['tapoutput'])) {
+                        return array('ok', ' # skip ' . $reason);
+                    }
                     return 'SKIPPED';
                 }
                 if (eregi("^info", trim($output))) {
@@ -277,6 +280,9 @@ class PEAR_RunTest
                 if (isset($old_php)) {
                     $php = $old_php;
                 }
+                if (isset($this->_options['tapoutput'])) {
+                    return array('ok', ' - ' . $tested);
+                }
                 return 'PASSED';
             }
 
@@ -294,6 +300,9 @@ class PEAR_RunTest
                 }
                 if (isset($old_php)) {
                     $php = $old_php;
+                }
+                if (isset($this->_options['tapoutput'])) {
+                    return array('ok', ' - ' . $tested);
                 }
                 return 'PASSED';
             }
@@ -386,6 +395,13 @@ $return_value
             $php = $old_php;
         }
 
+        if (isset($this->_options['tapoutput'])) {
+            $wanted = explode("\n", $wanted);
+            $wanted = "# Expected output:\n#\n#" . implode("\n#", $wanted);
+            $output = explode("\n", $output);
+            $output = "#\n#\n# Actual output:\n#\n#" . implode("\n#", $output);
+            return array($wanted . $output . 'not ok', ' - ' . $tested);
+        }
         return $warn ? 'WARNED' : 'FAILED';
     }
 

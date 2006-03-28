@@ -33,6 +33,10 @@
     <shortopt>u</shortopt>
     <doc>Search parameters for AllTests.php, and use that to run phpunit-based tests</doc>
    </phpunit>
+   <tapoutput>
+    <shortopt>t</shortopt>
+    <doc>Output run-tests.log in TAP-compliant format</doc>
+   </tapoutput>
   </options>
   <doc>[testfile|dir ...]
 Run regression tests with PHP&apos;s regression testing script (run-tests.php).</doc>
