@@ -48,6 +48,23 @@ class PEAR_REST_10
         $this->_rest = &new PEAR_REST($config, $options);
     }
 
+    /**
+     * Retrieve information about a remote package to be downloaded from a REST server
+     *
+     * @param string $base The uri to prepend to all REST calls
+     * @param array $packageinfo an array of format:
+     * <pre>
+     *  array(
+     *   'package' => 'packagename',
+     *   'channel' => 'channelname',
+     *  ['state' => 'alpha' (or valid state),]
+     *  -or-
+     *  ['version' => '1.whatever']
+     * </pre>
+     * @param string $prefstate Current preferred_state config variable value
+     * @param bool $installed the installed version of this package to compare against
+     * @return array|false|PEAR_Error see {@link _returnDownloadURL()}
+     */
     function getDownloadURL($base, $packageinfo, $prefstate, $installed)
     {
         $channel = $packageinfo['channel'];
@@ -82,7 +99,14 @@ class PEAR_REST_10
                 continue;
             }
             if (isset($state)) {
+                // try our preferred state first
                 if ($release['s'] == $state) {
+                    $found = true;
+                    break;
+                }
+                // see if there is something newer and more stable
+                // bug #7221
+                if (in_array($release['s'], $this->betterStates($state), true)) {
                     $found = true;
                     break;
                 }

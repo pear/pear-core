@@ -1531,7 +1531,7 @@ class PEAR_Downloader_Package
         }
         $info = $this->_downloader->_getPackageDownloadUrl($pname);
         if (PEAR::isError($info)) {
-            if ($pname['channel'] == 'pear.php.net') {
+            if ($info->getCode() != -976 && $pname['channel'] == 'pear.php.net') {
                 // try pecl
                 $pname['channel'] = 'pecl.php.net';
                 if ($test = $this->_downloader->_getPackageDownloadUrl($pname)) {

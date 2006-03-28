@@ -89,10 +89,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
   Minor feature addition/bugfixes
+  * fix Bug #6931: pear upgrade PEAR-alpha tries to upgrade to 1.4.0a12
   * fix Bug #7021: Everything must be within &lt;dir name=&quot;/&quot;&gt;
   * fix Bug #7196: PEAR crashes when using autoload_prepend_file
   * fix Bug #7207: proxy user/pass is not urldecoded in download
   * fix Bug #7219: bogus &quot;will download PEAR 1.4.8&quot; error
+  * fix Bug #7221: pear install blah-alpha won't install a newer stable
   * implement Request #7090: PEAR_Downloader mustn't contact pear server
     when installing local package file
  </notes>

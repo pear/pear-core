@@ -488,7 +488,7 @@ $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 0,
-    1 => 'pear/PEAR is already installed and is newer than detected release version 1.4.0a12',
+    1 => 'pear/PEAR is already installed and is newer than detected release version 1.4.8',
   ),
   1 => 
   array (

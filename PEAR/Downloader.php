@@ -760,6 +760,17 @@ class PEAR_Downloader extends PEAR_Common
                 return PEAR::raiseError('Invalid remote dependencies retrieved from REST - ' .
                     'this should never happen');
             }
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+            $testversion = $this->_registry->packageInfo($url['package'], 'version',
+                $parr['channel']);
+            PEAR::staticPopErrorHandling();
+            if (!isset($this->_options['force']) && !PEAR::isError($testversion)) {
+                if (version_compare($testversion, $url['version'], '>=')) {
+                    return PEAR::raiseError($this->_registry->parsedPackageNameToString(
+                        $parr, true) . ' is already installed and is newer than detected ' .
+                        'release version ' . $url['version'], -976);
+                }
+            }
             if (isset($url['info']['required']) || $url['compatible']) {
                 require_once 'PEAR/PackageFile/v2.php';
                 $pf = new PEAR_PackageFile_v2;
