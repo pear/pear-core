@@ -321,75 +321,75 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 $answers[$param['name']] = '';
             }
         }
+        $tried = false;
         do {
-            $ok = array('yesno' => 'no');
-            do {
-                $answers = $this->userDialog('', $prompts, $types, $answers);
-            } while (count(array_filter($answers)) != count($prompts));
-            $this->outputData('Your choices:');
-            foreach ($prompts as $name => $prompt) {
-                $this->outputData($prompt . ': ' . $answers[$name]);
+            if ($tried) {
+                $i = 1;
+                foreach ($answers as $var => $value) {
+                    if (!strlen($value)) {
+                        echo $this->bold("* Enter an answer for #" . $i . ": ({$prompts[$var]})\n");
+                    }
+                    $i++;
+                }
             }
-            $ok = $this->userDialog('',
-                array(
-                    'yesno' => 'These Choices OK? (use "abort" to halt)'
-                ),
-                array(
-                    'yesno' => 'string',
-                ),
-                array(
-                    'yesno' => 'yes'
-                )
-            );
-            if ($ok['yesno'] == 'abort') {
-                return false;
-            }
-        } while ($ok['yesno'] != 'yes');
+            $answers = $this->userDialog('', $prompts, $types, $answers);
+            $tried = true;
+        } while (is_array($answers) && count(array_filter($answers)) != count($prompts));
         return $answers;
     }
     // {{{ userDialog(prompt, [type], [default])
 
-    function userDialog($command, $prompts, $types = array(), $defaults = array())
+    function userDialog($command, $prompts, $types = array(), $defaults = array(),
+                        $screensize = 20)
     {
-        $result = array();
-        if (is_array($prompts)) {
-            // php 5.0.0 inexplicably breaks BC with this behavior
-            // now reading from STDIN is the intended syntax
-            if (version_compare(phpversion(), '5.0.0', '<')) {
-                $fp = fopen("php://stdin", "r");
+        if (!is_array($prompts)) {
+            return array();
+        }
+        $testprompts = array_keys($prompts);
+        $result = $defaults;
+        if (!defined('STDIN')) {
+            $fp = fopen('php://stdin', 'r');
+        } else {
+            $fp = STDIN;
+        }
+        while (true) {
+            $descLength = max(array_map('strlen', $prompts));
+            $descFormat = "%-{$descLength}s";
+            $last = count($prompts);
+
+            $i = 0;
+            foreach ($prompts as $n => $var) {
+                printf("%2d. $descFormat : %s\n", ++$i, $prompts[$n], isset($result[$n]) ?
+                    $result[$n] : null);
             }
-            foreach ($prompts as $key => $prompt) {
-                $type = $types[$key];
-                $default = isset($defaults[$key]) ? $defaults[$key] : null;
-                if ($type == 'password') {
-                    system('stty -echo');
-                }
-                print "$this->lp$prompt ";
-                if ($default) {
-                    print "[$default] ";
-                }
-                print ": ";
-                if (version_compare(phpversion(), '5.0.0', '<')) {
-                    $line = fgets($fp, 2048);
-                } else {
-                    if (!defined('STDIN')) {
-                        define('STDIN', fopen('php://stdin', 'r'));
+
+            print "\n1-$last, 'all', 'abort', or Enter to continue: ";
+            $tmp = trim(fgets($fp, 1024));
+            if (empty($tmp)) {
+                break;
+            }
+            if ($tmp == 'abort') {
+                return false;
+            }
+            if (isset($testprompts[(int)$tmp - 1])) {
+                $var = $testprompts[(int)$tmp - 1];
+                $desc = $prompts[$var];
+                $current = $result[$var];
+                print "$desc [$current] : ";
+                $result[$var] = trim(fgets($fp, 1024));
+            } elseif ($tmp == 'all') {
+                foreach ($prompts as $var => $desc) {
+                    $current = $result[$var];
+                    print "$desc [$current] : ";
+                    $tmp = trim(fgets($fp, 1024));
+                    if (!empty($tmp)) {
+                        $result[$var] = trim($tmp);
                     }
-                    $line = fgets(STDIN, 2048);
-                }
-                if ($type == 'password') {
-                    system('stty echo');
-                    print "\n";
-                }
-                if ($default && trim($line) == "") {
-                    $result[$key] = $default;
-                } else {
-                    $result[$key] = trim($line);
                 }
             }
-            if (version_compare(phpversion(), '5.0.0', '<')) {
-                fclose($fp);
-            }
+        }
+        if (!defined('STDIN')) {
+            fclose($fp);
         }
         return $result;
     }
