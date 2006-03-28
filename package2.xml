@@ -96,6 +96,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #7219: bogus &quot;will download PEAR 1.4.8&quot; error
   * fix Bug #7221: pear install blah-alpha won't install a newer stable
   * implement Request #6614: use go-pear style dialogs in PEAR_Command_CLI by default
+  * implement Request #6702: implement TAP output option for run-tests command
+    (as defined by http://perldoc.perl.org/Test/Harness/TAP.html)
   * implement Request #7090: PEAR_Downloader mustn't contact pear server
     when installing local package file
  </notes>
