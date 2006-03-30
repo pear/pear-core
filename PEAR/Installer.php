@@ -1500,6 +1500,7 @@ class PEAR_Installer extends PEAR_Downloader
                 $this->log(0, $e[0]);
             }
         }
+        $this->pkginfo = &$pkg;
         // {{{ Delete the files
         $this->startFileTransaction();
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
@@ -1538,6 +1539,11 @@ class PEAR_Installer extends PEAR_Downloader
             }
             if (!$this->commitFileTransaction()) {
                 $this->rollbackFileTransaction();
+                if (!isset($options['ignore-errors'])) {
+                    return $this->raiseError("uninstall failed");
+                } elseif (!isset($options['soft'])) {
+                    $this->log(0, 'WARNING: uninstall failed');
+                }
             }
         }
         // }}}
