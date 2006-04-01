@@ -60,19 +60,24 @@ class PEAR_REST_11
             $categorylist['c'] = array($categorylist['c']);
         }
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+
         foreach ($categorylist['c'] as $progress => $category) {
             $category = $category['_content'];
             $packagesinfo = $this->_rest->retrieveData($base .
                 'c/' . urlencode($category) . '/packagesinfo.xml');
+
             if (PEAR::isError($packagesinfo)) {
                 continue;
             }
+
             if (!is_array($packagesinfo) || !isset($packagesinfo['pi'])) {
                 continue;
             }
+
             if (!is_array($packagesinfo['pi']) || !isset($packagesinfo['pi'][0])) {
                 $packagesinfo['pi'] = array($packagesinfo['pi']);
             }
+
             foreach ($packagesinfo['pi'] as $packageinfo) {
                 $info = $packageinfo['p'];
                 $package = $info['n'];
@@ -81,6 +86,7 @@ class PEAR_REST_11
                 unset($unstable);
                 unset($stable);
                 unset($state);
+
                 if ($releases) {
                     if (!isset($releases['r'][0])) {
                         $releases['r'] = array($releases['r']);
@@ -114,13 +120,23 @@ class PEAR_REST_11
                         }
                     }
                 }
+
                 if ($basic) { // remote-list command
                     if (!isset($latest)) {
                         $latest = false;
                     }
-                    $ret[$package] = array('stable' => $latest);
+                    if ($dostable) {
+                        if ($state == 'stable') {
+                            $ret[$package] = array('stable' => $latest);
+                        } else {
+                            $ret[$package] = array('stable' => '-n/a-');
+                        }
+                    } else {
+                            $ret[$package] = array('stable' => $latest);
+                    }
                     continue;
                 }
+
                 // list-all command
                 $deps = array();
                 if (!isset($unstable)) {
@@ -132,9 +148,11 @@ class PEAR_REST_11
                 } else {
                     $latest = $unstable;
                 }
+
                 if (!isset($latest)) {
                     $latest = false;
                 }
+
                 if ($latest) {
                     if (isset($packageinfo['deps'])) {
                         if (!is_array($packageinfo['deps']) ||
@@ -169,9 +187,7 @@ class PEAR_REST_11
                         }
                     }
                 }
-                if (!isset($stable)) {
-                    $stable = '-n/a-';
-                }
+
                 $info = array('stable' => $latest, 'summary' => $info['s'],
                     'description' =>
                     $info['d'], 'deps' => $deps, 'category' => $info['ca']['_content'],
