@@ -248,7 +248,7 @@ PEAR_Command::getGetoptArgs('remote-list', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short remote-list'); 
 $phpunit->assertEquals(array ('channel='), $l, 'long remote-list');
 PEAR_Command::getGetoptArgs('run-tests', $s, $l);
-$phpunit->assertEquals('ri:lqspu', $s, 'short run-tests'); 
+$phpunit->assertEquals('ri:lqsput', $s, 'short run-tests'); 
 $phpunit->assertEquals(array (
     'recur',
     'ini=',
@@ -256,7 +256,8 @@ $phpunit->assertEquals(array (
     'quiet',
     'simple',
     'package',
-    'phpunit',), $l, 'long run-tests');
+    'phpunit',
+    'tapoutput'), $l, 'long run-tests');
 PEAR_Command::getGetoptArgs('search', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short search'); 
 $phpunit->assertEquals(array ('channel='), $l, 'long search');
