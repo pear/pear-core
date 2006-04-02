@@ -7,15 +7,17 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <channel>pear.php.net</channel>
  <summary>PEAR Remote installation plugin through FTP</summary>
  <description>Originally part of the 1.4.0 new features,
-remote installation through FTP is now its own package.
-This package adds the commands "remote-install" "remote-upgrade"
-"remote-uninstall" and "remote-upgrade-all" to the PEAR core.
+remote installation through FTP, FTPS and SFTP is now its own package.
+This package adds the commands &quot;remote-install&quot; &quot;remote-upgrade&quot;
+&quot;remote-uninstall&quot; and &quot;remote-upgrade-all&quot; to the PEAR core.
 
 To take advantage, you must have a config file on the remote
 ftp server and full access to the server to create and remove
 files.  The config-create command can be used to get started,
 and the remote_config configuration variable is set to the
-full URL as in "ftp://ftp.example.com/path/to/pear.ini"
+full URL as in &quot;ftp://ftp.example.com/path/to/pear.ini&quot; or
+&quot;ftps://user:pass@ftp.example.com/path/to/pear.ini&quot; or
+&quot;ssh2.sftp://user:pass@ftp.example.com/path/to/pear.ini&quot;
 
 After this is done, install/upgrade as normal using the
 remote* commands as if they were local.
@@ -44,7 +46,7 @@ remote* commands as if they were local.
   <email>cox@idecnet.com</email>
   <active>no</active>
  </lead>
- <date>2006-03-29</date>
+ <date>2006-04-02</date>
  <version>
   <release>0.3.0</release>
   <api>0.1.0</api>
@@ -55,9 +57,11 @@ remote* commands as if they were local.
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  Support for FTPS is now available
-  Drop Net_FTP dependency, add dependency on PHP 5, use streams to access
-  FTP.
+  Support for FTPS and SFTP is now available!
+  * Drop Net_FTP dependency, add dependency on PHP 5, use streams to access
+    FTP.
+  * Require PEAR 1.4.3 for security reasons
+  * Add optional dep on ssh2 extension
  </notes>
  <contents>
   <dir name="/">
@@ -91,6 +95,13 @@ remote* commands as if they were local.
     <min>1.4.3</min>
    </package>
   </required>
+  <optional>
+   <package>
+    <name>ssh2</name>
+    <channel>pecl.php.net</channel>
+    <providesextension>ssh2</providesextension>
+   </package>
+  </optional>
  </dependencies>
  <phprelease/>
  <changelog>
