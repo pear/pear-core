@@ -46,6 +46,17 @@ class PEAR_FTP extends PEAR
     protected $_uri;
 
     /**
+     * Value to prepend to relative paths
+     * @var string|null
+     */
+    protected $_pathprepend = null;
+    /**
+     * Resource needed for ssh2 action
+     * @var resource
+     */
+    protected $_ssh2connection;
+
+    /**
      * @param string full url to remote config file
      * @return true|PEAR_Error
      */
@@ -60,10 +71,10 @@ class PEAR_FTP extends PEAR
             return PEAR::raiseError('No FTP Host specified');
         }
         if (!isset($this->_parsed['scheme'])) {
-            return PEAR::raiseError('No FTP Scheme (ftp/ftps) specified');
+            return PEAR::raiseError('No FTP Scheme (ftp/ftps/ssh2.sftp) specified');
         }
-        if (!in_array($this->_parsed['scheme'], array('ftp', 'ftps'), true)) {
-            return PEAR::raiseError('Only ftp/ftps is supported for remote config');
+        if (!in_array($this->_parsed['scheme'], array('ftp', 'ftps', 'ssh2.sftp'), true)) {
+            return PEAR::raiseError('Only ftp/ftps/ssh2.sftp is supported for remote config');
         }
         if (!in_array($this->_parsed['scheme'], stream_get_wrappers(), true)) {
             if ($this->_parsed['scheme'] == 'ftps' && !extension_loaded('openssl')) {
@@ -74,6 +85,16 @@ class PEAR_FTP extends PEAR
                 } else {
                     return PEAR::raiseError('In order to use ftps, you must ' .
                         'enable the "openssl" extension in php.ini');
+                }
+            }
+            if ($this->_parsed['scheme'] == 'ssh2.sftp') {
+                if (OS_WINDOWS) {
+                    return PEAR::raiseError('In order to use ssh2.sftp, you must ' .
+                        'enable the "php_ssh2.dll" extension in php.ini');
+                } else {
+                    return PEAR::raiseError('In order to use ssh2.sftp, you must ' .
+                        'install ssh2 via "pecl install ssh2" and enable the "ssh2" ' .
+                        'extension in php.ini');
                 }
             }
             return PEAR::raiseError('Your PHP does not support this wrapper: ' .
@@ -90,7 +111,32 @@ class PEAR_FTP extends PEAR
         if ($path[strlen($path) - 1] == '/') {
             $path = substr($path, 0, strlen($path) - 1);
         }
-        $this->_uri = $this->_parsed['scheme'] . '://' . $user . $host . $path;
+        if ($this->_parsed['scheme'] == 'ssh2.sftp') {
+            $connection = @ssh2_connect($host, isset($this->_parsed['port']) ?
+                $this->_parsed['port'] : 22);
+            if (!$connection) {
+                return PEAR::raiseError('Unable to connect to remote host: ' .
+                    $php_errormsg);
+            }
+            $a = @ssh2_auth_password($connection, urldecode($this->_parsed['user']),
+                urldecode($this->_parsed['pass']));
+            if (!$a) {
+                return PEAR::raiseError('Unable to authenticate to remote host: ' .
+                    $php_errormsg);
+            }
+            
+            $sftp = @ssh2_sftp($connection);
+            if (!$sftp) {
+                return PEAR::raiseError('Unable to initiate sftp session: ' .
+                    $php_errormsg);
+            }
+            $this->_uri = $this->_parsed['scheme'] . '://' . $sftp;
+            $this->_pathprepend = $path;
+            $this->_ssh2connection = $sftp;
+        } else {
+            $this->_uri = $this->_parsed['scheme'] . '://' . $user . $host;
+            $this->_pathprepend = $path;
+        }
         return true;
     }
 
@@ -139,25 +185,50 @@ class PEAR_FTP extends PEAR
      */
     public function get($relfile, $localfile, $binary = true)
     {
-        $local = fopen($localfile, 'w' . ($binary ? 'b' : ''));
-        $remote = fopen($this->_prepend($relfile), 'r' . ($binary ? 'b' : ''));
-        $ret = stream_copy_to_stream($remote, $local);
-        fclose($local);
-        fclose($remote);
-        return $ret ? $ret : PEAR::raiseError('FTP get of ' . $this->_prepend($remotefile) .
+        $local = @fopen($localfile, 'w' . ($binary ? 'b' : ''));
+        $remote = @fopen($this->_prepend($relfile), 'r' . ($binary ? 'b' : ''));
+        if (!$remote) {
+            return PEAR::raiseError('Could not open remote file ' . 
+                $this->_prepend($relfile) . ' for retrieval');
+        }
+        if (!$local) {
+            return PEAR::raiseError('Could not open local file ' . 
+                $this->_prepend($relfile) . ' for retrieving remote file ' .
+                $this->_prepend($relfile));
+        }
+        $ret = @stream_copy_to_stream($remote, $local);
+        if ($local) {
+            @fclose($local);
+        }
+        if ($remote) {
+            @fclose($remote);
+        }
+        return $ret ? $ret : PEAR::raiseError('FTP get of ' . $this->_prepend($relfile) .
             ' failed');
     }
 
-    public function put($local, $remotefile, $overwrite = false)
+    public function put($localfile, $remotefile, $overwrite = false, $binary = true)
     {
-        $local = fopen($localfile, 'r' . ($binary ? 'b' : ''));
+        $local = @fopen($localfile, 'r' . ($binary ? 'b' : ''));
+        if (!$local) {
+            return PEAR::raiseError('Could not put local file ' . $localfile .
+                'opening the file failed');
+        }
         $opts = array('ftp' => array('overwrite' => $overwrite));
         $context = stream_context_create($opts);
-        $remote = fopen($this->_prepend($remotefile), 'r' . ($binary ? 'b' : ''), false,
+        $remote = @fopen($this->_prepend($remotefile), 'w' . ($binary ? 'b' : ''), false,
             $context);
-        $ret = stream_copy_to_stream($remote, $local);
-        fclose($local);
-        fclose($remote);
+        if (!$remote) {
+            return PEAR::raiseError('Could not open remote file ' .
+                $this->_prepend($remotefile) . ' for saving as local file ' . $localfile);
+        }
+        $ret = @stream_copy_to_stream($remote, $local);
+        if ($local) {
+            @fclose($local);
+        }
+        if ($remote) {
+            @fclose($remote);
+        }
         return $ret ? $ret : PEAR::raiseError('FTP put of ' . $this->_prepend($remotefile) .
             ' failed');
     }
@@ -169,7 +240,7 @@ class PEAR_FTP extends PEAR
 
     public function rm($path, $recursive = false)
     {
-        if (unlink($this->_prepend($path))) {
+        if (@unlink($this->_prepend($path))) {
             return true;
         }
         return PEAR::raiseError('rm of ' . $this->_prepend($path) . ' failed');
@@ -183,7 +254,11 @@ class PEAR_FTP extends PEAR
      */
     private function _prepend($path)
     {
-        return $this->_uri . '/' . $path;
+        if ($path[0] == '/') {
+            return $this->_uri . $path;
+        } else {
+            return $this->_uri . $this->_pathprepend . '/' . $path;
+        }
     }
 }
 ?>
