@@ -162,7 +162,7 @@ class PEAR_RemoteInstaller extends PEAR_Installer
      */
     public function ftpInstall($pkg)
     {
-        if ($pkg->getType() != 'php') {
+        if ($pkg->getPackageType() != 'php') {
             return PEAR::raiseError('Error: can only install PHP scripts remotely,' .
                 ' no PHP extensions can be compiled remotely');
         }
