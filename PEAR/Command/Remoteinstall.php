@@ -26,6 +26,7 @@
  */
 require_once 'PEAR/Command/Install.php';
 
+define('PEAR_REMOTEINSTALL_OK', 1);
 /**
  * PEAR commands for installation or deinstallation/upgrading of
  * packages.
@@ -329,6 +330,11 @@ channel not in your default channel ({config default_channel})
         } elseif (!$this->config->get('remote_config')) {
             return $this->raiseError('Error: ' . $command . ' expects either option ' .
                 '"remoteconfig" be set, or remote_config configuration variable be used');
+        } else {
+            $e = $this->config->readFTPConfigFile($this->config->get('remote_config'));
+            if (!PEAR::isError($e)) {
+                $this->installer->setConfig($this->config);
+            }
         }
         $command = str_replace('remote-', '', $command); // fool parent
         return parent::doInstall($command, $options, $params);
@@ -350,6 +356,11 @@ channel not in your default channel ({config default_channel})
         } elseif (!$this->config->get('remote_config')) {
             return $this->raiseError('Error: ' . $command . ' expects either option ' .
                 '"remoteconfig" be set, or remote_config configuration variable be used');
+        } else {
+            $e = $this->config->readFTPConfigFile($this->config->get('remote_config'));
+            if (!PEAR::isError($e)) {
+                $this->installer->setConfig($this->config);
+            }
         }
         $command = 'uninstall'; // fool parent
         return parent::doUninstall($command, $options, $params);
@@ -357,4 +368,10 @@ channel not in your default channel ({config default_channel})
 
     // }}}
 }
+
+/**
+ * This is a hack for PEAR 1.4.x to work
+ * @ignore
+ */
+class Net_FTP {}
 ?>

@@ -87,7 +87,7 @@ class PEAR_RemoteInstaller extends PEAR_Installer
     /**
      * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
      */
-    function ftpUninstall($pkg)
+    public function ftpUninstall($pkg)
     {
         $ftp = &$this->config->getFTP();
         if (!$ftp) {
@@ -160,8 +160,12 @@ class PEAR_RemoteInstaller extends PEAR_Installer
      * Upload an installed package - does not work with register-only packages!
      * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
      */
-    function ftpInstall($pkg)
+    public function ftpInstall($pkg)
     {
+        if ($pkg->getType() != 'php') {
+            return PEAR::raiseError('Error: can only install PHP scripts remotely,' .
+                ' no PHP extensions can be compiled remotely');
+        }
         $ftp = &$this->config->getFTP();
         if (!$ftp) {
             return PEAR::raiseError('FTP client not initialized');
