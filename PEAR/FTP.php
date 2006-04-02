@@ -31,55 +31,66 @@
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
-class PEAR_FTP extends Net_FTP
+class PEAR_FTP extends PEAR
 {
     /**
      * @var array
      * @access private
      */
-    var $_parsed;
+    protected $_parsed;
+
+    /**
+     * URI to prepend to all paths
+     * @var string
+     */
+    protected $_uri;
 
     /**
      * @param string full url to remote config file
      * @return true|PEAR_Error
      */
-    function init($url = null)
+    public function init($url = null)
     {
         if ($url !== null) {
             $this->_parsed = @parse_url($url);
+        } else {
+            return;
         }
         if (!isset($this->_parsed['host'])) {
             return PEAR::raiseError('No FTP Host specified');
+        }
+        if (!isset($this->_parsed['scheme'])) {
+            return PEAR::raiseError('No FTP Scheme (ftp/ftps) specified');
+        }
+        if (!in_array($this->_parsed['scheme'], array('ftp', 'ftps'), true)) {
+            return PEAR::raiseError('Only ftp/ftps is supported for remote config');
+        }
+        if (!in_array($this->_parsed['scheme'], stream_get_wrappers(), true)) {
+            if ($this->_parsed['scheme'] == 'ftps' && !extension_loaded('openssl')) {
+                if (OS_WINDOWS) {
+                    return PEAR::raiseError('In order to use ftps, you must ' .
+                        'put "extension=php_openssl.dll" into php.ini and ' .
+                        'copy libeay32.dll and ssleay32.dll to \windows\system32');
+                } else {
+                    return PEAR::raiseError('In order to use ftps, you must ' .
+                        'enable the "openssl" extension in php.ini');
+                }
+            }
+            return PEAR::raiseError('Your PHP does not support this wrapper: ' .
+                $this->_parsed['scheme']);
         }
         if (!isset($this->_parsed['path'])) {
             return PEAR::raiseError('No FTP file path to remote config specified');
         }
         $host = $this->_parsed['host'];
-        $user = @$this->_parsed['user'];
-        $pass = @$this->_parsed['pass'];
-        $port = @$this->_parsed['port'];
-        $path = @$this->_parsed['path'];
-        $this->Net_FTP($host, $port, 30); // 30 second timeout
-        $this->pushErrorHandling(PEAR_ERROR_RETURN);
-        $e = $this->connect();
-        if (PEAR::isError($e)) {
-            $this->popErrorHandling();
-            return $e;
+        $pass = isset($this->_parsed['pass']) ? ':' . $this->_parsed['pass'] : '';
+        $user = isset($this->_parsed['user']) ? $this->_parsed['user'] . "$pass@" : '';
+        $port = isset($this->_parsed['port']) ? ':' . $this->_parsed['port'] : '';
+        $path = dirname($this->_parsed['path']);
+        if ($path[strlen($path) - 1] == '/') {
+            $path = substr($path, 0, strlen($path) - 1);
         }
-        $e  = $this->login($user, $pass);
-        if (PEAR::isError($e)) {
-            $this->popErrorHandling();
-            return $e;
-        }
-        $path = dirname($path);
-        if ($path == '\\') { // windows will do this
-            $path = '/';
-        }
-        $e = $this->cd($path);
-        if (PEAR::isError($e)) {
-            $this->popErrorHandling();
-            return $e;
-        }
+        $this->_uri = $this->_parsed['scheme'] . '://' . $user . $host . $path;
         return true;
     }
 
@@ -89,44 +100,21 @@ class PEAR_FTP extends Net_FTP
      * selected server-path. (see: pwd())
      *
      * @access  public
-     * @param   string $dir       Absolute or relative dir-path
+     * @param   string $dir       relative dir-path
      * @param   bool   $recursive (optional) Create all needed directories
      * @return  mixed             True on success, otherwise PEAR::Error
      * @see     NET_FTP_ERR_CREATEDIR_FAILED
      */
-    function mkdir($dir, $recursive = false)
+    public function mkdir($dir, $recursive = false)
     {
-        $dir = $this->_construct_path($dir);
-        $savedir = $this->pwd();
-        $this->pushErrorHandling(PEAR_ERROR_RETURN);
-        $e = $this->cd($dir);
-        $this->popErrorHandling();
-        if ($e === true) {
-            $this->cd($savedir);
-            return true;
-        }
-        $this->cd($savedir);
-        if ($recursive === false) {
-            if (method_exists($this, '_testftp_mkdir')) {
-                $res = $this->_testftp_mkdir($this->_handle, $dir);
-            } else {
-                $res = @ftp_mkdir($this->_handle, $dir);
-            }
-            if (!$res) {
-                return $this->raiseError("Creation of '$dir' failed", NET_FTP_ERR_CREATEDIR_FAILED);
-            } else {
-                return true;
-            }
+        if (method_exists($this, '_testftp_mkdir')) {
+            $res = $this->_testftp_mkdir($this->_prepend($dir), 0755, $recursive);
         } else {
-            if(strpos($dir, '/') === false) {
-                return $this->mkdir($dir,false);
-            }
-            $pos = 0;
-            $res = $this->mkdir(dirname($dir), true);
-            $res = $this->mkdir($dir, false);
-            if ($res !== true) {
-                return $res;
-            }
+            $res = @mkdir($this->_prepend($dir), 0755, $recursive);
+        }
+        if (!$res) {
+            return $this->raiseError("Creation of '$dir' failed");
+        } else {
             return true;
         }
     }
@@ -135,12 +123,67 @@ class PEAR_FTP extends Net_FTP
      * @param string full path to local file
      * @param string full path to remote file
      */
-    function installFile($local, $remote)
+    public function installFile($local, $remote)
     {
         $this->pushErrorHandling(PEAR_ERROR_RETURN);
         $this->mkdir(dirname($remote), true);
         $this->popErrorHandling();
         return $this->put($local, $remote, true);
+    }
+
+    /**
+     * Retrieve a file from the remote server
+     *
+     * @param string $relfile relative path of the remote file
+     * @param string $localfile full local path to save the file in
+     */
+    public function get($relfile, $localfile, $binary = true)
+    {
+        $local = fopen($localfile, 'w' . ($binary ? 'b' : ''));
+        $remote = fopen($this->_prepend($relfile), 'r' . ($binary ? 'b' : ''));
+        $ret = stream_copy_to_stream($remote, $local);
+        fclose($local);
+        fclose($remote);
+        return $ret ? $ret : PEAR::raiseError('FTP get of ' . $this->_prepend($remotefile) .
+            ' failed');
+    }
+
+    public function put($local, $remotefile, $overwrite = false)
+    {
+        $local = fopen($localfile, 'r' . ($binary ? 'b' : ''));
+        $opts = array('ftp' => array('overwrite' => $overwrite));
+        $context = stream_context_create($opts);
+        $remote = fopen($this->_prepend($remotefile), 'r' . ($binary ? 'b' : ''), false,
+            $context);
+        $ret = stream_copy_to_stream($remote, $local);
+        fclose($local);
+        fclose($remote);
+        return $ret ? $ret : PEAR::raiseError('FTP put of ' . $this->_prepend($remotefile) .
+            ' failed');
+    }
+
+    public function disconnect()
+    {
+        // does nothing here
+    }
+
+    public function rm($path, $recursive = false)
+    {
+        if (unlink($this->_prepend($path))) {
+            return true;
+        }
+        return PEAR::raiseError('rm of ' . $this->_prepend($path) . ' failed');
+    }
+
+    /**
+     * Return a ftp URI for usage with filesystem functions directly
+     *
+     * @param string $path relative path to the on the FTP server
+     * @return string full path to the ftp server including ftp[s]://...
+     */
+    private function _prepend($path)
+    {
+        return $this->_uri . '/' . $path;
     }
 }
 ?>
