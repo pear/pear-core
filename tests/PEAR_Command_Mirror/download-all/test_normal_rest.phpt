@@ -99,6 +99,19 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/packages.xml", '<?xml versio
 <c>pear.php.net</c>
  <p>APC</p>
 </a>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/apc/info.xml", '<?xml version="1.0"?>
+<p xmlns="http://pear.php.net/dtd/rest.package"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.package
+    http://pear.php.net/dtd/rest.package.xsd">
+ <n>APC</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/File+Formats">File Formats</ca>
+ <l>PHP License</l>
+ <s>Zip file management class</s>
+ <d>This class provides handling of zip files in PHP.
+It supports creating, listing, extracting and adding to zip files.</d>
+ <r xlink:href="/rest/r/apc"/>
+</p>', 'text/xml');
 $config->set('preferred_state', 'stable');
 $save = getcwd();
 chdir($temp_path);
@@ -159,12 +172,14 @@ $phpunit->assertEquals(array (
     0 => 'http://pear.php.net/rest/r/apc/allreleases.xml',
     1 => '200',
   ),
-  2 => 
+  array (
+    0 => 'http://pear.php.net/rest/p/apc/info.xml',
+    1 => '200',
+  ),
   array (
     0 => 'http://pear.php.net/rest/r/apc/1.3.0.xml',
     1 => '200',
   ),
-  3 => 
   array (
     0 => 'http://pear.php.net/rest/r/apc/deps.1.3.0.txt',
     1 => '200',

@@ -1735,6 +1735,16 @@ class PEAR_Downloader_Package
                 return $err;
             }
         }
+        if (isset($info['deprecated']) && $info['deprecated']) {
+            $this->_downloader->log(0,
+                'WARNING: "' . 
+                    $this->_registry->parsedPackageNameToString(
+                            array('channel' => $info['info']->getChannel(),
+                                  'package' => $info['info']->getPackage()), true) .
+                '" is deprecated in favor of "' .
+                    $this->_registry->parsedPackageNameToString($info['deprecated'], true) .
+                '"');
+        }
         return $info;
     }
 }

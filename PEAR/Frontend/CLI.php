@@ -679,6 +679,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 $this->_endTable();
                 break;
             case 'remote-info':
+                $d = $data;
                 $data = array(
                     'caption' => 'Package details:',
                     'border' => false,
@@ -692,6 +693,12 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                         array("Description", $data['description']),
                         ),
                     );
+                    if (isset($d['deprecated']) && $d['deprecated']) {
+                        $conf = &PEAR_Config::singleton();
+                        $reg = $conf->getRegistry();
+                        $name = $reg->parsedPackageNameToString($d['deprecated'], true);
+                        $data['data'][] = array('Deprecated! use', $name);
+                    }
             default: {
                 if (is_array($data)) {
                     $this->_startTable($data);

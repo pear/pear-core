@@ -95,6 +95,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
     (as defined by http://perldoc.perl.org/Test/Harness/TAP.html)
   * implement Request #7090: PEAR_Downloader mustn't contact pear server
     when installing local package file
+  * implement Request #7220: recognize deprecated package/channel and display to user
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

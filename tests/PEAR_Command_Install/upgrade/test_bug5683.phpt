@@ -160,6 +160,79 @@ It has support for HTTP/HTTPS transport, proxies and authentication.
 </r>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/deps.1.4.4.txt", 'b:0;', 'text/xml');
 $pearweb->addHTMLConfig('http://pear.php.net/get/XML_RPC-1.4.4.tgz', $dir . 'XML_RPC-1.4.4.tgz');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/pear/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>PEAR</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License</l>
+ <s>PEAR Base System</s>
+ <d>The PEAR package contains:
+ * the PEAR installer, for creating, distributing
+   and installing packages
+ * the beta-quality PEAR_Exception PHP5 error handling mechanism
+ * the beta-quality PEAR_ErrorStack advanced error handling mechanism
+ * the PEAR_Error error handling mechanism
+ * the OS_Guess class for retrieving info about the OS
+   where PHP is running on
+ * the System class for quick handling of common operations
+   with files and directories
+ * the PEAR base class
+
+  New features in a nutshell:
+  * full support for channels
+  * pre-download dependency validation
+  * new package.xml 2.0 format allows tremendous flexibility while maintaining BC
+  * support for optional dependency groups and limited support for sub-packaging
+  * robust dependency support
+  * full dependency validation on uninstall
+  * remote install for hosts with only ftp access - no more problems with
+    restricted host installation
+  * full support for mirroring
+  * support for bundling several packages into a single tarball
+  * support for static dependencies on a url-based package
+  * support for custom file roles and installation tasks
+
+  NOTE: users of PEAR_Frontend_Web/PEAR_Frontend_Gtk must upgrade their installations
+  to the latest version, or PEAR will not upgrade properly</d>
+ <r xlink:href="/rest/r/pear"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/archive_tar/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>Archive_Tar</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/File+Formats">File Formats</ca>
+ <l>PHP License</l>
+ <s>Tar file management class</s>
+ <d>This class provides handling of tar files in PHP.
+It supports creating, listing, extracting and adding to tar files.
+Gzip support is available if PHP has the zlib extension built-in or
+loaded. Bz2 compression is also supported with the bz2 extension loaded.</d>
+ <r xlink:href="/rest/r/archive_tar"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/console_getopt/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>Console_Getopt</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/Console">Console</ca>
+ <l>PHP License</l>
+ <s>Command-line option parser</s>
+ <d>This is a PHP implementation of &quot;getopt&quot; supporting both
+short and long options.</d>
+ <r xlink:href="/rest/r/console_getopt"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/xml_rpc/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>XML_RPC</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/Web+Services">Web Services</ca>
+ <l>PHP License</l>
+ <s>PHP implementation of the XML-RPC protocol</s>
+ <d>A PEAR-ified version of Useful Inc\'s XML-RPC for PHP.
+
+It has support for HTTP/HTTPS transport, proxies and authentication.</d>
+ <r xlink:href="/rest/r/xml_rpc"/>
+</p>', 'text/xml');
 $command->run('install', array(), array($dir . 'PEAR-1.4.3.tgz', $dir . 'XML_RPC-1.4.3.tgz',
     $dir . 'Console_Getopt-1.2.tgz', $dir . 'Archive_Tar-1.3.1.tgz'));
 $phpunit->assertNoErrors('setup');

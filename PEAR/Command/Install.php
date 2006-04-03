@@ -421,6 +421,9 @@ Run post-installation scripts in package <package>, if any exist.
         $errors = array();
         $downloaded = array();
         $downloaded = &$this->downloader->download($params);
+        if (PEAR::isError($downloaded)) {
+            return $this->raiseError($downloaded);
+        }
         $errors = $this->downloader->getErrorMsgs();
         if (count($errors)) {
             foreach ($errors as $error) {

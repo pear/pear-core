@@ -158,6 +158,42 @@ It has support for HTTP/HTTPS transport, proxies and authentication.
  <g>http://pear.php.net/get/XML_RPC-1.4.4</g>
  <x xlink:href="package.1.4.4.xml"/>
 </r>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/archive_tar/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>Archive_Tar</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/File+Formats">File Formats</ca>
+ <l>PHP License</l>
+ <s>Tar file management class</s>
+ <d>This class provides handling of tar files in PHP.
+It supports creating, listing, extracting and adding to tar files.
+Gzip support is available if PHP has the zlib extension built-in or
+loaded. Bz2 compression is also supported with the bz2 extension loaded.</d>
+ <r xlink:href="/rest/r/archive_tar"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/console_getopt/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>Console_Getopt</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/Console">Console</ca>
+ <l>PHP License</l>
+ <s>Command-line option parser</s>
+ <d>This is a PHP implementation of &quot;getopt&quot; supporting both
+short and long options.</d>
+ <r xlink:href="/rest/r/console_getopt"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/xml_rpc/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>XML_RPC</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/Web+Services">Web Services</ca>
+ <l>PHP License</l>
+ <s>PHP implementation of the XML-RPC protocol</s>
+ <d>A PEAR-ified version of Useful Inc\'s XML-RPC for PHP.
+
+It has support for HTTP/HTTPS transport, proxies and authentication.</d>
+ <r xlink:href="/rest/r/xml_rpc"/>
+</p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/deps.1.4.4.txt", 'b:0;', 'text/xml');
 $pearweb->addHTMLConfig('http://pear.php.net/get/XML_RPC-1.4.4.tgz', $dir . 'XML_RPC-1.4.4.tgz');
 $command->run('install', array(), array($dir . 'PEAR-1.4.3.tgz', $dir . 'XML_RPC-1.4.3.tgz',

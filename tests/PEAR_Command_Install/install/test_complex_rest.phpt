@@ -103,6 +103,93 @@ $pearweb->addRESTConfig("http://smork/rest/r/foobar/1.5.0a1.xml", '<?xml version
  <x xlink:href="package.1.5.0a1.xml"/>
 
 </r>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/bar/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>bar</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>PEAR_PackageFileManager takes an existing package.xml file and updates it with a new filelist and changelog</s>
+ <d>This package revolutionizes the maintenance of PEAR packages.  With a few parameters,
+the entire package.xml is automatically updated with a listing of all files in a package.
+Features include
+ - manages the new package.xml 2.0 format in PEAR 1.4.0
+ - can detect PHP and extension dependencies using PHP_CompatInfo
+ - reads in an existing package.xml file, and only changes the release/changelog
+ - a plugin system for retrieving files in a directory.  Currently two plugins
+   exist, one for standard recursive directory content listing, and one that
+   reads the CVS/Entries files and generates a file listing based on the contents
+   of a checked out CVS repository
+ - incredibly flexible options for assigning install roles to files/directories
+ - ability to ignore any file based on a * ? wildcard-enabled string(s)
+ - ability to include only files that match a * ? wildcard-enabled string(s)
+ - ability to manage dependencies
+ - can output the package.xml in any directory, and read in the package.xml
+   file from any directory.
+ - can specify a different name for the package.xml file
+
+PEAR_PackageFileManager is fully unit tested.
+The new PEAR_PackageFileManager2 class is not.</d>
+ <r xlink:href="/rest/r/pear_packagefilemanager"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/foobar/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>foobar</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>PEAR_PackageFileManager takes an existing package.xml file and updates it with a new filelist and changelog</s>
+ <d>This package revolutionizes the maintenance of PEAR packages.  With a few parameters,
+the entire package.xml is automatically updated with a listing of all files in a package.
+Features include
+ - manages the new package.xml 2.0 format in PEAR 1.4.0
+ - can detect PHP and extension dependencies using PHP_CompatInfo
+ - reads in an existing package.xml file, and only changes the release/changelog
+ - a plugin system for retrieving files in a directory.  Currently two plugins
+   exist, one for standard recursive directory content listing, and one that
+   reads the CVS/Entries files and generates a file listing based on the contents
+   of a checked out CVS repository
+ - incredibly flexible options for assigning install roles to files/directories
+ - ability to ignore any file based on a * ? wildcard-enabled string(s)
+ - ability to include only files that match a * ? wildcard-enabled string(s)
+ - ability to manage dependencies
+ - can output the package.xml in any directory, and read in the package.xml
+   file from any directory.
+ - can specify a different name for the package.xml file
+
+PEAR_PackageFileManager is fully unit tested.
+The new PEAR_PackageFileManager2 class is not.</d>
+ <r xlink:href="/rest/r/pear_packagefilemanager"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://smork/rest/p/foobar/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>foobar</n>
+ <c>smork</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>PEAR_PackageFileManager takes an existing package.xml file and updates it with a new filelist and changelog</s>
+ <d>This package revolutionizes the maintenance of PEAR packages.  With a few parameters,
+the entire package.xml is automatically updated with a listing of all files in a package.
+Features include
+ - manages the new package.xml 2.0 format in PEAR 1.4.0
+ - can detect PHP and extension dependencies using PHP_CompatInfo
+ - reads in an existing package.xml file, and only changes the release/changelog
+ - a plugin system for retrieving files in a directory.  Currently two plugins
+   exist, one for standard recursive directory content listing, and one that
+   reads the CVS/Entries files and generates a file listing based on the contents
+   of a checked out CVS repository
+ - incredibly flexible options for assigning install roles to files/directories
+ - ability to ignore any file based on a * ? wildcard-enabled string(s)
+ - ability to include only files that match a * ? wildcard-enabled string(s)
+ - ability to manage dependencies
+ - can output the package.xml in any directory, and read in the package.xml
+   file from any directory.
+ - can specify a different name for the package.xml file
+
+PEAR_PackageFileManager is fully unit tested.
+The new PEAR_PackageFileManager2 class is not.</d>
+ <r xlink:href="/rest/r/pear_packagefilemanager"/>
+</p>', 'text/xml');
 $_test_dep->setPHPVersion('4.3.11');
 $_test_dep->setPEARVersion('1.4.0a1');
 $config->set('preferred_state', 'alpha');
@@ -476,32 +563,34 @@ if (OS_WINDOWS) {
     ), $fakelog->getLog(), 'log messages');
 }
 $phpunit->assertEquals(array (
-  0 => 
   array (
     0 => 'http://pear.php.net/rest/r/bar/allreleases.xml',
     1 => '200',
   ),
-  1 => 
+  array (
+    0 => 'http://pear.php.net/rest/p/bar/info.xml',
+    1 => '200',
+  ),
   array (
     0 => 'http://pear.php.net/rest/r/bar/1.5.2.xml',
     1 => '200',
   ),
-  2 => 
   array (
     0 => 'http://pear.php.net/rest/r/bar/deps.1.5.2.txt',
     1 => '200',
   ),
-  3 => 
   array (
     0 => 'http://smork/rest/r/foobar/allreleases.xml',
     1 => '200',
   ),
-  4 => 
+  array (
+    0 => 'http://smork/rest/p/foobar/info.xml',
+    1 => '200',
+  ),
   array (
     0 => 'http://smork/rest/r/foobar/1.5.0a1.xml',
     1 => '200',
   ),
-  5 => 
   array (
     0 => 'http://smork/rest/r/foobar/deps.1.5.0a1.txt',
     1 => '200',
