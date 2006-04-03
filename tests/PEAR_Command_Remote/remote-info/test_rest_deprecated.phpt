@@ -1,5 +1,5 @@
 --TEST--
-remote-info command (REST-based channel)
+remote-info command (REST-based channel with deprecation)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -26,6 +26,8 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/archive_zip/info.xml", '<?xm
  <d>This class provides handling of zip files in PHP.
 It supports creating, listing, extracting and adding to zip files.</d>
  <r xlink:href="/rest/r/archive_zip"/>
+ <dc>pear.php.net</dc>
+ <dp xlink:href="/rest/p/foo">Foo</dp>
 </p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/archive_zip/allreleases.xml", false, false);
 $pearweb->addRESTConfig("http://pear.php.net/rest/p/pear/info.xml", '<?xml version="1.0"?>
@@ -2125,7 +2127,11 @@ It supports creating, listing, extracting and adding to zip files.',
       'releases' => 
       array (
       ),
-      'deprecated' => false,
+      'deprecated' =>
+      array(
+        'channel' => 'pear.php.net',
+        'package' => 'Foo',
+      ),
       'installed' => '- no -',
     ),
     'cmd' => 'remote-info',

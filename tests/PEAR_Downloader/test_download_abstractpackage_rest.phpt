@@ -47,6 +47,16 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/test/1.0.xml", '<?xml versio
  <g>http://www.example.com/test-1.0</g>
  <x xlink:href="package.1.0.xml"/>
 </r>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/test/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>test</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/test">test</ca>
+ <l>PHP License</l>
+ <s>test</s>
+ <d>test</d>
+ <r xlink:href="/rest/r/test"/>
+</p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/test/deps.1.0.txt", 'b:0;', 'text/plain');
 
 $dp = &new test_PEAR_Downloader($fakelog, array(), $config);
@@ -133,12 +143,14 @@ $phpunit->assertEquals(array(
     0 => 'http://pear.php.net/rest/r/test/allreleases.xml',
     1 => '200',
   ),
-  1 => 
+  array (
+    0 => 'http://pear.php.net/rest/p/test/info.xml',
+    1 => '200',
+  ),
   array (
     0 => 'http://pear.php.net/rest/r/test/1.0.xml',
     1 => '200',
   ),
-  2 => 
   array (
     0 => 'http://pear.php.net/rest/r/test/deps.1.0.txt',
     1 => '200',

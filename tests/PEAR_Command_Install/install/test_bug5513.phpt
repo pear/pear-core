@@ -571,6 +571,180 @@ The new PEAR_PackageFileManager2 class is not.</d>
  <g>http://pear.php.net/get/PEAR_PackageFileManager-1.6.0a3</g>
  <x xlink:href="package.1.6.0a3.xml"/>
 </r>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/versioncontrol_svn/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>VersionControl_SVN</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/Version+Control">Version Control</ca>
+ <l>BSD License</l>
+ <s>Simple OO wrapper interface for the Subversion command-line client.</s>
+ <d>What is VersionControl_SVN?
+
+VersionControl_SVN is a simple OO-style interface for Subversion,
+the free/open-source version control system.
+
+VersionControl_SVN can be used to manage trees of source code,
+text files, image files -- just about any
+collection of files.
+
+Some of VersionControl_SVN\'s features:
+
+* Full support of svn command-line client\'s
+  subcommands.
+* Use of flexible error reporting provided by
+  PEAR_ErrorStack.
+* Multi-object factory.
+* Source fully documented with PHPDoc.
+* Stable, extensible interface.
+* Collection of helpful quickstart examples and
+  tutorials.
+
+What can be done with VersionControl_SVN?
+
+* Make your source code available to your
+  remote dev team or project manager.
+
+* Build your own WYSIWYG web interface to a
+  Subversion repository.
+
+* Add true version control to a content management
+  system!
+
+Note: Requires a Subversion installation.
+Subverison is available from
+http://subversion.tigris.org/
+
+VersionControl_SVN is tested against Subversion 1.0.4</d>
+ <r xlink:href="/rest/r/versioncontrol_svn"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/phpunit2/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>PHPUnit2</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/Testing">Testing</ca>
+ <l>BSD License</l>
+ <s>Regression testing framework for unit tests.</s>
+ <d>PHPUnit is a regression testing framework used by the developer who implements unit tests in PHP. This is the version to be used with PHP 5.</d>
+ <r xlink:href="/rest/r/phpunit2"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/phpdocumentor/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>PhpDocumentor</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/Tools+and+Utilities">Tools and Utilities</ca>
+ <l>PHP License</l>
+ <s>The phpDocumentor package provides automatic documenting of php api directly from the source.</s>
+ <d>The phpDocumentor tool is a standalone auto-documentor similar to JavaDoc
+written in PHP.  It differs from PHPDoc in that it is MUCH faster, parses a much
+wider range of php files, and comes with many customizations including 11 HTML
+templates, windows help file CHM output, PDF output, and XML DocBook peardoc2
+output for use with documenting PEAR.  In addition, it can do PHPXref source
+code highlighting and linking.
+
+Features (short list):
+-output in HTML, PDF (directly), CHM (with windows help compiler), XML DocBook
+-very fast
+-web and command-line interface
+-fully customizable output with Smarty-based templates
+-recognizes JavaDoc-style documentation with special tags customized for PHP 4
+-automatic linking, class inheritance diagrams and intelligent override
+-customizable source code highlighting, with phpxref-style cross-referencing
+-parses standard README/CHANGELOG/INSTALL/FAQ files and includes them
+ directly in documentation
+-generates a todo list from @todo tags in source
+-generates multiple documentation sets based on @access private, @internal and
+ {@internal} tags
+-example php files can be placed directly in documentation with highlighting
+ and phpxref linking using the @example tag
+-linking between external manual and API documentation is possible at the
+ sub-section level in all output formats
+-easily extended for specific documentation needs with Converter
+-full documentation of every feature, manual can be generated directly from
+ the source code with &quot;phpdoc -c makedocs&quot; in any format desired.
+-current manual always available at http://www.phpdoc.org/manual.php
+-user .ini files can be used to control output, multiple outputs can be
+ generated at once
+
+**WARNING**:
+To use the web interface, you must set PEAR\'s data_dir to a subdirectory of
+document root.
+
+If browsing to http://localhost/index.php displays /path/to/htdocs/index.php,
+set data_dir to a subdirectory of /path/to/htdocs:
+
+$ pear config-set data_dir /path/to/htdocs/pear
+$ pear install PhpDocumentor
+
+http://localhost/pear/PhpDocumentor is the web interface</d>
+ <r xlink:href="/rest/r/phpdocumentor"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pecl.php.net/rest/p/xdebug/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>Xdebug</n>
+ <c>pecl.php.net</c>
+ <ca xlink:href="/rest/c/PHP">PHP</ca>
+ <l>BSD style</l>
+ <s>Provides functions for function traces and profiling</s>
+ <d>The Xdebug extension helps you debugging your script by providing a lot of
+valuable debug information. The debug information that Xdebug can provide
+includes the following:
+
+    * stack and function traces in error messages with:
+          o full parameter display for user defined functions
+          o function name, file name and line indications
+          o support for member functions
+    * memory allocation
+    * protection for infinite recursions
+
+Xdebug also provides:
+
+    * profiling information for PHP scripts
+    * script execution analysis
+    * capabilities to debug your scripts interactively with a debug client</d>
+ <r xlink:href="/rest/r/xdebug"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/archive_tar/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>Archive_Tar</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/File+Formats">File Formats</ca>
+ <l>PHP License</l>
+ <s>Tar file management class</s>
+ <d>This class provides handling of tar files in PHP.
+It supports creating, listing, extracting and adding to tar files.
+Gzip support is available if PHP has the zlib extension built-in or
+loaded. Bz2 compression is also supported with the bz2 extension loaded.</d>
+ <r xlink:href="/rest/r/archive_tar"/>
+</p>', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/pear_packagefilemanager/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>PEAR_PackageFileManager</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>PEAR_PackageFileManager takes an existing package.xml file and updates it with a new filelist and changelog</s>
+ <d>This package revolutionizes the maintenance of PEAR packages.  With a few parameters,
+the entire package.xml is automatically updated with a listing of all files in a package.
+Features include
+ - manages the new package.xml 2.0 format in PEAR 1.4.0
+ - can detect PHP and extension dependencies using PHP_CompatInfo
+ - reads in an existing package.xml file, and only changes the release/changelog
+ - a plugin system for retrieving files in a directory.  Currently two plugins
+   exist, one for standard recursive directory content listing, and one that
+   reads the CVS/Entries files and generates a file listing based on the contents
+   of a checked out CVS repository
+ - incredibly flexible options for assigning install roles to files/directories
+ - ability to ignore any file based on a * ? wildcard-enabled string(s)
+ - ability to include only files that match a * ? wildcard-enabled string(s)
+ - ability to manage dependencies
+ - can output the package.xml in any directory, and read in the package.xml
+   file from any directory.
+ - can specify a different name for the package.xml file
+
+PEAR_PackageFileManager is fully unit tested.
+The new PEAR_PackageFileManager2 class is not.</d>
+ <r xlink:href="/rest/r/pear_packagefilemanager"/>
+</p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_packagefilemanager/deps.1.6.0a3.txt", 'a:1:{s:8:"required";a:2:{s:3:"php";a:1:{s:3:"min";s:5:"4.2.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0b1";}}}', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/phing/allreleases.xml", false, false);
 $pearweb->addRESTConfig("http://pecl.php.net/rest/r/phing/allreleases.xml", false, false);
