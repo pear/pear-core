@@ -1082,6 +1082,8 @@ class PEAR_Config extends PEAR
                     '" already exists');
             }
             $this->configuration_info[$name] = $var;
+            // fix bug #7351: setting custom config variable in a channel fails
+            $this->_channelConfigInfo[] = $name;
         }
         return true;
     }
