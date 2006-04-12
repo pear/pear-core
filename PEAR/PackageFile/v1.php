@@ -858,6 +858,11 @@ class PEAR_PackageFile_v1
         return false;
     }
 
+    function getProvidesExtension()
+    {
+        return false;
+    }
+
     function addFile($dir, $file, $attrs)
     {
         $dir = preg_replace(array('!\\\\+!', '!/+!'), array('/', '/'), $dir);
