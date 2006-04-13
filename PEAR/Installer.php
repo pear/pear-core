@@ -1036,6 +1036,9 @@ class PEAR_Installer extends PEAR_Downloader
         $pkgname = $pkg->getName();
         $channel = $pkg->getChannel();
         if (isset($this->_options['packagingroot'])) {
+            $regdir = $this->_prependPath(
+                $this->config->get('php_dir', null, 'pear.php.net'),
+                $this->_options['packagingroot']);
             $packrootphp_dir = $this->_prependPath(
                 $this->config->get('php_dir', null, $channel),
                 $this->_options['packagingroot']);
@@ -1051,7 +1054,7 @@ class PEAR_Installer extends PEAR_Downloader
             $this->config->setInstallRoot(false);
             $this->_registry = &$this->config->getRegistry();
             if (isset($this->_options['packagingroot'])) {
-                $installregistry = &new PEAR_Registry($packrootphp_dir);
+                $installregistry = &new PEAR_Registry($regdir);
                 $php_dir = $packrootphp_dir;
             } else {
                 $installregistry = &$this->_registry;
@@ -1368,12 +1371,16 @@ class PEAR_Installer extends PEAR_Downloader
                 $role = 'src';
             }
             $dest = $ext['dest'];
-            $this->log(1, "Installing '$ext[file]'");
             $packagingroot = '';
             if (isset($this->_options['packagingroot'])) {
                 $packagingroot = $this->_options['packagingroot'];
             }
             $copyto = $this->_prependPath($dest, $packagingroot);
+            if ($copyto != $dest) {
+	            $this->log(1, "Installing '$dest' as '$copyto'");
+            } else {
+	            $this->log(1, "Installing '$dest'");
+            }
             $copydir = dirname($copyto);
             // pretty much nothing happens if we are only registering the install
             if (empty($this->_options['register-only'])) {
