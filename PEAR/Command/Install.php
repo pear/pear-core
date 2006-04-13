@@ -452,6 +452,14 @@ Run post-installation scripts in package <package>, if any exist.
             return true;
         }
         $extrainfo = array();
+        if (isset($options['packagingroot'])) {
+            $packrootphp_dir = $this->installer->_prependPath(
+                $this->config->get('php_dir', null, 'pear.php.net'),
+                $options['packagingroot']);
+            $instreg = new PEAR_Registry($packrootphp_dir);
+        } else {
+            $instreg = $reg;
+        }
         foreach ($downloaded as $param) {
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $info = $this->installer->install($param, $options);
@@ -475,9 +483,9 @@ Run post-installation scripts in package <package>, if any exist.
                       $param->getPackageType() == 'extbin') {
                     $pkg = &$param->getPackageFile();
                     if ($instbin = $pkg->getInstalledBinary()) {
-                        $instpkg = &$reg->getPackage($instbin, $pkg->getChannel());
+                        $instpkg = &$instreg->getPackage($instbin, $pkg->getChannel());
                     } else {
-                        $instpkg = &$reg->getPackage($pkg->getPackage(), $pkg->getChannel());
+                        $instpkg = &$instreg->getPackage($pkg->getPackage(), $pkg->getChannel());
                     }
                     foreach ($instpkg->getFilelist() as $name => $atts) {
                         $pinfo = pathinfo($atts['installed_as']);
@@ -551,7 +559,12 @@ Run post-installation scripts in package <package>, if any exist.
                 if (isset($options['installroot'])) {
                     $reg = &$this->config->getRegistry();
                 }
-                $pkg = &$reg->getPackage($param->getPackage(), $param->getChannel());
+                if (isset($options['packagingroot'])) {
+                    $instreg = new PEAR_Registry($packrootphp_dir);
+                } else {
+                    $instreg = $reg;
+                }
+                $pkg = &$instreg->getPackage($param->getPackage(), $param->getChannel());
                 // $pkg may be NULL if install is a 'fake' install via --packagingroot
                 if (is_object($pkg)) {
                     $pkg->setConfig($this->config);
