@@ -84,6 +84,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <state>alpha</state>
   <notes>
   Minor feature addition/bugfixes
+  * fix Bug #6788: backtrace memory leak
   * fix Bug #6931: pear upgrade PEAR-alpha tries to upgrade to 1.4.0a12
   * fix Bug #7021: Everything must be within &lt;dir name=&quot;/&quot;&gt;
   * fix Bug #7196: PEAR crashes when using autoload_prepend_file
