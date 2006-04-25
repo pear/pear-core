@@ -1000,6 +1000,9 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
                                       $recommended = false, $exclude = false,
                                       $providesextension = false, $nodefault = false)
     {
+        if (!in_array($type, array('optional', 'required'), true)) {
+            $type = 'required';
+        }
         $this->_isValid = 0;
         $arr = array('optional', 'group');
         if ($type != 'required') {
