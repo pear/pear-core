@@ -603,6 +603,10 @@ class PEAR_PackageFile_v2
         $common->debug = $this->_config->get('verbose');
         $this->_scripts = array();
         foreach ($taskfiles as $name => $tasks) {
+            if (!isset($filelist[$name])) {
+                // file was not installed due to installconditions
+                continue;
+            }
             $atts = $filelist[$name];
             foreach ($tasks as $tag => $raw) {
                 $taskname = $this->getTask($tag);
