@@ -376,13 +376,16 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 $desc = $prompts[$var];
                 $current = $result[$var];
                 print "$desc [$current] : ";
-                $result[$var] = trim(fgets($fp, 1024));
+                $tmp = trim(fgets($fp, 1024));
+                if (trim($tmp) !== '') {
+                    $result[$var] = trim($tmp);
+                }
             } elseif ($tmp == 'all') {
                 foreach ($prompts as $var => $desc) {
                     $current = $result[$var];
                     print "$desc [$current] : ";
                     $tmp = trim(fgets($fp, 1024));
-                    if (!empty($tmp)) {
+                    if (trim($tmp) !== '') {
                         $result[$var] = trim($tmp);
                     }
                 }
