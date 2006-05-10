@@ -156,7 +156,7 @@ generate both package.xml.
         require_once 'PEAR/PackageFile/v1.php';
         $pf = new PEAR_PackageFile_v1;
         $pf->setConfig($this->config);
-        if (is_array($pf2->getPackageType() != 'extsrc')) {
+        if ($pf2->getPackageType() != 'extsrc') {
             return $this->raiseError('Cannot safely convert "' . $packagexml .
             '", is not an extension source package.  Using a PEAR_PackageFileManager-based ' .
             'script is an option');
