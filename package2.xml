@@ -42,22 +42,22 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <active>yes</active>
  </lead>
  <lead>
+  <name>Pierre-Alain Joye</name>
+  <user>pajoye</user>
+  <email>pajoye@pearfr.org</email>
+  <active>yes</active>
+ </lead>
+ <lead>
   <name>Stig Bakken</name>
   <user>ssb</user>
   <email>stig@php.net</email>
-  <active>yes</active>
+  <active>no</active>
  </lead>
  <lead>
   <name>Tomas V.V.Cox</name>
   <user>cox</user>
   <email>cox@idecnet.com</email>
-  <active>yes</active>
- </lead>
- <lead>
-  <name>Pierre-Alain Joye</name>
-  <user>pajoye</user>
-  <email>pajoye@pearfr.org</email>
-  <active>yes</active>
+  <active>no</active>
  </lead>
  <helper>
   <name>Tim Jackson</name>
@@ -69,7 +69,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <name>Bertrand Gugger</name>
   <user>toggg</user>
   <email>toggg@php.net</email>
-  <active>yes</active>
+  <active>no</active>
  </helper>
  <helper>
   <name>Martin Jansen</name>
@@ -77,9 +77,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2006-03-29</date>
+ <date>2006-05-15</date>
  <version>
-  <release>1.4.9</release>
+  <release>1.4.10</release>
   <api>1.4.2</api>
  </version>
  <stability>
@@ -88,12 +88,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  CRITICAL BUGFIX RELEASE
-  users upgrading from PEAR 1.3.x cannot upgrade to 1.4.8
-  users who use --packagingroot may find that installation fails
-  * fix Bug #7093: if pear channel does not exist, it cannot be retrieved
-  * fix Bug #7165: warnings in pear
-  * fix Bug #7075: PEAR_PackageFile_v2 :: setLogger failed on autodetection
+  bugfix release
+  * fix Bug #7579: cannot convert package 1.0 to 2.0 with PFM 1.6.0
+  * check pearinstaller dependency prior to validating package.xml 2.0
  </notes>
  <contents>
   <dir name="/">
@@ -811,6 +808,26 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #7008: PEAR_Frontend::setFrontendObject doesn't set the object
   * fix Bug #7015: install a package.tgz with unknown channel, fatal error in PEAR/Registry.php
   * fix Bug #7020: tests/PEAR_Registry/api1_1/test_getChannelValidator.phpt crashes PEAR
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.9</release>
+    <api>1.4.2</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-03-29</date>
+   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <notes>
+  CRITICAL BUGFIX RELEASE
+  users upgrading from PEAR 1.3.x cannot upgrade to 1.4.8
+  users who use --packagingroot may find that installation fails
+  * fix Bug #7093: if pear channel does not exist, it cannot be retrieved
+  * fix Bug #7165: warnings in pear
+  * fix Bug #7075: PEAR_PackageFile_v2 :: setLogger failed on autodetection
    </notes>
   </release>
  </changelog>

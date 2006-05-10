@@ -103,6 +103,15 @@ class PEAR_PackageFile_v2_Validator
             '*changelog',
         );
         $test = $this->_packageInfo;
+        if (isset($test['dependencies']) &&
+              isset($test['dependencies']['required']) &&
+              isset($test['dependencies']['required']['pearinstaller']) &&
+              isset($test['dependencies']['required']['pearinstaller']['min']) &&
+              version_compare('@package_version@',
+                $test['dependencies']['required']['pearinstaller']['min'], '<')) {
+            $this->_pearVersionTooLow($test['dependencies']['required']['pearinstaller']['min']);
+            return false;
+        }
         // ignore post-installation array fields
         if (array_key_exists('filelist', $test)) {
             unset($test['filelist']);
@@ -1268,6 +1277,14 @@ class PEAR_PackageFile_v2_Validator
     function _validateRole($role)
     {
         return in_array($role, PEAR_Installer_Role::getValidRoles($this->_pf->getPackageType()));
+    }
+
+    function _pearVersionTooLow($version)
+    {
+        $this->_stack->push(__FUNCTION__, 'error',
+            array('version' => $version),
+            'This package.xml requires PEAR version %version% to parse properly, we are ' .
+            'version @package_version@');
     }
 
     function _invalidTagOrder($oktags, $actual, $root)
