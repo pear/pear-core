@@ -63,8 +63,8 @@ disk in the current directory as "package.xml".  Note that
 only simple package.xml 2.0 will be converted.  package.xml 2.0 with:
 
  - dependency types other than required/optional PECL package/ext/php/pearinstaller
- - more than one extsrcrelease
- - extbinrelease, phprelease, or bundle release type
+ - more than one extsrcrelease or zendextsrcrelease
+ - zendextbinrelease, extbinrelease, phprelease, or bundle release type
  - dependency groups
  - ignore tags in release filelist
  - tasks other than replace
@@ -156,7 +156,7 @@ generate both package.xml.
         require_once 'PEAR/PackageFile/v1.php';
         $pf = new PEAR_PackageFile_v1;
         $pf->setConfig($this->config);
-        if (is_array($pf2->getPackageType() != 'extsrc')) {
+        if ($pf2->getPackageType() != 'extsrc' && $pf2->getPackageType() != 'zendextsrc') {
             return $this->raiseError('Cannot safely convert "' . $packagexml .
             '", is not an extension source package.  Using a PEAR_PackageFileManager-based ' .
             'script is an option');
@@ -307,7 +307,7 @@ generate both package.xml.
         $release = $pf2->getReleases();
         if (isset($releases[0])) {
             return $this->raiseError('Cannot safely process "' . $packagexml . '" contains ' 
-            . 'multiple extsrcrelease tags.  Using a PEAR_PackageFileManager-based script ' .
+            . 'multiple extsrcrelease/zendextsrcrelease tags.  Using a PEAR_PackageFileManager-based script ' .
             'or the convert command is an option');
         }
         if ($configoptions = $pf2->getConfigureOptions()) {

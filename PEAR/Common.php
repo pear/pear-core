@@ -453,7 +453,9 @@ class PEAR_Common extends PEAR
             unset($arr['dependencies']);
             unset($arr['phprelease']);
             unset($arr['extsrcrelease']);
+            unset($arr['zendextsrcrelease']);
             unset($arr['extbinrelease']);
+            unset($arr['zendextbinrelease']);
             unset($arr['bundle']);
             unset($arr['lead']);
             unset($arr['developer']);
