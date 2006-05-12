@@ -1,9 +1,9 @@
 <?php
 /* vim: set ts=4 sw=4: */
 // +----------------------------------------------------------------------+
-// | PHP Version 5                                                        |
+// | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2004 The PHP Group                                |
+// | Copyright (c) 1997-2003 The PHP Group                                |
 // +----------------------------------------------------------------------+
 // | This source file is subject to version 3.0 of the PHP license,       |
 // | that is bundled with this package in the file LICENSE, and is        |
@@ -14,16 +14,6 @@
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
 // | Author: Vincent Blavet <vincent@phpconcept.net>                      |
-// +----------------------------------------------------------------------+
-//
-// +----------------------------------------------------------------------+
-// | WARNING :                                                            |
-// | This file is a copy of pear/Archive_Tar/Archive/Tar.php              |
-// | NEVER MODIFY THIS FILE DIRECTLY WITHOUT MODIFYING THE REFERENCE FILE |
-// | If you modify this file without synchronizing with                   |
-// | pear/Archive_Tar/Archive/Tar.php, when the package will be upgraded  |
-// | with "pear upgrade Archive_Tar", it may result in software/bug       |
-// | regression.               |
 // +----------------------------------------------------------------------+
 //
 // $Id$
@@ -386,7 +376,7 @@ class Archive_Tar extends PEAR
     function addString($p_filename, $p_string)
     {
         $v_result = true;
-
+        
         if (!$this->_isArchive()) {
             if (!$this->_openWrite()) {
                 return false;
@@ -807,14 +797,14 @@ class Archive_Tar extends PEAR
               $p_len = 1;
 
           if ($this->_compress_type == 'gz') {
-              @gzseek($this->_file, gztell($this->_file)+($p_len*512));
+              @gzseek($this->_file, @gztell($this->_file)+($p_len*512));
           }
           else if ($this->_compress_type == 'bz2') {
               // ----- Replace missing bztell() and bzseek()
               for ($i=0; $i<$p_len; $i++)
                   $this->_readBlock();
           } else if ($this->_compress_type == 'none')
-              @fseek($this->_file, ftell($this->_file)+($p_len*512));
+              @fseek($this->_file, @ftell($this->_file)+($p_len*512));
           else
               $this->_error('Unknown or missing compression type ('
 			                .$this->_compress_type.')');
@@ -830,7 +820,6 @@ class Archive_Tar extends PEAR
       if (is_resource($this->_file)) {
           // ----- Write the last 0 filled block for end of archive
           $v_binary_data = pack("a512", '');
-          $this->_writeBlock($v_binary_data);
           $this->_writeBlock($v_binary_data);
       }
       return true;
@@ -883,10 +872,10 @@ class Archive_Tar extends PEAR
             }
             while (false !== ($p_hitem = readdir($p_hdir))) {
                 if (($p_hitem != '.') && ($p_hitem != '..')) {
-                if ($v_filename != ".")
-                    $p_temp_list[0] = $v_filename.'/'.$p_hitem;
-                else
-                    $p_temp_list[0] = $p_hitem;
+                    if ($v_filename != ".")
+                        $p_temp_list[0] = $v_filename.'/'.$p_hitem;
+                    else
+                        $p_temp_list[0] = $p_hitem;
 
                     $v_result = $this->_addList($p_temp_list,
 					                            $p_add_dir,
@@ -984,7 +973,7 @@ class Archive_Tar extends PEAR
       $p_filename = $this->_translateWinPath($p_filename, false);;
 
       if (!$this->_writeHeaderBlock($p_filename, strlen($p_string),
-	                                  time(), 384, "", 0, 0))
+	                                0, 0, "", 0, 0))
           return false;
 
       $i=0;
@@ -1526,11 +1515,8 @@ class Archive_Tar extends PEAR
 
             // ----- Change the file mode, mtime
             @touch($v_header['filename'], $v_header['mtime']);
-            if ($v_header['mode'] & 0111) {
-                // make file executable, obey umask
-                $mode = fileperms($v_header['filename']) | (~umask() & 0111);
-                @chmod($v_header['filename'], $mode);
-            }
+            // To be completed
+            //chmod($v_header[filename], DecOct($v_header[mode]));
           }
 
           // ----- Check the file size
@@ -1757,7 +1743,7 @@ class Archive_Tar extends PEAR
     // {{{ _translateWinPath()
     function _translateWinPath($p_path, $p_remove_disk_letter=true)
     {
-      if (defined('OS_WINDOWS') && OS_WINDOWS) {
+      if (OS_WINDOWS) {
           // ----- Look for potential disk letter
           if (   ($p_remove_disk_letter)
 		      && (($v_position = strpos($p_path, ':')) != false)) {

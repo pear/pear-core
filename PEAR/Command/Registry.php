@@ -571,8 +571,14 @@ installed package.'
             case 'extsrc' :
                 $release = 'PECL-style PHP extension (source code)';
             break;
+            case 'zendextsrc' :
+                $release = 'PECL-style Zend extension (source code)';
+            break;
             case 'extbin' :
                 $release = 'PECL-style PHP extension (binary)';
+            break;
+            case 'zendextbin' :
+                $release = 'PECL-style Zend extension (binary)';
             break;
             case 'bundle' :
                 $release = 'Package bundle (collection of packages)';

@@ -191,23 +191,24 @@ class PEAR_PackageFile_v2
             $a = false;
             return $a;
         }
-        if ($this->getPackageType() == 'extsrc') {
+        if ($this->getPackageType() == 'extsrc' || $this->getPackageType() == 'zendextsrc') {
+            $releasetype = $this->getPackageType() . 'release';
             if (!is_array($installer->getInstallPackages())) {
                 $a = false;
                 return $a;
             }
             foreach ($installer->getInstallPackages() as $p) {
                 if ($p->isExtension($this->_packageInfo['providesextension'])) {
-                    if ($p->getPackageType() != 'extsrc') {
+                    if ($p->getPackageType() != 'extsrc' && $p->getPackageType() != 'zendextsrc') {
                         $a = false;
                         return $a; // the user probably downloaded it separately
                     }
                 }
             }
-            if (isset($this->_packageInfo['extsrcrelease']['binarypackage'])) {
+            if (isset($this->_packageInfo[$releasetype]['binarypackage'])) {
                 $installer->log(0, 'Attempting to download binary version of extension "' .
                     $this->_packageInfo['providesextension'] . '"');
-                $params = $this->_packageInfo['extsrcrelease']['binarypackage'];
+                $params = $this->_packageInfo[$releasetype]['binarypackage'];
                 if (!is_array($params) || !isset($params[0])) {
                     $params = array($params);
                 }
@@ -264,7 +265,8 @@ class PEAR_PackageFile_v2
      */
     function getProvidesExtension()
     {
-        if (in_array($this->getPackageType(), array('extsrc', 'extbin'))) {
+        if (in_array($this->getPackageType(),
+              array('extsrc', 'extbin', 'zendextsrc', 'zendextbin'))) {
             if (isset($this->_packageInfo['providesextension'])) {
                 return $this->_packageInfo['providesextension'];
             }
@@ -278,7 +280,8 @@ class PEAR_PackageFile_v2
      */
     function isExtension($extension)
     {
-        if (in_array($this->getPackageType(), array('extsrc', 'extbin'))) {
+        if (in_array($this->getPackageType(),
+              array('extsrc', 'extbin', 'zendextsrc', 'zendextbin'))) {
             return $this->_packageInfo['providesextension'] == $extension;
         }
         return false;
@@ -1027,8 +1030,8 @@ class PEAR_PackageFile_v2
                 array('time', 'version',
                     'stability', 'license', 'notes', 'contents', 'compatible',
                     'dependencies', 'providesextension', 'srcpackage', 'srcuri',
-                    'phprelease', 'extsrcrelease',
-                    'extbinrelease', 'bundle', 'changelog'), array(), 'date');
+                    'phprelease', 'extsrcrelease', 'extbinrelease', 'zendextsrcrelease',
+                    'zendextbinrelease', 'bundle', 'changelog'), array(), 'date');
         }
         $this->_packageInfo['date'] = $date;
         $this->_isValid = 0;
@@ -1043,8 +1046,8 @@ class PEAR_PackageFile_v2
                     array('version',
                     'stability', 'license', 'notes', 'contents', 'compatible',
                     'dependencies', 'providesextension', 'srcpackage', 'srcuri',
-                    'phprelease', 'extsrcrelease',
-                    'extbinrelease', 'bundle', 'changelog'), $time, 'time');
+                    'phprelease', 'extsrcrelease', 'extbinrelease', 'zendextsrcrelease',
+                    'zendextbinrelease', 'bundle', 'changelog'), $time, 'time');
         }
         $this->_packageInfo['time'] = $time;
     }
@@ -1183,7 +1186,7 @@ class PEAR_PackageFile_v2
      */
     function getConfigureOptions()
     {
-        if ($this->getPackageType() != 'extsrc') {
+        if ($this->getPackageType() != 'extsrc' && $this->getPackageType() != 'zendextsrc') {
             return false;
         }
         $releases = $this->getReleases();
@@ -1718,7 +1721,7 @@ class PEAR_PackageFile_v2
     }
 
     /**
-     * @return php|extsrc|extbin|bundle|false
+     * @return php|extsrc|extbin|zendextsrc|zendextbin|bundle|false
      */
     function getPackageType()
     {
@@ -1730,6 +1733,12 @@ class PEAR_PackageFile_v2
         }
         if (isset($this->_packageInfo['extbinrelease'])) {
             return 'extbin';
+        }
+        if (isset($this->_packageInfo['zendextsrcrelease'])) {
+            return 'zendextsrc';
+        }
+        if (isset($this->_packageInfo['zendextbinrelease'])) {
+            return 'zendextbin';
         }
         if (isset($this->_packageInfo['bundle'])) {
             return 'bundle';
@@ -1778,7 +1787,8 @@ class PEAR_PackageFile_v2
      */
     function getSourcePackage()
     {
-        if (isset($this->_packageInfo['extbinrelease'])) {
+        if (isset($this->_packageInfo['extbinrelease']) ||
+              isset($this->_packageInfo['zendextbinrelease'])) {
             return array('channel' => $this->_packageInfo['srcchannel'],
                          'package' => $this->_packageInfo['srcpackage']);
         }

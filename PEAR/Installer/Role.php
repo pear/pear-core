@@ -86,8 +86,7 @@ class PEAR_Installer_Role
     /**
      * Get a list of file roles that are valid for the particular release type.
      *
-     * For instance, src files serve no purpose in regular php releases.  php files
-     * serve no purpose in extsrc or extbin releases
+     * For instance, src files serve no purpose in regular php releases.
      * @param string
      * @param bool clear cache
      * @return array

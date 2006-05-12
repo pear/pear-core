@@ -99,10 +99,20 @@ class PEAR_PackageFile_v2_Validator
                          // needs a certain package installed in order to implement a role or task
             '*providesextension',
             '*srcpackage|*srcuri',
-            '+phprelease|+extsrcrelease|+extbinrelease|bundle', //special validation needed
+            '+phprelease|+extsrcrelease|+extbinrelease|' .
+                '+zendextsrcrelease|+zendextbinrelease|bundle', //special validation needed
             '*changelog',
         );
         $test = $this->_packageInfo;
+        if (isset($test['dependencies']) &&
+              isset($test['dependencies']['required']) &&
+              isset($test['dependencies']['required']['pearinstaller']) &&
+              isset($test['dependencies']['required']['pearinstaller']['min']) &&
+              version_compare('@package_version@',
+                $test['dependencies']['required']['pearinstaller']['min'], '<')) {
+            $this->_pearVersionTooLow($test['dependencies']['required']['pearinstaller']['min']);
+            return false;
+        }
         // ignore post-installation array fields
         if (array_key_exists('filelist', $test)) {
             unset($test['filelist']);
@@ -1174,64 +1184,68 @@ class PEAR_PackageFile_v2_Validator
                 ), $rel, '<phprelease>');
             }
         }
-        if (isset($this->_packageInfo['extsrcrelease'])) {
-            $release = 'extsrcrelease';
-            if (!isset($this->_packageInfo['providesextension'])) {
-                $this->_mustProvideExtension($release);
-            }
-            if (isset($this->_packageInfo['srcpackage']) || isset($this->_packageInfo['srcuri'])) {
-                $this->_cannotHaveSrcpackage($release);
-            }
-            $releases = $this->_packageInfo['extsrcrelease'];
-            if (!is_array($releases)) {
-                return true;
-            }
-            if (!isset($releases[0])) {
-                $releases = array($releases);
-            }
-            foreach ($releases as $rel) {
-                $this->_stupidSchemaValidate(array(
-                    '*installconditions',
-                    '*configureoption->name->prompt->?default',
-                    '*binarypackage',
-                    '*filelist',
-                ), $rel, '<extsrcrelease>');
-                if (isset($rel['binarypackage'])) {
-                    if (!is_array($rel['binarypackage']) || !isset($rel['binarypackage'][0])) {
-                        $rel['binarypackage'] = array($rel['binarypackage']);
-                    }
-                    foreach ($rel['binarypackage'] as $bin) {
-                        if (!is_string($bin)) {
-                            $this->_binaryPackageMustBePackagename();
+        foreach (array('', 'zend') as $prefix) {
+            $releasetype = $prefix . 'extsrcrelease';
+            if (isset($this->_packageInfo[$releasetype])) {
+                $release = $releasetype;
+                if (!isset($this->_packageInfo['providesextension'])) {
+                    $this->_mustProvideExtension($release);
+                }
+                if (isset($this->_packageInfo['srcpackage']) || isset($this->_packageInfo['srcuri'])) {
+                    $this->_cannotHaveSrcpackage($release);
+                }
+                $releases = $this->_packageInfo[$releasetype];
+                if (!is_array($releases)) {
+                    return true;
+                }
+                if (!isset($releases[0])) {
+                    $releases = array($releases);
+                }
+                foreach ($releases as $rel) {
+                    $this->_stupidSchemaValidate(array(
+                        '*installconditions',
+                        '*configureoption->name->prompt->?default',
+                        '*binarypackage',
+                        '*filelist',
+                    ), $rel, '<' . $releasetype . '>');
+                    if (isset($rel['binarypackage'])) {
+                        if (!is_array($rel['binarypackage']) || !isset($rel['binarypackage'][0])) {
+                            $rel['binarypackage'] = array($rel['binarypackage']);
+                        }
+                        foreach ($rel['binarypackage'] as $bin) {
+                            if (!is_string($bin)) {
+                                $this->_binaryPackageMustBePackagename();
+                            }
                         }
                     }
                 }
             }
-        }
-        if (isset($this->_packageInfo['extbinrelease'])) {
-            $release = 'extbinrelease';
-            if (!isset($this->_packageInfo['providesextension'])) {
-                $this->_mustProvideExtension($release);
-            }
-            if (isset($this->_packageInfo['channel']) &&
-                  !isset($this->_packageInfo['srcpackage'])) {
-                $this->_mustSrcPackage($release);
-            }
-            if (isset($this->_packageInfo['uri']) && !isset($this->_packageInfo['srcuri'])) {
-                $this->_mustSrcuri($release);
-            }
-            $releases = $this->_packageInfo['extbinrelease'];
-            if (!is_array($releases)) {
-                return true;
-            }
-            if (!isset($releases[0])) {
-                $releases = array($releases);
-            }
-            foreach ($releases as $rel) {
-                $this->_stupidSchemaValidate(array(
-                    '*installconditions',
-                    '*filelist',
-                ), $rel, '<extbinrelease>');
+            $releasetype = 'extbinrelease';
+            if (isset($this->_packageInfo[$releasetype])) {
+                $release = $releasetype;
+                if (!isset($this->_packageInfo['providesextension'])) {
+                    $this->_mustProvideExtension($release);
+                }
+                if (isset($this->_packageInfo['channel']) &&
+                      !isset($this->_packageInfo['srcpackage'])) {
+                    $this->_mustSrcPackage($release);
+                }
+                if (isset($this->_packageInfo['uri']) && !isset($this->_packageInfo['srcuri'])) {
+                    $this->_mustSrcuri($release);
+                }
+                $releases = $this->_packageInfo[$releasetype];
+                if (!is_array($releases)) {
+                    return true;
+                }
+                if (!isset($releases[0])) {
+                    $releases = array($releases);
+                }
+                foreach ($releases as $rel) {
+                    $this->_stupidSchemaValidate(array(
+                        '*installconditions',
+                        '*filelist',
+                    ), $rel, '<' . $releasetype . '>');
+                }
             }
         }
         if (isset($this->_packageInfo['bundle'])) {
@@ -1276,6 +1290,14 @@ class PEAR_PackageFile_v2_Validator
         return in_array($role, PEAR_Installer_Role::getValidRoles($this->_pf->getPackageType()));
     }
 
+    function _pearVersionTooLow($version)
+    {
+        $this->_stack->push(__FUNCTION__, 'error',
+            array('version' => $version),
+            'This package.xml requires PEAR version %version% to parse properly, we are ' .
+            'version @package_version@');
+    }
+
     function _invalidTagOrder($oktags, $actual, $root)
     {
         $this->_stack->push(__FUNCTION__, 'error',
@@ -1287,7 +1309,7 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array('type' => $type),
             '<%type%> is not allowed inside global <contents>, only inside ' .
-            '<phprelease>/<extbinrelease>, use <dir> and <file> only');
+            '<phprelease>/<extbinrelease>/<zendextbinrelease>, use <dir> and <file> only');
     }
 
     function _fileNotAllowed($type)
@@ -1491,7 +1513,7 @@ class PEAR_PackageFile_v2_Validator
     function _cannotProvideExtension($release)
     {
         $this->_stack->push(__FUNCTION__, 'error', array('release' => $release),
-            '<%release%> packages cannot use <providesextension>, only extbinrelease and extsrcrelease can provide a PHP extension');
+            '<%release%> packages cannot use <providesextension>, only extbinrelease, extsrcrelease, zendextsrcrelease, and zendextbinrelease can provide a PHP extension');
     }
 
     function _mustProvideExtension($release)
@@ -1509,13 +1531,13 @@ class PEAR_PackageFile_v2_Validator
     function _mustSrcPackage($release)
     {
         $this->_stack->push(__FUNCTION__, 'error', array('release' => $release),
-            '<extbinrelease> packages must specify a source code package with <srcpackage>');
+            '<extbinrelease>/<zendextbinrelease> packages must specify a source code package with <srcpackage>');
     }
 
     function _mustSrcuri($release)
     {
         $this->_stack->push(__FUNCTION__, 'error', array('release' => $release),
-            '<extbinrelease> packages must specify a source code package with <srcuri>');
+            '<extbinrelease>/<zendextbinrelease> packages must specify a source code package with <srcuri>');
     }
 
     function _uriDepsCannotHaveVersioning($type)
@@ -1549,7 +1571,7 @@ class PEAR_PackageFile_v2_Validator
     {
         $this->_stack->push(__FUNCTION__, 'error', array(),
             '<binarypackage> tags must contain the name of a package that is ' .
-            'a compiled version of this extsrc package');
+            'a compiled version of this extsrc/zendextsrc package');
     }
 
     function _fileNotFound($file)

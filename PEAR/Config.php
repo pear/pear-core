@@ -420,6 +420,13 @@ class PEAR_Config extends PEAR
             'prompt' => 'PHP CLI/CGI binary',
             'group' => 'File Locations (Advanced)',
             ),
+        'php_ini' => array(
+            'type' => 'file',
+            'default' => '',
+            'doc' => 'location of php.ini in which to enable PECL extensions on install',
+            'prompt' => 'php.ini location',
+            'group' => 'File Locations (Advanced)',
+            ),
         // Maintainers
         'username' => array(
             'type' => 'string',

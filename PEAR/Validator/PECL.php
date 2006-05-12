@@ -48,7 +48,8 @@ class PEAR_Validator_PECL extends PEAR_Validate
     function validatePackageName()
     {
         $ret = parent::validatePackageName();
-        if ($this->_packagexml->getPackageType() == 'extsrc') {
+        if ($this->_packagexml->getPackageType() == 'extsrc' ||
+              $this->_packagexml->getPackageType() == 'zendextsrc') {
             if (strtolower($this->_packagexml->getPackage()) !=
                   strtolower($this->_packagexml->getProvidesExtension())) {
                 $this->_addWarning('providesextension', 'package name "' .
