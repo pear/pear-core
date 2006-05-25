@@ -843,33 +843,62 @@ class PEAR_Downloader extends PEAR_Common
     {
         $xsdversion = isset($dep['rel']) ? '1.0' : '2.0';
         $curchannel = $this->config->get('default_channel');
-        if (isset($dep['channel'])) {
-            $remotechannel = $dep['channel'];
+        if (isset($dep['uri'])) {
+            $xsdversion = '2.0';
+            $chan = &$this->_registry->getChannel('__uri');
+            if (PEAR::isError($chan)) {
+                return $chan;
+            }
+            $version = $this->_registry->packageInfo($dep['name'], 'version', '__uri');
+            $this->configSet('default_channel', '__uri');
         } else {
-            $remotechannel = 'pear.php.net';
-        }
-        if (!$this->_registry->channelExists($remotechannel)) {
-            do {
-                if ($this->config->get('auto_discover')) {
-                    if ($this->discover($remotechannel)) {
-                        break;
+            if (isset($dep['channel'])) {
+                $remotechannel = $dep['channel'];
+            } else {
+                $remotechannel = 'pear.php.net';
+            }
+            if (!$this->_registry->channelExists($remotechannel)) {
+                do {
+                    if ($this->config->get('auto_discover')) {
+                        if ($this->discover($remotechannel)) {
+                            break;
+                        }
                     }
-                }
-                return PEAR::raiseError('Unknown remote channel: ' . $remotechannel);
-            } while (false);
+                    return PEAR::raiseError('Unknown remote channel: ' . $remotechannel);
+                } while (false);
+            }
+            $chan = &$this->_registry->getChannel($remotechannel);
+            if (PEAR::isError($chan)) {
+                return $chan;
+            }
+            $version = $this->_registry->packageInfo($dep['name'], 'version',
+                $remotechannel);
+            $this->configSet('default_channel', $remotechannel);
         }
-        $this->configSet('default_channel', $remotechannel);
         $state = isset($parr['state']) ? $parr['state'] : $this->config->get('preferred_state');
         if (isset($parr['state']) && isset($parr['version'])) {
             unset($parr['state']);
         }
-        $chan = &$this->_registry->getChannel($remotechannel);
-        if (PEAR::isError($chan)) {
-            return $chan;
-        }
-        $version = $this->_registry->packageInfo($dep['name'], 'version',
-            $remotechannel);
-        if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
+        if (isset($dep['uri'])) {
+            $info = &$this->newDownloaderPackage($this);
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+            $err = $info->initialize($dep);
+            PEAR::staticPopErrorHandling();
+            if (!$err) {
+                // skip parameters that were missed by preferred_state
+                return PEAR::raiseError('Cannot initialize dependency');
+            }
+            if (PEAR::isError($err)) {
+                if (!isset($this->_options['soft'])) {
+                    $this->log(0, $err->getMessage());
+                }
+                if (is_object($info)) {
+                    $param = $info->getChannel() . '/' . $info->getPackage();
+                }
+                return PEAR::raiseError('Package "' . $param . '" is not valid');
+            }
+            return $info;
+        } elseif ($chan->supportsREST($this->config->get('preferred_mirror')) &&
               $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
             $rest = &$this->config->getREST('1.0', $this->_options);
             $url = $rest->getDepDownloadURL($base, $xsdversion, $dep, $parr,
@@ -926,7 +955,7 @@ class PEAR_Downloader extends PEAR_Common
         } else {
             $url = $this->_remote->call('package.getDepDownloadURL', $xsdversion, $dep, $parr, $state);
         }
-        if ($parr['channel'] != $curchannel) {
+        if ($this->config->get('default_channel') != $curchannel) {
             $this->configSet('default_channel', $curchannel);
         }
         if (!is_array($url)) {

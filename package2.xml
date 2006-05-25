@@ -77,7 +77,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2006-05-15</date>
+ <date>2006-06-01</date>
  <version>
   <release>1.4.10</release>
   <api>1.4.2</api>
@@ -90,6 +90,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <notes>
   bugfix release
   * fix Bug #7579: cannot convert package 1.0 to 2.0 with PFM 1.6.0
+  * fix Bug #7726: &lt;uri&gt; dependency is broken
   * fix typo in pickle command that would allow pickling of non-PECL package.xml
   * check pearinstaller dependency prior to validating package.xml 2.0
  </notes>
