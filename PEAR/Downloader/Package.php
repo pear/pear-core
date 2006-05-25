@@ -1016,8 +1016,10 @@ class PEAR_Downloader_Package
             }
         } else {
             if (isset($param['uri'])) {
-                $param['channel'] = '__uri';
-                $param['package'] = $param['dep']['name'];
+                if ($this->getChannel() != '__uri') {
+                    return false;
+                }
+                return $param['uri'] == $this->getURI();
             }
             $package = isset($param['package']) ? $param['package'] :
                 $param['info']->getPackage();

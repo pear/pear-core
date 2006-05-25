@@ -98,6 +98,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
     and --packagingroot, fatal erro
   * fix Bug #7419: Check inputs in PEAR_PackageFile_v2_rw
   * fix Bug #7464: run-scripts causes notices
+  * fix Bug #7726: &lt;uri&gt; dependency is broken
   * implement Request #6396: add extension enabling in php.ini for 1.5.0
   * implement Request #6614: use go-pear style dialogs in PEAR_Command_CLI by default
   * implement Request #6702: implement TAP output option for run-tests command
