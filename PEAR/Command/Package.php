@@ -185,7 +185,7 @@ release), pass them as additional parameters.
             'shortcut' => 'pd',
             'options' => array(),
             'doc' => '
-List all depencies the package has.'
+List all dependencies the package has.'
             ),
         'sign' => array(
             'summary' => 'Sign a package distribution file',
