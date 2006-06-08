@@ -445,17 +445,18 @@ class PEAR_Validate
     {
         if ($this->_state == PEAR_VALIDATE_NORMAL ||
               $this->_state == PEAR_VALIDATE_PACKAGING) {
-            if (!preg_match('/\d\d\d\d\-\d\d\-\d\d/',
-                  $this->_packagexml->getDate())) {
+
+            if (!preg_match('/(\d\d\d\d)\-(\d\d)\-(\d\d)/',
+                  $this->_packagexml->getDate(), $res) ||
+                  count($res) < 4
+                  || !checkdate($res[2], $res[3], $res[1])
+                ) {
                 $this->_addFailure('date', 'invalid release date "' .
                     $this->_packagexml->getDate() . '"');
                 return false;
             }
-            if (strtotime($this->_packagexml->getDate()) == -1) {
-                $this->_addFailure('date', 'invalid release date "' .
-                    $this->_packagexml->getDate() . '"');
-                return false;
-            }
+
+
             if ($this->_state == PEAR_VALIDATE_PACKAGING &&
                   $this->_packagexml->getDate() != date('Y-m-d')) {
                 $this->_addWarning('date', 'Release Date "' .
