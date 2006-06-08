@@ -397,6 +397,18 @@ class PEAR_PackageFile
      */
     function &fromAnyFile($info, $state)
     {
+        if (is_dir($info)) {
+            $dir_name = realpath($info);
+            if (file_exists($dir_name . '/package.xml')) {
+                $info = PEAR_PackageFile::fromPackageFile($dir_name .  '/package.xml', $state);
+            } elseif (file_exists($dir_name .  '/package2.xml')) {
+                $info = PEAR_PackageFile::fromPackageFile($dir_name .  '/package2.xml', $state);
+            } else {
+                $info = PEAR::raiseError("No package definition found in '$info' directory");
+            }
+            return $info;
+        }
+
         $fp = false;
         if (is_string($info) && strlen($info) < 255 &&
              (file_exists($info) || ($fp = @fopen($info, 'r')))) {
