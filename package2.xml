@@ -93,6 +93,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #7640: Check invalid date format
   * fix Bug #7726: &lt;uri&gt; dependency is broken
   * fix Bug #7830: Warning in package-dependencies command when a dir is used
+  * fix Bug #7842: package-dependencies wrong type display with package 1.0 
   * fix an issue in the better state detection
   * fix typo in pickle command that would allow pickling of non-PECL package.xml
   * check pearinstaller dependency prior to validating package.xml 2.0

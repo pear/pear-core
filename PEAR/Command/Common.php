@@ -74,7 +74,7 @@ class PEAR_Command_Common extends PEAR
 
     var $_deps_type_trans = array(
                                   'pkg' => 'package',
-                                  'extension' => 'extension',
+                                  'ext' => 'extension',
                                   'php' => 'PHP',
                                   'prog' => 'external program',
                                   'ldlib' => 'external library for linking',
