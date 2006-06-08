@@ -404,6 +404,11 @@ class PEAR_PackageFile
      */
     function &fromAnyFile($info, $state)
     {
+        if (is_dir($info)) {
+		 	$info = PEAR::raiseError("'$info' is a directory, a file is expected");
+            return $info;
+        }
+
         $fp = false;
         if (is_string($info) && strlen($info) < 255 &&
              (file_exists($info) || ($fp = @fopen($info, 'r')))) {
