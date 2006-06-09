@@ -431,6 +431,13 @@ class PEAR_Config extends PEAR
             'prompt' => 'PEAR Installer cache directory',
             'group' => 'File Locations (Advanced)',
             ),
+        'temp_dir' => array(
+            'type' => 'directory',
+            'default' => PEAR_CONFIG_DEFAULT_TEMP_DIR,
+            'doc' => 'directory which is used for all temp files',
+            'prompt' => 'PEAR Installer temp directory',
+            'group' => 'File Locations (Advanced)',
+            ),
         'download_dir' => array(
             'type' => 'directory',
             'default' => PEAR_CONFIG_DEFAULT_CACHE_DIR,
