@@ -231,6 +231,9 @@ class PEAR_Command
         if ($dir === null) {
             $dir = dirname(__FILE__) . '/Command';
         }
+        if (!is_dir($dir)) {
+            return PEAR::raiseError("registerCommands: opendir($dir) '$dir' does not exist or is not a directory");
+        }
         $dp = @opendir($dir);
         if (empty($dp)) {
             return PEAR::raiseError("registerCommands: opendir($dir) failed");
