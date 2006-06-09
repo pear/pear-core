@@ -106,6 +106,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * implement Request #7090: PEAR_Downloader mustn't contact pear server
     when installing local package file
   * implement Request #7220: recognize deprecated package/channel and display to user
+  * implement Request #7844: download_dir and temp_dir configuration option
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
