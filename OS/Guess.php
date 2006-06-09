@@ -202,7 +202,7 @@ class OS_Guess
             return $glibc; // no need to run this multiple times
         }
         include_once "System.php";
-        if (!file_exists('/usr/bin/cpp') || !is_executable('/usr/bin/cpp')) {
+        if (!@file_exists('/usr/bin/cpp') || !@is_executable('/usr/bin/cpp')) {
             // Use glibc's <features.h> header file to
             // get major and minor version number:
             if (file_exists('/usr/include/features.h') &&
