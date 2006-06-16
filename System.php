@@ -491,7 +491,7 @@ class System
         foreach ($exe_suffixes as $suff) {
             foreach ($path_elements as $dir) {
                 $file = $dir . DIRECTORY_SEPARATOR . $program . $suff;
-                if ($pear_is_executable($file)) {
+                if (@$pear_is_executable($file)) {
                     return $file;
                 }
             }
