@@ -138,6 +138,15 @@ if (getenv('PHP_PEAR_TEST_DIR')) {
            $PEAR_INSTALL_DIR.DIRECTORY_SEPARATOR.'tests');
 }
 
+// Default for temp_dir
+if (getenv('PHP_PEAR_TEMP_DIR')) {
+    define('PEAR_CONFIG_DEFAULT_TEMP_DIR', getenv('PHP_PEAR_TEMP_DIR'));
+} else {
+    define('PEAR_CONFIG_DEFAULT_TEMP_DIR',
+           System::tmpdir() . DIRECTORY_SEPARATOR . 'pear' .
+           DIRECTORY_SEPARATOR . 'temp');
+}
+
 // Default for cache_dir
 if (getenv('PHP_PEAR_CACHE_DIR')) {
     define('PEAR_CONFIG_DEFAULT_CACHE_DIR', getenv('PHP_PEAR_CACHE_DIR'));
@@ -145,6 +154,15 @@ if (getenv('PHP_PEAR_CACHE_DIR')) {
     define('PEAR_CONFIG_DEFAULT_CACHE_DIR',
            System::tmpdir() . DIRECTORY_SEPARATOR . 'pear' .
            DIRECTORY_SEPARATOR . 'cache');
+}
+
+// Default for download_dir
+if (getenv('PHP_PEAR_DOWNLOAD_DIR')) {
+    define('PEAR_CONFIG_DEFAULT_DOWNLOAD_DIR', getenv('PHP_PEAR_DOWNLOAD_DIR'));
+} else {
+    define('PEAR_CONFIG_DEFAULT_DOWNLOAD_DIR',
+           System::tmpdir() . DIRECTORY_SEPARATOR . 'pear' .
+           DIRECTORY_SEPARATOR . 'download');
 }
 
 // Default for php_bin
@@ -406,6 +424,20 @@ class PEAR_Config extends PEAR
             'group' => 'File Locations (Advanced)',
             ),
         'cache_dir' => array(
+            'type' => 'directory',
+            'default' => PEAR_CONFIG_DEFAULT_CACHE_DIR,
+            'doc' => 'directory which is used for XMLRPC cache',
+            'prompt' => 'PEAR Installer cache directory',
+            'group' => 'File Locations (Advanced)',
+            ),
+        'temp_dir' => array(
+            'type' => 'directory',
+            'default' => PEAR_CONFIG_DEFAULT_TEMP_DIR,
+            'doc' => 'directory which is used for all temp files',
+            'prompt' => 'PEAR Installer temp directory',
+            'group' => 'File Locations (Advanced)',
+            ),
+        'download_dir' => array(
             'type' => 'directory',
             'default' => PEAR_CONFIG_DEFAULT_CACHE_DIR,
             'doc' => 'directory which is used for XMLRPC cache',
