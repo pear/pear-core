@@ -132,7 +132,7 @@ class PEAR_Downloader extends PEAR_Common
      * @access private
      */
     var $_errorStack = array();
-    
+
     /**
      * @var boolean
      * @access private
@@ -293,29 +293,37 @@ class PEAR_Downloader extends PEAR_Common
                 $this->pushError('Package "' . $param . '" is not valid',
                     PEAR_INSTALLER_SKIPPED);
             } else {
-                if ($params[$i] && !isset($channelschecked[$params[$i]->getChannel()]) &&
-                      !isset($this->_options['offline'])) {
-                    $channelschecked[$params[$i]->getChannel()] = true;
-                    PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-                    if (!class_exists('System')) {
-                        require_once 'System.php';
+                do {
+                    if ($params[$i] && $params[$i]->getType() == 'local') {
+                        // bug #7090
+                        // skip channel.xml check for local packages
+                        break;
                     }
-                    $curchannel = &$this->_registry->getChannel($params[$i]->getChannel());
-                    if (PEAR::isError($curchannel)) {
+                    if ($params[$i] && !isset($channelschecked[$params[$i]->getChannel()]) &&
+                          !isset($this->_options['offline'])) {
+                        $channelschecked[$params[$i]->getChannel()] = true;
+                        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                        if (!class_exists('System')) {
+                            require_once 'System.php';
+                        }
+                        $curchannel = &$this->_registry->getChannel($params[$i]->getChannel());
+                        if (PEAR::isError($curchannel)) {
+                            PEAR::staticPopErrorHandling();
+                            return $this->raiseError($curchannel);
+                        }
+                        $a = $this->downloadHttp('http://' . $params[$i]->getChannel() .
+                            '/channel.xml', $this->ui,
+                            System::mktemp(array('-t' . $this->getDownloadDir())), null, $curchannel->lastModified());
+
                         PEAR::staticPopErrorHandling();
-                        return $this->raiseError($curchannel);
+                        if (PEAR::isError($a) || !$a) {
+                                break;
+                        }
+                        $this->log(0, 'WARNING: channel "' . $params[$i]->getChannel() . '" has ' .
+                            'updated its protocols, use "channel-update ' . $params[$i]->getChannel() .
+                            '" to update');
                     }
-                    $a = $this->downloadHttp('http://' . $params[$i]->getChannel() .
-                        '/channel.xml', $this->ui,
-                        System::mktemp(array('-d')), null, $curchannel->lastModified());
-                    PEAR::staticPopErrorHandling();
-                    if (PEAR::isError($a) || !$a) {
-                        continue;
-                    }
-                    $this->log(0, 'WARNING: channel "' . $params[$i]->getChannel() . '" has ' .
-                        'updated its protocols, use "channel-update ' . $params[$i]->getChannel() .
-                        '" to update');
-                }
+                } while (false);
                 if ($params[$i] && !isset($this->_options['downloadonly'])) {
                     if (isset($this->_options['packagingroot'])) {
                         $checkdir = $this->_prependPath(
@@ -1113,7 +1121,7 @@ class PEAR_Downloader extends PEAR_Common
      */
     function sortPkgDeps(&$packages, $uninstall = false)
     {
-        $uninstall ? 
+        $uninstall ?
             $this->sortPackagesForUninstall($packages) :
             $this->sortPackagesForInstall($packages);
     }
@@ -1356,7 +1364,7 @@ class PEAR_Downloader extends PEAR_Common
             $config = &PEAR_Config::singleton();
         }
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
-        if ($config->get('http_proxy')&& 
+        if ($config->get('http_proxy')&&
               $proxy = parse_url($config->get('http_proxy'))) {
             $proxy_host = @$proxy['host'];
             if (isset($proxy['scheme']) && $proxy['scheme'] == 'https') {
