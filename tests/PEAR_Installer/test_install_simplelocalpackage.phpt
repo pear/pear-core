@@ -35,16 +35,16 @@ $phpunit->assertEquals(0, count($after), 'after getdp count');
 
 $dd_dir = $dp->getDownloadDir();
 if (!empty($dd_dir) && is_dir($dd_dir)) {
-	$phpunit->assertEquals(array (), $fakelog->getLog(), 'log messages');
+    $phpunit->assertEquals(array (), $fakelog->getLog(), 'log messages');
 } else {
-	$phpunit->assertEquals(array (
-				0 => 
-				array (
-					0 => 3,
-					1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-					),
-				), $fakelog->getLog(), 'log messages');
-}
+    $phpunit->assertEquals(array (
+                0 => 
+                array (
+                    0 => 3,
+                    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
+                    ),
+                ), $fakelog->getLog(), 'log messages');
+    }
 $phpunit->assertEquals(array (
 ), $fakelog->getDownload(), 'download callback messages');
 
