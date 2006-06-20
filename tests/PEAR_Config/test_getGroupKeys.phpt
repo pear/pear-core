@@ -30,7 +30,9 @@ $phpunit->assertEquals(array (
   0 => 'data_dir',
   1 => 'test_dir',
   2 => 'cache_dir',
-  3 => 'php_bin',
+  3 => 'temp_dir',
+  4 => 'download_dir',
+  5 => 'php_bin',
 ), $config->getGroupKeys('File Locations (Advanced)'), 'File Locations (Advanced)');
 $phpunit->assertEquals(array (
   0 => 'username',

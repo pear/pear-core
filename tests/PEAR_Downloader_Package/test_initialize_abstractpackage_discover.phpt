@@ -165,7 +165,44 @@ $dp->_downloader->config->set('auto_discover', 1);
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('pear.foo.com/test');
 $phpunit->assertNoErrors('wrong errors');
-$phpunit->assertEquals(array (
+
+$dd_dir = $dp->_downloader->getDownloadDir();
+
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 1,
+    1 => 'Attempting to discover channel "pear.foo.com"...',
+  ),
+  1 =>
+  array (
+    0 => 1,
+    1 => 'downloading channel.xml ...',
+  ),
+  2 =>
+  array (
+    0 => 1,
+    1 => 'Starting to download channel.xml (' . $csize . ' bytes)',
+  ),
+  3 =>
+  array (
+    0 => 1,
+    1 => '.',
+  ),
+  4 =>
+  array (
+    0 => 1,
+    1 => '...done: ' . $csize . ' bytes',
+  ),
+  5 =>
+  array (
+    0 => 1,
+    1 => 'Auto-discovered channel "pear.foo.com", alias "foo", adding to registry',
+  )
+), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 1,
@@ -196,11 +233,13 @@ $phpunit->assertEquals(array (
     0 => 1,
     1 => 'Auto-discovered channel "pear.foo.com", alias "foo", adding to registry',
   ),
-  array (
+  6 => array (
     0 => 3,
     1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
   ),
 ), $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertEquals(array (
   0 => 
   array (

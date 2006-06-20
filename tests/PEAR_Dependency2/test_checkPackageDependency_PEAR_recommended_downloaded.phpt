@@ -153,12 +153,20 @@ $result = $dep->validatePackageDependency(
         'recommended' => '1.8'
     ), true, $params);
 $phpunit->assertNoErrors('compatible local works');
-$phpunit->assertEquals(array(
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
-  ),
-), $fakelog->getLog(), 'compatible local works log');
+
+$dd_dir =  $dp->_downloader->getDownloadDir();
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
+      0 =>
+      array (
+        0 => 3,
+        1 => '+ tmp dir created at ' . $dd_dir,
+      ),
+    ), $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertTrue($result, 'compatible local works');
 echo 'tests done';
 ?>

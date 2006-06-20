@@ -153,7 +153,17 @@ $phpunit->assertNoErrors('after create 1');
 $params = array(&$dp);
 $dp->detectDependencies($params);
 $phpunit->assertNoErrors('after detect');
-$phpunit->assertEquals(array (
+
+$dd_dir =  $dp->_downloader->getDownloadDir();
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
+  array (
+    0 => 2,
+    1 => 'pear/mainold: Skipping required dependency "pear/required", is already installed',
+  ),
+), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
   array (
     0 => 3,
     1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
@@ -163,6 +173,8 @@ $phpunit->assertEquals(array (
     1 => 'pear/mainold: Skipping required dependency "pear/required", is already installed',
   ),
 ), $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');
 $phpunit->assertEquals(1, count($params), 'detectDependencies');
 $result = PEAR_Downloader_Package::mergeDependencies($params);
@@ -179,12 +191,19 @@ $phpunit->assertNoErrors('after create 1');
 $params = array(&$dp);
 $dp->detectDependencies($params);
 $phpunit->assertNoErrors('after detect');
-$phpunit->assertEquals(array(
+
+$dd_dir =  $dp->_downloader->getDownloadDir();
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array(), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array(
   array (
     0 => 3,
     1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
   ),
 ), $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');
 $phpunit->assertEquals(1, count($params), 'detectDependencies');
 $result = PEAR_Downloader_Package::mergeDependencies($params);

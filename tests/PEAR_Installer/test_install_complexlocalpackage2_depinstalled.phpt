@@ -379,7 +379,18 @@ $phpunit->assertEquals('PEAR1',
     $dlpackages[0]['pkg'], 'PEAR1');
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
-$phpunit->assertEquals(array (
+
+$dd_dir = $dp->getDownloadDir();
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 3,
+    1 => 'pear/PEAR1: Skipping required dependency "pear/Bar" version 1.5.2, already installed as version 1.4.0a1',
+  ),
+), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 3,
@@ -391,6 +402,8 @@ $phpunit->assertEquals(array (
     1 => 'pear/PEAR1: Skipping required dependency "pear/Bar" version 1.5.2, already installed as version 1.4.0a1',
   ),
 ), $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertEquals(array (
 ), $fakelog->getDownload(), 'download callback messages');
 $installer->sortPackagesForInstall($result);

@@ -63,13 +63,21 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
 $dp = &newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('test');
-$phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
-  ),
-), $fakelog->getLog(), 'log messages');
+
+
+$dd_dir = $dp->_downloader->getDownloadDir();
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
+      0 =>
+      array (
+        0 => 3,
+        1 => '+ tmp dir created at ' . $dd_dir,
+      ),
+    ), $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
 $phpunit->assertTrue($result, 'after initialize');
 $phpunit->assertNull($dp->getPackageFile(), 'downloadable test');

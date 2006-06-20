@@ -84,7 +84,34 @@ $phpunit->assertEquals('test',
     $dlpackages[0]['pkg'], 'test');
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
-$phpunit->assertEquals(array (
+
+$dd_dir =  $dp->getDownloadDir();
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 0,
+    1 => 'WARNING: channel "pear.php.net" has updated its protocols, use "channel-update pear.php.net" to update',
+  ),
+  array (
+    0 => 1,
+    1 => 'downloading test-1.0.tgz ...',
+  ),
+  array (
+    0 => 1,
+    1 => 'Starting to download test-1.0.tgz (785 bytes)',
+  ),
+  array (
+    0 => 1,
+    1 => '.',
+  ),
+  array (
+    0 => 1,
+    1 => '...done: 785 bytes',
+  ),
+), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 3,
@@ -112,6 +139,8 @@ $phpunit->assertEquals(array (
     1 => '...done: 785 bytes',
   ),
 ), $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertEquals(array (
   0 => 
   array (

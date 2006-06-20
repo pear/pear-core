@@ -20,10 +20,20 @@ $result = $dp->initialize($pathtopackagexml);
 $phpunit->assertErrors(array('package' => 'PEAR_Error', 'message' => 
     "Cannot initialize '$pathtopackagexml', invalid or missing package file"),
     'after initialize');
-$phpunit->assertEquals(array(
+
+$dd_dir = $dp->_downloader->getDownloadDir();
+
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array(
+    array(0, $message)),
+    $fakelog->getLog(), 'after initialize log');
+} else {
+    $phpunit->assertEquals(array(
     array(3, '+ tmp dir created at ' . $dp->_downloader->getDownloadDir()),
     array(0, $message)),
     $fakelog->getLog(), 'after initialize log');
+}
+
 $phpunit->assertIsa('PEAR_Error', $result, 'no error returned');
 $phpunit->assertEquals("Cannot initialize '$pathtopackagexml', invalid or missing package file", $result->getMessage(), 'wrong error message');
 
@@ -38,11 +48,22 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' =>
         "Cannot initialize '$pathtopackagexml', invalid or missing package file")),
         'after initialize');
-$phpunit->assertEquals(array(
+
+$dd_dir = $dp->_downloader->getDownloadDir();
+
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array(
+    array(0, 'Missing Package Name'),
+    array(0, 'Parsing of package.xml from file "' . $pathtopackagexml .
+        '" failed')), $fakelog->getLog(), 'after initialize log');
+} else {
+    $phpunit->assertEquals(array(
     array(3, '+ tmp dir created at ' . $dp->_downloader->getDownloadDir()),
     array(0, 'Missing Package Name'),
     array(0, 'Parsing of package.xml from file "' . $pathtopackagexml .
         '" failed')), $fakelog->getLog(), 'after initialize log');
+}
+
 $phpunit->assertIsa('PEAR_Error', $result, 'no error returned');
 $phpunit->assertEquals("Cannot initialize '$pathtopackagexml', invalid or missing package file",
     $result->getMessage(), 'wrong error message');
@@ -58,10 +79,20 @@ $phpunit->assertErrors(array(
         "Cannot initialize '$pathtopackagexml', invalid or missing package file"
         )),
         'after initialize');
-$phpunit->assertEquals(array(
+
+$dd_dir = $dp->_downloader->getDownloadDir();
+
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array(
+    array(0, 'could not extract the package.xml file from "' .
+        $pathtopackagexml . '"')), $fakelog->getLog(), 'after initialize log');
+} else {
+    $phpunit->assertEquals(array(
     array(3, '+ tmp dir created at ' . $dp->_downloader->getDownloadDir()),
     array(0, 'could not extract the package.xml file from "' .
         $pathtopackagexml . '"')), $fakelog->getLog(), 'after initialize log');
+}
+
 $phpunit->assertIsa('PEAR_Error', $result, 'no error returned');
 $phpunit->assertEquals("Cannot initialize '$pathtopackagexml', invalid or missing package file",
     $result->getMessage(), 'wrong error message');

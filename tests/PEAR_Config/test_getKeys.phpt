@@ -25,6 +25,8 @@ $phpunit->assertEquals(array (
   'data_dir',
   'test_dir',
   'cache_dir',
+  'temp_dir',
+  'download_dir',
   'php_bin',
   'username',
   'password',

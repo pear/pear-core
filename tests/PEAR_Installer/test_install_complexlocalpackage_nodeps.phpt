@@ -46,7 +46,7 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
    <user>ssb</user>
    <role>lead</role>
    <name>Stig Bakken</name>
-   <email>stig@php.net</email>
+   email>stig@php.net</email>
   </maintainer>
   <maintainer>
    <user>cellog</user>
@@ -322,7 +322,19 @@ $phpunit->assertEquals('PEAR1',
     $dlpackages[0]['pkg'], 'PEAR1');
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
-$phpunit->assertEquals(array (
+
+$dd_dir = $dp->getDownloadDir();
+
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 0,
+    1 => 'warning: pear/PEAR1 requires package "pear/Bar" (version >= 1.0.0)',
+  ),
+), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 3,
@@ -334,6 +346,8 @@ $phpunit->assertEquals(array (
     1 => 'warning: pear/PEAR1 requires package "pear/Bar" (version >= 1.0.0)',
   ),
 ), $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertEquals(array (
 ), $fakelog->getDownload(), 'download callback messages');
 

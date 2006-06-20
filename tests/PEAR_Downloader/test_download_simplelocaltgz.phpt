@@ -31,13 +31,20 @@ $phpunit->assertEquals('PEAR',
     $dlpackages[0]['pkg'], 'PEAR');
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
-$phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
-), $fakelog->getLog(), 'log messages');
+
+$dd_dir = $dp->getDownloadDir();
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
+      0 =>
+      array (
+        0 => 3,
+        1 => '+ tmp dir created at ' . $dd_dir,
+      ),
+    ), $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertEquals(array (
 ), $fakelog->getDownload(), 'download callback messages');
 echo 'tests done';

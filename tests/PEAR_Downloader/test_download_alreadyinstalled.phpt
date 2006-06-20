@@ -73,7 +73,18 @@ $result = $dp->download(array('test'));
 $phpunit->assertEquals(0, count($result), 'return');
 $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($dlpackages), 'downloaded packages count');
-$phpunit->assertEquals(array (
+
+$dd_dir =  $dp->_downloader->getDownloadDir();
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
+  array (
+    0 => 1,
+    1 => 'Skipping package "pear/test", already installed as version 1.0',
+  ),
+), $fakelog->getLog(), 'log messages');
+
+} else {
+    $phpunit->assertEquals(array (
   array (
     0 => 3,
     1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
@@ -83,6 +94,8 @@ $phpunit->assertEquals(array (
     1 => 'Skipping package "pear/test", already installed as version 1.0',
   ),
 ), $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
 
 /************************************* nodeps *********************************/

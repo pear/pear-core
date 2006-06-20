@@ -195,7 +195,38 @@ $phpunit->assertNoErrors('setup');
 $_test_dep->setExtensions(array('bar' => '1.0'));
 $err = $dp->_downloader->analyzeDependencies($params);
 $phpunit->assertNoErrors('end');
-$phpunit->assertEquals(array (
+
+$dd_dir =  $dp->_downloader->getDownloadDir();
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
+  array (
+    0 => 3,
+    1 => 'Notice: package "pear/mainold" optional dependency "pear/optional" will not be automatically downloaded',
+  ),
+  array (
+    0 => 3,
+    1 => 'Notice: package "pear/mainold" required dependency "pear/required" will not be automatically downloaded',
+  ),
+  array (
+    0 => 1,
+    1 => 'Did not download dependencies: pear/optional, pear/required, use --alldeps or --onlyreqdeps to download automatically',
+  ),
+  array (
+    0 => 0,
+    1 => 'pear/mainold can optionally use package "pear/optional" (version >= 1.1)',
+  ),
+  array (
+    0 => 0,
+    1 => 'warning: pear/mainold requires package "pear/required" (version >= 1.1)',
+  ),
+  array (
+    0 => 0,
+    1 => 'warning: pear/mainold requires PHP extension "foo"',
+  ),
+), $fakelog->getLog(), 'end log');
+
+} else {
+    $phpunit->assertEquals(array (
   array (
     0 => 3,
     1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
@@ -225,6 +256,8 @@ $phpunit->assertEquals(array (
     1 => 'warning: pear/mainold requires PHP extension "foo"',
   ),
 ), $fakelog->getLog(), 'end log');
+}
+
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');
 echo 'tests done';
 ?>

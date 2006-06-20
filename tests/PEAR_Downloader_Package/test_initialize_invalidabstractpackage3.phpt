@@ -69,7 +69,20 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' =>
     "Cannot initialize 'test-1.0', invalid or missing package file"),
 ), 'after initialize');
-$phpunit->assertEquals(array (
+
+
+
+$dd_dir = $dp->_downloader->getDownloadDir();
+
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
+  array (
+    0 => 0,
+    1 => 'Failed to download pear/test, version "1.0", latest release is version 0.2.0, stability "beta", use "channel://pear.php.net/test-0.2.0" to install',
+  ),
+), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
   array (
     0 => 3,
     1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
@@ -79,6 +92,9 @@ $phpunit->assertEquals(array (
     1 => 'Failed to download pear/test, version "1.0", latest release is version 0.2.0, stability "beta", use "channel://pear.php.net/test-0.2.0" to install',
   ),
 ), $fakelog->getLog(), 'log messages');
+
+}
+
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
 $phpunit->assertIsa('PEAR_Error', $result, 'after initialize');
 $phpunit->assertNull($dp->getPackageFile(), 'downloadable test');

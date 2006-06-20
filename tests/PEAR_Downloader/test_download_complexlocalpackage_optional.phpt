@@ -242,7 +242,11 @@ $phpunit->assertEquals('Foobar',
     $dlpackages[2]['pkg'], 'Foobar');
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
-$phpunit->assertEquals(array (
+
+$dd_dir = $dp->getDownloadDir();
+
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+   $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 3,
@@ -284,6 +288,46 @@ $phpunit->assertEquals(array (
     1 => '...done: 2,062 bytes',
   ),
 ), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 1,
+    1 => 'downloading Bar-1.5.1.tgz ...',
+  ),
+  1 => 
+  array (
+    0 => 1,
+    1 => 'Starting to download Bar-1.5.1.tgz (610 bytes)',
+  ),
+  2 => 
+  array (
+    0 => 1,
+    1 => '.',
+  ),
+  3 => 
+  array (
+    0 => 1,
+    1 => '...done: 610 bytes',
+  ),
+  4 => 
+  array (
+    0 => 1,
+    1 => 'downloading Foobar-1.4.0a1.tgz ...',
+  ),
+  5 => 
+  array (
+    0 => 1,
+    1 => 'Starting to download Foobar-1.4.0a1.tgz (2,062 bytes)',
+  ),
+  6 => 
+  array (
+    0 => 1,
+    1 => '...done: 2,062 bytes',
+  ),
+), $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertEquals(array (
   0 => 
   array (

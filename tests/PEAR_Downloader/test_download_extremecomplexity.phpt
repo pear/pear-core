@@ -385,7 +385,109 @@ $result = $dp->download(array('pkg1'));
 $phpunit->assertEquals(6, count($result), 'return');
 $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(6, count($dlpackages), 'downloaded packages count');
-$phpunit->assertEquals(array (
+
+$dd_dir = $dp->getDownloadDir();
+
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 1,
+    1 => 'downloading pkg1-1.1.tgz ...',
+  ),
+  1 => 
+  array (
+    0 => 1,
+    1 => 'Starting to download pkg1-1.1.tgz (700 bytes)',
+  ),
+  2 => 
+  array (
+    0 => 1,
+    1 => '.'
+  ),
+  3 => 
+  array (
+    0 => 1,
+    1 => '...done: 700 bytes',
+  ),
+  4 => 
+  array (
+    0 => 1,
+    1 => 'downloading pkg2-1.1.tgz ...',
+  ),
+  5 => 
+  array (
+    0 => 1,
+    1 => 'Starting to download pkg2-1.1.tgz (704 bytes)',
+  ),
+  6 => 
+  array (
+    0 => 1,
+    1 => '...done: 704 bytes',
+  ),
+  7 => 
+  array (
+    0 => 1,
+    1 => 'downloading pkg3-1.1.tgz ...',
+  ),
+  8 => 
+  array (
+    0 => 1,
+    1 => 'Starting to download pkg3-1.1.tgz (714 bytes)',
+  ),
+  9 => 
+  array (
+    0 => 1,
+    1 => '...done: 714 bytes',
+  ),
+  10 => 
+  array (
+    0 => 1,
+    1 => 'downloading pkg4-1.1.tgz ...',
+  ),
+  11 => 
+  array (
+    0 => 1,
+    1 => 'Starting to download pkg4-1.1.tgz (702 bytes)',
+  ),
+  12 => 
+  array (
+    0 => 1,
+    1 => '...done: 702 bytes',
+  ),
+  13 => 
+  array (
+    0 => 1,
+    1 => 'downloading pkg5-1.1.tgz ...',
+  ),
+  14 => 
+  array (
+    0 => 1,
+    1 => 'Starting to download pkg5-1.1.tgz (706 bytes)',
+  ),
+  15 => 
+  array (
+    0 => 1,
+    1 => '...done: 706 bytes',
+  ),
+  16 => 
+  array (
+    0 => 1,
+    1 => 'downloading pkg6-1.1.tgz ...',
+  ),
+  17 => 
+  array (
+    0 => 1,
+    1 => 'Starting to download pkg6-1.1.tgz (673 bytes)',
+  ),
+  18 => 
+  array (
+    0 => 1,
+    1 => '...done: 673 bytes',
+   ),
+), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 3,
@@ -487,6 +589,8 @@ $phpunit->assertEquals(array (
     1 => '...done: 673 bytes',
    ),
 ), $fakelog->getLog(), 'log messages');
+}
+
 echo 'tests done';
 ?>
 --CLEAN--

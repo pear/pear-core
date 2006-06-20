@@ -169,7 +169,54 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' =>
         "Cannot initialize 'pear.foo.com/test', invalid or missing package file",
     )), 'wrong errors');
-$phpunit->assertEquals(array (
+
+$dd_dir = $dp->_downloader->getDownloadDir();
+
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 1,
+    1 => 'Attempting to discover channel "pear.foo.com"...',
+  ),
+  1 =>
+  array (
+    0 => 1,
+    1 => 'downloading channel.xml ...',
+  ),
+  2 =>
+  array (
+    0 => 1,
+    1 => 'Starting to download channel.xml (' . $csize . ' bytes)',
+  ),
+  3 =>
+  array (
+    0 => 1,
+    1 => '.',
+  ),
+  4 =>
+  array (
+    0 => 1,
+    1 => '...done: ' . $csize . ' bytes',
+  ),
+  5 =>
+  array (
+    0 => 0,
+    1 => 'Channel "pear.foo.com" is not initialized, use "pear channel-discover pear.foo.com" to initializeor pear config-set auto_discover 1',
+  ),
+  6 =>
+  array (
+    0 => 0,
+    1 => 'unknown channel "pear.foo.com" in "pear.foo.com/test"',
+  ),
+  7 =>
+  array (
+    0 => 0,
+    1 => 'invalid package name/package file "pear.foo.com/test"',
+  ),
+), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 1,
@@ -216,6 +263,9 @@ $phpunit->assertEquals(array (
     1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
   ),
 ), $fakelog->getLog(), 'log messages');
+}
+
+
 $phpunit->assertEquals(array (
   0 => 
   array (

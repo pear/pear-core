@@ -538,7 +538,86 @@ $phpunit->assertEquals('Bar',
     $dlpackages[1]['pkg'], 'Bar');
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
-$phpunit->assertEquals(array (
+
+$dd_dir = $dp->getDownloadDir();
+
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
+  0 =>
+  array (
+    0 => 0,
+    1 => 'Failed to download smork/Foobar within preferred state "stable", latest release is version 1.5.0a1, stability "alpha", use "channel://smork/Foobar-1.5.0a1" to install',
+  ),
+  1 =>
+  array (
+    0 => 0,
+    1 => 'pear/Bar requires package "smork/Foobar"',
+  ),
+  2 => 
+  array (
+    0 => 1,
+    1 => 'downloading Bar-1.5.2.tgz ...',
+  ),
+  3 => 
+  array (
+    0 => 1,
+    1 => 'Starting to download Bar-1.5.2.tgz (2,212 bytes)',
+  ),
+  4 => 
+  array (
+    0 => 1,
+    1 => '.',
+  ),
+  5 => 
+  array (
+    0 => 1,
+    1 => '...done: 2,212 bytes',
+  ),
+), $fakelog->getLog(), 'log messages');
+    $phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 'setup',
+    1 => 'self',
+  ),
+  1 => 
+  array (
+    0 => 'saveas',
+    1 => 'Bar-1.5.2.tgz',
+  ),
+  2 => 
+  array (
+    0 => 'start',
+    1 => 
+    array (
+      0 => 'Bar-1.5.2.tgz',
+      1 => '2212',
+    ),
+  ),
+  3 => 
+  array (
+    0 => 'bytesread',
+    1 => 1024,
+  ),
+  4 => 
+  array (
+    0 => 'bytesread',
+    1 => 2048,
+  ),
+  5 => 
+  array (
+    0 => 'bytesread',
+    1 => 2212,
+  ),
+  6 => 
+  array (
+    0 => 'done',
+    1 => 2212,
+  ),
+), $fakelog->getDownload(), 'download callback messages');
+
+} else {
+    $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 3,
@@ -616,6 +695,8 @@ $phpunit->assertEquals(array (
     1 => 2212,
   ),
 ), $fakelog->getDownload(), 'download callback messages');
+}
+
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');

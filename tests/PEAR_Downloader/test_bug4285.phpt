@@ -28,7 +28,29 @@ $dp = &new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($mainpackage, $requiredpackage));
 $phpunit->assertEquals(array(), $result, 'result');
-$phpunit->assertEquals(array (
+
+$dd_dir =  $dp->_downloader->getDownloadDir();
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 2,
+    1 => 'pear/PEAR: Skipping required dependency "pear.chiaraquartet.net/Chiara_XML_RPC5", will be installed',
+  ),
+  1 => 
+  array (
+    0 => 0,
+    1 => 'pear.chiaraquartet.net/Chiara_XML_RPC5 requires PHP (version >= 5.0.3, version <= 6.0.0), installed version is 4.2',
+  ),
+  2 => 
+  array (
+    0 => 0,
+    1 => 'pear/PEAR requires package "pear.chiaraquartet.net/Chiara_XML_RPC5" (version >= 0.3.0)',
+  ),
+)
+, $fakelog->getLog(), 'log');
+} else {
+    $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 3,
@@ -51,6 +73,8 @@ $phpunit->assertEquals(array (
   ),
 )
 , $fakelog->getLog(), 'log');
+}
+
 echo 'tests done';
 ?>
 --CLEAN--

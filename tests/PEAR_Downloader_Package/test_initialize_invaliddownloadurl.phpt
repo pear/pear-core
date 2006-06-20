@@ -21,7 +21,20 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',
           'message' => 'Invalid or missing remote package file'),
 ), 'expected errors');
-$phpunit->assertEquals(array (
+
+$dd_dir = $dp->_downloader->getDownloadDir();
+
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 0,
+    1 => 'Could not download from "http://www.example.com/test-1.1.tgz"',
+  ),
+), $fakelog->getLog(), 'log messages');
+
+} else {
+    $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 3,
@@ -33,6 +46,8 @@ $phpunit->assertEquals(array (
     1 => 'Could not download from "http://www.example.com/test-1.1.tgz"',
   ),
 ), $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertEquals(array (
   0 => 
   array (

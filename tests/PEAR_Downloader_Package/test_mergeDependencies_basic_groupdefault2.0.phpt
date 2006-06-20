@@ -255,7 +255,13 @@ $phpunit->assertNoErrors('after create 1');
 $params = array(&$dp);
 $dp->detectDependencies($params);
 $phpunit->assertNoErrors('after detect');
-$phpunit->assertEquals( array (
+
+$dd_dir = $dp->_downloader->getDownloadDir();
+
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 3,
@@ -263,6 +269,8 @@ $phpunit->assertEquals( array (
   ),
  )
 , $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');
 $phpunit->assertEquals(1, count($params), 'detectDependencies');
 $result = PEAR_Downloader_Package::mergeDependencies($params);

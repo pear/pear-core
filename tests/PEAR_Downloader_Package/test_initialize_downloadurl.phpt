@@ -15,7 +15,35 @@ $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.0.tgz', $patht
 $dp = &newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('http://www.example.com/test-1.0.tgz');
-$phpunit->assertEquals(array (
+
+
+$dd_dir = $dp->_downloader->getDownloadDir();
+
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 1,
+    1 => 'downloading test-1.0.tgz ...',
+  ),
+  1 => 
+  array (
+    0 => 1,
+    1 => 'Starting to download test-1.0.tgz (785 bytes)',
+  ),
+  2 => 
+  array (
+    0 => 1,
+    1 => '.',
+  ),
+  3 => 
+  array (
+    0 => 1,
+    1 => '...done: 785 bytes',
+  ),
+), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
   0 => 
   array (
     0 => 3,
@@ -42,6 +70,8 @@ $phpunit->assertEquals(array (
     1 => '...done: 785 bytes',
   ),
 ), $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertEquals(array (
   0 => 
   array (
