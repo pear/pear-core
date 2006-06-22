@@ -169,7 +169,7 @@ $dp->detectDependencies($params);
 $phpunit->assertNoErrors('after detect');
 
 $dd_dir =  $dp->_downloader->getDownloadDir();
-if (!empty($dd_dir) && is_dir($dd_dir)
+if (!empty($dd_dir) && is_dir($dd_dir)) {
     $phpunit->assertEquals(array(), $fakelog->getLog(), 'log messages');
 } else {
     $phpunit->assertEquals(array (

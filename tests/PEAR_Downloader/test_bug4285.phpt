@@ -29,7 +29,7 @@ $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($mainpackage, $requiredpackage));
 $phpunit->assertEquals(array(), $result, 'result');
 
-$dd_dir =  $dp->_downloader->getDownloadDir();
+$dd_dir =  $dp->getDownloadDir();
 if (!empty($dd_dir) && is_dir($dd_dir)) {
     $phpunit->assertEquals(array (
   0 => 

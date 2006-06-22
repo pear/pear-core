@@ -32,22 +32,33 @@ if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'script')) {
 if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'tmp')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'tmp');
 }
+if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'temp')) {
+    mkdir($temp_path . DIRECTORY_SEPARATOR . 'temp');
+}
+if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'download')) {
+    mkdir($temp_path . DIRECTORY_SEPARATOR . 'download');
+}
 if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'bin')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'bin');
 }
 if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'cache')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'cache');
 }
+
 // make the fake configuration - we'll use one of these and it should work
 $config = serialize(array('master_server' => $server,
     'preferred_state' => 'stable',
     'cache_dir' => $temp_path . DIRECTORY_SEPARATOR . 'cache',
-    'php_dir' => $temp_path . DIRECTORY_SEPARATOR . 'php',
-    'ext_dir' => $temp_path . DIRECTORY_SEPARATOR . 'ext',
-    'data_dir' => $temp_path . DIRECTORY_SEPARATOR . 'data',
-    'doc_dir' => $temp_path . DIRECTORY_SEPARATOR . 'doc',
-    'test_dir' => $temp_path . DIRECTORY_SEPARATOR . 'test',
-    'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',));
+    'php_dir'   => $temp_path . DIRECTORY_SEPARATOR . 'php',
+    'ext_dir'   => $temp_path . DIRECTORY_SEPARATOR . 'ext',
+    'data_dir'  => $temp_path . DIRECTORY_SEPARATOR . 'data',
+    'doc_dir'   => $temp_path . DIRECTORY_SEPARATOR . 'doc',
+    'test_dir'  => $temp_path . DIRECTORY_SEPARATOR . 'test',
+    'temp_dir'  =>$temp_path . DIRECTORY_SEPARATOR . 'temp',
+    'download_dir' => $temp_path . DIRECTORY_SEPARATOR . 'download',
+    'bin_dir'	=> $temp_path . DIRECTORY_SEPARATOR . 'bin',
+    )
+);
 touch($temp_path . DIRECTORY_SEPARATOR . 'pear.conf');
 $fp = fopen($temp_path . DIRECTORY_SEPARATOR . 'pear.conf', 'w');
 fwrite($fp, $config);

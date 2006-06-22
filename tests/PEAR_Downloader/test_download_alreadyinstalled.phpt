@@ -74,7 +74,7 @@ $phpunit->assertEquals(0, count($result), 'return');
 $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($dlpackages), 'downloaded packages count');
 
-$dd_dir =  $dp->_downloader->getDownloadDir();
+$dd_dir =  $dp->getDownloadDir();
 if (!empty($dd_dir) && is_dir($dd_dir)) {
     $phpunit->assertEquals(array (
   array (
