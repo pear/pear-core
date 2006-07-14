@@ -110,6 +110,17 @@ $result = $dp->download(array('test'));
 $phpunit->assertEquals(0, count($result), 'return');
 $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($dlpackages), 'downloaded packages count');
+
+$dd_dir = $dp->getDownloadDir();
+
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+$phpunit->assertEquals(array (
+  array (
+    0 => 1,
+    1 => 'Skipping package "pear/test", already installed as version 1.0',
+  ),
+), $fakelog->getLog(), 'log messages');
+} else {
 $phpunit->assertEquals(array (
   array (
     0 => 3,
@@ -120,6 +131,7 @@ $phpunit->assertEquals(array (
     1 => 'Skipping package "pear/test", already installed as version 1.0',
   ),
 ), $fakelog->getLog(), 'log messages');
+}
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
 
 /************************************* force *********************************/
@@ -142,6 +154,28 @@ $phpunit->assertEquals('test',
     $dlpackages[0]['pkg'], 'test');
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
+
+$dd_dir = $dp->getDownloadDir();
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+$phpunit->assertEquals(array (
+  array (
+    0 => 1,
+    1 => 'downloading test-1.0.tgz ...',
+  ),
+  array (
+    0 => 1,
+    1 => 'Starting to download test-1.0.tgz (785 bytes)',
+  ),
+  array (
+    0 => 1,
+    1 => '.',
+  ),
+  array (
+    0 => 1,
+    1 => '...done: 785 bytes',
+  ),
+), $fakelog->getLog(), 'log messages');
+} else {
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -169,6 +203,9 @@ $phpunit->assertEquals(array (
     1 => '...done: 785 bytes',
   ),
 ), $fakelog->getLog(), 'log messages');
+}
+
+
 $phpunit->assertEquals(array (
   0 => 
   array (
