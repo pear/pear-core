@@ -18,7 +18,7 @@ $pathtopackagexml2 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_upgrade_pecl'. DIRECTORY_SEPARATOR . 'SQLite-1.0.4.tgz';
 $pearweb->addHtmlConfig('http://pecl.php.net/get/SQLite-1.0.4.tgz', $pathtopackagexml2);
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+  0 =>
   array (
     'package' => 'SQLite',
     'channel' => 'pear.php.net',
@@ -234,382 +234,382 @@ $dd_dir = $dp->getDownloadDir();
 
 if (!empty($dd_dir) && is_dir($dd_dir)) {
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 1,
     1 => 'downloading SQLite-1.0.4.tgz ...',
   ),
-  1 => 
+  1 =>
   array (
     0 => 1,
     1 => 'Starting to download SQLite-1.0.4.tgz (371,000 bytes)',
   ),
-  2 => 
+  2 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  3 => 
+  3 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  4 => 
+  4 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  5 => 
+  5 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  6 => 
+  6 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  7 => 
+  7 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  8 => 
+  8 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  9 => 
+  9 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  10 => 
+  10 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  11 => 
+  11 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  12 => 
+  12 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  13 => 
+  13 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  14 => 
+  14 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  15 => 
+  15 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  16 => 
+  16 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  17 => 
+  17 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  18 => 
+  18 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  19 => 
+  19 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  20 => 
+  20 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  21 => 
+  21 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  22 => 
+  22 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  23 => 
+  23 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  24 => 
+  24 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  25 => 
+  25 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  26 => 
+  26 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  27 => 
+  27 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  28 => 
+  28 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  29 => 
+  29 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  30 => 
+  30 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  31 => 
+  31 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  32 => 
+  32 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  33 => 
+  33 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  34 => 
+  34 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  36 => 
+  35 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  37 => 
+  36 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  38 => 
+  37 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  40 => 
+  38 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  41 => 
+  39 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  42 => 
+  40 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  43 => 
+  41 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  44 => 
+  42 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  45 => 
+  43 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  46 => 
+  44 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  47 => 
+  45 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  48 => 
+  46 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  49 => 
+  47 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  50 => 
+  48 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  51 => 
+  49 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  52 => 
+  50 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  53 => 
+  51 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  54 => 
+  52 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  55 => 
+  53 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  56 => 
+  54 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  57 => 
+  55 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  58 => 
+  56 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  59 => 
+  57 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  60 => 
+  58 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  61 => 
+  59 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  62 => 
+  60 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  63 => 
+  61 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  64 => 
+  62 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  65 => 
+  63 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  66 => 
+  64 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  67 => 
+  65 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  68 => 
+  66 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  69 => 
+  67 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  70 => 
+  68 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  71 => 
+  69 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  72 => 
+  70 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  73 => 
+  71 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  74 => 
+  72 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  75 => 
+  73 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  76 => 
+  74 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  77 => 
+  75 =>
   array (
     0 => 1,
     1 => '...done: 371,000 bytes',
@@ -617,387 +617,387 @@ $phpunit->assertEquals(array (
 ), $fakelog->getLog(), 'log messages');
 } else {
     $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 3,
     1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
   ),
-  1 => 
+  1 =>
   array (
     0 => 1,
     1 => 'downloading SQLite-1.0.4.tgz ...',
   ),
-  2 => 
+  2 =>
   array (
     0 => 1,
     1 => 'Starting to download SQLite-1.0.4.tgz (371,000 bytes)',
   ),
-  3 => 
+  3 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  4 => 
+  4 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  5 => 
+  5 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  6 => 
+  6 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  7 => 
+  7 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  8 => 
+  8 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  9 => 
+  9 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  10 => 
+  10 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  11 => 
+  11 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  12 => 
+  12 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  13 => 
+  13 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  14 => 
+  14 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  15 => 
+  15 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  16 => 
+  16 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  17 => 
+  17 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  18 => 
+  18 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  19 => 
+  19 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  20 => 
+  20 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  21 => 
+  21 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  22 => 
+  22 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  23 => 
+  23 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  24 => 
+  24 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  25 => 
+  25 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  26 => 
+  26 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  27 => 
+  27 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  28 => 
+  28 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  29 => 
+  29 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  30 => 
+  30 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  31 => 
+  31 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  32 => 
+  32 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  33 => 
+  33 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  34 => 
+  34 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  35 => 
+  35 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  36 => 
+  36 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  37 => 
+  37 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  38 => 
+  38 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  39 => 
+  39 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  40 => 
+  40 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  41 => 
+  41 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  42 => 
+  42 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  43 => 
+  43 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  44 => 
+  44 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  45 => 
+  45 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  46 => 
+  46 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  47 => 
+  47 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  48 => 
+  48 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  49 => 
+  49 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  50 => 
+  50 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  51 => 
+  51 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  52 => 
+  52 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  53 => 
+  53 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  54 => 
+  54 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  55 => 
+  55 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  56 => 
+  56 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  57 => 
+  57 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  58 => 
+  58 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  59 => 
+  59 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  60 => 
+  60 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  61 => 
+  61 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  62 => 
+  62 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  63 => 
+  63 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  64 => 
+  64 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  65 => 
+  65 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  66 => 
+  66 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  67 => 
+  67 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  68 => 
+  68 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  69 => 
+  69 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  70 => 
+  70 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  71 => 
+  71 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  72 => 
+  72 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  73 => 
+  73 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  74 => 
+  74 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  75 => 
+  75 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  76 => 
+  76 =>
   array (
     0 => 1,
     1 => '...done: 371,000 bytes',
@@ -1007,1841 +1007,1841 @@ $phpunit->assertEquals(array (
 }
 
 $phpunit->assertEquals( array (
-  0 => 
+  0 =>
   array (
     0 => 'setup',
     1 => 'self',
   ),
-  1 => 
+  1 =>
   array (
     0 => 'saveas',
     1 => 'SQLite-1.0.4.tgz',
   ),
-  2 => 
+  2 =>
   array (
     0 => 'start',
-    1 => 
+    1 =>
     array (
       0 => 'SQLite-1.0.4.tgz',
       1 => '371000',
     ),
   ),
-  3 => 
+  3 =>
   array (
     0 => 'bytesread',
     1 => 1024,
   ),
-  4 => 
+  4 =>
   array (
     0 => 'bytesread',
     1 => 2048,
   ),
-  5 => 
+  5 =>
   array (
     0 => 'bytesread',
     1 => 3072,
   ),
-  6 => 
+  6 =>
   array (
     0 => 'bytesread',
     1 => 4096,
   ),
-  7 => 
+  7 =>
   array (
     0 => 'bytesread',
     1 => 5120,
   ),
-  8 => 
+  8 =>
   array (
     0 => 'bytesread',
     1 => 6144,
   ),
-  9 => 
+  9 =>
   array (
     0 => 'bytesread',
     1 => 7168,
   ),
-  10 => 
+  10 =>
   array (
     0 => 'bytesread',
     1 => 8192,
   ),
-  11 => 
+  11 =>
   array (
     0 => 'bytesread',
     1 => 9216,
   ),
-  12 => 
+  12 =>
   array (
     0 => 'bytesread',
     1 => 10240,
   ),
-  13 => 
+  13 =>
   array (
     0 => 'bytesread',
     1 => 11264,
   ),
-  14 => 
+  14 =>
   array (
     0 => 'bytesread',
     1 => 12288,
   ),
-  15 => 
+  15 =>
   array (
     0 => 'bytesread',
     1 => 13312,
   ),
-  16 => 
+  16 =>
   array (
     0 => 'bytesread',
     1 => 14336,
   ),
-  17 => 
+  17 =>
   array (
     0 => 'bytesread',
     1 => 15360,
   ),
-  18 => 
+  18 =>
   array (
     0 => 'bytesread',
     1 => 16384,
   ),
-  19 => 
+  19 =>
   array (
     0 => 'bytesread',
     1 => 17408,
   ),
-  20 => 
+  20 =>
   array (
     0 => 'bytesread',
     1 => 18432,
   ),
-  21 => 
+  21 =>
   array (
     0 => 'bytesread',
     1 => 19456,
   ),
-  22 => 
+  22 =>
   array (
     0 => 'bytesread',
     1 => 20480,
   ),
-  23 => 
+  23 =>
   array (
     0 => 'bytesread',
     1 => 21504,
   ),
-  24 => 
+  24 =>
   array (
     0 => 'bytesread',
     1 => 22528,
   ),
-  25 => 
+  25 =>
   array (
     0 => 'bytesread',
     1 => 23552,
   ),
-  26 => 
+  26 =>
   array (
     0 => 'bytesread',
     1 => 24576,
   ),
-  27 => 
+  27 =>
   array (
     0 => 'bytesread',
     1 => 25600,
   ),
-  28 => 
+  28 =>
   array (
     0 => 'bytesread',
     1 => 26624,
   ),
-  29 => 
+  29 =>
   array (
     0 => 'bytesread',
     1 => 27648,
   ),
-  30 => 
+  30 =>
   array (
     0 => 'bytesread',
     1 => 28672,
   ),
-  31 => 
+  31 =>
   array (
     0 => 'bytesread',
     1 => 29696,
   ),
-  32 => 
+  32 =>
   array (
     0 => 'bytesread',
     1 => 30720,
   ),
-  33 => 
+  33 =>
   array (
     0 => 'bytesread',
     1 => 31744,
   ),
-  34 => 
+  34 =>
   array (
     0 => 'bytesread',
     1 => 32768,
   ),
-  35 => 
+  35 =>
   array (
     0 => 'bytesread',
     1 => 33792,
   ),
-  36 => 
+  36 =>
   array (
     0 => 'bytesread',
     1 => 34816,
   ),
-  37 => 
+  37 =>
   array (
     0 => 'bytesread',
     1 => 35840,
   ),
-  38 => 
+  38 =>
   array (
     0 => 'bytesread',
     1 => 36864,
   ),
-  39 => 
+  39 =>
   array (
     0 => 'bytesread',
     1 => 37888,
   ),
-  40 => 
+  40 =>
   array (
     0 => 'bytesread',
     1 => 38912,
   ),
-  41 => 
+  41 =>
   array (
     0 => 'bytesread',
     1 => 39936,
   ),
-  42 => 
+  42 =>
   array (
     0 => 'bytesread',
     1 => 40960,
   ),
-  43 => 
+  43 =>
   array (
     0 => 'bytesread',
     1 => 41984,
   ),
-  44 => 
+  44 =>
   array (
     0 => 'bytesread',
     1 => 43008,
   ),
-  45 => 
+  45 =>
   array (
     0 => 'bytesread',
     1 => 44032,
   ),
-  46 => 
+  46 =>
   array (
     0 => 'bytesread',
     1 => 45056,
   ),
-  47 => 
+  47 =>
   array (
     0 => 'bytesread',
     1 => 46080,
   ),
-  48 => 
+  48 =>
   array (
     0 => 'bytesread',
     1 => 47104,
   ),
-  49 => 
+  49 =>
   array (
     0 => 'bytesread',
     1 => 48128,
   ),
-  50 => 
+  50 =>
   array (
     0 => 'bytesread',
     1 => 49152,
   ),
-  51 => 
+  51 =>
   array (
     0 => 'bytesread',
     1 => 50176,
   ),
-  52 => 
+  52 =>
   array (
     0 => 'bytesread',
     1 => 51200,
   ),
-  53 => 
+  53 =>
   array (
     0 => 'bytesread',
     1 => 52224,
   ),
-  54 => 
+  54 =>
   array (
     0 => 'bytesread',
     1 => 53248,
   ),
-  55 => 
+  55 =>
   array (
     0 => 'bytesread',
     1 => 54272,
   ),
-  56 => 
+  56 =>
   array (
     0 => 'bytesread',
     1 => 55296,
   ),
-  57 => 
+  57 =>
   array (
     0 => 'bytesread',
     1 => 56320,
   ),
-  58 => 
+  58 =>
   array (
     0 => 'bytesread',
     1 => 57344,
   ),
-  59 => 
+  59 =>
   array (
     0 => 'bytesread',
     1 => 58368,
   ),
-  60 => 
+  60 =>
   array (
     0 => 'bytesread',
     1 => 59392,
   ),
-  61 => 
+  61 =>
   array (
     0 => 'bytesread',
     1 => 60416,
   ),
-  62 => 
+  62 =>
   array (
     0 => 'bytesread',
     1 => 61440,
   ),
-  63 => 
+  63 =>
   array (
     0 => 'bytesread',
     1 => 62464,
   ),
-  64 => 
+  64 =>
   array (
     0 => 'bytesread',
     1 => 63488,
   ),
-  65 => 
+  65 =>
   array (
     0 => 'bytesread',
     1 => 64512,
   ),
-  66 => 
+  66 =>
   array (
     0 => 'bytesread',
     1 => 65536,
   ),
-  67 => 
+  67 =>
   array (
     0 => 'bytesread',
     1 => 66560,
   ),
-  68 => 
+  68 =>
   array (
     0 => 'bytesread',
     1 => 67584,
   ),
-  69 => 
+  69 =>
   array (
     0 => 'bytesread',
     1 => 68608,
   ),
-  70 => 
+  70 =>
   array (
     0 => 'bytesread',
     1 => 69632,
   ),
-  71 => 
+  71 =>
   array (
     0 => 'bytesread',
     1 => 70656,
   ),
-  72 => 
+  72 =>
   array (
     0 => 'bytesread',
     1 => 71680,
   ),
-  73 => 
+  73 =>
   array (
     0 => 'bytesread',
     1 => 72704,
   ),
-  74 => 
+  74 =>
   array (
     0 => 'bytesread',
     1 => 73728,
   ),
-  75 => 
+  75 =>
   array (
     0 => 'bytesread',
     1 => 74752,
   ),
-  76 => 
+  76 =>
   array (
     0 => 'bytesread',
     1 => 75776,
   ),
-  77 => 
+  77 =>
   array (
     0 => 'bytesread',
     1 => 76800,
   ),
-  78 => 
+  78 =>
   array (
     0 => 'bytesread',
     1 => 77824,
   ),
-  79 => 
+  79 =>
   array (
     0 => 'bytesread',
     1 => 78848,
   ),
-  80 => 
+  80 =>
   array (
     0 => 'bytesread',
     1 => 79872,
   ),
-  81 => 
+  81 =>
   array (
     0 => 'bytesread',
     1 => 80896,
   ),
-  82 => 
+  82 =>
   array (
     0 => 'bytesread',
     1 => 81920,
   ),
-  83 => 
+  83 =>
   array (
     0 => 'bytesread',
     1 => 82944,
   ),
-  84 => 
+  84 =>
   array (
     0 => 'bytesread',
     1 => 83968,
   ),
-  85 => 
+  85 =>
   array (
     0 => 'bytesread',
     1 => 84992,
   ),
-  86 => 
+  86 =>
   array (
     0 => 'bytesread',
     1 => 86016,
   ),
-  87 => 
+  87 =>
   array (
     0 => 'bytesread',
     1 => 87040,
   ),
-  88 => 
+  88 =>
   array (
     0 => 'bytesread',
     1 => 88064,
   ),
-  89 => 
+  89 =>
   array (
     0 => 'bytesread',
     1 => 89088,
   ),
-  90 => 
+  90 =>
   array (
     0 => 'bytesread',
     1 => 90112,
   ),
-  91 => 
+  91 =>
   array (
     0 => 'bytesread',
     1 => 91136,
   ),
-  92 => 
+  92 =>
   array (
     0 => 'bytesread',
     1 => 92160,
   ),
-  93 => 
+  93 =>
   array (
     0 => 'bytesread',
     1 => 93184,
   ),
-  94 => 
+  94 =>
   array (
     0 => 'bytesread',
     1 => 94208,
   ),
-  95 => 
+  95 =>
   array (
     0 => 'bytesread',
     1 => 95232,
   ),
-  96 => 
+  96 =>
   array (
     0 => 'bytesread',
     1 => 96256,
   ),
-  97 => 
+  97 =>
   array (
     0 => 'bytesread',
     1 => 97280,
   ),
-  98 => 
+  98 =>
   array (
     0 => 'bytesread',
     1 => 98304,
   ),
-  99 => 
+  99 =>
   array (
     0 => 'bytesread',
     1 => 99328,
   ),
-  100 => 
+  100 =>
   array (
     0 => 'bytesread',
     1 => 100352,
   ),
-  101 => 
+  101 =>
   array (
     0 => 'bytesread',
     1 => 101376,
   ),
-  102 => 
+  102 =>
   array (
     0 => 'bytesread',
     1 => 102400,
   ),
-  103 => 
+  103 =>
   array (
     0 => 'bytesread',
     1 => 103424,
   ),
-  104 => 
+  104 =>
   array (
     0 => 'bytesread',
     1 => 104448,
   ),
-  105 => 
+  105 =>
   array (
     0 => 'bytesread',
     1 => 105472,
   ),
-  106 => 
+  106 =>
   array (
     0 => 'bytesread',
     1 => 106496,
   ),
-  107 => 
+  107 =>
   array (
     0 => 'bytesread',
     1 => 107520,
   ),
-  108 => 
+  108 =>
   array (
     0 => 'bytesread',
     1 => 108544,
   ),
-  109 => 
+  109 =>
   array (
     0 => 'bytesread',
     1 => 109568,
   ),
-  110 => 
+  110 =>
   array (
     0 => 'bytesread',
     1 => 110592,
   ),
-  111 => 
+  111 =>
   array (
     0 => 'bytesread',
     1 => 111616,
   ),
-  112 => 
+  112 =>
   array (
     0 => 'bytesread',
     1 => 112640,
   ),
-  113 => 
+  113 =>
   array (
     0 => 'bytesread',
     1 => 113664,
   ),
-  114 => 
+  114 =>
   array (
     0 => 'bytesread',
     1 => 114688,
   ),
-  115 => 
+  115 =>
   array (
     0 => 'bytesread',
     1 => 115712,
   ),
-  116 => 
+  116 =>
   array (
     0 => 'bytesread',
     1 => 116736,
   ),
-  117 => 
+  117 =>
   array (
     0 => 'bytesread',
     1 => 117760,
   ),
-  118 => 
+  118 =>
   array (
     0 => 'bytesread',
     1 => 118784,
   ),
-  119 => 
+  119 =>
   array (
     0 => 'bytesread',
     1 => 119808,
   ),
-  120 => 
+  120 =>
   array (
     0 => 'bytesread',
     1 => 120832,
   ),
-  121 => 
+  121 =>
   array (
     0 => 'bytesread',
     1 => 121856,
   ),
-  122 => 
+  122 =>
   array (
     0 => 'bytesread',
     1 => 122880,
   ),
-  123 => 
+  123 =>
   array (
     0 => 'bytesread',
     1 => 123904,
   ),
-  124 => 
+  124 =>
   array (
     0 => 'bytesread',
     1 => 124928,
   ),
-  125 => 
+  125 =>
   array (
     0 => 'bytesread',
     1 => 125952,
   ),
-  126 => 
+  126 =>
   array (
     0 => 'bytesread',
     1 => 126976,
   ),
-  127 => 
+  127 =>
   array (
     0 => 'bytesread',
     1 => 128000,
   ),
-  128 => 
+  128 =>
   array (
     0 => 'bytesread',
     1 => 129024,
   ),
-  129 => 
+  129 =>
   array (
     0 => 'bytesread',
     1 => 130048,
   ),
-  130 => 
+  130 =>
   array (
     0 => 'bytesread',
     1 => 131072,
   ),
-  131 => 
+  131 =>
   array (
     0 => 'bytesread',
     1 => 132096,
   ),
-  132 => 
+  132 =>
   array (
     0 => 'bytesread',
     1 => 133120,
   ),
-  133 => 
+  133 =>
   array (
     0 => 'bytesread',
     1 => 134144,
   ),
-  134 => 
+  134 =>
   array (
     0 => 'bytesread',
     1 => 135168,
   ),
-  135 => 
+  135 =>
   array (
     0 => 'bytesread',
     1 => 136192,
   ),
-  136 => 
+  136 =>
   array (
     0 => 'bytesread',
     1 => 137216,
   ),
-  137 => 
+  137 =>
   array (
     0 => 'bytesread',
     1 => 138240,
   ),
-  138 => 
+  138 =>
   array (
     0 => 'bytesread',
     1 => 139264,
   ),
-  139 => 
+  139 =>
   array (
     0 => 'bytesread',
     1 => 140288,
   ),
-  140 => 
+  140 =>
   array (
     0 => 'bytesread',
     1 => 141312,
   ),
-  141 => 
+  141 =>
   array (
     0 => 'bytesread',
     1 => 142336,
   ),
-  142 => 
+  142 =>
   array (
     0 => 'bytesread',
     1 => 143360,
   ),
-  143 => 
+  143 =>
   array (
     0 => 'bytesread',
     1 => 144384,
   ),
-  144 => 
+  144 =>
   array (
     0 => 'bytesread',
     1 => 145408,
   ),
-  145 => 
+  145 =>
   array (
     0 => 'bytesread',
     1 => 146432,
   ),
-  146 => 
+  146 =>
   array (
     0 => 'bytesread',
     1 => 147456,
   ),
-  147 => 
+  147 =>
   array (
     0 => 'bytesread',
     1 => 148480,
   ),
-  148 => 
+  148 =>
   array (
     0 => 'bytesread',
     1 => 149504,
   ),
-  149 => 
+  149 =>
   array (
     0 => 'bytesread',
     1 => 150528,
   ),
-  150 => 
+  150 =>
   array (
     0 => 'bytesread',
     1 => 151552,
   ),
-  151 => 
+  151 =>
   array (
     0 => 'bytesread',
     1 => 152576,
   ),
-  152 => 
+  152 =>
   array (
     0 => 'bytesread',
     1 => 153600,
   ),
-  153 => 
+  153 =>
   array (
     0 => 'bytesread',
     1 => 154624,
   ),
-  154 => 
+  154 =>
   array (
     0 => 'bytesread',
     1 => 155648,
   ),
-  155 => 
+  155 =>
   array (
     0 => 'bytesread',
     1 => 156672,
   ),
-  156 => 
+  156 =>
   array (
     0 => 'bytesread',
     1 => 157696,
   ),
-  157 => 
+  157 =>
   array (
     0 => 'bytesread',
     1 => 158720,
   ),
-  158 => 
+  158 =>
   array (
     0 => 'bytesread',
     1 => 159744,
   ),
-  159 => 
+  159 =>
   array (
     0 => 'bytesread',
     1 => 160768,
   ),
-  160 => 
+  160 =>
   array (
     0 => 'bytesread',
     1 => 161792,
   ),
-  161 => 
+  161 =>
   array (
     0 => 'bytesread',
     1 => 162816,
   ),
-  162 => 
+  162 =>
   array (
     0 => 'bytesread',
     1 => 163840,
   ),
-  163 => 
+  163 =>
   array (
     0 => 'bytesread',
     1 => 164864,
   ),
-  164 => 
+  164 =>
   array (
     0 => 'bytesread',
     1 => 165888,
   ),
-  165 => 
+  165 =>
   array (
     0 => 'bytesread',
     1 => 166912,
   ),
-  166 => 
+  166 =>
   array (
     0 => 'bytesread',
     1 => 167936,
   ),
-  167 => 
+  167 =>
   array (
     0 => 'bytesread',
     1 => 168960,
   ),
-  168 => 
+  168 =>
   array (
     0 => 'bytesread',
     1 => 169984,
   ),
-  169 => 
+  169 =>
   array (
     0 => 'bytesread',
     1 => 171008,
   ),
-  170 => 
+  170 =>
   array (
     0 => 'bytesread',
     1 => 172032,
   ),
-  171 => 
+  171 =>
   array (
     0 => 'bytesread',
     1 => 173056,
   ),
-  172 => 
+  172 =>
   array (
     0 => 'bytesread',
     1 => 174080,
   ),
-  173 => 
+  173 =>
   array (
     0 => 'bytesread',
     1 => 175104,
   ),
-  174 => 
+  174 =>
   array (
     0 => 'bytesread',
     1 => 176128,
   ),
-  175 => 
+  175 =>
   array (
     0 => 'bytesread',
     1 => 177152,
   ),
-  176 => 
+  176 =>
   array (
     0 => 'bytesread',
     1 => 178176,
   ),
-  177 => 
+  177 =>
   array (
     0 => 'bytesread',
     1 => 179200,
   ),
-  178 => 
+  178 =>
   array (
     0 => 'bytesread',
     1 => 180224,
   ),
-  179 => 
+  179 =>
   array (
     0 => 'bytesread',
     1 => 181248,
   ),
-  180 => 
+  180 =>
   array (
     0 => 'bytesread',
     1 => 182272,
   ),
-  181 => 
+  181 =>
   array (
     0 => 'bytesread',
     1 => 183296,
   ),
-  182 => 
+  182 =>
   array (
     0 => 'bytesread',
     1 => 184320,
   ),
-  183 => 
+  183 =>
   array (
     0 => 'bytesread',
     1 => 185344,
   ),
-  184 => 
+  184 =>
   array (
     0 => 'bytesread',
     1 => 186368,
   ),
-  185 => 
+  185 =>
   array (
     0 => 'bytesread',
     1 => 187392,
   ),
-  186 => 
+  186 =>
   array (
     0 => 'bytesread',
     1 => 188416,
   ),
-  187 => 
+  187 =>
   array (
     0 => 'bytesread',
     1 => 189440,
   ),
-  188 => 
+  188 =>
   array (
     0 => 'bytesread',
     1 => 190464,
   ),
-  189 => 
+  189 =>
   array (
     0 => 'bytesread',
     1 => 191488,
   ),
-  190 => 
+  190 =>
   array (
     0 => 'bytesread',
     1 => 192512,
   ),
-  191 => 
+  191 =>
   array (
     0 => 'bytesread',
     1 => 193536,
   ),
-  192 => 
+  192 =>
   array (
     0 => 'bytesread',
     1 => 194560,
   ),
-  193 => 
+  193 =>
   array (
     0 => 'bytesread',
     1 => 195584,
   ),
-  194 => 
+  194 =>
   array (
     0 => 'bytesread',
     1 => 196608,
   ),
-  195 => 
+  195 =>
   array (
     0 => 'bytesread',
     1 => 197632,
   ),
-  196 => 
+  196 =>
   array (
     0 => 'bytesread',
     1 => 198656,
   ),
-  197 => 
+  197 =>
   array (
     0 => 'bytesread',
     1 => 199680,
   ),
-  198 => 
+  198 =>
   array (
     0 => 'bytesread',
     1 => 200704,
   ),
-  199 => 
+  199 =>
   array (
     0 => 'bytesread',
     1 => 201728,
   ),
-  200 => 
+  200 =>
   array (
     0 => 'bytesread',
     1 => 202752,
   ),
-  201 => 
+  201 =>
   array (
     0 => 'bytesread',
     1 => 203776,
   ),
-  202 => 
+  202 =>
   array (
     0 => 'bytesread',
     1 => 204800,
   ),
-  203 => 
+  203 =>
   array (
     0 => 'bytesread',
     1 => 205824,
   ),
-  204 => 
+  204 =>
   array (
     0 => 'bytesread',
     1 => 206848,
   ),
-  205 => 
+  205 =>
   array (
     0 => 'bytesread',
     1 => 207872,
   ),
-  206 => 
+  206 =>
   array (
     0 => 'bytesread',
     1 => 208896,
   ),
-  207 => 
+  207 =>
   array (
     0 => 'bytesread',
     1 => 209920,
   ),
-  208 => 
+  208 =>
   array (
     0 => 'bytesread',
     1 => 210944,
   ),
-  209 => 
+  209 =>
   array (
     0 => 'bytesread',
     1 => 211968,
   ),
-  210 => 
+  210 =>
   array (
     0 => 'bytesread',
     1 => 212992,
   ),
-  211 => 
+  211 =>
   array (
     0 => 'bytesread',
     1 => 214016,
   ),
-  212 => 
+  212 =>
   array (
     0 => 'bytesread',
     1 => 215040,
   ),
-  213 => 
+  213 =>
   array (
     0 => 'bytesread',
     1 => 216064,
   ),
-  214 => 
+  214 =>
   array (
     0 => 'bytesread',
     1 => 217088,
   ),
-  215 => 
+  215 =>
   array (
     0 => 'bytesread',
     1 => 218112,
   ),
-  216 => 
+  216 =>
   array (
     0 => 'bytesread',
     1 => 219136,
   ),
-  217 => 
+  217 =>
   array (
     0 => 'bytesread',
     1 => 220160,
   ),
-  218 => 
+  218 =>
   array (
     0 => 'bytesread',
     1 => 221184,
   ),
-  219 => 
+  219 =>
   array (
     0 => 'bytesread',
     1 => 222208,
   ),
-  220 => 
+  220 =>
   array (
     0 => 'bytesread',
     1 => 223232,
   ),
-  221 => 
+  221 =>
   array (
     0 => 'bytesread',
     1 => 224256,
   ),
-  222 => 
+  222 =>
   array (
     0 => 'bytesread',
     1 => 225280,
   ),
-  223 => 
+  223 =>
   array (
     0 => 'bytesread',
     1 => 226304,
   ),
-  224 => 
+  224 =>
   array (
     0 => 'bytesread',
     1 => 227328,
   ),
-  225 => 
+  225 =>
   array (
     0 => 'bytesread',
     1 => 228352,
   ),
-  226 => 
+  226 =>
   array (
     0 => 'bytesread',
     1 => 229376,
   ),
-  227 => 
+  227 =>
   array (
     0 => 'bytesread',
     1 => 230400,
   ),
-  228 => 
+  228 =>
   array (
     0 => 'bytesread',
     1 => 231424,
   ),
-  229 => 
+  229 =>
   array (
     0 => 'bytesread',
     1 => 232448,
   ),
-  230 => 
+  230 =>
   array (
     0 => 'bytesread',
     1 => 233472,
   ),
-  231 => 
+  231 =>
   array (
     0 => 'bytesread',
     1 => 234496,
   ),
-  232 => 
+  232 =>
   array (
     0 => 'bytesread',
     1 => 235520,
   ),
-  233 => 
+  233 =>
   array (
     0 => 'bytesread',
     1 => 236544,
   ),
-  234 => 
+  234 =>
   array (
     0 => 'bytesread',
     1 => 237568,
   ),
-  235 => 
+  235 =>
   array (
     0 => 'bytesread',
     1 => 238592,
   ),
-  236 => 
+  236 =>
   array (
     0 => 'bytesread',
     1 => 239616,
   ),
-  237 => 
+  237 =>
   array (
     0 => 'bytesread',
     1 => 240640,
   ),
-  238 => 
+  238 =>
   array (
     0 => 'bytesread',
     1 => 241664,
   ),
-  239 => 
+  239 =>
   array (
     0 => 'bytesread',
     1 => 242688,
   ),
-  240 => 
+  240 =>
   array (
     0 => 'bytesread',
     1 => 243712,
   ),
-  241 => 
+  241 =>
   array (
     0 => 'bytesread',
     1 => 244736,
   ),
-  242 => 
+  242 =>
   array (
     0 => 'bytesread',
     1 => 245760,
   ),
-  243 => 
+  243 =>
   array (
     0 => 'bytesread',
     1 => 246784,
   ),
-  244 => 
+  244 =>
   array (
     0 => 'bytesread',
     1 => 247808,
   ),
-  245 => 
+  245 =>
   array (
     0 => 'bytesread',
     1 => 248832,
   ),
-  246 => 
+  246 =>
   array (
     0 => 'bytesread',
     1 => 249856,
   ),
-  247 => 
+  247 =>
   array (
     0 => 'bytesread',
     1 => 250880,
   ),
-  248 => 
+  248 =>
   array (
     0 => 'bytesread',
     1 => 251904,
   ),
-  249 => 
+  249 =>
   array (
     0 => 'bytesread',
     1 => 252928,
   ),
-  250 => 
+  250 =>
   array (
     0 => 'bytesread',
     1 => 253952,
   ),
-  251 => 
+  251 =>
   array (
     0 => 'bytesread',
     1 => 254976,
   ),
-  252 => 
+  252 =>
   array (
     0 => 'bytesread',
     1 => 256000,
   ),
-  253 => 
+  253 =>
   array (
     0 => 'bytesread',
     1 => 257024,
   ),
-  254 => 
+  254 =>
   array (
     0 => 'bytesread',
     1 => 258048,
   ),
-  255 => 
+  255 =>
   array (
     0 => 'bytesread',
     1 => 259072,
   ),
-  256 => 
+  256 =>
   array (
     0 => 'bytesread',
     1 => 260096,
   ),
-  257 => 
+  257 =>
   array (
     0 => 'bytesread',
     1 => 261120,
   ),
-  258 => 
+  258 =>
   array (
     0 => 'bytesread',
     1 => 262144,
   ),
-  259 => 
+  259 =>
   array (
     0 => 'bytesread',
     1 => 263168,
   ),
-  260 => 
+  260 =>
   array (
     0 => 'bytesread',
     1 => 264192,
   ),
-  261 => 
+  261 =>
   array (
     0 => 'bytesread',
     1 => 265216,
   ),
-  262 => 
+  262 =>
   array (
     0 => 'bytesread',
     1 => 266240,
   ),
-  263 => 
+  263 =>
   array (
     0 => 'bytesread',
     1 => 267264,
   ),
-  264 => 
+  264 =>
   array (
     0 => 'bytesread',
     1 => 268288,
   ),
-  265 => 
+  265 =>
   array (
     0 => 'bytesread',
     1 => 269312,
   ),
-  266 => 
+  266 =>
   array (
     0 => 'bytesread',
     1 => 270336,
   ),
-  267 => 
+  267 =>
   array (
     0 => 'bytesread',
     1 => 271360,
   ),
-  268 => 
+  268 =>
   array (
     0 => 'bytesread',
     1 => 272384,
   ),
-  269 => 
+  269 =>
   array (
     0 => 'bytesread',
     1 => 273408,
   ),
-  270 => 
+  270 =>
   array (
     0 => 'bytesread',
     1 => 274432,
   ),
-  271 => 
+  271 =>
   array (
     0 => 'bytesread',
     1 => 275456,
   ),
-  272 => 
+  272 =>
   array (
     0 => 'bytesread',
     1 => 276480,
   ),
-  273 => 
+  273 =>
   array (
     0 => 'bytesread',
     1 => 277504,
   ),
-  274 => 
+  274 =>
   array (
     0 => 'bytesread',
     1 => 278528,
   ),
-  275 => 
+  275 =>
   array (
     0 => 'bytesread',
     1 => 279552,
   ),
-  276 => 
+  276 =>
   array (
     0 => 'bytesread',
     1 => 280576,
   ),
-  277 => 
+  277 =>
   array (
     0 => 'bytesread',
     1 => 281600,
   ),
-  278 => 
+  278 =>
   array (
     0 => 'bytesread',
     1 => 282624,
   ),
-  279 => 
+  279 =>
   array (
     0 => 'bytesread',
     1 => 283648,
   ),
-  280 => 
+  280 =>
   array (
     0 => 'bytesread',
     1 => 284672,
   ),
-  281 => 
+  281 =>
   array (
     0 => 'bytesread',
     1 => 285696,
   ),
-  282 => 
+  282 =>
   array (
     0 => 'bytesread',
     1 => 286720,
   ),
-  283 => 
+  283 =>
   array (
     0 => 'bytesread',
     1 => 287744,
   ),
-  284 => 
+  284 =>
   array (
     0 => 'bytesread',
     1 => 288768,
   ),
-  285 => 
+  285 =>
   array (
     0 => 'bytesread',
     1 => 289792,
   ),
-  286 => 
+  286 =>
   array (
     0 => 'bytesread',
     1 => 290816,
   ),
-  287 => 
+  287 =>
   array (
     0 => 'bytesread',
     1 => 291840,
   ),
-  288 => 
+  288 =>
   array (
     0 => 'bytesread',
     1 => 292864,
   ),
-  289 => 
+  289 =>
   array (
     0 => 'bytesread',
     1 => 293888,
   ),
-  290 => 
+  290 =>
   array (
     0 => 'bytesread',
     1 => 294912,
   ),
-  291 => 
+  291 =>
   array (
     0 => 'bytesread',
     1 => 295936,
   ),
-  292 => 
+  292 =>
   array (
     0 => 'bytesread',
     1 => 296960,
   ),
-  293 => 
+  293 =>
   array (
     0 => 'bytesread',
     1 => 297984,
   ),
-  294 => 
+  294 =>
   array (
     0 => 'bytesread',
     1 => 299008,
   ),
-  295 => 
+  295 =>
   array (
     0 => 'bytesread',
     1 => 300032,
   ),
-  296 => 
+  296 =>
   array (
     0 => 'bytesread',
     1 => 301056,
   ),
-  297 => 
+  297 =>
   array (
     0 => 'bytesread',
     1 => 302080,
   ),
-  298 => 
+  298 =>
   array (
     0 => 'bytesread',
     1 => 303104,
   ),
-  299 => 
+  299 =>
   array (
     0 => 'bytesread',
     1 => 304128,
   ),
-  300 => 
+  300 =>
   array (
     0 => 'bytesread',
     1 => 305152,
   ),
-  301 => 
+  301 =>
   array (
     0 => 'bytesread',
     1 => 306176,
   ),
-  302 => 
+  302 =>
   array (
     0 => 'bytesread',
     1 => 307200,
   ),
-  303 => 
+  303 =>
   array (
     0 => 'bytesread',
     1 => 308224,
   ),
-  304 => 
+  304 =>
   array (
     0 => 'bytesread',
     1 => 309248,
   ),
-  305 => 
+  305 =>
   array (
     0 => 'bytesread',
     1 => 310272,
   ),
-  306 => 
+  306 =>
   array (
     0 => 'bytesread',
     1 => 311296,
   ),
-  307 => 
+  307 =>
   array (
     0 => 'bytesread',
     1 => 312320,
   ),
-  308 => 
+  308 =>
   array (
     0 => 'bytesread',
     1 => 313344,
   ),
-  309 => 
+  309 =>
   array (
     0 => 'bytesread',
     1 => 314368,
   ),
-  310 => 
+  310 =>
   array (
     0 => 'bytesread',
     1 => 315392,
   ),
-  311 => 
+  311 =>
   array (
     0 => 'bytesread',
     1 => 316416,
   ),
-  312 => 
+  312 =>
   array (
     0 => 'bytesread',
     1 => 317440,
   ),
-  313 => 
+  313 =>
   array (
     0 => 'bytesread',
     1 => 318464,
   ),
-  314 => 
+  314 =>
   array (
     0 => 'bytesread',
     1 => 319488,
   ),
-  315 => 
+  315 =>
   array (
     0 => 'bytesread',
     1 => 320512,
   ),
-  316 => 
+  316 =>
   array (
     0 => 'bytesread',
     1 => 321536,
   ),
-  317 => 
+  317 =>
   array (
     0 => 'bytesread',
     1 => 322560,
   ),
-  318 => 
+  318 =>
   array (
     0 => 'bytesread',
     1 => 323584,
   ),
-  319 => 
+  319 =>
   array (
     0 => 'bytesread',
     1 => 324608,
   ),
-  320 => 
+  320 =>
   array (
     0 => 'bytesread',
     1 => 325632,
   ),
-  321 => 
+  321 =>
   array (
     0 => 'bytesread',
     1 => 326656,
   ),
-  322 => 
+  322 =>
   array (
     0 => 'bytesread',
     1 => 327680,
   ),
-  323 => 
+  323 =>
   array (
     0 => 'bytesread',
     1 => 328704,
   ),
-  324 => 
+  324 =>
   array (
     0 => 'bytesread',
     1 => 329728,
   ),
-  325 => 
+  325 =>
   array (
     0 => 'bytesread',
     1 => 330752,
   ),
-  326 => 
+  326 =>
   array (
     0 => 'bytesread',
     1 => 331776,
   ),
-  327 => 
+  327 =>
   array (
     0 => 'bytesread',
     1 => 332800,
   ),
-  328 => 
+  328 =>
   array (
     0 => 'bytesread',
     1 => 333824,
   ),
-  329 => 
+  329 =>
   array (
     0 => 'bytesread',
     1 => 334848,
   ),
-  330 => 
+  330 =>
   array (
     0 => 'bytesread',
     1 => 335872,
   ),
-  331 => 
+  331 =>
   array (
     0 => 'bytesread',
     1 => 336896,
   ),
-  332 => 
+  332 =>
   array (
     0 => 'bytesread',
     1 => 337920,
   ),
-  333 => 
+  333 =>
   array (
     0 => 'bytesread',
     1 => 338944,
   ),
-  334 => 
+  334 =>
   array (
     0 => 'bytesread',
     1 => 339968,
   ),
-  335 => 
+  335 =>
   array (
     0 => 'bytesread',
     1 => 340992,
   ),
-  336 => 
+  336 =>
   array (
     0 => 'bytesread',
     1 => 342016,
   ),
-  337 => 
+  337 =>
   array (
     0 => 'bytesread',
     1 => 343040,
   ),
-  338 => 
+  338 =>
   array (
     0 => 'bytesread',
     1 => 344064,
   ),
-  339 => 
+  339 =>
   array (
     0 => 'bytesread',
     1 => 345088,
   ),
-  340 => 
+  340 =>
   array (
     0 => 'bytesread',
     1 => 346112,
   ),
-  341 => 
+  341 =>
   array (
     0 => 'bytesread',
     1 => 347136,
   ),
-  342 => 
+  342 =>
   array (
     0 => 'bytesread',
     1 => 348160,
   ),
-  343 => 
+  343 =>
   array (
     0 => 'bytesread',
     1 => 349184,
   ),
-  344 => 
+  344 =>
   array (
     0 => 'bytesread',
     1 => 350208,
   ),
-  345 => 
+  345 =>
   array (
     0 => 'bytesread',
     1 => 351232,
   ),
-  346 => 
+  346 =>
   array (
     0 => 'bytesread',
     1 => 352256,
   ),
-  347 => 
+  347 =>
   array (
     0 => 'bytesread',
     1 => 353280,
   ),
-  348 => 
+  348 =>
   array (
     0 => 'bytesread',
     1 => 354304,
   ),
-  349 => 
+  349 =>
   array (
     0 => 'bytesread',
     1 => 355328,
   ),
-  350 => 
+  350 =>
   array (
     0 => 'bytesread',
     1 => 356352,
   ),
-  351 => 
+  351 =>
   array (
     0 => 'bytesread',
     1 => 357376,
   ),
-  352 => 
+  352 =>
   array (
     0 => 'bytesread',
     1 => 358400,
   ),
-  353 => 
+  353 =>
   array (
     0 => 'bytesread',
     1 => 359424,
   ),
-  354 => 
+  354 =>
   array (
     0 => 'bytesread',
     1 => 360448,
   ),
-  355 => 
+  355 =>
   array (
     0 => 'bytesread',
     1 => 361472,
   ),
-  356 => 
+  356 =>
   array (
     0 => 'bytesread',
     1 => 362496,
   ),
-  357 => 
+  357 =>
   array (
     0 => 'bytesread',
     1 => 363520,
   ),
-  358 => 
+  358 =>
   array (
     0 => 'bytesread',
     1 => 364544,
   ),
-  359 => 
+  359 =>
   array (
     0 => 'bytesread',
     1 => 365568,
   ),
-  360 => 
+  360 =>
   array (
     0 => 'bytesread',
     1 => 366592,
   ),
-  361 => 
+  361 =>
   array (
     0 => 'bytesread',
     1 => 367616,
   ),
-  362 => 
+  362 =>
   array (
     0 => 'bytesread',
     1 => 368640,
   ),
-  363 => 
+  363 =>
   array (
     0 => 'bytesread',
     1 => 369664,
   ),
-  364 => 
+  364 =>
   array (
     0 => 'bytesread',
     1 => 370688,
   ),
-  365 => 
+  365 =>
   array (
     0 => 'bytesread',
     1 => 371000,
   ),
-  366 => 
+  366 =>
   array (
     0 => 'done',
     1 => 371000,
