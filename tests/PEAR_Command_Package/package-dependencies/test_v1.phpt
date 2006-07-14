@@ -14,13 +14,13 @@ $e = $command->run('package-dependencies', array(), array(dirname(__FILE__) . DI
     'packagefiles' . DIRECTORY_SEPARATOR . 'v1.xml'));
 $phpunit->assertNoErrors('v1');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'Dependencies for pear/foo',
       'border' => true,
-      'headline' => 
+      'headline' =>
       array (
         0 => 'Required?',
         1 => 'Type',
@@ -28,9 +28,9 @@ $phpunit->assertEquals(array (
         3 => 'Relation',
         4 => 'Version',
       ),
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 =>
         array (
           0 => 'Yes',
           1 => 'PHP',
@@ -38,31 +38,31 @@ $phpunit->assertEquals(array (
           3 => '!=',
           4 => '4.3.10',
         ),
-        1 => 
+        1 =>
         array (
           0 => 'Yes',
-          1 => 'ext',
+          1 => 'Extension',
           2 => 'brump',
           3 => 'not',
           4 => '',
         ),
-        2 => 
+        2 =>
         array (
           0 => 'Yes',
-          1 => 'ext',
+          1 => 'Extension',
           2 => 'zoomp',
           3 => '>=',
           4 => '1.0',
         ),
-        3 => 
+        3 =>
         array (
           0 => 'No',
-          1 => 'ext',
+          1 => 'Extension',
           2 => 'xmlrpc',
           3 => '>=',
           4 => '1.0',
         ),
-        4 => 
+        4 =>
         array (
           0 => 'Yes',
           1 => 'Package',
@@ -70,7 +70,7 @@ $phpunit->assertEquals(array (
           3 => '<',
           4 => '1.2',
         ),
-        5 => 
+        5 =>
         array (
           0 => 'Yes',
           1 => 'Package',
@@ -78,7 +78,7 @@ $phpunit->assertEquals(array (
           3 => '<=',
           4 => '2.0',
         ),
-        6 => 
+        6 =>
         array (
           0 => 'Yes',
           1 => 'PHP',
