@@ -14,7 +14,7 @@ $phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'php', $config->get('p
 $command->run('config-set', array('channel' => '__uri'), array('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'poo'));
 $phpunit->assertNoErrors('after opt user');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     'info' => 'config-set succeeded',
     'cmd' => 'config-set',
@@ -25,7 +25,7 @@ $phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'php', $config->get('p
 $command->run('config-set', array('channel' => '__uri'), array('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'poo', 'system'));
 $phpunit->assertNoErrors('after');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     'info' => 'config-set succeeded',
     'cmd' => 'config-set',
@@ -40,6 +40,8 @@ $configinfo = array('master_server' => $server,
     'data_dir' => $temp_path . DIRECTORY_SEPARATOR . 'data',
     'doc_dir' => $temp_path . DIRECTORY_SEPARATOR . 'doc',
     'test_dir' => $temp_path . DIRECTORY_SEPARATOR . 'test',
+    'temp_dir' => $temp_path . DIRECTORY_SEPARATOR . 'temp',
+    'download_dir' => $temp_path . DIRECTORY_SEPARATOR . 'temp/download',
     'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',
     '__channels' => array('pecl.php.net' => array(),
         '__uri' => array('php_dir' => $temp_path . DIRECTORY_SEPARATOR . 'poo')));
