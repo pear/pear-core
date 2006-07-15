@@ -19,7 +19,7 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'has',
@@ -27,7 +27,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'radius',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'PEAR',
@@ -38,12 +38,12 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
 PEAR::popErrorHandling();
 $pearweb->addXmlrpcConfig("pecl.php.net", "package.getDepDownloadURL", array (
   0 => '2.0',
-  1 => 
+  1 =>
   array (
     'channel' => 'pecl.php.net',
     'name' => 'radius',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'PEAR',
@@ -105,52 +105,124 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "providesextension" - package name "peclpkg" is different from extension name "extpkg"'),
 ), 'after install');
 $dl = &$command->getDownloader(1, array());
-$phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dl->getDownloadDir(),
-  ),
-  1 => 
-  array (
-    0 => 3,
-    1 => 'Notice: package "pear/PEAR" required dependency "pecl/radius" will not be automatically downloaded',
-  ),
-  2 => 
-  array (
-    0 => 1,
-    1 => 'Did not download dependencies: pecl/radius, use --alldeps or --onlyreqdeps to download automatically',
-  ),
-  3 => 
-  array (
-    0 => 0,
-    1 => 'pear/PEAR requires package "pear/radius"',
-  ),
-  4 => 
-  array (
-    'info' => 
-    array (
-      'data' => 
+
+$dd_dir = $dl->getDownloadDir();
+if (!empty($dd_dir) && is_dir($dd_dir)) {
+    $phpunit->assertEquals(array (
       array (
-        0 => 
-        array (
-          0 => 'No valid packages found',
-        ),
+        0 => 3,
+        1 => 'Notice: package "pear/PEAR" required dependency "pecl/radius" will not be automatically downloaded',
       ),
-      'headline' => 'Install Errors',
-    ),
-    'cmd' => 'no command',
-  ),
-), $fakelog->getLog(), 'log messages');
+      array (
+        0 => 1,
+        1 => 'Did not download dependencies: pecl/radius, use --alldeps or --onlyreqdeps to download automatically',
+      ),
+      array (
+        0 => 0,
+        1 => 'pear/PEAR requires package "pear/radius"',
+      ),
+      array (
+        'info' =>
+        array (
+          'data' =>
+          array (
+            0 =>
+            array (
+              0 => 'No valid packages found',
+            ),
+          ),
+          'headline' => 'Install Errors',
+        ),
+        'cmd' => 'no command',
+      ),
+    ), $fakelog->getLog(), 'log messages');
+} else {
+    $phpunit->assertEquals(array (
+      0 =>
+      array (
+        0 => 3,
+        1 => '+ tmp dir created at ' . $dl->getDownloadDir(),
+      ),
+      1 =>
+      array (
+        0 => 3,
+        1 => 'Notice: package "pear/PEAR" required dependency "pecl/radius" will not be automatically downloaded',
+      ),
+      2 =>
+      array (
+        0 => 1,
+        1 => 'Did not download dependencies: pecl/radius, use --alldeps or --onlyreqdeps to download automatically',
+      ),
+      3 =>
+      array (
+        0 => 0,
+        1 => 'pear/PEAR requires package "pear/radius"',
+      ),
+      4 =>
+      array (
+        'info' =>
+        array (
+          'data' =>
+          array (
+            0 =>
+            array (
+              0 => 'No valid packages found',
+            ),
+          ),
+          'headline' => 'Install Errors',
+        ),
+        'cmd' => 'no command',
+      ),
+    ), $fakelog->getLog(), 'log messages');
+
+    $phpunit->assertEquals(array (
+      0 =>
+      array (
+        0 => 3,
+        1 => '+ tmp dir created at ' . $dl->getDownloadDir(),
+      ),
+      1 =>
+      array (
+        0 => 3,
+        1 => 'Notice: package "pear/PEAR" required dependency "pecl/radius" will not be automatically downloaded',
+      ),
+      2 =>
+      array (
+        0 => 1,
+        1 => 'Did not download dependencies: pecl/radius, use --alldeps or --onlyreqdeps to download automatically',
+      ),
+      3 =>
+      array (
+        0 => 0,
+        1 => 'pear/PEAR requires package "pear/radius"',
+      ),
+      4 =>
+      array (
+        'info' =>
+        array (
+          'data' =>
+          array (
+            0 =>
+            array (
+              0 => 'No valid packages found',
+            ),
+          ),
+          'headline' => 'Install Errors',
+        ),
+        'cmd' => 'no command',
+      ),
+    ), $fakelog->getLog(), 'log messages');
+}
+
 $phpunit->assertEquals( array (
-  0 => 
+  0 =>
   array (
     0 => 'pear.php.net',
     1 => 'package.getDepDownloadURL',
-    2 => 
+    2 =>
     array (
       0 => '1.0',
-      1 => 
+      1 =>
       array (
         'type' => 'pkg',
         'rel' => 'has',
@@ -158,7 +230,7 @@ $phpunit->assertEquals( array (
         'channel' => 'pear.php.net',
         'package' => 'radius',
       ),
-      2 => 
+      2 =>
       array (
         'channel' => 'pear.php.net',
         'package' => 'PEAR',
@@ -167,19 +239,19 @@ $phpunit->assertEquals( array (
       3 => 'stable',
     ),
   ),
-  1 => 
+  1 =>
   array (
     0 => 'pecl.php.net',
     1 => 'package.getDepDownloadURL',
-    2 => 
+    2 =>
     array (
       0 => '2.0',
-      1 => 
+      1 =>
       array (
         'channel' => 'pecl.php.net',
         'name' => 'radius',
       ),
-      2 => 
+      2 =>
       array (
         'channel' => 'pear.php.net',
         'package' => 'PEAR',
