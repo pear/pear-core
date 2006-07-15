@@ -77,13 +77,13 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2006-06-01</date>
+ <date>2006-07-15</date>
  <version>
-  <release>1.4.10</release>
+  <release>1.4.10RC1</release>
   <api>1.4.2</api>
  </version>
  <stability>
-  <release>stable</release>
+  <release>beta</release>
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
@@ -94,6 +94,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #7726: &lt;uri&gt; dependency is broken
   * fix Bug #7830: Warning in package-dependencies command when a dir is used
   * fix Bug #7842: package-dependencies wrong type display with package 1.0 
+  * fix many open_basedir issues
   * fix an issue in the better state detection
   * fix typo in pickle command that would allow pickling of non-PECL package.xml
   * implement Request #7090: PEAR_Downloader mustn't contact pear server

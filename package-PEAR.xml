@@ -78,10 +78,10 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.10</version>
-  <date>2006-06-01</date>
+  <version>1.4.10RC1</version>
+  <date>2006-07-15</date>
   <license>PHP License</license>
-  <state>stable</state>
+  <state>beta</state>
   <notes>
   bugfix release
   * fix Bug #7579: cannot convert package 1.0 to 2.0 with PFM 1.6.0
@@ -89,6 +89,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #7726: &lt;uri&gt; dependency is broken
   * fix Bug #7830: Warning in package-dependencies command when a dir is used
   * fix Bug #7842: package-dependencies wrong type display with package 1.0 
+  * fix many open_basedir issues
   * fix an issue in the better state detection
   * fix typo in pickle command that would allow pickling of non-PECL package.xml
   * implement Request #7090: PEAR_Downloader mustn't contact pear server
