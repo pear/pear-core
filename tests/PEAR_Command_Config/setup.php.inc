@@ -38,6 +38,14 @@ if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'bin')) {
 if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'cache')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'cache');
 }
+if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'temp')) {
+    mkdir($temp_path . DIRECTORY_SEPARATOR . 'temp');
+}
+if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'temp/downlaod')) {
+    mkdir($temp_path . DIRECTORY_SEPARATOR . 'temp/downlaod');
+}
+
+
 // make the fake configuration - we'll use one of these and it should work
 $config = serialize(array('master_server' => $server,
     'preferred_state' => 'stable',
@@ -47,6 +55,8 @@ $config = serialize(array('master_server' => $server,
     'data_dir' => $temp_path . DIRECTORY_SEPARATOR . 'data',
     'doc_dir' => $temp_path . DIRECTORY_SEPARATOR . 'doc',
     'test_dir' => $temp_path . DIRECTORY_SEPARATOR . 'test',
+    'temp_dir' => $temp_path . DIRECTORY_SEPARATOR . 'temp',
+    'download_dir' => $temp_path . DIRECTORY_SEPARATOR . 'temp/download',
     'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',));
 touch($temp_path . DIRECTORY_SEPARATOR . 'pear.conf');
 $fp = fopen($temp_path . DIRECTORY_SEPARATOR . 'pear.conf', 'w');
