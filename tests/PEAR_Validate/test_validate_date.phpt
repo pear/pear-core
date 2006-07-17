@@ -313,6 +313,7 @@ Other:
   </release>
  </changelog>
 </package>', 'package2.xml');
+
 $phpunit->assertNoErrors('parse');
 $pf->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('validate');
@@ -323,35 +324,35 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('$val->validate');
 $phpunit->assertTrue($res, '$val->validate');
 
-$pf->setDate('200-04-01');
+$pf->setDate('200-04-14');
 $res = $val->validate(PEAR_VALIDATE_NORMAL);
-$phpunit->assertFalse($res, '200-04-01');
+$phpunit->assertFalse($res, '200-04-14');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'date',
-      'reason' => 'invalid release date "200-04-01"',
+      'reason' => 'invalid release date "200-04-14"',
     ),
   ),
-), $val->getFailures(), 'failures 200-04-01');
+), $val->getFailures(), 'failures 200-04-14');
 
 $pf->setDate('2004_04-01');
 $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertFalse($res, '2004_04-01');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'date',
       'reason' => 'invalid release date "2004_04-01"',
@@ -364,12 +365,12 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertFalse($res, '2004-04-0');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'date',
       'reason' => 'invalid release date "2004-04-0"',
@@ -383,12 +384,12 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertFalse($res, 'way future-04-05');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'date',
       'reason' => 'invalid release date "' . str_repeat('141341', 5000) . '-04-05"',
@@ -401,10 +402,10 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertTrue($res, '2004-04-05');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures 2004-04-05');
