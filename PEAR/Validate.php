@@ -450,7 +450,7 @@ class PEAR_Validate
                   count($res) < 4
                   || !checkdate($res[2], $res[3], $res[1])
                 ) {
-                $this->_addWarning('date', 'invalid release date "' .
+                $this->_addFailure('date', 'invalid release date "' .
                     $this->_packagexml->getDate() . '"');
                 return false;
             }
