@@ -478,7 +478,7 @@ $phpunit->assertEquals('Foobar',
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 
-$dd_dir =  $dp->_downloader->getDownloadDir();
+$dd_dir =  $dp->getDownloadDir();
 if (!empty($dd_dir) && is_dir($dd_dir)) {
     $phpunit->assertEquals(array (
   0 => 
