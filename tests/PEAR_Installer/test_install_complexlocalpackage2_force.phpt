@@ -572,7 +572,7 @@ if (!empty($dd_dir) && is_dir($dd_dir)) {
     0 => 1,
     1 => 'Starting to download Foobar-1.5.0a1.tgz (2,207 bytes)',
   ),
-  6 => 
+  7 => 
   array (
     0 => 1,
     1 => '...done: 2,207 bytes',
