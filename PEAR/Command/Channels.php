@@ -132,8 +132,8 @@ alias.
             'function' => 'doDiscover',
             'shortcut' => 'di',
             'options' => array(),
-            'doc' => '<package>
-List the files in an installed package.
+            'doc' => '[<channel.xml>|<channel name>]
+Initialize a Channel from its server and creates the local channel.xml.
 '
             ),
         );
