@@ -78,7 +78,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.10RC1</version>
+  <version>1.4.10RC2</version>
   <date>2006-07-15</date>
   <license>PHP License</license>
   <state>beta</state>
@@ -89,6 +89,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #7726: &lt;uri&gt; dependency is broken
   * fix Bug #7830: Warning in package-dependencies command when a dir is used
   * fix Bug #7842: package-dependencies wrong type display with package 1.0 
+  * fix Bug #8230: pear help channel-discover shows wrong text
   * fix many open_basedir issues
   * fix an issue in the better state detection
   * fix typo in pickle command that would allow pickling of non-PECL package.xml
