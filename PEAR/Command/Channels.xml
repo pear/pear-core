@@ -86,8 +86,8 @@ alias.
   <function>doDiscover</function>
   <shortcut>di</shortcut>
   <options />
-  <doc>&lt;package&gt;
-List the files in an installed package.
+  <doc>[&lt;channel.xml&gt;|&lt;channel name&gt;]
+Initialize a Channel from its server and create the local channel.xml.
 </doc>
  </channel-discover>
 </commands>
