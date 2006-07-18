@@ -44,6 +44,16 @@ while (false !== ($entry = readdir($dp))) {
     }
     $packages[] = $entry;
 }
+$x = explode(PATH_SEPARATOR, get_include_path());
+$y = array();
+foreach ($x as $path) {
+    if ($path == '.') {
+        continue;
+    }
+    $y[] = $path;
+}
+// remove current dir, we will otherwise include CVS files, which is not good
+set_include_path(implode(PATH_SEPARATOR, $y));
 require_once 'PEAR/PackageFile.php';
 require_once 'PEAR/Config.php';
 require_once 'PHP/Archive/Creator.php';
@@ -53,9 +63,15 @@ chdir($peardir);
 
 $pkg = &new PEAR_PackageFile($config);
 $pf = $pkg->fromPackageFile($peardir . DIRECTORY_SEPARATOR . 'package2.xml', PEAR_VALIDATE_NORMAL);
+if (PEAR::isError($pf)) {
+    foreach ($pf->getUserInfo() as $warn) {
+        echo $warn['message'] . "\n";
+    }
+    die($pf->getMessage());
+}
 $pearver = $pf->getVersion();
 
-$creator = new PHP_Archive_Creator('index.php', true, 'go-pear.phar');
+$creator = new PHP_Archive_Creator('index.php', 'go-pear.phar', true);
 foreach ($packages as $package) {
     echo "adding PEAR/go-pear-tarballs/$package\n";
     $creator->addFile("PEAR/go-pear-tarballs/$package", "PEAR/go-pear-tarballs/$package");
@@ -259,6 +275,7 @@ $commandcontents = str_replace(
     $commandcontents);
 $creator->addString($commandcontents, 'PEAR/PackageFile.php');
 
+$creator->addMagicRequireCallback(array($creator, 'simpleMagicRequire'));
 $creator->addDir($peardir, array('tests/',
     'scripts/',
     'go-pear-phar.php',
@@ -327,6 +344,6 @@ $creator->addDir($peardir, array('tests/',
         '*Archive/Tar.php',
         '*Console/Getopt.php',
         'System.php',
-    ), 'go-pear.phar');
+    ));
 $creator->savePhar(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'go-pear.phar');
 ?>
