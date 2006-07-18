@@ -538,7 +538,7 @@ if (OS_WINDOWS) {
           ),
           array (
             0 => 3,
-            1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php',
+            1 => '+ cp ' . $dl->getDownloadDir() . DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php',
           ),
           array (
             0 => 2,
@@ -581,7 +581,7 @@ if (OS_WINDOWS) {
           ),
           array (
             0 => 3,
-            1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . ''  . DIRECTORY_SEPARATOR . 'Bar-1.5.2'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php',
+            1 => '+ cp ' . $dl->getDownloadDir() . ''  . DIRECTORY_SEPARATOR . 'Bar-1.5.2'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php',
           ),
           array (
             0 => 2,
@@ -650,12 +650,10 @@ if (OS_WINDOWS) {
             0 => 3,
             1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php',
           ),
-          35 =>
           array (
             0 => 2,
             1 => 'successfully committed 3 file operations',
           ),
-          36 =>
           array (
             'info' =>
             array (
