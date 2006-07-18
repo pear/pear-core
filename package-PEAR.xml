@@ -78,8 +78,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.4.10RC2</version>
-  <date>2006-07-15</date>
+  <version>1.4.10</version>
+  <date>2006-07-18</date>
   <license>PHP License</license>
   <state>beta</state>
   <notes>
@@ -109,6 +109,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
    <dep type="pkg" rel="ge" version="1.4.0" optional="yes">XML_RPC</dep>
    <dep type="pkg" rel="ge" version="0.5.0" optional="yes">PEAR_Frontend_Web</dep>
    <dep type="pkg" rel="ge" version="0.4.0" optional="yes">PEAR_Frontend_Gtk</dep>
+   <dep type="pkg" rel="ge" version="0.1.0" optional="yes">PEAR_Frontend_Gtk2</dep>
    <dep type="ext" rel="has">xml</dep>
    <dep type="ext" rel="has">pcre</dep>
   </deps>
