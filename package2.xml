@@ -483,7 +483,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <package>
     <name>PEAR_Frontend_Web</name>
     <channel>pear.php.net</channel>
-    <min>0.5.0</min>
+    <min>0.5.1</min>
    </package>
   </group>
   <group name="gtkinstaller" hint="PEAR's PHP-GTK-based installer">
