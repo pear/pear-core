@@ -448,9 +448,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <package>
     <name>PEAR_Frontend_Web</name>
     <channel>pear.php.net</channel>
-    <max>0.5.0</max>
-    <exclude>0.5.0</exclude>
-    <conflicts/>
+    <min>0.5.1</min>
    </package>
    <package>
     <name>PEAR_Frontend_Gtk</name>
