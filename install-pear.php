@@ -125,11 +125,16 @@ $pkg = new PEAR_PackageFile($config, $debug);
 
 foreach ($install_files as $package => $instfile) {
     $info = $pkg->fromAnyFile($instfile, PEAR_VALIDATE_INSTALLING);
-    $new_ver = $info->getVersion();
     if (PEAR::isError($info)) {
+        if (is_array($info->getUserInfo())) {
+            foreach ($info->getUserInfo() as $err) {
+                $ui->outputData(sprintf("[PEAR] %s: %s", $package, $err['message']));
+            }
+        }
         $ui->outputData(sprintf("[PEAR] %s: %s", $package, $info->getMessage()));
         continue;
     }
+    $new_ver = $info->getVersion();
     $downloaderpackage = new PEAR_Downloader_Package($installer);
     $err = $downloaderpackage->initialize($instfile);
     if (PEAR::isError($err)) {
