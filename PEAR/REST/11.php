@@ -143,7 +143,7 @@ class PEAR_REST_11
                         }
                     }
                     $d = false;
-                    if (isset($packageinfo['deps'] && is_array($packageinfo['deps'])) {
+                    if (isset($packageinfo['deps']) && is_array($packageinfo['deps'])) {
                         foreach ($packageinfo['deps'] as $dep) {
                             if ($dep['v'] == $latest) {
                                 $d = unserialize($dep['d']);
