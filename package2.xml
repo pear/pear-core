@@ -77,9 +77,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2006-07-18</date>
+ <date>2006-08-15</date>
  <version>
-  <release>1.4.10</release>
+  <release>1.4.11</release>
   <api>1.4.2</api>
  </version>
  <stability>
@@ -88,20 +88,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  bugfix release
-  * fix Bug #7579: cannot convert package 1.0 to 2.0 with PFM 1.6.0
-  * fix Bug #7640: Check invalid date format
-  * fix Bug #7726: &lt;uri&gt; dependency is broken
-  * fix Bug #7830: Warning in package-dependencies command when a dir is used
-  * fix Bug #7842: package-dependencies wrong type display with package 1.0 
-  * fix Bug #8230: pear help channel-discover shows wrong text
-  * fix many open_basedir issues
-  * fix an issue in the better state detection
-  * fix typo in pickle command that would allow pickling of non-PECL package.xml
-  * implement Request #7090: PEAR_Downloader mustn't contact pear server
-    when installing local package file
-  * implement Request #7844: download_dir and temp_dir configuration option
-  * check pearinstaller dependency prior to validating package.xml 2.0
+  minor bugfix release
+  * reintroduce conflict with the web frontend-0.5.0
+  * fix warnings in the list-all command
  </notes>
  <contents>
   <dir name="/">
@@ -448,7 +437,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <package>
     <name>PEAR_Frontend_Web</name>
     <channel>pear.php.net</channel>
-    <min>0.5.1</min>
+    <max>0.5.0</max>
+    <conflicts/>
    </package>
    <package>
     <name>PEAR_Frontend_Gtk</name>
@@ -471,14 +461,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <min>1.4.0</min>
    </package>
   </optional>
-<!--  <group name="remoteinstall" hint="adds the ability to install packages to a remote ftp server">
-   <subpackage>
-    <name>PEAR_RemoteInstaller</name>
-    <channel>pear.php.net</channel>
-    <min>0.1.0</min>
-    <recommended>0.1.0</recommended>
-   </subpackage>
-  </group> -->
   <group name="webinstaller" hint="PEAR's web-based installer">
    <package>
     <name>PEAR_Frontend_Web</name>
@@ -531,6 +513,35 @@ http://pear.php.net/dtd/package-2.0.xsd">
   </filelist>
  </phprelease>
  <changelog>
+  <release>
+ <date>2006-07-18</date>
+ <version>
+  <release>1.4.10</release>
+  <api>1.4.2</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license">PHP License</license>
+ <notes>
+  bugfix release
+  * fix Bug #7579: cannot convert package 1.0 to 2.0 with PFM 1.6.0
+  * fix Bug #7640: Check invalid date format
+  * fix Bug #7726: &lt;uri&gt; dependency is broken
+  * fix Bug #7830: Warning in package-dependencies command when a dir is used
+  * fix Bug #7842: package-dependencies wrong type display with package 1.0 
+  * fix Bug #8230: pear help channel-discover shows wrong text
+  * fix many open_basedir issues
+  * fix an issue in the better state detection
+  * fix typo in pickle command that would allow pickling of non-PECL package.xml
+  * implement Request #7090: PEAR_Downloader mustn't contact pear server
+    when installing local package file
+  * implement Request #7844: download_dir and temp_dir configuration option
+  * check pearinstaller dependency prior to validating package.xml 2.0
+ </notes>
+
+  </release>
   <release>
    <version>
     <release>1.4.0</release>
