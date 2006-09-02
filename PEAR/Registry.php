@@ -1207,7 +1207,7 @@ class PEAR_Registry extends PEAR
                 $ui = PEAR_Frontend::singleton();
                 if ($ui) {
                     foreach ($info->getValidationWarnings() as $err) {
-                        $ui->log(2, $err['message']);
+                        $ui->log($err['message'], true);
                     }
                 }
             }
