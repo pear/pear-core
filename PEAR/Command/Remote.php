@@ -495,9 +495,13 @@ parameter.
     {
         // make certain that dependencies are ignored
         $options['downloadonly'] = 1;
+
         // eliminate error messages for preferred_state-related errors
-        $options['ignorepreferred_state'] = 1;
-        $downloader = &$this->getDownloader($options);
+        /* TODO: Should be an option, but until now download does respect
+           prefered state */
+        /* $options['ignorepreferred_state'] = 1; */
+        // eliminate error messages for preferred_state-related errors
+
         $downloader->setDownloadDir(getcwd());
         $errors = array();
         $downloaded = array();
