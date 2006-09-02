@@ -94,12 +94,14 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #7221: pear install blah-alpha won't install a newer stable
   * fix Bug #7351: setting custom config variable in a channel fails
   * fix Bug #7368: undefined function: getProvidesextension()
+3B
   * fix Bug #7385: if post-install script or extension are present
     and --packagingroot, fatal erro
   * fix Bug #7419: Check inputs in PEAR_PackageFile_v2_rw
   * fix Bug #7464: run-scripts causes notices
   * fix Bug #7726: &lt;uri&gt; dependency is broken
   * fix Bug #7940: pear download fails silently
+  * fix Bug #8617, pear download prints (-1 bytes) if no content-length has been sent (Bjori, Pierre)
   * fix Bug #8620: typo error in PEAR_PackageFile_v2::getConfigureOptions()
   * fix Bug #8519: typo in PEAR/Start.php OS_WINDOWS not WINDOWS
   * fix Bug #8571: Sparse error message in registry
