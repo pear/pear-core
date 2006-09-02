@@ -330,7 +330,7 @@ Run this script as $root or pick another location.\n");
     
         // Oh well, we can keep this too :)
         // I dunno if get_cfg_var() is safe on every OS
-        if (WINDOWS) {
+        if (OS_WINDOWS) {
             // on Windows, we can be pretty sure that there is a php.ini
             // file somewhere
             do {
