@@ -621,7 +621,7 @@ class PEAR_Registry extends PEAR
     }
 
     // }}}
-    // {{{ _openPackageFile()
+    // {{{ _openChannelFile()
 
     function _openChannelFile($channel, $mode)
     {
