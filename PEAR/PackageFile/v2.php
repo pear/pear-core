@@ -1191,7 +1191,7 @@ class PEAR_PackageFile_v2
         }
         $releases = $this->getReleases();
         if (isset($releases[0])) {
-            $releases = $release[0];
+            $releases = $releases[0];
         }
         if (isset($releases['configureoption'])) {
             if (!isset($releases['configureoption'][0])) {
