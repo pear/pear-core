@@ -1074,7 +1074,12 @@ class PEAR_Downloader extends PEAR_Common
                 $bytes += $params;
                 break;
             case 'start':
-                $this->log(1, "Starting to download {$params[0]} (".number_format($params[1], 0, '', ',')." bytes)");
+                if($params[1] == -1) {
+                    $length = "Unknown size";
+                } else {
+                    $length = number_format($params[1], 0, '', ',')." bytes";
+                }
+                $this->log(1, "Starting to download {$params[0]} ($length)");
                 break;
         }
         if (method_exists($this->ui, '_downloadCallback'))
