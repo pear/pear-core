@@ -529,7 +529,7 @@ installed package.'
                 unset($info[$key]);
                 $info['Last Modified'] = $hdate;
             } elseif ($key == '_lastversion') {
-                $info['Last Installed Version'] = $info[$key] ? $info[$key] : '- None -';
+                $info['Previous Installed Version'] = $info[$key] ? $info[$key] : '- None -';
                 unset($info[$key]);
             } else {
                 $info[$key] = trim($info[$key]);
@@ -994,7 +994,7 @@ installed package.'
                 $info['Last Modified'] = date('Y-m-d H:i', $obj->getLastModified());
             }
             $v = $obj->getLastInstalledVersion();
-            $info['Last Installed Version'] = $v ? $v : '- None -';
+            $info['Previous Installed Version'] = $v ? $v : '- None -';
         }
         foreach ($info as $key => $value) {
             $data['data'][] = array($key, $value);

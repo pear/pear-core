@@ -118,7 +118,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * implement Request #7090: PEAR_Downloader mustn't contact pear server
     when installing local package file
   * implement Request #7220: recognize deprecated package/channel and display to user
-  * implement Request #7844: download_dir and temp_dir configuration option
+  * implement Request #7910: &quot;Last Installed Version&quot; should be
+                             &quot;Previous Installed Version&quot;
  </notes>
  <contents>
   <dir name="/">
