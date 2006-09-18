@@ -120,6 +120,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * implement Request #7220: recognize deprecated package/channel and display to user
   * implement Request #7910: &quot;Last Installed Version&quot; should be
                              &quot;Previous Installed Version&quot;
+  * implement Request #7912: PEAR_Exception detect PEAR_Error as $message in
+                             __construct()
  </notes>
  <contents>
   <dir name="/">
