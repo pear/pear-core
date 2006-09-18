@@ -131,6 +131,9 @@ class PEAR_Exception extends Exception
                 $p2 = array($p2);
             }
             $this->cause = $p2;
+        } elseif (PEAR::isError($message)) {
+            $code = $message->getCode();
+            $message = $message->getMessage();
         } else {
             $code = null;
             $this->cause = null;
