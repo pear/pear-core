@@ -4,6 +4,8 @@ PEAR_Packager->package() failure, double package.xml (v1 and v2)
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
+} elseif (!extension_loaded('tokenizer')) {
+    echo 'skip need tokenizer extension';
 }
 ?>
 --FILE--
