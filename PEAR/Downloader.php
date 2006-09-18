@@ -1430,8 +1430,10 @@ class PEAR_Downloader extends PEAR_Common
             }
             if ($lastmodified === false || $lastmodified) {
                 $request = "GET $path HTTP/1.1\r\n";
+                $request .= "Host: $host:$port\r\n";
             } else {
                 $request = "GET $path HTTP/1.0\r\n";
+                $request .= "Host: $host\r\n";
             }
         }
         $ifmodifiedsince = '';
@@ -1445,8 +1447,8 @@ class PEAR_Downloader extends PEAR_Common
         } else {
             $ifmodifiedsince = ($lastmodified ? "If-Modified-Since: $lastmodified\r\n" : '');
         }
-        $request .= "Host: $host:$port\r\n" . $ifmodifiedsince .
-            "User-Agent: PEAR/@package_version@/PHP/" . PHP_VERSION . "\r\n";
+        $request .= $ifmodifiedsince . "User-Agent: PEAR/@package_version@/PHP/" .
+            PHP_VERSION . "\r\n";
         if (isset($this)) { // only pass in authentication for non-static calls
             $username = $config->get('username');
             $password = $config->get('password');

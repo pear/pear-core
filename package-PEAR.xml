@@ -101,7 +101,9 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #7464: run-scripts causes notices
   * fix Bug #7726: &lt;uri&gt; dependency is broken
   * fix Bug #7940: pear download fails silently
-  * fix Bug #8617, pear download prints (-1 bytes) if no content-length has been sent (Bjori, Pierre)
+  * fix Bug #8254: downloading doesn't work with 302 messages
+  * fix Bug #8617: pear download prints (-1 bytes) if no content-length
+                   has been sent (Bjori, Pierre)
   * fix Bug #8620: typo error in PEAR_PackageFile_v2::getConfigureOptions()
   * fix Bug #8519: typo in PEAR/Start.php OS_WINDOWS not WINDOWS
   * fix Bug #8571: Sparse error message in registry
