@@ -930,15 +930,15 @@ class PEAR_Dependency2
         if (!isset($dep['min']) && !isset($dep['max'])) {
             if ($required) {
                 if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                    return $this->raiseError('%s' . $extra . ' is required by installed package "' .
-                        $depname . '"');
+                    return $this->raiseError('"' . $depname . '" is required by ' .
+                        'installed package %s' . $extra);
                 } else {
-                    return $this->warning('warning: %s' . $extra .
-                        ' is required by installed package "' . $depname . '"');
+                    return $this->warning('warning: "' . $depname . '" is required by ' .
+                        'installed package %s' . $extra);
                 }
             } else {
-                return $this->warning('%s' . $extra .
-                    ' can be optionally used by installed package "' . $depname . '"');
+                return $this->warning('"' . $depname . '" can be optionally used by ' .
+                        'installed package %s' . $extra);
             }
         }
         $fail = false;
