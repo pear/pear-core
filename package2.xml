@@ -103,6 +103,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     and --packagingroot, fatal erro
   * fix Bug #7419: Check inputs in PEAR_PackageFile_v2_rw
   * fix Bug #7464: run-scripts causes notices
+  * fix Bug #7539: if a file has both install-as and ignore notices
   * fix Bug #7726: &lt;uri&gt; dependency is broken
   * fix Bug #7940: pear download fails silently
   * fix Bug #8254: downloading doesn't work with 302 messages
