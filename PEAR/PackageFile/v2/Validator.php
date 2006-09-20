@@ -993,6 +993,7 @@ class PEAR_PackageFile_v2_Validator
         }
         $res = $this->_stupidSchemaValidate($struc, $list, $dirname);
         if ($allowignore && $res) {
+            $ignored_or_installed = array();
             $this->_pf->getFilelist();
             $fcontents = $this->_pf->getContents();
             $filelist = array();
@@ -1009,7 +1010,12 @@ class PEAR_PackageFile_v2_Validator
                 foreach ($list['install'] as $file) {
                     if (!isset($filelist[$file['attribs']['name']])) {
                         $this->_notInContents($file['attribs']['name'], 'install');
+                        continue;
                     }
+                    if (array_key_exists($file['attribs']['name'], $ignored_or_installed)) {
+                        $this->_multipleInstallAs($file['attribs']['name']);
+                    }
+                    $ignored_or_installed[$file['attribs']['name']][] = 1;
                 }
             }
             if (isset($list['ignore'])) {
@@ -1019,6 +1025,10 @@ class PEAR_PackageFile_v2_Validator
                 foreach ($list['ignore'] as $file) {
                     if (!isset($filelist[$file['attribs']['name']])) {
                         $this->_notInContents($file['attribs']['name'], 'ignore');
+                        continue;
+                    }
+                    if (array_key_exists($file['attribs']['name'], $ignored_or_installed)) {
+                        $this->_ignoreAndInstallAs($file['attribs']['name']);
                     }
                 }
             }
@@ -1627,6 +1637,18 @@ class PEAR_PackageFile_v2_Validator
         $this->_stack->push(__FUNCTION__, 'error', array(),
             'Multiple top-level <dir> tags are not allowed.  Enclose them ' .
                 'in a <dir name="/">');
+    }
+
+    function _multipleInstallAs($file)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('file' => $file),
+            'Only one <install> tag is allowed for file "%file%"');
+    }
+
+    function _ignoreAndInstallAs($file)
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array('file' => $file),
+            'Cannot have both <ignore> and <install> tags for file "%file%"');
     }
 
     function _analyzeBundledPackages()
