@@ -343,13 +343,42 @@ class PEAR_PackageFile
             $tmpdir = System::mkTemp(array('-d', 'pear'));
             PEAR_PackageFile::addTempFile($tmpdir);
         }
+        $this->_extractErrors();
+        PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, array($this, '_extractErrors'));
         if (!$xml || !$tar->extractList(array($xml), $tmpdir)) {
+            PEAR::staticPopErrorHandling();
             $ret = PEAR::raiseError('could not extract the package.xml file from "' .
-                $origfile . '"');
+                $origfile . '" ' . implode("\n", $this->_extractErrors()));
             return $ret;
         }
+        PEAR::staticPopErrorHandling();
         $ret = &PEAR_PackageFile::fromPackageFile("$tmpdir/$xml", $state, $origfile);
         return $ret;
+    }
+
+    /**
+     * helper for extracting Archive_Tar errors
+     * @var array
+     * @access private
+     */
+    var $_extractErrors = array();
+
+    /**
+     * helper callback for extracting Archive_Tar errors
+     *
+     * @param PEAR_Error|null $err
+     * @return array
+     * @access private
+     */
+    function _extractErrors($err = null)
+    {
+        static $errors = array();
+        if ($err === null) {
+            $e = $errors;
+            $errors = array();
+            return $e;
+        }
+        $errors[] = $err->getMessage();
     }
 
     /**
