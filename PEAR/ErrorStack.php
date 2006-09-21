@@ -476,19 +476,10 @@ class PEAR_ErrorStack {
      * @param array  $backtrace Protected parameter: use this to pass in the
      *                          {@link debug_backtrace()} that should be used
      *                          to find error context
-     * @return PEAR_Error|array|Exception
-     *                          if compatibility mode is on, a PEAR_Error is also
-     *                          thrown.  If the class Exception exists, then one
-     *                          is returned to allow code like:
-     * <code>
-     * throw ($stack->push(MY_ERROR_CODE, 'error', array('username' => 'grob')));
-     * </code>
+     * @return PEAR_Error|array if compatibility mode is on, a PEAR_Error is also
+     * thrown.  If a PEAR_Error is returned, the userinfo
+     * property is set to the following array:
      * 
-     * The errorData property of the exception class will be set to the array
-     * that would normally be returned.  If a PEAR_Error is returned, the userinfo
-     * property is set to the array
-     * 
-     * Otherwise, an array is returned in this format:
      * <code>
      * array(
      *    'code' => $code,
@@ -501,6 +492,8 @@ class PEAR_ErrorStack {
      * //['repackage' => $err] repackaged error array/Exception class
      * );
      * </code>
+     * 
+     * Normally, the previous array is returned.
      */
     function push($code, $level = 'error', $params = array(), $msg = false,
                   $repackage = false, $backtrace = false)
@@ -606,13 +599,8 @@ class PEAR_ErrorStack {
      * @param array  $backtrace Protected parameter: use this to pass in the
      *                          {@link debug_backtrace()} that should be used
      *                          to find error context
-     * @return PEAR_Error|null|Exception
-     *                          if compatibility mode is on, a PEAR_Error is also
-     *                          thrown.  If the class Exception exists, then one
-     *                          is returned to allow code like:
-     * <code>
-     * throw ($stack->push(MY_ERROR_CODE, 'error', array('username' => 'grob')));
-     * </code>
+     * @return PEAR_Error|array if compatibility mode is on, a PEAR_Error is also
+     *                          thrown.  see docs for {@link push()}
      * @static
      */
     function staticPush($package, $code, $level = 'error', $params = array(),
