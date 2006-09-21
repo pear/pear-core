@@ -673,7 +673,14 @@ class PEAR_ErrorStack {
      */
     function pop()
     {
-        return @array_shift($this->_errors);
+        $err = @array_shift($this->_errors);
+        if (!is_null($err)) {
+            @array_pop($this->_errorsByLevel[$err['level']]);
+            if (!count($this->_errorsByLevel[$err['level']])) {
+                unset($this->_errorsByLevel[$err['level']]);
+            }
+        }
+        return $err;
     }
     
     /**
