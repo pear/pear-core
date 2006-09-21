@@ -108,6 +108,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #7931: hasErrors() with an error level has returned true after invoking pop().
   * fix Bug #7940: pear download fails silently
   * fix Bug #8254: downloading doesn't work with 302 messages
+  * fix Bug #8384: PEAR_PackageFile doesn't include error messages from Archive_Tar
   * fix Bug #8617: pear download prints (-1 bytes) if no content-length
                    has been sent (Bjori, Pierre)
   * fix Bug #8620: typo error in PEAR_PackageFile_v2::getConfigureOptions()
