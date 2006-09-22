@@ -1382,7 +1382,7 @@ class PEAR_Config extends PEAR
                 }
                 return $ret;
             }
-            if ($channel == $this->getDefaultChannel($layer)) {
+            if ($channel != $this->getDefaultChannel($layer)) {
                 return $channel; // we must use the channel name as the preferred mirror
                                  // if the user has not chosen an alternate
             } else {
