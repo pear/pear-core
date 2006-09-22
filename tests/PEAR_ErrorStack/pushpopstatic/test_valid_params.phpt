@@ -31,7 +31,7 @@ $phpunit->assertEquals(
     ),
     $err, 'popped something else'
 );
-$err = $stack->pop();
+$err = PEAR_ErrorStack::staticPop('test');
 $phpunit->assertNull($err, 'stack not empty!');
 echo 'tests done';
 ?>

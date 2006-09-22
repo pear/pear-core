@@ -670,7 +670,24 @@ class PEAR_ErrorStack {
         }
         return $err;
     }
-    
+
+    /**
+     * Pop an error off of the error stack, static method
+     *
+     * @param string package name
+     * @return boolean
+     * @since PEAR1.5.0a1
+     */
+    function staticPop($package)
+    {
+        if ($package) {
+            if (!isset($GLOBALS['_PEAR_ERRORSTACK_SINGLETON'][$package])) {
+                return false;
+            }
+            return $GLOBALS['_PEAR_ERRORSTACK_SINGLETON'][$package]->pop();
+        }
+    }
+
     /**
      * Determine whether there are any errors on the stack
      * @param string|array Level name.  Use to determine if any errors
