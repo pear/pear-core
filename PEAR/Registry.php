@@ -295,7 +295,8 @@ class PEAR_Registry extends PEAR
                     $this->_dependencyDB = &PEAR_DependencyDB::singleton($this->_config);
                     if (PEAR::isError($this->_dependencyDB)) {
                         echo $this->_dependencyDB->getMessage();
-                        die('Unrecoverable error');
+                        echo 'Unrecoverable error';
+                        exit(1);
                     }
                 }
                 $initializing = false;

@@ -1991,7 +1991,8 @@ class PEAR_Config extends PEAR
             return $a;
         } else {
             // only go here if null was passed in
-            die("CRITICAL ERROR: Registry could not be initialized from any value");
+            echo "CRITICAL ERROR: Registry could not be initialized from any value";
+            exit(1);
         }
     }
     /**
