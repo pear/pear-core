@@ -108,6 +108,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #8617: pear download prints (-1 bytes) if no content-length
                    has been sent (Bjori, Pierre)
   * fix Bug #8620: typo error in PEAR_PackageFile_v2::getConfigureOptions()
+  * fix Bug #8622: PFM2 - wrong php exclude version is not detected
   * fix Bug #8519: typo in PEAR/Start.php OS_WINDOWS not WINDOWS
   * fix Bug #8571: Sparse error message in registry
   * implement Request #6396: add extension enabling in php.ini for 1.5.0
