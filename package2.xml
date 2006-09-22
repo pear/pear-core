@@ -126,6 +126,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * implement Request #7090: PEAR_Downloader mustn't contact pear server
     when installing local package file
   * implement Request #7220: recognize deprecated package/channel and display to user
+  * implement Request #7352: add a README and an INSTALL by pear
   * implement Request #7910: &quot;Last Installed Version&quot; should be
                              &quot;Previous Installed Version&quot;
   * implement Request #7912: PEAR_Exception detect PEAR_Error as $message in
@@ -442,10 +443,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
      <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
     </file>
    </dir> <!-- /scripts -->
+   <file name="INSTALL" role="doc" />
    <file name="package.dtd" role="data" />
    <file name="PEAR.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
+   <file name="README" role="doc" />
    <file name="System.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
