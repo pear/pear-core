@@ -61,7 +61,8 @@ $all_commands = PEAR_Command::getCommands();
 
 // remove this next part when we stop supporting that crap-ass PHP 4.2
 if (!isset($_SERVER['argv']) && !isset($argv) && !isset($HTTP_SERVER_VARS['argv'])) {
-    die('ERROR: either use the CLI php executable, or set register_argc_argv=On in php.ini');
+    echo 'ERROR: either use the CLI php executable, or set register_argc_argv=On in php.ini';
+    exit(1);
 }
 $argv = Console_Getopt::readPHPArgv();
 // fix CGI sapi oddity - the -- in pear.bat/pear is not removed
@@ -132,7 +133,7 @@ if (PEAR::isError($config)) {
     $config->getMessage();
     $ui->outputData("ERROR: $_file is not a valid config file or is corrupted.");
     // We stop, we have no idea where we are :)
-    exit();    
+    exit(1);    
 }
 
 // this is used in the error handler to retrieve a relative path
@@ -330,7 +331,7 @@ function usage($error = null, $helpsubject = null)
     }
     fputs($stderr, "$put\n");
     fclose($stderr);
-    exit;
+    exit(1);
 }
 
 function cmdHelp($command)
