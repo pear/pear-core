@@ -525,6 +525,18 @@ class PEAR_PackageFile_v2_Validator
                 $this->_invalidVersion($type . '<max>', $dep['max']);
             }
         }
+        if (isset($dep['exclude'])) {
+            if (!is_array($dep['exclude'])) {
+                $dep['exclude'] = array($dep['exclude']);
+            }
+            foreach ($dep['exclude'] as $exclude) {
+                if (!preg_match(
+                     '/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?(?:-[a-zA-Z0-9]+)?$/',
+                     $exclude)) {
+                    $this->_invalidVersion($type . '<exclude>', $exclude);
+                }
+            }
+        }
     }
 
     function _validatePearinstallerDep($dep)
