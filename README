@@ -1,18 +1,32 @@
-	   PEAR - PHP Extension and Application Repository
-	   ===============================================
-	     Dedicated to Malin Bakken, born 1999-11-21
+PEAR - The PEAR Installer
+=========================
 
-WHAT IS PEAR?
+What is the PEAR Installer?  What is PEAR?
 
-PEAR is a code repository for PHP extensions and PHP library code
-similar to TeX's CTAN and Perl's CPAN.
+PEAR is the PHP Extension and Application Repository, found at
+http://pear.php.net.  The PEAR Installer is this software, which
+contains executable files and PHP code that is used to download
+and install PEAR code from pear.php.net.
 
-The intention behind PEAR is to provide a means for library code
-authors to organize their code in a defined way shared by other
-developers, and to give the PHP community a single source for such
-code.
-
+PEAR contains useful software libraries and applications such as
+MDB2 (database abstraction), HTML_QuickForm (HTML forms management),
+PhpDocumentor (auto-documentation generator), DB_DataObject
+(Data Access Abstraction), and many hundreds more.  Browse all
+available packages at http://pear.php.net, the list is constantly
+growing and updating to reflect improvements in the PHP language.
 
 DOCUMENTATION
+=============
 
 Documentation for PEAR can be found at http://pear.php.net/manual/.
+Installation documentation can be found in the INSTALL file included
+in this tarball.
+
+WARNING: DO NOT RUN PEAR WITHOUT INSTALLING IT - if you downloaded this
+tarball manually, you MUST install it.  Read the instructions in INSTALL
+prior to use.
+
+
+Happy PHPing, we hope PEAR will be a great tool for your development work!
+
+$Id$
