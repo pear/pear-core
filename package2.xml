@@ -105,6 +105,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #7464: run-scripts causes notices
   * fix Bug #7539: if a file has both install-as and ignore notices
   * fix Bug #7726: &lt;uri&gt; dependency is broken
+  * fix Bug #7896: can't download packages, neither from cli or from web page.
   * fix Bug #7931: hasErrors() with an error level has returned true after invoking pop().
   * fix Bug #7940: pear download fails silently
   * fix Bug #8254: downloading doesn't work with 302 messages
