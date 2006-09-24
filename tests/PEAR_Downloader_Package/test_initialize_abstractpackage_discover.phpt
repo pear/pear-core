@@ -196,10 +196,6 @@ $phpunit->assertEquals(array (
     0 => 1,
     1 => 'Auto-discovered channel "pear.foo.com", alias "foo", adding to registry',
   ),
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
-  ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
   0 => 

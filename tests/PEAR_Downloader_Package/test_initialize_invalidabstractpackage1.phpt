@@ -24,15 +24,9 @@ $phpunit->assertErrors(array(array('package' => 'PEAR_Error', 'message' =>
     "Cannot initialize 'test', invalid or missing package file"),
 ), 'after initialize');
 $phpunit->assertEquals(array (
-  0 => 
   array (
     0 => 0,
     1 => 'No releases for package "pear/test" exist',
-  ),
-  1 =>
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
