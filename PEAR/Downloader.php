@@ -312,9 +312,13 @@ class PEAR_Downloader extends PEAR_Common
                             PEAR::staticPopErrorHandling();
                             return $this->raiseError($curchannel);
                         }
+                        if (PEAR::isError($dir = $this->getDownloadDir())) {
+                            PEAR::staticPopErrorHandling();
+                            break;
+                        }
                         $a = $this->downloadHttp('http://' . $params[$i]->getChannel() .
                             '/channel.xml', $this->ui,
-                        System::mktemp(array('-t' . $this->getDownloadDir())), null, $curchannel->lastModified());
+                        System::mktemp(array('-t' . $dir)), null, $curchannel->lastModified());
 
                         PEAR::staticPopErrorHandling();
                         if (PEAR::isError($a) || !$a) {
@@ -655,6 +659,11 @@ class PEAR_Downloader extends PEAR_Common
             }
             $this->log(3, '+ tmp dir created at ' . $downloaddir);
         }
+        if (!is_writable($downloaddir)) {
+            return PEAR::raiseError('download directory "' . $downloaddir .
+                '" is not writeable.  Change download_dir config variable to ' .
+                'a writeable dir');
+        }
         return $this->_downloadDir = $downloaddir;
     }
 
@@ -827,8 +836,13 @@ class PEAR_Downloader extends PEAR_Common
         if (isset($this->_options['downloadonly'])) {
             $pkg = &$this->getPackagefileObject($this->config, $this->debug);
         } else {
-            $pkg = &$this->getPackagefileObject($this->config, $this->debug,
-                $this->getDownloadDir());
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+            if (PEAR::isError($dir = $this->getDownloadDir())) {
+                PEAR::staticPopErrorHandling();
+                return $dir;
+            }
+            PEAR::staticPopErrorHandling();
+            $pkg = &$this->getPackagefileObject($this->config, $this->debug, $dir);
         }
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         $pinfo = &$pkg->fromXmlString($url['info'], PEAR_VALIDATE_DOWNLOADING, 'remote');

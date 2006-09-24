@@ -1219,7 +1219,10 @@ class PEAR_Downloader_Package
                 $filecontents = $pf->getFileContents($file);
                 $dl = &$param->getDownloader();
                 $options = $dl->getOptions();
-                $fp = @fopen($dl->getDownloadDir() . DIRECTORY_SEPARATOR . $file, 'wb');
+                if (PEAR::isError($dir = $dl->getDownloadDir())) {
+                    return $dir;
+                }
+                $fp = @fopen($dir . DIRECTORY_SEPARATOR . $file, 'wb');
                 if (!$fp) {
                     continue;
                 }
@@ -1230,7 +1233,11 @@ class PEAR_Downloader_Package
                 }
                 $obj = &new PEAR_Downloader_Package($params[$i]->getDownloader());
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                $e = $obj->_fromFile($a = $dl->getDownloadDir() . DIRECTORY_SEPARATOR . $file);
+                if (PEAR::isError($dir = $dl->getDownloadDir())) {
+                    PEAR::popErrorHandling();
+                    return $dir;
+                }
+                $e = $obj->_fromFile($a = $dir . DIRECTORY_SEPARATOR . $file);
                 PEAR::popErrorHandling();
                 if (PEAR::isError($e)) {
                     if (!isset($options['soft'])) {
@@ -1357,8 +1364,11 @@ class PEAR_Downloader_Package
                     $pkg = &$this->getPackagefileObject($this->_config,
                         $this->_downloader->_debug);
                 } else {
+                    if (PEAR::isError($dir = $this->_downloader->getDownloadDir())) {
+                        return $dir;
+                    }
                     $pkg = &$this->getPackagefileObject($this->_config,
-                        $this->_downloader->_debug, $this->_downloader->getDownloadDir());
+                        $this->_downloader->_debug, $dir);
                 }
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                 $pf = &$pkg->fromAnyFile($param, PEAR_VALIDATE_INSTALLING);
@@ -1386,8 +1396,12 @@ class PEAR_Downloader_Package
             $callback = $this->_downloader->ui ?
                 array(&$this->_downloader, '_downloadCallback') : null;
             $this->_downloader->pushErrorHandling(PEAR_ERROR_RETURN);
+            if (PEAR::isError($dir = $this->_downloader->getDownloadDir())) {
+                $this->_downloader->popErrorHandling();
+                return $dir;
+            }
             $file = $this->_downloader->downloadHttp($param, $this->_downloader->ui,
-                $this->_downloader->getDownloadDir(), $callback);
+                $dir, $callback);
             $this->_downloader->popErrorHandling();
             if (PEAR::isError($file)) {
                 if (!empty($saveparam)) {
@@ -1424,8 +1438,11 @@ class PEAR_Downloader_Package
             if (isset($options['downloadonly'])) {
                 $pkg = &$this->getPackagefileObject($this->_config, $this->_downloader->debug);
             } else {
+                if (PEAR::isError($dir = $this->_downloader->getDownloadDir())) {
+                    return $dir;
+                }
                 $pkg = &$this->getPackagefileObject($this->_config, $this->_downloader->debug,
-                    $this->_downloader->getDownloadDir());
+                    $dir);
             }
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $pf = &$pkg->fromAnyFile($file, PEAR_VALIDATE_INSTALLING);
