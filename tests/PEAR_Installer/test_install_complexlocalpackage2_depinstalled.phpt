@@ -380,12 +380,6 @@ $phpunit->assertEquals('PEAR1',
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
-  1 => 
   array (
     0 => 3,
     1 => 'pear/PEAR1: Skipping required dependency "pear/Bar" version 1.5.2, already installed as version 1.4.0a1',

@@ -534,47 +534,34 @@ $phpunit->assertEquals('Foobar',
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
-  1 =>
   array (
     0 => 1,
     1 => 'WARNING: failed to download smork/Foobar within preferred state "stable", will instead download version 1.5.0a1, stability "alpha"',
   ),
-  2 => 
   array (
     0 => 1,
     1 => 'downloading Bar-1.5.2.tgz ...',
   ),
-  3 => 
   array (
     0 => 1,
     1 => 'Starting to download Bar-1.5.2.tgz (2,212 bytes)',
   ),
-  4 => 
   array (
     0 => 1,
     1 => '.',
   ),
-  5 => 
   array (
     0 => 1,
     1 => '...done: 2,212 bytes',
   ),
-  6 => 
   array (
     0 => 1,
     1 => 'downloading Foobar-1.5.0a1.tgz ...',
   ),
-  7 => 
   array (
     0 => 1,
     1 => 'Starting to download Foobar-1.5.0a1.tgz (2,207 bytes)',
   ),
-  8 => 
   array (
     0 => 1,
     1 => '...done: 2,207 bytes',

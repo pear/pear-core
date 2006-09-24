@@ -72,17 +72,10 @@ $phpunit->assertEquals('Foobar',
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
-  1 => 
   array (
     0 => 2,
     1 => 'pear/PEAR1: Skipping required dependency "pear/Bar", will be installed',
   ),
-  2 => 
   array (
     0 => 2,
     1 => 'pear/Bar: Skipping required dependency "smork/Foobar", will be installed',
