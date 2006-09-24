@@ -775,7 +775,9 @@ class PEAR_Downloader extends PEAR_Common
             $testversion = $this->_registry->packageInfo($url['package'], 'version',
                 $parr['channel']);
             PEAR::staticPopErrorHandling();
-            if (!isset($this->_options['force']) && !PEAR::isError($testversion)) {
+            if (!isset($this->_options['force']) &&
+                  !isset($this->_options['downloadonly']) &&
+                  !PEAR::isError($testversion)) {
                 if (version_compare($testversion, $url['version'], '>=')) {
                     return PEAR::raiseError($this->_registry->parsedPackageNameToString(
                         $parr, true) . ' is already installed and is newer than detected ' .
