@@ -1348,7 +1348,7 @@ class PEAR_Downloader_Package
     function _fromFile(&$param)
     {
         if (is_string($param)) {
-            if (!file_exists($param)) {
+            if (!@file_exists($param)) {
                 $test = explode('#', $param);
                 $group = array_pop($test);
                 if (file_exists(implode('#', $test))) {
@@ -1357,7 +1357,7 @@ class PEAR_Downloader_Package
                     $this->_explicitGroup = true;
                 }
             }
-            if (is_file($param)) {
+            if (@is_file($param)) {
                 $this->_type = 'local';
                 $options = $this->_downloader->getOptions();
                 if (isset($options['downloadonly'])) {
