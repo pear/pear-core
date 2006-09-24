@@ -199,10 +199,6 @@ $phpunit->assertEquals(array(), $params, 'all things removed');
 $phpunit->assertEquals(array (
   array (
     0 => 3,
-    1 => '+ tmp dir created at ' . $dldir,
-  ),
-  array (
-    0 => 3,
     1 => 'Notice: package "pear/mainold" optional dependency "pear/optional" will not be automatically downloaded',
   ),
   array (

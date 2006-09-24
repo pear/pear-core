@@ -197,10 +197,6 @@ $err = $dp->_downloader->analyzeDependencies($params);
 $phpunit->assertEquals(array (
   array (
     0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
-  ),
-  array (
-    0 => 3,
     1 => 'Notice: package "pear/mainold" optional dependency "pear/optional" will not be automatically downloaded',
   ),
   array (

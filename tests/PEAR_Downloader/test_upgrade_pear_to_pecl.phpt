@@ -232,18 +232,18 @@ $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
   0 => 
   array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
+    0 => 1,
+    1 => 'downloading SQLite-1.0.4.tgz ...',
   ),
   1 => 
   array (
     0 => 1,
-    1 => 'downloading SQLite-1.0.4.tgz ...',
+    1 => 'Starting to download SQLite-1.0.4.tgz (371,000 bytes)',
   ),
   2 => 
   array (
     0 => 1,
-    1 => 'Starting to download SQLite-1.0.4.tgz (371,000 bytes)',
+    1 => '.',
   ),
   3 => 
   array (
@@ -606,11 +606,6 @@ $phpunit->assertEquals(array (
     1 => '.',
   ),
   75 => 
-  array (
-    0 => 1,
-    1 => '.',
-  ),
-  76 => 
   array (
     0 => 1,
     1 => '...done: 371,000 bytes',

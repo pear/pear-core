@@ -386,102 +386,78 @@ $phpunit->assertEquals(6, count($result), 'return');
 $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(6, count($dlpackages), 'downloaded packages count');
 $phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
-  1 => 
   array (
     0 => 1,
     1 => 'downloading pkg1-1.1.tgz ...',
   ),
-  2 => 
   array (
     0 => 1,
     1 => 'Starting to download pkg1-1.1.tgz (700 bytes)',
   ),
-  3 => 
   array (
     0 => 1,
     1 => '.'
   ),
-  4 => 
   array (
     0 => 1,
     1 => '...done: 700 bytes',
   ),
-  5 => 
   array (
     0 => 1,
     1 => 'downloading pkg2-1.1.tgz ...',
   ),
-  6 => 
   array (
     0 => 1,
     1 => 'Starting to download pkg2-1.1.tgz (704 bytes)',
   ),
-  7 => 
   array (
     0 => 1,
     1 => '...done: 704 bytes',
   ),
-  8 => 
   array (
     0 => 1,
     1 => 'downloading pkg3-1.1.tgz ...',
   ),
-  9 => 
   array (
     0 => 1,
     1 => 'Starting to download pkg3-1.1.tgz (714 bytes)',
   ),
-  10 => 
   array (
     0 => 1,
     1 => '...done: 714 bytes',
   ),
-  11 => 
   array (
     0 => 1,
     1 => 'downloading pkg4-1.1.tgz ...',
   ),
-  12 => 
   array (
     0 => 1,
     1 => 'Starting to download pkg4-1.1.tgz (702 bytes)',
   ),
-  13 => 
   array (
     0 => 1,
     1 => '...done: 702 bytes',
   ),
-  14 => 
   array (
     0 => 1,
     1 => 'downloading pkg5-1.1.tgz ...',
   ),
-  15 => 
   array (
     0 => 1,
     1 => 'Starting to download pkg5-1.1.tgz (706 bytes)',
   ),
-  16 => 
   array (
     0 => 1,
     1 => '...done: 706 bytes',
   ),
-  17 => 
   array (
     0 => 1,
     1 => 'downloading pkg6-1.1.tgz ...',
   ),
-  18 => 
   array (
     0 => 1,
     1 => 'Starting to download pkg6-1.1.tgz (673 bytes)',
   ),
-  19 => 
   array (
     0 => 1,
     1 => '...done: 673 bytes',

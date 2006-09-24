@@ -169,10 +169,6 @@ $dp->detectDependencies($params);
 $phpunit->assertNoErrors('after detect');
 $phpunit->assertEquals(array (
   array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
-  ),
-  array (
     0 => 0,
     1 => 'No releases for package "pear/required" exist',
   ),

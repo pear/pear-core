@@ -256,32 +256,22 @@ $phpunit->assertEquals(array (
     0 => 3,
     1 => 'pear/XML_Parser: Skipping required dependency "pear/PEAR" version 1.4.8, already installed as version 1.4.8',
   ),
-  1 =>
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
-  2 =>
   array (
     0 => 1,
     1 => 'downloading XML_Parser-1.2.7.tgz ...',
   ),
-  3 =>
   array (
     0 => 1,
     1 => 'Starting to download XML_Parser-1.2.7.tgz (12,939 bytes)',
   ),
-  4 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  5 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  6 =>
   array (
     0 => 1,
     1 => '...done: 12,939 bytes',

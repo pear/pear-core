@@ -343,57 +343,42 @@ $after = $dp->getDownloadedPackages();
 $phpunit->showall();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
-  1 => 
   array (
     0 => 1,
     1 => 'downloading PEAR1-1.4.0a1.tgz ...',
   ),
-  2 => 
   array (
     0 => 1,
     1 => 'Starting to download PEAR1-1.4.0a1.tgz (2,112 bytes)',
   ),
-  3 => 
   array (
     0 => 1,
     1 => '.',
   ),
-  4 => 
   array (
     0 => 1,
     1 => '...done: 2,112 bytes',
   ),
-  5 => 
   array (
     0 => 1,
     1 => 'downloading Bar-1.5.0.tgz ...',
   ),
-  6 => 
   array (
     0 => 1,
     1 => 'Starting to download Bar-1.5.0.tgz (2,085 bytes)',
   ),
-  7 => 
   array (
     0 => 1,
     1 => '...done: 2,085 bytes',
   ),
-  8 => 
   array (
     0 => 1,
     1 => 'downloading Foobar-1.4.0a1.tgz ...',
   ),
-  9 => 
   array (
     0 => 1,
     1 => 'Starting to download Foobar-1.4.0a1.tgz (2,062 bytes)',
   ),
-  10 => 
   array (
     0 => 1,
     1 => '...done: 2,062 bytes',
