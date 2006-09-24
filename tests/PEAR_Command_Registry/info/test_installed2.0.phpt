@@ -109,7 +109,7 @@ PEAR installer version 1.4.0a1 or newer',
         ),
         14 => 
         array (
-          0 => 'Last Installed Version',
+          0 => 'Previous Installed Version',
           1 => '- None -',
         ),
       ),
