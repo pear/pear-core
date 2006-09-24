@@ -502,6 +502,7 @@ parameter.
         /* $options['ignorepreferred_state'] = 1; */
         // eliminate error messages for preferred_state-related errors
 
+        $downloader = &$this->getDownloader($options);
         $downloader->setDownloadDir(getcwd());
         $errors = array();
         $downloaded = array();
