@@ -346,7 +346,10 @@ class PEAR_PackageFile
         $this->_extractErrors();
         PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, array($this, '_extractErrors'));
         if (!$xml || !$tar->extractList(array($xml), $tmpdir)) {
-            $extra =  ' ' . implode("\n", $this->_extractErrors());
+            $extra = implode("\n", $this->_extractErrors());
+            if ($extra) {
+                $extra = ' ' . $extra;
+            }
             PEAR::staticPopErrorHandling();
             $ret = PEAR::raiseError('could not extract the package.xml file from "' .
                 $origfile . '"' . $extra);
