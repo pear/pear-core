@@ -15,7 +15,7 @@ $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
 $pf->validate();
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => '<phprelease> packages cannot use <providesextension>, only extbinrelease and extsrcrelease can provide a PHP extension'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => '<phprelease> packages cannot use <providesextension>, only extbinrelease, extsrcrelease, zendextsrcrelease, and zendextbinrelease can provide a PHP extension'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<phprelease> packages cannot specify a source code package, only extension binaries may use the <srcpackage> tag'),
 ), '1');
 
@@ -25,7 +25,7 @@ $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
 $pf->validate();
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => '<phprelease> packages cannot use <providesextension>, only extbinrelease and extsrcrelease can provide a PHP extension'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => '<phprelease> packages cannot use <providesextension>, only extbinrelease, extsrcrelease, zendextsrcrelease, and zendextbinrelease can provide a PHP extension'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => '<phprelease> packages cannot specify a source code package, only extension binaries may use the <srcpackage> tag'),
 ), '2');
 
