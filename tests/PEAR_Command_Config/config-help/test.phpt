@@ -114,23 +114,41 @@ Valid set: stable beta alpha devel snapshot',
         ),
         14 => 
         array (
+          0 => 'temp_dir',
+          1 => 'directory',
+          2 => 'directory which is used for all temp files',
+        ),
+        15 => 
+        array (
+          0 => 'download_dir',
+          1 => 'directory',
+          2 => 'directory which is used for all downloaded files',
+        ),
+        16 =>
+        array (
           0 => 'php_bin',
           1 => 'file',
           2 => 'PHP CLI/CGI binary for executing scripts',
         ),
-        15 => 
+        17 =>
+        array (
+          0 => 'php_ini',
+          1 => 'file',
+          2 => 'location of php.ini in which to enable PECL extensions on install',
+        ),
+        18 => 
         array (
           0 => 'username',
           1 => 'string',
           2 => '(maintainers) your PEAR account name',
         ),
-        16 => 
+        19 => 
         array (
           0 => 'password',
           1 => 'password',
           2 => '(maintainers) your PEAR account password',
         ),
-        17 => 
+        20 => 
         array (
           0 => 'verbose',
           1 => 'integer',
@@ -140,38 +158,38 @@ Valid set: stable beta alpha devel snapshot',
 2: verbose
 3: debug',
         ),
-        18 => 
+        21 => 
         array (
           0 => 'umask',
           1 => 'mask',
           2 => 'umask used when creating files (Unix-like systems only)',
         ),
-        19 => 
+        22 => 
         array (
           0 => 'cache_ttl',
           1 => 'integer',
           2 => 'amount of secs where the local cache is used and not updated',
         ),
-        20 => 
+        23 => 
         array (
           0 => 'sig_type',
           1 => 'set',
           2 => 'which package signature mechanism to use
 Valid set: gpg',
         ),
-        21 => 
+        24 => 
         array (
           0 => 'sig_bin',
           1 => 'string',
           2 => 'which package signature mechanism to use',
         ),
-        22 => 
+        25 => 
         array (
           0 => 'sig_keyid',
           1 => 'string',
           2 => 'which key to use for signing with',
         ),
-        23 => 
+        26 => 
         array (
           0 => 'sig_keydir',
           1 => 'directory',
