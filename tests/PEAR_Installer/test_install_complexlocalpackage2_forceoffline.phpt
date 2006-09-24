@@ -536,17 +536,10 @@ $phpunit->assertEquals('PEAR1',
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
-  1 =>
   array (
     0 => 3,
     'Skipping dependency download check, --offline specified',
   ),
-  2 =>
   array (
     0 => 0,
     1 => 'warning: pear/PEAR1 requires package "pear/Bar" (version >= 1.0.0)',

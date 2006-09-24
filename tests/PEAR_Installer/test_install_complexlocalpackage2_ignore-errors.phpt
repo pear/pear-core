@@ -539,37 +539,26 @@ $phpunit->assertEquals('Bar',
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
-  1 =>
   array (
     0 => 0,
     1 => 'Failed to download smork/Foobar within preferred state "stable", latest release is version 1.5.0a1, stability "alpha", use "channel://smork/Foobar-1.5.0a1" to install',
   ),
-  2 =>
   array (
     0 => 0,
     1 => 'pear/Bar requires package "smork/Foobar"',
   ),
-  3 => 
   array (
     0 => 1,
     1 => 'downloading Bar-1.5.2.tgz ...',
   ),
-  4 => 
   array (
     0 => 1,
     1 => 'Starting to download Bar-1.5.2.tgz (2,212 bytes)',
   ),
-  5 => 
   array (
     0 => 1,
     1 => '.',
   ),
-  6 => 
   array (
     0 => 1,
     1 => '...done: 2,212 bytes',
