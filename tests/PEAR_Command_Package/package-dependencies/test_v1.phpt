@@ -41,7 +41,7 @@ $phpunit->assertEquals(array (
         1 => 
         array (
           0 => 'Yes',
-          1 => 'ext',
+          1 => 'Extension',
           2 => 'brump',
           3 => 'not',
           4 => '',
@@ -49,7 +49,7 @@ $phpunit->assertEquals(array (
         2 => 
         array (
           0 => 'Yes',
-          1 => 'ext',
+          1 => 'Extension',
           2 => 'zoomp',
           3 => '>=',
           4 => '1.0',
@@ -57,7 +57,7 @@ $phpunit->assertEquals(array (
         3 => 
         array (
           0 => 'No',
-          1 => 'ext',
+          1 => 'Extension',
           2 => 'xmlrpc',
           3 => '>=',
           4 => '1.0',
