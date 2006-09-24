@@ -660,9 +660,11 @@ class PEAR_Downloader extends PEAR_Common
             $this->log(3, '+ tmp dir created at ' . $downloaddir);
         }
         if (!is_writable($downloaddir)) {
-            return PEAR::raiseError('download directory "' . $downloaddir .
-                '" is not writeable.  Change download_dir config variable to ' .
-                'a writeable dir');
+            if (PEAR::isError($downloaddir = System::mkdir(array('-p', $downloaddir)))) {
+                return PEAR::raiseError('download directory "' . $downloaddir .
+                    '" is not writeable.  Change download_dir config variable to ' .
+                    'a writeable dir');
+            }
         }
         return $this->_downloadDir = $downloaddir;
     }
