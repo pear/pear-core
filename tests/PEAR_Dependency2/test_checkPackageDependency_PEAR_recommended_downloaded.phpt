@@ -154,10 +154,6 @@ $result = $dep->validatePackageDependency(
     ), true, $params);
 $phpunit->assertNoErrors('compatible local works');
 $phpunit->assertEquals(array(
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
-  ),
 ), $fakelog->getLog(), 'compatible local works log');
 $phpunit->assertTrue($result, 'compatible local works');
 echo 'tests done';
