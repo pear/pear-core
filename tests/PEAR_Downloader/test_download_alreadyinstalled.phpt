@@ -75,10 +75,6 @@ $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($dlpackages), 'downloaded packages count');
 $phpunit->assertEquals(array (
   array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
-  array (
     0 => 1,
     1 => 'Skipping package "pear/test", already installed as version 1.0',
   ),
@@ -98,10 +94,6 @@ $phpunit->assertEquals(0, count($result), 'return');
 $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($dlpackages), 'downloaded packages count');
 $phpunit->assertEquals(array (
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
   array (
     0 => 1,
     1 => 'Skipping package "pear/test", already installed as version 1.0',
@@ -130,11 +122,6 @@ $phpunit->assertEquals('test',
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
   1 => 
   array (
     0 => 1,

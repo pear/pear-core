@@ -196,10 +196,6 @@ $_test_dep->setExtensions(array('bar' => '1.0'));
 $err = $dp->_downloader->analyzeDependencies($params);
 $phpunit->assertNoErrors('end');
 $phpunit->assertEquals(array (
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
-  ),
 ), $fakelog->getLog(), 'end log');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');
 echo 'tests done';

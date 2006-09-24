@@ -85,12 +85,6 @@ $phpunit->assertEquals('test',
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
-  1 => 
   array (
     0 => 0,
     1 => 'WARNING: channel "pear.php.net" has updated its protocols, use "channel-update pear.php.net" to update',

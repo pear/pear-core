@@ -197,10 +197,6 @@ $dldir = $dp->_downloader->getDownloadDir();
 $dp->_downloader->analyzeDependencies($params);
 $phpunit->assertEquals(array(), $params, 'empty array');
 $phpunit->assertEquals(array (
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dldir,
-  ),
 ), $fakelog->getLog(), 'end log');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');
 echo 'tests done';

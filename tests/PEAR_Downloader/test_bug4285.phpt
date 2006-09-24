@@ -29,22 +29,14 @@ $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($mainpackage, $requiredpackage));
 $phpunit->assertEquals(array(), $result, 'result');
 $phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
-  1 => 
   array (
     0 => 2,
     1 => 'pear/PEAR: Skipping required dependency "pear.chiaraquartet.net/Chiara_XML_RPC5", will be installed',
   ),
-  2 => 
   array (
     0 => 0,
     1 => 'pear.chiaraquartet.net/Chiara_XML_RPC5 requires PHP (version >= 5.0.3, version <= 6.0.0), installed version is 4.2',
   ),
-  3 => 
   array (
     0 => 0,
     1 => 'pear/PEAR requires package "pear.chiaraquartet.net/Chiara_XML_RPC5" (version >= 0.3.0)',
