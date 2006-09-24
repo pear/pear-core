@@ -341,80 +341,75 @@ if (OS_WINDOWS) {
     $phpunit->assertEquals(array (
       0 => 
       array (
-        0 => 3,
-        1 => '+ tmp dir created at ' . $dl->getDownloadDir(),
+        0 => 1,
+        1 => 'downloading Bar-1.5.2.tgz ...',
       ),
       1 => 
       array (
         0 => 1,
-        1 => 'downloading Bar-1.5.2.tgz ...',
+        1 => 'Starting to download Bar-1.5.2.tgz (2,212 bytes)',
       ),
       2 => 
       array (
         0 => 1,
-        1 => 'Starting to download Bar-1.5.2.tgz (2,212 bytes)',
+        1 => '.',
       ),
       3 => 
       array (
         0 => 1,
-        1 => '.',
+        1 => '...done: 2,212 bytes',
       ),
       4 => 
       array (
         0 => 1,
-        1 => '...done: 2,212 bytes',
+        1 => 'downloading Foobar-1.5.0a1.tgz ...',
       ),
       5 => 
       array (
         0 => 1,
-        1 => 'downloading Foobar-1.5.0a1.tgz ...',
+        1 => 'Starting to download Foobar-1.5.0a1.tgz (2,207 bytes)',
       ),
       6 => 
       array (
         0 => 1,
-        1 => 'Starting to download Foobar-1.5.0a1.tgz (2,207 bytes)',
-      ),
-      7 => 
-      array (
-        0 => 1,
         1 => '...done: 2,207 bytes',
       ),
-      8 => 
+      7 => 
       array (
         0 => 3,
         1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php',
       ),
-      9 => 
+      8 => 
       array (
         0 => 2,
         1 => 'md5sum ok: ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php',
       ),
-      10 => 
+      9 => 
       array (
         0 => 3,
         1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php ',
       ),
-      11 => 
+      10 => 
       array (
         0 => 3,
         1 => 'adding to transaction: installed_as foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
       ),
-      12 => 
+      11 => 
       array (
         0 => 2,
         1 => 'about to commit 2 file operations',
       ),
-      13 => 
+      12 => 
       array (
         0 => 3,
         1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php',
       ),
-      14 => 
+      13 => 
       array (
         0 => 2,
         1 => 'successfully committed 2 file operations',
       ),
-      15 => 
+      14 => 
       array (
         'info' => 
         array (
@@ -422,42 +417,42 @@ if (OS_WINDOWS) {
         ),
         'cmd' => 'install',
       ),
-      16 => 
+      15 => 
       array (
         0 => 3,
         1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . ''  . DIRECTORY_SEPARATOR . 'Bar-1.5.2'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php',
       ),
-      17 => 
+      16 => 
       array (
         0 => 2,
         1 => 'md5sum ok: ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php',
       ),
-      18 => 
+      17 => 
       array (
         0 => 3,
         1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php ',
       ),
-      19 => 
+      18 => 
       array (
         0 => 3,
         1 => 'adding to transaction: installed_as foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
       ),
-      20 => 
+      19 => 
       array (
         0 => 2,
         1 => 'about to commit 2 file operations',
       ),
-      21 => 
+      20 => 
       array (
         0 => 3,
         1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php',
       ),
-      22 => 
+      21 => 
       array (
         0 => 2,
         1 => 'successfully committed 2 file operations',
       ),
-      23 => 
+      22 => 
       array (
         'info' => 
         array (
@@ -465,37 +460,37 @@ if (OS_WINDOWS) {
         ),
         'cmd' => 'install',
       ),
-      24 => 
+      23 => 
       array (
         0 => 3,
         1 => '+ cp ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php',
       ),
-      25 => 
+      24 => 
       array (
         0 => 3,
         1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php ',
       ),
-      26 => 
+      25 => 
       array (
         0 => 3,
         1 => 'adding to transaction: installed_as foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
       ),
-      27 => 
+      26 => 
       array (
         0 => 2,
         1 => 'about to commit 2 file operations',
       ),
-      28 => 
+      27 => 
       array (
         0 => 3,
         1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php',
       ),
-      29 => 
+      28 => 
       array (
         0 => 2,
         1 => 'successfully committed 2 file operations',
       ),
-      30 => 
+      29 => 
       array (
         'info' => 
         array (
@@ -508,90 +503,85 @@ if (OS_WINDOWS) {
     $phpunit->assertEquals(array (
       0 => 
       array (
-        0 => 3,
-        1 => '+ tmp dir created at ' . $dl->getDownloadDir(),
+        0 => 1,
+        1 => 'downloading Bar-1.5.2.tgz ...',
       ),
       1 => 
       array (
         0 => 1,
-        1 => 'downloading Bar-1.5.2.tgz ...',
+        1 => 'Starting to download Bar-1.5.2.tgz (2,212 bytes)',
       ),
       2 => 
       array (
         0 => 1,
-        1 => 'Starting to download Bar-1.5.2.tgz (2,212 bytes)',
+        1 => '.',
       ),
       3 => 
       array (
         0 => 1,
-        1 => '.',
+        1 => '...done: 2,212 bytes',
       ),
       4 => 
       array (
         0 => 1,
-        1 => '...done: 2,212 bytes',
+        1 => 'downloading Foobar-1.5.0a1.tgz ...',
       ),
       5 => 
       array (
         0 => 1,
-        1 => 'downloading Foobar-1.5.0a1.tgz ...',
+        1 => 'Starting to download Foobar-1.5.0a1.tgz (2,207 bytes)',
       ),
       6 => 
       array (
         0 => 1,
-        1 => 'Starting to download Foobar-1.5.0a1.tgz (2,207 bytes)',
-      ),
-      7 => 
-      array (
-        0 => 1,
         1 => '...done: 2,207 bytes',
       ),
-      8 => 
+      7 => 
       array (
         0 => 3,
         1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php',
       ),
-      9 => 
+      8 => 
       array (
         0 => 2,
         1 => 'md5sum ok: ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php',
       ),
-      10 => 
+      9 => 
       array (
         0 => 3,
         1 => 'adding to transaction: chmod 644 ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php',
       ),
-      11 => 
+      10 => 
       array (
         0 => 3,
         1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php ',
       ),
-      12 => 
+      11 => 
       array (
         0 => 3,
         1 => 'adding to transaction: installed_as foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
       ),
-      13 => 
+      12 => 
       array (
         0 => 2,
         1 => 'about to commit 3 file operations',
       ),
-      14 => 
+      13 => 
       array (
         0 => 3,
         1 => '+ chmod 644 ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php',
       ),
-      15 => 
+      14 => 
       array (
         0 => 3,
         1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php',
       ),
-      16 => 
+      15 => 
       array (
         0 => 2,
         1 => 'successfully committed 3 file operations',
       ),
-      17=> 
+      16 => 
       array (
         'info' => 
         array (
@@ -599,52 +589,52 @@ if (OS_WINDOWS) {
         ),
         'cmd' => 'install',
       ),
-      18 => 
+      17 => 
       array (
         0 => 3,
         1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . ''  . DIRECTORY_SEPARATOR . 'Bar-1.5.2'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php',
       ),
-      19 => 
+      18 => 
       array (
         0 => 2,
         1 => 'md5sum ok: ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php',
       ),
-      20 => 
+      19 => 
       array (
         0 => 3,
         1 => 'adding to transaction: chmod 644 ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php',
       ),
-      21 => 
+      20 => 
       array (
         0 => 3,
         1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php ',
       ),
-      22 => 
+      21 => 
       array (
         0 => 3,
         1 => 'adding to transaction: installed_as foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
       ),
-      23 => 
+      22 => 
       array (
         0 => 2,
         1 => 'about to commit 3 file operations',
       ),
-      24 => 
+      23 => 
       array (
         0 => 3,
         1 => '+ chmod 644 ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php',
       ),
-      25 => 
+      24 => 
       array (
         0 => 3,
         1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php',
       ),
-      26 => 
+      25 => 
       array (
         0 => 2,
         1 => 'successfully committed 3 file operations',
       ),
-      27 => 
+      26 => 
       array (
         'info' => 
         array (
@@ -652,47 +642,47 @@ if (OS_WINDOWS) {
         ),
         'cmd' => 'install',
       ),
-      28 => 
+      27 => 
       array (
         0 => 3,
         1 => '+ cp ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php',
       ),
-      29 => 
+      28 => 
       array (
         0 => 3,
         1 => 'adding to transaction: chmod 644 ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php',
       ),
-      30 => 
+      29 => 
       array (
         0 => 3,
         1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php ',
       ),
-      31 => 
+      30 => 
       array (
         0 => 3,
         1 => 'adding to transaction: installed_as foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
       ),
-      32 => 
+      31 => 
       array (
         0 => 2,
         1 => 'about to commit 3 file operations',
       ),
-      33 => 
+      32 => 
       array (
         0 => 3,
         1 => '+ chmod 644 ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php',
       ),
-      34 => 
+      33 => 
       array (
         0 => 3,
         1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php',
       ),
-      35 => 
+      34 => 
       array (
         0 => 2,
         1 => 'successfully committed 3 file operations',
       ),
-      36 => 
+      35 => 
       array (
         'info' => 
         array (

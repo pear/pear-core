@@ -638,11 +638,6 @@ $phpunit->assertEquals(array (
     ),
     'cmd' => 'no command',
   ),
-  3 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $GLOBALS['__Stupid_php4_a']->getDownloadDir(),
-  ),
 ), $fakelog->getLog(), 'bug part');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download bug part');
 echo 'tests done';
