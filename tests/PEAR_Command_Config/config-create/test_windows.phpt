@@ -104,11 +104,29 @@ $phpunit->assertEquals(array (
           ),
           2 => 
           array (
+            0 => 'PEAR Installer cache directory',
+            1 => 'download_dir',
+            2 => NULL,
+          ),
+          3 =>
+          array (
             0 => 'PHP CLI/CGI binary',
             1 => 'php_bin',
             2 => NULL,
           ),
-          3 => 
+          4 => 
+          array (
+            0 => 'php.ini location',
+            1 => 'php_ini',
+            2 => NULL,
+          ),
+          5 =>
+          array (
+            0 => 'PEAR Installer temp directory',
+            1 => 'temp_dir',
+            2 => NULL,
+          ),
+          6 =>
           array (
             0 => 'PEAR test directory',
             1 => 'test_dir',
