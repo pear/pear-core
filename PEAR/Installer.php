@@ -764,11 +764,14 @@ class PEAR_Installer extends PEAR_Downloader
                         }
                     }
                     // permissions issues with rename - copy() is far superior
+                    $perms = @fileperms($data[0]);
                     if (!@copy($data[0], $data[1])) {
                         $this->log(1, 'Could not rename ' . $data[0] . ' to ' . $data[1] .
                             ' ' . $php_errormsg);
                         return false;
                     }
+                    // copy over permissions, otherwise they are lost
+                    @chmod($data[1], $perms);
                     @unlink($data[0]);
                     $this->log(3, "+ mv $data[0] $data[1]");
                     break;
