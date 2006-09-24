@@ -106,27 +106,18 @@ $phpunit->assertErrors(array(
 ), 'after install');
 $dl = &$command->getDownloader(1, array());
 $phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dl->getDownloadDir(),
-  ),
-  1 => 
   array (
     0 => 3,
     1 => 'Notice: package "pear/PEAR" required dependency "pecl/radius" will not be automatically downloaded',
   ),
-  2 => 
   array (
     0 => 1,
     1 => 'Did not download dependencies: pecl/radius, use --alldeps or --onlyreqdeps to download automatically',
   ),
-  3 => 
   array (
     0 => 0,
     1 => 'pear/PEAR requires package "pear/radius"',
   ),
-  4 => 
   array (
     'info' => 
     array (
