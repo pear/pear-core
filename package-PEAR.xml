@@ -41,6 +41,12 @@ http://pear.php.net/dtd/package-1.0.xsd">
    <email>cellog@php.net</email>
   </maintainer>
   <maintainer>
+   <user>pajoye</user>
+   <role>lead</role>
+   <name>Pierre-Alain Joye</name>
+   <email>pajoye@pearfr.org</email>
+  </maintainer>
+  <maintainer>
    <user>ssb</user>
    <role>lead</role>
    <name>Stig Bakken</name>
@@ -51,12 +57,6 @@ http://pear.php.net/dtd/package-1.0.xsd">
    <role>lead</role>
    <name>Tomas V.V.Cox</name>
    <email>cox@idecnet.com</email>
-  </maintainer>
-  <maintainer>
-   <user>pajoye</user>
-   <role>lead</role>
-   <name>Pierre-Alain Joye</name>
-   <email>pajoye@pearfr.org</email>
   </maintainer>
   <maintainer>
    <user>timj</user>
@@ -79,7 +79,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
  </maintainers>
  <release>
   <version>1.5.0a1</version>
-  <date>2006-05-01</date>
+  <date>2006-09-30</date>
   <license>PHP License</license>
   <state>alpha</state>
   <notes>
