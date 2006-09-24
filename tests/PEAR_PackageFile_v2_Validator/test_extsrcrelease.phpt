@@ -38,7 +38,7 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'tag <configureoption> has no attributes in context "<extsrcrelease>"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'tag <configureoption> in context "<extsrcrelease>" has no attribute "prompt"'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'tag <configureoption> in context "<extsrcrelease>" has no attribute "name"'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => '<binarypackage> tags must contain the name of a package that is a compiled version of this extsrc package'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => '<binarypackage> tags must contain the name of a package that is a compiled version of this extsrc/zendextsrc package'),
 ), '3');
 echo 'tests done';
 ?>

@@ -67,13 +67,7 @@ $phpunit->assertEquals('Foobar',
     $dlpackages[2]['pkg'], 'Foobar');
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
-$phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->getDownloadDir(),
-  ),
-), $fakelog->getLog(), 'log messages');
+$phpunit->assertEquals(array (), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
 ), $fakelog->getDownload(), 'download callback messages');
 $installer->sortPackagesForInstall($result);
