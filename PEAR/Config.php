@@ -442,7 +442,7 @@ class PEAR_Config extends PEAR
             'type' => 'directory',
             'default' => PEAR_CONFIG_DEFAULT_CACHE_DIR,
             'doc' => 'directory which is used for all downloaded files',
-            'prompt' => 'PEAR Installer cache directory',
+            'prompt' => 'PEAR Installer download directory',
             'group' => 'File Locations (Advanced)',
             ),
         'php_bin' => array(

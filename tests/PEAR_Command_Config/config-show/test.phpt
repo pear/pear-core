@@ -104,7 +104,7 @@ $phpunit->assertEquals(array (
           ),
           2 => 
           array (
-            0 => 'PEAR Installer cache directory',
+            0 => 'PEAR Installer download directory',
             1 => 'download_dir',
             2 => PEAR_CONFIG_DEFAULT_CACHE_DIR,
           ),
@@ -311,7 +311,7 @@ $phpunit->assertEquals(array (
           ),
           2 => 
           array (
-            0 => 'PEAR Installer cache directory',
+            0 => 'PEAR Installer download directory',
             1 => 'download_dir',
             2 => PEAR_CONFIG_DEFAULT_CACHE_DIR,
           ),
@@ -519,7 +519,7 @@ $phpunit->assertEquals(array (
           ),
           2 => 
           array (
-            0 => 'PEAR Installer cache directory',
+            0 => 'PEAR Installer download directory',
             1 => 'download_dir',
             2 => PEAR_CONFIG_DEFAULT_CACHE_DIR,
           ),
