@@ -138,10 +138,6 @@ $phpunit->assertNoErrors('after detect');
 $phpunit->assertEquals(array (
   array (
     0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
-  ),
-  array (
-    0 => 3,
     1 => 'Notice: package "pear/mainold" required dependency "pear/required" will not be automatically downloaded',    
   ),
   array (

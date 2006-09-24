@@ -22,12 +22,6 @@ $phpunit->assertErrors(array(
           'message' => 'Invalid or missing remote package file'),
 ), 'expected errors');
 $phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
-  ),
-  1 => 
   array (
     0 => 0,
     1 => 'Could not download from "http://www.example.com/test-1.1.tgz" (File http://www.example.com:80/test-1.1.tgz not valid (received: HTTP/1.1 404 http://www.example.com/test-1.1.tgz Is not valid))',

@@ -71,10 +71,6 @@ $phpunit->assertErrors(array(
 ), 'after initialize');
 $phpunit->assertEquals(array (
   array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
-  ),
-  array (
     0 => 0,
     1 => 'Failed to download pear/test, stability "stable", ' .
     'latest release is version 0.2.0, stability "beta", use "channel://pear.php.net/test-0.2.0" to install',

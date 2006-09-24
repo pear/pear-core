@@ -210,11 +210,6 @@ $phpunit->assertEquals(array (
     0 => 0,
     1 => 'invalid package name/package file "pear.foo.com/test"',
   ),
-  8 =>
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
-  ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
   0 => 

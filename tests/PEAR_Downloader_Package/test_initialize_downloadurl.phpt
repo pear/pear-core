@@ -16,27 +16,18 @@ $dp = &newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('http://www.example.com/test-1.0.tgz');
 $phpunit->assertEquals(array (
-  0 => 
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
-  ),
-  1 => 
   array (
     0 => 1,
     1 => 'downloading test-1.0.tgz ...',
   ),
-  2 => 
   array (
     0 => 1,
     1 => 'Starting to download test-1.0.tgz (785 bytes)',
   ),
-  3 => 
   array (
     0 => 1,
     1 => '.',
   ),
-  4 => 
   array (
     0 => 1,
     1 => '...done: 785 bytes',

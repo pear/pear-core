@@ -155,10 +155,6 @@ $dp->detectDependencies($params);
 $phpunit->assertNoErrors('after detect');
 $phpunit->assertEquals(array (
   array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
-  ),
-  array (
     0 => 2,
     1 => 'pear/mainold: Skipping required dependency "pear/required", is already installed',
   ),
@@ -180,10 +176,6 @@ $params = array(&$dp);
 $dp->detectDependencies($params);
 $phpunit->assertNoErrors('after detect');
 $phpunit->assertEquals(array(
-  array (
-    0 => 3,
-    1 => '+ tmp dir created at ' . $dp->_downloader->getDownloadDir(),
-  ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');
 $phpunit->assertEquals(1, count($params), 'detectDependencies');
