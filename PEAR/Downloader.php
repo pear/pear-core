@@ -317,8 +317,7 @@ class PEAR_Downloader extends PEAR_Common
                             break;
                         }
                         $a = $this->downloadHttp('http://' . $params[$i]->getChannel() .
-                            '/channel.xml', $this->ui,
-                        System::mktemp(array('-t' . $dir)), null, $curchannel->lastModified());
+                            '/channel.xml', $this->ui, $dir, null, $curchannel->lastModified());
 
                         PEAR::staticPopErrorHandling();
                         if (PEAR::isError($a) || !$a) {
