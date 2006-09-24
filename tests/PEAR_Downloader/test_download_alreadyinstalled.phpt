@@ -122,22 +122,18 @@ $phpunit->assertEquals('test',
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
-  1 => 
   array (
     0 => 1,
     1 => 'downloading test-1.0.tgz ...',
   ),
-  2 => 
   array (
     0 => 1,
     1 => 'Starting to download test-1.0.tgz (785 bytes)',
   ),
-  3 => 
   array (
     0 => 1,
     1 => '.',
   ),
-  4 => 
   array (
     0 => 1,
     1 => '...done: 785 bytes',
