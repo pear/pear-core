@@ -975,13 +975,15 @@ class PEAR_Downloader_Package
     function getDeps()
     {
         if (isset($this->_packagefile)) {
-            if ($this->_packagefile->getPackagexmlVersion() == '2.0') {
+            $ver = $this->_packagefile->getPackagexmlVersion();
+            if (version_compare($ver, '2.0', '>=')) {
                 return $this->_packagefile->getDeps(true);
             } else {
                 return $this->_packagefile->getDeps();
             }
         } elseif (isset($this->_downloadURL['info'])) {
-            if ($this->_downloadURL['info']->getPackagexmlVersion() == '2.0') {
+            $ver = $this->_downloadURL['info']->getPackagexmlVersion();
+            if (version_compare($ver, '2.0', '>=')) {
                 return $this->_downloadURL['info']->getDeps(true);
             } else {
                 return $this->_downloadURL['info']->getDeps();
@@ -1347,6 +1349,7 @@ class PEAR_Downloader_Package
      */
     function _fromFile(&$param)
     {
+        $saveparam = $param;
         if (is_string($param)) {
             if (!@file_exists($param)) {
                 $test = explode('#', $param);
@@ -1384,6 +1387,7 @@ class PEAR_Downloader_Package
                 return $this->_valid = true;
             }
         }
+        $param = $saveparam;
         return $this->_valid = false;
     }
 

@@ -188,7 +188,8 @@ class PEAR_Validate
         if ($this->_packagexml->getPackagexmlVersion() == '1.0') {
             $this->validateState();
             $this->validateFilelist();
-        } elseif ($this->_packagexml->getPackagexmlVersion() == '2.0') {
+        } elseif ($this->_packagexml->getPackagexmlVersion() == '2.0' ||
+                  $this->_packagexml->getPackagexmlVersion() == '2.1') {
             $this->validateTime();
             $this->validateStability();
             $this->validateDeps();
@@ -207,7 +208,8 @@ class PEAR_Validate
     {
         if ($this->_state == PEAR_VALIDATE_PACKAGING ||
               $this->_state == PEAR_VALIDATE_NORMAL) {
-            if ($this->_packagexml->getPackagexmlVersion() == '2.0' &&
+            if (($this->_packagexml->getPackagexmlVersion() == '2.0' ||
+                 $this->_packagexml->getPackagexmlVersion() == '2.1') &&
                   $this->_packagexml->getExtends()) {
                 $version = $this->_packagexml->getVersion() . '';
                 $name = $this->_packagexml->getPackage();

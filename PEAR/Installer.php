@@ -1224,8 +1224,9 @@ class PEAR_Installer extends PEAR_Downloader
 
         $this->configSet('default_channel', $channel);
         // {{{ install files
-        
-        if ($pkg->getPackagexmlVersion() == '2.0') {
+
+        $ver = $pkg->getPackagexmlVersion();
+        if (version_compare($ver, '2.0', '>=')) {
             $filelist = $pkg->getInstallationFilelist();
         } else {
             $filelist = $pkg->getFileList();
