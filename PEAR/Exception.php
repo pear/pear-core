@@ -112,28 +112,37 @@ class PEAR_Exception extends Exception
 
     /**
      * Supported signatures:
-     * PEAR_Exception(string $message);
-     * PEAR_Exception(string $message, int $code);
-     * PEAR_Exception(string $message, Exception $cause);
-     * PEAR_Exception(string $message, Exception $cause, int $code);
-     * PEAR_Exception(string $message, array $causes);
-     * PEAR_Exception(string $message, array $causes, int $code);
+     *  - PEAR_Exception(string $message);
+     *  - PEAR_Exception(string $message, int $code);
+     *  - PEAR_Exception(string $message, Exception $cause);
+     *  - PEAR_Exception(string $message, Exception $cause, int $code);
+     *  - PEAR_Exception(string $message, PEAR_Error $cause);
+     *  - PEAR_Exception(string $message, PEAR_Error $cause, int $code);
+     *  - PEAR_Exception(string $message, array $causes);
+     *  - PEAR_Exception(string $message, array $causes, int $code);
+     * @param string exception message
+     * @param int|Exception|PEAR_Error|array|null exception cause
+     * @param int|null exception code or null
      */
     public function __construct($message, $p2 = null, $p3 = null)
     {
         if (is_int($p2)) {
             $code = $p2;
             $this->cause = null;
-        } elseif ($p2 instanceof Exception || is_array($p2)) {
+        } elseif (is_object($p2) || is_array($p2)) {
+            // using is_object allows both Exception and PEAR_Error
+            if (is_object($p2) && !($p2 instanceof Exception)) {
+                if (!class_exists('PEAR_Error') || !($p2 instanceof PEAR_Error)) {
+                    throw new PEAR_Exception('exception cause must be Exception, ' .
+                        'array, or PEAR_Error');
+                }
+            }
             $code = $p3;
             if (is_array($p2) && isset($p2['message'])) {
                 // fix potential problem of passing in a single warning
                 $p2 = array($p2);
             }
             $this->cause = $p2;
-        } elseif (PEAR::isError($message)) {
-            $code = $message->getCode();
-            $message = $message->getMessage();
         } else {
             $code = null;
             $this->cause = null;
@@ -246,10 +255,12 @@ class PEAR_Exception extends Exception
             $this->cause->getCauseMessage($causes);
         } elseif ($this->cause instanceof Exception) {
             $causes[] = array('class'   => get_class($cause),
-                           'message' => $cause->getMessage(),
-                           'file' => $cause->getFile(),
-                           'line' => $cause->getLine());
-
+                              'message' => $cause->getMessage(),
+                              'file' => $cause->getFile(),
+                              'line' => $cause->getLine());
+        } elseif (class_exists('PEAR_Error') && $this->cause instanceof PEAR_Error) {
+            $causes[] = array('class' => get_class($this->cause),
+                              'message' => $this->cause->getMessage());
         } elseif (is_array($this->cause)) {
             foreach ($this->cause as $cause) {
                 if ($cause instanceof PEAR_Exception) {
@@ -259,6 +270,9 @@ class PEAR_Exception extends Exception
                                    'message' => $cause->getMessage(),
                                    'file' => $cause->getFile(),
                                    'line' => $cause->getLine());
+                } elseif (class_exists('PEAR_Error') && $cause instanceof PEAR_Error) {
+                    $causes[] = array('class' => get_class($cause),
+                                      'message' => $cause->getMessage());
                 } elseif (is_array($cause) && isset($cause['message'])) {
                     // PEAR_ErrorStack warning
                     $causes[] = array(
