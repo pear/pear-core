@@ -163,74 +163,69 @@ $phpunit->assertEquals(array (
       ),
       1 => 
       array (
-        0 => 3,
-        1 => '+ tmp dir created at ' . $GLOBALS['last_dl']->getDownloadDir(),
-      ),
-      2 => 
-      array (
         0 => 0,
         1 => 'Cannot install pear/fail on windows operating system, can only install on linux',
       ),
-      3 => 
+      2 => 
       array (
         0 => 1,
         1 => 'downloading test-1.1.0.tgz ...',
       ),
-      4 => 
+      3 => 
       array (
         0 => 1,
         1 => 'Starting to download test-1.1.0.tgz (721 bytes)',
       ),
-      5 => 
+      4 => 
       array (
         0 => 1,
         1 => '.',
       ),
-      6 => 
+      5 => 
       array (
         0 => 1,
         1 => '...done: 721 bytes',
       ),
-      7 => 
+      6 => 
       array (
         0 => 3,
         1 => '+ cp ' . str_replace('\\\\', '\\', $GLOBALS['last_dl']->getDownloadDir()) . DIRECTORY_SEPARATOR . 'test-1.1.0' .
             DIRECTORY_SEPARATOR . 'foo.dll ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll',
       ),
-      8 => 
+      7 => 
       array (
         0 => 2,
         1 => 'md5sum ok: ' . $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll',
       ),
-      9 => 
+      8 => 
       array (
         0 => 3,
         1 => 'adding to transaction: rename ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll ' .
             $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll 1',
       ),
-      10 => 
+      9 => 
       array (
         0 => 3,
         1 => 'adding to transaction: installed_as foo.dll ' . $ext_dir . DIRECTORY_SEPARATOR .
             'foo.dll ' . $ext_dir . ' ' . DIRECTORY_SEPARATOR
       ),
-      11 => 
+      10 => 
       array (
         0 => 2,
         1 => 'about to commit 2 file operations',
       ),
-      12 => 
+      11 => 
       array (
         0 => 3,
         1 => '+ mv ' . $ext_dir . DIRECTORY_SEPARATOR . '.tmpfoo.dll ' .
             $ext_dir . DIRECTORY_SEPARATOR . 'foo.dll',
       ),
-      13 => 
+      12 => 
       array (
         0 => 2,
         1 => 'successfully committed 2 file operations',
       ),
-      14 => 
+      13 => 
       array (
         0 => 0,
         1 => 'Download and install of binary extension "pear/test" successful',
