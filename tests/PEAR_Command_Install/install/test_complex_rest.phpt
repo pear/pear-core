@@ -280,7 +280,7 @@ if (OS_WINDOWS) {
   15 => 
   array (
     0 => 3,
-    1 => '+ cp C:\\WINDOWS\\TEMP\\pear\\cache\\Bar-1.5.2\\foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php',
+    1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . ''  . DIRECTORY_SEPARATOR . 'Bar-1.5.2'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php',
   ),
   16 => 
   array (
