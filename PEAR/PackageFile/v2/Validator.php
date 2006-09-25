@@ -70,7 +70,8 @@ class PEAR_PackageFile_v2_Validator
             return false;
         }
         if (!isset($this->_packageInfo['attribs']['version']) ||
-              $this->_packageInfo['attribs']['version'] != '2.0') {
+              ($this->_packageInfo['attribs']['version'] != '2.0' &&
+               $this->_packageInfo['attribs']['version'] != '2.1')) {
             $this->_noPackageVersion();
         }
         $structure =

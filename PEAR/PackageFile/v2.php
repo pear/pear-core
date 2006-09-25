@@ -1779,6 +1779,12 @@ class PEAR_PackageFile_v2
 
     function getPackagexmlVersion()
     {
+        if (isset($this->_packageInfo['zendextsrcrelease'])) {
+            return '2.1';
+        }
+        if (isset($this->_packageInfo['zendextbinrelease'])) {
+            return '2.1';
+        }
         return '2.0';
     }
 

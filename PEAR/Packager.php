@@ -93,14 +93,16 @@ class PEAR_Packager extends PEAR_Common
                     $this->log(1, 'Warning: ' . $warning['message']);
                 }
             }
-            if ($pf2->getPackagexmlVersion() == '2.0') {
+            if ($pf2->getPackagexmlVersion() == '2.0' ||
+                  $pf2->getPackagexmlVersion() == '2.1') {
                 $main = &$pf2;
                 $other = &$pf;
             } else {
                 $main = &$pf;
                 $other = &$pf2;
             }
-            if ($main->getPackagexmlVersion() != '2.0') {
+            if ($main->getPackagexmlVersion() != '2.0' &&
+                  $main->getPackagexmlVersion() != '2.1') {
                 return PEAR::raiseError('Error: cannot package two package.xml version 1.0, can ' .
                     'only package together a package.xml 1.0 and package.xml 2.0');
             }

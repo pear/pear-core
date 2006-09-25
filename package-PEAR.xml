@@ -128,6 +128,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
                              &quot;Previous Installed Version&quot;
   * implement Request #7912: PEAR_Exception detect PEAR_Error as $message in
                              __construct()
+  * implement Request #8779: add package.xml 2.1 support for zend extensions
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

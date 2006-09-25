@@ -79,6 +79,29 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
         $this->_packageInfo['name'] = $package;
     }
 
+    /**
+     * set this as a package.xml version 2.1
+     * @access private
+     */
+    function _setPackageVersion2_1()
+    {
+        $info = array(
+                                 'version' => '2.1',
+                                 'xmlns' => 'http://pear.php.net/dtd/package-2.1',
+                                 'xmlns:tasks' => 'http://pear.php.net/dtd/tasks-1.0',
+                                 'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+                                 'xsi:schemaLocation' => 'http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.1
+    http://pear.php.net/dtd/package-2.1.xsd',
+                             );
+        if (!isset($this->_packageInfo['attribs'])) {
+            $this->_packageInfo = array_merge(array('attribs' => $info), $this->_packageInfo);
+        } else {
+            $this->_packageInfo['attribs'] = $info;
+        }
+    }
+
     function setUri($uri)
     {
         unset($this->_packageInfo['channel']);
@@ -1199,6 +1222,9 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
         if (!in_array($type, array('php', 'extbin', 'extsrc', 'zendextsrc',
                                    'zendextbin', 'bundle'))) {
             return false;
+        }
+        if (in_array($type, array('zendextsrc', 'zendextbin'))) {
+            $this->_setPackageVersion2_1();
         }
         if ($type != 'bundle') {
             $type .= 'release';
