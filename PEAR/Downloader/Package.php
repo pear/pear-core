@@ -1378,6 +1378,7 @@ class PEAR_Downloader_Package
                 PEAR::popErrorHandling();
                 if (PEAR::isError($pf)) {
                     $this->_valid = false;
+                    $param = $saveparam;
                     return $pf;
                 }
                 $this->_packagefile = &$pf;
