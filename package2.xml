@@ -873,5 +873,50 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #7075: PEAR_PackageFile_v2 :: setLogger failed on autodetection
    </notes>
   </release>
+  <release>
+   <version>
+    <release>1.4.10</release>
+    <api>1.4.2</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-07-18</date>
+   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
+   <notes>
+  bugfix release
+  * fix Bug #7579: cannot convert package 1.0 to 2.0 with PFM 1.6.0
+  * fix Bug #7640: Check invalid date format
+  * fix Bug #7726: &lt;uri&gt; dependency is broken
+  * fix Bug #7830: Warning in package-dependencies command when a dir is used
+  * fix Bug #7842: package-dependencies wrong type display with package 1.0 
+  * fix Bug #8230: pear help channel-discover shows wrong text
+  * fix many open_basedir issues
+  * fix an issue in the better state detection
+  * fix typo in pickle command that would allow pickling of non-PECL package.xml
+  * implement Request #7090: PEAR_Downloader mustn't contact pear server
+    when installing local package file
+  * implement Request #7844: download_dir and temp_dir configuration option
+  * check pearinstaller dependency prior to validating package.xml 2.0
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.11</release>
+    <api>1.4.2</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-08-15</date>
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>
+  minor bugfix release
+  * reintroduce conflict with the web frontend-0.5.0
+  * fix warnings in the list-all command
+   </notes>
+  </release>
  </changelog>
 </package>
