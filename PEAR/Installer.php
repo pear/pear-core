@@ -530,7 +530,8 @@ class PEAR_Installer extends PEAR_Downloader
                     $md5sum = md5($contents);
                 }
                 foreach ($atts as $tag => $raw) {
-                    $tag = str_replace($pkg->getTasksNs() . ':', '', $tag);
+                    $tag = str_replace(array($pkg->getTasksNs() . ':', '-'), 
+                        array('', '_'), $tag);
                     $task = "PEAR_Task_$tag";
                     $task = &new $task($this->config, $this, PEAR_TASK_INSTALL);
                     if (!$task->isScript()) { // scripts are only handled after installation
