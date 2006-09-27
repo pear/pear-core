@@ -44,8 +44,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <lead>
   <name>Pierre-Alain Joye</name>
   <user>pajoye</user>
-  <email>pajoye@pearfr.org</email>
-  <active>yes</active>
+  <email>pierre@php.net</email>
+  <active>no</active>
  </lead>
  <lead>
   <name>Stig Bakken</name>
