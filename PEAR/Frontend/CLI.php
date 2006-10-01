@@ -352,6 +352,32 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         } else {
             $fp = STDIN;
         }
+        reset($prompts);
+        if (count($prompts) == 1 && $types[key($prompts)] == 'yesno') {
+            foreach ($prompts as $key => $prompt) {
+                $type = $types[$key];
+                $default = @$defaults[$key];
+                print "$prompt ";
+                if ($default) {
+                    print "[$default] ";
+                }
+                print ": ";
+                if (version_compare(phpversion(), '5.0.0', '<')) {
+                    $line = fgets($fp, 2048);
+                } else {
+                    if (!defined('STDIN')) {
+                        define('STDIN', fopen('php://stdin', 'r'));
+                    }
+                    $line = fgets(STDIN, 2048);
+                }
+                if ($default && trim($line) == "") {
+                    $result[$key] = $default;
+                } else {
+                    $result[$key] = trim($line);
+                }
+            }
+            return $result;
+        }
         while (true) {
             $descLength = max(array_map('strlen', $prompts));
             $descFormat = "%-{$descLength}s";
