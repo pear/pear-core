@@ -89,6 +89,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
   Minor feature addition
+  * fix Bug #8794: upgrade-all including Auth fails with fatal error
   * implement Request #8827: add a yesno type handling for post-install scripts
  </notes>
  <contents>

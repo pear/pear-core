@@ -966,7 +966,11 @@ class PEAR_Downloader_Package
         if (isset($this->_packagefile)) {
             return $this->_packagefile->isExtension($name);
         } elseif (isset($this->_downloadURL['info'])) {
-            return $this->_downloadURL['info']->getProvidesExtension() == $name;
+			if ($this->_downloadURL['info']->getPackagexmlVersion() == '2.0') {
+				return $this->_downloadURL['info']->getProvidesExtension() == $name;
+			} else {
+				return false;
+			}
         } else {
             return false;
         }
