@@ -84,6 +84,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <state>alpha</state>
   <notes>
   Minor feature addition
+  * fix Bug #8553: PEAR_Installer_Role_Common::processInstallation() does not honor layer
   * fix Bug #8794: upgrade-all including Auth fails with fatal error
   * implement Request #8827: add a yesno type handling for post-install scripts
   </notes>
