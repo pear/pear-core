@@ -100,7 +100,7 @@ class PEAR_Installer_Role_Common
             }
         } else {
             $dest_dir = $save_destdir = $this->config->get($roleInfo['locationconfig'],
-                    null, $pkg->getChannel()) . DIRECTORY_SEPARATOR . $pkg->getPackage();
+                    $layer, $pkg->getChannel()) . DIRECTORY_SEPARATOR . $pkg->getPackage();
         }
         if (dirname($file) != '.' && empty($atts['install-as'])) {
             $dest_dir .= DIRECTORY_SEPARATOR . dirname($file);
