@@ -94,7 +94,7 @@ class PEAR_Installer_Role_Common
             }
         } elseif ($roleInfo['unusualbaseinstall']) {
             $dest_dir = $save_destdir = $this->config->get($roleInfo['locationconfig'],
-                    null, $pkg->getChannel()) . DIRECTORY_SEPARATOR . $pkg->getPackage();
+                    $layer, $pkg->getChannel()) . DIRECTORY_SEPARATOR . $pkg->getPackage();
             if (!empty($atts['baseinstalldir'])) {
                 $dest_dir .= DIRECTORY_SEPARATOR . $atts['baseinstalldir'];
             }
