@@ -145,7 +145,7 @@ class PEAR_RemoteInstaller extends PEAR_Installer
                     continue; // this shouldn't happen
                 }
                 list($save_destdir, $dest_dir, $dest_file, $orig_file) =
-                    $role->processInstallation($pkg, $atts['attribs'], $file, $tmp_path, 'ftp');
+                    $role->processInstallation($pkg, $atts, $file, $tmp_path, 'ftp');
                 $dest_file = str_replace(DIRECTORY_SEPARATOR, '/', $dest_file);
             }
             $this->log(2, 'Deleting "' . $dest_file . '"');
