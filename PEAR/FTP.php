@@ -222,7 +222,7 @@ class PEAR_FTP extends PEAR
             return PEAR::raiseError('Could not open remote file ' .
                 $this->_prepend($remotefile) . ' for saving as local file ' . $localfile);
         }
-        $ret = @stream_copy_to_stream($remote, $local);
+        $ret = @stream_copy_to_stream($local, $remote);
         if ($local) {
             @fclose($local);
         }
