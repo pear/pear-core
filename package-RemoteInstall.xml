@@ -32,23 +32,11 @@ remote* commands as if they were local.
   <name>Pierre-Alain Joye</name>
   <user>pajoye</user>
   <email>pajoye@pearfr.org</email>
-  <active>yes</active>
- </lead>
- <lead>
-  <name>Stig Bakken</name>
-  <user>ssb</user>
-  <email>stig@php.net</email>
-  <active>no</active>
- </lead>
- <lead>
-  <name>Tomas V.V.Cox</name>
-  <user>cox</user>
-  <email>cox@idecnet.com</email>
   <active>no</active>
  </lead>
  <date>2006-04-02</date>
  <version>
-  <release>0.3.0</release>
+  <release>0.3.1</release>
   <api>0.1.0</api>
  </version>
  <stability>
@@ -57,11 +45,11 @@ remote* commands as if they were local.
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  Support for FTPS and SFTP is now available!
-  * Drop Net_FTP dependency, add dependency on PHP 5, use streams to access
-    FTP.
-  * Require PEAR 1.4.3 for security reasons
-  * Add optional dep on ssh2 extension
+fix Bug #7881: stream_copy_to_stream function args reversed
+fix bug in uninstall - $atts instead of $atts['attribs']
+fix unclear error message in put()
+up required PEAR Installer dependency to 1.5.0a2 because of bug
+fixed in that version
  </notes>
  <contents>
   <dir name="/">
@@ -87,7 +75,7 @@ remote* commands as if they were local.
     <min>5.0.0</min>
    </php>
    <pearinstaller>
-    <min>1.4.3</min>
+    <min>1.5.0a2/min>
    </pearinstaller>
    <package>
     <name>PEAR</name>
@@ -133,6 +121,25 @@ remote* commands as if they were local.
    <license uri="http://www.php.net/license">PHP License</license>
    <notes>
   Update to new format needed by PEAR 1.4.3
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.3.0</release>
+    <api>0.1.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2006-04-02</date>
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>
+  Support for FTPS and SFTP is now available!
+  * Drop Net_FTP dependency, add dependency on PHP 5, use streams to access
+    FTP.
+  * Require PEAR 1.4.3 for security reasons
+  * Add optional dep on ssh2 extension
    </notes>
   </release>
  </changelog>
