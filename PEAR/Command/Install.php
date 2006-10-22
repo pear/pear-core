@@ -970,7 +970,7 @@ Run post-installation scripts in package <package>, if any exist.
     function doBundle($command, $options, $params)
     {
         $downloader = &$this->getDownloader($this->ui, array('force' => true, 'nodeps' => true,
-            'soft' => true), $this->config);
+            'soft' => true, 'downloadonly' => true), $this->config);
         $reg = &$this->config->getRegistry();
         if (sizeof($params) < 1) {
             return $this->raiseError("Please supply the package you want to bundle");
