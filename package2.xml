@@ -94,6 +94,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #9101: PEAR_Exception::getCauseMessage() failure with a
                    nested Exception (Adam Harvey)
   * fix Bug #9135: pear bundle fails if php_dir is not writeable
+  * fix Bug #9182: can't add versioning to conflicting deps in PEAR_PF_v2_rw
   * implement Request #8827: add a yesno type handling for post-install scripts
  </notes>
  <contents>
