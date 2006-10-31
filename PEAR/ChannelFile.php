@@ -1388,6 +1388,12 @@ class PEAR_ChannelFile {
         }
         $set = array('attribs' => array('version' => $version), '_content' => $name);
         if (!isset($this->_channelInfo['servers']['primary'][$type]['function'])) {
+            if (!isset($this->_channelInfo['servers'])) {
+                $this->_channelInfo['servers'] = array('primary' =>
+                    array($type => array()));
+            } elseif (!isset($this->_channelInfo['servers']['primary'])) {
+                $this->_channelInfo['servers']['primary'] = array($type => array());
+            }
             $this->_channelInfo['servers']['primary'][$type]['function'] = $set;
             $this->_isValid = false;
             return true;
@@ -1475,6 +1481,9 @@ class PEAR_ChannelFile {
             $setmirror = &$this->_channelInfo['servers']['primary'];
         }
         $set = array('attribs' => array('type' => $resourceType), '_content' => $url);
+        if (!isset($setmirror['rest'])) {
+            $setmirror['rest'] = array();
+        }
         if (!isset($setmirror['rest']['baseurl'])) {
             $setmirror['rest']['baseurl'] = $set;
             $this->_isValid = false;

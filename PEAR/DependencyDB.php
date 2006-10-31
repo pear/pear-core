@@ -27,6 +27,7 @@
 require_once 'PEAR.php';
 require_once 'PEAR/Config.php';
 
+$GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE'] = array();
 /**
  * Track dependency relationships between installed packages
  * @category   pear
@@ -558,6 +559,15 @@ class PEAR_DependencyDB
         if (!$deps) {
             return;
         }
+        if (!is_array($data)) {
+            $data = array();
+        }
+        if (!isset($data['dependencies'])) {
+            $data['dependencies'] = array();
+        }
+        if (!isset($data['dependencies'][strtolower($pkg->getChannel())])) {
+            $data['dependencies'][strtolower($pkg->getChannel())] = array();
+        }
         $data['dependencies'][strtolower($pkg->getChannel())][strtolower($pkg->getPackage())]
             = array();
         if (isset($deps['required']['package'])) {
@@ -646,6 +656,15 @@ class PEAR_DependencyDB
         } else {
             $depchannel = '__uri';
         }
+        if (!isset($data['dependencies'])) {
+            $data['dependencies'] = array();
+        }
+        if (!isset($data['dependencies'][strtolower($pkg->getChannel())])) {
+            $data['dependencies'][strtolower($pkg->getChannel())] = array();
+        }
+        if (!isset($data['dependencies'][strtolower($pkg->getChannel())][strtolower($pkg->getPackage())])) {
+            $data['dependencies'][strtolower($pkg->getChannel())][strtolower($pkg->getPackage())] = array();
+        }
         $data['dependencies'][strtolower($pkg->getChannel())][strtolower($pkg->getPackage())][]
             = $info;
         if (isset($data['packages'][strtolower($depchannel)][strtolower($dep['name'])])) {
@@ -664,6 +683,15 @@ class PEAR_DependencyDB
                             'package' => strtolower($pkg->getPackage()));
             }
         } else {
+            if (!isset($data['packages'])) {
+                $data['packages'] = array();
+            }
+            if (!isset($data['packages'][strtolower($depchannel)])) {
+                $data['packages'][strtolower($depchannel)] = array();
+            }
+            if (!isset($data['packages'][strtolower($depchannel)][strtolower($dep['name'])])) {
+                $data['packages'][strtolower($depchannel)][strtolower($dep['name'])] = array();
+            }
             $data['packages'][strtolower($depchannel)][strtolower($dep['name'])][]
                 = array('channel' => strtolower($pkg->getChannel()),
                         'package' => strtolower($pkg->getPackage()));

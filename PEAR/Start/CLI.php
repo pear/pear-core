@@ -498,6 +498,7 @@ Thanks for using go-pear!
             }
 
             $arrayPath = explode($iniSep, $currentPath);
+            $newPath = array();
             if ($arrayPath[0]=='.') {
                 $newPath[0] = '.';
                 $newPath[1] = $this->php_dir;
@@ -510,6 +511,7 @@ Thanks for using go-pear!
                 $newPath[]= $path;
             }
         } else {
+            $newPath = array();
             $newPath[0] = '.';
             $newPath[1] = $this->php_dir;
             $foundAt[] = count($arrayIni); // add a new line if none is present
