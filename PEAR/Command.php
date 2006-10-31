@@ -35,6 +35,12 @@ require_once 'PEAR/XMLParser.php';
 $GLOBALS['_PEAR_Command_commandlist'] = array();
 
 /**
+ * List of commands and their descriptions
+ * @var array command => description
+ */
+$GLOBALS['_PEAR_Command_commanddesc'] = array();
+
+/**
  * List of shortcuts to common commands.
  * @var array shortcut => command
  */

@@ -437,6 +437,7 @@ class PEAR_PackageFile_v2_Validator
     {
         $ret = array();
         if (count($pieces = explode('|', $key)) > 1) {
+            $ret['choices'] = array();
             foreach ($pieces as $piece) {
                 $ret['choices'][] = $this->_processStructure($piece);
             }
@@ -1027,6 +1028,9 @@ class PEAR_PackageFile_v2_Validator
                     }
                     if (array_key_exists($file['attribs']['name'], $ignored_or_installed)) {
                         $this->_multipleInstallAs($file['attribs']['name']);
+                    }
+                    if (!isset($ignored_or_installed[$file['attribs']['name']])) {
+                        $ignored_or_installed[$file['attribs']['name']] = array();
                     }
                     $ignored_or_installed[$file['attribs']['name']][] = 1;
                 }

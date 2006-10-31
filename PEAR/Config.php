@@ -798,7 +798,7 @@ class PEAR_Config extends PEAR
         $set = array_flip(array_values($this->_channels));
         foreach ($this->configuration as $layer => $data) {
             $i = 1000;
-            if (isset($data['__channels'])) {
+            if (isset($data['__channels']) && is_array($data['__channels'])) {
                 foreach ($data['__channels'] as $channel => $info) {
                     $set[$channel] = $i++;
                 }
@@ -1568,6 +1568,9 @@ class PEAR_Config extends PEAR
                 continue;
             }
             foreach ($this->layers as $layer) {
+                if (!isset($this->configuration[$layer]['__channels'])) {
+                    $this->configuration[$layer]['__channels'] = array();
+                }
                 if (!isset($this->configuration[$layer]['__channels'][$channel])
                       || !is_array($this->configuration[$layer]['__channels'][$channel])) {
                     $this->configuration[$layer]['__channels'][$channel] = array();

@@ -568,6 +568,9 @@ class PEAR_ErrorStack {
         }
         if ($push) {
             array_unshift($this->_errors, $err);
+            if (!isset($this->_errorsByLevel[$err['level']])) {
+                $this->_errorsByLevel[$err['level']] = array();
+            }
             $this->_errorsByLevel[$err['level']][] = &$this->_errors[0];
         }
         if ($log) {
