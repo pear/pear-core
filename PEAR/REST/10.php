@@ -606,7 +606,7 @@ class PEAR_REST_10
             if (!class_exists('PEAR_PackageFile_v2')) {
                 require_once 'PEAR/PackageFile/v2.php';
             }
-            if (!is_array($allreleases['r'])) {
+            if (!is_array($allreleases['r']) || !isset($allreleases['r'][0])) {
                 $allreleases['r'] = array($allreleases['r']);
             }
             $pf = new PEAR_PackageFile_v2;
