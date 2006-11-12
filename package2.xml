@@ -98,6 +98,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #9206: PEAR package info is not retrieved correctly for package
                    with single release
   * fix Bug #9208: Typo error on abstract PEAR_Task_Common::validXml() method
+  * fix Bug #9280: cannot install with --packagingroot package from non-php.net channel
   * fix Bug #9307: Validator generates warning on empty &lt;contents&gt; tag
   * implement Request #8827: add a yesno type handling for post-install scripts
  </notes>
