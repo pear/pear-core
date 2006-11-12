@@ -1728,6 +1728,9 @@ class PEAR_PackageFile_v2_Validator
         $log = isset($this->_pf->_logger) ? array(&$this->_pf->_logger, 'log') :
             array(&$common, 'log');
         $info = $this->_pf->getContents();
+        if (!$info) {
+            $this->_tagCannotBeEmpty('contents');
+        }
         $info = $info['dir']['file'];
         if (isset($info['attribs'])) {
             $info = array($info);
