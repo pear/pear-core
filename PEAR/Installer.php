@@ -1063,6 +1063,11 @@ class PEAR_Installer extends PEAR_Downloader
             $this->_registry = &$this->config->getRegistry();
             if (isset($this->_options['packagingroot'])) {
                 $installregistry = &new PEAR_Registry($regdir);
+                if (!$installregistry->channelExists($channel, true)) {
+                    // we need to fake a channel-discover of this channel
+                    $chanobj = $this->_registry->getChannel($channel, true);
+                    $installregistry->addChannel($chanobj);
+                }
                 $php_dir = $packrootphp_dir;
             } else {
                 $installregistry = &$this->_registry;
