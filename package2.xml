@@ -97,6 +97,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #9182: can't add versioning to conflicting deps in PEAR_PF_v2_rw
   * fix Bug #9206: PEAR package info is not retrieved correctly for package
                    with single release
+  * fix Bug #9208: Typo error on abstract PEAR_Task_Common::validXml() method
   * implement Request #8827: add a yesno type handling for post-install scripts
  </notes>
  <contents>

@@ -121,7 +121,7 @@ class PEAR_Task_Common
      * @static
      * @abstract
      */
-    function validXml($pkg, $xml, &$config, $fileXml)
+    function validateXml($pkg, $xml, &$config, $fileXml)
     {
     }
 
