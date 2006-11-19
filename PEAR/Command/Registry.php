@@ -315,7 +315,7 @@ installed package.'
         if (count($params) < 1) {
             return PEAR::raiseError('ERROR, usage: pear shell-test packagename [[relation] version]');
         }
-        $this->pushErrorHandling(PEAR_ERROR_RETURN);
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         $reg = &$this->config->getRegistry();
         $info = $reg->parsePackageName($params[0], $this->config->get('default_channel'));
         if (PEAR::isError($info)) {
@@ -348,7 +348,7 @@ installed package.'
                 exit(1);
             }
         } else {
-            $this->popErrorHandling();
+            PEAR::staticPopErrorHandling();
             $this->raiseError("$command: expects 1 to 3 parameters");
             exit(1);
         }
