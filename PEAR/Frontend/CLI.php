@@ -400,7 +400,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             if (isset($testprompts[(int)$tmp - 1])) {
                 $var = $testprompts[(int)$tmp - 1];
                 $desc = $prompts[$var];
-                $current = $result[$var];
+                $current = @$result[$var];
                 print "$desc [$current] : ";
                 $tmp = trim(fgets($fp, 1024));
                 if (trim($tmp) !== '') {
