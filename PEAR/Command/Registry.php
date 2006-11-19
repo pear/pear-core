@@ -312,6 +312,9 @@ installed package.'
 
     function doShellTest($command, $options, $params)
     {
+        if (count($params) < 1) {
+            return PEAR::raiseError('ERROR, usage: pear shell-test packagename [[relation] version]');
+        }
         $this->pushErrorHandling(PEAR_ERROR_RETURN);
         $reg = &$this->config->getRegistry();
         $info = $reg->parsePackageName($params[0], $this->config->get('default_channel'));
