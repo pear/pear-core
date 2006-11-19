@@ -75,7 +75,7 @@ fixed in that version
     <min>5.0.0</min>
    </php>
    <pearinstaller>
-    <min>1.5.0a2</min>
+    <min>1.5.0RC1</min>
    </pearinstaller>
    <package>
     <name>PEAR</name>
