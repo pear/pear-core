@@ -78,12 +78,12 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.5.0a2</version>
-  <date>2006-11-04</date>
+  <version>1.5.0RC1</version>
+  <date>2006-11-27</date>
   <license>PHP License</license>
-  <state>alpha</state>
+  <state>beta</state>
   <notes>
-  Minor feature addition
+  Minor feature addition, freeze API and prepare for 1.5.0 stable
   * fix Bug #8553: PEAR_Installer_Role_Common::processInstallation() does not honor layer
   * fix Bug #8794: upgrade-all including Auth fails with fatal error
   * fix Bug #9101: PEAR_Exception::getCauseMessage() failure with a
