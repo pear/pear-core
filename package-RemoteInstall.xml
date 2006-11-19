@@ -5,7 +5,7 @@ http://pear.php.net/dtd/package-2.0
 http://pear.php.net/dtd/package-2.0.xsd">
  <name>PEAR_RemoteInstaller</name>
  <channel>pear.php.net</channel>
- <summary>PEAR Remote installation plugin through FTP</summary>
+ <summary>PEAR Remote installation plugin through FTP, SFTP, and FTPS</summary>
  <description>Originally part of the 1.4.0 new features,
 remote installation through FTP, FTPS and SFTP is now its own package.
 This package adds the commands &quot;remote-install&quot; &quot;remote-upgrade&quot;
@@ -75,7 +75,7 @@ fixed in that version
     <min>5.0.0</min>
    </php>
    <pearinstaller>
-    <min>1.5.0a2/min>
+    <min>1.5.0a2</min>
    </pearinstaller>
    <package>
     <name>PEAR</name>
