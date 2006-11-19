@@ -209,6 +209,8 @@ class PEAR_FTP extends PEAR
 
     public function put($localfile, $remotefile, $overwrite = false, $binary = true)
     {
+        // sometimes we get the wrong size for files, this might fix it
+        clearstatcache();
         $local = @fopen($localfile, 'r' . ($binary ? 'b' : ''));
         if (!$local) {
             return PEAR::raiseError('Could not put local file ' . $localfile .
