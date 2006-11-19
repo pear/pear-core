@@ -781,7 +781,7 @@ class PEAR_Config extends PEAR
                     return true;
                 }
             } else {
-                return PEAR::raiseError('Net_FTP must be installed to use remote config');
+                return PEAR::raiseError('PEAR_RemoteInstaller must be installed to use remote config');
             }
         } while (false); // poor man's catch
         unset($this->files['ftp']);
