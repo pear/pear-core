@@ -174,6 +174,9 @@ class PEAR_PackageFile_v2_Validator
             $this->_validateCompatible();
         }
         if (!isset($this->_packageInfo['bundle'])) {
+            if (empty($this->_packageInfo['contents'])) {
+                $this->_tagCannotBeEmpty('contents');
+            }
             if (!isset($this->_packageInfo['contents']['dir'])) {
                 $this->_filelistMustContainDir('contents');
                 return false;
@@ -1728,8 +1731,9 @@ class PEAR_PackageFile_v2_Validator
         $log = isset($this->_pf->_logger) ? array(&$this->_pf->_logger, 'log') :
             array(&$common, 'log');
         $info = $this->_pf->getContents();
-        if (!$info) {
-            $this->_tagCannotBeEmpty('contents');
+        if (!$info || !isset($info['dir']['file'])) {
+            $this->_tagCannotBeEmpty('contents><dir');
+            return false;
         }
         $info = $info['dir']['file'];
         if (isset($info['attribs'])) {
