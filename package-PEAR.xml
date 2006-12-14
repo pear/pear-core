@@ -84,6 +84,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <state>beta</state>
   <notes>
    * fully fix Bug #9355: Bug in GLIBC detection
+   * fix Bug #9551: listing packages in pear.geeklog.net fails
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

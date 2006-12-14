@@ -89,6 +89,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
    * fully fix Bug #9355: Bug in GLIBC detection
+   * fix Bug #9551: listing packages in pear.geeklog.net fails
  </notes>
  <contents>
   <dir name="/">

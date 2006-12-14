@@ -56,7 +56,7 @@ class PEAR_REST_11
             return $categorylist;
         }
         $ret = array();
-        if (!is_array($categorylist['c'])) {
+        if (!is_array($categorylist['c']) || !isset($categorylist['c'][0])) {
             $categorylist['c'] = array($categorylist['c']);
         }
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
