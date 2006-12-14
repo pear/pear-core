@@ -78,27 +78,12 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.5.0RC1</version>
-  <date>2006-11-27</date>
+  <version>1.5.0RC2</version>
+  <date>2006-12-14</date>
   <license>PHP License</license>
   <state>beta</state>
   <notes>
-  Minor feature addition, freeze API and prepare for 1.5.0 stable
-  * fix Bug #8553: PEAR_Installer_Role_Common::processInstallation() does not honor layer
-  * fix Bug #8794: upgrade-all including Auth fails with fatal error
-  * fix Bug #9101: PEAR_Exception::getCauseMessage() failure with a
-                   nested Exception (Adam Harvey)
-  * fix Bug #9135: pear bundle fails if php_dir is not writeable
-  * fix Bug #9182: can't add versioning to conflicting deps in PEAR_PF_v2_rw
-  * fix Bug #9206: PEAR package info is not retrieved correctly for package
-                   with single release
-  * fix Bug #9208: Typo error on abstract PEAR_Task_Common::validXml() method
-  * fix Bug #9280: cannot install with --packagingroot package from non-php.net channel
-  * fix Bug #9307: Validator generates warning on empty &lt;contents&gt; tag
-  * fix Bug #9355: Bug in GLIBC detection (OS/Guess.php), patch proposal
-  * fix shell-test command with invalid usage (noticed by Christian Weiske)
-  * fix notice when running &quot;pear sign&quot; (noticed by Christian Weiske)
-  * implement Request #8827: add a yesno type handling for post-install scripts
+   * fully fix Bug #9355: Bug in GLIBC detection
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -765,6 +750,30 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * implement Request #7912: PEAR_Exception detect PEAR_Error as $message in
                              __construct()
   * implement Request #8779: add package.xml 2.1 support for zend extensions
+   </notes>
+  </release>
+  <release>
+   <version>1.5.0RC1</version>
+   <date>2006-11-27</date>
+   <license>PHP License</license>
+   <state>beta</state>
+   <notes>
+  Minor feature addition, freeze API and prepare for 1.5.0 stable
+  * fix Bug #8553: PEAR_Installer_Role_Common::processInstallation() does not honor layer
+  * fix Bug #8794: upgrade-all including Auth fails with fatal error
+  * fix Bug #9101: PEAR_Exception::getCauseMessage() failure with a
+                   nested Exception (Adam Harvey)
+  * fix Bug #9135: pear bundle fails if php_dir is not writeable
+  * fix Bug #9182: can't add versioning to conflicting deps in PEAR_PF_v2_rw
+  * fix Bug #9206: PEAR package info is not retrieved correctly for package
+                   with single release
+  * fix Bug #9208: Typo error on abstract PEAR_Task_Common::validXml() method
+  * fix Bug #9280: cannot install with --packagingroot package from non-php.net channel
+  * fix Bug #9307: Validator generates warning on empty &lt;contents&gt; tag
+  * fix Bug #9355: Bug in GLIBC detection (OS/Guess.php), patch proposal
+  * fix shell-test command with invalid usage (noticed by Christian Weiske)
+  * fix notice when running &quot;pear sign&quot; (noticed by Christian Weiske)
+  * implement Request #8827: add a yesno type handling for post-install scripts
    </notes>
   </release>
  </changelog>
