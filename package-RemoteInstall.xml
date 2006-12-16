@@ -28,12 +28,6 @@ remote* commands as if they were local.
   <email>cellog@php.net</email>
   <active>yes</active>
  </lead>
- <lead>
-  <name>Pierre-Alain Joye</name>
-  <user>pajoye</user>
-  <email>pajoye@pearfr.org</email>
-  <active>no</active>
- </lead>
  <date>2006-04-02</date>
  <version>
   <release>0.3.1</release>
@@ -48,7 +42,7 @@ remote* commands as if they were local.
 fix Bug #7881: stream_copy_to_stream function args reversed
 fix bug in uninstall - $atts instead of $atts['attribs']
 fix unclear error message in put()
-up required PEAR Installer dependency to 1.5.0a2 because of bug
+up required PEAR Installer dependency to 1.5.0RC1 because of bug
 fixed in that version
  </notes>
  <contents>
@@ -140,6 +134,25 @@ fixed in that version
     FTP.
   * Require PEAR 1.4.3 for security reasons
   * Add optional dep on ssh2 extension
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.3.1</release>
+    <api>0.1.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2006-12-15</date>
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>
+fix Bug #7881: stream_copy_to_stream function args reversed
+fix bug in uninstall - $atts instead of $atts['attribs']
+fix unclear error message in put()
+up required PEAR Installer dependency to 1.5.0RC1 because of bug
+fixed in that version
    </notes>
   </release>
  </changelog>
