@@ -1161,125 +1161,11 @@ class PEAR_Downloader extends PEAR_Common
             $this->sortPackagesForInstall($packages);
     }
 
-    function _getDepTreeDP($package, $packages, &$deps, &$checked)
-    {
-        $pf = $package->getPackageFile();
-        if (!is_array($checked)) {
-            $checked = array();
-        }
-        if (!isset($checked[strtolower($package->getChannel())])) {
-            $checked[strtolower($package->getChannel())] = array();
-        }
-        if (!isset($checked[strtolower($package->getChannel())][strtolower($package->getPackage())])) {
-            $checked[strtolower($package->getChannel())][strtolower($package->getPackage())] = array();
-        }
-        $checked[strtolower($package->getChannel())][strtolower($package->getPackage())]
-            = true;
-        $pdeps = $pf->getDeps(true);
-        if (!$pdeps) {
-            return;
-        }
-        if ($pf->getPackagexmlVersion() == '1.0') {
-            foreach ($pdeps as $dep) {
-                if ($dep['type'] != 'pkg') {
-                    continue;
-                }
-                $deps['pear.php.net'][strtolower($dep['name'])] = true;
-                foreach ($packages as $p) {
-                    $dep['channel'] = 'pear.php.net';
-                    $dep['package'] = $dep['name'];
-                    if ($p->isEqual($dep)) {
-                        if (!isset($checked[strtolower($p->getChannel())]
-                              [strtolower($p->getPackage())])) {
-                            // add the dependency's dependencies to the tree
-                            $this->_getDepTreeDP($p, $packages, $deps, $checked);
-                        }
-                    }
-                }
-            }
-        } else {
-            $tdeps = array();
-            if (isset($pdeps['required']['package'])) {
-                $t = $pdeps['required']['package'];
-                if (!isset($t[0])) {
-                    $t = array($t);
-                }
-                $tdeps = array_merge($tdeps, $t);
-            }
-            if (isset($pdeps['required']['subpackage'])) {
-                $t = $pdeps['required']['subpackage'];
-                if (!isset($t[0])) {
-                    $t = array($t);
-                }
-                $tdeps = array_merge($tdeps, $t);
-            }
-            if (isset($pdeps['optional']['package'])) {
-                $t = $pdeps['optional']['package'];
-                if (!isset($t[0])) {
-                    $t = array($t);
-                }
-                $tdeps = array_merge($tdeps, $t);
-            }
-            if (isset($pdeps['optional']['subpackage'])) {
-                $t = $pdeps['optional']['subpackage'];
-                if (!isset($t[0])) {
-                    $t = array($t);
-                }
-                $tdeps = array_merge($tdeps, $t);
-            }
-            if (isset($pdeps['group'])) {
-                if (!isset($pdeps['group'][0])) {
-                    $pdeps['group'] = array($pdeps['group']);
-                }
-                foreach ($pdeps['group'] as $group) {
-                    if (isset($group['package'])) {
-                        $t = $group['package'];
-                        if (!isset($t[0])) {
-                            $t = array($t);
-                        }
-                        $tdeps = array_merge($tdeps, $t);
-                    }
-                    if (isset($group['subpackage'])) {
-                        $t = $group['subpackage'];
-                        if (!isset($t[0])) {
-                            $t = array($t);
-                        }
-                        $tdeps = array_merge($tdeps, $t);
-                    }
-                }
-            }
-            foreach ($tdeps as $dep) {
-                if (!isset($dep['channel'])) {
-                    $depchannel = '__uri';
-                } else {
-                    $depchannel = $dep['channel'];
-                }
-                if (!is_array($deps)) {
-                    $deps = array();
-                }
-                if (!isset($deps[$depchannel])) {
-                    $deps[$depchannel] = array();
-                }
-                $deps[$depchannel][strtolower($dep['name'])] = true;
-                foreach ($packages as $p) {
-                    $dep['channel'] = $depchannel;
-                    $dep['package'] = $dep['name'];
-                    if ($p->isEqual($dep)) {
-                        if (!isset($checked[strtolower($p->getChannel())]
-                              [strtolower($p->getPackage())])) {
-                            // add the dependency's dependencies to the tree
-                            $this->_getDepTreeDP($p, $packages, $deps, $checked);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * Sort a list of arrays of array(downloaded packagefilename) by dependency.
      *
-     * It also removes duplicate dependencies
+     * This uses the topological sort method from graph theory, and the
+     * Structures_Graph package to properly sort dependencies for installation.
      * @param array an array of downloaded PEAR_Downloader_Packages
      * @return array array of array(packagefilename, package.xml contents)
      */
@@ -1353,28 +1239,7 @@ class PEAR_Downloader extends PEAR_Common
                     if (!isset($t[0])) {
                         $t = array($t);
                     }
-                    foreach ($t as $dep) {
-                        $depchannel = !isset($dep['channel']) ? '__uri': $dep['channel'];
-                        $dname = $reg->parsedPackageNameToString(
-                              array(
-                                  'channel' => $depchannel,
-                                  'package' => strtolower($dep['name']),
-                              ));
-                        if ((isset($deplinks[$dname]) && isset($deplinks[$dname][$package]))
-                             || (isset($deplinks[$package]) && isset($deplinks[$package][$dname]))) {
-                            // avoid circular links
-                            continue;
-                        }
-                        if (isset($nodes[$dname]))
-                        {
-                            if (!isset($deplinks[$dname])) {
-                                $deplinks[$dname] = array();
-                            }
-                            $deplinks[$dname][$package] = 1;
-                            // dependency is in installed packages
-                            $nodes[$dname]->connectTo($nodes[$package]);
-                        }
-                    }
+                    $this->_setupGraph($t, $reg, $deplinks, $nodes, $package);
                 }
                 if (isset($pdeps['group'])) {
                     if (!isset($pdeps['group'][0])) {
@@ -1386,31 +1251,7 @@ class PEAR_Downloader extends PEAR_Common
                             if (!isset($t[0])) {
                                 $t = array($t);
                             }
-                            foreach ($t as $dep) {
-                                $depchannel = !isset($dep['channel']) ?
-                                    '__uri': $dep['channel'];
-                                $dname = $reg->parsedPackageNameToString(
-                                      array(
-                                          'channel' => $depchannel,
-                                          'package' => strtolower($dep['name']),
-                                      ));
-                                if ((isset($deplinks[$dname]) &&
-                                     isset($deplinks[$dname][$package]))
-                                     || (isset($deplinks[$package]) &&
-                                         isset($deplinks[$package][$dname]))) {
-                                    // avoid circular links
-                                    continue;
-                                }
-                                if (isset($nodes[$dname]))
-                                {
-                                    if (!isset($deplinks[$dname])) {
-                                        $deplinks[$dname] = array();
-                                    }
-                                    $deplinks[$dname][$package] = 1;
-                                    // dependency is in installed packages
-                                    $nodes[$dname]->connectTo($nodes[$package]);
-                                }
-                            }
+                            $this->_setupGraph($t, $reg, $deplinks, $nodes, $package);
                         }
                     }
                 }
@@ -1419,56 +1260,14 @@ class PEAR_Downloader extends PEAR_Common
                     if (!isset($t[0])) {
                         $t = array($t);
                     }
-                    foreach ($t as $dep) {
-                        $depchannel = !isset($dep['channel']) ? '__uri': $dep['channel'];
-                        $dname = $reg->parsedPackageNameToString(
-                              array(
-                                  'channel' => $depchannel,
-                                  'package' => strtolower($dep['name']),
-                              ));
-                        if ((isset($deplinks[$dname]) && isset($deplinks[$dname][$package]))
-                             || (isset($deplinks[$package]) && isset($deplinks[$package][$dname]))) {
-                            // avoid circular links
-                            continue;
-                        }
-                        if (isset($nodes[$dname]))
-                        {
-                            if (!isset($deplinks[$dname])) {
-                                $deplinks[$dname] = array();
-                            }
-                            $deplinks[$dname][$package] = 1;
-                            // dependency is in installed packages
-                            $nodes[$dname]->connectTo($nodes[$package]);
-                        }
-                    }
+                    $this->_setupGraph($t, $reg, $deplinks, $nodes, $package);
                 }
                 if (isset($pdeps['required']['package'])) {
                     $t = $pdeps['required']['package'];
                     if (!isset($t[0])) {
                         $t = array($t);
                     }
-                    foreach ($t as $dep) {
-                        $depchannel = !isset($dep['channel']) ? '__uri': $dep['channel'];
-                        $dname = $reg->parsedPackageNameToString(
-                              array(
-                                  'channel' => $depchannel,
-                                  'package' => strtolower($dep['name']),
-                              ));
-                        if ((isset($deplinks[$dname]) && isset($deplinks[$dname][$package]))
-                             || (isset($deplinks[$package]) && isset($deplinks[$package][$dname]))) {
-                            // avoid circular links
-                            continue;
-                        }
-                        if (isset($nodes[$dname]))
-                        {
-                            if (!isset($deplinks[$dname])) {
-                                $deplinks[$dname] = array();
-                            }
-                            $deplinks[$dname][$package] = 1;
-                            // dependency is in installed packages
-                            $nodes[$dname]->connectTo($nodes[$package]);
-                        }
-                    }
+                    $this->_setupGraph($t, $reg, $deplinks, $nodes, $package);
                 }
                 if (isset($pdeps['group'])) {
                     if (!isset($pdeps['group'][0])) {
@@ -1480,59 +1279,53 @@ class PEAR_Downloader extends PEAR_Common
                             if (!isset($t[0])) {
                                 $t = array($t);
                             }
-                            foreach ($t as $dep) {
-                                $depchannel = !isset($dep['channel']) ?
-                                    '__uri': $dep['channel'];
-                                $dname = $reg->parsedPackageNameToString(
-                                      array(
-                                          'channel' => $depchannel,
-                                          'package' => strtolower($dep['name']),
-                                      ));
-                                if ((isset($deplinks[$dname]) && isset($deplinks[$dname][$package]))
-                                     || (isset($deplinks[$package]) && isset($deplinks[$package][$dname]))) {
-                                    // avoid circular links
-                                    continue;
-                                }
-                                if (isset($nodes[$dname]))
-                                {
-                                    if (!isset($deplinks[$dname])) {
-                                        $deplinks[$dname] = array();
-                                    }
-                                    $deplinks[$dname][$package] = 1;
-                                    // dependency is in installed packages
-                                    $nodes[$dname]->connectTo($nodes[$package]);
-                                }
-                            }
+                            $this->_setupGraph($t, $reg, $deplinks, $nodes, $package);
                         }
                     }
                 }
             }
-            continue;
-            $checked = $deps = array();
-            $this->_getDepTreeDP($packages[$i], $packages, $deps, $checked);
-            if (!isset($this->_depTree)) {
-                $this->_depTree = array();
-            }
-            if (!isset($this->_depTree[$package->getChannel()])) {
-                $this->_depTree[$package->getChannel()] = array();
-            }
-            $this->_depTree[$package->getChannel()][$package->getPackage()] = $deps;
         }
         $installOrder = Structures_Graph_Manipulator_TopologicalSorter::sort($depgraph);
         $ret = array();
-        foreach ($installOrder as $level => $info) {
-            foreach ($info as $index => $sortedpackage) {
-                $data = &$sortedpackage->getData();
+        for ($i = 0; $i < count($installOrder); $i++) {
+            foreach ($installOrder[$i] as $index => $sortedpackage) {
+                $data = &$installOrder[$i][$index]->getData();
                 $ret[] = &$nodes[$reg->parsedPackageNameToString(
                           array(
                               'channel' => $data->getChannel(),
                               'package' => strtolower($data->getPackage()),
-                          ))];
+                          ))]->getData();
             }
         }
         $packages = $ret;
         return;
-        usort($packages, array(&$this, '_sortInstall'));
+    }
+
+    function _setupGraph($t, $reg, &$deplinks, &$nodes, $package)
+    {
+        foreach ($t as $dep) {
+            $depchannel = !isset($dep['channel']) ?
+                '__uri': $dep['channel'];
+            $dname = $reg->parsedPackageNameToString(
+                  array(
+                      'channel' => $depchannel,
+                      'package' => strtolower($dep['name']),
+                  ));
+            if ((isset($deplinks[$dname]) && isset($deplinks[$dname][$package]))
+                 || (isset($deplinks[$package]) && isset($deplinks[$package][$dname]))) {
+                // avoid circular links
+                continue;
+            }
+            if (isset($nodes[$dname]))
+            {
+                if (!isset($deplinks[$dname])) {
+                    $deplinks[$dname] = array();
+                }
+                $deplinks[$dname][$package] = 1;
+                // dependency is in installed packages
+                $nodes[$dname]->connectTo($nodes[$package]);
+            }
+        }
     }
 
     function _dependsOn($a, $b)
