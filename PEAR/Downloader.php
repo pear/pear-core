@@ -777,7 +777,8 @@ class PEAR_Downloader extends PEAR_Common
             PEAR::staticPopErrorHandling();
             if (!isset($this->_options['force']) &&
                   !isset($this->_options['downloadonly']) &&
-                  !PEAR::isError($testversion)) {
+                  !PEAR::isError($testversion) &&
+                  !isset($parr['group'])) {
                 if (version_compare($testversion, $url['version'], '>=')) {
                     return PEAR::raiseError($this->_registry->parsedPackageNameToString(
                         $parr, true) . ' is already installed and is newer than detected ' .
@@ -1284,7 +1285,229 @@ class PEAR_Downloader extends PEAR_Common
      */
     function sortPackagesForInstall(&$packages)
     {
+        require_once 'Structures/Graph.php';
+        require_once 'Structures/Graph/Node.php';
+        require_once 'Structures/Graph/Manipulator/TopologicalSorter.php';
+        $depgraph = new Structures_Graph(true);
+        $nodes = array();
+        $reg = &$this->config->getRegistry();
         foreach ($packages as $i => $package) {
+            $pname = $reg->parsedPackageNameToString(
+                array(
+                    'channel' => $package->getChannel(),
+                    'package' => strtolower($package->getPackage()),
+                ));
+            $nodes[$pname] = new Structures_Graph_Node;
+            $nodes[$pname]->setData($packages[$i]);
+            $depgraph->addNode($nodes[$pname]);
+        }
+        $deplinks = array();
+        foreach ($nodes as $package => $node) {
+            $pf = &$node->getData();
+            $pdeps = $pf->getDeps(true);
+            if (!$pdeps) {
+                continue;
+            }
+            if ($pf->getPackagexmlVersion() == '1.0') {
+                foreach ($pdeps as $dep) {
+                    if ($dep['type'] != 'pkg' ||
+                          (isset($dep['optional']) && $dep['optional'] == 'yes')) {
+                        continue;
+                    }
+                    $dname = $reg->parsedPackageNameToString(
+                          array(
+                              'channel' => 'pear.php.net',
+                              'package' => strtolower($dep['name']),
+                          ));
+                    if ((isset($deplinks[$dname]) && isset($deplinks[$dname][$package]))
+                         || (isset($deplinks[$package]) && isset($deplinks[$package][$dname]))) {
+                        // avoid circular links
+                        continue;
+                    }
+                    if (isset($nodes[$dname]))
+                    {
+                        if (!isset($deplinks[$dname])) {
+                            $deplinks[$dname] = array();
+                        }
+                        $deplinks[$dname][$package] = 1;
+                        // dependency is in installed packages
+                        $nodes[$dname]->connectTo($nodes[$package]);
+                        continue;
+                    }
+                    $dname = $reg->parsedPackageNameToString(
+                          array(
+                              'channel' => 'pecl.php.net',
+                              'package' => strtolower($dep['name']),
+                          ));
+                    if (isset($nodes[$dname])) {
+                        // dependency is in installed packages
+                        $nodes[$dname]->connectTo($nodes[$package]);
+                    }
+                }
+            } else {
+                // the only ordering we care about is:
+                // 1) subpackages must be installed before packages that depend on them
+                // 2) required deps must be installed before packages that depend on them
+                if (isset($pdeps['required']['subpackage'])) {
+                    $t = $pdeps['required']['subpackage'];
+                    if (!isset($t[0])) {
+                        $t = array($t);
+                    }
+                    foreach ($t as $dep) {
+                        $depchannel = !isset($dep['channel']) ? '__uri': $dep['channel'];
+                        $dname = $reg->parsedPackageNameToString(
+                              array(
+                                  'channel' => $depchannel,
+                                  'package' => strtolower($dep['name']),
+                              ));
+                        if ((isset($deplinks[$dname]) && isset($deplinks[$dname][$package]))
+                             || (isset($deplinks[$package]) && isset($deplinks[$package][$dname]))) {
+                            // avoid circular links
+                            continue;
+                        }
+                        if (isset($nodes[$dname]))
+                        {
+                            if (!isset($deplinks[$dname])) {
+                                $deplinks[$dname] = array();
+                            }
+                            $deplinks[$dname][$package] = 1;
+                            // dependency is in installed packages
+                            $nodes[$dname]->connectTo($nodes[$package]);
+                        }
+                    }
+                }
+                if (isset($pdeps['group'])) {
+                    if (!isset($pdeps['group'][0])) {
+                        $pdeps['group'] = array($pdeps['group']);
+                    }
+                    foreach ($pdeps['group'] as $group) {
+                        if (isset($group['subpackage'])) {
+                            $t = $group['subpackage'];
+                            if (!isset($t[0])) {
+                                $t = array($t);
+                            }
+                            foreach ($t as $dep) {
+                                $depchannel = !isset($dep['channel']) ?
+                                    '__uri': $dep['channel'];
+                                $dname = $reg->parsedPackageNameToString(
+                                      array(
+                                          'channel' => $depchannel,
+                                          'package' => strtolower($dep['name']),
+                                      ));
+                                if ((isset($deplinks[$dname]) &&
+                                     isset($deplinks[$dname][$package]))
+                                     || (isset($deplinks[$package]) &&
+                                         isset($deplinks[$package][$dname]))) {
+                                    // avoid circular links
+                                    continue;
+                                }
+                                if (isset($nodes[$dname]))
+                                {
+                                    if (!isset($deplinks[$dname])) {
+                                        $deplinks[$dname] = array();
+                                    }
+                                    $deplinks[$dname][$package] = 1;
+                                    // dependency is in installed packages
+                                    $nodes[$dname]->connectTo($nodes[$package]);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (isset($pdeps['optional']['subpackage'])) {
+                    $t = $pdeps['optional']['subpackage'];
+                    if (!isset($t[0])) {
+                        $t = array($t);
+                    }
+                    foreach ($t as $dep) {
+                        $depchannel = !isset($dep['channel']) ? '__uri': $dep['channel'];
+                        $dname = $reg->parsedPackageNameToString(
+                              array(
+                                  'channel' => $depchannel,
+                                  'package' => strtolower($dep['name']),
+                              ));
+                        if ((isset($deplinks[$dname]) && isset($deplinks[$dname][$package]))
+                             || (isset($deplinks[$package]) && isset($deplinks[$package][$dname]))) {
+                            // avoid circular links
+                            continue;
+                        }
+                        if (isset($nodes[$dname]))
+                        {
+                            if (!isset($deplinks[$dname])) {
+                                $deplinks[$dname] = array();
+                            }
+                            $deplinks[$dname][$package] = 1;
+                            // dependency is in installed packages
+                            $nodes[$dname]->connectTo($nodes[$package]);
+                        }
+                    }
+                }
+                if (isset($pdeps['required']['package'])) {
+                    $t = $pdeps['required']['package'];
+                    if (!isset($t[0])) {
+                        $t = array($t);
+                    }
+                    foreach ($t as $dep) {
+                        $depchannel = !isset($dep['channel']) ? '__uri': $dep['channel'];
+                        $dname = $reg->parsedPackageNameToString(
+                              array(
+                                  'channel' => $depchannel,
+                                  'package' => strtolower($dep['name']),
+                              ));
+                        if ((isset($deplinks[$dname]) && isset($deplinks[$dname][$package]))
+                             || (isset($deplinks[$package]) && isset($deplinks[$package][$dname]))) {
+                            // avoid circular links
+                            continue;
+                        }
+                        if (isset($nodes[$dname]))
+                        {
+                            if (!isset($deplinks[$dname])) {
+                                $deplinks[$dname] = array();
+                            }
+                            $deplinks[$dname][$package] = 1;
+                            // dependency is in installed packages
+                            $nodes[$dname]->connectTo($nodes[$package]);
+                        }
+                    }
+                }
+                if (isset($pdeps['group'])) {
+                    if (!isset($pdeps['group'][0])) {
+                        $pdeps['group'] = array($pdeps['group']);
+                    }
+                    foreach ($pdeps['group'] as $group) {
+                        if (isset($group['package'])) {
+                            $t = $group['package'];
+                            if (!isset($t[0])) {
+                                $t = array($t);
+                            }
+                            foreach ($t as $dep) {
+                                $depchannel = !isset($dep['channel']) ?
+                                    '__uri': $dep['channel'];
+                                $dname = $reg->parsedPackageNameToString(
+                                      array(
+                                          'channel' => $depchannel,
+                                          'package' => strtolower($dep['name']),
+                                      ));
+                                if ((isset($deplinks[$dname]) && isset($deplinks[$dname][$package]))
+                                     || (isset($deplinks[$package]) && isset($deplinks[$package][$dname]))) {
+                                    // avoid circular links
+                                    continue;
+                                }
+                                if (isset($nodes[$dname]))
+                                {
+                                    if (!isset($deplinks[$dname])) {
+                                        $deplinks[$dname] = array();
+                                    }
+                                    $deplinks[$dname][$package] = 1;
+                                    // dependency is in installed packages
+                                    $nodes[$dname]->connectTo($nodes[$package]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            continue;
             $checked = $deps = array();
             $this->_getDepTreeDP($packages[$i], $packages, $deps, $checked);
             if (!isset($this->_depTree)) {
@@ -1295,6 +1518,20 @@ class PEAR_Downloader extends PEAR_Common
             }
             $this->_depTree[$package->getChannel()][$package->getPackage()] = $deps;
         }
+        $installOrder = Structures_Graph_Manipulator_TopologicalSorter::sort($depgraph);
+        $ret = array();
+        foreach ($installOrder as $level => $info) {
+            foreach ($info as $index => $sortedpackage) {
+                $data = &$sortedpackage->getData();
+                $ret[] = &$nodes[$reg->parsedPackageNameToString(
+                          array(
+                              'channel' => $data->getChannel(),
+                              'package' => strtolower($data->getPackage()),
+                          ))];
+            }
+        }
+        $packages = $ret;
+        return;
         usort($packages, array(&$this, '_sortInstall'));
     }
 
