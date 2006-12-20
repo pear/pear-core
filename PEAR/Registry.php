@@ -1949,6 +1949,18 @@ class PEAR_Registry extends PEAR
     }
 
     // }}}
+    // {{{ flush()
+    /**
+     * Force a reload of the filemap
+     * @since 1.5.0RC3
+     */
+    function flushFileMap()
+    {
+        $this->filemap_cache = null;
+        clearstatcache(); // ensure that the next read gets the full, current filemap
+    }
+
+    // }}}
     // {{{ apiVersion()
     /**
      * Get the expected API version.  Channels API is version 1.1, as it is backwards

@@ -1085,6 +1085,8 @@ class PEAR_Installer extends PEAR_Downloader
             if (PEAR::isError($instfilelist)) {
                 return $instfilelist;
             }
+            // ensure we have the most accurate registry
+            $installregistry->flushFileMap();
             $test = $installregistry->checkFileMap($instfilelist, $testp, '1.1');
             if (PEAR::isError($test)) {
                 return $test;
