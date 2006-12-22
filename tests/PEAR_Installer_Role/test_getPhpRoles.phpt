@@ -12,7 +12,6 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 PEAR_Installer_Role::registerRoles(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'sophisticated');
 $phpunit->assertEquals(array (
   0 => 'isphp',
-  1 => 'php',
 ), PEAR_Installer_Role::getPhpRoles(), 'test');
 echo 'tests done';
 ?>
