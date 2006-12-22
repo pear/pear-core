@@ -34,8 +34,8 @@ $p3 = new PEAR_Downloader_Package($dl);
 $p3->setPackageFile($pf3);
 $params = array(&$p1, &$p2, &$p3);
 $dl->sortPackagesForInstall($params);
-$phpunit->assertEquals('uberparent', $params[0]->getPackage(), 'uberparent');
-$phpunit->assertEquals('indirect', $params[1]->getPackage(), 'indirect');
+$phpunit->assertEquals('indirect', $params[0]->getPackage(), 'indirect');
+$phpunit->assertEquals('uberparent', $params[1]->getPackage(), 'uberparent');
 $phpunit->assertEquals('sneaky', $params[2]->getPackage(), 'indirect');
 echo 'tests done';
 ?>

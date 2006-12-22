@@ -1205,9 +1205,7 @@ class PEAR_Downloader extends PEAR_Common
                               'channel' => 'pear.php.net',
                               'package' => strtolower($dep['name']),
                           ));
-                    if ((isset($deplinks[$dname]) && isset($deplinks[$dname][$package]))
-                         || (isset($deplinks[$package]) && isset($deplinks[$package][$dname]))) {
-                        // avoid circular links
+                    if ($this->_detectDepCycle($deplinks, $dname, $package)) {
                         continue;
                     }
                     if (isset($nodes[$dname]))
@@ -1301,6 +1299,45 @@ class PEAR_Downloader extends PEAR_Common
         return;
     }
 
+    /**
+     * Detect a recursive link between dependencies, no matter how deep
+     *
+     * @param array $deplinks
+     * @param string $dname dependency identifier
+     * @param string $package dependency identifier
+     * @return bool
+     * @access private
+     */
+    function _detectDepCycle($deplinks, $dname, $package)
+    {
+        if ((isset($deplinks[$dname]) && isset($deplinks[$dname][$package])) ||
+             (isset($deplinks[$package]) && isset($deplinks[$package][$dname]))) {
+            return true;
+        }
+        if ($dname == $package) {
+            return true;
+        }
+        // traverse through dep trees to see if we have a cycle
+        if (isset($deplinks[$package])) {
+            foreach ($deplinks[$package] as $p => $unused) {
+                if ($this->_detectDepCycle($deplinks, $p, $package)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Set up the dependency for installation parsing
+     *
+     * @param array $t dependency information
+     * @param PEAR_Registry $reg
+     * @param array $deplinks list of dependency links already established
+     * @param array $nodes all existing package nodes
+     * @param string $package parent package name
+     * @access private
+     */
     function _setupGraph($t, $reg, &$deplinks, &$nodes, $package)
     {
         foreach ($t as $dep) {
@@ -1311,13 +1348,11 @@ class PEAR_Downloader extends PEAR_Common
                       'channel' => $depchannel,
                       'package' => strtolower($dep['name']),
                   ));
-            if ((isset($deplinks[$dname]) && isset($deplinks[$dname][$package]))
-                 || (isset($deplinks[$package]) && isset($deplinks[$package][$dname]))) {
-                // avoid circular links
-                continue;
-            }
             if (isset($nodes[$dname]))
             {
+                if ($this->_detectDepCycle($deplinks, $dname, $package)) {
+                    return;
+                }
                 if (!isset($deplinks[$dname])) {
                     $deplinks[$dname] = array();
                 }
