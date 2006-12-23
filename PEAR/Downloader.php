@@ -1205,9 +1205,6 @@ class PEAR_Downloader extends PEAR_Common
                               'channel' => 'pear.php.net',
                               'package' => strtolower($dep['name']),
                           ));
-                    if ($this->_detectDepCycle($deplinks, $dname, $package)) {
-                        continue;
-                    }
                     if (isset($nodes[$dname]))
                     {
                         if (!isset($deplinks[$dname])) {
@@ -1215,7 +1212,6 @@ class PEAR_Downloader extends PEAR_Common
                         }
                         $deplinks[$dname][$package] = 1;
                         // dependency is in installed packages
-                        $nodes[$dname]->connectTo($nodes[$package]);
                         continue;
                     }
                     $dname = $reg->parsedPackageNameToString(
@@ -1223,9 +1219,14 @@ class PEAR_Downloader extends PEAR_Common
                               'channel' => 'pecl.php.net',
                               'package' => strtolower($dep['name']),
                           ));
-                    if (isset($nodes[$dname])) {
+                    if (isset($nodes[$dname]))
+                    {
+                        if (!isset($deplinks[$dname])) {
+                            $deplinks[$dname] = array();
+                        }
+                        $deplinks[$dname][$package] = 1;
                         // dependency is in installed packages
-                        $nodes[$dname]->connectTo($nodes[$package]);
+                        continue;
                     }
                 }
             } else {
@@ -1283,6 +1284,12 @@ class PEAR_Downloader extends PEAR_Common
                 }
             }
         }
+        $this->_detectDepCycle($deplinks);
+        foreach ($deplinks as $dependent => $parents) {
+            foreach ($parents as $parent => $unused) {
+                $nodes[$dependent]->connectTo($nodes[$parent]);
+            }
+        }
         $installOrder = Structures_Graph_Manipulator_TopologicalSorter::sort($depgraph);
         $ret = array();
         for ($i = 0; $i < count($installOrder); $i++) {
@@ -1300,27 +1307,38 @@ class PEAR_Downloader extends PEAR_Common
     }
 
     /**
-     * Detect a recursive link between dependencies, no matter how deep
+     * Detect recursive links between dependencies and break the cycles
      *
-     * @param array $deplinks
-     * @param string $dname dependency identifier
-     * @param string $package dependency identifier
-     * @return bool
+     * @param array
      * @access private
      */
-    function _detectDepCycle($deplinks, $dname, $package)
+    function _detectDepCycle(&$deplinks)
     {
-        if ((isset($deplinks[$dname]) && isset($deplinks[$dname][$package])) ||
-             (isset($deplinks[$package]) && isset($deplinks[$package][$dname]))) {
+        do {
+            $keepgoing = false;
+            foreach ($deplinks as $dep => $parents) {
+                foreach ($parents as $parent => $unused) {
+                    if ($this->_testCycle($dep, $deplinks, $parent)) {
+                        $keepgoing = true;
+                        unset($deplinks[$dep][$parent]);
+                        if (count($deplinks[$dep]) == 0) {
+                            unset($deplinks[$dep]);
+                        }
+                        continue 3;
+                    }
+                }
+            }
+        } while ($keepgoing);
+    }
+
+    function _testCycle($test, $deplinks, $dep)
+    {
+        if ($test == $dep) {
             return true;
         }
-        if ($dname == $package) {
-            return true;
-        }
-        // traverse through dep trees to see if we have a cycle
-        if (isset($deplinks[$package])) {
-            foreach ($deplinks[$package] as $p => $unused) {
-                if ($this->_detectDepCycle($deplinks, $p, $package)) {
+        if (isset($deplinks[$dep])) {
+            foreach ($deplinks[$dep] as $parent => $unused) {
+                if ($this->_testCycle($test, $deplinks, $parent)) {
                     return true;
                 }
             }
@@ -1350,15 +1368,10 @@ class PEAR_Downloader extends PEAR_Common
                   ));
             if (isset($nodes[$dname]))
             {
-                if ($this->_detectDepCycle($deplinks, $dname, $package)) {
-                    return;
-                }
                 if (!isset($deplinks[$dname])) {
                     $deplinks[$dname] = array();
                 }
                 $deplinks[$dname][$package] = 1;
-                // dependency is in installed packages
-                $nodes[$dname]->connectTo($nodes[$package]);
             }
         }
     }
