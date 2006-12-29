@@ -241,9 +241,6 @@ class PEAR2_Config
 
     function saveConfig($userfile = false)
     {
-        $userfile = str_replace('\\', '/', $userfile);
-        $userfile = str_replace('//', '/', $userfile);
-        $userfile = str_replace('/', DIRECTORY_SEPARATOR, $userfile);
         if (!$userfile) {
             if (class_exists('COM')) {
                 $userfile = $this->_locateLocalSettingsDirectory() . DIRECTORY_SEPARATOR .
@@ -253,6 +250,9 @@ class PEAR2_Config
                     '.pear' . DIRECTORY_SEPARATOR . 'pearconfig.xml';
             }
         }
+        $userfile = str_replace('\\', '/', $userfile);
+        $userfile = str_replace('//', '/', $userfile);
+        $userfile = str_replace('/', DIRECTORY_SEPARATOR, $userfile);
         $x = simplexml_load_string('<pearconfig version="1.0"></pearconfig>');
         foreach (self::$userConfigNames as $var) {
             $x->$var = $this->$var;
