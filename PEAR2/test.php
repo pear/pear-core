@@ -7,8 +7,8 @@ function __autoload($class)
     PEAR2_Autoload($class);
 }
 define('OS_WINDOWS', true);
-$g = new PEAR2_Config('G:/Documents/PEAR2/testpear');
+$g = new PEAR2_Config('C:/development/pear-core/testpear');
 $g->saveConfig();
-$a = new PEAR2_Package('C:/development/pear-core/package2.xml');
+$a = new PEAR2_Package('C:/development/pear-core/PEAR-1.5.0a1.tgz');
 $b = new PEAR2_Installer;
 $b->install($a);
