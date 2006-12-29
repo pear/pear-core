@@ -30,19 +30,26 @@ class PEAR2_Package_Tar implements ArrayAccess, Iterator
         }
     }
 
+    /**
+     * Sort files/directories for removal
+     *
+     * Files are always removed first, followed by directories in
+     * path order
+     * @param unknown_type $a
+     * @param unknown_type $b
+     * @return unknown
+     */
     function sortstuff($a, $b)
     {
+        // files can be removed in any order
+        if (is_file($a) && is_file($b)) return 0;
+        if (is_dir($a) && is_file($b)) return 1;
+        if (is_dir($b) && is_file($a)) return -1;
         $countslasha = substr_count($a, DIRECTORY_SEPARATOR);
         $countslashb = substr_count($b, DIRECTORY_SEPARATOR);
         if ($countslasha > $countslashb) return -1;
         if ($countslashb > $countslasha) return 1;
-        $dira = dirname($a);
-        $dirb = dirname($b);
-        if ($dira == $dirb) {
-            return strnatcasecmp($a, $b);
-        }
-        if (strlen($dira) > strlen($dirb)) return -1;
-        if (strlen($dirb) > strlen($dira)) return 1;
+        // if not subdirectories, tehy can be removed in any order
         return 0;
     }
 
@@ -54,15 +61,7 @@ class PEAR2_Package_Tar implements ArrayAccess, Iterator
             if (is_file($fileOrDir)) {
                 unlink($fileOrDir);
             } elseif (is_dir($fileOrDir)) {
-                if (!@rmdir($fileOrDir)) {
-                    $dir = opendir($fileOrDir);
-                    while (false !== ($entry = readdir($dir))) {
-                        if ($entry == '.' || $entry == '..') {
-                            continue;
-                        }
-                        unlink($fileOrDir . DIRECTORY_SEPARATOR . $entry);
-                    }
-                }
+                rmdir($fileOrDir);
             }
         }
     }
