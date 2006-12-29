@@ -141,16 +141,17 @@ class PEAR2_Config
     private function _locateLocalSettingsDirectory()
     {
         if (class_exists('COM')) {
-            // windows
-            $locator = new COM('WbemScripting.SWbemLocator');
-            $services = $locator->ConnectServer('', '\\root\\default');
-            $services->Security_->ImpersonationLevel = 0x3;
-            $registry = $services->Get("StdRegProv");
-            $appdata = new VARIANT;
-            $registry->GetStringValue(0x80000001, 
-                'Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders',
-                'Local AppData', $appdata);
-            return strval($appdata);
+            // windows, grab current user My Documents folder
+            $info = new COM('winmgmts:{impersonationLevel=impersonate}!\\\\.\\root\\cimv2');
+            $users = $info->ExecQuery("Select * From Win32_ComputerSystem");
+            foreach ($users as $user) {
+                $d = explode('\\', $user->UserName);
+                $curuser = $d[1];
+            }
+            $registry = new COM('Wscript.Shell');
+            return $registry->RegRead(
+                'HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\' .
+                'Explorer\\DocFolderPaths\\' . $curuser);
         } else {
             return getenv('HOME');
         }
