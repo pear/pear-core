@@ -32,22 +32,22 @@ class PEAR2_Package_Xml implements ArrayAccess, Iterator
         return;
     }
 
-    function current ()
+    function current()
     {
         return key($this->_packagefile->info->_packageInfo['filelist']);
     }
 
-    function  key ()
+    function  key()
     {
         return 1;
     }
 
-    function  next ()
+    function  next()
     {
         next($this->_packagefile->info->_packageInfo['filelist']);
     }
 
-    function  rewind ()
+    function  rewind()
     {
         reset($this->_packagefile->info->_packageInfo['filelist']);
     }
@@ -68,7 +68,7 @@ class PEAR2_Package_Xml implements ArrayAccess, Iterator
         return $this->_packagefile;
     }
 
-    function  valid ()
+    function  valid()
     {
         return key($this->_packagefile->info->_packageInfo['filelist']);
     }

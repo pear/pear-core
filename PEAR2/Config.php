@@ -113,6 +113,9 @@ class PEAR2_Config
 
     function __construct($pearDirectory, $userfile = false)
     {
+        $pearDirectory = str_replace('\\', '/', $pearDirectory);
+        $pearDirectory = str_replace('//', '/', $pearDirectory);
+        $pearDirectory = str_replace('/', DIRECTORY_SEPARATOR, $pearDirectory);
         self::_constructDefaults();
         $this->loadConfigFile($pearDirectory, $userfile);
         $this->pearDir = $pearDirectory;
@@ -237,6 +240,9 @@ class PEAR2_Config
 
     function saveConfig($userfile = false)
     {
+        $userfile = str_replace('\\', '/', $userfile);
+        $userfile = str_replace('//', '/', $userfile);
+        $userfile = str_replace('/', DIRECTORY_SEPARATOR, $userfile);
         if (!$userfile) {
             if (class_exists('COM')) {
                 $userfile = $this->_locateLocalSettingsDirectory() . DIRECTORY_SEPARATOR .
@@ -251,7 +257,7 @@ class PEAR2_Config
             $x->$var = $this->$var;
         }
         if (!file_exists(dirname($userfile))) {
-            mkdir(dirname($userfile), null, true);
+            mkdir(dirname($userfile), 0777, true);
         }
         file_put_contents($userfile, $x->asXML());
 
