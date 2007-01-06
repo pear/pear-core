@@ -227,6 +227,12 @@ class PEAR_DependencyDB
             foreach ($temp as $dep) {
                 if (strtolower($dep['dep']['channel']) == strtolower($channel) &&
                       strtolower($dep['dep']['name']) == strtolower($package)) {
+                    if (!isset($dependencies[$info['channel']])) {
+                        $dependencies[$info['channel']] = array();
+                    }
+                    if (!isset($dependencies[$info['channel']][$info['package']])) {
+                        $dependencies[$info['channel']][$info['package']] = array();
+                    }
                     $dependencies[$info['channel']][$info['package']][] = $dep;
                 }
             }
