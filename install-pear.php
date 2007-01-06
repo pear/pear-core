@@ -191,6 +191,7 @@ foreach ($install_files as $package => $instfile) {
         if (isset($oldcachedir)) {
             $config->set('cache_dir', $oldcachedir);
         }
+        $data = array();
         foreach ($config->getKeys() as $key) {
             $data[$key] = $config->get($key);
         }
