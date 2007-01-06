@@ -1,6 +1,6 @@
 <?php
 /**
- * install-pear-nozlib.phar creator.  Requires PHP_Archive version 0.6.0 or newer
+ * install-pear-nozlib.phar creator.  Requires PHP_Archive version 0.9.1 or newer
  *
  * PHP version 5.1+
  *
@@ -302,6 +302,10 @@ $creator->addDir($peardir, array('tests/',
     '*PEAR/Installer/Role.php',
     '*PEAR/Frontend.php'),
     array(
+        '*Structures/Graph.php',
+        '*Structures/Graph/Node.php',
+        '*Structures/Graph/Manipulator/AcyclicTest.php',
+        '*Structures/Graph/Manipulator/TopologicalSorter.php',
         '*PEAR/ChannelFile/Parser.php',
         '*PEAR/Command/Install.xml',
         '*PEAR/Command/Install.php',
