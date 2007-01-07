@@ -85,6 +85,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <notes>
    * fix Bug #9660: dependency sorting on installation does not always work
    * fix Bug #9688: [PATCH] Fix build of PECL extensions
+   * fix Bug #9712: pear uninstall --register-only remove file : it should not
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
