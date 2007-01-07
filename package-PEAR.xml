@@ -83,7 +83,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>PHP License</license>
   <state>beta</state>
   <notes>
-   * 
+   * fix Bug #9660: dependency sorting on installation does not always work
+   * fix Bug #9688: [PATCH] Fix build of PECL extensions
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

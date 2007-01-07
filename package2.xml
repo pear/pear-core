@@ -89,6 +89,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
    * fix Bug #9660: dependency sorting on installation does not always work
+   * fix Bug #9688: [PATCH] Fix build of PECL extensions
  </notes>
  <contents>
   <dir name="/">
