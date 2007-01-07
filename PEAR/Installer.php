@@ -1459,6 +1459,7 @@ class PEAR_Installer extends PEAR_Downloader
      * @param array Command-line options.  Possibilities include:
      *
      *              - installroot: base installation dir, if not the default
+     *              - register-only : update registry but don't remove files
      *              - nodeps: do not process dependencies of other packages to ensure
      *                        uninstallation does not break things
      */
@@ -1524,41 +1525,24 @@ class PEAR_Installer extends PEAR_Downloader
             }
         }
         $this->pkginfo = &$pkg;
-        // {{{ Delete the files
-        $this->startFileTransaction();
-        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-        if (PEAR::isError($err = $this->_deletePackageFiles($package, $channel))) {
-            PEAR::popErrorHandling();
-            $this->rollbackFileTransaction();
-            $this->configSet('default_channel', $savechannel);
-            if (!isset($options['ignore-errors'])) {
-                return $this->raiseError($err);
-            } else {
-                if (!isset($options['soft'])) {
-                    $this->log(0, 'WARNING: ' . $err->getMessage());
-                }
-            }
-        } else {
-            PEAR::popErrorHandling();
-        }
-        if (!$this->commitFileTransaction()) {
-            $this->rollbackFileTransaction();
-            if (!isset($options['ignore-errors'])) {
-                return $this->raiseError("uninstall failed");
-            } elseif (!isset($options['soft'])) {
-                $this->log(0, 'WARNING: uninstall failed');
-            }
-        } else {
+        // pretty much nothing happens if we are only registering the uninstall
+        if (empty($options['register-only'])) {
+            // {{{ Delete the files
             $this->startFileTransaction();
-            if ($dirtree = $pkg->getDirTree()) {
-                // attempt to delete empty directories
-                uksort($dirtree, array($this, '_sortDirs'));
-                foreach($dirtree as $dir => $notused) {
-                    $this->addFileOperation('rmdir', array($dir));
+            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+            if (PEAR::isError($err = $this->_deletePackageFiles($package, $channel))) {
+                PEAR::popErrorHandling();
+                $this->rollbackFileTransaction();
+                $this->configSet('default_channel', $savechannel);
+                if (!isset($options['ignore-errors'])) {
+                    return $this->raiseError($err);
+                } else {
+                    if (!isset($options['soft'])) {
+                        $this->log(0, 'WARNING: ' . $err->getMessage());
+                    }
                 }
             } else {
-                $this->configSet('default_channel', $savechannel);
-                return $this->_registry->deletePackage($package, $channel);
+                PEAR::popErrorHandling();
             }
             if (!$this->commitFileTransaction()) {
                 $this->rollbackFileTransaction();
@@ -1567,9 +1551,29 @@ class PEAR_Installer extends PEAR_Downloader
                 } elseif (!isset($options['soft'])) {
                     $this->log(0, 'WARNING: uninstall failed');
                 }
+            } else {
+                $this->startFileTransaction();
+                if ($dirtree = $pkg->getDirTree()) {
+                    // attempt to delete empty directories
+                    uksort($dirtree, array($this, '_sortDirs'));
+                    foreach($dirtree as $dir => $notused) {
+                        $this->addFileOperation('rmdir', array($dir));
+                    }
+                } else {
+                    $this->configSet('default_channel', $savechannel);
+                    return $this->_registry->deletePackage($package, $channel);
+                }
+                if (!$this->commitFileTransaction()) {
+                    $this->rollbackFileTransaction();
+                    if (!isset($options['ignore-errors'])) {
+                        return $this->raiseError("uninstall failed");
+                    } elseif (!isset($options['soft'])) {
+                        $this->log(0, 'WARNING: uninstall failed');
+                    }
+                }
             }
+            // }}}
         }
-        // }}}
 
         $this->configSet('default_channel', $savechannel);
         // Register that the package is no longer installed
