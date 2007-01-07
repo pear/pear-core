@@ -91,6 +91,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    * update Archive_Tar recommended version to 1.3.2
    * fix Bug #9660: dependency sorting on installation does not always work
    * fix Bug #9688: [PATCH] Fix build of PECL extensions
+   * fix Bug #9695: sgl-list-all command problem
    * fix Bug #9712: pear uninstall --register-only remove file : it should not
    * fix Bug #9757: pear does not validate -d input (pear -d php_dir=whatever command)
  </notes>

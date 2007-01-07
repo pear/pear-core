@@ -153,7 +153,7 @@ class PEAR_REST_11
                     $latest = false;
                 }
 
-                if ($latest) {
+                if ($latest && $packageinfo['deps'] !== null) {
                     if (isset($packageinfo['deps'])) {
                         if (!is_array($packageinfo['deps']) ||
                               !isset($packageinfo['deps'][0])) {
