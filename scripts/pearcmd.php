@@ -188,10 +188,28 @@ foreach ($opts as $opt) {
     $param = !empty($opt[1]) ? $opt[1] : true;
     switch ($opt[0]) {
         case 'd':
+            if ($param === true) {
+                die('Invalid usage of "-d" option, expected -d config_value=value, ' .
+                    'received "-d"' . "\n");
+            }
+            $possible = explode('=', $param);
+            if (count($possible) != 2) {
+                die('Invalid usage of "-d" option, expected -d config_value=value, received "' .
+                    $param . '"' . "\n");
+            }
             list($key, $value) = explode('=', $param);
             $config->set($key, $value, 'user');
             break;
         case 'D':
+            if ($param === true) {
+                die('Invalid usage of "-d" option, expected -d config_value=value, ' .
+                    'received "-d"' . "\n");
+            }
+            $possible = explode('=', $param);
+            if (count($possible) != 2) {
+                die('Invalid usage of "-d" option, expected -d config_value=value, received "' .
+                    $param . '"' . "\n");
+            }
             list($key, $value) = explode('=', $param);
             $config->set($key, $value, 'system');
             break;
