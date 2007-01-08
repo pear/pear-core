@@ -91,6 +91,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   Minor feature addition release
   The following bugs in 1.5.0RC3 were fixed:
    * fix Bug #9761: $php_errormsg not being filled properly
+   * fix Bug #9763: Upgrading PECL packages fails when chmoding .so
 
   New features since 1.4.11:
    * implement Request #3436: implement staticPop [PEAR_Error_Stack]
