@@ -436,8 +436,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <package>
     <name>Structures_Graph</name>
     <channel>pear.php.net</channel>
-    <min>1.0.1</min>
-    <recommended>1.0.1</recommended>
+    <min>1.0.2</min>
+    <recommended>1.0.2</recommended>
    </package>
    <package>
     <name>Console_Getopt</name>
