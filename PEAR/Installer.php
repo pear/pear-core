@@ -1411,6 +1411,7 @@ class PEAR_Installer extends PEAR_Downloader
                     return $this->raiseError("failed to write $copyto ($php_errormsg)", PEAR_INSTALLER_FAILED);
                 }
                 $this->log(3, "+ cp $ext[file] $copyto");
+                $this->addFileOperation('rename', array($ext['file'], $copyto));
                 if (!OS_WINDOWS) {
                     $mode = 0666 & ~(int)octdec($this->config->get('umask'));
                     $this->addFileOperation('chmod', array($mode, $copyto));
@@ -1418,7 +1419,6 @@ class PEAR_Installer extends PEAR_Downloader
                         $this->log(0, "failed to change mode of $copyto ($php_errormsg)");
                     }
                 }
-                $this->addFileOperation('rename', array($ext['file'], $copyto));
             }
 
             if ($filelist->getPackageXmlVersion() == '1.0') {
