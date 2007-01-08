@@ -405,7 +405,7 @@ function error_handler($errno, $errmsg, $file, $line, $vars) {
             return; // E_STRICT
         }
         if ($GLOBALS['config']->get('verbose') < 4) {
-            return; // @silenced error, show all if debug is high enough
+            return false; // @silenced error, show all if debug is high enough
         }
     }
     $errortype = array (
@@ -429,6 +429,7 @@ function error_handler($errno, $errmsg, $file, $line, $vars) {
         $file = basename($file);
     }
     print "\n$prefix: $errmsg in $file on line $line\n";
+    return false;
 }
 
 
