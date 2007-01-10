@@ -302,7 +302,7 @@ class PEAR_Builder extends PEAR_Common
         $configure_options = $pkg->getConfigureOptions();
         if ($configure_options) {
             foreach ($configure_options as $o) {
-                $default = array_key_exists($o['default']) ? $o['default'] : null;
+                $default = array_key_exists('default', $o) ? $o['default'] : null;
                 list($r) = $this->ui->userDialog('build',
                                                  array($o['prompt']),
                                                  array('text'),
