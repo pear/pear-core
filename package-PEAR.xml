@@ -85,6 +85,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <notes>
   Minor feature addition release
   The following bugs in 1.5.0RC3 were fixed:
+   * fix Bug #7941: Bogus error message when uninstalling subpackages
    * fix Bug #9761: $php_errormsg not being filled properly
    * fix Bug #9763: Upgrading PECL packages fails when chmoding .so
    * fix Bug #9791: Warning: Wrong parameter count for
