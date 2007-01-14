@@ -1149,9 +1149,10 @@ class PEAR_Downloader_Package
 
     /**
      * @param array
+     * @param bool ignore install groups - for final removal of dupe packages
      * @static
      */
-    function removeDuplicates(&$params)
+    function removeDuplicates(&$params, $ignoreGroups = false)
     {
         $pnames = array();
         foreach ($params as $i => $param) {
@@ -1159,8 +1160,13 @@ class PEAR_Downloader_Package
                 continue;
             }
             if ($param->getPackage()) {
+                if ($ignoreGroups) {
+                    $group = '';
+                } else {
+                    $group = $param->getGroup();
+                }
                 $pnames[$i] = $param->getChannel() . '/' .
-                    $param->getPackage() . '-' . $param->getVersion() . '#' . $param->getGroup();
+                    $param->getPackage() . '-' . $param->getVersion() . '#' . $group;
             }
         }
         $pnames = array_unique($pnames);
@@ -1175,8 +1181,13 @@ class PEAR_Downloader_Package
                 $unset[] = $i;
                 continue;
             }
+            if ($ignoreGroups) {
+                $group = '';
+            } else {
+                $group = $param->getGroup();
+            }
             if (!isset($testp[$param->getChannel() . '/' . $param->getPackage() . '-' .
-                  $param->getVersion() . '#' . $param->getGroup()])) {
+                  $param->getVersion() . '#' . $group])) {
                 $unset[] = $i;
             }
         }

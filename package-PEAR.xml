@@ -89,6 +89,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
    * fix Bug #9763: Upgrading PECL packages fails when chmoding .so
    * fix Bug #9791: Warning: Wrong parameter count for
          array_key_exists() in PEAR/Builder.php on li
+   * fix Bug #9824: pear install Structures_DataGrid#renderers recursion crash
+   * fix Bug #9825: install 2 opt groups leaves duplicate parent package
 
   New features since 1.4.11:
    * implement Request #3436: implement staticPop [PEAR_Error_Stack]

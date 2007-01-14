@@ -382,6 +382,7 @@ class PEAR_Downloader extends PEAR_Common
             return $a;
         }
         while (PEAR_Downloader_Package::mergeDependencies($params));
+        PEAR_Downloader_Package::removeDuplicates($params, true);
         PEAR_Downloader_Package::removeInstalled($params);
         if (!count($params)) {
             $this->pushError('No valid packages found', PEAR_INSTALLER_FAILED);
@@ -1337,6 +1338,9 @@ class PEAR_Downloader extends PEAR_Common
             return true;
         }
         if (isset($deplinks[$dep])) {
+            if (in_array($test, array_keys($deplinks[$dep]), true)) {
+                return true;
+            }
             foreach ($deplinks[$dep] as $parent => $unused) {
                 if ($this->_testCycle($test, $deplinks, $parent)) {
                     return true;
