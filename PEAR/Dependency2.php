@@ -952,6 +952,8 @@ class PEAR_Dependency2
                 $fail = true;
             }
         }
+        // we re-use this variable, preserve the original value
+        $saverequired = $required;
         if ($fail) {
             if ($found) {
                 if (!isset($dl->___checked[$this->_currentPackage['channel']]
@@ -985,6 +987,7 @@ class PEAR_Dependency2
                     return true;
                 }
             }
+            $required = $saverequired;
             if (!$fail) {
                 return true;
             }
