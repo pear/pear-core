@@ -83,6 +83,7 @@ class PEAR2_Package implements IteratorAggregate, ArrayAccess
         }
         try {
             $info = PEAR2_Registry::parsePackageName($package);
+            return 'PEAR2_Package_Remote';
         } catch (Exception $e) {
             // not a remote package
             if (file_exists($package)) {
