@@ -126,13 +126,14 @@ class PEAR_REST_11
                         $latest = false;
                     }
                     if ($dostable) {
-                        if ($state == 'stable') {
+                        // $state is not set if there are no releases
+                        if (isset($state) && $state == 'stable') {
                             $ret[$package] = array('stable' => $latest);
                         } else {
                             $ret[$package] = array('stable' => '-n/a-');
                         }
                     } else {
-                            $ret[$package] = array('stable' => $latest);
+                        $ret[$package] = array('stable' => $latest);
                     }
                     continue;
                 }
