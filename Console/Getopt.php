@@ -189,7 +189,7 @@ class Console_Getopt {
 
         for ($i = 0; $i < count($long_options); $i++) {
             $long_opt  = $long_options[$i];
-            $opt_start = substr($long_opt, 0, $opt_len);\
+            $opt_start = substr($long_opt, 0, $opt_len);
             $long_opt_name = str_replace('=', '', $long_opt);
 
             /* Option doesn't match. Go on to the next one. */
