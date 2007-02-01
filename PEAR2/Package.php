@@ -21,7 +21,7 @@ class PEAR2_Package implements IteratorAggregate, ArrayAccess
     function __construct($packagedescription, $forceremote = false)
     {
         if ($forceremote) {
-            $this->internal = new PEAR_Package_Remote($packagedescription);
+            $this->internal = new PEAR2_Package_Remote($packagedescription);
         } else {
             $class = $this->_parsePackageDescription($packagedescription);
             $this->internal = new $class($packagedescription, $this);
