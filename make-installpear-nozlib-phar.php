@@ -1,6 +1,6 @@
 <?php
 /**
- * install-pear-nozlib.phar creator.  Requires PHP_Archive version 0.9.1 or newer
+ * install-pear-nozlib.phar creator.  Requires PHP_Archive version 0.10.0 or newer
  *
  * PHP version 5.1+
  *
@@ -11,6 +11,7 @@
  * $ pear download -Z PEAR
  * $ pear download -Z Archive_Tar
  * $ pear download -Z Console_Getopt
+ * $ pear download -Z Structures_Graph
  * </pre>
  *
  * finally, run this script using PHP 5.1's cli php
@@ -70,6 +71,7 @@ $pf = $pkg->fromPackageFile($peardir . DIRECTORY_SEPARATOR . 'package2.xml', PEA
 $pearver = $pf->getVersion();
 
 $creator = new PHP_Archive_Creator('index.php', 'install-pear-nozlib.phar'); // no compression
+$creator->useSHA1Signature();
 $install_files = '$install_files = array(';
 foreach ($packages as $name => $package) {
     echo "$name => $package\n";
