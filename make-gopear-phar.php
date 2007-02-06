@@ -1,6 +1,6 @@
 <?php
 /**
- * go-pear.phar creator.  Requires PHP_Archive version 0.6.0 or newer
+ * go-pear.phar creator.  Requires PHP_Archive version 0.10.0 or newer
  *
  * PHP version 5.1+
  *
@@ -11,7 +11,7 @@
  * $ pear download -Z PEAR
  * $ pear download -Z Archive_Tar
  * $ pear download -Z Console_Getopt
- * $ pear download -Z XML_RPC
+ * $ pear download -Z Structures_Graph
  * </pre>
  *
  * finally, run this script using PHP 5.1's cli php
@@ -72,6 +72,7 @@ if (PEAR::isError($pf)) {
 $pearver = $pf->getVersion();
 
 $creator = new PHP_Archive_Creator('index.php', 'go-pear.phar', false);
+$creator->useSHA1Signature();
 foreach ($packages as $package) {
     echo "adding PEAR/go-pear-tarballs/$package\n";
     $creator->addFile("PEAR/go-pear-tarballs/$package", "PEAR/go-pear-tarballs/$package");
