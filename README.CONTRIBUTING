@@ -162,7 +162,7 @@ In order to maintain PEAR inside the PHP distribution, you MUST have a unix mach
 on which to test your changes.  cygwin or some other alternative on windows is not enough.
 
 The windows build of PHP < 5.1.0 is far simpler to maintain than the unix version.  All
-that is required is to simply update the version numbers in pear-core/go-pear-list.php,
+that is required is to simply update the version numbers in pear-core/make-pear-bundle.php,
 which should look something like this:
 
 <?php
@@ -174,9 +174,10 @@ which should look something like this:
  */
 $packages  = array(
 // required packages for the installer
-"PEAR"                  =>    "1.4.6",
-"Console_Getopt"        =>    "1.2",
+"PEAR"                  =>    "1.5.0",
+"Console_Getopt"        =>    "1.2.1",
 "Archive_Tar"           =>    "1.3.2",
+"Structures_Graph"      =>    "1.0.2",
 
 // required packages for the web frontend
 "PEAR_Frontend_Web"     =>    "0.4",
