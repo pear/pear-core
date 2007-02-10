@@ -90,6 +90,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <notes>
   Minor bugfix release
   * fix Bug #9957: E_NOTICE on remote-list
+  * fix Bug #10012: pear package: tokenizer should be enabled
  </notes>
  <contents>
   <dir name="/">

@@ -85,6 +85,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <notes>
   Minor bugfix release
   * fix Bug #9957: E_NOTICE on remote-list
+  * fix Bug #10012: pear package: tokenizer should be enabled
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

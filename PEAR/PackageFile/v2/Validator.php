@@ -1795,7 +1795,7 @@ class PEAR_PackageFile_v2_Validator
     {
         if (!function_exists("token_get_all")) {
             $this->_stack->push(__FUNCTION__, 'error', array('file' => $file),
-                'Parser error: token_get_all() function must exist to analyze source code');
+                'Parser error: token_get_all() function must exist to analyze source code, PHP may have been compiled with --disable-tokenizer');
             return false;
         }
         if (!defined('T_DOC_COMMENT')) {
