@@ -83,7 +83,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>PHP License</license>
   <state>stable</state>
   <notes>
-  Minor bugfix release
+  Major bugfix release
+  * fix Bug #9841: incorrect dependency information shown on uninstall
   * fix Bug #9957: E_NOTICE on remote-list
   * fix Bug #10012: pear package: tokenizer should be enabled
   </notes>
