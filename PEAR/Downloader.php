@@ -1319,6 +1319,8 @@ class PEAR_Downloader extends PEAR_Common
             $keepgoing = false;
             foreach ($deplinks as $dep => $parents) {
                 foreach ($parents as $parent => $unused) {
+                    // reset the parent cycle detector
+                    $this->_testCycle(null, null, null);
                     if ($this->_testCycle($dep, $deplinks, $parent)) {
                         $keepgoing = true;
                         unset($deplinks[$dep][$parent]);
@@ -1334,6 +1336,17 @@ class PEAR_Downloader extends PEAR_Common
 
     function _testCycle($test, $deplinks, $dep)
     {
+        static $visited = array();
+        if ($test === null) {
+            $visited = array();
+            return;
+        }
+        // this happens when a parent has a dep cycle on another dependency
+        // but the child is not part of the cycle
+        if (isset($visited[$dep])) {
+            return false;
+        }
+        $visited[$dep] = 1;
         if ($test == $dep) {
             return true;
         }

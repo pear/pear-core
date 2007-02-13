@@ -89,9 +89,14 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
   Major bugfix release
+  uninstall validation was completely rewritten, the previous algorithm
+  was incorrect in certain complex situations.
+  Fortunately, none exist in the real world yet.  However, Structures_DataGrid
+  approaches this complexity, and so the error messages were incorrect.
   * fix Bug #9841: incorrect dependency information shown on uninstall
   * fix Bug #9957: E_NOTICE on remote-list
   * fix Bug #10012: pear package: tokenizer should be enabled
+  * fix Bug #10081: installer dies on uninstall (recursion too deep)
  </notes>
  <contents>
   <dir name="/">

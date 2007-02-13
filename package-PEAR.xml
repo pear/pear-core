@@ -78,7 +78,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.5.0</version>
+  <version>1.5.1</version>
   <date>2007-02-23</date>
   <license>PHP License</license>
   <state>stable</state>
@@ -87,6 +87,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #9841: incorrect dependency information shown on uninstall
   * fix Bug #9957: E_NOTICE on remote-list
   * fix Bug #10012: pear package: tokenizer should be enabled
+  * fix Bug #10081: installer dies on uninstall (recursion too deep)
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
