@@ -584,9 +584,9 @@ Run post-installation scripts in package <package>, if any exist.
                         // installed version is up-to-date
                         continue;
                     }
-                    $params[] = $reg->parsedPackageNameToString(array('package' => $package,
+                    $params[] = $a = $reg->parsedPackageNameToString(array('package' => $package,
                         'channel' => $channel));
-                    $this->ui->outputData(array('data' => "Will upgrade $package"), $command);
+                    $this->ui->outputData(array('data' => "Will upgrade $a"), $command);
                 }
             }
             $this->config->set('default_channel', $savechannel);
