@@ -986,13 +986,14 @@ class PEAR_Dependency2
                 }
                 $packagename = $this->_registry->parsePackageName($parent[0]);
                 $packagename['channel'] = $this->_registry->channelAlias($packagename['channel']);
-                $packagename['package'] = $this->_registry->packageInfo($packagename['package'], 'package', $packagename['channel']);
+                $pa = $this->_registry->getPackage($packagename['package'], $packagename['channel']);
+                $packagename['package'] = $pa->getPackage();
                 $this->_currentPackage = $packagename;
                 // parent is not present in uninstall list, make sure we can actually
                 // uninstall it (parent dep is optional)
                 $parentname['channel'] = $this->_registry->channelAlias($parent[1]['dep']['channel']);
-                $parentname['package'] = $this->_registry->packageInfo($parent[1]['dep']['name'],
-                    'package', $parent[1]['dep']['channel']);
+                $pa = $this->_registry->getPackage($parent[1]['dep']['name'], $parent[1]['dep']['channel']);
+                $parentname['package'] = $pa->getPackage();
                 $parent[1]['dep']['package'] = $parentname['package'];
                 $parent[1]['dep']['channel'] = $parentname['channel'];
                 if ($parent[1]['type'] == 'optional') {
