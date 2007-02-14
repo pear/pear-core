@@ -96,6 +96,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #9841: incorrect dependency information shown on uninstall
   * fix Bug #9957: E_NOTICE on remote-list
   * fix Bug #9959: Channel name not shown when upgrading
+  * fix Bug #9971: Improve run-tests diffs of EXPECTF sections
   * fix Bug #10012: pear package: tokenizer should be enabled
   * fix Bug #10081: installer dies on uninstall (recursion too deep)
  </notes>

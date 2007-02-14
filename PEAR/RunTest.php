@@ -100,6 +100,7 @@ class PEAR_RunTest
             'SKIPIF'  => '',
             'GET'     => '',
             'ARGS'    => '',
+            'INI'     => '',
             'CLEAN'   => '',
         );
 
@@ -360,9 +361,13 @@ class PEAR_RunTest
             if (!$log = fopen($logname,'w')) {
                 return PEAR::raiseError("Cannot create test log - $logname");
             }
-            fwrite($log, $this->generate_diff($wanted, $output,
-                isset($section_text['RETURNS']) ? array(trim($section_text['RETURNS']),
-                    $return_value) : null));
+            fwrite($log, $this->generate_diff(
+                      $wanted,
+                      $output,
+                      isset($section_text['RETURNS']) ?
+                        array(trim($section_text['RETURNS']), $return_value) : null,
+                      isset($section_text['EXPECTF']) ? $wanted_re : null)
+                  );
             fclose($log);
         }
 
@@ -405,16 +410,27 @@ $return_value
         return $warn ? 'WARNED' : 'FAILED';
     }
 
-    function generate_diff($wanted, $output, $return_value)
+    function generate_diff($wanted, $output, $return_value, $wanted_re)
     {
         $w = explode("\n", $wanted);
         $o = explode("\n", $output);
+        $wr = explode("\n", $wanted_re);
         $w1 = array_diff_assoc($w,$o);
         $o1 = array_diff_assoc($o,$w);
         $w2 = array();
         $o2 = array();
-        foreach($w1 as $idx => $val) $w2[sprintf("%03d<",$idx)] = sprintf("%03d- ", $idx+1).$val;
-        foreach($o1 as $idx => $val) $o2[sprintf("%03d>",$idx)] = sprintf("%03d+ ", $idx+1).$val;
+        foreach($w1 as $idx => $val) {
+            if (!$wanted_re || !isset($wr[$idx]) || !isset($o1[$idx]) ||
+                  !preg_match('/^' . $wr[$idx] . '$/', $o1[$idx])) {
+                $w2[sprintf("%03d<", $idx)] = sprintf("%03d- ", $idx + 1) . $val;
+            }
+        }
+        foreach($o1 as $idx => $val) {
+            if (!$wanted_re || !isset($wr[$idx]) ||
+                  !preg_match('/^' . $wr[$idx] . '$/', $val)) {
+                $o2[sprintf("%03d>", $idx)] = sprintf("%03d+ ", $idx + 1) . $val;
+            }
+        }
         $diff = array_merge($w2, $o2);
         ksort($diff);
         if ($return_value) {
