@@ -860,9 +860,17 @@ class PEAR_Installer extends PEAR_Downloader
             switch ($type) {
                 case 'backup':
                     if (file_exists($data[0] . '.bak')) {
-                        @unlink($data[0]);
+                        if (file_exists($data[0] && is_writable($data[0]))) {
+                            unlink($data[0]);
+                        }
                         @copy($data[0] . '.bak', $data[0]);
                         $this->log(3, "+ restore $data[0] from $data[0].bak");
+                    }
+                    break;
+                case 'removebackup':
+                    if (file_exists($data[0] . '.bak') && is_writable($data[0] . '.bak')) {
+                        unlink($data[0] . '.bak');
+                        $this->log(3, "+ rm backup of $data[0] ($data[0].bak)");
                     }
                     break;
                 case 'rename':
