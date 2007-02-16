@@ -88,6 +88,7 @@ class PEAR_Command_Test extends PEAR_Command_Common
                 'cgi' => array(
                     'shortopt' => 'c',
                     'doc' => 'CGI php executable (needed for tests with POST/GET section)',
+                    'arg' => 'PHPCGI',
                 ),
             ),
             'doc' => '[testfile|dir ...]
