@@ -85,6 +85,10 @@ class PEAR_Command_Test extends PEAR_Command_Common
                     'shortopt' => 't',
                     'doc' => 'Output run-tests.log in TAP-compliant format',
                 ),
+                'cgi' => array(
+                    'shortopt' => 'c',
+                    'doc' => 'CGI php executable (needed for tests with POST/GET section)',
+                ),
             ),
             'doc' => '[testfile|dir ...]
 Run regression tests with PHP\'s regression testing script (run-tests.php).',
