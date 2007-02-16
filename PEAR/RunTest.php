@@ -250,6 +250,12 @@ class PEAR_RunTest
                 $section_text['INI']), $ini_settings);
         }
         $ini_settings = $this->settings2params($ini_settings);
+        $shortname = str_replace($cwd . DIRECTORY_SEPARATOR, '', $file);
+        if (!isset($this->_options['simple'])) {
+            $tested = trim($section_text['TEST']) . "[$shortname]";
+        } else {
+            $tested = trim($section_text['TEST']) . ' ';
+        }
         if (!empty($section_text['GET']) || !empty($section_text['POST'])) {
             if (empty($this->_options['cgi'])) {
                 if (!isset($this->_options['quiet'])) {
@@ -261,12 +267,6 @@ class PEAR_RunTest
                 return 'SKIPPED';
             }
             $php = $this->_options['cgi'];
-        }
-        $shortname = str_replace($cwd . DIRECTORY_SEPARATOR, '', $file);
-        if (!isset($this->_options['simple'])) {
-            $tested = trim($section_text['TEST']) . "[$shortname]";
-        } else {
-            $tested = trim($section_text['TEST']) . ' ';
         }
 
         $temp_dir = $test_dir = realpath(dirname($file));

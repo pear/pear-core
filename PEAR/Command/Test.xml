@@ -40,6 +40,7 @@
    <cgi>
     <shortopt>c</shortopt>
     <doc>CGI php executable (needed for tests with POST/GET section)</doc>
+    <arg>PHPCGI</arg>
    </cgi>
   </options>
   <doc>[testfile|dir ...]
