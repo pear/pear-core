@@ -726,10 +726,18 @@ class PEAR_Installer extends PEAR_Downloader
         }
         $this->_dirtree = array();
         // {{{ really commit the transaction
-        foreach ($this->file_operations as $tr) {
+        foreach ($this->file_operations as $i => $tr) {
+            if (!$tr) {
+                // support removal of non-existing backups
+                continue;
+            }
             list($type, $data) = $tr;
             switch ($type) {
                 case 'backup':
+                    if (!file_exists($data[0])) {
+                        $this->file_operations[$i] = false;
+                        break;
+                    }
                     if (!@copy($data[0], $data[0] . '.bak')) {
                         $this->log(1, 'Could not copy ' . $data[0] . ' to ' . $data[0] .
                             '.bak ' . $php_errormsg);
