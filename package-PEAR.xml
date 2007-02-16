@@ -90,6 +90,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #9971: Improve run-tests diffs of EXPECTF sections
   * fix Bug #10012: pear package: tokenizer should be enabled
   * fix Bug #10081: installer dies on uninstall (recursion too deep)
+  * fix Bug #10092: run-tests does not support --INI-- or --POST--
   * fix Bug #10108: update-error with backups from test-Folder
   * fix Bug #10109: on failed upgrade, .bak files everywhere
   </notes>
