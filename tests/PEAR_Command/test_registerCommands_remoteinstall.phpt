@@ -311,8 +311,17 @@ $phpunit->assertEquals(array (
   6 => 'remoteconfig=',
 ), $l, 'long remote-upgrade-all');
 PEAR_Command::getGetoptArgs('run-tests', $s, $l);
-$phpunit->assertEquals('ri:lqsput', $s, 'short run-tests'); 
-$phpunit->assertEquals(array ('recur', 'ini=', 'realtimelog', 'quiet', 'simple', 'package', 'phpunit', 'tapoutput'), $l, 'long run-tests');
+$phpunit->assertEquals('ri:lqsputc:', $s, 'short run-tests'); 
+$phpunit->assertEquals(array (
+    'recur',
+    'ini=',
+    'realtimelog',
+    'quiet',
+    'simple',
+    'package',
+    'phpunit',
+    'tapoutput',
+    'cgi='), $l, 'long run-tests');
 PEAR_Command::getGetoptArgs('search', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short search'); 
 $phpunit->assertEquals(array ('channel='), $l, 'long search');

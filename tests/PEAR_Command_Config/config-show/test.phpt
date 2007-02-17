@@ -14,6 +14,12 @@ $config->set('remote_config', 'blah');
 $config->set('preferred_state', 'alpha', 'user', '__uri');
 $config->set('preferred_state', 'beta', 'user', 'pear.php.net');
 $e = $command->run('config-show', array(), array());
+$log = $fakelog->getLog();
+$log[0]['info']['data']['Internet Access'] = array_slice($log[0]['info']['data']['Internet Access'], 0, 6);
+$log[0]['info']['data']['File Locations'] = array_slice($log[0]['info']['data']['File Locations'], 0, 4);
+$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 7);
+$log[0]['info']['data']['Advanced'] = array_slice($log[0]['info']['data']['Advanced'], 0, 4);
+$log[0]['info']['data']['Maintainers'] = array_slice($log[0]['info']['data']['Maintainers'], 0, 6);
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -218,9 +224,15 @@ $phpunit->assertEquals(array (
     ),
     'cmd' => 'config-show',
   ),
-), $fakelog->getLog(), 'normal');
+), $log, 'normal');
 
 $e = $command->run('config-show', array('channel' => '__uri'), array());
+$log = $fakelog->getLog();
+$log[0]['info']['data']['Internet Access'] = array_slice($log[0]['info']['data']['Internet Access'], 0, 6);
+$log[0]['info']['data']['File Locations'] = array_slice($log[0]['info']['data']['File Locations'], 0, 4);
+$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 7);
+$log[0]['info']['data']['Advanced'] = array_slice($log[0]['info']['data']['Advanced'], 0, 4);
+$log[0]['info']['data']['Maintainers'] = array_slice($log[0]['info']['data']['Maintainers'], 0, 6);
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -425,10 +437,16 @@ $phpunit->assertEquals(array (
     ),
     'cmd' => 'config-show',
   ),
-), $fakelog->getLog(), 'opt');
+), $log, 'opt');
 
 $config->set('default_channel', '__uri');
 $e = $command->run('config-show', array(), array());
+$log = $fakelog->getLog();
+$log[0]['info']['data']['Internet Access'] = array_slice($log[0]['info']['data']['Internet Access'], 0, 6);
+$log[0]['info']['data']['File Locations'] = array_slice($log[0]['info']['data']['File Locations'], 0, 4);
+$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 7);
+$log[0]['info']['data']['Advanced'] = array_slice($log[0]['info']['data']['Advanced'], 0, 4);
+$log[0]['info']['data']['Maintainers'] = array_slice($log[0]['info']['data']['Maintainers'], 0, 6);
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -633,7 +651,7 @@ $phpunit->assertEquals(array (
     ),
     'cmd' => 'config-show',
   ),
-), $fakelog->getLog(), 'default channel');
+), $log, 'default channel');
 echo 'tests done';
 ?>
 --CLEAN--

@@ -12,6 +12,8 @@ error_reporting(E_ALL);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $e = $command->run('config-help', array(), array());
 $phpunit->assertNoErrors('test');
+$log = $fakelog->getLog();
+$log[0]['info']['data'] = array_slice($log[0]['info']['data'], 0, 27);
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -199,7 +201,7 @@ Valid set: gpg',
     ),
     'cmd' => 'config-help',
   ),
-), $fakelog->getLog(), 'log');
+), $log, 'log');
 echo 'tests done';
 ?>
 --CLEAN--
