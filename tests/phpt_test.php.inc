@@ -62,7 +62,15 @@ class PEAR_PHPTest
         return false;
     }
 
-    function assertErrors($errors, $message, $trace = null)
+    function assertErrorsF($errors, $message, $trace = null)
+    {
+        if ($trace === null) {
+            $trace = debug_backtrace();
+        }
+        return $this->assertErrors($errors, $message, $trace, true);
+    }
+
+    function assertErrors($errors, $message, $trace = null, $f = null)
     {
         if (!count($this->_errors)) {
             if ($trace === null) {
@@ -80,9 +88,18 @@ class PEAR_PHPTest
             $found = false;
             foreach ($this->_errors as $i => $caughterror) {
                 if ($caughterror['package'] == $err['package']) {
-                    if ($caughterror['message'] == $err['message']) {
-                        $found = true;
-                        break;
+                    if ($f) {
+                        $error = preg_quote($err['message'], '/');
+                        $error = str_replace('%s', '.+?', $error);
+                        if (preg_match('/^' . $error . '$/', $caughterror['message'])) {
+                            $found = true;
+                            break;
+                        }
+                    } else {
+                        if ($caughterror['message'] == $err['message']) {
+                            $found = true;
+                            break;
+                        }
                     }
                 }
             }
