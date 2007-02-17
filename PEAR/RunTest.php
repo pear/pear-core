@@ -152,6 +152,9 @@ class PEAR_RunTest
             }
         }
         $code = proc_close($proc);
+        if (function_exists('proc_get_status')) {
+            $code = $stat['exitcode'];
+        }
         return array($code, $data);
     }
 
