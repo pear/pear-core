@@ -145,12 +145,14 @@ class PEAR_RunTest
                 $data .= $line;
             }
         }
-        $stat = proc_get_status($proc);
-        if ($stat['signaled']) {
-            $data .= "\nTermsig=".$stat['stopsig'];
+        if (function_exists('proc_get_status')) {
+            $stat = proc_get_status($proc);
+            if ($stat['signaled']) {
+                $data .= "\nTermsig=".$stat['stopsig'];
+            }
         }
         $code = proc_close($proc);
-        return array($stat['exitcode'], $data);
+        return array($code, $data);
     }
 
     function settings2array($settings, $ini_settings)
