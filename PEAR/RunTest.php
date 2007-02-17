@@ -58,7 +58,7 @@ class PEAR_RunTest
         'safe_mode=0',
         'disable_functions=',
         'output_buffering=Off',
-        'error_reporting=8191',
+        'error_reporting=E_ALL',
         'display_errors=1',
         'log_errors=0',
         'html_errors=0',
