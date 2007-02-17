@@ -354,6 +354,7 @@ class PEAR_RunTest
 
         $savedir = getcwd(); // in case the test moves us around
         // Reset environment from any previous test.
+        $env = $_ENV;
         $env['REDIRECT_STATUS']='';
         $env['QUERY_STRING']='';
         $env['PATH_TRANSLATED']='';
@@ -469,33 +470,87 @@ class PEAR_RunTest
             }
         }
 
-        if (isset($section_text['EXPECTF']) || isset($section_text['EXPECTREGEX'])) {
-            if (isset($section_text['EXPECTF'])) {
-                $wanted = trim($section_text['EXPECTF']);
-            } else {
-                $wanted = trim($section_text['EXPECTREGEX']);
-            }
-            $wanted_re = preg_replace('/\r\n/',"\n",$wanted);
-            if (isset($section_text['EXPECTF'])) {
-                $wanted_re = preg_quote($wanted_re, '/');
-                // Stick to basics
-                $wanted_re = str_replace("%s", ".+?", $wanted_re); //not greedy
-                $wanted_re = str_replace("%i", "[+\-]?[0-9]+", $wanted_re);
-                $wanted_re = str_replace("%d", "[0-9]+", $wanted_re);
-                $wanted_re = str_replace("%x", "[0-9a-fA-F]+", $wanted_re);
-                $wanted_re = str_replace("%f", "[+\-]?\.?[0-9]+\.?[0-9]*(E-?[0-9]+)?", $wanted_re);
-                $wanted_re = str_replace("%c", ".", $wanted_re);
-                // %f allows two points "-.0.0" but that is the best *simple* expression
-            }
+        do {
+            if (isset($section_text['EXPECTF']) || isset($section_text['EXPECTREGEX'])) {
+                if (isset($section_text['EXPECTF'])) {
+                    $wanted = trim($section_text['EXPECTF']);
+                } else {
+                    $wanted = trim($section_text['EXPECTREGEX']);
+                }
+                $wanted_re = preg_replace('/\r\n/',"\n",$wanted);
+                if (isset($section_text['EXPECTF'])) {
+                    $wanted_re = preg_quote($wanted_re, '/');
+                    // Stick to basics
+                    $wanted_re = str_replace("%s", ".+?", $wanted_re); //not greedy
+                    $wanted_re = str_replace("%i", "[+\-]?[0-9]+", $wanted_re);
+                    $wanted_re = str_replace("%d", "[0-9]+", $wanted_re);
+                    $wanted_re = str_replace("%x", "[0-9a-fA-F]+", $wanted_re);
+                    $wanted_re = str_replace("%f", "[+\-]?\.?[0-9]+\.?[0-9]*(E-?[0-9]+)?", $wanted_re);
+                    $wanted_re = str_replace("%c", ".", $wanted_re);
+                    // %f allows two points "-.0.0" but that is the best *simple* expression
+                }
     /* DEBUG YOUR REGEX HERE
             var_dump($wanted_re);
             print(str_repeat('=', 80) . "\n");
             var_dump($output);
     */
-            if (!$returnfail && preg_match("/^$wanted_re\$/s", $output)) {
-                if (file_exists($temp_file)) {
-                    unlink($temp_file);
+                if (!$returnfail && preg_match("/^$wanted_re\$/s", $output)) {
+                    if (file_exists($temp_file)) {
+                        unlink($temp_file);
+                    }
+
+                    if (array_key_exists('FAIL', $section_text)) {
+                        break;
+                    }
+                    if (!isset($this->_options['quiet'])) {
+                        $this->_logger->log(0, "PASS $tested$info");
+                    }
+                    if (isset($old_php)) {
+                        $php = $old_php;
+                    }
+                    if (isset($this->_options['tapoutput'])) {
+                        return array('ok', ' - ' . $tested);
+                    }
+                    return 'PASSED';
                 }
+
+            } else {
+                $wanted = trim($section_text['EXPECT']);
+                $wanted = preg_replace('/\r\n/',"\n",$wanted);
+            // compare and leave on success
+                $ok = (0 == strcmp($output,$wanted));
+                if (!$returnfail && $ok) {
+                    if (file_exists($temp_file)) {
+                        unlink($temp_file);
+                    }
+                    if (array_key_exists('FAIL', $section_text)) {
+                        break;
+                    }
+                    if (!isset($this->_options['quiet'])) {
+                        $this->_logger->log(0, "PASS $tested$info");
+                    }
+                    if (isset($old_php)) {
+                        $php = $old_php;
+                    }
+                    if (isset($this->_options['tapoutput'])) {
+                        return array('ok', ' - ' . $tested);
+                    }
+                    return 'PASSED';
+                }
+            }
+        } while (false);
+
+        if (array_key_exists('FAIL', $section_text)) {
+            // we expect a particular failure
+            // this is only used for testing PEAR_RunTest
+            $faildiff = $this->generate_diff(
+                      $wanted,
+                      $output,
+                      null,
+                      isset($section_text['EXPECTF']) ? $wanted_re : null);
+            $wanted = explode("\n", trim($section_text['FAIL']));
+            $wanted = implode("\r\n", $wanted);
+            if ($faildiff == $wanted) {
                 if (!isset($this->_options['quiet'])) {
                     $this->_logger->log(0, "PASS $tested$info");
                 }
@@ -507,26 +562,11 @@ class PEAR_RunTest
                 }
                 return 'PASSED';
             }
-
-        } else {
-            $wanted = trim($section_text['EXPECT']);
-            $wanted = preg_replace('/\r\n/',"\n",$wanted);
-        // compare and leave on success
-            $ok = (0 == strcmp($output,$wanted));
-            if (!$returnfail && $ok) {
-                if (file_exists($temp_file)) {
-                    unlink($temp_file);
-                }
-                if (!isset($this->_options['quiet'])) {
-                    $this->_logger->log(0, "PASS $tested$info");
-                }
-                if (isset($old_php)) {
-                    $php = $old_php;
-                }
-                if (isset($this->_options['tapoutput'])) {
-                    return array('ok', ' - ' . $tested);
-                }
-                return 'PASSED';
+            unset($section_text['EXPECTF']);
+            $output = $faildiff;
+            if (isset($section_text['RETURNS'])) {
+                return PEAR::raiseError('Cannot have both RETURNS and FAIL in the same test: ' .
+                    $file);
             }
         }
 
@@ -558,7 +598,7 @@ class PEAR_RunTest
 
         // write .exp
         if (strpos($log_format,'E') !== FALSE) {
-            $logname = $log_filename;
+            $logname = $exp_filename;
             if (!$log = fopen($logname,'w')) {
                 return PEAR::raiseError("Cannot create test log - $logname");
             }
