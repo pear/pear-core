@@ -293,7 +293,7 @@ class PEAR_RunTest
     	$test_skipif       = $test_dir . DIRECTORY_SEPARATOR . $main_file_name.'skip.php';
     	$temp_clean        = $temp_dir . DIRECTORY_SEPARATOR . $main_file_name.'clean.php';
     	$test_clean        = $test_dir . DIRECTORY_SEPARATOR . $main_file_name.'clean.php';
-    	$tmp_post          = $temp_dir . DIRECTORY_SEPARATOR . uniqid('/phpt.');
+    	$tmp_post          = $temp_dir . DIRECTORY_SEPARATOR . uniqid('phpt.');
 
     	// unlink old test results	
     	@unlink($diff_filename);
@@ -475,18 +475,22 @@ class PEAR_RunTest
     
             $cmd = "$php$pass_options$ini_settings -f \"$test_file\" $args 2>&1";
         }
-        $out = $this->system_with_timeout($cmd, $env,
-            isset($section_text['STDIN']) ? $section_text['STDIN'] : null);
-        $return_value = $out[0];
-        $out = $out[1];
-        if (isset($tmp_post) && file_exists($tmp_post)) {
-            unlink($tmp_post);
-        }
-        if (isset($section_text['RETURNS'])) {
+        if (OS_WINDOWS && isset($section_text['RETURNS'])) {
+            ob_start();
+            system($cmd, $return_value);
+            $out = ob_get_contents();
+            ob_end_clean();
             $section_text['RETURNS'] = (int) trim($section_text['RETURNS']);
             $returnfail = ($return_value != $section_text['RETURNS']);
         } else {
             $returnfail = false;
+            $out = $this->system_with_timeout($cmd, $env,
+                isset($section_text['STDIN']) ? $section_text['STDIN'] : null);
+            $return_value = $out[0];
+            $out = $out[1];
+        }
+        if (isset($tmp_post) && realpath($tmp_post)) {
+            unlink(realpath($tmp_post));
         }
         chdir($savedir);
 
