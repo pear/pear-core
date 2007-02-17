@@ -41,7 +41,7 @@ array(1) {
     ["error"]=>
     int(0)
     ["size"]=>
-    int(9)
+    int(%d)
   }
 }
 array(1) {
