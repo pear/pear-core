@@ -211,8 +211,10 @@ class PEAR_RunTest
         $section_text = array(
             'TEST'    => '(unnamed test)',
             'SKIPIF'  => '',
-            'GET'     => '',
-            'POST'    => '',
+            'GET'    => '',
+            'COOKIE' => '',
+            'POST_RAW' => '',
+            'POST'   => '',
             'ARGS'    => '',
             'INI'     => '',
             'CLEAN'   => '',
@@ -258,7 +260,8 @@ class PEAR_RunTest
         } else {
             $tested = trim($section_text['TEST']) . ' ';
         }
-        if (!empty($section_text['GET']) || !empty($section_text['POST'])) {
+        if (!empty($section_text['GET']) || !empty($section_text['POST']) ||
+              !empty($section_text['POST_RAW']) || !empty($section_text['COOKIE'])) {
             if (empty($this->_options['cgi'])) {
                 if (!isset($this->_options['quiet'])) {
                     $this->_logger->log(0, "SKIP $tested (reason: --cgi option needed for this test, type 'pear help run-tests')");
@@ -377,7 +380,31 @@ class PEAR_RunTest
         $env['QUERY_STRING']    = $query_string;
         $env['PATH_TRANSLATED'] = $test_file;
         $env['SCRIPT_FILENAME'] = $test_file;
-        if (array_key_exists('POST', $section_text) && !empty($section_text['POST'])) {
+        if (array_key_exists('POST_RAW', $section_text) && !empty($section_text['POST_RAW'])) {
+            $post = trim($section_text['POST_RAW']);
+            $raw_lines = explode("\n", $post);
+    
+            $request = '';
+            $started = false;
+            foreach ($raw_lines as $i => $line) {
+                if (empty($env['CONTENT_TYPE']) &&
+                      preg_match('/^Content-Type:(.*)/i', $line, $res)) {
+                    $env['CONTENT_TYPE'] = trim(str_replace("\r", '', $res[1]));
+                    continue;
+                }
+                if ($started) {
+                    $request .= "\n";
+                }
+                $started = true;
+                $request .= $line;
+            }
+    
+            $env['CONTENT_LENGTH'] = strlen($request);
+            $env['REQUEST_METHOD'] = 'POST';
+
+            $this->save_text($tmp_post, $request);
+            $cmd = "$php$pass_options$ini_settings -f \"$test_file\" 2>&1 < $tmp_post";
+        } elseif (array_key_exists('POST', $section_text) && !empty($section_text['POST'])) {
     
             $post = trim($section_text['POST']);
             $this->save_text($tmp_post, $post);
@@ -401,6 +428,9 @@ class PEAR_RunTest
             isset($section_text['STDIN']) ? $section_text['STDIN'] : null);
         $return_value = $out[0];
         $out = $out[1];
+        if (isset($tmp_post) && file_exists($tmp_post)) {
+            unlink($tmp_post);
+        }
         if (isset($section_text['RETURNS'])) {
             $section_text['RETURNS'] = (int) trim($section_text['RETURNS']);
             $returnfail = ($return_value != $section_text['RETURNS']);
