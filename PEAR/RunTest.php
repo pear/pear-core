@@ -216,7 +216,6 @@ class PEAR_RunTest
             'SKIPIF'  => '',
             'GET'    => '',
             'COOKIE' => '',
-            'POST_RAW' => '',
             'POST'   => '',
             'ARGS'    => '',
             'INI'     => '',
@@ -247,6 +246,9 @@ class PEAR_RunTest
         }
         fclose($fp);
 
+        if (isset($section_text['POST_RAW']) && isset($section_text['UPLOAD'])) {
+            return PEAR::raiseError("Cannot contain both POST_RAW and UPLOAD in test file: $file");
+        }
         $ini_settings = array();
         $ini_settings = $this->settings2array($this->ini_overwrites, $ini_settings);
         if ($section_text['INI']) {
@@ -264,7 +266,8 @@ class PEAR_RunTest
             $tested = trim($section_text['TEST']) . ' ';
         }
         if (!empty($section_text['GET']) || !empty($section_text['POST']) ||
-              !empty($section_text['POST_RAW']) || !empty($section_text['COOKIE'])) {
+              !empty($section_text['POST_RAW']) || !empty($section_text['COOKIE']) ||
+              !empty($section_text['UPLOAD'])) {
             if (empty($this->_options['cgi'])) {
                 if (!isset($this->_options['quiet'])) {
                     $this->_logger->log(0, "SKIP $tested (reason: --cgi option needed for this test, type 'pear help run-tests')");
@@ -384,6 +387,50 @@ class PEAR_RunTest
         $env['QUERY_STRING']    = $query_string;
         $env['PATH_TRANSLATED'] = $test_file;
         $env['SCRIPT_FILENAME'] = $test_file;
+        if (array_key_exists('UPLOAD', $section_text) && !empty($section_text['UPLOAD'])) {
+            $upload_files = trim($section_text['UPLOAD']);
+            $upload_files = explode("\n", $upload_files);
+
+            $request = "Content-Type: multipart/form-data; boundary=---------------------------20896060251896012921717172737\n" .
+                       "-----------------------------20896060251896012921717172737\n";
+            foreach ($upload_files as $fileinfo) {
+                $fileinfo = explode('=', $fileinfo);
+                if (count($fileinfo) != 2) {
+                    return PEAR::raiseError("Invalid UPLOAD section in test file: $file");
+                }
+                if (!realpath(dirname($file) . '/' . $fileinfo[1])) {
+                    return PEAR::raiseError("File for upload does not exist: $fileinfo[1] " .
+                        "in test file: $file");
+                }
+                $file_contents = file_get_contents(dirname($file) . '/' . $fileinfo[1]);
+                $fileinfo[1] = basename($fileinfo[1]);
+                $request .= "Content-Disposition: form-data; name=\"$fileinfo[0]\"; filename=\"$fileinfo[1]\"\n";
+                $request .= "Content-Type: text/plain\n\n";
+                $request .= $file_contents . "\n" .
+                    "-----------------------------20896060251896012921717172737\n";
+            }
+            if (array_key_exists('POST', $section_text) && !empty($section_text['POST'])) {
+                // encode POST raw
+                $post = trim($section_text['POST']);
+                $post = explode('&', $post);
+                foreach ($post as $i => $post_info) {
+                    $post_info = explode('=', $post_info);
+                    if (count($post_info) != 2) {
+                        return PEAR::raiseError("Invalid POST data in test file: $file");
+                    }
+                    $post_info[0] = rawurldecode($post_info[0]);
+                    $post_info[1] = rawurldecode($post_info[1]);
+                    $post[$i] = $post_info;
+                }
+                foreach ($post as $post_info) {
+                    $request .= "Content-Disposition: form-data; name=\"$post_info[0]\"\n\n";
+                    $request .= $post_info[1] . "\n" .
+                        "-----------------------------20896060251896012921717172737\n";
+                }
+                unset($section_text['POST']);
+            }
+            $section_text['POST_RAW'] = $request;
+        }
         if (array_key_exists('POST_RAW', $section_text) && !empty($section_text['POST_RAW'])) {
             $post = trim($section_text['POST_RAW']);
             $raw_lines = explode("\n", $post);
