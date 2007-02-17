@@ -233,7 +233,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
             $result = $run->run($t, $ini_settings);
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($result)) {
-                $this->ui->log(0, $result->getMessage());
+                $this->ui->log($result->getMessage());
                 continue;
             }
             if (isset($options['tapoutput'])) {
