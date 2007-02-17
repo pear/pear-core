@@ -595,8 +595,8 @@ class PEAR_RunTest
                       $output,
                       null,
                       isset($section_text['EXPECTF']) ? $wanted_re : null);
-            $wanted = explode("\n", trim($section_text['FAIL']));
-            $wanted = implode("\r\n", $wanted);
+            $wanted = preg_replace('/\r/', '', trim($section_text['FAIL']));
+            $faildiff = preg_replace('/\r/', '', $faildiff);
             if ($faildiff == $wanted) {
                 if (!isset($this->_options['quiet'])) {
                     $this->_logger->log(0, "PASS $tested$info");
