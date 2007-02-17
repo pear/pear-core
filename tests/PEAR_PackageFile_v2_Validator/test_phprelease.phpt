@@ -34,9 +34,9 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
 $pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
 $pf->validate();
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "1" in directory "<dir name="/">" has invalid role "src", should be one of data, doc, php, script, test'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "6" in directory "<dir name="/">" has invalid role "ext", should be one of data, doc, php, script, test'),
+$phpunit->assertErrorsF(array(
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "1" in directory "<dir name="/">" has invalid role "src", should be one of data, doc, php, script, test%s'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "6" in directory "<dir name="/">" has invalid role "ext", should be one of data, doc, php, script, test%s'),
 ), '3');
 echo 'tests done';
 ?>

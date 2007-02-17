@@ -106,10 +106,12 @@ echo "Testing: which\n";
 if (OS_UNIX) {
     $ls = trim(`which ls`);
     if (System::which('ls') != $ls) {
-        print "System::which('ls') failed\n";
+        print "System::which('ls') 1 failed\n";
+        var_dump($ls, System::which('ls'));
     }
     if (System::which($ls) != $ls) {
-        print "System::which('$ls') failed\n";
+        print "System::which('$ls') 2 failed\n";
+        var_dump($ls, System::which('ls'));
     }
 } elseif (OS_WINDOWS) {
     $sysroot = getenv('SystemRoot') . '\\system32\\';

@@ -14,6 +14,12 @@ $temp_path2 = str_replace(DIRECTORY_SEPARATOR, '\\', $temp_path);
 $e = $command->run('config-create', array('windows' => true), array($temp_path2 . DIRECTORY_SEPARATOR . 'nomake', $temp_path . DIRECTORY_SEPARATOR
     . 'remote.ini'));
 $phpunit->assertNoErrors('log errors');
+$log = $fakelog->getLog();
+$log[0]['info']['data']['Internet Access'] = array_slice($log[0]['info']['data']['Internet Access'], 0, 6);
+$log[0]['info']['data']['File Locations'] = array_slice($log[0]['info']['data']['File Locations'], 0, 4);
+$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 7);
+$log[0]['info']['data']['Advanced'] = array_slice($log[0]['info']['data']['Advanced'], 0, 4);
+$log[0]['info']['data']['Maintainers'] = array_slice($log[0]['info']['data']['Maintainers'], 0, 6);
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -224,7 +230,7 @@ $phpunit->assertEquals(array (
     $temp_path . DIRECTORY_SEPARATOR . 'remote.ini"',
     'cmd' => 'config-create',
   ),
-), $fakelog->getLog(), 'log');
+), $log, 'log');
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'remote.ini', 'not created');
 $contents = explode("\n", implode('', file($temp_path . DIRECTORY_SEPARATOR . 'remote.ini')));
 $contents = unserialize($contents[1]);
