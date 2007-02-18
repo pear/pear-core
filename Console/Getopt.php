@@ -167,15 +167,38 @@ class Console_Getopt {
                     if ($i + 1 < strlen($arg)) {
                         $opts[] = array($opt,  substr($arg, $i + 1));
                         break;
-                    } else if (list(, $opt_arg) = each($args))
+                    } else if (list(, $opt_arg) = each($args)) {
                         /* Else use the next argument. */;
-                    else
+                        if (Console_Getopt::_isShortOpt($opt_arg) || Console_Getopt::_isLongOpt($opt_arg)) {
+                            return PEAR::raiseError("Console_Getopt: option requires an argument -- $opt");
+                        }
+                    } else {
                         return PEAR::raiseError("Console_Getopt: option requires an argument -- $opt");
+                    }
                 }
             }
 
             $opts[] = array($opt, $opt_arg);
         }
+    }
+
+    /**
+     * @access private
+     *
+     */
+    function _isShortOpt($arg)
+    {
+        return strlen($arg) == 2 && $arg[0] == '-' && preg_match('/[a-zA-Z]/', $arg[1]);
+    }
+
+    /**
+     * @access private
+     *
+     */
+    function _isLongOpt($arg)
+    {
+        return strlen($arg) > 2 && $arg[0] == '-' && $arg[1] == '-' &&
+            preg_match('/[a-zA-Z]+$/', substr($arg, 2));
     }
 
     /**
