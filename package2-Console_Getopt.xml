@@ -27,7 +27,7 @@ short and long options.
   <email>cellog@php.net</email>
   <active>yes</active>
  </helper>
- <date>2007-02-01</date>
+ <date>2007-02-17</date>
  <version>
   <release>1.2.2</release>
   <api>1.2.1</api>
@@ -37,7 +37,9 @@ short and long options.
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
- <notes>* fix Bug #4475: An ambiguous error occurred when specifying similar longoption name.
+ <notes>
+ * fix Bug #4475: An ambiguous error occurred when specifying similar longoption name.
+ * fix Bug #10055: Not failing properly on short options missing required values
  </notes>
  <contents>
   <dir name="/">
@@ -46,6 +48,12 @@ short and long options.
    </dir> <!-- //Console -->
   </dir> <!-- / -->
  </contents>
+ <compatible>
+  <name>PEAR</name>
+  <channel>pear.php.net</channel>
+  <min>1.4.0</min>
+  <max>1.5.0</max>
+ </compatible>
  <dependencies>
   <required>
    <php>

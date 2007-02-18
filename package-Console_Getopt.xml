@@ -30,9 +30,10 @@ short and long options.</description>
   </maintainers>
   <release>
     <version>1.2.2</version>
-    <date>2007-02-05</date>
+    <date>2007-02-17</date>
     <notes>
      * fix Bug #4475: An ambiguous error occurred when specifying similar longoption name.
+     * fix Bug #10055: Not failing properly on short options missing required values
     </notes>
     <state>stable</state>
     <filelist>
