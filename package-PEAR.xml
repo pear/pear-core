@@ -84,6 +84,10 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <state>stable</state>
   <notes>
   Major bugfix release
+  uninstall validation was completely rewritten, the previous algorithm
+  was incorrect in certain complex situations.
+  Fortunately, none exist in the real world yet.  However, Structures_DataGrid
+  approaches this complexity, and so the error messages were incorrect.
   * fix Bug #9841: incorrect dependency information shown on uninstall
   * fix Bug #9957: E_NOTICE on remote-list
   * fix Bug #9959: Channel name not shown when upgrading
