@@ -799,6 +799,9 @@ class PEAR_Downloader extends PEAR_Common
             }
             $pf->setRawPackage($url['package']);
             $pf->setDeps($url['info']);
+            if ($url['compatible']) {
+                $pf->setCompatible($url['compatible']);
+            }
             $pf->setRawState($url['stability']);
             $url['info'] = &$pf;
             if (!extension_loaded("zlib") || isset($this->_options['nocompress'])) {
@@ -970,6 +973,9 @@ class PEAR_Downloader extends PEAR_Common
             }
             $pf->setRawPackage($url['package']);
             $pf->setDeps($url['info']);
+            if ($url['compatible']) {
+                $pf->setCompatible($url['compatible']);
+            }
             $pf->setRawState($url['stability']);
             $url['info'] = &$pf;
             if (!extension_loaded("zlib") || isset($this->_options['nocompress'])) {

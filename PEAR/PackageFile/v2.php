@@ -756,6 +756,14 @@ class PEAR_PackageFile_v2
         $this->_packageInfo['dependencies'] = $deps;
     }
 
+    /**
+     * WARNING - do not use this function directly unless you know what you're doing
+     */
+    function setCompatible($compat)
+    {
+        $this->_packageInfo['compatible'] = $compat;
+    }
+
     function setPackagefile($file, $archive = false)
     {
         $this->_packageFile = $file;
