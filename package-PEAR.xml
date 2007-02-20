@@ -99,6 +99,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #10108: update-error with backups from test-Folder
   * fix Bug #10109: on failed upgrade, .bak files everywhere
   * fix Bug #10113 proc_get_status() is php5
+  * fix Bug #10130: Console_Getopt 1.2.2 not upgraded, even though it is compatible
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
