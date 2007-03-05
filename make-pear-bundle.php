@@ -92,7 +92,7 @@ copy("http://cvs.php.net/viewvc.cgi/pear-core/scripts/go-pear.bat?revision=1.1",
  */
 $packages  = array(
 // required packages for the installer
-"PEAR"                  =>    "1.5.0",
+"PEAR"                  =>    "1.5.1",
 "Console_Getopt"        =>    "1.2.1",
 "Archive_Tar"           =>    "1.3.2",
 "Structures_Graph"      =>    "1.0.2",
