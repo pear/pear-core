@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.5.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+ <name>PHP_Parser_DocblockParser</name>
+ <channel>pear.php.net</channel>
+ <summary>A /** docblock */ parser</summary>
+ <description>
+  PHP_Parser_DocblockParser is designed for use with PHP_Parser, but is also
+  a general /** docblock */ parser for phpDocumentor-style docblocks.
+  
+  This package is fully unit-tested, and is based on a
+  PHP_ParserGenerator-generated parser
+ </description>
+ <lead>
+  <name>Greg Beaver</name>
+  <user>cellog</user>
+  <email>cellog@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2007-03-05</date>
+ <version>
+  <release>0.1.0</release>
+  <api>0.1.0</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+ <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
+ <notes>
+  Initial release, this is a subpackage of PHP_Parser
+ </notes>
+ <contents>
+  <dir name="/" baseinstalldir="PHP/Parser">
+   <dir name="DocblockParser">
+    <file name="Tokenizer.php" role="php" />
+   </dir> <!-- /DocblockParser -->
+   <dir name="tests">
+    <file name="basic.phpt" role="test" />
+    <file name="internal.phpt" role="test" />
+    <file name="paragraph.phpt" role="test" />
+    <file name="tags.phpt" role="test" />
+    <file name="text.phpt" role="test" />
+    <file name="text_escape.phpt" role="test" />
+    <file name="text_special_htmltag.phpt" role="test" />
+    <file name="text_special_inlinetag.phpt" role="test" />
+    <file name="text_special_list.phpt" role="test" />
+   </dir> <!-- /tests -->
+   <file name="DocblockParser.y" role="data" />
+   <file name="DocblockParser.out" role="data" />
+   <file name="DocblockParser.php" role="php" />
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.1.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.3</min>
+   </pearinstaller>
+   <package>
+    <name>docblock</name>
+    <channel>pecl.php.net</channel>
+    <min>0.1.0</min>
+    <providesextension>docblock</providesextension>
+   </package>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>0.1.0</release>
+    <api>0.1.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2007-03-05</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>Initial development release.
+   </notes>
+  </release>
+ </changelog>
+</package>
