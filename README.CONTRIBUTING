@@ -213,9 +213,12 @@ php make-gopear-phar.php
 Note that PHP 5.1 is required in order to create the archives, and they can be created
 on either unix or windows.
 
-Now, these files need to reside in the document root of pear.php.net, and the only
-way to do that is to commit them to pearweb/public_html in cvs.php.net's CVS repository.
-As such, you will need to ask someone with karma to commit them if you do not have karma.
+Now, these files need to reside in the document root of pear.php.net.  However, the
+files are stored in cvs at pear/installphars and are released as the package
+pearweb_phars.
+
+As such, you will need to ask someone with karma to commit them if you do not have karma,
+and to release the pearweb_phars package as well.
 
 To use these files, do the following:
 
