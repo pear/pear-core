@@ -69,7 +69,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <name>Bertrand Gugger</name>
   <user>toggg</user>
   <email>toggg@php.net</email>
-  <active>no</active>
+  <active>yes</active>
  </helper>
  <helper>
   <name>Martin Jansen</name>
