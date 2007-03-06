@@ -185,136 +185,24 @@ Initialize a Channel from its server and creates the local channel.xml.
     function doUpdateAll($command, $options, $params)
     {
         $reg = &$this->config->getRegistry();
-        $savechannel = $this->config->get('default_channel');
-        if (isset($options['channel'])) {
-            if (!$reg->channelExists($options['channel'])) {
-                return $this->raiseError('Unknown channel "' . $options['channel'] . '"');
-            }
-            $this->config->set('default_channel', $options['channel']);
-        } else {
-            $this->config->set('default_channel', 'pear.php.net');
-        }
-        $remote = &$this->config->getRemote();
-        $channels = $remote->call('channel.listAll');
-        if (PEAR::isError($channels)) {
-            $this->config->set('default_channel', $savechannel);
-            return $channels;
-        }
-        if (!is_array($channels) || isset($channels['faultCode'])) {
-            $this->config->set('default_channel', $savechannel);
-            return $this->raiseError("Incorrect channel listing returned from channel '$chan'");
-        }
-        if (!count($channels)) {
-            $data = 'no updates available';
-        }
-        $dl = &$this->getDownloader();
-        if (!class_exists('System')) {
-            require_once 'System.php';
-        }
-        $tmpdir = System::mktemp(array('-d'));
+        $channels = $reg->getChannels();
+
+        $success = true;
         foreach ($channels as $channel) {
-            $channel = $channel[0];
-            $save = $channel;
-            if ($reg->channelExists($channel, true)) {
-                $this->ui->outputData("Updating channel \"$channel\"", $command);
-                $test = $reg->getChannel($channel, true);
-                if (PEAR::isError($test)) {
-                    $this->ui->outputData("Channel '$channel' is corrupt in registry!", $command);
-                    $lastmodified = false;
+            if ($channel->getName() != '__uri') {
+                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                $err = $this->doUpdate('channel-update',
+                                          $options,
+                                          array($channel->getName()));
+                if (PEAR::isError($err)) {
+                    $this->ui->outputData($err->getMessage(), $command);
+                    $success = false;
                 } else {
-                    $lastmodified = $test->lastModified();
-                    
+                    $success &= $err;
                 }
-                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-                $contents = $dl->downloadHttp('http://' . $test->getName() . '/channel.xml',
-                    $this->ui, $tmpdir, null, $lastmodified);
-                PEAR::staticPopErrorHandling();
-                if (PEAR::isError($contents)) {
-                    $this->ui->outputData('ERROR: Cannot retrieve channel.xml for channel "' .
-                        $test->getName() . '"', $command);
-                    continue;
-                }
-                if (!$contents) {
-                    $this->ui->outputData("Channel \"$channel\" is up-to-date", $command);
-                    continue;
-                }
-                list($contents, $lastmodified) = $contents;
-                $info = implode('', file($contents));
-                if (!$info) {
-                    $this->ui->outputData("Channel \"$channel\" is up-to-date", $command);
-                    continue;
-                }
-                if (!class_exists('PEAR_ChannelFile')) {
-                    require_once 'PEAR/ChannelFile.php';
-                }
-                $channelinfo = new PEAR_ChannelFile;
-                $channelinfo->fromXmlString($info);
-                if ($channelinfo->getErrors()) {
-                    $this->ui->outputData("Downloaded channel data from channel \"$channel\" " . 
-                        'is corrupt, skipping', $command);
-                    continue;
-                }
-                $channel = $channelinfo;
-                if ($channel->getName() != $save) {
-                    $this->ui->outputData('ERROR: Security risk - downloaded channel ' .
-                        'definition file for channel "'
-                        . $channel->getName() . ' from channel "' . $save .
-                        '".  To use anyway, use channel-update', $command);
-                    continue;
-                }
-                $reg->updateChannel($channel, $lastmodified);
-            } else {
-                if ($reg->isAlias($channel)) {
-                    $temp = &$reg->getChannel($channel);
-                    if (PEAR::isError($temp)) {
-                        return $this->raiseError($temp);
-                    }
-                    $temp->setAlias($temp->getName(), true); // set the alias to the channel name
-                    if ($reg->channelExists($temp->getName())) {
-                        $this->ui->outputData('ERROR: existing channel "' . $temp->getName() .
-                            '" is aliased to "' . $channel . '" already and cannot be ' .
-                            're-aliased to "' . $temp->getName() . '" because a channel with ' .
-                            'that name or alias already exists!  Please re-alias and try ' .
-                            'again.', $command);
-                        continue;
-                    }
-                }
-                $this->ui->outputData("Adding new channel \"$channel\"", $command);
-                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-                $contents = $dl->downloadHttp('http://' . $channel . '/channel.xml',
-                    $this->ui, $tmpdir, null, false);
-                PEAR::staticPopErrorHandling();
-                if (PEAR::isError($contents)) {
-                    $this->ui->outputData('ERROR: Cannot retrieve channel.xml for channel "' .
-                        $channel . '"', $command);
-                    continue;
-                }
-                list($contents, $lastmodified) = $contents;
-                $info = implode('', file($contents));
-                if (!class_exists('PEAR_ChannelFile')) {
-                    require_once 'PEAR/ChannelFile.php';
-                }
-                $channelinfo = new PEAR_Channelfile;
-                $channelinfo->fromXmlString($info);
-                if ($channelinfo->getErrors()) {
-                    $this->ui->outputData("Downloaded channel data from channel \"$channel\"" .
-                        ' is corrupt, skipping', $command);
-                    continue;
-                }
-                $channel = $channelinfo;
-                if ($channel->getName() != $save) {
-                    $this->ui->outputData('ERROR: Security risk - downloaded channel ' .
-                        'definition file for channel "'
-                        . $channel->getName() . '" from channel "' . $save .
-                        '".  To use anyway, use channel-update', $command);
-                    continue;
-                }
-                $reg->addChannel($channel, $lastmodified);
             }
         }
-        $this->config->set('default_channel', $savechannel);
-        $this->ui->outputData('update-channels complete', $command);
-        return true;
+        return $success;
     }
     
     function doInfo($command, $options, $params)
@@ -611,7 +499,7 @@ Initialize a Channel from its server and creates the local channel.xml.
             if (PEAR::isError($c)) {
                 return $this->raiseError($c);
             }
-            $this->ui->outputData('Retrieving channel.xml from remote server');
+            $this->ui->outputData("Updating channel \"$params[0]\"", $command);
             $dl = &$this->getDownloader(array());
             // if force is specified, use a timestamp of "1" to force retrieval
             $lastmodified = isset($options['force']) ? false : $c->lastModified();
@@ -625,7 +513,7 @@ Initialize a Channel from its server and creates the local channel.xml.
             }
             list($contents, $lastmodified) = $contents;
             if (!$contents) {
-                $this->ui->outputData("Channel $params[0] channel.xml is up to date");
+                $this->ui->outputData("Channel \"$params[0]\" is up to date");
                 return;
             }
             $contents = implode('', file($contents));
