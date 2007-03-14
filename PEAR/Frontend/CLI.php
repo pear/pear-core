@@ -672,6 +672,10 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 $this->_endTable();
                 break;
             case 'list-all':
+                if (!isset($data['data'])) {
+                      $this->_displayLine('No packages in channel');
+                      break;
+                }
                 $this->_startTable($data);
                 if (isset($data['headline']) && is_array($data['headline'])) {
                     $this->_tableRow($data['headline'], array('bold' => true), array(1 => array('wrap' => 55)));
