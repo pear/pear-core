@@ -58,12 +58,11 @@ class PEAR_RunTest
         'safe_mode=0',
         'disable_functions=',
         'output_buffering=Off',
-        'error_reporting=E_ALL',
         'display_errors=1',
         'log_errors=0',
         'html_errors=0',
         'track_errors=1',
-        'report_memleaks=1',
+        'report_memleaks=0',
         'report_zend_debug=0',
         'docref_root=',
         'docref_ext=.html',
@@ -81,6 +80,7 @@ class PEAR_RunTest
      */
     function PEAR_RunTest($logger = null, $options = array())
     {
+        $this->ini_overwrites[] = 'error_reporting=' . E_ALL;
         if (is_null($logger)) {
             require_once 'PEAR/Common.php';
             $logger = new PEAR_Common;

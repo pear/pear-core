@@ -83,7 +83,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>PHP License</license>
   <state>stable</state>
   <notes>
-  * fix Bug #10367: E_WARNING on list-all for empty channel
+  * fix Bug #10286: No output on failed tests [cellog]
+  * fix Bug #10367: E_WARNING on list-all for empty channel [timj]
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
