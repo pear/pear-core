@@ -63,7 +63,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <name>Tim Jackson</name>
   <user>timj</user>
   <email>timj@php.net</email>
-  <active>no</active>
+  <active>yes</active>
  </helper>
  <helper>
   <name>Bertrand Gugger</name>
