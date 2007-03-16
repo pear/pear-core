@@ -144,6 +144,7 @@ class PEAR_RemoteInstaller extends PEAR_Installer
                 if (!$role->isInstallable()) {
                     continue; // this shouldn't happen
                 }
+                $tmp_path = ''; // unused
                 list($save_destdir, $dest_dir, $dest_file, $orig_file) =
                     $role->processInstallation($pkg, $atts, $file, $tmp_path, 'ftp');
                 $dest_file = str_replace(DIRECTORY_SEPARATOR, '/', $dest_file);
