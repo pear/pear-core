@@ -30,7 +30,7 @@ remote* commands as if they were local.
  </lead>
  <date>2006-12-15</date>
  <version>
-  <release>0.3.1</release>
+  <release>0.3.2</release>
   <api>0.1.0</api>
  </version>
  <stability>
@@ -39,11 +39,7 @@ remote* commands as if they were local.
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-fix Bug #7881: stream_copy_to_stream function args reversed
-fix bug in uninstall - $atts instead of $atts['attribs']
-fix unclear error message in put()
-up required PEAR Installer dependency to 1.5.0RC1 because of bug
-fixed in that version
+ * fix Bug #9768: notice error raised with remote-uninstall
  </notes>
  <contents>
   <dir name="/">
