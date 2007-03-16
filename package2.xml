@@ -89,6 +89,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
   * fix Bug #10286: No output on failed tests [cellog]
+  * fix Bug #10358: placeholders not replaced in PackageFile validator [cellog]
   * fix Bug #10367: E_WARNING on list-all for empty channel [timj]
  </notes>
  <contents>

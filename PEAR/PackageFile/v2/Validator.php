@@ -1625,13 +1625,13 @@ class PEAR_PackageFile_v2_Validator
     function _usesroletaskMustHaveChannelOrUri($role, $tag)
     {
         $this->_stack->push(__FUNCTION__, 'error', array('role' => $role, 'tag' => $tag),
-            '<%tag%> must contain either <uri>, or <channel> and <package>');
+            '<%tag%> for role "%role%" must contain either <uri>, or <channel> and <package>');
     }
 
     function _usesroletaskMustHavePackage($role, $tag)
     {
         $this->_stack->push(__FUNCTION__, 'error', array('role' => $role, 'tag' => $tag),
-            '<%tag%> must contain <package>');
+            '<%tag%> for role "%role%" must contain <package>');
     }
 
     function _usesroletaskMustHaveRoleTask($tag, $type)
@@ -1648,7 +1648,7 @@ class PEAR_PackageFile_v2_Validator
 
     function _invalidDepGroupName($name)
     {
-        $this->_stack->push(__FUNCTION__, 'error', array('group' => $name),
+        $this->_stack->push(__FUNCTION__, 'error', array('name' => $name),
             'Invalid dependency group name "%name%"');
     }
 
