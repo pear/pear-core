@@ -1683,8 +1683,9 @@ class PEAR_PackageFile_v2_Validator
             return false;
         }
         $dir_prefix = dirname($this->_pf->_packageFile);
+        $common = new PEAR_Common;
         $log = isset($this->_pf->_logger) ? array(&$this->_pf->_logger, 'log') :
-            array('PEAR_Common', 'log');
+            array($common, 'log');
         $info = $this->_pf->getContents();
         $info = $info['bundledpackage'];
         if (!is_array($info)) {

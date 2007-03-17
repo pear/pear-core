@@ -86,6 +86,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #10286: No output on failed tests [cellog]
   * fix Bug #10358: placeholders not replaced in PackageFile validator [cellog]
   * fix Bug #10367: E_WARNING on list-all for empty channel [timj]
+  * fix Bug #10400: Fatal Error when creating a bundled package with PFM2 [berdir]
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
