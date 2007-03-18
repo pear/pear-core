@@ -637,9 +637,12 @@ installed package.'
         }
         $info['Release Notes'] = $obj->getNotes();
         if ($compat = $obj->getCompatible()) {
+            if (!isset($compat[0])) {
+                $compat = array($compat);
+            }
             $info['Compatible with'] = '';
             foreach ($compat as $package) {
-                $info['Compatible with'] .= $package['channel'] . '/' . $package['package'] .
+                $info['Compatible with'] .= $package['channel'] . '/' . $package['name'] .
                     "\nVersions >= " . $package['min'] . ', <= ' . $package['max'];
                 if (isset($package['exclude'])) {
                     if (is_array($package['exclude'])) {
@@ -651,7 +654,7 @@ installed package.'
                         $info['Not Compatible with'] .= "\n";
                     }
                     $info['Not Compatible with'] .= $package['channel'] . '/' .
-                        $package['package'] . "\nVersions " . $package['exclude'];
+                        $package['name'] . "\nVersions " . $package['exclude'];
                 }
             }
         }
