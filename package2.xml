@@ -558,8 +558,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #10109: on failed upgrade, .bak files everywhere
   * fix Bug #10113 proc_get_status() is php5
   * fix Bug #10130: Console_Getopt 1.2.2 not upgraded, even though it is compatible
-  </release>
-  <release>
+  </notes>
+ </release>
+ <release>
    <version>
     <release>1.5.0</release>
     <api>1.5.0</api>
