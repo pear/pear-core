@@ -402,6 +402,7 @@ class PEAR_Downloader extends PEAR_Common
         if (isset($this->_options['pretend'])) {
             return $params;
         }
+        $somefailed = false;
         foreach ($params as $i => $package) {
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $pf = &$params[$i]->download();
@@ -414,12 +415,24 @@ class PEAR_Downloader extends PEAR_Common
                             true) .
                         '"');
                 }
+                $somefailed = true;
                 continue;
             }
             $newparams[] = &$params[$i];
             $ret[] = array('file' => $pf->getArchiveFile(),
                                    'info' => &$pf,
                                    'pkg' => $pf->getPackage());
+        }
+        if ($somefailed) {
+            // remove params that did not download successfully
+            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+            $err = $this->analyzeDependencies($newparams, true);
+            PEAR::popErrorHandling();
+            if (!count($newparams)) {
+                $this->pushError('Download failed', PEAR_INSTALLER_FAILED);
+                $a = array();
+                return $a;
+            }
         }
         $this->_downloadedPackages = $ret;
         return $newparams;
@@ -428,7 +441,7 @@ class PEAR_Downloader extends PEAR_Common
     /**
      * @param array all packages to be installed
      */
-    function analyzeDependencies(&$params)
+    function analyzeDependencies(&$params, $force = false)
     {
         $hasfailed = $failed = false;
         if (isset($this->_options['downloadonly'])) {
@@ -464,7 +477,7 @@ class PEAR_Downloader extends PEAR_Common
                     }
                     continue;
                 }
-                if (!$reset && $param->alreadyValidated()) {
+                if (!$reset && $param->alreadyValidated() && !$force) {
                     continue;
                 }
                 if (count($deps)) {
