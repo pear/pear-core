@@ -879,7 +879,11 @@ class PEAR_Dependency2
             }
             if (isset($badpackages[$memyselfandI]['errors'])) {
                 foreach ($badpackages[$memyselfandI]['errors'] as $error) {
-                    $dl->log(0, $error->getMessage());
+                    if (is_array($error)) {
+                        $dl->log(0, $error[0]);
+                    } else {
+                        $dl->log(0, $error->getMessage());
+                    }
                 }
                 if (isset($this->_options['nodeps']) || isset($this->_options['force'])) {
                     return $this->warning(
@@ -1019,7 +1023,11 @@ class PEAR_Dependency2
             }
             if (isset($badpackages[$memyselfandI]['errors'])) {
                 foreach ($badpackages[$memyselfandI]['errors'] as $error) {
-                    $dl->log(0, $error->getMessage());
+                    if (is_array($error)) {
+                        $dl->log(0, $error[0]);
+                    } else {
+                        $dl->log(0, $error->getMessage());
+                    }
                 }
                 if (isset($this->_options['nodeps']) || isset($this->_options['force'])) {
                     return $this->warning(
