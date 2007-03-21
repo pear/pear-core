@@ -325,8 +325,13 @@ class PEAR_REST_10
             break;
         }
         if (isset($pinfo['dc']) && isset($pinfo['dp'])) {
-            $deprecated = array('channel' => (string) $pinfo['dc'],
-                                'package' => trim($pinfo['dp']['_content']));
+            if (is_array($pinfo['dp'])) {
+                $deprecated = array('channel' => (string) $pinfo['dc'],
+                                    'package' => trim($pinfo['dp']['_content']));
+            } else {
+                $deprecated = array('channel' => (string) $pinfo['dc'],
+                                    'package' => trim($pinfo['dp']));
+            }
         } else {
             $deprecated = false;
         }
@@ -642,8 +647,13 @@ class PEAR_REST_10
         }
         PEAR::popErrorHandling();
         if (isset($pinfo['dc']) && isset($pinfo['dp'])) {
-            $deprecated = array('channel' => (string) $pinfo['dc'],
-                                'package' => trim($pinfo['dp']['_content']));
+            if (is_array($pinfo['dp'])) {
+                $deprecated = array('channel' => (string) $pinfo['dc'],
+                                    'package' => trim($pinfo['dp']['_content']));
+            } else {
+                $deprecated = array('channel' => (string) $pinfo['dc'],
+                                    'package' => trim($pinfo['dp']));
+            }
         } else {
             $deprecated = false;
         }
