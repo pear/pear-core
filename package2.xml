@@ -36,7 +36,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   to the latest version, or PEAR will not upgrade properly
  </description>
  <lead>
-  <name>Greg Beaver</name>
+  <name>Gregory Beaver</name>
   <user>cellog</user>
   <email>cellog@php.net</email>
   <active>yes</active>
