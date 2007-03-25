@@ -1420,6 +1420,7 @@ class PEAR_Downloader_Package
                 $this->_downloader->popErrorHandling();
                 return $dir;
             }
+            $this->_downloader->log(3, 'Downloading "' . $param . '"');
             $file = $this->_downloader->downloadHttp($param, $this->_downloader->ui,
                 $dir, $callback);
             $this->_downloader->popErrorHandling();
