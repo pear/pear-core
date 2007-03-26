@@ -489,8 +489,8 @@ class PEAR_RunTest
             $return_value = $out[0];
             $out = $out[1];
         }
-        if (isset($tmp_post) && realpath($tmp_post)) {
-            unlink(realpath($tmp_post));
+        if (isset($tmp_post) && realpath($tmp_post) && file_exists($tmp_post)) {
+            @unlink(realpath($tmp_post));
         }
         chdir($savedir);
 
