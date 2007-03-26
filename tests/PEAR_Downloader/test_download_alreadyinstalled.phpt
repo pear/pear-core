@@ -123,6 +123,10 @@ $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
   array (
+    0 => 3,
+    1 => 'Downloading "http://www.example.com/test-1.0.tgz"',
+  ),
+  array (
     0 => 1,
     1 => 'downloading test-1.0.tgz ...',
   ),

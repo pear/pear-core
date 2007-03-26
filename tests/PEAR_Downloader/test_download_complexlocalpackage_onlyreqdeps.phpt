@@ -248,6 +248,10 @@ $phpunit->assertEquals(array (
     1 => 'pear/Bar can optionally use package "pear/Foobar"',
   ),
   array (
+    0 => 3,
+    1 => 'Downloading "http://www.example.com/Bar-1.5.1.tgz"',
+  ),
+  array (
     0 => 1,
     1 => 'downloading Bar-1.5.1.tgz ...',
   ),

@@ -387,6 +387,10 @@ $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(6, count($dlpackages), 'downloaded packages count');
 $phpunit->assertEquals(array (
   array (
+    0 => 3,
+    1 => 'Downloading "http://pear.php.net/get/pkg1-1.1.tgz"',
+  ),
+  array (
     0 => 1,
     1 => 'downloading pkg1-1.1.tgz ...',
   ),
@@ -403,6 +407,10 @@ $phpunit->assertEquals(array (
     1 => '...done: 700 bytes',
   ),
   array (
+    0 => 3,
+    1 => 'Downloading "http://pear.php.net/get/pkg2-1.1.tgz"',
+  ),
+  array (
     0 => 1,
     1 => 'downloading pkg2-1.1.tgz ...',
   ),
@@ -413,6 +421,10 @@ $phpunit->assertEquals(array (
   array (
     0 => 1,
     1 => '...done: 704 bytes',
+  ),
+  array (
+    0 => 3,
+    1 => 'Downloading "http://pear.php.net/get/pkg3-1.1.tgz"',
   ),
   array (
     0 => 1,
@@ -427,6 +439,10 @@ $phpunit->assertEquals(array (
     1 => '...done: 714 bytes',
   ),
   array (
+    0 => 3,
+    1 => 'Downloading "http://pear.php.net/get/pkg4-1.1.tgz"',
+  ),
+  array (
     0 => 1,
     1 => 'downloading pkg4-1.1.tgz ...',
   ),
@@ -439,6 +455,10 @@ $phpunit->assertEquals(array (
     1 => '...done: 702 bytes',
   ),
   array (
+    0 => 3,
+    1 => 'Downloading "http://pear.php.net/get/pkg5-1.1.tgz"',
+  ),
+  array (
     0 => 1,
     1 => 'downloading pkg5-1.1.tgz ...',
   ),
@@ -449,6 +469,10 @@ $phpunit->assertEquals(array (
   array (
     0 => 1,
     1 => '...done: 706 bytes',
+  ),
+  array (
+    0 => 3,
+    1 => 'Downloading "http://pear.php.net/get/pkg6-1.1.tgz"',
   ),
   array (
     0 => 1,

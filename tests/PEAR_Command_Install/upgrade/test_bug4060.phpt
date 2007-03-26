@@ -2930,18 +2930,18 @@ if (OS_WINDOWS) {
   ),
   1 => 
   array (
-    0 => 1,
-    1 => 'downloading Auth_HTTP-2.1.6RC1.tgz ...',
+    0 => 3,
+    1 => 'Downloading "http://pear.php.net/get/Auth_HTTP-2.1.6RC1.tgz"',
   ),
   2 => 
   array (
     0 => 1,
-    1 => 'Starting to download Auth_HTTP-2.1.6RC1.tgz (9,294 bytes)',
+    1 => 'downloading Auth_HTTP-2.1.6RC1.tgz ...',
   ),
   3 => 
   array (
     0 => 1,
-    1 => '.',
+    1 => 'Starting to download Auth_HTTP-2.1.6RC1.tgz (9,294 bytes)',
   ),
   4 => 
   array (
@@ -2951,409 +2951,414 @@ if (OS_WINDOWS) {
   5 => 
   array (
     0 => 1,
-    1 => '...done: 9,294 bytes',
+    1 => '.',
   ),
   6 => 
   array (
-    0 => 3,
-    1 => 'adding to transaction: backup ' . $temp_path . '/php/Auth/HTTP.php',
+    0 => 1,
+    1 => '...done: 9,294 bytes',
   ),
   7 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/php/Auth/HTTP.php',
+    1 => 'adding to transaction: backup ' . $temp_path . '/php/Auth/HTTP.php',
   ),
   8 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: backup ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql',
+    1 => 'adding to transaction: delete ' . $temp_path . '/php/Auth/HTTP.php',
   ),
   9 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql',
+    1 => 'adding to transaction: backup ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql',
   ),
   10 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: backup ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql',
   ),
   11 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php',
+    1 => 'adding to transaction: backup ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php',
   ),
   12 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: backup ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php',
   ),
   13 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php',
+    1 => 'adding to transaction: backup ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php',
   ),
   14 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: backup ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php',
   ),
   15 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php',
+    1 => 'adding to transaction: backup ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php',
   ),
   16 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: backup ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php',
+    1 => 'adding to transaction: delete ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php',
   ),
   17 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: delete ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php',
+    1 => 'adding to transaction: backup ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php',
   ),
   18 => 
   array (
     0 => 3,
-    1 => '+ cp ' . $dl->getDownloadDir() . '/Auth_HTTP-2.1.6RC1/tests/sample.sql ' . $temp_path . '/test/Auth_HTTP/tests/.tmpsample.sql',
+    1 => 'adding to transaction: delete ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php',
   ),
   19 => 
+  array (
+    0 => 3,
+    1 => '+ cp ' . $temp_path . '/tmp/Auth_HTTP-2.1.6RC1/tests/sample.sql ' . $temp_path . '/test/Auth_HTTP/tests/.tmpsample.sql',
+  ),
+  20 => 
   array (
     0 => 2,
     1 => 'md5sum ok: ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql',
   ),
-  20 => 
+  21 => 
   array (
     0 => 3,
     1 => 'adding to transaction: chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmpsample.sql',
   ),
-  21 => 
+  22 => 
   array (
     0 => 3,
     1 => 'adding to transaction: rename ' . $temp_path . '/test/Auth_HTTP/tests/.tmpsample.sql ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql ',
   ),
-  22 => 
+  23 => 
   array (
     0 => 3,
     1 => 'adding to transaction: installed_as tests/sample.sql ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql ' . $temp_path . '/test/Auth_HTTP /tests',
   ),
-  23 => 
+  24 => 
   array (
     0 => 3,
-    1 => '+ cp ' . $dl->getDownloadDir() . '/Auth_HTTP-2.1.6RC1/tests/test_basic_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_basic_simple.php',
+    1 => '+ cp ' . $temp_path . '/tmp/Auth_HTTP-2.1.6RC1/tests/test_basic_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_basic_simple.php',
   ),
-  24 => 
+  25 => 
   array (
     0 => 2,
     1 => 'md5sum ok: ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php',
   ),
-  25 => 
+  26 => 
   array (
     0 => 3,
     1 => 'adding to transaction: chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_basic_simple.php',
   ),
-  26 => 
+  27 => 
   array (
     0 => 3,
     1 => 'adding to transaction: rename ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_basic_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php ',
   ),
-  27 => 
+  28 => 
   array (
     0 => 3,
     1 => 'adding to transaction: installed_as tests/test_basic_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php ' . $temp_path . '/test/Auth_HTTP /tests',
   ),
-  28 => 
+  29 => 
   array (
     0 => 3,
-    1 => '+ cp ' . $dl->getDownloadDir() . '/Auth_HTTP-2.1.6RC1/tests/test_digest_get.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_get.php',
+    1 => '+ cp ' . $temp_path . '/tmp/Auth_HTTP-2.1.6RC1/tests/test_digest_get.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_get.php',
   ),
-  29 => 
+  30 => 
   array (
     0 => 2,
     1 => 'md5sum ok: ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php',
   ),
-  30 => 
+  31 => 
   array (
     0 => 3,
     1 => 'adding to transaction: chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_get.php',
   ),
-  31 => 
+  32 => 
   array (
     0 => 3,
     1 => 'adding to transaction: rename ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_get.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php ',
   ),
-  32 => 
+  33 => 
   array (
     0 => 3,
     1 => 'adding to transaction: installed_as tests/test_digest_get.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php ' . $temp_path . '/test/Auth_HTTP /tests',
   ),
-  33 => 
+  34 => 
   array (
     0 => 3,
-    1 => '+ cp ' . $dl->getDownloadDir() . '/Auth_HTTP-2.1.6RC1/tests/test_digest_post.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_post.php',
+    1 => '+ cp ' . $temp_path . '/tmp/Auth_HTTP-2.1.6RC1/tests/test_digest_post.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_post.php',
   ),
-  34 => 
+  35 => 
   array (
     0 => 2,
     1 => 'md5sum ok: ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php',
   ),
-  35 => 
+  36 => 
   array (
     0 => 3,
     1 => 'adding to transaction: chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_post.php',
   ),
-  36 => 
+  37 => 
   array (
     0 => 3,
     1 => 'adding to transaction: rename ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_post.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php ',
   ),
-  37 => 
+  38 => 
   array (
     0 => 3,
     1 => 'adding to transaction: installed_as tests/test_digest_post.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php ' . $temp_path . '/test/Auth_HTTP /tests',
   ),
-  38 => 
+  39 => 
   array (
     0 => 3,
-    1 => '+ cp ' . $dl->getDownloadDir() . '/Auth_HTTP-2.1.6RC1/tests/test_digest_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_simple.php',
+    1 => '+ cp ' . $temp_path . '/tmp/Auth_HTTP-2.1.6RC1/tests/test_digest_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_simple.php',
   ),
-  39 => 
+  40 => 
   array (
     0 => 2,
     1 => 'md5sum ok: ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php',
   ),
-  40 => 
+  41 => 
   array (
     0 => 3,
     1 => 'adding to transaction: chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_simple.php',
   ),
-  41 => 
+  42 => 
   array (
     0 => 3,
     1 => 'adding to transaction: rename ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php ',
   ),
-  42 => 
+  43 => 
   array (
     0 => 3,
     1 => 'adding to transaction: installed_as tests/test_digest_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php ' . $temp_path . '/test/Auth_HTTP /tests',
   ),
-  43 => 
+  44 => 
   array (
     0 => 3,
-    1 => '+ cp ' . $dl->getDownloadDir() . '/Auth_HTTP-2.1.6RC1/Auth_HTTP.php ' . $temp_path . '/php/Auth/.tmpHTTP.php',
+    1 => '+ cp ' . $temp_path . '/tmp/Auth_HTTP-2.1.6RC1/Auth_HTTP.php ' . $temp_path . '/php/Auth/.tmpHTTP.php',
   ),
-  44 => 
+  45 => 
   array (
     0 => 2,
     1 => 'md5sum ok: ' . $temp_path . '/php/Auth/HTTP.php',
   ),
-  45 => 
+  46 => 
   array (
     0 => 3,
     1 => 'adding to transaction: chmod 644 ' . $temp_path . '/php/Auth/.tmpHTTP.php',
   ),
-  46 => 
+  47 => 
   array (
     0 => 3,
     1 => 'adding to transaction: rename ' . $temp_path . '/php/Auth/.tmpHTTP.php ' . $temp_path . '/php/Auth/HTTP.php ',
   ),
-  47 => 
+  48 => 
   array (
     0 => 3,
     1 => 'adding to transaction: installed_as Auth_HTTP.php ' . $temp_path . '/php/Auth/HTTP.php ' . $temp_path . '/php /Auth',
   ),
-  48 => 
+  49 => 
   array (
     0 => 3,
     1 => 'adding to transaction: removebackup ' . $temp_path . '/php/Auth/HTTP.php',
   ),
-  49 => 
+  50 => 
   array (
     0 => 3,
     1 => 'adding to transaction: removebackup ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql',
   ),
-  50 => 
+  51 => 
   array (
     0 => 3,
     1 => 'adding to transaction: removebackup ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php',
   ),
-  51 => 
+  52 => 
   array (
     0 => 3,
     1 => 'adding to transaction: removebackup ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php',
   ),
-  52 => 
+  53 => 
   array (
     0 => 3,
     1 => 'adding to transaction: removebackup ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php',
   ),
-  53 => 
+  54 => 
   array (
     0 => 3,
     1 => 'adding to transaction: removebackup ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php',
   ),
-  54 => 
+  55 => 
   array (
     0 => 2,
     1 => 'about to commit 36 file operations',
   ),
-  55 => 
+  56 => 
   array (
     0 => 3,
     1 => '+ backup ' . $temp_path . '/php/Auth/HTTP.php to ' . $temp_path . '/php/Auth/HTTP.php.bak',
   ),
-  56 => 
+  57 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '/php/Auth/HTTP.php',
   ),
-  57 => 
+  58 => 
   array (
     0 => 3,
     1 => '+ backup ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql to ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql.bak',
   ),
-  58 => 
+  59 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql',
   ),
-  59 => 
+  60 => 
   array (
     0 => 3,
     1 => '+ backup ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php to ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php.bak',
   ),
-  60 => 
+  61 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php',
   ),
-  61 => 
+  62 => 
   array (
     0 => 3,
     1 => '+ backup ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php to ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php.bak',
   ),
-  62 => 
+  63 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php',
   ),
-  63 => 
+  64 => 
   array (
     0 => 3,
     1 => '+ backup ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php to ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php.bak',
   ),
-  64 => 
+  65 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php',
   ),
-  65 => 
+  66 => 
   array (
     0 => 3,
     1 => '+ backup ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php to ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php.bak',
   ),
-  66 => 
+  67 => 
   array (
     0 => 3,
     1 => '+ rm ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php',
   ),
-  67 => 
+  68 => 
   array (
     0 => 3,
     1 => '+ chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmpsample.sql',
   ),
-  68 => 
+  69 => 
   array (
     0 => 3,
     1 => '+ mv ' . $temp_path . '/test/Auth_HTTP/tests/.tmpsample.sql ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql',
   ),
-  69 => 
+  70 => 
   array (
     0 => 3,
     1 => '+ chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_basic_simple.php',
   ),
-  70 => 
+  71 => 
   array (
     0 => 3,
     1 => '+ mv ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_basic_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php',
   ),
-  71 => 
+  72 => 
   array (
     0 => 3,
     1 => '+ chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_get.php',
   ),
-  72 => 
+  73 => 
   array (
     0 => 3,
     1 => '+ mv ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_get.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php',
   ),
-  73 => 
+  74 => 
   array (
     0 => 3,
     1 => '+ chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_post.php',
   ),
-  74 => 
+  75 => 
   array (
     0 => 3,
     1 => '+ mv ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_post.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php',
   ),
-  75 => 
+  76 => 
   array (
     0 => 3,
     1 => '+ chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_simple.php',
   ),
-  76 => 
+  77 => 
   array (
     0 => 3,
     1 => '+ mv ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php',
   ),
-  77 => 
+  78 => 
   array (
     0 => 3,
     1 => '+ chmod 644 ' . $temp_path . '/php/Auth/.tmpHTTP.php',
   ),
-  78 => 
+  79 => 
   array (
     0 => 3,
     1 => '+ mv ' . $temp_path . '/php/Auth/.tmpHTTP.php ' . $temp_path . '/php/Auth/HTTP.php',
   ),
-  79 => 
+  80 => 
   array (
     0 => 3,
     1 => '+ rm backup of ' . $temp_path . '/php/Auth/HTTP.php (' . $temp_path . '/php/Auth/HTTP.php.bak)',
   ),
-  80 => 
+  81 => 
   array (
     0 => 3,
     1 => '+ rm backup of ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql (' . $temp_path . '/test/Auth_HTTP/tests/sample.sql.bak)',
   ),
-  81 => 
+  82 => 
   array (
     0 => 3,
     1 => '+ rm backup of ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php (' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php.bak)',
   ),
-  82 => 
+  83 => 
   array (
     0 => 3,
     1 => '+ rm backup of ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php (' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php.bak)',
   ),
-  83 => 
+  84 => 
   array (
     0 => 3,
     1 => '+ rm backup of ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php (' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php.bak)',
   ),
-  84 => 
+  85 => 
   array (
     0 => 3,
     1 => '+ rm backup of ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php (' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php.bak)',
   ),
-  85 => 
+  86 => 
   array (
     0 => 2,
     1 => 'successfully committed 36 file operations',
   ),
-  86 => 
+  87 => 
   array (
     'info' => 
     array (
@@ -3361,8 +3366,7 @@ if (OS_WINDOWS) {
     ),
     'cmd' => 'upgrade',
   ),
-)
-, $fakelog->getLog(), 'log messages');
+), $fakelog->getLog(), 'log messages');
 }
 echo 'tests done';
 ?>

@@ -23,6 +23,10 @@ $phpunit->assertErrors(array(
 ), 'expected errors');
 $phpunit->assertEquals(array (
   array (
+    0 => 3,
+    1 => 'Downloading "http://www.example.com/test-1.1.tgz"',
+  ),
+  array (
     0 => 0,
     1 => 'Could not download from "http://www.example.com/test-1.1.tgz" (File http://www.example.com:80/test-1.1.tgz not valid (received: HTTP/1.1 404 http://www.example.com/test-1.1.tgz Is not valid))',
   ),
@@ -46,33 +50,31 @@ $phpunit->assertErrors(array(
           'message' => 'Invalid or missing remote package file'),
 ), 'expected errors');
 $phpunit->assertEquals(array (
-  0 => 
+  array (
+    0 => 3,
+    1 => 'Downloading "http://www.example.com/test-1.0.tgz"',
+  ),
   array (
     0 => 1,
     1 => 'downloading test-1.0.tgz ...',
   ),
-  1 =>
   array (
     0 => 1,
     1 => 'Starting to download test-1.0.tgz (213 bytes)',
   ),
-  2 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  3 =>
   array (
     0 => 1,
     1 => '...done: 213 bytes',
   ),
-  4 =>
   array (
     0 => 0,
     1 => 'could not extract the package.xml file from "' . $dp->_downloader->getDownloadDir() .
         DIRECTORY_SEPARATOR . 'test-1.0.tgz"',
   ),
-  5 =>
   array (
     0 => 0,
     1 => 'Download of "http://www.example.com/test-1.0.tgz" succeeded, but it is not a valid package archive',

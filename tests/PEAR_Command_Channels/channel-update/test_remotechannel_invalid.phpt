@@ -23,8 +23,8 @@ $phpunit->assertErrors(array(
 $phpunit->assertEquals(array (
   0 =>
   array (
-    'info' => 'Retrieving channel.xml from remote server',
-    'cmd' => 'no command',
+    'info' => 'Updating channel "pear.php.net"',
+    'cmd' => 'channel-update',
   ),
 ), $fakelog->getLog(), 'log');
 
@@ -43,8 +43,8 @@ $phpunit->assertErrors(array(
 $phpunit->assertEquals(array (
   0 =>
   array (
-    'info' => 'Retrieving channel.xml from remote server',
-    'cmd' => 'no command',
+    'info' => 'Updating channel "pear.php.net"',
+    'cmd' => 'channel-update',
   ),
   1 =>
   array (
