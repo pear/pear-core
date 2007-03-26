@@ -83,6 +83,10 @@ $result = PEAR_Downloader_Package::mergeDependencies($params);
 $phpunit->assertNoErrors('after merge 1');
 $phpunit->assertEquals(array (
   array (
+    0 => 3,
+    1 => 'Downloading "http://www.example.com/foo-1.0.tgz"',
+  ),
+  array (
     0 => 1,
     1 => 'downloading foo-1.0.tgz ...',
   ),

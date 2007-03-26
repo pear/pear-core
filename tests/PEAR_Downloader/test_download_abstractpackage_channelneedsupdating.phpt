@@ -90,6 +90,10 @@ $phpunit->assertEquals(array (
     1 => 'WARNING: channel "pear.php.net" has updated its protocols, use "channel-update pear.php.net" to update',
   ),
   array (
+    0 => 3,
+    1 => 'Downloading "http://www.example.com/test-1.0.tgz"',
+  ),
+  array (
     0 => 1,
     1 => 'downloading test-1.0.tgz ...',
   ),

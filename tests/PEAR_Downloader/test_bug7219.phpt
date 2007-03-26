@@ -257,6 +257,10 @@ $phpunit->assertEquals(array (
     1 => 'pear/XML_Parser: Skipping required dependency "pear/PEAR" version 1.4.8, already installed as version 1.4.8',
   ),
   array (
+    0 => 3,
+    1 => 'Downloading "http://pear.php.net/get/XML_Parser-1.2.7.tgz"',
+  ),
+  array (
     0 => 1,
     1 => 'downloading XML_Parser-1.2.7.tgz ...',
   ),

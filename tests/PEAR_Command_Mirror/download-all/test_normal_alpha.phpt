@@ -439,47 +439,46 @@ $phpunit->assertEquals(array (
     'info' => 'Gathering release information, please wait...',
     'cmd' => 'no command',
   ),
-  3 => 
+  array (
+    0 => 3,
+    1 => 'Downloading "http://pear.php.net/get/APC-1.4.0a1.tgz"',
+  ),
   array (
     0 => 1,
     1 => 'downloading APC-1.4.0a1.tgz ...',
   ),
-  4 => 
   array (
     0 => 1,
     1 => 'Starting to download APC-1.4.0a1.tgz (513 bytes)',
   ),
-  5 => 
   array (
     0 => 1,
     1 => '.',
   ),
-  6 => 
   array (
     0 => 1,
     1 => '...done: 513 bytes',
   ),
-  7 => 
+  array (
+    0 => 3,
+    1 => 'Downloading "http://pear.php.net/get/Archive_Tar-1.5.0a1.tgz"',
+  ),
   array (
     0 => 1,
     1 => 'downloading Archive_Tar-1.5.0a1.tgz ...',
   ),
-  8 => 
   array (
     0 => 1,
     1 => 'Starting to download Archive_Tar-1.5.0a1.tgz (686 bytes)',
   ),
-  9 => 
   array (
     0 => 1,
     1 => '...done: 686 bytes',
   ),
-  10 => 
   array (
     'info' => 'File ' . $temp_path . DIRECTORY_SEPARATOR . 'APC-1.4.0a1.tgz downloaded',
     'cmd' => 'download',
   ),
-  11 => 
   array (
     'info' => 'File ' . $temp_path . DIRECTORY_SEPARATOR . 'Archive_Tar-1.5.0a1.tgz downloaded',
     'cmd' => 'download',

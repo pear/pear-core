@@ -12,6 +12,10 @@ error_reporting(E_ALL);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $reg = &$config->getRegistry();
 $c = &$reg->getChannel(strtolower('pear.php.net'));
+$c->setName('zornk.ornk.org');
+$reg->addChannel($c);
+$c->setName('horde.orde.de');
+$reg->addChannel($c);
 $lastmod = $c->lastModified();
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'channel.listAll',
     null,
@@ -32,28 +36,50 @@ $GLOBALS['pearweb']->addHtmlConfig('http://horde.orde.de/channel.xml', $pathtoch
 
 $e = $command->run('update-channels', array(), array());
 $phpunit->assertNoErrors('after');
+$phpunit->showall();
 $phpunit->assertEquals(array (
-  0 =>
+  0 => 
   array (
     'info' => 'Updating channel "pear.php.net"',
+    'cmd' => 'channel-update',
+  ),
+  1 => 
+  array (
+    'info' => 'Update of Channel "pear.php.net" succeeded',
+    'cmd' => 'no command',
+  ),
+  2 => 
+  array (
+    'info' => 'Updating channel "pecl.php.net"',
+    'cmd' => 'channel-update',
+  ),
+  3 => 
+  array (
+    'info' => 'Cannot retrieve channel.xml for channel "pecl.php.net"',
     'cmd' => 'update-channels',
   ),
-  1 =>
+  4 => 
   array (
-    'info' => 'Adding new channel "zornk.ornk.org"',
-    'cmd' => 'update-channels', 
+    'info' => 'Updating channel "zornk.ornk.org"',
+    'cmd' => 'channel-update',
   ),
-  2 =>
+  5 => 
   array (
-    'info' => 'Adding new channel "horde.orde.de"',
-    'cmd' => 'update-channels', 
+    'info' => 'Update of Channel "zornk.ornk.org" succeeded',
+    'cmd' => 'no command',
   ),
-  3 =>
+  6 => 
   array (
-    'info' => 'update-channels complete',
-    'cmd' => 'update-channels',
+    'info' => 'Updating channel "horde.orde.de"',
+    'cmd' => 'channel-update',
   ),
-), $fakelog->getLog(), 'log');
+  7 => 
+  array (
+    'info' => 'Update of Channel "horde.orde.de" succeeded',
+    'cmd' => 'no command',
+  ),
+)
+, $fakelog->getLog(), 'log');
 
 $reg = &new PEAR_Registry($temp_path . DIRECTORY_SEPARATOR . 'php');
 $chan = $reg->getChannel('pear.php.net');

@@ -17,6 +17,10 @@ $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('http://www.example.com/test-1.0.tgz');
 $phpunit->assertEquals(array (
   array (
+    0 => 3,
+    1 => 'Downloading "http://www.example.com/test-1.0.tgz"',
+  ),
+  array (
     0 => 1,
     1 => 'downloading test-1.0.tgz ...',
   ),

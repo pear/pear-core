@@ -16,17 +16,18 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => 'download failed'),
 ), '404');
 $phpunit->assertEquals( array (
-  0 => 
+  array (
+    0 => 3,
+    1 => 'Downloading "http://www.example.com/bloo.tgz"',
+  ),
   array (
     0 => 0,
     1 => 'Could not download from "http://www.example.com/bloo.tgz" (File http://www.example.com:80/bloo.tgz not valid (received: HTTP/1.1 404 http://www.example.com/bloo.tgz Is not valid))',
   ),
-  1 => 
   array (
     0 => 0,
     1 => 'Invalid or missing remote package file',
   ),
-  2 => 
   array (
     'info' => 'Package "http://www.example.com/bloo.tgz" is not valid',
     'cmd' => 'no command',
