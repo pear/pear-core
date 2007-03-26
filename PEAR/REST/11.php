@@ -109,7 +109,7 @@ class PEAR_REST_11
                             }
                         }
                         if (!isset($unstable) && $release['s'] != 'stable') {
-                            $latest = $unstable = $release['v'];
+                            $unstable = $release['v'];
                             $state = $release['s'];
                         }
                         if (isset($latest) && !isset($state)) {
