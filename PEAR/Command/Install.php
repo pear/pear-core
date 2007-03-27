@@ -206,7 +206,7 @@ More than one package may be specified at once.
 '),
         'upgrade-all' => array(
             'summary' => 'Upgrade All Packages',
-            'function' => 'doInstall',
+            'function' => 'doUpgradeAll',
             'shortcut' => 'ua',
             'options' => array(
                 'nodeps' => array(
@@ -524,8 +524,10 @@ Run post-installation scripts in package <package>, if any exist.
         if (empty($this->installer)) {
             $this->installer = &$this->getInstaller($this->ui);
         }
-        if ($command == 'upgrade') {
+        if ($command == 'upgrade' || $command == 'upgrade-all') {
             $options['upgrade'] = true;
+        } else {
+            $packages = $params;
         }
         if (isset($options['installroot']) && isset($options['packagingroot'])) {
             return $this->raiseError('ERROR: cannot use both --installroot and --packagingroot');
@@ -534,67 +536,59 @@ Run post-installation scripts in package <package>, if any exist.
             $this->ui->outputData('using package root: ' . $options['packagingroot']);
         }
         $reg = &$this->config->getRegistry();
-        if ($command == 'upgrade-all') {
-            $options['upgrade'] = true;
-            $reg = &$this->config->getRegistry();
-            $savechannel = $this->config->get('default_channel');
-            $params = array();
-            foreach ($reg->listChannels() as $channel) {
-                if ($channel == '__uri') {
+ 
+        if (isset($options['upgrade'])) {
+            $abstractpackages = array();
+            $otherpackages = array();
+            // parse params
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+            foreach($params as $param) {
+                if (strpos($param, 'http://') === 0) {
+                    $otherpackages[] = $param;
                     continue;
                 }
-                $this->config->set('default_channel', $channel);
-                $chan = &$reg->getChannel($channel);
-                if (PEAR::isError($chan)) {
-                    return $this->raiseError($chan);
-                }
-                if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
-                      $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
-                    $dorest = true;
-                    unset($remote);
+                $e = $reg->parsePackageName($param, $this->config->get('default_channel'));
+                if (PEAR::isError($e)) {
+                    $otherpackages[] = $param;
                 } else {
-                    $dorest = false;
-                    $remote = &$this->config->getRemote($this->config);
-                }
-                $state = $this->config->get('preferred_state');
-                $installed = array_flip($reg->listPackages($channel));
-                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-                if ($dorest) {
-                    $rest = &$this->config->getREST('1.0', array());
-                    $latest = $rest->listLatestUpgrades($base, $state, $installed, $channel, $reg);
-                } else {
-                    if (empty($state) || $state == 'any') {
-                        $latest = $remote->call("package.listLatestReleases");
-                    } else {
-                        $latest = $remote->call("package.listLatestReleases", $state);
-                    }
-                }
-                PEAR::staticPopErrorHandling();
-                if (PEAR::isError($latest) || !is_array($latest)) {
-                    continue;
-                }
-                foreach ($latest as $package => $info) {
-                    $package = strtolower($package);
-                    if (!isset($installed[$package])) {
-                        // skip packages we don't have installed
-                        continue;
-                    }
-                    $inst_version = $reg->packageInfo($package, 'version', $channel);
-                    if (version_compare("$info[version]", "$inst_version", "le")) {
-                        // installed version is up-to-date
-                        continue;
-                    }
-                    $params[] = $a = $reg->parsedPackageNameToString(array('package' => $package,
-                        'channel' => $channel));
-                    $this->ui->outputData(array('data' => "Will upgrade $a"), $command);
+                    $abstractpackages[] = $e;
                 }
             }
-            $this->config->set('default_channel', $savechannel);
+            PEAR::staticPopErrorHandling();
+
+            // if there are any local package .tgz or remote static url, we can't
+            // filter.  The filter only works for abstract packages
+            if (count($abstractpackages) && !isset($options['force'])) {
+                // when not being forced, only do necessary upgrades/installs
+                if (isset($options['upgrade'])) {
+                    $abstractpackages = $this->_filterUptodatePackages($abstractpackages,
+                        $command);
+                } else {
+                    foreach ($abstractpackages as $i => $package) {
+                        if ($reg->packageExists($package['package'], $package['channel'])) {
+                            if ($this->config->get('verbose')) {
+                                $this->ui->outputData('Ignoring installed package ' .
+                                    $reg->parsedPackageNameToString($package, true));
+                            }
+                            unset($abstractpackages[$i]);
+                        }
+                    }
+                }
+                $abstractpackages = 
+                    array_map(array($reg, 'parsedPackageNameToString'), $abstractpackages);
+            }
+
+            $packages = array_merge($abstractpackages, $otherpackages);
         }
+        if (!count($packages)) {
+            $this->ui->outputData('Nothing to ' . $command);
+            return true;
+        }
+
         $this->downloader = &$this->getDownloader($this->ui, $options, $this->config);
         $errors = array();
         $downloaded = array();
-        $downloaded = &$this->downloader->download($params);
+        $downloaded = &$this->downloader->download($packages);
         if (PEAR::isError($downloaded)) {
             return $this->raiseError($downloaded);
         }
@@ -791,6 +785,33 @@ Run post-installation scripts in package <package>, if any exist.
         }
         return true;
     }
+
+    // }}}
+    // {{{ doUpgradeAll()
+
+    function doUpgradeAll($command, $options, $params)
+    {
+        $reg = &$this->config->getRegistry();
+        $toUpgrade = array();
+        foreach ($reg->listChannels() as $channel) {
+            if ($channel == '__uri') {
+                continue;
+            }
+
+            // parse name with channel
+            foreach ($reg->listPackages($channel) as $name) {
+                $toUpgrade[] = $reg->parsedPackageNameToString(array(
+                        'channel' => $channel,
+                        'package' => $name
+                    ));
+            }
+        }
+
+        $err = $this->doInstall('upgrade-all', $options, $toUpgrade);
+        if (PEAR::isError($err)) {
+            $this->ui->outputData($err->getMessage(), $command);
+        }
+   }
 
     // }}}
     // {{{ doUninstall()
@@ -1035,5 +1056,78 @@ Run post-installation scripts in package <package>, if any exist.
         $this->ui->outputData('Install scripts complete', $command);
         return true;
     }
+
+    /**
+     * Given a list of packages, filter out those ones that are already up to date
+     *
+     * @param $packages: packages, in parsed array format !
+     * @return list of packages that can be upgraded
+     */
+    function _filterUptodatePackages($packages, $command)
+    {
+        $reg = &$this->config->getRegistry();
+        $latestReleases = array();
+
+        $ret = array();
+        foreach($packages as $package) {
+            $channel = $package['channel'];
+            $name = $package['package'];
+
+            if (!isset($latestReleases[$channel])) {
+                // fill in cache for this channel
+                $chan = &$reg->getChannel($channel);
+                if (PEAR::isError($chan)) {
+                    return $this->raiseError($chan);
+                }
+                if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
+                      $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
+                    $dorest = true;
+                } else {
+                    $dorest = false;
+                    $remote = &$this->config->getRemote($this->config);
+                }
+                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                if ($dorest) {
+                    $rest = &$this->config->getREST('1.0', array());
+                    $installed = array_flip($reg->listPackages($channel));
+                    $latest = $rest->listLatestUpgrades($base, 
+                        $this->config->get('preferred_state'), $installed,
+                        $channel, $reg);
+                } else {
+                    $latest = $remote->call("package.listLatestReleases",
+                        $this->config->get('preferred_state'));
+                    unset($remote);
+                }
+                PEAR::staticPopErrorHandling();
+                if (PEAR::isError($latest)) {
+                    $this->ui->outputData('Error getting channel info from ' . $channel .
+                        ': ' . $latest->getMessage());
+                    continue;
+                }
+
+                $latestReleases[$channel] = array_change_key_case($latest);
+            }
+
+            // check package for latest release
+            if (isset($latestReleases[$channel][strtolower($name)])) {
+                // if not set, up to date
+                $inst_version = $reg->packageInfo($name, 'version', $channel);
+                $channel_version = $latestReleases[$channel][strtolower($name)]['version'];
+                if (version_compare($channel_version, $inst_version, "le")) {
+                    // installed version is up-to-date
+                    continue;
+                }
+                // maintain BC
+                if ($command == 'upgrade-all') {
+                    $this->ui->outputData(array('data' => 'Will upgrade ' .
+                        $reg->parsedPackageNameToString($package)), $command);
+                }
+                $ret[] = $package;
+            }
+        }
+
+        return $ret;
+    }
+
 }
 ?>
