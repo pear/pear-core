@@ -179,7 +179,59 @@ class PEAR_Frontend extends PEAR
         $GLOBALS['_PEAR_Common_tempfiles'][] = $file;
     }
 
+    /**
+     * Log an action
+     *
+     * @param string $msg the message to log
+     * @param boolean $append_crlf
+     * @return boolean true
+     * @abstract
+     */
     function log($msg, $append_crlf = true)
+    {
+    }
+
+    /**
+     * Run a post-installation script
+     *
+     * @param array $scripts array of post-install scripts
+     * @abstract
+     */
+    function runPostinstallScripts(&$scripts)
+    {
+    }
+
+    /**
+     * Display human-friendly output formatted depending on the
+     * $command parameter.
+     *
+     * This should be able to handle basic output data with no command
+     * @param mixed  $data    data structure containing the information to display
+     * @param string $command command from which this method was called
+     * @abstract
+     */
+    function outputData($data, $command = '_default')
+    {
+    }
+
+    /**
+     * Display a modal form dialog and return the given input
+     *
+     * A frontend that requires multiple requests to retrieve and process
+     * data must take these needs into account, and implement the request
+     * handling code.
+     * @param string $command  command from which this method was called
+     * @param array  $prompts  associative array. keys are the input field names
+     *                         and values are the description
+     * @param array  $types    array of input field types (text, password,
+     *                         etc.) keys have to be the same like in $prompts
+     * @param array  $defaults array of default values. again keys have
+     *                         to be the same like in $prompts.  Do not depend
+     *                         on a default value being set.
+     * @return array input sent by the user
+     * @abstract
+     */
+    function userDialog($command, $prompts, $types = array(), $defaults = array())
     {
     }
 }
