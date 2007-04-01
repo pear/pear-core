@@ -136,8 +136,8 @@ password from your user configuration.',
         $username = trim($username);
         $password = trim($password);
         
-        $this->config->set('username', $username);
-        $this->config->set('password', $password);
+        $this->config->set('username', $username, 'user', $channel);
+        $this->config->set('password', $password, 'user', $channel);
 
         if ($chan->supportsREST()) {
             $ok = true;
