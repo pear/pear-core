@@ -648,6 +648,17 @@ If <channel name> is in the format "<username>:<password>@<channel>" then
             strtolower($params[1]) . '"');
     }
 
+    /**
+     * The channel-discover command
+     *
+     * @param string $command command name
+     * @param array  $options option_name => value
+     * @param array  $params  list of additional parameters.
+     *               $params[0] should contain a string with either:
+     *               - <channel name> or
+     *               - <username>:<password>@<channel name>
+     * @return null|PEAR_Error
+     */
     function doDiscover($command, $options, $params)
     {
         $reg = &$this->config->getRegistry();
@@ -682,6 +693,9 @@ If <channel name> is in the format "<username>:<password>@<channel>" then
         }
         
         // Store username/password if they were given
+        // Arguably we should do a logintest on the channel here, but since
+        // that's awkward on a REST-based channel (even "pear login" doesn't
+        // do it for those), and XML-RPC is deprecated, it's fairly pointless.
         if (isset($username)) {
             $this->config->set('username', $username, 'user', $channel);
             $this->config->set('password', $password, 'user', $channel);
