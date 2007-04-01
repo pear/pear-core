@@ -50,8 +50,9 @@ class PEAR_Command_Auth extends PEAR_Command_Common
             'shortcut' => 'li',
             'function' => 'doLogin',
             'options' => array(),
-            'doc' => '
-Log in to the remote server.  To use remote functions in the installer
+            'doc' => '<channel name> (optional)
+Log in to the remote server.  If <channel name> is not supplied, the
+default channel is used. To use remote functions in the installer
 that require any kind of privileges, you need to log in first.  The
 username and password you enter here will be stored in your per-user
 PEAR configuration (~/.pearrc on Unix-like systems).  After logging
@@ -106,14 +107,21 @@ password from your user configuration.',
     function doLogin($command, $options, $params)
     {
         $reg = &$this->config->getRegistry();
-        $channel = $this->config->get('default_channel');
+        
+        // If a parameter is supplied, use that as the channel to log in to
+        if (isset($params[0])) {
+            $channel = $params[0];
+	    } else {
+            $channel = $this->config->get('default_channel');
+        }
+        
         $chan = $reg->getChannel($channel);
         if (PEAR::isError($chan)) {
             return $this->raiseError($chan);
         }
-        $server = $this->config->get('preferred_mirror');
+        $server = $this->config->get('preferred_mirror', null, $channel);
         $remote = &$this->config->getRemote();
-        $username = $this->config->get('username');
+        $username = $this->config->get('username', null, $channel);
         if (empty($username)) {
             $username = isset($_ENV['USER']) ? $_ENV['USER'] : null;
         }

@@ -97,6 +97,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #10402: Missing versions with remote-list [cellog]
   * fix Bug #10494: Missing abstract methods in Frontend.php [tias]
   * fix Bug #10516: unlinking of files needs extra check [cellog]
+  * fix Bug #9758:  "pear login" should support a channel parameter [timj]
  </notes>
  <contents>
   <dir name="/">
