@@ -136,7 +136,9 @@ alias.
 Initialize a channel from its server and create a local channel.xml.
 If <channel name> is in the format "<username>:<password>@<channel>" then
 <username> and <password> will be set as the login username/password for
-<channel>.
+<channel>. Use caution when passing the username/password in this way, as
+it may allow other users on your computer to briefly view your username/
+password via the system\'s process list.
 '
             ),
         );
