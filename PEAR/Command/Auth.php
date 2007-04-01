@@ -50,9 +50,9 @@ class PEAR_Command_Auth extends PEAR_Command_Common
             'shortcut' => 'li',
             'function' => 'doLogin',
             'options' => array(),
-            'doc' => '<channel name> (optional)
-Log in to the remote server.  If <channel name> is not supplied, the
-default channel is used. To use remote functions in the installer
+            'doc' => '<channel name>
+Log in to a remote channel server.  If <channel name> is not supplied, 
+the default channel is used. To use remote functions in the installer
 that require any kind of privileges, you need to log in first.  The
 username and password you enter here will be stored in your per-user
 PEAR configuration (~/.pearrc on Unix-like systems).  After logging
