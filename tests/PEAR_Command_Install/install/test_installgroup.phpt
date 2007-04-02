@@ -80,7 +80,97 @@ $phpunit->assertTrue($res, 'result');
 $phpunit->showAll();
 $dl = &$command->getDownloader(1, array());
 if (OS_WINDOWS) {
-    $phpunit->assertEquals(array(), $fakelog->getLog(), 'log');
+    $phpunit->assertEquals(array (
+  0 => 
+  array (
+    0 => 1,
+    1 => 'Skipping package "pear/Installed", already installed as version 1.4.0a1',
+  ),
+  1 => 
+  array (
+    0 => 3,
+    1 => 'Downloading "http://pear.php.net/get/Console_Getopt-1.2.tgz"',
+  ),
+  2 => 
+  array (
+    0 => 1,
+    1 => 'downloading Console_Getopt-1.2.tgz ...',
+  ),
+  3 => 
+  array (
+    0 => 1,
+    1 => 'Starting to download Console_Getopt-1.2.tgz (3,370 bytes)',
+  ),
+  4 => 
+  array (
+    0 => 1,
+    1 => '.',
+  ),
+  5 => 
+  array (
+    0 => 1,
+    1 => '...done: 3,370 bytes',
+  ),
+  6 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: mkdir ' . $temp_path . '\\php\\Console',
+  ),
+  7 => 
+  array (
+    0 => 2,
+    1 => '+ create dir ' . $temp_path . '\\php\\Console',
+  ),
+  8 => 
+  array (
+    0 => 3,
+    1 => '+ mkdir ' . $temp_path . '\\php\\Console',
+  ),
+  9 => 
+  array (
+    0 => 3,
+    1 => '+ cp ' . $temp_path . '\\tmp\\Console_Getopt-1.2\\Console\\Getopt.php ' . $temp_path . '\\php\\Console\\.tmpGetopt.php',
+  ),
+  10 => 
+  array (
+    0 => 2,
+    1 => 'md5sum ok: ' . $temp_path . '\\php\\Console\\Getopt.php',
+  ),
+  11 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: rename ' . $temp_path . '\\php\\Console\\.tmpGetopt.php ' . $temp_path . '\\php\\Console\\Getopt.php ',
+  ),
+  12 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: installed_as Console/Getopt.php ' . $temp_path . '\\php\\Console\\Getopt.php ' . $temp_path . '\\php \\Console',
+  ),
+  13 => 
+  array (
+    0 => 2,
+    1 => 'about to commit 3 file operations',
+  ),
+  14 => 
+  array (
+    0 => 3,
+    1 => '+ mv ' . $temp_path . '\\php\\Console\\.tmpGetopt.php ' . $temp_path . '\\php\\Console\\Getopt.php',
+  ),
+  15 => 
+  array (
+    0 => 2,
+    1 => 'successfully committed 3 file operations',
+  ),
+  16 => 
+  array (
+    'info' => 
+    array (
+      'data' => 'install ok: channel://pear.php.net/Console_Getopt-1.2',
+    ),
+    'cmd' => 'install',
+  ),
+)
+, $fakelog->getLog(), 'log');
 } else {
     $phpunit->assertEquals(array (
   array (
