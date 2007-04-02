@@ -537,49 +537,51 @@ Run post-installation scripts in package <package>, if any exist.
         }
         $reg = &$this->config->getRegistry();
  
-        if (isset($options['upgrade'])) {
-            $abstractpackages = array();
-            $otherpackages = array();
-            // parse params
-            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-            foreach($params as $param) {
-                if (strpos($param, 'http://') === 0) {
-                    $otherpackages[] = $param;
-                    continue;
-                }
-                $e = $reg->parsePackageName($param, $this->config->get('default_channel'));
-                if (PEAR::isError($e)) {
-                    $otherpackages[] = $param;
-                } else {
-                    $abstractpackages[] = $e;
-                }
+        $abstractpackages = array();
+        $otherpackages = array();
+        // parse params
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+        foreach($params as $param) {
+            if (strpos($param, 'http://') === 0) {
+                $otherpackages[] = $param;
+                continue;
             }
-            PEAR::staticPopErrorHandling();
+            $e = $reg->parsePackageName($param, $this->config->get('default_channel'));
+            if (PEAR::isError($e)) {
+                $otherpackages[] = $param;
+            } else {
+                $abstractpackages[] = $e;
+            }
+        }
+        PEAR::staticPopErrorHandling();
 
-            // if there are any local package .tgz or remote static url, we can't
-            // filter.  The filter only works for abstract packages
-            if (count($abstractpackages) && !isset($options['force'])) {
-                // when not being forced, only do necessary upgrades/installs
-                if (isset($options['upgrade'])) {
-                    $abstractpackages = $this->_filterUptodatePackages($abstractpackages,
-                        $command);
-                } else {
-                    foreach ($abstractpackages as $i => $package) {
-                        if ($reg->packageExists($package['package'], $package['channel'])) {
-                            if ($this->config->get('verbose')) {
-                                $this->ui->outputData('Ignoring installed package ' .
-                                    $reg->parsedPackageNameToString($package, true));
-                            }
-                            unset($abstractpackages[$i]);
+        // if there are any local package .tgz or remote static url, we can't
+        // filter.  The filter only works for abstract packages
+        if (count($abstractpackages) && !isset($options['force'])) {
+            // when not being forced, only do necessary upgrades/installs
+            if (isset($options['upgrade'])) {
+                $abstractpackages = $this->_filterUptodatePackages($abstractpackages,
+                    $command);
+            } else {
+                foreach ($abstractpackages as $i => $package) {
+                    if (isset($package['group'])) {
+                        // do not filter out install groups
+                        continue;
+                    }
+                    if ($reg->packageExists($package['package'], $package['channel'])) {
+                        if ($this->config->get('verbose')) {
+                            $this->ui->outputData('Ignoring installed package ' .
+                                $reg->parsedPackageNameToString($package, true));
                         }
+                        unset($abstractpackages[$i]);
                     }
                 }
-                $abstractpackages = 
-                    array_map(array($reg, 'parsedPackageNameToString'), $abstractpackages);
             }
-
-            $packages = array_merge($abstractpackages, $otherpackages);
+            $abstractpackages = 
+                array_map(array($reg, 'parsedPackageNameToString'), $abstractpackages);
         }
+
+        $packages = array_merge($abstractpackages, $otherpackages);
         if (!count($packages)) {
             $this->ui->outputData('Nothing to ' . $command);
             return true;
@@ -1070,6 +1072,10 @@ Run post-installation scripts in package <package>, if any exist.
 
         $ret = array();
         foreach($packages as $package) {
+            if (isset($package['group'])) {
+                $ret[] = $package;
+                continue;
+            }
             $channel = $package['channel'];
             $name = $package['package'];
 
