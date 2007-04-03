@@ -1343,385 +1343,390 @@ $dl = &$command->getDownloader(1, array());
 if (OS_WINDOWS) {
     $nicedldir = str_replace('\\\\', '\\', $dl->getDownloadDir());
     $phpunit->assertEquals(array (
-      0 =>
-      array (
-        0 => 3,
-        1 => 'pear/Auth_HTTP: Skipping required dependency "pear/Auth" version 1.3.0r3, already installed as version 1.3.0r3',
-      ),
-      1 => 
-      array (
-        0 => 1,
-        1 => 'downloading Auth_HTTP-2.1.6RC1.tgz ...',
-      ),
-      2 => 
-      array (
-        0 => 1,
-        1 => 'Starting to download Auth_HTTP-2.1.6RC1.tgz (9,294 bytes)',
-      ),
-      3 => 
-      array (
-        0 => 1,
-        1 => '.',
-      ),
-      4 => 
-      array (
-        0 => 1,
-        1 => '.',
-      ),
-      5 => 
-      array (
-        0 => 1,
-        1 => '...done: 9,294 bytes',
-      ),
-      6 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: backup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . 'HTTP.php',
-      ),
-      7 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . 'HTTP.php',
-      ),
-      8 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: backup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql',
-      ),
-      9 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql',
-      ),
-      10 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: backup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php',
-      ),
-      11 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php',
-      ),
-      12 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: backup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php',
-      ),
-      13 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php',
-      ),
-      14 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: backup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php',
-      ),
-      15 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php',
-      ),
-      16 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: backup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php',
-      ),
-      17 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: delete ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php',
-      ),
-      18 => 
-      array (
-        0 => 3,
-        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmpsample.sql',
-      ),
-      19 => 
-      array (
-        0 => 2,
-        1 => 'md5sum ok: ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql',
-      ),
-      20 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: rename ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmpsample.sql ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql ',
-      ),
-      21 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: installed_as tests/sample.sql ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP ' . DIRECTORY_SEPARATOR . 'tests',
-      ),
-      22 => 
-      array (
-        0 => 3,
-        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_basic_simple.php',
-      ),
-      23 => 
-      array (
-        0 => 2,
-        1 => 'md5sum ok: ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php',
-      ),
-      24 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: rename ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_basic_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php ',
-      ),
-      25 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: installed_as tests/test_basic_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP ' . DIRECTORY_SEPARATOR . 'tests',
-      ),
-      26 => 
-      array (
-        0 => 3,
-        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_get.php',
-      ),
-      27 => 
-      array (
-        0 => 2,
-        1 => 'md5sum ok: ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php',
-      ),
-      28 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: rename ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_get.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php ',
-      ),
-      29 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: installed_as tests/test_digest_get.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP ' . DIRECTORY_SEPARATOR . 'tests',
-      ),
-      30 => 
-      array (
-        0 => 3,
-        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_post.php',
-      ),
-      31 => 
-      array (
-        0 => 2,
-        1 => 'md5sum ok: ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php',
-      ),
-      32 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: rename ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_post.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php ',
-      ),
-      33 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: installed_as tests/test_digest_post.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP ' . DIRECTORY_SEPARATOR . 'tests',
-      ),
-      34 => 
-      array (
-        0 => 3,
-        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_simple.php',
-      ),
-      35 => 
-      array (
-        0 => 2,
-        1 => 'md5sum ok: ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php',
-      ),
-      36 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: rename ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php ',
-      ),
-      37 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: installed_as tests/test_digest_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP ' . DIRECTORY_SEPARATOR . 'tests',
-      ),
-      38 => 
-      array (
-        0 => 3,
-        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'Auth_HTTP.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . '.tmpHTTP.php',
-      ),
-      39 => 
-      array (
-        0 => 2,
-        1 => 'md5sum ok: ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . 'HTTP.php',
-      ),
-      40 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: rename ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . '.tmpHTTP.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . 'HTTP.php ',
-      ),
-      41 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: installed_as Auth_HTTP.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . 'HTTP.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php ' . DIRECTORY_SEPARATOR . 'Auth',
-      ),
-      42 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: removebackup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . 'HTTP.php',
-      ),
-      43 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: removebackup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql',
-      ),
-      44 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: removebackup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php',
-      ),
-      45 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: removebackup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php',
-      ),
-      46 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: removebackup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php',
-      ),
-      47 => 
-      array (
-        0 => 3,
-        1 => 'adding to transaction: removebackup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php',
-      ),
-      48 => 
-      array (
-        0 => 2,
-        1 => 'about to commit 30 file operations',
-      ),
-      49 => 
-      array (
-        0 => 3,
-        1 => '+ backup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . 'HTTP.php to ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . 'HTTP.php.bak',
-      ),
-      50 => 
-      array (
-        0 => 3,
-        1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . 'HTTP.php',
-      ),
-      51 => 
-      array (
-        0 => 3,
-        1 => '+ backup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql to ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql.bak',
-      ),
-      52 => 
-      array (
-        0 => 3,
-        1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql',
-      ),
-      53 => 
-      array (
-        0 => 3,
-        1 => '+ backup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php to ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php.bak',
-      ),
-      54 => 
-      array (
-        0 => 3,
-        1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php',
-      ),
-      55 => 
-      array (
-        0 => 3,
-        1 => '+ backup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php to ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php.bak',
-      ),
-      56 => 
-      array (
-        0 => 3,
-        1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php',
-      ),
-      57 => 
-      array (
-        0 => 3,
-        1 => '+ backup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php to ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php.bak',
-      ),
-      58 => 
-      array (
-        0 => 3,
-        1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php',
-      ),
-      59 => 
-      array (
-        0 => 3,
-        1 => '+ backup ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php to ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php.bak',
-      ),
-      60 => 
-      array (
-        0 => 3,
-        1 => '+ rm ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php',
-      ),
-      61 => 
-      array (
-        0 => 3,
-        1 => '+ mv ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmpsample.sql ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql',
-      ),
-      62 => 
-      array (
-        0 => 3,
-        1 => '+ mv ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_basic_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php',
-      ),
-      63 => 
-      array (
-        0 => 3,
-        1 => '+ mv ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_get.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php',
-      ),
-      64 => 
-      array (
-        0 => 3,
-        1 => '+ mv ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_post.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php',
-      ),
-      65 => 
-      array (
-        0 => 3,
-        1 => '+ mv ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php',
-      ),
-      66 => 
-      array (
-        0 => 3,
-        1 => '+ mv ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . '.tmpHTTP.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . 'HTTP.php',
-      ),
-      67 => 
-      array (
-        0 => 3,
-        1 => '+ rm backup of ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . 'HTTP.php (' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . 'HTTP.php.bak)',
-      ),
-      68 => 
-      array (
-        0 => 3,
-        1 => '+ rm backup of ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql (' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql.bak)',
-      ),
-      69 => 
-      array (
-        0 => 3,
-        1 => '+ rm backup of ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php (' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php.bak)',
-      ),
-      70 => 
-      array (
-        0 => 3,
-        1 => '+ rm backup of ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php (' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php.bak)',
-      ),
-      71 => 
-      array (
-        0 => 3,
-        1 => '+ rm backup of ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php (' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php.bak)',
-      ),
-      72 => 
-      array (
-        0 => 3,
-        1 => '+ rm backup of ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php (' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php.bak)',
-      ),
-      73 => 
-      array (
-        0 => 2,
-        1 => 'successfully committed 30 file operations',
-      ),
-      74 => 
-      array (
-        'info' => 
-        array (
-          'data' => 'upgrade ok: channel://pear.php.net/Auth_HTTP-2.1.6RC1',
-        ),
-        'cmd' => 'upgrade',
-      ),
-    ), $fakelog->getLog(), 'log messages');
+  0 => 
+  array (
+    0 => 3,
+    1 => 'pear/Auth_HTTP: Skipping required dependency "pear/Auth" version 1.3.0r3, already installed as version 1.3.0r3',
+  ),
+  1 => 
+  array (
+    0 => 3,
+    1 => 'Downloading "http://pear.php.net/get/Auth_HTTP-2.1.6RC1.tgz"',
+  ),
+  2 => 
+  array (
+    0 => 1,
+    1 => 'downloading Auth_HTTP-2.1.6RC1.tgz ...',
+  ),
+  3 => 
+  array (
+    0 => 1,
+    1 => 'Starting to download Auth_HTTP-2.1.6RC1.tgz (9,294 bytes)',
+  ),
+  4 => 
+  array (
+    0 => 1,
+    1 => '.',
+  ),
+  5 => 
+  array (
+    0 => 1,
+    1 => '.',
+  ),
+  6 => 
+  array (
+    0 => 1,
+    1 => '...done: 9,294 bytes',
+  ),
+  7 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: backup ' . $temp_path . '\\php\\Auth\\HTTP.php',
+  ),
+  8 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: delete ' . $temp_path . '\\php\\Auth\\HTTP.php',
+  ),
+  9 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: backup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\sample.sql',
+  ),
+  10 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: delete ' . $temp_path . '\\test\\Auth_HTTP\\tests\\sample.sql',
+  ),
+  11 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: backup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_basic_simple.php',
+  ),
+  12 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: delete ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_basic_simple.php',
+  ),
+  13 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: backup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_simple.php',
+  ),
+  14 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: delete ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_simple.php',
+  ),
+  15 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: backup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_get.php',
+  ),
+  16 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: delete ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_get.php',
+  ),
+  17 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: backup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_post.php',
+  ),
+  18 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: delete ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_post.php',
+  ),
+  19 => 
+  array (
+    0 => 3,
+    1 => '+ cp ' . $temp_path . '\\tmp\\Auth_HTTP-2.1.6RC1\\tests\\sample.sql ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmpsample.sql',
+  ),
+  20 => 
+  array (
+    0 => 2,
+    1 => 'md5sum ok: ' . $temp_path . '\\test\\Auth_HTTP\\tests\\sample.sql',
+  ),
+  21 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: rename ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmpsample.sql ' . $temp_path . '\\test\\Auth_HTTP\\tests\\sample.sql ',
+  ),
+  22 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: installed_as tests/sample.sql ' . $temp_path . '\\test\\Auth_HTTP\\tests\\sample.sql ' . $temp_path . '\\test\\Auth_HTTP \\tests',
+  ),
+  23 => 
+  array (
+    0 => 3,
+    1 => '+ cp ' . $temp_path . '\\tmp\\Auth_HTTP-2.1.6RC1\\tests\\test_basic_simple.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmptest_basic_simple.php',
+  ),
+  24 => 
+  array (
+    0 => 2,
+    1 => 'md5sum ok: ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_basic_simple.php',
+  ),
+  25 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: rename ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmptest_basic_simple.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_basic_simple.php ',
+  ),
+  26 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: installed_as tests/test_basic_simple.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_basic_simple.php ' . $temp_path . '\\test\\Auth_HTTP \\tests',
+  ),
+  27 => 
+  array (
+    0 => 3,
+    1 => '+ cp ' . $temp_path . '\\tmp\\Auth_HTTP-2.1.6RC1\\tests\\test_digest_get.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmptest_digest_get.php',
+  ),
+  28 => 
+  array (
+    0 => 2,
+    1 => 'md5sum ok: ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_get.php',
+  ),
+  29 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: rename ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmptest_digest_get.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_get.php ',
+  ),
+  30 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: installed_as tests/test_digest_get.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_get.php ' . $temp_path . '\\test\\Auth_HTTP \\tests',
+  ),
+  31 => 
+  array (
+    0 => 3,
+    1 => '+ cp ' . $temp_path . '\\tmp\\Auth_HTTP-2.1.6RC1\\tests\\test_digest_post.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmptest_digest_post.php',
+  ),
+  32 => 
+  array (
+    0 => 2,
+    1 => 'md5sum ok: ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_post.php',
+  ),
+  33 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: rename ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmptest_digest_post.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_post.php ',
+  ),
+  34 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: installed_as tests/test_digest_post.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_post.php ' . $temp_path . '\\test\\Auth_HTTP \\tests',
+  ),
+  35 => 
+  array (
+    0 => 3,
+    1 => '+ cp ' . $temp_path . '\\tmp\\Auth_HTTP-2.1.6RC1\\tests\\test_digest_simple.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmptest_digest_simple.php',
+  ),
+  36 => 
+  array (
+    0 => 2,
+    1 => 'md5sum ok: ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_simple.php',
+  ),
+  37 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: rename ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmptest_digest_simple.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_simple.php ',
+  ),
+  38 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: installed_as tests/test_digest_simple.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_simple.php ' . $temp_path . '\\test\\Auth_HTTP \\tests',
+  ),
+  39 => 
+  array (
+    0 => 3,
+    1 => '+ cp ' . $temp_path . '\\tmp\\Auth_HTTP-2.1.6RC1\\Auth_HTTP.php ' . $temp_path . '\\php\\Auth\\.tmpHTTP.php',
+  ),
+  40 => 
+  array (
+    0 => 2,
+    1 => 'md5sum ok: ' . $temp_path . '\\php\\Auth\\HTTP.php',
+  ),
+  41 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: rename ' . $temp_path . '\\php\\Auth\\.tmpHTTP.php ' . $temp_path . '\\php\\Auth\\HTTP.php ',
+  ),
+  42 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: installed_as Auth_HTTP.php ' . $temp_path . '\\php\\Auth\\HTTP.php ' . $temp_path . '\\php \\Auth',
+  ),
+  43 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: removebackup ' . $temp_path . '\\php\\Auth\\HTTP.php',
+  ),
+  44 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: removebackup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\sample.sql',
+  ),
+  45 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: removebackup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_basic_simple.php',
+  ),
+  46 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: removebackup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_simple.php',
+  ),
+  47 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: removebackup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_get.php',
+  ),
+  48 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: removebackup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_post.php',
+  ),
+  49 => 
+  array (
+    0 => 2,
+    1 => 'about to commit 30 file operations',
+  ),
+  50 => 
+  array (
+    0 => 3,
+    1 => '+ backup ' . $temp_path . '\\php\\Auth\\HTTP.php to ' . $temp_path . '\\php\\Auth\\HTTP.php.bak',
+  ),
+  51 => 
+  array (
+    0 => 3,
+    1 => '+ rm ' . $temp_path . '\\php\\Auth\\HTTP.php',
+  ),
+  52 => 
+  array (
+    0 => 3,
+    1 => '+ backup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\sample.sql to ' . $temp_path . '\\test\\Auth_HTTP\\tests\\sample.sql.bak',
+  ),
+  53 => 
+  array (
+    0 => 3,
+    1 => '+ rm ' . $temp_path . '\\test\\Auth_HTTP\\tests\\sample.sql',
+  ),
+  54 => 
+  array (
+    0 => 3,
+    1 => '+ backup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_basic_simple.php to ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_basic_simple.php.bak',
+  ),
+  55 => 
+  array (
+    0 => 3,
+    1 => '+ rm ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_basic_simple.php',
+  ),
+  56 => 
+  array (
+    0 => 3,
+    1 => '+ backup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_simple.php to ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_simple.php.bak',
+  ),
+  57 => 
+  array (
+    0 => 3,
+    1 => '+ rm ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_simple.php',
+  ),
+  58 => 
+  array (
+    0 => 3,
+    1 => '+ backup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_get.php to ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_get.php.bak',
+  ),
+  59 => 
+  array (
+    0 => 3,
+    1 => '+ rm ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_get.php',
+  ),
+  60 => 
+  array (
+    0 => 3,
+    1 => '+ backup ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_post.php to ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_post.php.bak',
+  ),
+  61 => 
+  array (
+    0 => 3,
+    1 => '+ rm ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_post.php',
+  ),
+  62 => 
+  array (
+    0 => 3,
+    1 => '+ mv ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmpsample.sql ' . $temp_path . '\\test\\Auth_HTTP\\tests\\sample.sql',
+  ),
+  63 => 
+  array (
+    0 => 3,
+    1 => '+ mv ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmptest_basic_simple.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_basic_simple.php',
+  ),
+  64 => 
+  array (
+    0 => 3,
+    1 => '+ mv ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmptest_digest_get.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_get.php',
+  ),
+  65 => 
+  array (
+    0 => 3,
+    1 => '+ mv ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmptest_digest_post.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_post.php',
+  ),
+  66 => 
+  array (
+    0 => 3,
+    1 => '+ mv ' . $temp_path . '\\test\\Auth_HTTP\\tests\\.tmptest_digest_simple.php ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_simple.php',
+  ),
+  67 => 
+  array (
+    0 => 3,
+    1 => '+ mv ' . $temp_path . '\\php\\Auth\\.tmpHTTP.php ' . $temp_path . '\\php\\Auth\\HTTP.php',
+  ),
+  68 => 
+  array (
+    0 => 3,
+    1 => '+ rm backup of ' . $temp_path . '\\php\\Auth\\HTTP.php (' . $temp_path . '\\php\\Auth\\HTTP.php.bak)',
+  ),
+  69 => 
+  array (
+    0 => 3,
+    1 => '+ rm backup of ' . $temp_path . '\\test\\Auth_HTTP\\tests\\sample.sql (' . $temp_path . '\\test\\Auth_HTTP\\tests\\sample.sql.bak)',
+  ),
+  70 => 
+  array (
+    0 => 3,
+    1 => '+ rm backup of ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_basic_simple.php (' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_basic_simple.php.bak)',
+  ),
+  71 => 
+  array (
+    0 => 3,
+    1 => '+ rm backup of ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_simple.php (' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_simple.php.bak)',
+  ),
+  72 => 
+  array (
+    0 => 3,
+    1 => '+ rm backup of ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_get.php (' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_get.php.bak)',
+  ),
+  73 => 
+  array (
+    0 => 3,
+    1 => '+ rm backup of ' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_post.php (' . $temp_path . '\\test\\Auth_HTTP\\tests\\test_digest_post.php.bak)',
+  ),
+  74 => 
+  array (
+    0 => 2,
+    1 => 'successfully committed 30 file operations',
+  ),
+  75 => 
+  array (
+    'info' => 
+    array (
+      'data' => 'upgrade ok: channel://pear.php.net/Auth_HTTP-2.1.6RC1',
+    ),
+    'cmd' => 'upgrade',
+  ),
+), $fakelog->getLog(), 'log messages');
 } else {
     $phpunit->assertEquals(array (
   0 => 
