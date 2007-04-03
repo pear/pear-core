@@ -389,6 +389,17 @@ class PEAR_REST_10
         if (!is_array($packagelist['p'])) {
             $packagelist['p'] = array($packagelist['p']);
         }
+
+        // only search-packagename = quicksearch !
+        if ($searchpackage && (!$searchsummary || empty($searchpackage))) {
+            $newpackagelist = array();
+            foreach ($packagelist['p'] as $package) {
+                if (!empty($searchpackage) && stristr($package, $searchpackage) !== false) {
+                    $newpackagelist[] = $package;
+                }
+            }
+            $packagelist['p'] = $newpackagelist;
+        }
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         $next = .1;
         foreach ($packagelist['p'] as $progress => $package) {
