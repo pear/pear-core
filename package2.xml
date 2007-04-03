@@ -77,7 +77,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2007-03-05</date>
+ <date>2007-04-07</date>
  <version>
   <release>1.5.2</release>
   <api>1.5.0</api>
@@ -88,15 +88,20 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  * fix Bug #10286: No output on failed tests [cellog]
-  * fix Bug #10358: placeholders not replaced in PackageFile validator [cellog]
-  * fix Bug #10367: E_WARNING on list-all for empty channel [timj]
-  * fix Bug #10372: upgrade package, only try when needed [cellog based on tias patch]
-  * fix Bug #10400: Fatal Error when creating a bundled package with PFM2 [berdir]
-  * fix Bug #10401: Funny 'pear info' output [cellog]
-  * fix Bug #10402: Missing versions with remote-list [cellog]
-  * fix Bug #10494: Missing abstract methods in Frontend.php [tias]
-  * fix Bug #10516: unlinking of files needs extra check [cellog]
+ * Fix Bug #10261: Transaction handling fails to halt/rollback on certain errors [cellog]
+ * Fix Bug #10275: [Patch] XML-RPC usage in Channels.php [tias]
+ * Fix Bug #10286: No output on failed tests [cellog]
+ * Fix Bug #10358: placeholders not replaced in PackageFile validator [cellog]
+ * Fix Bug #10367: E_WARNING on list-all for empty channel [timj]
+ * Fix Bug #10372: upgrade package, only try when needed [cellog]
+ * Fix Bug #10400: Fatal Error when creating a bundled package with PFM2 [berdir]
+ * Fix Bug #10401: Funny 'pear info' output [cellog]
+ * Fix Bug #10402: Missing versions with remote-list [cellog]
+ * Fix Bug #10434: pear uninstall --ignore-errors causes fatal error [cellog]
+ * Fix Bug #10435: deprecated message shows only first letter of package [cellog]
+ * Fix Bug #10494: Missing abstract methods in Frontend.php [cellog]
+ * Fix Bug #10516: unlinking of files needs extra check [cellog]
+ * Fix Bug #10554: no unit test for pear install package#sub if package is installed [cellog]
  </notes>
  <contents>
   <dir name="/">
