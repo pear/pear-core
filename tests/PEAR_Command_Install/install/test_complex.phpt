@@ -389,7 +389,7 @@ if (OS_WINDOWS) {
   ),
   array (
     0 => 3,
-    1 => 'adding to transaction: installed_as foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php C:\\development\\pear-core\\tests\\PEAR_Command_Install\\testinstallertemp\\php \\',
+    1 => 'adding to transaction: installed_as foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $temp_path . '\\php \\',
   ),
   array (
     0 => 2,
@@ -424,7 +424,7 @@ if (OS_WINDOWS) {
   ),
   array (
     0 => 3,
-    1 => 'adding to transaction: installed_as foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php C:\\development\\pear-core\\tests\\PEAR_Command_Install\\testinstallertemp\\php \\',
+    1 => 'adding to transaction: installed_as foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $temp_path . '\\php \\',
   ),
   array (
     0 => 2,
@@ -447,7 +447,7 @@ if (OS_WINDOWS) {
   ),
   array (
     0 => 3,
-    1 => '+ cp C:\\development\\pear-core\\tests\\PEAR_Command_Install\\install\\packages\\foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php',
+    1 => '+ cp ' . dirname(__FILE__) . '\\packages\\foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php',
   ),
   array (
     0 => 3,
@@ -455,7 +455,7 @@ if (OS_WINDOWS) {
   ),
   array (
     0 => 3,
-    1 => 'adding to transaction: installed_as foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php C:\\development\\pear-core\\tests\\PEAR_Command_Install\\testinstallertemp\\php \\',
+    1 => 'adding to transaction: installed_as foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . '\\php \\',
   ),
   array (
     0 => 2,
