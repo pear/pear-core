@@ -79,8 +79,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </helper>
  <date>2007-03-05</date>
  <version>
-  <release>1.5.2</release>
-  <api>1.5.0</api>
+  <release>1.6.0</release>
+  <api>1.6.0</api>
  </version>
  <stability>
   <release>stable</release>
@@ -567,100 +567,30 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </release>
  <release>
    <version>
-    <release>1.5.0</release>
+    <release>1.5.2</release>
     <api>1.5.0</api>
    </version>
    <stability>
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2007-01-23</date>
+   <date>2007-04-07</date>
    <license uri="http://www.php.net/license">PHP License</license>
    <notes>
-  Minor feature addition release
-  The following bugs in 1.5.0RC3 were fixed:
-   * fix Bug #7941: Bogus error message when uninstalling subpackages
-   * fix Bug #9761: $php_errormsg not being filled properly
-   * fix Bug #9763: Upgrading PECL packages fails when chmoding .so
-   * fix Bug #9791: Warning: Wrong parameter count for
-         array_key_exists() in PEAR/Builder.php on li
-   * fix Bug #9824: pear install Structures_DataGrid#renderers recursion crash
-   * fix Bug #9825: install 2 opt groups leaves duplicate parent package
-
-  New features since 1.4.11:
-   * implement Request #3436: implement staticPop [PEAR_Error_Stack]
-   * implement Request #6396: add extension enabling in php.ini for 1.5.0
-   * implement Request #6614: use go-pear style dialogs in PEAR_Command_CLI by default
-   * implement Request #6702: implement TAP output option for run-tests command
-     (as defined by http://perldoc.perl.org/Test/Harness/TAP.html)
-   * implement Request #7090: PEAR_Downloader mustn't contact pear server
-     when installing local package file
-   * implement Request #7220: recognize deprecated package/channel and display to user
-   * implement Request #7352: add a README and an INSTALL by pear
-   * implement Request #7910: &quot;Last Installed Version&quot; should be
-                              &quot;Previous Installed Version&quot;
-   * implement Request #7912: PEAR_Exception detect PEAR_Error as $message in
-                              __construct()
-   * implement Request #8779: add package.xml 2.1 support for zend extensions
-   * implement Request #8827: add a yesno type handling for post-install scripts
-   
-   * Structures_Graph is now a required dependency (1.0.2 or newer) for
-     sorting of dependencies upon installation
-   * update Archive_Tar recommended version to 1.3.2
-   * update Console_Getopt recommended version to 1.2.1
-
-   Bugs fixed since 1.4.11:
-   * fix Bug #6788: backtrace memory leak
-   * fix Bug #6931: pear upgrade PEAR-alpha tries to upgrade to 1.4.0a12
-   * fix Bug #7021: Everything must be within &lt;dir name=&quot;/&quot;&gt;
-   * fix Bug #7196: PEAR crashes when using autoload_prepend_file
-   * fix Bug #7203: pecl install &lt;name&gt; does not use the correct ext_dir
-   * fix Bug #7207: proxy user/pass is not urldecoded in download
-   * fix Bug #7219: bogus &quot;will download PEAR 1.4.8&quot; error
-   * fix Bug #7221: pear install blah-alpha won't install a newer stable
-   * fix Bug #7351: setting custom config variable in a channel fails
-   * fix Bug #7368: undefined function: getProvidesextension()
-   * fix Bug #7385: if post-install script or extension are present
-     and --packagingroot, fatal erro
-   * fix Bug #7419: Check inputs in PEAR_PackageFile_v2_rw
-   * fix Bug #7464: run-scripts causes notices
-   * fix Bug #7539: if a file has both install-as and ignore notices
-   * fix Bug #7726: &lt;uri&gt; dependency is broken
-   * fix Bug #7896: can't download packages, neither from cli or from web page.
-   * fix Bug #7931: hasErrors() with an error level has returned true after invoking pop().
-   * fix Bug #7940: pear download fails silently
-   * fix Bug #8254: downloading doesn't work with 302 messages
-   * fix Bug #8383: No exit code on errors
-   * fix Bug #8384: PEAR_PackageFile doesn't include error messages from Archive_Tar
-   * fix Bug #8516: PEAR_Config->get('preferred_mirror', null, 'non-pear.channel')
-                    returns pear
-   * fix Bug #8617: pear download prints (-1 bytes) if no content-length
-                    has been sent (Bjori, Pierre)
-   * fix Bug #8620: typo error in PEAR_PackageFile_v2::getConfigureOptions()
-   * fix Bug #8622: PFM2 - wrong php exclude version is not detected
-   * fix Bug #8519: typo in PEAR/Start.php OS_WINDOWS not WINDOWS
-   * fix Bug #8553: PEAR_Installer_Role_Common::processInstallation() does not honor layer
-   * fix Bug #8571: Sparse error message in registry
-   * fix Bug #8788: fatal error in Installer.php when task is not found
-   * fix Bug #8794: upgrade-all including Auth fails with fatal error
-   * fix Bug #9101: PEAR_Exception::getCauseMessage() failure with a
-                    nested Exception (Adam Harvey)
-   * fix Bug #9135: pear bundle fails if php_dir is not writeable
-   * fix Bug #9182: can't add versioning to conflicting deps in PEAR_PF_v2_rw
-   * fix Bug #9206: PEAR package info is not retrieved correctly for package
-                    with single release
-   * fix Bug #9208: Typo error on abstract PEAR_Task_Common::validXml() method
-   * fix Bug #9280: cannot install with --packagingroot package from non-php.net channel
-   * fix Bug #9307: Validator generates warning on empty &lt;contents&gt; tag
-   * fix Bug #9355: Bug in GLIBC detection (OS/Guess.php), patch proposal
-   * fix Bug #9551: listing packages in pear.geeklog.net fails
-   * fix Bug #9660: dependency sorting on installation does not always work
-   * fix Bug #9688: [PATCH] Fix build of PECL extensions
-   * fix Bug #9695: sgl-list-all command problem
-   * fix Bug #9712: pear uninstall --register-only remove file : it should not
-   * fix Bug #9757: pear does not validate -d input (pear -d php_dir=whatever command)
-   * fix shell-test command with invalid usage (noticed by Christian Weiske)
-   * fix notice when running &quot;pear sign&quot; (noticed by Christian Weiske)
+ * Fix Bug #10261: Transaction handling fails to halt/rollback on certain errors [cellog]
+ * Fix Bug #10275: [Patch] XML-RPC usage in Channels.php [tias]
+ * Fix Bug #10286: No output on failed tests [cellog]
+ * Fix Bug #10358: placeholders not replaced in PackageFile validator [cellog]
+ * Fix Bug #10367: E_WARNING on list-all for empty channel [timj]
+ * Fix Bug #10372: upgrade package, only try when needed [cellog]
+ * Fix Bug #10400: Fatal Error when creating a bundled package with PFM2 [berdir]
+ * Fix Bug #10401: Funny 'pear info' output [cellog]
+ * Fix Bug #10402: Missing versions with remote-list [cellog]
+ * Fix Bug #10434: pear uninstall --ignore-errors causes fatal error [cellog]
+ * Fix Bug #10435: deprecated message shows only first letter of package [cellog]
+ * Fix Bug #10494: Missing abstract methods in Frontend.php [cellog]
+ * Fix Bug #10516: unlinking of files needs extra check [cellog]
+ * Fix Bug #10554: no unit test for pear install package#sub if package is installed [cellog]
    </notes>
   </release>
  </changelog>
