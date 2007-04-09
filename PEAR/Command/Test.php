@@ -154,11 +154,11 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                         continue;
                     }
                     if (isset($options['phpunit'])) {
-                        if (!preg_match('/AllTests\.php$/i', $name)) {
+                        if (!preg_match('/AllTests\.php\\z/i', $name)) {
                             continue;
                         }
                     } else {
-                        if (!preg_match('/\.phpt$/', $name)) {
+                        if (!preg_match('/\.phpt\\z/', $name)) {
                             continue;
                         }
                     }
@@ -180,13 +180,13 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                 $tests = array_merge($tests, $dir);
             } else {
                 if (isset($options['phpunit'])) {
-                    if (!preg_match('/AllTests\.php$/i', $p)) {
+                    if (!preg_match('/AllTests\.php\\z/i', $p)) {
                         continue;
                     }
                     $tests[] = $p;
                 } else {
                     if (!file_exists($p)) {
-                        if (!preg_match('/\.phpt$/', $p)) {
+                        if (!preg_match('/\.phpt\\z/', $p)) {
                             $p .= '.phpt';
                         }
                         $dir = System::find(array(dirname($p), '-type', 'f',

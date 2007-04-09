@@ -246,7 +246,7 @@ class test_PEAR_RemoteInstaller extends PEAR_RemoteInstaller {
         $headers = array();
         $line = array_shift($retrieved);
         while (strlen(trim($line))) {
-            if (preg_match('/^([^:]+):\s+(.*)\s*$/', $line, $matches)) {
+            if (preg_match('/^([^:]+):\s+(.*)\s*\\z/', $line, $matches)) {
                 $headers[strtolower($matches[1])] = trim($matches[2]);
             } elseif (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
                 if ($matches[1] != 200) {

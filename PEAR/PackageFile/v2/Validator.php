@@ -466,11 +466,11 @@ class PEAR_PackageFile_v2_Validator
         $a = $this->_stupidSchemaValidate($structure, $this->_packageInfo['version'], '<version>');
         $a &= $this->_stupidSchemaValidate($structure, $this->_packageInfo['stability'], '<stability>');
         if ($a) {
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                   $this->_packageInfo['version']['release'])) {
                 $this->_invalidVersion('release', $this->_packageInfo['version']['release']);
             }
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                   $this->_packageInfo['version']['api'])) {
                 $this->_invalidVersion('api', $this->_packageInfo['version']['api']);
             }
@@ -519,13 +519,13 @@ class PEAR_PackageFile_v2_Validator
         $type = $installcondition ? '<installcondition><php>' : '<dependencies><required><php>';
         $this->_stupidSchemaValidate($structure, $dep, $type);
         if (isset($dep['min'])) {
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?(?:-[a-zA-Z0-9]+)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?(?:-[a-zA-Z0-9]+)?\\z/',
                   $dep['min'])) {
                 $this->_invalidVersion($type . '<min>', $dep['min']);
             }
         }
         if (isset($dep['max'])) {
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?(?:-[a-zA-Z0-9]+)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?(?:-[a-zA-Z0-9]+)?\\z/',
                   $dep['max'])) {
                 $this->_invalidVersion($type . '<max>', $dep['max']);
             }
@@ -536,7 +536,7 @@ class PEAR_PackageFile_v2_Validator
             }
             foreach ($dep['exclude'] as $exclude) {
                 if (!preg_match(
-                     '/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?(?:-[a-zA-Z0-9]+)?$/',
+                     '/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?(?:-[a-zA-Z0-9]+)?\\z/',
                      $exclude)) {
                     $this->_invalidVersion($type . '<exclude>', $exclude);
                 }
@@ -554,21 +554,21 @@ class PEAR_PackageFile_v2_Validator
         );
         $this->_stupidSchemaValidate($structure, $dep, '<dependencies><required><pearinstaller>');
         if (isset($dep['min'])) {
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                   $dep['min'])) {
                 $this->_invalidVersion('<dependencies><required><pearinstaller><min>',
                     $dep['min']);
             }
         }
         if (isset($dep['max'])) {
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                   $dep['max'])) {
                 $this->_invalidVersion('<dependencies><required><pearinstaller><max>',
                     $dep['max']);
             }
         }
         if (isset($dep['recommended'])) {
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                   $dep['recommended'])) {
                 $this->_invalidVersion('<dependencies><required><pearinstaller><recommended>',
                     $dep['recommended']);
@@ -579,7 +579,7 @@ class PEAR_PackageFile_v2_Validator
                 $dep['exclude'] = array($dep['exclude']);
             }
             foreach ($dep['exclude'] as $exclude) {
-                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                       $exclude)) {
                     $this->_invalidVersion('<dependencies><required><pearinstaller><exclude>',
                         $exclude);
@@ -641,19 +641,19 @@ class PEAR_PackageFile_v2_Validator
             $this->_DepchannelCannotBeUri('<dependencies>' . $group . $type);
         }
         if (isset($dep['min'])) {
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                   $dep['min'])) {
                 $this->_invalidVersion('<dependencies>' . $group . $type . '<min>', $dep['min']);
             }
         }
         if (isset($dep['max'])) {
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                   $dep['max'])) {
                 $this->_invalidVersion('<dependencies>' . $group . $type . '<max>', $dep['max']);
             }
         }
         if (isset($dep['recommended'])) {
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                   $dep['recommended'])) {
                 $this->_invalidVersion('<dependencies>' . $group . $type . '<recommended>',
                     $dep['recommended']);
@@ -664,7 +664,7 @@ class PEAR_PackageFile_v2_Validator
                 $dep['exclude'] = array($dep['exclude']);
             }
             foreach ($dep['exclude'] as $exclude) {
-                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                       $exclude)) {
                     $this->_invalidVersion('<dependencies>' . $group . $type . '<exclude>',
                         $exclude);
@@ -713,19 +713,19 @@ class PEAR_PackageFile_v2_Validator
         }
         $this->_stupidSchemaValidate($structure, $dep, $type);
         if (isset($dep['min'])) {
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                   $dep['min'])) {
                 $this->_invalidVersion(substr($type, 1) . '<min', $dep['min']);
             }
         }
         if (isset($dep['max'])) {
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                   $dep['max'])) {
                 $this->_invalidVersion(substr($type, 1) . '<max', $dep['max']);
             }
         }
         if (isset($dep['recommended'])) {
-            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+            if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                   $dep['recommended'])) {
                 $this->_invalidVersion(substr($type, 1) . '<recommended', $dep['recommended']);
             }
@@ -735,7 +735,7 @@ class PEAR_PackageFile_v2_Validator
                 $dep['exclude'] = array($dep['exclude']);
             }
             foreach ($dep['exclude'] as $exclude) {
-                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                       $exclude)) {
                     $this->_invalidVersion(substr($type, 1) . '<exclude', $exclude);
                 }
@@ -932,13 +932,13 @@ class PEAR_PackageFile_v2_Validator
             }
             $this->_stupidSchemaValidate($required, $package, $type);
             if (is_array($package) && array_key_exists('min', $package)) {
-                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                       $package['min'])) {
                     $this->_invalidVersion(substr($type, 1) . '<min', $package['min']);
                 }
             }
             if (is_array($package) && array_key_exists('max', $package)) {
-                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                       $package['max'])) {
                     $this->_invalidVersion(substr($type, 1) . '<max', $package['max']);
                 }
@@ -948,7 +948,7 @@ class PEAR_PackageFile_v2_Validator
                     $package['exclude'] = array($package['exclude']);
                 }
                 foreach ($package['exclude'] as $exclude) {
-                    if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?$/',
+                    if (!preg_match('/^\d+(?:\.\d+)*(?:[a-zA-Z]+\d*)?\\z/',
                           $exclude)) {
                         $this->_invalidVersion(substr($type, 1) . '<exclude', $exclude);
                     }

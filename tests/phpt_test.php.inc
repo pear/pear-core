@@ -91,7 +91,7 @@ class PEAR_PHPTest
                     if ($f) {
                         $error = preg_quote($err['message'], '/');
                         $error = str_replace('%s', '.+?', $error);
-                        if (preg_match('/^' . $error . '$/', $caughterror['message'])) {
+                        if (preg_match('/^' . $error . '\\z/', $caughterror['message'])) {
                             $found = true;
                             break;
                         }

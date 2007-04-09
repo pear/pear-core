@@ -650,8 +650,8 @@ parameter.
         }
         $num = 0;
         while ($ent = readdir($dp)) {
-            if (preg_match('/^xmlrpc_cache_[a-z0-9]{32}$/', $ent) ||
-                  preg_match('/rest.cache(file|id)$/', $ent)) {
+            if (preg_match('/^xmlrpc_cache_[a-z0-9]{32}\\z/', $ent) ||
+                  preg_match('/rest.cache(file|id)\\z/', $ent)) {
                 $path = $cache_dir . DIRECTORY_SEPARATOR . $ent;
                 if (file_exists($path)) {
                     $ok = @unlink($path);

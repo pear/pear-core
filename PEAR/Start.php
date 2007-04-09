@@ -175,7 +175,7 @@ class PEAR_Start extends PEAR
         foreach ($this->corePackages as $package) {
             foreach ($potentials as $i => $candidate) {
                 if (preg_match('/^' . $package . '-' . _PEAR_COMMON_PACKAGE_VERSION_PREG
-                      . '\.(tar|tgz)$/', $candidate)) {
+                      . '\.(tar|tgz)\\z/', $candidate)) {
                     $this->tarball[$package] = dirname(__FILE__) . '/go-pear-tarballs/' . $candidate;
                     unset($potentials[$i]);
                     continue 2;
@@ -298,7 +298,7 @@ class PEAR_Start extends PEAR
         foreach ($this->config as $var) {
             $dir = $this->$var;
         
-            if (!preg_match('/_dir$/', $var)) {
+            if (!preg_match('/_dir\\z/', $var)) {
                 continue;
             }
         

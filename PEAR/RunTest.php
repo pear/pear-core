@@ -733,13 +733,13 @@ $return_value
         $o2 = array();
         foreach($w1 as $idx => $val) {
             if (!$wanted_re || !isset($wr[$idx]) || !isset($o1[$idx]) ||
-                  !preg_match('/^' . $wr[$idx] . '$/', $o1[$idx])) {
+                  !preg_match('/^' . $wr[$idx] . '\\z/', $o1[$idx])) {
                 $w2[sprintf("%03d<", $idx)] = sprintf("%03d- ", $idx + 1) . $val;
             }
         }
         foreach($o1 as $idx => $val) {
             if (!$wanted_re || !isset($wr[$idx]) ||
-                  !preg_match('/^' . $wr[$idx] . '$/', $val)) {
+                  !preg_match('/^' . $wr[$idx] . '\\z/', $val)) {
                 $o2[sprintf("%03d>", $idx)] = sprintf("%03d+ ", $idx + 1) . $val;
             }
         }

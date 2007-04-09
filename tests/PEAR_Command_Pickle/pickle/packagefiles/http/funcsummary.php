@@ -121,7 +121,7 @@ foreach (array_slice($_SERVER['argv'], 1) as $fp) {
             printf("<h1 id=\"%s\">%s</h1>\n", basename($f), basename($f));
             foreach ($m[1] as $i => $p) {
                 e("Documenting $p\n");
-                if ($o = preg_match('/^(.*), (.*)$/', $m[4][$i], $n)) {
+                if ($o = preg_match('/^(.*), (.*)\\z/', $m[4][$i], $n)) {
                     if ($n[2] == '__construct') {
                         printf("<h2 id=\"%s\" class=\"o\">%s</h2>\n", $n[1], $n[1]);
                     }
