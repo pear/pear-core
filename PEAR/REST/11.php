@@ -154,12 +154,10 @@ class PEAR_REST_11
                     $latest = false;
                 }
 
-                if ($latest && $packageinfo['deps'] !== null) {
-                    if (isset($packageinfo['deps'])) {
-                        if (!is_array($packageinfo['deps']) ||
-                              !isset($packageinfo['deps'][0])) {
-                            $packageinfo['deps'] = array($packageinfo['deps']);
-                        }
+                if ($latest && isset($packageinfo['deps'])) {
+                    if (!is_array($packageinfo['deps']) ||
+                          !isset($packageinfo['deps'][0])) {
+                        $packageinfo['deps'] = array($packageinfo['deps']);
                     }
                     $d = false;
                     foreach ($packageinfo['deps'] as $dep) {
