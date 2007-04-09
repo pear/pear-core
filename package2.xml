@@ -59,6 +59,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>cox@idecnet.com</email>
   <active>no</active>
  </lead>
+ <developer>
+  <name>Mattias Guns</name>
+  <user>tias</user>
+  <email>tias@php.net</email>
+  <active>yes</active>
+ </developer>
  <helper>
   <name>Tim Jackson</name>
   <user>timj</user>
