@@ -521,6 +521,9 @@ Run post-installation scripts in package <package>, if any exist.
 
     function doInstall($command, $options, $params)
     {
+        if (!class_exists('PEAR/PackageFile.php')) {
+            require_once 'PEAR/PackageFile.php';
+        }
         if (empty($this->installer)) {
             $this->installer = &$this->getInstaller($this->ui);
         }
@@ -543,6 +546,32 @@ Run post-installation scripts in package <package>, if any exist.
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         foreach($params as $param) {
             if (strpos($param, 'http://') === 0) {
+                $otherpackages[] = $param;
+                continue;
+            }
+            if (file_exists($param)) {
+                if (isset($options['force'])) {
+                    $otherpackages[] = $param;
+                    continue;
+                }
+                $pkg = new PEAR_PackageFile($this->config);
+                $pf = $pkg->fromAnyFile($param, PEAR_VALIDATE_DOWNLOADING);
+                if (PEAR::isError($pf)) {
+                    $otherpackages[] = $param;
+                    continue;
+                }
+                if ($reg->packageExists($pf->getPackage(), $pf->getChannel()) &&
+                      version_compare($pf->getVersion(), 
+                      $reg->packageInfo($pf->getPackage(), 'version', $pf->getChannel()),
+                      '<=')) {
+                    if ($this->config->get('verbose')) {
+                        $this->ui->outputData('Ignoring installed package ' .
+                            $reg->parsedPackageNameToString(
+                            array('package' => $pf->getPackage(),
+                                  'channel' => $pf->getChannel()), true));
+                    }
+                    continue;
+                }
                 $otherpackages[] = $param;
                 continue;
             }

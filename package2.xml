@@ -83,9 +83,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2007-04-07</date>
+ <date>2007-04-22</date>
  <version>
-  <release>1.5.2</release>
+  <release>1.5.3</release>
   <api>1.5.0</api>
  </version>
  <stability>
@@ -94,20 +94,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
- * Fix Bug #10261: Transaction handling fails to halt/rollback on certain errors [cellog]
- * Fix Bug #10275: [Patch] XML-RPC usage in Channels.php [tias]
- * Fix Bug #10286: No output on failed tests [cellog]
- * Fix Bug #10358: placeholders not replaced in PackageFile validator [cellog]
- * Fix Bug #10367: E_WARNING on list-all for empty channel [timj]
- * Fix Bug #10372: upgrade package, only try when needed [cellog]
- * Fix Bug #10400: Fatal Error when creating a bundled package with PFM2 [berdir]
- * Fix Bug #10401: Funny 'pear info' output [cellog]
- * Fix Bug #10402: Missing versions with remote-list [cellog]
- * Fix Bug #10434: pear uninstall --ignore-errors causes fatal error [cellog]
- * Fix Bug #10435: deprecated message shows only first letter of package [cellog]
- * Fix Bug #10494: Missing abstract methods in Frontend.php [cellog]
- * Fix Bug #10516: unlinking of files needs extra check [cellog]
- * Fix Bug #10554: no unit test for pear install package#sub if package is installed [cellog]
+  * fix Bug #10661: Failure to install local package
  </notes>
  <contents>
   <dir name="/">
@@ -546,37 +533,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </phprelease>
  <changelog>
  <release>
- <date>2007-03-05</date>
- <version>
-  <release>1.5.1</release>
-  <api>1.5.0</api>
- </version>
- <stability>
-  <release>stable</release>
-  <api>stable</api>
- </stability>
- <license uri="http://www.php.net/license">PHP License</license>
- <notes>
-  Major bugfix release
-  uninstall validation was completely rewritten, the previous algorithm
-  was incorrect in certain complex situations.
-  Fortunately, none exist in the real world yet.  However, Structures_DataGrid
-  approaches this complexity, and so the error messages were incorrect.
-  * fix Bug #9841: incorrect dependency information shown on uninstall
-  * fix Bug #9957: E_NOTICE on remote-list
-  * fix Bug #9959: Channel name not shown when upgrading
-  * fix Bug #9971: Improve run-tests diffs of EXPECTF sections
-  * fix Bug #10012: pear package: tokenizer should be enabled
-  * fix Bug #10081: installer dies on uninstall (recursion too deep)
-  * fix Bug #10092: run-tests does not support --INI--. --POST--, --GET--,
-                    --STDIN--, --UPLOAD--
-  * fix Bug #10108: update-error with backups from test-Folder
-  * fix Bug #10109: on failed upgrade, .bak files everywhere
-  * fix Bug #10113 proc_get_status() is php5
-  * fix Bug #10130: Console_Getopt 1.2.2 not upgraded, even though it is compatible
-  </notes>
- </release>
- <release>
    <version>
     <release>1.5.0</release>
     <api>1.5.0</api>
@@ -674,5 +630,64 @@ http://pear.php.net/dtd/package-2.0.xsd">
    * fix notice when running &quot;pear sign&quot; (noticed by Christian Weiske)
    </notes>
   </release>
+ <release>
+ <date>2007-03-05</date>
+ <version>
+  <release>1.5.1</release>
+  <api>1.5.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license">PHP License</license>
+ <notes>
+  Major bugfix release
+  uninstall validation was completely rewritten, the previous algorithm
+  was incorrect in certain complex situations.
+  Fortunately, none exist in the real world yet.  However, Structures_DataGrid
+  approaches this complexity, and so the error messages were incorrect.
+  * fix Bug #9841: incorrect dependency information shown on uninstall
+  * fix Bug #9957: E_NOTICE on remote-list
+  * fix Bug #9959: Channel name not shown when upgrading
+  * fix Bug #9971: Improve run-tests diffs of EXPECTF sections
+  * fix Bug #10012: pear package: tokenizer should be enabled
+  * fix Bug #10081: installer dies on uninstall (recursion too deep)
+  * fix Bug #10092: run-tests does not support --INI--. --POST--, --GET--,
+                    --STDIN--, --UPLOAD--
+  * fix Bug #10108: update-error with backups from test-Folder
+  * fix Bug #10109: on failed upgrade, .bak files everywhere
+  * fix Bug #10113 proc_get_status() is php5
+  * fix Bug #10130: Console_Getopt 1.2.2 not upgraded, even though it is compatible
+  </notes>
+ </release>
+ <release>
+ <date>2007-04-07</date>
+ <version>
+  <release>1.5.2</release>
+  <api>1.5.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license">PHP License</license>
+ <notes>
+ * Fix Bug #10261: Transaction handling fails to halt/rollback on certain errors [cellog]
+ * Fix Bug #10275: [Patch] XML-RPC usage in Channels.php [tias]
+ * Fix Bug #10286: No output on failed tests [cellog]
+ * Fix Bug #10358: placeholders not replaced in PackageFile validator [cellog]
+ * Fix Bug #10367: E_WARNING on list-all for empty channel [timj]
+ * Fix Bug #10372: upgrade package, only try when needed [cellog]
+ * Fix Bug #10400: Fatal Error when creating a bundled package with PFM2 [berdir]
+ * Fix Bug #10401: Funny 'pear info' output [cellog]
+ * Fix Bug #10402: Missing versions with remote-list [cellog]
+ * Fix Bug #10434: pear uninstall --ignore-errors causes fatal error [cellog]
+ * Fix Bug #10435: deprecated message shows only first letter of package [cellog]
+ * Fix Bug #10494: Missing abstract methods in Frontend.php [cellog]
+ * Fix Bug #10516: unlinking of files needs extra check [cellog]
+ * Fix Bug #10554: no unit test for pear install package#sub if package is installed [cellog]
+  </notes>
+ </release>
  </changelog>
 </package>
