@@ -1369,7 +1369,7 @@ class PEAR_Downloader_Package
             if (!@file_exists($param)) {
                 $test = explode('#', $param);
                 $group = array_pop($test);
-                if (file_exists(implode('#', $test))) {
+                if (@file_exists(implode('#', $test))) {
                     $this->setGroup($group);
                     $param = implode('#', $test);
                     $this->_explicitGroup = true;
