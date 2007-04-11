@@ -122,6 +122,9 @@ class PEAR_Frontend extends PEAR
                 get_class($uiobject) . ')');
             return $err;
         }
+        $GLOBALS['_PEAR_FRONTEND_SINGLETON'] = &$uiobject;
+        $GLOBALS['_PEAR_FRONTEND_CLASS'] = get_class($uiobject);
+        return $uiobject;
     }
 
     /**
