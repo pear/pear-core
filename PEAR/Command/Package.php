@@ -191,7 +191,12 @@ List all dependencies the package has.'
             'summary' => 'Sign a package distribution file',
             'function' => 'doSign',
             'shortcut' => 'si',
-            'options' => array(),
+            'options' => array(
+                'verbose' => array(
+                    'shortopt' => 'v',
+                    'doc' => 'Display GnuPG output',
+                    ),
+            ),
             'doc' => '<package-file>
 Signs a package distribution (.tar or .tgz) file with GnuPG.',
             ),
@@ -710,7 +715,13 @@ used for automated conversion or learning the format.
         $input = $this->ui->userDialog($command,
                                        array('GnuPG Passphrase'),
                                        array('password'));
-        $gpg = popen("gpg --batch --passphrase-fd 0 --armor --detach-sign --output $tmpdir/package.sig $tmpdir/$packagexml 2>/dev/null", "w");
+        if (!isset($input[0])) {
+            //use empty passphrase
+            $input[0] = '';
+        }
+
+        $devnull = (isset($options['verbose'])) ? '' : ' 2>/dev/null';
+        $gpg = popen("gpg --batch --passphrase-fd 0 --armor --detach-sign --output $tmpdir/package.sig $tmpdir/$packagexml" . $devnull, "w");
         if (!$gpg) {
             return $this->raiseError("gpg command failed");
         }
