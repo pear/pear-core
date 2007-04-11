@@ -220,10 +220,7 @@ Initialize a Channel from its server and creates the local channel.xml.
         } else {
             if (strpos($channel, '://')) {
                 $downloader = &$this->getDownloader();
-                if (!class_exists('System')) {
-                    require_once 'System.php';
-                }
-                $tmpdir = System::mktemp(array('-d'));
+                $tmpdir = $this->config->get('temp_dir');
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
                 $loc = $downloader->downloadHttp($channel, $this->ui, $tmpdir);
                 PEAR::staticPopErrorHandling();
@@ -416,10 +413,7 @@ Initialize a Channel from its server and creates the local channel.xml.
         }
         if (strpos($params[0], '://')) {
             $downloader = &$this->getDownloader();
-            if (!class_exists('System')) {
-                require_once 'System.php';
-            }
-            $tmpdir = System::mktemp(array('-d'));
+            $tmpdir = $this->config->get('temp_dir');
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $loc = $downloader->downloadHttp($params[0], $this->ui, $tmpdir, null, false);
             PEAR::staticPopErrorHandling();
@@ -484,10 +478,7 @@ Initialize a Channel from its server and creates the local channel.xml.
 
     function doUpdate($command, $options, $params)
     {
-        if (!class_exists('System')) {
-            require_once 'System.php';
-        }
-        $tmpdir = System::mktemp(array('-d'));
+        $tmpdir = $this->config->get('temp_dir');
         $reg = &$this->config->getRegistry();
         if (sizeof($params) != 1) {
             return $this->raiseError("No channel file specified");
