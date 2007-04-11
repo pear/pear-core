@@ -322,7 +322,7 @@ Initialize a Channel from its server and creates the local channel.xml.
                     $data['data'][] = array($mirror['attribs']['host']);
                     $d['mirrors'] = $data;
                 }
-                foreach ($mirrors as $mirror) {
+                foreach ($mirrors as $i => $mirror) {
                     $data['data'] = array();
                     $data['caption'] = 'Mirror ' . $mirror['attribs']['host'] . ' Capabilities';
                     $data['headline'] = array('Type', 'Version/REST type', 'Function Name/REST base');
@@ -360,7 +360,7 @@ Initialize a Channel from its server and creates the local channel.xml.
                     } else {
                         $data['data'][] = array('No supported protocols');
                     }
-                    $d['mirrorprotocols'] = $data;
+                    $d['mirrorprotocols' . $i] = $data;
                 }
             }
             $this->ui->outputData($d, 'channel-info');
