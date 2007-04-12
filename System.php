@@ -418,15 +418,18 @@ class System
     * Note: php.ini-recommended removes the "E" from the variables_order setting,
     * making unavaible the $_ENV array, that s why we do tests with _ENV
     *
-    * @return string The temporal directory on the system
+    * @return string The temporary directory on the system
     */
     function tmpdir()
     {
         if (OS_WINDOWS) {
+            if ($var = isset($_ENV['TMP']) ? $_ENV['TMP'] : getenv('TMP')) {
+                return $var;
+            }
             if ($var = isset($_ENV['TEMP']) ? $_ENV['TEMP'] : getenv('TEMP')) {
                 return $var;
             }
-            if ($var = isset($_ENV['TMP']) ? $_ENV['TMP'] : getenv('TMP')) {
+            if ($var = isset($_ENV['USERPROFILE']) ? $_ENV['USERPROFILE'] : getenv('USERPROFILE')) {
                 return $var;
             }
             if ($var = isset($_ENV['windir']) ? $_ENV['windir'] : getenv('windir')) {
