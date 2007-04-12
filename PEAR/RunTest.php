@@ -509,6 +509,7 @@ class PEAR_RunTest
         /* when using CGI, strip the headers from the output */
         $headers = "";
         if (!empty($this->_options['cgi']) &&
+              $php == $this->_options['cgi'] && 
               preg_match("/^(.*?)\r?\n\r?\n(.*)/s", $out, $match)) {
             $output = trim($match[2]);
             $rh = preg_split("/[\n\r]+/",$match[1]);
