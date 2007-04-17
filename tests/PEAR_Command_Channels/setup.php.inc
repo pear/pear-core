@@ -47,6 +47,8 @@ $config = serialize(array('master_server' => $server,
     'data_dir' => $temp_path . DIRECTORY_SEPARATOR . 'data',
     'doc_dir' => $temp_path . DIRECTORY_SEPARATOR . 'doc',
     'test_dir' => $temp_path . DIRECTORY_SEPARATOR . 'test',
+    'download_dir' => $temp_path . DIRECTORY_SEPARATOR . 'tmp',
+    'temp_dir' => $temp_path . DIRECTORY_SEPARATOR . 'tmp',
     'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',));
 touch($temp_path . DIRECTORY_SEPARATOR . 'pear.conf');
 $fp = fopen($temp_path . DIRECTORY_SEPARATOR . 'pear.conf', 'w');

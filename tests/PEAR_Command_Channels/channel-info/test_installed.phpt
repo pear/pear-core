@@ -168,7 +168,7 @@ $phpunit->assertEquals(array (
         ),
         'caption' => 'Channel froo Mirrors:',
       ),
-      'mirrorprotocols' => 
+      'mirrorprotocols0' => 
       array (
         'data' => 
         array (
