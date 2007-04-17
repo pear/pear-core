@@ -89,7 +89,19 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>PHP License</license>
   <state>stable</state>
   <notes>
-  * fix Bug #10661: Failure to install local package
+ * Fix Bug #10311: use clearContents to delete bundledPackages [cellog]
+ * Fix Bug #10602: notice on line 157 PEAR/REST/11.php [cellog]
+ * Fix Bug #10620: use \z instead of $ in regexes [cellog]
+ * Fix Bug #10621: channel-info does not handle mirrors properly [cellog]
+ * Fix Bug #10645: Patch for verbose sign command [cweiske]
+ * Fix Bug #10647: no mktempdir but config temp_dir in Channels.php [tias]
+ * Fix Bug #10656: no userConfirm() check in Frontend::setFrontendObject [tias]
+ * Fix Bug #10661: Failure to install local package [cellog]
+ * Fix Bug #10676: tmpdir() search variables in wrong order. [cellog]
+ * Fix Bug #10690: RunTest.php parses HTTP headers for non-CGI tests [jstump]
+ * Fix Bug #10720: Notice: Undefined variable: group in PEAR/Downloader/Package.php on
+   line 698 [cellog]
+ * Fix Bug #10733: Validator cannot handle invalid package2.xml file [cellog]
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
