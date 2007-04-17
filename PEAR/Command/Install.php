@@ -549,7 +549,7 @@ Run post-installation scripts in package <package>, if any exist.
                 $otherpackages[] = $param;
                 continue;
             }
-            if (file_exists($param)) {
+            if (@file_exists($param)) {
                 if (isset($options['force'])) {
                     $otherpackages[] = $param;
                     continue;
