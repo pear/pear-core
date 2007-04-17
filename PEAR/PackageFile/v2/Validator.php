@@ -1054,6 +1054,10 @@ class PEAR_PackageFile_v2_Validator
             }
         }
         if (!$allowignore && isset($list['file'])) {
+            if (is_string($list['file'])) {
+                $this->_oldStyleFileNotAllowed();
+                return false;
+            }
             if (!isset($list['file'][0])) {
                 // single file
                 $list['file'] = array($list['file']);
@@ -1347,6 +1351,13 @@ class PEAR_PackageFile_v2_Validator
         $this->_stack->push(__FUNCTION__, 'error', array('type' => $type),
             '<%type%> is not allowed inside release <filelist>, only inside ' .
             '<contents>, use <ignore> and <install> only');
+    }
+
+    function _oldStyleFileNotAllowed()
+    {
+        $this->_stack->push(__FUNCTION__, 'error', array(),
+            'Old-style <file>name</file> is not allowed.  Use' .
+            '<file name="name" role="role"/>');
     }
 
     function _tagMissingAttribute($tag, $attr, $context)
