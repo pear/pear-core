@@ -694,8 +694,7 @@ class PEAR_Downloader_Package
                         } else {
                             if (isset($dep['optional']) && $dep['optional'] == 'yes') {
                                 $this->_downloader->log(2, $this->getShortName() .
-                                    ': Skipping ' . $group
-                                    . ' dependency "' .
+                                    ': Skipping optional dependency "' .
                                     $this->_registry->parsedPackageNameToString($dep, true) .
                                     '", no releases exist');
                                 continue;
