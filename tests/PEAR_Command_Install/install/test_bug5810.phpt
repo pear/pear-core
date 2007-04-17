@@ -22,10 +22,20 @@ $dir = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
 $res = $command->run('install', array(), array($dir . 'Image_Color-1.0.2.tgz',
     $dir . 'Image_Canvas-0.2.2.tgz'));
 $phpunit->assertNoErrors('setup');
+$fakelog->getLog();
 $res = $command->run('install', array(), array($dir . 'Image_Canvas-0.2.2.tgz'));
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 'install failed')
-), 'after install');
+$phpunit->assertEquals(array(
+  0 => 
+  array (
+    'info' => 'Ignoring installed package pear/Image_Canvas',
+    'cmd' => 'no command',
+  ),
+  1 => 
+  array (
+    'info' => 'Nothing to install',
+    'cmd' => 'no command',
+  ),
+), $fakelog->getLog(), 'log');
 echo 'tests done';
 ?>
 --CLEAN--
