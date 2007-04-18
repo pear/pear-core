@@ -549,6 +549,10 @@ Run post-installation scripts in package <package>, if any exist.
                 $otherpackages[] = $param;
                 continue;
             }
+            if (strpos($param, 'channel://') === 0) {
+                $abstractpackages[] = $param;
+                continue;
+            }
             if (@file_exists($param)) {
                 if (isset($options['force'])) {
                     $otherpackages[] = $param;
@@ -1108,6 +1112,10 @@ Run post-installation scripts in package <package>, if any exist.
             $channel = $package['channel'];
             $name = $package['package'];
 
+            if (!$reg->packageExists($name, $channel)) {
+                $ret[] = $package;
+                continue;
+            }
             if (!isset($latestReleases[$channel])) {
                 // fill in cache for this channel
                 $chan = &$reg->getChannel($channel);
