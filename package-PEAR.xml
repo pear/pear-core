@@ -102,6 +102,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
  * Fix Bug #10720: Notice: Undefined variable: group in PEAR/Downloader/Package.php on
    line 698 [cellog]
  * Fix Bug #10733: Validator cannot handle invalid package2.xml file [cellog]
+ * Fix Bug #10768: if a package is not installed, upgrade will not install it [cellog]
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
