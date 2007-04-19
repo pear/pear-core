@@ -108,6 +108,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    line 698 [cellog]
  * Fix Bug #10733: Validator cannot handle invalid package2.xml file [cellog]
  * Fix Bug #10768: if a package is not installed, upgrade will not install it [cellog]
+ * Fix Bug #10771: upgrade-all/upgrade will not upgrade non-PEAR channels [cellog]
  </notes>
  <contents>
   <dir name="/">
