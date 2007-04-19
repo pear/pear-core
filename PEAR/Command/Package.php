@@ -697,10 +697,8 @@ used for automated conversion or learning the format.
         }
         $tar = new Archive_Tar($params[0]);
         $tmpdir = System::mktemp('-d pearsign');
-        if (!$tar->extractList('package2.xml package.sig', $tmpdir)) {
-            if (!$tar->extractList('package.xml package.sig', $tmpdir)) {
-                return $this->raiseError("failed to extract tar file");
-            }
+        if (!$tar->extractList('package2.xml package.xml package.sig', $tmpdir)) {
+            return $this->raiseError("failed to extract tar file");
         }
         if (file_exists("$tmpdir/package.sig")) {
             return $this->raiseError("package already signed");
@@ -711,6 +709,9 @@ used for automated conversion or learning the format.
         }
         if (file_exists("$tmpdir/package.sig")) {
             unlink("$tmpdir/package.sig");
+        }
+        if (!file_exists("$tmpdir/$packagexml")) {
+            return $this->raiseError("Extracted file $tmpdir/$packagexml not found.");
         }
         $input = $this->ui->userDialog($command,
                                        array('GnuPG Passphrase'),
@@ -729,7 +730,11 @@ used for automated conversion or learning the format.
         if (pclose($gpg) || !file_exists("$tmpdir/package.sig")) {
             return $this->raiseError("gpg sign failed");
         }
-        $tar->addModify("$tmpdir/package.sig", '', $tmpdir);
+        if (!$tar->addModify("$tmpdir/package.sig", '', $tmpdir)) {
+            return $this->raiseError('failed adding signature to file');
+        }
+
+        $this->ui->outputData("Package signed.", $command);
         return true;
     }
 
