@@ -549,11 +549,7 @@ Run post-installation scripts in package <package>, if any exist.
                 $otherpackages[] = $param;
                 continue;
             }
-            if (strpos($param, 'channel://') === 0) {
-                $abstractpackages[] = $param;
-                continue;
-            }
-            if (@file_exists($param)) {
+            if (strpos($param, 'channel://') === false && @file_exists($param)) {
                 if (isset($options['force'])) {
                     $otherpackages[] = $param;
                     continue;
@@ -1122,8 +1118,12 @@ Run post-installation scripts in package <package>, if any exist.
                 if (PEAR::isError($chan)) {
                     return $this->raiseError($chan);
                 }
-                if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
-                      $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
+                if ($chan->supportsREST($this->config->get('preferred_mirror',
+                                                           null, $channel)) &&
+                      $base = $chan->getBaseURL('REST1.0',
+                                                $this->config->get('preferred_mirror',
+                                                                   null, $channel)))
+                {
                     $dorest = true;
                 } else {
                     $dorest = false;
@@ -1134,11 +1134,11 @@ Run post-installation scripts in package <package>, if any exist.
                     $rest = &$this->config->getREST('1.0', array());
                     $installed = array_flip($reg->listPackages($channel));
                     $latest = $rest->listLatestUpgrades($base, 
-                        $this->config->get('preferred_state'), $installed,
+                        $this->config->get('preferred_state', null, $channel), $installed,
                         $channel, $reg);
                 } else {
                     $latest = $remote->call("package.listLatestReleases",
-                        $this->config->get('preferred_state'));
+                        $this->config->get('preferred_state', null, $channel));
                     unset($remote);
                 }
                 PEAR::staticPopErrorHandling();
