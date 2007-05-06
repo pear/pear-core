@@ -90,6 +90,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <notes>
   * fix Bug #10780: wrong output from PEAR_Exception [cellog]
   * fix Bug #10865: using --packagingroot regression [tias/cellog]
+  * fix Bug #10873: pear channel-discover broken - pear temp directories
+    not writeable [cellog]
  </notes>
  <contents>
   <dir name="/">
