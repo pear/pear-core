@@ -272,7 +272,9 @@ class PEAR_Exception extends Exception
                                    'line' => $cause->getLine());
                 } elseif (class_exists('PEAR_Error') && $cause instanceof PEAR_Error) {
                     $causes[] = array('class' => get_class($cause),
-                                      'message' => $cause->getMessage());
+                                      'message' => $cause->getMessage(),
+                                      'file' => 'unknown',
+                                      'line' => 'unknown');
                 } elseif (is_array($cause) && isset($cause['message'])) {
                     // PEAR_ErrorStack warning
                     $causes[] = array(

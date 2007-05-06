@@ -88,15 +88,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  * fix Bug #10286: No output on failed tests [cellog]
-  * fix Bug #10358: placeholders not replaced in PackageFile validator [cellog]
-  * fix Bug #10367: E_WARNING on list-all for empty channel [timj]
-  * fix Bug #10372: upgrade package, only try when needed [cellog based on tias patch]
-  * fix Bug #10400: Fatal Error when creating a bundled package with PFM2 [berdir]
-  * fix Bug #10401: Funny 'pear info' output [cellog]
-  * fix Bug #10402: Missing versions with remote-list [cellog]
-  * fix Bug #10494: Missing abstract methods in Frontend.php [tias]
-  * fix Bug #10516: unlinking of files needs extra check [cellog]
+  * fix Bug #10780: wrong output from PEAR_Exception [cellog]
  </notes>
  <contents>
   <dir name="/">
