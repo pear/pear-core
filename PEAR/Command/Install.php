@@ -541,7 +541,7 @@ Run post-installation scripts in package <package>, if any exist.
             if ($this->config->get('verbose') > 2) {
                 $this->ui->outputData('using package root: ' . $options['packagingroot']);
             }
- 
+        }
         $abstractpackages = array();
         $otherpackages = array();
         // parse params
