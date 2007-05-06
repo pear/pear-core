@@ -89,6 +89,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
   * fix Bug #10780: wrong output from PEAR_Exception [cellog]
+  * fix Bug #10865: using --packagingroot regression [tias/cellog]
  </notes>
  <contents>
   <dir name="/">
