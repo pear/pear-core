@@ -83,10 +83,13 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>PHP License</license>
   <state>stable</state>
   <notes>
+  * fix Bug #10846: Wont upgrade Text_Wiki from RC1 to RC2 [tias]
   * fix Bug #10780: wrong output from PEAR_Exception [cellog]
   * fix Bug #10865: using --packagingroot regression [tias/cellog]
   * fix Bug #10873: pear channel-discover broken - pear temp directories
     not writeable [cellog]
+  * implement Request #10373: if pref_state=stable and installed package=beta,
+    allow up to latest beta version [tias]
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
