@@ -260,7 +260,9 @@ class PEAR_Exception extends Exception
                               'line' => $this->cause->getLine());
         } elseif (class_exists('PEAR_Error') && $this->cause instanceof PEAR_Error) {
             $causes[] = array('class' => get_class($this->cause),
-                              'message' => $this->cause->getMessage());
+                              'message' => $this->cause->getMessage(),
+                              'file' => 'unknown',
+                              'line' => 'unknown');
         } elseif (is_array($this->cause)) {
             foreach ($this->cause as $cause) {
                 if ($cause instanceof PEAR_Exception) {
