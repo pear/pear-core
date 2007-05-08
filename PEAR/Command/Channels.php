@@ -225,7 +225,8 @@ Initialize a Channel from its server and creates the local channel.xml.
                 $loc = $downloader->downloadHttp($channel, $this->ui, $tmpdir);
                 PEAR::staticPopErrorHandling();
                 if (PEAR::isError($loc)) {
-                    return $this->raiseError('Cannot open "' . $channel . '"');
+                    return $this->raiseError('Cannot open "' . $channel .
+                        '" (' . $loc->getMessage() . ')');
                 } else {
                     $contents = implode('', file($loc));
                 }
@@ -414,11 +415,28 @@ Initialize a Channel from its server and creates the local channel.xml.
         if (strpos($params[0], '://')) {
             $downloader = &$this->getDownloader();
             $tmpdir = $this->config->get('temp_dir');
+            if (!file_exists($tmpdir)) {
+                require_once 'System.php';
+                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                $err = System::mkdir(array('-p', $tmpdir));
+                PEAR::staticPopErrorHandling();
+                if (PEAR::isError($err)) {
+                    return $this->raiseError('channel-add: temp_dir does not exist: "' .
+                        $tmpdir . 
+                        '" - You can change this location with "pear config-set temp_dir"');
+                }
+            }
+            if (!is_writable($tmpdir)) {
+                return $this->raiseError('channel-add: temp_dir is not writable: "' .
+                    $tmpdir . 
+                    '" - You can change this location with "pear config-set temp_dir"');
+            }
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $loc = $downloader->downloadHttp($params[0], $this->ui, $tmpdir, null, false);
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($loc)) {
-                return $this->raiseError('channel-add: Cannot open "' . $params[0] . '"');
+                return $this->raiseError('channel-add: Cannot open "' . $params[0] .
+                    '" (' . $loc->getMessage() . ')');
             } else {
                 list($loc, $lastmodified) = $loc;
                 $contents = implode('', file($loc));
@@ -479,6 +497,22 @@ Initialize a Channel from its server and creates the local channel.xml.
     function doUpdate($command, $options, $params)
     {
         $tmpdir = $this->config->get('temp_dir');
+        if (!file_exists($tmpdir)) {
+            require_once 'System.php';
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+            $err = System::mkdir(array('-p', $tmpdir));
+            PEAR::staticPopErrorHandling();
+            if (PEAR::isError($err)) {
+                return $this->raiseError('channel-add: temp_dir does not exist: "' .
+                    $tmpdir . 
+                    '" - You can change this location with "pear config-set temp_dir"');
+            }
+        }
+        if (!is_writable($tmpdir)) {
+            return $this->raiseError('channel-add: temp_dir is not writable: "' .
+                $tmpdir . 
+                '" - You can change this location with "pear config-set temp_dir"');
+        }
         $reg = &$this->config->getRegistry();
         if (sizeof($params) != 1) {
             return $this->raiseError("No channel file specified");
@@ -500,7 +534,7 @@ Initialize a Channel from its server and creates the local channel.xml.
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($contents)) {
                 return $this->raiseError('Cannot retrieve channel.xml for channel "' .
-                    $c->getName() . '"');
+                    $c->getName() . '" (' . $contents->getMessage() . ')');
             }
             list($contents, $lastmodified) = $contents;
             if (!$contents) {
@@ -535,7 +569,8 @@ Initialize a Channel from its server and creates the local channel.xml.
                     $this->ui, $tmpdir, null, $lastmodified);
                 PEAR::staticPopErrorHandling();
                 if (PEAR::isError($loc)) {
-                    return $this->raiseError("Cannot open " . $params[0]);
+                    return $this->raiseError("Cannot open " . $params[0] .
+                         ' (' . $loc->getMessage() . ')');
                 } else {
                     list($loc, $lastmodified) = $loc;
                     $contents = implode('', file($loc));
