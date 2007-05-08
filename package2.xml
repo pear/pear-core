@@ -83,9 +83,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2007-04-22</date>
+ <date>2007-05-08</date>
  <version>
-  <release>1.5.3</release>
+  <release>1.5.4</release>
   <api>1.5.0</api>
  </version>
  <stability>
@@ -94,21 +94,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
- * Fix Bug #10311: use clearContents to delete bundledPackages [cellog]
- * Fix Bug #10602: notice on line 157 PEAR/REST/11.php [cellog]
- * Fix Bug #10620: use \z instead of $ in regexes [cellog]
- * Fix Bug #10621: channel-info does not handle mirrors properly [cellog]
- * Fix Bug #10645: Patch for verbose sign command [cweiske]
- * Fix Bug #10647: no mktempdir but config temp_dir in Channels.php [tias]
- * Fix Bug #10656: no userConfirm() check in Frontend::setFrontendObject [tias]
- * Fix Bug #10661: Failure to install local package [cellog]
- * Fix Bug #10676: tmpdir() search variables in wrong order. [cellog]
- * Fix Bug #10690: RunTest.php parses HTTP headers for non-CGI tests [jstump]
- * Fix Bug #10720: Notice: Undefined variable: group in PEAR/Downloader/Package.php on
-   line 698 [cellog]
- * Fix Bug #10733: Validator cannot handle invalid package2.xml file [cellog]
- * Fix Bug #10768: if a package is not installed, upgrade will not install it [cellog]
- * Fix Bug #10771: upgrade-all/upgrade will not upgrade non-PEAR channels [cellog]
+ MAJOR SECURITY BUGFIX RELEASE
+ * Fix Bug #10865: using --packagingroot regression [tias/cellog]
+ * Fix Bug #10873: pear channel-discover broken - pear temp directories not writeable [cellog]
  </notes>
  <contents>
   <dir name="/">
@@ -701,6 +689,35 @@ http://pear.php.net/dtd/package-2.0.xsd">
  * Fix Bug #10494: Missing abstract methods in Frontend.php [cellog]
  * Fix Bug #10516: unlinking of files needs extra check [cellog]
  * Fix Bug #10554: no unit test for pear install package#sub if package is installed [cellog]
+  </notes>
+ </release>
+ <release>
+ <date>2007-04-22</date>
+ <version>
+  <release>1.5.3</release>
+  <api>1.5.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license">PHP License</license>
+ <notes>
+ * Fix Bug #10311: use clearContents to delete bundledPackages [cellog]
+ * Fix Bug #10602: notice on line 157 PEAR/REST/11.php [cellog]
+ * Fix Bug #10620: use \z instead of $ in regexes [cellog]
+ * Fix Bug #10621: channel-info does not handle mirrors properly [cellog]
+ * Fix Bug #10645: Patch for verbose sign command [cweiske]
+ * Fix Bug #10647: no mktempdir but config temp_dir in Channels.php [tias]
+ * Fix Bug #10656: no userConfirm() check in Frontend::setFrontendObject [tias]
+ * Fix Bug #10661: Failure to install local package [cellog]
+ * Fix Bug #10676: tmpdir() search variables in wrong order. [cellog]
+ * Fix Bug #10690: RunTest.php parses HTTP headers for non-CGI tests [jstump]
+ * Fix Bug #10720: Notice: Undefined variable: group in PEAR/Downloader/Package.php on
+   line 698 [cellog]
+ * Fix Bug #10733: Validator cannot handle invalid package2.xml file [cellog]
+ * Fix Bug #10768: if a package is not installed, upgrade will not install it [cellog]
+ * Fix Bug #10771: upgrade-all/upgrade will not upgrade non-PEAR channels [cellog]
   </notes>
  </release>
  </changelog>
