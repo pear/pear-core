@@ -90,6 +90,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <state>stable</state>
   <notes>
  MAJOR SECURITY BUGFIX RELEASE
+ arbitrary file execution
+ see http://pear.php.net/news/vulnerability2.php
  * Fix Bug #10865: using --packagingroot regression [tias/cellog]
  * Fix Bug #10873: pear channel-discover broken - pear temp directories not writeable [cellog]
   </notes>
