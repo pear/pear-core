@@ -167,12 +167,7 @@ four ways of specifying packages.
                 'installroot' => array(
                     'shortopt' => 'R',
                     'arg' => 'DIR',
-                    'doc' => 'root directory used when installing files (ala PHP\'s INSTALL_ROOT), use packagingroot for RPM',
-                    ),
-                'packagingroot' => array(
-                    'shortopt' => 'P',
-                    'arg' => 'DIR',
-                    'doc' => 'root directory used when packaging files, like RPM packaging',
+                    'doc' => 'root directory used when installing files (ala PHP\'s INSTALL_ROOT)',
                     ),
                 'ignore-errors' => array(
                     'doc' => 'force install even if there were errors',
@@ -535,10 +530,18 @@ Run post-installation scripts in package <package>, if any exist.
         if (isset($options['installroot']) && isset($options['packagingroot'])) {
             return $this->raiseError('ERROR: cannot use both --installroot and --packagingroot');
         }
-        if (isset($options['packagingroot']) && $this->config->get('verbose') > 2) {
-            $this->ui->outputData('using package root: ' . $options['packagingroot']);
-        }
         $reg = &$this->config->getRegistry();
+        $instreg = &$reg; // instreg used to check if package is installed
+        if (isset($options['packagingroot']) && !isset($options['upgrade'])) {
+            $packrootphp_dir = $this->installer->_prependPath(
+                $this->config->get('php_dir', null, 'pear.php.net'),
+                $options['packagingroot']);
+            $instreg = new PEAR_Registry($packrootphp_dir); // other instreg!
+
+            if ($this->config->get('verbose') > 2) {
+                $this->ui->outputData('using package root: ' . $options['packagingroot']);
+            }
+        }
  
         $abstractpackages = array();
         $otherpackages = array();
@@ -597,7 +600,7 @@ Run post-installation scripts in package <package>, if any exist.
                         // do not filter out install groups
                         continue;
                     }
-                    if ($reg->packageExists($package['package'], $package['channel'])) {
+                    if ($instreg->packageExists($package['package'], $package['channel'])) {
                         if ($this->config->get('verbose')) {
                             $this->ui->outputData('Ignoring installed package ' .
                                 $reg->parsedPackageNameToString($package, true));
@@ -652,14 +655,6 @@ Run post-installation scripts in package <package>, if any exist.
             return true;
         }
         $extrainfo = array();
-        if (isset($options['packagingroot'])) {
-            $packrootphp_dir = $this->installer->_prependPath(
-                $this->config->get('php_dir', null, 'pear.php.net'),
-                $options['packagingroot']);
-            $instreg = new PEAR_Registry($packrootphp_dir);
-        } else {
-            $instreg = $reg;
-        }
         foreach ($downloaded as $param) {
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $info = $this->installer->install($param, $options);
@@ -781,14 +776,6 @@ Run post-installation scripts in package <package>, if any exist.
                                       'channel' => $param->getChannel()), true) .
                                   '#featurename"';
                     }
-                }
-                if (isset($options['installroot'])) {
-                    $reg = &$this->config->getRegistry();
-                }
-                if (isset($options['packagingroot'])) {
-                    $instreg = new PEAR_Registry($packrootphp_dir);
-                } else {
-                    $instreg = $reg;
                 }
                 $pkg = &$instreg->getPackage($param->getPackage(), $param->getChannel());
                 // $pkg may be NULL if install is a 'fake' install via --packagingroot
