@@ -1147,6 +1147,39 @@ class PEAR_Downloader_Package
     }
 
     /**
+     * Detect duplicate package names with differing versions
+     * 
+     * If a user requests to install Date 1.4.6 and Date 1.4.7,
+     * for instance, this is a logic error.  This method
+     * detects this situation.
+     *
+     * @param array $params array of PEAR_Downloader_Package objects
+     * @param array $errorparams empty array
+     * @return array array of stupid duplicated packages in PEAR_Downloader_Package obejcts
+     */
+    function detectStupidDuplicates($params, &$errorparams)
+    {
+        $existing = array();
+        foreach ($params as $i => $param) {
+            $existing[$param->getChannel() . '/' . $param->getPackage()]
+                [$param->getGroup()][] = $i;
+        }
+        $indices = array();
+        foreach ($existing as $package => $groups) {
+            foreach ($groups as $group => $dupes) {
+                if (count($dupes) > 1) {
+                    $indices = $indices + $dupes;
+                }
+            }
+        }
+        $indices = array_unique($indices);
+        foreach ($indices as $index) {
+            $errorparams[] = $params[$index];
+        }
+        return count($errorparams);
+    }
+
+    /**
      * @param array
      * @param bool ignore install groups - for final removal of dupe packages
      * @static
