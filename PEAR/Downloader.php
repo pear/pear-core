@@ -383,6 +383,17 @@ class PEAR_Downloader extends PEAR_Common
         }
         while (PEAR_Downloader_Package::mergeDependencies($params));
         PEAR_Downloader_Package::removeDuplicates($params, true);
+        $errorparams = array();
+        if (PEAR_Downloader_Package::detectStupidDuplicates($params, $errorparams)) {
+            if (count($errorparams)) {
+                foreach ($errorparams as $param) {
+                    $name = $this->_registry->parsedPackageNameToString($param->getParsedPackage());
+                    $this->pushError('Duplicate package ' . $name . ' found', PEAR_INSTALLER_FAILED);
+                }
+                $a = array();
+                return $a;
+            }
+        }
         PEAR_Downloader_Package::removeInstalled($params);
         if (!count($params)) {
             $this->pushError('No valid packages found', PEAR_INSTALLER_FAILED);
