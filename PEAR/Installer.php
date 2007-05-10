@@ -293,6 +293,9 @@ class PEAR_Installer extends PEAR_Downloader
         }
         $dest_dir = dirname($final_dest_file);
         $dest_file = $dest_dir . DIRECTORY_SEPARATOR . '.tmp' . basename($final_dest_file);
+        if (preg_match('~/\.\.(/|\\z)|^\.\./~', str_replace('\\', '/', $dest_file))) {
+            return $this->raiseError("SECURITY ERROR: file $file (installed to $dest_file) contains parent directory reference ..", PEAR_INSTALLER_FAILED);
+        }
         // }}}
 
         if (empty($this->_options['register-only']) &&
@@ -481,6 +484,9 @@ class PEAR_Installer extends PEAR_Downloader
             return $info;
         } else {
             list($save_destdir, $dest_dir, $dest_file, $orig_file) = $info;
+        }
+        if (preg_match('~/\.\.(/|\\z)|^\.\./~', str_replace('\\', '/', $dest_file))) {
+            return $this->raiseError("SECURITY ERROR: file $file (installed to $dest_file) contains parent directory reference ..", PEAR_INSTALLER_FAILED);
         }
         $final_dest_file = $installed_as = $dest_file;
         if (isset($this->_options['packagingroot'])) {
