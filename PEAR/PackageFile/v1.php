@@ -1200,9 +1200,24 @@ class PEAR_PackageFile_v1
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILEROLE,
                         array('file' => $file, 'role' => $fa['role'], 'roles' => PEAR_Common::getFileRoles()));
                 }
-                if ($file{0} == '.' && $file{1} == '/') {
+                if (preg_match('~/\.\.?(/|\\z)|^\.\.?/~', str_replace('\\', '/', $file))) {
+                    // file contains .. parent directory or . cur directory references
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILENAME,
                         array('file' => $file));
+                }
+                if (isset($fa['install-as']) &&
+                      preg_match('~/\.\.?(/|\\z)|^\.\.?/~', 
+                                 str_replace('\\', '/', $fa['install-as']))) {
+                    // install-as contains .. parent directory or . cur directory references
+                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILENAME,
+                        array('file' => $file . ' [installed as ' . $fa['install-as'] . ']'));
+                }
+                if (isset($fa['baseinstalldir']) &&
+                      preg_match('~/\.\.?(/|\\z)|^\.\.?/~', 
+                                 str_replace('\\', '/', $fa['baseinstalldir']))) {
+                    // install-as contains .. parent directory or . cur directory references
+                    $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILENAME,
+                        array('file' => $file . ' [baseinstalldir ' . $fa['baseinstalldir'] . ']'));
                 }
             }
         }
