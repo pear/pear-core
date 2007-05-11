@@ -219,7 +219,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
                         // run any package-time tasks
                         $contents = file_get_contents($file);
                         foreach ($orig as $tag => $raw) {
-                            $tag = str_replace($this->_packagefile->getTasksNs() . ':', '', $tag);
+                            $tag = str_replace(
+                                array($this->_packagefile->getTasksNs() . ':', '-'),
+                                array('', '_'), $tag);
                             $task = "PEAR_Task_$tag";
                             $task = &new $task($this->_packagefile->_config,
                                 $this->_packagefile->_logger,
