@@ -11,7 +11,7 @@ class PEAR2_Downloader
      * @param unknown_type $lastmodified
      * @param unknown_type $accept
      */
-    static function downloadCurlHttp($url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null,
+    static function downloadCurlHttp($url, $ui, $save_dir = '.', $callback = null, $lastmodified = null,
                               $accept = false)
     {
         if (!function_exists('curl_init')) {
@@ -27,7 +27,7 @@ class PEAR2_Downloader
         }
         if ($config->http_proxy && 
               $proxy = parse_url($config->http_proxy)) {
-            curl_setopt($c, CURLOPT_HTTPPROXYTUNNEL, 1);
+            curl_setopt($c, CURLOPT_HTTPPROXYTUNNEL, true);
             curl_setopt($c, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
             $proxy_host = isset($proxy['host']) ? $proxy['host'] : null;
             $proxy_host = $proxy['scheme'] . '://' . $proxy_host;
@@ -37,13 +37,43 @@ class PEAR2_Downloader
             curl_setopt($c, CURLOPT_PROXY, $proxy_host);
             curl_setopt($c, CURLOPT_PROXYPORT, $proxy_port);
             curl_setopt($c, CURLOPT_PROXYUSERPWD, $proxy_user . ':' . $proxy_pass);
-
+            curl_setopt($c, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
             if ($callback) {
                 call_user_func($callback, 'message', "Using HTTP proxy $host:$port");
             }
         } else {
             
         }
+        curl_setopt($c, CURLOPT_MAXREDIRS, 3);
+        curl_setopt($c, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($c, CURLOPT_ENCODING, '');
+        curl_setopt($c, CURLOPT_USERAGENT, 'PEAR/@package_version@/PHP/' . PHP_VERSION);
+        $username = $config->username;
+        if ($username) {
+            $password = $config->password;
+            curl_setopt($c, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+            curl_setopt($c, CURLOPT_USERPWD, $username . ':' . $password);
+        }
+        if ($ui) {
+            curl_setopt($c, CURLOPT_WRITEFUNCTION, array(__CLASS__, 'curlCallback'));
+            self::$_written = 0;
+        }
+    }
+
+    static private $_written;
+    static private $_savefp;
+
+    static function curlCallback($curl, $string)
+    {
+        
+    }
+
+    static function headerCallback($curl, $string)
+    {
+        $length = strlen($string);
+        echo "Header: $string<br />\n";
+        return $length;
     }
 
     /**
