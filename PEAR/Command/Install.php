@@ -765,11 +765,12 @@ Run post-installation scripts in package <package>, if any exist.
                                 // explicitly chooses to install another group
                                 continue;
                             }
-                            $this->ui->outputData($param->getPackage() . ': Optional feature ' .
+                            $extrainfo[] = $param->getPackage() . ': Optional feature ' .
                                 $group['attribs']['name'] . ' available (' .
-                                $group['attribs']['hint'] . ')');
+                                $group['attribs']['hint'] . ')';
                         }
-                        $extrainfo[] = 'To install use "pear install ' .
+                        $extrainfo[] = $param->getPackage() .
+                            ': To install optional features use "pear install ' .
                             $reg->parsedPackageNameToString(
                                 array('package' => $param->getPackage(),
                                       'channel' => $param->getChannel()), true) .
@@ -787,7 +788,8 @@ Run post-installation scripts in package <package>, if any exist.
                         foreach ($list as $file) {
                             $extrainfo[] = $file;
                         }
-                        $extrainfo[] = 'Use "pear run-scripts ' . $pn . '" to run';
+                        $extrainfo[] = $param->getPackage() .
+                            ': Use "pear run-scripts ' . $pn . '" to finish setup.';
                         $extrainfo[] = 'DO NOT RUN SCRIPTS FROM UNTRUSTED SOURCES';
                     }
                 }
