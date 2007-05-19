@@ -1161,6 +1161,14 @@ class PEAR_Downloader_Package
     {
         $existing = array();
         foreach ($params as $i => $param) {
+            if (!isset($existing[$param->getChannel() . '/' . $param->getPackage()])) {
+                $existing[$param->getChannel() . '/' . $param->getPackage()] = array();
+            }
+            if (!isset($existing[$param->getChannel() . '/' . $param->getPackage()]
+                [$param->getGroup()])) {
+                $existing[$param->getChannel() . '/' . $param->getPackage()]
+                    [$param->getGroup()] = array();
+            }
             $existing[$param->getChannel() . '/' . $param->getPackage()]
                 [$param->getGroup()][] = $i;
         }
