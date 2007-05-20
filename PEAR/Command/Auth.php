@@ -141,8 +141,8 @@ password from your user configuration.',
             $ourfile = $this->config->getConfFile('system');
         }
 
-        $this->config->set('username', $username, $channel);
-        $this->config->set('password', $password, $channel);
+        $this->config->set('username', $username, 'user', $channel);
+        $this->config->set('password', $password, 'user', $channel);
 
         if ($chan->supportsREST()) {
             $ok = true;
@@ -155,8 +155,8 @@ password from your user configuration.',
             $this->ui->outputData("Logged in.", $command);
             // avoid changing any temporary settings changed with -d
             $ourconfig = new PEAR_Config($ourfile, $ourfile);
-            $ourconfig->set('username', $username, $channel);
-            $ourconfig->set('password', $password, $channel);
+            $ourconfig->set('username', $username, 'user', $channel);
+            $ourconfig->set('password', $password, 'user', $channel);
             $ourconfig->store();
         } else {
             return $this->raiseError("Login failed!");
