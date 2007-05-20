@@ -133,7 +133,12 @@ alias.
             'shortcut' => 'di',
             'options' => array(),
             'doc' => '[<channel.xml>|<channel name>]
-Initialize a Channel from its server and creates the local channel.xml.
+Initialize a channel from its server and create a local channel.xml.
+If <channel name> is in the format "<username>:<password>@<channel>" then
+<username> and <password> will be set as the login username/password for
+<channel>. Use caution when passing the username/password in this way, as
+it may allow other users on your computer to briefly view your username/
+password via the system\'s process list.
 '
             ),
         );
@@ -671,29 +676,62 @@ Initialize a Channel from its server and creates the local channel.xml.
             strtolower($params[1]) . '"');
     }
 
+    /**
+     * The channel-discover command
+     *
+     * @param string $command command name
+     * @param array  $options option_name => value
+     * @param array  $params  list of additional parameters.
+     *               $params[0] should contain a string with either:
+     *               - <channel name> or
+     *               - <username>:<password>@<channel name>
+     * @return null|PEAR_Error
+     */
     function doDiscover($command, $options, $params)
     {
         $reg = &$this->config->getRegistry();
         if (sizeof($params) != 1) {
             return $this->raiseError("No channel server specified");
         }
-        if ($reg->channelExists($params[0])) {
-            if ($reg->isAlias($params[0])) {
-                return $this->raiseError("A channel alias named \"$params[0]\" " .
-                    'already exists, aliasing channel "' . $reg->channelName($params[0])
+        
+        // Look for the possible input format "<username>:<password>@<channel>"
+        if (preg_match('/^(.+):(.+)@(.+)$/', $params[0], $matches)) {
+            $username = $matches[1];
+            $password = $matches[2];
+            $channel = $matches[3];
+        } else {
+            $channel = $params[0];
+        }
+        
+        if ($reg->channelExists($channel)) {
+            if ($reg->isAlias($channel)) {
+                return $this->raiseError("A channel alias named \"$channel\" " .
+                    'already exists, aliasing channel "' . $reg->channelName($channel)
                     . '"');
             } else {
-                return $this->raiseError("Channel \"$params[0]\" is already initialized");
+                return $this->raiseError("Channel \"$channel\" is already initialized");
             }
         }
         $this->pushErrorHandling(PEAR_ERROR_RETURN);
-        $err = $this->doAdd($command, $options, array('http://' . $params[0] . '/channel.xml'));
+        $err = $this->doAdd($command, $options, array('http://' . $channel . '/channel.xml'));
         $this->popErrorHandling();
         if (PEAR::isError($err)) {
-            return $this->raiseError("Discovery of channel \"$params[0]\" failed (" .
+            return $this->raiseError("Discovery of channel \"$channel\" failed (" .
                 $err->getMessage() . ')');
         }
-        $this->ui->outputData("Discovery of channel \"$params[0]\" succeeded", $command);
+        
+        // Store username/password if they were given
+        // Arguably we should do a logintest on the channel here, but since
+        // that's awkward on a REST-based channel (even "pear login" doesn't
+        // do it for those), and XML-RPC is deprecated, it's fairly pointless.
+        if (isset($username)) {
+            $this->config->set('username', $username, 'user', $channel);
+            $this->config->set('password', $password, 'user', $channel);
+            $this->config->store();
+            $this->ui->outputData("Stored login for channel \"$channel\" using username \"$username\"", $command);
+        }
+        
+        $this->ui->outputData("Discovery of channel \"$channel\" succeeded", $command);
     }
 }
 ?>
