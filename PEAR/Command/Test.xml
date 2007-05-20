@@ -31,7 +31,8 @@
    </package>
    <phpunit>
     <shortopt>u</shortopt>
-    <doc>Search parameters for AllTests.php, and use that to run phpunit-based tests</doc>
+    <doc>Search parameters for AllTests.php, and use that to run phpunit-based tests.
+If none is found, all .phpt tests will be tried instead.</doc>
    </phpunit>
    <tapoutput>
     <shortopt>t</shortopt>
