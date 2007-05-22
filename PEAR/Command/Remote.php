@@ -336,7 +336,7 @@ parameter.
             return $this->raiseError('The package list could not be fetched from the remote server. Please try again. (Debug info: "' . $available->getMessage() . '")');
         }
         $data = array(
-            'caption' => 'All packages [Channel' . $channel . ']:',
+            'caption' => 'All packages [Channel ' . $channel . ']:',
             'border' => true,
             'headline' => array('Package', 'Latest', 'Local'),
             );
