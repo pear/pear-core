@@ -380,7 +380,7 @@ $phpunit->assertEquals(array (
   array (
     'info' => 
     array (
-      'caption' => 'All packages:',
+      'caption' => 'All packages [Channel pear.php.net]:',
       'border' => true,
       'headline' => 
       array (

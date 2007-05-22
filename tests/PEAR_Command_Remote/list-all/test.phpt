@@ -5455,7 +5455,7 @@ $phpunit->assertEquals(array (
   array (
     'info' => 
     array (
-      'caption' => 'All packages:',
+      'caption' => 'All packages [Channel pear.php.net]:',
       'border' => true,
       'headline' => 
       array (
@@ -7330,7 +7330,7 @@ $phpunit->assertEquals(array (
   array (
     'info' => 
     array (
-      'caption' => 'All packages:',
+      'caption' => 'All packages [Channel smoog]:',
       'border' => true,
       'headline' => 
       array (
@@ -7365,7 +7365,7 @@ $phpunit->assertEquals(array (
   array (
     'info' => 
     array (
-      'caption' => 'All packages:',
+      'caption' => 'All packages [Channel empty]:',
       'border' => true,
       'headline' => 
       array (

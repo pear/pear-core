@@ -15,7 +15,7 @@ $_test_dep->setPEARVersion('1.4.0a10');
 $reg = &$config->getRegistry();
 $ch = new PEAR_ChannelFile;
 $ch->setName('smoog');
-$ch->setSUmmary('smoog');
+$ch->setSUmmary('smooging about');
 $ch->setDefaultPEARProtocols();
 $reg->addChannel($ch);
 $pf = new PEAR_PackageFile_v2_rw;
@@ -77,7 +77,7 @@ $phpunit->assertEquals(array (
   array (
     'info' => 
     array (
-      'caption' => 'All packages:',
+      'caption' => 'All packages [Channel smoog]:',
       'border' => true,
       'headline' => 
       array (
