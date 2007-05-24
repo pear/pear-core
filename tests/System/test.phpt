@@ -5,10 +5,6 @@ System commands tests
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip ';
 }
-if (!($fp = @fsockopen('pear.php.net', 80))) {
-    echo 'skip internet is down';
-}
-@fclose($fp);
 ?>
 --FILE--
 <?php
@@ -138,7 +134,7 @@ if (System::which('i_am_not_a_command')) {
  /*******************
          cat
  ********************/
-echo "Testing: cat\n";
+echo "Testing: cat offline\n";
 
 if (!function_exists('file_put_contents')) {
     function file_put_contents($file, $text) {
@@ -241,11 +237,6 @@ for ($i = $totalfiles; $i > 0; --$i) {
     }
 }
 
-// Concat from url wrapper
-$cat = 'http://www.php.net/ http://pear.php.net/ > ' . $catfile;
-if (!System::cat($cat)) {
-    print "System::cat('$cat') failed\n";
-}
 /*
 // Concat to files with space in names
 $catfile = System::mktemp('tst') . ' space in filename';
@@ -286,5 +277,5 @@ Testing: MkDir
 Testing: mkTemp
 Testing: rm
 Testing: which
-Testing: cat
+Testing: cat offline
 end
