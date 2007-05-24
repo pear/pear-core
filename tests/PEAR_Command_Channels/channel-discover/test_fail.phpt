@@ -25,7 +25,7 @@ $phpunit->assertErrors(array(
 ), 'pear');
 $e = $command->run('channel-discover', array(), array('zornk.net'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 'Discovery of channel "zornk.net" failed (channel-add: Cannot open "http://zornk.net/channel.xml")'),
+    array('package' => 'PEAR_Error', 'message' => 'Discovery of channel "zornk.net" failed (channel-add: Cannot open "http://zornk.net/channel.xml" (File http://zornk.net:80/channel.xml not valid (received: HTTP/1.1 404 http://zornk.net/channel.xml Is not valid)))'),
 ), 'zornk');
 echo 'tests done';
 ?>

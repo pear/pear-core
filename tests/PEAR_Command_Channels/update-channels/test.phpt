@@ -55,7 +55,7 @@ $phpunit->assertEquals(array (
   ),
   3 => 
   array (
-    'info' => 'Cannot retrieve channel.xml for channel "pecl.php.net"',
+    'info' => 'Cannot retrieve channel.xml for channel "pecl.php.net" (File http://pecl.php.net:80/channel.xml not valid (received: HTTP/1.1 404 http://pecl.php.net/channel.xml Is not valid))',
     'cmd' => 'update-channels',
   ),
   4 => 

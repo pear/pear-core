@@ -266,8 +266,8 @@ PEAR_Command::getGetoptArgs('shell-test', $s, $l);
 $phpunit->assertEquals('', $s, 'short shell-test'); 
 $phpunit->assertEquals(array (), $l, 'long shell-test');
 PEAR_Command::getGetoptArgs('sign', $s, $l);
-$phpunit->assertEquals('', $s, 'short sign'); 
-$phpunit->assertEquals(array (), $l, 'long sign');
+$phpunit->assertEquals('v', $s, 'short sign'); 
+$phpunit->assertEquals(array(0 => 'verbose',), $l, 'long sign');
 PEAR_Command::getGetoptArgs('uninstall', $s, $l);
 $phpunit->assertEquals('nrR:O', $s, 'short uninstall'); 
 $phpunit->assertEquals(array (
@@ -281,7 +281,7 @@ PEAR_Command::getGetoptArgs('update-channels', $s, $l);
 $phpunit->assertEquals('', $s, 'short update-channels'); 
 $phpunit->assertEquals(array (), $l, 'long update-channels');
 PEAR_Command::getGetoptArgs('upgrade', $s, $l);
-$phpunit->assertEquals('flnrBZR:P:aoOp', $s, 'short upgrade'); 
+$phpunit->assertEquals('flnrBZR:aoOp', $s, 'short upgrade'); 
 $phpunit->assertEquals(array (
   0 => 'force',
   1 => 'loose',
@@ -290,12 +290,11 @@ $phpunit->assertEquals(array (
   4 => 'nobuild',
   5 => 'nocompress',
   6 => 'installroot=',
-  7 => 'packagingroot=',
-  8 => 'ignore-errors',
-  9 => 'alldeps',
-  10 => 'onlyreqdeps',
-  11 => 'offline',
-  12 => 'pretend',
+  7 => 'ignore-errors',
+  8 => 'alldeps',
+  9 => 'onlyreqdeps',
+  10 => 'offline',
+  11 => 'pretend',
 ), $l, 'long upgrade');
 PEAR_Command::getGetoptArgs('upgrade-all', $s, $l);
 $phpunit->assertEquals('nrBZR:', $s, 'short upgrade-all'); 
