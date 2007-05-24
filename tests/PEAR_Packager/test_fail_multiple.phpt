@@ -99,6 +99,7 @@ $phpunit->assertEquals(array (
     1 => true,
   ),
 ), $fakelog->getLog(), 'invalid v1 log');
+
 $savedir = getcwd();
 chdir($temp_path);
 // test double v1

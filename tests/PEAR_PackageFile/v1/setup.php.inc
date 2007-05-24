@@ -1,6 +1,7 @@
 <?php
 require_once 'PEAR/PackageFile/Parser/v1.php';
 require_once 'PEAR/Config.php';
+set_include_path(get_include_path().':'.getcwd()); // allows chdir
 
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 

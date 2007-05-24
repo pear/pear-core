@@ -2,6 +2,7 @@
 error_reporting(E_ALL);
 require_once "PEAR/DependencyDB.php";
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
+set_include_path(get_include_path().':'.getcwd()); // allows chdir
 
 // ------------------------------------------------------------------------- //
 

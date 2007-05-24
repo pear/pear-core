@@ -10,8 +10,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 
 error_reporting(E_ALL);
-chdir(dirname(__FILE__));
-require_once './setup.php.inc';
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $phpt->assertTrue($chf->setPath('xmlrpc', 'hi'), 'first time');
 $phpt->assertEquals('hi', $chf->getPath('xmlrpc'), 'first');
 $phpt->assertTrue($chf->setPath('soap', 'byebye'), 'first time soap');
