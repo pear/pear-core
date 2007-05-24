@@ -1723,6 +1723,8 @@ if (OS_WINDOWS) {
       ),
     ), $fakelog->getLog(), 'log messages');
 } else {
+    // Don't forget umask ! permission of new file is 0666
+    $umask = decoct(0666 & ( 0777 - umask()));
     $phpunit->assertEquals(array (
   0 => 
   array (
@@ -1832,7 +1834,7 @@ if (OS_WINDOWS) {
   21 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmpsample.sql',
+    1 => 'adding to transaction: chmod '.$umask.' ' . $temp_path . '/test/Auth_HTTP/tests/.tmpsample.sql',
   ),
   22 => 
   array (
@@ -1857,7 +1859,7 @@ if (OS_WINDOWS) {
   26 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_basic_simple.php',
+    1 => 'adding to transaction: chmod '.$umask.' ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_basic_simple.php',
   ),
   27 => 
   array (
@@ -1882,7 +1884,7 @@ if (OS_WINDOWS) {
   31 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_get.php',
+    1 => 'adding to transaction: chmod '.$umask.' ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_get.php',
   ),
   32 => 
   array (
@@ -1907,7 +1909,7 @@ if (OS_WINDOWS) {
   36 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_post.php',
+    1 => 'adding to transaction: chmod '.$umask.' ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_post.php',
   ),
   37 => 
   array (
@@ -1932,7 +1934,7 @@ if (OS_WINDOWS) {
   41 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_simple.php',
+    1 => 'adding to transaction: chmod '.$umask.' ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_simple.php',
   ),
   42 => 
   array (
@@ -1957,7 +1959,7 @@ if (OS_WINDOWS) {
   46 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: chmod 644 ' . $temp_path . '/php/Auth/.tmpHTTP.php',
+    1 => 'adding to transaction: chmod '.$umask.' ' . $temp_path . '/php/Auth/.tmpHTTP.php',
   ),
   47 => 
   array (
@@ -2067,7 +2069,7 @@ if (OS_WINDOWS) {
   68 => 
   array (
     0 => 3,
-    1 => '+ chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmpsample.sql',
+    1 => '+ chmod '.$umask.' ' . $temp_path . '/test/Auth_HTTP/tests/.tmpsample.sql',
   ),
   69 => 
   array (
@@ -2077,7 +2079,7 @@ if (OS_WINDOWS) {
   70 => 
   array (
     0 => 3,
-    1 => '+ chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_basic_simple.php',
+    1 => '+ chmod '.$umask.' ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_basic_simple.php',
   ),
   71 => 
   array (
@@ -2087,7 +2089,7 @@ if (OS_WINDOWS) {
   72 => 
   array (
     0 => 3,
-    1 => '+ chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_get.php',
+    1 => '+ chmod '.$umask.' ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_get.php',
   ),
   73 => 
   array (
@@ -2097,7 +2099,7 @@ if (OS_WINDOWS) {
   74 => 
   array (
     0 => 3,
-    1 => '+ chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_post.php',
+    1 => '+ chmod '.$umask.' ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_post.php',
   ),
   75 => 
   array (
@@ -2107,7 +2109,7 @@ if (OS_WINDOWS) {
   76 => 
   array (
     0 => 3,
-    1 => '+ chmod 644 ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_simple.php',
+    1 => '+ chmod '.$umask.' ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_simple.php',
   ),
   77 => 
   array (
@@ -2117,7 +2119,7 @@ if (OS_WINDOWS) {
   78 => 
   array (
     0 => 3,
-    1 => '+ chmod 644 ' . $temp_path . '/php/Auth/.tmpHTTP.php',
+    1 => '+ chmod '.$umask.' ' . $temp_path . '/php/Auth/.tmpHTTP.php',
   ),
   79 => 
   array (

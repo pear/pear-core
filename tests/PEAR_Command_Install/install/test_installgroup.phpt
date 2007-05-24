@@ -172,6 +172,8 @@ if (OS_WINDOWS) {
 )
 , $fakelog->getLog(), 'log');
 } else {
+    // Don't forget umask ! permission of new file is 0666
+    $umask = decoct(0666 & ( 0777 - umask()));
     $phpunit->assertEquals(array (
   array (
     0 => 1,
@@ -223,7 +225,7 @@ if (OS_WINDOWS) {
   11 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: chmod 644 ' . $temp_path . '/php/Console/.tmpGetopt.php',
+    1 => 'adding to transaction: chmod '.$umask.' ' . $temp_path . '/php/Console/.tmpGetopt.php',
   ),
   12 => 
   array (
@@ -243,7 +245,7 @@ if (OS_WINDOWS) {
   15 => 
   array (
     0 => 3,
-    1 => '+ chmod 644 ' . $temp_path . '/php/Console/.tmpGetopt.php',
+    1 => '+ chmod '.$umask.' ' . $temp_path . '/php/Console/.tmpGetopt.php',
   ),
   16 => 
   array (
