@@ -1947,16 +1947,16 @@ class PEAR_PackageFile_v2
         $this->getTasksNs();
         // transform all '-' to '/' and 'tasks:' to '' so tasks:replace becomes replace
         $task = str_replace(array($this->_tasksNs . ':', '-'), array('', ' '), $task);
-        $task = str_replace(' ', '/', ucwords($task));
-        $ps = (strtolower(substr(PHP_OS, 0, 3)) == 'win') ? ';' : ':';
-        foreach (explode($ps, ini_get('include_path')) as $path) {
-            if (file_exists($path . "/PEAR/Task/$task.php")) {
-                include_once "PEAR/Task/$task.php";
-                $task = str_replace('/', '_', $task);
-                if (class_exists("PEAR_Task_$task")) {
-                    return "PEAR_Task_$task";
-                }
-            }
+        $taskfile = str_replace(' ', '/', ucwords($task));
+        $task = str_replace('/', '_', $task);
+        if (class_exists("PEAR_Task_$task")) {
+            return "PEAR_Task_$task";
+        }
+        $fp = @fopen("PEAR/Task/$taskfile.php", 'r', true);
+        if ($fp) {
+            fclose($fp);
+            require_once "PEAR/Task/$taskfile.php";
+            return "PEAR_Task_$task";
         }
         return false;
     }
