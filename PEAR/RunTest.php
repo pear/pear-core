@@ -127,8 +127,7 @@ class PEAR_RunTest
         while (true) {
             /* hide errors from interrupted syscalls */
             $r = $pipes;
-            $w = null;
-            $e = null;
+            $e = $w = null;
             $n = @stream_select($r, $w, $e, 60);
     
             if ($n === 0) {
@@ -161,9 +160,9 @@ class PEAR_RunTest
     function settings2array($settings, $ini_settings)
     {
         foreach ($settings as $setting) {
-            if (strpos($setting, '=')!==false) {
-                $setting = explode("=", $setting, 2);
-                $name = trim(strtolower($setting[0]));
+            if (strpos($setting, '=')!== false) {
+                $setting = explode('=', $setting, 2);
+                $name  = trim(strtolower($setting[0]));
                 $value = trim($setting[1]);
                 $ini_settings[$name] = $value;
             }
@@ -260,11 +259,10 @@ class PEAR_RunTest
         }
         $ini_settings = $this->settings2params($ini_settings);
         $shortname = str_replace($cwd . DIRECTORY_SEPARATOR, '', $file);
-        if (!isset($this->_options['simple'])) {
-            $tested = trim($section_text['TEST']) . "[$shortname]";
-        } else {
-            $tested = trim($section_text['TEST']) . ' ';
-        }
+        
+        $tested = trim($section_text['TEST']);
+        $tested.= !isset($this->_options['simple']) ? "[$shortname]" : ' ';
+        
         if (!empty($section_text['GET']) || !empty($section_text['POST']) ||
               !empty($section_text['POST_RAW']) || !empty($section_text['COOKIE']) ||
               !empty($section_text['UPLOAD'])) {
@@ -312,36 +310,35 @@ class PEAR_RunTest
         // Check if test should be skipped.
         $info = '';
         $warn = false;
-        if (array_key_exists('SKIPIF', $section_text)) {
-            if (trim($section_text['SKIPIF'])) {
-                $this->save_text($temp_skipif, $section_text['SKIPIF']);
-                $output = $this->system_with_timeout("$php $info_params -f $temp_skipif");
-                $output = $output[1];
-                unlink($temp_skipif);
-                if (!strncasecmp('skip', ltrim($output), 4)) {
-                    $skipreason = "SKIP $tested";
-                    if (preg_match('/^\s*skip\s*(.+)\s*/i', $output, $m)) {
-                        $skipreason .= '(reason: ' . $m[1] . ')';
-                    }
-                    if (!isset($this->_options['quiet'])) {
-                        $this->_logger->log(0, $skipreason);
-                    }
-                    if (isset($this->_options['tapoutput'])) {
-                        return array('ok', ' # skip ' . $reason);
-                    }
-                    return 'SKIPPED';
+        if (array_key_exists('SKIPIF', $section_text) && trim($section_text['SKIPIF'])) {
+            $this->save_text($temp_skipif, $section_text['SKIPIF']);
+            $output = $this->system_with_timeout("$php $info_params -f $temp_skipif");
+            $output = $output[1];
+            $loutput = ltrim($output);
+            unlink($temp_skipif);
+            if (!strncasecmp('skip', $loutput, 4)) {
+                $skipreason = "SKIP $tested";
+                if (preg_match('/^\s*skip\s*(.+)\s*/i', $output, $m)) {
+                    $skipreason .= '(reason: ' . $m[1] . ')';
                 }
-                if (!strncasecmp('info', ltrim($output), 4)) {
-                    if (preg_match('/^\s*info\s*(.+)\s*/i', $output, $m)) {
-                        $info = " (info: $m[1])";
-                    }
+                if (!isset($this->_options['quiet'])) {
+                    $this->_logger->log(0, $skipreason);
                 }
-                if (!strncasecmp('warn', ltrim($output), 4)) {
-                    if (preg_match('/^\s*warn\s*(.+)\s*/i', $output, $m)) {
-                        $warn = true; /* only if there is a reason */
-                        $info = " (warn: $m[1])";
-                    }
+                if (isset($this->_options['tapoutput'])) {
+                    return array('ok', ' # skip ' . $reason);
                 }
+                return 'SKIPPED';
+            }
+
+            if (!strncasecmp('info', $loutput, 4)
+                && preg_match('/^\s*info\s*(.+)\s*/i', $output, $m)) {
+                $info = " (info: $m[1])";
+            }
+
+            if (!strncasecmp('warn', $loutput, 4)
+                && preg_match('/^\s*warn\s*(.+)\s*/i', $output, $m)) {
+                $warn = true; /* only if there is a reason */
+                $info = " (warn: $m[1])";
             }
         }
 
@@ -358,16 +355,16 @@ class PEAR_RunTest
         $savedir = getcwd(); // in case the test moves us around
         // Reset environment from any previous test.
         $env = $_ENV;
-        $env['REDIRECT_STATUS']='';
-        $env['QUERY_STRING']='';
-        $env['PATH_TRANSLATED']='';
-        $env['SCRIPT_FILENAME']='';
-        $env['REQUEST_METHOD']='';
-        $env['CONTENT_TYPE']='';
-        $env['CONTENT_LENGTH']='';
+        $env['REDIRECT_STATUS'] = '';
+        $env['QUERY_STRING']    = '';
+        $env['PATH_TRANSLATED'] = '';
+        $env['SCRIPT_FILENAME'] = '';
+        $env['REQUEST_METHOD']  = '';
+        $env['CONTENT_TYPE']    = '';
+        $env['CONTENT_LENGTH']  = '';
         if (!empty($section_text['ENV'])) {
-            foreach(explode("\n", trim($section_text['ENV'])) as $e) {
-                $e = explode('=',trim($e),2);
+            foreach (explode("\n", trim($section_text['ENV'])) as $e) {
+                $e = explode('=', trim($e), 2);
                 if (!empty($e[0]) && isset($e[1])) {
                     $env[$e[0]] = $e[1];
                 }
@@ -456,7 +453,6 @@ class PEAR_RunTest
             $this->save_text($tmp_post, $request);
             $cmd = "$php$pass_options$ini_settings -f \"$test_file\" 2>&1 < $tmp_post";
         } elseif (array_key_exists('POST', $section_text) && !empty($section_text['POST'])) {
-    
             $post = trim($section_text['POST']);
             $this->save_text($tmp_post, $post);
             $content_length = strlen($post);
@@ -466,9 +462,7 @@ class PEAR_RunTest
             $env['CONTENT_LENGTH'] = $content_length;
     
             $cmd = "$php$pass_options$ini_settings -f \"$test_file\" 2>&1 < $tmp_post";
-    
         } else {
-    
             $env['REQUEST_METHOD'] = 'GET';
             $env['CONTENT_TYPE']   = '';
             $env['CONTENT_LENGTH'] = '';
@@ -503,11 +497,10 @@ class PEAR_RunTest
             }
         }
         // Does the output match what is expected?
-        $output = trim($out);
-        $output = preg_replace('/\r\n/', "\n", $output);
+        $output = preg_replace('/\r\n/', "\n", trim($out));
 
         /* when using CGI, strip the headers from the output */
-        $headers = "";
+        $headers = '';
         if (!empty($this->_options['cgi']) &&
               $php == $this->_options['cgi'] && 
               preg_match("/^(.*?)\r?\n\r?\n(.*)/s", $out, $match)) {
@@ -569,7 +562,7 @@ class PEAR_RunTest
             } else {
                 $wanted = trim($section_text['EXPECT']);
                 $wanted = preg_replace('/\r\n/',"\n",$wanted);
-            // compare and leave on success
+                // compare and leave on success
                 $ok = (0 == strcmp($output,$wanted));
                 if (!$returnfail && $ok) {
                     if (file_exists($temp_file)) {
@@ -623,30 +616,22 @@ class PEAR_RunTest
         }
 
         // Test failed so we need to report details.
-        if ($warn) {
-            $this->_logger->log(0, "WARN $tested$info");
-        } else {
-            $this->_logger->log(0, "FAIL $tested$info");
-        }
+        $txt = $warn ? 'WARN ' : 'FAIL ';
+        $this->_logger->log(0, $txt . $tested . $info);
 
+        $failed = array(
+            'name' => $file,
+            'test_name' => $tested,
+            'diff'   => $diff_filename,
+            'info'   => $info,
+        );
         if (isset($section_text['RETURNS'])) {
-            $GLOBALS['__PHP_FAILED_TESTS__'][] = array(
-                            'name' => $file,
-                            'test_name' => $tested,
-                            'output' => $log_filename,
-                            'diff'   => $diff_filename,
-                            'info'   => $info,
-                            'return' => $return_value
-                            );
+            $failed['output'] = $log_filename;
+            $failed['return'] = $return_value;
         } else {
-            $GLOBALS['__PHP_FAILED_TESTS__'][] = array(
-                            'name' => $file,
-                            'test_name' => $tested,
-                            'output' => $output_filename,
-                            'diff'   => $diff_filename,
-                            'info'   => $info,
-                            );
+            $failed['output'] = $output_filename;
         }
+        $GLOBALS['__PHP_FAILED_TESTS__'][] = $failed;
 
         // write .exp
         if (strpos($log_format,'E') !== FALSE) {
@@ -654,12 +639,12 @@ class PEAR_RunTest
             if (!$log = fopen($logname,'w')) {
                 return PEAR::raiseError("Cannot create test log - $logname");
             }
-            fwrite($log,$wanted);
+            fwrite($log, $wanted);
             fclose($log);
         }
 
         // write .out
-        if (strpos($log_format,'O') !== FALSE) {
+        if (strpos($log_format,'O') !== false) {
             $logname = $output_filename;
             if (!$log = fopen($logname,'w')) {
                 return PEAR::raiseError("Cannot create test log - $logname");
@@ -669,7 +654,7 @@ class PEAR_RunTest
         }
 
         // write .diff
-        if (strpos($log_format,'D') !== FALSE) {
+        if (strpos($log_format,'D') !== false) {
             $logname = $diff_filename;
             if (!$log = fopen($logname,'w')) {
                 return PEAR::raiseError("Cannot create test log - $logname");
@@ -723,22 +708,22 @@ $return_value
         return $warn ? 'WARNED' : 'FAILED';
     }
 
-    function generate_diff($wanted, $output, $return_value, $wanted_re)
+    function generate_diff($wanted, $output, $rvalue, $wanted_re)
     {
         $w = explode("\n", $wanted);
         $o = explode("\n", $output);
         $wr = explode("\n", $wanted_re);
-        $w1 = array_diff_assoc($w,$o);
-        $o1 = array_diff_assoc($o,$w);
+        $w1 = array_diff_assoc($w, $o);
+        $o1 = array_diff_assoc($o, $w);
         $w2 = array();
         $o2 = array();
-        foreach($w1 as $idx => $val) {
+        foreach ($w1 as $idx => $val) {
             if (!$wanted_re || !isset($wr[$idx]) || !isset($o1[$idx]) ||
                   !preg_match('/^' . $wr[$idx] . '$/', $o1[$idx])) {
                 $w2[sprintf("%03d<", $idx)] = sprintf("%03d- ", $idx + 1) . $val;
             }
         }
-        foreach($o1 as $idx => $val) {
+        foreach ($o1 as $idx => $val) {
             if (!$wanted_re || !isset($wr[$idx]) ||
                   !preg_match('/^' . $wr[$idx] . '$/', $val)) {
                 $o2[sprintf("%03d>", $idx)] = sprintf("%03d+ ", $idx + 1) . $val;
@@ -746,24 +731,17 @@ $return_value
         }
         $diff = array_merge($w2, $o2);
         ksort($diff);
-        if ($return_value) {
-            $extra = "##EXPECTED: $return_value[0]\r\n##RETURNED: $return_value[1]";
-        } else {
-            $extra = '';
-        }
+        $extra = $rvalue ? "##EXPECTED: $rvalue[0]\r\n##RETURNED: $rvalue[1]" : '';
         return implode("\r\n", $diff) . $extra;
     }
 
-    //
     //  Write the given text to a temporary file, and return the filename.
-    //
-
     function save_text($filename, $text)
     {
         if (!$fp = fopen($filename, 'w')) {
             return PEAR::raiseError("Cannot open file '" . $filename . "' (save_text)");
         }
-        fwrite($fp,$text);
+        fwrite($fp, $text);
         fclose($fp);
     if (1 < DETAILED) echo "
 FILE $filename {{{
@@ -771,6 +749,4 @@ $text
 }}}
 ";
     }
-
 }
-?>
