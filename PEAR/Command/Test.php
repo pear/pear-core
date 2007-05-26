@@ -125,11 +125,9 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
             return $this->raiseError('ERROR: cannot use both --phpunit and --tapoutput at the same time');
         }
         require_once 'PEAR/Common.php';
-        require_once 'PEAR/RunTest.php';
         require_once 'System.php';
         $log = new PEAR_Common;
         $log->ui = &$this->ui; // slightly hacky, but it will work
-        $run = new PEAR_RunTest($log, $options);
         $tests = array();
         $depth = isset($options['recur']) ? 4 : 1;
 
@@ -217,26 +215,36 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
             $this->ui->outputData('Using INI settings: "' . $ini_settings . '"');
         }
         $skipped = $passed = $failed = array();
-        $this->ui->outputData('Running ' . count($tests) . ' tests', $command);
+        $tests_count = count($tests);
+        $this->ui->outputData('Running ' . $tests_count . ' tests', $command);
         $start = time();
         if (isset($options['realtimelog']) && file_exists('run-tests.log')) {
             unlink('run-tests.log');
         }
         
         if (isset($options['tapoutput'])) {
-            $tap = '1..' . count($tests) . "\n";
+            $tap = '1..' . $tests_count . "\n";
         }
-        $i = 1;
+
+        require_once 'PEAR/RunTest.php';
+        $run = new PEAR_RunTest($log, $options);
+        $run->tests_count = $tests_count;
+
+        $j = $i = 1;
         foreach ($tests as $t) {
             if (isset($options['realtimelog'])) {
                 $fp = @fopen('run-tests.log', 'a');
                 if ($fp) {
-                    fwrite($fp, "Running test $t...");
+                    fwrite($fp, "Running test [$i / $tests_count] $t...");
                     fclose($fp);
                 }
             }
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-            $result = $run->run($t, $ini_settings);
+            if (isset($options['phpunit'])) {
+                $result = $run->runPHPUnit($t, $ini_settings);
+            } else {
+                $result = $run->run($t, $ini_settings, $j);
+            }
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($result)) {
                 $this->ui->log($result->getMessage());
@@ -245,7 +253,6 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
             
             if (isset($options['tapoutput'])) {
                 $tap .= $result[0] . ' ' . $i . $result[1] . "\n";
-                $i++;
                 continue;
             }
             
@@ -256,6 +263,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                     fclose($fp);
                 }
             }
+            
             if ($result == 'FAILED') {
             	$failed[] = $t;
             }
@@ -265,7 +273,10 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
             if ($result == 'SKIPPED') {
             	$skipped[] = $t;
             }
+            
+            $j++;
         }
+
         $total = date('i:s', time() - $start);
         if (isset($options['tapoutput'])) {
             $fp = @fopen('run-tests.log', 'w');
@@ -284,11 +295,10 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
             	foreach ($failed as $failure) {
             		$output .= $failure . "\n";
             	}
-                if (isset($options['realtimelog'])) {
-                    $fp = @fopen('run-tests.log', 'a');
-                } else {
-                    $fp = @fopen('run-tests.log', 'w');
-                }
+                
+                $mode = isset($options['realtimelog']) ? 'a' : 'w';
+                $fp   = @fopen('run-tests.log', $mode);
+
                 if ($fp) {
                     fwrite($fp, $output, strlen($output));
                     fclose($fp);
@@ -312,5 +322,3 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
     }
     // }}}
 }
-
-?>
