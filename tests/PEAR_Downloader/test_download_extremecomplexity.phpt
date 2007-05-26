@@ -396,7 +396,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download pkg1-1.1.tgz (700 bytes)',
+    1 => 'Starting to download pkg1-1.1.tgz (701 bytes)',
   ),
   array (
     0 => 1,
@@ -404,7 +404,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => '...done: 700 bytes',
+    1 => '...done: 701 bytes',
   ),
   array (
     0 => 3,
@@ -416,11 +416,11 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download pkg2-1.1.tgz (704 bytes)',
+    1 => 'Starting to download pkg2-1.1.tgz (705 bytes)',
   ),
   array (
     0 => 1,
-    1 => '...done: 704 bytes',
+    1 => '...done: 705 bytes',
   ),
   array (
     0 => 3,
@@ -432,11 +432,11 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download pkg3-1.1.tgz (714 bytes)',
+    1 => 'Starting to download pkg3-1.1.tgz (715 bytes)',
   ),
   array (
     0 => 1,
-    1 => '...done: 714 bytes',
+    1 => '...done: 715 bytes',
   ),
   array (
     0 => 3,
@@ -448,11 +448,11 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download pkg4-1.1.tgz (702 bytes)',
+    1 => 'Starting to download pkg4-1.1.tgz (703 bytes)',
   ),
   array (
     0 => 1,
-    1 => '...done: 702 bytes',
+    1 => '...done: 703 bytes',
   ),
   array (
     0 => 3,
@@ -464,11 +464,11 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download pkg5-1.1.tgz (706 bytes)',
+    1 => 'Starting to download pkg5-1.1.tgz (707 bytes)',
   ),
   array (
     0 => 1,
-    1 => '...done: 706 bytes',
+    1 => '...done: 707 bytes',
   ),
   array (
     0 => 3,
@@ -480,11 +480,11 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download pkg6-1.1.tgz (673 bytes)',
+    1 => 'Starting to download pkg6-1.1.tgz (674 bytes)',
   ),
   array (
     0 => 1,
-    1 => '...done: 673 bytes',
+    1 => '...done: 674 bytes',
    ),
 ), $fakelog->getLog(), 'log messages');
 echo 'tests done';

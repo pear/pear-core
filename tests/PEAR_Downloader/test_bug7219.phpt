@@ -266,7 +266,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download XML_Parser-1.2.7.tgz (12,939 bytes)',
+    1 => 'Starting to download XML_Parser-1.2.7.tgz (12,940 bytes)',
   ),
   array (
     0 => 1,
@@ -278,7 +278,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => '...done: 12,939 bytes',
+    1 => '...done: 12,940 bytes',
   ),
 )
 , $fakelog->getLog(), 'log');

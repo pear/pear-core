@@ -253,7 +253,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download Bar-1.5.1.tgz (610 bytes)',
+    1 => 'Starting to download Bar-1.5.1.tgz (611 bytes)',
   ),
   array (
     0 => 1,
@@ -261,7 +261,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => '...done: 610 bytes',
+    1 => '...done: 611 bytes',
   ),
   array (
     0 => 3,
@@ -273,11 +273,11 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download Foobar-1.4.0a1.tgz (2,062 bytes)',
+    1 => 'Starting to download Foobar-1.4.0a1.tgz (2,063 bytes)',
   ),
   array (
     0 => 1,
-    1 => '...done: 2,062 bytes',
+    1 => '...done: 2,063 bytes',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
@@ -297,18 +297,18 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       0 => 'Bar-1.5.1.tgz',
-      1 => '610',
+      1 => '611',
     ),
   ),
   3 => 
   array (
     0 => 'bytesread',
-    1 => 610,
+    1 => 611,
   ),
   4 => 
   array (
     0 => 'done',
-    1 => 610,
+    1 => 611,
   ),
   5 => 
   array (
@@ -326,7 +326,7 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       0 => 'Foobar-1.4.0a1.tgz',
-      1 => '2062',
+      1 => '2063',
     ),
   ),
   8 => 
@@ -342,12 +342,12 @@ $phpunit->assertEquals(array (
   10 => 
   array (
     0 => 'bytesread',
-    1 => 2062,
+    1 => 2063,
   ),
   11 => 
   array (
     0 => 'done',
-    1 => 2062,
+    1 => 2063,
   ),
 ), $fakelog->getDownload(), 'download callback messages');
 echo 'tests done';
