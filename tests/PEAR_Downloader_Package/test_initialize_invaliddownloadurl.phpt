@@ -60,7 +60,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download test-1.0.tgz (213 bytes)',
+    1 => 'Starting to download test-1.0.tgz (214 bytes)',
   ),
   array (
     0 => 1,
@@ -68,7 +68,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => '...done: 213 bytes',
+    1 => '...done: 214 bytes',
   ),
   array (
     0 => 0,
@@ -97,18 +97,18 @@ $phpunit->assertEquals(array (
     1 =>
     array (
       0 => 'test-1.0.tgz',
-      1 => '213',
+      1 => '214',
     ),
   ),
   3 =>
   array (
     0 => 'bytesread',
-    1 => 213,
+    1 => 214,
   ),
   4 =>
   array (
     0 => 'done',
-    1 => 213,
+    1 => 214,
   ),
 ), $fakelog->getDownload(), 'download callback messages');
 $phpunit->assertIsa('PEAR_Error', $result, 'after initialize');
