@@ -349,7 +349,7 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 1,
-        1 => 'Starting to download Bar-1.5.2.tgz (2,212 bytes)',
+        1 => 'Starting to download Bar-1.5.2.tgz (2,213 bytes)',
       ),
       array (
         0 => 1,
@@ -357,7 +357,7 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 1,
-        1 => '...done: 2,212 bytes',
+        1 => '...done: 2,213 bytes',
       ),
       array (
         0 => 3,
@@ -369,11 +369,11 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 1,
-        1 => 'Starting to download Foobar-1.5.0a1.tgz (2,207 bytes)',
+        1 => 'Starting to download Foobar-1.5.0a1.tgz (2,208 bytes)',
       ),
       array (
         0 => 1,
-        1 => '...done: 2,207 bytes',
+        1 => '...done: 2,208 bytes',
       ),
       array (
         0 => 3,
@@ -491,7 +491,7 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 1,
-        1 => 'Starting to download Bar-1.5.2.tgz (2,212 bytes)',
+        1 => 'Starting to download Bar-1.5.2.tgz (2,213 bytes)',
       ),
       array (
         0 => 1,
@@ -499,7 +499,7 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 1,
-        1 => '...done: 2,212 bytes',
+        1 => '...done: 2,213 bytes',
       ),
       array (
         0 => 3,
@@ -511,11 +511,11 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 1,
-        1 => 'Starting to download Foobar-1.5.0a1.tgz (2,207 bytes)',
+        1 => 'Starting to download Foobar-1.5.0a1.tgz (2,208 bytes)',
       ),
       array (
         0 => 1,
-        1 => '...done: 2,207 bytes',
+        1 => '...done: 2,208 bytes',
       ),
       array (
         0 => 3,

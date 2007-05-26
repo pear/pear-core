@@ -99,7 +99,7 @@ if (OS_WINDOWS) {
   3 => 
   array (
     0 => 1,
-    1 => 'Starting to download Console_Getopt-1.2.tgz (3,370 bytes)',
+    1 => 'Starting to download Console_Getopt-1.2.tgz (3,371 bytes)',
   ),
   4 => 
   array (
@@ -109,7 +109,7 @@ if (OS_WINDOWS) {
   5 => 
   array (
     0 => 1,
-    1 => '...done: 3,370 bytes',
+    1 => '...done: 3,371 bytes',
   ),
   6 => 
   array (
@@ -189,7 +189,7 @@ if (OS_WINDOWS) {
   ),
   array (
     0 => 1,
-    1 => 'Starting to download Console_Getopt-1.2.tgz (3,370 bytes)',
+    1 => 'Starting to download Console_Getopt-1.2.tgz (3,371 bytes)',
   ),
   array (
     0 => 1,
@@ -197,7 +197,7 @@ if (OS_WINDOWS) {
   ),
   array (
     0 => 1,
-    1 => '...done: 3,370 bytes',
+    1 => '...done: 3,371 bytes',
   ),
   array (
     0 => 3,
