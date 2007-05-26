@@ -5,11 +5,7 @@ $server = 'pear.Chiara';
 $temp_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
 function cleanall($dir = null)
 {
-    if ($dir !== null) {
-        $statedir = $dir;
-    } else {
-        $statedir = $GLOBALS['statedir'];
-    }
+    $statedir = ($dir !== null) ? $dir : $GLOBALS['statedir'];
     clearstatcache();
     if (file_exists($statedir)) {
         $dp = opendir($statedir);
