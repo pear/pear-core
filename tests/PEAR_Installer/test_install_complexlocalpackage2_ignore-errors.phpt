@@ -557,7 +557,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download Bar-1.5.2.tgz (2,212 bytes)',
+    1 => 'Starting to download Bar-1.5.2.tgz (2,213 bytes)',
   ),
   array (
     0 => 1,
@@ -565,7 +565,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => '...done: 2,212 bytes',
+    1 => '...done: 2,213 bytes',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
@@ -585,7 +585,7 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       0 => 'Bar-1.5.2.tgz',
-      1 => '2212',
+      1 => '2213',
     ),
   ),
   3 => 
@@ -601,12 +601,12 @@ $phpunit->assertEquals(array (
   5 => 
   array (
     0 => 'bytesread',
-    1 => 2212,
+    1 => 2213,
   ),
   6 => 
   array (
     0 => 'done',
-    1 => 2212,
+    1 => 2213,
   ),
 ), $fakelog->getDownload(), 'download callback messages');
 $installer->sortPackagesForInstall($result);
