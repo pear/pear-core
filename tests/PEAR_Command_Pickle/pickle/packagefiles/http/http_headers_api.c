@@ -354,7 +354,7 @@ PHP_HTTP_API STATUS _http_parse_headers_ex(const char *header, HashTable *header
 		/* note: valgrind may choke on that -- should be safe though */
 		switch (*line++)
 		{
-			case ':':
+			case PATH_SEPARATOR:
 				if (!colon) {
 					colon = line - 1;
 				}

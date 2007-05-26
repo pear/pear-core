@@ -491,7 +491,7 @@ sqlite *sqlite_open(const char *zFilename, int mode, char **pzErrMsg){
   }
   
   /* Open the backend database driver */
-  if( zFilename[0]==':' && strcmp(zFilename,":memory:")==0 ){
+  if( zFilename[0]==PATH_SEPARATOR && strcmp(zFilename,":memory:")==0 ){
     db->temp_store = 2;
   }
   rc = sqliteBtreeFactory(db, zFilename, 0, MAX_PAGES, &db->aDb[0].pBt);
@@ -1129,7 +1129,7 @@ int sqliteBtreeFactory(
       /* Always use in-core DB */
       return sqliteRbtreeOpen(0, 0, 0, ppBtree);
     }
-  }else if( zFilename[0]==':' && strcmp(zFilename,":memory:")==0 ){
+  }else if( zFilename[0]==PATH_SEPARATOR && strcmp(zFilename,":memory:")==0 ){
     return sqliteRbtreeOpen(0, 0, 0, ppBtree);
   }else
 #endif

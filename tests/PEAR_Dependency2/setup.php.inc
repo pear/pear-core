@@ -1,5 +1,5 @@
 <?php
-set_include_path(get_include_path().':'.getcwd()); // allows chdir
+set_include_path(get_include_path().PATH_SEPARATOR.getcwd()); // allows chdir
 
 $server = 'pear.Chiara';
 //$server = 'test.pear.php.net';
