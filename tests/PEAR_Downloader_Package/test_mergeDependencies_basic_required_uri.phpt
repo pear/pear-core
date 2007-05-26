@@ -92,7 +92,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download foo-1.0.tgz (638 bytes)',
+    1 => 'Starting to download foo-1.0.tgz (639 bytes)',
   ),
   array (
     0 => 1,
@@ -100,7 +100,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => '...done: 638 bytes',
+    1 => '...done: 639 bytes',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
@@ -120,18 +120,18 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       0 => 'foo-1.0.tgz',
-      1 => '638',
+      1 => '639',
     ),
   ),
   3 => 
   array (
     0 => 'bytesread',
-    1 => 638,
+    1 => 639,
   ),
   4 => 
   array (
     0 => 'done',
-    1 => 638,
+    1 => 639,
   ),
 ), $fakelog->getDownload(), 'download callback messages');
 $phpunit->assertTrue($result, 'first return');
