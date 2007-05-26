@@ -28,7 +28,7 @@ $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');
 $foolit = new foolit;
 $foolit->setConfig($config);
 $foolit->fromArray($pf->getArray());
-$ps = strtolower(substr(PHP_OS, 0, 3)) == 'win' ? ';' : ':';
+$ps = strtolower(substr(PHP_OS, 0, 3)) == 'win' ? ';' : PATH_SEPARATOR;
 $d = DIRECTORY_SEPARATOR;
 ini_set('include_path', dirname(__FILE__) . "${d}test_getTask" . $ps . ini_get('include_path'));
 $phpunit->assertEquals('PEAR_Task_Gronk', $foolit->getTask('tasks:gronk'), 'tasks:gronk');

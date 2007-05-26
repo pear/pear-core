@@ -486,7 +486,7 @@ PHP_HTTP_API STATUS _http_message_send(http_message *message TSRMLS_DC)
 				int port = 0;
 
 				/* check for port */
-				if (colon = strchr(Z_STRVAL_PP(zhost), ':')) {
+				if (colon = strchr(Z_STRVAL_PP(zhost), PATH_SEPARATOR)) {
 					port = atoi(colon + 1);
 					host = estrndup(Z_STRVAL_PP(zhost), host_len = (Z_STRVAL_PP(zhost) - colon - 1));
 				} else {

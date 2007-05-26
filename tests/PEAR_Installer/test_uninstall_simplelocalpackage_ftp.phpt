@@ -21,7 +21,7 @@ if (defined('PATH_SEPARATOR')) {
     if (substr(PHP_OS, 0, 3) == 'WIN') {
         $ps = ';';
     } else {
-        $ps = ':';
+        $ps = PATH_SEPARATOR;
     }
 }
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';

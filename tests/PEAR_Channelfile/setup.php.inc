@@ -1,6 +1,6 @@
 <?php
 include "PEAR/ChannelFile.php";
-set_include_path(get_include_path().':'.getcwd()); // allows chdir
+set_include_path(get_include_path().PATH_SEPARATOR.getcwd()); // allows chdir
 require_once dirname(dirname(__FILE__)) . '/phpt_test.php.inc';
 function postprocess($string)
 {

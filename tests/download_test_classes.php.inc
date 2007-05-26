@@ -80,7 +80,7 @@ class test_PEAR_REST extends PEAR_REST {
         }
         if ($proxy_host != '' && $proxy_user != '') {
             $request .= 'Proxy-Authorization: Basic ' .
-                base64_encode($proxy_user . ':' . $proxy_pass) . "\r\n";
+                base64_encode($proxy_user . PATH_SEPARATOR . $proxy_pass) . "\r\n";
         }
         if ($accept) {
             $request .= 'Accept: ' . implode(', ', $accept) . "\r\n";

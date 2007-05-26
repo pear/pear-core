@@ -25,7 +25,7 @@ $post->addPostFields(array('a'=>1,'b'=>2)) ;
 $pool->send();
 foreach ($pool as $req) {
     echo $req->getUrl(), '=',
-        $req->getResponseCode(), ':',
+        $req->getResponseCode(), PATH_SEPARATOR,
         $req->getResponseMessage()->getResponseCode(), "\n";
 }
 foreach ($pool as $req) {

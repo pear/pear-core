@@ -155,7 +155,7 @@ static int parseTimezone(const char *zDate, DateTime *p){
     return *zDate!=0;
   }
   zDate++;
-  if( getDigits(zDate, 2, 0, 14, ':', &nHr, 2, 0, 59, 0, &nMn)!=2 ){
+  if( getDigits(zDate, 2, 0, 14, PATH_SEPARATOR, &nHr, 2, 0, 59, 0, &nMn)!=2 ){
     return 1;
   }
   zDate += 5;
@@ -174,11 +174,11 @@ static int parseTimezone(const char *zDate, DateTime *p){
 static int parseHhMmSs(const char *zDate, DateTime *p){
   int h, m, s;
   double ms = 0.0;
-  if( getDigits(zDate, 2, 0, 24, ':', &h, 2, 0, 59, 0, &m)!=2 ){
+  if( getDigits(zDate, 2, 0, 24, PATH_SEPARATOR, &h, 2, 0, 59, 0, &m)!=2 ){
     return 1;
   }
   zDate += 5;
-  if( *zDate==':' ){
+  if( *zDate==PATH_SEPARATOR ){
     zDate++;
     if( getDigits(zDate, 2, 0, 59, 0, &s)!=1 ){
       return 1;
@@ -566,7 +566,7 @@ static int parseModifier(const char *zMod, DateTime *p){
     case '9': {
       n = getValue(z, &r);
       if( n<=0 ) break;
-      if( z[n]==':' ){
+      if( z[n]==PATH_SEPARATOR ){
         /* A modifier of the form (+|-)HH:MM:SS.FFF adds (or subtracts) the
         ** specified number of hours, minutes, seconds, and fractional seconds
         ** to the time.  The ".FFF" may be omitted.  The ":SS.FFF" may be

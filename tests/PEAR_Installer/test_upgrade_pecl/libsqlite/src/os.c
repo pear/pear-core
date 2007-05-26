@@ -877,7 +877,7 @@ int sqliteOsTempFileName(char *zBuf){
         i = strlen(zdirName);
         memmove(&(zTempPath[i+1]), zTempPath, strlen(zTempPath));
         strcpy(zTempPath, zdirName);
-        zTempPath[i] = ':';
+        zTempPath[i] = PATH_SEPARATOR;
       }else{
         *zTempPath = 0;
         break;
@@ -1791,12 +1791,12 @@ char *sqliteOsFullPathname(const char *zRelative){
 #endif
 #if OS_MAC
   char *zFull = 0;
-  if( zRelative[0]==':' ){
+  if( zRelative[0]==PATH_SEPARATOR ){
     char zBuf[_MAX_PATH+1];
     sqliteSetString(&zFull, getcwd(zBuf, sizeof(zBuf)), &(zRelative[1]),
                     (char*)0);
   }else{
-    if( strchr(zRelative, ':') ){
+    if( strchr(zRelative, PATH_SEPARATOR) ){
       sqliteSetString(&zFull, zRelative, (char*)0);
     }else{
     char zBuf[_MAX_PATH+1];
