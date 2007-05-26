@@ -240,7 +240,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download SQLite-1.0.4.tgz (371,000 bytes)',
+    1 => 'Starting to download SQLite-1.0.4.tgz (371,001 bytes)',
   ),
   array (
     0 => 1,
@@ -536,7 +536,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => '...done: 371,000 bytes',
+    1 => '...done: 371,001 bytes',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals( array (
@@ -556,7 +556,7 @@ $phpunit->assertEquals( array (
     1 => 
     array (
       0 => 'SQLite-1.0.4.tgz',
-      1 => '371000',
+      1 => '371001',
     ),
   ),
   3 => 
@@ -2372,12 +2372,12 @@ $phpunit->assertEquals( array (
   365 => 
   array (
     0 => 'bytesread',
-    1 => 371000,
+    1 => 371001,
   ),
   366 => 
   array (
     0 => 'done',
-    1 => 371000,
+    1 => 371001,
   ),
  )
 , $fakelog->getDownload(), 'download callback messages');
