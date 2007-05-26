@@ -352,7 +352,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download APC-1.3.0.tgz (516 bytes)',
+    1 => 'Starting to download APC-1.3.0.tgz (517 bytes)',
   ),
   array (
     0 => 1,
@@ -360,7 +360,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => '...done: 516 bytes',
+    1 => '...done: 517 bytes',
   ),
   array (
     'info' => 'File ' . $temp_path . DIRECTORY_SEPARATOR . 'APC-1.3.0.tgz downloaded',
