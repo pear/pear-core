@@ -361,6 +361,9 @@ class PEAR_Downloader extends PEAR_Common
             while ($reverify) {
                 $reverify = false;
                 foreach ($params as $i => $param) {
+                    //PHP Bug 40768 / PEAR Bug #10944
+                    //Nested foreaches fail in PHP 5.2.1
+                    key($params);
                     $ret = $params[$i]->detectDependencies($params);
                     if (PEAR::isError($ret)) {
                         $reverify = true;
