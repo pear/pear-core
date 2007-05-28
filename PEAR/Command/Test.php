@@ -91,10 +91,10 @@ If none is found, all .phpt tests will be tried instead.',
                     'doc' => 'CGI php executable (needed for tests with POST/GET section)',
                     'arg' => 'PHPCGI',
                 ),
-                'coverage' => array(
-                    'shortopt' => 'x',
-                    'doc'      => 'Generate a code coverage report (requires Xdebug 2.0.0+)',
-                ),
+                //~ 'coverage' => array(
+                    //~ 'shortopt' => 'x',
+                    //~ 'doc'      => 'Generate a code coverage report (requires Xdebug 2.0.0+)',
+                //~ ),
             ),
             'doc' => '[testfile|dir ...]
 Run regression tests with PHP\'s regression testing script (run-tests.php).',
