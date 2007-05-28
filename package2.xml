@@ -59,6 +59,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>cox@idecnet.com</email>
   <active>no</active>
  </lead>
+ <developer>
+  <name>Tias Guns</name>
+  <user>tias</user>
+  <email>tias@php.net</email>
+  <active>yes</active>
+ </developer>
  <helper>
   <name>Tim Jackson</name>
   <user>timj</user>
@@ -99,6 +105,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #10944: Cannot install Package+Subpackage [cipri]
   * fix Bug #11014: custom tasks with &quot;-&quot; in name cannot be
     packaged [cellog]
+  * implement Request #10182: add resolution of PHP dependency prior to download
+    [cellog]
   * implement Request #10373: if pref_state=stable and installed package=beta,
     allow up to latest beta version [tias]
  </notes>
@@ -250,6 +258,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="11.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="13.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
     </dir> <!-- /PEAR/REST -->
