@@ -43,6 +43,10 @@ If none is found, all .phpt tests will be tried instead.</doc>
     <doc>CGI php executable (needed for tests with POST/GET section)</doc>
     <arg>PHPCGI</arg>
    </cgi>
+   <coveraget>
+    <shortopt>x</shortopt>
+    <doc>Generate a code coverage report (requires Xdebug 2.0.0+)</doc>
+   </coverage>
   </options>
   <doc>[testfile|dir ...]
 Run regression tests with PHP&apos;s regression testing script (run-tests.php).</doc>

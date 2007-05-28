@@ -54,6 +54,7 @@ class PEAR_RunTest
     var $_options;
     var $_php;
     var $test_count;
+    var $xdebug_loaded;
     var $ini_overwrites = array(
         'output_handler=',
         'open_basedir=',
@@ -258,7 +259,7 @@ class PEAR_RunTest
             $this->_php = $this->_options['cgi'];
         }
 
-        $temp_dir = $test_dir = realpath(dirname($file));
+        $temp_dir = realpath(dirname($file));
     	$main_file_name = basename($file, 'phpt');
     	$diff_filename     = $temp_dir . DIRECTORY_SEPARATOR . $main_file_name.'diff';
     	$log_filename      = $temp_dir . DIRECTORY_SEPARATOR . $main_file_name.'log';
@@ -281,24 +282,27 @@ class PEAR_RunTest
         $info = $res['info'];
         $warn = $res['warn'];
 
-        /*
-        $pos = substr($section_text['FILE'], 0, 5);
         // We've satisfied the preconditions - run the test!
-        if ($pos != '<?php') {
-            $pos = substr($section_text['FILE'], 0, 2);
-            if ($pos != '<?') {
-
+        if (isset($this->_options['coverage']) && $this->xdebug_loaded) {
+            $len_f = 5;
+            if (substr($section_text['FILE'], 0, 5) != '<?php'
+                && substr($section_text['FILE'], 0, 2) == '<?') {
+                $len_f = 2;
             }
+
+            $text = '<?php' . "\n" . 'xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);' . "\n";
+            $new = substr($section_text['FILE'], $len_f, strlen($section_text['FILE']));
+            $text.= substr($new, 0, strrpos($new, '?>'));
+            $xdebug_file = $temp_dir . DIRECTORY_SEPARATOR . $main_file_name . 'xdebug';
+            $text.= "\n" . 
+                   "\n" . '$xdebug = var_export(xdebug_get_code_coverage(), true);' . 
+                   "\n" . 'file_put_contents(\'' . $xdebug_file . '\', $xdebug);' . 
+                   "\n" . 'xdebug_stop_code_coverage();' . "\n" . '?>';
+
+            $this->save_text($temp_file, $text);
+        } else {
+            $this->save_text($temp_file, $section_text['FILE']);
         }
-
-        $foo = '<?php' . "\n" . 'xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);' . "\n";
-        $new = substr($section_text['FILE'], 5);
-        $foo.= substr($new, 0, strlen($new) - strrpos($new, '?>'));
-        $foo.= "\n" . 'var_dump(xdebug_get_code_coverage()); ';
-        $foo.= 'xdebug_stop_code_coverage();' . "\n" . '?>';
-        */
-
-        $this->save_text($temp_file, $section_text['FILE']);
 
         $args = $section_text['ARGS'] ? ' -- '.$section_text['ARGS'] : '';
         $cmd = "$this->_php$ini_settings -f \"$temp_file\" $args 2>&1";
