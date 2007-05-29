@@ -109,6 +109,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     [cellog]
   * implement Request #10373: if pref_state=stable and installed package=beta,
     allow up to latest beta version [tias]
+  * implement Request #10495: list-all with channel information etc [tias]
  </notes>
  <contents>
   <dir name="/">

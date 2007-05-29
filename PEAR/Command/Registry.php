@@ -146,7 +146,8 @@ installed package.'
             'caption' => 'Installed packages, channel ' .
                 $channel . ':',
             'border' => true,
-            'headline' => array('Package', 'Version', 'State')
+            'headline' => array('Package', 'Version', 'State'),
+            'channel' => $channel,
             );
         foreach ($installed as $package) {
             $pobj = $reg->getPackage(isset($package['package']) ?
@@ -171,7 +172,8 @@ installed package.'
             $data = array(
                 'caption' => 'Installed packages, channel ' . $channel . ':',
                 'border' => true,
-                'headline' => array('Package', 'Version', 'State')
+                'headline' => array('Package', 'Version', 'State'),
+                'channel' => $channel
                 );
             foreach ($packages as $package) {
                 $pobj = $reg->getPackage(isset($package['package']) ?
@@ -184,6 +186,7 @@ installed package.'
                     'caption' => 'Installed packages, channel ' . $channel . ':',
                     'border' => true,
                     'data' => array(array('(no packages installed)')),
+                    'channel' => $channel
                     );
             }
             $this->ui->outputData($data, $command);

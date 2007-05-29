@@ -108,7 +108,11 @@ will be used to match any portion of the summary/description',
                     'shortopt' => 'c',
                     'doc' => 'specify a channel other than the default channel',
                     'arg' => 'CHAN',
-                    )
+                    ),
+                'channelinfo' => array(
+                    'shortopt' => 'i',
+                    'doc' => 'output fully channel-aware data, even on failure',
+                    ),
                 ),
             'doc' => '
 Lists the packages available on the configured server along with the
@@ -276,6 +280,7 @@ parameter.
             'caption' => 'Channel ' . $channel . ' Available packages:',
             'border' => true,
             'headline' => array('Package', 'Version'),
+            'channel' => $channel
             );
         if (count($available)==0) {
             $data = '(no packages available yet)';
@@ -339,7 +344,14 @@ parameter.
             'caption' => 'All packages [Channel ' . $channel . ']:',
             'border' => true,
             'headline' => array('Package', 'Latest', 'Local'),
+            'channel' => $channel,
             );
+        if (isset($options['channelinfo'])) {
+            // add full channelinfo
+            $data['caption'] = 'Channel ' . $channel . ' All packages:';
+            $data['headline'] = array('Channel', 'Package', 'Latest', 'Local',
+                'Description', 'Dependencies');
+        }
         $local_pkgs = $reg->listPackages($channel);
 
         foreach ($available as $name => $info) {
@@ -373,13 +385,39 @@ parameter.
             if (isset($info['stable']) && !$info['stable']) {
                 $info['stable'] = null;
             }
-            $data['data'][$info['category']][] = array(
-                $reg->channelAlias($channel) . '/' . $name,
-                isset($info['stable']) ? $info['stable'] : null,
-                isset($installed['version']) ? $installed['version'] : null,
-                isset($desc) ? $desc : null,
-                isset($info['deps']) ? $info['deps'] : null,
+
+            if (isset($options['channelinfo'])) {
+                // add full channelinfo
+                if ($info['stable'] === $info['unstable']) {
+                    $state = $info['state'];
+                } else {
+                    $state = 'stable';
+                }
+                $latest = $info['stable'].' ('.$state.')';
+                $local = '';
+                if (isset($installed['version'])) {
+                    $inst_state = $reg->packageInfo($name, 'release_state', $channel);
+                    $local = $installed['version'].' ('.$inst_state.')';
+                }
+                
+                $packageinfo = array(
+                    $channel,
+                    $name,
+                    $latest,
+                    $local,
+                    isset($desc) ? $desc : null,
+                    isset($info['deps']) ? $info['deps'] : null,
                 );
+            } else {
+                $packageinfo = array(
+                    $reg->channelAlias($channel) . '/' . $name,
+                    isset($info['stable']) ? $info['stable'] : null,
+                    isset($installed['version']) ? $installed['version'] : null,
+                    isset($desc) ? $desc : null,
+                    isset($info['deps']) ? $info['deps'] : null,
+                );
+            }
+            $data['data'][$info['category']][] = $packageinfo;
         }
 
         if (isset($options['mode']) && in_array($options['mode'], array('notinstalled', 'upgrades'))) {
@@ -451,6 +489,7 @@ parameter.
             'caption' => 'Matched packages, channel ' . $channel . ':',
             'border' => true,
             'headline' => array('Package', 'Stable/(Latest)', 'Local'),
+            'channel' => $channel
             );
 
         foreach ($available as $name => $info) {
@@ -596,6 +635,7 @@ parameter.
                 'caption' => $caption,
                 'border' => 1,
                 'headline' => array('Channel', 'Package', 'Local', 'Remote', 'Size'),
+                'channel' => $channel
                 );
             foreach ((array)$latest as $pkg => $info) {
                 $package = strtolower($pkg);
