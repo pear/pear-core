@@ -627,6 +627,7 @@ Run post-installation scripts in package <package>, if any exist.
         }
         $errors = $this->downloader->getErrorMsgs();
         if (count($errors)) {
+            $err = array();
             $err['data'] = array();
             foreach ($errors as $error) {
                 $err['data'][] = array($error);
