@@ -100,6 +100,10 @@ latest stable release of each package.',
                     'shortopt' => 'a',
                     'doc' => 'search packages from all known channels',
                     ),
+                'channelinfo' => array(
+                    'shortopt' => 'i',
+                    'doc' => 'output fully channel-aware data, even on failure',
+                    ),
                 ),
             'doc' => '[packagename] [packageinfo]
 Lists all packages which match the search parameters.  The first
@@ -461,6 +465,7 @@ parameter.
             return $this->raiseError('no valid search string supplied');
         };
 
+        $channelinfo = isset($options['channelinfo']);
         $reg = &$this->config->getRegistry();
         if (isset($options['allchannels'])) {
             // search all channels
@@ -515,41 +520,69 @@ parameter.
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($available);
         }
-        if (!$available) {
+        if (!$available && !$channelinfo) {
             // clean exit when not found, no error !
             $data = 'no packages found that match pattern "' . $package . '", for channel '.$channel.'.';
             $this->ui->outputData($data);
             $this->config->set('default_channel', $channel);
             return true;
         }
-        $data = array(
-            'caption' => 'Matched packages, channel ' . $channel . ':',
-            'border' => true,
-            'headline' => array('Package', 'Stable/(Latest)', 'Local'),
-            'channel' => $channel
-            );
+        if ($channelinfo) {
+            $data = array(
+                'caption' => 'Matched packages, channel ' . $channel . ':',
+                'border' => true,
+                'headline' => array('Channel', 'Package', 'Stable/(Latest)', 'Local'),
+                'channel' => $channel
+                );
+        } else {
+            $data = array(
+                'caption' => 'Matched packages, channel ' . $channel . ':',
+                'border' => true,
+                'headline' => array('Package', 'Stable/(Latest)', 'Local'),
+                'channel' => $channel
+                );
+        }
 
+        if (!$available && $channelinfo) {
+            unset($data['headline']);
+            $data['data'] = 'No packages found that match pattern "' . $package . '".';
+            $available = array();
+        }
         foreach ($available as $name => $info) {
             $installed = $reg->packageInfo($name, null, $channel);
             $desc = $info['summary'];
             if (isset($params[$name]))
                 $desc .= "\n\n".$info['description'];
 
-            $unstable = '';
-            if ($info['unstable']) {
-                $unstable = '/(' . $info['unstable'] . ' ' . $info['state'] . ')';
-            }
             if (!isset($info['stable']) || !$info['stable']) {
-                $info['stable'] = 'none';
+                $version_remote = 'none';
+            } else {
+                if ($info['unstable']) {
+                    $version_remote = $info['unstable'];
+                } else {
+                    $version_remote = $info['stable'];
+                }
+                $version_remote .= ' ('.$info['state'].')';
             }
             $version = is_array($installed['version']) ? $installed['version']['release'] :
                 $installed['version'];
-            $data['data'][$info['category']][] = array(
-                $name,
-                $info['stable'] . $unstable,
-                $version,
-                $desc,
+            if ($channelinfo) {
+                $packageinfo = array(
+                    $channel,
+                    $name,
+                    $version_remote,
+                    $version,
+                    $desc,
                 );
+            } else {
+                $packageinfo = array(
+                    $name,
+                    $version_remote,
+                    $version,
+                    $desc,
+                );
+            }
+            $data['data'][$info['category']][] = $packageinfo;
         }
         $this->ui->outputData($data, $command);
         $this->config->set('default_channel', $channel);
