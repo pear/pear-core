@@ -95,7 +95,11 @@ latest stable release of each package.',
                     'shortopt' => 'c',
                     'doc' => 'specify a channel other than the default channel',
                     'arg' => 'CHAN',
-                    )
+                    ),
+                'allchannels' => array(
+                    'shortopt' => 'a',
+                    'doc' => 'search packages from all known channels',
+                    ),
                 ),
             'doc' => '[packagename] [packageinfo]
 Lists all packages which match the search parameters.  The first
@@ -457,8 +461,32 @@ parameter.
             return $this->raiseError('no valid search string supplied');
         };
 
-        $savechannel = $channel = $this->config->get('default_channel');
         $reg = &$this->config->getRegistry();
+        if (isset($options['allchannels'])) {
+            // search all channels
+            unset($options['allchannels']);
+            $channels = $reg->getChannels();
+            $errors = array();
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+            foreach ($channels as $channel) {
+                if ($channel->getName() != '__uri') {
+                    $options['channel'] = $channel->getName();
+                    $ret = $this->doSearch($command, $options, $params);
+                    if (PEAR::isError($ret)) {
+                        $errors[] = $ret;
+                    }
+                }
+            }
+            PEAR::staticPopErrorHandling();
+            if (count($errors) !== 0) {
+                // for now, only give first error
+                return PEAR::raiseError($errors[0]);
+            }
+
+            return true;
+        }
+
+        $savechannel = $channel = $this->config->get('default_channel');
         $package = $params[0];
         $summary = isset($params[1]) ? $params[1] : false;
         if (isset($options['channel'])) {
@@ -488,7 +516,11 @@ parameter.
             return $this->raiseError($available);
         }
         if (!$available) {
-            return $this->raiseError('no packages found that match pattern "' . $package . '"');
+            // clean exit when not found, no error !
+            $data = 'no packages found that match pattern "' . $package . '", for channel '.$channel.'.';
+            $this->ui->outputData($data);
+            $this->config->set('default_channel', $channel);
+            return true;
         }
         $data = array(
             'caption' => 'Matched packages, channel ' . $channel . ':',

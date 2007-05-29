@@ -46,6 +46,10 @@ latest stable release of each package.</doc>
     <doc>specify a channel other than the default channel</doc>
     <arg>CHAN</arg>
    </channel>
+   <allchannels>
+    <shortopt>a</shortopt>
+    <doc>search packages from all known channels</doc>
+   </allchannels>
   </options>
   <doc>[packagename] [packageinfo]
 Lists all packages which match the search parameters.  The first

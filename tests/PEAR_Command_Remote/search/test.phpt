@@ -96,12 +96,14 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'log after');
 $e = $command->run('search', array(), array('XZ'));
-$phpunit->assertErrors(array (
-  array (
-    'package' => 'PEAR_Error',
-    'message' => 'no packages found that match pattern "XZ"',
-  ),
-), 'errors');
+$phpunit->assertNoErrors('errors');
+$phpunit->assertEquals(array (
+  0 => 
+   array (
+    'info' => 'no packages found that match pattern "XZ", for channel pear.php.net.',
+    'cmd' => 'no command',
+   ),
+), $fakelog->getLog(), 'log notfound');
 echo 'tests done';
 ?>
 --CLEAN--
