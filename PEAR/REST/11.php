@@ -199,6 +199,101 @@ class PEAR_REST_11
     }
 
     /**
+     * List all categories of a REST server
+     *
+     * @param string $base base URL of the server
+     * @return array of categorynames
+     */
+    function listCategories($base)
+    {
+        $categorylist = $this->_rest->retrieveData($base . 'c/categories.xml');
+        if (PEAR::isError($categorylist)) {
+            return $categorylist;
+        }
+        if (!is_array($categorylist) || !isset($categorylist['c'])) {
+            return array();
+        }
+        if (isset($categorylist['c']['_content'])) {
+            // only 1 category
+            $categorylist['c'] = array($categorylist['c']);
+        }
+        return $categorylist['c'];
+    }
+
+    /**
+     * List packages in a category of a REST server
+     *
+     * @param string $base base URL of the server
+     * @param string $category name of the category
+     * @param boolean $info also download full package info
+     * @return array of packagenames
+     */
+    function listPackagesInCategory($base, $category, $info=false)
+    {
+        if ($info == false) {
+            $url = '%s'.'c/%s/packages.xml';
+        } else {
+            $url = '%s'.'c/%s/packagesinfo.xml';
+        }
+        $url = sprintf($url,
+                    $base,
+                    urlencode($category));
+            
+        // gives '404 Not Found' error when category doesn't exist
+        $packagelist = $this->_rest->retrieveData($url);
+        if (PEAR::isError($packagelist)) {
+            return $packagelist;
+        }
+        if (!is_array($packagelist)) {
+            return array();
+        }
+
+        if ($info == false) {
+            if (!isset($packagelist['p'])) {
+                return array();
+            }
+            if (!is_array($packagelist['p']) ||
+                !isset($packagelist['p'][0])) { // only 1 pkg
+                $packagelist = array($packagelist['p']);
+            } else {
+                $packagelist = $packagelist['p'];
+            }
+            return $packagelist;
+        } else {
+            // info == true
+            if (!isset($packagelist['pi'])) {
+                return array();
+            }
+            if (!is_array($packagelist['pi']) ||
+                !isset($packagelist['pi'][0])) { // only 1 pkg
+                $packagelist_pre = array($packagelist['pi']);
+            } else {
+                $packagelist_pre = $packagelist['pi'];
+            }
+
+            $packagelist = array();
+            foreach ($packagelist_pre as $i => $item) {
+                // compatibility with r/<latest.txt>.xml
+                if (isset($item['a']['r'][0])) {
+                    // multiple releases
+                    $item['p']['v'] = $item['a']['r'][0]['v'];
+                    $item['p']['st'] = $item['a']['r'][0]['s'];
+                } elseif (isset($item['a'])) {
+                    // first and only release
+                    $item['p']['v'] = $item['a']['r']['v'];
+                    $item['p']['st'] = $item['a']['r']['s'];
+                }
+
+                $packagelist[$i] = array('attribs' => $item['p']['r'],
+                                         '_content' => $item['p']['n'],
+                                         'info' => $item['p']);
+            }
+        }
+
+        return $packagelist;
+    }
+
+    /**
      * Return an array containing all of the states that are more stable than
      * or equal to the passed in state
      *
