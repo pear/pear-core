@@ -112,6 +112,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * implement Request #10495: list-all with channel information etc [tias]
   * implement Request #10496: list with channel information [tias]
   * implement Request #10515: list-upgrades with channel information [tias]
+  * implement Request #10812: list-categories and list-category [tias]
  </notes>
  <contents>
   <dir name="/">
