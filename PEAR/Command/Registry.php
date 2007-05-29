@@ -193,7 +193,7 @@ installed package.'
             $data['data'][] = $packageinfo;
         }
         if (count($installed) == 0) {
-            if ($channelinfo) {
+            if (!$channelinfo) {
                 $data = '(no packages installed from channel ' . $channel . ')';
             } else {
                 $data = array(
