@@ -777,10 +777,11 @@ class PEAR_Downloader extends PEAR_Common
             $parr['channel']);
         $base2 = false;
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
-              ($base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror')) ||
-              $base2 = $chan->getBaseURL('REST1.2', $this->config->get('preferred_mirror')))) {
+              (($base2 = $chan->getBaseURL('REST1.3', $this->config->get('preferred_mirror'))) ||
+              ($base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))))) {
             if ($base2) {
-                $rest = &$this->config->getREST('1.2', $this->_options);
+                $rest = &$this->config->getREST('1.3', $this->_options);
+                $base = $base2;
             } else {
                 $rest = &$this->config->getREST('1.0', $this->_options);
             }
