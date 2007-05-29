@@ -388,6 +388,7 @@ $phpunit->assertEquals(array (
         1 => 'Latest',
         2 => 'Local',
       ),
+      'channel' => 'pear.php.net',
       'data' => 
       array (
         'File Formats' => 

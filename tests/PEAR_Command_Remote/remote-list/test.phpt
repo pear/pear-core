@@ -5467,6 +5467,7 @@ $phpunit->assertEquals(array (
         0 => 'Package',
         1 => 'Version',
       ),
+      'channel' => 'pear.php.net',
       'data' => 
       array (
         0 => 
@@ -6358,6 +6359,7 @@ $phpunit->assertEquals(array (
         0 => 'Package',
         1 => 'Version',
       ),
+      'channel' => 'smoog',
       'data' => 
       array (
         0 => 

@@ -59,6 +59,7 @@ $phpunit->assertEquals(array (
         1 => 'Version',
         2 => 'State',
       ),
+      'channel' => 'gronk',
       'data' => 
       array (
         0 => 

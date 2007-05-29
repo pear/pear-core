@@ -103,6 +103,7 @@ $actual = array (
         3 => 'Remote',
         4 => 'Size',
       ),
+      'channel' => 'pear.php.net',
       'data' => 
       array (
         0 => 

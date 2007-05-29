@@ -5463,6 +5463,7 @@ $phpunit->assertEquals(array (
         1 => 'Latest',
         2 => 'Local',
       ),
+      'channel' => 'pear.php.net',
       'data' => 
       array (
         'Caching' => 
@@ -7338,6 +7339,7 @@ $phpunit->assertEquals(array (
         1 => 'Latest',
         2 => 'Local',
       ),
+      'channel' => 'smoog',
       'data' => 
       array (
         'Caching' => 
@@ -7373,6 +7375,7 @@ $phpunit->assertEquals(array (
         1 => 'Latest',
         2 => 'Local',
       ),
+      'channel' => 'empty',
     ),
     'cmd' => 'list-all',
   ),
