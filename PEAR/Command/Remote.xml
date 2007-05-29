@@ -59,6 +59,10 @@ will be used to match any portion of the summary/description</doc>
     <doc>specify a channel other than the default channel</doc>
     <arg>CHAN</arg>
    </channel>
+   <channelinfo>
+    <shortopt>i</shortopt>
+    <doc>output fully channel-aware data, even on failure</doc>
+   </channelinfo>
   </options>
   <doc>
 Lists the packages available on the configured server along with the
