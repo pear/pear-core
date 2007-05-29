@@ -58,6 +58,10 @@ class PEAR_Command_Registry extends PEAR_Command_Common
                     'shortopt' => 'a',
                     'doc' => 'list installed packages from all channels',
                     ),
+                'channelinfo' => array(
+                    'shortopt' => 'i',
+                    'doc' => 'output fully channel-aware data, even on failure',
+                    ),
                 ),
             'doc' => '<package>
 If invoked without parameters, this command lists the PEAR packages
@@ -123,10 +127,33 @@ installed package.'
 
     function doList($command, $options, $params)
     {
-        if (isset($options['allchannels'])) {
+        $reg = &$this->config->getRegistry();
+        $channelinfo = isset($options['channelinfo']);
+        if (isset($options['allchannels']) && !$channelinfo) {
             return $this->doListAll($command, array(), $params);
         }
-        $reg = &$this->config->getRegistry();
+        if (isset($options['allchannels']) && $channelinfo) {
+            // allchannels with $channelinfo
+            unset($options['allchannels']);
+            $channels = $reg->getChannels();
+            $errors = array();
+            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+            foreach ($channels as $channel) {
+                $options['channel'] = $channel->getName();
+                $ret = $this->doList($command, $options, $params);
+
+                if (PEAR::isError($ret)) {
+                    $errors[] = $ret;
+                }
+            }
+            PEAR::staticPopErrorHandling();
+            if (count($errors)) {
+                // for now, only give first error
+                return PEAR::raiseError($errors[0]);
+            }
+            return true;
+        }
+
         if (count($params) == 1) {
             return $this->doFileList($command, $options, $params);
         }
@@ -141,7 +168,7 @@ installed package.'
         }
         $installed = $reg->packageInfo(null, null, $channel);
         usort($installed, array(&$this, '_sortinfo'));
-        $i = $j = 0;
+
         $data = array(
             'caption' => 'Installed packages, channel ' .
                 $channel . ':',
@@ -149,14 +176,34 @@ installed package.'
             'headline' => array('Package', 'Version', 'State'),
             'channel' => $channel,
             );
+        if ($channelinfo) {
+            $data['headline'] = array('Channel', 'Package', 'Version', 'State');
+        }
+
         foreach ($installed as $package) {
             $pobj = $reg->getPackage(isset($package['package']) ?
                                         $package['package'] : $package['name'], $channel);
-            $data['data'][] = array($pobj->getPackage(), $pobj->getVersion(),
+            if ($channelinfo) {
+                $packageinfo = array($pobj->getChannel(), $pobj->getPackage(), $pobj->getVersion(),
                                     $pobj->getState() ? $pobj->getState() : null);
+            } else {
+                $packageinfo = array($pobj->getPackage(), $pobj->getVersion(),
+                                    $pobj->getState() ? $pobj->getState() : null);
+            }
+            $data['data'][] = $packageinfo;
         }
-        if (count($installed)==0) {
-            $data = '(no packages installed from channel ' . $channel . ')';
+        if (count($installed) == 0) {
+            if ($channelinfo) {
+                $data = '(no packages installed from channel ' . $channel . ')';
+            } else {
+                $data = array(
+                    'caption' => 'Installed packages, channel ' .
+                        $channel . ':',
+                    'border' => true,
+                    'channel' => $channel,
+                    'data' => '(no packages installed)',
+                );
+            }
         }
         $this->ui->outputData($data, $command);
         return true;
@@ -164,11 +211,13 @@ installed package.'
     
     function doListAll($command, $options, $params)
     {
+        // This duplicate code is deprecated over
+        // list --channelinfo, which gives identical
+        // output for list and list --allchannels.
         $reg = &$this->config->getRegistry();
         $installed = $reg->packageInfo(null, null, null);
         foreach ($installed as $channel => $packages) {
             usort($packages, array($this, '_sortinfo'));
-            $i = $j = 0;
             $data = array(
                 'caption' => 'Installed packages, channel ' . $channel . ':',
                 'border' => true,
