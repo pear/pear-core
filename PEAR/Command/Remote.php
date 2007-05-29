@@ -58,7 +58,12 @@ Get details on a package from the server.',
             'summary' => 'List Available Upgrades',
             'function' => 'doListUpgrades',
             'shortcut' => 'lu',
-            'options' => array(),
+            'options' => array(
+                'channelinfo' => array(
+                    'shortopt' => 'i',
+                    'doc' => 'output fully channel-aware data, even on failure',
+                    ),
+            ),
             'doc' => '[preferred_state]
 List releases on the server of packages you have installed where
 a newer version is available with the same release state (stable etc.)
@@ -661,10 +666,22 @@ parameter.
                 }
                 $data['data'][] = array($channel, $pkg, "$inst_version ($inst_state)", "$version ($state)", $fs);
             }
-            if (empty($data['data'])) {
-                $this->ui->outputData('Channel ' . $channel . ': No upgrades available');
-            } else {
+            if (isset($options['channelinfo'])) {
+                if (empty($data['data'])) {
+                    unset($data['headline']);
+                    if (count($inst) == 0) {
+                        $data['data'] = '(no packages installed)';
+                    } else {
+                        $data['data'] = '(no upgrades available)';
+                    }
+                }
                 $this->ui->outputData($data, $command);
+            } else {
+                if (empty($data['data'])) {
+                    $this->ui->outputData('Channel ' . $channel . ': No upgrades available');
+                } else {
+                    $this->ui->outputData($data, $command);
+                }
             }
         }
         $this->config->set('default_channel', $savechannel);
