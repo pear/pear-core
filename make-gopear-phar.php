@@ -1,6 +1,6 @@
 <?php
 /**
- * go-pear.phar creator.  Requires PHP_Archive version 0.10.0 or newer
+ * go-pear.phar creator.  Requires PHP_Archive version 0.11.0 or newer
  *
  * PHP version 5.1+
  *
@@ -75,8 +75,8 @@ if (PEAR::isError($pf)) {
 }
 $pearver = $pf->getVersion();
 
-$creator = new PHP_Archive_Creator('index.php', 'go-pear.phar', false);
-//$creator->useDefaultFrontController();
+$creator = new PHP_Archive_Creator('index.php', 'go-pear.phar');
+$creator->useDefaultFrontController('PEAR.php');
 foreach ($packages as $package) {
     echo "adding PEAR/go-pear-tarballs/$package\n";
     $creator->addFile("PEAR/go-pear-tarballs/$package", "PEAR/go-pear-tarballs/$package");
@@ -89,6 +89,28 @@ function replaceVersion($contents, $path)
 {
     return str_replace(array('@PEAR-VER@', '@package_version@'), $GLOBALS['pearver'], $contents);
 }
+$commandcontents = file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . '/PEAR/Frontend.php');
+$commandcontents = str_replace(
+    array(
+        "\$file = str_replace('_', '/', \$uiclass) . '.php';"
+    ),
+    array(
+        "\$file = 'phar://go-pear.phar/' . str_replace('_', '/', \$uiclass) . '.php';"
+    ), $commandcontents);
+$commandcontents = replaceVersion($commandcontents, '');
+$creator->addString($commandcontents, 'PEAR/Frontend.php');
+
+$commandcontents = file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . '/PEAR/PackageFile/v2.php');
+$commandcontents = str_replace(
+    array(
+        '$fp = @fopen("PEAR/Task/$taskfile.php", \'r\', true);',
+    ),
+    array(
+        '$fp = @fopen("phar://go-pear.phar/PEAR/Task/$taskfile.php", \'r\', true);'
+    ), $commandcontents);
+$commandcontents = replaceVersion($commandcontents, '');
+$commandcontents = $creator->tokenMagicRequire($commandcontents, 'a.php');
+$creator->addString($commandcontents, 'PEAR/PackageFile/v2.php');
 
 $creator->addMagicRequireCallback(array($creator, 'limitedSmartMagicRequire'));
 $creator->addMagicRequireCallback('replaceVersion');
@@ -102,11 +124,9 @@ $creator->addDir($peardir . DIRECTORY_SEPARATOR . 'PEAR', array(),
         '*PEAR/Dependency2.php',
         '*PEAR/PackageFile/Generator/v1.php',
         '*PEAR/PackageFile/Generator/v2.php',
-        '*PEAR/PackageFile/v2.php',
         '*PEAR/PackageFile/v2/Validator.php',
         '*PEAR/Downloader/Package.php',
         '*PEAR/Installer/Role.php',
-        '*PEAR/Frontend.php',
         '*PEAR/ChannelFile/Parser.php',
         '*PEAR/Command/Install.xml',
         '*PEAR/Command/Install.php',
@@ -125,7 +145,6 @@ $creator->addDir($peardir . DIRECTORY_SEPARATOR . 'PEAR', array(),
         '*PEAR/Installer/Role/Test.xml',
         '*PEAR/PackageFile.php',
         '*PEAR/PackageFile/v1.php',
-        '*PEAR/PackageFile/v2.php',
         '*PEAR/PackageFile/Parser/v1.php',
         '*PEAR/PackageFile/Parser/v2.php',
         '*PEAR/PackageFile/Generator/v1.php',
@@ -149,7 +168,6 @@ $creator->addDir($peardir . DIRECTORY_SEPARATOR . 'PEAR', array(),
         '*PEAR/DependencyDB.php',
         '*PEAR/Downloader.php',
         '*PEAR/ErrorStack.php',
-        '*PEAR/Frontend.php',
         '*PEAR/Installer.php',
         '*PEAR/Registry.php',
         '*PEAR/Remote.php',
