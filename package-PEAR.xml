@@ -106,6 +106,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
     allow up to latest beta version [tias]
   * implement Request #10495: list-all with channel information etc [tias]
   * implement Request #10496: list with channel information [tias]
+  * implement Request #10515: list-upgrades with channel information [tias]
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
