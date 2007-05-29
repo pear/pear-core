@@ -257,7 +257,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download Bar-1.5.1.tgz (611 bytes)',
+    1 => 'Starting to download Bar-1.5.1.tgz (610 bytes)',
   ),
   array (
     0 => 1,
@@ -265,7 +265,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => '...done: 611 bytes',
+    1 => '...done: 610 bytes',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
@@ -285,18 +285,18 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       0 => 'Bar-1.5.1.tgz',
-      1 => '611',
+      1 => '610',
     ),
   ),
   3 => 
   array (
     0 => 'bytesread',
-    1 => 611,
+    1 => 610,
   ),
   4 => 
   array (
     0 => 'done',
-    1 => 611,
+    1 => 610,
   ),
 ), $fakelog->getDownload(), 'download callback messages');
 echo 'tests done';

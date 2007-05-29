@@ -353,7 +353,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download PEAR1-1.4.0a1.tgz (2,113 bytes)',
+    1 => 'Starting to download PEAR1-1.4.0a1.tgz (2,112 bytes)',
   ),
   array (
     0 => 1,
@@ -361,7 +361,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => '...done: 2,113 bytes',
+    1 => '...done: 2,112 bytes',
   ),
   array (
     0 => 3,
@@ -373,11 +373,11 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download Bar-1.5.0.tgz (2,086 bytes)',
+    1 => 'Starting to download Bar-1.5.0.tgz (2,085 bytes)',
   ),
   array (
     0 => 1,
-    1 => '...done: 2,086 bytes',
+    1 => '...done: 2,085 bytes',
   ),
   array (
     0 => 3,
@@ -389,11 +389,11 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download Foobar-1.4.0a1.tgz (2,063 bytes)',
+    1 => 'Starting to download Foobar-1.4.0a1.tgz (2,062 bytes)',
   ),
   array (
     0 => 1,
-    1 => '...done: 2,063 bytes',
+    1 => '...done: 2,062 bytes',
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
@@ -413,7 +413,7 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       0 => 'PEAR1-1.4.0a1.tgz',
-      1 => '2113',
+      1 => '2112',
     ),
   ),
   3 => 
@@ -429,12 +429,12 @@ $phpunit->assertEquals(array (
   5 => 
   array (
     0 => 'bytesread',
-    1 => 2113,
+    1 => 2112,
   ),
   6 => 
   array (
     0 => 'done',
-    1 => 2113,
+    1 => 2112,
   ),
   7 => 
   array (
@@ -452,7 +452,7 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       0 => 'Bar-1.5.0.tgz',
-      1 => '2086',
+      1 => '2085',
     ),
   ),
   10 => 
@@ -468,12 +468,12 @@ $phpunit->assertEquals(array (
   12 => 
   array (
     0 => 'bytesread',
-    1 => 2086,
+    1 => 2085,
   ),
   13 => 
   array (
     0 => 'done',
-    1 => 2086,
+    1 => 2085,
   ),
   14 => 
   array (
@@ -491,7 +491,7 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       0 => 'Foobar-1.4.0a1.tgz',
-      1 => '2063',
+      1 => '2062',
     ),
   ),
   17 => 
@@ -507,12 +507,12 @@ $phpunit->assertEquals(array (
   19 => 
   array (
     0 => 'bytesread',
-    1 => 2063,
+    1 => 2062,
   ),
   20 => 
   array (
     0 => 'done',
-    1 => 2063,
+    1 => 2062,
   ),
 ), $fakelog->getDownload(), 'download callback messages');
 echo 'tests done';
