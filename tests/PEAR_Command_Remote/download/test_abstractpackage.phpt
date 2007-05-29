@@ -81,7 +81,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download test-1.0.tgz (786 bytes)',
+    1 => 'Starting to download test-1.0.tgz (785 bytes)',
   ),
   array (
     0 => 1,
@@ -89,7 +89,7 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => '...done: 786 bytes',
+    1 => '...done: 785 bytes',
   ),
   array (
     'info' => 'File ' . $temp_path . DIRECTORY_SEPARATOR . 'bloob' .
@@ -114,18 +114,18 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       0 => 'test-1.0.tgz',
-      1 => '786',
+      1 => '785',
     ),
   ),
   3 => 
   array (
     0 => 'bytesread',
-    1 => 786,
+    1 => 785,
   ),
   4 => 
   array (
     0 => 'done',
-    1 => 786,
+    1 => 785,
   ),
 ), $fakelog->getDownload(), 'download log');
 
@@ -142,11 +142,11 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => 'Starting to download test-1.0.tar (6,657 bytes)',
+    1 => 'Starting to download test-1.0.tar (6,656 bytes)',
   ),
   array (
     0 => 1,
-    1 => '...done: 6,657 bytes',
+    1 => '...done: 6,656 bytes',
   ),
   array (
     'info' => 'File ' . $temp_path . DIRECTORY_SEPARATOR . 'bloob' .
@@ -171,7 +171,7 @@ $phpunit->assertEquals(array (
     1 => 
     array (
       0 => 'test-1.0.tar',
-      1 => '6657',
+      1 => '6656',
     ),
   ),
   3 => 
@@ -207,12 +207,12 @@ $phpunit->assertEquals(array (
   9 => 
   array (
     0 => 'bytesread',
-    1 => 6657,
+    1 => 6656,
   ),
   10 => 
   array (
     0 => 'done',
-    1 => 6657,
+    1 => 6656,
   ),
 ), $fakelog->getDownload(), 'download --nocompress log');
 echo 'tests done';
