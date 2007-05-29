@@ -50,6 +50,10 @@ latest stable release of each package.</doc>
     <shortopt>a</shortopt>
     <doc>search packages from all known channels</doc>
    </allchannels>
+   <channelinfo>
+    <shortopt>i</shortopt>
+    <doc>output fully channel-aware data, even on failure</doc>
+   </channelinfo>
   </options>
   <doc>[packagename] [packageinfo]
 Lists all packages which match the search parameters.  The first

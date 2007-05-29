@@ -109,6 +109,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * implement Request #10515: list-upgrades with channel information [tias]
   * implement Request #10659: search allchannels [tias]
   * implement Request #10812: list-categories and list-category [tias]
+  * implement Request #11169: search with channel information [tias]
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
