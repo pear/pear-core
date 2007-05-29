@@ -52,6 +52,7 @@ $phpunit->assertEquals(array (
         1 => 'Version',
         2 => 'State',
       ),
+      'channel' => 'pear.php.net',
       'data' => 
       array (
         0 => 
