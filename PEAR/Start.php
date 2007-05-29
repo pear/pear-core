@@ -14,6 +14,7 @@ class PEAR_Start extends PEAR
             'Archive_Tar',
             'Console_Getopt',
             'PEAR',
+            'Structures_Graph',
         );
     var $local_dir = array();
     var $origpwd;
@@ -31,6 +32,8 @@ class PEAR_Start extends PEAR
     var $pear_conf;
     var $validPHPBin = false;
     var $test_dir;
+    var $download_dir;
+    var $temp_dir;
     var $config =
         array(
             'prefix',
@@ -39,6 +42,8 @@ class PEAR_Start extends PEAR
             'doc_dir',
             'data_dir',
             'test_dir',
+            'temp_dir',
+            'download_dir',
             'pear_conf',
         );
     var $prefix;
@@ -46,6 +51,8 @@ class PEAR_Start extends PEAR
     var $configPrompt =
         array(
             'prefix' => 'Installation base ($prefix)',
+            'temp_dir' => 'Temporary directory for processing',
+            'download_dir' => 'Temporary directory for downloads',
             'bin_dir' => 'Binaries directory',
             'php_dir' => 'PHP code directory ($php_dir)',
             'doc_dir' => 'Documentation directory',
@@ -76,6 +83,8 @@ class PEAR_Start extends PEAR
 
             $this->localInstall = false;
             $this->bin_dir   = '$prefix';
+            $this->temp_dir   = '$prefix\tmp';
+            $this->download_dir   = '$prefix\tmp';
             $this->php_dir   = '$prefix\pear';
             $this->doc_dir   = '$php_dir\docs';
             $this->data_dir  = '$php_dir\data';
@@ -126,6 +135,8 @@ class PEAR_Start extends PEAR
             }
             $this->bin_dir   = '$prefix/bin';
             $this->php_dir   = '$prefix/share/pear';
+            $this->temp_dir  = '/tmp/pear/install';
+            $this->download_dir  = '/tmp/pear/install';
             $this->doc_dir   = '$php_dir/docs';
             $this->data_dir  = '$php_dir/data';
             $this->test_dir  = '$php_dir/tests';

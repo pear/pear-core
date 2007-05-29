@@ -473,6 +473,9 @@ class PEAR_PackageFile_v2
      */
     function setRawState($state)
     {
+        if (!isset($this->_packageInfo['stability'])) {
+            $this->_packageInfo['stability'] = array();
+        }
         $this->_packageInfo['stability']['release'] = $state;
     }
 

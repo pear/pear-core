@@ -76,7 +76,7 @@ if (PEAR::isError($pf)) {
 $pearver = $pf->getVersion();
 
 $creator = new PHP_Archive_Creator('index.php', 'go-pear.phar', false);
-$creator->useDefaultFrontController();
+//$creator->useDefaultFrontController();
 foreach ($packages as $package) {
     echo "adding PEAR/go-pear-tarballs/$package\n";
     $creator->addFile("PEAR/go-pear-tarballs/$package", "PEAR/go-pear-tarballs/$package");
