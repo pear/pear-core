@@ -18,7 +18,6 @@ $workingcopy = array (
     array (
       'caption' => 'Installed packages, channel pear.php.net:',
       'border' => true,
-      'channel' => 'pear.php.net',
       'data' => 
       array (
         0 => 
@@ -26,6 +25,7 @@ $workingcopy = array (
           0 => '(no packages installed)',
         ),
       ),
+      'channel' => 'pear.php.net',
     ),
     'cmd' => 'list',
   ),
@@ -35,7 +35,6 @@ $workingcopy = array (
     array (
       'caption' => 'Installed packages, channel __uri:',
       'border' => true,
-      'channel' => '__uri',
       'data' => 
       array (
         0 => 
@@ -43,6 +42,7 @@ $workingcopy = array (
           0 => '(no packages installed)',
         ),
       ),
+      'channel' => '__uri',
     ),
     'cmd' => 'list',
   ),
@@ -52,7 +52,6 @@ $workingcopy = array (
     array (
       'caption' => 'Installed packages, channel pecl.php.net:',
       'border' => true,
-      'channel' => 'pecl.php.net',
       'data' => 
       array (
         0 => 
@@ -60,6 +59,7 @@ $workingcopy = array (
           0 => '(no packages installed)',
         ),
       ),
+      'channel' => 'pecl.php.net',
     ),
     'cmd' => 'list',
   ),
@@ -153,7 +153,6 @@ $workingcopy = array (
     array (
       'caption' => 'Installed packages, channel __uri:',
       'border' => true,
-      'channel' => '__uri',
       'data' => 
       array (
         0 => 
@@ -161,6 +160,7 @@ $workingcopy = array (
           0 => '(no packages installed)',
         ),
       ),
+      'channel' => '__uri',
     ),
     'cmd' => 'list',
   ),
@@ -170,7 +170,6 @@ $workingcopy = array (
     array (
       'caption' => 'Installed packages, channel pecl.php.net:',
       'border' => true,
-      'channel' => 'pecl.php.net',
       'data' => 
       array (
         0 => 
@@ -178,6 +177,7 @@ $workingcopy = array (
           0 => '(no packages installed)',
         ),
       ),
+      'channel' => 'pecl.php.net',
     ),
     'cmd' => 'list',
   ),

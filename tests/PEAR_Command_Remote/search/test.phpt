@@ -86,7 +86,7 @@ $phpunit->assertEquals(array (
           0 => 
           array (
             0 => 'Archive_Tar',
-            1 => '1.2',
+            1 => '1.2 (stable)',
             2 => '1.0.0',
             3 => 'Tar file management class',
           ),

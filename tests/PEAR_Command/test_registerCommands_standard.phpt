@@ -203,11 +203,11 @@ $phpunit->assertEquals(array (
   13 => 'pretend',
 ), $l, 'long install');
 PEAR_Command::getGetoptArgs('list', $s, $l);
-$phpunit->assertEquals('c:a', $s, 'short list'); 
-$phpunit->assertEquals(array('channel=', 'allchannels'), $l, 'long list');
+$phpunit->assertEquals('c:ai', $s, 'short list'); 
+$phpunit->assertEquals(array('channel=', 'allchannels', 'channelinfo'), $l, 'long list');
 PEAR_Command::getGetoptArgs('list-all', $s, $l);
-$phpunit->assertEquals('c:', $s, 'short list-all'); 
-$phpunit->assertEquals(array('channel='), $l, 'long list-all');
+$phpunit->assertEquals('c:i', $s, 'short list-all'); 
+$phpunit->assertEquals(array('channel=', 'channelinfo'), $l, 'long list-all');
 PEAR_Command::getGetoptArgs('list-channels', $s, $l);
 $phpunit->assertEquals('', $s, 'short list-channels'); 
 $phpunit->assertEquals(array(), $l, 'long list-channels');
@@ -215,8 +215,8 @@ PEAR_Command::getGetoptArgs('list-files', $s, $l);
 $phpunit->assertEquals('', $s, 'short list-files'); 
 $phpunit->assertEquals(array(), $l, 'long list-files');
 PEAR_Command::getGetoptArgs('list-upgrades', $s, $l);
-$phpunit->assertEquals('', $s, 'short list-upgrades'); 
-$phpunit->assertEquals(array(), $l, 'long list-upgrades');
+$phpunit->assertEquals('i', $s, 'short list-upgrades'); 
+$phpunit->assertEquals(array('channelinfo'), $l, 'long list-upgrades');
 PEAR_Command::getGetoptArgs('login', $s, $l);
 $phpunit->assertEquals('', $s, 'short login'); 
 $phpunit->assertEquals(array(), $l, 'long login');
@@ -260,8 +260,8 @@ $phpunit->assertEquals(array (
     'tapoutput',
     'cgi='), $l, 'long run-tests');
 PEAR_Command::getGetoptArgs('search', $s, $l);
-$phpunit->assertEquals('c:', $s, 'short search'); 
-$phpunit->assertEquals(array ('channel='), $l, 'long search');
+$phpunit->assertEquals('c:ai', $s, 'short search'); 
+$phpunit->assertEquals(array ('channel=', 'allchannels', 'channelinfo'), $l, 'long search');
 PEAR_Command::getGetoptArgs('shell-test', $s, $l);
 $phpunit->assertEquals('', $s, 'short shell-test'); 
 $phpunit->assertEquals(array (), $l, 'long shell-test');
