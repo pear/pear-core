@@ -693,12 +693,12 @@ class PEAR_Registry extends PEAR
                     }
                     $file = preg_replace(',^/+,', '', $file);
                     if ($channel != 'pear.php.net') {
+                        if (!isset($files[$attrs['role']])) {
+                            $files[$attrs['role']] = array();
+                        }
                         $files[$attrs['role']][$file] = array(strtolower($channel),
                             strtolower($package));
                     } else {
-                        if (!is_array($files)) {
-                            $file = array();
-                        }
                         if (!isset($files[$attrs['role']])) {
                             $files[$attrs['role']] = array();
                         }
