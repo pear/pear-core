@@ -259,12 +259,13 @@ class PEAR_REST_10
      * @param array $release an array of format array('v' => version, 's' => state)
      *                       describing the release to download
      * @param array $info list of all releases as defined by allreleases.xml
-     * @param bool $found determines whether the release was found or this is the next
-     *                    best alternative
+     * @param bool|null $found determines whether the release was found or this is the next
+     *                    best alternative.  If null, then versions were skipped because
+     *                    of PHP dependency
      * @return array|PEAR_Error
      * @access private
      */
-    function _returnDownloadURL($base, $package, $release, $info, $found)
+    function _returnDownloadURL($base, $package, $release, $info, $found, $phpversion = false)
     {
         if (!$found) {
             $release = $info['r'][0];
@@ -353,6 +354,7 @@ class PEAR_REST_10
                       'info' => $packagexml,
                       'compatible' => $compatible,
                       'deprecated' => $deprecated,
+                      'php' => $phpversion
                 );
         }
     }

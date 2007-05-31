@@ -137,15 +137,10 @@ class PEAR_Frontend extends PEAR
         if (file_exists($path) && is_readable($path)) {
             return true;
         }
-        $ipath = explode(PATH_SEPARATOR, ini_get('include_path'));
-        foreach ($ipath as $include) {
-            $test = realpath($include . DIRECTORY_SEPARATOR . $path);
-            if (!$test) { // support wrappers like phar (realpath just don't work with them)
-                $test = $include . DIRECTORY_SEPARATOR . $path;
-            }
-            if (file_exists($test) && is_readable($test)) {
-                return true;
-            }
+        $fp = @fopen($path, 'r', true);
+        if ($fp) {
+            fclose($fp);
+            return true;
         }
         return false;
     }

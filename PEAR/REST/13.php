@@ -87,40 +87,62 @@ class PEAR_REST_13 extends PEAR_REST_10
         if (!is_array($info['r']) || !isset($info['r'][0])) {
             $info['r'] = array($info['r']);
         }
+        $skippedphp = false;
         foreach ($info['r'] as $release) {
             if (!isset($this->_rest->_options['force']) && ($installed &&
                   version_compare($release['v'], $installed, '<'))) {
                 continue;
             }
-            if (!isset($version) && version_compare($release['m'], phpversion(), '<=')) {
-                // skip releases that require a PHP version newer than our PHP version
-                continue;
-            }
             if (isset($state)) {
                 // try our preferred state first
                 if ($release['s'] == $state) {
+                    if (!isset($version) && version_compare($release['m'], phpversion(), '>')) {
+                        // skip releases that require a PHP version newer than our PHP version
+                        $skippedphp = $release;
+                        continue;
+                    }
                     $found = true;
                     break;
                 }
                 // see if there is something newer and more stable
                 // bug #7221
                 if (in_array($release['s'], $this->betterStates($state), true)) {
+                    if (!isset($version) && version_compare($release['m'], phpversion(), '>')) {
+                        // skip releases that require a PHP version newer than our PHP version
+                        $skippedphp = $release;
+                        continue;
+                    }
                     $found = true;
                     break;
                 }
             } elseif (isset($version)) {
                 if ($release['v'] == $version) {
+                    if (!isset($this->_rest->_options['force']) &&
+                          !isset($version) &&
+                          version_compare($release['m'], phpversion(), '>')) {
+                        // skip releases that require a PHP version newer than our PHP version
+                        $skippedphp = $release;
+                        continue;
+                    }
                     $found = true;
                     break;
                 }
             } else {
                 if (in_array($release['s'], $states)) {
+                    if (version_compare($release['m'], phpversion(), '>')) {
+                        // skip releases that require a PHP version newer than our PHP version
+                        $skippedphp = $release;
+                        continue;
+                    }
                     $found = true;
                     break;
                 }
             }
         }
-        return $this->_returnDownloadURL($base, $package, $release, $info, $found);
+        if (!$found && $skippedphp) {
+            $found = null;
+        }
+        return $this->_returnDownloadURL($base, $package, $release, $info, $found, $skippedphp);
     }
 
     function getDepDownloadURL($base, $xsdversion, $dependency, $deppackage,
@@ -189,6 +211,7 @@ class PEAR_REST_13 extends PEAR_REST_10
         }
         $found = false;
         $release = false;
+        $skippedphp = false;
         if (!is_array($info['r']) || !isset($info['r'][0])) {
             $info['r'] = array($info['r']);
         }
@@ -198,11 +221,6 @@ class PEAR_REST_13 extends PEAR_REST_10
                 continue;
             }
             if (in_array($release['v'], $exclude)) { // skip excluded versions
-                continue;
-            }
-            if (version_compare($release['m'], phpversion(), '<=')) {
-                // skip dependency releases that require a PHP version
-                // newer than our PHP version
                 continue;
             }
             // allow newer releases to say "I'm OK with the dependent package"
@@ -221,6 +239,12 @@ class PEAR_REST_13 extends PEAR_REST_10
                           version_compare($deppackage['version'], $entry['min'], '>=') &&
                           version_compare($deppackage['version'], $entry['max'], '<=') &&
                           !in_array($release['v'], $entry['x'])) {
+                        if (version_compare($release['m'], phpversion(), '>')) {
+                            // skip dependency releases that require a PHP version
+                            // newer than our PHP version
+                            $skippedphp = $release;
+                            continue;
+                        }
                         $recommended = $release['v'];
                         break;
                     }
@@ -248,11 +272,20 @@ class PEAR_REST_13 extends PEAR_REST_10
                 continue;
             }
             if (in_array($release['s'], $states)) { // if in the preferred state...
+                if (version_compare($release['m'], phpversion(), '>')) {
+                    // skip dependency releases that require a PHP version
+                    // newer than our PHP version
+                    $skippedphp = $release;
+                    continue;
+                }
                 $found = true; // ... then use it
                 break;
             }
         }
-        return $this->_returnDownloadURL($base, $package, $release, $info, $found);
+        if (!$found && $skippedphp) {
+            $found = null;
+        }
+        return $this->_returnDownloadURL($base, $package, $release, $info, $found, $skippedphp);
     }
 }
 ?>

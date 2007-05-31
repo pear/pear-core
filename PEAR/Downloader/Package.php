@@ -25,6 +25,11 @@
  */
 define('PEAR_DOWNLOADER_PACKAGE_STATE', -1003);
 /**
+ * Error code when parameter initialization fails because no releases
+ * exist that will work with the existing PHP version
+ */
+define('PEAR_DOWNLOADER_PACKAGE_PHPVERSION', -1004);
+/**
  * Coordinates download parameters and manages their dependencies
  * prior to downloading them.
  *
@@ -1747,6 +1752,21 @@ class PEAR_Downloader_Package
                           'channel' => $pname['channel'],
                           'version' => $info['version']));
             } else {
+                if (isset($info['php']) && $info['php']) {
+                    $err = PEAR::raiseError('Failed to download ' .
+                        $this->_registry->parsedPackageNameToString(
+                            array('channel' => $pname['channel'],
+                                  'package' => $pname['package']),
+                                true) .
+                        ', latest release is version ' . $info['php']['v'] .
+                        ', but it requires PHP version "' .
+                        $info['php']['m'] . '", use "' .
+                        $this->_registry->parsedPackageNameToString(
+                            array('channel' => $pname['channel'], 'package' => $pname['package'],
+                            'version' => $info['php']['v'])) . '" to install',
+                            PEAR_DOWNLOADER_PACKAGE_PHPVERSION);
+                    return $err;
+                }
                 // construct helpful error message
                 if (isset($pname['version'])) {
                     $vs = ', version "' . $pname['version'] . '"';

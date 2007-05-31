@@ -120,6 +120,9 @@ if (!empty($install_root)) {
 }
 
 $ui = PEAR_Frontend::singleton('PEAR_Frontend_CLI');
+if (PEAR::isError($ui)) {
+    die($ui->getMessage());
+}
 $installer = new PEAR_Installer($ui);
 $pkg = new PEAR_PackageFile($config, $debug);
 
