@@ -374,6 +374,99 @@ class PEAR_REST_10
         return $packagelist['p'];
     }
 
+    /**
+     * List all categories of a REST server
+     *
+     * @param string $base base URL of the server
+     * @return array of categorynames
+     */
+    function listCategories($base)
+    {
+        $categories = array();
+
+        // c/categories.xml does not exist;
+        // check for every package its category manually
+        // This is SLOOOWWWW : ///
+        $packagelist = $this->_rest->retrieveData($base . 'p/packages.xml');
+        if (PEAR::isError($packagelist)) {
+            return $packagelist;
+        }
+        if (!is_array($packagelist) || !isset($packagelist['p'])) {
+            $ret = array();
+            return $ret;
+        }
+        if (!is_array($packagelist['p'])) {
+            $packagelist['p'] = array($packagelist['p']);
+        }
+
+        PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+        foreach ($packagelist['p'] as $package) {
+                $inf = $this->_rest->retrieveData($base . 'p/' . strtolower($package) . '/info.xml');
+                if (PEAR::isError($inf)) {
+                    PEAR::popErrorHandling();
+                    return $inf;
+                }
+                $cat = $inf['ca']['_content'];
+                if (!isset($categories[$cat])) {
+                    $categories[$cat] = $inf['ca'];
+                }
+        }
+        return array_values($categories);
+    }
+
+    /**
+     * List a category of a REST server
+     *
+     * @param string $base base URL of the server
+     * @param string $category name of the category
+     * @param boolean $info also download full package info
+     * @return array of packagenames
+     */
+    function listCategory($base, $category, $info=false)
+    {
+        // gives '404 Not Found' error when category doesn't exist
+        $packagelist = $this->_rest->retrieveData($base.'c/'.urlencode($category).'/packages.xml');
+        if (PEAR::isError($packagelist)) {
+            return $packagelist;
+        }
+        if (!is_array($packagelist) || !isset($packagelist['p'])) {
+            return array();
+        }
+        if (!is_array($packagelist['p']) ||
+            !isset($packagelist['p'][0])) { // only 1 pkg
+            $packagelist = array($packagelist['p']);
+        } else {
+            $packagelist = $packagelist['p'];
+        }
+
+        if ($info == true) {
+            // get individual package info
+            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+            foreach ($packagelist as $i => $packageitem) {
+                $url = sprintf('%s'.'r/%s/latest.txt',
+                        $base,
+                        strtolower($packageitem['_content']));
+                $version = $this->_rest->retrieveData($url);
+                if (PEAR::isError($version)) {
+                    break; // skipit
+                }
+                $url = sprintf('%s'.'r/%s/%s.xml',
+                        $base,
+                        strtolower($packageitem['_content']),
+                        $version);
+                $info = $this->_rest->retrieveData($url);
+                if (PEAR::isError($info)) {
+                    break; // skipit
+                }
+                $packagelist[$i]['info'] = $info;
+            }
+            PEAR::popErrorHandling();
+        }
+
+        return $packagelist;
+    }
+
+
     function listAll($base, $dostable, $basic = true, $searchpackage = false, $searchsummary = false)
     {
         $packagelist = $this->_rest->retrieveData($base . 'p/packages.xml');
