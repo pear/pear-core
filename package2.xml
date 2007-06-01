@@ -105,6 +105,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #10944: Cannot install Package+Subpackage [cipri]
   * fix Bug #11014: custom tasks with &quot;-&quot; in name cannot be
     packaged [cellog]
+  * fix Bug #11181: pear requests channel.xml from main server instead from
+    mirror [cellog]
   * implement Request #10182: add resolution of PHP dependency prior to download
     [cellog]
   * implement Request #10373: if pref_state=stable and installed package=beta,
