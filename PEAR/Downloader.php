@@ -316,7 +316,9 @@ class PEAR_Downloader extends PEAR_Common
                             PEAR::staticPopErrorHandling();
                             break;
                         }
-                        $a = $this->downloadHttp('http://' . $params[$i]->getChannel() .
+                        $mirror = $this->config->get('preferred_mirror', null,
+                                                     $params[$i]->getChannel());
+                        $a = $this->downloadHttp('http://' . $mirror .
                             '/channel.xml', $this->ui, $dir, null, $curchannel->lastModified());
 
                         PEAR::staticPopErrorHandling();

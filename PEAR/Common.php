@@ -159,7 +159,7 @@ class PEAR_Common extends PEAR
 
     /**
      * Configuration object (PEAR_Config).
-     * @var object
+     * @var PEAR_Config
      */
     var $config = null;
 
