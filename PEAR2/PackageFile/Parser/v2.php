@@ -88,13 +88,12 @@ class PEAR2_PackageFile_Parser_v2 extends PEAR2_XMLParser
      */
     function parse($data, $file, $archive = false, $class = 'PEAR2_PackageFile_v2')
     {
-        parent::parse($data, $file);
         $ret = new $class;
         $ret->setConfig(PEAR2_Config::current());
         if (isset($this->_logger)) {
             $ret->setLogger($this->_logger);
         }
-        $ret->fromArray($this->_unserializedData);
+        $ret->fromArray(parent::parse($data, $file));
         $ret->setPackagefile($file, $archive);
         return $ret;
     }
