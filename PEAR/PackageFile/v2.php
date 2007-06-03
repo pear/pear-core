@@ -1951,7 +1951,7 @@ class PEAR_PackageFile_v2
         // transform all '-' to '/' and 'tasks:' to '' so tasks:replace becomes replace
         $task = str_replace(array($this->_tasksNs . ':', '-'), array('', ' '), $task);
         $taskfile = str_replace(' ', '/', ucwords($task));
-        $task = str_replace('/', '_', ucwords($task));
+        $task = str_replace(array(' ', '/'), '_', ucwords($task));
         if (class_exists("PEAR_Task_$task")) {
             return "PEAR_Task_$task";
         }
