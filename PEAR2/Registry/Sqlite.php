@@ -259,8 +259,7 @@ class PEAR2_Registry_Sqlite
             // process the array
             if (!isset($param['package'])) {
                 throw new PEAR2_Registry_Exception('parsePackageName(): array $param ' .
-                    'must contain a valid package name in index "param"',
-                    'package');
+                    'must contain a valid package name in index "param"');
             }
             if (!isset($param['uri'])) {
                 if (!isset($param['channel'])) {
@@ -282,8 +281,7 @@ class PEAR2_Registry_Sqlite
             }
             if (!isset($components['path'])) {
                 throw new PEAR2_Registry_Exception('parsePackageName(): array $param ' .
-                    'must contain a valid package name in "' . $param . '"',
-                    'package');
+                    'must contain a valid package name in "' . $param . '"');
             }
             if (isset($components['host'])) {
                 // remove the leading "/"
@@ -293,8 +291,7 @@ class PEAR2_Registry_Sqlite
                 if (strpos($components['path'], '/') !== false) {
                     if ($components['path']{0} == '/') {
                         throw new PEAR2_Registry_Exception('parsePackageName(): this is not ' .
-                            'a package name, it begins with "/" in "' . $param . '"',
-                            'invalid');
+                            'a package name, it begins with "/" in "' . $param . '"');
                     }
                     $parts = explode('/', $components['path']);
                     $components['host'] = array_shift($parts);
@@ -350,8 +347,7 @@ class PEAR2_Registry_Sqlite
                 $test = explode('-', $param['package']);
                 if (count($test) != 2) {
                     throw new PEAR2_Registry_Exception('parsePackageName(): only one version/state ' .
-                        'delimiter "-" is allowed in "' . $saveparam . '"',
-                        'version');
+                        'delimiter "-" is allowed in "' . $saveparam . '"');
                 }
                 list($param['package'], $param['version']) = $test;
             }
@@ -365,8 +361,7 @@ class PEAR2_Registry_Sqlite
         $chan = $this->getChannel($param['channel']);
         if (!$chan) {
             throw new PEAR2_Registry_Exception("Exception: corrupt registry, could not " .
-                "retrieve channel " . $param['channel'] . " information",
-                'registry');
+                "retrieve channel " . $param['channel'] . " information");
         }
         $param['channel'] = $chan->getName();
         $validate = $chan->getValidationObject();
@@ -374,21 +369,18 @@ class PEAR2_Registry_Sqlite
         // validate package name
         if (!$validate->validPackageName($param['package'], $vpackage['_content'])) {
             throw new PEAR2_Registry_Exception('parsePackageName(): invalid package name "' .
-                $param['package'] . '" in "' . $saveparam . '"',
-                'package');
+                $param['package'] . '" in "' . $saveparam . '"');
         }
         if (isset($param['group'])) {
             if (!PEAR_Validate::validGroupName($param['group'])) {
                 throw new PEAR2_Registry_Exception('parsePackageName(): dependency group "' . $param['group'] .
-                    '" is not a valid group name in "' . $saveparam . '"', 'group', null, null,
-                    $param);
+                    '" is not a valid group name in "' . $saveparam . '"');
             }
         }
         if (isset($param['state'])) {
             if (!in_array(strtolower($param['state']), $validate->getValidStates())) {
                 throw new PEAR2_Registry_Exception('parsePackageName(): state "' . $param['state']
-                    . '" is not a valid state in "' . $saveparam . '"',
-                    'state');
+                    . '" is not a valid state in "' . $saveparam . '"');
             }
         }
         if (isset($param['version'])) {
@@ -405,7 +397,7 @@ class PEAR2_Registry_Sqlite
                 if (!$validate->validVersion($param['version'])) {
                     throw new PEAR2_Registry_Exception('parsePackageName(): "' . $param['version'] .
                         '" is neither a valid version nor a valid state in "' .
-                        $saveparam . '"', 'version/state');
+                        $saveparam . '"');
                 }                    
             }
         }
