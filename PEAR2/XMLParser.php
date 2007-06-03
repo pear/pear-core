@@ -1,7 +1,7 @@
 <?php
 /**
  * Process an XML file, convert it to an array
- * @package PEAR_SimpleChannelServer
+ * @package PEAR2
  * @subpackage XML
  */
 class PEAR2_XMLParser
