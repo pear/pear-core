@@ -62,6 +62,41 @@ class PEAR2_Installer_Role_Common
     }
 
     /**
+     * Retrieve the location a packaged file should be placed in a package
+     *
+     * @param PEAR2_Package $pkg
+     * @param array $atts
+     * @return string
+     */
+    function getPackagingLocation($pkg, $atts)
+    {
+        $roleInfo = PEAR2_Installer_Role::getInfo('PEAR2_Installer_Role_' . 
+            ucfirst(str_replace('pear2_installer_role_', '', strtolower(get_class($this)))));
+        $file = $atts['name'];
+        if ($roleInfo['honorsbaseinstall']) {
+            $dest_dir = $save_destdir = '';
+            if (!empty($atts['baseinstalldir'])) {
+                $dest_dir .= $atts['baseinstalldir'];
+            }
+        } elseif ($roleInfo['unusualbaseinstall']) {
+            $dest_dir = $save_destdir = str_replace('pear2_installer_role_', '',
+                strtolower(get_class($this))) . DIRECTORY_SEPARATOR .
+                $pkg->getChannel() . DIRECTORY_SEPARATOR . $pkg->getPackage();
+            if (!empty($atts['baseinstalldir'])) {
+                $dest_dir .= DIRECTORY_SEPARATOR . $atts['baseinstalldir'];
+            }
+        } else {
+            $dest_dir = $save_destdir = str_replace('pear2_installer_role_', '',
+                strtolower(get_class($this))) . DIRECTORY_SEPARATOR .
+                $pkg->getChannel() . DIRECTORY_SEPARATOR . $pkg->getPackage();
+        }
+        if (dirname($file) != '.') {
+            $dest_dir .= DIRECTORY_SEPARATOR . dirname($file);
+        }
+        return $dest_dir . DIRECTORY_SEPARATOR . basename($file);
+    }
+
+    /**
      * This is called for each file to set up the directories and files
      * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
      * @param array attributes from the <file> tag
