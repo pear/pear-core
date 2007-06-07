@@ -18,7 +18,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    with files and directories
  * the PEAR base class
 
-  New features in a nutshell:
+  Features in a nutshell:
   * full support for channels
   * pre-download dependency validation
   * new package.xml 2.0 format allows tremendous flexibility while maintaining BC
@@ -31,9 +31,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * support for bundling several packages into a single tarball
   * support for static dependencies on a url-based package
   * support for custom file roles and installation tasks
-
-  NOTE: users of PEAR_Frontend_Web/PEAR_Frontend_Gtk must upgrade their installations
-  to the latest version, or PEAR will not upgrade properly
  </description>
  <lead>
   <name>Greg Beaver</name>
@@ -94,6 +91,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
+  Minor new feature/bugfix release
   * fix Bug #10846: Wont upgrade Text_Wiki from RC1 to RC2 [tias]
   * fix Bug #10857: Structures_Graph_Node::getMetadata: Requested
     key does not exist [cellog]
@@ -117,6 +115,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * implement Request #10659: search allchannels [tias]
   * implement Request #10812: list-categories and list-category [tias]
   * implement Request #11169: search with channel information [tias]
+  * implement xdebug code coverage generation with pear run-tests --coverage
+    [dufuz]
  </notes>
  <contents>
   <dir name="/">
@@ -558,7 +558,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </phprelease>
  <changelog>
  <release>
- <date>2007-05-08</date>
  <version>
   <release>1.5.4</release>
   <api>1.5.0</api>
@@ -567,6 +566,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <release>stable</release>
   <api>stable</api>
  </stability>
+ <date>2007-05-08</date>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
  MAJOR SECURITY BUGFIX RELEASE
