@@ -50,6 +50,7 @@ putenv("PHP_PEAR_RUNTESTS=1");
  */
 class PEAR_RunTest
 {
+    var $_headers = array();
     var $_logger;
     var $_options;
     var $_php;
@@ -244,9 +245,9 @@ class PEAR_RunTest
         $tested = trim($section_text['TEST']);
         $tested.= !isset($this->_options['simple']) ? "[$shortname]" : ' ';
 
-        if (!empty($section_text['GET']) || !empty($section_text['POST']) ||
-              !empty($section_text['POST_RAW']) || !empty($section_text['COOKIE']) ||
-              !empty($section_text['UPLOAD'])) {
+        if (!empty($section_text['POST']) || !empty($section_text['POST_RAW']) ||
+              !empty($section_text['UPLOAD']) || !empty($section_text['GET']) ||
+              !empty($section_text['COOKIE']) || !empty($section_text['EXPECTHEADERS'])) {
             if (empty($this->_options['cgi'])) {
                 if (!isset($this->_options['quiet'])) {
                     $this->_logger->log(0, "SKIP $test_nr$tested (reason: --cgi option needed for this test, type 'pear help run-tests')");
@@ -305,7 +306,7 @@ class PEAR_RunTest
         }
 
         $args = $section_text['ARGS'] ? ' -- '.$section_text['ARGS'] : '';
-        $cmd = "$this->_php$ini_settings -f \"$temp_file\" $args 2>&1";
+        $cmd = "$this->_php$ini_settings \"$temp_file\" $args 2>&1";
         if (isset($this->_logger)) {
             $this->_logger->log(2, 'Running command "' . $cmd . '"');
         }
@@ -314,6 +315,9 @@ class PEAR_RunTest
         $env = $this->_resetEnv($section_text, $temp_file);
 
         $section_text = $this->_processUpload($section_text, $file);
+        if (PEAR::isError($section_text)) {
+            return $section_text;
+        }
 
         if (array_key_exists('POST_RAW', $section_text) && !empty($section_text['POST_RAW'])) {
             $post = trim($section_text['POST_RAW']);
@@ -338,7 +342,7 @@ class PEAR_RunTest
             $env['REQUEST_METHOD'] = 'POST';
 
             $this->save_text($tmp_post, $request);
-            $cmd = "$this->_php$pass_options$ini_settings -f \"$temp_file\" 2>&1 < $tmp_post";
+            $cmd = "$this->_php$pass_options$ini_settings \"$temp_file\" 2>&1 < $tmp_post";
         } elseif (array_key_exists('POST', $section_text) && !empty($section_text['POST'])) {
             $post = trim($section_text['POST']);
             $this->save_text($tmp_post, $post);
@@ -348,13 +352,11 @@ class PEAR_RunTest
             $env['CONTENT_TYPE']   = 'application/x-www-form-urlencoded';
             $env['CONTENT_LENGTH'] = $content_length;
     
-            $cmd = "$this->_php$pass_options$ini_settings -f \"$temp_file\" 2>&1 < $tmp_post";
+            $cmd = "$this->_php$pass_options$ini_settings \"$temp_file\" 2>&1 < $tmp_post";
         } else {
-            //~ $env['REQUEST_METHOD'] = 'GET';
-            //~ $env['CONTENT_TYPE']   = '';
-            //~ $env['CONTENT_LENGTH'] = '';
-    
-            //~ $cmd = "$this->_php$pass_options$ini_settings -f \"$temp_file\" $args 2>&1";
+            $env['REQUEST_METHOD'] = 'GET';
+            $env['CONTENT_TYPE']   = '';
+            $env['CONTENT_LENGTH'] = '';
         }
 
         if (OS_WINDOWS && isset($section_text['RETURNS'])) {
@@ -384,6 +386,23 @@ class PEAR_RunTest
         /* when using CGI, strip the headers from the output */
         $output = $this->_stripHeadersCGI($output);
 
+        if (isset($section_text['EXPECTHEADERS'])) {
+            $testheaders = $this->_processHeaders($section_text['EXPECTHEADERS']);
+            $missing = array_diff_assoc($testheaders, $this->_headers);
+            $changed = '';
+            foreach ($missing as $header => $value) {
+                if (isset($this->_headers[$header])) {
+                    $changed .= "-$header: $value\n+$header: ";
+                    $changed .= $this->_headers[$header];
+                } else {
+                    $changed .= "-$header: $value\n";
+                }
+            }
+            if ($missing) {
+                // tack on failed headers to output:
+                $output .= "\n====EXPECTHEADERS FAILURE====:\n$changed";
+            }
+        }
         // Does the output match what is expected?
         do {
             if (isset($section_text['EXPECTF']) || isset($section_text['EXPECTREGEX'])) {
@@ -636,24 +655,35 @@ $text
     
     function _stripHeadersCGI($output)
     {
-        $headers = '';
+        $this->headers = array();
         if (!empty($this->_options['cgi']) &&
               $this->_php == $this->_options['cgi'] && 
-              preg_match("/^(.*?)\r?\n\r?\n(.*)/s", $out, $match)) {
+              preg_match("/^(.*?)(?:\n\n(.*)|\\z)/s", $output, $match)) {
             $output = trim($match[2]);
-            $rh = preg_split("/[\n\r]+/",$match[1]);
-            $headers = array();
-            foreach ($rh as $line) {
-                if (strpos($line, ':')!== false) {
-                    $line = explode(':', $line, 2);
-                    $headers[trim($line[0])] = trim($line[1]);
-                }
-            }
+            $this->_headers = $this->_processHeaders($match[1]);
         }
         
         return $output;
     }
-    
+
+    /**
+     * Return an array that can be used with array_diff() to compare headers
+     *
+     * @param string $text
+     */
+    function _processHeaders($text)
+    {
+        $headers = array();
+        $rh = preg_split("/[\n\r]+/", $text);
+        foreach ($rh as $line) {
+            if (strpos($line, ':')!== false) {
+                $line = explode(':', $line, 2);
+                $headers[trim($line[0])] = trim($line[1]);
+            }
+        }
+        return $headers;
+    }
+
     function _readFile($file)
     {
         // Load the sections of the test file.
