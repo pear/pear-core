@@ -1211,6 +1211,10 @@ class PEAR_Registry extends PEAR
      */
     function _addPackage2($info)
     {
+        if (!is_a($info, 'PEAR_PackageFile_v1') || !is_a($info, 'PEAR_PackageFile_v2')) {
+            return false;
+        }
+
         if (!$info->validate()) {
             if (class_exists('PEAR_Common')) {
                 $ui = PEAR_Frontend::singleton();
