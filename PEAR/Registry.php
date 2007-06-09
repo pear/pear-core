@@ -1210,7 +1210,7 @@ class PEAR_Registry extends PEAR
      * @access private
      */
     function _addPackage2($info)
-    {var_dump($info);
+    {
         if (!is_a($info, 'PEAR_PackageFile_v1') && !is_a($info, 'PEAR_PackageFile_v2')) {
             return false;
         }
