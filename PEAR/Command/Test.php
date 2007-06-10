@@ -156,10 +156,10 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                         continue;
                     }
 
-                    if (isset($options['phpunit']) && preg_match('/AllTests\.php$/i', $name)) {
+                    if (isset($options['phpunit']) && preg_match('/AllTests\.php\\z/i', $name)) {
                         $params = array($atts['installed_as']);
                         break;
-                    } elseif (!preg_match('/\.phpt$/', $name)) {
+                    } elseif (!preg_match('/\.phpt\\z/', $name)) {
                         continue;
                     }
                     $params[] = $atts['installed_as'];
@@ -183,13 +183,13 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                                             '-name', '*.phpt'));
                 $tests = array_merge($tests, $dir);
             } else {
-                if (isset($options['phpunit']) && preg_match('/AllTests\.php$/i', $p)) {
+                if (isset($options['phpunit']) && preg_match('/AllTests\.php\\z/i', $p)) {
                     $tests = array($p);
                     break;
                 }
 
                 if (!file_exists($p)) {
-                    if (!preg_match('/\.phpt$/', $p)) {
+                    if (!preg_match('/\.phpt\\z/', $p)) {
                         $p .= '.phpt';
                     }
                     $dir = System::find(array(dirname($p), '-type', 'f',

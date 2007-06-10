@@ -827,7 +827,7 @@ class PEAR_ErrorStack {
                          'line' => $filebacktrace['line']);
             // rearrange for eval'd code or create function errors
             if (strpos($filebacktrace['file'], '(') && 
-            	  preg_match(';^(.*?)\((\d+)\) : (.*?)$;', $filebacktrace['file'],
+            	  preg_match(';^(.*?)\((\d+)\) : (.*?)\\z;', $filebacktrace['file'],
                   $matches)) {
                 $ret['file'] = $matches[1];
                 $ret['line'] = $matches[2] + 0;

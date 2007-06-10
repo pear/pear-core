@@ -695,7 +695,7 @@ password via the system\'s process list.
         }
         
         // Look for the possible input format "<username>:<password>@<channel>"
-        if (preg_match('/^(.+):(.+)@(.+)$/', $params[0], $matches)) {
+        if (preg_match('/^(.+):(.+)@(.+)\\z/', $params[0], $matches)) {
             $username = $matches[1];
             $password = $matches[2];
             $channel = $matches[3];
