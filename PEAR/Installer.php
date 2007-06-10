@@ -338,7 +338,7 @@ class PEAR_Installer extends PEAR_Downloader
                 foreach ($atts['replacements'] as $a) {
                     $to = '';
                     if ($a['type'] == 'php-const') {
-                        if (preg_match('/^[a-z0-9_]+$/i', $a['to'])) {
+                        if (preg_match('/^[a-z0-9_]+\\z/i', $a['to'])) {
                             eval("\$to = $a[to];");
                         } else {
                             if (!isset($options['soft'])) {
