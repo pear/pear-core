@@ -355,7 +355,7 @@ class PEAR_REST
         fwrite($fp, $request);
         $headers = array();
         while (trim($line = fgets($fp, 1024))) {
-            if (preg_match('/^([^:]+):\s+(.*)\s*$/', $line, $matches)) {
+            if (preg_match('/^([^:]+):\s+(.*)\s*\\z/', $line, $matches)) {
                 $headers[strtolower($matches[1])] = trim($matches[2]);
             } elseif (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
                 if ($matches[1] == 304 && ($lastmodified || ($lastmodified === false))) {

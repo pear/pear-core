@@ -68,7 +68,7 @@ class PEAR_Validate
      */
     function _validPackageName($name)
     {
-        return (bool) preg_match('/^' . $this->packageregex . '$/', $name);
+        return (bool) preg_match('/^' . $this->packageregex . '\\z/', $name);
     }
 
     /**
@@ -80,7 +80,7 @@ class PEAR_Validate
     {
         if ($validatepackagename) {
             if (strtolower($name) == strtolower($validatepackagename)) {
-                return (bool) preg_match('/^[a-zA-Z0-9_]+(?:\.[a-zA-Z0-9_]+)*$/', $name);
+                return (bool) preg_match('/^[a-zA-Z0-9_]+(?:\.[a-zA-Z0-9_]+)*\\z/', $name);
             }
         }
         return $this->_validPackageName($name);
@@ -95,7 +95,7 @@ class PEAR_Validate
      */
     function validGroupName($name)
     {
-        return (bool) preg_match('/^' . _PEAR_COMMON_PACKAGE_NAME_PREG . '$/', $name);
+        return (bool) preg_match('/^' . _PEAR_COMMON_PACKAGE_NAME_PREG . '\\z/', $name);
     }
 
     /**

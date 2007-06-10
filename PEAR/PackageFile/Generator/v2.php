@@ -1497,12 +1497,12 @@ class PEAR_PackageFile_Generator_v2_XML_Util {
     function isValidName($string)
     {
         // check for invalid chars
-        if (!preg_match("/^[[:alnum:]_\-.]$/", $string{0})) {
+        if (!preg_match("/^[[:alnum:]_\-.]\\z/", $string{0})) {
             return PEAR_PackageFile_Generator_v2_XML_Util::raiseError( "XML names may only start with letter or underscore", PEAR_PackageFile_Generator_v2_XML_Util_ERROR_INVALID_START );
         }
         
         // check for invalid chars
-        if (!preg_match("/^([a-zA-Z_]([a-zA-Z0-9_\-\.]*)?:)?[a-zA-Z_]([a-zA-Z0-9_\-\.]+)?$/", $string)) {
+        if (!preg_match("/^([a-zA-Z_]([a-zA-Z0-9_\-\.]*)?:)?[a-zA-Z_]([a-zA-Z0-9_\-\.]+)?\\z/", $string)) {
             return PEAR_PackageFile_Generator_v2_XML_Util::raiseError( "XML names may only contain alphanumeric chars, period, hyphen, colon and underscores", PEAR_PackageFile_Generator_v2_XML_Util_ERROR_INVALID_CHARS );
          }
         // XML name is valid

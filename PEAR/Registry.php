@@ -254,7 +254,7 @@ class PEAR_Registry extends PEAR
               $handle = opendir($this->statedir)) {
             $dest = $this->statedir . $ds;
             while (false !== ($file = readdir($handle))) {
-                if (preg_match('/^.*[A-Z].*\.reg$/', $file)) {
+                if (preg_match('/^.*[A-Z].*\.reg\\z/', $file)) {
                     rename($dest . $file, $dest . strtolower($file));
                 }
             }
