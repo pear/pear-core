@@ -1031,7 +1031,13 @@ Run post-installation scripts in package <package>, if any exist.
                 $dest = $pwd;
             }
         }
-        $downloader->setDownloadDir($dest);
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+        $err = $downloader->setDownloadDir($dest);
+        PEAR::staticPopErrorHandling();
+        if (PEAR::isError($err)) {
+            return PEAR::raiseError('download directory "' . $dest .
+                '" is not writeable.');
+        }
         $result = &$downloader->download(array($params[0]));
         if (PEAR::isError($result)) {
             return $result;

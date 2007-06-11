@@ -612,7 +612,12 @@ parameter.
         // eliminate error messages for preferred_state-related errors
 
         $downloader = &$this->getDownloader($options);
-        $downloader->setDownloadDir(getcwd());
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+        $e = $downloader->setDownloadDir(getcwd());
+        PEAR::staticPopErrorHandling();
+        if (PEAR::isError($e)) {
+            return $this->raiseError('Current directory is not writeable, cannot download');
+        }
         $errors = array();
         $downloaded = array();
         $err = $downloader->download($params);
