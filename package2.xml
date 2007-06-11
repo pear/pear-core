@@ -95,6 +95,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #11251: &quot;pear config-create&quot; does not set download_dir
     [cellog]
   * fix Bug #11261: run-tests --cgi broken in several ways [cellog]
+  * fix Bug #11233: error message does not specify which of
+    temp_dir/download_dir needs to be change [cellog]
  </notes>
  <contents>
   <dir name="/">
