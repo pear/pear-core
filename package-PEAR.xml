@@ -87,7 +87,9 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <state>stable</state>
   <notes>
   Minor bugfix release
-  * fix Bug #11261: run-tests --cgi broken in several ways
+  * fix Bug #11251: &quot;pear config-create&quot; does not set download_dir
+    [cellog]
+  * fix Bug #11261: run-tests --cgi broken in several ways [cellog]
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
