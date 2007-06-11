@@ -92,7 +92,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
   Minor bugfix release
-  * fix Bug #11261: run-tests --cgi broken in several ways
+  * fix Bug #11251: &quot;pear config-create&quot; does not set download_dir
+    [cellog]
+  * fix Bug #11261: run-tests --cgi broken in several ways [cellog]
  </notes>
  <contents>
   <dir name="/">

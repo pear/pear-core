@@ -354,6 +354,8 @@ and uninstall).
         $config->set('doc_dir', $windows ? "$root\\pear\\docs" : "$root/pear/docs");
         $config->set('test_dir', $windows ? "$root\\pear\\tests" : "$root/pear/tests");
         $config->set('cache_dir', $windows ? "$root\\pear\\cache" : "$root/pear/cache");
+        $config->set('download_dir', $windows ? "$root\\pear\\download" : "$root/pear/download");
+        $config->set('temp_dir', $windows ? "$root\\pear\\temp" : "$root/pear/temp");
         $config->set('bin_dir', $windows ? "$root\\pear" : "$root/pear");
         $config->writeConfigFile();
         $this->_showConfig($config);
