@@ -659,7 +659,7 @@ $text
         if (!empty($this->_options['cgi']) &&
               $this->_php == $this->_options['cgi'] && 
               preg_match("/^(.*?)(?:\n\n(.*)|\\z)/s", $output, $match)) {
-            $output = trim($match[2]);
+            $output = isset($match[2]) ? trim($match[2]) : '';
             $this->_headers = $this->_processHeaders($match[1]);
         }
         
