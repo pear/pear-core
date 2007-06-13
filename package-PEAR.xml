@@ -92,6 +92,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #11261: run-tests --cgi broken in several ways [cellog]
   * fix Bug #11233: error message does not specify which of
     temp_dir/download_dir needs to be change [cellog]
+  * fix Bug #11302: code coverage option for run-tests not working [stoyan]
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

@@ -97,6 +97,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #11261: run-tests --cgi broken in several ways [cellog]
   * fix Bug #11233: error message does not specify which of
     temp_dir/download_dir needs to be change [cellog]
+  * fix Bug #11302: code coverage option for run-tests not working [stoyan]
  </notes>
  <contents>
   <dir name="/">
@@ -449,7 +450,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>Console_Getopt</name>
     <channel>pear.php.net</channel>
     <min>1.2</min>
-    <recommended>1.2.2</recommended>
+    <recommended>1.2.3</recommended>
    </package>
    <package>
     <name>PEAR_Frontend_Web</name>

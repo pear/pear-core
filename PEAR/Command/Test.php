@@ -230,7 +230,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
         $run = new PEAR_RunTest($log, $options);
         $run->tests_count = $tests_count;
 
-        if (isset($this->_options['coverage']) && extension_loaded('xdebug')){
+        if (isset($options['coverage']) && extension_loaded('xdebug')){
             $run->xdebug_loaded = true;
         } else {
             $run->xdebug_loaded = false;
