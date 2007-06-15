@@ -207,6 +207,12 @@ class PEAR_RunTest
 
     function run($file, $ini_settings = '', $test_number)
     {
+        if (empty($this->_options['cgi'])) {
+            // try to see if php-cgi is in the path
+            if (false !== $this->system_with_timeout('php-cgi -v')) {
+                $this->_options['cgi'] = 'php-cgi';
+            }
+        }
         if (1 < $len = strlen($this->tests_count)) {
             $test_number = str_pad($test_number, $len, ' ', STR_PAD_LEFT);
             $test_nr = "[$test_number/$this->tests_count] ";
