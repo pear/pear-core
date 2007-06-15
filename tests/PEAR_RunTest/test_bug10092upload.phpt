@@ -33,7 +33,7 @@ array(2) {
     ["error"]=>
     int(0)
     ["size"]=>
-    int(403)
+    int(%d)
   }
   ["myfile2_txt"]=>
   array(5) {
@@ -46,7 +46,7 @@ array(2) {
     ["error"]=>
     int(0)
     ["size"]=>
-    int(299)
+    int(%d)
   }
 }
 array(2) {
