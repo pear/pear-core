@@ -98,6 +98,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #11233: error message does not specify which of
     temp_dir/download_dir needs to be change [cellog]
   * fix Bug #11302: code coverage option for run-tests not working [stoyan]
+  * fix Bug #11321: run-tests should assume php-cgi in path if --cgi option
+    is not set [cellog]
  </notes>
  <contents>
   <dir name="/">
