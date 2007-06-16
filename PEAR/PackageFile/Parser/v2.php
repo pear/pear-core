@@ -70,6 +70,8 @@ class PEAR_PackageFile_Parser_v2 extends PEAR_XMLParser
         foreach (explode("\n", $str) as $line) {
             if (substr($line, 0, $indent_len) == $indent) {
                 $data .= substr($line, $indent_len) . "\n";
+            } else {
+                $data .= $line . "\n";
             }
         }
         return $data;
