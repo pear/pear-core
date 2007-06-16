@@ -157,6 +157,7 @@ class PEAR_Registry extends PEAR
         if (!file_exists($this->install_dir)) {
             $dir = $this->install_dir;
             while ($dir && $dir != '.') {
+                $olddir = $dir;
                 $dir = dirname($dir); // cd ..
                 if ($dir != '.' && file_exists($dir)) {
                     if (is_writeable($dir)) {
@@ -164,6 +165,9 @@ class PEAR_Registry extends PEAR
                     } else {
                         return false;
                     }
+                }
+                if ($dir == $olddir) { // this can happen in safe mode
+                    return @is_writable($dir);
                 }
             }
             return false;
