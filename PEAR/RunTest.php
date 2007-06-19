@@ -450,6 +450,15 @@ class PEAR_RunTest
                     return 'PASSED';
                 }
             } else {
+                if (isset($section_text['EXPECTFILE'])) {
+                    $f = $temp_dir . '/' . trim($section_text['EXPECTFILE']);
+                    if (!($fp = @fopen($f, 'rb'))) {
+                        return PEAR::raiseError('--EXPECTFILE-- section file ' .
+                            $f . ' not found');
+                    }
+                    fclose($fp);
+                    $section_text['EXPECT'] = file_get_contents($f);
+                }
                 $wanted = preg_replace('/\r\n/', "\n", trim($section_text['EXPECT']));
                 // compare and leave on success
                 if (!$returnfail && 0 == strcmp($output, $wanted)) {
