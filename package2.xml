@@ -102,6 +102,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #11318: &quot;pear package&quot; ignores changelog items [cellog]
   * fix Bug #11321: run-tests should assume php-cgi in path if --cgi option
     is not set [cellog]
+  * fix Bug #11336: REST 1.0 - 1.1 inconcistency [tias]
  </notes>
  <contents>
   <dir name="/">

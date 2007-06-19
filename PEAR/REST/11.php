@@ -228,7 +228,7 @@ class PEAR_REST_11
      * @param boolean $info also download full package info
      * @return array of packagenames
      */
-    function listPackagesInCategory($base, $category, $info=false)
+    function listCategory($base, $category, $info=false)
     {
         if ($info == false) {
             $url = '%s'.'c/%s/packages.xml';
