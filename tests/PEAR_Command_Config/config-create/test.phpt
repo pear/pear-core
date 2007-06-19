@@ -115,7 +115,7 @@ $phpunit->assertEquals(array (
           array (
             0 => 'PEAR Installer download directory',
             1 => 'download_dir',
-            2 => NULL,
+            2 => $temp_path2 . '/nomake/pear/temp',
           ),
           3 =>
           array (
@@ -133,7 +133,7 @@ $phpunit->assertEquals(array (
           array (
             0 => 'PEAR Installer temp directory',
             1 => 'temp_dir',
-            2 => NULL,
+            2 => $temp_path2 . '/nomake/pear/data',
           ),
           6 =>
           array (
@@ -246,6 +246,8 @@ $phpunit->assertEquals(array (
   'test_dir' => $temp_path2 . '/nomake/pear/tests',
   'cache_dir' => $temp_path2 . '/nomake/pear/cache',
   'bin_dir' => $temp_path2 . '/nomake/pear',
+  'download_dir' => $temp_path2 . '/nomake/pear/temp',
+  'temp_dir' => $temp_path2 . '/nomake/pear/temp',
 ), $contents, 'ok');
 echo 'tests done';
 ?>
