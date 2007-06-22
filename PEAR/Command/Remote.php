@@ -184,6 +184,8 @@ parameter.
         }
         $rest = new PEAR_REST($this->config);
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+        $mirror = $this->config->get('preferred_mirror', null,
+                                     $channel);
         $a = $rest->downloadHttp('http://' . $channel .
             '/channel.xml', $chan->lastModified());
         PEAR::staticPopErrorHandling();
