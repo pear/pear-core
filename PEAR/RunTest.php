@@ -54,7 +54,7 @@ class PEAR_RunTest
     var $_logger;
     var $_options;
     var $_php;
-    var $test_count;
+    var $tests_count;
     var $xdebug_loaded;
     var $ini_overwrites = array(
         'output_handler=',
