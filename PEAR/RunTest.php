@@ -205,7 +205,7 @@ class PEAR_RunTest
     //  Run an individual test case.
     //
 
-    function run($file, $ini_settings = '', $test_number)
+    function run($file, $ini_settings = '', $test_number = 1)
     {
         if (empty($this->_options['cgi'])) {
             // try to see if php-cgi is in the path
