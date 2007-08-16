@@ -164,10 +164,34 @@ class PEAR_RunTest
         return array($code, $data);
     }
 
+    /**
+     * Turns a PHP INI string into an array
+     *
+     * Turns -d "include_path=/foo/bar" into this:
+     * array(
+     *   'include_path' => array(
+     *          'operator' => '-d',
+     *          'value'    => '/foo/bar',
+     *   )
+     * )
+     * Works both with quotes and without
+     *
+     * @param string an PHP INI string, -d "include_path=/foo/bar"
+     * @return array
+     */
+    function iniString2array($ini_string)
+    {
+        $split = preg_split('/[\s]|=/', $ini_string, -1, PREG_SPLIT_NO_EMPTY);
+        $key   = $split[1][0] == '"'                     ? substr($split[1], 1)     : $split[1];
+        $value = $split[2][strlen($split[2]) - 1] == '"' ? substr($split[2], 0, -1) : $split[2];
+        $array = array($key => array('operator' => $split[0], 'value' => $value));
+        return $array;
+    }
+
     function settings2array($settings, $ini_settings)
     {
         foreach ($settings as $setting) {
-            if (strpos($setting, '=')!== false) {
+            if (strpos($setting, '=') !== false) {
                 $setting = explode('=', $setting, 2);
                 $name  = trim(strtolower($setting[0]));
                 $value = trim($setting[1]);
@@ -181,8 +205,14 @@ class PEAR_RunTest
     {
         $settings = '';
         foreach ($ini_settings as $name => $value) {
+            if (is_array($value)) {
+                $operator = $value['operator'];
+                $value    = $value['value'];
+            } else {
+                $operator = '-d';
+            }
             $value = addslashes($value);
-            $settings .= " -d \"$name=$value\"";
+            $settings .= " $operator \"$name=$value\"";
         }
         return $settings;
     }
@@ -205,7 +235,7 @@ class PEAR_RunTest
     //  Run an individual test case.
     //
 
-    function run($file, $ini_settings = '', $test_number = 1)
+    function run($file, $ini_settings = array(), $test_number = 1)
     {
         if (empty($this->_options['cgi'])) {
             // try to see if php-cgi is in the path
@@ -235,6 +265,10 @@ class PEAR_RunTest
         $pass_options = '';
         if (!empty($this->_options['ini'])) {
             $pass_options = $this->_options['ini'];
+        }
+
+        if (is_string($ini_settings)) {
+            $ini_settings = $this->iniString2array($ini_settings);
         }
 
         $ini_settings = $this->settings2array($this->ini_overwrites, $ini_settings);
