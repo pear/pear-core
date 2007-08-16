@@ -232,10 +232,18 @@ class PEAR_RunTest
         return 'PASSED'; // we have no way of knowing this information so assume passing
     }
 
-    //
-    //  Run an individual test case.
-    //
-
+    /**
+     * Runs an individual test case.
+     *
+     * @param string       The filename of the test
+     * @param array|string INI settings to be applied to the test run
+     * @param integer      Number what the current running test is of the
+     *                     whole test suite being runned.
+     *
+     * @return string|object Returns PASSED, WARNED, FAILED depending on how the
+     *                       test came out.
+     *                       PEAR Error when the tester it self fails
+     */
     function run($file, $ini_settings = array(), $test_number = 1)
     {
         if (empty($this->_options['cgi'])) {
