@@ -188,7 +188,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                     break;
                 }
 
-                if (file_exists($p)) {
+                if (file_exists($p) && preg_match('/\.phpt$/', $p)) {
                     $tests[] = $p;
                     continue;
                 }
