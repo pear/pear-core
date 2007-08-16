@@ -143,7 +143,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                 if (PEAR::isError($pname)) {
                     return $this->raiseError($pname);
                 }
- 
+
                 $package = &$reg->getPackage($pname['package'], $pname['channel']);
                 if (!$package) {
                     return PEAR::raiseError('Unknown package "' .
@@ -188,20 +188,21 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                     break;
                 }
 
-                if (!file_exists($p)) {
-                    if (!preg_match('/\.phpt\\z/', $p)) {
-                        $p .= '.phpt';
-                    }
-                    $dir = System::find(array(dirname($p), '-type', 'f',
-                                                '-maxdepth', $depth,
-                                                '-name', $p));
-                    $tests = array_merge($tests, $dir);
-                } else {
+                if (file_exists($p)) {
                     $tests[] = $p;
+                    continue;
                 }
+
+                if (!preg_match('/\.phpt\\z/', $p)) {
+                    $p .= '.phpt';
+                }
+                $dir = System::find(array(dirname($p), '-type', 'f',
+                                            '-maxdepth', $depth,
+                                            '-name', $p));
+                $tests = array_merge($tests, $dir);
             }
         }
-        
+
         $ini_settings = '';
         if (isset($options['ini'])) {
             $ini_settings .= $options['ini'];
@@ -221,7 +222,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
         if (isset($options['realtimelog']) && file_exists('run-tests.log')) {
             unlink('run-tests.log');
         }
-        
+
         if (isset($options['tapoutput'])) {
             $tap = '1..' . $tests_count . "\n";
         }
@@ -256,12 +257,12 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                 $this->ui->log($result->getMessage());
                 continue;
             }
-            
+
             if (isset($options['tapoutput'])) {
                 $tap .= $result[0] . ' ' . $i . $result[1] . "\n";
                 continue;
             }
-            
+
             if (isset($options['realtimelog'])) {
                 $fp = @fopen('run-tests.log', 'a');
                 if ($fp) {
