@@ -73,13 +73,8 @@ class PEAR_REST_10
         if (!$states) {
             return PEAR::raiseError('"' . $prefstate . '" is not a valid state');
         }
-        $state = $version = null;
-        if (isset($packageinfo['state'])) {
-            $state = $packageinfo['state'];
-        }
-        if (isset($packageinfo['version'])) {
-            $version = $packageinfo['version'];
-        }
+        $state   = isset($packageinfo['state'])   ? $packageinfo['state']   : null;
+        $version = isset($packageinfo['version']) ? $packageinfo['version'] : null;
         $info = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/allreleases.xml');
         if (PEAR::isError($info)) {
             return PEAR::raiseError('No releases available for package "' .
@@ -88,8 +83,7 @@ class PEAR_REST_10
         if (!isset($info['r'])) {
             return false;
         }
-        $found = false;
-        $release = false;
+        $release = $found = false;
         if (!is_array($info['r']) || !isset($info['r'][0])) {
             $info['r'] = array($info['r']);
         }
@@ -183,8 +177,7 @@ class PEAR_REST_10
                 }
             }
         }
-        $found = false;
-        $release = false;
+        $release = $found = false;
         if (!is_array($info['r']) || !isset($info['r'][0])) {
             $info['r'] = array($info['r']);
         }
