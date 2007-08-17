@@ -134,13 +134,8 @@ class PEAR_REST_10
         if (!$states) {
             return PEAR::raiseError('"' . $prefstate . '" is not a valid state');
         }
-        $state = $version = null;
-        if (isset($packageinfo['state'])) {
-            $state = $packageinfo['state'];
-        }
-        if (isset($packageinfo['version'])) {
-            $version = $packageinfo['version'];
-        }
+        $state   = isset($dependency['state'])   ? $dependency['state']   : null;
+        $version = isset($dependency['version']) ? $dependency['version'] : null;
         $info = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/allreleases.xml');
         if (PEAR::isError($info)) {
             return PEAR::raiseError('Package "' . $deppackage['channel'] . '/' . $deppackage['package']
