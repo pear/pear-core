@@ -181,6 +181,9 @@ class PEAR_RunTest
      */
     function iniString2array($ini_string)
     {
+        if (!$ini_string) {
+            return array();
+        }
         $split = preg_split('/[\s]|=/', $ini_string, -1, PREG_SPLIT_NO_EMPTY);
         $key   = $split[1][0] == '"'                     ? substr($split[1], 1)     : $split[1];
         $value = $split[2][strlen($split[2]) - 1] == '"' ? substr($split[2], 0, -1) : $split[2];
