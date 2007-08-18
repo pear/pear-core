@@ -99,6 +99,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <notes>
   Minor bugfix release
   * fix Bug #11481: PEAR_PackageFile_Parser_v1 skips single-char directories [pmjones]
+  * fix Bug #11517: Error : download directory &quot;/var/cache/php-pear&quot;
+    is not writeable. [remicollet]
  </notes>
  <contents>
   <dir name="/">

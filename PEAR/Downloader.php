@@ -679,7 +679,12 @@ class PEAR_Downloader extends PEAR_Common
             return $this->_downloadDir;
         }
         $downloaddir = $this->config->get('download_dir');
-        if (empty($downloaddir)) {
+        if (empty($downloaddir) || (is_dir($downloaddir) && !is_writable($downloaddir))) {
+            if  (is_dir($downloaddir) && !is_writable($downloaddir)) {
+                $this->log(0, 'WARNING: configuration download directory "' . $downloaddir .
+                    '" is not writeable.  Change download_dir config variable to ' .
+                    'a writeable dir to avoid this warning');
+            }
             if (!class_exists('System')) {
                 require_once 'System.php';
             }
