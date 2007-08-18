@@ -396,7 +396,7 @@ class PEAR_Installer extends PEAR_Downloader
             }
             // {{{ check the md5
             if (isset($md5sum)) {
-                if (strtolower($md5sum) == strtolower($atts['md5sum'])) {
+                if (strtolower($md5sum) === strtolower($atts['md5sum'])) {
                     $this->log(2, "md5sum ok: $final_dest_file");
                 } else {
                     if (empty($options['force'])) {
@@ -565,7 +565,7 @@ class PEAR_Installer extends PEAR_Downloader
             }
             // {{{ check the md5
             if (isset($md5sum)) {
-                if (strtolower($md5sum) == strtolower($attribs['md5sum'])) {
+                if (strtolower($md5sum) === strtolower($attribs['md5sum'])) {
                     $this->log(2, "md5sum ok: $final_dest_file");
                 } else {
                     if (empty($options['force'])) {
