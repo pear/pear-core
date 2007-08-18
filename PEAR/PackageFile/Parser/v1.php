@@ -167,7 +167,7 @@ class PEAR_PackageFile_Parser_v1
                 if (array_key_exists('name', $attribs) && $attribs['name'] != '/') {
                     $attribs['name'] = preg_replace(array('!\\\\+!', '!/+!'), array('/', '/'),
                         $attribs['name']);
-                    if (strrpos($attribs['name'], '/') == strlen($attribs['name']) - 1) {
+                    if (strrpos($attribs['name'], '/') === strlen($attribs['name']) - 1) {
                         $attribs['name'] = substr($attribs['name'], 0,
                             strlen($attribs['name']) - 1);
                     }
