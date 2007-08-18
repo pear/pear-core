@@ -1533,6 +1533,7 @@ class PEAR_Downloader extends PEAR_Common
      * @param false|string|array $lastmodified header values to check against for caching
      *                           use false to return the header values from this download
      * @param false|array $accept Accept headers to send
+     * @param false|string $channel Channel to use for retrieving authentication
      * @return string|array  Returns the full path of the downloaded file or a PEAR
      *                       error on failure.  If the error is caused by
      *                       socket-related errors, the error object will
@@ -1543,7 +1544,7 @@ class PEAR_Downloader extends PEAR_Common
      * @access public
      */
     function downloadHttp($url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null,
-                          $accept = false)
+                          $accept = false, $channel = false)
     {
         static $redirect = 0;
         // allways reset , so we are clean case of error
@@ -1638,8 +1639,8 @@ class PEAR_Downloader extends PEAR_Common
         $request .= $ifmodifiedsince . "User-Agent: PEAR/@package_version@/PHP/" .
             PHP_VERSION . "\r\n";
         if (isset($this)) { // only pass in authentication for non-static calls
-            $username = $config->get('username');
-            $password = $config->get('password');
+            $username = $config->get('username', null, $channel);
+            $password = $config->get('password', null, $channel);
             if ($username && $password) {
                 $tmp = base64_encode("$username:$password");
                 $request .= "Authorization: Basic $tmp\r\n";
