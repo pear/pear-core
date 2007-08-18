@@ -609,7 +609,7 @@ class PEAR_Installer extends PEAR_Downloader
         }
         // Store the full path where the file was installed for easy uninstall
         $this->addFileOperation("installed_as", array($file, $installed_as,
-                            $save_destdir, dirname(substr($dest_file, strlen($save_destdir)))));
+                            $save_destdir, dirname(substr($installed_as, strlen($save_destdir)))));
 
         //$this->log(2, "installed: $dest_file");
         return PEAR_INSTALLER_OK;
