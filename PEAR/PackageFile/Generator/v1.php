@@ -700,7 +700,7 @@ class PEAR_PackageFile_Generator_v1
         $peardep = array('pearinstaller' =>
             array('min' => '1.4.0b1')); // this is a lot safer
         $required = $optional = array();
-        $release['dependencies'] = array();
+        $release['dependencies'] = array('required' => array());
         if ($this->_packagefile->hasDeps()) {
             foreach ($this->_packagefile->getDeps() as $dep) {
                 if (!isset($dep['optional']) || $dep['optional'] == 'no') {
