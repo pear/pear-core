@@ -788,8 +788,10 @@ class PEAR_Downloader extends PEAR_Common
         if (PEAR::isError($chan)) {
             return $chan;
         }
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         $version = $this->_registry->packageInfo($parr['package'], 'version',
             $parr['channel']);
+        PEAR::staticPopErrorHandling();
         $base2 = false;
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
               (($base2 = $chan->getBaseURL('REST1.3', $this->config->get('preferred_mirror'))) ||
@@ -801,6 +803,7 @@ class PEAR_Downloader extends PEAR_Common
                 $rest = &$this->config->getREST('1.0', $this->_options);
             }
             if (!isset($parr['version']) && !isset($parr['state']) && $version
+                  && !PEAR::isError($version)
                   && !isset($this->_options['downloadonly'])) {
                 $url = $rest->getDownloadURL($base, $parr, $state, $version);
             } else {
@@ -821,15 +824,12 @@ class PEAR_Downloader extends PEAR_Common
                 return PEAR::raiseError('Invalid remote dependencies retrieved from REST - ' .
                     'this should never happen');
             }
-            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-            $testversion = $this->_registry->packageInfo($url['package'], 'version',
-                $parr['channel']);
-            PEAR::staticPopErrorHandling();
             if (!isset($this->_options['force']) &&
                   !isset($this->_options['downloadonly']) &&
-                  !PEAR::isError($testversion) &&
+                  $version &&
+                  !PEAR::isError($version) &&
                   !isset($parr['group'])) {
-                if (version_compare($testversion, $url['version'], '>=')) {
+                if (version_compare($version, $url['version'], '>=')) {
                     return PEAR::raiseError($this->_registry->parsedPackageNameToString(
                         $parr, true) . ' is already installed and is newer than detected ' .
                         'release version ' . $url['version'], -976);

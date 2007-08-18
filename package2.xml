@@ -106,6 +106,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     channels [timj]
   * fix Bug #11657: Installer generate bad "dirtree" using INSTALL_ROOT [remicollet]
   * fix Bug #11703: pear convert and package.xml with optional dependencies fails [cellog]
+  * fix Bug #11754: Error at upgrade-all command run [cellog]
  </notes>
  <contents>
   <dir name="/">
