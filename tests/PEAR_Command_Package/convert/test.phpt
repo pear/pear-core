@@ -1,5 +1,5 @@
 --TEST--
-convert command failure
+convert command success
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
