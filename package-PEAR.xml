@@ -97,6 +97,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #11517: Error : download directory &quot;/var/cache/php-pear&quot;
     is not writeable. [remicollet]
   * fix Bug #11616: Incorrect equality operator used when comparing md5 check sums [robham]
+  * fix Bug #11642: PEAR fails to authenticate when downloading deps from non-default
+    channels [timj]
   * fix Bug #11657: Installer generate bad "dirtree" using INSTALL_ROOT [remicollet]
   </notes>
   <provides type="class" name="OS_Guess"/>
