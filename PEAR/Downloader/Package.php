@@ -1467,7 +1467,7 @@ class PEAR_Downloader_Package
             }
             $this->_downloader->log(3, 'Downloading "' . $param . '"');
             $file = $this->_downloader->downloadHttp($param, $this->_downloader->ui,
-                $dir, $callback);
+                $dir, $callback, null, false, $this->getChannel());
             $this->_downloader->popErrorHandling();
             if (PEAR::isError($file)) {
                 if (!empty($saveparam)) {
