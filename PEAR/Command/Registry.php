@@ -180,6 +180,10 @@ installed package.'
             $data['headline'] = array('Channel', 'Package', 'Version', 'State');
         }
 
+        if (count($installed) && !isset($data['data'])) {
+            $data['data'] = array();
+        }
+
         foreach ($installed as $package) {
             $pobj = $reg->getPackage(isset($package['package']) ?
                                         $package['package'] : $package['name'], $channel);
