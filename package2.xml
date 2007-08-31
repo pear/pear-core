@@ -107,7 +107,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #11657: Installer generate bad "dirtree" using INSTALL_ROOT [remicollet]
   * fix Bug #11678: Registry.php getChannel() deadlocks [cellog]
   * fix Bug #11703: pear convert and package.xml with optional dependencies fails [cellog]
-  * fix Bug #11754: Error at upgrade-all command run [cellog]
+  * fix Bug #11754: Error at upgrade-all command run [cellog]\
+  * fix Bug #11861: uninstall of package did not delete directory created during install
+    of package [cellog]
   * fix Bug #11862: Notice: Array to string conversion in PEAR/PackageFile.php on line 433
     [cellog]
  </notes>
