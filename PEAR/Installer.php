@@ -440,8 +440,10 @@ class PEAR_Installer extends PEAR_Downloader
                 $atts['role'] == 'ext'));
         }
         // Store the full path where the file was installed for easy unistall
+        $loc = $this->config->get($atts['role'] . '_dir');
         $this->addFileOperation("installed_as", array($file, $installed_as,
-                                $save_destdir, dirname(substr($installedas_dest_file, strlen($save_destdir)))));
+                                $loc,
+                                dirname(substr($installedas_dest_file, strlen($loc)))));
 
         //$this->log(2, "installed: $dest_file");
         return PEAR_INSTALLER_OK;
@@ -608,8 +610,10 @@ class PEAR_Installer extends PEAR_Downloader
             $this->addFileOperation("rename", array($dest_file, $final_dest_file, $role->isExtension()));
         }
         // Store the full path where the file was installed for easy uninstall
+        $loc = $this->config->get($role->getLocationConfig(), null, $channel);
         $this->addFileOperation("installed_as", array($file, $installed_as,
-                            $save_destdir, dirname(substr($installed_as, strlen($save_destdir)))));
+                            $loc,
+                            dirname(substr($installed_as, strlen($loc)))));
 
         //$this->log(2, "installed: $dest_file");
         return PEAR_INSTALLER_OK;
