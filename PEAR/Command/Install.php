@@ -610,7 +610,11 @@ Run post-installation scripts in package <package>, if any exist.
             }
             $abstractpackages = 
                 array_map(array($reg, 'parsedPackageNameToString'), $abstractpackages);
+        } elseif (count($abstractpackages)) {
+            $abstractpackages = 
+                array_map(array($reg, 'parsedPackageNameToString'), $abstractpackages);
         }
+        
 
         $packages = array_merge($abstractpackages, $otherpackages);
         if (!count($packages)) {
