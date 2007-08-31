@@ -795,6 +795,7 @@ class PEAR_Registry extends PEAR
             }
 
             if (!is_resource($this->lock_fp)) {
+                $this->lock_fp = null;
                 return $this->raiseError("could not create lock file" .
                                          (isset($php_errormsg) ? ": " . $php_errormsg : ""));
             }
@@ -805,6 +806,9 @@ class PEAR_Registry extends PEAR
                     case LOCK_UN: $str = 'unlock';    break;
                     default:      $str = 'unknown';   break;
                 }
+                //is resource at this point, close it on error.
+                fclose($this->lock_fp);
+                $this->lock_fp = null;
                 return $this->raiseError("could not acquire $str lock ($this->lockfile)",
                                          PEAR_REGISTRY_ERROR_LOCK);
             }
