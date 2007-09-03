@@ -76,7 +76,7 @@ Currently, the following decorators are provided:
   <email>mike@php.net</email>
   <active>yes</active>
  </developer>
- <date>2007-08-18</date>
+ <date>' . date('Y-m-d') . '</date>
  <time>' . $pf->getTime() . '</time>
  <version>
   <release>2.0.0beta13</release>
