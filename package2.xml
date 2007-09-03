@@ -114,6 +114,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     [cellog]
   * fix Bug #11883: run-tests -u -p SomePackage should run the topmost
     &quot;AllTests.php&quot; file [cellog]
+  * fix Bug #11936: run-tests fails to preserve SYSTEMROOT environment variable [cellog]
  </notes>
  <contents>
   <dir name="/">
