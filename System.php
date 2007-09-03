@@ -298,7 +298,7 @@ class System
         }
 
         $count_args = count($args);
-        for ($i = 0; $i < $args_count; $i++) {
+        for ($i = 0; $i < $count_args; $i++) {
             if ($args[$i] == '>') {
                 $mode = 'wb';
                 $outputfile = $args[$i+1];
