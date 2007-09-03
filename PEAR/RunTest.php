@@ -223,6 +223,12 @@ class PEAR_RunTest
 
     function runPHPUnit($file, $ini_settings = '')
     {
+        if (!file_exists($file) && file_exists(getcwd() . DIRECTORY_SEPARATOR . $file)) {
+            $file = realpath(getcwd() . DIRECTORY_SEPARATOR . $file);
+            break;
+        } elseif (file_exists($file)) {
+            $file = realpath($file);
+        }
         $cmd = "$this->_php$ini_settings -f $file";
         if (isset($this->_logger)) {
             $this->_logger->log(2, 'Running command "' . $cmd . '"');

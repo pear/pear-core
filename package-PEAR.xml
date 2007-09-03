@@ -107,6 +107,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
     of package [cellog]
   * fix Bug #11862: Notice: Array to string conversion in PEAR/PackageFile.php on line 433
     [cellog]
+  * fix Bug #11883: run-tests -u -p SomePackage should run the topmost
+    &quot;AllTests.php&quot; file [cellog]
   </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
