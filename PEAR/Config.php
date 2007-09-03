@@ -131,6 +131,14 @@ if (getenv('PHP_PEAR_DATA_DIR')) {
            $PEAR_INSTALL_DIR.DIRECTORY_SEPARATOR.'data');
 }
 
+// Default for www_dir
+if (getenv('PHP_PEAR_WWW_DIR')) {
+    define('PEAR_CONFIG_DEFAULT_WWW_DIR', getenv('PHP_PEAR_WWW_DIR'));
+} else {
+    define('PEAR_CONFIG_DEFAULT_WWW_DIR',
+           $PEAR_INSTALL_DIR.DIRECTORY_SEPARATOR.'www');
+}
+
 // Default for test_dir
 if (getenv('PHP_PEAR_TEST_DIR')) {
     define('PEAR_CONFIG_DEFAULT_TEST_DIR', getenv('PHP_PEAR_TEST_DIR'));
@@ -282,7 +290,7 @@ class PEAR_Config extends PEAR
      */
     var $_channelConfigInfo = array(
         'php_dir', 'ext_dir', 'doc_dir', 'bin_dir', 'data_dir',
-        'test_dir', 'php_bin', 'username', 'password', 'verbose',
+        'test_dir', 'www_dir', 'php_bin', 'username', 'password', 'verbose',
         'preferred_state', 'umask', 'preferred_mirror',
         );
 
@@ -415,6 +423,13 @@ class PEAR_Config extends PEAR
             'default' => PEAR_CONFIG_DEFAULT_DATA_DIR,
             'doc' => 'directory where data files are installed',
             'prompt' => 'PEAR data directory',
+            'group' => 'File Locations (Advanced)',
+            ),
+        'www_dir' => array(
+            'type' => 'directory',
+            'default' => PEAR_CONFIG_DEFAULT_WWW_DIR,
+            'doc' => 'directory where www frontend files (html/js) are installed',
+            'prompt' => 'PEAR www files directory',
             'group' => 'File Locations (Advanced)',
             ),
         'test_dir' => array(

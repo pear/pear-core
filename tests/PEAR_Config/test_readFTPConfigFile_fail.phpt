@@ -69,7 +69,7 @@ $ftp->addRemoteFile('config.ini', dirname(__FILE__) . DIRECTORY_SEPARATOR .
     'test_readFTPConfigFile' . DIRECTORY_SEPARATOR . 'novars.ini');
 $e = $config->readFTPConfigFile('ftp://example.com/config.ini');
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 'ERROR: Ftp configuration file must set all directory configuration variables.  These variables were not set: "php_dir", "ext_dir", "doc_dir", "bin_dir", "data_dir", "test_dir", "cache_dir"')
+    array('package' => 'PEAR_Error', 'message' => 'ERROR: Ftp configuration file must set all directory configuration variables.  These variables were not set: "php_dir", "ext_dir", "doc_dir", "bin_dir", "data_dir", "www_dir", "test_dir", "cache_dir"')
 ), 'last failure');
 $phpunit->assertIsa('PEAR_Error', $e, 'ftp://example.com/config.ini no dir vars');
 echo 'tests done';

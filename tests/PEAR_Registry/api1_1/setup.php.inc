@@ -108,6 +108,7 @@ $config = serialize(array(
     'php_dir' => $temp_path . DIRECTORY_SEPARATOR . 'php',
     'ext_dir' => $temp_path . DIRECTORY_SEPARATOR . 'ext',
     'data_dir' => $temp_path . DIRECTORY_SEPARATOR . 'data',
+    'www_dir' => $temp_path . DIRECTORY_SEPARATOR . 'www',
     'doc_dir' => $temp_path . DIRECTORY_SEPARATOR . 'doc',
     'test_dir' => $temp_path . DIRECTORY_SEPARATOR . 'test',
     'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',));

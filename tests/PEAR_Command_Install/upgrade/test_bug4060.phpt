@@ -1451,7 +1451,7 @@ if (OS_WINDOWS) {
       21 => 
       array (
         0 => 3,
-        1 => 'adding to transaction: installed_as tests/sample.sql ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP ' . DIRECTORY_SEPARATOR . 'tests',
+        1 => 'adding to transaction: installed_as tests/sample.sql ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test ' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests',
       ),
       22 => 
       array (
@@ -1471,7 +1471,7 @@ if (OS_WINDOWS) {
       25 => 
       array (
         0 => 3,
-        1 => 'adding to transaction: installed_as tests/test_basic_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP ' . DIRECTORY_SEPARATOR . 'tests',
+        1 => 'adding to transaction: installed_as tests/test_basic_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test ' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests',
       ),
       26 => 
       array (
@@ -1491,7 +1491,7 @@ if (OS_WINDOWS) {
       29 => 
       array (
         0 => 3,
-        1 => 'adding to transaction: installed_as tests/test_digest_get.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP ' . DIRECTORY_SEPARATOR . 'tests',
+        1 => 'adding to transaction: installed_as tests/test_digest_get.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test ' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests',
       ),
       30 => 
       array (
@@ -1511,7 +1511,7 @@ if (OS_WINDOWS) {
       33 => 
       array (
         0 => 3,
-        1 => 'adding to transaction: installed_as tests/test_digest_post.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP ' . DIRECTORY_SEPARATOR . 'tests',
+        1 => 'adding to transaction: installed_as tests/test_digest_post.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test ' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests',
       ),
       34 => 
       array (
@@ -1531,7 +1531,7 @@ if (OS_WINDOWS) {
       37 => 
       array (
         0 => 3,
-        1 => 'adding to transaction: installed_as tests/test_digest_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP ' . DIRECTORY_SEPARATOR . 'tests',
+        1 => 'adding to transaction: installed_as tests/test_digest_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test ' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests',
       ),
       38 => 
       array (
@@ -1844,7 +1844,7 @@ if (OS_WINDOWS) {
   23 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: installed_as tests/sample.sql ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql ' . $temp_path . '/test/Auth_HTTP /tests',
+    1 => 'adding to transaction: installed_as tests/sample.sql ' . $temp_path . '/test/Auth_HTTP/tests/sample.sql ' . $temp_path . '/test /Auth_HTTP/tests',
   ),
   24 => 
   array (
@@ -1894,7 +1894,7 @@ if (OS_WINDOWS) {
   33 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: installed_as tests/test_digest_get.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php ' . $temp_path . '/test/Auth_HTTP /tests',
+    1 => 'adding to transaction: installed_as tests/test_digest_get.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_get.php ' . $temp_path . '/test /Auth_HTTP/tests',
   ),
   34 => 
   array (
@@ -1919,7 +1919,7 @@ if (OS_WINDOWS) {
   38 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: installed_as tests/test_digest_post.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php ' . $temp_path . '/test/Auth_HTTP /tests',
+    1 => 'adding to transaction: installed_as tests/test_digest_post.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_post.php ' . $temp_path . '/test /Auth_HTTP/tests',
   ),
   39 => 
   array (
@@ -1944,7 +1944,7 @@ if (OS_WINDOWS) {
   43 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: installed_as tests/test_digest_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php ' . $temp_path . '/test/Auth_HTTP /tests',
+    1 => 'adding to transaction: installed_as tests/test_digest_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/test_digest_simple.php ' . $temp_path . '/test /Auth_HTTP/tests',
   ),
   44 => 
   array (

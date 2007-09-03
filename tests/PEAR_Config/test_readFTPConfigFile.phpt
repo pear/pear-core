@@ -29,6 +29,7 @@ $phpunit->assertNoErrors('test');
 $phpunit->assertTrue($e, 'test');
 $phpunit->assertEquals('/path/to/pear/pear/php', $config->get('php_dir', 'ftp'), 'php_dir');
 $phpunit->assertEquals('/path/to/pear/pear/data', $config->get('data_dir', 'ftp'), 'data_dir');
+$phpunit->assertEquals('/path/to/pear/pear/www', $config->get('www_dir', 'ftp'), 'www_dir');
 $phpunit->assertEquals('/path/to/pear/pear/ext', $config->get('ext_dir', 'ftp'), 'ext_dir');
 $phpunit->assertEquals('/path/to/pear/pear', $config->get('bin_dir', 'ftp'), 'bin_dir');
 $phpunit->assertEquals('/path/to/pear/pear/docs', $config->get('doc_dir', 'ftp'), 'doc_dir');

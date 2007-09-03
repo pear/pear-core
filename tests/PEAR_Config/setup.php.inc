@@ -17,6 +17,9 @@ if (!is_dir($php_dir = $temp_path . DIRECTORY_SEPARATOR . 'php')) {
 if (!is_dir($data_dir = $temp_path . DIRECTORY_SEPARATOR . 'data')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'data');
 }
+if (!is_dir($www_dir = $temp_path . DIRECTORY_SEPARATOR . 'www')) {
+    mkdir($temp_path . DIRECTORY_SEPARATOR . 'www');
+}
 if (!is_dir($doc_dir = $temp_path . DIRECTORY_SEPARATOR . 'doc')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'doc');
 }
@@ -45,6 +48,7 @@ $config = serialize(array('master_server' => $server,
     'php_dir' => $temp_path . DIRECTORY_SEPARATOR . 'php',
     'ext_dir' => $temp_path . DIRECTORY_SEPARATOR . 'ext',
     'data_dir' => $temp_path . DIRECTORY_SEPARATOR . 'data',
+    'www_dir' => $temp_path . DIRECTORY_SEPARATOR . 'www',
     'doc_dir' => $temp_path . DIRECTORY_SEPARATOR . 'doc',
     'test_dir' => $temp_path . DIRECTORY_SEPARATOR . 'test',
     'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',));
