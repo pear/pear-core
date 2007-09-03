@@ -157,8 +157,8 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                     }
 
                     if (isset($options['phpunit']) && preg_match('/AllTests\.php\\z/i', $name)) {
-                        $params = array($atts['installed_as']);
-                        break;
+                        $params[] = $atts['installed_as'];
+                        continue;
                     } elseif (!preg_match('/\.phpt\\z/', $name)) {
                         continue;
                     }
@@ -174,18 +174,32 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                                                 '-maxdepth', $depth,
                                                 '-name', 'AllTests.php'));
                     if (count($dir)) {
-                        $tests = $dir;
-                        break;
+                        foreach ($dir as $p) {
+                            $p = realpath($p);
+                            if (!count($tests) ||
+                                  (count($tests) && strlen($p) < strlen($tests[0]))) {
+                                // this is in a higher-level directory, use this one instead.
+                                $tests = array($p);
+                            }
+                        }
                     }
+                    continue;
                 }
                 $dir = System::find(array($p, '-type', 'f',
                                             '-maxdepth', $depth,
                                             '-name', '*.phpt'));
                 $tests = array_merge($tests, $dir);
             } else {
-                if (isset($options['phpunit']) && preg_match('/AllTests\.php\\z/i', $p)) {
-                    $tests = array($p);
-                    break;
+                if (isset($options['phpunit'])) {
+                    if (preg_match('/AllTests\.php\\z/i', $p)) {
+                        $p = realpath($p);
+                        if (!count($tests) ||
+                              (count($tests) && strlen($p) < strlen($tests[0]))) {
+                            // this is in a higher-level directory, use this one instead.
+                            $tests = array($p);
+                        }
+                    }
+                    continue;
                 }
 
                 if (file_exists($p) && preg_match('/\.phpt$/', $p)) {
