@@ -219,11 +219,11 @@ class PEAR_Installer_Role
             $dir = dirname(__FILE__) . '/Role';
         }
         if (!file_exists($dir) || !is_dir($dir)) {
-            return PEAR::raiseError("registerRoles: opendir($dir) failed");
+            return PEAR::raiseError("registerRoles: opendir($dir) failed: does not exist/is not directory");
         }
         $dp = @opendir($dir);
         if (empty($dp)) {
-            return PEAR::raiseError("registerRoles: opendir($dir) failed");
+            return PEAR::raiseError("registerRoles: opendir($dir) failed: $php_errmsg");
         }
         while ($entry = readdir($dp)) {
             if ($entry{0} == '.' || substr($entry, -4) != '.xml') {
