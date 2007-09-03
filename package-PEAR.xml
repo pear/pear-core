@@ -93,6 +93,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <state>stable</state>
   <notes>
   Minor bugfix release
+  * fix Bug #11420: warning on pecl (un)install with --register-only option [cellog]
   * fix Bug #11481: PEAR_PackageFile_Parser_v1 skips single-char directories [pmjones]
   * fix Bug #11517: Error : download directory &quot;/var/cache/php-pear&quot;
     is not writeable. [remicollet]
