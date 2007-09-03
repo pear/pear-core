@@ -88,7 +88,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
  </maintainers>
  <release>
   <version>1.6.2</version>
-  <date>2007-09-01</date>
+  <date>2007-09-09</date>
   <license>PHP License</license>
   <state>stable</state>
   <notes>
