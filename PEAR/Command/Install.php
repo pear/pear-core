@@ -624,6 +624,7 @@ Run post-installation scripts in package <package>, if any exist.
 
         $this->downloader = &$this->getDownloader($this->ui, $options, $this->config);
         $errors = array();
+        $binaries = array();
         $downloaded = array();
         $downloaded = &$this->downloader->download($packages);
         if (PEAR::isError($downloaded)) {
@@ -704,29 +705,31 @@ Run post-installation scripts in package <package>, if any exist.
                             break;
                         }
                     }
-                    foreach ($binaries as $pinfo) {
-                        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-                        $ret = $this->enableExtension(array($pinfo[0]), $param->getPackageType());
-                        PEAR::staticPopErrorHandling();
-                        if (PEAR::isError($ret)) {
-                            $extrainfo[] = $ret->getMessage();
-                            if ($param->getPackageType() == 'extsrc' ||
-                                  $param->getPackageType() == 'extbin') {
-                                $exttype = 'extension';
+                    if (count($binaries)) {
+                        foreach ($binaries as $pinfo) {
+                            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                            $ret = $this->enableExtension(array($pinfo[0]), $param->getPackageType());
+                            PEAR::staticPopErrorHandling();
+                            if (PEAR::isError($ret)) {
+                                $extrainfo[] = $ret->getMessage();
+                                if ($param->getPackageType() == 'extsrc' ||
+                                      $param->getPackageType() == 'extbin') {
+                                    $exttype = 'extension';
+                                } else {
+                                    ob_start();
+                                    phpinfo(INFO_GENERAL);
+                                    $info = ob_get_contents();
+                                    ob_end_clean();
+                                    $debug = function_exists('leak') ? '_debug' : '';
+                                    $ts = preg_match('Thread Safety.+enabled', $info) ? '_ts' : '';
+                                    $exttype = 'zend_extension' . $debug . $ts;
+                                }
+                                $extrainfo[] = 'You should add "' . $exttype . '=' .
+                                    $pinfo[1]['basename'] . '" to php.ini';
                             } else {
-                                ob_start();
-                                phpinfo(INFO_GENERAL);
-                                $info = ob_get_contents();
-                                ob_end_clean();
-                                $debug = function_exists('leak') ? '_debug' : '';
-                                $ts = preg_match('Thread Safety.+enabled', $info) ? '_ts' : '';
-                                $exttype = 'zend_extension' . $debug . $ts;
+                                $extrainfo[] = 'Extension ' . $instpkg->getProvidesExtension() .
+                                    ' enabled in php.ini';
                             }
-                            $extrainfo[] = 'You should add "' . $exttype . '=' .
-                                $pinfo[1]['basename'] . '" to php.ini';
-                        } else {
-                            $extrainfo[] = 'Extension ' . $instpkg->getProvidesExtension() .
-                                ' enabled in php.ini';
                         }
                     }
                 }
@@ -856,6 +859,7 @@ Run post-installation scripts in package <package>, if any exist.
         }
         $reg = &$this->config->getRegistry();
         $newparams = array();
+        $binaries = array();
         $badparams = array();
         foreach ($params as $pkg) {
             $channel = $this->config->get('default_channel');
@@ -945,29 +949,31 @@ Run post-installation scripts in package <package>, if any exist.
                             break;
                         }
                     }
-                    foreach ($binaries as $pinfo) {
-                        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-                        $ret = $this->disableExtension(array($pinfo[0]), $pkg->getPackageType());
-                        PEAR::staticPopErrorHandling();
-                        if (PEAR::isError($ret)) {
-                            $extrainfo[] = $ret->getMessage();
-                            if ($pkg->getPackageType() == 'extsrc' ||
-                                  $pkg->getPackageType() == 'extbin') {
-                                $exttype = 'extension';
+                    if (count($binaries)) {
+                        foreach ($binaries as $pinfo) {
+                            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                            $ret = $this->disableExtension(array($pinfo[0]), $pkg->getPackageType());
+                            PEAR::staticPopErrorHandling();
+                            if (PEAR::isError($ret)) {
+                                $extrainfo[] = $ret->getMessage();
+                                if ($pkg->getPackageType() == 'extsrc' ||
+                                      $pkg->getPackageType() == 'extbin') {
+                                    $exttype = 'extension';
+                                } else {
+                                    ob_start();
+                                    phpinfo(INFO_GENERAL);
+                                    $info = ob_get_contents();
+                                    ob_end_clean();
+                                    $debug = function_exists('leak') ? '_debug' : '';
+                                    $ts = preg_match('Thread Safety.+enabled', $info) ? '_ts' : '';
+                                    $exttype = 'zend_extension' . $debug . $ts;
+                                }
+                                $this->ui->outputData('Unable to remove "' . $exttype . '=' .
+                                    $pinfo[1]['basename'] . '" from php.ini', $command);
                             } else {
-                                ob_start();
-                                phpinfo(INFO_GENERAL);
-                                $info = ob_get_contents();
-                                ob_end_clean();
-                                $debug = function_exists('leak') ? '_debug' : '';
-                                $ts = preg_match('Thread Safety.+enabled', $info) ? '_ts' : '';
-                                $exttype = 'zend_extension' . $debug . $ts;
+                                $this->ui->outputData('Extension ' . $pkg->getProvidesExtension() .
+                                    ' disabled in php.ini', $command);
                             }
-                            $this->ui->outputData('Unable to remove "' . $exttype . '=' .
-                                $pinfo[1]['basename'] . '" from php.ini', $command);
-                        } else {
-                            $this->ui->outputData('Extension ' . $pkg->getProvidesExtension() .
-                                ' disabled in php.ini', $command);
                         }
                     }
                 }
