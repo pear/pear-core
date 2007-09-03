@@ -350,6 +350,7 @@ and uninstall).
         $config->noRegistry();
         $config->set('php_dir', $windows ? "$root\\pear\\php" : "$root/pear/php", 'user');
         $config->set('data_dir', $windows ? "$root\\pear\\data" : "$root/pear/data");
+        $config->set('www_dir', $windows ? "$root\\pear\\www" : "$root/pear/www");
         $config->set('ext_dir', $windows ? "$root\\pear\\ext" : "$root/pear/ext");
         $config->set('doc_dir', $windows ? "$root\\pear\\docs" : "$root/pear/docs");
         $config->set('test_dir', $windows ? "$root\\pear\\tests" : "$root/pear/tests");

@@ -21,6 +21,7 @@ $phpunit->assertEquals('HTTP Proxy Server Address', $config->getPrompt('http_pro
 
 $phpunit->assertEquals('PEAR directory', $config->getPrompt('php_dir'), 'php_dir');
 $phpunit->assertEquals('PEAR data directory', $config->getPrompt('data_dir'), 'data_dir');
+$phpunit->assertEquals('PEAR www files directory', $config->getPrompt('www_dir'), 'www_dir');
 $phpunit->assertEquals('PEAR documentation directory', $config->getPrompt('doc_dir'), 'doc_dir');
 $phpunit->assertEquals('PHP extension directory', $config->getPrompt('ext_dir'), 'ext_dir');
 $phpunit->assertEquals('PEAR test directory', $config->getPrompt('test_dir'), 'test_dir');

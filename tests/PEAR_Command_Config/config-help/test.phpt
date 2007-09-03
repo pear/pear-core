@@ -13,7 +13,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $e = $command->run('config-help', array(), array());
 $phpunit->assertNoErrors('test');
 $log = $fakelog->getLog();
-$log[0]['info']['data'] = array_slice($log[0]['info']['data'], 0, 27);
+$log[0]['info']['data'] = array_slice($log[0]['info']['data'], 0, 28);
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -116,41 +116,47 @@ Valid set: stable beta alpha devel snapshot',
         ),
         14 => 
         array (
+          0 => 'www_dir',
+          1 => 'directory',
+          2 => 'directory where www frontend files (html/js) are installed',
+        ),
+        15 => 
+        array (
           0 => 'temp_dir',
           1 => 'directory',
           2 => 'directory which is used for all temp files',
         ),
-        15 => 
+        16 => 
         array (
           0 => 'download_dir',
           1 => 'directory',
           2 => 'directory which is used for all downloaded files',
         ),
-        16 =>
+        17 =>
         array (
           0 => 'php_bin',
           1 => 'file',
           2 => 'PHP CLI/CGI binary for executing scripts',
         ),
-        17 =>
+        18 =>
         array (
           0 => 'php_ini',
           1 => 'file',
           2 => 'location of php.ini in which to enable PECL extensions on install',
         ),
-        18 => 
+        19 => 
         array (
           0 => 'username',
           1 => 'string',
           2 => '(maintainers) your PEAR account name',
         ),
-        19 => 
+        20 => 
         array (
           0 => 'password',
           1 => 'password',
           2 => '(maintainers) your PEAR account password',
         ),
-        20 => 
+        21 => 
         array (
           0 => 'verbose',
           1 => 'integer',
@@ -160,38 +166,38 @@ Valid set: stable beta alpha devel snapshot',
 2: verbose
 3: debug',
         ),
-        21 => 
+        22 => 
         array (
           0 => 'umask',
           1 => 'mask',
           2 => 'umask used when creating files (Unix-like systems only)',
         ),
-        22 => 
+        23 => 
         array (
           0 => 'cache_ttl',
           1 => 'integer',
           2 => 'amount of secs where the local cache is used and not updated',
         ),
-        23 => 
+        24 => 
         array (
           0 => 'sig_type',
           1 => 'set',
           2 => 'which package signature mechanism to use
 Valid set: gpg',
         ),
-        24 => 
+        25 => 
         array (
           0 => 'sig_bin',
           1 => 'string',
           2 => 'which package signature mechanism to use',
         ),
-        25 => 
+        26 => 
         array (
           0 => 'sig_keyid',
           1 => 'string',
           2 => 'which key to use for signing with',
         ),
-        26 => 
+        27 => 
         array (
           0 => 'sig_keydir',
           1 => 'directory',

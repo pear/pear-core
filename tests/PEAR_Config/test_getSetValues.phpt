@@ -21,6 +21,7 @@ $phpunit->assertEquals(null, $config->getSetValues('http_proxy'), 'http_proxy');
 
 $phpunit->assertEquals(null, $config->getSetValues('php_dir'), 'php_dir');
 $phpunit->assertEquals(null, $config->getSetValues('data_dir'), 'data_dir');
+$phpunit->assertEquals(null, $config->getSetValues('www_dir'), 'www_dir');
 $phpunit->assertEquals(null, $config->getSetValues('doc_dir'), 'doc_dir');
 $phpunit->assertEquals(null, $config->getSetValues('ext_dir'), 'ext_dir');
 $phpunit->assertEquals(null, $config->getSetValues('test_dir'), 'test_dir');

@@ -20,7 +20,7 @@ $phpunit->assertNoErrors('log errors');
 $log = $fakelog->getLog();
 $log[0]['info']['data']['Internet Access'] = array_slice($log[0]['info']['data']['Internet Access'], 0, 6);
 $log[0]['info']['data']['File Locations'] = array_slice($log[0]['info']['data']['File Locations'], 0, 4);
-$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 7);
+$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 8);
 $log[0]['info']['data']['Advanced'] = array_slice($log[0]['info']['data']['Advanced'], 0, 4);
 $log[0]['info']['data']['Maintainers'] = array_slice($log[0]['info']['data']['Maintainers'], 0, 6);
 $phpunit->assertEquals(array (
@@ -115,7 +115,7 @@ $phpunit->assertEquals(array (
           array (
             0 => 'PEAR Installer download directory',
             1 => 'download_dir',
-            2 => $temp_path2 . '/nomake/pear/temp',
+            2 => $temp_path2 . '/nomake/pear/download',
           ),
           3 =>
           array (
@@ -133,13 +133,19 @@ $phpunit->assertEquals(array (
           array (
             0 => 'PEAR Installer temp directory',
             1 => 'temp_dir',
-            2 => $temp_path2 . '/nomake/pear/data',
+            2 => $temp_path2 . '/nomake/pear/temp',
           ),
           6 =>
           array (
             0 => 'PEAR test directory',
             1 => 'test_dir',
             2 => '' . $temp_path2 . '/nomake/pear/tests',
+          ),
+          7 => 
+          array (
+            0 => 'PEAR www files directory',
+            1 => 'www_dir',
+            2 => '' . $temp_path2 . '/nomake/pear/www',
           ),
         ),
         'Advanced' => 
@@ -241,13 +247,14 @@ $config->readConfigFile($temp_path . DIRECTORY_SEPARATOR . 'remote.ini');
 $phpunit->assertEquals(array (
   'php_dir' => $temp_path2 . '/nomake/pear/php',
   'data_dir' => $temp_path2 . '/nomake/pear/data',
+  'www_dir' => $temp_path2 . '/nomake/pear/www',
   'ext_dir' => $temp_path2 . '/nomake/pear/ext',
   'doc_dir' => $temp_path2 . '/nomake/pear/docs',
   'test_dir' => $temp_path2 . '/nomake/pear/tests',
   'cache_dir' => $temp_path2 . '/nomake/pear/cache',
-  'bin_dir' => $temp_path2 . '/nomake/pear',
-  'download_dir' => $temp_path2 . '/nomake/pear/temp',
+  'download_dir' => $temp_path2 . '/nomake/pear/download',
   'temp_dir' => $temp_path2 . '/nomake/pear/temp',
+  'bin_dir' => $temp_path2 . '/nomake/pear',
 ), $contents, 'ok');
 echo 'tests done';
 ?>

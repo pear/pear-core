@@ -21,6 +21,7 @@ $phpunit->assertEquals('HTTP proxy (host:port) to use when downloading packages'
 
 $phpunit->assertEquals('directory where .php files are installed', $config->getDocs('php_dir'), 'php_dir');
 $phpunit->assertEquals('directory where data files are installed', $config->getDocs('data_dir'), 'data_dir');
+$phpunit->assertEquals('directory where www frontend files (html/js) are installed', $config->getDocs('www_dir'), 'www_dir');
 $phpunit->assertEquals('directory where documentation is installed', $config->getDocs('doc_dir'), 'doc_dir');
 $phpunit->assertEquals('directory where loadable extensions are installed', $config->getDocs('ext_dir'), 'ext_dir');
 $phpunit->assertEquals('directory where regression tests are installed', $config->getDocs('test_dir'), 'test_dir');

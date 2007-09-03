@@ -21,6 +21,7 @@ $phpunit->assertEquals(true, $config->isDefined('http_proxy'), 'http_proxy');
 
 $phpunit->assertEquals(true, $config->isDefined('php_dir'), 'php_dir');
 $phpunit->assertEquals(true, $config->isDefined('data_dir'), 'data_dir');
+$phpunit->assertEquals(true, $config->isDefined('www_dir'), 'www_dir');
 $phpunit->assertEquals(true, $config->isDefined('doc_dir'), 'doc_dir');
 $phpunit->assertEquals(true, $config->isDefined('ext_dir'), 'ext_dir');
 $phpunit->assertEquals(true, $config->isDefined('test_dir'), 'test_dir');

@@ -21,6 +21,7 @@ $phpunit->assertEquals('Internet Access', $config->getGroup('http_proxy'), 'http
 
 $phpunit->assertEquals('File Locations', $config->getGroup('php_dir'), 'php_dir');
 $phpunit->assertEquals('File Locations (Advanced)', $config->getGroup('data_dir'), 'data_dir');
+$phpunit->assertEquals('File Locations (Advanced)', $config->getGroup('www_dir'), 'www_dir');
 $phpunit->assertEquals('File Locations', $config->getGroup('doc_dir'), 'doc_dir');
 $phpunit->assertEquals('File Locations', $config->getGroup('ext_dir'), 'ext_dir');
 $phpunit->assertEquals('File Locations (Advanced)', $config->getGroup('test_dir'), 'test_dir');

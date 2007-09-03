@@ -44,6 +44,7 @@ $config = serialize(array('master_server' => 'pear.php.net',
     'php_dir' => $statedir . DIRECTORY_SEPARATOR . 'php',
     'ext_dir' => $statedir . DIRECTORY_SEPARATOR . 'ext',
     'data_dir' => $statedir . DIRECTORY_SEPARATOR . 'data',
+    'www_dir' => $statedir . DIRECTORY_SEPARATOR . 'www',
     'doc_dir' => $statedir . DIRECTORY_SEPARATOR . 'doc',
     'test_dir' => $statedir . DIRECTORY_SEPARATOR . 'test',
     'bin_dir' => $statedir . DIRECTORY_SEPARATOR . 'bin',));

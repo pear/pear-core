@@ -28,13 +28,14 @@ $phpunit->assertEquals(array (
 ), array_slice($config->getGroupKeys('File Locations'), 0, 4), 'File Locations');
 $phpunit->assertEquals(array (
   0 => 'data_dir',
-  1 => 'test_dir',
-  2 => 'cache_dir',
-  3 => 'temp_dir',
-  4 => 'download_dir',
-  5 => 'php_bin',
-  6 => 'php_ini',
-), array_slice($config->getGroupKeys('File Locations (Advanced)'), 0, 7), 'File Locations (Advanced)');
+  1 => 'www_dir',
+  2 => 'test_dir',
+  3 => 'cache_dir',
+  4 => 'temp_dir',
+  5 => 'download_dir',
+  6 => 'php_bin',
+  7 => 'php_ini',
+), array_slice($config->getGroupKeys('File Locations (Advanced)'), 0, 8), 'File Locations (Advanced)');
 $phpunit->assertEquals(array (
   0 => 'username',
   1 => 'password',
