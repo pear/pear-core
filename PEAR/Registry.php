@@ -1771,10 +1771,10 @@ class PEAR_Registry extends PEAR
             return $e;
         }
         $ret = &$this->_getChannel($channel, $noaliases);
+        $this->_unlock();
         if (!$ret) {
             return PEAR::raiseError('Unknown channel: ' . $channel);
         }
-        $this->_unlock();
         return $ret;
     }
 
