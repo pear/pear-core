@@ -141,8 +141,6 @@ class PEAR_REST_10
         $exclude = array();
         $min = $max = $recommended = false;
         if ($xsdversion == '1.0') {
-            $pinfo['package'] = $dependency['name'];
-            $pinfo['channel'] = 'pear.php.net'; // this is always true - don't change this
             switch ($dependency['rel']) {
                 case 'ge' :
                     $min = $dependency['version'];
@@ -166,7 +164,6 @@ class PEAR_REST_10
                 break;
             }
         } else {
-            $pinfo['package'] = $dependency['name'];
             $min = isset($dependency['min']) ? $dependency['min'] : false;
             $max = isset($dependency['max']) ? $dependency['max'] : false;
             $recommended = isset($dependency['recommended']) ?
