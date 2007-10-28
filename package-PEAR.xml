@@ -92,6 +92,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>PHP License</license>
   <state>stable</state>
   <notes>
+  * fix Bug #12116: Accept-Encoding not supported: breaks installer [jldupont]
   * implement Request #11964: introduce www role, www_dir config variable [cellog]
   </notes>
   <provides type="class" name="OS_Guess"/>
