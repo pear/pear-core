@@ -100,6 +100,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #12116: Accept-Encoding not supported: breaks installer [jldupont]
   * fix Bug #12162: config-create doesn't work after installing custom roles [cellog]
   * implement Request #11964: introduce www role, www_dir config variable [cellog]
+  * implement Request #12108: Add &quot;config&quot; (cfg) role [cellog]
   * implement Request #12147: Avoid compile-time strict warnings [cellog]
  </notes>
  <contents>
