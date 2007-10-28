@@ -131,6 +131,14 @@ if (getenv('PHP_PEAR_DATA_DIR')) {
            $PEAR_INSTALL_DIR.DIRECTORY_SEPARATOR.'data');
 }
 
+// Default for cfg_dir
+if (getenv('PHP_PEAR_CFG_DIR')) {
+    define('PEAR_CONFIG_DEFAULT_CFG_DIR', getenv('PHP_PEAR_CFG_DIR'));
+} else {
+    define('PEAR_CONFIG_DEFAULT_CFG_DIR',
+           $PEAR_INSTALL_DIR.DIRECTORY_SEPARATOR.'cfg');
+}
+
 // Default for www_dir
 if (getenv('PHP_PEAR_WWW_DIR')) {
     define('PEAR_CONFIG_DEFAULT_WWW_DIR', getenv('PHP_PEAR_WWW_DIR'));
@@ -289,7 +297,7 @@ class PEAR_Config extends PEAR
      * @access private
      */
     var $_channelConfigInfo = array(
-        'php_dir', 'ext_dir', 'doc_dir', 'bin_dir', 'data_dir',
+        'php_dir', 'ext_dir', 'doc_dir', 'bin_dir', 'data_dir', 'cfg_dir',
         'test_dir', 'www_dir', 'php_bin', 'username', 'password', 'verbose',
         'preferred_state', 'umask', 'preferred_mirror',
         );
@@ -423,6 +431,13 @@ class PEAR_Config extends PEAR
             'default' => PEAR_CONFIG_DEFAULT_DATA_DIR,
             'doc' => 'directory where data files are installed',
             'prompt' => 'PEAR data directory',
+            'group' => 'File Locations (Advanced)',
+            ),
+        'cfg_dir' => array(
+            'type' => 'directory',
+            'default' => PEAR_CONFIG_DEFAULT_CFG_DIR,
+            'doc' => 'directory where modifiable configuration files are installed',
+            'prompt' => 'PEAR configuration file directory',
             'group' => 'File Locations (Advanced)',
             ),
         'www_dir' => array(
