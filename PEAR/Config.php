@@ -1453,7 +1453,7 @@ class PEAR_Config extends PEAR
                 }
             }
         }
-        if (empty($this->configuration_info[$key])) {
+        if (!isset($this->configuration_info[$key])) {
             return false;
         }
         extract($this->configuration_info[$key]);
