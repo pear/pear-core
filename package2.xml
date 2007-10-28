@@ -97,6 +97,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
+  * fix Bug #12116: Accept-Encoding not supported: breaks installer [jldupont]
   * implement Request #11964: introduce www role, www_dir config variable [cellog]
  </notes>
  <contents>

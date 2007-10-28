@@ -335,6 +335,7 @@ class PEAR_REST
         if ($accept) {
             $request .= 'Accept: ' . implode(', ', $accept) . "\r\n";
         }
+        $request .= "Accept-Encoding:\r\n";
         $request .= "Connection: close\r\n";
         $request .= "\r\n";
         if ($proxy_host != '') {
