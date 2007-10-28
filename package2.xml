@@ -99,6 +99,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <notes>
   * fix Bug #12116: Accept-Encoding not supported: breaks installer [jldupont]
   * implement Request #11964: introduce www role, www_dir config variable [cellog]
+  * implement Request #12147: Avoid compile-time strict warnings [cellog]
  </notes>
  <contents>
   <dir name="/">

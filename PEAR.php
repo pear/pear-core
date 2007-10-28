@@ -565,13 +565,17 @@ class PEAR
         } else {
             $ec = 'PEAR_Error';
         }
-        if ($skipmsg) {
-            $a = &new $ec($code, $mode, $options, $userinfo);
-            return $a;
-        } else {
-            $a = &new $ec($message, $code, $mode, $options, $userinfo);
+        if (intval(PHP_VERSION) < 5) {
+            // little non-eval hack to fix bug #12147
+            include 'PEAR/FixPHP5PEARWarnings.php';
             return $a;
         }
+        if ($skipmsg) {
+            $a = new $ec($code, $mode, $options, $userinfo);
+        } else {
+            $a = new $ec($message, $code, $mode, $options, $userinfo);
+        }
+        return $a;
     }
 
     // }}}
