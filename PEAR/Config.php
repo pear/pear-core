@@ -1077,12 +1077,18 @@ class PEAR_Config extends PEAR
     // }}}
 
     /**
+     * @param string Configuration class name, used for detecting duplicate calls
      * @param array information on a role as parsed from its xml file
      * @return true|PEAR_Error
      * @access private
      */
-    function _addConfigVars($vars)
+    function _addConfigVars($class, $vars)
     {
+        static $called = array();
+        if (isset($called[$class])) {
+            return;
+        }
+        $called[$class] = 1;
         if (count($vars) > 3) {
             return $this->raiseError('Roles can only define 3 new config variables or less');
         }
