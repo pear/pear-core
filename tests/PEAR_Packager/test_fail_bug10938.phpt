@@ -53,7 +53,7 @@ $phpunit->assertEquals(array (
   ),
   4 => 
   array (
-    0 => 'Parsing of package.xml from file "/home/cellog/workspace/pear-core/tests/PEAR_Packager/testinstallertemp/package.xml" failed',
+    0 => 'Parsing of package.xml from file "' . $temp_path . DIRECTORY_SEPARATOR . 'package.xml" failed',
     1 => true,
   ),
 ), $fakelog->getLog(), 'log');
