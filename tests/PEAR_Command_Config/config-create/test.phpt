@@ -20,7 +20,7 @@ $phpunit->assertNoErrors('log errors');
 $log = $fakelog->getLog();
 $log[0]['info']['data']['Internet Access'] = array_slice($log[0]['info']['data']['Internet Access'], 0, 6);
 $log[0]['info']['data']['File Locations'] = array_slice($log[0]['info']['data']['File Locations'], 0, 4);
-$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 8);
+$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 9);
 $log[0]['info']['data']['Advanced'] = array_slice($log[0]['info']['data']['Advanced'], 0, 4);
 $log[0]['info']['data']['Maintainers'] = array_slice($log[0]['info']['data']['Maintainers'], 0, 6);
 $phpunit->assertEquals(array (
@@ -99,49 +99,46 @@ $phpunit->assertEquals(array (
         ),
         'File Locations (Advanced)' => 
         array (
-          0 => 
           array (
             0 => 'PEAR Installer cache directory',
             1 => 'cache_dir',
             2 => '' . $temp_path2 . '/nomake/pear/cache',
           ),
-          1 => 
+          array (
+            0 => 'PEAR configuration file directory',
+            1 => 'cfg_dir',
+            2 => $temp_path2 . '/nomake/pear/cfg',
+          ),
           array (
             0 => 'PEAR data directory',
             1 => 'data_dir',
             2 => '' . $temp_path2 . '/nomake/pear/data',
           ),
-          2 => 
           array (
             0 => 'PEAR Installer download directory',
             1 => 'download_dir',
             2 => $temp_path2 . '/nomake/pear/download',
           ),
-          3 =>
           array (
             0 => 'PHP CLI/CGI binary',
             1 => 'php_bin',
             2 => NULL,
           ),
-          4 => 
           array (
             0 => 'php.ini location',
             1 => 'php_ini',
             2 => NULL,
           ),
-          5 =>
           array (
             0 => 'PEAR Installer temp directory',
             1 => 'temp_dir',
             2 => $temp_path2 . '/nomake/pear/temp',
           ),
-          6 =>
           array (
             0 => 'PEAR test directory',
             1 => 'test_dir',
             2 => '' . $temp_path2 . '/nomake/pear/tests',
           ),
-          7 => 
           array (
             0 => 'PEAR www files directory',
             1 => 'www_dir',
@@ -248,6 +245,7 @@ $phpunit->assertEquals(array (
   'php_dir' => $temp_path2 . '/nomake/pear/php',
   'data_dir' => $temp_path2 . '/nomake/pear/data',
   'www_dir' => $temp_path2 . '/nomake/pear/www',
+  'cfg_dir' => $temp_path2 . '/nomake/pear/cfg',
   'ext_dir' => $temp_path2 . '/nomake/pear/ext',
   'doc_dir' => $temp_path2 . '/nomake/pear/docs',
   'test_dir' => $temp_path2 . '/nomake/pear/tests',
