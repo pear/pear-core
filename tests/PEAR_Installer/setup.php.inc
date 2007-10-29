@@ -18,6 +18,9 @@ if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'php')) {
 if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'data')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'data');
 }
+if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'cfg')) {
+    mkdir($temp_path . DIRECTORY_SEPARATOR . 'cfg');
+}
 if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'doc')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'doc');
 }
@@ -45,6 +48,7 @@ $config = serialize(array(
     'preferred_state' => 'stable',
     'cache_dir' => $temp_path . DIRECTORY_SEPARATOR . 'cache',
     'php_dir' => $temp_path . DIRECTORY_SEPARATOR . 'php',
+    'cfg_dir' => $temp_path . DIRECTORY_SEPARATOR . 'cfg',
     'ext_dir' => $temp_path . DIRECTORY_SEPARATOR . 'ext',
     'data_dir' => $temp_path . DIRECTORY_SEPARATOR . 'data',
     'www_dir' => $temp_path . DIRECTORY_SEPARATOR . 'www',

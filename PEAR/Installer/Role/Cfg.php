@@ -32,7 +32,7 @@
  */
 class PEAR_Installer_Role_Cfg extends PEAR_Installer_Role_Common
 {
-    var $actualfilename = false;
+    var $installer;
     /**
      * Do any unusual setup here
      * @param PEAR_Installer
@@ -42,52 +42,49 @@ class PEAR_Installer_Role_Cfg extends PEAR_Installer_Role_Common
      */
     function setup(&$installer, $pkg, $atts, $file)
     {
-        $fake = '.';
-        $this->actualfilename = $file;
-        $test = parent::processInstallation($pkg, $atts, $file, $fake);
+        $this->installer = &$installer;
+    }
+
+    function processInstallation($pkg, $atts, $file, $tmp_path, $layer = null)
+    {
+        $test = parent::processInstallation($pkg, $atts, $file, $tmp_path, $layer);
         if (@file_exists($test[2])) {
             // configuration has already been installed, check for mods
-            if (md5_file($test[2]) !== md5_file($file)) {
+            if (md5_file($test[2]) !== md5_file($test[3])) {
                 // configuration has been modified, so save our version as
                 // configfile-version
-                $this->actualfilename = '.new-' . $pkg->getVersion();
+                $old = $test[2];
+                $test[2] .= '.new-' . $pkg->getVersion();
                 // backup original and re-install it
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                 $tmpcfg = $this->config->get('temp_dir');
-                $newloc = System::mkdir(array('-r', $tmpcfg));
+                $newloc = System::mkdir(array('-p', $tmpcfg));
                 if (!$newloc) {
                     // try temp_dir 
                     $newloc = System::mktemp(array('-d'));
                     if (!$newloc || PEAR::isError($newloc)) {
                         PEAR::popErrorHandling();
                         return PEAR::raiseError('Could not save existing configuration file '.
-                            $test[2] . ', unable to install.  Please set temp_dir ' .
+                            $old . ', unable to install.  Please set temp_dir ' .
                             'configuration variable to a writeable location and try again');
                     }
+                } else {
+                    $newloc = $tmpcfg;
                 }
-                if (!@copy($test[2], $newloc . DIRECTORY_SEPARATOR . 'savefile')) {
+                if (!@copy($old, $newloc . DIRECTORY_SEPARATOR . 'savefile')) {
                     PEAR::popErrorHandling();
                     return PEAR::raiseError('Could not save existing configuration file '.
-                        $test[2] . ', unable to install.  Please set temp_dir ' .
+                        $old . ', unable to install.  Please set temp_dir ' .
                         'configuration variable to a writeable location and try again');
                 }
                 PEAR::popErrorHandling();
-                $installer->addFileOperation('rename',
-                    array($newloc . DIRECTORY_SEPARATOR . 'savefile', $test[2], false
+                $this->installer->addFileOperation('rename',
+                    array($newloc . DIRECTORY_SEPARATOR . 'savefile', $old, false
                 ));
-                $installer->addFileOperation('delete', array($newloc . DIRECTORY_SEPARATOR . 'savefile'));
+                $this->installer->addFileOperation('delete', array($newloc . DIRECTORY_SEPARATOR . 'savefile'));
             }
         }
-    }
-
-    function processInstallation($pkg, $atts, $file, $tmp_path, $layer = null)
-    {
-        $ret = parent::processInstallation($pkg, $atts, $file, $tmp_path, $layer);
-        if ($this->actualfilename) {
-            // substitute our temporary name
-            $ret[3] = $this->actualfilename;
-        }
-        return $ret;
+        return $test;
     }
 }
 ?>
