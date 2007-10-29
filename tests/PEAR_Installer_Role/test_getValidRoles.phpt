@@ -10,28 +10,31 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $phpunit->assertEquals(array (
-  0 => 'data',
-  1 => 'doc',
-  2 => 'php',
-  3 => 'script',
-  4 => 'test',
-), array_slice(PEAR_Installer_Role::getValidRoles('php'), 0, 5), 'php');
+  'cfg',
+  'data',
+  'doc',
+  'php',
+  'script',
+  'test',
+), array_slice(PEAR_Installer_Role::getValidRoles('php'), 0, 6), 'php');
 $phpunit->assertEquals(array (
+  'cfg',
   'data',
   'doc',
   'php',
   'script',
   'src',
   'test',
-), array_slice(PEAR_Installer_Role::getValidRoles('extsrc'), 0, 6), 'extsrc');
+), array_slice(PEAR_Installer_Role::getValidRoles('extsrc'), 0, 7), 'extsrc');
 $phpunit->assertEquals(array (
+  'cfg',
   'data',
   'doc',
   'ext',
   'php',
   'script',
   'test',
-), array_slice(PEAR_Installer_Role::getValidRoles('extbin'), 0, 6), 'extbin');
+), array_slice(PEAR_Installer_Role::getValidRoles('extbin'), 0, 7), 'extbin');
 $phpunit->assertEquals(array(), PEAR_Installer_Role::getValidRoles('bundle'), 'bundle');
 
 PEAR_Installer_Role::registerRoles(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'sophisticated');
