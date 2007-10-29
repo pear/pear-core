@@ -181,6 +181,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file name="Common.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="Cfg.xml" role="php"/>
+      <file name="Cfg.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
       <file name="Data.xml" role="php"/>
       <file name="Data.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />

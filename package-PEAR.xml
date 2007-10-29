@@ -190,6 +190,10 @@ http://pear.php.net/dtd/package-1.0.xsd">
       <file role="php" name="Common.php">
        <replace from="@package_version@" to="version" type="package-info"/>
       </file>
+      <file role="php" name="Cfg.xml"/>
+      <file role="php" name="Cfg.php">
+       <replace from="@package_version@" to="version" type="package-info"/>
+      </file>
       <file role="php" name="Data.xml"/>
       <file role="php" name="Data.php">
        <replace from="@package_version@" to="version" type="package-info"/>

@@ -51,6 +51,31 @@ class PEAR_Installer_Role_Cfg extends PEAR_Installer_Role_Common
                 // configuration has been modified, so save our version as
                 // configfile-version
                 $this->actualfilename = '.new-' . $pkg->getVersion();
+                // backup original and re-install it
+                PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                $tmpcfg = $this->config->get('temp_dir');
+                $newloc = System::mkdir(array('-r', $tmpcfg));
+                if (!$newloc) {
+                    // try temp_dir 
+                    $newloc = System::mktemp(array('-d'));
+                    if (!$newloc || PEAR::isError($newloc)) {
+                        PEAR::popErrorHandling();
+                        return PEAR::raiseError('Could not save existing configuration file '.
+                            $test[2] . ', unable to install.  Please set temp_dir ' .
+                            'configuration variable to a writeable location and try again');
+                    }
+                }
+                if (!@copy($test[2], $newloc . DIRECTORY_SEPARATOR . 'savefile')) {
+                    PEAR::popErrorHandling();
+                    return PEAR::raiseError('Could not save existing configuration file '.
+                        $test[2] . ', unable to install.  Please set temp_dir ' .
+                        'configuration variable to a writeable location and try again');
+                }
+                PEAR::popErrorHandling();
+                $installer->addFileOperation('rename',
+                    array($newloc . DIRECTORY_SEPARATOR . 'savefile', $test[2], false
+                ));
+                $installer->addFileOperation('delete', array($newloc . DIRECTORY_SEPARATOR . 'savefile'));
             }
         }
     }
