@@ -47,11 +47,6 @@ class PEAR_Installer_Role
      */
     function initializeConfig(&$config)
     {
-        static $called = false;
-        if ($called) {
-            return;
-        }
-        $called = true;
         if (!isset($GLOBALS['_PEAR_INSTALLER_ROLES'])) {
             PEAR_Installer_Role::registerRoles();
         }
@@ -59,7 +54,7 @@ class PEAR_Installer_Role
             if (!$info['config_vars']) {
                 continue;
             }
-            $config->_addConfigVars($info['config_vars']);
+            $config->_addConfigVars($class, $info['config_vars']);
         }
     }
 
