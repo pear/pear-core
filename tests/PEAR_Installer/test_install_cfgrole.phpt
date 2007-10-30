@@ -17,6 +17,8 @@ $c2 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'cfg2.xml';
 $c3 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'cfg3.xml';
+$c4 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
+    'packages'. DIRECTORY_SEPARATOR . 'cfg4.xml';
 $dp = &new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($c1));
@@ -209,6 +211,30 @@ $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_
     'installed file');
 $phpunit->assertEquals(md5_file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' .
     DIRECTORY_SEPARATOR . 'foo.php'), md5_file($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR .  'PEAR' . DIRECTORY_SEPARATOR . 'foo.php.new-1.4.2'), 'md52');$fakelog->getLog();
+
+$dp = &new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
+$result = $dp->download(array($c4));
+$after = $dp->getDownloadedPackages();
+$phpunit->assertEquals(1, count($after), 'after getdp count');
+$phpunit->assertEquals(array (), $fakelog->getLog(), 'log messages');
+$phpunit->assertEquals(array (
+), $fakelog->getDownload(), 'download callback messages');
+
+$installer->setOptions($dp->getOptions());
+$installer->sortPackagesForInstall($result);
+$installer->setDownloadedPackages($result);
+$phpunit->assertNoErrors('set of downloaded packages');
+$ret = &$installer->install($result[0], $dp->getOptions());
+$phpunit->assertNoErrors('after install');
+$phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR .  'PEAR' . DIRECTORY_SEPARATOR . 'foo.php',
+    'installed file');
+$phpunit->assertEquals(md5('fix it up - woo'), md5_file($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR .  'PEAR' . DIRECTORY_SEPARATOR . 'foo.php'), 'md51');
+$phpunit->assertFileNotExists($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR .  'PEAR' . DIRECTORY_SEPARATOR . 'foo.php.new-1.4.2',
+    'installed file should be erased');
+$phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR .  'PEAR' . DIRECTORY_SEPARATOR . 'foo.php.new-1.4.3',
+    'installed file');
+$phpunit->assertEquals(md5_file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' .
+    DIRECTORY_SEPARATOR . 'foo.php'), md5_file($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR .  'PEAR' . DIRECTORY_SEPARATOR . 'foo.php.new-1.4.3'), 'md52');$fakelog->getLog();
 
 echo 'tests done';
 ?>
