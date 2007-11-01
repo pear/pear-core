@@ -421,9 +421,15 @@ class PEAR_DependencyDB
             return $depdb;
         }
         $packages = $this->_registry->listAllPackages();
+        if (PEAR::isError($packages)) {
+            return $packages;
+        }
         foreach ($packages as $channel => $ps) {
             foreach ($ps as $package) {
                 $package = $this->_registry->getPackage($package, $channel);
+                if (PEAR::isError($package)) {
+                    return $package;
+                }
                 $this->_setPackageDeps($depdb, $package);
             }
         }
