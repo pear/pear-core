@@ -133,7 +133,7 @@ if (PEAR::isError($config)) {
     $config->getMessage();
     $ui->outputData("ERROR: $_file is not a valid config file or is corrupted.");
     // We stop, we have no idea where we are :)
-    exit(1);    
+    exit(1);
 }
 
 // this is used in the error handler to retrieve a relative path
@@ -394,7 +394,7 @@ function cmdHelp($command)
             return "$progname $command [options] $help[0]\n$help[1]";
         }
     }
-    return "Command '$command' is not valid, try 'pear help'";
+    return "Command '$command' is not valid, try '$progname help'";
 }
 
 // }}}
