@@ -70,7 +70,7 @@ if (!@is_file($tmpfile) || !ereg("^$tmpenv{$ereg_sep}tst", $tmpfile)) {
 
 // Create a temporal dir in "dir1" with default prefix "tmp"
 $tmpdir  = System::mkTemp('-d -t dir1');
-if (!@is_dir($tmpdir) || (!OS_WINDOWS && !ereg("^dir1{$ereg_sep}tmp", $tmpdir))) {
+if (!@is_dir($tmpdir) || (!OS_WINDOWS && !ereg("dir1{$ereg_sep}tmp", $tmpdir))) {
     print "System::mkTemp('-d -t dir1') failed\n";
 }
 
