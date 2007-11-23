@@ -1869,7 +1869,7 @@ if (OS_WINDOWS) {
   28 => 
   array (
     0 => 3,
-    1 => 'adding to transaction: installed_as tests/test_basic_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php ' . $temp_path . '/test/Auth_HTTP /tests',
+    1 => 'adding to transaction: installed_as tests/test_basic_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/test_basic_simple.php ' . $temp_path . '/test /Auth_HTTP/tests',
   ),
   29 => 
   array (

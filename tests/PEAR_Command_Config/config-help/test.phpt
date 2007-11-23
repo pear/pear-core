@@ -13,7 +13,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $e = $command->run('config-help', array(), array());
 $phpunit->assertNoErrors('test');
 $log = $fakelog->getLog();
-$log[0]['info']['data'] = array_slice($log[0]['info']['data'], 0, 28);
+$log[0]['info']['data'] = array_slice($log[0]['info']['data'], 0, 29);
 $phpunit->assertEquals(array (
   0 => 
   array (
@@ -54,109 +54,96 @@ Valid set: stable beta alpha devel snapshot',
           1 => 'directory',
           2 => 'directory where .php files are installed',
         ),
-        4 => 
         array (
-          0 => 'ext_dir',
+          0 => 'cfg_dir',
           1 => 'directory',
-          2 => 'directory where loadable extensions are installed',
+          2 => 'directory where modifiable configuration files are installed',
         ),
-        5 => 
-        array (
-          0 => 'data_dir',
-          1 => 'directory',
-          2 => 'directory where data files are installed',
-        ),
-        6 => 
-        array (
-          0 => 'doc_dir',
-          1 => 'directory',
-          2 => 'directory where documentation is installed',
-        ),
-        7 => 
-        array (
-          0 => 'test_dir',
-          1 => 'directory',
-          2 => 'directory where regression tests are installed',
-        ),
-        8 => 
-        array (
-          0 => 'bin_dir',
-          1 => 'directory',
-          2 => 'directory where executables are installed',
-        ),
-        9 => 
-        array (
-          0 => 'default_channel',
-          1 => 'string',
-          2 => 'the default channel to use for all non explicit commands',
-        ),
-        10 => 
-        array (
-          0 => 'preferred_mirror',
-          1 => 'string',
-          2 => 'the default server or mirror to use for channel actions',
-        ),
-        11 => 
-        array (
-          0 => 'remote_config',
-          1 => 'password',
-          2 => 'ftp url of remote configuration file to use for synchronized install',
-        ),
-        12 => 
-        array (
-          0 => 'auto_discover',
-          1 => 'integer',
-          2 => 'whether to automatically discover new channels',
-        ),
-        13 => 
-        array (
-          0 => 'http_proxy',
-          1 => 'string',
-          2 => 'HTTP proxy (host:port) to use when downloading packages',
-        ),
-        14 => 
         array (
           0 => 'www_dir',
           1 => 'directory',
           2 => 'directory where www frontend files (html/js) are installed',
         ),
-        15 => 
+        array (
+          0 => 'ext_dir',
+          1 => 'directory',
+          2 => 'directory where loadable extensions are installed',
+        ),
+        array (
+          0 => 'data_dir',
+          1 => 'directory',
+          2 => 'directory where data files are installed',
+        ),
+        array (
+          0 => 'doc_dir',
+          1 => 'directory',
+          2 => 'directory where documentation is installed',
+        ),
+        array (
+          0 => 'test_dir',
+          1 => 'directory',
+          2 => 'directory where regression tests are installed',
+        ),
+        array (
+          0 => 'bin_dir',
+          1 => 'directory',
+          2 => 'directory where executables are installed',
+        ),
+        array (
+          0 => 'default_channel',
+          1 => 'string',
+          2 => 'the default channel to use for all non explicit commands',
+        ),
+        array (
+          0 => 'preferred_mirror',
+          1 => 'string',
+          2 => 'the default server or mirror to use for channel actions',
+        ),
+        array (
+          0 => 'remote_config',
+          1 => 'password',
+          2 => 'ftp url of remote configuration file to use for synchronized install',
+        ),
+        array (
+          0 => 'auto_discover',
+          1 => 'integer',
+          2 => 'whether to automatically discover new channels',
+        ),
+        array (
+          0 => 'http_proxy',
+          1 => 'string',
+          2 => 'HTTP proxy (host:port) to use when downloading packages',
+        ),
         array (
           0 => 'temp_dir',
           1 => 'directory',
           2 => 'directory which is used for all temp files',
         ),
-        16 => 
         array (
           0 => 'download_dir',
           1 => 'directory',
           2 => 'directory which is used for all downloaded files',
         ),
-        17 =>
         array (
           0 => 'php_bin',
           1 => 'file',
           2 => 'PHP CLI/CGI binary for executing scripts',
         ),
-        18 =>
         array (
           0 => 'php_ini',
           1 => 'file',
           2 => 'location of php.ini in which to enable PECL extensions on install',
         ),
-        19 => 
         array (
           0 => 'username',
           1 => 'string',
           2 => '(maintainers) your PEAR account name',
         ),
-        20 => 
         array (
           0 => 'password',
           1 => 'password',
           2 => '(maintainers) your PEAR account password',
         ),
-        21 => 
         array (
           0 => 'verbose',
           1 => 'integer',
@@ -166,38 +153,32 @@ Valid set: stable beta alpha devel snapshot',
 2: verbose
 3: debug',
         ),
-        22 => 
         array (
           0 => 'umask',
           1 => 'mask',
           2 => 'umask used when creating files (Unix-like systems only)',
         ),
-        23 => 
         array (
           0 => 'cache_ttl',
           1 => 'integer',
           2 => 'amount of secs where the local cache is used and not updated',
         ),
-        24 => 
         array (
           0 => 'sig_type',
           1 => 'set',
           2 => 'which package signature mechanism to use
 Valid set: gpg',
         ),
-        25 => 
         array (
           0 => 'sig_bin',
           1 => 'string',
           2 => 'which package signature mechanism to use',
         ),
-        26 => 
         array (
           0 => 'sig_keyid',
           1 => 'string',
           2 => 'which key to use for signing with',
         ),
-        27 => 
         array (
           0 => 'sig_keydir',
           1 => 'directory',
