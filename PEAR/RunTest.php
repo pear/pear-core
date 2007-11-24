@@ -56,6 +56,13 @@ class PEAR_RunTest
     var $_php;
     var $tests_count;
     var $xdebug_loaded;
+    /**
+     * Saved value of php executable, used to reset $_php when we
+     * have a test that uses cgi
+     *
+     * @var unknown_type
+     */
+    var $_savephp;
     var $ini_overwrites = array(
         'output_handler=',
         'open_basedir=',
@@ -255,6 +262,10 @@ class PEAR_RunTest
      */
     function run($file, $ini_settings = array(), $test_number = 1)
     {
+        if (isset($this->_savephp)) {
+            $this->_php = $this->_savephp;
+            unset($this->_savephp);
+        }
         if (empty($this->_options['cgi'])) {
             // try to see if php-cgi is in the path
             if (false !== $this->system_with_timeout('php-cgi -v')) {
@@ -315,6 +326,7 @@ class PEAR_RunTest
                 }
                 return 'SKIPPED';
             }
+            $this->_savephp = $this->_php;
             $this->_php = $this->_options['cgi'];
         }
 
