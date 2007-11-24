@@ -154,16 +154,17 @@ for ($i = 0; $i < $totalfiles + 1; ++$i) {
 }
 // Concat in new file
 for ($i = $totalfiles; $i > 0; --$i) {
-    $cat = '';
+    $cat = array();
     $expected = '';
     for ($j = $i; $j > 0; --$j) {
-        $cat .= $tmpfile[$j] . ' ';
+        $cat[] = $tmpfile[$j];
         $expected .= 'FILE ' . $j;
     }
-    $cat .= '> ' . $catfile;
+    $cat[] = '>';
+    $cat[] = $catfile;
     System::cat($cat);
     if (file_get_contents($catfile) != $expected) {
-        print "System::cat('$cat') failed\n";
+        print "System::cat('" . implode(' ', $cat) . "') failed\n";
     }
 }
 
