@@ -442,7 +442,7 @@ class System
         if ($var = isset($_ENV['TMPDIR']) ? $_ENV['TMPDIR'] : getenv('TMPDIR')) {
             return $var;
         }
-        return '/tmp';
+        return realpath('/tmp');
     }
 
     /**
