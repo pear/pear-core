@@ -268,7 +268,8 @@ class PEAR_RunTest
         }
         if (empty($this->_options['cgi'])) {
             // try to see if php-cgi is in the path
-            if (false !== $this->system_with_timeout('php-cgi -v')) {
+            $res = $this->system_with_timeout('php-cgi -v');
+            if (false !== $res && !(is_array($res) && $res === array(127, ''))) {
                 $this->_options['cgi'] = 'php-cgi';
             }
         }
