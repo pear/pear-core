@@ -1052,6 +1052,9 @@ Run post-installation scripts in package <package>, if any exist.
         if (PEAR::isError($result)) {
             return $result;
         }
+        if (!isset($result[0])) {
+            return $this->raiseError('unable to unpack ' . $params[0]);
+        }
         $pkgfile = &$result[0]->getPackageFile();
         $pkgname = $pkgfile->getName();
         $pkgversion = $pkgfile->getVersion();
