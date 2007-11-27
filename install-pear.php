@@ -58,6 +58,11 @@ for ($i = 0; $i < sizeof($argv); $i++) {
 
 $config = PEAR_Config::singleton();
 
+if (PEAR::isError($config)) {
+    $locs = PEAR_Config::getDefaultConfigFiles();
+    die("ERROR: One of $locs[user] or $locs[system] is corrupt, please remove them and try again");
+}
+
 // make sure we use only default values
 $config_layers = $config->getLayers();
 foreach ($config_layers as $layer) {
