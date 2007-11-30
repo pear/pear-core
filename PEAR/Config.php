@@ -649,6 +649,25 @@ class PEAR_Config extends PEAR
     }
 
     // }}}
+    /**
+     * Return the default locations of user and system configuration files
+     * @static
+     */
+    function getDefaultConfigFiles()
+    {
+        $sl = DIRECTORY_SEPARATOR;
+        if (OS_WINDOWS) {
+            return array(
+                'user' => PEAR_CONFIG_SYSCONFDIR . $sl . 'pear.ini',
+                'system' =>  PEAR_CONFIG_SYSCONFDIR . $sl . 'pearsys.ini'
+            );
+        } else {
+            return array(
+                'user' => getenv('HOME') . $sl . '.pearrc',
+                'system' => PEAR_CONFIG_SYSCONFDIR . $sl . 'pear.conf'
+            );
+        }
+    }
     // {{{ singleton([file], [defaults_file])
 
     /**
