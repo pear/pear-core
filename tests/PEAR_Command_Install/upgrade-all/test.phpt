@@ -3425,7 +3425,7 @@ array (
   array (
     'info' =>
     array (
-      'data' => 'Will upgrade channel://pear.php.net/text_wiki',
+      'data' => 'Will upgrade channel://pear.php.net/file',
     ),
     'cmd' => 'upgrade-all',
   ),
@@ -3433,7 +3433,7 @@ array (
   array (
     'info' =>
     array (
-      'data' => 'Will upgrade channel://pear.php.net/xml_rpc',
+      'data' => 'Will upgrade channel://pear.php.net/net_sieve',
     ),
     'cmd' => 'upgrade-all',
   ),
@@ -3441,7 +3441,7 @@ array (
   array (
     'info' =>
     array (
-      'data' => 'Will upgrade channel://pear.php.net/net_sieve',
+      'data' => 'Will upgrade channel://pear.php.net/text_highlighter',
     ),
     'cmd' => 'upgrade-all',
   ),
@@ -3449,7 +3449,7 @@ array (
   array (
     'info' =>
     array (
-      'data' => 'Will upgrade channel://pear.php.net/file',
+      'data' => 'Will upgrade channel://pear.php.net/text_wiki',
     ),
     'cmd' => 'upgrade-all',
   ),
@@ -3457,14 +3457,14 @@ array (
   array (
     'info' =>
     array (
-      'data' => 'Will upgrade channel://pear.php.net/text_highlighter',
+      'data' => 'Will upgrade channel://pear.php.net/xml_rpc',
     ),
     'cmd' => 'upgrade-all',
   ),
   5 =>
   array (
     0 => 3,
-    1 => 'Notice: package "pear/Net_Sieve" required dependency "pear/Net_Socket" will not be automatically downloaded',
+    1 => 'Notice: package "pear/File" required dependency "pear/PEAR" will not be automatically downloaded',
   ),
 ), array_slice($fakelog->getLog(), 0, 6),
 'upgrade-all log');
