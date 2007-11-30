@@ -29,7 +29,7 @@ array(2) {
     ["type"]=>
     string(10) "text/plain"
     ["tmp_name"]=>
-    string(14) "%s"
+    string(%d) "%s"
     ["error"]=>
     int(0)
     ["size"]=>
@@ -42,7 +42,7 @@ array(2) {
     ["type"]=>
     string(10) "text/plain"
     ["tmp_name"]=>
-    string(14) "%s"
+    string(%d) "%s"
     ["error"]=>
     int(0)
     ["size"]=>
