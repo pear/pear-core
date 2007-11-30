@@ -88,11 +88,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </helper>
  <date>2007-12-01</date>
  <version>
-  <release>1.7.0</release>
+  <release>1.7.0RC1</release>
   <api>1.7.0</api>
  </version>
  <stability>
-  <release>stable</release>
+  <release>beta</release>
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>

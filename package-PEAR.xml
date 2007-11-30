@@ -87,10 +87,10 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.7.0</version>
+  <version>1.7.RC1</version>
   <date>2007-12-01</date>
   <license>PHP License</license>
-  <state>stable</state>
+  <state>beta</state>
   <notes>
   * fix Bug #12116: Accept-Encoding not supported: breaks installer [jldupont]
   * fix Bug #12162: config-create doesn't work after installing custom roles [cellog]
