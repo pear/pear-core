@@ -87,7 +87,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.7.RC1</version>
+  <version>1.7.0RC1</version>
   <date>2007-12-01</date>
   <license>PHP License</license>
   <state>beta</state>
