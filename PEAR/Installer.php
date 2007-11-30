@@ -440,7 +440,11 @@ class PEAR_Installer extends PEAR_Downloader
                 $atts['role'] == 'ext'));
         }
         // Store the full path where the file was installed for easy unistall
-        $loc = $this->config->get($atts['role'] . '_dir');
+        if ($atts['role'] != 'script') {
+            $loc = $this->config->get($atts['role'] . '_dir');
+        } else {
+            $loc = $this->config->get('bin_dir');
+        }
         $this->addFileOperation("installed_as", array($file, $installed_as,
                                 $loc,
                                 dirname(substr($installedas_dest_file, strlen($loc)))));
@@ -841,8 +845,8 @@ class PEAR_Installer extends PEAR_Downloader
                         $this->_dirtree[dirname($data[1])] = true;
                         $this->pkginfo->setDirtree(dirname($data[1]));
 
-                        while(!empty($data[3]) && $data[3] != '/' && $data[3] != '\\'
-                              && $data[3] != '.') {
+                        while(!empty($data[3]) && dirname($data[3]) != $data[3] &&
+                                $data[3] != '/' && $data[3] != '\\') {
                             $this->pkginfo->setDirtree($pp =
                                 $this->_prependPath($data[3], $data[2]));
                             $this->_dirtree[$pp] = true;
