@@ -94,6 +94,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <notes>
   * fix Bug #12116: Accept-Encoding not supported: breaks installer [jldupont]
   * fix Bug #12162: config-create doesn't work after installing custom roles [cellog]
+  * fix Bug #12553: System::find() does not find exact filename matches [cellog/jorrit]
   * fix Bug #12554: enableExtension() zeros php.ini in some instances [jlightsey]
   * implement Request #11964: introduce www role, www_dir config variable [cellog]
   * implement Request #12108: Add &quot;config&quot; (cfg) role [cellog]
