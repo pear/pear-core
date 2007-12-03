@@ -31,25 +31,25 @@ $phpunit->assertEquals(array (
 $phpunit->assertTrue($reg->addPackage("pkg2", array("name" => "pkg2", "version" => "2.0", "filelist" => $files2, 'maintainers' => array())), 'add pkg2 return');
 $phpunit->assertTrue($reg->addPackage("pkg3", array("name" => "pkg3", "version" => "3.0", "filelist" => $files3, 'maintainers' => array())), 'add pkg3 return');
 
-$phpunit->assertEquals(array (
+$phpunit->assertUnorderedArray(array (
   0 => 'pkg1',
   1 => 'pkg2',
   2 => 'pkg3',
 ), $reg->listPackages(), 'list packages after adding 2 and 3');
 
-$phpunit->assertEquals(array (
+$phpunit->assertUnorderedArray(array (
   0 => 'pkg1',
   1 => 'pkg2',
   2 => 'pkg3',
 ), $subreg->listPackages(), 'list packages after adding 2 and 3, new object');
 $phpunit->assertTrue($reg->deletePackage('pkg1'), 'delete pkg1');
 
-$phpunit->assertEquals(array (
+$phpunit->assertUnorderedArray(array (
   0 => 'pkg2',
   1 => 'pkg3',
 ), $reg->listPackages(), 'list packages after deleting 1');
 
-$phpunit->assertEquals(array (
+$phpunit->assertUnorderedArray(array (
   0 => 'pkg2',
   1 => 'pkg3',
 ), $subreg->listPackages(), 'list packages after deleting 1, new object');
