@@ -41,7 +41,7 @@ if (OS_WINDOWS) {
 }
 $phpunit->assertFalse($reg->hasWriteAccess(), 2);
 if (OS_WINDOWS) {
-    $reg->install_dir = '\\$:*#';
+    $reg->install_dir = '$:\\$*#';
 } else {
     $reg->install_dir = '/usr/$*#^';
 }
