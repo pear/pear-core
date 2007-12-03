@@ -259,13 +259,24 @@ class PEAR_PHPTest
         return false;
     }
 
-    function assertEquals($control, $test, $message)
+    function assertUnorderedArray($control, $test, $message)
     {
-        $this->assertNoErrors($message, debug_backtrace());
+        sort($control);
+        sort($test);
+        $trace = debug_backtrace();
+        return $this->assertEquals($control, $test, $message, $trace);
+    }
+
+    function assertEquals($control, $test, $message, $trace = null)
+    {
+        if ($trace === null) {
+            $trace = debug_backtrace();
+        }
+        $this->assertNoErrors($message, $trace);
         if (str_replace(array("\r", "\n"), array('', ''),
             var_export($control, true)) != str_replace(array("\r", "\n"), array('', ''),
             var_export($test, true))) {
-            $this->_failTest(debug_backtrace(), $message);
+            $this->_failTest($trace, $message);
             if (class_exists('Text_Diff')) {
                 echo "Diff of expecting/received:\n";
                 $diff = &new Text_Diff(
