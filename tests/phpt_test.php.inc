@@ -332,11 +332,14 @@ class PEAR_PHPTest
     function assertPackageInfoEquals($control, $test, $message)
     {
         $this->assertNoErrors($message, debug_backtrace());
+        $a = create_function('$a,$b', 'return strcmp($a["name"],$b["name"]);');
         if (isset($control[0])) {
             if (!isset($test[0]) || (count($control) != count($test))) {
                 echo "Invalid packageInfo\n";
                 $ret = $this->assertEquals($control, $test, $message);
             }
+            usort($control, $a);
+            usort($test, $a);
             $ret = true;
             foreach ($control as $i => $packageinfo) {
                 $ret = $ret &&
