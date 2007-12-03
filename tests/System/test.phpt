@@ -141,7 +141,7 @@ if (!function_exists('file_put_contents')) {
         fclose($fd);
     }
 }
-$catdir  = uniqid();
+$catdir  = uniqid('foobar');
 $catfile = $catdir.$sep.basename(System::mktemp("-t {$catdir} tst"));
 
 // Create temp files
