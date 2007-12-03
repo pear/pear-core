@@ -12,10 +12,7 @@ error_reporting(E_ALL);
 require_once 'System.php';
 
 $sep = DIRECTORY_SEPARATOR;
-$ereg_sep = $sep;
-if (OS_WINDOWS) {
-    $ereg_sep .= $sep;
-}
+
 /*******************
         mkDir
 ********************/
@@ -56,22 +53,23 @@ if (!@is_dir("dir2{$sep}dir21") || !@is_dir("dir6{$sep}dir61{$sep}dir611")) {
 }
 
 /*******************
-        mkTemp
+        mktemp
 ********************/
-echo "Testing: mkTemp\n";
+echo "Testing: mktemp\n";
 
 // Create a temporal file with "tst" as filename prefix
-$tmpfile = System::mkTemp('tst');
-$tmpenv = str_replace($sep, $ereg_sep, System::tmpDir());
-if (!@is_file($tmpfile) || !ereg("^$tmpenv{$ereg_sep}tst", $tmpfile)) {
-    print "System::mkTemp('tst') failed\n";
-    var_dump(is_file($tmpfile), $tmpfile, "^$tmpenv{$ereg_sep}tst", !ereg("^$tmpenv{$ereg_sep}tst", $tmpfile));
+$tmpfile = System::mktemp('tst');
+$tmpenv  = rtrim(realpath(System::tmpDir()), '\/');
+if (!@is_file($tmpfile) || (0 !== strpos($tmpfile, "{$tmpenv}{$sep}tst"))) {
+    print "System::mktemp('tst') failed\n";
+    var_dump(is_file($tmpfile), $tmpfile, "{$tmpenv}{$sep}tst", (0 !== strpos($tmpfile, "{$tmpenv}{$sep}tst")));
 }
 
 // Create a temporal dir in "dir1" with default prefix "tmp"
-$tmpdir  = System::mkTemp('-d -t dir1');
-if (!@is_dir($tmpdir) || (!OS_WINDOWS && !ereg("dir1{$ereg_sep}tmp", $tmpdir))) {
-    print "System::mkTemp('-d -t dir1') failed\n";
+$tmpdir = System::mktemp('-d -t dir1');
+if (!@is_dir($tmpdir) || (false === strpos($tmpdir, "dir1{$sep}tmp"))) {
+    print "System::mktemp('-d -t dir1') failed\n";
+    var_dump(is_dir($tmpdir), $tmpdir, "dir1{$sep}tmp", (false === strpos($tmpdir, "dir1{$sep}tmp")));
 }
 
 /*******************
@@ -138,33 +136,34 @@ echo "Testing: cat offline\n";
 
 if (!function_exists('file_put_contents')) {
     function file_put_contents($file, $text) {
-        $fd = fopen($file, 'w');
+        $fd = fopen($file, 'wb');
         fputs($fd, $text);
         fclose($fd);
     }
 }
-$catfile = System::mktemp('tst');
+$catdir  = uniqid();
+$catfile = $catdir.$sep.basename(System::mktemp("-t {$catdir} tst"));
 
 // Create temp files
 $tmpfile = array();
 $totalfiles = 3;
 for ($i = 0; $i < $totalfiles + 1; ++$i) {
-    $tmpfile[] = System::mktemp('tst');
+    $tmpfile[] = $catdir.$sep.basename(System::mktemp("-t {$catdir} tst"));
     file_put_contents($tmpfile[$i], 'FILE ' . $i);
 }
+
 // Concat in new file
 for ($i = $totalfiles; $i > 0; --$i) {
-    $cat = array();
+    $cat = '';
     $expected = '';
     for ($j = $i; $j > 0; --$j) {
-        $cat[] = $tmpfile[$j];
+        $cat .= $tmpfile[$j] . ' ';
         $expected .= 'FILE ' . $j;
     }
-    $cat[] = '>';
-    $cat[] = $catfile;
+    $cat .= '> ' . $catfile;
     System::cat($cat);
     if (file_get_contents($catfile) != $expected) {
-        print "System::cat('" . implode(' ', $cat) . "') failed\n";
+        print "System::cat(> '$cat') failed\n";
     }
 }
 
@@ -178,7 +177,7 @@ for ($i = $totalfiles; $i > 0; --$i) {
     $cat .= '>> ' . $catfile;
     System::cat($cat);
     if (file_get_contents($catfile) != $expected) {
-        print "System::cat('$cat') failed\n";
+        print "System::cat(>> '$cat') failed\n";
     }
 }
 
@@ -238,44 +237,57 @@ for ($i = $totalfiles; $i > 0; --$i) {
     }
 }
 
-/*
-// Concat to files with space in names
-$catfile = System::mktemp('tst') . ' space in filename';
-
-// Create temp files
-$tmpfile = array();
-$totalfiles = 3;
-for ($i = 0; $i < $totalfiles + 1; ++$i) {
-    $tmpfile[$i] = System::mktemp('tst') . ' space in filename';
-    file_put_contents($tmpfile[$i], 'FILE ' . $i);
-}
-
-// Concat in new file
-for ($i = $totalfiles; $i > 0; --$i) {
-    $cat = '';
-    $expected = '';
-    for ($j = $i; $j > 0; --$j) {
-        $cat .= '"' . $tmpfile[$j] . '" ';
-        $expected .= 'FILE ' . $j;
-    }
-    $cat .= ' > "' . $catfile . '"';
-    System::cat($cat);
-    if (file_get_contents($catfile) != $expected) {
-        print "System::cat('$cat') failed\n";
-    }
-}
-*/
 // Clean up
 for ($i = 0; $i < $totalfiles + 1; ++$i) {
     unlink($tmpfile[$i]);
 }
 unlink($catfile);
 
+// Concat to files with space in names
+$catfile1 = $catdir.$sep.basename(System::mktemp("-t {$catdir} tst"));
+$catfile  = $catfile1.' space in filename';
+
+// Create temp files with space in names
+$tmpfile  = array();
+$tmpfile1 = array();
+$totalfiles = 3;
+for ($i = 0; $i < $totalfiles + 1; ++$i) {
+    $tmpfile1[$i] = $catdir.$sep.basename(System::mktemp("-t {$catdir} tst"));
+    $tmpfile[$i]  = $tmpfile1[$i].' space in filename';
+    file_put_contents($tmpfile[$i], 'FILE ' . $i);
+}
+
+// Concat by array in new file with space in names
+for ($i = $totalfiles; $i > 0; --$i) {
+    $cat = array();
+    $expected = '';
+    for ($j = $i; $j > 0; --$j) {
+        $cat[] = $tmpfile[$j];
+        $expected .= 'FILE ' . $j;
+    }
+    $cat[] = '>';
+    $cat[] = $catfile;
+    System::cat($cat);
+    if (file_get_contents($catfile) != $expected) {
+        print "System::cat(Array > $catfile) with space in names failed\n";
+    }
+}
+
+// Clean up
+for ($i = 0; $i < $totalfiles + 1; ++$i) {
+    unlink($tmpfile[$i]);
+    unlink($tmpfile1[$i]);
+}
+unlink($catfile);
+unlink($catfile1);
+
+rmdir($catdir);
+    
 print "end\n";
 ?>
 --EXPECT--
 Testing: MkDir
-Testing: mkTemp
+Testing: mktemp
 Testing: rm
 Testing: which
 Testing: cat offline
