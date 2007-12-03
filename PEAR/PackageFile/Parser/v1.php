@@ -74,7 +74,7 @@ class PEAR_PackageFile_Parser_v1
         $xp = xml_parser_create();
         if (!$xp) {
             $a = &PEAR::raiseError('Cannot create xml parser for parsing package.xml');
-            return $a
+            return $a;
         }
         xml_set_object($xp, $this);
         xml_set_element_handler($xp, '_element_start_1_0', '_element_end_1_0');
