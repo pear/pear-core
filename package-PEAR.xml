@@ -352,6 +352,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
     <file role="php" name="Exception.php">
      <replace from="@package_version@" to="version" type="package-info"/>
     </file>
+    <file role="php" name="FixPHP5PEARWarnings.php"/>
     <file role="php" name="Frontend.php">
      <replace from="@package_version@" to="version" type="package-info"/>
     </file>
