@@ -347,10 +347,6 @@ Run post-installation scripts in package <package>, if any exist.
         if (PEAR::isError($ini)) {
             return $ini;
         }
-        $fp = @fopen($phpini, 'wb');
-        if (!$fp) {
-            return PEAR::raiseError('cannot open php.ini "' . $phpini . '" for writing');
-        }
         $line = 0;
         if ($type == 'extsrc' || $type == 'extbin') {
             $search = 'extensions';
@@ -384,6 +380,10 @@ Run post-installation scripts in package <package>, if any exist.
             $newini[] = $enable . '="' . $binary . '"' . (OS_UNIX ? "\n" : "\r\n");
         }
         $newini = array_merge($newini, array_slice($ini['all'], $line));
+        $fp = @fopen($phpini, 'wb');
+        if (!$fp) {
+            return PEAR::raiseError('cannot open php.ini "' . $phpini . '" for writing');
+        }
         foreach ($newini as $line) {
             fwrite($fp, $line);
         }
