@@ -165,12 +165,12 @@ $phpunit->assertEquals(array (
         1 => 'Cannot install pear/fail on windows operating system, can only install on linux',
       ),
       array (
-        0 => 1,
-        1 => 'downloading test-1.1.0.tgz ...',
-      ),
-      array (
         0 => 3,
         1 => 'Downloading "http://www.example.com/test-1.1.0.tgz"',
+      ),
+      array (
+        0 => 1,
+        1 => 'downloading test-1.1.0.tgz ...',
       ),
       array (
         0 => 1,
