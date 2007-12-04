@@ -8,6 +8,8 @@ class PEAR_Start extends PEAR
 {
     var $bin_dir;
     var $data_dir;
+    var $cfg_dir;
+    var $www_dir;
     var $install_pfc;
     var $corePackages =
         array(
@@ -41,6 +43,8 @@ class PEAR_Start extends PEAR
             'php_dir',
             'doc_dir',
             'data_dir',
+            'cfg_dir',
+            'www_dir',
             'test_dir',
             'temp_dir',
             'download_dir',
@@ -57,6 +61,8 @@ class PEAR_Start extends PEAR
             'php_dir' => 'PHP code directory ($php_dir)',
             'doc_dir' => 'Documentation directory',
             'data_dir' => 'Data directory',
+            'cfg_dir' => 'User-modifiable configuration files directory',
+            'www_dir' => 'Public Web Files directory',
             'test_dir' => 'Tests directory',
             'pear_conf' => 'Name of configuration file',
         );
@@ -86,14 +92,12 @@ class PEAR_Start extends PEAR
             $this->temp_dir   = '$prefix\tmp';
             $this->download_dir   = '$prefix\tmp';
             $this->php_dir   = '$prefix\pear';
-            $this->doc_dir   = '$php_dir\docs';
-            $this->data_dir  = '$php_dir\data';
-            $this->test_dir  = '$php_dir\tests';
-            if (OS_WINDOWS) {
-                $this->pear_conf = PEAR_CONFIG_SYSCONFDIR . '\\pear.ini';
-            } else {
-                $this->pear_conf = PEAR_CONFIG_SYSCONFDIR . '/pear.conf';
-            }
+            $this->doc_dir   = '$prefix\docs';
+            $this->data_dir  = '$prefix\data';
+            $this->test_dir  = '$prefix\tests';
+            $this->www_dir  = '$prefix\www';
+            $this->cfg_dir  = '$prefix\cfg';
+            $this->pear_conf = PEAR_CONFIG_SYSCONFDIR . '\\pear.ini';
             /*
              * Detects php.exe
              */
@@ -130,16 +134,20 @@ class PEAR_Start extends PEAR
             }
         } else {
             $this->prefix = dirname(PHP_BINDIR);
+            $this->pear_conf = PEAR_CONFIG_SYSCONFDIR . '/pear.conf';
             if (get_current_user() != 'root') {
                 $this->prefix = $this->safeGetenv('HOME') . '/pear';
+                $this->pear_conf = $this->safeGetenv('HOME') . '.pearrc';
             }
             $this->bin_dir   = '$prefix/bin';
             $this->php_dir   = '$prefix/share/pear';
             $this->temp_dir  = '/tmp/pear/install';
             $this->download_dir  = '/tmp/pear/install';
-            $this->doc_dir   = '$php_dir/docs';
-            $this->data_dir  = '$php_dir/data';
-            $this->test_dir  = '$php_dir/tests';
+            $this->doc_dir   = '$prefix/docs';
+            $this->www_dir   = '$prefix/www';
+            $this->cfg_dir   = '$prefix/cfg';
+            $this->data_dir  = '$prefix/data';
+            $this->test_dir  = '$prefix/tests';
             // check if the user has installed PHP with PHP or GNU layout
             if (@is_dir("$this->prefix/lib/php/.registry")) {
                 $this->php_dir = '$prefix/lib/php';
