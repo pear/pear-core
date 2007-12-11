@@ -1052,6 +1052,12 @@ class PEAR_Error
 
     // }}}
     // {{{ toString()
+    function __toString()
+    {
+        return $this->getMessage();
+    }
+    // }}}
+    // {{{ toString()
 
     /**
      * Make a string representation of this object.
