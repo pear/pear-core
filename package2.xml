@@ -86,17 +86,21 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2007-12-10</date>
+ <date>2007-12-20</date>
  <version>
-  <release>1.7.0RC1</release>
+  <release>1.7.0</release>
   <api>1.7.0</api>
  </version>
  <stability>
-  <release>beta</release>
+  <release>stable</release>
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
+ fixed since 1.7.0RC1:
+  * fix Bug #12662: System::_parseArgs() should be declared statically [cellog]
+  * fix Bug #12661: System::mktemp needs to be declaired statically [cellog]
+ fixed since 1.6.2:
   * fix Bug #12116: Accept-Encoding not supported: breaks installer [jldupont]
   * fix Bug #12162: config-create doesn't work after installing custom roles [cellog]
   * fix Bug #12553: System::find() does not find exact filename matches [cellog/jorrit]
@@ -584,6 +588,27 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * fix Bug #11883: run-tests -u -p SomePackage should run the topmost
     &quot;AllTests.php&quot; file [cellog]
   * fix Bug #11936: run-tests fails to preserve SYSTEMROOT environment variable [cellog]
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.7.0RC1</release>
+    <api>1.6.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <date>2007-12-10</date>
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>
+  * fix Bug #12116: Accept-Encoding not supported: breaks installer [jldupont]
+  * fix Bug #12162: config-create doesn't work after installing custom roles [cellog]
+  * fix Bug #12553: System::find() does not find exact filename matches [cellog/jorrit]
+  * fix Bug #12554: enableExtension() zeros php.ini in some instances [jlightsey]
+  * implement Request #11964: introduce www role, www_dir config variable [cellog]
+  * implement Request #12108: Add &quot;config&quot; (cfg) role [cellog]
+  * implement Request #12147: Avoid compile-time strict warnings [cellog]
    </notes>
   </release>
  </changelog>
