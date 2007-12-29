@@ -563,7 +563,7 @@ Run post-installation scripts in package <package>, if any exist.
                     continue;
                 }
                 if ($reg->packageExists($pf->getPackage(), $pf->getChannel()) &&
-                      version_compare($pf->getVersion(), 
+                      version_compare($pf->getVersion(),
                       $reg->packageInfo($pf->getPackage(), 'version', $pf->getChannel()),
                       '<=')) {
                     if ($this->config->get('verbose')) {
@@ -608,13 +608,13 @@ Run post-installation scripts in package <package>, if any exist.
                     }
                 }
             }
-            $abstractpackages = 
+            $abstractpackages =
                 array_map(array($reg, 'parsedPackageNameToString'), $abstractpackages);
         } elseif (count($abstractpackages)) {
-            $abstractpackages = 
+            $abstractpackages =
                 array_map(array($reg, 'parsedPackageNameToString'), $abstractpackages);
         }
-        
+
 
         $packages = array_merge($abstractpackages, $otherpackages);
         if (!count($packages)) {
@@ -660,7 +660,7 @@ Run post-installation scripts in package <package>, if any exist.
             return true;
         }
         $extrainfo = array();
-        // $binaries = array();
+        $binaries = array();
         foreach ($downloaded as $param) {
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $info = $this->installer->install($param, $options);
@@ -920,7 +920,7 @@ Run post-installation scripts in package <package>, if any exist.
         // for circular dependencies like subpackages
         $this->installer->setUninstallPackages($newparams);
         $params = array_merge($params, $badparams);
-        // $binaries = array();
+        $binaries = array();
         foreach ($params as $pkg) {
             $this->installer->pushErrorHandling(PEAR_ERROR_RETURN);
             if ($err = $this->installer->uninstall($pkg, $options)) {
@@ -1145,7 +1145,7 @@ Run post-installation scripts in package <package>, if any exist.
                 if ($dorest) {
                     $rest = &$this->config->getREST('1.0', array());
                     $installed = array_flip($reg->listPackages($channel));
-                    $latest = $rest->listLatestUpgrades($base, 
+                    $latest = $rest->listLatestUpgrades($base,
                         $this->config->get('preferred_state', null, $channel), $installed,
                         $channel, $reg);
                 } else {
