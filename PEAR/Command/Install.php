@@ -660,6 +660,7 @@ Run post-installation scripts in package <package>, if any exist.
             return true;
         }
         $extrainfo = array();
+        // $binaries = array();
         foreach ($downloaded as $param) {
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $info = $this->installer->install($param, $options);
@@ -689,6 +690,7 @@ Run post-installation scripts in package <package>, if any exist.
                     } else {
                         $instpkg = &$instreg->getPackage($pkg->getPackage(), $pkg->getChannel());
                     }
+
                     foreach ($instpkg->getFilelist() as $name => $atts) {
                         $pinfo = pathinfo($atts['installed_as']);
                         if (!isset($pinfo['extension']) ||
@@ -918,6 +920,7 @@ Run post-installation scripts in package <package>, if any exist.
         // for circular dependencies like subpackages
         $this->installer->setUninstallPackages($newparams);
         $params = array_merge($params, $badparams);
+        // $binaries = array();
         foreach ($params as $pkg) {
             $this->installer->pushErrorHandling(PEAR_ERROR_RETURN);
             if ($err = $this->installer->uninstall($pkg, $options)) {
@@ -933,6 +936,7 @@ Run post-installation scripts in package <package>, if any exist.
                     if ($instbin = $pkg->getInstalledBinary()) {
                         continue; // this will be uninstalled later
                     }
+
                     foreach ($pkg->getFilelist() as $name => $atts) {
                         $pinfo = pathinfo($atts['installed_as']);
                         if (!isset($pinfo['extension']) ||
