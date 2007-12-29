@@ -367,9 +367,16 @@ class PEAR_RunTest
             $text.= substr($new, 0, strrpos($new, '?>'));
             $xdebug_file = $temp_dir . DIRECTORY_SEPARATOR . $main_file_name . 'xdebug';
             $text.= "\n" .
-                   "\n" . '$xdebug = var_export(xdebug_get_code_coverage(), true);' .
-                   "\n" . 'file_put_contents(\'' . $xdebug_file . '\', $xdebug);' .
-                   "\n" . 'xdebug_stop_code_coverage();' . "\n" . '?>';
+                   "\n" . '$xdebug = var_export(xdebug_get_code_coverage(), true);';
+            if (version_compare('5', PHP_VERSION, '<')) {
+                $text.= "\n" . 'if ($fh = fopen(\'' . $xdebug_file . '\', "wb") !== false) {' .
+                        "\n" . '    fwrite($fh, $xdebug);' .
+                        "\n" . '    fclose($fh);' .
+                        "\n" . '}';
+            } else {
+                $text.= "\n" . 'file_put_contents(\'' . $xdebug_file . '\', $xdebug);';
+            }
+            $text.= "\n" . 'xdebug_stop_code_coverage();' . "\n" . '?>';
 
             $this->save_text($temp_file, $text);
         } else {
