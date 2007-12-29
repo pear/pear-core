@@ -1120,8 +1120,8 @@ class PEAR_Registry extends PEAR
         }
         if (!in_array('__uri', $channellist)) {
             $channellist[] = '__uri';
-        }
-        
+        } 
+   
         natsort($channellist);
         return $channellist;
     }
