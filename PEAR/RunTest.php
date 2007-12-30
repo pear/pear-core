@@ -368,8 +368,9 @@ class PEAR_RunTest
             $xdebug_file = $temp_dir . DIRECTORY_SEPARATOR . $main_file_name . 'xdebug';
             $text.= "\n" .
                    "\n" . '$xdebug = var_export(xdebug_get_code_coverage(), true);';
-            if (version_compare(PHP_VERSION, '5', '<')) {
-                $text.= "\n" . 'if ($fh = fopen(\'' . $xdebug_file . '\', "wb") !== false) {' .
+            if (!function_exists('file_put_contents')) {
+                $text.= "\n" . '$fh = fopen(\'' . $xdebug_file . '\', "wb");' .
+                        "\n" . 'if ($fh !== false) {' .
                         "\n" . '    fwrite($fh, $xdebug);' .
                         "\n" . '    fclose($fh);' .
                         "\n" . '}';
