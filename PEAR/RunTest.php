@@ -363,21 +363,21 @@ class PEAR_RunTest
             }
 
             $text = '<?php' . "\n" . 'xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);' . "\n";
-            $new = substr($section_text['FILE'], $len_f, strlen($section_text['FILE']));
-            $text.= substr($new, 0, strrpos($new, '?>'));
+            $new  = substr($section_text['FILE'], $len_f, strlen($section_text['FILE']));
+            $text .= substr($new, 0, strrpos($new, '?>'));
             $xdebug_file = $temp_dir . DIRECTORY_SEPARATOR . $main_file_name . 'xdebug';
-            $text.= "\n" .
+            $text .= "\n" .
                    "\n" . '$xdebug = var_export(xdebug_get_code_coverage(), true);';
             if (!function_exists('file_put_contents')) {
-                $text.= "\n" . '$fh = fopen(\'' . $xdebug_file . '\', "wb");' .
+                $text .= "\n" . '$fh = fopen(\'' . $xdebug_file . '\', "wb");' .
                         "\n" . 'if ($fh !== false) {' .
                         "\n" . '    fwrite($fh, $xdebug);' .
                         "\n" . '    fclose($fh);' .
                         "\n" . '}';
             } else {
-                $text.= "\n" . 'file_put_contents(\'' . $xdebug_file . '\', $xdebug);';
+                $text .= "\n" . 'file_put_contents(\'' . $xdebug_file . '\', $xdebug);';
             }
-            $text.= "\n" . 'xdebug_stop_code_coverage();' . "\n" . '?>';
+            $text .= "\n" . 'xdebug_stop_code_coverage();' . "\n" . '?>';
 
             $this->save_text($temp_file, $text);
         } else {
