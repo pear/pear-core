@@ -22,7 +22,7 @@ require_once 'PEAR/Validate.php';
  * @category   pear
  * @package    PEAR
  * @author     Greg Beaver <cellog@php.net>
- * @copyright  1997-2006 The PHP Group
+ * @copyright  1997-2008 The PHP Group
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/PEAR

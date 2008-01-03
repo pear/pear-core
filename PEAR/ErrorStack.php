@@ -21,7 +21,7 @@
  * @category   Debugging
  * @package    PEAR_ErrorStack
  * @author     Greg Beaver <cellog@php.net>
- * @copyright  2004-2006 Greg Beaver
+ * @copyright  2004-2008 Greg Beaver
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/PEAR_ErrorStack
@@ -135,7 +135,7 @@ define('PEAR_ERRORSTACK_ERR_OBJTOSTRING', 2);
  * @version    @package_version@
  * @package    PEAR_ErrorStack
  * @category   Debugging
- * @copyright  2004-2006 Greg Beaver
+ * @copyright  2004-2008 Greg Beaver
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/PEAR_ErrorStack

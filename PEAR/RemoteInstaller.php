@@ -16,7 +16,7 @@
  * @author     Tomas V.V. Cox <cox@idecnet.com>
  * @author     Martin Jansen <mj@php.net>
  * @author     Greg Beaver <cellog@php.net>
- * @copyright  2005-2006 The PHP Group
+ * @copyright  2005-2008 The PHP Group
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/PEAR
@@ -35,7 +35,7 @@ require_once 'PEAR/Installer.php';
  * @category   pear
  * @package    PEAR
  * @author     Greg Beaver <cellog@php.net>
- * @copyright  2005-2006 The PHP Group
+ * @copyright  2005-2008 The PHP Group
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/PEAR
