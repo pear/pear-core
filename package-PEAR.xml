@@ -91,7 +91,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <date>2008-01-03</date>
   <license>PHP License</license>
   <state>beta</state>
-  <notes>
+ <notes>
   **WARNING** MAJOR BC BREAK IN WWW ROLE**
   The www role was installing into packagename/ and now installs into the root directory
   of www_dir.  This is necessary to allow easy migration from applications already using
@@ -109,7 +109,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * implement Request #11964: introduce www role, www_dir config variable [cellog]
   * implement Request #12108: Add &quot;config&quot; (cfg) role [cellog]
   * implement Request #12147: Avoid compile-time strict warnings [cellog]
-  </notes>
+ </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
   <provides type="function" name="md5_file"/>
