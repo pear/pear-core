@@ -98,6 +98,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   Role_Web
   
  fixed since 1.7.0RC1:
+  * fix Bug #12818: package.xml 1.0 parsing can drop lines [cellog]
   * fix Bug #12662: System::_parseArgs() should be declared statically [cellog]
   * fix Bug #12661: System::mktemp needs to be declaired statically [cellog]
   * implement PEAR_Error::__toString() as alias to getMessage() [cellog]
