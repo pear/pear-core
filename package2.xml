@@ -102,6 +102,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   of www_dir.  This is necessary to allow easy migration from applications already using
   Role_Web
   
+ fixed since 1.7.0RC1:
   * fix Bug #12662: System::_parseArgs() should be declared statically [cellog]
   * fix Bug #12661: System::mktemp needs to be declaired statically [cellog]
   * implement PEAR_Error::__toString() as alias to getMessage() [cellog]
@@ -633,6 +634,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   of www_dir.  This is necessary to allow easy migration from applications already using
   Role_Web
   
+ fixed since 1.7.0RC1:
   * fix Bug #12662: System::_parseArgs() should be declared statically [cellog]
   * fix Bug #12661: System::mktemp needs to be declaired statically [cellog]
   * implement PEAR_Error::__toString() as alias to getMessage() [cellog]
