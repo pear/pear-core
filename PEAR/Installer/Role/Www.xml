@@ -6,7 +6,7 @@
  <releasetypes>zendextbin</releasetypes>
  <installable>1</installable>
  <locationconfig>www_dir</locationconfig>
- <honorsbaseinstall>1<honorsbaseinstall>
+ <honorsbaseinstall>1</honorsbaseinstall>
  <unusualbaseinstall />
  <phpfile />
  <executable />
