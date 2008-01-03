@@ -13,7 +13,7 @@
  * @category   pear
  * @package    System
  * @author     Tomas V.V.Cox <cox@idecnet.com>
- * @copyright  1997-2006 The PHP Group
+ * @copyright  1997-2008 The PHP Group
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/PEAR
