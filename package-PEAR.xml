@@ -87,11 +87,16 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.7.0</version>
-  <date>2007-12-20</date>
+  <version>1.7.0RC2</version>
+  <date>2008-01-03</date>
   <license>PHP License</license>
-  <state>stable</state>
+  <state>beta</state>
   <notes>
+  **WARNING** MAJOR BC BREAK IN WWW ROLE**
+  The www role was installing into packagename/ and now installs into the root directory
+  of www_dir.  This is necessary to allow easy migration from applications already using
+  Role_Web
+  
  fixed since 1.7.0RC1:
   * fix Bug #12662: System::_parseArgs() should be declared statically [cellog]
   * fix Bug #12661: System::mktemp needs to be declaired statically [cellog]
@@ -482,6 +487,31 @@ http://pear.php.net/dtd/package-1.0.xsd">
    <license>PHP License</license>
    <state>beta</state>
    <notes>
+  * fix Bug #12116: Accept-Encoding not supported: breaks installer [jldupont]
+  * fix Bug #12162: config-create doesn't work after installing custom roles [cellog]
+  * fix Bug #12553: System::find() does not find exact filename matches [cellog/jorrit]
+  * fix Bug #12554: enableExtension() zeros php.ini in some instances [jlightsey]
+  * implement Request #11964: introduce www role, www_dir config variable [cellog]
+  * implement Request #12108: Add &quot;config&quot; (cfg) role [cellog]
+  * implement Request #12147: Avoid compile-time strict warnings [cellog]
+   </notes>
+  </release>
+  <release>
+   <version>1.7.0RC2</version>
+   <date>2007-01-03</date>
+   <license>PHP License</license>
+   <state>beta</state>
+   <notes>
+  **WARNING** MAJOR BC BREAK IN WWW ROLE**
+  The www role was installing into packagename/ and now installs into the root directory
+  of www_dir.  This is necessary to allow easy migration from applications already using
+  Role_Web
+  
+ fixed since 1.7.0RC1:
+  * fix Bug #12662: System::_parseArgs() should be declared statically [cellog]
+  * fix Bug #12661: System::mktemp needs to be declaired statically [cellog]
+  * implement PEAR_Error::__toString() as alias to getMessage() [cellog]
+ fixed since 1.6.2:
   * fix Bug #12116: Accept-Encoding not supported: breaks installer [jldupont]
   * fix Bug #12162: config-create doesn't work after installing custom roles [cellog]
   * fix Bug #12553: System::find() does not find exact filename matches [cellog/jorrit]

@@ -86,18 +86,22 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2007-12-20</date>
+ <date>2008-01-03</date>
  <version>
-  <release>1.7.0</release>
+  <release>1.7.0RC2</release>
   <api>1.7.0</api>
  </version>
  <stability>
-  <release>stable</release>
+  <release>beta</release>
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
- fixed since 1.7.0RC1:
+  **WARNING** MAJOR BC BREAK IN WWW ROLE**
+  The www role was installing into packagename/ and now installs into the root directory
+  of www_dir.  This is necessary to allow easy migration from applications already using
+  Role_Web
+  
   * fix Bug #12662: System::_parseArgs() should be declared statically [cellog]
   * fix Bug #12661: System::mktemp needs to be declaired statically [cellog]
   * implement PEAR_Error::__toString() as alias to getMessage() [cellog]
@@ -603,6 +607,36 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <date>2007-12-10</date>
    <license uri="http://www.php.net/license">PHP License</license>
    <notes>
+  * fix Bug #12116: Accept-Encoding not supported: breaks installer [jldupont]
+  * fix Bug #12162: config-create doesn't work after installing custom roles [cellog]
+  * fix Bug #12553: System::find() does not find exact filename matches [cellog/jorrit]
+  * fix Bug #12554: enableExtension() zeros php.ini in some instances [jlightsey]
+  * implement Request #11964: introduce www role, www_dir config variable [cellog]
+  * implement Request #12108: Add &quot;config&quot; (cfg) role [cellog]
+  * implement Request #12147: Avoid compile-time strict warnings [cellog]
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.7.0RC2</release>
+    <api>1.6.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <date>2007-01-03</date>
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>
+  **WARNING** MAJOR BC BREAK IN WWW ROLE**
+  The www role was installing into packagename/ and now installs into the root directory
+  of www_dir.  This is necessary to allow easy migration from applications already using
+  Role_Web
+  
+  * fix Bug #12662: System::_parseArgs() should be declared statically [cellog]
+  * fix Bug #12661: System::mktemp needs to be declaired statically [cellog]
+  * implement PEAR_Error::__toString() as alias to getMessage() [cellog]
+ fixed since 1.6.2:
   * fix Bug #12116: Accept-Encoding not supported: breaks installer [jldupont]
   * fix Bug #12162: config-create doesn't work after installing custom roles [cellog]
   * fix Bug #12553: System::find() does not find exact filename matches [cellog/jorrit]
