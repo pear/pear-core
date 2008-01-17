@@ -270,14 +270,21 @@ class PEAR_Builder extends PEAR_Common
         if (is_object($descfile)) {
             $pkg = $descfile;
             $descfile = $pkg->getPackageFile();
+            if (is_a($pkg, 'PEAR_PackageFile_v1')) {
+                $dir = dirname($descfile);
+            } else {
+                $dir = $pkg->_config->get('temp_dir') . '/' . $pkg->getName();
+                // automatically delete at session end
+                $this->addTempFile($dir);
+            }
         } else {
             $pf = &new PEAR_PackageFile($this->config);
             $pkg = &$pf->fromPackageFile($descfile, PEAR_VALIDATE_NORMAL);
             if (PEAR::isError($pkg)) {
                 return $pkg;
             }
+            $dir = dirname($descfile);
         }
-        $dir = dirname($descfile);
         $old_cwd = getcwd();
         if (!file_exists($dir) || !is_dir($dir) || !chdir($dir)) {
             return $this->raiseError("could not chdir to $dir");
