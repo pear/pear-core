@@ -1367,7 +1367,7 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
         }
         $opt = array('attribs' => array('name' => $name, 'prompt' => $prompt));
         if ($default !== null) {
-            $opt['default'] = $default;
+            $opt['attribs']['default'] = $default;
         }
         $this->_isValid = 0;
         $r = $this->_mergeTag($r, $opt,
