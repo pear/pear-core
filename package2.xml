@@ -102,6 +102,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  fixed since 1.7.0RC2
   * fix Bug #12918: file tasks ignored for role=src [cellog]
   * fix Bug #12816: &lt;configureoption&gt; default isn't being parsed [jon]
+  * fix Bug #12793: run-tests fails when using --ARGS-- in phpt test files [izi]
  fixed since 1.7.0RC1:
   * fix Bug #12818: package.xml 1.0 parsing can drop lines [cellog]
   * fix Bug #12662: System::_parseArgs() should be declared statically [cellog]

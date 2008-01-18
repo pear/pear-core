@@ -385,7 +385,7 @@ class PEAR_RunTest
         }
 
         $args = $section_text['ARGS'] ? ' -- '.$section_text['ARGS'] : '';
-        $cmd = "$this->_php$ini_settings \"$temp_file\" $args 2>&1";
+        $cmd = "$this->_php$ini_settings -f \"$temp_file\" $args 2>&1";
         if (isset($this->_logger)) {
             $this->_logger->log(2, 'Running command "' . $cmd . '"');
         }
