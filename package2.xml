@@ -100,6 +100,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  Minor feature addition release
  
  fixed since 1.7.0RC2
+  * fix Bug #12987: improper calls to class_exists [weirdan]
   * fix Bug #12918: file tasks ignored for role=src [cellog]
   * fix Bug #12816: &lt;configureoption&gt; default isn't being parsed [jon]
   * fix Bug #12793: run-tests fails when using --ARGS-- in phpt test files [izi]
