@@ -209,7 +209,7 @@ class PEAR_Downloader extends PEAR_Common
             return false;
         }
         list($a, $lastmodified) = $a;
-        if (!class_exists('PEAR/ChannelFile.php')) {
+        if (!class_exists('PEAR_ChannelFile')) {
             require_once 'PEAR/ChannelFile.php';
         }
         $b = new PEAR_ChannelFile;
@@ -253,7 +253,7 @@ class PEAR_Downloader extends PEAR_Common
      */
     function &getDependency2Object(&$c, $i, $p, $s)
     {
-        if (!class_exists('PEAR/Dependency2.php')) {
+        if (!class_exists('PEAR_Dependency2')) {
             require_once 'PEAR/Dependency2.php';
         }
         $z = &new PEAR_Dependency2($c, $i, $p, $s);

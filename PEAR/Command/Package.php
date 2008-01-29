@@ -301,7 +301,7 @@ used for automated conversion or learning the format.
         if (!class_exists('PEAR_Common')) {
             require_once 'PEAR/Common.php';
         }
-        if (!class_exists('PEAR/PackageFile.php')) {
+        if (!class_exists('PEAR_PackageFile')) {
             require_once 'PEAR/PackageFile.php';
         }
         $a = &new PEAR_PackageFile($config, $debug, $tmpdir);

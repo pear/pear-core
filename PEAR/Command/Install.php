@@ -516,7 +516,7 @@ Run post-installation scripts in package <package>, if any exist.
 
     function doInstall($command, $options, $params)
     {
-        if (!class_exists('PEAR/PackageFile.php')) {
+        if (!class_exists('PEAR_PackageFile')) {
             require_once 'PEAR/PackageFile.php';
         }
         if (empty($this->installer)) {
