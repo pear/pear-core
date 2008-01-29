@@ -286,7 +286,7 @@ class PEAR_REST
             $path = $info['path'];
         }
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
-        if ($this->config->get('http_proxy')&& 
+        if ($this->config->get('http_proxy')&&
               $proxy = parse_url($this->config->get('http_proxy'))) {
             $proxy_host = isset($proxy['host']) ? $proxy['host'] : null;
             if (isset($proxy['scheme']) && $proxy['scheme'] == 'https') {
@@ -305,9 +305,9 @@ class PEAR_REST
         }
         If (isset($proxy['host'])) {
             $request = "GET $url HTTP/1.1\r\n";
-            $request .= "Host: $host:$port\r\n";
+            $request .= 'Host: . ' . $proxy['host'] . ":$port\r\n";
         } else {
-            $request = "GET $path HTTP/1.0\r\n";
+            $request = "GET $path HTTP/1.1\r\n";
             $request .= "Host: $host\r\n";
         }
 
