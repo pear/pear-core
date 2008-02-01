@@ -305,10 +305,10 @@ class PEAR_REST
         }
         If (isset($proxy['host'])) {
             $request = "GET $url HTTP/1.1\r\n";
-            $request .= 'Host: ' . $proxy['host'] . ":$port\r\n";
+            $request .= 'Host: . ' . $proxy['host'] . ":$port\r\n";
         } else {
             $request = "GET $path HTTP/1.1\r\n";
-            $request .= "Host: $host:$port\r\n";
+            $request .= "Host: $host\r\n";
         }
 
         $ifmodifiedsince = '';
@@ -322,7 +322,7 @@ class PEAR_REST
         } else {
             $ifmodifiedsince = ($lastmodified ? "If-Modified-Since: $lastmodified\r\n" : '');
         }
-        $request .= $ifmodifiedsince .
+        $request .= "Host: $host:$port\r\n" . $ifmodifiedsince .
             "User-Agent: PEAR/@package_version@/PHP/" . PHP_VERSION . "\r\n";
         $username = $this->config->get('username');
         $password = $this->config->get('password');
