@@ -102,6 +102,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
   - Bug #13033 	Signature to PEAR_REST_XX::listAll() changes between REST1.0 and 1.1
 
  fixed since 1.7.0RC2
+  * fix bug #13030: Port not set for REST HTTP requests [timj]
+  * fix bug #13029: Duplicate Host headers set when requesting REST data [timj]
   * fix Bug #12987: improper calls to class_exists [weirdan]
   * fix Bug #12954: Host header missing when using proxy [flint]
   * fix Bug #12918: file tasks ignored for role=src [cellog]
