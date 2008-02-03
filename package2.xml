@@ -86,9 +86,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2008-01-31</date>
+ <date>2008-02-03</date>
  <version>
-  <release>1.7.0</release>
+  <release>1.7.1</release>
   <api>1.7.0</api>
  </version>
  <stability>
@@ -97,36 +97,17 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
- Minor feature addition release
- 
- Known bugs to be fixed in version 1.7.1:
+ fixed since 1.7.0
+  * fix bug #13030: Port not set for REST HTTP requests [timj]
+  * fix bug #13029: Duplicate Host headers set when requesting REST data [timj]
+  * fix bug #13047: PEAR fails to install *any* package [timj]
+
+ Known bugs to be fixed in version 1.7.2:
   - Bug #12945 	PEAR_Registry::setConfig() does not set install path
   - Bug #12959 	PEAR should give warning when doing &quot;special&quot; handling with cfg role
   - Bug #12960 	role=cfg should automatically replace file if it has not been modified
   - Bug #13031 	PEAR fails to authenticate when doing upgrade-all on non-default channel
   - Bug #13033 	Signature to PEAR_REST_XX::listAll() changes between REST1.0 and 1.1
- 
- fixed since 1.7.0RC2
-  * fix bug #13030: Port not set for REST HTTP requests [timj]
-  * fix bug #13029: Duplicate Host headers set when requesting REST data [timj]
-  * fix Bug #12987: improper calls to class_exists [weirdan]
-  * fix Bug #12954: Host header missing when using proxy [flint]
-  * fix Bug #12918: file tasks ignored for role=src [cellog]
-  * fix Bug #12816: &lt;configureoption&gt; default isn't being parsed [jon]
-  * fix Bug #12793: run-tests fails when using --ARGS-- in phpt test files [izi]
- fixed since 1.7.0RC1:
-  * fix Bug #12818: package.xml 1.0 parsing can drop lines [cellog]
-  * fix Bug #12662: System::_parseArgs() should be declared statically [cellog]
-  * fix Bug #12661: System::mktemp needs to be declaired statically [cellog]
-  * implement PEAR_Error::__toString() as alias to getMessage() [cellog]
- fixed since 1.6.2:
-  * fix Bug #12116: Accept-Encoding not supported: breaks installer [jldupont]
-  * fix Bug #12162: config-create doesn't work after installing custom roles [cellog]
-  * fix Bug #12553: System::find() does not find exact filename matches [cellog/jorrit]
-  * fix Bug #12554: enableExtension() zeros php.ini in some instances [jlightsey]
-  * implement Request #11964: introduce www role, www_dir config variable [cellog]
-  * implement Request #12108: Add &quot;config&quot; (cfg) role [cellog]
-  * implement Request #12147: Avoid compile-time strict warnings [cellog]
  </notes>
  <contents>
   <dir name="/">
@@ -646,8 +627,52 @@ http://pear.php.net/dtd/package-2.0.xsd">
   The www role was installing into packagename/ and now installs into the root directory
   of www_dir.  This is necessary to allow easy migration from applications already using
   Role_Web
-  
+
  fixed since 1.7.0RC1:
+  * fix Bug #12662: System::_parseArgs() should be declared statically [cellog]
+  * fix Bug #12661: System::mktemp needs to be declaired statically [cellog]
+  * implement PEAR_Error::__toString() as alias to getMessage() [cellog]
+ fixed since 1.6.2:
+  * fix Bug #12116: Accept-Encoding not supported: breaks installer [jldupont]
+  * fix Bug #12162: config-create doesn't work after installing custom roles [cellog]
+  * fix Bug #12553: System::find() does not find exact filename matches [cellog/jorrit]
+  * fix Bug #12554: enableExtension() zeros php.ini in some instances [jlightsey]
+  * implement Request #11964: introduce www role, www_dir config variable [cellog]
+  * implement Request #12108: Add &quot;config&quot; (cfg) role [cellog]
+  * implement Request #12147: Avoid compile-time strict warnings [cellog]
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.7.0</release>
+    <api>1.7.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2008-01-31</date>
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>
+ Minor feature addition release
+
+ Known bugs to be fixed in version 1.7.1:
+  - Bug #12945 	PEAR_Registry::setConfig() does not set install path
+  - Bug #12959 	PEAR should give warning when doing &quot;special&quot; handling with cfg role
+  - Bug #12960 	role=cfg should automatically replace file if it has not been modified
+  - Bug #13031 	PEAR fails to authenticate when doing upgrade-all on non-default channel
+  - Bug #13033 	Signature to PEAR_REST_XX::listAll() changes between REST1.0 and 1.1
+
+ fixed since 1.7.0RC2
+  * fix bug #13030: Port not set for REST HTTP requests [timj]
+  * fix bug #13029: Duplicate Host headers set when requesting REST data [timj]
+  * fix Bug #12987: improper calls to class_exists [weirdan]
+  * fix Bug #12954: Host header missing when using proxy [flint]
+  * fix Bug #12918: file tasks ignored for role=src [cellog]
+  * fix Bug #12816: &lt;configureoption&gt; default isn't being parsed [jon]
+  * fix Bug #12793: run-tests fails when using --ARGS-- in phpt test files [izi]
+ fixed since 1.7.0RC1:
+  * fix Bug #12818: package.xml 1.0 parsing can drop lines [cellog]
   * fix Bug #12662: System::_parseArgs() should be declared statically [cellog]
   * fix Bug #12661: System::mktemp needs to be declaired statically [cellog]
   * implement PEAR_Error::__toString() as alias to getMessage() [cellog]
