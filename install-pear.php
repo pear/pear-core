@@ -46,6 +46,9 @@ for ($i = 0; $i < sizeof($argv); $i++) {
     } elseif ($arg == '-b') {
         $bin_dir = $argv[$i+1];
         $i++;
+    } elseif ($arg == '-c') {
+       	$cfg_dir = $argv[$i+1];
+       	$i++;
     } elseif ($arg == '-p') {
         $php_bin = $argv[$i+1];
         $i++;
@@ -79,6 +82,12 @@ if ($debug) {
 if (!empty($bin_dir)) {
     $config->set('bin_dir', $bin_dir, 'default');
 }
+
+// Config files
+if (!empty($cfg_dir)) {
+    $config->set('cfg_dir', $cfg_dir, 'default');
+}
+
 // User supplied a dir prefix
 if (!empty($with_dir)) {
     $ds = DIRECTORY_SEPARATOR;

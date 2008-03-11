@@ -86,9 +86,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2008-02-03</date>
+ <date>2008-03-11</date>
  <version>
-  <release>1.7.1</release>
+  <release>1.7.2</release>
   <api>1.7.0</api>
  </version>
  <stability>
@@ -97,17 +97,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
- fixed since 1.7.0
-  * fix bug #13030: Port not set for REST HTTP requests [timj]
-  * fix bug #13029: Duplicate Host headers set when requesting REST data [timj]
-  * fix bug #13047: PEAR fails to install *any* package [timj]
-
- Known bugs to be fixed in version 1.7.2:
-  - Bug #12945 	PEAR_Registry::setConfig() does not set install path
-  - Bug #12959 	PEAR should give warning when doing &quot;special&quot; handling with cfg role
-  - Bug #12960 	role=cfg should automatically replace file if it has not been modified
-  - Bug #13031 	PEAR fails to authenticate when doing upgrade-all on non-default channel
-  - Bug #13033 	Signature to PEAR_REST_XX::listAll() changes between REST1.0 and 1.1
+  * Implement Request #13375: install-pear.php should have option to set cfg_dir [timj]
  </notes>
  <contents>
   <dir name="/">
@@ -684,6 +674,30 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * implement Request #11964: introduce www role, www_dir config variable [cellog]
   * implement Request #12108: Add &quot;config&quot; (cfg) role [cellog]
   * implement Request #12147: Avoid compile-time strict warnings [cellog]
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.7.1</release>
+    <api>1.7.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>
+ fixed since 1.7.0
+  * fix bug #13030: Port not set for REST HTTP requests [timj]
+  * fix bug #13029: Duplicate Host headers set when requesting REST data [timj]
+  * fix bug #13047: PEAR fails to install *any* package [timj]
+
+ Known bugs to be fixed in version 1.7.2:
+  - Bug #12945 	PEAR_Registry::setConfig() does not set install path
+  - Bug #12959 	PEAR should give warning when doing &quot;special&quot; handling with cfg role
+  - Bug #12960 	role=cfg should automatically replace file if it has not been modified
+  - Bug #13031 	PEAR fails to authenticate when doing upgrade-all on non-default channel
+  - Bug #13033 	Signature to PEAR_REST_XX::listAll() changes between REST1.0 and 1.1
    </notes>
   </release>
  </changelog>
