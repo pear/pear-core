@@ -93,6 +93,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <state>stable</state>
  <notes>
   * Implement Request #13375: install-pear.php should have option to set cfg_dir [timj]
+  * Fix bug #13315: Upgrading of package fails if more than one file of role=cfg has changed [timj]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

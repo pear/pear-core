@@ -71,17 +71,16 @@ class PEAR_Installer_Role_Cfg extends PEAR_Installer_Role_Common
                 } else {
                     $newloc = $tmpcfg;
                 }
-                if (!@copy($old, $newloc . DIRECTORY_SEPARATOR . 'savefile')) {
+                $temp_file = $newloc . DIRECTORY_SEPARATOR . uniqid('savefile');
+                if (!@copy($old, $temp_file)) {
                     PEAR::popErrorHandling();
                     return PEAR::raiseError('Could not save existing configuration file '.
                         $old . ', unable to install.  Please set temp_dir ' .
                         'configuration variable to a writeable location and try again');
                 }
                 PEAR::popErrorHandling();
-                $this->installer->addFileOperation('rename',
-                    array($newloc . DIRECTORY_SEPARATOR . 'savefile', $old, false
-                ));
-                $this->installer->addFileOperation('delete', array($newloc . DIRECTORY_SEPARATOR . 'savefile'));
+                $this->installer->addFileOperation('rename', array($temp_file, $old, false));
+                $this->installer->addFileOperation('delete', array($temp_file));
             }
         }
         return $test;
