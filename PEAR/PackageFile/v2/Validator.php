@@ -484,11 +484,11 @@ class PEAR_PackageFile_v2_Validator
             }
             if (!in_array($this->_packageInfo['stability']['release'],
                   array('snapshot', 'devel', 'alpha', 'beta', 'stable'))) {
-                $this->_invalidState('release', $this->_packageinfo['stability']['release']);
+                $this->_invalidState('release', $this->_packageInfo['stability']['release']);
             }
             if (!in_array($this->_packageInfo['stability']['api'],
                   array('devel', 'alpha', 'beta', 'stable'))) {
-                $this->_invalidState('api', $this->_packageinfo['stability']['api']);
+                $this->_invalidState('api', $this->_packageInfo['stability']['api']);
             }
         }
     }
@@ -1333,7 +1333,7 @@ class PEAR_PackageFile_v2_Validator
             }
             if (is_array($rel) && array_key_exists('filelist', $rel)) {
                 if ($rel['filelist']) {
-                    
+
                     $this->_validateFilelist($rel['filelist'], true);
                 }
             }
@@ -1964,7 +1964,7 @@ class PEAR_PackageFile_v2_Validator
                     if (version_compare(zend_version(), '2.0', '<')) {
                         if (in_array(strtolower($data),
                             array('public', 'private', 'protected', 'abstract',
-                                  'interface', 'implements', 'throw') 
+                                  'interface', 'implements', 'throw')
                                  )) {
                             $this->_stack->push(__FUNCTION__, 'warning', array(
                                 'file' => $file),
