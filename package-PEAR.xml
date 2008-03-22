@@ -94,6 +94,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
  <notes>
   * Implement Request #13375: install-pear.php should have option to set cfg_dir [timj]
   * Fix bug #13315: Upgrading of package fails if more than one file of role=cfg has changed [timj]
+  * Fix bug #13059: Invalid release type causes Undefined Property notice [gwynne, dufuz]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
