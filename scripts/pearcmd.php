@@ -400,9 +400,13 @@ function cmdHelp($command)
 // }}}
 
 function error_handler($errno, $errmsg, $file, $line, $vars) {
-    if ((defined('E_STRICT') && $errno & E_STRICT) || !error_reporting()) {
+    if ((defined('E_STRICT') && $errno & E_STRICT) || (defined('E_DEPRECATED') &&
+          $errno & E_DEPRECATED) || !error_reporting()) {
         if (defined('E_STRICT') && $errno & E_STRICT) {
             return; // E_STRICT
+        }
+        if (defined('E_DEPRECATED') && $errno & E_DEPRECATED) {
+            return; // E_DEPRECATED
         }
         if ($GLOBALS['config']->get('verbose') < 4) {
             return false; // @silenced error, show all if debug is high enough
