@@ -121,7 +121,7 @@ class PEAR_PackageFile_v2
      *
      * - package name
      * - channel name
-     * - dependencies 
+     * - dependencies
      * @var boolean
      * @access private
      */
@@ -1566,7 +1566,7 @@ class PEAR_PackageFile_v2
                         if (strtolower($dep['name']) == strtolower($package) &&
                               $depchannel == $channel) {
                             return true;
-                        }  
+                        }
                     }
                 }
             }
@@ -1584,7 +1584,7 @@ class PEAR_PackageFile_v2
                             if (strtolower($dep['name']) == strtolower($package) &&
                                   $depchannel == $channel) {
                                 return true;
-                            }  
+                            }
                         }
                     }
                 }
@@ -1644,7 +1644,8 @@ class PEAR_PackageFile_v2
                 );
             foreach (array('required', 'optional') as $type) {
                 $optional = ($type == 'optional') ? 'yes' : 'no';
-                if (!isset($this->_packageInfo['dependencies'][$type])) {
+                if (!isset($this->_packageInfo['dependencies'][$type])
+                    || empty($this->_packageInfo['dependencies'][$type])) {
                     continue;
                 }
                 foreach ($this->_packageInfo['dependencies'][$type] as $dtype => $deps) {
