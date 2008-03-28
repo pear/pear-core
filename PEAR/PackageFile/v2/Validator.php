@@ -79,7 +79,8 @@ class PEAR_PackageFile_v2_Validator
         }
         if (!isset($this->_packageInfo['attribs']['version']) ||
               ($this->_packageInfo['attribs']['version'] != '2.0' &&
-               $this->_packageInfo['attribs']['version'] != '2.1')) {
+               $this->_packageInfo['attribs']['version'] != '2.1')
+        ) {
             $this->_noPackageVersion();
         }
         $structure =
@@ -118,7 +119,8 @@ class PEAR_PackageFile_v2_Validator
               isset($test['dependencies']['required']['pearinstaller']) &&
               isset($test['dependencies']['required']['pearinstaller']['min']) &&
               version_compare('@package_version@',
-                $test['dependencies']['required']['pearinstaller']['min'], '<')) {
+                $test['dependencies']['required']['pearinstaller']['min'], '<')
+        ) {
             $this->_pearVersionTooLow($test['dependencies']['required']['pearinstaller']['min']);
             return false;
         }
@@ -138,18 +140,13 @@ class PEAR_PackageFile_v2_Validator
         if (array_key_exists('_lastversion', $test)) {
             unset($test['_lastversion']);
         }
-        if (!$this->_stupidSchemaValidate($structure,
-                                          $test, '<package>')) {
+        if (!$this->_stupidSchemaValidate($structure, $test, '<package>')) {
             return false;
         }
         if (empty($this->_packageInfo['name'])) {
             $this->_tagCannotBeEmpty('name');
         }
-        if (isset($this->_packageInfo['uri'])) {
-            $test = 'uri';
-        } else {
-            $test = 'channel';
-        }
+        $test = isset($this->_packageInfo['uri']) ? 'uri' :'channel';
         if (empty($this->_packageInfo[$test])) {
             $this->_tagCannotBeEmpty($test);
         }
