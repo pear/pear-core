@@ -96,6 +96,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * fix Bug #13323:	Deprecated errors in many places [hubbitus]
   * Fix Bug #13315: Upgrading of package fails if more than one file of role=cfg has changed [timj]
   * Fix Bug #13059: Invalid release type causes Undefined Property notice [gwynne, dufuz]
+  * Fix Bug #13484: pear package brings up warnings [dufuz]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
