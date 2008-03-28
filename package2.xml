@@ -103,6 +103,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Fix Bug #13059 Invalid release type causes Undefined Property notice [gwynne, dufuz]
   * Fix Bug #13484 pear package brings up warnings [dufuz]
   * Fix Bug #13485 pear package-validate brings up ASCII issues [dufuz]
+  * Fix Bug #13525 pear package-validate is not showing warnings even if there are [dufuz]
  </notes>
  <contents>
   <dir name="/">
