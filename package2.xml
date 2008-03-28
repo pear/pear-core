@@ -98,10 +98,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
   * Implement Request #13375: install-pear.php should have option to set cfg_dir [timj]
-  * fix Bug #13323:	Deprecated errors in many places [hubbitus]
-  * Fix Bug #13315: Upgrading of package fails if more than one file of role=cfg has changed [timj]
-  * Fix Bug #13059: Invalid release type causes Undefined Property notice [gwynne, dufuz]
-  * Fix Bug #13484: pear package brings up warnings [dufuz]
+  * fix Bug #13323 Deprecated errors in many places [hubbitus]
+  * Fix Bug #13315 Upgrading of package fails if more than one file of role=cfg has changed [timj]
+  * Fix Bug #13059 Invalid release type causes Undefined Property notice [gwynne, dufuz]
+  * Fix Bug #13484 pear package brings up warnings [dufuz]
+  * Fix Bug #13485 pear package-validate brings up ASCII issues [dufuz]
  </notes>
  <contents>
   <dir name="/">
