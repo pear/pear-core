@@ -374,15 +374,12 @@ used for automated conversion or learning the format.
         } else {
             $valid = $info->validate(PEAR_VALIDATE_PACKAGING);
         }
-        $err = array();
-        $warn = array();
-        if (!$valid) {
-            foreach ($info->getValidationWarnings() as $error) {
-                if ($error['level'] == 'warning') {
-                    $warn[] = $error['message'];
-                } else {
-                    $err[] = $error['message'];
-                }
+        $err = $warn = array();
+        foreach ($info->getValidationWarnings() as $error) {
+            if (!$valid) {
+                $err[] = $error['message'];
+            } else {
+                $warn[] = $error['message'];
             }
         }
         $this->_displayValidationResults($err, $warn);
@@ -751,7 +748,7 @@ used for automated conversion or learning the format.
         $a = &new PEAR_Installer($ui);
         return $a;
     }
-    
+
     /**
      * For unit testing purposes
      */
@@ -763,7 +760,7 @@ used for automated conversion or learning the format.
                 include_once 'PEAR/Command/Packaging.php';
             }
         }
-        
+
         if (class_exists('PEAR_Command_Packaging')) {
             $a = &new PEAR_Command_Packaging($ui, $config);
         } else {
