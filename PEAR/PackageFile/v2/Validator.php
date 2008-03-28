@@ -1867,7 +1867,17 @@ class PEAR_PackageFile_v2_Validator
             fclose($fp);
             $contents = file_get_contents($file);
         }
-        $tokens = token_get_all($contents);
+
+        // Silence this function so we can catch PHP Warnings and show our own custom message
+        $tokens = @token_get_all($contents);
+        if (isset($php_errormsg)) {
+            $pn = $this->_pf->getPackage();
+            $this->_stack->push(__FUNCTION__, 'warning',
+                    array('file' => $file, 'package' => $pn),
+                    'in %file%: Could not process file for unkown reasons,' .
+                    ' possibly a PHP parse error in %file% from %package%');
+
+        }
 /*
         for ($i = 0; $i < sizeof($tokens); $i++) {
             @list($token, $data) = $tokens[$i];
