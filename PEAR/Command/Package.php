@@ -375,11 +375,13 @@ used for automated conversion or learning the format.
             $valid = $info->validate(PEAR_VALIDATE_PACKAGING);
         }
         $err = $warn = array();
-        foreach ($info->getValidationWarnings() as $error) {
-            if (!$valid) {
-                $err[] = $error['message'];
-            } else {
-                $warn[] = $error['message'];
+        if ($errors = $info->getValidationWarnings()) {
+            foreach ($errors as $error) {
+                if ($error['level'] == 'warning') {
+                    $warn[] = $error['message'];
+                } else {
+                    $err[] = $error['message'];
+                }
             }
         }
         $this->_displayValidationResults($err, $warn);
