@@ -58,7 +58,7 @@ class PEAR_REST_13 extends PEAR_REST_10
      * @param bool $installed the installed version of this package to compare against
      * @return array|false|PEAR_Error see {@link _returnDownloadURL()}
      */
-    function getDownloadURL($base, $packageinfo, $prefstate, $installed)
+    function getDownloadURL($base, $packageinfo, $prefstate, $installed, $channel = false)
     {
         $channel = $packageinfo['channel'];
         $package = $packageinfo['package'];
@@ -136,11 +136,11 @@ class PEAR_REST_13 extends PEAR_REST_10
         if (!$found && $skippedphp) {
             $found = null;
         }
-        return $this->_returnDownloadURL($base, $package, $release, $info, $found, $skippedphp);
+        return $this->_returnDownloadURL($base, $package, $release, $info, $found, $skippedphp, $channel);
     }
 
     function getDepDownloadURL($base, $xsdversion, $dependency, $deppackage,
-                               $prefstate = 'stable', $installed = false)
+                               $prefstate = 'stable', $installed = false, $channel = false)
     {
         $channel = $dependency['channel'];
         $package = $dependency['name'];
@@ -247,7 +247,7 @@ class PEAR_REST_13 extends PEAR_REST_10
                     if (!in_array($release['s'], $states)) {
                         // the stability is too low, but we must return the
                         // recommended version if possible
-                        return $this->_returnDownloadURL($base, $package, $release, $info, true);
+                        return $this->_returnDownloadURL($base, $package, $release, $info, true, false, $channel);
                     }
                 }
             }
@@ -274,7 +274,7 @@ class PEAR_REST_13 extends PEAR_REST_10
         if (!$found && $skippedphp) {
             $found = null;
         }
-        return $this->_returnDownloadURL($base, $package, $release, $info, $found, $skippedphp);
+        return $this->_returnDownloadURL($base, $package, $release, $info, $found, $skippedphp, $channel);
     }
 }
 ?>

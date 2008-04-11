@@ -49,9 +49,9 @@ class PEAR_REST_11
         $this->_rest = &new PEAR_REST($config, $options);
     }
 
-    function listAll($base, $dostable, $basic = true)
+    function listAll($base, $dostable, $basic = true, $searchpackage = false, $searchsummary = false, $channel = false)
     {
-        $categorylist = $this->_rest->retrieveData($base . 'c/categories.xml');
+        $categorylist = $this->_rest->retrieveData($base . 'c/categories.xml', false, false, $channel);
         if (PEAR::isError($categorylist)) {
             return $categorylist;
         }
@@ -64,7 +64,7 @@ class PEAR_REST_11
         foreach ($categorylist['c'] as $progress => $category) {
             $category = $category['_content'];
             $packagesinfo = $this->_rest->retrieveData($base .
-                'c/' . urlencode($category) . '/packagesinfo.xml');
+                'c/' . urlencode($category) . '/packagesinfo.xml', false, false, $channel);
 
             if (PEAR::isError($packagesinfo)) {
                 continue;
@@ -204,9 +204,9 @@ class PEAR_REST_11
      * @param string $base base URL of the server
      * @return array of categorynames
      */
-    function listCategories($base)
+    function listCategories($base, $channel = false)
     {
-        $categorylist = $this->_rest->retrieveData($base . 'c/categories.xml');
+        $categorylist = $this->_rest->retrieveData($base . 'c/categories.xml', false, false, $channel);
         if (PEAR::isError($categorylist)) {
             return $categorylist;
         }
@@ -228,7 +228,7 @@ class PEAR_REST_11
      * @param boolean $info also download full package info
      * @return array of packagenames
      */
-    function listCategory($base, $category, $info=false)
+    function listCategory($base, $category, $info = false, $channel = false)
     {
         if ($info == false) {
             $url = '%s'.'c/%s/packages.xml';
@@ -238,9 +238,9 @@ class PEAR_REST_11
         $url = sprintf($url,
                     $base,
                     urlencode($category));
-            
+
         // gives '404 Not Found' error when category doesn't exist
-        $packagelist = $this->_rest->retrieveData($url);
+        $packagelist = $this->_rest->retrieveData($url, false, false, $channel);
         if (PEAR::isError($packagelist)) {
             return $packagelist;
         }

@@ -132,7 +132,7 @@ class PEAR_Downloader extends PEAR_Common
      * @access private
      */
     var $_errorStack = array();
-    
+
     /**
      * @var boolean
      * @access private
@@ -805,9 +805,9 @@ class PEAR_Downloader extends PEAR_Common
             if (!isset($parr['version']) && !isset($parr['state']) && $version
                   && !PEAR::isError($version)
                   && !isset($this->_options['downloadonly'])) {
-                $url = $rest->getDownloadURL($base, $parr, $state, $version);
+                $url = $rest->getDownloadURL($base, $parr, $state, $version, $chan->getName());
             } else {
-                $url = $rest->getDownloadURL($base, $parr, $state, false);
+                $url = $rest->getDownloadURL($base, $parr, $state, false, $chan->getName());
             }
             if (PEAR::isError($url)) {
                 $this->configSet('default_channel', $curchannel);
@@ -993,7 +993,7 @@ class PEAR_Downloader extends PEAR_Common
               $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
             $rest = &$this->config->getREST('1.0', $this->_options);
             $url = $rest->getDepDownloadURL($base, $xsdversion, $dep, $parr,
-                    $state, $version);
+                    $state, $version, $chan->getName());
             if (PEAR::isError($url)) {
                 return $url;
             }
@@ -1212,7 +1212,7 @@ class PEAR_Downloader extends PEAR_Common
      */
     function sortPkgDeps(&$packages, $uninstall = false)
     {
-        $uninstall ? 
+        $uninstall ?
             $this->sortPackagesForUninstall($packages) :
             $this->sortPackagesForInstall($packages);
     }
@@ -1570,7 +1570,7 @@ class PEAR_Downloader extends PEAR_Common
             $config = &PEAR_Config::singleton();
         }
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
-        if ($config->get('http_proxy') && 
+        if ($config->get('http_proxy') &&
               $proxy = parse_url($config->get('http_proxy'))) {
             $proxy_host = isset($proxy['host']) ? $proxy['host'] : null;
             if (isset($proxy['scheme']) && $proxy['scheme'] == 'https') {
