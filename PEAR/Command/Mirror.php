@@ -98,7 +98,7 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
     * @param array $options the command options before the command
     * @param array $params the stuff after the command name
     * @return bool true if succesful
-    * @throw PEAR_Error 
+    * @throw PEAR_Error
     */
     function doDownloadAll($command, $options, $params)
     {
@@ -119,7 +119,7 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
               $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
             $rest = &$this->config->getREST('1.0', array());
-            $remoteInfo = array_flip($rest->listPackages($base));
+            $remoteInfo = array_flip($rest->listPackages($base, $channel));
         } else {
             $remote = &$this->config->getRemote();
             $stable = ($this->config->get('preferred_state') == 'stable');
@@ -136,7 +136,7 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
             $this->config->get('preferred_state'));
         $this->ui->outputData('Gathering release information, please wait...');
         /**
-         * Error handling not necessary, because already done by 
+         * Error handling not necessary, because already done by
          * the download command
          */
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
