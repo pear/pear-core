@@ -353,7 +353,7 @@ class PEAR_Builder extends PEAR_Common
             $configure_command,
             $make_command,
             "$make_command INSTALL_ROOT=\"$inst_dir\" install",
-            "find \"$inst_dir\" -ls"
+            "find \"$inst_dir\" | xargs ls -dils"
             );
         if (!file_exists($build_dir) || !is_dir($build_dir) || !chdir($build_dir)) {
             return $this->raiseError("could not chdir to $build_dir");
