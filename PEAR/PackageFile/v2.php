@@ -1172,6 +1172,9 @@ class PEAR_PackageFile_v2
         $this->flattenFilelist();
         if ($contents = $this->getContents()) {
             $ret = array();
+            if (!isset($contents['dir'])) {
+                return false;
+            }
             if (!isset($contents['dir']['file'][0])) {
                 $contents['dir']['file'] = array($contents['dir']['file']);
             }

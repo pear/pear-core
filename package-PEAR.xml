@@ -102,6 +102,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * Fix Bug #13434 Breaks on HPUX - &quot;find () -ls&quot; doesn't work [cellog]
   * Fix Bug #13484 pear package brings up warnings [dufuz]
   * Fix Bug #13485 pear package-validate brings up ASCII issues [dufuz]
+  * Fix Bug #13508 undefined index errors when installing a remote bundle [cellog/tswicegood]
   * Fix Bug #13525 pear package-validate is not showing warnings even if there are [dufuz]
  </notes>
   <provides type="class" name="OS_Guess"/>
