@@ -299,7 +299,7 @@ class PEAR_Config extends PEAR
     var $_channelConfigInfo = array(
         'php_dir', 'ext_dir', 'doc_dir', 'bin_dir', 'data_dir', 'cfg_dir',
         'test_dir', 'www_dir', 'php_bin', 'username', 'password', 'verbose',
-        'preferred_state', 'umask', 'preferred_mirror',
+        'preferred_state', 'umask', 'preferred_mirror', 'php_ini'
         );
 
     /**
