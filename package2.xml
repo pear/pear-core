@@ -110,6 +110,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Fix Bug #13508 undefined index errors when installing a remote bundle [cellog/tswicegood]
   * Fix Bug #13525 pear package-validate is not showing warnings even if there are [dufuz]
   * Fix Bug #13559 installing package fails via proxy to virtual-hosted server. [hirose]
+  * Fix Bug #13870 Notice uninstalling or using bundles [cellog]
   * Fix Bug #13883 file permissions not preserved on packaging [cellog]
  </notes>
  <contents>
