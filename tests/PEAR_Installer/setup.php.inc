@@ -18,7 +18,7 @@ if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'php')) {
 if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'data')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'data');
 }
-if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'cfg')) {
+if (!is_dir($cfg_dir = $temp_path . DIRECTORY_SEPARATOR . 'cfg')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'cfg');
 }
 if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'doc')) {
@@ -34,7 +34,7 @@ if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'ext')) {
 if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'script')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'script');
 }
-if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'tmp')) {
+if (!is_dir($tmp_dir = $temp_path . DIRECTORY_SEPARATOR . 'tmp')) {
     mkdir($temp_path . DIRECTORY_SEPARATOR . 'tmp');
 }
 if (!is_dir($temp_path . DIRECTORY_SEPARATOR . 'bin')) {
@@ -55,6 +55,7 @@ $config = serialize(array(
     'doc_dir' => $temp_path . DIRECTORY_SEPARATOR . 'doc',
     'test_dir' => $temp_path . DIRECTORY_SEPARATOR . 'test',
     'download_dir' => $temp_path . DIRECTORY_SEPARATOR . 'tmp',
+    'temp_dir' => $temp_path . DIRECTORY_SEPARATOR . 'tmp',
     'bin_dir' => $temp_path . DIRECTORY_SEPARATOR . 'bin',));
 touch($temp_path . DIRECTORY_SEPARATOR . 'pear.conf');
 $fp = fopen($temp_path . DIRECTORY_SEPARATOR . 'pear.conf', 'w');
