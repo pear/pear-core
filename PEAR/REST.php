@@ -305,11 +305,10 @@ class PEAR_REST
         }
         If (isset($proxy['host'])) {
             $request = "GET $url HTTP/1.1\r\n";
-            $request .= 'Host: ' . $proxy['host'] . ":$port\r\n";
         } else {
             $request = "GET $path HTTP/1.1\r\n";
-            $request .= "Host: $host:$port\r\n";
         }
+        $request .= "Host: $host:$port\r\n";
 
         $ifmodifiedsince = '';
         if (is_array($lastmodified)) {
