@@ -1290,6 +1290,12 @@ class PEAR_Installer extends PEAR_Downloader
         if (PEAR::isError($filelist)) {
             return $filelist;
         }
+        $p = &$installregistry->getPackage($pkgname, $channel);
+        if (empty($options['register-only']) && $p) {
+            $dirtree = $p->getDirTree();
+        } else {
+            $dirtree = false;
+        }
         $pkg->resetFilelist();
         $pkg->setLastInstalledVersion($installregistry->packageInfo($pkg->getPackage(),
             'version', $pkg->getChannel()));
@@ -1365,6 +1371,15 @@ class PEAR_Installer extends PEAR_Downloader
             }
             $ret = $installregistry->addPackage2($pkg);
         } else {
+            if ($dirtree) {
+                $this->startFileTransaction();
+                // attempt to delete empty directories
+                uksort($dirtree, array($this, '_sortDirs'));
+                foreach($dirtree as $dir => $notused) {
+                    $this->addFileOperation('rmdir', array($dir));
+                }
+                $this->commitFileTransaction();
+            }
             $usechannel = $channel;
             if ($channel == 'pecl.php.net') {
                 $test = $installregistry->packageExists($pkgname, $channel);

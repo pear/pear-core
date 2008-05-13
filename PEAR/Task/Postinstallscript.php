@@ -62,7 +62,7 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
      * @param array the entire parsed <file> tag
      * @static
      */
-    function validateXml($pkg, $xml, &$config, $fileXml)
+    function validateXml($pkg, $xml, $config, $fileXml)
     {
         if ($fileXml['role'] != 'php') {
             return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "' .

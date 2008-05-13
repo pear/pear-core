@@ -47,7 +47,7 @@ class PEAR_Task_Replace extends PEAR_Task_Common
      * @param PEAR_Config
      * @static
      */
-    function validateXml($pkg, $xml, &$config, $fileXml)
+    function validateXml($pkg, $xml, $config, $fileXml)
     {
         if (!isset($xml['attribs'])) {
             return array(PEAR_TASK_ERROR_NOATTRIBS);
