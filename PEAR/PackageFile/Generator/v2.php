@@ -213,6 +213,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 if (!file_exists($file)) {
                     return $packager->raiseError("File does not exist: $fname");
                 } else {
+                    $origperms = fileperms($file);
                     $tfile = $packageDir . DIRECTORY_SEPARATOR . $fname;
                     unset($orig['attribs']);
                     if (count($orig)) { // file with tasks
@@ -245,6 +246,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                         System::mkdir(array('-p', dirname($tfile)));
                         copy($file, $tfile);
                     }
+                    chmod($tfile, $origperms);
                     $filelist[$i++] = $tfile;
                     $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($tfile), $i - 1);
                     $packager->log(2, "Adding file $fname");
