@@ -473,8 +473,9 @@ class PEAR_Installer extends PEAR_Downloader
      * @param array options from command-line
      * @access private
      */
-    function _installFile2(&$pkg, $file, $atts, $tmp_path, $options)
+    function _installFile2(&$pkg, $file, &$real_atts, $tmp_path, $options)
     {
+        $atts = $real_atts;
         if (!isset($this->_registry)) {
             $this->_registry = &$this->config->getRegistry();
         }
@@ -602,6 +603,8 @@ class PEAR_Installer extends PEAR_Downloader
                         }
                     }
                 }
+            } else {
+                $real_atts['attribs']['md5sum'] = md5_file($dest_file);
             }
             // }}}
             // {{{ set file permissions
