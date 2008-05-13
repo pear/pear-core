@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ERROR|E_NOTICE|E_WARNING|E_USER_ERROR|E_USER_NOTICE|E_USER_WARNING);
 set_include_path(get_include_path().PATH_SEPARATOR.getcwd()); // allows chdir
 
 $server = 'pear.Chiara';
