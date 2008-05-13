@@ -113,6 +113,7 @@ $phpunit->assertEquals(array (
     array (
       'name' => 'foo.php',
       'role' => 'cfg',
+      'md5sum' => '718d8596a14d123d83afb0d5d6d6fd96',
       'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR . 'PEAR' .
         DIRECTORY_SEPARATOR . 'foo.php',
     ),
@@ -210,7 +211,8 @@ $phpunit->assertEquals(md5('fix it up - woo'), md5_file($temp_path . DIRECTORY_S
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR .  'PEAR' . DIRECTORY_SEPARATOR . 'foo.php.new-1.4.2',
     'installed file');
 $phpunit->assertEquals(md5_file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' .
-    DIRECTORY_SEPARATOR . 'foo.php'), md5_file($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR .  'PEAR' . DIRECTORY_SEPARATOR . 'foo.php.new-1.4.2'), 'md52');$fakelog->getLog();
+    DIRECTORY_SEPARATOR . 'foo.php'), md5_file($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR .  'PEAR' . DIRECTORY_SEPARATOR . 'foo.php.new-1.4.2'), 'md52');
+$fakelog->getLog();
 
 $dp = &new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
 $result = $dp->download(array($c4));
@@ -226,6 +228,11 @@ $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
 $ret = &$installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
+$arr = $fakelog->getLog();
+$phpunit->assertEquals(array (
+    0 => 0,
+    1 => 'WARNING: configuration file ' . $cfg_dir . DIRECTORY_SEPARATOR . 'PEAR' . DIRECTORY_SEPARATOR . 'foo.php is being installed as ' . $cfg_dir . DIRECTORY_SEPARATOR . 'PEAR' . DIRECTORY_SEPARATOR . 'foo.php.new-1.4.3, you should manually merge in changes to the existing configuration file',
+  ), $arr[2], 'after install log');
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR .  'PEAR' . DIRECTORY_SEPARATOR . 'foo.php',
     'installed file');
 $phpunit->assertEquals(md5('fix it up - woo'), md5_file($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR .  'PEAR' . DIRECTORY_SEPARATOR . 'foo.php'), 'md51');

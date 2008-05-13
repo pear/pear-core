@@ -97,6 +97,7 @@ class PEAR_Installer_Role_Cfg extends PEAR_Installer_Role_Common
                         'configuration variable to a writeable location and try again');
                 }
                 PEAR::popErrorHandling();
+                $this->installer->log(0, "WARNING: configuration file $old is being installed as $test[2], you should manually merge in changes to the existing configuration file");
                 $this->installer->addFileOperation('rename', array($temp_file, $old, false));
                 $this->installer->addFileOperation('delete', array($temp_file));
             }
