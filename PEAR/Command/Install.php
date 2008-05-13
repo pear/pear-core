@@ -900,7 +900,7 @@ Run post-installation scripts in package <package>, if any exist.
                 if (isset($parsed['group'])) {
                     $group = $info->getDependencyGroup($parsed['group']);
                     if ($group) {
-                        $installed = &$reg->getInstalledGroup($group);
+                        $installed = $reg->getInstalledGroup($group);
                         if ($installed) {
                             foreach ($installed as $i => $p) {
                                 $newparams[] = &$installed[$i];
