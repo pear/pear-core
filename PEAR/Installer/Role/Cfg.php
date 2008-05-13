@@ -32,7 +32,16 @@
  */
 class PEAR_Installer_Role_Cfg extends PEAR_Installer_Role_Common
 {
+    /**
+     * @var PEAR_Installer
+     */
     var $installer;
+    /**
+     * the md5 of the original file
+     *
+     * @var unknown_type
+     */
+    var $md5 = null;
     /**
      * Do any unusual setup here
      * @param PEAR_Installer
@@ -43,14 +52,23 @@ class PEAR_Installer_Role_Cfg extends PEAR_Installer_Role_Common
     function setup(&$installer, $pkg, $atts, $file)
     {
         $this->installer = &$installer;
+        $reg = &$this->installer->config->getRegistry();
+        $package = $reg->getPackage($pkg->getPackage(), $pkg->getChannel());
+        if ($package) {
+            $filelist = $package->getFilelist();
+            if (isset($filelist[$file]) && isset($filelist[$file]['md5sum'])) {
+                $this->md5 = $filelist[$file]['md5sum'];
+            }
+        }
     }
 
     function processInstallation($pkg, $atts, $file, $tmp_path, $layer = null)
     {
         $test = parent::processInstallation($pkg, $atts, $file, $tmp_path, $layer);
         if (@file_exists($test[2])) {
+            $md5 = md5_file($test[2]);
             // configuration has already been installed, check for mods
-            if (md5_file($test[2]) !== md5_file($test[3])) {
+            if ($md5 !== $this->md5 && $md5 !== md5_file($test[3])) {
                 // configuration has been modified, so save our version as
                 // configfile-version
                 $old = $test[2];

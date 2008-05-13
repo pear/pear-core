@@ -98,6 +98,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
   * Implement Request #13375: install-pear.php should have option to set cfg_dir [timj]
+  * Fix Bug #12960 role=cfg should automatically replace file if it has not been modified [cellog]
   * Fix Bug #13031 PEAR fails to authenticate when doing upgrade-all on non-default channel [timj]
   * Fix Bug #13033 Signature to PEAR_REST_XX::listAll() changes between REST1.0 and 1.1 [timj]
   * Fix Bug #13059 Invalid release type causes Undefined Property notice [gwynne, dufuz]
