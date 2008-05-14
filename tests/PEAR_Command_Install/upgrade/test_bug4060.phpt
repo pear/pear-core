@@ -1713,7 +1713,32 @@ if (OS_WINDOWS) {
         0 => 2,
         1 => 'successfully committed 30 file operations',
       ),
-      74 => 
+      74 =>
+      array (
+        0 => 3,
+        1 => 'adding to transaction: rmdir ' . $temp_path . '\\test\\Auth_HTTP\\tests',
+      ),
+      75 => 
+      array (
+        0 => 3,
+        1 => 'adding to transaction: rmdir ' . $temp_path . '\\test\\Auth_HTTP',
+      ),
+      76 => 
+      array (
+        0 => 3,
+        1 => 'adding to transaction: rmdir ' . $temp_path . '\\php\\Auth',
+      ),
+      77 => 
+      array (
+        0 => 2,
+        1 => 'about to commit 3 file operations',
+      ),
+      78 => 
+      array (
+        0 => 2,
+        1 => 'successfully committed 3 file operations',
+      ),
+      79 => 
       array (
         'info' => 
         array (
@@ -2162,6 +2187,31 @@ if (OS_WINDOWS) {
     1 => 'successfully committed 36 file operations',
   ),
   87 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: rmdir ' . $temp_path . '/test/Auth_HTTP/tests',
+  ),
+  88 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: rmdir ' . $temp_path . '/test/Auth_HTTP',
+  ),
+  89 => 
+  array (
+    0 => 3,
+    1 => 'adding to transaction: rmdir ' . $temp_path . '/php/Auth',
+  ),
+  90 => 
+  array (
+    0 => 2,
+    1 => 'about to commit 3 file operations',
+  ),
+  91 => 
+  array (
+    0 => 2,
+    1 => 'successfully committed 3 file operations',
+  ),
+  92 => 
   array (
     'info' => 
     array (

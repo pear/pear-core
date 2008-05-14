@@ -254,6 +254,7 @@ Other:
     array (
       'name' => 'foo1.php',
       'role' => 'php',
+      'md5sum' => '718d8596a14d123d83afb0d5d6d6fd96',
       'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo1.php',
     ),
   ),

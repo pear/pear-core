@@ -17,8 +17,9 @@ $phpunit->assertEquals(array (
   'ext',
   'php',
   'script',
+  'src',
   'test',
-), array_slice(PEAR_Installer_Role::getInstallableRoles(), 0, 7), 'test');
+), array_slice(PEAR_Installer_Role::getInstallableRoles(), 0, 8), 'test');
 echo 'tests done';
 ?>
 --CLEAN--
