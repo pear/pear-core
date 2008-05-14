@@ -18,9 +18,15 @@ include_once "PEAR.php";
 if (!defined('E_STRICT')) {
     define('E_STRICT', -1);
 }
+if (!defined('E_STRICT')) {
+    define('E_DEPRECATED', -1);
+}
 
 function test_error_handler($errno, $errmsg, $file, $line, $vars) {
     if ($errno == E_STRICT) {
+        return;
+    }
+    if ($errno == E_DEPRECATED) {
         return;
     }
 	$errortype = array (
@@ -45,7 +51,7 @@ function test_error_handler($errno, $errmsg, $file, $line, $vars) {
 	print "\n$prefix: $errmsg in $file on line XXX\n";
 }
 
-error_reporting(1803);
+error_reporting(E_ALL);
 set_error_handler("test_error_handler");
 
 class Foo_Error extends PEAR_Error
@@ -67,12 +73,12 @@ class Test1 extends PEAR {
     }
 }
 
-function errorhandler(&$obj) {
+function errorhandler($obj) {
     print "errorhandler function called, obj=".$obj->toString()."\n";
 }
 
 class errorclass {
-    function errorhandler(&$obj) {
+    function errorhandler($obj) {
 		print "errorhandler method called, obj=".$obj->toString()."\n";
     }
 }
