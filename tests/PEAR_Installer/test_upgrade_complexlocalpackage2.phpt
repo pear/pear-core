@@ -1207,7 +1207,6 @@ $phpunit->assertEquals($ret, $info, 'test installation, Bar');
 
 $ret = &$installer->install($result[2], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
-$phpunit->showall();
 $phpunit->assertEquals(array (
   'attribs' => 
   array (
@@ -1344,6 +1343,7 @@ $phpunit->assertEquals(array (
     array (
       'name' => 'foo.php',
       'role' => 'php',
+      'md5sum' => '718d8596a14d123d83afb0d5d6d6fd96',
       'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
     ),
   ),
