@@ -102,6 +102,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * Fix Bug #13123 pear config-set works, but pecl config-set does not [cellog]
   * Fix Bug #13323 Deprecated errors in many places [hubbitus]
   * Fix Bug #13315 Upgrading of package fails if more than one file of role=cfg has changed [timj]
+  * Fix Bug #13386 &quot;pear install --register-only&quot; fails with cfg role [cellog]
   * Fix Bug #13434 Breaks on HPUX - &quot;find () -ls&quot; doesn't work [cellog]
   * Fix Bug #13484 pear package brings up warnings [dufuz]
   * Fix Bug #13485 pear package-validate brings up ASCII issues [dufuz]
