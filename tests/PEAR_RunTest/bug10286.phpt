@@ -2,6 +2,7 @@
 PEAR_RunTest Bug #10286 - no output from fatal errors displayed.
 --FILE--
 <?php
+error_reporting(E_ALL);
 $oops->method();
 ?>
 --EXPECTF--
