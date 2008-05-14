@@ -643,7 +643,7 @@ class PEAR_Config extends PEAR
         }
 
         $this->_registry['default'] = &new PEAR_Registry($this->configuration['default']['php_dir']);
-        $this->_registry['default']->setConfig($this);
+        $this->_registry['default']->setConfig($this, false);
         $this->_regInitialized['default'] = false;
         //$GLOBALS['_PEAR_Config_instance'] = &$this;
     }
@@ -759,7 +759,7 @@ class PEAR_Config extends PEAR
         $this->_setupChannels();
         if (!$this->_noRegistry && ($phpdir = $this->get('php_dir', $layer, 'pear.php.net'))) {
             $this->_registry[$layer] = &new PEAR_Registry($phpdir);
-            $this->_registry[$layer]->setConfig($this);
+            $this->_registry[$layer]->setConfig($this, false);
             $this->_regInitialized[$layer] = false;
         } else {
             unset($this->_registry[$layer]);
@@ -917,7 +917,7 @@ class PEAR_Config extends PEAR
         $this->_setupChannels();
         if (!$this->_noRegistry && ($phpdir = $this->get('php_dir', $layer, 'pear.php.net'))) {
             $this->_registry[$layer] = &new PEAR_Registry($phpdir);
-            $this->_registry[$layer]->setConfig($this);
+            $this->_registry[$layer]->setConfig($this, false);
             $this->_regInitialized[$layer] = false;
         } else {
             unset($this->_registry[$layer]);
@@ -1558,7 +1558,7 @@ class PEAR_Config extends PEAR
                   $value != $this->_registry[$layer]->install_dir) {
                 $this->_registry[$layer] = &new PEAR_Registry($value);
                 $this->_regInitialized[$layer] = false;
-                $this->_registry[$layer]->setConfig($this);
+                $this->_registry[$layer]->setConfig($this, false);
             }
         }
         return true;
@@ -1584,7 +1584,7 @@ class PEAR_Config extends PEAR
                 if (!is_object($this->_registry[$layer])) {
                     if ($phpdir = $this->get('php_dir', $layer, 'pear.php.net')) {
                         $this->_registry[$layer] = &new PEAR_Registry($phpdir);
-                        $this->_registry[$layer]->setConfig($this);
+                        $this->_registry[$layer]->setConfig($this, false);
                         $this->_regInitialized[$layer] = false;
                     } else {
                         unset($this->_registry[$layer]);
@@ -2068,7 +2068,7 @@ class PEAR_Config extends PEAR
         }
         $this->_registry[$layer] = &$reg;
         if (is_object($reg)) {
-            $this->_registry[$layer]->setConfig($this);
+            $this->_registry[$layer]->setConfig($this, false);
         }
         return true;
     }
@@ -2153,7 +2153,7 @@ class PEAR_Config extends PEAR
                 }
                 $this->_registry[$layer] =
                     &new PEAR_Registry($this->get('php_dir', $layer, 'pear.php.net'));
-                $this->_registry[$layer]->setConfig($this);
+                $this->_registry[$layer]->setConfig($this, false);
                 $this->_regInitialized[$layer] = false;
             }
         }
