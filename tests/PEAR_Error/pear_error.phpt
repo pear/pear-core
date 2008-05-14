@@ -18,7 +18,7 @@ include_once "PEAR.php";
 if (!defined('E_STRICT')) {
     define('E_STRICT', -1);
 }
-if (!defined('E_STRICT')) {
+if (!defined('E_DEPRECATED')) {
     define('E_DEPRECATED', -1);
 }
 
