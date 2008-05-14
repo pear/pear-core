@@ -8,7 +8,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-error_reporting(E_ALL);
+error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/allreleases.xml", '<?xml version="1.0" encoding="UTF-8" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
