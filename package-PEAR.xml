@@ -88,7 +88,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
  </maintainers>
  <release>
   <version>1.7.2</version>
-  <date>2008-03-11</date>
+  <date>2008-05-17</date>
   <license>PHP License</license>
   <state>stable</state>
  <notes>
@@ -579,6 +579,34 @@ http://pear.php.net/dtd/package-1.0.xsd">
   - Bug #12960 	role=cfg should automatically replace file if it has not been modified
   - Bug #13031 	PEAR fails to authenticate when doing upgrade-all on non-default channel
   - Bug #13033 	Signature to PEAR_REST_XX::listAll() changes between REST1.0 and 1.1
+   </notes>
+  </release>
+  <release>
+   <version>1.7.2</version>
+   <date>2008-05-17</date>
+   <license>PHP License</license>
+   <state>stable</state>
+   <notes>
+  * Implement Request #13375: install-pear.php should have option to set cfg_dir [timj]
+  * Fix Bug #12945 PEAR_Registry::setConfig() does not set install path [cweiske/cellog]
+  * Fix Bug #12959 PEAR should give warning when doing &quot;special&quot; handling with cfg role [cellog]
+  * Fix Bug #12960 role=cfg should automatically replace file if it has not been modified [cellog]
+  * Fix Bug #13031 PEAR fails to authenticate when doing upgrade-all on non-default channel [timj]
+  * Fix Bug #13033 Signature to PEAR_REST_XX::listAll() changes between REST1.0 and 1.1 [timj]
+  * Fix Bug #13059 Invalid release type causes Undefined Property notice [gwynne, dufuz]
+  * Fix Bug #13123 pear config-set works, but pecl config-set does not [cellog]
+  * Fix Bug #13323 Deprecated errors in many places [hubbitus]
+  * Fix Bug #13315 Upgrading of package fails if more than one file of role=cfg has changed [timj]
+  * Fix Bug #13386 &quot;pear install --register-only&quot; fails with cfg role [cellog]
+  * Fix Bug #13434 Breaks on HPUX - &quot;find () -ls&quot; doesn't work [cellog]
+  * Fix Bug #13484 pear package brings up warnings [dufuz]
+  * Fix Bug #13485 pear package-validate brings up ASCII issues [dufuz]
+  * Fix Bug #13508 undefined index errors when installing a remote bundle [cellog/tswicegood]
+  * Fix Bug #13525 pear package-validate is not showing warnings even if there are [dufuz]
+  * Fix Bug #13559 installing package fails via proxy to virtual-hosted server. [hirose]
+  * Fix Bug #13691 Pear doesn't remove old directories on upgrade [cellog]
+  * Fix Bug #13870 Notice uninstalling or using bundles [cellog]
+  * Fix Bug #13883 file permissions not preserved on packaging [cellog]
    </notes>
   </release>
  </changelog>
