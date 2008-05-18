@@ -97,7 +97,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  * Fix Bug #13926 install-pear.php does not set cfg_dir if -w option set with no -c option [timj]
+  * Fix Bug #13926 install-pear.php does not set cfg_dir if -d option set with no -c option [timj]
  </notes>
  <contents>
   <dir name="/">

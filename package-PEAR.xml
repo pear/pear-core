@@ -92,7 +92,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>PHP License</license>
   <state>stable</state>
  <notes>
-  * Fix Bug #13926 install-pear.php does not set cfg_dir if -w option set with no -c option [timj]
+  * Fix Bug #13926 install-pear.php does not set cfg_dir if -d option set with no -c option [timj]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
