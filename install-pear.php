@@ -47,8 +47,11 @@ for ($i = 0; $i < sizeof($argv); $i++) {
         $bin_dir = $argv[$i+1];
         $i++;
     } elseif ($arg == '-c') {
-       	$cfg_dir = $argv[$i+1];
-       	$i++;
+        $cfg_dir = $argv[$i+1];
+        $i++;
+    } elseif ($arg == '-w') {
+        $www_dir = $argv[$i+1];
+        $i++;
     } elseif ($arg == '-p') {
         $php_bin = $argv[$i+1];
         $i++;
@@ -88,14 +91,21 @@ if (!empty($cfg_dir)) {
     $config->set('cfg_dir', $cfg_dir, 'default');
 }
 
+// Web files
+if (!empty($www_dir)) {
+    $config->set('www_dir', $www_dir, 'default');
+}
+
 // User supplied a dir prefix
 if (!empty($with_dir)) {
     $ds = DIRECTORY_SEPARATOR;
     $config->set('php_dir', $with_dir, 'default');
     $config->set('doc_dir', $with_dir . $ds . 'doc', 'default');
     $config->set('data_dir', $with_dir . $ds . 'data', 'default');
-    $config->set('www_dir', $with_dir . $ds . 'htdocs', 'default');
     $config->set('test_dir', $with_dir . $ds . 'test', 'default');
+    if (empty($www_dir)) {
+        $config->set('www_dir', $with_dir . $ds . 'htdocs', 'default');
+    }
     if (empty($cfg_dir)) {
         $config->set('cfg_dir', $with_dir . $ds . 'cfg', 'default');
     }
