@@ -96,7 +96,7 @@ if (!empty($with_dir)) {
     $config->set('data_dir', $with_dir . $ds . 'data', 'default');
     $config->set('www_dir', $with_dir . $ds . 'htdocs', 'default');
     $config->set('test_dir', $with_dir . $ds . 'test', 'default');
-    if (!empty($cfg_dir)) {
+    if (empty($cfg_dir)) {
         $config->set('cfg_dir', $with_dir . $ds . 'cfg', 'default');
     }
     if (!is_writable($config->get('cache_dir'))) {
