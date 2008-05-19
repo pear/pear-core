@@ -2,7 +2,7 @@
 
 /* $Id$ */
 
-error_reporting(E_ALL);
+error_reporting(1803);
 $pear_dir = dirname(__FILE__);
 ini_set('include_path', '');
 if (function_exists('mb_internal_encoding')) {
