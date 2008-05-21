@@ -173,6 +173,7 @@ and uninstall).
         if (!$reg->channelExists($channel)) {
             return $this->raiseError('Channel "' . $channel . '" does not exist');
         }
+        $channel = $reg->channelName($channel);
         $data = array('caption' => 'Configuration (channel ' . $channel . '):');
         foreach ($keys as $key) {
             $type = $this->config->getType($key);
@@ -258,6 +259,7 @@ and uninstall).
         if (!$reg->channelExists($channel)) {
             return $this->raiseError('Channel "' . $channel . '" does not exist');
         }
+        $channel = $reg->channelName($channel);
         if ($params[0] == 'default_channel') {
             if (!$reg->channelExists($params[1])) {
                 return $this->raiseError('Channel "' . $params[1] . '" does not exist');
@@ -268,6 +270,7 @@ and uninstall).
             $layer = 'user';
         } else {
             $layer = $params[2];
+            array_push($params, $layer);
         }
         array_push($params, $channel);
         if (!call_user_func_array(array(&$this->config, 'set'), $params))

@@ -838,6 +838,9 @@ $text
         $env['CONTENT_TYPE']    = '';
         $env['CONTENT_LENGTH']  = '';
         if (!empty($section_text['ENV'])) {
+            if (strpos($section_text['ENV'], '{PWD}') !== false) {
+                $section_text['ENV'] = str_replace('{PWD}', dirname($temp_file), $section_text['ENV']);
+            }
             foreach (explode("\n", trim($section_text['ENV'])) as $e) {
                 $e = explode('=', trim($e), 2);
                 if (!empty($e[0]) && isset($e[1])) {
