@@ -96,7 +96,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
-  * Fix Bug #13953: config-set/config-show with channel alias fail
+  * Fix Bug #13908: pear info command and maintainers inactive not mentioned [dufuz]
+  * Fix Bug #13926: install-pear.php does not set cfg_dir if -d option set with no -c option [timj]
+  * Implement Request #13927: install-pear.php should have option to set www_dir [timj]
+  * Fix Bug #13953: config-set/config-show with channel alias fail[cellog]
  </notes>
  <contents>
   <dir name="/">
