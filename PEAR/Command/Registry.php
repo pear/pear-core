@@ -212,7 +212,7 @@ installed package.'
         $this->ui->outputData($data, $command);
         return true;
     }
-    
+
     function doListAll($command, $options, $params)
     {
         // This duplicate code is deprecated over
@@ -246,7 +246,7 @@ installed package.'
         }
         return true;
     }
-    
+
     function doFileList($command, $options, $params)
     {
         if (count($params) != 1) {
@@ -669,8 +669,10 @@ installed package.'
                 if (!empty($info['Maintainers'])) {
                     $info['Maintainers'] .= "\n";
                 }
+
+                $active = $lead['active'] == 'no' ? ', inactive' : '';
                 $info['Maintainers'] .= $lead['name'] . ' <';
-                $info['Maintainers'] .= $lead['email'] . "> ($role)";
+                $info['Maintainers'] .= $lead['email'] . "> ($role$active)";
             }
         }
         $info['Release Date'] = $obj->getDate();
