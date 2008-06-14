@@ -234,6 +234,19 @@ class PEAR_RunTest
         return $settings;
     }
 
+    function _preparePhpBin($php, $file, $ini_settings)
+    {
+        $file = escapeshellarg($file);
+        // This was fixed in php 5.3 and is not needed after that
+        if (OS_WINDOWS && version_compare(PHP_VERSION, '5.3', '<')) {
+            $cmd = '"'.escapeshellarg($php).' '.$ini_settings.' -f ' . $file .'"';
+        } else {
+            $cmd = $php . $ini_settings . ' -f ' . $file;
+        }
+
+        return $cmd;
+    }
+
     function runPHPUnit($file, $ini_settings = '')
     {
         if (!file_exists($file) && file_exists(getcwd() . DIRECTORY_SEPARATOR . $file)) {
@@ -242,7 +255,8 @@ class PEAR_RunTest
         } elseif (file_exists($file)) {
             $file = realpath($file);
         }
-        $cmd = "$this->_php$ini_settings -f $file";
+
+        $cmd = $this->_preparePhpBin($this->_php, $file. $ini_settings);
         if (isset($this->_logger)) {
             $this->_logger->log(2, 'Running command "' . $cmd . '"');
         }
@@ -391,7 +405,8 @@ class PEAR_RunTest
         }
 
         $args = $section_text['ARGS'] ? ' -- '.$section_text['ARGS'] : '';
-        $cmd = "$this->_php$ini_settings -f \"$temp_file\" $args 2>&1";
+        $cmd = $this->_preparePhpBin($this->_php, $temp_file, $ini_settings);
+        $cmd.= "$args 2>&1";
         if (isset($this->_logger)) {
             $this->_logger->log(2, 'Running command "' . $cmd . '"');
         }
