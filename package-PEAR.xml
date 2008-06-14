@@ -96,6 +96,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * Fix Bug #13926: install-pear.php does not set cfg_dir if -d option set with no -c option [timj]
   * Implement Request #13927: install-pear.php should have option to set www_dir [timj]
   * Fix Bug #13953: config-set/config-show with channel alias fail[cellog]
+  * Fix Bug #14140: Strict warning not suppressed in the shutdown function [dufuz]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
