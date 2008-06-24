@@ -376,28 +376,31 @@ class PEAR_RunTest
 
         // We've satisfied the preconditions - run the test!
         if (isset($this->_options['coverage']) && $this->xdebug_loaded) {
+            $xdebug_file = $temp_dir . DIRECTORY_SEPARATOR . $main_file_name . 'xdebug';
+            $text = '<?php';
+            $text .= "\n" . 'function coverage_shutdown() {' .
+                     "\n" . '    $xdebug = var_export(xdebug_get_code_coverage(), true);';
+            if (!function_exists('file_put_contents')) {
+                $text .= "\n" . '    $fh = fopen(\'' . $xdebug_file . '\', "wb");' .
+                        "\n" . '    if ($fh !== false) {' .
+                        "\n" . '        fwrite($fh, $xdebug);' .
+                        "\n" . '        fclose($fh);' .
+                        "\n" . '    }';
+            } else {
+                $text .= "\n" . '    file_put_contents(\'' . $xdebug_file . '\', $xdebug);';
+            }
+
+            $text .= "\n" . 'xdebug_stop_code_coverage();' .
+                "\n" . '} // end coverage_shutdown()' .
+                "\n" . 'register_shutdown_function("coverage_shutdown");';
+            $text .= "\n" . 'xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);' . "\n";
+
             $len_f = 5;
             if (substr($section_text['FILE'], 0, 5) != '<?php'
                 && substr($section_text['FILE'], 0, 2) == '<?') {
                 $len_f = 2;
             }
-
-            $text = '<?php' . "\n" . 'xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);' . "\n";
-            $new  = substr($section_text['FILE'], $len_f, strlen($section_text['FILE']));
-            $text .= substr($new, 0, strrpos($new, '?>'));
-            $xdebug_file = $temp_dir . DIRECTORY_SEPARATOR . $main_file_name . 'xdebug';
-            $text .= "\n" .
-                   "\n" . '$xdebug = var_export(xdebug_get_code_coverage(), true);';
-            if (!function_exists('file_put_contents')) {
-                $text .= "\n" . '$fh = fopen(\'' . $xdebug_file . '\', "wb");' .
-                        "\n" . 'if ($fh !== false) {' .
-                        "\n" . '    fwrite($fh, $xdebug);' .
-                        "\n" . '    fclose($fh);' .
-                        "\n" . '}';
-            } else {
-                $text .= "\n" . 'file_put_contents(\'' . $xdebug_file . '\', $xdebug);';
-            }
-            $text .= "\n" . 'xdebug_stop_code_coverage();' . "\n" . '?>';
+            $text .= substr($section_text['FILE'], $len_f, strlen($section_text['FILE']));
 
             $this->save_text($temp_file, $text);
         } else {
