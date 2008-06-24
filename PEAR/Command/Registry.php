@@ -132,6 +132,7 @@ installed package.'
         if (isset($options['allchannels']) && !$channelinfo) {
             return $this->doListAll($command, array(), $params);
         }
+
         if (isset($options['allchannels']) && $channelinfo) {
             // allchannels with $channelinfo
             unset($options['allchannels']);
@@ -157,6 +158,7 @@ installed package.'
         if (count($params) == 1) {
             return $this->doFileList($command, $options, $params);
         }
+
         if (isset($options['channel'])) {
             if ($reg->channelExists($options['channel'])) {
                 $channel = $reg->channelName($options['channel']);
@@ -166,6 +168,7 @@ installed package.'
         } else {
             $channel = $this->config->get('default_channel');
         }
+
         $installed = $reg->packageInfo(null, null, $channel);
         usort($installed, array(&$this, '_sortinfo'));
 
@@ -196,6 +199,7 @@ installed package.'
             }
             $data['data'][] = $packageinfo;
         }
+
         if (count($installed) == 0) {
             if (!$channelinfo) {
                 $data = '(no packages installed from channel ' . $channel . ')';
@@ -205,10 +209,11 @@ installed package.'
                         $channel . ':',
                     'border' => true,
                     'channel' => $channel,
-                    'data' => '(no packages installed)',
+                    'data' => array(array('(no packages installed)')),
                 );
             }
         }
+
         $this->ui->outputData($data, $command);
         return true;
     }
