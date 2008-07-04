@@ -526,6 +526,11 @@ class PEAR_RunTest
                     $wanted_re = str_replace("%c", ".", $wanted_re);
                     // %f allows two points "-.0.0" but that is the best *simple* expression
                 }
+
+                if (isset($section_text['EXPECTREGEX'])) {
+                    $wanted_re = preg_quote($wanted_re, '/');
+                }
+
     /* DEBUG YOUR REGEX HERE
             var_dump($wanted_re);
             print(str_repeat('=', 80) . "\n");
