@@ -552,7 +552,7 @@ class PEAR_Installer extends PEAR_Downloader
                     $md5sum = md5($contents);
                 }
                 foreach ($atts as $tag => $raw) {
-                    $tag = str_replace(array($pkg->getTasksNs() . ':', '-'), 
+                    $tag = str_replace(array($pkg->getTasksNs() . ':', '-'),
                         array('', '_'), $tag);
                     $task = "PEAR_Task_$tag";
                     $task = &new $task($this->config, $this, PEAR_TASK_INSTALL);
@@ -1573,7 +1573,7 @@ class PEAR_Installer extends PEAR_Downloader
         if (!class_exists('PEAR_Dependency2')) {
             require_once 'PEAR/Dependency2.php';
         }
-        $depchecker = &new PEAR_Dependency2($this->config, $options, 
+        $depchecker = &new PEAR_Dependency2($this->config, $options,
             array('channel' => $channel, 'package' => $package),
             PEAR_VALIDATE_UNINSTALLING);
         $e = $depchecker->validatePackageUninstall($this);
@@ -1707,17 +1707,3 @@ class PEAR_Installer extends PEAR_Downloader
 
     // }}}
 }
-
-// {{{ md5_file() utility function
-if (!function_exists("md5_file")) {
-    function md5_file($filename) {
-        if (!$fd = @fopen($file, 'r')) {
-            return false;
-        }
-        fclose($fd);
-        return md5(file_get_contents($filename));
-    }
-}
-// }}}
-
-?>
