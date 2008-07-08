@@ -548,10 +548,10 @@ Run post-installation scripts in package <package>, if any exist.
         }
 
         $abstractpackages = array();
-        $otherpackages = array();
+        $otherpackages    = array();
         // parse params
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        foreach($params as $param) {
+        foreach ($params as $param) {
             if (strpos($param, 'http://') === 0) {
                 $otherpackages[] = $param;
                 continue;
@@ -570,11 +570,10 @@ Run post-installation scripts in package <package>, if any exist.
                     continue;
                 }
 
-                if ($reg->packageExists($pf->getPackage(), $pf->getChannel()) &&
-                      version_compare($pf->getVersion(),
-                      $reg->packageInfo($pf->getPackage(), 'version', $pf->getChannel()),
-                      '<=')) {
-
+                $exists   = $reg->packageExists($pf->getPackage(), $pf->getChannel());
+                $pversion = $reg->packageInfo($pf->getPackage(), 'version', $pf->getChannel());
+                $version_compare = version_compare($pf->getVersion(), $pversion, '<=');
+                if ($exists && $version_compare) {
                     if ($this->config->get('verbose')) {
                         $this->ui->outputData('Ignoring installed package ' .
                             $reg->parsedPackageNameToString(
@@ -601,14 +600,14 @@ Run post-installation scripts in package <package>, if any exist.
         if (count($abstractpackages) && !isset($options['force'])) {
             // when not being forced, only do necessary upgrades/installs
             if (isset($options['upgrade'])) {
-                $abstractpackages = $this->_filterUptodatePackages($abstractpackages,
-                    $command);
+                $abstractpackages = $this->_filterUptodatePackages($abstractpackages, $command);
             } else {
                 foreach ($abstractpackages as $i => $package) {
                     if (isset($package['group'])) {
                         // do not filter out install groups
                         continue;
                     }
+
                     if ($instreg->packageExists($package['package'], $package['channel'])) {
                         if ($this->config->get('verbose')) {
                             $this->ui->outputData('Ignoring installed package ' .
@@ -691,7 +690,7 @@ Run post-installation scripts in package <package>, if any exist.
                     // we just installed a different package than requested,
                     // let's change the param and info so that the rest of this works
                     $param = $info[0];
-                    $info = $info[1];
+                    $info  = $info[1];
                 }
             }
 
@@ -1138,24 +1137,26 @@ Run post-installation scripts in package <package>, if any exist.
         $latestReleases = array();
 
         $ret = array();
-        foreach($packages as $package) {
+        foreach ($packages as $package) {
             if (isset($package['group'])) {
                 $ret[] = $package;
                 continue;
             }
-            $channel = $package['channel'];
-            $name = $package['package'];
 
+            $channel = $package['channel'];
+            $name    = $package['package'];
             if (!$reg->packageExists($name, $channel)) {
                 $ret[] = $package;
                 continue;
             }
+
             if (!isset($latestReleases[$channel])) {
                 // fill in cache for this channel
                 $chan = &$reg->getChannel($channel);
                 if (PEAR::isError($chan)) {
                     return $this->raiseError($chan);
                 }
+
                 if ($chan->supportsREST($this->config->get('preferred_mirror',
                                                            null, $channel)) &&
                       $base = $chan->getBaseURL('REST1.0',
@@ -1167,6 +1168,7 @@ Run post-installation scripts in package <package>, if any exist.
                     $dorest = false;
                     $remote = &$this->config->getRemote($this->config);
                 }
+
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
                 if ($dorest) {
                     $rest = &$this->config->getREST('1.0', array());
@@ -1175,10 +1177,11 @@ Run post-installation scripts in package <package>, if any exist.
                         $this->config->get('preferred_state', null, $channel), $installed,
                         $channel, $reg);
                 } else {
-                    $latest = $remote->call("package.listLatestReleases",
+                    $latest = $remote->call('package.listLatestReleases',
                         $this->config->get('preferred_state', null, $channel));
                     unset($remote);
                 }
+
                 PEAR::staticPopErrorHandling();
                 if (PEAR::isError($latest)) {
                     $this->ui->outputData('Error getting channel info from ' . $channel .
@@ -1194,10 +1197,11 @@ Run post-installation scripts in package <package>, if any exist.
                 // if not set, up to date
                 $inst_version = $reg->packageInfo($name, 'version', $channel);
                 $channel_version = $latestReleases[$channel][strtolower($name)]['version'];
-                if (version_compare($channel_version, $inst_version, "le")) {
+                if (version_compare($channel_version, $inst_version, 'le')) {
                     // installed version is up-to-date
                     continue;
                 }
+
                 // maintain BC
                 if ($command == 'upgrade-all') {
                     $this->ui->outputData(array('data' => 'Will upgrade ' .
@@ -1211,4 +1215,3 @@ Run post-installation scripts in package <package>, if any exist.
     }
 
 }
-?>
