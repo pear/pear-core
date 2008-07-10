@@ -124,6 +124,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
         if (isset($options['phpunit']) && isset($options['tapoutput'])) {
             return $this->raiseError('ERROR: cannot use both --phpunit and --tapoutput at the same time');
         }
+
         require_once 'PEAR/Common.php';
         require_once 'System.php';
         $log = new PEAR_Common;
@@ -134,6 +135,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
         if (!count($params)) {
             $params[] = '.';
         }
+
         if (isset($options['package'])) {
             $oldparams = $params;
             $params = array();
@@ -185,6 +187,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                     }
                     continue;
                 }
+
                 $dir = System::find(array($p, '-type', 'f',
                                             '-maxdepth', $depth,
                                             '-name', '*.phpt'));
@@ -229,6 +232,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
         if ($ini_settings) {
             $this->ui->outputData('Using INI settings: "' . $ini_settings . '"');
         }
+
         $skipped = $passed = $failed = array();
         $tests_count = count($tests);
         $this->ui->outputData('Running ' . $tests_count . ' tests', $command);
@@ -284,17 +288,17 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                     fclose($fp);
                 }
             }
-            
+
             if ($result == 'FAILED') {
-            	$failed[] = $t;
+                $failed[] = $t;
             }
             if ($result == 'PASSED') {
-            	$passed[] = $t;
+                $passed[] = $t;
             }
             if ($result == 'SKIPPED') {
-            	$skipped[] = $t;
+                $skipped[] = $t;
             }
-            
+
             $j++;
         }
 
@@ -312,11 +316,11 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                 $output = "TOTAL TIME: $total\n";
                 $output .= count($passed) . " PASSED TESTS\n";
                 $output .= count($skipped) . " SKIPPED TESTS\n";
-        		$output .= count($failed) . " FAILED TESTS:\n";
-            	foreach ($failed as $failure) {
-            		$output .= $failure . "\n";
-            	}
-                
+                $output .= count($failed) . " FAILED TESTS:\n";
+                foreach ($failed as $failure) {
+                    $output .= $failure . "\n";
+                }
+
                 $mode = isset($options['realtimelog']) ? 'a' : 'w';
                 $fp   = @fopen('run-tests.log', $mode);
 
@@ -333,10 +337,10 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
         $this->ui->outputData(count($passed) . ' PASSED TESTS', $command);
         $this->ui->outputData(count($skipped) . ' SKIPPED TESTS', $command);
         if (count($failed)) {
-    		$this->ui->outputData(count($failed) . ' FAILED TESTS:', $command);
-        	foreach ($failed as $failure) {
-        		$this->ui->outputData($failure, $command);
-        	}
+            $this->ui->outputData(count($failed) . ' FAILED TESTS:', $command);
+            foreach ($failed as $failure) {
+                $this->ui->outputData($failure, $command);
+            }
         }
 
         return true;
