@@ -60,7 +60,7 @@ $GLOBALS['_System_temp_files'] = array();
 * @version    Release: @package_version@
 * @link       http://pear.php.net/package/PEAR
 * @since      Class available since Release 0.1
-* @static 
+* @static
 */
 class System
 {
@@ -71,7 +71,7 @@ class System
     * @param    string  $short_options  the allowed option short-tags
     * @param    string  $long_options   the allowed option long-tags
     * @return   array   the given options and there values
-    * @static 
+    * @static
     * @access private
     */
     function _parseArgs($argv, $short_options, $long_options = null)
@@ -88,7 +88,7 @@ class System
     *
     * @param mixed $error a PEAR error or a string with the error message
     * @return bool false
-    * @static 
+    * @static
     * @access private
     */
     function raiseError($error)
@@ -122,7 +122,7 @@ class System
     * @param    integer $aktinst    starting deep of the lookup
     * @param    bool    $silent     if true, do not emit errors.
     * @return   array   the structure of the dir
-    * @static 
+    * @static
     * @access   private
     */
 
@@ -135,6 +135,7 @@ class System
             }
             return $struct; // XXX could not open error
         }
+
         $struct['dirs'][] = $sPath = realpath($sPath); // XXX don't add if '.' or '..' ?
         $list = array();
         while (false !== ($file = readdir($dir))) {
@@ -142,19 +143,21 @@ class System
                 $list[] = $file;
             }
         }
+
         closedir($dir);
-        sort($list);
+        natsort($list);
         if ($aktinst < $maxinst || $maxinst == 0) {
             foreach ($list as $val) {
                 $path = $sPath . DIRECTORY_SEPARATOR . $val;
                 if (is_dir($path) && !is_link($path)) {
-                    $tmp = System::_dirToStruct($path, $maxinst, $aktinst+1, $silent);
-                    $struct = array_merge_recursive($tmp, $struct);
+                    $tmp    = System::_dirToStruct($path, $maxinst, $aktinst+1, $silent);
+                    $struct = array_merge_recursive($struct, $tmp);
                 } else {
                     $struct['files'][] = $path;
                 }
             }
         }
+
         return $struct;
     }
 
@@ -163,7 +166,7 @@ class System
     *
     * @param    array $files Array listing files and dirs
     * @return   array
-    * @static 
+    * @static
     * @see System::_dirToStruct()
     */
     function _multipleToStruct($files)
@@ -187,7 +190,7 @@ class System
     *
     * @param    string  $args   the arguments for rm
     * @return   mixed   PEAR_Error or true for success
-    * @static 
+    * @static
     * @access   public
     */
     function rm($args)
@@ -231,7 +234,7 @@ class System
     * The -p option will create parent directories
     * @param    string  $args    the name of the director(y|ies) to create
     * @return   bool    True for success
-    * @static 
+    * @static
     * @access   public
     */
     function mkDir($args)
@@ -297,7 +300,7 @@ class System
     *
     * @param    string  $args   the arguments
     * @return   boolean true on success
-    * @static 
+    * @static
     * @access   public
     */
     function &cat($args)
@@ -371,7 +374,7 @@ class System
     * @param   string  $args  The arguments
     * @return  mixed   the full path of the created (file|dir) or false
     * @see System::tmpdir()
-    * @static 
+    * @static
     * @access  public
     */
     function mktemp($args = null)
@@ -414,7 +417,7 @@ class System
     * Remove temporary files created my mkTemp. This function is executed
     * at script shutdown time
     *
-    * @static 
+    * @static
     * @access private
     */
     function _removeTmpFiles()
@@ -433,7 +436,7 @@ class System
     * Note: php.ini-recommended removes the "E" from the variables_order setting,
     * making unavaible the $_ENV array, that s why we do tests with _ENV
     *
-    * @static 
+    * @static
     * @return string The temporary directory on the system
     */
     function tmpdir()
@@ -466,7 +469,7 @@ class System
     * @param mixed  $fallback Value to return if $program is not found
     *
     * @return mixed A string with the full path or false if not found
-    * @static 
+    * @static
     * @author Stig Bakken <ssb@php.net>
     */
     function which($program, $fallback = false)
@@ -538,7 +541,7 @@ class System
     *
     * @param  mixed Either array or string with the command line
     * @return array Array of found files
-    * @static 
+    * @static
     *
     */
     function find($args)
