@@ -87,7 +87,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </helper>
  <date>2008-05-17</date>
  <version>
-  <release>1.7.3</release>
+  <release>1.8.0</release>
   <api>1.7.0</api>
  </version>
  <stability>
@@ -96,9 +96,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
+  * Implement Request #13927: install-pear.php should have option to set www_dir [timj]
+  * Implement Request #14324 Make the pear install command behave similar to apt-get [dufuz]
+  * Implement Request #14325 make pear upgrade with no params behave like pear upgrade-all [dufuz]
+
   * Fix Bug #13908: pear info command and maintainers inactive not mentioned [dufuz]
   * Fix Bug #13926: install-pear.php does not set cfg_dir if -d option set with no -c option [timj]
-  * Implement Request #13927: install-pear.php should have option to set www_dir [timj]
   * Fix Bug #13943: tests fail when php.exe path contains spaces [dufuz / jorrit]
   * Fix Bug #13953: config-set/config-show with channel alias fail [cellog]
   * Fix Bug #13958: When a phpt tests exit() or die() xdebug coverage is not generated, patch by izi (David Jean Louis) [izi, dufuz]
