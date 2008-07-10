@@ -1167,11 +1167,9 @@ Run post-installation scripts in package <package>, if any exist.
                     return $this->raiseError($chan);
                 }
 
-                if ($chan->supportsREST($this->config->get('preferred_mirror',
-                                                           null, $channel)) &&
-                      $base = $chan->getBaseURL('REST1.0',
-                                                $this->config->get('preferred_mirror',
-                                                                   null, $channel)))
+                $preferred_mirror = $this->config->get('preferred_mirror', null, $channel);
+                if ($chan->supportsREST($preferred_mirror) &&
+                      $base = $chan->getBaseURL('REST1.0', $preferred_mirror))
                 {
                     $dorest = true;
                 } else {
@@ -1180,15 +1178,19 @@ Run post-installation scripts in package <package>, if any exist.
                 }
 
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                if (!isset($package['state'])) {
+                    $state = $this->config->get('preferred_state', null, $channel);
+                } else {
+                    $state = $package['state'];
+                }
+
                 if ($dorest) {
                     $rest = &$this->config->getREST('1.0', array());
                     $installed = array_flip($reg->listPackages($channel));
-                    $latest = $rest->listLatestUpgrades($base,
-                        $this->config->get('preferred_state', null, $channel), $installed,
-                        $channel, $reg);
+
+                    $latest = $rest->listLatestUpgrades($base, $state, $installed, $channel, $reg);
                 } else {
-                    $latest = $remote->call('package.listLatestReleases',
-                        $this->config->get('preferred_state', null, $channel));
+                    $latest = $remote->call('package.listLatestReleases', $state);
                     unset($remote);
                 }
 
@@ -1203,10 +1205,11 @@ Run post-installation scripts in package <package>, if any exist.
             }
 
             // check package for latest release
-            if (isset($latestReleases[$channel][strtolower($name)])) {
+            $name_lower = strtolower($name);
+            if (isset($latestReleases[$channel][$name_lower])) {
                 // if not set, up to date
-                $inst_version = $reg->packageInfo($name, 'version', $channel);
-                $channel_version = $latestReleases[$channel][strtolower($name)]['version'];
+                $inst_version    = $reg->packageInfo($name, 'version', $channel);
+                $channel_version = $latestReleases[$channel][$name_lower]['version'];
                 if (version_compare($channel_version, $inst_version, 'le')) {
                     // installed version is up-to-date
                     continue;
