@@ -105,6 +105,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Fix Bug #13943: tests fail when php.exe path contains spaces [dufuz / jorrit]
   * Fix Bug #13953: config-set/config-show with channel alias fail [cellog]
   * Fix Bug #13958: When a phpt tests exit() or die() xdebug coverage is not generated, patch by izi (David Jean Louis) [izi, dufuz]
+  * Fix Bug #14041: Unpredictable unit test processing sequence [dufuz]
   * Fix Bug #14140: Strict warning not suppressed in the shutdown function [dufuz]
   * Fix Bug #14210: pear list -ia brings warnings [dufuz]
  </notes>
