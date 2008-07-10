@@ -525,6 +525,10 @@ Run post-installation scripts in package <package>, if any exist.
         }
 
         if ($command == 'upgrade' || $command == 'upgrade-all') {
+            // If people run the upgrade command but pass nothing, emulate a upgrade-all
+            if ($command == 'upgrade' && empty($params)) {
+                $this->doUpgradeAll($command, $options, $params);
+            }
             $options['upgrade'] = true;
         } else {
             $packages = $params;
@@ -602,6 +606,7 @@ Run post-installation scripts in package <package>, if any exist.
             if (isset($options['upgrade'])) {
                 $abstractpackages = $this->_filterUptodatePackages($abstractpackages, $command);
             } else {
+                $count = count($abstractpackages);
                 foreach ($abstractpackages as $i => $package) {
                     if (isset($package['group'])) {
                         // do not filter out install groups
@@ -609,11 +614,16 @@ Run post-installation scripts in package <package>, if any exist.
                     }
 
                     if ($instreg->packageExists($package['package'], $package['channel'])) {
-                        if ($this->config->get('verbose')) {
-                            $this->ui->outputData('Ignoring installed package ' .
-                                $reg->parsedPackageNameToString($package, true));
+                        if ($count > 1) {
+                            if ($this->config->get('verbose')) {
+                                $this->ui->outputData('Ignoring installed package ' .
+                                    $reg->parsedPackageNameToString($package, true));
+                            }
+                            unset($abstractpackages[$i]);
+                        } elseif ($count === 1) {
+                            // Lets try to upgrade it since it's already installed
+                            $options['upgrade'] = true;
                         }
-                        unset($abstractpackages[$i]);
                     }
                 }
             }
