@@ -93,7 +93,7 @@ class PEAR_XMLParser
             }
             $xp = xml_parser_create('ISO-8859-1');
         } else {
-            if (strpos($data, 'encoding="UTF-8"')) {
+            if (stripos($data, 'encoding="UTF-8"')) {
                 $xp = xml_parser_create('UTF-8');
             } else {
                 $xp = xml_parser_create('ISO-8859-1');
