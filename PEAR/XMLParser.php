@@ -88,12 +88,19 @@ class PEAR_XMLParser
         $this->_depth = 0;
 
         if (version_compare(phpversion(), '5.0.0', 'lt')) {
-            if (strpos($data, 'encoding="UTF-8"')) {
+            if (
+                strpos($data, 'encoding="UTF-8"')
+                || strpos($data, 'encoding="utf-8"')
+                || strpos($data, "encoding='UTF-8'")
+                || strpos($data, "encoding='utf-8'")
+            ) {
                 $data = utf8_decode($data);
             }
             $xp = xml_parser_create('ISO-8859-1');
         } else {
-            if (stripos($data, 'encoding="UTF-8"')) {
+            if (stripos($data, 'encoding="UTF-8"')
+                || stripos($data, "encoding='UTF-8'")
+            ) {
                 $xp = xml_parser_create('UTF-8');
             } else {
                 $xp = xml_parser_create('ISO-8859-1');
