@@ -400,11 +400,14 @@ used for automated conversion or learning the format.
             $help = $this->getHelp($command);
             return $this->raiseError("$command: missing parameter: $help[0]");
         }
-        $obj = &$this->getPackageFile($this->config, $this->_debug);
-        $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
+
+        $file = realpath($params[0]);
+        $obj  = &$this->getPackageFile($this->config, $this->_debug);
+        $info = $obj->fromAnyFile($file, PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
+
         $err = $warn = array();
         if (!$info->validate()) {
             foreach ($info->getValidationWarnings() as $error) {
@@ -415,40 +418,49 @@ used for automated conversion or learning the format.
                 }
             }
         }
+
         if (!$this->_displayValidationResults($err, $warn, true)) {
             $this->ui->outputData($this->output, $command);
             return $this->raiseError('CVS tag failed');
         }
-        $version = $info->getVersion();
+
+        $version    = $info->getVersion();
         $cvsversion = preg_replace('/[^a-z0-9]/i', '_', $version);
-        $cvstag = "RELEASE_$cvsversion";
-        $files = array_keys($info->getFilelist());
-        $command = "cvs";
+        $cvstag     = "RELEASE_$cvsversion";
+        $files      = array_keys($info->getFilelist());
+        $command = 'cvs';
         if (isset($options['quiet'])) {
             $command .= ' -q';
         }
+
         if (isset($options['reallyquiet'])) {
             $command .= ' -Q';
         }
+
         $command .= ' tag';
         if (isset($options['slide'])) {
             $command .= ' -F';
         }
+
         if (isset($options['delete'])) {
             $command .= ' -d';
         }
+
         $command .= ' ' . $cvstag . ' ' . escapeshellarg($params[0]);
         array_shift($params);
         if (count($params)) {
             // add in additional files to be tagged
             $files = array_merge($files, $params);
         }
+
         foreach ($files as $file) {
             $command .= ' ' . escapeshellarg($file);
         }
+
         if ($this->config->get('verbose') > 1) {
             $this->output .= "+ $command\n";
         }
+
         $this->output .= "+ $command\n";
         if (empty($options['dry-run'])) {
             $fp = popen($command, "r");
@@ -457,6 +469,7 @@ used for automated conversion or learning the format.
             }
             pclose($fp);
         }
+
         $this->ui->outputData($this->output, $_cmd);
         return true;
     }
@@ -471,11 +484,14 @@ used for automated conversion or learning the format.
             $help = $this->getHelp($command);
             return $this->raiseError("$command: missing parameter: $help[0]");
         }
-        $obj = &$this->getPackageFile($this->config, $this->_debug);
-        $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
+
+        $file = realpath($params[0]);
+        $obj  = &$this->getPackageFile($this->config, $this->_debug);
+        $info = $obj->fromAnyFile($file, PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
+
         $err = $warn = array();
         if (!$info->validate()) {
             foreach ($info->getValidationWarnings() as $error) {
@@ -486,10 +502,12 @@ used for automated conversion or learning the format.
                 }
             }
         }
+
         if (!$this->_displayValidationResults($err, $warn, true)) {
             $this->ui->outputData($this->output, $command);
             return $this->raiseError('CVS diff failed');
         }
+
         $info1 = $info->getFilelist();
         $files = $info1;
         $cmd = "cvs";
@@ -497,21 +515,25 @@ used for automated conversion or learning the format.
             $cmd .= ' -q';
             unset($options['quiet']);
         }
+
         if (isset($options['reallyquiet'])) {
             $cmd .= ' -Q';
             unset($options['reallyquiet']);
         }
+
         if (isset($options['release'])) {
             $cvsversion = preg_replace('/[^a-z0-9]/i', '_', $options['release']);
             $cvstag = "RELEASE_$cvsversion";
             $options['revision'] = $cvstag;
             unset($options['release']);
         }
+
         $execute = true;
         if (isset($options['dry-run'])) {
             $execute = false;
             unset($options['dry-run']);
         }
+
         $cmd .= ' diff';
         // the rest of the options are passed right on to "cvs diff"
         foreach ($options as $option => $optarg) {
@@ -525,12 +547,15 @@ used for automated conversion or learning the format.
                 $cmd .= ($short ? '' : '=') . escapeshellarg($optarg);
             }
         }
+
         foreach ($files as $file) {
             $cmd .= ' ' . escapeshellarg($file['name']);
         }
+
         if ($this->config->get('verbose') > 1) {
             $this->output .= "+ $cmd\n";
         }
+
         if ($execute) {
             $fp = popen($cmd, "r");
             while ($line = fgets($fp, 1024)) {
@@ -538,6 +563,7 @@ used for automated conversion or learning the format.
             }
             pclose($fp);
         }
+
         $this->ui->outputData($this->output, $command);
         return true;
     }
