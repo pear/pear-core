@@ -87,7 +87,7 @@ class PEAR_XMLParser
         $this->_dataStack = array();
         $this->_depth = 0;
 
-        if (version_compare(phpversion(), '5.0.2', 'lt')) {
+        if (version_compare(phpversion(), '5.0.0', 'lt')) {
             if (strpos($data, 'encoding="UTF-8"')) {
                 $data = utf8_decode($data);
             }
