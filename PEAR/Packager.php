@@ -148,7 +148,7 @@ class PEAR_Packager extends PEAR_Common
             }
             $dest_package = basename($tgzfile);
             $pkgdir = dirname($pkgfile);
-    
+
             // TAR the Package -------------------------------------------
             $this->log(1, "Package $dest_package done");
             if (file_exists("$pkgdir/CVS/Root")) {
@@ -167,7 +167,7 @@ class PEAR_Packager extends PEAR_Common
             }
             $dest_package = basename($tgzfile);
             $pkgdir = dirname($pkgfile);
-    
+
             // TAR the Package -------------------------------------------
             $this->log(1, "Package $dest_package done");
             if (file_exists("$pkgdir/CVS/Root")) {
@@ -182,18 +182,3 @@ class PEAR_Packager extends PEAR_Common
 
     // }}}
 }
-
-// {{{ md5_file() utility function
-if (!function_exists('md5_file')) {
-    function md5_file($file) {
-        if (!$fd = @fopen($file, 'r')) {
-            return false;
-        }
-        fclose($fd);
-        $md5 = md5(file_get_contents($file));
-        return $md5;
-    }
-}
-// }}}
-
-?>
