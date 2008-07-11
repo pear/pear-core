@@ -55,9 +55,10 @@ class PEAR_Packager extends PEAR_Common
         if (empty($pkgfile)) {
             $pkgfile = 'package.xml';
         }
+
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        $pkg = &new PEAR_PackageFile($this->config, $this->debug);
-        $pf = &$pkg->fromPackageFile($pkgfile, PEAR_VALIDATE_NORMAL);
+        $pkg  = &new PEAR_PackageFile($this->config, $this->debug);
+        $pf   = &$pkg->fromPackageFile($pkgfile, PEAR_VALIDATE_NORMAL);
         $main = &$pf;
         PEAR::staticPopErrorHandling();
         if (PEAR::isError($pf)) {
@@ -66,12 +67,13 @@ class PEAR_Packager extends PEAR_Common
                     $this->log(0, 'Error: ' . $error['message']);
                 }
             }
+
             $this->log(0, $pf->getMessage());
             return $this->raiseError("Cannot package, errors in package file");
-        } else {
-            foreach ($pf->getValidationWarnings() as $warning) {
-                $this->log(1, 'Warning: ' . $warning['message']);
-            }
+        }
+
+        foreach ($pf->getValidationWarnings() as $warning) {
+            $this->log(1, 'Warning: ' . $warning['message']);
         }
 
         // }}}
@@ -88,40 +90,46 @@ class PEAR_Packager extends PEAR_Common
                 }
                 $this->log(0, $pf2->getMessage());
                 return $this->raiseError("Cannot package, errors in second package file");
-            } else {
-                foreach ($pf2->getValidationWarnings() as $warning) {
-                    $this->log(1, 'Warning: ' . $warning['message']);
-                }
             }
+
+            foreach ($pf2->getValidationWarnings() as $warning) {
+                $this->log(1, 'Warning: ' . $warning['message']);
+            }
+
             if ($pf2->getPackagexmlVersion() == '2.0' ||
-                  $pf2->getPackagexmlVersion() == '2.1') {
-                $main = &$pf2;
+                  $pf2->getPackagexmlVersion() == '2.1'
+            ) {
+                $main  = &$pf2;
                 $other = &$pf;
             } else {
-                $main = &$pf;
+                $main  = &$pf;
                 $other = &$pf2;
             }
+
             if ($main->getPackagexmlVersion() != '2.0' &&
                   $main->getPackagexmlVersion() != '2.1') {
                 return PEAR::raiseError('Error: cannot package two package.xml version 1.0, can ' .
                     'only package together a package.xml 1.0 and package.xml 2.0');
             }
+
             if ($other->getPackagexmlVersion() != '1.0') {
                 return PEAR::raiseError('Error: cannot package two package.xml version 2.0, can ' .
                     'only package together a package.xml 1.0 and package.xml 2.0');
             }
         }
+
         $main->setLogger($this);
         if (!$main->validate(PEAR_VALIDATE_PACKAGING)) {
             foreach ($main->getValidationWarnings() as $warning) {
                 $this->log(0, 'Error: ' . $warning['message']);
             }
             return $this->raiseError("Cannot package, errors in package");
-        } else {
-            foreach ($main->getValidationWarnings() as $warning) {
-                $this->log(1, 'Warning: ' . $warning['message']);
-            }
         }
+
+        foreach ($main->getValidationWarnings() as $warning) {
+            $this->log(1, 'Warning: ' . $warning['message']);
+        }
+
         if ($pkg2) {
             $other->setLogger($this);
             $a = false;
@@ -129,25 +137,30 @@ class PEAR_Packager extends PEAR_Common
                 foreach ($other->getValidationWarnings() as $warning) {
                     $this->log(0, 'Error: ' . $warning['message']);
                 }
+
                 foreach ($main->getValidationWarnings() as $warning) {
                     $this->log(0, 'Error: ' . $warning['message']);
                 }
+
                 if ($a) {
                     return $this->raiseError('The two package.xml files are not equivalent!');
                 }
+
                 return $this->raiseError("Cannot package, errors in package");
-            } else {
-                foreach ($other->getValidationWarnings() as $warning) {
-                    $this->log(1, 'Warning: ' . $warning['message']);
-                }
             }
+
+            foreach ($other->getValidationWarnings() as $warning) {
+                $this->log(1, 'Warning: ' . $warning['message']);
+            }
+
             $gen = &$main->getDefaultGenerator();
             $tgzfile = $gen->toTgz2($this, $other, $compress);
             if (PEAR::isError($tgzfile)) {
                 return $tgzfile;
             }
+
             $dest_package = basename($tgzfile);
-            $pkgdir = dirname($pkgfile);
+            $pkgdir       = dirname($pkgfile);
 
             // TAR the Package -------------------------------------------
             $this->log(1, "Package $dest_package done");
@@ -165,8 +178,9 @@ class PEAR_Packager extends PEAR_Common
                 $this->log(0, $tgzfile->getMessage());
                 return $this->raiseError("Cannot package, errors in package");
             }
+
             $dest_package = basename($tgzfile);
-            $pkgdir = dirname($pkgfile);
+            $pkgdir       = dirname($pkgfile);
 
             // TAR the Package -------------------------------------------
             $this->log(1, "Package $dest_package done");
@@ -177,8 +191,8 @@ class PEAR_Packager extends PEAR_Common
                 $this->log(1, "(or set the CVS tag $cvstag by hand)");
             }
         }
+
         return $dest_package;
     }
-
     // }}}
 }
