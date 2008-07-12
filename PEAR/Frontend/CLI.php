@@ -39,8 +39,6 @@ require_once 'PEAR/Frontend.php';
  */
 class PEAR_Frontend_CLI extends PEAR_Frontend
 {
-    // {{{ properties
-
     /**
      * What type of user interface this frontend is for.
      * @var string
@@ -51,13 +49,9 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
 
     var $params = array();
     var $term = array(
-        'bold' => '',
+        'bold'   => '',
         'normal' => '',
-        );
-
-    // }}}
-
-    // {{{ constructor
+    );
 
     function PEAR_Frontend_CLI()
     {
@@ -79,35 +73,15 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         }
     }
 
-    // }}}
-
-    // {{{ displayLine(text)
-
-    function displayLine($text)
-    {
-        trigger_error("PEAR_Frontend_CLI::displayLine deprecated", E_USER_ERROR);
-    }
-
     function _displayLine($text)
     {
         print "$this->lp$text\n";
-    }
-
-    // }}}
-    // {{{ display(text)
-
-    function display($text)
-    {
-        trigger_error("PEAR_Frontend_CLI::display deprecated", E_USER_ERROR);
     }
 
     function _display($text)
     {
         print $text;
     }
-
-    // }}}
-    // {{{ displayError(eobj)
 
     /**
      * @param object PEAR_Error object
@@ -116,9 +90,6 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
     {
         return $this->_displayLine($eobj->getMessage());
     }
-
-    // }}}
-    // {{{ displayFatalError(eobj)
 
     /**
      * @param object PEAR_Error object
@@ -163,21 +134,11 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         exit(1);
     }
 
-    // }}}
-    // {{{ displayHeading(title)
-
-    function displayHeading($title)
-    {
-        trigger_error("PEAR_Frontend_CLI::displayHeading deprecated", E_USER_ERROR);
-    }
-
     function _displayHeading($title)
     {
         print $this->lp.$this->bold($title)."\n";
         print $this->lp.str_repeat("=", strlen($title))."\n";
     }
-
-    // }}}
 
     /**
      * Instruct the runInstallScript method to skip a paramgroup that matches the
@@ -337,7 +298,6 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         } while (is_array($answers) && count(array_filter($answers)) != count($prompts));
         return $answers;
     }
-    // {{{ userDialog(prompt, [type], [default])
 
     function userDialog($command, $prompts, $types = array(), $defaults = array(),
                         $screensize = 20)
@@ -422,9 +382,6 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         return $result;
     }
 
-    // }}}
-    // {{{ userConfirm(prompt, [default])
-
     function userConfirm($prompt, $default = 'yes')
     {
         trigger_error("PEAR_Frontend_CLI::userConfirm not yet converted", E_USER_ERROR);
@@ -450,14 +407,6 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         return false;
     }
 
-    // }}}
-    // {{{ startTable([params])
-
-    function startTable($params = array())
-    {
-        trigger_error("PEAR_Frontend_CLI::startTable deprecated", E_USER_ERROR);
-    }
-
     function _startTable($params = array())
     {
         $params['table_data'] = array();
@@ -465,14 +414,6 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         $params['highest'] = array(); // indexed by row
         $params['ncols'] = 0;
         $this->params = $params;
-    }
-
-    // }}}
-    // {{{ tableRow(columns, [rowparams], [colparams])
-
-    function tableRow($columns, $rowparams = array(), $colparams = array())
-    {
-        trigger_error("PEAR_Frontend_CLI::tableRow deprecated", E_USER_ERROR);
     }
 
     function _tableRow($columns, $rowparams = array(), $colparams = array())
@@ -525,14 +466,6 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             'colparams' => $colparams,
         );
         $this->params['table_data'][] = $new_row;
-    }
-
-    // }}}
-    // {{{ endTable()
-
-    function endTable()
-    {
-        trigger_error("PEAR_Frontend_CLI::endTable deprecated", E_USER_ERROR);
     }
 
     function _endTable()
@@ -646,9 +579,6 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             $this->_displayLine($borderline);
         }
     }
-
-    // }}}
-    // {{{ outputData()
 
     function outputData($data, $command = '_default')
     {
@@ -783,9 +713,6 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         }
     }
 
-    // }}}
-    // {{{ log(text)
-
     function log($text, $append_crlf = true)
     {
         if ($append_crlf) {
@@ -794,9 +721,6 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         return $this->_display($text);
     }
 
-    // }}}
-    // {{{ bold($text)
-
     function bold($text)
     {
         if (empty($this->term['bold'])) {
@@ -804,5 +728,4 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         }
         return $this->term['bold'] . $text . $this->term['normal'];
     }
-    // }}}
 }
