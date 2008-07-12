@@ -228,22 +228,27 @@ installed package.'
         foreach ($installed as $channel => $packages) {
             usort($packages, array($this, '_sortinfo'));
             $data = array(
-                'caption' => 'Installed packages, channel ' . $channel . ':',
-                'border' => true,
+                'caption'  => 'Installed packages, channel ' . $channel . ':',
+                'border'   => true,
                 'headline' => array('Package', 'Version', 'State'),
-                'channel' => $channel
-                );
+                'channel'  => $channel
+            );
+
             foreach ($packages as $package) {
-                $pobj = $reg->getPackage(isset($package['package']) ?
-                                            $package['package'] : $package['name'], $channel);
+                $p = isset($package['package']) ? $package['package'] : $package['name'];
+                $pobj = $reg->getPackage($p, $channel);
                 $data['data'][] = array($pobj->getPackage(), $pobj->getVersion(),
                                         $pobj->getState() ? $pobj->getState() : null);
             }
-            if (count($packages)==0) {
+
+            // Adds a blank line before each section
+            $data['data'][] = array();
+
+            if (count($packages) === 0) {
                 $data = array(
                     'caption' => 'Installed packages, channel ' . $channel . ':',
                     'border' => true,
-                    'data' => array(array('(no packages installed)')),
+                    'data' => array(array('(no packages installed)'), array()),
                     'channel' => $channel
                     );
             }
