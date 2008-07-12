@@ -107,6 +107,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
     function PEAR_PackageFile_Generator_v2(&$packagefile)
     {
         $this->_packagefile = &$packagefile;
+        $this->_defaultOptions['encoding'] = $this->_packagefile->encoding;
     }
 
     /**
