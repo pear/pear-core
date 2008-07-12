@@ -317,24 +317,26 @@ used for automated conversion or learning the format.
         $this->output = '';
         $pkginfofile = isset($params[0]) ? $params[0] : 'package.xml';
         $pkg2 = isset($params[1]) ? $params[1] : null;
-        if (!$pkg2 && !isset($params[0])) {
-            if (file_exists('package2.xml')) {
-                $pkg2 = 'package2.xml';
-            }
+        if (!$pkg2 && !isset($params[0]) && file_exists('package2.xml')) {
+            $pkg2 = 'package2.xml';
         }
+
         $packager = &$this->getPackager();
         $compress = empty($options['nocompress']) ? true : false;
-        $result = $packager->package($pkginfofile, $compress, $pkg2);
+        $result   = $packager->package($pkginfofile, $compress, $pkg2);
         if (PEAR::isError($result)) {
             return $this->raiseError($result);
         }
+
         // Don't want output, only the package file name just created
         if (isset($options['showname'])) {
             $this->output = $result;
         }
+
         if ($this->output) {
             $this->ui->outputData($this->output, $command);
         }
+
         return true;
     }
 
@@ -344,9 +346,10 @@ used for automated conversion or learning the format.
     function doPackageValidate($command, $options, $params)
     {
         $this->output = '';
-        if (sizeof($params) < 1) {
-            $params[0] = "package.xml";
+        if (count($params) < 1) {
+            $params[0] = 'package.xml';
         }
+
         $obj = &$this->getPackageFile($this->config, $this->_debug);
         $obj->rawReturn();
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
@@ -361,10 +364,12 @@ used for automated conversion or learning the format.
                 $info->getPackage() . '-' . $info->getVersion() . DIRECTORY_SEPARATOR .
                 basename($info->getPackageFile()));
         }
+
         PEAR::staticPopErrorHandling();
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
+
         $valid = false;
         if ($info->getPackagexmlVersion() == '2.0') {
             if ($valid = $info->validate(PEAR_VALIDATE_NORMAL)) {
@@ -374,6 +379,7 @@ used for automated conversion or learning the format.
         } else {
             $valid = $info->validate(PEAR_VALIDATE_PACKAGING);
         }
+
         $err = $warn = array();
         if ($errors = $info->getValidationWarnings()) {
             foreach ($errors as $error) {
@@ -384,6 +390,7 @@ used for automated conversion or learning the format.
                 }
             }
         }
+
         $this->_displayValidationResults($err, $warn);
         $this->ui->outputData($this->output, $command);
         return true;
@@ -396,7 +403,7 @@ used for automated conversion or learning the format.
     {
         $this->output = '';
         $_cmd = $command;
-        if (sizeof($params) < 1) {
+        if (count($params) < 1) {
             $help = $this->getHelp($command);
             return $this->raiseError("$command: missing parameter: $help[0]");
         }
