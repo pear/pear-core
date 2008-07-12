@@ -92,6 +92,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>PHP License</license>
   <state>stable</state>
  <notes>
+  * Implement Request #12706: pear list -a hard to read [dufuz]
   * Implement Request #13927: install-pear.php should have option to set www_dir [timj]
   * Implement Request #14324 Make the pear install command behave similar to apt-get [dufuz]
   * Implement Request #14325 make pear upgrade with no params behave like pear upgrade-all [dufuz]
