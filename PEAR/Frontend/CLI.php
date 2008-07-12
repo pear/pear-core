@@ -347,13 +347,13 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         }
         $testprompts = array_keys($prompts);
         $result = $defaults;
+
         if (!defined('STDIN')) {
-            $fp = fopen('php://stdin', 'r');
-        } else {
-            $fp = STDIN;
+            define('STDIN', fopen('php://stdin', 'r'));
         }
+
         reset($prompts);
-        if (count($prompts) == 1 && $types[key($prompts)] == 'yesno') {
+        if (count($prompts) === 1 && $types[key($prompts)] == 'yesno') {
             foreach ($prompts as $key => $prompt) {
                 $type = $types[$key];
                 $default = @$defaults[$key];
@@ -362,14 +362,8 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                     print "[$default] ";
                 }
                 print ": ";
-                if (version_compare(phpversion(), '5.0.0', '<')) {
-                    $line = fgets($fp, 2048);
-                } else {
-                    if (!defined('STDIN')) {
-                        define('STDIN', fopen('php://stdin', 'r'));
-                    }
-                    $line = fgets(STDIN, 2048);
-                }
+
+                $line = fgets(STDIN, 2048);
                 if ($default && trim($line) == "") {
                     $result[$key] = $default;
                 } else {
@@ -378,6 +372,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             }
             return $result;
         }
+
         while (true) {
             $descLength = max(array_map('strlen', $prompts));
             $descFormat = "%-{$descLength}s";
@@ -385,24 +380,26 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
 
             $i = 0;
             foreach ($prompts as $n => $var) {
-                printf("%2d. $descFormat : %s\n", ++$i, $prompts[$n], isset($result[$n]) ?
-                    $result[$n] : null);
+                $res = isset($result[$n]) ? $result[$n] : null;
+                printf("%2d. $descFormat : %s\n", ++$i, $prompts[$n], $res);
             }
 
             print "\n1-$last, 'all', 'abort', or Enter to continue: ";
-            $tmp = trim(fgets($fp, 1024));
+            $tmp = trim(fgets(STDIN, 1024));
             if (empty($tmp)) {
                 break;
             }
+
             if ($tmp == 'abort') {
                 return false;
             }
+
             if (isset($testprompts[(int)$tmp - 1])) {
                 $var = $testprompts[(int)$tmp - 1];
                 $desc = $prompts[$var];
                 $current = @$result[$var];
                 print "$desc [$current] : ";
-                $tmp = trim(fgets($fp, 1024));
+                $tmp = trim(fgets(STDIN, 1024));
                 if (trim($tmp) !== '') {
                     $result[$var] = trim($tmp);
                 }
@@ -410,16 +407,18 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 foreach ($prompts as $var => $desc) {
                     $current = $result[$var];
                     print "$desc [$current] : ";
-                    $tmp = trim(fgets($fp, 1024));
+                    $tmp = trim(fgets(STDIN, 1024));
                     if (trim($tmp) !== '') {
                         $result[$var] = trim($tmp);
                     }
                 }
             }
         }
-        if (!defined('STDIN')) {
-            fclose($fp);
+
+        if (!defined('STDOUT')) {
+            fclose(STDIN);
         }
+
         return $result;
     }
 
@@ -484,12 +483,14 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             if (isset($colparams[$i]) && !empty($colparams[$i]['wrap'])) {
                 $col = wordwrap($col, $colparams[$i]['wrap'], "\n", 0);
             }
+
             if (strpos($col, "\n") !== false) {
                 $multiline = explode("\n", $col);
                 $w = 0;
                 foreach ($multiline as $n => $line) {
-                    if (strlen($line) > $w) {
-                        $w = strlen($line);
+                    $len = strlen($line);
+                    if ($len > $w) {
+                        $w = $len;
                     }
                 }
                 $lines = sizeof($multiline);
@@ -504,6 +505,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             } else {
                 $this->params['widest'][$i] = $w;
             }
+
             $tmp = count_chars($columns[$i], 1);
             // handle unix, mac and windows formats
             $lines = (isset($tmp[10]) ? $tmp[10] : (isset($tmp[13]) ? $tmp[13] : 0)) + 1;
@@ -511,15 +513,17 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 $highest = $lines;
             }
         }
+
         if (sizeof($columns) > $this->params['ncols']) {
             $this->params['ncols'] = sizeof($columns);
         }
+
         $new_row = array(
-            'data' => $columns,
-            'height' => $highest,
+            'data'     => $columns,
+            'height'    => $highest,
             'rowparams' => $rowparams,
             'colparams' => $colparams,
-            );
+        );
         $this->params['table_data'][] = $new_row;
     }
 
@@ -537,9 +541,11 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         if (!empty($caption)) {
             $this->_displayHeading($caption);
         }
-        if (count($table_data) == 0) {
+
+        if (count($table_data) === 0) {
             return;
         }
+
         if (!isset($width)) {
             $width = $widest;
         } else {
@@ -549,56 +555,63 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 }
             }
         }
+
         $border = false;
         if (empty($border)) {
-            $cellstart = '';
-            $cellend = ' ';
-            $rowend = '';
-            $padrowend = false;
+            $cellstart  = '';
+            $cellend    = ' ';
+            $rowend     = '';
+            $padrowend  = false;
             $borderline = '';
         } else {
-            $cellstart = '| ';
-            $cellend = ' ';
-            $rowend = '|';
-            $padrowend = true;
+            $cellstart  = '| ';
+            $cellend    = ' ';
+            $rowend     = '|';
+            $padrowend  = true;
             $borderline = '+';
             foreach ($width as $w) {
                 $borderline .= str_repeat('-', $w + strlen($cellstart) + strlen($cellend) - 1);
                 $borderline .= '+';
             }
         }
+
         if ($borderline) {
             $this->_displayLine($borderline);
         }
-        for ($i = 0; $i < sizeof($table_data); $i++) {
+
+        for ($i = 0; $i < count($table_data); $i++) {
             extract($table_data[$i]);
             if (!is_array($rowparams)) {
                 $rowparams = array();
             }
+
             if (!is_array($colparams)) {
                 $colparams = array();
             }
+
             $rowlines = array();
             if ($height > 1) {
-                for ($c = 0; $c < sizeof($data); $c++) {
+                for ($c = 0; $c < count($data); $c++) {
                     $rowlines[$c] = preg_split('/(\r?\n|\r)/', $data[$c]);
-                    if (sizeof($rowlines[$c]) < $height) {
+                    if (count($rowlines[$c]) < $height) {
                         $rowlines[$c] = array_pad($rowlines[$c], $height, '');
                     }
                 }
             } else {
-                for ($c = 0; $c < sizeof($data); $c++) {
+                for ($c = 0; $c < count($data); $c++) {
                     $rowlines[$c] = array($data[$c]);
                 }
             }
+
             for ($r = 0; $r < $height; $r++) {
                 $rowtext = '';
-                for ($c = 0; $c < sizeof($data); $c++) {
+                for ($c = 0; $c < count($data); $c++) {
                     if (isset($colparams[$c])) {
                         $attribs = array_merge($rowparams, $colparams);
                     } else {
                         $attribs = $rowparams;
                     }
+
                     $w = isset($width[$c]) ? $width[$c] : 0;
                     //$cell = $data[$c];
                     $cell = $rowlines[$c][$r];
@@ -606,9 +619,11 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                     if ($l > $w) {
                         $cell = substr($cell, 0, $w);
                     }
+
                     if (isset($attribs['bold'])) {
                         $cell = $this->bold($cell);
                     }
+
                     if ($l < $w) {
                         // not using str_pad here because we may
                         // add bold escape characters to $cell
@@ -617,13 +632,16 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
 
                     $rowtext .= $cellstart . $cell . $cellend;
                 }
+
                 if (!$border) {
                     $rowtext = rtrim($rowtext);
                 }
+
                 $rowtext .= $rowend;
                 $this->_displayLine($rowtext);
             }
         }
+
         if ($borderline) {
             $this->_displayLine($borderline);
         }
@@ -753,6 +771,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                                          array('bold' => true),
                                          $opts);
                     }
+
                     foreach($data['data'] as $row) {
                         $this->_tableRow($row, null, $opts);
                     }
@@ -767,7 +786,6 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
     // }}}
     // {{{ log(text)
 
-
     function log($text, $append_crlf = true)
     {
         if ($append_crlf) {
@@ -775,7 +793,6 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         }
         return $this->_display($text);
     }
-
 
     // }}}
     // {{{ bold($text)
@@ -787,8 +804,5 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         }
         return $this->term['bold'] . $text . $this->term['normal'];
     }
-
     // }}}
 }
-
-?>
