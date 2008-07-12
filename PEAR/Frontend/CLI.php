@@ -60,13 +60,12 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         if (function_exists('posix_isatty') && !posix_isatty(1)) {
             // output is being redirected to a file or through a pipe
         } elseif ($term) {
-            // XXX can use ncurses extension here, if available
             if (preg_match('/^(xterm|vt220|linux)/', $term)) {
-                $this->term['bold'] = sprintf("%c%c%c%c", 27, 91, 49, 109);
-                $this->term['normal']=sprintf("%c%c%c", 27, 91, 109);
+                $this->term['bold']   = sprintf("%c%c%c%c", 27, 91, 49, 109);
+                $this->term['normal'] = sprintf("%c%c%c", 27, 91, 109);
             } elseif (preg_match('/^vt100/', $term)) {
-                $this->term['bold'] = sprintf("%c%c%c%c%c%c", 27, 91, 49, 109, 0, 0);
-                $this->term['normal']=sprintf("%c%c%c%c%c", 27, 91, 109, 0, 0);
+                $this->term['bold']   = sprintf("%c%c%c%c%c%c", 27, 91, 49, 109, 0, 0);
+                $this->term['normal'] = sprintf("%c%c%c%c%c", 27, 91, 109, 0, 0);
             }
         } elseif (OS_WINDOWS) {
             // XXX add ANSI codes here
@@ -102,32 +101,33 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             if ($config->get('verbose') > 5) {
                 if (function_exists('debug_print_backtrace')) {
                     debug_print_backtrace();
-                } elseif (function_exists('debug_backtrace')) {
-                    $trace = debug_backtrace();
-                    $raised = false;
-                    foreach ($trace as $i => $frame) {
-                        if (!$raised) {
-                            if (isset($frame['class']) && strtolower($frame['class']) ==
-                                  'pear' && strtolower($frame['function']) == 'raiseerror') {
-                                $raised = true;
-                            } else {
-                                continue;
-                            }
+                    exit(1);
+                }
+
+                $trace = debug_backtrace();
+                $raised = false;
+                foreach ($trace as $i => $frame) {
+                    if (!$raised) {
+                        if (isset($frame['class']) && strtolower($frame['class']) ==
+                              'pear' && strtolower($frame['function']) == 'raiseerror') {
+                            $raised = true;
+                        } else {
+                            continue;
                         }
-                        if (!isset($frame['class'])) {
-                            $frame['class'] = '';
-                        }
-                        if (!isset($frame['type'])) {
-                            $frame['type'] = '';
-                        }
-                        if (!isset($frame['function'])) {
-                            $frame['function'] = '';
-                        }
-                        if (!isset($frame['line'])) {
-                            $frame['line'] = '';
-                        }
-                        $this->_displayLine("#$i: $frame[class]$frame[type]$frame[function] $frame[line]");
                     }
+                    if (!isset($frame['class'])) {
+                        $frame['class'] = '';
+                    }
+                    if (!isset($frame['type'])) {
+                        $frame['type'] = '';
+                    }
+                    if (!isset($frame['function'])) {
+                        $frame['function'] = '';
+                    }
+                    if (!isset($frame['line'])) {
+                        $frame['line'] = '';
+                    }
+                    $this->_displayLine("#$i: $frame[class]$frame[type]$frame[function] $frame[line]");
                 }
             }
         }
@@ -171,95 +171,104 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         $this->_skipSections = array();
         if (!is_array($xml) || !isset($xml['paramgroup'])) {
             $script->run(array(), '_default');
-        } else {
-            $completedPhases = array();
-            if (!isset($xml['paramgroup'][0])) {
-                $xml['paramgroup'] = array($xml['paramgroup']);
+            return;
+        }
+
+        $completedPhases = array();
+        if (!isset($xml['paramgroup'][0])) {
+            $xml['paramgroup'] = array($xml['paramgroup']);
+        }
+
+        foreach ($xml['paramgroup'] as $group) {
+            if (isset($this->_skipSections[$group['id']])) {
+                // the post-install script chose to skip this section dynamically
+                continue;
             }
-            foreach ($xml['paramgroup'] as $group) {
-                if (isset($this->_skipSections[$group['id']])) {
-                    // the post-install script chose to skip this section dynamically
+
+            if (isset($group['name'])) {
+                $paramname = explode('::', $group['name']);
+                if ($lastgroup['id'] != $paramname[0]) {
                     continue;
                 }
-                if (isset($group['name'])) {
-                    $paramname = explode('::', $group['name']);
-                    if ($lastgroup['id'] != $paramname[0]) {
-                        continue;
-                    }
-                    $group['name'] = $paramname[1];
-                    if (isset($answers)) {
-                        if (isset($answers[$group['name']])) {
-                            switch ($group['conditiontype']) {
-                                case '=' :
-                                    if ($answers[$group['name']] != $group['value']) {
-                                        continue 2;
-                                    }
-                                break;
-                                case '!=' :
-                                    if ($answers[$group['name']] == $group['value']) {
-                                        continue 2;
-                                    }
-                                break;
-                                case 'preg_match' :
-                                    if (!@preg_match('/' . $group['value'] . '/',
-                                          $answers[$group['name']])) {
-                                        continue 2;
-                                    }
-                                break;
-                                default :
-                                return;
+
+                $group['name'] = $paramname[1];
+                if (!isset($answers)) {
+                    return;
+                }
+
+                if (isset($answers[$group['name']])) {
+                    switch ($group['conditiontype']) {
+                        case '=' :
+                            if ($answers[$group['name']] != $group['value']) {
+                                continue 2;
                             }
-                        }
-                    } else {
+                        break;
+                        case '!=' :
+                            if ($answers[$group['name']] == $group['value']) {
+                                continue 2;
+                            }
+                        break;
+                        case 'preg_match' :
+                            if (!@preg_match('/' . $group['value'] . '/',
+                                  $answers[$group['name']])) {
+                                continue 2;
+                            }
+                        break;
+                        default :
                         return;
                     }
                 }
-                $lastgroup = $group;
-                if (isset($group['instructions'])) {
-                    $this->_display($group['instructions']);
-                }
-                if (!isset($group['param'][0])) {
-                    $group['param'] = array($group['param']);
-                }
-                if (isset($group['param'])) {
-                    if (method_exists($script, 'postProcessPrompts')) {
-                        $prompts = $script->postProcessPrompts($group['param'], $group['id']);
-                        if (!is_array($prompts) || count($prompts) != count($group['param'])) {
-                            $this->outputData('postinstall', 'Error: post-install script did not ' .
-                                'return proper post-processed prompts');
-                            $prompts = $group['param'];
-                        } else {
-                            foreach ($prompts as $i => $var) {
-                                if (!is_array($var) || !isset($var['prompt']) ||
-                                      !isset($var['name']) ||
-                                      ($var['name'] != $group['param'][$i]['name']) ||
-                                      ($var['type'] != $group['param'][$i]['type'])) {
-                                    $this->outputData('postinstall', 'Error: post-install script ' .
-                                        'modified the variables or prompts, severe security risk. ' .
-                                        'Will instead use the defaults from the package.xml');
-                                    $prompts = $group['param'];
-                                }
+            }
+
+            $lastgroup = $group;
+            if (isset($group['instructions'])) {
+                $this->_display($group['instructions']);
+            }
+
+            if (!isset($group['param'][0])) {
+                $group['param'] = array($group['param']);
+            }
+
+            if (isset($group['param'])) {
+                if (method_exists($script, 'postProcessPrompts')) {
+                    $prompts = $script->postProcessPrompts($group['param'], $group['id']);
+                    if (!is_array($prompts) || count($prompts) != count($group['param'])) {
+                        $this->outputData('postinstall', 'Error: post-install script did not ' .
+                            'return proper post-processed prompts');
+                        $prompts = $group['param'];
+                    } else {
+                        foreach ($prompts as $i => $var) {
+                            if (!is_array($var) || !isset($var['prompt']) ||
+                                  !isset($var['name']) ||
+                                  ($var['name'] != $group['param'][$i]['name']) ||
+                                  ($var['type'] != $group['param'][$i]['type'])) {
+                                $this->outputData('postinstall', 'Error: post-install script ' .
+                                    'modified the variables or prompts, severe security risk. ' .
+                                    'Will instead use the defaults from the package.xml');
+                                $prompts = $group['param'];
                             }
                         }
-                        $answers = $this->confirmDialog($prompts);
-                    } else {
-                        $answers = $this->confirmDialog($group['param']);
                     }
-                }
-                if ((isset($answers) && $answers) || !isset($group['param'])) {
-                    if (!isset($answers)) {
-                        $answers = array();
-                    }
-                    array_unshift($completedPhases, $group['id']);
-                    if (!$script->run($answers, $group['id'])) {
-                        $script->run($completedPhases, '_undoOnError');
-                        return;
-                    }
+                    $answers = $this->confirmDialog($prompts);
                 } else {
+                    $answers = $this->confirmDialog($group['param']);
+                }
+            }
+
+            if ((isset($answers) && $answers) || !isset($group['param'])) {
+                if (!isset($answers)) {
+                    $answers = array();
+                }
+
+                array_unshift($completedPhases, $group['id']);
+                if (!$script->run($answers, $group['id'])) {
                     $script->run($completedPhases, '_undoOnError');
                     return;
                 }
             }
+
+            $script->run($completedPhases, '_undoOnError');
+            return;
         }
     }
 
@@ -410,16 +419,16 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
     function _startTable($params = array())
     {
         $params['table_data'] = array();
-        $params['widest'] = array();  // indexed by column
-        $params['highest'] = array(); // indexed by row
-        $params['ncols'] = 0;
-        $this->params = $params;
+        $params['widest']     = array();  // indexed by column
+        $params['highest']    = array(); // indexed by row
+        $params['ncols']      = 0;
+        $this->params         = $params;
     }
 
     function _tableRow($columns, $rowparams = array(), $colparams = array())
     {
         $highest = 1;
-        for ($i = 0; $i < sizeof($columns); $i++) {
+        for ($i = 0; $i < count($columns); $i++) {
             $col = &$columns[$i];
             if (isset($colparams[$i]) && !empty($colparams[$i]['wrap'])) {
                 $col = wordwrap($col, $colparams[$i]['wrap'], "\n", 0);
@@ -434,7 +443,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                         $w = $len;
                     }
                 }
-                $lines = sizeof($multiline);
+                $lines = count($multiline);
             } else {
                 $w = strlen($col);
             }
@@ -459,13 +468,12 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             $this->params['ncols'] = sizeof($columns);
         }
 
-        $new_row = array(
-            'data'     => $columns,
+        $this->params['table_data'][] = array(
+            'data'      => $columns,
             'height'    => $highest,
             'rowparams' => $rowparams,
             'colparams' => $colparams,
         );
-        $this->params['table_data'][] = $new_row;
     }
 
     function _endTable()
