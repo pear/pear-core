@@ -108,6 +108,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Fix Bug #14041: Unpredictable unit test processing sequence [dufuz]
   * Fix Bug #14140: Strict warning not suppressed in the shutdown function [dufuz]
   * Fix Bug #14210: pear list -ia brings warnings [dufuz]
+  * Fix Bug #14274: PEAR packager mangles package.xml encoding, then complains about it [dufuz]
   * Fix Bug #14287: cannot upgrade from stable to beta via -beta when config is set to stable [dufuz]
  </notes>
  <contents>
