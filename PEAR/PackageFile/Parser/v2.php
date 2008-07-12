@@ -104,7 +104,9 @@ class PEAR_PackageFile_Parser_v2 extends PEAR_XMLParser
         if (PEAR::isError($err = parent::parse($data, $file))) {
             return $err;
         }
+
         $ret = new $class;
+        $ret->encoding = $this->encoding;
         $ret->setConfig($this->_config);
         if (isset($this->_logger)) {
             $ret->setLogger($this->_logger);
@@ -114,4 +116,3 @@ class PEAR_PackageFile_Parser_v2 extends PEAR_XMLParser
         return $ret;
     }
 }
-?>
