@@ -1588,22 +1588,26 @@ class PEAR_Downloader extends PEAR_Common
         if ($callback) {
             call_user_func($callback, 'setup', array(&$ui));
         }
+
         $info = parse_url($url);
         if (!isset($info['scheme']) || !in_array($info['scheme'], array('http', 'https'))) {
             return PEAR::raiseError('Cannot download non-http URL "' . $url . '"');
         }
+
         if (!isset($info['host'])) {
             return PEAR::raiseError('Cannot download from non-URL "' . $url . '"');
-        } else {
-            $host = isset($info['host']) ? $info['host'] : null;
-            $port = isset($info['port']) ? $info['port'] : null;
-            $path = isset($info['path']) ? $info['path'] : null;
         }
+
+        $host = isset($info['host']) ? $info['host'] : null;
+        $port = isset($info['port']) ? $info['port'] : null;
+        $path = isset($info['path']) ? $info['path'] : null;
+
         if (isset($this)) {
             $config = &$this->config;
         } else {
             $config = &PEAR_Config::singleton();
         }
+
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
         if ($config->get('http_proxy') &&
               $proxy = parse_url($config->get('http_proxy'))) {
@@ -1619,13 +1623,11 @@ class PEAR_Downloader extends PEAR_Common
                 call_user_func($callback, 'message', "Using HTTP proxy $host:$port");
             }
         }
+
         if (empty($port)) {
-            if (isset($info['scheme']) && $info['scheme'] == 'https') {
-                $port = 443;
-            } else {
-                $port = 80;
-            }
+            $port = (isset($info['scheme']) && $info['scheme'] == 'https') ? 443 : 80;
         }
+
         if ($proxy_host != '') {
             $fp = @fsockopen($proxy_host, $proxy_port, $errno, $errstr);
             if (!$fp) {
@@ -1635,6 +1637,7 @@ class PEAR_Downloader extends PEAR_Common
                 }
                 return PEAR::raiseError("Connection to `$proxy_host:$proxy_port' failed: $errstr", $errno);
             }
+
             if ($lastmodified === false || $lastmodified) {
                 $request = "GET $url HTTP/1.1\r\n";
             } else {
@@ -1644,6 +1647,7 @@ class PEAR_Downloader extends PEAR_Common
             if (isset($info['scheme']) && $info['scheme'] == 'https') {
                 $host = 'ssl://' . $host;
             }
+
             $fp = @fsockopen($host, $port, $errno, $errstr);
             if (!$fp) {
                 if ($callback) {
@@ -1652,6 +1656,7 @@ class PEAR_Downloader extends PEAR_Common
                 }
                 return PEAR::raiseError("Connection to `$host:$port' failed: $errstr", $errno);
             }
+
             if ($lastmodified === false || $lastmodified) {
                 $request = "GET $path HTTP/1.1\r\n";
                 $request .= "Host: $host:$port\r\n";
@@ -1660,17 +1665,20 @@ class PEAR_Downloader extends PEAR_Common
                 $request .= "Host: $host\r\n";
             }
         }
+
         $ifmodifiedsince = '';
         if (is_array($lastmodified)) {
             if (isset($lastmodified['Last-Modified'])) {
                 $ifmodifiedsince = 'If-Modified-Since: ' . $lastmodified['Last-Modified'] . "\r\n";
             }
+
             if (isset($lastmodified['ETag'])) {
                 $ifmodifiedsince .= "If-None-Match: $lastmodified[ETag]\r\n";
             }
         } else {
             $ifmodifiedsince = ($lastmodified ? "If-Modified-Since: $lastmodified\r\n" : '');
         }
+
         $request .= $ifmodifiedsince . "User-Agent: PEAR/@package_version@/PHP/" .
             PHP_VERSION . "\r\n";
         if (isset($this)) { // only pass in authentication for non-static calls
@@ -1681,13 +1689,16 @@ class PEAR_Downloader extends PEAR_Common
                 $request .= "Authorization: Basic $tmp\r\n";
             }
         }
+
         if ($proxy_host != '' && $proxy_user != '') {
             $request .= 'Proxy-Authorization: Basic ' .
                 base64_encode($proxy_user . ':' . $proxy_pass) . "\r\n";
         }
+
         if ($accept) {
             $request .= 'Accept: ' . implode(', ', $accept) . "\r\n";
         }
+
         $request .= "Connection: close\r\n";
         $request .= "\r\n";
         fwrite($fp, $request);
@@ -1701,36 +1712,41 @@ class PEAR_Downloader extends PEAR_Common
                 if ($reply == 304 && ($lastmodified || ($lastmodified === false))) {
                     return false;
                 }
-                if (! in_array($reply, array(200, 301, 302, 303, 305, 307))) {
+
+                if (!in_array($reply, array(200, 301, 302, 303, 305, 307))) {
                     return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)");
                 }
             }
         }
+
         if ($reply != 200) {
             if (isset($headers['location'])) {
-                if ($wasredirect < 5) {
-                    $redirect = $wasredirect + 1;
-                    return $this->downloadHttp($headers['location'],
-                            $ui, $save_dir, $callback, $lastmodified, $accept);
-                } else {
-                    return PEAR::raiseError("File http://$host:$port$path not valid (redirection looped more than 5 times)");
-                }
-            } else {
                 return PEAR::raiseError("File http://$host:$port$path not valid (redirected but no location)");
             }
+
+            if ($wasredirect > 4) {
+                return PEAR::raiseError("File http://$host:$port$path not valid (redirection looped more than 5 times)");
+            }
+
+            $redirect = $wasredirect + 1;
+            return $this->downloadHttp($headers['location'],
+                    $ui, $save_dir, $callback, $lastmodified, $accept);
         }
+
         if (isset($headers['content-disposition']) &&
             preg_match('/\sfilename=\"([^;]*\S)\"\s*(;|\\z)/', $headers['content-disposition'], $matches)) {
             $save_as = basename($matches[1]);
         } else {
             $save_as = basename($url);
         }
+
         if ($callback) {
             $tmp = call_user_func($callback, 'saveas', $save_as);
             if ($tmp) {
                 $save_as = $tmp;
             }
         }
+
         $dest_file = $save_dir . DIRECTORY_SEPARATOR . $save_as;
         if (!$wp = @fopen($dest_file, 'wb')) {
             fclose($fp);
@@ -1739,15 +1755,14 @@ class PEAR_Downloader extends PEAR_Common
             }
             return PEAR::raiseError("could not open $dest_file for writing");
         }
-        if (isset($headers['content-length'])) {
-            $length = $headers['content-length'];
-        } else {
-            $length = -1;
-        }
+
+        $length = isset($headers['content-length']) ? $headers['content-length'] : -1;
+
         $bytes = 0;
         if ($callback) {
             call_user_func($callback, 'start', array(basename($dest_file), $length));
         }
+
         while ($data = fread($fp, 1024)) {
             $bytes += strlen($data);
             if ($callback) {
@@ -1766,6 +1781,7 @@ class PEAR_Downloader extends PEAR_Common
         if ($callback) {
             call_user_func($callback, 'done', $bytes);
         }
+
         if ($lastmodified === false || $lastmodified) {
             if (isset($headers['etag'])) {
                 $lastmodified = array('ETag' => $headers['etag']);
@@ -1783,5 +1799,3 @@ class PEAR_Downloader extends PEAR_Common
     }
 }
 // }}}
-
-?>
