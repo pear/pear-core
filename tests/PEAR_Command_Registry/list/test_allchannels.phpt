@@ -191,6 +191,9 @@ $workingcopy = array (
         array (
           0 => '(no packages installed)',
         ),
+        1 =>
+        array (
+        ),
       ),
       'channel' => 'pecl.php.net',
     ),
