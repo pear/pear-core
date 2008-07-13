@@ -12,51 +12,57 @@ error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $reg = &$config->getRegistry();
 $workingcopy = array (
-  'pear.php.net' => 
+  'pear.php.net' =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'Installed packages, channel pear.php.net:',
       'border' => true,
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 =>
         array (
           0 => '(no packages installed)',
+        ),
+        array (
         ),
       ),
       'channel' => 'pear.php.net',
     ),
     'cmd' => 'list',
   ),
-  '__uri' => 
+  '__uri' =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'Installed packages, channel __uri:',
       'border' => true,
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 =>
         array (
           0 => '(no packages installed)',
+        ),
+        array (
         ),
       ),
       'channel' => '__uri',
     ),
     'cmd' => 'list',
   ),
-  'pecl.php.net' => 
+  'pecl.php.net' =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'Installed packages, channel pecl.php.net:',
       'border' => true,
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 =>
         array (
           0 => '(no packages installed)',
+        ),
+        array (
         ),
       ),
       'channel' => 'pecl.php.net',
@@ -91,88 +97,97 @@ $info = $pkg->fromPackageFile(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     PEAR_VALIDATE_NORMAL);
 $reg->addPackage2($info);
 $workingcopy = array (
-  'gronk' => 
+  'gronk' =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'Installed packages, channel gronk:',
       'border' => true,
-      'headline' => 
+      'headline' =>
       array (
         0 => 'Package',
         1 => 'Version',
         2 => 'State',
       ),
       'channel' => 'gronk',
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 =>
         array (
           0 => 'PEAR',
           1 => '1.4.0a1',
           2 => 'alpha',
         ),
+        1 =>
+        array (
+        ),
       ),
     ),
     'cmd' => 'list',
   ),
-  'pear.php.net' => 
+  'pear.php.net' =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'Installed packages, channel pear.php.net:',
       'border' => true,
-      'headline' => 
+      'headline' =>
       array (
         0 => 'Package',
         1 => 'Version',
         2 => 'State',
       ),
       'channel' => 'pear.php.net',
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 =>
         array (
           0 => 'Console_Getopt',
           1 => '1.2',
           2 => 'stable',
         ),
-        1 => 
+        1 =>
         array (
           0 => 'PEAR',
           1 => '1.4.0a1',
           2 => 'alpha',
         ),
+        2 =>
+        array (
+        ),
       ),
     ),
     'cmd' => 'list',
   ),
-  '__uri' => 
+  '__uri' =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'Installed packages, channel __uri:',
       'border' => true,
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 =>
         array (
           0 => '(no packages installed)',
+        ),
+        1 =>
+        array (
         ),
       ),
       'channel' => '__uri',
     ),
     'cmd' => 'list',
   ),
-  'pecl.php.net' => 
+  'pecl.php.net' =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'Installed packages, channel pecl.php.net:',
       'border' => true,
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 =>
         array (
           0 => '(no packages installed)',
         ),
