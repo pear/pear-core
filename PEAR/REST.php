@@ -231,9 +231,7 @@ class PEAR_REST
             }
 
             System::mkdir(array('-p', $cache_dir));
-
             $fp = @fopen($cacheidfile, 'wb');
-
             if (!$fp) {
                 return false;
             }
