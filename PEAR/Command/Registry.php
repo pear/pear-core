@@ -241,7 +241,7 @@ installed package.'
                                         $pobj->getState() ? $pobj->getState() : null);
             }
 
-            // Adds a blank line before each section
+            // Adds a blank line after each section
             $data['data'][] = array();
 
             if (count($packages) === 0) {
