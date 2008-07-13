@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <package packagerversion="1.4.0a1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
 http://pear.php.net/dtd/tasks-1.0.xsd
 http://pear.php.net/dtd/package-2.0
@@ -8,7 +8,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <summary>foo</summary>
  <description>foo
 hi there
- 
+
  </description>
  <lead>
   <name>personally</name>
@@ -42,7 +42,7 @@ hi there
  <notes>here are the
 multi-line
 release notes
-  
+
  </notes>
  <contents>
   <dir name="/">
@@ -116,7 +116,7 @@ Other:
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
-   
+
    </notes>
   </release>
   <release>
@@ -144,7 +144,7 @@ Other:
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
-   
+
    </notes>
   </release>
  </changelog>

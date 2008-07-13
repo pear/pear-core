@@ -25,12 +25,12 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-10" is not today'),
 ), 'errors');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 1,
     1 => 'Analyzing bundled package fakefoo-1.9.0.tgz',
   ),
-  1 => 
+  1 =>
   array (
     0 => 1,
     1 => 'Analyzing bundled package fakebar-1.9.0.tgz',
@@ -41,7 +41,7 @@ $newpf = &$pkg->fromTgzFile($e, PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('errors');
 $xml = $newpf->getFileContents('package.xml');
 $phpunit->showall();
-$phpunit->assertEquals('<?xml version="1.0" encoding="UTF-8"?>
+$phpunit->assertEquals('<?xml version="1.0" encoding="ISO-8859-1"?>
 <package packagerversion="' . $generator->getPackagerVersion() . '" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>foobundle</name>
  <channel>pear.php.net</channel>

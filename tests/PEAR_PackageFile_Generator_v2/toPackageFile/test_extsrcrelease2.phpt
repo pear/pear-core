@@ -19,7 +19,7 @@ $phpunit->assertNoErrors('errors');
 $phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'tub.xml', $e, 'filename');
 $e = implode('', file($e));
 $phpunit->showall();
-$phpunit->assertEquals('<?xml version="1.0" encoding="UTF-8"?>
+$phpunit->assertEquals('<?xml version="1.0" encoding="ISO-8859-1"?>
 <package packagerversion="' . $generator->getPackagerVersion() . '" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>foo</name>
  <uri>http://www.example.com/foo.tgz</uri>
