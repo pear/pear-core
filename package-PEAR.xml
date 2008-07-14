@@ -90,13 +90,12 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <version>1.8.0alpha1</version>
   <date>2008-07-14</date>
   <license>PHP License</license>
-  <state>stable</state>
+  <state>alpha</state>
  <notes>
   * Implement Request #12706: pear list -a hard to read [dufuz]
   * Implement Request #13927: install-pear.php should have option to set www_dir [timj]
   * Implement Request #14324 Make the pear install command behave similar to apt-get [dufuz]
   * Implement Request #14325 make pear upgrade with no params behave like pear upgrade-all [dufuz]
-
 
   * Fix Bug #13908: pear info command and maintainers inactive not mentioned [dufuz]
   * Fix Bug #13926: install-pear.php does not set cfg_dir if -d option set with no -c option [timj]
