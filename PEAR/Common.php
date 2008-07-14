@@ -340,99 +340,6 @@ class PEAR_Common extends PEAR
 
     // }}}
 
-    // {{{ infoFromTgzFile()
-
-    /**
-     * Returns information about a package file.  Expects the name of
-     * a gzipped tar file as input.
-     *
-     * @param string  $file  name of .tgz file
-     *
-     * @return array  array with package information
-     *
-     * @access public
-     * @deprecated use PEAR_PackageFile->fromTgzFile() instead
-     *
-     */
-    function infoFromTgzFile($file)
-    {
-        $packagefile = &new PEAR_PackageFile($this->config);
-        $pf = &$packagefile->fromTgzFile($file, PEAR_VALIDATE_NORMAL);
-        if (PEAR::isError($pf)) {
-            $errs = $pf->getUserinfo();
-            if (is_array($errs)) {
-                foreach ($errs as $error) {
-                    $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
-                }
-            }
-            return $pf;
-        }
-        return $this->_postProcessValidPackagexml($pf);
-    }
-
-    // }}}
-    // {{{ infoFromDescriptionFile()
-
-    /**
-     * Returns information about a package file.  Expects the name of
-     * a package xml file as input.
-     *
-     * @param string  $descfile  name of package xml file
-     *
-     * @return array  array with package information
-     *
-     * @access public
-     * @deprecated use PEAR_PackageFile->fromPackageFile() instead
-     *
-     */
-    function infoFromDescriptionFile($descfile)
-    {
-        $packagefile = &new PEAR_PackageFile($this->config);
-        $pf = &$packagefile->fromPackageFile($descfile, PEAR_VALIDATE_NORMAL);
-        if (PEAR::isError($pf)) {
-            $errs = $pf->getUserinfo();
-            if (is_array($errs)) {
-                foreach ($errs as $error) {
-                    $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
-                }
-            }
-            return $pf;
-        }
-        return $this->_postProcessValidPackagexml($pf);
-    }
-
-    // }}}
-    // {{{ infoFromString()
-
-    /**
-     * Returns information about a package file.  Expects the contents
-     * of a package xml file as input.
-     *
-     * @param string  $data  contents of package.xml file
-     *
-     * @return array   array with package information
-     *
-     * @access public
-     * @deprecated use PEAR_PackageFile->fromXmlstring() instead
-     *
-     */
-    function infoFromString($data)
-    {
-        $packagefile = &new PEAR_PackageFile($this->config);
-        $pf = &$packagefile->fromXmlString($data, PEAR_VALIDATE_NORMAL, false);
-        if (PEAR::isError($pf)) {
-            $errs = $pf->getUserinfo();
-            if (is_array($errs)) {
-                foreach ($errs as $error) {
-                    $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
-                }
-            }
-            return $pf;
-        }
-        return $this->_postProcessValidPackagexml($pf);
-    }
-    // }}}
-
     /**
      * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
      * @return array
@@ -469,105 +376,7 @@ class PEAR_Common extends PEAR
             return $this->pkginfo;
         }
     }
-    // {{{ infoFromAny()
 
-    /**
-     * Returns package information from different sources
-     *
-     * This method is able to extract information about a package
-     * from a .tgz archive or from a XML package definition file.
-     *
-     * @access public
-     * @param  string Filename of the source ('package.xml', '<package>.tgz')
-     * @return string
-     * @deprecated use PEAR_PackageFile->fromAnyFile() instead
-     */
-    function infoFromAny($info)
-    {
-        if (is_string($info) && file_exists($info)) {
-            $packagefile = &new PEAR_PackageFile($this->config);
-            $pf = &$packagefile->fromAnyFile($info, PEAR_VALIDATE_NORMAL);
-            if (PEAR::isError($pf)) {
-                $errs = $pf->getUserinfo();
-                if (is_array($errs)) {
-                    foreach ($errs as $error) {
-                        $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
-                    }
-                }
-                return $pf;
-            }
-            return $this->_postProcessValidPackagexml($pf);
-        }
-        return $info;
-    }
-
-    // }}}
-    // {{{ xmlFromInfo()
-
-    /**
-     * Return an XML document based on the package info (as returned
-     * by the PEAR_Common::infoFrom* methods).
-     *
-     * @param array  $pkginfo  package info
-     *
-     * @return string XML data
-     *
-     * @access public
-     * @deprecated use a PEAR_PackageFile_v* object's generator instead
-     */
-    function xmlFromInfo($pkginfo)
-    {
-        $config = &PEAR_Config::singleton();
-        $packagefile = &new PEAR_PackageFile($config);
-        $pf = &$packagefile->fromArray($pkginfo);
-        $gen = &$pf->getDefaultGenerator();
-        return $gen->toXml(PEAR_VALIDATE_PACKAGING);
-    }
-
-    // }}}
-    // {{{ validatePackageInfo()
-
-    /**
-     * Validate XML package definition file.
-     *
-     * @param  string $info Filename of the package archive or of the
-     *                package definition file
-     * @param  array $errors Array that will contain the errors
-     * @param  array $warnings Array that will contain the warnings
-     * @param  string $dir_prefix (optional) directory where source files
-     *                may be found, or empty if they are not available
-     * @access public
-     * @return boolean
-     * @deprecated use the validation of PEAR_PackageFile objects
-     */
-    function validatePackageInfo($info, &$errors, &$warnings, $dir_prefix = '')
-    {
-        $config = &PEAR_Config::singleton();
-        $packagefile = &new PEAR_PackageFile($config);
-        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        if (strpos($info, '<?xml') !== false) {
-            $pf = &$packagefile->fromXmlString($info, PEAR_VALIDATE_NORMAL, '');
-        } else {
-            $pf = &$packagefile->fromAnyFile($info, PEAR_VALIDATE_NORMAL);
-        }
-        PEAR::staticPopErrorHandling();
-        if (PEAR::isError($pf)) {
-            $errs = $pf->getUserinfo();
-            if (is_array($errs)) {
-                foreach ($errs as $error) {
-                    if ($error['level'] == 'error') {
-                        $errors[] = $error['message'];
-                    } else {
-                        $warnings[] = $error['message'];
-                    }
-                }
-            }
-            return false;
-        }
-        return true;
-    }
-
-    // }}}
     // {{{ buildProvidesArray()
 
     /**
@@ -760,9 +569,9 @@ class PEAR_Common extends PEAR
                     if (version_compare(zend_version(), '2.0', '<')) {
                         if (in_array(strtolower($data),
                             array('public', 'private', 'protected', 'abstract',
-                                  'interface', 'implements', 'throw') 
+                                  'interface', 'implements', 'throw')
                                  )) {
-                            PEAR::raiseError('Error: PHP5 token encountered in ' . $file . 
+                            PEAR::raiseError('Error: PHP5 token encountered in ' . $file .
                             'packaging should be done in PHP 5');
                             return false;
                         }
@@ -1044,63 +853,6 @@ class PEAR_Common extends PEAR
 
     // }}}
 
-    // {{{ downloadHttp()
-
-    /**
-     * Download a file through HTTP.  Considers suggested file name in
-     * Content-disposition: header and can run a callback function for
-     * different events.  The callback will be called with two
-     * parameters: the callback type, and parameters.  The implemented
-     * callback types are:
-     *
-     *  'setup'       called at the very beginning, parameter is a UI object
-     *                that should be used for all output
-     *  'message'     the parameter is a string with an informational message
-     *  'saveas'      may be used to save with a different file name, the
-     *                parameter is the filename that is about to be used.
-     *                If a 'saveas' callback returns a non-empty string,
-     *                that file name will be used as the filename instead.
-     *                Note that $save_dir will not be affected by this, only
-     *                the basename of the file.
-     *  'start'       download is starting, parameter is number of bytes
-     *                that are expected, or -1 if unknown
-     *  'bytesread'   parameter is the number of bytes read so far
-     *  'done'        download is complete, parameter is the total number
-     *                of bytes read
-     *  'connfailed'  if the TCP connection fails, this callback is called
-     *                with array(host,port,errno,errmsg)
-     *  'writefailed' if writing to disk fails, this callback is called
-     *                with array(destfile,errmsg)
-     *
-     * If an HTTP proxy has been configured (http_proxy PEAR_Config
-     * setting), the proxy will be used.
-     *
-     * @param string  $url       the URL to download
-     * @param object  $ui        PEAR_Frontend_* instance
-     * @param object  $config    PEAR_Config instance
-     * @param string  $save_dir  (optional) directory to save file in
-     * @param mixed   $callback  (optional) function/method to call for status
-     *                           updates
-     *
-     * @return string  Returns the full path of the downloaded file or a PEAR
-     *                 error on failure.  If the error is caused by
-     *                 socket-related errors, the error object will
-     *                 have the fsockopen error code available through
-     *                 getCode().
-     *
-     * @access public
-     * @deprecated in favor of PEAR_Downloader::downloadHttp()
-     */
-    function downloadHttp($url, &$ui, $save_dir = '.', $callback = null)
-    {
-        if (!class_exists('PEAR_Downloader')) {
-            require_once 'PEAR/Downloader.php';
-        }
-        return PEAR_Downloader::downloadHttp($url, $ui, $save_dir, $callback);
-    }
-
-    // }}}
-
     /**
      * @param string $path relative or absolute include path
      * @return boolean
@@ -1121,6 +873,6 @@ class PEAR_Common extends PEAR
         return false;
     }
 }
+
 require_once 'PEAR/Config.php';
 require_once 'PEAR/PackageFile.php';
-?>

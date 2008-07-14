@@ -111,6 +111,16 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Fix Bug #14210: pear list -ia brings warnings [dufuz]
   * Fix Bug #14274: PEAR packager mangles package.xml encoding, then complains about it [dufuz]
   * Fix Bug #14287: cannot upgrade from stable to beta via -beta when config is set to stable [dufuz]
+
+  NOTE!
+  Functions that have been deprecated for 3 years in PEAR_Common have been removed:
+  * PEAR_Common->downloadHttp (use PEAR_Downloader->downloadHttp instead)
+  * PEAR_Common->infoFromTgzFile (use PEAR_PackageFile->fromTgzFile instead)
+  * PEAR_Common->infoFromDescriptionFile (use PEAR_PackageFile->fromPackageFile instead)
+  * PEAR_Common->infoFromString (use PEAR_PackageFile->fromXmlstring instead)
+  * PEAR_Common->infoFromArray (use PEAR_PackageFile->fromAnyFile instead)
+  * PEAR_Common->xmlFromInfo (use a PEAR_PackageFile_v* object's generator instead)
+  * PEAR_Common->validatePackageInfo (use the validation of PEAR_PackageFile objects)
  </notes>
  <contents>
   <dir name="/">
