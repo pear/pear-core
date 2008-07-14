@@ -159,7 +159,7 @@ password via the system\'s process list.
     // }}}
 
     // {{{ doList()
-    
+
     function _sortChannels($a, $b)
     {
         return strnatcasecmp($a->getName(), $b->getName());
@@ -186,7 +186,7 @@ password via the system\'s process list.
         $this->ui->outputData($data, $command);
         return true;
     }
-    
+
     function doUpdateAll($command, $options, $params)
     {
         $reg = &$this->config->getRegistry();
@@ -209,7 +209,7 @@ password via the system\'s process list.
         }
         return $success;
     }
-    
+
     function doInfo($command, $options, $params)
     {
         if (sizeof($params) != 1) {
@@ -312,7 +312,7 @@ password via the system\'s process list.
                     }
                     foreach ($funcs as $protocol) {
                         $data['data'][] = array('rest', $protocol['attribs']['type'],
-                            $protocol['_content']); 
+                            $protocol['_content']);
                     }
                 }
             } else {
@@ -360,7 +360,7 @@ password via the system\'s process list.
                             }
                             foreach ($funcs as $protocol) {
                                 $data['data'][] = array('rest', $protocol['attribs']['type'],
-                                    $protocol['_content']); 
+                                    $protocol['_content']);
                             }
                         }
                     } else {
@@ -377,7 +377,7 @@ password via the system\'s process list.
     }
 
     // }}}
-    
+
     function doDelete($command, $options, $params)
     {
         if (sizeof($params) != 1) {
@@ -417,6 +417,7 @@ password via the system\'s process list.
         if (sizeof($params) != 1) {
             return $this->raiseError('channel-add: no channel file specified');
         }
+
         if (strpos($params[0], '://')) {
             $downloader = &$this->getDownloader();
             $tmpdir = $this->config->get('temp_dir');
@@ -427,42 +428,48 @@ password via the system\'s process list.
                 PEAR::staticPopErrorHandling();
                 if (PEAR::isError($err)) {
                     return $this->raiseError('channel-add: temp_dir does not exist: "' .
-                        $tmpdir . 
+                        $tmpdir .
                         '" - You can change this location with "pear config-set temp_dir"');
                 }
             }
+
             if (!is_writable($tmpdir)) {
                 return $this->raiseError('channel-add: temp_dir is not writable: "' .
-                    $tmpdir . 
+                    $tmpdir .
                     '" - You can change this location with "pear config-set temp_dir"');
             }
+
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $loc = $downloader->downloadHttp($params[0], $this->ui, $tmpdir, null, false);
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($loc)) {
                 return $this->raiseError('channel-add: Cannot open "' . $params[0] .
                     '" (' . $loc->getMessage() . ')');
-            } else {
-                list($loc, $lastmodified) = $loc;
-                $contents = implode('', file($loc));
             }
+
+            list($loc, $lastmodified) = $loc;
+            $contents = implode('', file($loc));
         } else {
             $lastmodified = $fp = false;
             if (file_exists($params[0])) {
                 $fp = fopen($params[0], 'r');
             }
+
             if (!$fp) {
                 return $this->raiseError('channel-add: cannot open "' . $params[0] . '"');
             }
+
             $contents = '';
             while (!feof($fp)) {
                 $contents .= fread($fp, 1024);
             }
             fclose($fp);
         }
+
         if (!class_exists('PEAR_ChannelFile')) {
             require_once 'PEAR/ChannelFile.php';
         }
+
         $channel = new PEAR_ChannelFile;
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         $result = $channel->fromXmlString($contents);
@@ -481,19 +488,23 @@ password via the system\'s process list.
                 }
             }
         }
+
         $reg = &$this->config->getRegistry();
         if ($reg->channelExists($channel->getName())) {
             return $this->raiseError('channel-add: Channel "' . $channel->getName() .
                 '" exists, use channel-update to update entry');
         }
+
         $ret = $reg->addChannel($channel, $lastmodified);
         if (PEAR::isError($ret)) {
             return $ret;
         }
+
         if (!$ret) {
             return $this->raiseError('channel-add: adding Channel "' . $channel->getName() .
                 '" to registry failed');
         }
+
         $this->config->setChannels($reg->listChannels());
         $this->config->writeConfigFile();
         $this->ui->outputData('Adding Channel "' . $channel->getName() . '" succeeded', $command);
@@ -509,13 +520,13 @@ password via the system\'s process list.
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($err)) {
                 return $this->raiseError('channel-add: temp_dir does not exist: "' .
-                    $tmpdir . 
+                    $tmpdir .
                     '" - You can change this location with "pear config-set temp_dir"');
             }
         }
         if (!is_writable($tmpdir)) {
             return $this->raiseError('channel-add: temp_dir is not writable: "' .
-                $tmpdir . 
+                $tmpdir .
                 '" - You can change this location with "pear config-set temp_dir"');
         }
         $reg = &$this->config->getRegistry();
@@ -693,7 +704,7 @@ password via the system\'s process list.
         if (sizeof($params) != 1) {
             return $this->raiseError("No channel server specified");
         }
-        
+
         // Look for the possible input format "<username>:<password>@<channel>"
         if (preg_match('/^(.+):(.+)@(.+)\\z/', $params[0], $matches)) {
             $username = $matches[1];
@@ -702,16 +713,17 @@ password via the system\'s process list.
         } else {
             $channel = $params[0];
         }
-        
+
         if ($reg->channelExists($channel)) {
-            if ($reg->isAlias($channel)) {
-                return $this->raiseError("A channel alias named \"$channel\" " .
-                    'already exists, aliasing channel "' . $reg->channelName($channel)
-                    . '"');
-            } else {
+            if (!$reg->isAlias($channel)) {
                 return $this->raiseError("Channel \"$channel\" is already initialized");
             }
+
+            return $this->raiseError("A channel alias named \"$channel\" " .
+                'already exists, aliasing channel "' . $reg->channelName($channel)
+                . '"');
         }
+
         $this->pushErrorHandling(PEAR_ERROR_RETURN);
         $err = $this->doAdd($command, $options, array('http://' . $channel . '/channel.xml'));
         $this->popErrorHandling();
@@ -719,7 +731,7 @@ password via the system\'s process list.
             return $this->raiseError("Discovery of channel \"$channel\" failed (" .
                 $err->getMessage() . ')');
         }
-        
+
         // Store username/password if they were given
         // Arguably we should do a logintest on the channel here, but since
         // that's awkward on a REST-based channel (even "pear login" doesn't
@@ -730,7 +742,7 @@ password via the system\'s process list.
             $this->config->store();
             $this->ui->outputData("Stored login for channel \"$channel\" using username \"$username\"", $command);
         }
-        
+
         $this->ui->outputData("Discovery of channel \"$channel\" succeeded", $command);
     }
 }
