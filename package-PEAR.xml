@@ -109,7 +109,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * Fix Bug #14287: cannot upgrade from stable to beta via -beta when config is set to stable [dufuz]
 
   NOTE!
-  Functions that have been deprecated for 3 years in PEAR_Common have been removed:
+  Functions that have been deprecated for 3+ years in PEAR_Common have been removed:
   * PEAR_Common->downloadHttp (use PEAR_Downloader->downloadHttp instead)
   * PEAR_Common->infoFromTgzFile (use PEAR_PackageFile->fromTgzFile instead)
   * PEAR_Common->infoFromDescriptionFile (use PEAR_PackageFile->fromPackageFile instead)
@@ -117,6 +117,9 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * PEAR_Common->infoFromArray (use PEAR_PackageFile->fromAnyFile instead)
   * PEAR_Common->xmlFromInfo (use a PEAR_PackageFile_v* object's generator instead)
   * PEAR_Common->validatePackageInfo (use the validation of PEAR_PackageFile objects)
+  * PEAR_Common->analyzeSourceCode (use a PEAR_PackageFile_v* object instead)
+  * PEAR_Common->detectDependencies (use PEAR_Downloader_Package->detectDependencies instead)
+  * PEAR_Common->buildProvidesArray (use PEAR_PackageFile_v1->_buildProvidesArray or PEAR_PackageFile_v2_Validator->_buildProvidesArray)
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
