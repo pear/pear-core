@@ -202,16 +202,19 @@ class PEAR_Downloader extends PEAR_Common
         if (!class_exists('System')) {
             require_once 'System.php';
         }
+
         $a = $this->downloadHttp('http://' . $channel . '/channel.xml', $this->ui,
             System::mktemp(array('-d')), $callback, false);
         PEAR::popErrorHandling();
         if (PEAR::isError($a)) {
             return false;
         }
+
         list($a, $lastmodified) = $a;
         if (!class_exists('PEAR_ChannelFile')) {
             require_once 'PEAR/ChannelFile.php';
         }
+
         $b = new PEAR_ChannelFile;
         if ($b->fromXmlFile($a)) {
             unlink($a);
@@ -221,11 +224,14 @@ class PEAR_Downloader extends PEAR_Common
                 if ($b->getName() == $this->_registry->channelName($b->getAlias())) {
                     $alias = $b->getAlias();
                 }
+
                 $this->log(1, 'Auto-discovered channel "' . $channel .
                     '", alias "' . $alias . '", adding to registry');
             }
+
             return true;
         }
+
         unlink($a);
         return false;
     }
@@ -1582,7 +1588,7 @@ class PEAR_Downloader extends PEAR_Common
                           $accept = false, $channel = false)
     {
         static $redirect = 0;
-        // allways reset , so we are clean case of error
+        // always reset , so we are clean case of error
         $wasredirect = $redirect;
         $redirect = 0;
         if ($callback) {
@@ -1679,8 +1685,9 @@ class PEAR_Downloader extends PEAR_Common
             $ifmodifiedsince = ($lastmodified ? "If-Modified-Since: $lastmodified\r\n" : '');
         }
 
-        $request .= $ifmodifiedsince . "User-Agent: PEAR/@package_version@/PHP/" .
-            PHP_VERSION . "\r\n";
+        $request .= $ifmodifiedsince .
+            "User-Agent: PEAR/@package_version@/PHP/" . PHP_VERSION . "\r\n";
+
         if (isset($this)) { // only pass in authentication for non-static calls
             $username = $config->get('username', null, $channel);
             $password = $config->get('password', null, $channel);
@@ -1708,7 +1715,7 @@ class PEAR_Downloader extends PEAR_Common
             if (preg_match('/^([^:]+):\s+(.*)\s*\\z/', $line, $matches)) {
                 $headers[strtolower($matches[1])] = trim($matches[2]);
             } elseif (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
-                $reply = (int) $matches[1];
+                $reply = (int)$matches[1];
                 if ($reply == 304 && ($lastmodified || ($lastmodified === false))) {
                     return false;
                 }
@@ -1720,7 +1727,7 @@ class PEAR_Downloader extends PEAR_Common
         }
 
         if ($reply != 200) {
-            if (isset($headers['location'])) {
+            if (!isset($headers['location'])) {
                 return PEAR::raiseError("File http://$host:$port$path not valid (redirected but no location)");
             }
 
