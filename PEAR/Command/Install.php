@@ -882,18 +882,21 @@ Run post-installation scripts in package <package>, if any exist.
 
     function doUninstall($command, $options, $params)
     {
+        if (count($params) < 1) {
+            return $this->raiseError("Please supply the package(s) you want to uninstall");
+        }
+
         if (empty($this->installer)) {
             $this->installer = &$this->getInstaller($this->ui);
         }
+
         if (isset($options['remoteconfig'])) {
             $e = $this->config->readFTPConfigFile($options['remoteconfig']);
             if (!PEAR::isError($e)) {
                 $this->installer->setConfig($this->config);
             }
         }
-        if (sizeof($params) < 1) {
-            return $this->raiseError("Please supply the package(s) you want to uninstall");
-        }
+
         $reg = &$this->config->getRegistry();
         $newparams = array();
         $binaries = array();
@@ -1039,12 +1042,13 @@ Run post-installation scripts in package <package>, if any exist.
                 }
             } else {
                 $this->installer->popErrorHandling();
-                if (is_object($pkg)) {
-                    $pkg = $reg->parsedPackageNameToString($pkg);
+                if (!is_object($pkg)) {
+                    return $this->raiseError("uninstall failed: $pkg");
                 }
-                return $this->raiseError("uninstall failed: $pkg");
+                $pkg = $reg->parsedPackageNameToString($pkg);
             }
         }
+
         return true;
     }
 
@@ -1060,10 +1064,15 @@ Run post-installation scripts in package <package>, if any exist.
 
     function doBundle($command, $options, $params)
     {
-        $downloader = &$this->getDownloader($this->ui, array('force' => true, 'nodeps' => true,
-            'soft' => true, 'downloadonly' => true), $this->config);
+        $opts = array(
+            'force'        => true,
+            'nodeps'       => true,
+            'soft'         => true,
+            'downloadonly' => true
+        );
+        $downloader = &$this->getDownloader($this->ui, $opts, $this->config);
         $reg = &$this->config->getRegistry();
-        if (sizeof($params) < 1) {
+        if (count($params) < 1) {
             return $this->raiseError("Please supply the package you want to bundle");
         }
 
@@ -1073,12 +1082,9 @@ Run post-installation scripts in package <package>, if any exist.
             }
             $dest = realpath($options['destination']);
         } else {
-            $pwd = getcwd();
-            if (is_dir($pwd . DIRECTORY_SEPARATOR . 'ext')) {
-                $dest = $pwd . DIRECTORY_SEPARATOR . 'ext';
-            } else {
-                $dest = $pwd;
-            }
+            $pwd  = getcwd();
+            $dir  = $pwd . DIRECTORY_SEPARATOR . 'ext';
+            $dest = is_dir($dir) ? $dir : $pwd;
         }
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         $err = $downloader->setDownloadDir($dest);
@@ -1117,6 +1123,7 @@ Run post-installation scripts in package <package>, if any exist.
         if (!isset($params[0])) {
             return $this->raiseError('run-scripts expects 1 parameter: a package name');
         }
+
         $reg = &$this->config->getRegistry();
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         $parsed = $reg->parsePackageName($params[0], $this->config->get('default_channel'));
@@ -1124,13 +1131,14 @@ Run post-installation scripts in package <package>, if any exist.
         if (PEAR::isError($parsed)) {
             return $this->raiseError($parsed);
         }
+
         $package = &$reg->getPackage($parsed['package'], $parsed['channel']);
-        if (is_object($package)) {
-            $package->setConfig($this->config);
-            $package->runPostinstallScripts();
-        } else {
+        if (!is_object($package)) {
             return $this->raiseError('Could not retrieve package "' . $params[0] . '" from registry');
         }
+
+        $package->setConfig($this->config);
+        $package->runPostinstallScripts();
         $this->ui->outputData('Install scripts complete', $command);
         return true;
     }
