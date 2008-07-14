@@ -329,23 +329,27 @@ class PEAR_Downloader_Package
         if (isset($options['downloadonly'])) {
             return;
         }
+
         if (isset($options['offline'])) {
             $this->_downloader->log(3, 'Skipping dependency download check, --offline specified');
             return;
         }
+
         $pname = $this->getParsedPackage();
         if (!$pname) {
             return;
         }
+
         $deps = $this->getDeps();
         if (!$deps) {
             return;
         }
+
         if (isset($deps['required'])) { // package.xml 2.0
             return $this->_detect2($deps, $pname, $options, $params);
-        } else {
-            return $this->_detect1($deps, $pname, $options, $params);
         }
+
+        return $this->_detect1($deps, $pname, $options, $params);
     }
 
     function setValidated()
@@ -552,10 +556,12 @@ class PEAR_Downloader_Package
         if (isset($dep['conflicts'])) {
             return true;
         }
+
         $options = $this->_downloader->getOptions();
         if (isset($dep['uri'])) {
             return array('uri' => $dep['uri'], 'dep' => $dep);;
         }
+
         $testdep = $dep;
         $testdep['package'] = $dep['name'];
         if (PEAR_Downloader_Package::willDownload($testdep, $params)) {
@@ -568,17 +574,19 @@ class PEAR_Downloader_Package
             }
             return false;
         }
+
         $options = $this->_downloader->getOptions();
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         if ($this->_explicitState) {
             $pname['state'] = $this->_explicitState;
         }
-        $url =
-            $this->_downloader->_getDepPackageDownloadUrl($dep, $pname);
+
+        $url = $this->_downloader->_getDepPackageDownloadUrl($dep, $pname);
         if (PEAR::isError($url)) {
             PEAR::popErrorHandling();
             return $url;
         }
+
         $dep['package'] = $dep['name'];
         $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params, $group == 'optional' &&
             !isset($options['alldeps']), true);
@@ -587,34 +595,39 @@ class PEAR_Downloader_Package
             if (!isset($options['soft'])) {
                 $this->_downloader->log(0, $ret->getMessage());
             }
+
             return false;
-        } else {
-            // check to see if a dep is already installed and is the same or newer
-            if (!isset($dep['min']) && !isset($dep['max']) && !isset($dep['recommended'])) {
-                $oper = 'has';
-            } else {
-                $oper = 'gt';
-            }
-            // do not try to move this before getDepPackageDownloadURL
-            // we can't determine whether upgrade is necessary until we know what
-            // version would be downloaded
-            if (!isset($options['force']) && $this->isInstalled($ret, $oper)) {
-                $version = $this->_installRegistry->packageInfo($dep['name'], 'version',
-                    $dep['channel']);
-                $dep['package'] = $dep['name'];
-                if (!isset($options['soft'])) {
-                    $this->_downloader->log(3, $this->getShortName() . ': Skipping ' . $group .
-                        ' dependency "' .
-                    $this->_registry->parsedPackageNameToString($dep, true) .
-                        '" version ' . $url['version'] . ', already installed as version ' .
-                        $version);
-                }
-                return false;
-            }
         }
+
+        // check to see if a dep is already installed and is the same or newer
+        if (!isset($dep['min']) && !isset($dep['max']) && !isset($dep['recommended'])) {
+            $oper = 'has';
+        } else {
+            $oper = 'gt';
+        }
+
+        // do not try to move this before getDepPackageDownloadURL
+        // we can't determine whether upgrade is necessary until we know what
+        // version would be downloaded
+        if (!isset($options['force']) && $this->isInstalled($ret, $oper)) {
+            $version = $this->_installRegistry->packageInfo($dep['name'], 'version',
+                $dep['channel']);
+            $dep['package'] = $dep['name'];
+            if (!isset($options['soft'])) {
+                $this->_downloader->log(3, $this->getShortName() . ': Skipping ' . $group .
+                    ' dependency "' .
+                $this->_registry->parsedPackageNameToString($dep, true) .
+                    '" version ' . $url['version'] . ', already installed as version ' .
+                    $version);
+            }
+
+            return false;
+        }
+
         if (isset($dep['nodefault'])) {
             $ret['nodefault'] = true;
         }
+
         return $ret;
     }
 
@@ -727,6 +740,7 @@ class PEAR_Downloader_Package
                         $nodownload = true;
                     }
                 }
+
                 if (!isset($options['alldeps']) && !isset($options['onlyreqdeps'])) {
                     if (!isset($dep['optional']) || $dep['optional'] == 'no') {
                         if (!isset($options['soft'])) {
@@ -744,6 +758,7 @@ class PEAR_Downloader_Package
                         $nodownload = true;
                     }
                 }
+
                 // check to see if a dep is already installed
                 // do not try to move this before getDepPackageDownloadURL
                 // we can't determine whether upgrade is necessary until we know what
@@ -760,6 +775,7 @@ class PEAR_Downloader_Package
                     } else {
                         $version = $this->_installRegistry->packageInfo($dep['name'], 'version');
                     }
+
                     $dep['version'] = $url['version'];
                     if (!isset($options['soft'])) {
                         $this->_downloader->log(3, $this->getShortName() . ': Skipping ' . $group .
@@ -767,21 +783,26 @@ class PEAR_Downloader_Package
                             $this->_registry->parsedPackageNameToString($dep, true) .
                             '", already installed as version ' . $version);
                     }
+
                     $skip = count($skipnames) ?
                         $skipnames[count($skipnames) - 1] : '';
                     if ($skip ==
                           $this->_registry->parsedPackageNameToString($dep, true)) {
                         array_pop($skipnames);
                     }
+
                     continue;
                 }
+
                 if ($nodownload) {
                     continue;
                 }
+
                 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                 if (isset($newdep)) {
                     $dep = $newdep;
                 }
+
                 $dep['package'] = $dep['name'];
                 $ret = $this->_analyzeDownloadURL($url, 'dependency', $dep, $params,
                     isset($dep['optional']) && $dep['optional'] == 'yes' &&
@@ -793,9 +814,11 @@ class PEAR_Downloader_Package
                     }
                     continue;
                 }
+
                 $this->_downloadDeps[] = $ret;
             }
         }
+
         if (count($skipnames)) {
             if (!isset($options['soft'])) {
                 $this->_downloader->log(1, 'Did not download dependencies: ' .
@@ -833,6 +856,7 @@ class PEAR_Downloader_Package
                 'package' => $this->getPackage(),
                 'version' => $this->getVersion());
         }
+
         return false;
     }
 
@@ -848,6 +872,7 @@ class PEAR_Downloader_Package
                 return false;
             }
         }
+
         return true;
     }
 
@@ -857,9 +882,9 @@ class PEAR_Downloader_Package
             return $this->_packagefile->getPackage();
         } elseif (isset($this->_downloadURL['info'])) {
             return $this->_downloadURL['info']->getPackage();
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -871,9 +896,9 @@ class PEAR_Downloader_Package
             return $this->_packagefile->isSubpackage($pf);
         } elseif (isset($this->_downloadURL['info'])) {
             return $this->_downloadURL['info']->isSubpackage($pf);
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     function getPackageType()
@@ -882,18 +907,18 @@ class PEAR_Downloader_Package
             return $this->_packagefile->getPackageType();
         } elseif (isset($this->_downloadURL['info'])) {
             return $this->_downloadURL['info']->getPackageType();
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     function isBundle()
     {
         if (isset($this->_packagefile)) {
             return $this->_packagefile->getPackageType() == 'bundle';
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     function getPackageXmlVersion()
@@ -902,9 +927,9 @@ class PEAR_Downloader_Package
             return $this->_packagefile->getPackagexmlVersion();
         } elseif (isset($this->_downloadURL['info'])) {
             return $this->_downloadURL['info']->getPackagexmlVersion();
-        } else {
-            return '1.0';
         }
+
+        return '1.0';
     }
 
     function getChannel()
@@ -913,9 +938,9 @@ class PEAR_Downloader_Package
             return $this->_packagefile->getChannel();
         } elseif (isset($this->_downloadURL['info'])) {
             return $this->_downloadURL['info']->getChannel();
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     function getURI()
@@ -924,9 +949,9 @@ class PEAR_Downloader_Package
             return $this->_packagefile->getURI();
         } elseif (isset($this->_downloadURL['info'])) {
             return $this->_downloadURL['info']->getURI();
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     function getVersion()
@@ -935,9 +960,9 @@ class PEAR_Downloader_Package
             return $this->_packagefile->getVersion();
         } elseif (isset($this->_downloadURL['version'])) {
             return $this->_downloadURL['version'];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     function isCompatible($pf)
@@ -946,9 +971,9 @@ class PEAR_Downloader_Package
             return $this->_packagefile->isCompatible($pf);
         } elseif (isset($this->_downloadURL['info'])) {
             return $this->_downloadURL['info']->isCompatible($pf);
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     function setGroup($group)
@@ -960,9 +985,9 @@ class PEAR_Downloader_Package
     {
         if (isset($this->_parsedname['group'])) {
             return $this->_parsedname['group'];
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     function isExtension($name)
@@ -970,14 +995,14 @@ class PEAR_Downloader_Package
         if (isset($this->_packagefile)) {
             return $this->_packagefile->isExtension($name);
         } elseif (isset($this->_downloadURL['info'])) {
-			if ($this->_downloadURL['info']->getPackagexmlVersion() == '2.0') {
-				return $this->_downloadURL['info']->getProvidesExtension() == $name;
-			} else {
-				return false;
-			}
-        } else {
+            if ($this->_downloadURL['info']->getPackagexmlVersion() == '2.0') {
+                return $this->_downloadURL['info']->getProvidesExtension() == $name;
+            }
+
             return false;
         }
+
+        return false;
     }
 
     function getDeps()
@@ -986,19 +1011,19 @@ class PEAR_Downloader_Package
             $ver = $this->_packagefile->getPackagexmlVersion();
             if (version_compare($ver, '2.0', '>=')) {
                 return $this->_packagefile->getDeps(true);
-            } else {
-                return $this->_packagefile->getDeps();
             }
+
+            return $this->_packagefile->getDeps();
         } elseif (isset($this->_downloadURL['info'])) {
             $ver = $this->_downloadURL['info']->getPackagexmlVersion();
             if (version_compare($ver, '2.0', '>=')) {
                 return $this->_downloadURL['info']->getDeps(true);
-            } else {
-                return $this->_downloadURL['info']->getDeps();
             }
-        } else {
-            return array();
+
+            return $this->_downloadURL['info']->getDeps();
         }
+
+        return array();
     }
 
     /**
@@ -1069,12 +1094,14 @@ class PEAR_Downloader_Package
                 version_compare($newdep['min'], $this->getVersion(), '<=') &&
                 version_compare($newdep['max'], $this->getVersion(), '>='));
         }
+
         // use magic to support pecl packages suddenly jumping to the pecl channel
         if ($channel == 'pecl.php.net' && $this->getChannel() == 'pear.php.net') {
             if (strtolower($package) == strtolower($this->getPackage())) {
                 $channel = 'pear.php.net';
             }
         }
+
         if (isset($param['version'])) {
             return (strtolower($package) == strtolower($this->getPackage()) &&
                 $channel == $this->getChannel() &&
@@ -1850,4 +1877,3 @@ class PEAR_Downloader_Package
         return $info;
     }
 }
-?>

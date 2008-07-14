@@ -299,17 +299,9 @@ class PEAR_REST
             return PEAR::raiseError('Cannot download from non-URL "' . $url . '"');
         }
 
-        $host = $info['host'];
-        if (!array_key_exists('port', $info)) {
-            $info['port'] = null;
-        }
-
-        if (!array_key_exists('path', $info)) {
-            $info['path'] = null;
-        }
-
-        $port = $info['port'];
-        $path = $info['path'];
+        $host = isset($info['host']) ? $info['host'] : null;
+        $port = isset($info['port']) ? $info['port'] : null;
+        $path = isset($info['path']) ? $info['path'] : null;
 
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
         if ($this->config->get('http_proxy')&&
@@ -330,7 +322,7 @@ class PEAR_REST
             $port = (isset($info['scheme']) && $info['scheme'] == 'https')  ? 443 : 80;
         }
 
-        If (isset($proxy['host'])) {
+        if (isset($proxy['host'])) {
             $request = "GET $url HTTP/1.1\r\n";
         } else {
             $request = "GET $path HTTP/1.1\r\n";
@@ -398,11 +390,12 @@ class PEAR_REST
             if (preg_match('/^([^:]+):\s+(.*)\s*\\z/', $line, $matches)) {
                 $headers[strtolower($matches[1])] = trim($matches[2]);
             } elseif (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
-                if ($matches[1] == 304 && ($lastmodified || ($lastmodified === false))) {
+                $reply = (int)$matches[1];
+                if ($reply == 304 && ($lastmodified || ($lastmodified === false))) {
                     return false;
                 }
 
-                if ($matches[1] != 200) {
+                if ($reply != 200) {
                     return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)", (int) $matches[1]);
                 }
             }
