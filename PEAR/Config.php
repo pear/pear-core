@@ -1878,21 +1878,6 @@ class PEAR_Config extends PEAR
     }
 
     /**
-     * Unset the user-defined value of a config key, reverting the
-     * value to the system-defined one.
-     *
-     * @param string config key
-     * @return bool TRUE on success, FALSE on failure
-     *
-     * @access public
-     */
-    function toDefault($key)
-    {
-        trigger_error("PEAR_Config::toDefault() deprecated, use PEAR_Config::remove() instead", E_USER_NOTICE);
-        return $this->remove($key, 'user');
-    }
-
-    /**
      * Tells what config layer that gets to define a key.
      *
      * @param string config key
@@ -1927,21 +1912,6 @@ class PEAR_Config extends PEAR
         }
 
         return '';
-    }
-
-    /**
-     * Tells whether a config value has a system-defined value.
-     *
-     * @param string   config key
-     * @return bool
-     * @access public
-     *
-     * @deprecated
-     */
-    function isDefaulted($key)
-    {
-        trigger_error("PEAR_Config::isDefaulted() deprecated, use PEAR_Config::definedBy() instead", E_USER_NOTICE);
-        return $this->definedBy($key) == 'system';
     }
 
     /**
