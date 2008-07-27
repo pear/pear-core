@@ -290,6 +290,11 @@ class PEAR_REST
      */
     function downloadHttp($url, $lastmodified = null, $accept = false, $channel = false)
     {
+        static $redirect = 0;
+        // always reset , so we are clean case of error
+        $wasredirect = $redirect;
+        $redirect = 0;
+
         $info = parse_url($url);
         if (!isset($info['scheme']) || !in_array($info['scheme'], array('http', 'https'))) {
             return PEAR::raiseError('Cannot download non-http URL "' . $url . '"');
@@ -386,6 +391,7 @@ class PEAR_REST
         fwrite($fp, $request);
 
         $headers = array();
+        $reply   = 0;
         while (trim($line = fgets($fp, 1024))) {
             if (preg_match('/^([^:]+):\s+(.*)\s*\\z/', $line, $matches)) {
                 $headers[strtolower($matches[1])] = trim($matches[2]);
@@ -395,10 +401,23 @@ class PEAR_REST
                     return false;
                 }
 
-                if ($reply != 200) {
-                    return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)", (int) $matches[1]);
+                if (!in_array($reply, array(200, 301, 302, 303, 305, 307))) {
+                    return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)");
                 }
             }
+        }
+
+        if ($reply != 200) {
+            if (!isset($headers['location'])) {
+                return PEAR::raiseError("File http://$host:$port$path not valid (redirected but no location)");
+            }
+
+            if ($wasredirect > 4) {
+                return PEAR::raiseError("File http://$host:$port$path not valid (redirection looped more than 5 times)");
+            }
+
+            $redirect = $wasredirect + 1;
+            return $this->downloadHttp($headers['location'], $lastmodified, $accept, $channel);
         }
 
         $length = isset($headers['content-length']) ? $headers['content-length'] : -1;
