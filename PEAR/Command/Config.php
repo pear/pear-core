@@ -41,8 +41,6 @@ require_once 'PEAR/Command/Common.php';
  */
 class PEAR_Command_Config extends PEAR_Command_Common
 {
-    // {{{ properties
-
     var $commands = array(
         'config-show' => array(
             'summary' => 'Show All Settings',
@@ -136,9 +134,6 @@ and uninstall).
             ),
         );
 
-    // }}}
-    // {{{ constructor
-
     /**
      * PEAR_Command_Config constructor.
      *
@@ -149,22 +144,18 @@ and uninstall).
         parent::PEAR_Command_Common($ui, $config);
     }
 
-    // }}}
-
-    // {{{ doConfigShow()
-
     function doConfigShow($command, $options, $params)
     {
+        $layer = null;
         if (is_array($params)) {
-            $layer = isset($params[0]) ? $params[0] : NULL;
-        } else {
-            $layer = NULL;
+            $layer = isset($params[0]) ? $params[0] : null;
         }
 
         // $params[0] -> the layer
         if ($error = $this->_checkLayer($layer)) {
             return $this->raiseError("config-show:$error");
         }
+
         $keys = $this->config->getKeys();
         sort($keys);
         $channel = isset($options['channel']) ? $options['channel'] :
@@ -173,6 +164,7 @@ and uninstall).
         if (!$reg->channelExists($channel)) {
             return $this->raiseError('Channel "' . $channel . '" does not exist');
         }
+
         $channel = $reg->channelName($channel);
         $data = array('caption' => 'Configuration (channel ' . $channel . '):');
         foreach ($keys as $key) {
@@ -181,13 +173,16 @@ and uninstall).
             if ($type == 'password' && $value) {
                 $value = '********';
             }
+
             if ($value === false) {
                 $value = 'false';
             } elseif ($value === true) {
                 $value = 'true';
             }
+
             $data['data'][$this->config->getGroup($key)][] = array($this->config->getPrompt($key) , $key, $value);
         }
+
         foreach ($this->config->getLayers() as $layer) {
             $data['data']['Config Files'][] = array(ucfirst($layer) . ' Configuration File', 'Filename' , $this->config->getConfFile($layer));
         }
@@ -196,21 +191,13 @@ and uninstall).
         return true;
     }
 
-    // }}}
-    // {{{ doConfigGet()
-
     function doConfigGet($command, $options, $params)
     {
-        if (!is_array($params)) {
-            $args_cnt = 0;
-        } else {
-            $args_cnt  = count($params);
-        }
-
+        $args_cnt = is_array($params) ? count($params) : 0;
         switch ($args_cnt) {
             case 1:
                 $config_key = $params[0];
-                $layer = NULL;
+                $layer = null;
                 break;
             case 2:
                 $config_key = $params[0];
@@ -226,18 +213,13 @@ and uninstall).
 
         $channel = isset($options['channel']) ? $options['channel'] : $this->config->get('default_channel');
         $reg = &$this->config->getRegistry();
-
         if (!$reg->channelExists($channel)) {
             return $this->raiseError('Channel "' . $channel . '" does not exist');
         }
 
         $this->ui->outputData($this->config->get($config_key, $layer, $channel), $command);
-
         return true;
     }
-
-    // }}}
-    // {{{ doConfigSet()
 
     function doConfigSet($command, $options, $params)
     {
@@ -245,26 +227,27 @@ and uninstall).
         // $param[1] -> the value for the parameter
         // $param[2] -> the layer
         $failmsg = '';
-        if (sizeof($params) < 2 || sizeof($params) > 3) {
+        if (count($params) < 2 || count($params) > 3) {
             $failmsg .= "config-set expects 2 or 3 parameters";
             return PEAR::raiseError($failmsg);
         }
+
         if (isset($params[2]) && ($error = $this->_checkLayer($params[2]))) {
             $failmsg .= $error;
             return PEAR::raiseError("config-set:$failmsg");
         }
-        $channel = isset($options['channel']) ? $options['channel'] :
-            $this->config->get('default_channel');
+
+        $channel = isset($options['channel']) ? $options['channel'] : $this->config->get('default_channel');
         $reg = &$this->config->getRegistry();
         if (!$reg->channelExists($channel)) {
             return $this->raiseError('Channel "' . $channel . '" does not exist');
         }
+
         $channel = $reg->channelName($channel);
-        if ($params[0] == 'default_channel') {
-            if (!$reg->channelExists($params[1])) {
-                return $this->raiseError('Channel "' . $params[1] . '" does not exist');
-            }
+        if ($params[0] == 'default_channel' && !$reg->channelExists($params[1])) {
+            return $this->raiseError('Channel "' . $params[1] . '" does not exist');
         }
+
         if (count($params) == 2) {
             array_push($params, 'user');
             $layer = 'user';
@@ -272,29 +255,29 @@ and uninstall).
             $layer = $params[2];
             array_push($params, $layer);
         }
+
         array_push($params, $channel);
-        if (!call_user_func_array(array(&$this->config, 'set'), $params))
-        {
+        if (!call_user_func_array(array(&$this->config, 'set'), $params)) {
             array_pop($params);
             $failmsg = "config-set (" . implode(", ", $params) . ") failed, channel $channel";
         } else {
             $this->config->store($layer);
         }
+
         if ($failmsg) {
             return $this->raiseError($failmsg);
         }
+
         $this->ui->outputData('config-set succeeded', $command);
         return true;
     }
-
-    // }}}
-    // {{{ doConfigHelp()
 
     function doConfigHelp($command, $options, $params)
     {
         if (empty($params)) {
             $params = $this->config->getKeys();
         }
+
         $data['caption']  = "Config help" . ((count($params) == 1) ? " for $params[0]" : '');
         $data['headline'] = array('Name', 'Type', 'Description');
         $data['border']   = true;
@@ -305,13 +288,12 @@ and uninstall).
                 $docs = rtrim($docs) . "\nValid set: " .
                     implode(' ', $this->config->getSetValues($name));
             }
+
             $data['data'][] = array($name, $type, $docs);
         }
+
         $this->ui->outputData($data, $command);
     }
-
-    // }}}
-    // {{{ doConfigCreate()
 
     function doConfigCreate($command, $options, $params)
     {
@@ -319,6 +301,7 @@ and uninstall).
             return PEAR::raiseError('config-create: must have 2 parameters, root path and ' .
                 'filename to save as');
         }
+
         $root = $params[0];
         // Clean up the DIRECTORY_SEPARATOR mess
         $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
@@ -336,20 +319,24 @@ and uninstall).
                     'with "/", was: "' . $root . '"');
             }
         }
+
         $windows = isset($options['windows']);
         if ($windows) {
             $root = str_replace('/', '\\', $root);
         }
+
         if (!file_exists($params[1])) {
             if (!@touch($params[1])) {
                 return PEAR::raiseError('Could not create "' . $params[1] . '"');
             }
         }
+
         $params[1] = realpath($params[1]);
         $config = &new PEAR_Config($params[1], '#no#system#config#', false, false);
         if ($root{strlen($root) - 1} == '/') {
             $root = substr($root, 0, strlen($root) - 1);
         }
+
         $config->noRegistry();
         $config->set('php_dir', $windows ? "$root\\pear\\php" : "$root/pear/php", 'user');
         $config->set('data_dir', $windows ? "$root\\pear\\data" : "$root/pear/data");
@@ -368,8 +355,6 @@ and uninstall).
             $command);
     }
 
-    // }}}
-
     function _showConfig(&$config)
     {
         $params = array('user');
@@ -383,6 +368,7 @@ and uninstall).
             if ($type == 'password' && $value) {
                 $value = '********';
             }
+
             if ($value === false) {
                 $value = 'false';
             } elseif ($value === true) {
@@ -391,6 +377,7 @@ and uninstall).
             $data['data'][$config->getGroup($key)][] =
                 array($config->getPrompt($key) , $key, $value);
         }
+
         foreach ($config->getLayers() as $layer) {
             $data['data']['Config Files'][] =
                 array(ucfirst($layer) . ' Configuration File', 'Filename' ,
@@ -400,7 +387,6 @@ and uninstall).
         $this->ui->outputData($data, 'config-show');
         return true;
     }
-    // {{{ _checkLayer()
 
     /**
      * Checks if a layer is defined or not
@@ -416,10 +402,7 @@ and uninstall).
                 return " only the layers: \"" . implode('" or "', $layers) . "\" are supported";
             }
         }
+
         return false;
     }
-
-    // }}}
 }
-
-?>
