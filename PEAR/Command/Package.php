@@ -45,8 +45,6 @@ require_once 'PEAR/Command/Common.php';
 
 class PEAR_Command_Package extends PEAR_Command_Common
 {
-    // {{{ properties
-
     var $commands = array(
         'package' => array(
             'summary' => 'Build Package',
@@ -252,9 +250,6 @@ used for automated conversion or learning the format.
 
     var $output;
 
-    // }}}
-    // {{{ constructor
-
     /**
      * PEAR_Command_Package constructor.
      *
@@ -264,10 +259,6 @@ used for automated conversion or learning the format.
     {
         parent::PEAR_Command_Common($ui, $config);
     }
-
-    // }}}
-
-    // {{{ _displayValidationResults()
 
     function _displayValidationResults($err, $warn, $strict = false)
     {
@@ -279,14 +270,13 @@ used for automated conversion or learning the format.
         }
         $this->output .= sprintf('Validation: %d error(s), %d warning(s)'."\n",
                                        sizeof($err), sizeof($warn));
-        if ($strict && sizeof($err) > 0) {
+        if ($strict && count($err) > 0) {
             $this->output .= "Fix these errors and try again.";
             return false;
         }
         return true;
     }
 
-    // }}}
     function &getPackager()
     {
         if (!class_exists('PEAR_Packager')) {
@@ -310,7 +300,6 @@ used for automated conversion or learning the format.
         $a->setLogger($common);
         return $a;
     }
-    // {{{ doPackage()
 
     function doPackage($command, $options, $params)
     {
@@ -339,9 +328,6 @@ used for automated conversion or learning the format.
 
         return true;
     }
-
-    // }}}
-    // {{{ doPackageValidate()
 
     function doPackageValidate($command, $options, $params)
     {
@@ -395,9 +381,6 @@ used for automated conversion or learning the format.
         $this->ui->outputData($this->output, $command);
         return true;
     }
-
-    // }}}
-    // {{{ doCvsTag()
 
     function doCvsTag($command, $options, $params)
     {
@@ -480,9 +463,6 @@ used for automated conversion or learning the format.
         $this->ui->outputData($this->output, $_cmd);
         return true;
     }
-
-    // }}}
-    // {{{ doCvsDiff()
 
     function doCvsDiff($command, $options, $params)
     {
@@ -575,20 +555,19 @@ used for automated conversion or learning the format.
         return true;
     }
 
-    // }}}
-    // {{{ doPackageDependencies()
-
     function doPackageDependencies($command, $options, $params)
     {
         // $params[0] -> the PEAR package to list its information
-        if (sizeof($params) != 1) {
+        if (count($params) !== 1) {
             return $this->raiseError("bad parameter(s), try \"help $command\"");
         }
-        $obj = &$this->getPackageFile($this->config, $this->_debug);
+
+        $obj  = &$this->getPackageFile($this->config, $this->_debug);
         $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
+
         $deps = $info->getDeps();
         if (is_array($deps)) {
             if ($info->getPackagexmlVersion() == '1.0') {
@@ -608,6 +587,7 @@ used for automated conversion or learning the format.
                     } else {
                         $req = 'Yes';
                     }
+
                     if (isset($this->_deps_rel_trans[$d['rel']])) {
                         $rel = $this->_deps_rel_trans[$d['rel']];
                     } else {
@@ -652,20 +632,25 @@ used for automated conversion or learning the format.
                         } else {
                             $group = '';
                         }
+
                         if (!isset($subd[0])) {
                             $subd = array($subd);
                         }
+
                         foreach ($subd as $groupa) {
                             foreach ($groupa as $deptype => $depinfo) {
                                 if ($deptype == 'attribs') {
                                     continue;
                                 }
+
                                 if ($deptype == 'pearinstaller') {
                                     $deptype = 'pear Installer';
                                 }
+
                                 if (!isset($depinfo[0])) {
                                     $depinfo = array($depinfo);
                                 }
+
                                 foreach ($depinfo as $inf) {
                                     $name = '';
                                     if (isset($inf['channel'])) {
@@ -674,6 +659,7 @@ used for automated conversion or learning the format.
                                             $alias = '(channel?) ' .$inf['channel'];
                                         }
                                         $name = $alias . '/';
+
                                     }
                                     if (isset($inf['name'])) {
                                         $name .= $inf['name'];
@@ -682,14 +668,17 @@ used for automated conversion or learning the format.
                                     } else {
                                         $name .= '';
                                     }
+
                                     if (isset($inf['uri'])) {
                                         $name .= ' [' . $inf['uri'] .  ']';
                                     }
+
                                     if (isset($inf['conflicts'])) {
                                         $ver = 'conflicts';
                                     } else {
                                         $ver = $d->_getExtraString($inf);
                                     }
+
                                     $data['data'][] = array($req, ucfirst($deptype), $name,
                                         $ver, $group);
                                 }
@@ -707,44 +696,50 @@ used for automated conversion or learning the format.
         $this->ui->outputData("This package does not have any dependencies.", $command);
     }
 
-    // }}}
-    // {{{ doSign()
-
     function doSign($command, $options, $params)
     {
-        require_once 'System.php';
-        require_once 'Archive/Tar.php';
         // should move most of this code into PEAR_Packager
         // so it'll be easy to implement "pear package --sign"
-        if (sizeof($params) != 1) {
+        if (count($params) !== 1) {
             return $this->raiseError("bad parameter(s), try \"help $command\"");
         }
+
+        require_once 'System.php';
+        require_once 'Archive/Tar.php';
+
         if (!file_exists($params[0])) {
             return $this->raiseError("file does not exist: $params[0]");
         }
+
         $obj = $this->getPackageFile($this->config, $this->_debug);
         $info = $obj->fromTgzFile($params[0], PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
+
         $tar = new Archive_Tar($params[0]);
         $tmpdir = System::mktemp('-d pearsign');
         if (!$tar->extractList('package2.xml package.xml package.sig', $tmpdir)) {
             return $this->raiseError("failed to extract tar file");
         }
+
         if (file_exists("$tmpdir/package.sig")) {
             return $this->raiseError("package already signed");
         }
+
         $packagexml = 'package.xml';
         if (file_exists("$tmpdir/package2.xml")) {
             $packagexml = 'package2.xml';
         }
+
         if (file_exists("$tmpdir/package.sig")) {
             unlink("$tmpdir/package.sig");
         }
+
         if (!file_exists("$tmpdir/$packagexml")) {
             return $this->raiseError("Extracted file $tmpdir/$packagexml not found.");
         }
+
         $input = $this->ui->userDialog($command,
                                        array('GnuPG Passphrase'),
                                        array('password'));
@@ -758,10 +753,12 @@ used for automated conversion or learning the format.
         if (!$gpg) {
             return $this->raiseError("gpg command failed");
         }
+
         fwrite($gpg, "$input[0]\n");
         if (pclose($gpg) || !file_exists("$tmpdir/package.sig")) {
             return $this->raiseError("gpg sign failed");
         }
+
         if (!$tar->addModify("$tmpdir/package.sig", '', $tmpdir)) {
             return $this->raiseError('failed adding signature to file');
         }
@@ -769,8 +766,6 @@ used for automated conversion or learning the format.
         $this->ui->outputData("Package signed.", $command);
         return true;
     }
-
-    // }}}
 
     /**
      * For unit testing purposes
@@ -801,10 +796,9 @@ used for automated conversion or learning the format.
         } else {
             $a = null;
         }
+
         return $a;
     }
-
-    // {{{ doMakeRPM()
 
     function doMakeRPM($command, $options, $params)
     {
@@ -818,49 +812,24 @@ used for automated conversion or learning the format.
             $this->ui->outputData('PEAR_Command_Packaging is installed; using '.
                 'newer "make-rpm-spec" command instead');
             return $packaging_cmd->run('make-rpm-spec', $options, $params);
-        } else {
-            $this->ui->outputData('WARNING: "pear makerpm" is no longer available; an '.
-              'improved version is available via "pear make-rpm-spec", which '.
-              'is available by installing PEAR_Command_Packaging');
         }
+
+        $this->ui->outputData('WARNING: "pear makerpm" is no longer available; an '.
+          'improved version is available via "pear make-rpm-spec", which '.
+          'is available by installing PEAR_Command_Packaging');
         return true;
     }
 
     function doConvert($command, $options, $params)
     {
-        $packagexml = isset($params[0]) ? $params[0] : 'package.xml';
+        $packagexml    = isset($params[0]) ? $params[0] : 'package.xml';
         $newpackagexml = isset($params[1]) ? $params[1] : dirname($packagexml) .
             DIRECTORY_SEPARATOR . 'package2.xml';
         $pkg = &$this->getPackageFile($this->config, $this->_debug);
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         $pf = $pkg->fromPackageFile($packagexml, PEAR_VALIDATE_NORMAL);
         PEAR::staticPopErrorHandling();
-        if (!PEAR::isError($pf)) {
-            if (is_a($pf, 'PEAR_PackageFile_v2')) {
-                $this->ui->outputData($packagexml . ' is already a package.xml version 2.0');
-                return true;
-            }
-            $gen = &$pf->getDefaultGenerator();
-            $newpf = &$gen->toV2();
-            $newpf->setPackagefile($newpackagexml);
-            $gen = &$newpf->getDefaultGenerator();
-            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-            $state = (isset($options['flat']) ? PEAR_VALIDATE_PACKAGING : PEAR_VALIDATE_NORMAL);
-            $saved = $gen->toPackageFile(dirname($newpackagexml), $state,
-                basename($newpackagexml));
-            PEAR::staticPopErrorHandling();
-            if (PEAR::isError($saved)) {
-                if (is_array($saved->getUserInfo())) {
-                    foreach ($saved->getUserInfo() as $warning) {
-                        $this->ui->outputData($warning['message']);
-                    }
-                }
-                $this->ui->outputData($saved->getMessage());
-                return true;
-            }
-            $this->ui->outputData('Wrote new version 2.0 package.xml to "' . $saved . '"');
-            return true;
-        } else {
+        if (PEAR::isError($pf)) {
             if (is_array($pf->getUserInfo())) {
                 foreach ($pf->getUserInfo() as $warning) {
                     $this->ui->outputData($warning['message']);
@@ -868,9 +837,32 @@ used for automated conversion or learning the format.
             }
             return $this->raiseError($pf);
         }
+
+        if (is_a($pf, 'PEAR_PackageFile_v2')) {
+            $this->ui->outputData($packagexml . ' is already a package.xml version 2.0');
+            return true;
+        }
+
+        $gen   = &$pf->getDefaultGenerator();
+        $newpf = &$gen->toV2();
+        $newpf->setPackagefile($newpackagexml);
+        $gen = &$newpf->getDefaultGenerator();
+        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+        $state = (isset($options['flat']) ? PEAR_VALIDATE_PACKAGING : PEAR_VALIDATE_NORMAL);
+        $saved = $gen->toPackageFile(dirname($newpackagexml), $state, basename($newpackagexml));
+        PEAR::staticPopErrorHandling();
+        if (PEAR::isError($saved)) {
+            if (is_array($saved->getUserInfo())) {
+                foreach ($saved->getUserInfo() as $warning) {
+                    $this->ui->outputData($warning['message']);
+                }
+            }
+
+            $this->ui->outputData($saved->getMessage());
+            return true;
+        }
+
+        $this->ui->outputData('Wrote new version 2.0 package.xml to "' . $saved . '"');
+        return true;
     }
-
-    // }}}
 }
-
-?>
