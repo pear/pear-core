@@ -65,15 +65,15 @@ $GLOBALS['_System_temp_files'] = array();
 class System
 {
     /**
-    * returns the commandline arguments of a function
-    *
-    * @param    string  $argv           the commandline
-    * @param    string  $short_options  the allowed option short-tags
-    * @param    string  $long_options   the allowed option long-tags
-    * @return   array   the given options and there values
-    * @static
-    * @access private
-    */
+     * returns the commandline arguments of a function
+     *
+     * @param    string  $argv           the commandline
+     * @param    string  $short_options  the allowed option short-tags
+     * @param    string  $long_options   the allowed option long-tags
+     * @return   array   the given options and there values
+     * @static
+     * @access private
+     */
     function _parseArgs($argv, $short_options, $long_options = null)
     {
         if (!is_array($argv) && $argv !== null) {
@@ -83,14 +83,14 @@ class System
     }
 
     /**
-    * Output errors with PHP trigger_error(). You can silence the errors
-    * with prefixing a "@" sign to the function call: @System::mkdir(..);
-    *
-    * @param mixed $error a PEAR error or a string with the error message
-    * @return bool false
-    * @static
-    * @access private
-    */
+     * Output errors with PHP trigger_error(). You can silence the errors
+     * with prefixing a "@" sign to the function call: @System::mkdir(..);
+     *
+     * @param mixed $error a PEAR error or a string with the error message
+     * @return bool false
+     * @static
+     * @access private
+     */
     function raiseError($error)
     {
         if (PEAR::isError($error)) {
@@ -101,31 +101,30 @@ class System
     }
 
     /**
-    * Creates a nested array representing the structure of a directory
-    *
-    * System::_dirToStruct('dir1', 0) =>
-    *   Array
-    *    (
-    *    [dirs] => Array
-    *        (
-    *            [0] => dir1
-    *        )
-    *
-    *    [files] => Array
-    *        (
-    *            [0] => dir1/file2
-    *            [1] => dir1/file3
-    *        )
-    *    )
-    * @param    string  $sPath      Name of the directory
-    * @param    integer $maxinst    max. deep of the lookup
-    * @param    integer $aktinst    starting deep of the lookup
-    * @param    bool    $silent     if true, do not emit errors.
-    * @return   array   the structure of the dir
-    * @static
-    * @access   private
-    */
-
+     * Creates a nested array representing the structure of a directory
+     *
+     * System::_dirToStruct('dir1', 0) =>
+     *   Array
+     *    (
+     *    [dirs] => Array
+     *        (
+     *            [0] => dir1
+     *        )
+     *
+     *    [files] => Array
+     *        (
+     *            [0] => dir1/file2
+     *            [1] => dir1/file3
+     *        )
+     *    )
+     * @param    string  $sPath      Name of the directory
+     * @param    integer $maxinst    max. deep of the lookup
+     * @param    integer $aktinst    starting deep of the lookup
+     * @param    bool    $silent     if true, do not emit errors.
+     * @return   array   the structure of the dir
+     * @static
+     * @access   private
+     */
     function _dirToStruct($sPath, $maxinst, $aktinst = 0, $silent = false)
     {
         $struct = array('dirs' => array(), 'files' => array());
@@ -162,13 +161,13 @@ class System
     }
 
     /**
-    * Creates a nested array representing the structure of a directory and files
-    *
-    * @param    array $files Array listing files and dirs
-    * @return   array
-    * @static
-    * @see System::_dirToStruct()
-    */
+     * Creates a nested array representing the structure of a directory and files
+     *
+     * @param    array $files Array listing files and dirs
+     * @return   array
+     * @static
+     * @see System::_dirToStruct()
+     */
     function _multipleToStruct($files)
     {
         $struct = array('dirs' => array(), 'files' => array());
@@ -187,14 +186,14 @@ class System
     }
 
     /**
-    * The rm command for removing files.
-    * Supports multiple files and dirs and also recursive deletes
-    *
-    * @param    string  $args   the arguments for rm
-    * @return   mixed   PEAR_Error or true for success
-    * @static
-    * @access   public
-    */
+     * The rm command for removing files.
+     * Supports multiple files and dirs and also recursive deletes
+     *
+     * @param    string  $args   the arguments for rm
+     * @return   mixed   PEAR_Error or true for success
+     * @static
+     * @access   public
+     */
     function rm($args)
     {
         $opts = System::_parseArgs($args, 'rf'); // "f" does nothing but I like it :-)
@@ -233,14 +232,14 @@ class System
     }
 
     /**
-    * Make directories.
-    *
-    * The -p option will create parent directories
-    * @param    string  $args    the name of the director(y|ies) to create
-    * @return   bool    True for success
-    * @static
-    * @access   public
-    */
+     * Make directories.
+     *
+     * The -p option will create parent directories
+     * @param    string  $args    the name of the director(y|ies) to create
+     * @return   bool    True for success
+     * @static
+     * @access   public
+     */
     function mkDir($args)
     {
         $opts = System::_parseArgs($args, 'pm:');
@@ -293,20 +292,20 @@ class System
     }
 
     /**
-    * Concatenate files
-    *
-    * Usage:
-    * 1) $var = System::cat('sample.txt test.txt');
-    * 2) System::cat('sample.txt test.txt > final.txt');
-    * 3) System::cat('sample.txt test.txt >> final.txt');
-    *
-    * Note: as the class use fopen, urls should work also (test that)
-    *
-    * @param    string  $args   the arguments
-    * @return   boolean true on success
-    * @static
-    * @access   public
-    */
+     * Concatenate files
+     *
+     * Usage:
+     * 1) $var = System::cat('sample.txt test.txt');
+     * 2) System::cat('sample.txt test.txt > final.txt');
+     * 3) System::cat('sample.txt test.txt >> final.txt');
+     *
+     * Note: as the class use fopen, urls should work also (test that)
+     *
+     * @param    string  $args   the arguments
+     * @return   boolean true on success
+     * @static
+     * @access   public
+     */
     function &cat($args)
     {
         $ret = null;
@@ -358,29 +357,29 @@ class System
     }
 
     /**
-    * Creates temporary files or directories. This function will remove
-    * the created files when the scripts finish its execution.
-    *
-    * Usage:
-    *   1) $tempfile = System::mktemp("prefix");
-    *   2) $tempdir  = System::mktemp("-d prefix");
-    *   3) $tempfile = System::mktemp();
-    *   4) $tempfile = System::mktemp("-t /var/tmp prefix");
-    *
-    * prefix -> The string that will be prepended to the temp name
-    *           (defaults to "tmp").
-    * -d     -> A temporary dir will be created instead of a file.
-    * -t     -> The target dir where the temporary (file|dir) will be created. If
-    *           this param is missing by default the env vars TMP on Windows or
-    *           TMPDIR in Unix will be used. If these vars are also missing
-    *           c:\windows\temp or /tmp will be used.
-    *
-    * @param   string  $args  The arguments
-    * @return  mixed   the full path of the created (file|dir) or false
-    * @see System::tmpdir()
-    * @static
-    * @access  public
-    */
+     * Creates temporary files or directories. This function will remove
+     * the created files when the scripts finish its execution.
+     *
+     * Usage:
+     *   1) $tempfile = System::mktemp("prefix");
+     *   2) $tempdir  = System::mktemp("-d prefix");
+     *   3) $tempfile = System::mktemp();
+     *   4) $tempfile = System::mktemp("-t /var/tmp prefix");
+     *
+     * prefix -> The string that will be prepended to the temp name
+     *           (defaults to "tmp").
+     * -d     -> A temporary dir will be created instead of a file.
+     * -t     -> The target dir where the temporary (file|dir) will be created. If
+     *           this param is missing by default the env vars TMP on Windows or
+     *           TMPDIR in Unix will be used. If these vars are also missing
+     *           c:\windows\temp or /tmp will be used.
+     *
+     * @param   string  $args  The arguments
+     * @return  mixed   the full path of the created (file|dir) or false
+     * @see System::tmpdir()
+     * @static
+     * @access  public
+     */
     function mktemp($args = null)
     {
         static $first_time = true;
@@ -422,12 +421,12 @@ class System
     }
 
     /**
-    * Remove temporary files created my mkTemp. This function is executed
-    * at script shutdown time
-    *
-    * @static
-    * @access private
-    */
+     * Remove temporary files created my mkTemp. This function is executed
+     * at script shutdown time
+     *
+     * @static
+     * @access private
+     */
     function _removeTmpFiles()
     {
         if (count($GLOBALS['_System_temp_files'])) {
@@ -439,14 +438,14 @@ class System
     }
 
     /**
-    * Get the path of the temporal directory set in the system
-    * by looking in its environments variables.
-    * Note: php.ini-recommended removes the "E" from the variables_order setting,
-    * making unavaible the $_ENV array, that s why we do tests with _ENV
-    *
-    * @static
-    * @return string The temporary directory on the system
-    */
+     * Get the path of the temporal directory set in the system
+     * by looking in its environments variables.
+     * Note: php.ini-recommended removes the "E" from the variables_order setting,
+     * making unavaible the $_ENV array, that s why we do tests with _ENV
+     *
+     * @static
+     * @return string The temporary directory on the system
+     */
     function tmpdir()
     {
         if (OS_WINDOWS) {
@@ -471,15 +470,15 @@ class System
     }
 
     /**
-    * The "which" command (show the full path of a command)
-    *
-    * @param string $program The command to search for
-    * @param mixed  $fallback Value to return if $program is not found
-    *
-    * @return mixed A string with the full path or false if not found
-    * @static
-    * @author Stig Bakken <ssb@php.net>
-    */
+     * The "which" command (show the full path of a command)
+     *
+     * @param string $program The command to search for
+     * @param mixed  $fallback Value to return if $program is not found
+     *
+     * @return mixed A string with the full path or false if not found
+     * @static
+     * @author Stig Bakken <ssb@php.net>
+     */
     function which($program, $fallback = false)
     {
         // enforce API
@@ -529,29 +528,29 @@ class System
     }
 
     /**
-    * The "find" command
-    *
-    * Usage:
-    *
-    * System::find($dir);
-    * System::find("$dir -type d");
-    * System::find("$dir -type f");
-    * System::find("$dir -name *.php");
-    * System::find("$dir -name *.php -name *.htm*");
-    * System::find("$dir -maxdepth 1");
-    *
-    * Params implmented:
-    * $dir            -> Start the search at this directory
-    * -type d         -> return only directories
-    * -type f         -> return only files
-    * -maxdepth <n>   -> max depth of recursion
-    * -name <pattern> -> search pattern (bash style). Multiple -name param allowed
-    *
-    * @param  mixed Either array or string with the command line
-    * @return array Array of found files
-    * @static
-    *
-    */
+     * The "find" command
+     *
+     * Usage:
+     *
+     * System::find($dir);
+     * System::find("$dir -type d");
+     * System::find("$dir -type f");
+     * System::find("$dir -name *.php");
+     * System::find("$dir -name *.php -name *.htm*");
+     * System::find("$dir -maxdepth 1");
+     *
+     * Params implmented:
+     * $dir            -> Start the search at this directory
+     * -type d         -> return only directories
+     * -type f         -> return only files
+     * -maxdepth <n>   -> max depth of recursion
+     * -name <pattern> -> search pattern (bash style). Multiple -name param allowed
+     *
+     * @param  mixed Either array or string with the command line
+     * @return array Array of found files
+     * @static
+     *
+     */
     function find($args)
     {
         if (!is_array($args)) {
