@@ -175,10 +175,12 @@ class System
         settype($files, 'array');
         foreach ($files as $file) {
             if (is_dir($file) && !is_link($file)) {
-                $tmp = System::_dirToStruct($file, 0);
+                $tmp    = System::_dirToStruct($file, 0);
                 $struct = array_merge_recursive($tmp, $struct);
             } else {
-                $struct['files'][] = $file;
+                if (!in_array($file, $struct['files'])) {
+                    $struct['files'][] = $file;
+                }
             }
         }
         return $struct;
@@ -212,6 +214,8 @@ class System
                     $ret = false;
                 }
             }
+
+            rsort($struct['dirs']);
             foreach ($struct['dirs'] as $dir) {
                 if (!@rmdir($dir)) {
                     $ret = false;
@@ -406,6 +410,10 @@ class System
             }
         }
         $GLOBALS['_System_temp_files'][] = $tmp;
+        if (isset($tmp_is_dir)) {
+            $GLOBALS['_System_temp_files'][] = dirname($tmp);
+        }
+
         if ($first_time) {
             PEAR::registerShutdownFunc(array('System', '_removeTmpFiles'));
             $first_time = false;
