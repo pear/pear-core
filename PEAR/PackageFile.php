@@ -211,19 +211,7 @@ class PEAR_PackageFile
                 return $pf;
             }
 
-            if ($pf->validate($state)) {
-                if ($this->_logger && $pf->getValidationWarnings(false)) {
-                    foreach ($pf->getValidationWarnings() as $warning) {
-                        $this->_logger->log(0, 'WARNING: ' . $warning['message']);
-                    }
-                }
-
-                if (method_exists($pf, 'flattenFilelist')) {
-                    $pf->flattenFilelist(); // for v2
-                }
-
-                return $pf;
-            } else {
+            if (!$pf->validate($state)) {
                 if ($this->_config->get('verbose') > 0
                     && $this->_logger && $pf->getValidationWarnings(false)) {
                     foreach ($pf->getValidationWarnings(false) as $warning) {
@@ -235,6 +223,18 @@ class PEAR_PackageFile
                     2, null, null, $pf->getValidationWarnings());
                 return $a;
             }
+
+            if ($this->_logger && $pf->getValidationWarnings(false)) {
+                foreach ($pf->getValidationWarnings() as $warning) {
+                    $this->_logger->log(0, 'WARNING: ' . $warning['message']);
+                }
+            }
+
+            if (method_exists($pf, 'flattenFilelist')) {
+                $pf->flattenFilelist(); // for v2
+            }
+
+            return $pf;
         } elseif (preg_match('/<package[^>]+version="([^"]+)"/', $data, $packageversion)) {
             $a = PEAR::raiseError('package.xml file "' . $file .
                 '" has unsupported package.xml <package> version "' . $packageversion[1] . '"');
