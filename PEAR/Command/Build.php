@@ -43,8 +43,6 @@ require_once 'PEAR/Command/Common.php';
  */
 class PEAR_Command_Build extends PEAR_Command_Common
 {
-    // {{{ properties
-
     var $commands = array(
         'build' => array(
             'summary' => 'Build an Extension From C Source',
@@ -56,10 +54,6 @@ Builds one or more extensions contained in a package.'
             ),
         );
 
-    // }}}
-
-    // {{{ constructor
-
     /**
      * PEAR_Command_Build constructor.
      *
@@ -70,27 +64,22 @@ Builds one or more extensions contained in a package.'
         parent::PEAR_Command_Common($ui, $config);
     }
 
-    // }}}
-
-    // {{{ doBuild()
-
     function doBuild($command, $options, $params)
     {
         require_once 'PEAR/Builder.php';
         if (sizeof($params) < 1) {
             $params[0] = 'package.xml';
         }
+
         $builder = &new PEAR_Builder($this->ui);
         $this->debug = $this->config->get('verbose');
         $err = $builder->build($params[0], array(&$this, 'buildCallback'));
         if (PEAR::isError($err)) {
             return $err;
         }
+
         return true;
     }
-
-    // }}}
-    // {{{ buildCallback()
 
     function buildCallback($what, $data)
     {
@@ -99,6 +88,4 @@ Builds one or more extensions contained in a package.'
             $this->ui->outputData(rtrim($data), 'build');
         }
     }
-
-    // }}}
 }

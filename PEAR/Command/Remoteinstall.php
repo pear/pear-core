@@ -43,8 +43,6 @@ define('PEAR_REMOTEINSTALL_OK', 1);
  */
 class PEAR_Command_RemoteInstall extends PEAR_Command_Install
 {
-    // {{{ properties
-
     var $commands = array(
         'remote-install' => array(
             'summary' => 'Install Package',
@@ -276,9 +274,6 @@ channel not in your default channel ({config default_channel})
 '),
     );
 
-    // }}}
-    // {{{ constructor
-
     /**
      * PEAR_Command_Install constructor.
      *
@@ -288,8 +283,6 @@ channel not in your default channel ({config default_channel})
     {
         parent::PEAR_Command_Install($ui, $config);
     }
-
-    // }}}
 
     /**
      * For unit testing purposes
@@ -315,13 +308,12 @@ channel not in your default channel ({config default_channel})
         return $a;
     }
 
-    // {{{ doInstall()
-
     function doInstall($command, $options, $params)
     {
         if (empty($this->installer)) {
             $this->installer = &$this->getInstaller($this->ui);
         }
+
         if (isset($options['remoteconfig'])) {
             $e = $this->config->readFTPConfigFile($options['remoteconfig']);
             if (!PEAR::isError($e)) {
@@ -336,18 +328,17 @@ channel not in your default channel ({config default_channel})
                 $this->installer->setConfig($this->config);
             }
         }
+
         $command = str_replace('remote-', '', $command); // fool parent
         return parent::doInstall($command, $options, $params);
     }
-
-    // }}}
-    // {{{ doUninstall()
 
     function doUninstall($command, $options, $params)
     {
         if (empty($this->installer)) {
             $this->installer = &$this->getInstaller($this->ui);
         }
+
         if (isset($options['remoteconfig'])) {
             $e = $this->config->readFTPConfigFile($options['remoteconfig']);
             if (!PEAR::isError($e)) {
@@ -362,11 +353,10 @@ channel not in your default channel ({config default_channel})
                 $this->installer->setConfig($this->config);
             }
         }
+
         $command = 'uninstall'; // fool parent
         return parent::doUninstall($command, $options, $params);
     }
-
-    // }}}
 }
 
 /**
@@ -374,4 +364,3 @@ channel not in your default channel ({config default_channel})
  * @ignore
  */
 class Net_FTP {}
-?>

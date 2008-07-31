@@ -39,8 +39,6 @@ require_once 'PEAR/Command/Common.php';
  */
 class PEAR_Command_Mirror extends PEAR_Command_Common
 {
-    // {{{ properties
-
     var $commands = array(
         'download-all' => array(
             'summary' => 'Downloads each available package from the default channel',
@@ -61,10 +59,6 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
             ),
         );
 
-    // }}}
-
-    // {{{ constructor
-
     /**
      * PEAR_Command_Mirror constructor.
      *
@@ -77,8 +71,6 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
         parent::PEAR_Command_Common($ui, $config);
     }
 
-    // }}}
-
     /**
      * For unit-testing
      */
@@ -88,7 +80,6 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
         return $a;
     }
 
-    // {{{ doDownloadAll()
     /**
     * retrieves a list of avaible Packages from master server
     * and downloads them
@@ -111,11 +102,13 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
             return $this->raiseError('Channel "' . $channel . '" does not exist');
         }
         $this->config->set('default_channel', $channel);
+
         $this->ui->outputData('Using Channel ' . $this->config->get('default_channel'));
         $chan = $reg->getChannel($channel);
         if (PEAR::isError($chan)) {
             return $this->raiseError($chan);
         }
+
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
               $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
             $rest = &$this->config->getREST('1.0', array());
@@ -125,16 +118,20 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
             $stable = ($this->config->get('preferred_state') == 'stable');
             $remoteInfo = $remote->call("package.listAll", true, $stable, false);
         }
+
         if (PEAR::isError($remoteInfo)) {
             return $remoteInfo;
         }
+
         $cmd = &$this->factory("download");
         if (PEAR::isError($cmd)) {
             return $cmd;
         }
+
         $this->ui->outputData('Using Preferred State of ' .
             $this->config->get('preferred_state'));
         $this->ui->outputData('Gathering release information, please wait...');
+
         /**
          * Error handling not necessary, because already done by
          * the download command
@@ -146,8 +143,7 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
         if (PEAR::isError($err)) {
             $this->ui->outputData($err->getMessage());
         }
+
         return true;
     }
-
-    // }}}
 }

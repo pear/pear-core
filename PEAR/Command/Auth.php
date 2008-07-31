@@ -42,8 +42,6 @@ require_once 'PEAR/Config.php';
  */
 class PEAR_Command_Auth extends PEAR_Command_Common
 {
-    // {{{ properties
-
     var $commands = array(
         'login' => array(
             'summary' => 'Connects and authenticates to remote server',
@@ -51,7 +49,7 @@ class PEAR_Command_Auth extends PEAR_Command_Common
             'function' => 'doLogin',
             'options' => array(),
             'doc' => '<channel name>
-Log in to a remote channel server.  If <channel name> is not supplied, 
+Log in to a remote channel server.  If <channel name> is not supplied,
 the default channel is used. To use remote functions in the installer
 that require any kind of privileges, you need to log in first.  The
 username and password you enter here will be stored in your per-user
@@ -72,10 +70,6 @@ password from your user configuration.',
 
         );
 
-    // }}}
-
-    // {{{ constructor
-
     /**
      * PEAR_Command_Auth constructor.
      *
@@ -86,17 +80,11 @@ password from your user configuration.',
         parent::PEAR_Command_Common($ui, $config);
     }
 
-    // }}}
-
-    // {{{ doLogin()
-
     /**
      * Execute the 'login' command.
      *
      * @param string $command command name
-     *
      * @param array $options option_name => value
-     *
      * @param array $params list of additional parameters
      *
      * @return bool TRUE on success or
@@ -107,26 +95,27 @@ password from your user configuration.',
     function doLogin($command, $options, $params)
     {
         $reg = &$this->config->getRegistry();
-        
+
         // If a parameter is supplied, use that as the channel to log in to
         if (isset($params[0])) {
             $channel = $params[0];
         } else {
             $channel = $this->config->get('default_channel');
         }
-        
+
         $chan = $reg->getChannel($channel);
         if (PEAR::isError($chan)) {
             return $this->raiseError($chan);
         }
-        $server = $this->config->get('preferred_mirror', null, $channel);
-        $remote = &$this->config->getRemote();
+
+        $server   = $this->config->get('preferred_mirror', null, $channel);
+        $remote   = &$this->config->getRemote();
         $username = $this->config->get('username', null, $channel);
         if (empty($username)) {
             $username = isset($_ENV['USER']) ? $_ENV['USER'] : null;
         }
         $this->ui->outputData("Logging in to $server.", $command);
-        
+
         list($username, $password) = $this->ui->userDialog(
             $command,
             array('Username', 'Password'),
@@ -151,29 +140,26 @@ password from your user configuration.',
             $ok = $remote->call('logintest');
             $remote->popExpect();
         }
-        if ($ok === true) {
-            $this->ui->outputData("Logged in.", $command);
-            // avoid changing any temporary settings changed with -d
-            $ourconfig = new PEAR_Config($ourfile, $ourfile);
-            $ourconfig->set('username', $username, 'user', $channel);
-            $ourconfig->set('password', $password, 'user', $channel);
-            $ourconfig->store();
-        } else {
-            return $this->raiseError("Login failed!");
+
+        if ($ok !== true) {
+            return $this->raiseError('Login failed!');
         }
+
+        $this->ui->outputData("Logged in.", $command);
+        // avoid changing any temporary settings changed with -d
+        $ourconfig = new PEAR_Config($ourfile, $ourfile);
+        $ourconfig->set('username', $username, 'user', $channel);
+        $ourconfig->set('password', $password, 'user', $channel);
+        $ourconfig->store();
+
         return true;
     }
-
-    // }}}
-    // {{{ doLogout()
 
     /**
      * Execute the 'logout' command.
      *
      * @param string $command command name
-     *
      * @param array $options option_name => value
-     *
      * @param array $params list of additional parameters
      *
      * @return bool TRUE on success or
@@ -183,12 +169,13 @@ password from your user configuration.',
      */
     function doLogout($command, $options, $params)
     {
-        $reg = &$this->config->getRegistry();
+        $reg     = &$this->config->getRegistry();
         $channel = $this->config->get('default_channel');
-        $chan = $reg->getChannel($channel);
+        $chan    = $reg->getChannel($channel);
         if (PEAR::isError($chan)) {
             return $this->raiseError($chan);
         }
+
         $server = $this->config->get('preferred_mirror');
         $this->ui->outputData("Logging out from $server.", $command);
         $this->config->remove('username');
@@ -196,8 +183,4 @@ password from your user configuration.',
         $this->config->store();
         return true;
     }
-
-    // }}}
 }
-
-?>
