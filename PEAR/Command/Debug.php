@@ -28,8 +28,6 @@ require_once 'PEAR/Config.php';
  */
 class PEAR_Command_Debug extends PEAR_Command_Common
 {
-    // {{{ properties
-
     var $commands = array(
         'debugrpc' => array(
             'summary' => 'displays output from a call to an XML-RPC function on the default server',
@@ -42,18 +40,13 @@ params are interpreted as php values and evaled - be careful',
 
         );
 
-    // }}}
-
 
     /**
      * Execute the 'login' command.
      *
      * @param string $command command name
-     *
      * @param array $options option_name => value
-     *
      * @param array $params list of additional parameters
-     *
      * @return bool TRUE on success, FALSE for unknown commands, or
      * a PEAR error on failure
      *
@@ -64,6 +57,7 @@ params are interpreted as php values and evaled - be careful',
         if (!count($params)) {
             return true;
         }
+
         $remote = &$this->config->getRemote();
         $method = array_shift($params);
         if (count($params)) {
@@ -71,13 +65,10 @@ params are interpreted as php values and evaled - be careful',
             $this->ui->outputData('Evaling "' . $params . '"');
             eval($params);
         }
+
         $remote->clearCache($method, $params);
         array_unshift($params, $method);
         var_dump(call_user_func_array(array(&$remote, 'call'), $params));
         return true;
     }
-
-    // }}}
 }
-
-?>

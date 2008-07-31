@@ -306,7 +306,7 @@ generate both package.xml.
         $contents = $pf2->getContents();
         $release = $pf2->getReleases();
         if (isset($releases[0])) {
-            return $this->raiseError('Cannot safely process "' . $packagexml . '" contains ' 
+            return $this->raiseError('Cannot safely process "' . $packagexml . '" contains '
             . 'multiple extsrcrelease/zendextsrcrelease tags.  Using a PEAR_PackageFileManager-based script ' .
             'or the convert command is an option');
         }
@@ -317,7 +317,7 @@ generate both package.xml.
             }
         }
         if (isset($release['filelist']['ignore'])) {
-            return $this->raiseError('Cannot safely process "' . $packagexml . '" contains ' 
+            return $this->raiseError('Cannot safely process "' . $packagexml . '" contains '
             . 'ignore tags.  Using a PEAR_PackageFileManager-based script or the convert' .
             ' command is an option');
         }
@@ -372,5 +372,3 @@ generate both package.xml.
         $gen->toPackageFile('.');
     }
 }
-
-?>

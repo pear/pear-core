@@ -42,8 +42,6 @@ require_once 'PEAR/Command/Common.php';
  */
 class PEAR_Command_Channels extends PEAR_Command_Common
 {
-    // {{{ properties
-
     var $commands = array(
         'list-channels' => array(
             'summary' => 'List Available Channels',
@@ -143,9 +141,6 @@ password via the system\'s process list.
             ),
         );
 
-    // }}}
-    // {{{ constructor
-
     /**
      * PEAR_Command_Registry constructor.
      *
@@ -155,10 +150,6 @@ password via the system\'s process list.
     {
         parent::PEAR_Command_Common($ui, $config);
     }
-
-    // }}}
-
-    // {{{ doList()
 
     function _sortChannels($a, $b)
     {
@@ -180,7 +171,8 @@ password via the system\'s process list.
             $data['data'][] = array($channel->getName(),
                                       $channel->getSummary());
         }
-        if (count($registered)==0) {
+
+        if (count($registered) === 0) {
             $data = '(no registered channels)';
         }
         $this->ui->outputData($data, $command);
@@ -212,10 +204,11 @@ password via the system\'s process list.
 
     function doInfo($command, $options, $params)
     {
-        if (sizeof($params) != 1) {
+        if (count($params) !== 1) {
             return $this->raiseError("No channel specified");
         }
-        $reg = &$this->config->getRegistry();
+
+        $reg     = &$this->config->getRegistry();
         $channel = strtolower($params[0]);
         if ($reg->channelExists($channel)) {
             $chan = $reg->getChannel($channel);
@@ -236,23 +229,26 @@ password via the system\'s process list.
                     $contents = implode('', file($loc));
                 }
             } else {
-                if (file_exists($params[0])) {
-                    $fp = fopen($params[0], 'r');
-                    if (!$fp) {
-                        return $this->raiseError('Cannot open "' . $params[0] . '"');
-                    }
-                } else {
+                if (!file_exists($params[0])) {
                     return $this->raiseError('Unknown channel "' . $channel . '"');
                 }
+
+                $fp = fopen($params[0], 'r');
+                if (!$fp) {
+                    return $this->raiseError('Cannot open "' . $params[0] . '"');
+                }
+
                 $contents = '';
                 while (!feof($fp)) {
                     $contents .= fread($fp, 1024);
                 }
                 fclose($fp);
             }
+
             if (!class_exists('PEAR_ChannelFile')) {
                 require_once 'PEAR/ChannelFile.php';
             }
+
             $chan = new PEAR_ChannelFile;
             $chan->fromXmlString($contents);
             $chan->validate();
@@ -263,147 +259,164 @@ password via the system\'s process list.
                 return $this->raiseError('Channel file "' . $params[0] . '" is not valid');
             }
         }
-        if ($chan) {
-            $channel = $chan->getName();
-            $caption = 'Channel ' . $channel . ' Information:';
-            $data1 = array(
-                'caption' => $caption,
-                'border' => true);
-            $data1['data']['server'] = array('Name and Server', $chan->getName());
-            if ($chan->getAlias() != $chan->getName()) {
-                $data1['data']['alias'] = array('Alias', $chan->getAlias());
-            }
-            $data1['data']['summary'] = array('Summary', $chan->getSummary());
-            $validate = $chan->getValidationPackage();
-            $data1['data']['vpackage'] = array('Validation Package Name', $validate['_content']);
-            $data1['data']['vpackageversion'] =
-                array('Validation Package Version', $validate['attribs']['version']);
-            $d = array();
-            $d['main'] = $data1;
 
-            $data['data'] = array();
-            $data['caption'] = 'Server Capabilities';
-            $data['headline'] = array('Type', 'Version/REST type', 'Function Name/REST base');
-            $capabilities = $chan->getFunctions('xmlrpc');
-            $soaps = $chan->getFunctions('soap');
-            if ($capabilities || $soaps || $chan->supportsREST()) {
-                if ($capabilities) {
-                    if (!isset($capabilities[0])) {
-                        $capabilities = array($capabilities);
-                    }
-                    foreach ($capabilities as $protocol) {
-                        $data['data'][] = array('xmlrpc', $protocol['attribs']['version'],
-                            $protocol['_content']);
-                    }
-                }
-                if ($soaps) {
-                    if (!isset($soaps[0])) {
-                        $soaps = array($soaps);
-                    }
-                    foreach ($soaps as $protocol) {
-                        $data['data'][] = array('soap', $protocol['attribs']['version'],
-                            $protocol['_content']);
-                    }
-                }
-                if ($chan->supportsREST()) {
-                    $funcs = $chan->getFunctions('rest');
-                    if (!isset($funcs[0])) {
-                        $funcs = array($funcs);
-                    }
-                    foreach ($funcs as $protocol) {
-                        $data['data'][] = array('rest', $protocol['attribs']['type'],
-                            $protocol['_content']);
-                    }
-                }
-            } else {
-                $data['data'][] = array('No supported protocols');
-            }
-            $d['protocols'] = $data;
-            $data['data'] = array();
-            $mirrors = $chan->getMirrors();
-            if ($mirrors) {
-                $data['caption'] = 'Channel ' . $channel . ' Mirrors:';
-                unset($data['headline']);
-                foreach ($mirrors as $mirror) {
-                    $data['data'][] = array($mirror['attribs']['host']);
-                    $d['mirrors'] = $data;
-                }
-                foreach ($mirrors as $i => $mirror) {
-                    $data['data'] = array();
-                    $data['caption'] = 'Mirror ' . $mirror['attribs']['host'] . ' Capabilities';
-                    $data['headline'] = array('Type', 'Version/REST type', 'Function Name/REST base');
-                    $capabilities = $chan->getFunctions('xmlrpc', $mirror['attribs']['host']);
-                    $soaps = $chan->getFunctions('soap', $mirror['attribs']['host']);
-                    if ($capabilities || $soaps || $chan->supportsREST($mirror['attribs']['host'])) {
-                        if ($capabilities) {
-                            if (!isset($capabilities[0])) {
-                                $capabilities = array($capabilities);
-                            }
-                            foreach ($capabilities as $protocol) {
-                                $data['data'][] = array('xmlrpc', $protocol['attribs']['version'],
-                                    $protocol['_content']);
-                            }
-                        }
-                        if ($soaps) {
-                            if (!isset($soaps[0])) {
-                                $soaps = array($soaps);
-                            }
-                            foreach ($soaps as $protocol) {
-                                $data['data'][] = array('soap', $protocol['attribs']['version'],
-                                    $protocol['_content']);
-                            }
-                        }
-                        if ($chan->supportsREST($mirror['attribs']['host'])) {
-                            $funcs = $chan->getFunctions('rest', $mirror['attribs']['host']);
-                            if (!isset($funcs[0])) {
-                                $funcs = array($funcs);
-                            }
-                            foreach ($funcs as $protocol) {
-                                $data['data'][] = array('rest', $protocol['attribs']['type'],
-                                    $protocol['_content']);
-                            }
-                        }
-                    } else {
-                        $data['data'][] = array('No supported protocols');
-                    }
-                    $d['mirrorprotocols' . $i] = $data;
-                }
-            }
-            $this->ui->outputData($d, 'channel-info');
-        } else {
+        if (!$chan) {
             return $this->raiseError('Serious error: Channel "' . $params[0] .
                 '" has a corrupted registry entry');
         }
+
+        $channel = $chan->getName();
+        $caption = 'Channel ' . $channel . ' Information:';
+        $data1 = array(
+            'caption' => $caption,
+            'border' => true);
+        $data1['data']['server'] = array('Name and Server', $chan->getName());
+        if ($chan->getAlias() != $chan->getName()) {
+            $data1['data']['alias'] = array('Alias', $chan->getAlias());
+        }
+
+        $data1['data']['summary'] = array('Summary', $chan->getSummary());
+        $validate = $chan->getValidationPackage();
+        $data1['data']['vpackage'] = array('Validation Package Name', $validate['_content']);
+        $data1['data']['vpackageversion'] =
+            array('Validation Package Version', $validate['attribs']['version']);
+        $d = array();
+        $d['main'] = $data1;
+
+        $data['data'] = array();
+        $data['caption'] = 'Server Capabilities';
+        $data['headline'] = array('Type', 'Version/REST type', 'Function Name/REST base');
+        $capabilities = $chan->getFunctions('xmlrpc');
+        $soaps = $chan->getFunctions('soap');
+        if ($capabilities || $soaps || $chan->supportsREST()) {
+            if ($capabilities) {
+                if (!isset($capabilities[0])) {
+                    $capabilities = array($capabilities);
+                }
+
+                foreach ($capabilities as $protocol) {
+                    $data['data'][] = array('xmlrpc', $protocol['attribs']['version'],
+                        $protocol['_content']);
+                }
+            }
+
+            if ($soaps) {
+                if (!isset($soaps[0])) {
+                    $soaps = array($soaps);
+                }
+                foreach ($soaps as $protocol) {
+                    $data['data'][] = array('soap', $protocol['attribs']['version'],
+                        $protocol['_content']);
+                }
+            }
+
+            if ($chan->supportsREST()) {
+                $funcs = $chan->getFunctions('rest');
+                if (!isset($funcs[0])) {
+                    $funcs = array($funcs);
+                }
+                foreach ($funcs as $protocol) {
+                    $data['data'][] = array('rest', $protocol['attribs']['type'],
+                        $protocol['_content']);
+                }
+            }
+        } else {
+            $data['data'][] = array('No supported protocols');
+        }
+
+        $d['protocols'] = $data;
+        $data['data'] = array();
+        $mirrors = $chan->getMirrors();
+        if ($mirrors) {
+            $data['caption'] = 'Channel ' . $channel . ' Mirrors:';
+            unset($data['headline']);
+            foreach ($mirrors as $mirror) {
+                $data['data'][] = array($mirror['attribs']['host']);
+                $d['mirrors'] = $data;
+            }
+
+            foreach ($mirrors as $i => $mirror) {
+                $data['data'] = array();
+                $data['caption'] = 'Mirror ' . $mirror['attribs']['host'] . ' Capabilities';
+                $data['headline'] = array('Type', 'Version/REST type', 'Function Name/REST base');
+                $capabilities = $chan->getFunctions('xmlrpc', $mirror['attribs']['host']);
+                $soaps = $chan->getFunctions('soap', $mirror['attribs']['host']);
+                if ($capabilities || $soaps || $chan->supportsREST($mirror['attribs']['host'])) {
+                    if ($capabilities) {
+                        if (!isset($capabilities[0])) {
+                            $capabilities = array($capabilities);
+                        }
+                        foreach ($capabilities as $protocol) {
+                            $data['data'][] = array('xmlrpc', $protocol['attribs']['version'],
+                                $protocol['_content']);
+                        }
+                    }
+
+                    if ($soaps) {
+                        if (!isset($soaps[0])) {
+                            $soaps = array($soaps);
+                        }
+                        foreach ($soaps as $protocol) {
+                            $data['data'][] = array('soap', $protocol['attribs']['version'],
+                                $protocol['_content']);
+                        }
+                    }
+
+                    if ($chan->supportsREST($mirror['attribs']['host'])) {
+                        $funcs = $chan->getFunctions('rest', $mirror['attribs']['host']);
+                        if (!isset($funcs[0])) {
+                            $funcs = array($funcs);
+                        }
+
+                        foreach ($funcs as $protocol) {
+                            $data['data'][] = array('rest', $protocol['attribs']['type'],
+                                $protocol['_content']);
+                        }
+                    }
+                } else {
+                    $data['data'][] = array('No supported protocols');
+                }
+                $d['mirrorprotocols' . $i] = $data;
+            }
+        }
+        $this->ui->outputData($d, 'channel-info');
     }
 
     // }}}
 
     function doDelete($command, $options, $params)
     {
-        if (sizeof($params) != 1) {
+        if (count($params) !== 1) {
             return $this->raiseError('channel-delete: no channel specified');
         }
+
         $reg = &$this->config->getRegistry();
         if (!$reg->channelExists($params[0])) {
             return $this->raiseError('channel-delete: channel "' . $params[0] . '" does not exist');
         }
+
         $channel = $reg->channelName($params[0]);
         if ($channel == 'pear.php.net') {
             return $this->raiseError('Cannot delete the pear.php.net channel');
         }
+
         if ($channel == 'pecl.php.net') {
             return $this->raiseError('Cannot delete the pecl.php.net channel');
         }
+
         if ($channel == '__uri') {
             return $this->raiseError('Cannot delete the __uri pseudo-channel');
         }
+
         if (PEAR::isError($err = $reg->listPackages($channel))) {
             return $err;
         }
+
         if (count($err)) {
             return $this->raiseError('Channel "' . $channel .
                 '" has installed packages, cannot delete');
         }
+
         if (!$reg->deleteChannel($channel)) {
             return $this->raiseError('Channel "' . $channel . '" deletion failed');
         } else {
@@ -414,7 +427,7 @@ password via the system\'s process list.
 
     function doAdd($command, $options, $params)
     {
-        if (sizeof($params) != 1) {
+        if (count($params) !== 1) {
             return $this->raiseError('channel-add: no channel file specified');
         }
 
@@ -512,6 +525,10 @@ password via the system\'s process list.
 
     function doUpdate($command, $options, $params)
     {
+        if (count($params) !== 1) {
+            return $this->raiseError("No channel file specified");
+        }
+
         $tmpdir = $this->config->get('temp_dir');
         if (!file_exists($tmpdir)) {
             require_once 'System.php';
@@ -524,15 +541,14 @@ password via the system\'s process list.
                     '" - You can change this location with "pear config-set temp_dir"');
             }
         }
+
         if (!is_writable($tmpdir)) {
             return $this->raiseError('channel-add: temp_dir is not writable: "' .
                 $tmpdir .
                 '" - You can change this location with "pear config-set temp_dir"');
         }
+
         $reg = &$this->config->getRegistry();
-        if (sizeof($params) != 1) {
-            return $this->raiseError("No channel file specified");
-        }
         $lastmodified = false;
         if ((!file_exists($params[0]) || is_dir($params[0]))
               && $reg->channelExists(strtolower($params[0]))) {
@@ -540,6 +556,7 @@ password via the system\'s process list.
             if (PEAR::isError($c)) {
                 return $this->raiseError($c);
             }
+
             $this->ui->outputData("Updating channel \"$params[0]\"", $command);
             $dl = &$this->getDownloader(array());
             // if force is specified, use a timestamp of "1" to force retrieval
@@ -552,29 +569,32 @@ password via the system\'s process list.
                 return $this->raiseError('Cannot retrieve channel.xml for channel "' .
                     $c->getName() . '" (' . $contents->getMessage() . ')');
             }
+
             list($contents, $lastmodified) = $contents;
             if (!$contents) {
                 $this->ui->outputData("Channel \"$params[0]\" is up to date");
                 return;
             }
+
             $contents = implode('', file($contents));
             if (!class_exists('PEAR_ChannelFile')) {
                 require_once 'PEAR/ChannelFile.php';
             }
+
             $channel = new PEAR_ChannelFile;
             $channel->fromXmlString($contents);
             if (!$channel->getErrors()) {
                 // security check: is the downloaded file for the channel we got it from?
                 if (strtolower($channel->getName()) != strtolower($c->getName())) {
-                    if (isset($options['force'])) {
-                        $this->ui->log(0, 'WARNING: downloaded channel definition file' .
-                            ' for channel "' . $channel->getName() . '" from channel "' .
-                            strtolower($c->getName()) . '"');
-                    } else {
+                    if (!isset($options['force'])) {
                         return $this->raiseError('ERROR: downloaded channel definition file' .
                             ' for channel "' . $channel->getName() . '" from channel "' .
                             strtolower($c->getName()) . '"');
                     }
+
+                    $this->ui->log(0, 'WARNING: downloaded channel definition file' .
+                        ' for channel "' . $channel->getName() . '" from channel "' .
+                        strtolower($c->getName()) . '"');
                 }
             }
         } else {
@@ -587,30 +607,35 @@ password via the system\'s process list.
                 if (PEAR::isError($loc)) {
                     return $this->raiseError("Cannot open " . $params[0] .
                          ' (' . $loc->getMessage() . ')');
-                } else {
-                    list($loc, $lastmodified) = $loc;
-                    $contents = implode('', file($loc));
                 }
+
+                list($loc, $lastmodified) = $loc;
+                $contents = implode('', file($loc));
             } else {
                 $fp = false;
                 if (file_exists($params[0])) {
                     $fp = fopen($params[0], 'r');
                 }
+
                 if (!$fp) {
                     return $this->raiseError("Cannot open " . $params[0]);
                 }
+
                 $contents = '';
                 while (!feof($fp)) {
                     $contents .= fread($fp, 1024);
                 }
                 fclose($fp);
             }
+
             if (!class_exists('PEAR_ChannelFile')) {
                 require_once 'PEAR/ChannelFile.php';
             }
+
             $channel = new PEAR_ChannelFile;
             $channel->fromXmlString($contents);
         }
+
         $exit = false;
         if (count($errors = $channel->getErrors(true))) {
             foreach ($errors as $error) {
@@ -623,18 +648,22 @@ password via the system\'s process list.
                 return $this->raiseError('Invalid channel.xml file');
             }
         }
+
         if (!$reg->channelExists($channel->getName())) {
             return $this->raiseError('Error: Channel "' . $channel->getName() .
                 '" does not exist, use channel-add to add an entry');
         }
+
         $ret = $reg->updateChannel($channel, $lastmodified);
         if (PEAR::isError($ret)) {
             return $ret;
         }
+
         if (!$ret) {
             return $this->raiseError('Updating Channel "' . $channel->getName() .
                 '" in registry failed');
         }
+
         $this->config->setChannels($reg->listChannels());
         $this->config->writeConfigFile();
         $this->ui->outputData('Update of Channel "' . $channel->getName() . '" succeeded');
@@ -651,37 +680,43 @@ password via the system\'s process list.
 
     function doAlias($command, $options, $params)
     {
-        $reg = &$this->config->getRegistry();
-        if (sizeof($params) == 1) {
+        if (count($params) === 1) {
             return $this->raiseError('No channel alias specified');
         }
-        if (sizeof($params) != 2) {
+
+        if (count($params) !== 2) {
             return $this->raiseError(
                 'Invalid format, correct is: channel-alias channel alias');
         }
+
+        $reg = &$this->config->getRegistry();
         if (!$reg->channelExists($params[0], true)) {
+            $extra = '';
             if ($reg->isAlias($params[0])) {
                 $extra = ' (use "channel-alias ' . $reg->channelName($params[0]) . ' ' .
                     strtolower($params[1]) . '")';
-            } else {
-                $extra = '';
             }
+
             return $this->raiseError('"' . $params[0] . '" is not a valid channel' . $extra);
         }
+
         if ($reg->isAlias($params[1])) {
             return $this->raiseError('Channel "' . $reg->channelName($params[1]) . '" is ' .
                 'already aliased to "' . strtolower($params[1]) . '", cannot re-alias');
         }
+
         $chan = &$reg->getChannel($params[0]);
         if (PEAR::isError($chan)) {
             return $this->raiseError('Corrupt registry?  Error retrieving channel "' . $params[0] .
                 '" information (' . $chan->getMessage() . ')');
         }
+
         // make it a local alias
         if (!$chan->setAlias(strtolower($params[1]), true)) {
             return $this->raiseError('Alias "' . strtolower($params[1]) .
                 '" is not a valid channel alias');
         }
+
         $reg->updateChannel($chan);
         $this->ui->outputData('Channel "' . $chan->getName() . '" aliased successfully to "' .
             strtolower($params[1]) . '"');
@@ -700,8 +735,7 @@ password via the system\'s process list.
      */
     function doDiscover($command, $options, $params)
     {
-        $reg = &$this->config->getRegistry();
-        if (sizeof($params) != 1) {
+        if (count($params) !== 1) {
             return $this->raiseError("No channel server specified");
         }
 
@@ -709,11 +743,12 @@ password via the system\'s process list.
         if (preg_match('/^(.+):(.+)@(.+)\\z/', $params[0], $matches)) {
             $username = $matches[1];
             $password = $matches[2];
-            $channel = $matches[3];
+            $channel  = $matches[3];
         } else {
             $channel = $params[0];
         }
 
+        $reg = &$this->config->getRegistry();
         if ($reg->channelExists($channel)) {
             if (!$reg->isAlias($channel)) {
                 return $this->raiseError("Channel \"$channel\" is already initialized");
@@ -746,4 +781,3 @@ password via the system\'s process list.
         $this->ui->outputData("Discovery of channel \"$channel\" succeeded", $command);
     }
 }
-?>

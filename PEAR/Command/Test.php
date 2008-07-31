@@ -44,8 +44,6 @@ require_once 'PEAR/Command/Common.php';
 
 class PEAR_Command_Test extends PEAR_Command_Common
 {
-    // {{{ properties
-
     var $commands = array(
         'run-tests' => array(
             'summary' => 'Run Regression Tests',
@@ -103,9 +101,6 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
 
     var $output;
 
-    // }}}
-    // {{{ constructor
-
     /**
      * PEAR_Command_Test constructor.
      *
@@ -115,9 +110,6 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
     {
         parent::PEAR_Command_Common($ui, $config);
     }
-
-    // }}}
-    // {{{ doRunTests()
 
     function doRunTests($command, $options, $params)
     {
@@ -345,5 +337,4 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
 
         return true;
     }
-    // }}}
 }
