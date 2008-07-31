@@ -598,10 +598,11 @@ class PEAR_Config extends PEAR
         }
 
         if (empty($system_file)) {
+            $system_file = PEAR_CONFIG_SYSCONFDIR . $sl;
             if (OS_WINDOWS) {
-                $system_file = PEAR_CONFIG_SYSCONFDIR . $sl . 'pearsys.ini';
+                $system_file .= 'pearsys.ini';
             } else {
-                $system_file = PEAR_CONFIG_SYSCONFDIR . $sl . 'pear.conf';
+                $system_file .= 'pear.conf';
             }
         }
 
@@ -652,13 +653,13 @@ class PEAR_Config extends PEAR
         $sl = DIRECTORY_SEPARATOR;
         if (OS_WINDOWS) {
             return array(
-                'user' => PEAR_CONFIG_SYSCONFDIR . $sl . 'pear.ini',
+                'user'   => PEAR_CONFIG_SYSCONFDIR . $sl . 'pear.ini',
                 'system' =>  PEAR_CONFIG_SYSCONFDIR . $sl . 'pearsys.ini'
             );
         }
 
         return array(
-            'user' => getenv('HOME') . $sl . '.pearrc',
+            'user'   => getenv('HOME') . $sl . '.pearrc',
             'system' => PEAR_CONFIG_SYSCONFDIR . $sl . 'pear.conf'
         );
     }
@@ -737,10 +738,9 @@ class PEAR_Config extends PEAR
             $this->lastError = $data;
 
             return $data;
-        } else {
-            $this->files[$layer] = $file;
         }
 
+        $this->files[$layer] = $file;
         $this->_decodeInput($data);
         $this->configuration[$layer] = $data;
         $this->_setupChannels();
@@ -847,16 +847,15 @@ class PEAR_Config extends PEAR
 
     function deleteChannel($channel)
     {
+        $ch = strtolower($channel);
         foreach ($this->configuration as $layer => $data) {
-            if (isset($data['__channels'])) {
-                if (isset($data['__channels'][strtolower($channel)])) {
-                    unset($this->configuration[$layer]['__channels'][strtolower($channel)]);
-                }
+            if (isset($data['__channels']) && isset($data['__channels'][$ch])) {
+                unset($this->configuration[$layer]['__channels'][$ch]);
             }
         }
 
         $this->_channels = array_flip($this->_channels);
-        unset($this->_channels[strtolower($channel)]);
+        unset($this->_channels[$ch]);
         $this->_channels = array_flip($this->_channels);
     }
 
@@ -1008,6 +1007,7 @@ class PEAR_Config extends PEAR
         if (file_exists($file)) {
             $fp = @fopen($file, "r");
         }
+
         if (!$fp) {
             return $this->raiseError("PEAR_Config::readConfigFile fopen('$file','r') failed");
         }
@@ -1101,13 +1101,11 @@ class PEAR_Config extends PEAR
 
             if (!isset($var['type'])) {
                 return $this->raiseError('Configuration information must contain a type');
-            } else {
-                if (!in_array($var['type'],
-                      array('string', 'mask', 'password', 'directory', 'file', 'set'))) {
-                    return $this->raiseError(
-                        'Configuration type must be one of directory, file, string, ' .
-                        'mask, set, or password');
-                }
+            } elseif (!in_array($var['type'],
+                    array('string', 'mask', 'password', 'directory', 'file', 'set'))) {
+                  return $this->raiseError(
+                      'Configuration type must be one of directory, file, string, ' .
+                      'mask, set, or password');
             }
             if (!isset($var['default'])) {
                 return $this->raiseError(
@@ -1120,14 +1118,14 @@ class PEAR_Config extends PEAR
                     if (strpos($config_var, 'text') === 0) {
                         $real_default .= $val;
                     } elseif (strpos($config_var, 'constant') === 0) {
-                        if (defined($val)) {
-                            $real_default .= constant($val);
-                        } else {
+                        if (!defined($val)) {
                             return $this->raiseError(
                                 'Unknown constant "' . $val . '" requested in ' .
                                 'default value for configuration variable "' .
                                 $name . '"');
                         }
+
+                        $real_default .= constant($val);
                     } elseif (isset($this->configuration_info[$config_var])) {
                         $real_default .=
                             $this->configuration_info[$config_var]['default'];
@@ -1543,22 +1541,22 @@ class PEAR_Config extends PEAR
             }
 
             return false;
-        } else {
-            if ($key == 'default_channel') {
-                if (!isset($reg)) {
-                    $reg = &$this->getRegistry($layer);
-                    if (!$reg) {
-                        $reg = &$this->getRegistry();
-                    }
-                }
+        }
 
-                if ($reg) {
-                    $value = $reg->channelName($value);
+        if ($key == 'default_channel') {
+            if (!isset($reg)) {
+                $reg = &$this->getRegistry($layer);
+                if (!$reg) {
+                    $reg = &$this->getRegistry();
                 }
+            }
 
-                if (!$value) {
-                    return false;
-                }
+            if ($reg) {
+                $value = $reg->channelName($value);
+            }
+
+            if (!$value) {
+                return false;
             }
         }
 
