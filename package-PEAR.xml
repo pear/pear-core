@@ -107,6 +107,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * Fix Bug #14210: pear list -ia brings warnings [dufuz]
   * Fix Bug #14274: PEAR packager mangles package.xml encoding, then complains about it [dufuz]
   * Fix Bug #14287: cannot upgrade from stable to beta via -beta when config is set to stable [dufuz]
+  * Fix Bug #14437: openbasedir warning when loading config [dufuz]
 
   NOTE!
   Functions that have been deprecated for 3+ years in PEAR_Common have been removed:
@@ -123,7 +124,6 @@ http://pear.php.net/dtd/package-1.0.xsd">
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
-  <provides type="function" name="md5_file"/>
   <deps>
    <dep type="php" rel="ge" version="4.3.0"/>
    <dep type="pkg" rel="ge" version="1.3.3">PEAR</dep>
