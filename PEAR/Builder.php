@@ -19,7 +19,7 @@
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 0.1
- * 
+ *
  * TODO: log output parameters in PECL command line
  * TODO: msdev path in configuration
  */
@@ -29,6 +29,7 @@
  */
 require_once 'PEAR/Common.php';
 require_once 'PEAR/PackageFile.php';
+
 /**
  * Class to handle building (compiling) extensions.
  *
@@ -45,8 +46,6 @@ require_once 'PEAR/PackageFile.php';
  */
 class PEAR_Builder extends PEAR_Common
 {
-    // {{{ properties
-
     var $php_api_version = 0;
     var $zend_module_api_no = 0;
     var $zend_extension_api_no = 0;
@@ -62,8 +61,6 @@ class PEAR_Builder extends PEAR_Common
     // used for msdev builds
     var $_lastline = null;
     var $_firstline = null;
-    // }}}
-    // {{{ constructor
 
     /**
      * PEAR_Builder constructor.
@@ -77,10 +74,6 @@ class PEAR_Builder extends PEAR_Common
         parent::PEAR_Common();
         $this->setFrontendObject($ui);
     }
-
-    // }}}
-
-    // {{{ _build_win32()
 
     /**
      * Build an extension from source on windows.
@@ -188,9 +181,7 @@ class PEAR_Builder extends PEAR_Common
         $this->_lastline = $data;
         call_user_func($this->current_callback, $what, $data);
     }
-    // }}}
 
-    // {{{ _harventInstDir
     /**
      * @param string
      * @param string
@@ -230,10 +221,6 @@ class PEAR_Builder extends PEAR_Common
         closedir($d);
         return $ret;
     }
-
-    // }}}
-
-    // {{{ build()
 
     /**
      * Build an extension from source.  Runs "phpize" in the source
@@ -381,9 +368,6 @@ class PEAR_Builder extends PEAR_Common
         return $built_files;
     }
 
-    // }}}
-    // {{{ phpizeCallback()
-
     /**
      * Message callback function used when running the "phpize"
      * program.  Extracts the API numbers used.  Ignores other message
@@ -416,9 +400,6 @@ class PEAR_Builder extends PEAR_Common
             }
         }
     }
-
-    // }}}
-    // {{{ _runCommand()
 
     /**
      * Run an external command, using a message callback to report
@@ -466,9 +447,6 @@ class PEAR_Builder extends PEAR_Common
         return ($exitcode == 0);
     }
 
-    // }}}
-    // {{{ log()
-
     function log($level, $msg)
     {
         if ($this->current_callback) {
@@ -479,8 +457,4 @@ class PEAR_Builder extends PEAR_Common
         }
         return PEAR_Common::log($level, $msg);
     }
-
-    // }}}
 }
-
-?>

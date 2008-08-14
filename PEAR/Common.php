@@ -28,8 +28,6 @@
  */
 require_once 'PEAR.php';
 
-// {{{ constants and globals
-
 /**
  * PEAR_Common error when an invalid PHP file is passed to PEAR_Common::analyzeSourceCode()
  */
@@ -117,8 +115,6 @@ $GLOBALS['_PEAR_Common_provide_types'] = array('ext', 'prog', 'class', 'function
  */
 $GLOBALS['_PEAR_Common_script_phases'] = array('pre-install', 'post-install', 'pre-uninstall', 'post-uninstall', 'pre-build', 'post-build', 'pre-configure', 'post-configure', 'pre-setup', 'post-setup');
 
-// }}}
-
 /**
  * Class providing common functionality for PEAR administration classes.
  * @category   pear
@@ -136,7 +132,6 @@ $GLOBALS['_PEAR_Common_script_phases'] = array('pre-install', 'post-install', 'p
  */
 class PEAR_Common extends PEAR
 {
-    // {{{ properties
     /**
      * User Interface object (PEAR_Frontend_* class).  If null,
      * the log() method uses print.
@@ -150,10 +145,6 @@ class PEAR_Common extends PEAR
      */
     var $config = null;
 
-    // }}}
-
-    // {{{ constructor
-
     /**
      * PEAR_Common constructor
      *
@@ -165,9 +156,6 @@ class PEAR_Common extends PEAR
         $this->config = &PEAR_Config::singleton();
         $this->debug = $this->config->get('verbose');
     }
-
-    // }}}
-    // {{{ destructor
 
     /**
      * PEAR_Common destructor
@@ -191,9 +179,6 @@ class PEAR_Common extends PEAR
         }
     }
 
-    // }}}
-    // {{{ addTempFile()
-
     /**
      * Register a temporary file or directory.  When the destructor is
      * executed, all registered temporary files and directories are
@@ -213,9 +198,6 @@ class PEAR_Common extends PEAR
         PEAR_Frontend::addTempFile($file);
     }
 
-    // }}}
-    // {{{ mkDirHier()
-
     /**
      * Wrapper to System::mkDir(), creates a directory as well as
      * any necessary parent directories.
@@ -234,9 +216,6 @@ class PEAR_Common extends PEAR
         }
         return System::mkDir(array('-p', $dir));
     }
-
-    // }}}
-    // {{{ log()
 
     /**
      * Logging method.
@@ -263,9 +242,6 @@ class PEAR_Common extends PEAR
             }
         }
     }
-
-    // }}}
-    // {{{ mkTempDir()
 
     /**
      * Create and register a temporary directory.
@@ -296,9 +272,6 @@ class PEAR_Common extends PEAR
         return $tmpdir;
     }
 
-    // }}}
-    // {{{ setFrontendObject()
-
     /**
      * Set object that represents the frontend to be used.
      *
@@ -310,9 +283,6 @@ class PEAR_Common extends PEAR
     {
         $this->ui = &$ui;
     }
-
-    // }}}
-    // {{{  betterStates()
 
     /**
      * Return an array containing all of the states that are more stable than
@@ -335,9 +305,6 @@ class PEAR_Common extends PEAR
         return array_slice($states, $i + 1);
     }
 
-    // }}}
-    // {{{ getUserRoles()
-
     /**
      * Get the valid roles for a PEAR package maintainer
      *
@@ -348,9 +315,6 @@ class PEAR_Common extends PEAR
     {
         return $GLOBALS['_PEAR_Common_maintainer_roles'];
     }
-
-    // }}}
-    // {{{ getReleaseStates()
 
     /**
      * Get the valid package release states of packages
@@ -363,9 +327,6 @@ class PEAR_Common extends PEAR
         return $GLOBALS['_PEAR_Common_release_states'];
     }
 
-    // }}}
-    // {{{ getDependencyTypes()
-
     /**
      * Get the implemented dependency types (php, ext, pkg etc.)
      *
@@ -376,9 +337,6 @@ class PEAR_Common extends PEAR
     {
         return $GLOBALS['_PEAR_Common_dependency_types'];
     }
-
-    // }}}
-    // {{{ getDependencyRelations()
 
     /**
      * Get the implemented dependency relations (has, lt, ge etc.)
@@ -391,9 +349,6 @@ class PEAR_Common extends PEAR
         return $GLOBALS['_PEAR_Common_dependency_relations'];
     }
 
-    // }}}
-    // {{{ getFileRoles()
-
     /**
      * Get the implemented file roles
      *
@@ -404,9 +359,6 @@ class PEAR_Common extends PEAR
     {
         return $GLOBALS['_PEAR_Common_file_roles'];
     }
-
-    // }}}
-    // {{{ getReplacementTypes()
 
     /**
      * Get the implemented file replacement types in
@@ -419,9 +371,6 @@ class PEAR_Common extends PEAR
         return $GLOBALS['_PEAR_Common_replacement_types'];
     }
 
-    // }}}
-    // {{{ getProvideTypes()
-
     /**
      * Get the implemented file replacement types in
      *
@@ -433,9 +382,6 @@ class PEAR_Common extends PEAR
         return $GLOBALS['_PEAR_Common_provide_types'];
     }
 
-    // }}}
-    // {{{ getScriptPhases()
-
     /**
      * Get the implemented file replacement types in
      *
@@ -446,9 +392,6 @@ class PEAR_Common extends PEAR
     {
         return $GLOBALS['_PEAR_Common_script_phases'];
     }
-
-    // }}}
-    // {{{ validPackageName()
 
     /**
      * Test whether a string contains a valid package name.
@@ -464,10 +407,6 @@ class PEAR_Common extends PEAR
         return (bool)preg_match(PEAR_COMMON_PACKAGE_NAME_PREG, $name);
     }
 
-
-    // }}}
-    // {{{ validPackageVersion()
-
     /**
      * Test whether a string contains a valid package version.
      *
@@ -481,9 +420,6 @@ class PEAR_Common extends PEAR
     {
         return (bool)preg_match(PEAR_COMMON_PACKAGE_VERSION_PREG, $ver);
     }
-
-
-    // }}}
 
     /**
      * @param string $path relative or absolute include path
