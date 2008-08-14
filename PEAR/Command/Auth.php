@@ -109,7 +109,6 @@ password from your user configuration.',
         }
 
         $server   = $this->config->get('preferred_mirror', null, $channel);
-        $remote   = &$this->config->getRemote();
         $username = $this->config->get('username', null, $channel);
         if (empty($username)) {
             $username = isset($_ENV['USER']) ? $_ENV['USER'] : null;
@@ -136,6 +135,7 @@ password from your user configuration.',
         if ($chan->supportsREST()) {
             $ok = true;
         } else {
+            $remote = &$this->config->getRemote();
             $remote->expectError(401);
             $ok = $remote->call('logintest');
             $remote->popExpect();
