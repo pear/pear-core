@@ -84,9 +84,8 @@ if (getenv('PHP_PEAR_HTTP_PROXY')) {
 if (getenv('PHP_PEAR_INSTALL_DIR')) {
     define('PEAR_CONFIG_DEFAULT_PHP_DIR', getenv('PHP_PEAR_INSTALL_DIR'));
 } else {
-    if (file_exists($PEAR_INSTALL_DIR) && is_dir($PEAR_INSTALL_DIR)) {
-        define('PEAR_CONFIG_DEFAULT_PHP_DIR',
-               $PEAR_INSTALL_DIR);
+    if (@file_exists($PEAR_INSTALL_DIR) && is_dir($PEAR_INSTALL_DIR)) {
+        define('PEAR_CONFIG_DEFAULT_PHP_DIR', $PEAR_INSTALL_DIR);
     } else {
         define('PEAR_CONFIG_DEFAULT_PHP_DIR', $PEAR_INSTALL_DIR);
     }
@@ -607,7 +606,7 @@ class PEAR_Config extends PEAR
         }
 
         $this->layers = array_keys($this->configuration);
-        $this->files['user'] = $user_file;
+        $this->files['user']   = $user_file;
         $this->files['system'] = $system_file;
         if ($user_file && file_exists($user_file)) {
             $this->pushErrorHandling(PEAR_ERROR_RETURN);
@@ -618,7 +617,7 @@ class PEAR_Config extends PEAR
             }
         }
 
-        if ($system_file && file_exists($system_file)) {
+        if ($system_file && @file_exists($system_file)) {
             $this->mergeConfigFile($system_file, false, 'system', $strict);
             if ($this->_errorsFound > 0) {
                 return;
