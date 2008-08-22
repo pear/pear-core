@@ -308,12 +308,12 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         return $answers;
     }
 
-    function userDialog($command, $prompts, $types = array(), $defaults = array(),
-                        $screensize = 20)
+    function userDialog($command, $prompts, $types = array(), $defaults = array(), $screensize = 20)
     {
         if (!is_array($prompts)) {
             return array();
         }
+
         $testprompts = array_keys($prompts);
         $result = $defaults;
 
@@ -322,7 +322,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         }
 
         reset($prompts);
-        if (count($prompts) === 1 && $types[key($prompts)] == 'yesno') {
+        if (count($prompts) === 1) {
             foreach ($prompts as $key => $prompt) {
                 $type = $types[$key];
                 $default = @$defaults[$key];
@@ -342,6 +342,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             return $result;
         }
 
+        $first_run = true;
         while (true) {
             $descLength = max(array_map('strlen', $prompts));
             $descFormat = "%-{$descLength}s";
@@ -352,8 +353,8 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 $res = isset($result[$n]) ? $result[$n] : null;
                 printf("%2d. $descFormat : %s\n", ++$i, $prompts[$n], $res);
             }
-
             print "\n1-$last, 'all', 'abort', or Enter to continue: ";
+
             $tmp = trim(fgets(STDIN, 1024));
             if (empty($tmp)) {
                 break;
@@ -364,13 +365,13 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             }
 
             if (isset($testprompts[(int)$tmp - 1])) {
-                $var = $testprompts[(int)$tmp - 1];
+                $var  = $testprompts[(int)$tmp - 1];
                 $desc = $prompts[$var];
                 $current = @$result[$var];
                 print "$desc [$current] : ";
                 $tmp = trim(fgets(STDIN, 1024));
-                if (trim($tmp) !== '') {
-                    $result[$var] = trim($tmp);
+                if ($tmp !== '') {
+                    $result[$var] = $tmp;
                 }
             } elseif ($tmp == 'all') {
                 foreach ($prompts as $var => $desc) {
@@ -382,6 +383,8 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                     }
                 }
             }
+
+            $first_run = false;
         }
 
         if (!defined('STDOUT')) {
