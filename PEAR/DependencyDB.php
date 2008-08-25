@@ -476,7 +476,7 @@ class PEAR_DependencyDB
      */
     function _lock($mode = LOCK_EX)
     {
-        if (eregi('Windows 9', php_uname())) {
+        if (preg_match('/Windows 9/i', php_uname())) {
             return true;
         }
 
@@ -716,7 +716,7 @@ class PEAR_DependencyDB
     function _registerDep(&$data, &$pkg, $dep, $type, $group = false)
     {
         $info = array(
-            'dep'   => strtolower($dep),
+            'dep'   => $dep,
             'type'  => $type,
             'group' => $group
         );
