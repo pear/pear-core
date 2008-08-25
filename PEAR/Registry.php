@@ -158,7 +158,7 @@ class PEAR_Registry extends PEAR
             $dir = $this->install_dir;
             while ($dir && $dir != '.') {
                 $olddir = $dir;
-                $dir = dirname($dir); // cd ..
+                $dir    = dirname($dir);
                 if ($dir != '.' && file_exists($dir)) {
                     if (is_writeable($dir)) {
                         return true;
@@ -777,7 +777,7 @@ class PEAR_Registry extends PEAR
      */
     function _lock($mode = LOCK_EX)
     {
-        if (!eregi('Windows 9', php_uname())) {
+        if (!preg_match('/Windows 9/i', php_uname())) {
             if ($mode != LOCK_UN && is_resource($this->lock_fp)) {
                 // XXX does not check type of lock (LOCK_SH/LOCK_EX)
                 return true;
