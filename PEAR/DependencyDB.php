@@ -476,7 +476,7 @@ class PEAR_DependencyDB
      */
     function _lock($mode = LOCK_EX)
     {
-        if (preg_match('/Windows 9/i', php_uname())) {
+        if (stristr(php_uname(), 'Windows 9')) {
             return true;
         }
 
