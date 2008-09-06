@@ -58,7 +58,6 @@ params are interpreted as php values and evaled - be careful',
             return true;
         }
 
-        $remote = &$this->config->getRemote();
         $method = array_shift($params);
         if (count($params)) {
             $params = '$params=array(' . implode(', ', $params) . ');';
@@ -66,6 +65,7 @@ params are interpreted as php values and evaled - be careful',
             eval($params);
         }
 
+        $remote = &$this->config->getRemote();
         $remote->clearCache($method, $params);
         array_unshift($params, $method);
         var_dump(call_user_func_array(array(&$remote, 'call'), $params));
