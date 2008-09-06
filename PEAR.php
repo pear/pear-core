@@ -456,7 +456,6 @@ class PEAR
     function delExpect($error_code)
     {
         $deleted = false;
-
         if ((is_array($error_code) && (0 != count($error_code)))) {
             // $error_code is a non-empty array here;
             // we walk through it trying to unset all
@@ -476,10 +475,10 @@ class PEAR
             } else {
                 return PEAR::raiseError("The expected error you submitted does not exist"); // IMPROVE ME
             }
-        } else {
-            // $error_code is empty
-            return PEAR::raiseError("The expected error you submitted is empty"); // IMPROVE ME
         }
+
+        // $error_code is empty
+        return PEAR::raiseError("The expected error you submitted is empty"); // IMPROVE ME
     }
 
     // }}}
@@ -546,6 +545,7 @@ class PEAR
                 $mode = PEAR_ERROR_RETURN;
             }
         }
+
         // No mode given, try global ones
         if ($mode === null) {
             // Class error handler
@@ -566,16 +566,19 @@ class PEAR
         } else {
             $ec = 'PEAR_Error';
         }
+
         if (intval(PHP_VERSION) < 5) {
             // little non-eval hack to fix bug #12147
             include 'PEAR/FixPHP5PEARWarnings.php';
             return $a;
         }
+
         if ($skipmsg) {
             $a = new $ec($code, $mode, $options, $userinfo);
         } else {
             $a = new $ec($message, $code, $mode, $options, $userinfo);
         }
+
         return $a;
     }
 
@@ -596,10 +599,10 @@ class PEAR
         if (isset($this) && is_a($this, 'PEAR')) {
             $a = &$this->raiseError($message, $code, null, null, $userinfo);
             return $a;
-        } else {
-            $a = &PEAR::raiseError($message, $code, null, null, $userinfo);
-            return $a;
         }
+
+        $a = &PEAR::raiseError($message, $code, null, null, $userinfo);
+        return $a;
     }
 
     // }}}
@@ -750,6 +753,7 @@ class PEAR
             if ((ini_get('enable_dl') != 1) || (ini_get('safe_mode') == 1)) {
                 return false;
             }
+
             if (OS_WINDOWS) {
                 $suffix = '.dll';
             } elseif (PHP_OS == 'HP-UX') {
@@ -761,8 +765,10 @@ class PEAR
             } else {
                 $suffix = '.so';
             }
+
             return @dl('php_'.$ext.$suffix) || @dl($ext.$suffix);
         }
+
         return true;
     }
 
@@ -1164,4 +1170,3 @@ class PEAR_Error
  * c-basic-offset: 4
  * End:
  */
-?>
