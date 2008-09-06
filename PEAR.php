@@ -278,16 +278,17 @@ class PEAR
      */
     function isError($data, $code = null)
     {
-        if (is_a($data, 'PEAR_Error')) {
-            if (is_null($code)) {
-                return true;
-            } elseif (is_string($code)) {
-                return $data->getMessage() == $code;
-            } else {
-                return $data->getCode() == $code;
-            }
+        if (!is_a($data, 'PEAR_Error')) {
+            return false;
         }
-        return false;
+
+        if (is_null($code)) {
+            return true;
+        } elseif (is_string($code)) {
+            return $data->getMessage() == $code;
+        }
+
+        return $data->getCode() == $code;
     }
 
     // }}}
