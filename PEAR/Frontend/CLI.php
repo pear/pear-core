@@ -249,6 +249,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                             }
                         }
                     }
+
                     $answers = $this->confirmDialog($prompts);
                 } else {
                     $answers = $this->confirmDialog($group['param']);
@@ -259,16 +260,15 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 if (!isset($answers)) {
                     $answers = array();
                 }
-
                 array_unshift($completedPhases, $group['id']);
                 if (!$script->run($answers, $group['id'])) {
                     $script->run($completedPhases, '_undoOnError');
                     return;
                 }
+            } else {
+                $script->run($completedPhases, '_undoOnError');
+                return;
             }
-
-            $script->run($completedPhases, '_undoOnError');
-            return;
         }
     }
 
@@ -284,13 +284,10 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         $prompts = $types = array();
         foreach ($params as $param) {
             $prompts[$param['name']] = $param['prompt'];
-            $types[$param['name']] = $param['type'];
-            if (isset($param['default'])) {
-                $answers[$param['name']] = $param['default'];
-            } else {
-                $answers[$param['name']] = '';
-            }
+            $types[$param['name']]   = $param['type'];
+            $answers[$param['name']] = isset($param['default']) ? $param['default'] : '';
         }
+
         $tried = false;
         do {
             if ($tried) {
@@ -302,9 +299,11 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                     $i++;
                 }
             }
+
             $answers = $this->userDialog('', $prompts, $types, $answers);
             $tried = true;
         } while (is_array($answers) && count(array_filter($answers)) != count($prompts));
+
         return $answers;
     }
 
@@ -322,7 +321,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         }
 
         reset($prompts);
-        if (count($prompts) === 1) {
+        if (count($prompts) === 1 && $types[key($prompts)] == 'yesno') {
             foreach ($prompts as $key => $prompt) {
                 $type = $types[$key];
                 $default = @$defaults[$key];
@@ -471,12 +470,13 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             $this->params['ncols'] = sizeof($columns);
         }
 
-        $this->params['table_data'][] = array(
+        $new_row = array(
             'data'      => $columns,
             'height'    => $highest,
             'rowparams' => $rowparams,
             'colparams' => $colparams,
         );
+        $this->params['table_data'][] = $new_row;
     }
 
     function _endTable()
