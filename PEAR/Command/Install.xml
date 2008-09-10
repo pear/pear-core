@@ -95,6 +95,11 @@ four ways of specifying packages.
   <function>doInstall</function>
   <shortcut>up</shortcut>
   <options>
+   <channel>
+    <shortopt>c</shortopt>
+    <doc>upgrade packages from a specific channel</doc>
+    <arg>CHAN</arg>
+   </channel>
    <force>
     <shortopt>f</shortopt>
     <doc>overwrite newer installed packages</doc>
@@ -160,6 +165,11 @@ More than one package may be specified at once.
   <function>doInstall</function>
   <shortcut>ua</shortcut>
   <options>
+   <channel>
+    <shortopt>c</shortopt>
+    <doc>upgrade packages from a specific channel</doc>
+    <arg>CHAN</arg>
+   </channel>
    <nodeps>
     <shortopt>n</shortopt>
     <doc>ignore dependencies, upgrade anyway</doc>
@@ -189,6 +199,8 @@ More than one package may be specified at once.
    </loose>
   </options>
   <doc>
+WARNING: This function is deprecated in favor of using the upgrade command with no params
+
 Upgrades all packages that have a newer release available.  Upgrades are
 done only if there is a release available of the state specified in
 &quot;preferred_state&quot; (currently {config preferred_state}), or a state considered

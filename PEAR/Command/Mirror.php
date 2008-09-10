@@ -113,10 +113,6 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
               $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
             $rest = &$this->config->getREST('1.0', array());
             $remoteInfo = array_flip($rest->listPackages($base, $channel));
-        } else {
-            $remote = &$this->config->getRemote();
-            $stable = ($this->config->get('preferred_state') == 'stable');
-            $remoteInfo = $remote->call("package.listAll", true, $stable, false);
         }
 
         if (PEAR::isError($remoteInfo)) {

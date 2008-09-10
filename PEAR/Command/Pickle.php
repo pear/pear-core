@@ -304,7 +304,7 @@ generate both package.xml.
             }
         }
         $contents = $pf2->getContents();
-        $release = $pf2->getReleases();
+        $release  = $pf2->getReleases();
         if (isset($releases[0])) {
             return $this->raiseError('Cannot safely process "' . $packagexml . '" contains '
             . 'multiple extsrcrelease/zendextsrcrelease tags.  Using a PEAR_PackageFileManager-based script ' .
@@ -312,8 +312,8 @@ generate both package.xml.
         }
         if ($configoptions = $pf2->getConfigureOptions()) {
             foreach ($configoptions as $option) {
-                $pf->addConfigureOption($option['name'], $option['prompt'],
-                    isset($option['default']) ? $option['default'] : false);
+                $default = isset($option['default']) ? $option['default'] : false;
+                $pf->addConfigureOption($option['name'], $option['prompt'], $default);
             }
         }
         if (isset($release['filelist']['ignore'])) {

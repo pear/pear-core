@@ -140,6 +140,11 @@ four ways of specifying packages.
             'function' => 'doInstall',
             'shortcut' => 'up',
             'options' => array(
+                'channel' => array(
+                    'shortopt' => 'c',
+                    'doc' => 'upgrade packages from a specific channel',
+                    'arg' => 'CHAN',
+                    ),
                 'force' => array(
                     'shortopt' => 'f',
                     'doc' => 'overwrite newer installed packages',
@@ -204,6 +209,11 @@ More than one package may be specified at once.
             'function' => 'doUpgradeAll',
             'shortcut' => 'ua',
             'options' => array(
+                'channel' => array(
+                    'shortopt' => 'c',
+                    'doc' => 'upgrade packages from a specific channel',
+                    'arg' => 'CHAN',
+                    ),
                 'nodeps' => array(
                     'shortopt' => 'n',
                     'doc' => 'ignore dependencies, upgrade anyway',
@@ -233,6 +243,8 @@ More than one package may be specified at once.
                     ),
                 ),
             'doc' => '
+WARNING: This function is deprecated in favor of using the upgrade command with no params
+
 Upgrades all packages that have a newer release available.  Upgrades are
 done only if there is a release available of the state specified in
 "preferred_state" (currently {config preferred_state}), or a state considered
@@ -520,6 +532,16 @@ Run post-installation scripts in package <package>, if any exist.
             require_once 'PEAR/PackageFile.php';
         }
 
+        if (isset($options['installroot']) && isset($options['packagingroot'])) {
+            return $this->raiseError('ERROR: cannot use both --installroot and --packagingroot');
+        }
+
+        $reg = &$this->config->getRegistry();
+        $channel = isset($options['channel']) ? $options['channel'] : $this->config->get('default_channel');
+        if (!$reg->channelExists($channel)) {
+            return $this->raiseError('Channel "' . $channel . '" does not exist');
+        }
+
         if (empty($this->installer)) {
             $this->installer = &$this->getInstaller($this->ui);
         }
@@ -527,18 +549,13 @@ Run post-installation scripts in package <package>, if any exist.
         if ($command == 'upgrade' || $command == 'upgrade-all') {
             // If people run the upgrade command but pass nothing, emulate a upgrade-all
             if ($command == 'upgrade' && empty($params)) {
-                $this->doUpgradeAll($command, $options, $params);
+                return $this->doUpgradeAll($command, $options, $params);
             }
             $options['upgrade'] = true;
         } else {
             $packages = $params;
         }
 
-        if (isset($options['installroot']) && isset($options['packagingroot'])) {
-            return $this->raiseError('ERROR: cannot use both --installroot and --packagingroot');
-        }
-
-        $reg = &$this->config->getRegistry();
         $instreg = &$reg; // instreg used to check if package is installed
         if (isset($options['packagingroot']) && !isset($options['upgrade'])) {
             $packrootphp_dir = $this->installer->_prependPath(
@@ -590,7 +607,7 @@ Run post-installation scripts in package <package>, if any exist.
                 continue;
             }
 
-            $e = $reg->parsePackageName($param, $this->config->get('default_channel'));
+            $e = $reg->parsePackageName($param, $channel);
             if (PEAR::isError($e)) {
                 $otherpackages[] = $param;
             } else {
@@ -637,7 +654,11 @@ Run post-installation scripts in package <package>, if any exist.
 
         $packages = array_merge($abstractpackages, $otherpackages);
         if (!count($packages)) {
-            $this->ui->outputData('Nothing to ' . $command);
+            $c = '';
+            if (isset($options['channel'])){
+                $c .= ' in channel "' . $options['channel'] . '"';
+            }
+            $this->ui->outputData('Nothing to ' . $command . $c);
             return true;
         }
 
@@ -767,10 +788,10 @@ Run post-installation scripts in package <package>, if any exist.
             }
 
             if ($this->config->get('verbose') > 0) {
-                $channel = $param->getChannel();
+                $chan = $param->getChannel();
                 $label = $reg->parsedPackageNameToString(
                     array(
-                        'channel' => $channel,
+                        'channel' => $chan,
                         'package' => $param->getPackage(),
                         'version' => $param->getVersion(),
                     ));
@@ -856,22 +877,29 @@ Run post-installation scripts in package <package>, if any exist.
     function doUpgradeAll($command, $options, $params)
     {
         $reg = &$this->config->getRegistry();
-        $toUpgrade = array();
-        foreach ($reg->listChannels() as $channel) {
+        $upgrade = array();
+
+        if (isset($options['channel'])) {
+            $channels = array($options['channel']);
+        } else {
+            $channels = $reg->listChannels();
+        }
+
+        foreach ($channels as $channel) {
             if ($channel == '__uri') {
                 continue;
             }
 
             // parse name with channel
             foreach ($reg->listPackages($channel) as $name) {
-                $toUpgrade[] = $reg->parsedPackageNameToString(array(
+                $upgrade[] = $reg->parsedPackageNameToString(array(
                         'channel' => $channel,
                         'package' => $name
                     ));
             }
         }
 
-        $err = $this->doInstall('upgrade-all', $options, $toUpgrade);
+        $err = $this->doInstall($command, $options, $upgrade);
         if (PEAR::isError($err)) {
             $this->ui->outputData($err->getMessage(), $command);
         }
@@ -1180,9 +1208,6 @@ Run post-installation scripts in package <package>, if any exist.
                       $base = $chan->getBaseURL('REST1.0', $preferred_mirror))
                 {
                     $dorest = true;
-                } else {
-                    $dorest = false;
-                    $remote = &$this->config->getRemote($this->config);
                 }
 
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
@@ -1197,9 +1222,6 @@ Run post-installation scripts in package <package>, if any exist.
                     $installed = array_flip($reg->listPackages($channel));
 
                     $latest = $rest->listLatestUpgrades($base, $state, $installed, $channel, $reg);
-                } else {
-                    $latest = $remote->call('package.listLatestReleases', $state);
-                    unset($remote);
                 }
 
                 PEAR::staticPopErrorHandling();
@@ -1234,5 +1256,4 @@ Run post-installation scripts in package <package>, if any exist.
 
         return $ret;
     }
-
 }
