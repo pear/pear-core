@@ -358,7 +358,7 @@ class PEAR_PackageFile
         if ($this->_tmpdir) {
             $tmpdir = $this->_tmpdir;
         } else {
-            $tmpdir = System::mkTemp(array('-d', 'pear'));
+            $tmpdir = System::mkTemp(array('-t', $this->_config->get('temp_dir'), '-d', 'pear'));
             PEAR_PackageFile::addTempFile($tmpdir);
         }
 
