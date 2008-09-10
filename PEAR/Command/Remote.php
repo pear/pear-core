@@ -213,9 +213,6 @@ parameter.
               $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
             $rest = &$this->config->getREST('1.0', array());
             $info = $rest->packageInfo($base, $parsed['package'], $channel);
-        } else {
-            $r = &$this->config->getRemote();
-            $info = $r->call('package.info', $parsed['package']);
         }
 
         if (PEAR::isError($info)) {
@@ -269,15 +266,8 @@ parameter.
               $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
             $rest = &$this->config->getREST('1.0', array());
             $available = $rest->listAll($base, $list_options, true, false, false, $chan->getName());
-        } else {
-            $r = &$this->config->getRemote();
-            if ($channel == 'pear.php.net') {
-                // hack because of poor pearweb design
-                $available = $r->call('package.listAll', true, $list_options, false);
-            } else {
-                $available = $r->call('package.listAll', true, $list_options);
-            }
         }
+
         if (PEAR::isError($available)) {
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($available);
@@ -331,15 +321,8 @@ parameter.
               $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
             $rest = &$this->config->getREST('1.0', array());
             $available = $rest->listAll($base, $list_options, false, false, false, $chan->getName());
-        } else {
-            $r = &$this->config->getRemote();
-            if ($channel == 'pear.php.net') {
-                // hack because of poor pearweb design
-                $available = $r->call('package.listAll', true, $list_options, false);
-            } else {
-                $available = $r->call('package.listAll', true, $list_options);
-            }
         }
+
         if (PEAR::isError($available)) {
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError('The package list could not be fetched from the remote server. Please try again. (Debug info: "' . $available->getMessage() . '")');
@@ -502,10 +485,6 @@ parameter.
               $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
             $rest = &$this->config->getREST('1.0', array());
             $available = $rest->listAll($base, false, false, $package, $summary, $chan->getName());
-        } else {
-            $r = &$this->config->getRemote();
-            $available = $r->call('package.search', $package, $summary, true,
-                $this->config->get('preferred_state') == 'stable', true);
         }
 
         if (PEAR::isError($available)) {
@@ -664,11 +643,7 @@ parameter.
             }
 
             $this->config->set('default_channel', $channel);
-            if (empty($params[0])) {
-                $state = $this->config->get('preferred_state');
-            } else {
-                $state = $params[0];
-            }
+            $state = empty($params[0]) ? $this->config->get('preferred_state') : $params[0];
 
             $caption = $channel . ' Available Upgrades';
             $chan = $reg->getChannel($channel);
@@ -688,17 +663,6 @@ parameter.
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
                 $latest = $rest->listLatestUpgrades($base, $state, $inst, $channel, $reg);
                 PEAR::staticPopErrorHandling();
-            } else {
-                $remote = &$this->config->getRemote();
-                $remote->pushErrorHandling(PEAR_ERROR_RETURN);
-                if (empty($state) || $state == 'any') {
-                    $latest = $remote->call("package.listLatestReleases");
-                } else {
-                    $latest = $remote->call("package.listLatestReleases", $state);
-                    $caption .= ' (' . implode(', ', PEAR_Common::betterStates($state, true)) . ')';
-                }
-
-                $remote->popErrorHandling();
             }
 
             if (PEAR::isError($latest)) {

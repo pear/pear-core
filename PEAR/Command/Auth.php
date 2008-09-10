@@ -134,11 +134,6 @@ password from your user configuration.',
 
         if ($chan->supportsREST()) {
             $ok = true;
-        } else {
-            $remote = &$this->config->getRemote();
-            $remote->expectError(401);
-            $ok = $remote->call('logintest');
-            $remote->popExpect();
         }
 
         if ($ok !== true) {

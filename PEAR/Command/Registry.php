@@ -415,11 +415,11 @@ installed package.'
             if (!$v || !version_compare("$v", "{$params[2]}", $params[1])) {
                 exit(1);
             }
+        } else {
+            PEAR::staticPopErrorHandling();
+            $this->raiseError("$command: expects 1 to 3 parameters");
+            exit(1);
         }
-
-        PEAR::staticPopErrorHandling();
-        $this->raiseError("$command: expects 1 to 3 parameters");
-        exit(1);
     }
 
     function doInfo($command, $options, $params)
