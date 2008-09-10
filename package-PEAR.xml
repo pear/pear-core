@@ -109,7 +109,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * Fix Bug #14287: cannot upgrade from stable to beta via -beta when config is set to stable [dufuz]
   * Fix Bug #14437: openbasedir warning when loading config [dufuz]
   * Fix Bug #14558:	PackageFile.php creates tmp directory outside configured temp_dir [cweiske]
-  
+
 
   NOTE!
   Functions that have been deprecated for 3+ years in PEAR_Common have been removed:
@@ -126,6 +126,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
 
   PHP 4.4 and 5.1.6 are now the minimum PHP requirements, for brave souls pear upgrade -f PEAR will allow people with lower versions
   to upgrade to this release but no guarantees will be made that it will work properly.
+
+  Support for XML RPC channels has been dropped - The only ones that used it (pear.php.net and pecl.php.net) have used the REST interface for years now
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

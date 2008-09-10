@@ -128,6 +128,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
 
   PHP 4.4 and 5.1.6 are now the minimum PHP requirements, for brave souls pear upgrade -f PEAR will allow people with lower versions
   to upgrade to this release but no guarantees will be made that it will work properly.
+
+  Support for XML RPC channels has been dropped - The only ones that used it (pear.php.net and pecl.php.net) have used the REST interface for years now
  </notes>
  <contents>
   <dir name="/">
