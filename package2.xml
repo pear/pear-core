@@ -125,6 +125,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * PEAR_Common->analyzeSourceCode (use a PEAR_PackageFile_v* object instead)
   * PEAR_Common->detectDependencies (use PEAR_Downloader_Package->detectDependencies instead)
   * PEAR_Common->buildProvidesArray (use PEAR_PackageFile_v1->_buildProvidesArray or PEAR_PackageFile_v2_Validator->_buildProvidesArray)
+
+  PHP 4.4 and 5.1.6 are now the minimum PHP requirements, for brave souls pear upgrade -f PEAR will allow people with lower versions
+  to upgrade to this release but no guarantees will be made that it will work properly.
  </notes>
  <contents>
   <dir name="/">
@@ -380,9 +383,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <file name="Registry.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
-    <file name="Remote.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
     <file name="REST.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
@@ -515,13 +515,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>pcre</name>
    </extension>
   </required>
-  <optional>
-   <package>
-    <name>XML_RPC</name>
-    <channel>pear.php.net</channel>
-    <min>1.4.0</min>
-   </package>
-  </optional>
 <!--  <group name="remoteinstall" hint="adds the ability to install packages to a remote ftp server">
    <subpackage>
     <name>PEAR_RemoteInstaller</name>
