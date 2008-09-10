@@ -58,12 +58,6 @@ class PEAR_Downloader extends PEAR_Common
     var $_registry;
 
     /**
-     * @var PEAR_Remote
-     * @access private
-     */
-    var $_remote;
-
-    /**
      * Preferred Installation State (snapshot, devel, alpha, beta, stable)
      * @var string|null
      * @access private
@@ -174,7 +168,6 @@ class PEAR_Downloader extends PEAR_Common
             $this->config->setInstallRoot($this->_options['installroot']);
         }
         $this->_registry = &$config->getRegistry();
-        $this->_remote = &$config->getRemote();
 
         if (isset($this->_options['alldeps']) || isset($this->_options['onlyreqdeps'])) {
             $this->_installed = $this->_registry->listAllPackages();
@@ -275,10 +268,6 @@ class PEAR_Downloader extends PEAR_Common
 
         if (!isset($this->_registry)) {
             $this->_registry = &$this->config->getRegistry();
-        }
-
-        if (!isset($this->_remote)) {
-            $this->_remote = &$this->config->getRemote();
         }
 
         $channelschecked = array();
@@ -905,31 +894,24 @@ class PEAR_Downloader extends PEAR_Common
                 }
             }
             return $url;
-        } elseif ($chan->supports('xmlrpc', 'package.getDownloadURL', false, '1.1')) {
-            // don't install with the old version information unless we're doing a plain
-            // vanilla simple installation.  If the user says to install a particular
-            // version or state, ignore the current installed version
-            if (!isset($parr['version']) && !isset($parr['state']) && $version
-                  && !isset($this->_options['downloadonly'])) {
-                $url = $this->_remote->call('package.getDownloadURL', $parr, $state, $version);
-            } else {
-                $url = $this->_remote->call('package.getDownloadURL', $parr, $state);
-            }
-        } else {
-            $url = $this->_remote->call('package.getDownloadURL', $parr, $state);
         }
+
         if (PEAR::isError($url)) {
             return $url;
         }
+
         if ($parr['channel'] != $curchannel) {
             $this->configSet('default_channel', $curchannel);
         }
+
         if (isset($url['__PEAR_ERROR_CLASS__'])) {
             return PEAR::raiseError($url['message']);
         }
+
         if (!is_array($url)) {
             return $url;
         }
+
         $url['raw'] = $url['info'];
         if (isset($this->_options['downloadonly'])) {
             $pkg = &$this->getPackagefileObject($this->config, $this->debug);
@@ -1079,26 +1061,20 @@ class PEAR_Downloader extends PEAR_Common
                 }
             }
             return $url;
-        } elseif ($chan->supports('xmlrpc', 'package.getDepDownloadURL', false, '1.1')) {
-            if ($version) {
-                $url = $this->_remote->call('package.getDepDownloadURL', $xsdversion, $dep, $parr,
-                    $state, $version);
-            } else {
-                $url = $this->_remote->call('package.getDepDownloadURL', $xsdversion, $dep, $parr,
-                    $state);
-            }
-        } else {
-            $url = $this->_remote->call('package.getDepDownloadURL', $xsdversion, $dep, $parr, $state);
         }
+
         if ($this->config->get('default_channel') != $curchannel) {
             $this->configSet('default_channel', $curchannel);
         }
+
         if (!is_array($url)) {
             return $url;
         }
+
         if (isset($url['__PEAR_ERROR_CLASS__'])) {
             return PEAR::raiseError($url['message']);
         }
+
         $url['raw'] = $url['info'];
         $pkg = &$this->getPackagefileObject($this->config, $this->debug);
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);

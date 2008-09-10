@@ -28,7 +28,6 @@ require_once 'PEAR.php';
 require_once 'PEAR/Registry.php';
 require_once 'PEAR/Installer/Role.php';
 require_once 'System.php';
-require_once 'PEAR/Remote.php';
 
 /**
  * Last created PEAR_Config instance.
@@ -2008,15 +2007,6 @@ class PEAR_Config extends PEAR
     function noRegistry()
     {
         $this->_noRegistry = true;
-    }
-
-    /**
-     * @return PEAR_Remote
-     */
-    function &getRemote()
-    {
-        $remote = &new PEAR_Remote($this);
-        return $remote;
     }
 
     /**

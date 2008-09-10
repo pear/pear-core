@@ -394,8 +394,7 @@ class PEAR_DependencyDB
             $depname    = strtolower($dep['dep']['name']);
             if (isset($data['packages'][$depchannel][$depname])) {
                 foreach ($data['packages'][$depchannel][$depname] as $i => $info) {
-                    if ($info['channel'] == $channel &&
-                          $info['package'] == $package) {
+                    if ($info['channel'] == $channel && $info['package'] == $package) {
                         $found = true;
                         break;
                     }
@@ -715,13 +714,14 @@ class PEAR_DependencyDB
      */
     function _registerDep(&$data, &$pkg, $dep, $type, $group = false)
     {
+        $dep  = array_map('strtolower', $dep);
         $info = array(
             'dep'   => $dep,
             'type'  => $type,
             'group' => $group
         );
 
-        $depchannel = isset($dep['channel']) ? strtolower($dep['channel']) : '__uri';
+        $depchannel = isset($dep['channel']) ? $dep['channel'] : '__uri';
         if (!isset($data['dependencies'])) {
             $data['dependencies'] = array();
         }
