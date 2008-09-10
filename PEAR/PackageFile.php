@@ -1,3 +1,4 @@
+
 <?php
 /**
  * PEAR_PackageFile, package.xml parsing utility class
@@ -419,9 +420,13 @@ class PEAR_PackageFile
      */
     function &fromPackageFile($descfile, $state, $archive = false)
     {
+        $fp = false;
         if (is_string($descfile) && strlen($descfile) < 255 &&
-             (!file_exists($descfile) || !is_file($descfile) || !is_readable($descfile) ||
-             (!$fp = @fopen($descfile, 'r')))) {
+             (
+              !file_exists($descfile) || !is_file($descfile) || !is_readable($descfile)
+              || (!$fp = @fopen($descfile, 'r'))
+             )
+        ) {
             $a = PEAR::raiseError("Unable to open $descfile");
             return $a;
         }
@@ -478,20 +483,20 @@ class PEAR_PackageFile
             } elseif ($tmp == '.tar' || $tmp == '.tgz') {
                 $info = &PEAR_PackageFile::fromTgzFile($info, $state);
             } else {
-                $fp = fopen($info, "r");
+                $fp   = fopen($info, 'r');
                 $test = fread($fp, 5);
                 fclose($fp);
-                if ($test == "<?xml") {
+                if ($test == '<?xml') {
                     $info = &PEAR_PackageFile::fromPackageFile($info, $state);
                 } else {
                     $info = &PEAR_PackageFile::fromTgzFile($info, $state);
                 }
             }
-        } else {
-            $info = PEAR::raiseError("Cannot open '$info' for parsing");
+
             return $info;
         }
 
+        $info = PEAR::raiseError("Cannot open '$info' for parsing");
         return $info;
     }
 }
