@@ -18,12 +18,12 @@ $pearweb->addXmlrpcConfig("pear.php.net", "logintest",  null, true);
 $command->run('login', array(), array());
 $phpunit->assertNoErrors('test');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     'info' => 'Logging in to pear.php.net.',
     'cmd' => 'login',
   ),
-  1 => 
+  1 =>
   array (
     'info' => 'Logged in.',
     'cmd' => 'login',
@@ -34,7 +34,7 @@ $phpunit->assertEquals('hi', $config->get('password'), 'password');
 $command->run('logout', array(), array());
 $phpunit->assertNoErrors('test');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     'info' => 'Logging out from pear.php.net.',
     'cmd' => 'logout',
