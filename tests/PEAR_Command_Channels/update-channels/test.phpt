@@ -38,42 +38,42 @@ $e = $command->run('update-channels', array(), array());
 $phpunit->assertNoErrors('after');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     'info' => 'Updating channel "horde.orde.de"',
     'cmd' => 'channel-update',
   ),
-  1 => 
+  1 =>
   array (
     'info' => 'Update of Channel "horde.orde.de" succeeded',
     'cmd' => 'no command',
   ),
-  2 => 
+  2 =>
   array (
     'info' => 'Updating channel "pear.php.net"',
     'cmd' => 'channel-update',
   ),
-  3 => 
+  3 =>
   array (
     'info' => 'Update of Channel "pear.php.net" succeeded',
     'cmd' => 'no command',
   ),
-  4 => 
+  4 =>
   array (
     'info' => 'Updating channel "pecl.php.net"',
     'cmd' => 'channel-update',
   ),
-  5 => 
+  5 =>
   array (
     'info' => 'Cannot retrieve channel.xml for channel "pecl.php.net" (File http://pecl.php.net:80/channel.xml not valid (received: HTTP/1.1 404 http://pecl.php.net/channel.xml Is not valid))',
     'cmd' => 'update-channels',
   ),
-  6 => 
+  6 =>
   array (
     'info' => 'Updating channel "zornk.ornk.org"',
     'cmd' => 'channel-update',
   ),
-  7 => 
+  7 =>
   array (
     'info' => 'Update of Channel "zornk.ornk.org" succeeded',
     'cmd' => 'no command',
