@@ -9,12 +9,12 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 error_reporting(1803);
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+$ds = DIRECTORY_SEPARATOR;
+require_once dirname(dirname(__FILE__)) . $ds . 'setup.php.inc';
 $reg = $config->getRegistry();
 $pkg = &new PEAR_PackageFile($config);
-$info = $pkg->fromPackageFile(dirname(__FILE__) . DIRECTORY_SEPARATOR .
-    DIRECTORY_SEPARATOR . 'packagefiles' . DIRECTORY_SEPARATOR . 'package2.xml',
-    PEAR_VALIDATE_NORMAL);
+$file = dirname(__FILE__) . $ds . $ds. 'packagefiles' . $ds . 'package2.xml';
+$info = $pkg->fromPackageFile($file, PEAR_VALIDATE_NORMAL);
 $reg->addPackage2($info);
 $e = $command->run('shell-test', array(), array('PEAR', 'gt', '1.3.9'));
 $phpunit->assertNoErrors('ok');
