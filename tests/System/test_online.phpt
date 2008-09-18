@@ -16,7 +16,7 @@ error_reporting(1803);
 require_once 'System.php';
 
  /*******************
-         cat 
+         cat
  ********************/
 echo "Testing: cat online\n";
 $catfile = System::mktemp('tst');
