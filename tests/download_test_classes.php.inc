@@ -1,26 +1,7 @@
 <?php
-require_once 'XML/RPC.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'PEAR_test_mock_pearweb.php.inc';
 $GLOBALS['pearweb'] = new PEAR_test_mock_pearweb;
-class test_XML_RPC_Client extends XML_RPC_Client {
-    function test_XML_RPC_Client($path, $server)
-    {
-        $this->_fakepearweb = &$GLOBALS['pearweb'];
-        parent::XML_RPC_Client($path, $server);
-    }
 
-    function sendPayloadHTTP10($msg, $server, $port, $timeout=0,
-                               $username="", $password="")
-    {
-        // Only create the payload if it was not created previously
-        if(empty($msg->payload)) $msg->createPayload();
-
-        $resp = $this->_fakepearweb->receiveXmlrpc($msg->payload, $server);
-        
-        $resp=$msg->parseResponse($resp);
-        return $resp;
-    }
-}
 require_once 'PEAR/REST.php';
 class test_PEAR_REST extends PEAR_REST {
     function downloadHttp($url, $lastmodified = null, $accept = false)
@@ -37,7 +18,7 @@ class test_PEAR_REST extends PEAR_REST {
             $path = @$info['path'];
         }
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
-        if ($this->config->get('http_proxy')&& 
+        if ($this->config->get('http_proxy')&&
               $proxy = parse_url($this->config->get('http_proxy'))) {
             $proxy_host = @$proxy['host'];
             if (isset($proxy['scheme']) && $proxy['scheme'] == 'https') {
@@ -133,213 +114,6 @@ class test_PEAR_REST_10 extends PEAR_REST_10 {
         $this->_rest = &new test_PEAR_REST($config, $options);
     }
 }
-require_once 'PEAR/Remote.php';
-
-class test_PEAR_Remote extends PEAR_Remote {
-    var $_pearweb;
-    var $_fakepearweb = true;
-    var $_simulateEpi = true;
-    function test_PEAR_Remote(&$config)
-    {
-        $pearweb = &$GLOBALS['pearweb'];
-//        include dirname(__FILE__) . DIRECTORY_SEPARATOR . 'download_test.config.inc';
-        $this->_pearweb = &$pearweb;
-        parent::PEAR_Remote($config);
-        $this->_pearweb->setRemote($this);
-    }
-    
-    function parentcall()
-    {
-        $args = func_get_args();
-        $method = array_shift($args);
-        switch (count($args)) {
-            case 0:
-                $result = PEAR_Remote::call($method);
-            break;
-            case 1:
-                $result = PEAR_Remote::call($method, $args[0]);
-            break;
-            case 2:
-                $result = PEAR_Remote::call($method, $args[0], $args[1]);
-            break;
-            case 3:
-                $result = PEAR_Remote::call($method, $args[0], $args[1], $args[2]);
-            break;
-            case 4:
-                $result = PEAR_Remote::call($method, $args[0], $args[1], $args[2], $args[3]);
-            break;
-            case 5:
-                $result = PEAR_Remote::call($method, $args[0], $args[1], $args[2], $args[3], $args[4]);
-            break;
-            case 6:
-                $result = PEAR_Remote::call($method, $args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
-            break;
-        }
-        return $result;
-    }
-
-    function call($method)
-    {
-        $_args = $args = func_get_args();
-
-        $server_channel = $this->config->get('default_channel');
-        $channel = $this->_registry->getChannel($server_channel);
-        if ($channel) {
-            $mirror = $this->config->get('preferred_mirror');
-            if ($channel->getMirror($mirror)) {
-                if ($channel->supports('xmlrpc', $method, $mirror)) {
-                    $server_channel = $server_host = $mirror; // use the preferred mirror
-                    $server_port = $channel->getPort($mirror);
-                } elseif (!$channel->supports('xmlrpc', $method)) {
-                    return $this->raiseError("Channel $server_channel does not " .
-                        "support xml-rpc method $method");
-                }
-            }
-            if (!isset($server_host)) {
-                if (!$channel->supports('xmlrpc', $method)) {
-                    return $this->raiseError("Channel $server_channel does not support " .
-                        "xml-rpc method $method");
-                } else {
-                    $server_host = $server_channel;
-                    $server_port = $channel->getPort();
-                }
-            }
-        } else {
-            return $this->raiseError("Unknown channel '$server_channel'");
-        }
-
-        array_unshift($_args, $channel); // cache by channel
-        $this->cache = $this->getCache($_args);
-        $cachettl = $this->config->get('cache_ttl');
-        // If cache is newer than $cachettl seconds, we use the cache!
-        if ($this->cache !== null && $this->cache['age'] < $cachettl) {
-            return $this->cache['content'];
-        };
-        if ($this->_simulateEpi) {
-            $result = call_user_func_array(array(&$this, 'call_epi'), $args);
-            if (!PEAR::isError($result)) {
-                $this->saveCache($_args, $result);
-            };
-            return $result;
-        }
-        if (!@include_once("XML/RPC.php")) {
-            return $this->raiseError("For this remote PEAR operation you need to install the XML_RPC package");
-        }
-        array_shift($args);
-        $server_host = $channel->getServer();
-        $username = $this->config->get('username');
-        $password = $this->config->get('password');
-        $eargs = array();
-        foreach($args as $arg) {
-            $eargs[] = $this->_encode($arg);
-        }
-        $f = new XML_RPC_Message($method, $eargs);
-        if ($this->cache !== null) {
-            $maxAge = '?maxAge='.$this->cache['lastChange'];
-        } else {
-            $maxAge = '';
-        }
-        $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
-        if ($proxy = parse_url($this->config->get('http_proxy'))) {
-            $proxy_host = @$proxy['host'];
-            $proxy_port = @$proxy['port'];
-            $proxy_user = @urldecode(@$proxy['user']);
-            $proxy_pass = @urldecode(@$proxy['pass']);
-        }
-        $c = new test_XML_RPC_Client($channel->getPath('xmlrpc')
-            .$maxAge, $server_host, $channel->getPort(), $proxy_host, $proxy_port, $proxy_user, $proxy_pass);
-        if ($username && $password) {
-            $c->setCredentials($username, $password);
-        }
-        if ($this->config->get('verbose') >= 3) {
-            $c->setDebug(1);
-        }
-        $r = $c->send($f);
-        if (!$r) {
-            return $this->raiseError("XML_RPC send failed");
-        }
-        $v = $r->value();
-        if ($e = $r->faultCode()) {
-            if ($e == $GLOBALS['XML_RPC_err']['http_error'] && strstr($r->faultString(), '304 Not Modified') !== false) {
-                return $this->cache['content'];
-            }
-            return $this->raiseError($r->faultString(), $e);
-        }
-
-        $result = XML_RPC_decode($v);
-        $this->saveCache($_args, $result);
-        return $result;
-    }
-
-    function call_epi($method)
-    {
-        static $norecur = false;
-        $args = func_get_args();
-        array_shift($args);
-        if ($this->_fakepearweb && !$norecur) {
-            $norecur = true;
-            $server_channel = $this->config->get('default_channel');
-            $channel = $this->_registry->getChannel($server_channel);
-            if ($channel) {
-                $mirror = $this->config->get('preferred_mirror');
-                if ($channel->getMirror($mirror)) {
-                    if ($channel->supports('xmlrpc', $method, $mirror)) {
-                        $server_channel = $server_host = $mirror; // use the preferred mirror
-                        $server_port = $channel->getPort($mirror);
-                    } elseif (!$channel->supports('xmlrpc', $method)) {
-                        return $this->raiseError("Channel $server_channel does not " .
-                            "support xml-rpc method $method");
-                    }
-                }
-                if (!isset($server_host)) {
-                    if (!$channel->supports('xmlrpc', $method)) {
-                        return $this->raiseError("Channel $server_channel does not support " .
-                            "xml-rpc method $method");
-                    } else {
-                        $server_host = $server_channel;
-                        $server_port = $channel->getPort();
-                    }
-                }
-            } else {
-                return $this->raiseError("Unknown channel '$server_channel'");
-            }
-            if (count($args)) {
-                $result = $this->_pearweb->call($server_channel, $method, $args);
-            } else {
-                $result = $this->_pearweb->call($server_channel, $method);
-            }
-            $norecur = false;
-        } else {
-            switch (count($args)) {
-                case 0:
-                    $result = parent::call_epi($method);
-                break;
-                case 1:
-                    $result = parent::call_epi($method, $args[0]);
-                break;
-                case 2:
-                    $result = parent::call_epi($method, $args[0], $args[1]);
-                break;
-                case 3:
-                    $result = parent::call_epi($method, $args[0], $args[1], $args[2]);
-                break;
-                case 4:
-                    $result = parent::call_epi($method, $args[0], $args[1], $args[2], $args[3]);
-                break;
-                case 5:
-                    $result = parent::call_epi($method, $args[0], $args[1], $args[2], $args[3], $args[4]);
-                break;
-                case 6:
-                    $result = parent::call_epi($method, $args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
-                break;
-            }
-        }
-        if (PEAR::isError($result)) {
-            return $result;
-        }
-        return $result;
-    }
-}
 
 require_once 'PEAR/Installer.php';
 class test_PEAR_Installer extends PEAR_Installer {
@@ -348,7 +122,6 @@ class test_PEAR_Installer extends PEAR_Installer {
     {
         // trickiness: initialize here
         $this->PEAR_Downloader($this->ui, $options, $config);
-        $this->_remote = &new test_PEAR_Remote($config);
         $ret = PEAR_Downloader::download($packages);
         $errors = $this->getErrorMsgs();
         $installpackages = $this->getDownloadedPackages();
@@ -368,7 +141,7 @@ class test_PEAR_Installer extends PEAR_Installer {
         $a = &new test_PEAR_PackageFile($c, $d, $dir);
         return $a;
     }
-    
+
     function downloadHttp($url, &$ui, $save_dir = '.', $callback = null)
     {
 //        return parent::downloadHttp($url, $ui, $save_dir, $callback);
@@ -409,7 +182,7 @@ class test_PEAR_Installer extends PEAR_Installer {
             $port = 80;
         }
         // use _pearweb to get file
-        $retrieved = explode("\n", $this->_remote->_pearweb->receiveHttp($url));
+        $retrieved = explode("\n", $GLOBALS['pearweb']->receiveHttp($url));
         $headers = array();
         $line = array_shift($retrieved);
         while (strlen(trim($line))) {
@@ -509,7 +282,6 @@ class test_PEAR_Downloader extends PEAR_Downloader {
     function test_PEAR_Downloader(&$ui, $options, &$config)
     {
         parent::PEAR_Downloader($ui, $options, $config);
-        $this->_remote = &new test_PEAR_Remote($config);
     }
 
     /**
@@ -523,7 +295,7 @@ class test_PEAR_Downloader extends PEAR_Downloader {
         $a = &new test_PEAR_PackageFile($c, $d, $dir);
         return $a;
     }
-    
+
     function downloadHttp($url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null)
     {
         if (isset($GLOBALS['return304'])) {
@@ -550,7 +322,7 @@ class test_PEAR_Downloader extends PEAR_Downloader {
             $config = &PEAR_Config::singleton();
         }
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
-        if ($config->get('http_proxy')&& 
+        if ($config->get('http_proxy')&&
               $proxy = parse_url($config->get('http_proxy'))) {
             $proxy_host = @$proxy['host'];
             $proxy_port = @$proxy['port'];
@@ -568,7 +340,7 @@ class test_PEAR_Downloader extends PEAR_Downloader {
             $port = 80;
         }
         // use _pearweb to get file
-        $retrieved = explode("\n", $this->_remote->_pearweb->receiveHttp($url));
+        $retrieved = explode("\n", $GLOBALS['pearweb']->receiveHttp($url));
         $headers = array();
         $line = array_shift($retrieved);
         while (strlen(trim($line))) {
@@ -685,7 +457,7 @@ class test_PEAR_Downloader_Package extends PEAR_Downloader_Package
     function &getDependency2Object($c, $i, $p, $s)
     {
         $a = &test_PEAR_Dependency2::singleton($c, $i, $p, $s);
-        return $a; 
+        return $a;
     }
 
     /**
@@ -955,12 +727,6 @@ class test_PEAR_PackageFile_v1 extends PEAR_PackageFile_v1
 
 class test_PEAR_Config extends PEAR_Config
 {
-    function &getRemote()
-    {
-        $remote = &new test_PEAR_Remote($this);
-        return $remote;
-    }
-
     function &getREST($version, $options = array())
     {
         $version = str_replace('.', '', $version);
@@ -1060,4 +826,3 @@ function cleanall($dir = null)
         rmdir($statedir);
     }
 }
-?>
