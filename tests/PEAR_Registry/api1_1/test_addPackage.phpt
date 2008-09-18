@@ -35,11 +35,13 @@ $pf->resetFilelist();
 $pf->installedFile('foo.php', array('role' => 'php'));
 $pf->setInstalledAs('foo.php', $php_dir . DIRECTORY_SEPARATOR . 'foo.php');
 $pf->setPackage('foop');
+
 $ret = $reg->addPackage($pf->getPackage(), $pf->getArray());
 $phpunit->assertTrue($ret, 'install of valid package');
 $phpunit->assertNoErrors('install of valid package');
 $phpunit->assertFileExists($statedir  . DIRECTORY_SEPARATOR . 'php' .
     DIRECTORY_SEPARATOR . '.registry' . DIRECTORY_SEPARATOR . 'foop.reg', 'reg file of foop.reg');
+
 $contents = unserialize(implode('', file($statedir  . DIRECTORY_SEPARATOR . 'php' .
     DIRECTORY_SEPARATOR . '.registry' . DIRECTORY_SEPARATOR . 'foop.reg')));
 $phpunit->showall();
@@ -51,15 +53,15 @@ $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb');
 $contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb')));
 $phpunit->assertEquals(array (
   '_version' => '1.0',
-  'dependencies' => 
+  'dependencies' =>
   array (
-    'pear.php.net' => 
+    'pear.php.net' =>
     array (
-      'foop' => 
+      'foop' =>
       array (
-        0 => 
+        0 =>
         array (
-          'dep' => 
+          'dep' =>
           array (
             'name' => 'Floop',
             'channel' => 'pear.php.net',
@@ -71,13 +73,13 @@ $phpunit->assertEquals(array (
       ),
     ),
   ),
-  'packages' => 
+  'packages' =>
   array (
-    'pear.php.net' => 
+    'pear.php.net' =>
     array (
-      'floop' => 
+      'floop' =>
       array (
-        0 => 
+        0 =>
         array (
           'channel' => 'pear.php.net',
           'package' => 'foop',
