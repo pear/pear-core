@@ -85,7 +85,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.listAll",     array(true,true
         )
 );
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+  0 =>
   array (
     'package' => 'APC',
     'channel' => 'pear.php.net',
@@ -93,11 +93,11 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   1 => 'stable',
 ), array (
   'version' => '1.3.0',
-  'info' => 
+  'info' =>
             '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="1.4.0a1">
- <name>APC</name>       
+ <name>APC</name>
  <summary>APC pear</summary>
  <description>APC pear
  </description>
@@ -124,7 +124,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   'url' => 'http://pear.php.net/get/APC-1.3.0',
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+  0 =>
   array (
     'package' => 'Archive_Tar',
     'channel' => 'pear.php.net',
@@ -132,7 +132,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   1 => 'stable',
 ), array (
   'version' => '1.5.0a1',
-  'info' => 
+  'info' =>
           '<?xml version="1.0" encoding="ISO-8859-1"?>
 <!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
 <package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
@@ -165,7 +165,7 @@ Installer Roles/Tasks:
 ',
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+  0 =>
   array (
     'package' => 'Archive_Tar',
     'channel' => 'pear.php.net',
@@ -174,7 +174,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   1 => 'stable',
 ), array (
   'version' => '1.5.0a1',
-  'info' => 
+  'info' =>
           '<?xml version="1.0" encoding="ISO-8859-1"?>
 <!--DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0"-->
 <package version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd">
@@ -209,7 +209,7 @@ Installer Roles/Tasks:
 ));
 
 $pearweb->addXmlrpcConfig("smoog", "package.getDownloadURL", array (
-  0 => 
+  0 =>
   array (
     'package' => 'APC',
     'channel' => 'smoog',
@@ -217,7 +217,7 @@ $pearweb->addXmlrpcConfig("smoog", "package.getDownloadURL", array (
   1 => 'stable',
 ), array (
   'version' => '1.5.0a1',
-  'info' => 
+  'info' =>
   '<?xml version="1.0"?>
 <package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
 http://pear.php.net/dtd/tasks-1.0.xsd
@@ -266,7 +266,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 </package>',
 ));
 $pearweb->addXmlrpcConfig("smoog", "package.getDownloadURL", array (
-  0 => 
+  0 =>
   array (
     'package' => 'APC',
     'channel' => 'smoog',
@@ -275,7 +275,7 @@ $pearweb->addXmlrpcConfig("smoog", "package.getDownloadURL", array (
   1 => 'stable',
 ), array (
   'version' => '1.5.0a1',
-  'info' => 
+  'info' =>
   '<?xml version="1.0"?>
 <package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
 http://pear.php.net/dtd/tasks-1.0.xsd
