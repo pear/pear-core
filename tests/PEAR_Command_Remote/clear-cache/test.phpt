@@ -20,7 +20,7 @@ $phpunit->assertEquals(array (
   0 =>
   array (
     'info' => 'reading directory ' . $config->get('cache_dir') . '
-7 cache entries cleared',
+4 cache entries cleared',
     'cmd' => 'clear-cache',
   ),
 ), $fakelog->getLog(), 'clear-cache log');
