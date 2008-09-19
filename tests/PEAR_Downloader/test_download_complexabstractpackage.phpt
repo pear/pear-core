@@ -25,7 +25,7 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
 '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="1.4.0a1">
- <name>PEAR1</name>       
+ <name>PEAR1</name>
  <summary>PEAR Base System</summary>
  <description>The PEAR package contains:
  * the PEAR installer, for creating, distributing
@@ -165,7 +165,7 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
 '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="1.4.0a1">
- <name>Bar</name>       
+ <name>Bar</name>
  <summary>PEAR Base System</summary>
  <description>The PEAR package contains:
  * the PEAR installer, for creating, distributing
@@ -303,7 +303,7 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
 '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="1.4.0a1">
- <name>Foobar</name>       
+ <name>Foobar</name>
  <summary>PEAR Base System</summary>
  <description>The PEAR package contains:
  * the PEAR installer, for creating, distributing
@@ -532,119 +532,119 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 'setup',
     1 => 'self',
   ),
-  1 => 
+  1 =>
   array (
     0 => 'saveas',
     1 => 'PEAR1-1.4.0a1.tgz',
   ),
-  2 => 
+  2 =>
   array (
     0 => 'start',
-    1 => 
+    1 =>
     array (
       0 => 'PEAR1-1.4.0a1.tgz',
       1 => '2112',
     ),
   ),
-  3 => 
+  3 =>
   array (
     0 => 'bytesread',
     1 => 1024,
   ),
-  4 => 
+  4 =>
   array (
     0 => 'bytesread',
     1 => 2048,
   ),
-  5 => 
+  5 =>
   array (
     0 => 'bytesread',
     1 => 2112,
   ),
-  6 => 
+  6 =>
   array (
     0 => 'done',
     1 => 2112,
   ),
-  7 => 
+  7 =>
   array (
     0 => 'setup',
     1 => 'self',
   ),
-  8 => 
+  8 =>
   array (
     0 => 'saveas',
     1 => 'Bar-1.5.0.tgz',
   ),
-  9 => 
+  9 =>
   array (
     0 => 'start',
-    1 => 
+    1 =>
     array (
       0 => 'Bar-1.5.0.tgz',
       1 => '2085',
     ),
   ),
-  10 => 
+  10 =>
   array (
     0 => 'bytesread',
     1 => 1024,
   ),
-  11 => 
+  11 =>
   array (
     0 => 'bytesread',
     1 => 2048,
   ),
-  12 => 
+  12 =>
   array (
     0 => 'bytesread',
     1 => 2085,
   ),
-  13 => 
+  13 =>
   array (
     0 => 'done',
     1 => 2085,
   ),
-  14 => 
+  14 =>
   array (
     0 => 'setup',
     1 => 'self',
   ),
-  15 => 
+  15 =>
   array (
     0 => 'saveas',
     1 => 'Foobar-1.4.0a1.tgz',
   ),
-  16 => 
+  16 =>
   array (
     0 => 'start',
-    1 => 
+    1 =>
     array (
       0 => 'Foobar-1.4.0a1.tgz',
       1 => '2062',
     ),
   ),
-  17 => 
+  17 =>
   array (
     0 => 'bytesread',
     1 => 1024,
   ),
-  18 => 
+  18 =>
   array (
     0 => 'bytesread',
     1 => 2048,
   ),
-  19 => 
+  19 =>
   array (
     0 => 'bytesread',
     1 => 2062,
   ),
-  20 => 
+  20 =>
   array (
     0 => 'done',
     1 => 2062,
