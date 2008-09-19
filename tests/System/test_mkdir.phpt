@@ -58,6 +58,8 @@ if (!@is_dir("mkdir_dir2{$sep}mkdir_dir21") || !@is_dir("mkdir_dir6{$sep}mkdir_d
 
 if (OS_WINDOWS) {
     mkdir('mkdir_dir1\\oops');
+} else {
+    mkdir('mkdir_dir1/oops');
 }
 
 // Try to delete a dir without "-r" option
