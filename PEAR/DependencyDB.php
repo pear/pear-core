@@ -714,13 +714,13 @@ class PEAR_DependencyDB
      */
     function _registerDep(&$data, &$pkg, $dep, $type, $group = false)
     {
-        $dep  = array_map('strtolower', $dep);
         $info = array(
             'dep'   => $dep,
             'type'  => $type,
             'group' => $group
         );
 
+        $dep  = array_map('strtolower', $dep);
         $depchannel = isset($dep['channel']) ? $dep['channel'] : '__uri';
         if (!isset($data['dependencies'])) {
             $data['dependencies'] = array();
