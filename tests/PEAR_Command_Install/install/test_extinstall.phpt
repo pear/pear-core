@@ -404,7 +404,7 @@ if (OS_WINDOWS) {
         1 => 'successfully committed 2 file operations',
       ),
       array (
-        'info' => 
+        'info' =>
         array (
           'data' => 'install ok: channel://smork/Foobar-1.5.0a1',
         ),
@@ -439,7 +439,7 @@ if (OS_WINDOWS) {
         1 => 'successfully committed 2 file operations',
       ),
       array (
-        'info' => 
+        'info' =>
         array (
           'data' => 'install ok: channel://pear.php.net/Bar-1.5.2',
         ),
@@ -470,7 +470,7 @@ if (OS_WINDOWS) {
         1 => 'successfully committed 2 file operations',
       ),
       array (
-        'info' => 
+        'info' =>
         array (
           'data' => 'install ok: channel://pear.php.net/PEAR1-1.5.0a1',
         ),
@@ -554,7 +554,7 @@ if (OS_WINDOWS) {
         1 => 'successfully committed 3 file operations',
       ),
       array (
-        'info' => 
+        'info' =>
         array (
           'data' => 'install ok: channel://smork/Foobar-1.5.0a1',
         ),
@@ -597,7 +597,7 @@ if (OS_WINDOWS) {
         1 => 'successfully committed 3 file operations',
       ),
       array (
-        'info' => 
+        'info' =>
         array (
           'data' => 'install ok: channel://pear.php.net/Bar-1.5.2',
         ),
@@ -636,7 +636,7 @@ if (OS_WINDOWS) {
         1 => 'successfully committed 3 file operations',
       ),
       array (
-        'info' => 
+        'info' =>
         array (
           'data' => 'install ok: channel://pear.php.net/PEAR1-1.5.0a1',
         ),

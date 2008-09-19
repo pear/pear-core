@@ -25,12 +25,12 @@ $phpunit->assertNoErrors('setup');
 $fakelog->getLog();
 $res = $command->run('install', array(), array($dir . 'Image_Canvas-0.2.2.tgz'));
 $phpunit->assertEquals(array(
-  0 => 
+  0 =>
   array (
     'info' => 'Ignoring installed package pear/Image_Canvas',
     'cmd' => 'no command',
   ),
-  1 => 
+  1 =>
   array (
     'info' => 'Nothing to install',
     'cmd' => 'no command',
