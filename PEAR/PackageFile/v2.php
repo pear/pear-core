@@ -1203,19 +1203,24 @@ class PEAR_PackageFile_v2
         if ($this->getPackageType() != 'extsrc' && $this->getPackageType() != 'zendextsrc') {
             return false;
         }
+
         $releases = $this->getReleases();
         if (isset($releases[0])) {
             $releases = $releases[0];
         }
+
         if (isset($releases['configureoption'])) {
             if (!isset($releases['configureoption'][0])) {
                 $releases['configureoption'] = array($releases['configureoption']);
             }
+
             for ($i = 0; $i < count($releases['configureoption']); $i++) {
                 $releases['configureoption'][$i] = $releases['configureoption'][$i]['attribs'];
             }
+
             return $releases['configureoption'];
         }
+
         return false;
     }
 

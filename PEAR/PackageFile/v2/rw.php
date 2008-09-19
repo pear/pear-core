@@ -108,7 +108,7 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
         $this->_isValid = 0;
         if (!isset($this->_packageInfo['uri'])) {
             // ensure that the uri tag is set up in the right location
-            $this->_packageInfo = $this->_insertBefore($this->_packageInfo, 
+            $this->_packageInfo = $this->_insertBefore($this->_packageInfo,
                 array('extends', 'summary', 'description', 'lead',
                 'developer', 'contributor', 'helper', 'date', 'time', 'version',
                 'stability', 'license', 'notes', 'contents', 'compatible',
@@ -458,7 +458,7 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
                     'bundle', 'changelog'), array(), 'contents');
         }
         if ($this->getPackageType() != 'bundle') {
-            $this->_packageInfo['contents'] = 
+            $this->_packageInfo['contents'] =
                 array('dir' => array('attribs' => array('name' => '/')));
             if ($baseinstall) {
                 $this->_packageInfo['contents']['dir']['attribs']['baseinstalldir'] = $baseinstall;
@@ -1227,21 +1227,26 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
                                    'zendextbin', 'bundle'))) {
             return false;
         }
+
         if (in_array($type, array('zendextsrc', 'zendextbin'))) {
             $this->_setPackageVersion2_1();
         }
+
         if ($type != 'bundle') {
             $type .= 'release';
         }
+
         foreach (array('phprelease', 'extbinrelease', 'extsrcrelease',
                        'zendextsrcrelease', 'zendextbinrelease', 'bundle') as $test) {
             unset($this->_packageInfo[$test]);
         }
+
         if (!isset($this->_packageInfo[$type])) {
             // ensure that the release tag is set up
             $this->_packageInfo = $this->_insertBefore($this->_packageInfo, array('changelog'),
                 array(), $type);
         }
+
         $this->_packageInfo[$type] = array();
         return true;
     }
@@ -1361,14 +1366,17 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
         if ($this->getPackageType() != 'extsrc' && $this->getPackageType() != 'zendextsrc') {
             return false;
         }
+
         $r = &$this->_getCurrentRelease(false);
         if ($r === null) {
             return false;
         }
+
         $opt = array('attribs' => array('name' => $name, 'prompt' => $prompt));
         if ($default !== null) {
             $opt['attribs']['default'] = $default;
         }
+
         $this->_isValid = 0;
         $r = $this->_mergeTag($r, $opt,
             array(
@@ -1546,7 +1554,7 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
     function generateChangeLogEntry($notes = false)
     {
         return array(
-            'version' => 
+            'version' =>
                 array(
                     'release' => $this->getVersion('release'),
                     'api' => $this->getVersion('api'),
