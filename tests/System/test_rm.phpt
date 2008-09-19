@@ -16,15 +16,15 @@ $sep = DIRECTORY_SEPARATOR;
 // setup
 
 // Single directory creation
-System::mkDir('singledir');
-if( !is_dir('singledir') ){
-    print "System::mkDir('singledir'); failed\n";
+System::mkDir('rm_singledir');
+if( !is_dir('rm_singledir') ){
+    print "System::mkDir('rm_singledir'); failed\n";
 }
-System::rm('singledir');
+System::rm('rm_singledir');
 
 // Multiple directory creation
 System::mkDir('rm_dir1 rm_dir2 rm_dir3');
-if (!@is_dir('rm_dir1') || !@is_dir('rm_dir2') || !@is_dir('drm_ir3')) {
+if (!@is_dir('rm_dir1') || !@is_dir('rm_dir2') || !@is_dir('rm_dir3')) {
     print "System::mkDir('rm_dir1 rm_dir2 rm_dir3'); failed\n";
 }
 
@@ -56,6 +56,8 @@ echo "Testing: rm\n";
 
 if (OS_WINDOWS) {
     mkdir('rm_dir1\\oops');
+} else {
+    mkdir('rm_dir1/oops');
 }
 
 // Try to delete a dir without "-r" option
