@@ -16,11 +16,11 @@ $reg->updateChannel($chan);
 $chan = &$reg->getChannel('pecl.php.net');
 $chan->resetREST();
 $reg->updateChannel($chan);
-$pearweb->addRESTConfig("pecl.php.net", "package.listLatestReleases", array (
+$pearweb->addXmlrpcConfig("pecl.php.net", "package.listLatestReleases", array (
   0 => 'alpha',
 ), array (
 ));
-$pearweb->addRESTConfig("pear.php.net", "package.listLatestReleases", array (
+$pearweb->addXmlrpcConfig("pear.php.net", "package.listLatestReleases", array (
   0 => 'alpha',
 ), array (
   'Archive_Tar' =>
@@ -1597,7 +1597,7 @@ $pearweb->addRESTConfig("pear.php.net", "package.listLatestReleases", array (
   ),
 ));
 $pearweb->addHtmlConfig('http://pear.php.net/get/file-1.1.0RC5.tgz', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'File-1.1.0RC5.tgz');
-$pearweb->addRESTConfig("pear.php.net", "package.getDownloadURL", array (
+$pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   0 =>
   array (
     'package' => 'file',
@@ -1803,7 +1803,7 @@ interface for handling CSV files.
 ',
   'url' => 'http://pear.php.net/get/File-1.1.0RC5',
 ));
-$pearweb->addRESTConfig("pear.php.net", "package.getDownloadURL", array (
+$pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   0 =>
   array (
     'package' => 'net_sieve',
@@ -1937,7 +1937,7 @@ it affects you or disable DIGEST-MD5
   'url' => 'http://pear.php.net/get/Net_Sieve-1.1.1',
 ));
 $pearweb->addHtmlConfig('http://pear.php.net/get/Net_Sieve-1.1.1.tgz', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'Net_Sieve-1.1.1.tgz');
-$pearweb->addRESTConfig("pear.php.net", "package.getDownloadURL", array (
+$pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   0 =>
   array (
     'package' => 'text_highlighter',
@@ -2184,7 +2184,7 @@ a new class.</description>
   'url' => 'http://pear.php.net/get/Text_Highlighter-0.6.2',
 ));
 $pearweb->addHtmlConfig('http://pear.php.net/get/Text_Highlighter-0.6.2.tgz', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'Text_Highlighter-0.6.2.tgz');
-$pearweb->addRESTConfig("pear.php.net", "package.getDownloadURL", array (
+$pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   0 =>
   array (
     'package' => 'text_wiki',
@@ -2369,7 +2369,7 @@ $pearweb->addRESTConfig("pear.php.net", "package.getDownloadURL", array (
   'url' => 'http://pear.php.net/get/Text_Wiki-0.25.0',
 ));
 $pearweb->addHtmlConfig('http://pear.php.net/get/Text_Wiki-0.25.0.tgz', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'Text_Wiki-0.25.0.tgz');
-$pearweb->addRESTConfig("pear.php.net", "package.getDownloadURL", array (
+$pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   0 =>
   array (
     'package' => 'xml_rpc',
@@ -2543,7 +2543,7 @@ Includes an urgent security fix identified by Dan Libby &lt;dan@libby.com&gt;.
   'url' => 'http://pear.php.net/get/XML_RPC-1.2.0RC6',
 ));
 $pearweb->addHtmlConfig('http://pear.php.net/get/XML_RPC-1.2.0RC6.tgz', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'XML_RPC-1.2.0RC6.tgz');
-$pearweb->addRESTConfig("pear.php.net", "package.getDepDownloadURL", array (
+$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
   1 =>
   array (
@@ -2741,7 +2741,7 @@ Other:
 </package>',
   'url' => 'http://pear.php.net/get/PEAR-1.3.4',
 ));
-$pearweb->addRESTConfig("pear.php.net", "package.getDepDownloadURL", array (
+$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
   1 =>
   array (
@@ -2846,7 +2846,7 @@ Add select() implementation [#1428].
 </package>',
   'url' => 'http://pear.php.net/get/Net_Socket-1.0.5',
 ));
-$pearweb->addRESTConfig("pear.php.net", "package.getDepDownloadURL", array (
+$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
   1 =>
   array (
@@ -3045,7 +3045,7 @@ Other:
 </package>',
   'url' => 'http://pear.php.net/get/PEAR-1.3.4',
 ));
-$pearweb->addRESTConfig("pear.php.net", "package.getDepDownloadURL", array (
+$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
   1 =>
   array (
@@ -3301,7 +3301,7 @@ XML_Parser_Simple:
 </package>',
   'url' => 'http://pear.php.net/get/XML_Parser-1.2.4',
 ));
-$pearweb->addRESTConfig("pear.php.net", "package.getDepDownloadURL", array (
+$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
   1 =>
   array (
