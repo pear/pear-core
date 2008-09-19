@@ -144,12 +144,12 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a11.xml", '<?xml v
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -159,7 +159,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a11.xml", '<?xml v
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: &quot;pear package&quot; only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
 
@@ -278,12 +278,12 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a10.xml", '<?xml v
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -293,7 +293,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a10.xml", '<?xml v
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: &quot;pear package&quot; only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
 
@@ -401,12 +401,12 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a9.xml", '<?xml ve
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -416,7 +416,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a9.xml", '<?xml ve
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: &quot;pear package&quot; only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
 
@@ -510,12 +510,12 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a8.xml", '<?xml ve
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -525,7 +525,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a8.xml", '<?xml ve
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: &quot;pear package&quot; only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
 
@@ -609,12 +609,12 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a7.xml", '<?xml ve
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -624,7 +624,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a7.xml", '<?xml ve
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: &quot;pear package&quot; only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
 
@@ -696,12 +696,12 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a6.xml", '<?xml ve
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -711,7 +711,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a6.xml", '<?xml ve
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: &quot;pear package&quot; only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
 
@@ -777,12 +777,12 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a5.xml", '<?xml ve
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -792,7 +792,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a5.xml", '<?xml ve
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: &quot;pear package&quot; only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
 
@@ -856,12 +856,12 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a4.xml", '<?xml ve
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -871,7 +871,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a4.xml", '<?xml ve
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: &quot;pear package&quot; only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1</n>
  <f>243805</f>
@@ -923,12 +923,12 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a3.xml", '<?xml ve
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -987,7 +987,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a2.xml", '<?xml ve
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
@@ -1068,13 +1068,13 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.3.5.xml", '<?xml vers
  * the System class for quick handling common operations
    with files and directories
  * the PEAR base class
- 
+
 </d>
  <da>2005-02-18 00:38:04</da>
  <n>* fix Bug #3505: pecl can\'t install PDO
 * enhance pear run-tests dramatically
 * fix Bug #3506: pear install should export the pear version into the environment
-  
+
 </n>
  <f>108423</f>
  <g>http://pear.php.net/get/PEAR-1.3.5</g>
@@ -1222,9 +1222,9 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.3.1.xml", '<?xml vers
  <n>PEAR Installer:
 
  * Bug #534  pear search doesn\'t list unstable releases
- * Bug #933  CMD Usability Patch 
- * Bug #937  throwError() treats every call as static 
- * Bug #964 PEAR_ERROR_EXCEPTION causes fatal error 
+ * Bug #933  CMD Usability Patch
+ * Bug #937  throwError() treats every call as static
+ * Bug #964 PEAR_ERROR_EXCEPTION causes fatal error
  * Bug #1008 safe mode raises warning
 
 PEAR_ErrorStack:
@@ -2112,9 +2112,9 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/0.9.xml", '<?xml versio
 $e = $command->run('remote-info', array(), array('Archive_Zip'));
 $phpunit->assertNoErrors('Archive_Zip');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'name' => 'Archive_Zip',
       'channel' => 'pear.php.net',
@@ -2124,7 +2124,7 @@ $phpunit->assertEquals(array (
       'summary' => 'Zip file management class',
       'description' => 'This class provides handling of zip files in PHP.
 It supports creating, listing, extracting and adding to zip files.',
-      'releases' => 
+      'releases' =>
       array (
       ),
       'deprecated' =>
@@ -2140,9 +2140,9 @@ It supports creating, listing, extracting and adding to zip files.',
 $e = $command->run('remote-info', array(), array('PEAR'));
 $phpunit->assertNoErrors('PEAR');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'name' => 'PEAR',
       'channel' => 'pear.php.net',
@@ -2161,9 +2161,9 @@ $phpunit->assertEquals(array (
  * the System class for quick handling of common operations
    with files and directories
  * the PEAR base class',
-      'releases' => 
+      'releases' =>
       array (
-        '1.4.0a11' => 
+        '1.4.0a11' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -2201,12 +2201,12 @@ $phpunit->assertEquals(array (
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -2216,7 +2216,7 @@ $phpunit->assertEquals(array (
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: "pear package" only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
 
@@ -2287,23 +2287,23 @@ $phpunit->assertEquals(array (
   * make list-upgrades only search channels from which we have installed packages
   * remove <max> tag requirement for php dependency',
           'state' => 'alpha',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'rel' => 'le',
               'version' => '6.0.0',
               'optional' => 'no',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'php',
               'rel' => 'ge',
               'version' => '4.2',
               'optional' => 'no',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2312,7 +2312,7 @@ $phpunit->assertEquals(array (
               'version' => '1.4.0a1',
               'optional' => 'no',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2321,7 +2321,7 @@ $phpunit->assertEquals(array (
               'version' => '1.1',
               'optional' => 'no',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2330,7 +2330,7 @@ $phpunit->assertEquals(array (
               'version' => '1.2',
               'optional' => 'no',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2339,21 +2339,21 @@ $phpunit->assertEquals(array (
               'version' => '1.2.0RC1',
               'optional' => 'no',
             ),
-            6 => 
+            6 =>
             array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            7 => 
+            7 =>
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            8 => 
+            8 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2362,7 +2362,7 @@ $phpunit->assertEquals(array (
               'version' => '0.5.0',
               'optional' => 'yes',
             ),
-            9 => 
+            9 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2373,7 +2373,7 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        '1.4.0a10' => 
+        '1.4.0a10' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -2411,12 +2411,12 @@ $phpunit->assertEquals(array (
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -2426,7 +2426,7 @@ $phpunit->assertEquals(array (
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: "pear package" only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
 
@@ -2486,23 +2486,23 @@ $phpunit->assertEquals(array (
   * fix Bug #4060: pear upgrade Auth_HTTP fails
   * fix Bug #4072: pear list-all -c channel does not list installed packages',
           'state' => 'alpha',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'rel' => 'le',
               'version' => '6.0.0',
               'optional' => 'no',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'php',
               'rel' => 'ge',
               'version' => '4.2',
               'optional' => 'no',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2511,7 +2511,7 @@ $phpunit->assertEquals(array (
               'version' => '1.4.0dev13',
               'optional' => 'no',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2520,7 +2520,7 @@ $phpunit->assertEquals(array (
               'version' => '1.1',
               'optional' => 'no',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2529,7 +2529,7 @@ $phpunit->assertEquals(array (
               'version' => '1.2',
               'optional' => 'no',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2538,21 +2538,21 @@ $phpunit->assertEquals(array (
               'version' => '1.2.0RC1',
               'optional' => 'no',
             ),
-            6 => 
+            6 =>
             array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            7 => 
+            7 =>
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            8 => 
+            8 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2561,7 +2561,7 @@ $phpunit->assertEquals(array (
               'version' => '0.5.0',
               'optional' => 'yes',
             ),
-            9 => 
+            9 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2572,7 +2572,7 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        '1.4.0a9' => 
+        '1.4.0a9' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -2610,12 +2610,12 @@ $phpunit->assertEquals(array (
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -2625,7 +2625,7 @@ $phpunit->assertEquals(array (
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: "pear package" only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
 
@@ -2671,23 +2671,23 @@ $phpunit->assertEquals(array (
   * split PEAR_PackageFile_v2 into two classes, read-only PEAR_PackageFile_v2, and read-write
     PEAR_PackageFile_v2_rw',
           'state' => 'alpha',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'rel' => 'le',
               'version' => '6.0.0',
               'optional' => 'no',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'php',
               'rel' => 'ge',
               'version' => '4.2',
               'optional' => 'no',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2696,7 +2696,7 @@ $phpunit->assertEquals(array (
               'version' => '1.4.0dev13',
               'optional' => 'no',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2705,7 +2705,7 @@ $phpunit->assertEquals(array (
               'version' => '1.1',
               'optional' => 'no',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2714,7 +2714,7 @@ $phpunit->assertEquals(array (
               'version' => '1.2',
               'optional' => 'no',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2723,21 +2723,21 @@ $phpunit->assertEquals(array (
               'version' => '1.2.0RC1',
               'optional' => 'no',
             ),
-            6 => 
+            6 =>
             array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            7 => 
+            7 =>
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            8 => 
+            8 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2746,7 +2746,7 @@ $phpunit->assertEquals(array (
               'version' => '0.5.0',
               'optional' => 'yes',
             ),
-            9 => 
+            9 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2757,7 +2757,7 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        '1.4.0a8' => 
+        '1.4.0a8' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -2795,12 +2795,12 @@ $phpunit->assertEquals(array (
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -2810,7 +2810,7 @@ $phpunit->assertEquals(array (
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: "pear package" only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
 
@@ -2846,23 +2846,23 @@ $phpunit->assertEquals(array (
   * add "peardev" command for those with memory_limit issue
   * make package-validate command work on packaged .tgz files',
           'state' => 'alpha',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'rel' => 'le',
               'version' => '6.0.0',
               'optional' => 'no',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'php',
               'rel' => 'ge',
               'version' => '4.2',
               'optional' => 'no',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2871,7 +2871,7 @@ $phpunit->assertEquals(array (
               'version' => '1.4.0dev13',
               'optional' => 'no',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2880,7 +2880,7 @@ $phpunit->assertEquals(array (
               'version' => '1.1',
               'optional' => 'no',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2889,7 +2889,7 @@ $phpunit->assertEquals(array (
               'version' => '1.2',
               'optional' => 'no',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2898,21 +2898,21 @@ $phpunit->assertEquals(array (
               'version' => '1.2.0RC1',
               'optional' => 'no',
             ),
-            6 => 
+            6 =>
             array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            7 => 
+            7 =>
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            8 => 
+            8 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2921,7 +2921,7 @@ $phpunit->assertEquals(array (
               'version' => '0.5.0',
               'optional' => 'yes',
             ),
-            9 => 
+            9 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -2932,7 +2932,7 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        '1.4.0a7' => 
+        '1.4.0a7' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -2970,12 +2970,12 @@ $phpunit->assertEquals(array (
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -2985,7 +2985,7 @@ $phpunit->assertEquals(array (
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: "pear package" only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
 
@@ -3009,23 +3009,23 @@ $phpunit->assertEquals(array (
   * fix Bug #3864 Invalid dependency relation
   * fix Bug #3863 illogical warning about PEAR_Frontend_Gtk 0.4.0 with PEAR 1.4.0a6',
           'state' => 'alpha',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'rel' => 'le',
               'version' => '6.0.0',
               'optional' => 'no',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'php',
               'rel' => 'ge',
               'version' => '4.2',
               'optional' => 'no',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3034,7 +3034,7 @@ $phpunit->assertEquals(array (
               'version' => '1.4.0dev13',
               'optional' => 'no',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3043,7 +3043,7 @@ $phpunit->assertEquals(array (
               'version' => '1.1',
               'optional' => 'no',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3052,7 +3052,7 @@ $phpunit->assertEquals(array (
               'version' => '1.2',
               'optional' => 'no',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3061,21 +3061,21 @@ $phpunit->assertEquals(array (
               'version' => '1.2.0RC1',
               'optional' => 'no',
             ),
-            6 => 
+            6 =>
             array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            7 => 
+            7 =>
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            8 => 
+            8 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3084,7 +3084,7 @@ $phpunit->assertEquals(array (
               'version' => '0.5.0',
               'optional' => 'yes',
             ),
-            9 => 
+            9 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3095,7 +3095,7 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        '1.4.0a6' => 
+        '1.4.0a6' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -3133,12 +3133,12 @@ $phpunit->assertEquals(array (
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -3148,7 +3148,7 @@ $phpunit->assertEquals(array (
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: "pear package" only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
 
@@ -3166,23 +3166,23 @@ $phpunit->assertEquals(array (
   Specific changes from 1.4.0a5
   * fix Bug #3860 PEAR_Dependency2 not included in 1 case',
           'state' => 'alpha',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'rel' => 'le',
               'version' => '6.0.0',
               'optional' => 'no',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'php',
               'rel' => 'ge',
               'version' => '4.2',
               'optional' => 'no',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3191,7 +3191,7 @@ $phpunit->assertEquals(array (
               'version' => '1.4.0dev13',
               'optional' => 'no',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3200,7 +3200,7 @@ $phpunit->assertEquals(array (
               'version' => '1.1',
               'optional' => 'no',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3209,7 +3209,7 @@ $phpunit->assertEquals(array (
               'version' => '1.2',
               'optional' => 'no',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3218,21 +3218,21 @@ $phpunit->assertEquals(array (
               'version' => '1.2.0RC1',
               'optional' => 'no',
             ),
-            6 => 
+            6 =>
             array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            7 => 
+            7 =>
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            8 => 
+            8 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3241,7 +3241,7 @@ $phpunit->assertEquals(array (
               'version' => '0.5.0',
               'optional' => 'yes',
             ),
-            9 => 
+            9 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3252,7 +3252,7 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        '1.4.0a5' => 
+        '1.4.0a5' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -3290,12 +3290,12 @@ $phpunit->assertEquals(array (
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -3305,7 +3305,7 @@ $phpunit->assertEquals(array (
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: "pear package" only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1
 
@@ -3321,23 +3321,23 @@ $phpunit->assertEquals(array (
   * fix Bug #3671 Installing package features doesn\'t work as expected
   * implement Request #3717 [Patch] Implement Simple run-tests output',
           'state' => 'alpha',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'rel' => 'le',
               'version' => '6.0.0',
               'optional' => 'no',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'php',
               'rel' => 'ge',
               'version' => '4.2',
               'optional' => 'no',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3346,7 +3346,7 @@ $phpunit->assertEquals(array (
               'version' => '1.4.0dev13',
               'optional' => 'no',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3355,7 +3355,7 @@ $phpunit->assertEquals(array (
               'version' => '1.1',
               'optional' => 'no',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3364,7 +3364,7 @@ $phpunit->assertEquals(array (
               'version' => '1.2',
               'optional' => 'no',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3373,21 +3373,21 @@ $phpunit->assertEquals(array (
               'version' => '1.2.0RC1',
               'optional' => 'no',
             ),
-            6 => 
+            6 =>
             array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            7 => 
+            7 =>
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            8 => 
+            8 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3396,7 +3396,7 @@ $phpunit->assertEquals(array (
               'version' => '0.5.0',
               'optional' => 'yes',
             ),
-            9 => 
+            9 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3407,7 +3407,7 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        '1.4.0a4' => 
+        '1.4.0a4' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -3445,12 +3445,12 @@ $phpunit->assertEquals(array (
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -3460,27 +3460,27 @@ $phpunit->assertEquals(array (
   * Fix Bug #3634: still too many pear-specific restrictions on package valid
   * Implement Request #3647: "pear package" only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name
-  
+
   Specific changes from 1.4.0a3:
   * upgrade suggested XML_RPC version to 1.2.1',
           'state' => 'alpha',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'rel' => 'le',
               'version' => '6.0.0',
               'optional' => 'no',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'php',
               'rel' => 'ge',
               'version' => '4.2',
               'optional' => 'no',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3489,7 +3489,7 @@ $phpunit->assertEquals(array (
               'version' => '1.4.0dev13',
               'optional' => 'no',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3498,7 +3498,7 @@ $phpunit->assertEquals(array (
               'version' => '1.1',
               'optional' => 'no',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3507,7 +3507,7 @@ $phpunit->assertEquals(array (
               'version' => '1.2',
               'optional' => 'no',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3516,21 +3516,21 @@ $phpunit->assertEquals(array (
               'version' => '1.2.0RC1',
               'optional' => 'no',
             ),
-            6 => 
+            6 =>
             array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            7 => 
+            7 =>
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            8 => 
+            8 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3539,7 +3539,7 @@ $phpunit->assertEquals(array (
               'version' => '0.5.0',
               'optional' => 'yes',
             ),
-            9 => 
+            9 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3550,7 +3550,7 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        '1.4.0a3' => 
+        '1.4.0a3' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -3588,12 +3588,12 @@ $phpunit->assertEquals(array (
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC
-  
+
   Specific changes from 1.4.0a2:
  BC BREAK FOR PECL DEVS ONLY:
  In order to circumvent strict package-validation, use
@@ -3604,23 +3604,23 @@ $phpunit->assertEquals(array (
   * Implement Request #3647: "pear package" only includes one package.xml
   * Fix Bug #3677: Post-Install script message needs to display channel name',
           'state' => 'alpha',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'rel' => 'le',
               'version' => '6.0.0',
               'optional' => 'no',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'php',
               'rel' => 'ge',
               'version' => '4.2',
               'optional' => 'no',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3629,7 +3629,7 @@ $phpunit->assertEquals(array (
               'version' => '1.4.0dev13',
               'optional' => 'no',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3638,7 +3638,7 @@ $phpunit->assertEquals(array (
               'version' => '1.1',
               'optional' => 'no',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3647,7 +3647,7 @@ $phpunit->assertEquals(array (
               'version' => '1.2',
               'optional' => 'no',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3656,21 +3656,21 @@ $phpunit->assertEquals(array (
               'version' => '1.2.0RC1',
               'optional' => 'no',
             ),
-            6 => 
+            6 =>
             array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            7 => 
+            7 =>
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            8 => 
+            8 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3679,7 +3679,7 @@ $phpunit->assertEquals(array (
               'version' => '0.5.0',
               'optional' => 'yes',
             ),
-            9 => 
+            9 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3690,7 +3690,7 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        '1.4.0a2' => 
+        '1.4.0a2' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -3728,29 +3728,29 @@ $phpunit->assertEquals(array (
   Specific changes from 1.3.5:
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read
-  
+
   Specific changes from 1.4.0a1:
   * Fix Bug #3610: fix for PDO package in 1.3.5 was never merged to 1.4.0a1
   * Fix Bug #3612: fatal error in PEAR_Downloader_Package
   * Use 1.2.0 as recommended version of XML_RPC',
           'state' => 'alpha',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'rel' => 'le',
               'version' => '6.0.0',
               'optional' => 'no',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'php',
               'rel' => 'ge',
               'version' => '4.2',
               'optional' => 'no',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3759,7 +3759,7 @@ $phpunit->assertEquals(array (
               'version' => '1.4.0dev13',
               'optional' => 'no',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3768,7 +3768,7 @@ $phpunit->assertEquals(array (
               'version' => '1.1',
               'optional' => 'no',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3777,7 +3777,7 @@ $phpunit->assertEquals(array (
               'version' => '1.2',
               'optional' => 'no',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3786,21 +3786,21 @@ $phpunit->assertEquals(array (
               'version' => '1.2.0RC1',
               'optional' => 'no',
             ),
-            6 => 
+            6 =>
             array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            7 => 
+            7 =>
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            8 => 
+            8 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3809,7 +3809,7 @@ $phpunit->assertEquals(array (
               'version' => '0.5.0',
               'optional' => 'yes',
             ),
-            9 => 
+            9 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3820,7 +3820,7 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        '1.4.0a1' => 
+        '1.4.0a1' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -3859,23 +3859,23 @@ $phpunit->assertEquals(array (
   * Implement request #1789: SSL support for xml-rpc and download
   * Everything above here that you just read',
           'state' => 'alpha',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'rel' => 'le',
               'version' => '6.0.0',
               'optional' => 'no',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'php',
               'rel' => 'ge',
               'version' => '4.2',
               'optional' => 'no',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3884,7 +3884,7 @@ $phpunit->assertEquals(array (
               'version' => '1.4.0dev13',
               'optional' => 'no',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3893,7 +3893,7 @@ $phpunit->assertEquals(array (
               'version' => '1.1',
               'optional' => 'no',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3902,7 +3902,7 @@ $phpunit->assertEquals(array (
               'version' => '1.2',
               'optional' => 'no',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3911,21 +3911,21 @@ $phpunit->assertEquals(array (
               'version' => '1.2.0RC1',
               'optional' => 'no',
             ),
-            6 => 
+            6 =>
             array (
               'type' => 'ext',
               'name' => 'xml',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            7 => 
+            7 =>
             array (
               'type' => 'ext',
               'name' => 'pcre',
               'rel' => 'has',
               'optional' => 'no',
             ),
-            8 => 
+            8 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3934,7 +3934,7 @@ $phpunit->assertEquals(array (
               'version' => '0.5.0',
               'optional' => 'yes',
             ),
-            9 => 
+            9 =>
             array (
               'type' => 'pkg',
               'channel' => 'pear.php.net',
@@ -3945,7 +3945,7 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        '1.3.5' => 
+        '1.3.5' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -3966,11 +3966,11 @@ $phpunit->assertEquals(array (
 * enhance pear run-tests dramatically
 * fix Bug #3506: pear install should export the pear version into the environment',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.3.4' => 
+        '1.3.4' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -3998,11 +3998,11 @@ $phpunit->assertEquals(array (
 * implement Request #2914: Dynamic Include Path for run-tests command
 * make pear help listing more useful (put how-to-use info at the bottom of the listing)',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.3.3.1' => 
+        '1.3.3.1' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -4021,11 +4021,11 @@ $phpunit->assertEquals(array (
           'releasedate' => '2004-11-12 02:04:57',
           'releasenotes' => 'add RunTest.php to package.xml, make run-tests display failed tests, and use ui',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.3.3' => 
+        '1.3.3' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -4057,11 +4057,11 @@ Other:
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.3.1' => 
+        '1.3.1' =>
         array (
           'doneby' => 'cellog',
           'license' => 'PHP License',
@@ -4080,9 +4080,9 @@ Other:
           'releasenotes' => 'PEAR Installer:
 
  * Bug #534  pear search doesn\'t list unstable releases
- * Bug #933  CMD Usability Patch 
- * Bug #937  throwError() treats every call as static 
- * Bug #964 PEAR_ERROR_EXCEPTION causes fatal error 
+ * Bug #933  CMD Usability Patch
+ * Bug #937  throwError() treats every call as static
+ * Bug #964 PEAR_ERROR_EXCEPTION causes fatal error
  * Bug #1008 safe mode raises warning
 
 PEAR_ErrorStack:
@@ -4091,11 +4091,11 @@ PEAR_ErrorStack:
    PEAR_Error.  It should be considered experimental until explicitly marked
    stable.  require_once \'PEAR/ErrorStack.php\' to use.',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.3' => 
+        '1.3' =>
         array (
           'doneby' => 'pajoye',
           'license' => 'PHP License',
@@ -4122,11 +4122,11 @@ PEAR_ErrorStack:
 * Moved download code into its own class
 * Fully unit tested the installer, packager, downloader, and PEAR_Common',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.3b6' => 
+        '1.3b6' =>
         array (
           'doneby' => 'pajoye',
           'license' => 'PHP License',
@@ -4153,11 +4153,11 @@ PEAR_ErrorStack:
 * Moved download code into its own class
 * Fully unit tested the installer, packager, downloader, and PEAR_Common',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.3b5' => 
+        '1.3b5' =>
         array (
           'doneby' => 'pajoye',
           'license' => 'PHP License',
@@ -4182,11 +4182,11 @@ PEAR_ErrorStack:
 * Moved download code into its own class
 * Fully unit tested the installer, packager, downloader, and PEAR_Common',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.3b3' => 
+        '1.3b3' =>
         array (
           'doneby' => 'cox',
           'license' => 'PHP License',
@@ -4208,11 +4208,11 @@ PEAR_ErrorStack:
 * Better error detecting and reporting in "install/upgrade"
 * Various other bugfixes and cleanups',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.3b2' => 
+        '1.3b2' =>
         array (
           'doneby' => 'cox',
           'license' => 'PHP License',
@@ -4234,11 +4234,11 @@ PEAR_ErrorStack:
 * Fixed optional dependency attrib removed from
   package.xml, making them a requirement',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.3b1' => 
+        '1.3b1' =>
         array (
           'doneby' => 'cox',
           'license' => 'PHP License',
@@ -4285,11 +4285,11 @@ System Class:
 * Fixed recursion deep param in _dirToStruct()
 * Added the System::find() command (read API doc for more info)',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.2.1' => 
+        '1.2.1' =>
         array (
           'doneby' => 'pajoye',
           'license' => 'PHP License',
@@ -4302,11 +4302,11 @@ System Class:
           'releasedate' => '2003-08-15 13:48:00',
           'releasenotes' => '- Set back the default library path (BC issues)',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.2' => 
+        '1.2' =>
         array (
           'doneby' => 'cox',
           'license' => 'PHP License',
@@ -4334,11 +4334,11 @@ System Class:
 The main purpouse of this command is for easily adding extensions to the PHP sources
 before compiling it.',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.2b5' => 
+        '1.2b5' =>
         array (
           'doneby' => 'cox',
           'license' => 'PHP License',
@@ -4364,11 +4364,11 @@ before compiling it.',
 The main purpouse of this command is for easily adding extensions to the PHP sources
 before compiling it.',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.2b4' => 
+        '1.2b4' =>
         array (
           'doneby' => 'cox',
           'license' => 'PHP License',
@@ -4394,11 +4394,11 @@ before compiling it.',
 The main purpouse of this command is for easily adding extensions to the PHP sources
 before compiling it.',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.2b3' => 
+        '1.2b3' =>
         array (
           'doneby' => '<',
           'license' => '<',
@@ -4407,11 +4407,11 @@ before compiling it.',
           'releasedate' => '<',
           'releasenotes' => '<',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.2b2' => 
+        '1.2b2' =>
         array (
           'doneby' => 'cox',
           'license' => 'PHP License',
@@ -4431,11 +4431,11 @@ before compiling it.',
 The main purpouse of this command is for easily adding extensions to the PHP sources
 before compiling it.',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.2b1' => 
+        '1.2b1' =>
         array (
           'doneby' => 'cox',
           'license' => 'PHP License',
@@ -4454,11 +4454,11 @@ before compiling it.',
 The main purpouse of this command is for easily adding extensions to the PHP sources
 before compiling it.',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.1' => 
+        '1.1' =>
         array (
           'doneby' => 'ssb',
           'license' => 'PHP License',
@@ -4490,11 +4490,11 @@ PEAR INSTALLER:
   All classes and non-private (not underscore-prefixed) methods and
   functions are now registered during "pear package".',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.0.1' => 
+        '1.0.1' =>
         array (
           'doneby' => 'ssb',
           'license' => 'PHP License',
@@ -4519,11 +4519,11 @@ PEAR INSTALLER:
 
 * Windows output buffering bugfix for "pear" command',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.0' => 
+        '1.0' =>
         array (
           'doneby' => 'ssb',
           'license' => 'PHP License',
@@ -4537,11 +4537,11 @@ PEAR INSTALLER:
           'releasenotes' => '* set default cache_ttl to 1 hour
 * added "clear-cache" command',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.0b3' => 
+        '1.0b3' =>
         array (
           'doneby' => 'ssb',
           'license' => 'PHP License',
@@ -4558,11 +4558,11 @@ PEAR INSTALLER:
   environment variables for defaults (very useful
   to override the default php_dir on Windows!)',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.0b2' => 
+        '1.0b2' =>
         array (
           'doneby' => 'ssb',
           'license' => 'PHP License',
@@ -4580,11 +4580,11 @@ PEAR INSTALLER:
   cleanly, without leaving half-installed packages
   around',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '1.0b1' => 
+        '1.0b1' =>
         array (
           'doneby' => 'ssb',
           'license' => 'PHP License',
@@ -4636,11 +4636,11 @@ Bugfixes, PEAR Library:
 * ZE2 compatibility fixes
 * use getenv() as fallback for $_ENV',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '0.90' => 
+        '0.90' =>
         array (
           'doneby' => 'ssb',
           'license' => 'PHP License',
@@ -4665,11 +4665,11 @@ Bugfixes, PEAR Library:
 * add --nobuild option to install/upgrade commands
 * new and more generic Frontend API',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '0.11' => 
+        '0.11' =>
         array (
           'doneby' => 'ssb',
           'license' => 'PHP License',
@@ -4688,11 +4688,11 @@ Bugfixes, PEAR Library:
 * fix: config-set did not work with "set" parameters
 * disable magic_quotes_runtime',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '0.10' => 
+        '0.10' =>
         array (
           'doneby' => 'ssb',
           'license' => 'PHP License',
@@ -4728,11 +4728,11 @@ though it claimed to be.  This version finally is self-hosting
 * new command: package-dependencies
 * lots of minor fixes',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),
-        '0.9' => 
+        '0.9' =>
         array (
           'doneby' => 'ssb',
           'license' => 'PHP License',
@@ -4762,7 +4762,7 @@ though it claimed to be.  This version finally is self-hosting
    login
    logout',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
           ),
         ),

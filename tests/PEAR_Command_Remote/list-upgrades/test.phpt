@@ -91,11 +91,11 @@ $e = $command->run('list-upgrades', array(), array());
 $phpunit->assertNoErrors('pear.php.net');
 $actual = array (
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'pear.php.net Available Upgrades (stable):',
       'border' => 1,
-      'headline' => 
+      'headline' =>
       array (
         0 => 'Channel',
         1 => 'Package',
@@ -104,9 +104,9 @@ $actual = array (
         4 => 'Size',
       ),
       'channel' => 'pear.php.net',
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 =>
         array (
           0 => 'pear.php.net',
           1 => 'Archive_Zip',

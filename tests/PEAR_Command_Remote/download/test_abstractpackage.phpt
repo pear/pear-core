@@ -98,31 +98,31 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'log');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 'setup',
     1 => 'self',
   ),
-  1 => 
+  1 =>
   array (
     0 => 'saveas',
     1 => 'test-1.0.tgz',
   ),
-  2 => 
+  2 =>
   array (
     0 => 'start',
-    1 => 
+    1 =>
     array (
       0 => 'test-1.0.tgz',
       1 => '785',
     ),
   ),
-  3 => 
+  3 =>
   array (
     0 => 'bytesread',
     1 => 785,
   ),
-  4 => 
+  4 =>
   array (
     0 => 'done',
     1 => 785,
@@ -155,61 +155,61 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), '--nocompress log');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 'setup',
     1 => 'self',
   ),
-  1 => 
+  1 =>
   array (
     0 => 'saveas',
     1 => 'test-1.0.tar',
   ),
-  2 => 
+  2 =>
   array (
     0 => 'start',
-    1 => 
+    1 =>
     array (
       0 => 'test-1.0.tar',
       1 => '6656',
     ),
   ),
-  3 => 
+  3 =>
   array (
     0 => 'bytesread',
     1 => 1024,
   ),
-  4 => 
+  4 =>
   array (
     0 => 'bytesread',
     1 => 2048,
   ),
-  5 => 
+  5 =>
   array (
     0 => 'bytesread',
     1 => 3072,
   ),
-  6 => 
+  6 =>
   array (
     0 => 'bytesread',
     1 => 4096,
   ),
-  7 => 
+  7 =>
   array (
     0 => 'bytesread',
     1 => 5120,
   ),
-  8 => 
+  8 =>
   array (
     0 => 'bytesread',
     1 => 6144,
   ),
-  9 => 
+  9 =>
   array (
     0 => 'bytesread',
     1 => 6656,
   ),
-  10 => 
+  10 =>
   array (
     0 => 'done',
     1 => 6656,
