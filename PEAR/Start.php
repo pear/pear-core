@@ -227,9 +227,9 @@ class PEAR_Start extends PEAR
             if (!$ok) { // This should not happen, really ;)
                 $this->bail('chdir ' . $this->ptmp . ' ... failed');
             }
-    
+
             print "ok\n";
-    
+
             // Adjust TEMPDIR envvars
             if (!isset($_ENV)) {
                 $_ENV = array();
@@ -286,7 +286,7 @@ class PEAR_Start extends PEAR
             }
             $this->PEARConfig->set($var, $this->$var);
         }
-        
+
         $this->PEARConfig->store();
 //       $this->PEARConfig->set('verbose', 6);
         print "Configuration written to $this->pear_conf...\n";
@@ -316,11 +316,11 @@ class PEAR_Start extends PEAR
 
         foreach ($this->config as $var) {
             $dir = $this->$var;
-        
+
             if (!preg_match('/_dir\\z/', $var)) {
                 continue;
             }
-        
+
             if (!@is_dir($dir)) {
                 if (!System::mkDir(array('-p', $dir))) {
                     $root = OS_WINDOWS ? 'administrator' : 'root';
@@ -346,7 +346,7 @@ Run this script as $root or pick another location.\n");
         if ($pathIni && is_file($pathIni)) {
             return $pathIni;
         }
-    
+
         // Oh well, we can keep this too :)
         // I dunno if get_cfg_var() is safe on every OS
         if (OS_WINDOWS) {
@@ -366,11 +366,11 @@ Run this script as $root or pick another location.\n");
         } else {
             $php_ini = PHP_CONFIG_FILE_PATH . DIRECTORY_SEPARATOR . 'php.ini';
         }
-    
+
         if (@is_file($php_ini)) {
             return $php_ini;
         }
-    
+
         // We re running in hackz&troubles :)
         ob_implicit_flush(false);
         ob_start();
@@ -378,7 +378,7 @@ Run this script as $root or pick another location.\n");
         $strInfo = ob_get_contents();
         ob_end_clean();
         ob_implicit_flush(true);
-    
+
         if (php_sapi_name() != 'cli') {
             $strInfo = strip_tags($strInfo,'<td>');
             $arrayInfo = explode("</td>", $strInfo );
@@ -387,7 +387,7 @@ Run this script as $root or pick another location.\n");
             $arrayInfo = explode("\n", $strInfo);
             $cli = true;
         }
-    
+
         foreach ($arrayInfo as $val) {
             if (strpos($val,"php.ini")) {
                 if ($cli) {
