@@ -1,9 +1,9 @@
 --TEST--
-System test Bug #14041: System::find does not order properly (None windows test)
+System test Bug #14041: System::find does not order properly (Windows only test)
 --SKIPIF--
 <?php
 require_once 'PEAR.php';
-if (OS_WINDOWS) {
+if (!OS_WINDOWS) {
   echo 'skip';
 }
 ?>
@@ -57,21 +57,21 @@ rmdir($path);
 --EXPECTF--
 array(9) {
   [0]=>
-  string(%s) "%sbug14041/1/test.php"
+  string(%s) "%sbug14041\1\test.php"
   [1]=>
-  string(%s) "%sbug14041/2/test.php"
+  string(%s) "%sbug14041\2\test.php"
   [2]=>
-  string(%s) "%sbug14041/3/test.php"
+  string(%s) "%sbug14041\3\test.php"
   [3]=>
-  string(%s) "%sbug14041/10/test.php"
+  string(%s) "%sbug14041\10\test.php"
   [4]=>
-  string(%s) "%sbug14041/11/test.php"
+  string(%s) "%sbug14041\11\test.php"
   [5]=>
-  string(%s) "%sbug14041/12/test.php"
+  string(%s) "%sbug14041\12\test.php"
   [6]=>
-  string(%s) "%sbug14041/test.php"
+  string(%s) "%sbug14041\test.php"
   [7]=>
-  string(%s) "%sbug14041/test4095.php"
+  string(%s) "%sbug14041\test4095.php"
   [8]=>
-  string(%s) "%sbug14041/test14041.php"
+  string(%s) "%sbug14041\test14041.php"
 }
