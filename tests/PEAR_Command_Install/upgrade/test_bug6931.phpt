@@ -1057,7 +1057,7 @@ unset($GLOBALS['__Stupid_php4_a']); // reset downloader
 $command->run('upgrade', array(), array('PEAR-alpha'));
 $phpunit->assertNoErrors('full test');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     'info' => 'Nothing to upgrade',
     'cmd' => 'no command',

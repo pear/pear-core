@@ -81,89 +81,89 @@ $phpunit->showAll();
 $dl = &$command->getDownloader(1, array());
 if (OS_WINDOWS) {
     $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 1,
     1 => 'Skipping package "pear/Installed", already installed as version 1.4.0a1',
   ),
-  1 => 
+  1 =>
   array (
     0 => 3,
     1 => 'Downloading "http://pear.php.net/get/Console_Getopt-1.2.tgz"',
   ),
-  2 => 
+  2 =>
   array (
     0 => 1,
     1 => 'downloading Console_Getopt-1.2.tgz ...',
   ),
-  3 => 
+  3 =>
   array (
     0 => 1,
     1 => 'Starting to download Console_Getopt-1.2.tgz (3,371 bytes)',
   ),
-  4 => 
+  4 =>
   array (
     0 => 1,
     1 => '.',
   ),
-  5 => 
+  5 =>
   array (
     0 => 1,
     1 => '...done: 3,371 bytes',
   ),
-  6 => 
+  6 =>
   array (
     0 => 3,
     1 => 'adding to transaction: mkdir ' . $temp_path . '\\php\\Console',
   ),
-  7 => 
+  7 =>
   array (
     0 => 2,
     1 => '+ create dir ' . $temp_path . '\\php\\Console',
   ),
-  8 => 
+  8 =>
   array (
     0 => 3,
     1 => '+ mkdir ' . $temp_path . '\\php\\Console',
   ),
-  9 => 
+  9 =>
   array (
     0 => 3,
     1 => '+ cp ' . $temp_path . '\\tmp\\Console_Getopt-1.2\\Console\\Getopt.php ' . $temp_path . '\\php\\Console\\.tmpGetopt.php',
   ),
-  10 => 
+  10 =>
   array (
     0 => 2,
     1 => 'md5sum ok: ' . $temp_path . '\\php\\Console\\Getopt.php',
   ),
-  11 => 
+  11 =>
   array (
     0 => 3,
     1 => 'adding to transaction: rename ' . $temp_path . '\\php\\Console\\.tmpGetopt.php ' . $temp_path . '\\php\\Console\\Getopt.php ',
   ),
-  12 => 
+  12 =>
   array (
     0 => 3,
     1 => 'adding to transaction: installed_as Console/Getopt.php ' . $temp_path . '\\php\\Console\\Getopt.php ' . $temp_path . '\\php \\Console',
   ),
-  13 => 
+  13 =>
   array (
     0 => 2,
     1 => 'about to commit 3 file operations',
   ),
-  14 => 
+  14 =>
   array (
     0 => 3,
     1 => '+ mv ' . $temp_path . '\\php\\Console\\.tmpGetopt.php ' . $temp_path . '\\php\\Console\\Getopt.php',
   ),
-  15 => 
+  15 =>
   array (
     0 => 2,
     1 => 'successfully committed 3 file operations',
   ),
-  16 => 
+  16 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'data' => 'install ok: channel://pear.php.net/Console_Getopt-1.2',
     ),
@@ -207,59 +207,59 @@ if (OS_WINDOWS) {
     0 => 2,
     1 => '+ create dir ' . $temp_path . '/php/Console',
   ),
-  8 => 
+  8 =>
   array (
     0 => 3,
     1 => '+ mkdir ' . $temp_path . '/php/Console',
   ),
-  9 => 
+  9 =>
   array (
     0 => 3,
     1 => '+ cp ' . $temp_path . '/tmp/Console_Getopt-1.2/Console/Getopt.php ' . $temp_path . '/php/Console/.tmpGetopt.php',
   ),
-  10 => 
+  10 =>
   array (
     0 => 2,
     1 => 'md5sum ok: ' . $temp_path . '/php/Console/Getopt.php',
   ),
-  11 => 
+  11 =>
   array (
     0 => 3,
     1 => 'adding to transaction: chmod '.$umask.' ' . $temp_path . '/php/Console/.tmpGetopt.php',
   ),
-  12 => 
+  12 =>
   array (
     0 => 3,
     1 => 'adding to transaction: rename ' . $temp_path . '/php/Console/.tmpGetopt.php ' . $temp_path . '/php/Console/Getopt.php ',
   ),
-  13 => 
+  13 =>
   array (
     0 => 3,
     1 => 'adding to transaction: installed_as Console/Getopt.php ' . $temp_path . '/php/Console/Getopt.php ' . $temp_path . '/php /Console',
   ),
-  14 => 
+  14 =>
   array (
     0 => 2,
     1 => 'about to commit 4 file operations',
   ),
-  15 => 
+  15 =>
   array (
     0 => 3,
     1 => '+ chmod '.$umask.' ' . $temp_path . '/php/Console/.tmpGetopt.php',
   ),
-  16 => 
+  16 =>
   array (
     0 => 3,
     1 => '+ mv ' . $temp_path . '/php/Console/.tmpGetopt.php ' . $temp_path . '/php/Console/Getopt.php',
   ),
-  17 => 
+  17 =>
   array (
     0 => 2,
     1 => 'successfully committed 4 file operations',
   ),
-  18 => 
+  18 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'data' => 'install ok: channel://pear.php.net/Console_Getopt-1.2',
     ),

@@ -12,17 +12,8 @@ error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $packagexml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' .
     'PEAR_Frontend_Web-0.4.tgz';
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
-  array (
-    'package' => 'PEAR_Frontend_Web',
-    'channel' => 'pear.php.net',
-    'version' => '0.4',
-  ),
-  1 => 'stable',
-), array (
-  'version' => '0.4',
-  'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
+$pearweb->addXmlrpcConfig('http://pear.php.net/rest/r/pear_frontend_web/package.0.4.xml',
+'<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0">
   <name>PEAR_Frontend_Web</name>
@@ -43,7 +34,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
     </maintainer>
     <maintainer>
       <user>ssb</user>
-      <name>Stig S?ther Bakken</name>
+      <name>Stig Sæther Bakken</name>
       <email>stig@php.net</email>
       <role>helper</role>
     </maintainer>
@@ -118,18 +109,17 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
 </notes>
     </release>
   </changelog>
-</package>',
-  'url' => 'http://pear.php.net/get/PEAR_Frontend_Web-0.4',
-));
+</package>', 'text/xml');
+
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '2.0',
-  1 => 
+  1 =>
   array (
     'name' => 'PEAR_Frontend_Gtk',
     'channel' => 'pear.php.net',
     'min' => '0.4.0',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'PEAR',
@@ -218,15 +208,16 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   </changelog>
 </package>',
 ));
+
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '2.0',
-  1 => 
+  1 =>
   array (
     'name' => 'PEAR_Frontend_Web',
     'channel' => 'pear.php.net',
     'min' => '0.5.0',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'PEAR',
@@ -333,8 +324,9 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   </changelog>
 </package>',
 ));
+
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+  0 =>
   array (
     'package' => 'PEAR_Frontend_Gtk',
     'channel' => 'pear.php.net',
@@ -424,8 +416,9 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
 </package>',
   'url' => 'http://pear.php.net/get/PEAR_Frontend_Gtk-0.3',
 ));
+
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+  0 =>
   array (
     'package' => 'PEAR_Frontend_Web',
     'channel' => 'pear.php.net',
@@ -533,9 +526,10 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
 </package>',
   'url' => 'http://pear.php.net/get/PEAR_Frontend_Web-0.4',
 ));
+
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'has',
@@ -543,7 +537,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'Net_UserAgent_Detect',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'PEAR_Frontend_Web',
@@ -596,7 +590,7 @@ version 1.3 of Horde.</description>
 * Bumped konq\'s javascript version up to 1.4
 * Fix bug where w3m caused warnings
 * fixed a notice error when the user agent is empty
-* Fixed missing windows xp detection and added nested_table_render_bug quirk for netscape 4.8 and below. 
+* Fixed missing windows xp detection and added nested_table_render_bug quirk for netscape 4.8 and below.
 * Code cleanups.</notes>
     <deps>
       <dep type="php" rel="ge" version="4.1.0"/>
@@ -618,9 +612,10 @@ version 1.3 of Horde.</description>
 </package>',
   'url' => 'http://pear.php.net/get/Net_UserAgent_Detect-2.0.1',
 ));
+
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'has',
@@ -628,7 +623,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'HTML_Template_IT',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'PEAR_Frontend_Web',
@@ -685,7 +680,7 @@ you to modify some parts of your layout easily.</description>
     <date>2003-03-11</date>
     <license>PHP License</license>
     <state>stable</state>
-    <notes>- Added str_replace optionnal parsing (fixes problems 
+    <notes>- Added str_replace optionnal parsing (fixes problems
   with regular expression like \'$\' symbols) (Alexey, pajoye)
 - Added preserve_data to substitute/preserve variables inside
   in datas already passed through setVariable (Alexey)
@@ -735,20 +730,20 @@ $phpunit->assertTrue($res, 'result');
 $fakelog->getLog();
 $fakelog->getDownload();
 $res = $command->run('install', array(), array('PEAR_Frontend_Web-beta'));
-$phpunit->assertErrors(array(array('package' => 'PEAR_Error', 'message' => 'install failed')), 
+$phpunit->assertErrors(array(array('package' => 'PEAR_Error', 'message' => 'install failed')),
 'after install');
 $phpunit->assertEquals( array (
-  0 => 
+  0 =>
   array (
     0 => 2,
     1 => 'pear/PEAR_Frontend_Web: Skipping required dependency "pear/Net_UserAgent_Detect", is already installed',
   ),
-  1 => 
+  1 =>
   array (
     0 => 2,
     1 => 'pear/PEAR_Frontend_Web: Skipping required dependency "pear/HTML_Template_IT", is already installed',
   ),
-  2 => 
+  2 =>
   array (
     0 => 0,
     1 => 'pear/pear requires package "pear/PEAR_Frontend_Web" (version >= 0.5.0), downloaded version is 0.4',
@@ -758,18 +753,18 @@ $phpunit->assertEquals( array (
     0 => 0,
     1 => 'pear/pear requires package "pear/PEAR_Frontend_Web" (version >= 0.5.0), downloaded version is 0.4',
   ),
-  4 => 
+  4 =>
   array (
     0 => 0,
     1 => 'pear/PEAR_Frontend_Web cannot be installed, conflicts with installed packages',
   ),
-  5 => 
+  5 =>
   array (
-    'info' => 
+    'info' =>
     array (
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 =>
         array (
           0 => 'No valid packages found',
         ),

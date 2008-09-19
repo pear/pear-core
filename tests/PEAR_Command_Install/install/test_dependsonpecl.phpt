@@ -19,7 +19,7 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'has',
@@ -27,7 +27,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'radius',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'PEAR',
@@ -38,12 +38,12 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
 PEAR::popErrorHandling();
 $pearweb->addXmlrpcConfig("pecl.php.net", "package.getDepDownloadURL", array (
   0 => '2.0',
-  1 => 
+  1 =>
   array (
     'channel' => 'pecl.php.net',
     'name' => 'radius',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'PEAR',
@@ -119,11 +119,11 @@ $phpunit->assertEquals(array (
     1 => 'pear/PEAR requires package "pear/radius"',
   ),
   array (
-    'info' => 
+    'info' =>
     array (
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 =>
         array (
           0 => 'No valid packages found',
         ),
@@ -134,14 +134,14 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals( array (
-  0 => 
+  0 =>
   array (
     0 => 'pear.php.net',
     1 => 'package.getDepDownloadURL',
-    2 => 
+    2 =>
     array (
       0 => '1.0',
-      1 => 
+      1 =>
       array (
         'type' => 'pkg',
         'rel' => 'has',
@@ -149,7 +149,7 @@ $phpunit->assertEquals( array (
         'channel' => 'pear.php.net',
         'package' => 'radius',
       ),
-      2 => 
+      2 =>
       array (
         'channel' => 'pear.php.net',
         'package' => 'PEAR',
@@ -158,19 +158,19 @@ $phpunit->assertEquals( array (
       3 => 'stable',
     ),
   ),
-  1 => 
+  1 =>
   array (
     0 => 'pecl.php.net',
     1 => 'package.getDepDownloadURL',
-    2 => 
+    2 =>
     array (
       0 => '2.0',
-      1 => 
+      1 =>
       array (
         'channel' => 'pecl.php.net',
         'name' => 'radius',
       ),
-      2 => 
+      2 =>
       array (
         'channel' => 'pear.php.net',
         'package' => 'PEAR',
@@ -180,7 +180,7 @@ $phpunit->assertEquals( array (
     ),
   ),
  )
-, $pearweb->getXmlrpcCalls(), 'xmlrpc calls');
+, $pearweb->getRESTCalls(), 'xmlrpc calls');
 echo 'tests done';
 ?>
 --CLEAN--

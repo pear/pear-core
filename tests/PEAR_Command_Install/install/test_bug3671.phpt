@@ -13,7 +13,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'bug3671_1.xml';
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+  0 =>
   array (
     'package' => 'PEAR_Frontend_Web',
     'channel' => 'pear.php.net',
@@ -122,7 +122,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   'url' => 'http://pear.php.net/get/PEAR_Frontend_Web-0.4',
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+  0 =>
   array (
     'package' => 'PEAR_Frontend_Gtk',
     'channel' => 'pear.php.net',
@@ -263,7 +263,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   'url' => 'http://pear.php.net/get/PEAR_Frontend_Gtk-0.4.0',
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+  0 =>
   array (
     'package' => 'PEAR_Frontend_Web',
     'channel' => 'pear.php.net',
@@ -373,13 +373,13 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '2.0',
-  1 => 
+  1 =>
   array (
     'name' => 'PEAR_Frontend_Web',
     'channel' => 'pear.php.net',
     'min' => '0.5.0',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'PEAR',
@@ -488,13 +488,13 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '2.0',
-  1 => 
+  1 =>
   array (
     'name' => 'PEAR_Frontend_Gtk',
     'channel' => 'pear.php.net',
     'min' => '0.4.0',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'PEAR',
@@ -634,7 +634,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
 </package>',
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+  0 =>
   array (
     'package' => 'pear',
     'channel' => 'pear.php.net',
@@ -755,13 +755,13 @@ http://pear.php.net/dtd/package-2.0.xsd">
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '2.0',
-  1 => 
+  1 =>
   array (
     'name' => 'PEAR_Frontend_Web',
     'channel' => 'pear.php.net',
     'min' => '0.5.0',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'PEAR',
@@ -870,13 +870,13 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '2.0',
-  1 => 
+  1 =>
   array (
     'name' => 'PEAR_Frontend_Gtk',
     'channel' => 'pear.php.net',
     'min' => '0.4.0',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'PEAR',
@@ -1049,11 +1049,11 @@ $phpunit->assertEquals(array(
     1 => 'Skipping package "pear/PEAR", already installed as version 1.4.0a5',
   ),
   array (
-    'info' => 
+    'info' =>
     array (
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 =>
         array (
           0 => 'No valid packages found',
         ),

@@ -38,13 +38,13 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/versioncontrol_svn/0.3.0alph
 VersionControl_SVN is a simple OO-style interface for Subversion,
 the free/open-source version control system.
 
-VersionControl_SVN can be used to manage trees of source code, 
-text files, image files -- just about any 
+VersionControl_SVN can be used to manage trees of source code,
+text files, image files -- just about any
 collection of files.
 
 Some of VersionControl_SVN\'s features:
 
-* Full support of svn command-line client\'s 
+* Full support of svn command-line client\'s
   subcommands.
 * Use of flexible error reporting provided by
   PEAR_ErrorStack.
@@ -56,15 +56,15 @@ Some of VersionControl_SVN\'s features:
 
 What can be done with VersionControl_SVN?
 
-* Make your source code available to your 
+* Make your source code available to your
   remote dev team or project manager.
 
 * Build your own WYSIWYG web interface to a
   Subversion repository.
- 
+
 * Add true version control to a content management
   system!
-  
+
 Note: Requires a Subversion installation.
 Subverison is available from
 http://subversion.tigris.org/
@@ -228,7 +228,7 @@ Features (short list):
 -current manual always available at http://www.phpdoc.org/manual.php
 -user .ini files can be used to control output, multiple outputs can be
  generated at once
- 
+
 **WARNING**:
 To use the web interface, you must set PEAR\'s data_dir to a subdirectory of
 document root.
@@ -561,7 +561,7 @@ Features include
  - can output the package.xml in any directory, and read in the package.xml
    file from any directory.
  - can specify a different name for the package.xml file
- 
+
 PEAR_PackageFileManager is fully unit tested.
 The new PEAR_PackageFileManager2 class is not.</d>
  <da>2005-09-06 19:26:57</da>
