@@ -19,37 +19,37 @@ $sep = DIRECTORY_SEPARATOR;
 echo "Testing: MkDir\n";
 
 // Single directory creation
-System::mkDir('singledir');
-if( !is_dir('singledir') ){
-    print "System::mkDir('singledir'); failed\n";
+System::mkDir('mkdir_singledir');
+if( !is_dir('mkdir_singledir') ){
+    print "System::mkDir('mkdir_singledir'); failed\n";
 }
-System::rm('singledir');
+System::rm('mkdir_singledir');
 
 // Multiple directory creation
-System::mkDir('dir1 dir2 dir3');
-if (!@is_dir('dir1') || !@is_dir('dir2') || !@is_dir('dir3')) {
-    print "System::mkDir('dir1 dir2 dir3'); failed\n";
+System::mkDir('mkdir_dir1 mkdir_dir2 mkdir_dir3');
+if (!@is_dir('mkdir_dir1') || !@is_dir('mkdir_dir2') || !@is_dir('mkdir_dir3')) {
+    print "System::mkDir('mkdir_dir1 mkdir_dir2 mkdir_dir3'); failed\n";
 }
 
 // Parent creation without "-p" fail
-if (@System::mkDir("dir4{$sep}dir3")) {
-    print "System::mkDir(\"dir4{$sep}dir3\") did not failed\n";
+if (@System::mkDir("mkdir_dir4{$sep}mkdir_dir3")) {
+    print "System::mkDir(\"mkdir_dir4{$sep}mkdir_dir3\") did not failed\n";
 }
 
 // Create a directory which is a file already fail
-touch('file4');
-$res = @System::mkDir('file4 dir5');
+touch('mkdir_file4');
+$res = @System::mkDir('mkdir_file4 mkdir_dir5');
 if ($res) {
-    print "System::mkDir('file4 dir5') did not failed\n";
+    print "System::mkDir('mkdir_file4 mkdir_dir5') did not failed\n";
 }
-if (!@is_dir('dir5')) {
-    print "System::mkDir('file4 dir5') failed\n";
+if (!@is_dir('mkdir_dir5')) {
+    print "System::mkDir('mkdir_file4 mkdir_dir5') failed\n";
 }
 
 // Parent directory creation
-System::mkDir("-p dir2{$sep}dir21 dir6{$sep}dir61{$sep}dir611");
-if (!@is_dir("dir2{$sep}dir21") || !@is_dir("dir6{$sep}dir61{$sep}dir611")) {
-    print "System::mkDir(\"-p dir2{$sep}dir21 dir6{$sep}dir61{$sep}dir611\")); failed\n";
+System::mkDir("-p mkdir_dir2{$sep}mkdir_dir21 mkdir_dir6{$sep}mkdir_dir61{$sep}mkdir_dir611");
+if (!@is_dir("mkdir_dir2{$sep}mkdir_dir21") || !@is_dir("mkdir_dir6{$sep}mkdir_dir61{$sep}mkdir_dir611")) {
+    print "System::mkDir(\"-p mkdir_dir2{$sep}mkdir_dir21 mkdir_dir6{$sep}mkdir_dir61{$sep}mkdir_dir611\")); failed\n";
 }
 
 
@@ -57,16 +57,16 @@ if (!@is_dir("dir2{$sep}dir21") || !@is_dir("dir6{$sep}dir61{$sep}dir611")) {
 // Cleanup
 
 if (OS_WINDOWS) {
-    mkdir('dir1\\oops');
+    mkdir('mkdir_dir1\\oops');
 }
 
 // Try to delete a dir without "-r" option
-if (@System::rm('dir1')) {
-    print "System::rm('dir1') did not fail\n";
+if (@System::rm('mkdir_dir1')) {
+    print "System::rm('mkdir_dir1') did not fail\n";
 }
 
 // Multiple and recursive delete
-$del = "dir1 dir2 dir3 file4 dir5 dir6";
+$del = "mkdir_dir1 mkdir_dir2 mkdir_dir3 mkdir_file4 mkdir_dir5 mkdir_dir6";
 if (!@System::rm("-r $del")) {
     print "System::rm(\"-r $del\") failed\n";
 }
