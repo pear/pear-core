@@ -20,21 +20,18 @@ $chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
  <summary>PHP Extension and Application Repository</summary>
  <servers>
   <primary>
-   <xmlrpc>
-    <function version="1.0">logintest</function>
-    <function version="1.0">package.listLatestReleases</function>
-    <function version="1.0">package.listAll</function>
-    <function version="1.0">package.info</function>
-    <function version="1.0">package.getDownloadURL</function>
-    <function version="1.0">channel.listAll</function>
-    <function version="1.0">channel.update</function>
-   </xmlrpc>
+   <rest>
+    <baseurl type="REST1.0">http://pear.php.net/rest/</baseurl>
+    <baseurl type="REST1.1">http://pear.php.net/rest/</baseurl>
+    <baseurl type="REST1.2">http://pear.php.net/rest/</baseurl>
+    <baseurl type="REST1.3">http://pear.php.net/rest/</baseurl>
+   </rest>
   </primary>
  </servers>
 </channel>');
 $phpt->assertTrue($chf->validate(), 'initial parse');
 $phpt->assertEquals(array (
-  'attribs' => 
+  'attribs' =>
   array (
     'version' => '1.0',
     'xmlns' => 'http://pear.php.net/channel-1.0',
@@ -44,69 +41,45 @@ $phpt->assertEquals(array (
   'name' => 'pear.php.net',
   'suggestedalias' => 'pear',
   'summary' => 'PHP Extension and Application Repository',
-  'servers' => 
+  'servers' =>
   array (
-    'primary' => 
+    'primary' =>
     array (
-      'xmlrpc' => 
+      'rest' =>
       array (
-        'function' => 
+        'baseurl' =>
         array (
-          0 => 
+          0 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.0',
             ),
-            '_content' => 'logintest',
+            '_content' => 'http://pear.php.net/rest/',
           ),
-          1 => 
+          1 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.1',
             ),
-            '_content' => 'package.listLatestReleases',
+            '_content' => 'http://pear.php.net/rest/',
           ),
-          2 => 
+          2 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.2',
             ),
-            '_content' => 'package.listAll',
+            '_content' => 'http://pear.php.net/rest/',
           ),
-          3 => 
+          3 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.3',
             ),
-            '_content' => 'package.info',
-          ),
-          4 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.getDownloadURL',
-          ),
-          5 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'channel.listAll',
-          ),
-          6 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'channel.update',
+            '_content' => 'http://pear.php.net/rest/',
           ),
         ),
       ),
@@ -118,7 +91,7 @@ $chf->fromXmlString($chf->toXml());
 $chf->setName('boopie');
 $phpt->assertTrue($chf->validate(), 're-parsing validate');
 $phpt->assertEquals(array (
-  'attribs' => 
+  'attribs' =>
   array (
     'version' => '1.0',
     'xmlns' => 'http://pear.php.net/channel-1.0',
@@ -128,69 +101,45 @@ $phpt->assertEquals(array (
   'name' => 'boopie',
   'summary' => 'PHP Extension and Application Repository',
   'suggestedalias' => 'pear',
-  'servers' => 
+  'servers' =>
   array (
-    'primary' => 
+    'primary' =>
     array (
-      'xmlrpc' => 
+      'rest' =>
       array (
-        'function' => 
+        'baseurl' =>
         array (
-          0 => 
+          0 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.0',
             ),
-            '_content' => 'logintest',
+            '_content' => 'http://pear.php.net/rest/',
           ),
-          1 => 
+          1 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.1',
             ),
-            '_content' => 'package.listLatestReleases',
+            '_content' => 'http://pear.php.net/rest/',
           ),
-          2 => 
+          2 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.2',
             ),
-            '_content' => 'package.listAll',
+            '_content' => 'http://pear.php.net/rest/',
           ),
-          3 => 
+          3 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.3',
             ),
-            '_content' => 'package.info',
-          ),
-          4 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.getDownloadURL',
-          ),
-          5 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'channel.listAll',
-          ),
-          6 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'channel.update',
+            '_content' => 'http://pear.php.net/rest/',
           ),
         ),
       ),
