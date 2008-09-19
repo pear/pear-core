@@ -72,11 +72,11 @@ define('PEAR_CHANNELFILE_ERROR_NO_SUMMARY', 8);
  */
 define('PEAR_CHANNELFILE_ERROR_MULTILINE_SUMMARY', 9);
 /**
- * Error code when channel server is missing for xmlrpc or soap protocol
+ * Error code when channel server is missing for protocol
  */
 define('PEAR_CHANNELFILE_ERROR_NO_HOST', 10);
 /**
- * Error code when channel server is invalid for xmlrpc or soap protocol
+ * Error code when channel server is invalid for protocol
  */
 define('PEAR_CHANNELFILE_ERROR_INVALID_HOST', 11);
 /**
@@ -485,14 +485,8 @@ class PEAR_ChannelFile
             $ret .= ' port="' . $channelInfo['servers']['primary']['attribs']['port'] . '"';
         }
         $ret .= ">\n";
-        if (isset($channelInfo['servers']['primary']['xmlrpc'])) {
-            $ret .= $this->_makeXmlrpcXml($channelInfo['servers']['primary']['xmlrpc'], '   ');
-        }
         if (isset($channelInfo['servers']['primary']['rest'])) {
             $ret .= $this->_makeRestXml($channelInfo['servers']['primary']['rest'], '   ');
-        }
-        if (isset($channelInfo['servers']['primary']['soap'])) {
-            $ret .= $this->_makeSoapXml($channelInfo['servers']['primary']['soap'], '   ');
         }
         $ret .= "  </primary>\n";
         if (isset($channelInfo['servers']['mirror'])) {
@@ -501,38 +495,6 @@ class PEAR_ChannelFile
         $ret .= " </servers>\n";
         $ret .= "</channel>";
         return str_replace("\r", "\n", str_replace("\r\n", "\n", $ret));
-    }
-
-    /**
-     * Generate the <xmlrpc> tag
-     * @access private
-     */
-    function _makeXmlrpcXml($info, $indent)
-    {
-        $ret = $indent . "<xmlrpc";
-        if (isset($info['attribs']['path'])) {
-            $ret .= ' path="' . htmlspecialchars($info['attribs']['path']) . '"';
-        }
-        $ret .= ">\n";
-        $ret .= $this->_makeFunctionsXml($info['function'], "$indent ");
-        $ret .= $indent . "</xmlrpc>\n";
-        return $ret;
-    }
-
-    /**
-     * Generate the <soap> tag
-     * @access private
-     */
-    function _makeSoapXml($info, $indent)
-    {
-        $ret = $indent . "<soap";
-        if (isset($info['attribs']['path'])) {
-            $ret .= ' path="' . htmlspecialchars($info['attribs']['path']) . '"';
-        }
-        $ret .= ">\n";
-        $ret .= $this->_makeFunctionsXml($info['function'], "$indent ");
-        $ret .= $indent . "</soap>\n";
-        return $ret;
     }
 
     /**
@@ -572,15 +534,9 @@ class PEAR_ChannelFile
                 $ret .= ' ssl="' . $mirror['attribs']['ssl'] . '"';
             }
             $ret .= ">\n";
-            if (isset($mirror['xmlrpc']) || isset($mirror['soap'])) {
-                if (isset($mirror['xmlrpc'])) {
-                    $ret .= $this->_makeXmlrpcXml($mirror['xmlrpc'], '   ');
-                }
+            if (isset($mirror['rest'])) {
                 if (isset($mirror['rest'])) {
                     $ret .= $this->_makeRestXml($mirror['rest'], '   ');
-                }
-                if (isset($mirror['soap'])) {
-                    $ret .= $this->_makeSoapXml($mirror['soap'], '   ');
                 }
                 $ret .= "  </mirror>\n";
             } else {
@@ -693,14 +649,6 @@ class PEAR_ChannelFile
                     'server' => $info['name']));
         }
 
-        if (isset($info['servers']['primary']['xmlrpc']) &&
-              isset($info['servers']['primary']['xmlrpc']['function'])) {
-            $this->_validateFunctions('xmlrpc', $info['servers']['primary']['xmlrpc']['function']);
-        }
-        if (isset($info['servers']['primary']['soap']) &&
-              isset($info['servers']['primary']['soap']['function'])) {
-            $this->_validateFunctions('soap', $info['servers']['primary']['soap']['function']);
-        }
         if (isset($info['servers']['primary']['rest']) &&
               isset($info['servers']['primary']['rest']['baseurl'])) {
             $this->_validateFunctions('rest', $info['servers']['primary']['rest']['baseurl']);
@@ -724,14 +672,6 @@ class PEAR_ChannelFile
                     $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_SSL,
                         array('ssl' => $info['ssl'], 'server' => $mirror['attribs']['host']));
                 }
-                if (isset($mirror['xmlrpc'])) {
-                    $this->_validateFunctions('xmlrpc',
-                        $mirror['xmlrpc']['function'], $mirror['attribs']['host']);
-                }
-                if (isset($mirror['soap'])) {
-                    $this->_validateFunctions('soap', $mirror['soap']['function'],
-                        $mirror['attribs']['host']);
-                }
                 if (isset($mirror['rest'])) {
                     $this->_validateFunctions('rest', $mirror['rest']['baseurl'],
                         $mirror['attribs']['host']);
@@ -742,7 +682,7 @@ class PEAR_ChannelFile
     }
 
     /**
-     * @param string xmlrpc or soap - protocol name this function applies to
+     * @param string  rest - protocol name this function applies to
      * @param array the functions
      * @param string the name of the parent element (mirror name, for instance)
      */
@@ -878,34 +818,7 @@ class PEAR_ChannelFile
     }
 
     /**
-     * @param string xmlrpc or soap
-     * @param string|false mirror name or false for primary server
-     */
-    function getPath($protocol, $mirror = false)
-    {
-        if (!in_array($protocol, array('xmlrpc', 'soap'))) {
-            return false;
-        }
-
-        if ($mirror) {
-            if (!($mir = $this->getMirror($mirror))) {
-                return false;
-            }
-
-            if (isset($mir[$protocol]['attribs']['path'])) {
-                return $mir[$protocol]['attribs']['path'];
-            }
-
-            return $protocol . '.php';
-        } elseif (isset($this->_channelInfo['servers']['primary'][$protocol]['attribs']['path'])) {
-            return $this->_channelInfo['servers']['primary'][$protocol]['attribs']['path'];
-        }
-
-        return $protocol . '.php';
-    }
-
-    /**
-     * @param string protocol type (xmlrpc, soap)
+     * @param string protocol type
      * @param string Mirror name
      * @return array|false
      */
@@ -1067,7 +980,7 @@ class PEAR_ChannelFile
 
     /**
      * Empty all protocol definitions
-     * @param string protocol type (xmlrpc, soap)
+     * @param string protocol type
      * @param string|false mirror name, if any
      */
     function resetFunctions($type, $mirror = false)
@@ -1109,19 +1022,7 @@ class PEAR_ChannelFile
     {
         switch ($version) {
             case '1.0' :
-                $this->resetFunctions('xmlrpc', $mirror);
-                $this->resetFunctions('soap', $mirror);
                 $this->resetREST($mirror);
-                $this->addFunction('xmlrpc', '1.0', 'logintest', $mirror);
-                $this->addFunction('xmlrpc', '1.0', 'package.listLatestReleases', $mirror);
-                $this->addFunction('xmlrpc', '1.0', 'package.listAll', $mirror);
-                $this->addFunction('xmlrpc', '1.0', 'package.info', $mirror);
-                $this->addFunction('xmlrpc', '1.0', 'package.getDownloadURL', $mirror);
-                $this->addFunction('xmlrpc', '1.1', 'package.getDownloadURL', $mirror);
-                $this->addFunction('xmlrpc', '1.0', 'package.getDepDownloadURL', $mirror);
-                $this->addFunction('xmlrpc', '1.1', 'package.getDepDownloadURL', $mirror);
-                $this->addFunction('xmlrpc', '1.0', 'package.search', $mirror);
-                $this->addFunction('xmlrpc', '1.0', 'channel.listAll', $mirror);
                 return true;
             break;
             default :
@@ -1261,48 +1162,6 @@ class PEAR_ChannelFile
             }
         }
 
-        $this->_isValid = false;
-        return true;
-    }
-
-    /**
-     * Set the socket number (port) that is used to connect to this channel
-     * @param integer
-     * @param string|false name of the mirror server, or false for the primary
-     */
-    function setPath($protocol, $path, $mirror = false)
-    {
-        if (!in_array($protocol, array('xmlrpc', 'soap'))) {
-            return false;
-        }
-
-        if ($mirror) {
-            if (!isset($this->_channelInfo['servers']['mirror'])) {
-                $this->_validateError(PEAR_CHANNELFILE_ERROR_MIRROR_NOT_FOUND,
-                    array('mirror' => $mirror));
-                return false;
-            }
-
-            if (isset($this->_channelInfo['servers']['mirror'][0])) {
-                foreach ($this->_channelInfo['servers']['mirror'] as $i => $mir) {
-                    if ($mirror == $mir['attribs']['host']) {
-                        $this->_channelInfo['servers']['mirror'][$i][$protocol]['attribs']['path'] =
-                            $path;
-                        return true;
-                    }
-                }
-
-                $this->_validateError(PEAR_CHANNELFILE_ERROR_MIRROR_NOT_FOUND,
-                    array('mirror' => $mirror));
-                return false;
-            } elseif ($this->_channelInfo['servers']['mirror']['attribs']['host'] == $mirror) {
-                $this->_channelInfo['servers']['mirror'][$protocol]['attribs']['path'] = $path;
-                $this->_isValid = false;
-                return true;
-            }
-        }
-
-        $this->_channelInfo['servers']['primary'][$protocol]['attribs']['path'] = $path;
         $this->_isValid = false;
         return true;
     }

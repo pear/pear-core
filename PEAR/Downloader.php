@@ -493,11 +493,7 @@ class PEAR_Downloader extends PEAR_Common
                 if (!$deps) {
                     $depchecker = &$this->getDependency2Object($this->config, $this->getOptions(),
                         $param->getParsedPackage(), PEAR_VALIDATE_DOWNLOADING);
-                    if ($param->getType() == 'xmlrpc') {
-                        $send = $param->getDownloadURL();
-                    } else {
-                        $send = $param->getPackageFile();
-                    }
+                    $send = $param->getPackageFile();
 
                     $installcheck = $depchecker->validatePackage($send, $this, $params);
                     if (PEAR::isError($installcheck)) {
@@ -522,11 +518,7 @@ class PEAR_Downloader extends PEAR_Common
                 if (count($deps)) {
                     $depchecker = &$this->getDependency2Object($this->config, $this->getOptions(),
                         $param->getParsedPackage(), PEAR_VALIDATE_DOWNLOADING);
-                    if ($param->getType() == 'xmlrpc') {
-                        $send = $param->getDownloadURL();
-                    } else {
-                        $send = $param->getPackageFile();
-                    }
+                    $send = $param->getPackageFile();
 
                     $installcheck = $depchecker->validatePackage($send, $this, $params);
                     if (PEAR::isError($installcheck)) {

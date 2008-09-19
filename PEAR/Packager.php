@@ -47,7 +47,6 @@ class PEAR_Packager extends PEAR_Common
      * @var PEAR_Registry
      */
     var $_registry;
-    // {{{ package()
 
     function package($pkgfile = null, $compress = true, $pkg2 = null)
     {
@@ -194,5 +193,4 @@ class PEAR_Packager extends PEAR_Common
 
         return $dest_package;
     }
-    // }}}
 }
