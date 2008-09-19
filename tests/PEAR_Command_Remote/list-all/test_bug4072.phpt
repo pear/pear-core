@@ -73,30 +73,30 @@ $pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true, true),
 $reg = &$config->getRegistry();
 $e = $command->run('list-all', array('channel' => 'smoog'), array());
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'All packages [Channel smoog]:',
       'border' => true,
-      'headline' => 
+      'headline' =>
       array (
         0 => 'Package',
         1 => 'Latest',
         2 => 'Local',
       ),
       'channel' => 'smoog',
-      'data' => 
+      'data' =>
       array (
-        'Caching' => 
+        'Caching' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'smoog/APC',
             1 => '2.0.4',
             2 => '1.2.0',
             3 => 'Alternative PHP Cache',
-            4 => 
+            4 =>
             array (
             ),
           ),

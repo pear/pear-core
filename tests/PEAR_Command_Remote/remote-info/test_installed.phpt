@@ -166,9 +166,9 @@ It supports creating, listing, extracting and adding to zip files.",
 $e = $command->run('remote-info', array(), array('Archive_Zip'));
 $phpunit->assertNoErrors('Archive_Zip');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'packageid' => '252',
       'name' => 'Archive_Zip',
@@ -183,9 +183,9 @@ $phpunit->assertEquals(array (
 It supports creating, listing, extracting and adding to zip files.',
       'cvs_link' => 'http://cvs.php.net/cvs.php/pear/Archive_Zip',
       'doc_link' => '',
-      'releases' => 
+      'releases' =>
       array (
-        '1.3.3.1' => 
+        '1.3.3.1' =>
         array (
           'id' => '1803',
           'doneby' => 'cellog',
@@ -195,9 +195,9 @@ It supports creating, listing, extracting and adding to zip files.',
           'releasedate' => '2004-11-12 02:04:57',
           'releasenotes' => 'add RunTest.php to package.xml, make run-tests display failed tests, and use ui',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'relation' => 'ge',
@@ -205,7 +205,7 @@ It supports creating, listing, extracting and adding to zip files.',
               'name' => 'PHP',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -213,7 +213,7 @@ It supports creating, listing, extracting and adding to zip files.',
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -221,7 +221,7 @@ It supports creating, listing, extracting and adding to zip files.',
               'name' => 'Console_Getopt',
               'optional' => '0',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -229,7 +229,7 @@ It supports creating, listing, extracting and adding to zip files.',
               'name' => 'XML_RPC',
               'optional' => '0',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -237,7 +237,7 @@ It supports creating, listing, extracting and adding to zip files.',
               'name' => 'xml',
               'optional' => '0',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -248,7 +248,7 @@ It supports creating, listing, extracting and adding to zip files.',
           ),
         ),
       ),
-      'notes' => 
+      'notes' =>
       array (
       ),
       'installed' => '1.0.0',

@@ -318,9 +318,9 @@ Other:
                 "PEAR Installer:
 
  * Bug #534  pear search doesn\'t list unstable releases
- * Bug #933  CMD Usability Patch 
- * Bug #937  throwError() treats every call as static 
- * Bug #964 PEAR_ERROR_EXCEPTION causes fatal error 
+ * Bug #933  CMD Usability Patch
+ * Bug #937  throwError() treats every call as static
+ * Bug #964 PEAR_ERROR_EXCEPTION causes fatal error
  * Bug #1008 safe mode raises warning
 
 PEAR_ErrorStack:
@@ -1787,9 +1787,9 @@ though it claimed to be.  This version finally is self-hosting
 $e = $command->run('remote-info', array(), array('Archive_Zip'));
 $phpunit->assertNoErrors('Archive_Zip');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'packageid' => '252',
       'name' => 'Archive_Zip',
@@ -1804,10 +1804,10 @@ $phpunit->assertEquals(array (
 It supports creating, listing, extracting and adding to zip files.',
       'cvs_link' => 'http://cvs.php.net/cvs.php/pear/Archive_Zip',
       'doc_link' => '',
-      'releases' => 
+      'releases' =>
       array (
       ),
-      'notes' => 
+      'notes' =>
       array (
       ),
       'installed' => '- no -',
@@ -1818,9 +1818,9 @@ It supports creating, listing, extracting and adding to zip files.',
 $e = $command->run('remote-info', array(), array('PEAR'));
 $phpunit->assertNoErrors('PEAR');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'packageid' => '14',
       'name' => 'PEAR',
@@ -1844,9 +1844,9 @@ $phpunit->assertEquals(array (
  * the PEAR base class',
       'cvs_link' => 'http://cvs.php.net/cvs.php/pear-core/',
       'doc_link' => '',
-      'releases' => 
+      'releases' =>
       array (
-        '1.3.3.1' => 
+        '1.3.3.1' =>
         array (
           'id' => '1803',
           'doneby' => 'cellog',
@@ -1856,9 +1856,9 @@ $phpunit->assertEquals(array (
           'releasedate' => '2004-11-12 02:04:57',
           'releasenotes' => 'add RunTest.php to package.xml, make run-tests display failed tests, and use ui',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'relation' => 'ge',
@@ -1866,7 +1866,7 @@ $phpunit->assertEquals(array (
               'name' => 'PHP',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -1874,7 +1874,7 @@ $phpunit->assertEquals(array (
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -1882,7 +1882,7 @@ $phpunit->assertEquals(array (
               'name' => 'Console_Getopt',
               'optional' => '0',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -1890,7 +1890,7 @@ $phpunit->assertEquals(array (
               'name' => 'XML_RPC',
               'optional' => '0',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -1898,7 +1898,7 @@ $phpunit->assertEquals(array (
               'name' => 'xml',
               'optional' => '0',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -1908,7 +1908,7 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        '1.3.3' => 
+        '1.3.3' =>
         array (
           'id' => '1772',
           'doneby' => 'cellog',
@@ -1931,9 +1931,9 @@ Other:
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'relation' => 'ge',
@@ -1941,7 +1941,7 @@ Other:
               'name' => 'PHP',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -1949,7 +1949,7 @@ Other:
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -1957,7 +1957,7 @@ Other:
               'name' => 'Console_Getopt',
               'optional' => '0',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -1965,7 +1965,7 @@ Other:
               'name' => 'XML_RPC',
               'optional' => '0',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -1973,7 +1973,7 @@ Other:
               'name' => 'xml',
               'optional' => '0',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -1983,7 +1983,7 @@ Other:
             ),
           ),
         ),
-        '1.3.1' => 
+        '1.3.1' =>
         array (
           'id' => '1274',
           'doneby' => 'cellog',
@@ -1994,9 +1994,9 @@ Other:
           'releasenotes' => 'PEAR Installer:
 
  * Bug #534  pear search doesn\\\'t list unstable releases
- * Bug #933  CMD Usability Patch 
- * Bug #937  throwError() treats every call as static 
- * Bug #964 PEAR_ERROR_EXCEPTION causes fatal error 
+ * Bug #933  CMD Usability Patch
+ * Bug #937  throwError() treats every call as static
+ * Bug #964 PEAR_ERROR_EXCEPTION causes fatal error
  * Bug #1008 safe mode raises warning
 
 PEAR_ErrorStack:
@@ -2005,9 +2005,9 @@ PEAR_ErrorStack:
    PEAR_Error.  It should be considered experimental until explicitly marked
    stable.  require_once \\\'PEAR/ErrorStack.php\\\' to use.',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'relation' => 'ge',
@@ -2015,7 +2015,7 @@ PEAR_ErrorStack:
               'name' => 'PHP',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2023,7 +2023,7 @@ PEAR_ErrorStack:
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2031,7 +2031,7 @@ PEAR_ErrorStack:
               'name' => 'Console_Getopt',
               'optional' => '0',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2039,7 +2039,7 @@ PEAR_ErrorStack:
               'name' => 'XML_RPC',
               'optional' => '0',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -2047,7 +2047,7 @@ PEAR_ErrorStack:
               'name' => 'xml',
               'optional' => '0',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -2057,7 +2057,7 @@ PEAR_ErrorStack:
             ),
           ),
         ),
-        '1.3' => 
+        '1.3' =>
         array (
           'id' => '1142',
           'doneby' => 'pajoye',
@@ -2077,9 +2077,9 @@ PEAR_ErrorStack:
 * Moved download code into its own class
 * Fully unit tested the installer, packager, downloader, and PEAR_Common',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'relation' => 'ge',
@@ -2087,7 +2087,7 @@ PEAR_ErrorStack:
               'name' => 'PHP',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2095,7 +2095,7 @@ PEAR_ErrorStack:
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2103,7 +2103,7 @@ PEAR_ErrorStack:
               'name' => 'Console_Getopt',
               'optional' => '0',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2111,7 +2111,7 @@ PEAR_ErrorStack:
               'name' => 'XML_RPC',
               'optional' => '0',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -2119,7 +2119,7 @@ PEAR_ErrorStack:
               'name' => 'xml',
               'optional' => '0',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -2129,7 +2129,7 @@ PEAR_ErrorStack:
             ),
           ),
         ),
-        '1.3b6' => 
+        '1.3b6' =>
         array (
           'id' => '1092',
           'doneby' => 'pajoye',
@@ -2149,9 +2149,9 @@ PEAR_ErrorStack:
 * Moved download code into its own class
 * Fully unit tested the installer, packager, downloader, and PEAR_Common',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'php',
               'relation' => 'ge',
@@ -2159,7 +2159,7 @@ PEAR_ErrorStack:
               'name' => 'PHP',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2167,7 +2167,7 @@ PEAR_ErrorStack:
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2175,7 +2175,7 @@ PEAR_ErrorStack:
               'name' => 'Console_Getopt',
               'optional' => '0',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2183,7 +2183,7 @@ PEAR_ErrorStack:
               'name' => 'XML_RPC',
               'optional' => '0',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -2191,7 +2191,7 @@ PEAR_ErrorStack:
               'name' => 'xml',
               'optional' => '0',
             ),
-            5 => 
+            5 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -2201,7 +2201,7 @@ PEAR_ErrorStack:
             ),
           ),
         ),
-        '1.3b5' => 
+        '1.3b5' =>
         array (
           'id' => '1024',
           'doneby' => 'pajoye',
@@ -2219,9 +2219,9 @@ PEAR_ErrorStack:
 * Moved download code into its own class
 * Fully unit tested the installer, packager, downloader, and PEAR_Common',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2229,7 +2229,7 @@ PEAR_ErrorStack:
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2237,7 +2237,7 @@ PEAR_ErrorStack:
               'name' => 'Console_Getopt',
               'optional' => '0',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2245,7 +2245,7 @@ PEAR_ErrorStack:
               'name' => 'XML_RPC',
               'optional' => '0',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -2253,7 +2253,7 @@ PEAR_ErrorStack:
               'name' => 'xml',
               'optional' => '0',
             ),
-            4 => 
+            4 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -2263,7 +2263,7 @@ PEAR_ErrorStack:
             ),
           ),
         ),
-        '1.3b3' => 
+        '1.3b3' =>
         array (
           'id' => '919',
           'doneby' => 'cox',
@@ -2278,9 +2278,9 @@ PEAR_ErrorStack:
 * Better error detecting and reporting in "install/upgrade"
 * Various other bugfixes and cleanups',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2288,7 +2288,7 @@ PEAR_ErrorStack:
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2296,7 +2296,7 @@ PEAR_ErrorStack:
               'name' => 'Console_Getopt',
               'optional' => '0',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2304,7 +2304,7 @@ PEAR_ErrorStack:
               'name' => 'XML_RPC',
               'optional' => '0',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -2314,7 +2314,7 @@ PEAR_ErrorStack:
             ),
           ),
         ),
-        '1.3b2' => 
+        '1.3b2' =>
         array (
           'id' => '887',
           'doneby' => 'cox',
@@ -2329,9 +2329,9 @@ PEAR_ErrorStack:
 * Fixed optional dependency attrib removed from
   package.xml, making them a requirement',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2339,7 +2339,7 @@ PEAR_ErrorStack:
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2347,7 +2347,7 @@ PEAR_ErrorStack:
               'name' => 'Console_Getopt',
               'optional' => '0',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2355,7 +2355,7 @@ PEAR_ErrorStack:
               'name' => 'XML_RPC',
               'optional' => '0',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -2365,7 +2365,7 @@ PEAR_ErrorStack:
             ),
           ),
         ),
-        '1.3b1' => 
+        '1.3b1' =>
         array (
           'id' => '875',
           'doneby' => 'cox',
@@ -2409,9 +2409,9 @@ System Class:
 * Fixed recursion deep param in _dirToStruct()
 * Added the System::find() command (read API doc for more info)',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2419,7 +2419,7 @@ System Class:
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2427,7 +2427,7 @@ System Class:
               'name' => 'Console_Getopt',
               'optional' => '0',
             ),
-            2 => 
+            2 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2435,7 +2435,7 @@ System Class:
               'name' => 'XML_RPC',
               'optional' => '0',
             ),
-            3 => 
+            3 =>
             array (
               'type' => 'ext',
               'relation' => 'has',
@@ -2445,7 +2445,7 @@ System Class:
             ),
           ),
         ),
-        '1.2.1' => 
+        '1.2.1' =>
         array (
           'id' => '774',
           'doneby' => 'pajoye',
@@ -2455,9 +2455,9 @@ System Class:
           'releasedate' => '2003-08-15 13:48:00',
           'releasenotes' => '- Set back the default library path (BC issues)',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2465,7 +2465,7 @@ System Class:
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2475,7 +2475,7 @@ System Class:
             ),
           ),
         ),
-        '1.2' => 
+        '1.2' =>
         array (
           'id' => '771',
           'doneby' => 'cox',
@@ -2500,9 +2500,9 @@ System Class:
 The main purpouse of this command is for easily adding extensions to the PHP sources
 before compiling it.',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2510,7 +2510,7 @@ before compiling it.',
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2520,7 +2520,7 @@ before compiling it.',
             ),
           ),
         ),
-        '1.2b5' => 
+        '1.2b5' =>
         array (
           'id' => '753',
           'doneby' => 'cox',
@@ -2543,9 +2543,9 @@ before compiling it.',
 The main purpouse of this command is for easily adding extensions to the PHP sources
 before compiling it.',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2553,7 +2553,7 @@ before compiling it.',
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2563,7 +2563,7 @@ before compiling it.',
             ),
           ),
         ),
-        '1.2b4' => 
+        '1.2b4' =>
         array (
           'id' => '752',
           'doneby' => 'cox',
@@ -2586,9 +2586,9 @@ before compiling it.',
 The main purpouse of this command is for easily adding extensions to the PHP sources
 before compiling it.',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2596,7 +2596,7 @@ before compiling it.',
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2606,7 +2606,7 @@ before compiling it.',
             ),
           ),
         ),
-        '1.2b3' => 
+        '1.2b3' =>
         array (
           'id' => '750',
           'doneby' => 'cox',
@@ -2628,9 +2628,9 @@ before compiling it.',
 The main purpouse of this command is for easily adding extensions to the PHP sources
 before compiling it.',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2638,7 +2638,7 @@ before compiling it.',
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2648,7 +2648,7 @@ before compiling it.',
             ),
           ),
         ),
-        '1.2b2' => 
+        '1.2b2' =>
         array (
           'id' => '675',
           'doneby' => 'cox',
@@ -2665,9 +2665,9 @@ before compiling it.',
 The main purpouse of this command is for easily adding extensions to the PHP sources
 before compiling it.',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2675,7 +2675,7 @@ before compiling it.',
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2685,7 +2685,7 @@ before compiling it.',
             ),
           ),
         ),
-        '1.2b1' => 
+        '1.2b1' =>
         array (
           'id' => '674',
           'doneby' => 'cox',
@@ -2701,9 +2701,9 @@ before compiling it.',
 The main purpouse of this command is for easily adding extensions to the PHP sources
 before compiling it.',
           'state' => 'beta',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2711,7 +2711,7 @@ before compiling it.',
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2721,7 +2721,7 @@ before compiling it.',
             ),
           ),
         ),
-        '1.1' => 
+        '1.1' =>
         array (
           'id' => '587',
           'doneby' => 'ssb',
@@ -2750,9 +2750,9 @@ PEAR INSTALLER:
   All classes and non-private (not underscore-prefixed) methods and
   functions are now registered during "pear package".',
           'state' => 'stable',
-          'deps' => 
+          'deps' =>
           array (
-            0 => 
+            0 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2760,7 +2760,7 @@ PEAR INSTALLER:
               'name' => 'Archive_Tar',
               'optional' => '0',
             ),
-            1 => 
+            1 =>
             array (
               'type' => 'pkg',
               'relation' => 'ge',
@@ -2770,7 +2770,7 @@ PEAR INSTALLER:
             ),
           ),
         ),
-        '1.0.1' => 
+        '1.0.1' =>
         array (
           'id' => '372',
           'doneby' => 'ssb',
@@ -2793,7 +2793,7 @@ PEAR INSTALLER:
 * Windows output buffering bugfix for "pear" command',
           'state' => 'stable',
         ),
-        '1.0' => 
+        '1.0' =>
         array (
           'id' => '353',
           'doneby' => 'ssb',
@@ -2805,7 +2805,7 @@ PEAR INSTALLER:
 * added "clear-cache" command',
           'state' => 'stable',
         ),
-        '1.0b3' => 
+        '1.0b3' =>
         array (
           'id' => '345',
           'doneby' => 'ssb',
@@ -2820,7 +2820,7 @@ PEAR INSTALLER:
   to override the default php_dir on Windows!)',
           'state' => 'stable',
         ),
-        '1.0b2' => 
+        '1.0b2' =>
         array (
           'id' => '306',
           'doneby' => 'ssb',
@@ -2836,7 +2836,7 @@ PEAR INSTALLER:
   around',
           'state' => 'stable',
         ),
-        '1.0b1' => 
+        '1.0b1' =>
         array (
           'id' => '259',
           'doneby' => 'ssb',
@@ -2886,7 +2886,7 @@ Bugfixes, PEAR Library:
 * use getenv() as fallback for $_ENV',
           'state' => 'stable',
         ),
-        '0.91-dev' => 
+        '0.91-dev' =>
         array (
           'id' => '140',
           'doneby' => 'cox',
@@ -2905,7 +2905,7 @@ Fixed Bugs:
 * lot of other minor fixes',
           'state' => 'beta',
         ),
-        '0.90' => 
+        '0.90' =>
         array (
           'id' => '117',
           'doneby' => 'ssb',
@@ -2928,7 +2928,7 @@ Fixed Bugs:
 * new and more generic Frontend API',
           'state' => 'beta',
         ),
-        '0.11' => 
+        '0.11' =>
         array (
           'id' => '99',
           'doneby' => 'ssb',
@@ -2945,7 +2945,7 @@ Fixed Bugs:
 * disable magic_quotes_runtime',
           'state' => 'beta',
         ),
-        '0.10' => 
+        '0.10' =>
         array (
           'id' => '93',
           'doneby' => 'ssb',
@@ -2979,7 +2979,7 @@ though it claimed to be.  This version finally is self-hosting
 * lots of minor fixes',
           'state' => 'beta',
         ),
-        '0.9' => 
+        '0.9' =>
         array (
           'id' => '38',
           'doneby' => 'ssb',
@@ -3008,7 +3008,7 @@ though it claimed to be.  This version finally is self-hosting
           'state' => 'stable',
         ),
       ),
-      'notes' => 
+      'notes' =>
       array (
       ),
       'installed' => '- no -',

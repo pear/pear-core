@@ -66,24 +66,24 @@ $e = $command->run('search', array(), array('Ar'));
 $phpunit->assertNoErrors('after');
 $phpunit->assertTrue($e, 'after');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'Matched packages, channel pear.php.net:',
       'border' => true,
-      'headline' => 
+      'headline' =>
       array (
         0 => 'Package',
         1 => 'Stable/(Latest)',
         2 => 'Local',
       ),
       'channel' => 'pear.php.net',
-      'data' => 
+      'data' =>
       array (
-        'File Formats' => 
+        'File Formats' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'Archive_Tar',
             1 => '1.2 (stable)',
@@ -99,7 +99,7 @@ $phpunit->assertEquals(array (
 $e = $command->run('search', array(), array('XZ'));
 $phpunit->assertNoErrors('errors');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
    array (
     'info' => 'no packages found that match pattern "XZ", for channel pear.php.net.',
     'cmd' => 'no command',

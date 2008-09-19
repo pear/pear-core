@@ -1121,7 +1121,7 @@ SQL-Statements and execute them.",
 API for many spell libraries:
 - aspell/pspell (intended to replace ispell)
 - hspell (hebrew)
-- ispell 
+- ispell
 - myspell (OpenOffice project, mozilla)
 - uspell (primarily Yiddish, Hebrew, and Eastern European languages)
 A plugin system allows to add custom spell support.
@@ -1179,8 +1179,8 @@ interface for handling CSV files.",
         'summary' =>
             "A Class the facillitates the search of filesystems",
         'description' =>
-            "File_Find, created as a replacement for its Perl counterpart, also named 
-File_Find, is a directory searcher, which handles, globbing, recursive 
+            "File_Find, created as a replacement for its Perl counterpart, also named
+File_Find, is a directory searcher, which handles, globbing, recursive
 directory searching, as well as a slew of other cool features.?",
         'lead' =>
             "tuupola",
@@ -1265,8 +1265,8 @@ Features:
         'summary' =>
             "Manipulate many kinds of password files",
         'description' =>
-            "Provides methods to manipulate and authenticate against standard Unix, 
-SMB server, AuthUser (.htpasswd), AuthDigest (.htdigest), CVS pserver 
+            "Provides methods to manipulate and authenticate against standard Unix,
+SMB server, AuthUser (.htpasswd), AuthDigest (.htdigest), CVS pserver
 and custom formatted password files.",
         'lead' =>
             "mike",
@@ -1456,11 +1456,11 @@ provides means for handling right-to-left text.",
         'summary' =>
             "Encrypts text which is later decoded using javascript on the client side",
         'description' =>
-            "The PEAR::HTML_Crypt provides methods to encrypt text, which 
+            "The PEAR::HTML_Crypt provides methods to encrypt text, which
    can be later be decrypted using JavaScript on the client side
- 
+
    This is very useful to prevent spam robots collecting email
-   addresses from your site, included is a method to add mailto 
+   addresses from your site, included is a method to add mailto
    links to the text being generated",
         'lead' =>
             "mikedransfield",
@@ -1587,8 +1587,8 @@ Allow output data to a file, to the standart output(print), or return",
         'summary' =>
             "Generates HTML menus from multidimensional hashes.",
         'description' =>
-            "With the HTML_Menu class one can easily create and maintain a 
-navigation structure for websites, configuring it via a multidimensional 
+            "With the HTML_Menu class one can easily create and maintain a
+navigation structure for websites, configuring it via a multidimensional
 hash structure. Different modes for the HTML output are supported.",
         'lead' =>
             "uw",
@@ -1620,13 +1620,13 @@ Your browser should accept DHTML feature.
 
 Features:
 - create horizontal, vertival bar and also circle, ellipse and polygons (square, rectangle)
-- allows usage of existing external StyleSheet and/or JavaScript 
+- allows usage of existing external StyleSheet and/or JavaScript
 - all elements (progress, cells, string) are customizable by their html properties
 - percent/string is floating all around the progress meter
 - compliant with all CSS/XHMTL standards
 - integration with all template engines is very easy
 - implements Observer design pattern. It is possible to add Listeners
-- adds a customizable UI monitor pattern to display a progress bar. 
+- adds a customizable UI monitor pattern to display a progress bar.
   User-end can abort progress at any time.
 - Look and feel can be sets by internal API or external config file
 - Allows many progress meter on same page without uses of iframe solution
@@ -1760,7 +1760,7 @@ o FR Departements",
 * Lots of customization options.
 * Tables can be modified at any time.
 * The logic is the same as standard HTML editors.
-* Handles col and rowspans. 
+* Handles col and rowspans.
 * PHP code is shorter, easier to read and to maintain.
 * Tables options can be reused.",
         'lead' =>
@@ -1824,23 +1824,23 @@ Features:
         'summary' =>
             "An extremely powerful Tokenizer driven Template engine",
         'description' =>
-            "HTML_Template_Flexy started it\'s life as a simplification of HTML_Template_Xipe, 
+            "HTML_Template_Flexy started it\'s life as a simplification of HTML_Template_Xipe,
 however in Version 0.2, It became one of the first template engine to use a real Lexer,
-rather than regex\'es, making it possible to do things like ASP.net or Cold Fusion tags. 
+rather than regex\'es, making it possible to do things like ASP.net or Cold Fusion tags.
 However, it still has a very simple set of goals.
-- Very Simple API, 
+- Very Simple API,
    o easy to learn...
    o prevents to much logic going in templates
 - Easy to write document\'able code
-   o By using object vars for a template rather than \'assign\', you 
+   o By using object vars for a template rather than \'assign\', you
      can use phpdoc comments to list what variable you use.
 - Editable in WYSIWYG editors
-   o you can create full featured templates, that doesnt get broken every time you edit with 
+   o you can create full featured templates, that doesnt get broken every time you edit with
      Dreamweaver(tm) or Mozzila editor
-   o Uses namespaced attributes to add looping/conditionals  
-- Extremely Fast, 
+   o Uses namespaced attributes to add looping/conditionals
+- Extremely Fast,
    o runtime is at least 4 time smaller than most other template engines (eg. Smarty)
-   o uses compiled templates, as a result it is many times faster on blocks and loops than 
+   o uses compiled templates, as a result it is many times faster on blocks and loops than
      than Regex templates (eg. IT/phplib)
 - Safer (for cross site scripting attacks)
    o All variables default to be output as HTML escaped (overridden with the :h modifier)
@@ -1861,13 +1861,13 @@ Features:
 - replacement of INPUT, TEXTAREA and SELECT tags with HTML_Template_Flexy_Element code
   use FLEXY:IGNORE (inherited) and FLEXY:IGNOREONLY (single) to prevent replacements
 - FLEXY:START/FLEXY:STARTCHILDREN tags to define where template starts/finishes
-- support for urlencoded braces {} in HTML attributes.  
+- support for urlencoded braces {} in HTML attributes.
 - documentation in the pear manual
 
 - examples at http://cvs.php.net/cvs.php/pear/HTML_Template_Flexy/tests/
 
-** The long term plan for Flexy is to be integrated as a backend for the 
-Future Template Package (A BC wrapper will be made available - as I need 
+** The long term plan for Flexy is to be integrated as a backend for the
+Future Template Package (A BC wrapper will be made available - as I need
 to use it too!)",
         'lead' =>
             "alan_k",
@@ -2026,7 +2026,7 @@ via either an XML-file or a XML-chunk which you simply write anywhere inside the
 Using the Cache the final file can also be cached (i.e. a resulting HTML-file).
 The caching options can be customized as needed. The cache can reduce the server
 load by very much, since the entire php-file doesn\'t need to be processed again,
-the resulting client-readable data are simply delivered right from the cache 
+the resulting client-readable data are simply delivered right from the cache
 (the data are saved using php\'s output buffering).
 
 The template engine is prepared to be used for multi-language applications too.
@@ -2093,7 +2093,7 @@ from Chip Chapin (http://www.chipchapin.com).",
         'summary' =>
             "Miscellaneous HTTP utilities",
         'description' =>
-            "The HTTP class is a class with static methods for doing 
+            "The HTTP class is a class with static methods for doing
 miscellaneous HTTP related stuff like date formatting,
 language negotiation or HTTP redirection.",
         'lead' =>
@@ -2121,14 +2121,14 @@ language negotiation or HTTP redirection.",
         'summary' =>
             "Easy way to perform multiple HTTP requests and process their results",
         'description' =>
-            "The HTTP_Client class wraps around HTTP_Request and provides a higher level interface 
+            "The HTTP_Client class wraps around HTTP_Request and provides a higher level interface
 for performing multiple HTTP requests.
 
 Features:
 * Manages cookies and referrers between requests
 * Handles HTTP redirection
 * Has methods to set default headers and request parameters
-* Implements the Subject-Observer design pattern: the base class sends 
+* Implements the Subject-Observer design pattern: the base class sends
 events to listeners that do the response processing.",
         'lead' =>
             "avb",
@@ -2155,7 +2155,7 @@ events to listeners that do the response processing.",
         'summary' =>
             "OO interface to modify and handle HTTP headers and status codes.",
         'description' =>
-            "This class provides methods to set/modify HTTP headers 
+            "This class provides methods to set/modify HTTP headers
 and status codes including an HTTP caching facility.
 It also provides methods for checking Status types.",
         'lead' =>
@@ -2272,7 +2272,7 @@ from html forms. Features:
         'description' =>
             "With PEAR::Image_Barcode class you can create a barcode representation of a
 given string.
-                                                                                                                             
+
 This class uses GD function because this the generated graphic can be any of
 GD supported supported image types.",
         'lead' =>
@@ -2358,8 +2358,8 @@ produce images using GD or Scalable Vector Graphics (SVG).",
         'summary' =>
             "Interface to AT&T\'s GraphViz tools",
         'description' =>
-            "The GraphViz class allows for the creation of and the work with 
- directed and undirected graphs and their visualization with 
+            "The GraphViz class allows for the creation of and the work with
+ directed and undirected graphs and their visualization with
  AT&T\'s GraphViz tools.",
         'lead' =>
             "sebastian",
@@ -2677,9 +2677,9 @@ The Math_IntegerOp class defines operations on Math_Integer objects.",
         'summary' =>
             "Class to represent matrices and matrix operations",
         'description' =>
-            "Matrices are represented as 2 dimensional arrays of numbers. 
-This class defines methods for matrix objects, as well as static methods 
-to read, write and manipulate matrices, including methods to solve systems 
+            "Matrices are represented as 2 dimensional arrays of numbers.
+This class defines methods for matrix objects, as well as static methods
+to read, write and manipulate matrices, including methods to solve systems
 of linear equations (with and without iterative error correction).
 Requires the Math_Vector package.
 For running the unit tests you will need PHPUnit version 0.6.2 or older.",
@@ -2735,7 +2735,7 @@ For running the unit tests you will need PHPUnit version 0.6.2 or older.",
             "Classes to calculate statistical parameters",
         'description' =>
             "Package to calculate statistical parameters of numerical arrays
-of data. The data can be in a simple numerical array, or in a 
+of data. The data can be in a simple numerical array, or in a
 cummulative numerical array. A cummulative array, has the value
 as the index and the number of repeats as the value for the
 array item, e.g. \$data = array(3=>4, 2.3=>5, 1.25=>6, 0.5=>3).
@@ -2888,8 +2888,8 @@ written by Wolfram Kriesing and Paolo Panto (vision:produktion, wk@visionp.de)."
         'summary' =>
             "memcached extension",
         'description' =>
-            "Memcached is a caching daemon designed especially for 
-dynamic web applications to decrease database load by 
+            "Memcached is a caching daemon designed especially for
+dynamic web applications to decrease database load by
 storing objects in memory.
 This extension allows you to work with memcached through
 handy OO and procedural interfaces.",
@@ -2997,9 +2997,9 @@ writing information tags (version 1) in MP3 files.",
         'summary' =>
             "Interface to the DICT Protocol",
         'description' =>
-            "This class provides a simple API to the DICT Protocol handling all the network related issues 
-and providing DICT responses in PHP datatypes 
-to make it easy for a developer to use DICT 
+            "This class provides a simple API to the DICT Protocol handling all the network related issues
+and providing DICT responses in PHP datatypes
+to make it easy for a developer to use DICT
 servers in their programs.",
         'lead' =>
             "cnb",
@@ -3747,8 +3747,8 @@ version 1.3 of Horde.",
         'summary' =>
             "Provides methods for converting to and from Roman Numerals.",
         'description' =>
-            "Numbers_Roman provides static methods for converting to and from Roman 
-numerals. It supports Roman numerals in both uppercase and lowercase 
+            "Numbers_Roman provides static methods for converting to and from Roman
+numerals. It supports Roman numerals in both uppercase and lowercase
 styles and conversion for and to numbers up to 5 999 999",
         'lead' =>
             "gurugeek",
@@ -3775,7 +3775,7 @@ styles and conversion for and to numbers up to 5 999 999",
         'summary' =>
             "Oracle Call Interface(OCI) wrapper",
         'description' =>
-            "This module allows you to access Oracle9/8/7 database. 
+            "This module allows you to access Oracle9/8/7 database.
 It wraps the Oracle Call Interface (OCI).",
         'lead' =>
             "tony2001",
@@ -3995,7 +3995,7 @@ This extension is meant for development and debug purposes only and contains som
             "Creating PDF on the fly with the PDFlib library",
         'description' =>
             "This extension wraps the PDFlib programming library
-for processing PDF on the fly, created by Thomas Merz. 
+for processing PDF on the fly, created by Thomas Merz.
 
 PDFlib is available under the PDFlib Lite License
 (http://www.pdflib.com/pdffiles/PDFlib-Lite-license.pdf)
@@ -4106,7 +4106,7 @@ Features include
  - can output the package.xml in any directory, and read in the package.xml
    file from any directory.
  - can specify a different name for the package.xml file
- 
+
 As of version 1.2.0, PEAR_PackageFileManager is fully unit tested.",
         'lead' =>
             "cellog",
@@ -4189,7 +4189,7 @@ Features (short list):
 -current manual always available at http://www.phpdoc.org/manual.php
 -user .ini files can be used to control output, multiple outputs can be
  generated at once
- 
+
 **WARNING**:
 To use the web interface, you must set PEAR\'s data_dir to a subdirectory of
 document root.
@@ -4331,9 +4331,9 @@ Constants and Functions for older versions of PHP.",
         'summary' =>
             "Radius client library",
         'description' =>
-            "This package is based on the libradius of FreeBSD, with some modifications and extensions. 
-This PECL provides full support for RADIUS authentication (RFC 2865) and RADIUS accounting (RFC 2866), 
-works on Unix and on Windows. Its an easy way to authenticate your users against the user-database of your 
+            "This package is based on the libradius of FreeBSD, with some modifications and extensions.
+This PECL provides full support for RADIUS authentication (RFC 2865) and RADIUS accounting (RFC 2866),
+works on Unix and on Windows. Its an easy way to authenticate your users against the user-database of your
 OS (for example against Windows Active-Directory via IAS).",
         'lead' =>
             "mbretter",
@@ -4564,7 +4564,7 @@ not taken to escape the shell arguments and reaping the exit status properly.  T
 provides a formal interface to both, so that you can run a system command as comfortably as
 you would run a php function, with full pear error handling as results on failure.
 It is important to note that this class, unlike other implementations, distinguishes between
-output to stderr and output to stdout.  It also reports the exit status of the command.  
+output to stderr and output to stdout.  It also reports the exit status of the command.
 So in every sense of the word, it gives php shell capabilities.",
         'lead' =>
             "dallen",
@@ -4788,7 +4788,7 @@ XHTML and XML documents quickly.",
         'description' =>
             "This extension provides functions to generate and analyse
 universally unique identifiers (UUIDs). It depends on the
-external libuuid. This library is available on most linux 
+external libuuid. This library is available on most linux
 systems, its source is bundled with the ext2fs tools.",
         'lead' =>
             "hholzgra",
@@ -4943,8 +4943,8 @@ Xdebug also provides:
         'summary' =>
             "Provides fast, non-cached, forward-only access to XML data.",
         'description' =>
-            "This extension wraps the libxml xmlReader API. The reader acts as a cursor 
-going forward on the document stream and stopping at each node in the way. 
+            "This extension wraps the libxml xmlReader API. The reader acts as a cursor
+going forward on the document stream and stopping at each node in the way.
 xmlReader is similar to SAX though uses a much simpler API.",
         'lead' =>
             "rrichards",
@@ -4999,12 +4999,12 @@ xmlReader is similar to SAX though uses a much simpler API.",
         'description' =>
             "The best way to describe this library is to classify it as a template system for generating cascading style sheets (CSS). It is ideal for storing all of the CSS in a single location and allowing it to be parsed as needed at runtime (or from cache) using both general and browser filters specified in the attribute for the style tags. It can be driven with either the libxslt pear extenstion (part of xmldom) or the xslt extension (part of the sablotron libraries).
 
-You may see an example usage of this class at the follow url: 
+You may see an example usage of this class at the follow url:
 
 http://mojave.mojavelinux.com/forum/viewtopic.php?p=22#22
 
 Users may post questions or comments about the class at this location.
-  
+
 My hope is that such a system becomes the standard for the organization of stylesheet information in the future.",
         'lead' =>
             "dallen",
@@ -5451,1866 +5451,1866 @@ $reg->addChannel($ch);
 $e = $command->run('list-all', array(), array());
 $phpunit->assertNoErrors('pear.php.net');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'All packages [Channel pear.php.net]:',
       'border' => true,
-      'headline' => 
+      'headline' =>
       array (
         0 => 'Package',
         1 => 'Latest',
         2 => 'Local',
       ),
       'channel' => 'pear.php.net',
-      'data' => 
+      'data' =>
       array (
-        'Caching' => 
+        'Caching' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/APC',
             1 => '2.0.4',
             2 => NULL,
             3 => 'Alternative PHP Cache',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/Cache',
             1 => '1.5.4',
             2 => NULL,
             3 => 'Framework for caching of arbitrary data.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/Cache_Lite',
             1 => '1.3.1',
             2 => NULL,
             3 => 'Fast and Safe little cache system',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'PHP' => 
+        'PHP' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/apd',
             1 => '1.0.1',
             2 => NULL,
             3 => 'A full-featured engine-level profiler/debugger',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/memcache',
             1 => '1.4',
             2 => NULL,
             3 => 'memcached extension',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/parsekit',
             1 => '1.0',
             2 => NULL,
             3 => 'PHP Opcode Analyser',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/perl',
             1 => '0.6',
             2 => NULL,
             3 => 'Embedded Perl.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             0 => 'pear/PHP_Compat',
             1 => '1.3.1',
             2 => NULL,
             3 => 'Provides missing functionality for older versions of PHP',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          5 => 
+          5 =>
           array (
             0 => 'pear/Var_Dump',
             1 => '1.0.1',
             2 => NULL,
             3 => 'Provides methods for dumping structured information about a variable.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          6 => 
+          6 =>
           array (
             0 => 'pear/Xdebug',
             1 => '1.3.2',
             2 => NULL,
             3 => 'Provides functions for function traces and profiling',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'File Formats' => 
+        'File Formats' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Archive_Tar',
             1 => '1.2',
             2 => NULL,
             3 => 'Tar file management class',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/bz2',
             1 => '1.0',
             2 => NULL,
             3 => 'A Bzip2 management extension',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/Contact_Vcard_Build',
             1 => '1.1',
             2 => NULL,
             3 => 'Build (create) and fetch vCard 2.1 and 3.0 text blocks.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/Contact_Vcard_Parse',
             1 => '1.30',
             2 => NULL,
             3 => 'Parse vCard 2.1 and 3.0 files.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             0 => 'pear/File_Fstab',
             1 => '2.0.1',
             2 => NULL,
             3 => 'Read and write fstab files',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          5 => 
+          5 =>
           array (
             0 => 'pear/File_HtAccess',
             1 => '1.1.0',
             2 => NULL,
             3 => 'Manipulate .htaccess files',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          6 => 
+          6 =>
           array (
             0 => 'pear/File_Passwd',
             1 => '1.1.1',
             2 => NULL,
             3 => 'Manipulate many kinds of password files',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          7 => 
+          7 =>
           array (
             0 => 'pear/File_SMBPasswd',
             1 => '1.0.1',
             2 => NULL,
             3 => 'Class for managing SAMBA style password files.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          8 => 
+          8 =>
           array (
             0 => 'pear/MP3_ID',
             1 => '1.1.3',
             2 => NULL,
             3 => 'Read/Write MP3-Tags',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          9 => 
+          9 =>
           array (
             0 => 'pear/zip',
             1 => '1.0',
             2 => NULL,
             3 => 'A zip management extension',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Authentication' => 
+        'Authentication' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Auth',
             1 => '1.2.3',
             2 => NULL,
             3 => 'Creating an authentication system.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/Auth_HTTP',
             1 => '2.0',
             2 => NULL,
             3 => 'HTTP authentication',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/Auth_PrefManager',
             1 => '1.1.3',
             2 => NULL,
             3 => 'Preferences management class',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/Auth_RADIUS',
             1 => '1.0.4',
             2 => NULL,
             3 => 'Wrapper Classes for the RADIUS PECL.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             0 => 'pear/Auth_SASL',
             1 => '1.0.1',
             2 => NULL,
             3 => 'Abstraction of various SASL mechanism responses',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          5 => 
+          5 =>
           array (
             0 => 'pear/radius',
             1 => '1.2.4',
             2 => NULL,
             3 => 'Radius client library',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Benchmarking' => 
+        'Benchmarking' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Benchmark',
             1 => '1.2.1',
             2 => NULL,
             3 => 'Framework to benchmark PHP scripts or function calls.',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Configuration' => 
+        'Configuration' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Config',
             1 => '1.10.3',
             2 => NULL,
             3 => 'Your configurations swiss-army knife.',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Console' => 
+        'Console' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Console_Getargs',
             1 => '1.2.1',
             2 => NULL,
             3 => 'A command-line arguments parser',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/Console_Getopt',
             1 => '1.2',
             2 => NULL,
             3 => 'Command-line option parser',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/Console_Table',
             1 => '1.0.1',
             2 => NULL,
             3 => 'Class that makes it easy to build console style tables',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/System_Command',
             1 => '1.0.1',
             2 => NULL,
             3 => 'PEAR::System_Command is a commandline execution interface.',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Tools and Utilities' => 
+        'Tools and Utilities' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/crack',
             1 => '0.1',
             2 => NULL,
             3 => '"Good Password" Checking Utility: Keep your users\\\' passwords reasonably safe from dictionary based attacks',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/huffman',
             1 => '0.2.0',
             2 => NULL,
             3 => 'Huffman compression is a lossless compression algorithm that is ideal for compressing textual data.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/PhpDocumentor',
             1 => '1.2.3',
             2 => NULL,
             3 => 'The phpDocumentor package provides automatic documenting of php api directly from the source.',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Encryption' => 
+        'Encryption' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Crypt_CBC',
             1 => '0.4',
             2 => NULL,
             3 => 'A class to emulate Perl\\\'s Crypt::CBC module.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/Crypt_CHAP',
             1 => '1.0.0',
             2 => NULL,
             3 => 'Generating CHAP packets.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/Crypt_RC4',
             1 => '1.0.2',
             2 => NULL,
             3 => 'Encryption class for RC4 encryption',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/Crypt_Xtea',
             1 => '1.0',
             2 => NULL,
             3 => 'A class that implements the Tiny Encryption Algorithm (TEA) (New Variant).',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Payment' => 
+        'Payment' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/cybermut',
             1 => '1.1',
             2 => NULL,
             3 => 'CyberMut Paiement System',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/Payment_Clieop',
             1 => '0.1.1',
             2 => NULL,
             3 => 'These classes can create a clieop03 file for you which you can send to a Dutch Bank. Ofcourse you need also a Dutch bank account.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/Payment_DTA',
             1 => '1.00',
             2 => NULL,
             3 => 'Creates DTA files containing money transaction data (Germany).',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/spplus',
             1 => '1.0',
             2 => NULL,
             3 => 'SPPLUS Paiement System',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             0 => 'pear/TCLink',
             1 => '3.4.0',
             2 => NULL,
             3 => 'Enables credit card processing via the TrustCommerce payment gateway',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Networking' => 
+        'Networking' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/cyrus',
             1 => '1.0',
             2 => NULL,
             3 => 'An extension which eases the manipulation of Cyrus IMAP servers.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/Net_CheckIP',
             1 => '1.1',
             2 => NULL,
             3 => 'Check the syntax of IPv4 addresses',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/Net_Curl',
             1 => '0.2',
             2 => NULL,
             3 => 'Net_Curl provides an OO interface to PHP\\\'s cURL extension',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/Net_Dict',
             1 => '1.0.3',
             2 => NULL,
             3 => 'Interface to the DICT Protocol',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             0 => 'pear/Net_Dig',
             1 => '0.1',
             2 => NULL,
             3 => 'The PEAR::Net_Dig class should be a nice, friendly OO interface to the dig command',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          5 => 
+          5 =>
           array (
             0 => 'pear/Net_DNS',
             1 => '0.03',
             2 => NULL,
             3 => 'Resolver library used to communicate with a DNS server',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          6 => 
+          6 =>
           array (
             0 => 'pear/Net_Finger',
             1 => '1.0.0',
             2 => NULL,
             3 => 'The PEAR::Net_Finger class provides a tool for querying Finger Servers',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          7 => 
+          7 =>
           array (
             0 => 'pear/Net_FTP',
             1 => '1.3.0RC1',
             2 => NULL,
             3 => 'Net_FTP provides an OO interface to the PHP FTP functions plus some additions',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          8 => 
+          8 =>
           array (
             0 => 'pear/Net_Geo',
             1 => '1.0',
             2 => NULL,
             3 => 'Geographical locations based on Internet address',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          9 => 
+          9 =>
           array (
             0 => 'pear/Net_Ident',
             1 => '1.0',
             2 => NULL,
             3 => 'Identification Protocol implementation',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          10 => 
+          10 =>
           array (
             0 => 'pear/Net_IMAP',
             1 => '1.0.3',
             2 => NULL,
             3 => 'Provides an implementation of the IMAP protocol',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          11 => 
+          11 =>
           array (
             0 => 'pear/Net_IPv4',
             1 => '1.2',
             2 => NULL,
             3 => 'IPv4 network calculations and validation',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          12 => 
+          12 =>
           array (
             0 => 'pear/Net_IPv6',
             1 => '1.0.1',
             2 => NULL,
             3 => 'Check and validate IPv6 addresses',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          13 => 
+          13 =>
           array (
             0 => 'pear/Net_LMTP',
             1 => '1.0.1',
             2 => NULL,
             3 => 'Provides an implementation of the RFC2033 LMTP protocol',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          14 => 
+          14 =>
           array (
             0 => 'pear/Net_NNTP',
             1 => '0.2.5',
             2 => NULL,
             3 => 'Implementation of the NNTP protocol',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          15 => 
+          15 =>
           array (
             0 => 'pear/Net_Ping',
             1 => '2.4',
             2 => NULL,
             3 => 'Execute ping',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          16 => 
+          16 =>
           array (
             0 => 'pear/Net_POP3',
             1 => '1.3.3',
             2 => NULL,
             3 => 'Provides a POP3 class to access POP3 server.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          17 => 
+          17 =>
           array (
             0 => 'pear/Net_Portscan',
             1 => '1.0.2',
             2 => NULL,
             3 => 'Portscanner utilities.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          18 => 
+          18 =>
           array (
             0 => 'pear/Net_Sieve',
             1 => '1.1.0',
             2 => NULL,
             3 => 'Handles talking to timsieved',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          19 => 
+          19 =>
           array (
             0 => 'pear/Net_SmartIRC',
             1 => '0.5.5p1',
             2 => NULL,
             3 => 'Net_SmartIRC is a PHP class for communication with IRC networks',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          20 => 
+          20 =>
           array (
             0 => 'pear/Net_SMTP',
             1 => '1.2.6',
             2 => NULL,
             3 => 'Provides an implementation of the SMTP protocol',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          21 => 
+          21 =>
           array (
             0 => 'pear/Net_Socket',
             1 => '1.0.4',
             2 => NULL,
             3 => 'Network Socket Interface',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          22 => 
+          22 =>
           array (
             0 => 'pear/Net_URL',
             1 => '1.0.14',
             2 => NULL,
             3 => 'Easy parsing of Urls',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          23 => 
+          23 =>
           array (
             0 => 'pear/Net_UserAgent_Detect',
             1 => '2.0.1',
             2 => NULL,
             3 => 'Net_UserAgent_Detect determines the Web browser, version, and platform from an HTTP user agent string',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          24 => 
+          24 =>
           array (
             0 => 'pear/Net_Whois',
             1 => '1.0',
             2 => NULL,
             3 => 'The PEAR::Net_Whois class provides a tool to query internet domain name and network number directory services',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          25 => 
+          25 =>
           array (
             0 => 'pear/tcpwrap',
             1 => '1.0',
             2 => NULL,
             3 => 'tcpwrappers binding.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          26 => 
+          26 =>
           array (
             0 => 'pear/uuid',
             1 => '1.0',
             2 => NULL,
             3 => 'UUID support functions',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          27 => 
+          27 =>
           array (
             0 => 'pear/yaz',
             1 => '1.0.2',
             2 => NULL,
             3 => 'a Z39.50 client for PHP',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Date and Time' => 
+        'Date and Time' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Date',
             1 => '1.4.3',
             2 => NULL,
             3 => 'Date and Time Zone Classes',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Database' => 
+        'Database' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/DB',
             1 => '1.6.8',
             2 => NULL,
             3 => 'Database Abstraction Layer',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/DBA',
             1 => '1.1',
             2 => NULL,
             3 => 'Berkely-style database abstraction class',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/DB_ado',
             1 => '1.3',
             2 => NULL,
             3 => 'DB driver which use MS ADODB library',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/DB_DataObject',
             1 => '1.7.2',
             2 => NULL,
             3 => 'An SQL Builder, Object Interface to Database Tables',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             0 => 'pear/DB_ldap',
             1 => '1.1.0',
             2 => NULL,
             3 => 'DB interface to LDAP server',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          5 => 
+          5 =>
           array (
             0 => 'pear/DB_NestedSet',
             1 => '1.2.4',
             2 => NULL,
             3 => 'API to build and query nested sets',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          6 => 
+          6 =>
           array (
             0 => 'pear/DB_odbtp',
             1 => '1.0.2',
             2 => NULL,
             3 => 'DB interface for ODBTP',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          7 => 
+          7 =>
           array (
             0 => 'pear/DB_Pager',
             1 => '0.7',
             2 => NULL,
             3 => 'Retrieve and return information of database result sets',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          8 => 
+          8 =>
           array (
             0 => 'pear/DB_QueryTool',
             1 => '0.11.1',
             2 => NULL,
             3 => 'An OO-interface for easily retrieving and modifying data in a DB.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          9 => 
+          9 =>
           array (
             0 => 'pear/MDB',
             1 => '1.3.0',
             2 => NULL,
             3 => 'database abstraction layer',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          10 => 
+          10 =>
           array (
             0 => 'pear/MDB_QueryTool',
             1 => '0.11.1',
             2 => NULL,
             3 => 'An OO-interface for easily retrieving and modifying data in a DB.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          11 => 
+          11 =>
           array (
             0 => 'pear/oci8',
             1 => '1.0',
             2 => NULL,
             3 => 'Oracle Call Interface(OCI) wrapper',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          12 => 
+          12 =>
           array (
             0 => 'pear/odbtp',
             1 => '1.1.2',
             2 => NULL,
             3 => 'ODBTP client functions',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          13 => 
+          13 =>
           array (
             0 => 'pear/Paradox',
             1 => '1.3.0',
             2 => NULL,
             3 => 'An extension to read Paradox files',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          14 => 
+          14 =>
           array (
             0 => 'pear/SQLite',
             1 => '1.0.3',
             2 => NULL,
             3 => 'SQLite database bindings',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Text' => 
+        'Text' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/enchant',
             1 => '1.0',
             2 => NULL,
             3 => 'libenchant binder, support near all spelling tools',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/lzf',
             1 => '1.3',
             2 => NULL,
             3 => 'LZF compression.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/pdflib',
             1 => '2.0.4',
             2 => NULL,
             3 => 'Creating PDF on the fly with the PDFlib library',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/ps',
             1 => '1.3.0',
             2 => NULL,
             3 => 'An extension to create PostScript files',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             0 => 'pear/Text_Password',
             1 => '1.0',
             2 => NULL,
             3 => 'Creating passwords with PHP.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          5 => 
+          5 =>
           array (
             0 => 'pear/xdiff',
             1 => '1.2',
             2 => NULL,
             3 => 'File differences/patches.',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'File System' => 
+        'File System' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/File',
             1 => '1.0.3',
             2 => NULL,
             3 => 'Common file and directory routines',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/File_Find',
             1 => '0.2.0',
             2 => NULL,
             3 => 'A Class the facillitates the search of filesystems',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/File_SearchReplace',
             1 => '1.0.1',
             2 => NULL,
             3 => 'Performs search and replace routines',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/xattr',
             1 => '1.0',
             2 => NULL,
             3 => 'Extended attributes.',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Internationalization' => 
+        'Internationalization' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/fribidi',
             1 => '1.0',
             2 => NULL,
             3 => 'Implementation of the Unicode BiDi algorithm',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/Translation',
             1 => '1.2.6pl1',
             2 => NULL,
             3 => 'Class for creating multilingual websites.',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Processing' => 
+        'Processing' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/FSM',
             1 => '1.2.1',
             2 => NULL,
             3 => 'Finite State Machine',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'HTML' => 
+        'HTML' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/HTML_BBCodeParser',
             1 => '1.1',
             2 => NULL,
             3 => 'This is a parser to replace UBB style tags with their html equivalents.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/HTML_Common',
             1 => '1.2.1',
             2 => NULL,
             3 => 'PEAR::HTML_Common is a base class for other HTML classes.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/HTML_Crypt',
             1 => '1.2.2',
             2 => NULL,
             3 => 'Encrypts text which is later decoded using javascript on the client side',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/HTML_CSS',
             1 => '0.2.0',
             2 => NULL,
             3 => 'HTML_CSS is a class for generating CSS declarations.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             0 => 'pear/HTML_Form',
             1 => '1.1.0',
             2 => NULL,
             3 => 'Simple HTML form package',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          5 => 
+          5 =>
           array (
             0 => 'pear/HTML_Javascript',
             1 => '1.1.0',
             2 => NULL,
             3 => 'Provides an interface for creating simple JS scripts.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          6 => 
+          6 =>
           array (
             0 => 'pear/HTML_Menu',
             1 => '2.1.1',
             2 => NULL,
             3 => 'Generates HTML menus from multidimensional hashes.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          7 => 
+          7 =>
           array (
             0 => 'pear/HTML_Progress',
             1 => '1.2.0',
             2 => NULL,
             3 => 'How to include a loading bar in your XHTML documents quickly and easily.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          8 => 
+          8 =>
           array (
             0 => 'pear/HTML_QuickForm',
             1 => '3.2.4pl1',
             2 => NULL,
             3 => 'The PEAR::HTML_QuickForm package provides methods for creating, validating, processing HTML forms.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          9 => 
+          9 =>
           array (
             0 => 'pear/HTML_QuickForm_Controller',
             1 => '1.0.3',
             2 => NULL,
             3 => 'The add-on to HTML_QuickForm package that allows building of multipage forms',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          10 => 
+          10 =>
           array (
             0 => 'pear/HTML_Select_Common',
             1 => '1.1',
             2 => NULL,
             3 => 'Some small classes to handle common &lt;select&gt; lists',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          11 => 
+          11 =>
           array (
             0 => 'pear/HTML_Table',
             1 => '1.5',
             2 => NULL,
             3 => 'PEAR::HTML_Table makes the design of HTML tables easy, flexible, reusable and efficient.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          12 => 
+          12 =>
           array (
             0 => 'pear/HTML_Table_Matrix',
             1 => '1.0.6',
             2 => NULL,
             3 => 'Autofill a table with data',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          13 => 
+          13 =>
           array (
             0 => 'pear/HTML_Template_Flexy',
             1 => '1.1.0',
             2 => NULL,
             3 => 'An extremely powerful Tokenizer driven Template engine',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          14 => 
+          14 =>
           array (
             0 => 'pear/HTML_Template_IT',
             1 => '1.1',
             2 => NULL,
             3 => 'Integrated Templates',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          15 => 
+          15 =>
           array (
             0 => 'pear/HTML_Template_PHPLIB',
             1 => '1.3.1',
             2 => NULL,
             3 => 'preg_* based template system.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          16 => 
+          16 =>
           array (
             0 => 'pear/HTML_Template_Sigma',
             1 => '1.1.2',
             2 => NULL,
             3 => 'An implementation of Integrated Templates API with template \\\'compilation\\\' added',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          17 => 
+          17 =>
           array (
             0 => 'pear/HTML_Template_Xipe',
             1 => '1.7.6',
             2 => NULL,
             3 => 'A simple, fast and powerful template engine.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          18 => 
+          18 =>
           array (
             0 => 'pear/HTML_TreeMenu',
             1 => '1.1.9',
             2 => NULL,
             3 => 'Provides an api to create a HTML tree',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          19 => 
+          19 =>
           array (
             0 => 'pear/Pager',
             1 => '2.2.4',
             2 => NULL,
             3 => 'Data paging class',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          20 => 
+          20 =>
           array (
             0 => 'pear/Pager_Sliding',
             1 => '1.6',
             2 => NULL,
             3 => 'Sliding Window Pager.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          21 => 
+          21 =>
           array (
             0 => 'pear/tidy',
             1 => '1.1',
             2 => NULL,
             3 => 'Tidy HTML Repairing and Parsing',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'HTTP' => 
+        'HTTP' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/HTTP',
             1 => '1.3.3',
             2 => NULL,
             3 => 'Miscellaneous HTTP utilities',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/HTTP_Client',
             1 => '1.0.0',
             2 => NULL,
             3 => 'Easy way to perform multiple HTTP requests and process their results',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/HTTP_Header',
             1 => '1.1.1',
             2 => NULL,
             3 => 'OO interface to modify and handle HTTP headers and status codes.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/HTTP_Request',
             1 => '1.2.3',
             2 => NULL,
             3 => 'Provides an easy way to perform HTTP requests',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             0 => 'pear/HTTP_Upload',
             1 => '0.9.1',
             2 => NULL,
             3 => 'Easy and secure managment of files submitted via HTML Forms',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Images' => 
+        'Images' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Image_Barcode',
             1 => '0.5',
             2 => NULL,
             3 => 'Barcode generation',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/Image_Color',
             1 => '1.0.1',
             2 => NULL,
             3 => 'Manage and handles color data and conversions.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/Image_GIS',
             1 => '1.1.1',
             2 => NULL,
             3 => 'Visualization of GIS data.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/Image_GraphViz',
             1 => '1.0.3',
             2 => NULL,
             3 => 'Interface to AT&T\\\'s GraphViz tools',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             0 => 'pear/Image_IPTC',
             1 => '1.0.2',
             2 => NULL,
             3 => 'Extract, modify, and save IPTC data',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Logging' => 
+        'Logging' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Log',
             1 => '1.8.7',
             2 => NULL,
             3 => 'Logging utilities',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Mail' => 
+        'Mail' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Mail',
             1 => '1.1.4',
             2 => NULL,
             3 => 'Class that provides multiple interfaces for sending emails',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/mailparse',
             1 => '2.0b',
             2 => NULL,
             3 => 'Email message manipulation',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/Mail_Mime',
             1 => '1.2.1',
             2 => NULL,
             3 => 'Provides classes to create and decode mime messages.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/Mail_Queue',
             1 => '1.1.3',
             2 => NULL,
             3 => 'Class for put mails in queue and send them later in background.',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Math' => 
+        'Math' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Math_Basex',
             1 => '0.3',
             2 => NULL,
             3 => 'Simple class for converting base set of numbers with a customizable character base set.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/Math_Fibonacci',
             1 => '0.8',
             2 => NULL,
             3 => 'Package to calculate and manipulate Fibonacci numbers',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/Math_Integer',
             1 => '0.8',
             2 => NULL,
             3 => 'Package to represent and manipulate integers',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/Math_Matrix',
             1 => '0.8.0',
             2 => NULL,
             3 => 'Class to represent matrices and matrix operations',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             0 => 'pear/Math_RPN',
             1 => '1.1',
             2 => NULL,
             3 => 'Reverse Polish Notation.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          5 => 
+          5 =>
           array (
             0 => 'pear/Math_Stats',
             1 => '0.8.5',
             2 => NULL,
             3 => 'Classes to calculate statistical parameters',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          6 => 
+          6 =>
           array (
             0 => 'pear/Math_TrigOp',
             1 => '1.0',
             2 => NULL,
             3 => 'Supplementary trigonometric functions',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Numbers' => 
+        'Numbers' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Numbers_Roman',
             1 => '0.2.0',
             2 => NULL,
             3 => 'Provides methods for converting to and from Roman Numerals.',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'PEAR' => 
+        'PEAR' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/PEAR',
             1 => '1.3.3.1',
             2 => NULL,
             3 => 'PEAR Base System',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/PEAR_Info',
             1 => '1.5.2',
             2 => NULL,
             3 => 'Show Information about your PEAR install and its packages',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/PEAR_PackageFileManager',
             1 => '1.2.1',
             2 => NULL,
             3 => 'PEAR_PackageFileManager takes an existing package.xml file and updates it with a new filelist and changelog',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Testing' => 
+        'Testing' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/PHPUnit',
             1 => '1.1.1',
             2 => NULL,
             3 => 'Regression testing framework for unit tests.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/PHPUnit2',
             1 => '2.1.4',
             2 => NULL,
             3 => 'Regression testing framework for unit tests.',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Science' => 
+        'Science' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Science_Chemistry',
             1 => '1.1.0',
             2 => NULL,
             3 => 'Classes to manipulate chemical objects: atoms, molecules, etc.',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Web Services' => 
+        'Web Services' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Services_Weather',
             1 => '1.3.1',
             2 => NULL,
             3 => 'This class acts as an interface to various online weather-services.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/XML_RPC',
             1 => '1.1.0',
             2 => NULL,
             3 => 'PHP implementation of the XML-RPC protocol',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Streams' => 
+        'Streams' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Stream_SHM',
             1 => '1.0.0',
             2 => NULL,
             3 => 'Shared Memory Stream',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/Stream_Var',
             1 => '1.0.0',
             2 => NULL,
             3 => 'Allows stream based access to any variable.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/zlib_filter',
             1 => '1.1',
             2 => NULL,
             3 => 'zlib filter implementation backport for PHP 5.0',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Structures' => 
+        'Structures' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Structures_Graph',
             1 => '1.0.1',
             2 => NULL,
             3 => 'Graph datastructure manipulation library',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/Text_Statistics',
             1 => '1.0',
             2 => NULL,
             3 => 'Compute readability indexes for documents.',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'System' => 
+        'System' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/System_Mount',
             1 => '1.0.0',
             2 => NULL,
             3 => 'Mount and unmount devices in fstab',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'XML' => 
+        'XML' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/xmlReader',
             1 => '1.0',
             2 => NULL,
             3 => 'Provides fast, non-cached, forward-only access to XML data.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             0 => 'pear/XML_Beautifier',
             1 => '1.1',
             2 => NULL,
             3 => 'Class to format XML documents.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             0 => 'pear/XML_CSSML',
             1 => '1.1',
             2 => NULL,
             3 => 'The PEAR::XML_CSSML package provides methods for creating cascading style sheets (CSS) from an XML standard called CSSML.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             0 => 'pear/XML_fo2pdf',
             1 => '0.98',
             2 => NULL,
             3 => 'Converts a xsl-fo file to pdf/ps/pcl/text/etc with the help of apache-fop',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             0 => 'pear/XML_HTMLSax',
             1 => '2.1.2',
             2 => NULL,
             3 => 'A SAX parser for HTML and other badly formed XML documents',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          5 => 
+          5 =>
           array (
             0 => 'pear/XML_image2svg',
             1 => '0.1',
             2 => NULL,
             3 => 'Image to SVG conversion',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          6 => 
+          6 =>
           array (
             0 => 'pear/XML_NITF',
             1 => '1.0.0',
             2 => NULL,
             3 => 'Parse NITF documents.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          7 => 
+          7 =>
           array (
             0 => 'pear/XML_Parser',
             1 => '1.2.1',
             2 => NULL,
             3 => 'XML parsing class based on PHP\\\'s bundled expat',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          8 => 
+          8 =>
           array (
             0 => 'pear/XML_RSS',
             1 => '0.9.2',
             2 => NULL,
             3 => 'RSS parser',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          9 => 
+          9 =>
           array (
             0 => 'pear/XML_SVG',
             1 => '0.0.3',
             2 => NULL,
             3 => 'XML_SVG API',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          10 => 
+          10 =>
           array (
             0 => 'pear/XML_Transformer',
             1 => '1.1.0',
             2 => NULL,
             3 => 'XML Transformations in PHP',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          11 => 
+          11 =>
           array (
             0 => 'pear/XML_Tree',
             1 => '1.1',
             2 => NULL,
             3 => 'Represent XML data in a tree structure',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          12 => 
+          12 =>
           array (
             0 => 'pear/XML_Util',
             1 => '1.1.0',
             2 => NULL,
             3 => 'XML utility class.',
-            4 => 
+            4 =>
             array (
             ),
           ),
-          13 => 
+          13 =>
           array (
             0 => 'pear/XML_Wddx',
             1 => '1.0.0',
             2 => NULL,
             3 => 'Wddx pretty serializer and deserializer',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Local' => 
+        'Local' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Archive_Zip',
             1 => '',
             2 => '1.0.0',
             3 => 'foo',
-            4 => 
+            4 =>
             array (
               array (
                 'type' => 'php',
@@ -7327,30 +7327,30 @@ $phpunit->assertEquals(array (
 ), $fakelog->getLog(), 'pear log');
 $e = $command->run('list-all', array('channel' => 'smoog'), array());
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'All packages [Channel smoog]:',
       'border' => true,
-      'headline' => 
+      'headline' =>
       array (
         0 => 'Package',
         1 => 'Latest',
         2 => 'Local',
       ),
       'channel' => 'smoog',
-      'data' => 
+      'data' =>
       array (
-        'Caching' => 
+        'Caching' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'smoog/APC',
             1 => '2.0.4',
             2 => NULL,
             3 => 'Alternative PHP Cache',
-            4 => 
+            4 =>
             array (
             ),
           ),
@@ -7363,13 +7363,13 @@ $phpunit->assertEquals(array (
 $phpunit->assertNoErrors('smoog');
 $e = $command->run('list-all', array('channel' => 'empty'), array());
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'All packages [Channel empty]:',
       'border' => true,
-      'headline' => 
+      'headline' =>
       array (
         0 => 'Package',
         1 => 'Latest',
