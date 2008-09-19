@@ -74,7 +74,7 @@
 // Darwin home-eden.local 7.5.0 Darwin Kernel Version 7.5.0: Thu Aug  5 19:26:16 PDT 2004; root:xnu/xnu-517.7.21.obj~3/RELEASE_PPC  Power Macintosh
 //
 // Mac OS X early versions
-// 
+//
 
 // }}}
 
@@ -128,16 +128,16 @@ class OS_Guess
         if ($uname === null) {
             $uname = php_uname();
         }
-        $parts = split('[[:space:]]+', trim($uname));
+        $parts = preg_split('/\s+/', trim($uname));
         $n = count($parts);
 
-        $release = $machine = $cpu = '';
-        $sysname = $parts[0];
+        $release  = $machine = $cpu = '';
+        $sysname  = $parts[0];
         $nodename = $parts[1];
-        $cpu = $parts[$n-1];
+        $cpu      = $parts[$n-1];
         $extra = '';
         if ($cpu == 'unknown') {
-            $cpu = $parts[$n-2];
+            $cpu = $parts[$n - 2];
         }
 
         switch ($sysname) {
@@ -341,4 +341,3 @@ class OS_Guess
  * c-basic-offset: 4
  * End:
  */
-?>
