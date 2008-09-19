@@ -16,1580 +16,1580 @@ $reg->updateChannel($chan);
 $chan = &$reg->getChannel('pecl.php.net');
 $chan->resetREST();
 $reg->updateChannel($chan);
-$pearweb->addXmlrpcConfig("pecl.php.net", "package.listLatestReleases", array (
+$pearweb->addRESTConfig("pecl.php.net", "package.listLatestReleases", array (
   0 => 'alpha',
 ), array (
 ));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.listLatestReleases", array (
+$pearweb->addRESTConfig("pear.php.net", "package.listLatestReleases", array (
   0 => 'alpha',
 ), array (
-  'Archive_Tar' => 
+  'Archive_Tar' =>
   array (
     'version' => '1.2',
     'state' => 'stable',
     'filesize' => 14792,
   ),
-  'Auth' => 
+  'Auth' =>
   array (
     'version' => '1.3.0r3',
     'state' => 'beta',
     'filesize' => 34636,
   ),
-  'Auth_HTTP' => 
+  'Auth_HTTP' =>
   array (
     'version' => '2.1.4',
     'state' => 'stable',
     'filesize' => 7835,
   ),
-  'Auth_PrefManager' => 
+  'Auth_PrefManager' =>
   array (
     'version' => '1.1.3',
     'state' => 'stable',
     'filesize' => 4729,
   ),
-  'Auth_PrefManager2' => 
+  'Auth_PrefManager2' =>
   array (
     'version' => '2.0.0dev1',
     'state' => 'alpha',
     'filesize' => 7987,
   ),
-  'Auth_RADIUS' => 
+  'Auth_RADIUS' =>
   array (
     'version' => '1.0.4',
     'state' => 'stable',
     'filesize' => 8232,
   ),
-  'Auth_SASL' => 
+  'Auth_SASL' =>
   array (
     'version' => '1.0.1',
     'state' => 'stable',
     'filesize' => 5293,
   ),
-  'Benchmark' => 
+  'Benchmark' =>
   array (
     'version' => '1.2.2',
     'state' => 'stable',
     'filesize' => 5966,
   ),
-  'Cache' => 
+  'Cache' =>
   array (
     'version' => '1.5.4',
     'state' => 'stable',
     'filesize' => 30690,
   ),
-  'Cache_Lite' => 
+  'Cache_Lite' =>
   array (
     'version' => '1.4.0',
     'state' => 'stable',
     'filesize' => 20046,
   ),
-  'Calendar' => 
+  'Calendar' =>
   array (
     'version' => '0.5.2',
     'state' => 'beta',
     'filesize' => 60164,
   ),
-  'Config' => 
+  'Config' =>
   array (
     'version' => '1.10.3',
     'state' => 'stable',
     'filesize' => 18349,
   ),
-  'Console_Color' => 
+  'Console_Color' =>
   array (
     'version' => '0.0.3',
     'state' => 'beta',
     'filesize' => 5394,
   ),
-  'Console_Getargs' => 
+  'Console_Getargs' =>
   array (
     'version' => '1.2.1',
     'state' => 'stable',
     'filesize' => 16199,
   ),
-  'Console_Getopt' => 
+  'Console_Getopt' =>
   array (
     'version' => '1.2',
     'state' => 'stable',
     'filesize' => 3370,
   ),
-  'Console_ProgressBar' => 
+  'Console_ProgressBar' =>
   array (
     'version' => '0.2',
     'state' => 'beta',
     'filesize' => 4271,
   ),
-  'Console_Table' => 
+  'Console_Table' =>
   array (
     'version' => '1.0.1',
     'state' => 'stable',
     'filesize' => 3319,
   ),
-  'Contact_Vcard_Build' => 
+  'Contact_Vcard_Build' =>
   array (
     'version' => '1.1',
     'state' => 'stable',
     'filesize' => 11747,
   ),
-  'Contact_Vcard_Parse' => 
+  'Contact_Vcard_Parse' =>
   array (
     'version' => '1.30',
     'state' => 'stable',
     'filesize' => 6814,
   ),
-  'Crypt_CBC' => 
+  'Crypt_CBC' =>
   array (
     'version' => '0.4',
     'state' => 'stable',
     'filesize' => 2938,
   ),
-  'Crypt_CHAP' => 
+  'Crypt_CHAP' =>
   array (
     'version' => '1.0.0',
     'state' => 'stable',
     'filesize' => 5437,
   ),
-  'Crypt_HMAC' => 
+  'Crypt_HMAC' =>
   array (
     'version' => '0.9',
     'state' => 'beta',
     'filesize' => 1721,
   ),
-  'Crypt_RC4' => 
+  'Crypt_RC4' =>
   array (
     'version' => '1.0.2',
     'state' => 'stable',
     'filesize' => 1850,
   ),
-  'Crypt_Xtea' => 
+  'Crypt_Xtea' =>
   array (
     'version' => '1.1.0RC4',
     'state' => 'beta',
     'filesize' => 9132,
   ),
-  'Date' => 
+  'Date' =>
   array (
     'version' => '1.4.3',
     'state' => 'stable',
     'filesize' => 42048,
   ),
-  'Date_Holidays' => 
+  'Date_Holidays' =>
   array (
     'version' => '0.12.0',
     'state' => 'alpha',
     'filesize' => 25984,
   ),
-  'DB' => 
+  'DB' =>
   array (
     'version' => '1.6.8',
     'state' => 'stable',
     'filesize' => 92460,
   ),
-  'DBA' => 
+  'DBA' =>
   array (
     'version' => '1.1',
     'state' => 'stable',
     'filesize' => 12578,
   ),
-  'DB_ado' => 
+  'DB_ado' =>
   array (
     'version' => '1.3',
     'state' => 'stable',
     'filesize' => 13686,
   ),
-  'DB_DataObject' => 
+  'DB_DataObject' =>
   array (
     'version' => '1.7.2',
     'state' => 'stable',
     'filesize' => 45244,
   ),
-  'DB_DataObject_FormBuilder' => 
+  'DB_DataObject_FormBuilder' =>
   array (
     'version' => '0.11.1',
     'state' => 'beta',
     'filesize' => 35494,
   ),
-  'DB_ldap' => 
+  'DB_ldap' =>
   array (
     'version' => '1.1.0',
     'state' => 'stable',
     'filesize' => 8245,
   ),
-  'DB_ldap2' => 
+  'DB_ldap2' =>
   array (
     'version' => '0.4',
     'state' => 'beta',
     'filesize' => 19260,
   ),
-  'DB_NestedSet' => 
+  'DB_NestedSet' =>
   array (
     'version' => '1.3.6',
     'state' => 'beta',
     'filesize' => 48291,
   ),
-  'DB_odbtp' => 
+  'DB_odbtp' =>
   array (
     'version' => '1.0.2',
     'state' => 'stable',
     'filesize' => 12871,
   ),
-  'DB_Pager' => 
+  'DB_Pager' =>
   array (
     'version' => '0.7',
     'state' => 'stable',
     'filesize' => 3447,
   ),
-  'DB_QueryTool' => 
+  'DB_QueryTool' =>
   array (
     'version' => '0.11.1',
     'state' => 'stable',
     'filesize' => 31614,
   ),
-  'DB_Sqlite_Tools' => 
+  'DB_Sqlite_Tools' =>
   array (
     'version' => '0.1.3',
     'state' => 'alpha',
     'filesize' => 17706,
   ),
-  'DB_Table' => 
+  'DB_Table' =>
   array (
     'version' => '0.23.0',
     'state' => 'beta',
     'filesize' => 28750,
   ),
-  'File' => 
+  'File' =>
   array (
     'version' => '1.1.0RC5',
     'state' => 'beta',
     'filesize' => 14739,
   ),
-  'File_Bittorrent' => 
+  'File_Bittorrent' =>
   array (
     'version' => '0.1.5',
     'state' => 'beta',
     'filesize' => 30784,
   ),
-  'File_DICOM' => 
+  'File_DICOM' =>
   array (
     'version' => '0.3',
     'state' => 'beta',
     'filesize' => 26759,
   ),
-  'File_Find' => 
+  'File_Find' =>
   array (
     'version' => '0.3.1',
     'state' => 'beta',
     'filesize' => 4759,
   ),
-  'File_Fstab' => 
+  'File_Fstab' =>
   array (
     'version' => '2.0.1',
     'state' => 'stable',
     'filesize' => 6275,
   ),
-  'File_Gettext' => 
+  'File_Gettext' =>
   array (
     'version' => '0.3.3',
     'state' => 'beta',
     'filesize' => 4864,
   ),
-  'File_HtAccess' => 
+  'File_HtAccess' =>
   array (
     'version' => '1.1.0',
     'state' => 'stable',
     'filesize' => 3020,
   ),
-  'File_IMC' => 
+  'File_IMC' =>
   array (
     'version' => '0.3',
     'state' => 'beta',
     'filesize' => 20369,
   ),
-  'File_Ogg' => 
+  'File_Ogg' =>
   array (
     'version' => '0.1.2',
     'state' => 'alpha',
     'filesize' => 8412,
   ),
-  'File_Passwd' => 
+  'File_Passwd' =>
   array (
     'version' => '1.1.2',
     'state' => 'stable',
     'filesize' => 23282,
   ),
-  'File_PDF' => 
+  'File_PDF' =>
   array (
     'version' => '0.0.1',
     'state' => 'beta',
     'filesize' => 25181,
   ),
-  'File_SearchReplace' => 
+  'File_SearchReplace' =>
   array (
     'version' => '1.0.1',
     'state' => 'stable',
     'filesize' => 3839,
   ),
-  'File_SMBPasswd' => 
+  'File_SMBPasswd' =>
   array (
     'version' => '1.0.1',
     'state' => 'stable',
     'filesize' => 4917,
   ),
-  'FSM' => 
+  'FSM' =>
   array (
     'version' => '1.2.2',
     'state' => 'stable',
     'filesize' => 5415,
   ),
-  'Games_Chess' => 
+  'Games_Chess' =>
   array (
     'version' => '0.8.1',
     'state' => 'alpha',
     'filesize' => 61245,
   ),
-  'Gtk_FileDrop' => 
+  'Gtk_FileDrop' =>
   array (
     'version' => '0.1.0',
     'state' => 'beta',
     'filesize' => 5678,
   ),
-  'Gtk_MDB_Designer' => 
+  'Gtk_MDB_Designer' =>
   array (
     'version' => '0.1',
     'state' => 'beta',
     'filesize' => 17775,
   ),
-  'Gtk_ScrollingLabel' => 
+  'Gtk_ScrollingLabel' =>
   array (
     'version' => '0.3.0beta1',
     'state' => 'beta',
     'filesize' => 8565,
   ),
-  'Gtk_Styled' => 
+  'Gtk_Styled' =>
   array (
     'version' => '0.9.0beta1',
     'state' => 'beta',
     'filesize' => 12946,
   ),
-  'Gtk_VarDump' => 
+  'Gtk_VarDump' =>
   array (
     'version' => '0.2.0',
     'state' => 'beta',
     'filesize' => 4759,
   ),
-  'HTML_BBCodeParser' => 
+  'HTML_BBCodeParser' =>
   array (
     'version' => '1.1',
     'state' => 'stable',
     'filesize' => 8821,
   ),
-  'HTML_Common' => 
+  'HTML_Common' =>
   array (
     'version' => '1.2.1',
     'state' => 'stable',
     'filesize' => 3637,
   ),
-  'HTML_Crypt' => 
+  'HTML_Crypt' =>
   array (
     'version' => '1.2.2',
     'state' => 'stable',
     'filesize' => 2620,
   ),
-  'HTML_CSS' => 
+  'HTML_CSS' =>
   array (
     'version' => '0.3.4',
     'state' => 'beta',
     'filesize' => 16249,
   ),
-  'HTML_Form' => 
+  'HTML_Form' =>
   array (
     'version' => '1.1.1',
     'state' => 'stable',
     'filesize' => 13550,
   ),
-  'HTML_Javascript' => 
+  'HTML_Javascript' =>
   array (
     'version' => '1.1.0',
     'state' => 'stable',
     'filesize' => 8362,
   ),
-  'HTML_Menu' => 
+  'HTML_Menu' =>
   array (
     'version' => '2.1.1',
     'state' => 'stable',
     'filesize' => 13106,
   ),
-  'HTML_Page' => 
+  'HTML_Page' =>
   array (
     'version' => '2.0.0RC2',
     'state' => 'beta',
     'filesize' => 10847,
   ),
-  'HTML_Page2' => 
+  'HTML_Page2' =>
   array (
     'version' => '0.5.0beta',
     'state' => 'beta',
     'filesize' => 15467,
   ),
-  'HTML_Progress' => 
+  'HTML_Progress' =>
   array (
     'version' => '1.2.0',
     'state' => 'stable',
     'filesize' => 359992,
   ),
-  'HTML_QuickForm' => 
+  'HTML_QuickForm' =>
   array (
     'version' => '3.2.4pl1',
     'state' => 'stable',
     'filesize' => 93144,
   ),
-  'HTML_QuickForm_Controller' => 
+  'HTML_QuickForm_Controller' =>
   array (
     'version' => '1.0.4',
     'state' => 'stable',
     'filesize' => 15631,
   ),
-  'HTML_QuickForm_SelectFilter' => 
+  'HTML_QuickForm_SelectFilter' =>
   array (
     'version' => '1.0.0RC1',
     'state' => 'beta',
     'filesize' => 2436,
   ),
-  'HTML_Select' => 
+  'HTML_Select' =>
   array (
     'version' => '1.2.1',
     'state' => 'beta',
     'filesize' => 3480,
   ),
-  'HTML_Select_Common' => 
+  'HTML_Select_Common' =>
   array (
     'version' => '1.1',
     'state' => 'stable',
     'filesize' => 5592,
   ),
-  'HTML_Table' => 
+  'HTML_Table' =>
   array (
     'version' => '1.5',
     'state' => 'stable',
     'filesize' => 6276,
   ),
-  'HTML_Table_Matrix' => 
+  'HTML_Table_Matrix' =>
   array (
     'version' => '1.0.6',
     'state' => 'stable',
     'filesize' => 5331,
   ),
-  'HTML_Template_Flexy' => 
+  'HTML_Template_Flexy' =>
   array (
     'version' => '1.2.1',
     'state' => 'stable',
     'filesize' => 117996,
   ),
-  'HTML_Template_IT' => 
+  'HTML_Template_IT' =>
   array (
     'version' => '1.1',
     'state' => 'stable',
     'filesize' => 18563,
   ),
-  'HTML_Template_PHPLIB' => 
+  'HTML_Template_PHPLIB' =>
   array (
     'version' => '1.3.1',
     'state' => 'stable',
     'filesize' => 6299,
   ),
-  'HTML_Template_Sigma' => 
+  'HTML_Template_Sigma' =>
   array (
     'version' => '1.1.2',
     'state' => 'stable',
     'filesize' => 26442,
   ),
-  'HTML_Template_Xipe' => 
+  'HTML_Template_Xipe' =>
   array (
     'version' => '1.7.6',
     'state' => 'stable',
     'filesize' => 56848,
   ),
-  'HTML_TreeMenu' => 
+  'HTML_TreeMenu' =>
   array (
     'version' => '1.1.9',
     'state' => 'stable',
     'filesize' => 49213,
   ),
-  'HTTP' => 
+  'HTTP' =>
   array (
     'version' => '1.3.3',
     'state' => 'stable',
     'filesize' => 4574,
   ),
-  'HTTP_Client' => 
+  'HTTP_Client' =>
   array (
     'version' => '1.0.0',
     'state' => 'stable',
     'filesize' => 6396,
   ),
-  'HTTP_Download' => 
+  'HTTP_Download' =>
   array (
     'version' => '1.0.0RC5',
     'state' => 'beta',
     'filesize' => 10431,
   ),
-  'HTTP_Header' => 
+  'HTTP_Header' =>
   array (
     'version' => '1.1.2RC1',
     'state' => 'beta',
     'filesize' => 9568,
   ),
-  'HTTP_Request' => 
+  'HTTP_Request' =>
   array (
     'version' => '1.2.4',
     'state' => 'stable',
     'filesize' => 13212,
   ),
-  'HTTP_Server' => 
+  'HTTP_Server' =>
   array (
     'version' => '0.4.0',
     'state' => 'alpha',
     'filesize' => 6884,
   ),
-  'HTTP_Session' => 
+  'HTTP_Session' =>
   array (
     'version' => '0.4',
     'state' => 'beta',
     'filesize' => 8587,
   ),
-  'HTTP_SessionServer' => 
+  'HTTP_SessionServer' =>
   array (
     'version' => '0.4.0',
     'state' => 'alpha',
     'filesize' => 8278,
   ),
-  'HTTP_Upload' => 
+  'HTTP_Upload' =>
   array (
     'version' => '0.9.1',
     'state' => 'stable',
     'filesize' => 9460,
   ),
-  'HTTP_WebDAV_Client' => 
+  'HTTP_WebDAV_Client' =>
   array (
     'version' => '0.9.7',
     'state' => 'beta',
     'filesize' => 7504,
   ),
-  'HTTP_WebDAV_Server' => 
+  'HTTP_WebDAV_Server' =>
   array (
     'version' => '0.99.1',
     'state' => 'beta',
     'filesize' => 24646,
   ),
-  'I18N' => 
+  'I18N' =>
   array (
     'version' => '0.8.6',
     'state' => 'beta',
     'filesize' => 33383,
   ),
-  'I18Nv2' => 
+  'I18Nv2' =>
   array (
     'version' => '0.11.0',
     'state' => 'beta',
     'filesize' => 313762,
   ),
-  'I18N_UnicodeString' => 
+  'I18N_UnicodeString' =>
   array (
     'version' => '0.1.0',
     'state' => 'beta',
     'filesize' => 5433,
   ),
-  'Image_Barcode' => 
+  'Image_Barcode' =>
   array (
     'version' => '0.5',
     'state' => 'stable',
     'filesize' => 7530,
   ),
-  'Image_Color' => 
+  'Image_Color' =>
   array (
     'version' => '1.0.1',
     'state' => 'stable',
     'filesize' => 7718,
   ),
-  'Image_GIS' => 
+  'Image_GIS' =>
   array (
     'version' => '1.1.1',
     'state' => 'stable',
     'filesize' => 5915,
   ),
-  'Image_Graph' => 
+  'Image_Graph' =>
   array (
     'version' => '0.2.1',
     'state' => 'alpha',
     'filesize' => 35948,
   ),
-  'Image_GraphViz' => 
+  'Image_GraphViz' =>
   array (
     'version' => '1.1.0',
     'state' => 'stable',
     'filesize' => 4452,
   ),
-  'Image_IPTC' => 
+  'Image_IPTC' =>
   array (
     'version' => '1.0.2',
     'state' => 'stable',
     'filesize' => 3530,
   ),
-  'Image_Remote' => 
+  'Image_Remote' =>
   array (
     'version' => '1.0',
     'state' => 'beta',
     'filesize' => 4764,
   ),
-  'Image_Text' => 
+  'Image_Text' =>
   array (
     'version' => '0.5.2beta2',
     'state' => 'beta',
     'filesize' => 12603,
   ),
-  'Image_Tools' => 
+  'Image_Tools' =>
   array (
     'version' => '0.2',
     'state' => 'alpha',
     'filesize' => 3468,
   ),
-  'Image_Transform' => 
+  'Image_Transform' =>
   array (
     'version' => '0.8',
     'state' => 'alpha',
     'filesize' => 16087,
   ),
-  'Inline_C' => 
+  'Inline_C' =>
   array (
     'version' => '0.1',
     'state' => 'alpha',
     'filesize' => 4349,
   ),
-  'LiveUser' => 
+  'LiveUser' =>
   array (
     'version' => '0.14.0',
     'state' => 'beta',
     'filesize' => 64484,
   ),
-  'LiveUser_Admin' => 
+  'LiveUser_Admin' =>
   array (
     'version' => '0.1.0',
     'state' => 'beta',
     'filesize' => 35391,
   ),
-  'Log' => 
+  'Log' =>
   array (
     'version' => '1.8.7',
     'state' => 'stable',
     'filesize' => 32693,
   ),
-  'Mail' => 
+  'Mail' =>
   array (
     'version' => '1.1.4',
     'state' => 'stable',
     'filesize' => 14548,
   ),
-  'Mail_IMAP' => 
+  'Mail_IMAP' =>
   array (
     'version' => '1.1.0RC2',
     'state' => 'beta',
     'filesize' => 23618,
   ),
-  'Mail_Mbox' => 
+  'Mail_Mbox' =>
   array (
     'version' => '0.3.0',
     'state' => 'beta',
     'filesize' => 5798,
   ),
-  'Mail_Mime' => 
+  'Mail_Mime' =>
   array (
     'version' => '1.2.1',
     'state' => 'stable',
     'filesize' => 15268,
   ),
-  'Mail_Queue' => 
+  'Mail_Queue' =>
   array (
     'version' => '1.1.3',
     'state' => 'stable',
     'filesize' => 14721,
   ),
-  'Math_Basex' => 
+  'Math_Basex' =>
   array (
     'version' => '0.3',
     'state' => 'stable',
     'filesize' => 5243,
   ),
-  'Math_BinaryUtils' => 
+  'Math_BinaryUtils' =>
   array (
     'version' => '0.2.0',
     'state' => 'alpha',
     'filesize' => 5966,
   ),
-  'Math_Complex' => 
+  'Math_Complex' =>
   array (
     'version' => '0.8.5',
     'state' => 'beta',
     'filesize' => 40930,
   ),
-  'Math_Fibonacci' => 
+  'Math_Fibonacci' =>
   array (
     'version' => '0.8',
     'state' => 'stable',
     'filesize' => 22101,
   ),
-  'Math_Fraction' => 
+  'Math_Fraction' =>
   array (
     'version' => '0.3.0',
     'state' => 'alpha',
     'filesize' => 3347,
   ),
-  'Math_Histogram' => 
+  'Math_Histogram' =>
   array (
     'version' => '0.9.0',
     'state' => 'beta',
     'filesize' => 10754,
   ),
-  'Math_Integer' => 
+  'Math_Integer' =>
   array (
     'version' => '0.8',
     'state' => 'stable',
     'filesize' => 3952,
   ),
-  'Math_Matrix' => 
+  'Math_Matrix' =>
   array (
     'version' => '0.8.5',
     'state' => 'beta',
     'filesize' => 14485,
   ),
-  'Math_Numerical_RootFinding' => 
+  'Math_Numerical_RootFinding' =>
   array (
     'version' => '0.3.0',
     'state' => 'alpha',
     'filesize' => 10377,
   ),
-  'Math_Quaternion' => 
+  'Math_Quaternion' =>
   array (
     'version' => '0.7.1',
     'state' => 'beta',
     'filesize' => 6340,
   ),
-  'Math_RPN' => 
+  'Math_RPN' =>
   array (
     'version' => '1.1.1',
     'state' => 'stable',
     'filesize' => 5139,
   ),
-  'Math_Stats' => 
+  'Math_Stats' =>
   array (
     'version' => '0.9.0beta3',
     'state' => 'beta',
     'filesize' => 19917,
   ),
-  'Math_TrigOp' => 
+  'Math_TrigOp' =>
   array (
     'version' => '1.0',
     'state' => 'stable',
     'filesize' => 1613,
   ),
-  'Math_Vector' => 
+  'Math_Vector' =>
   array (
     'version' => '0.6.2',
     'state' => 'beta',
     'filesize' => 8768,
   ),
-  'MDB' => 
+  'MDB' =>
   array (
     'version' => '1.3.0',
     'state' => 'stable',
     'filesize' => 218957,
   ),
-  'MDB2' => 
+  'MDB2' =>
   array (
     'version' => '2.0.0beta2',
     'state' => 'beta',
     'filesize' => 176377,
   ),
-  'MDB_QueryTool' => 
+  'MDB_QueryTool' =>
   array (
     'version' => '0.11.1',
     'state' => 'stable',
     'filesize' => 31778,
   ),
-  'Message' => 
+  'Message' =>
   array (
     'version' => '0.6',
     'state' => 'beta',
     'filesize' => 12793,
   ),
-  'MIME_Type' => 
+  'MIME_Type' =>
   array (
     'version' => '1.0.0',
     'state' => 'stable',
     'filesize' => 4404,
   ),
-  'MP3_ID' => 
+  'MP3_ID' =>
   array (
     'version' => '1.1.3',
     'state' => 'stable',
     'filesize' => 7719,
   ),
-  'Net_CheckIP' => 
+  'Net_CheckIP' =>
   array (
     'version' => '1.1',
     'state' => 'stable',
     'filesize' => 1385,
   ),
-  'Net_Curl' => 
+  'Net_Curl' =>
   array (
     'version' => '1.0.1beta',
     'state' => 'beta',
     'filesize' => 3336,
   ),
-  'Net_Cyrus' => 
+  'Net_Cyrus' =>
   array (
     'version' => '0.3.1',
     'state' => 'beta',
     'filesize' => 5164,
   ),
-  'Net_Dict' => 
+  'Net_Dict' =>
   array (
     'version' => '1.0.3',
     'state' => 'stable',
     'filesize' => 5441,
   ),
-  'Net_Dig' => 
+  'Net_Dig' =>
   array (
     'version' => '0.1',
     'state' => 'stable',
     'filesize' => 3046,
   ),
-  'Net_DIME' => 
+  'Net_DIME' =>
   array (
     'version' => '0.3',
     'state' => 'beta',
     'filesize' => 6740,
   ),
-  'Net_DNS' => 
+  'Net_DNS' =>
   array (
     'version' => '1.00b2',
     'state' => 'beta',
     'filesize' => 25981,
   ),
-  'Net_DNSBL' => 
+  'Net_DNSBL' =>
   array (
     'version' => '1.0.0',
     'state' => 'stable',
     'filesize' => 4196,
   ),
-  'Net_Finger' => 
+  'Net_Finger' =>
   array (
     'version' => '1.0.0',
     'state' => 'stable',
     'filesize' => 1401,
   ),
-  'Net_FTP' => 
+  'Net_FTP' =>
   array (
     'version' => '1.3.0RC2',
     'state' => 'beta',
     'filesize' => 19442,
   ),
-  'Net_GameServerQuery' => 
+  'Net_GameServerQuery' =>
   array (
     'version' => '0.2.0',
     'state' => 'alpha',
     'filesize' => 15175,
   ),
-  'Net_Geo' => 
+  'Net_Geo' =>
   array (
     'version' => '1.0',
     'state' => 'stable',
     'filesize' => 6345,
   ),
-  'Net_HL7' => 
+  'Net_HL7' =>
   array (
     'version' => '0.1.0',
     'state' => 'alpha',
     'filesize' => 13228,
   ),
-  'Net_Ident' => 
+  'Net_Ident' =>
   array (
     'version' => '1.0',
     'state' => 'stable',
     'filesize' => 3183,
   ),
-  'Net_IDNA' => 
+  'Net_IDNA' =>
   array (
     'version' => '0.5.0',
     'state' => 'beta',
     'filesize' => 41534,
   ),
-  'Net_IMAP' => 
+  'Net_IMAP' =>
   array (
     'version' => '1.0.3',
     'state' => 'stable',
     'filesize' => 27192,
   ),
-  'Net_IPv4' => 
+  'Net_IPv4' =>
   array (
     'version' => '1.2',
     'state' => 'stable',
     'filesize' => 4187,
   ),
-  'Net_IPv6' => 
+  'Net_IPv6' =>
   array (
     'version' => '1.0.1',
     'state' => 'stable',
     'filesize' => 2534,
   ),
-  'Net_IRC' => 
+  'Net_IRC' =>
   array (
     'version' => '0.0.7',
     'state' => 'beta',
     'filesize' => 92503,
   ),
-  'Net_LDAP' => 
+  'Net_LDAP' =>
   array (
     'version' => '0.6.5',
     'state' => 'beta',
     'filesize' => 30302,
   ),
-  'Net_LMTP' => 
+  'Net_LMTP' =>
   array (
     'version' => '1.0.1',
     'state' => 'stable',
     'filesize' => 5596,
   ),
-  'Net_Monitor' => 
+  'Net_Monitor' =>
   array (
     'version' => '0.1.0',
     'state' => 'beta',
     'filesize' => 11222,
   ),
-  'Net_NNTP' => 
+  'Net_NNTP' =>
   array (
     'version' => '1.2.0',
     'state' => 'alpha',
     'filesize' => 19804,
   ),
-  'Net_Ping' => 
+  'Net_Ping' =>
   array (
     'version' => '2.4',
     'state' => 'stable',
     'filesize' => 8408,
   ),
-  'Net_POP3' => 
+  'Net_POP3' =>
   array (
     'version' => '1.3.5',
     'state' => 'stable',
     'filesize' => 9931,
   ),
-  'Net_Portscan' => 
+  'Net_Portscan' =>
   array (
     'version' => '1.0.2',
     'state' => 'stable',
     'filesize' => 2553,
   ),
-  'Net_Server' => 
+  'Net_Server' =>
   array (
     'version' => '0.12.0',
     'state' => 'alpha',
     'filesize' => 9226,
   ),
-  'Net_Sieve' => 
+  'Net_Sieve' =>
   array (
     'version' => '1.1.1',
     'state' => 'stable',
     'filesize' => 9750,
   ),
-  'Net_SmartIRC' => 
+  'Net_SmartIRC' =>
   array (
     'version' => '0.5.5p1',
     'state' => 'stable',
     'filesize' => 186781,
   ),
-  'Net_SMS' => 
+  'Net_SMS' =>
   array (
     'version' => '0.0.1',
     'state' => 'beta',
     'filesize' => 9866,
   ),
-  'Net_SMTP' => 
+  'Net_SMTP' =>
   array (
     'version' => '1.2.6',
     'state' => 'stable',
     'filesize' => 9106,
   ),
-  'Net_Socket' => 
+  'Net_Socket' =>
   array (
     'version' => '1.0.5',
     'state' => 'stable',
     'filesize' => 4208,
   ),
-  'Net_Traceroute' => 
+  'Net_Traceroute' =>
   array (
     'version' => '0.21',
     'state' => 'alpha',
     'filesize' => 4987,
   ),
-  'Net_URL' => 
+  'Net_URL' =>
   array (
     'version' => '1.0.14',
     'state' => 'stable',
     'filesize' => 5173,
   ),
-  'Net_UserAgent_Detect' => 
+  'Net_UserAgent_Detect' =>
   array (
     'version' => '2.0.1',
     'state' => 'stable',
     'filesize' => 8230,
   ),
-  'Net_UserAgent_Mobile' => 
+  'Net_UserAgent_Mobile' =>
   array (
     'version' => '0.22.0',
     'state' => 'beta',
     'filesize' => 27873,
   ),
-  'Net_Whois' => 
+  'Net_Whois' =>
   array (
     'version' => '1.0',
     'state' => 'stable',
     'filesize' => 2921,
   ),
-  'Numbers_Roman' => 
+  'Numbers_Roman' =>
   array (
     'version' => '1.0.1',
     'state' => 'beta',
     'filesize' => 3778,
   ),
-  'Numbers_Words' => 
+  'Numbers_Words' =>
   array (
     'version' => '0.12.0',
     'state' => 'beta',
     'filesize' => 40815,
   ),
-  'OLE' => 
+  'OLE' =>
   array (
     'version' => '0.5',
     'state' => 'beta',
     'filesize' => 9058,
   ),
-  'Pager' => 
+  'Pager' =>
   array (
     'version' => '2.2.6',
     'state' => 'stable',
     'filesize' => 20103,
   ),
-  'Pager_Sliding' => 
+  'Pager_Sliding' =>
   array (
     'version' => '1.6',
     'state' => 'stable',
     'filesize' => 10419,
   ),
-  'Payment_Clieop' => 
+  'Payment_Clieop' =>
   array (
     'version' => '0.1.1',
     'state' => 'stable',
     'filesize' => 5884,
   ),
-  'Payment_DTA' => 
+  'Payment_DTA' =>
   array (
     'version' => '1.2.0',
     'state' => 'stable',
     'filesize' => 11211,
   ),
-  'Payment_Process' => 
+  'Payment_Process' =>
   array (
     'version' => '0.5.8',
     'state' => 'beta',
     'filesize' => 24136,
   ),
-  'PEAR' => 
+  'PEAR' =>
   array (
     'version' => '1.3.4',
     'state' => 'stable',
     'filesize' => 107207,
   ),
-  'PEAR_Frontend_Gtk' => 
+  'PEAR_Frontend_Gtk' =>
   array (
     'version' => '0.3',
     'state' => 'beta',
     'filesize' => 70008,
   ),
-  'PEAR_Frontend_Web' => 
+  'PEAR_Frontend_Web' =>
   array (
     'version' => '0.4',
     'state' => 'beta',
     'filesize' => 32386,
   ),
-  'PEAR_Info' => 
+  'PEAR_Info' =>
   array (
     'version' => '1.6.0',
     'state' => 'stable',
     'filesize' => 6564,
   ),
-  'PEAR_PackageFileManager' => 
+  'PEAR_PackageFileManager' =>
   array (
     'version' => '1.2.1',
     'state' => 'stable',
     'filesize' => 38907,
   ),
-  'PHPDoc' => 
+  'PHPDoc' =>
   array (
     'version' => '0.1.0',
     'state' => 'beta',
     'filesize' => 88108,
   ),
-  'PhpDocumentor' => 
+  'PhpDocumentor' =>
   array (
     'version' => '1.3.0RC3',
     'state' => 'beta',
     'filesize' => 2711672,
   ),
-  'PHPUnit' => 
+  'PHPUnit' =>
   array (
     'version' => '1.2.2',
     'state' => 'stable',
     'filesize' => 21058,
   ),
-  'PHPUnit2' => 
+  'PHPUnit2' =>
   array (
     'version' => '2.2.0beta4',
     'state' => 'beta',
     'filesize' => 38776,
   ),
-  'PHP_Beautifier' => 
+  'PHP_Beautifier' =>
   array (
     'version' => '0.1.2',
     'state' => 'beta',
     'filesize' => 40424,
   ),
-  'PHP_Compat' => 
+  'PHP_Compat' =>
   array (
     'version' => '1.3.1',
     'state' => 'stable',
     'filesize' => 34720,
   ),
-  'PHP_CompatInfo' => 
+  'PHP_CompatInfo' =>
   array (
     'version' => '1.0.0RC3',
     'state' => 'beta',
     'filesize' => 94804,
   ),
-  'PHP_Fork' => 
+  'PHP_Fork' =>
   array (
     'version' => '0.2.0',
     'state' => 'beta',
     'filesize' => 10796,
   ),
-  'RDF' => 
+  'RDF' =>
   array (
     'version' => '0.1.0alpha1',
     'state' => 'alpha',
     'filesize' => 56104,
   ),
-  'RDF_N3' => 
+  'RDF_N3' =>
   array (
     'version' => '0.1.0alpha1',
     'state' => 'alpha',
     'filesize' => 21216,
   ),
-  'RDF_NTriple' => 
+  'RDF_NTriple' =>
   array (
     'version' => '0.1.0alpha1',
     'state' => 'alpha',
     'filesize' => 1719,
   ),
-  'RDF_RDQL' => 
+  'RDF_RDQL' =>
   array (
     'version' => '0.1.0alpha1',
     'state' => 'alpha',
     'filesize' => 29102,
   ),
-  'Science_Chemistry' => 
+  'Science_Chemistry' =>
   array (
     'version' => '1.1.0',
     'state' => 'stable',
     'filesize' => 85881,
   ),
-  'Search_Mnogosearch' => 
+  'Search_Mnogosearch' =>
   array (
     'version' => '0.1.0',
     'state' => 'alpha',
     'filesize' => 18186,
   ),
-  'Services_Amazon' => 
+  'Services_Amazon' =>
   array (
     'version' => '0.2.0',
     'state' => 'beta',
     'filesize' => 8086,
   ),
-  'Services_Delicious' => 
+  'Services_Delicious' =>
   array (
     'version' => '0.2.0beta',
     'state' => 'beta',
     'filesize' => 5336,
   ),
-  'Services_Ebay' => 
+  'Services_Ebay' =>
   array (
     'version' => '0.11.0',
     'state' => 'alpha',
     'filesize' => 82855,
   ),
-  'Services_ExchangeRates' => 
+  'Services_ExchangeRates' =>
   array (
     'version' => '0.5.0',
     'state' => 'beta',
     'filesize' => 9342,
   ),
-  'Services_Google' => 
+  'Services_Google' =>
   array (
     'version' => '0.1.1',
     'state' => 'alpha',
     'filesize' => 2886,
   ),
-  'Services_Weather' => 
+  'Services_Weather' =>
   array (
     'version' => '1.3.1',
     'state' => 'stable',
     'filesize' => 44818,
   ),
-  'SOAP' => 
+  'SOAP' =>
   array (
     'version' => '0.8.1',
     'state' => 'beta',
     'filesize' => 69177,
   ),
-  'SOAP_Interop' => 
+  'SOAP_Interop' =>
   array (
     'version' => '0.8',
     'state' => 'beta',
     'filesize' => 32097,
   ),
-  'Spreadsheet_Excel_Writer' => 
+  'Spreadsheet_Excel_Writer' =>
   array (
     'version' => '0.8',
     'state' => 'beta',
     'filesize' => 55402,
   ),
-  'Stream_SHM' => 
+  'Stream_SHM' =>
   array (
     'version' => '1.0.0',
     'state' => 'stable',
     'filesize' => 2579,
   ),
-  'Stream_Var' => 
+  'Stream_Var' =>
   array (
     'version' => '1.0.0',
     'state' => 'stable',
     'filesize' => 4919,
   ),
-  'Structures_DataGrid' => 
+  'Structures_DataGrid' =>
   array (
     'version' => '0.6.2',
     'state' => 'beta',
     'filesize' => 25297,
   ),
-  'Structures_Graph' => 
+  'Structures_Graph' =>
   array (
     'version' => '1.0.1',
     'state' => 'stable',
     'filesize' => 7060,
   ),
-  'System_Command' => 
+  'System_Command' =>
   array (
     'version' => '1.0.1',
     'state' => 'stable',
     'filesize' => 5324,
   ),
-  'System_Mount' => 
+  'System_Mount' =>
   array (
     'version' => '1.0.0',
     'state' => 'stable',
     'filesize' => 3264,
   ),
-  'System_ProcWatch' => 
+  'System_ProcWatch' =>
   array (
     'version' => '0.4.2',
     'state' => 'beta',
     'filesize' => 12757,
   ),
-  'System_Socket' => 
+  'System_Socket' =>
   array (
     'version' => '0.4.1',
     'state' => 'alpha',
     'filesize' => 13097,
   ),
-  'Text_CAPTCHA' => 
+  'Text_CAPTCHA' =>
   array (
     'version' => '0.1.2',
     'state' => 'alpha',
     'filesize' => 3827,
   ),
-  'Text_Diff' => 
+  'Text_Diff' =>
   array (
     'version' => '0.0.4',
     'state' => 'beta',
     'filesize' => 11566,
   ),
-  'Text_Figlet' => 
+  'Text_Figlet' =>
   array (
     'version' => '0.8.0',
     'state' => 'beta',
     'filesize' => 22756,
   ),
-  'Text_Highlighter' => 
+  'Text_Highlighter' =>
   array (
     'version' => '0.6.2',
     'state' => 'beta',
     'filesize' => 55103,
   ),
-  'Text_Huffman' => 
+  'Text_Huffman' =>
   array (
     'version' => '0.2.0',
     'state' => 'beta',
     'filesize' => 10561,
   ),
-  'Text_Password' => 
+  'Text_Password' =>
   array (
     'version' => '1.0',
     'state' => 'stable',
     'filesize' => 3707,
   ),
-  'Text_Statistics' => 
+  'Text_Statistics' =>
   array (
     'version' => '1.0',
     'state' => 'stable',
     'filesize' => 3949,
   ),
-  'Text_TeXHyphen' => 
+  'Text_TeXHyphen' =>
   array (
     'version' => '0.1.0',
     'state' => 'alpha',
     'filesize' => 148654,
   ),
-  'Text_Wiki' => 
+  'Text_Wiki' =>
   array (
     'version' => '0.25.0',
     'state' => 'beta',
     'filesize' => 46425,
   ),
-  'Translation' => 
+  'Translation' =>
   array (
     'version' => '1.2.6pl1',
     'state' => 'stable',
     'filesize' => 16252,
   ),
-  'Translation2' => 
+  'Translation2' =>
   array (
     'version' => '2.0.0beta6',
     'state' => 'beta',
     'filesize' => 47192,
   ),
-  'Tree' => 
+  'Tree' =>
   array (
     'version' => '0.2.4',
     'state' => 'beta',
     'filesize' => 48824,
   ),
-  'UDDI' => 
+  'UDDI' =>
   array (
     'version' => '0.2.0alpha4',
     'state' => 'alpha',
     'filesize' => 6492,
   ),
-  'Validate' => 
+  'Validate' =>
   array (
     'version' => '0.4.1',
     'state' => 'alpha',
     'filesize' => 37615,
   ),
-  'Var_Dump' => 
+  'Var_Dump' =>
   array (
     'version' => '1.0.1',
     'state' => 'stable',
     'filesize' => 14843,
   ),
-  'VersionControl_SVN' => 
+  'VersionControl_SVN' =>
   array (
     'version' => '0.3.0alpha1',
     'state' => 'alpha',
     'filesize' => 33829,
   ),
-  'VFS' => 
+  'VFS' =>
   array (
     'version' => '0.0.4',
     'state' => 'beta',
     'filesize' => 21675,
   ),
-  'XML_Beautifier' => 
+  'XML_Beautifier' =>
   array (
     'version' => '1.1',
     'state' => 'stable',
     'filesize' => 9854,
   ),
-  'XML_CSSML' => 
+  'XML_CSSML' =>
   array (
     'version' => '1.1',
     'state' => 'stable',
     'filesize' => 10002,
   ),
-  'XML_DTD' => 
+  'XML_DTD' =>
   array (
     'version' => '0.4.2',
     'state' => 'alpha',
     'filesize' => 33790,
   ),
-  'XML_FastCreate' => 
+  'XML_FastCreate' =>
   array (
     'version' => '0.9',
     'state' => 'beta',
     'filesize' => 51853,
   ),
-  'XML_fo2pdf' => 
+  'XML_fo2pdf' =>
   array (
     'version' => '0.98',
     'state' => 'stable',
     'filesize' => 6267,
   ),
-  'XML_FOAF' => 
+  'XML_FOAF' =>
   array (
     'version' => '0.2',
     'state' => 'alpha',
     'filesize' => 136793,
   ),
-  'XML_HTMLSax' => 
+  'XML_HTMLSax' =>
   array (
     'version' => '2.1.2',
     'state' => 'stable',
     'filesize' => 16099,
   ),
-  'XML_HTMLSax3' => 
+  'XML_HTMLSax3' =>
   array (
     'version' => '3.0.0RC1',
     'state' => 'beta',
     'filesize' => 19267,
   ),
-  'XML_image2svg' => 
+  'XML_image2svg' =>
   array (
     'version' => '0.1',
     'state' => 'stable',
     'filesize' => 25805,
   ),
-  'XML_Indexing' => 
+  'XML_Indexing' =>
   array (
     'version' => '0.3.5',
     'state' => 'alpha',
     'filesize' => 10936,
   ),
-  'XML_MXML' => 
+  'XML_MXML' =>
   array (
     'version' => '0.3.0',
     'state' => 'alpha',
     'filesize' => 32178,
   ),
-  'XML_NITF' => 
+  'XML_NITF' =>
   array (
     'version' => '1.0.1',
     'state' => 'stable',
     'filesize' => 6056,
   ),
-  'XML_Parser' => 
+  'XML_Parser' =>
   array (
     'version' => '1.2.4',
     'state' => 'stable',
     'filesize' => 10858,
   ),
-  'XML_RDDL' => 
+  'XML_RDDL' =>
   array (
     'version' => '0.9',
     'state' => 'beta',
     'filesize' => 4424,
   ),
-  'XML_RPC' => 
+  'XML_RPC' =>
   array (
     'version' => '1.2.0RC6',
     'state' => 'beta',
     'filesize' => 18691,
   ),
-  'XML_RSS' => 
+  'XML_RSS' =>
   array (
     'version' => '0.9.2',
     'state' => 'stable',
     'filesize' => 3515,
   ),
-  'XML_SaxFilters' => 
+  'XML_SaxFilters' =>
   array (
     'version' => '0.3.0',
     'state' => 'beta',
     'filesize' => 25577,
   ),
-  'XML_Serializer' => 
+  'XML_Serializer' =>
   array (
     'version' => '0.14.1',
     'state' => 'beta',
     'filesize' => 16460,
   ),
-  'XML_sql2xml' => 
+  'XML_sql2xml' =>
   array (
     'version' => '0.3.2',
     'state' => 'beta',
     'filesize' => 18646,
   ),
-  'XML_Statistics' => 
+  'XML_Statistics' =>
   array (
     'version' => '0.1',
     'state' => 'beta',
     'filesize' => 10893,
   ),
-  'XML_SVG' => 
+  'XML_SVG' =>
   array (
     'version' => '0.0.3',
     'state' => 'stable',
     'filesize' => 4643,
   ),
-  'XML_svg2image' => 
+  'XML_svg2image' =>
   array (
     'version' => '0.1',
     'state' => 'beta',
     'filesize' => 7436,
   ),
-  'XML_Transformer' => 
+  'XML_Transformer' =>
   array (
     'version' => '1.1.0',
     'state' => 'stable',
     'filesize' => 29877,
   ),
-  'XML_Tree' => 
+  'XML_Tree' =>
   array (
     'version' => '2.0.0RC2',
     'state' => 'beta',
     'filesize' => 8827,
   ),
-  'XML_Util' => 
+  'XML_Util' =>
   array (
     'version' => '1.1.1',
     'state' => 'stable',
     'filesize' => 8358,
   ),
-  'XML_Wddx' => 
+  'XML_Wddx' =>
   array (
     'version' => '1.0.0',
     'state' => 'stable',
     'filesize' => 3915,
   ),
-  'XML_XPath' => 
+  'XML_XPath' =>
   array (
     'version' => '1.2',
     'state' => 'beta',
     'filesize' => 17826,
   ),
-  'XML_XSLT_Wrapper' => 
+  'XML_XSLT_Wrapper' =>
   array (
     'version' => '0.2.1',
     'state' => 'alpha',
     'filesize' => 16284,
   ),
-  'XML_XUL' => 
+  'XML_XUL' =>
   array (
     'version' => '0.8.1',
     'state' => 'alpha',
@@ -1597,8 +1597,8 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.listLatestReleases", array (
   ),
 ));
 $pearweb->addHtmlConfig('http://pear.php.net/get/file-1.1.0RC5.tgz', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'File-1.1.0RC5.tgz');
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+$pearweb->addRESTConfig("pear.php.net", "package.getDownloadURL", array (
+  0 =>
   array (
     'package' => 'file',
     'channel' => 'pear.php.net',
@@ -1610,7 +1610,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="1.4.0a1">
- <name>File</name>       
+ <name>File</name>
  <summary>Common file and directory routines</summary>
  <description>Provides easy access to read/write to files along with
 some common routines to deal with paths. Also provides
@@ -1730,12 +1730,12 @@ interface for handling CSV files.
     <state>beta</state>
     <notes>* added File_Util containing all methods not handling file I/O (mike)
 * deprecated methods are now available in File_Util (still in File for BC) (mike)
-* fixed bug #2827 (File_CSV::discoverFormat() is unable to discover format in 
-  one column CSV file), allows 1 field per line in discoverFormat as well as 
-  the config overall, with no separator (which is the standard), removed 
-  one error check to fix this issue as well as moving error checking around 
-  in _conf, might give some people issues (can\'t see how tho), also added a 
-  new param to discoverFormat so one can inject a check for $ as a separator 
+* fixed bug #2827 (File_CSV::discoverFormat() is unable to discover format in
+  one column CSV file), allows 1 field per line in discoverFormat as well as
+  the config overall, with no separator (which is the standard), removed
+  one error check to fix this issue as well as moving error checking around
+  in _conf, might give some people issues (can\'t see how tho), also added a
+  new param to discoverFormat so one can inject a check for $ as a separator
   or something like that (dufuz)
     </notes>
    </release>
@@ -1803,8 +1803,8 @@ interface for handling CSV files.
 ',
   'url' => 'http://pear.php.net/get/File-1.1.0RC5',
 ));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+$pearweb->addRESTConfig("pear.php.net", "package.getDownloadURL", array (
+  0 =>
   array (
     'package' => 'net_sieve',
     'channel' => 'pear.php.net',
@@ -1937,8 +1937,8 @@ it affects you or disable DIGEST-MD5
   'url' => 'http://pear.php.net/get/Net_Sieve-1.1.1',
 ));
 $pearweb->addHtmlConfig('http://pear.php.net/get/Net_Sieve-1.1.1.tgz', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'Net_Sieve-1.1.1.tgz');
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+$pearweb->addRESTConfig("pear.php.net", "package.getDownloadURL", array (
+  0 =>
   array (
     'package' => 'text_highlighter',
     'channel' => 'pear.php.net',
@@ -1954,14 +1954,14 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   <summary>Syntax highlighting</summary>
   <description>Text_Highlighter is a package for syntax highlighting.
 
-It provides a base class provining all the functionality, 
+It provides a base class provining all the functionality,
 and a descendent classes geneator class.
 
 The main idea is to simplify creation of subclasses
 implementing syntax highlighting for particular language.
 Subclasses do not implement any new functioanality,
 they just provide syntax highlighting rules.
-The rules sources are in XML format. 
+The rules sources are in XML format.
 
 To create a highlighter for a language, there is no need
 to code a new class manually. Simply describe the rules
@@ -2184,8 +2184,8 @@ a new class.</description>
   'url' => 'http://pear.php.net/get/Text_Highlighter-0.6.2',
 ));
 $pearweb->addHtmlConfig('http://pear.php.net/get/Text_Highlighter-0.6.2.tgz', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'Text_Highlighter-0.6.2.tgz');
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+$pearweb->addRESTConfig("pear.php.net", "package.getDownloadURL", array (
+  0 =>
   array (
     'package' => 'text_wiki',
     'channel' => 'pear.php.net',
@@ -2369,8 +2369,8 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   'url' => 'http://pear.php.net/get/Text_Wiki-0.25.0',
 ));
 $pearweb->addHtmlConfig('http://pear.php.net/get/Text_Wiki-0.25.0.tgz', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'Text_Wiki-0.25.0.tgz');
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+$pearweb->addRESTConfig("pear.php.net", "package.getDownloadURL", array (
+  0 =>
   array (
     'package' => 'xml_rpc',
     'channel' => 'pear.php.net',
@@ -2430,7 +2430,7 @@ It has support for HTTP transport, proxies and authentication.</description>
       <date>2005-01-24</date>
       <state>beta</state>
       <notes>- If $port is 443 but a protocol isn\'t specified in $server, assume ssl:// is the protocol.
-      
+
 </notes>
     </release>
     <release>
@@ -2442,7 +2442,7 @@ It has support for HTTP transport, proxies and authentication.</description>
 - Add tests for setting the client properties.  (danielc)
 - Remove $GLOBALS[\'XML_RPC_twoslash\'] since it\'s not used.  (danielc)
 - Bundle the tests with the package.  (danielc)
-      
+
 </notes>
     </release>
     <release>
@@ -2450,7 +2450,7 @@ It has support for HTTP transport, proxies and authentication.</description>
       <date>2005-01-19</date>
       <state>beta</state>
       <notes>- ssl uses port 443, not 445.
-      
+
 </notes>
     </release>
     <release>
@@ -2460,7 +2460,7 @@ It has support for HTTP transport, proxies and authentication.</description>
       <notes>- Handle ssl:// in the $server string.  (danielc)
 - Also default to port 445 for ssl:// requests as well.  (danielc)
 - Enhance debugging in the server.  (danielc)
-      
+
 </notes>
     </release>
     <release>
@@ -2486,7 +2486,7 @@ It has support for HTTP transport, proxies and authentication.</description>
     * XML_RPC_entity_decode()
     * XML_RPC_lookup_entity()
 - Determine the XML\'s encoding via the encoding attribute in the XML declaration.  Bug 52.  (danielc)
-      
+
 </notes>
     </release>
     <release>
@@ -2501,7 +2501,7 @@ It has support for HTTP transport, proxies and authentication.</description>
 - be tolerant of junk after methodResponse (Luca Mariano, mroch)
 - Silent notice even in the error log (pierre)
 - fix include of shared xml extension on win32 (pierre)
-      
+
 </notes>
     </release>
     <release>
@@ -2509,7 +2509,7 @@ It has support for HTTP transport, proxies and authentication.</description>
       <date>2002-10-02</date>
       <state>stable</state>
       <notes>* added HTTP proxy authorization support (thanks to Arnaud Limbourg)
-      
+
 </notes>
     </release>
     <release>
@@ -2517,7 +2517,7 @@ It has support for HTTP transport, proxies and authentication.</description>
       <date>2002-05-19</date>
       <state>stable</state>
       <notes>* fix bug when parsing responses with boolean types
-      
+
 </notes>
     </release>
     <release>
@@ -2526,7 +2526,7 @@ It has support for HTTP transport, proxies and authentication.</description>
       <state>stable</state>
       <notes>* E_ALL fixes
 * fix HTTP response header parsing
-      
+
 </notes>
     </release>
     <release>
@@ -2535,7 +2535,7 @@ It has support for HTTP transport, proxies and authentication.</description>
       <state>stable</state>
       <notes>This is a PEAR-ified version of Useful Inc\'s 1.0.1 release.
 Includes an urgent security fix identified by Dan Libby &lt;dan@libby.com&gt;.
-      
+
 </notes>
     </release>
   </changelog>
@@ -2543,9 +2543,9 @@ Includes an urgent security fix identified by Dan Libby &lt;dan@libby.com&gt;.
   'url' => 'http://pear.php.net/get/XML_RPC-1.2.0RC6',
 ));
 $pearweb->addHtmlConfig('http://pear.php.net/get/XML_RPC-1.2.0RC6.tgz', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'XML_RPC-1.2.0RC6.tgz');
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
+$pearweb->addRESTConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'has',
@@ -2554,7 +2554,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'PEAR',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'File',
@@ -2695,9 +2695,9 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
       <notes>PEAR Installer:
 
  * Bug #534  pear search doesn\'t list unstable releases
- * Bug #933  CMD Usability Patch 
- * Bug #937  throwError() treats every call as static 
- * Bug #964 PEAR_ERROR_EXCEPTION causes fatal error 
+ * Bug #933  CMD Usability Patch
+ * Bug #937  throwError() treats every call as static
+ * Bug #964 PEAR_ERROR_EXCEPTION causes fatal error
  * Bug #1008 safe mode raises warning
 
 PEAR_ErrorStack:
@@ -2706,7 +2706,7 @@ PEAR_ErrorStack:
    PEAR_Error.  It should be considered experimental until explicitly marked
    stable.  require_once \'PEAR/ErrorStack.php\' to use.
 
-    
+
 </notes>
     </release>
     <release>
@@ -2727,7 +2727,7 @@ Other:
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
-    
+
 </notes>
     </release>
     <release>
@@ -2741,9 +2741,9 @@ Other:
 </package>',
   'url' => 'http://pear.php.net/get/PEAR-1.3.4',
 ));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
+$pearweb->addRESTConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'ge',
@@ -2752,7 +2752,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'Net_Socket',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'Net_Sieve',
@@ -2846,9 +2846,9 @@ Add select() implementation [#1428].
 </package>',
   'url' => 'http://pear.php.net/get/Net_Socket-1.0.5',
 ));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
+$pearweb->addRESTConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'ge',
@@ -2858,7 +2858,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'PEAR',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'Text_Highlighter',
@@ -2999,9 +2999,9 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
       <notes>PEAR Installer:
 
  * Bug #534  pear search doesn\'t list unstable releases
- * Bug #933  CMD Usability Patch 
- * Bug #937  throwError() treats every call as static 
- * Bug #964 PEAR_ERROR_EXCEPTION causes fatal error 
+ * Bug #933  CMD Usability Patch
+ * Bug #937  throwError() treats every call as static
+ * Bug #964 PEAR_ERROR_EXCEPTION causes fatal error
  * Bug #1008 safe mode raises warning
 
 PEAR_ErrorStack:
@@ -3010,7 +3010,7 @@ PEAR_ErrorStack:
    PEAR_Error.  It should be considered experimental until explicitly marked
    stable.  require_once \'PEAR/ErrorStack.php\' to use.
 
-    
+
 </notes>
     </release>
     <release>
@@ -3031,7 +3031,7 @@ Other:
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
-    
+
 </notes>
     </release>
     <release>
@@ -3045,9 +3045,9 @@ Other:
 </package>',
   'url' => 'http://pear.php.net/get/PEAR-1.3.4',
 ));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
+$pearweb->addRESTConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'ge',
@@ -3057,7 +3057,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'XML_Parser',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'Text_Highlighter',
@@ -3301,9 +3301,9 @@ XML_Parser_Simple:
 </package>',
   'url' => 'http://pear.php.net/get/XML_Parser-1.2.4',
 ));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
+$pearweb->addRESTConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'ge',
@@ -3313,7 +3313,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'Console_Getopt',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'Text_Highlighter',
@@ -3373,7 +3373,7 @@ short and long options.</description>
       <state>beta</state>
       <notes>POSIX getopt compatibility fix: treat first element of args
        array as command name
-     
+
 </notes>
     </release>
     <release>
