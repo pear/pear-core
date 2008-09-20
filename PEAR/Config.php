@@ -810,16 +810,16 @@ class PEAR_Config extends PEAR
                 }
             }
 
-            if (count($fail)) {
-                $fail = '"' . implode('", "', $fail) . '"';
-                unset($this->files['ftp']);
-                unset($this->configuration['ftp']);
-                return PEAR::raiseError('ERROR: Ftp configuration file must set all ' .
-                    'directory configuration variables.  These variables were not set: ' .
-                    $fail);
-            } else {
+            if (!count($fail)) {
                 return true;
             }
+
+            $fail = '"' . implode('", "', $fail) . '"';
+            unset($this->files['ftp']);
+            unset($this->configuration['ftp']);
+            return PEAR::raiseError('ERROR: Ftp configuration file must set all ' .
+                'directory configuration variables.  These variables were not set: ' .
+                $fail);
         } while (false); // poor man's catch
         unset($this->files['ftp']);
         return PEAR::raiseError('no remote host specified');
@@ -1051,9 +1051,9 @@ class PEAR_Config extends PEAR
                     $error = "PEAR_Config: bad data in $file";
                     $err = $this->raiseError($error);
                     return $err;
-                } else {
-                    $data = array();
                 }
+
+                $data = array();
             }
         // add parsing of newer formats here...
         } else {
