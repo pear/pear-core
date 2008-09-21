@@ -59,10 +59,10 @@ class PEAR_Frontend extends PEAR
                 return $a;
             }
             return $GLOBALS['_PEAR_FRONTEND_SINGLETON'];
-        } else {
-            $a = PEAR_Frontend::setFrontendClass($type);
-            return $a;
         }
+
+        $a = PEAR_Frontend::setFrontendClass($type);
+        return $a;
     }
 
     /**
@@ -80,12 +80,14 @@ class PEAR_Frontend extends PEAR
               is_a($GLOBALS['_PEAR_FRONTEND_SINGLETON'], $uiclass)) {
             return $GLOBALS['_PEAR_FRONTEND_SINGLETON'];
         }
+
         if (!class_exists($uiclass)) {
             $file = str_replace('_', '/', $uiclass) . '.php';
             if (PEAR_Frontend::isIncludeable($file)) {
                 include_once $file;
             }
         }
+
         if (class_exists($uiclass)) {
             $obj = &new $uiclass;
             // quick test to see if this class implements a few of the most
@@ -94,11 +96,12 @@ class PEAR_Frontend extends PEAR
                 $GLOBALS['_PEAR_FRONTEND_SINGLETON'] = &$obj;
                 $GLOBALS['_PEAR_FRONTEND_CLASS'] = $uiclass;
                 return $obj;
-            } else {
-                $err = PEAR::raiseError("not a frontend class: $uiclass");
-                return $err;
             }
+
+            $err = PEAR::raiseError("not a frontend class: $uiclass");
+            return $err;
         }
+
         $err = PEAR::raiseError("no such class: $uiclass");
         return $err;
     }
@@ -117,11 +120,13 @@ class PEAR_Frontend extends PEAR
               is_a($GLOBALS['_PEAR_FRONTEND_SINGLETON'], get_class($uiobject))) {
             return $GLOBALS['_PEAR_FRONTEND_SINGLETON'];
         }
+
         if (!is_a($uiobject, 'PEAR_Frontend')) {
             $err = PEAR::raiseError('not a valid frontend class: (' .
                 get_class($uiobject) . ')');
             return $err;
         }
+
         $GLOBALS['_PEAR_FRONTEND_SINGLETON'] = &$uiobject;
         $GLOBALS['_PEAR_FRONTEND_CLASS'] = get_class($uiobject);
         return $uiobject;
@@ -137,11 +142,13 @@ class PEAR_Frontend extends PEAR
         if (file_exists($path) && is_readable($path)) {
             return true;
         }
+
         $fp = @fopen($path, 'r', true);
         if ($fp) {
             fclose($fp);
             return true;
         }
+
         return false;
     }
 
@@ -220,4 +227,3 @@ class PEAR_Frontend extends PEAR
     {
     }
 }
-?>
