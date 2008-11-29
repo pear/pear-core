@@ -247,6 +247,21 @@ class PEAR_Builder extends PEAR_Common
      */
     function build($descfile, $callback = null)
     {
+        if (preg_match('/(\\/|\\\\|^)([^\\/\\\\]+)?php(.+)?$/',
+                       $this->config->get('php_bin'), $matches)) {
+            if (isset($matches[2]) && strlen($matches[2]) &&
+                trim($matches[2]) != trim($this->config->get('php_prefix'))) {
+                $this->log(0, 'WARNING: php_bin ' . $this->config->get('php_bin') .
+                           ' appears to have a prefix ' . $matches[2] . ', but' .
+                           ' config variable php_prefix does not match');
+            }
+            if (isset($matches[3]) && strlen($matches[3]) &&
+                trim($matches[3]) != trim($this->config->get('php_suffix'))) {
+                $this->log(0, 'WARNING: php_bin ' . $this->config->get('php_bin') .
+                           ' appears to have a suffix ' . $matches[3] . ', but' .
+                           ' config variable php_suffix does not match');
+            }
+        }
         $this->current_callback = $callback;
         if (PEAR_OS == "Windows") {
             return $this->_build_win32($descfile,$callback);
@@ -283,7 +298,10 @@ class PEAR_Builder extends PEAR_Common
         $dir = getcwd();
         $this->log(2, "building in $dir");
         putenv('PATH=' . $this->config->get('bin_dir') . ':' . getenv('PATH'));
-        $err = $this->_runCommand("phpize", array(&$this, 'phpizeCallback'));
+        $err = $this->_runCommand($this->config->get('php_prefix')
+                                . "phpize" .
+                                $this->config->get('php_suffix'),
+                                array(&$this, 'phpizeCallback'));
         if (PEAR::isError($err)) {
             return $err;
         }
@@ -362,8 +380,11 @@ class PEAR_Builder extends PEAR_Common
             return $this->raiseError("no `modules' directory found");
         }
         $built_files = array();
-        $prefix = exec("php-config --prefix");
-        $this->_harvestInstDir($prefix, $inst_dir . DIRECTORY_SEPARATOR . $prefix, $built_files);
+        $prefix = exec($this->config->get('php_prefix')
+                                . "phpize" .
+                                $this->config->get('php_suffix') . " --prefix");
+        $this->_harvestInstDir($prefix, $inst_dir . DIRECTORY_SEPARATOR . $prefix,
+                               $built_files);
         chdir($old_cwd);
         return $built_files;
     }

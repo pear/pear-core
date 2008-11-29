@@ -101,6 +101,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Implement Request #14324 Make the pear install command behave similar to apt-get [dufuz]
   * Implement Request #14325 make pear upgrade with no params behave like pear upgrade-all [dufuz]
 
+  * Fix PHP Bug #43857: --program-suffix not always reflected everywhere [cellog]
+
   * Fix Bug #13908: pear info command and maintainers inactive not mentioned [dufuz]
   * Fix Bug #13926: install-pear.php does not set cfg_dir if -d option set with no -c option [timj]
   * Fix Bug #13943: tests fail when php.exe path contains spaces [dufuz / jorrit]
@@ -112,6 +114,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Fix Bug #14274: PEAR packager mangles package.xml encoding, then complains about it [dufuz]
   * Fix Bug #14287: cannot upgrade from stable to beta via -beta when config is set to stable [dufuz]
   * Fix Bug #14437: openbasedir warning when loading config [dufuz]
+  * Fix Bug #14558: PackageFile.php creates tmp directory outside configured temp_dir [cweiske]
 
   NOTE!
   Functions that have been deprecated for 3+ years in PEAR_Common have been removed:
@@ -124,12 +127,15 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * PEAR_Common->validatePackageInfo (use the validation of PEAR_PackageFile objects)
   * PEAR_Common->analyzeSourceCode (use a PEAR_PackageFile_v* object instead)
   * PEAR_Common->detectDependencies (use PEAR_Downloader_Package->detectDependencies instead)
-  * PEAR_Common->buildProvidesArray (use PEAR_PackageFile_v1->_buildProvidesArray or PEAR_PackageFile_v2_Validator->_buildProvidesArray)
+  * PEAR_Common->buildProvidesArray (use PEAR_PackageFile_v1->_buildProvidesArray or
+    PEAR_PackageFile_v2_Validator->_buildProvidesArray)
 
-  PHP 4.4 and 5.1.6 are now the minimum PHP requirements, for brave souls pear upgrade -f PEAR will allow people with lower versions
+  PHP 4.4 and 5.1.6 are now the minimum PHP requirements, for brave souls
+  pear upgrade -f PEAR will allow people with lower versions
   to upgrade to this release but no guarantees will be made that it will work properly.
 
-  Support for XML RPC channels has been dropped - The only ones that used it (pear.php.net and pecl.php.net) have used the REST interface for years now
+  Support for XML RPC channels has been dropped - The only ones that used it
+  (pear.php.net and pecl.php.net) have used the REST interface for years now
  </notes>
  <contents>
   <dir name="/">
