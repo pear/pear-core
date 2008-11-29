@@ -294,8 +294,8 @@ class PEAR_Config extends PEAR
      */
     var $_channelConfigInfo = array(
         'php_dir', 'ext_dir', 'doc_dir', 'bin_dir', 'data_dir', 'cfg_dir',
-        'test_dir', 'www_dir', 'php_bin', 'username', 'password', 'verbose',
-        'preferred_state', 'umask', 'preferred_mirror', 'php_ini'
+        'test_dir', 'www_dir', 'php_bin', 'php_prefix', 'php_suffix', 'username',
+        'password', 'verbose', 'preferred_state', 'umask', 'preferred_mirror', 'php_ini'
         );
 
     /**
@@ -476,6 +476,20 @@ class PEAR_Config extends PEAR
             'default' => PEAR_CONFIG_DEFAULT_PHP_BIN,
             'doc' => 'PHP CLI/CGI binary for executing scripts',
             'prompt' => 'PHP CLI/CGI binary',
+            'group' => 'File Locations (Advanced)',
+            ),
+        'php_prefix' => array(
+            'type' => 'string',
+            'default' => '',
+            'doc' => '--program-prefix for php_bin\'s ./configure, used for pecl installs',
+            'prompt' => '--program-prefix passed to PHP\'s ./configure',
+            'group' => 'File Locations (Advanced)',
+            ),
+        'php_suffix' => array(
+            'type' => 'string',
+            'default' => '',
+            'doc' => '--program-suffix for php_bin\'s ./configure, used for pecl installs',
+            'prompt' => '--program-suffix passed to PHP\'s ./configure',
             'group' => 'File Locations (Advanced)',
             ),
         'php_ini' => array(
