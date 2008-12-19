@@ -10,6 +10,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $reg = &$config->getRegistry();
 $chan = &$reg->getChannel('pear.php.net');
 $chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
@@ -19,15 +20,16 @@ $ch->setName('smoog');
 $ch->setBaseURL('REST1.0', 'http://smoog/rest/');
 $ch->setSummary('smoog');
 $reg->addChannel($ch);
-$pathtoStableAPC = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR .
-    'APC-1.3.0.tgz';
-$pathtoAlphaAPC = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR .
-    'APC-1.4.0a1.tgz';
-$pathtoSmoogAPC = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR .
-    'APC-1.5.0a1.tgz';
+
+$packageDir      = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR;
+$pathtoStableAPC = $packageDir . 'APC-1.3.0.tgz';
+$pathtoAlphaAPC  = $packageDir . 'APC-1.4.0a1.tgz';
+$pathtoSmoogAPC  = $packageDir . 'APC-1.5.0a1.tgz';
+
 $pearweb->addHtmlConfig('http://pear.php.net/get/APC-1.3.0.tgz', $pathtoStableAPC);
 $pearweb->addHtmlConfig('http://pear.php.net/get/APC-1.4.0a1.tgz', $pathtoAlphaAPC);
 $pearweb->addHtmlConfig('http://smoog/get/APC-1.5.0a1.tgz', $pathtoSmoogAPC);
+
 $pearweb->addRESTConfig("http://smoog/rest/p/packages.xml", '<?xml version="1.0" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allpackages"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allpackages
@@ -119,17 +121,17 @@ $e = $command->run('download-all', array(), array());
 $phpunit->assertNoErrors('after');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     'info' => 'Using Channel pear.php.net',
     'cmd' => 'no command',
   ),
-  1 => 
+  1 =>
   array (
     'info' => 'Using Preferred State of stable',
     'cmd' => 'no command',
   ),
-  2 => 
+  2 =>
   array (
     'info' => 'Gathering release information, please wait...',
     'cmd' => 'no command',
@@ -159,14 +161,15 @@ $phpunit->assertEquals(array (
     'cmd' => 'download',
   ),
 ), $fakelog->getLog(), 'log');
+
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'APC-1.3.0.tgz', 'APC 1.3.0');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 'http://pear.php.net/rest/p/packages.xml',
     1 => '200',
   ),
-  1 => 
+  1 =>
   array (
     0 => 'http://pear.php.net/rest/r/apc/allreleases.xml',
     1 => '200',
@@ -186,6 +189,7 @@ $phpunit->assertEquals(array (
 )
 , $pearweb->getRESTCalls(), 'rest calls');
 chdir($save);
+
 echo 'tests done';
 ?>
 --CLEAN--
