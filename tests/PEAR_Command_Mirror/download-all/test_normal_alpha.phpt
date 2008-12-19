@@ -10,23 +10,24 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $reg = &$config->getRegistry();
 $ch = new PEAR_ChannelFile;
 $ch->setName('smoog');
 $ch->setDefaultPEARProtocols();
 $ch->setSummary('smoog');
-$pathtoStableAPC = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR .
-    'APC-1.3.0.tgz';
-$pathtoAlphaAPC = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR .
-    'APC-1.4.0a1.tgz';
-$pathtoSmoogAPC = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR .
-    'APC-1.5.0a1.tgz';
-$pathtoAT = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR .
-    'Archive_Tar-1.5.0a1.tgz';
+
+$packageDir      = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR;
+$pathtoStableAPC = $packageDir . 'APC-1.3.0.tgz';
+$pathtoAlphaAPC  = $packageDir . 'APC-1.4.0a1.tgz';
+$pathtoSmoogAPC  = $packageDir . 'APC-1.5.0a1.tgz';
+$pathtoAT        = $packageDir . 'Archive_Tar-1.5.0a1.tgz';
+
 $pearweb->addHtmlConfig('http://pear.php.net/get/APC-1.3.0.tgz', $pathtoStableAPC);
 $pearweb->addHtmlConfig('http://pear.php.net/get/APC-1.4.0a1.tgz', $pathtoAlphaAPC);
 $pearweb->addHtmlConfig('http://pear.php.net/get/Archive_Tar-1.5.0a1.tgz', $pathtoAT);
 $pearweb->addHtmlConfig('http://smoog/get/APC-1.5.0a1.tgz', $pathtoSmoogAPC);
+
 $pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true,true,false),     array(
     'APC' =>
         array(
@@ -55,6 +56,7 @@ $pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true,true,false)
             ),
         ),
     ));
+
 $pearweb->addXmlrpcConfig("pear.php.net", "package.listAll",     array(true,false,false),     array(
     'APC' =>
         array(
@@ -113,6 +115,7 @@ loaded. Bz2 compression is also supported with the bz2 extension loaded.",
         ),
       )
 );
+
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   0 =>
   array (
@@ -155,6 +158,7 @@ Installer Roles/Tasks:
 ',
   'url' => 'http://pear.php.net/get/APC-1.3.0',
 ));
+
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
   0 =>
   array (
@@ -418,11 +422,14 @@ http://pear.php.net/dtd/package-2.0.xsd">
 </package>',
   'url' => 'http://smoog/get/Archive_Tar-1.5.0a1',
 ));
+
 $config->set('preferred_state', 'alpha');
 $save = getcwd();
 chdir($temp_path);
 $e = $command->run('download-all', array(), array());
+
 $phpunit->assertNoErrors('after');
+
 $phpunit->assertEquals(array (
   0 =>
   array (
@@ -484,9 +491,11 @@ $phpunit->assertEquals(array (
     'cmd' => 'download',
   ),
 ), $fakelog->getLog(), 'log');
+
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'APC-1.4.0a1.tgz', 'APC 1.4.0a1');
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'Archive_Tar-1.5.0a1.tgz', 'Archive_Tar 1.5.0a1');
 chdir($save);
+
 echo 'tests done';
 ?>
 --CLEAN--
