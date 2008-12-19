@@ -10,20 +10,23 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $ch = new PEAR_ChannelFile;
 $ch->setName('smork');
 $ch->setSummary('smork');
 $ch->setDefaultPEARProtocols();
 $reg = &$config->getRegistry();
+
 $phpunit->assertTrue($reg->addChannel($ch), 'smork setup');
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'package2.xml';
-$pathtobarxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'Bar-1.5.2.tgz';
-$pathtofoobarxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1.tgz';
+
+$packageDir       = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR;
+$pathtopackagexml = $packageDir . 'package2.xml';
+$pathtobarxml     = $packageDir . 'Bar-1.5.2.tgz';
+$pathtofoobarxml  = $packageDir . 'Foobar-1.5.0a1.tgz';
+
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Bar-1.5.2.tgz', $pathtobarxml);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Foobar-1.5.0a1.tgz', $pathtofoobarxml);
+
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
     array('2.0',
          array('name' => 'Bar', 'channel' => 'pear.php.net', 'min' => '1.0.0'),
@@ -330,13 +333,17 @@ Other:
  </changelog>
 </package>',
           'url' => 'http://www.example.com/Foobar-1.5.0a1'));
+
 $_test_dep->setPHPVersion('4.3.11');
 $_test_dep->setPEARVersion('1.4.0a1');
 $config->set('preferred_state', 'alpha');
 $res = $command->run('install', array(), array($pathtopackagexml));
+
 $phpunit->assertNoErrors('after install');
 $phpunit->assertTrue($res, 'result');
 $dl = &$command->getDownloader(1, array());
+
+$tmpdir = $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR;
 if (OS_WINDOWS) {
     $phpunit->assertEquals(array (
       array (
@@ -377,19 +384,19 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php',
+        1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $tmpdir . '.tmpfoo12.php',
       ),
       array (
         0 => 2,
-        1 => 'md5sum ok: ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php',
+        1 => 'md5sum ok: ' . $tmpdir . 'foo12.php',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php ',
+        1 => 'adding to transaction: rename ' . $tmpdir . '.tmpfoo12.php ' . $tmpdir . 'foo12.php ',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: installed_as foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
+        1 => 'adding to transaction: installed_as foo12.php ' . $tmpdir . 'foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
       ),
       array (
         0 => 2,
@@ -397,7 +404,7 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php',
+        1 => '+ mv ' . $tmpdir . '.tmpfoo12.php ' . $tmpdir . 'foo12.php',
       ),
       array (
         0 => 2,
@@ -412,19 +419,19 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . ''  . DIRECTORY_SEPARATOR . 'Bar-1.5.2'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php',
+        1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . ''  . DIRECTORY_SEPARATOR . 'Bar-1.5.2'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $tmpdir . '.tmpfoo1.php',
       ),
       array (
         0 => 2,
-        1 => 'md5sum ok: ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php',
+        1 => 'md5sum ok: ' . $tmpdir . 'foo1.php',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php ',
+        1 => 'adding to transaction: rename ' . $tmpdir . '.tmpfoo1.php ' . $tmpdir . 'foo1.php ',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: installed_as foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
+        1 => 'adding to transaction: installed_as foo1.php ' . $tmpdir . 'foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
       ),
       array (
         0 => 2,
@@ -432,7 +439,7 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php',
+        1 => '+ mv ' . $tmpdir . '.tmpfoo1.php ' . $tmpdir . 'foo1.php',
       ),
       array (
         0 => 2,
@@ -447,15 +454,15 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ cp ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php',
+        1 => '+ cp ' . $packageDir . 'foo.php ' . $tmpdir . '.tmpfoo.php',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php ',
+        1 => 'adding to transaction: rename ' . $tmpdir . '.tmpfoo.php ' . $tmpdir . 'foo.php ',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: installed_as foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
+        1 => 'adding to transaction: installed_as foo.php ' . $tmpdir . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
       ),
       array (
         0 => 2,
@@ -463,7 +470,7 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php',
+        1 => '+ mv ' . $tmpdir . '.tmpfoo.php ' . $tmpdir . 'foo.php',
       ),
       array (
         0 => 2,
@@ -519,23 +526,23 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php',
+        1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $tmpdir . '.tmpfoo12.php',
       ),
       array (
         0 => 2,
-        1 => 'md5sum ok: ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php',
+        1 => 'md5sum ok: ' . $tmpdir . 'foo12.php',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: chmod '.$umask.' ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php',
+        1 => 'adding to transaction: chmod '.$umask.' ' . $tmpdir . '.tmpfoo12.php',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php ',
+        1 => 'adding to transaction: rename ' . $tmpdir . '.tmpfoo12.php ' . $tmpdir . 'foo12.php ',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: installed_as foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
+        1 => 'adding to transaction: installed_as foo12.php ' . $tmpdir . 'foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
       ),
       array (
         0 => 2,
@@ -543,11 +550,11 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ chmod '.$umask.' ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php',
+        1 => '+ chmod '.$umask.' ' . $tmpdir . '.tmpfoo12.php',
       ),
       array (
         0 => 3,
-        1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo12.php',
+        1 => '+ mv ' . $tmpdir . '.tmpfoo12.php ' . $tmpdir . 'foo12.php',
       ),
       array (
         0 => 2,
@@ -562,23 +569,23 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . ''  . DIRECTORY_SEPARATOR . 'Bar-1.5.2'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php',
+        1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . ''  . DIRECTORY_SEPARATOR . 'Bar-1.5.2'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $tmpdir . '.tmpfoo1.php',
       ),
       array (
         0 => 2,
-        1 => 'md5sum ok: ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php',
+        1 => 'md5sum ok: ' . $tmpdir . 'foo1.php',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: chmod '.$umask.' ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php',
+        1 => 'adding to transaction: chmod '.$umask.' ' . $tmpdir . '.tmpfoo1.php',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php ',
+        1 => 'adding to transaction: rename ' . $tmpdir . '.tmpfoo1.php ' . $tmpdir . 'foo1.php ',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: installed_as foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
+        1 => 'adding to transaction: installed_as foo1.php ' . $tmpdir . 'foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
       ),
       array (
         0 => 2,
@@ -586,11 +593,11 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ chmod '.$umask.' ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php',
+        1 => '+ chmod '.$umask.' ' . $tmpdir . '.tmpfoo1.php',
       ),
       array (
         0 => 3,
-        1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo1.php',
+        1 => '+ mv ' . $tmpdir . '.tmpfoo1.php ' . $tmpdir . 'foo1.php',
       ),
       array (
         0 => 2,
@@ -605,19 +612,19 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ cp ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php',
+        1 => '+ cp ' . $packageDir . 'foo.php ' . $tmpdir . '.tmpfoo.php',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: chmod '.$umask.' ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php',
+        1 => 'adding to transaction: chmod '.$umask.' ' . $tmpdir . '.tmpfoo.php',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: rename ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php ',
+        1 => 'adding to transaction: rename ' . $tmpdir . '.tmpfoo.php ' . $tmpdir . 'foo.php ',
       ),
       array (
         0 => 3,
-        1 => 'adding to transaction: installed_as foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
+        1 => 'adding to transaction: installed_as foo.php ' . $tmpdir . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
       ),
       array (
         0 => 2,
@@ -625,11 +632,11 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ chmod '.$umask.' ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php',
+        1 => '+ chmod '.$umask.' ' . $tmpdir . '.tmpfoo.php',
       ),
       array (
         0 => 3,
-        1 => '+ mv ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . '.tmpfoo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR . 'foo.php',
+        1 => '+ mv ' . $tmpdir . '.tmpfoo.php ' . $tmpdir . 'foo.php',
       ),
       array (
         0 => 2,
@@ -644,6 +651,7 @@ if (OS_WINDOWS) {
       ),
     ), $fakelog->getLog(), 'log messages');
 }
+
 echo 'tests done';
 ?>
 --CLEAN--
