@@ -17,7 +17,7 @@ $ch->setDefaultPEARProtocols();
 $reg = &$config->getRegistry();
 $phpunit->assertTrue($reg->addChannel($ch), 'smork setup');
 
-$packageDir       = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packages'. DIRECTORY_SEPARATOR;
+$packageDir       = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR;
 $pathtopackagexml = $packageDir . 'package2.xml';
 $pathtobarxml     = $packageDir . 'Bar-1.5.2.tgz';
 $pathtofoobarxml  = $packageDir . 'Foobar-1.5.0a1.tgz';
@@ -609,7 +609,7 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ cp ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'foo.php ' . $tmpdir . '.tmpfoo.php',
+        1 => '+ cp ' . $packageDir . 'foo.php ' . $tmpdir . '.tmpfoo.php',
       ),
       array (
         0 => 3,

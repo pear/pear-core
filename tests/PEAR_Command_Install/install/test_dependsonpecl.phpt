@@ -10,13 +10,15 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $reg = &$config->getRegistry();
 $chan = $reg->getChannel('pecl.php.net');
 $chan->resetREST();
 $reg->updateChannel($chan);
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'dependsonpecl.xml';
+
+$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packages'. DIRECTORY_SEPARATOR . 'dependsonpecl.xml';
 PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
   1 =>
@@ -99,12 +101,15 @@ http://pear.php.net/dtd/package-2.0.xsd">
 </package>',
              'url' => 'http://pecl.php.net/get/peclpackage-1.3.0')
 );
+
 $res = $command->run('install', array(), array($pathtopackagexml));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => 'install failed'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "providesextension" - package name "peclpkg" is different from extension name "extpkg"'),
 ), 'after install');
+
 $dl = &$command->getDownloader(1, array());
+
 $phpunit->assertEquals(array (
   array (
     0 => 3,
@@ -181,6 +186,7 @@ $phpunit->assertEquals( array (
   ),
  )
 , $pearweb->getRESTCalls(), 'xmlrpc calls');
+
 echo 'tests done';
 ?>
 --CLEAN--
