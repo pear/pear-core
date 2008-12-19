@@ -10,26 +10,26 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $reg = &$config->getRegistry();
 $ch = new PEAR_ChannelFile;
 $ch->setName('smoog');
 $ch->setDefaultPEARProtocols();
 $ch->setSummary('smoog');
 $reg->addChannel($ch);
-$pathtoStableAPC = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR .
-    'APC-1.3.0.tgz';
-$pathtoAlphaAPC = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR .
-    'APC-1.4.0a1.tgz';
-$pathtoSmoogAPC = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR .
-    'APC-1.5.0a1.tgz';
-$pathtoAT = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR .
-    'Archive_Tar-1.5.0a1.tgz';
+
+$packageDir      = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR;
+$pathtoStableAPC = $packageDir . 'APC-1.3.0.tgz';
+$pathtoAlphaAPC  = $packageDir . 'APC-1.4.0a1.tgz';
+$pathtoSmoogAPC  = $packageDir . 'APC-1.5.0a1.tgz';
+$pathtoAT        = $packageDir . 'Archive_Tar-1.5.0a1.tgz';
+
 $pearweb->addHtmlConfig('http://pear.php.net/get/APC-1.3.0.tgz', $pathtoStableAPC);
 $pearweb->addHtmlConfig('http://pear.php.net/get/APC-1.4.0a1.tgz', $pathtoAlphaAPC);
 $pearweb->addHtmlConfig('http://pear.php.net/get/Archive_Tar-1.5.0a1.tgz', $pathtoAT);
 $pearweb->addHtmlConfig('http://smoog/get/APC-1.5.0a1.tgz', $pathtoSmoogAPC);
-$pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true,true,false),     array(
-    ));
+$pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true,true,false),     array());
+
 $pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true,false,false),     array(
     'APC' =>
         array(
@@ -406,13 +406,16 @@ $pearweb->addXmlrpcConfig("smoog", "package.getDownloadURL", array (
 </package>',
   'url' => 'http://smoog/get/APC-1.5.0a1',
 ));
+
 $_test_dep->setPEARVersion('1.4.0a1');
 $_test_dep->setPHPVersion('4.3.11');
 $save = getcwd();
 chdir($temp_path);
 $config->set('preferred_state', 'stable');
 $e = $command->run('download-all', array('channel' => 'smoog'), array());
+
 $phpunit->assertNoErrors('after 1');
+
 $phpunit->assertEquals(array (
   0 =>
   array (
@@ -431,9 +434,12 @@ $phpunit->assertEquals(array (
   ),
 )
 , $fakelog->getLog(), 'log 1');
+
 $config->set('preferred_state', 'alpha');
 $e = $command->run('download-all', array('channel' => 'smoog'), array());
+
 $phpunit->assertNoErrors('after');
+
 $phpunit->assertEquals(array (
   0 =>
   array (
@@ -475,8 +481,10 @@ $phpunit->assertEquals(array (
     'cmd' => 'download',
   ),
 ), $fakelog->getLog(), 'log');
+
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'APC-1.5.0a1.tgz', 'APC 1.5.0a1');
 chdir($save);
+
 echo 'tests done';
 ?>
 --CLEAN--
