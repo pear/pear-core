@@ -29,7 +29,7 @@ fclose($fp);
 
 $ret = PEAR_Common::analyzeSourceCode($testdir . DIRECTORY_SEPARATOR . 'test1.php');
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 
+    array('package' => 'PEAR_Error', 'message' =>
     'Parser error: invalid PHP found in file "' . $testdir . DIRECTORY_SEPARATOR . 'test1.php"')),
     'invalid php');
 $phpunit->assertFalse($ret, 'wrong return value, invalid php in file');
@@ -50,7 +50,7 @@ fclose($fp);
 
 $ret = PEAR_Common::analyzeSourceCode($testdir . DIRECTORY_SEPARATOR . 'test3.php');
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 
+    array('package' => 'PEAR_Error', 'message' =>
     'Parser error: invalid PHP found in file "' . $testdir . DIRECTORY_SEPARATOR . 'test3.php"')),
     'more invalid php');
 $phpunit->assertFalse($ret, 'wrong return value, 2nd invalid PHP test');
@@ -71,7 +71,7 @@ fclose($fp);
 
 $ret = PEAR_Common::analyzeSourceCode($testdir . DIRECTORY_SEPARATOR . 'test4.php');
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' => 
+    array('package' => 'PEAR_Error', 'message' =>
     'Parser error: invalid PHP found in file "' . $testdir . DIRECTORY_SEPARATOR . 'test4.php"')),
     '3rd invalid php');
 $phpunit->assertFalse($ret, 'wrong return value, 3rd invalid PHP test');
@@ -100,7 +100,7 @@ class blah extends test2 {
     /**
      * @nodep Stig
      */
-    function blah() 
+    function blah()
     {
         Stig::rules();
     }
@@ -116,40 +116,40 @@ $phpunit->assertNoErrors('1st valid PHP');
 $phpunit->showall();
 $phpunit->assertEquals(array (
   'source_file' => $testdir . DIRECTORY_SEPARATOR . 'test5.php',
-  'declared_classes' => 
+  'declared_classes' =>
   array (
     0 => 'test2',
     1 => 'blah',
   ),
-  'declared_interfaces' => 
+  'declared_interfaces' =>
   array (
   ),
-  'declared_methods' => 
+  'declared_methods' =>
   array (
-    'test2' => 
+    'test2' =>
     array (
       0 => 'test2',
     ),
-    'blah' => 
+    'blah' =>
     array (
       0 => 'blah',
     ),
   ),
-  'declared_functions' => 
+  'declared_functions' =>
   array (
     0 => 'test',
     1 => 'fool',
   ),
-  'used_classes' => 
+  'used_classes' =>
   array (
     0 => 'Greg',
     1 => 'Pierre',
   ),
-  'inheritance' => 
+  'inheritance' =>
   array (
     'blah' => 'test2',
   ),
-  'implements' => 
+  'implements' =>
   array (
   ),
 ), $ret, 'wrong return value, 1st valid PHP test');
