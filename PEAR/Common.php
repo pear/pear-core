@@ -210,6 +210,7 @@ class PEAR_Common extends PEAR
      */
     function mkDirHier($dir)
     {
+        // Only used in Installer - move it there ?
         $this->log(2, "+ create dir $dir");
         if (!class_exists('System')) {
             require_once 'System.php';
