@@ -1,4 +1,3 @@
-
 <?php
 /**
  * PEAR_PackageFile, package.xml parsing utility class
@@ -337,7 +336,7 @@ class PEAR_PackageFile
             }
         }
 
-        $xml = null;
+        $xml      = null;
         $origfile = $file;
         foreach ($content as $file) {
             $name = $file['filename'];
@@ -359,6 +358,11 @@ class PEAR_PackageFile
             $tmpdir = $this->_tmpdir;
         } else {
             $tmpdir = System::mkTemp(array('-t', $this->_config->get('temp_dir'), '-d', 'pear'));
+            if ($tmpdir === false) {
+                $ret = PEAR::raiseError("there was a problem with getting the configured temp directory");
+                return $ret;
+            }
+
             PEAR_PackageFile::addTempFile($tmpdir);
         }
 
