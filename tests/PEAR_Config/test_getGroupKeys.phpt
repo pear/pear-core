@@ -35,8 +35,10 @@ $phpunit->assertEquals(array (
   'temp_dir',
   'download_dir',
   'php_bin',
+  'php_prefix',
+  'php_suffix',
   'php_ini',
-), array_slice($config->getGroupKeys('File Locations (Advanced)'), 0, 9), 'File Locations (Advanced)');
+), array_slice($config->getGroupKeys('File Locations (Advanced)'), 0, 12), 'File Locations (Advanced)');
 $phpunit->assertEquals(array (
   0 => 'username',
   1 => 'password',
