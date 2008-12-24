@@ -110,48 +110,48 @@ $phpunit->assertEquals(array (
 ), PEAR_Command::getShortcuts(), 'getshortcuts');
 PEAR_Command::getGetoptArgs('build', $s, $l);
 $phpunit->assertEquals('', $s, 'short build');
-$phpunit->assertEquals(array(), $l, 'long build'); 
+$phpunit->assertEquals(array(), $l, 'long build');
 PEAR_Command::getGetoptArgs('bundle', $s, $l);
 $phpunit->assertEquals('d:f', $s, 'short bundle');
-$phpunit->assertEquals(array('destination=', 'force'), $l, 'long bundle'); 
+$phpunit->assertEquals(array('destination=', 'force'), $l, 'long bundle');
 PEAR_Command::getGetoptArgs('channel-add', $s, $l);
 $phpunit->assertEquals('', $s, 'short channel-add');
 $phpunit->assertEquals(array(), $l, 'long channel-add');
 PEAR_Command::getGetoptArgs('channel-alias', $s, $l);
-$phpunit->assertEquals('', $s, 'short channel-alias'); 
+$phpunit->assertEquals('', $s, 'short channel-alias');
 $phpunit->assertEquals(array(), $l, 'long channel-alias');
 PEAR_Command::getGetoptArgs('channel-delete', $s, $l);
-$phpunit->assertEquals('', $s, 'short channel-delete'); 
+$phpunit->assertEquals('', $s, 'short channel-delete');
 $phpunit->assertEquals(array(), $l, 'long channel-delete');
 PEAR_Command::getGetoptArgs('channel-discover', $s, $l);
-$phpunit->assertEquals('', $s, 'short channel-discover'); 
+$phpunit->assertEquals('', $s, 'short channel-discover');
 $phpunit->assertEquals(array(), $l, 'long channel-discover');
 PEAR_Command::getGetoptArgs('channel-info', $s, $l);
-$phpunit->assertEquals('', $s, 'short channel-info'); 
+$phpunit->assertEquals('', $s, 'short channel-info');
 $phpunit->assertEquals(array(), $l, 'long channel-info');
 PEAR_Command::getGetoptArgs('channel-update', $s, $l);
-$phpunit->assertEquals('fc:', $s, 'short channel-update'); 
+$phpunit->assertEquals('fc:', $s, 'short channel-update');
 $phpunit->assertEquals(array('force', 'channel='), $l, 'long channel-update');
 PEAR_Command::getGetoptArgs('clear-cache', $s, $l);
-$phpunit->assertEquals('', $s, 'short clear-cache'); 
+$phpunit->assertEquals('', $s, 'short clear-cache');
 $phpunit->assertEquals(array(), $l, 'long clear-cache');
 PEAR_Command::getGetoptArgs('config-create', $s, $l);
-$phpunit->assertEquals('w', $s, 'short config-create'); 
+$phpunit->assertEquals('w', $s, 'short config-create');
 $phpunit->assertEquals(array('windows'), $l, 'long config-create');
 PEAR_Command::getGetoptArgs('config-get', $s, $l);
-$phpunit->assertEquals('c:', $s, 'short config-get'); 
+$phpunit->assertEquals('c:', $s, 'short config-get');
 $phpunit->assertEquals(array('channel='), $l, 'long config-get');
 PEAR_Command::getGetoptArgs('config-set', $s, $l);
-$phpunit->assertEquals('c:', $s, 'short config-set'); 
+$phpunit->assertEquals('c:', $s, 'short config-set');
 $phpunit->assertEquals(array('channel='), $l, 'long config-set');
 PEAR_Command::getGetoptArgs('config-show', $s, $l);
-$phpunit->assertEquals('c:', $s, 'short config-show'); 
+$phpunit->assertEquals('c:', $s, 'short config-show');
 $phpunit->assertEquals(array('channel='), $l, 'long config-show');
 PEAR_Command::getGetoptArgs('convert', $s, $l);
-$phpunit->assertEquals('f', $s, 'short convert'); 
+$phpunit->assertEquals('f', $s, 'short convert');
 $phpunit->assertEquals(array('flat'), $l, 'long convert');
 PEAR_Command::getGetoptArgs('cvsdiff', $s, $l);
-$phpunit->assertEquals('qQD:R:r:cuibBn', $s, 'short cvsdiff'); 
+$phpunit->assertEquals('qQD:R:r:cuibBn', $s, 'short cvsdiff');
 $phpunit->assertEquals(array (
   0 => 'quiet',
   1 => 'reallyquiet',
@@ -167,7 +167,7 @@ $phpunit->assertEquals(array (
   11 => 'dry-run',
 ), $l, 'long cvsdiff');
 PEAR_Command::getGetoptArgs('cvstag', $s, $l);
-$phpunit->assertEquals('qQFdn', $s, 'short cvstag'); 
+$phpunit->assertEquals('qQFdn', $s, 'short cvstag');
 $phpunit->assertEquals(array (
   0 => 'quiet',
   1 => 'reallyquiet',
@@ -176,16 +176,16 @@ $phpunit->assertEquals(array (
   4 => 'dry-run',
 ), $l, 'long cvstag');
 PEAR_Command::getGetoptArgs('download', $s, $l);
-$phpunit->assertEquals('Z', $s, 'short download'); 
+$phpunit->assertEquals('Z', $s, 'short download');
 $phpunit->assertEquals(array('nocompress'), $l, 'long download');
 PEAR_Command::getGetoptArgs('download-all', $s, $l);
-$phpunit->assertEquals('c:', $s, 'short download-all'); 
+$phpunit->assertEquals('c:', $s, 'short download-all');
 $phpunit->assertEquals(array('channel='), $l, 'long download-all');
 PEAR_Command::getGetoptArgs('info', $s, $l);
-$phpunit->assertEquals('', $s, 'short info'); 
+$phpunit->assertEquals('', $s, 'short info');
 $phpunit->assertEquals(array(), $l, 'long info');
 PEAR_Command::getGetoptArgs('install', $s, $l);
-$phpunit->assertEquals('flnrsBZR:P:aoOp', $s, 'short install'); 
+$phpunit->assertEquals('flnrsBZR:P:aoOp', $s, 'short install');
 $phpunit->assertEquals(array (
   0 => 'force',
   1 => 'loose',
@@ -203,52 +203,52 @@ $phpunit->assertEquals(array (
   13 => 'pretend',
 ), $l, 'long install');
 PEAR_Command::getGetoptArgs('list', $s, $l);
-$phpunit->assertEquals('c:ai', $s, 'short list'); 
+$phpunit->assertEquals('c:ai', $s, 'short list');
 $phpunit->assertEquals(array('channel=', 'allchannels', 'channelinfo'), $l, 'long list');
 PEAR_Command::getGetoptArgs('list-all', $s, $l);
-$phpunit->assertEquals('c:i', $s, 'short list-all'); 
+$phpunit->assertEquals('c:i', $s, 'short list-all');
 $phpunit->assertEquals(array('channel=', 'channelinfo'), $l, 'long list-all');
 PEAR_Command::getGetoptArgs('list-channels', $s, $l);
-$phpunit->assertEquals('', $s, 'short list-channels'); 
+$phpunit->assertEquals('', $s, 'short list-channels');
 $phpunit->assertEquals(array(), $l, 'long list-channels');
 PEAR_Command::getGetoptArgs('list-files', $s, $l);
-$phpunit->assertEquals('', $s, 'short list-files'); 
+$phpunit->assertEquals('', $s, 'short list-files');
 $phpunit->assertEquals(array(), $l, 'long list-files');
 PEAR_Command::getGetoptArgs('list-upgrades', $s, $l);
-$phpunit->assertEquals('i', $s, 'short list-upgrades'); 
+$phpunit->assertEquals('i', $s, 'short list-upgrades');
 $phpunit->assertEquals(array('channelinfo'), $l, 'long list-upgrades');
 PEAR_Command::getGetoptArgs('login', $s, $l);
-$phpunit->assertEquals('', $s, 'short login'); 
+$phpunit->assertEquals('', $s, 'short login');
 $phpunit->assertEquals(array(), $l, 'long login');
 PEAR_Command::getGetoptArgs('logout', $s, $l);
-$phpunit->assertEquals('', $s, 'short logout'); 
+$phpunit->assertEquals('', $s, 'short logout');
 $phpunit->assertEquals(array(), $l, 'long logout');
 PEAR_Command::getGetoptArgs('makerpm', $s, $l);
-$phpunit->assertEquals('t:p:', $s, 'short makerpm'); 
+$phpunit->assertEquals('t:p:', $s, 'short makerpm');
 $phpunit->assertEquals(array(
   0 => 'spec-template=',
   1 => 'rpm-pkgname=',
 ), $l, 'long makerpm');
 PEAR_Command::getGetoptArgs('package', $s, $l);
-$phpunit->assertEquals('Zn', $s, 'short package'); 
+$phpunit->assertEquals('Zn', $s, 'short package');
 $phpunit->assertEquals(array (
   0 => 'nocompress',
   1 => 'showname',
 ), $l, 'long package');
 PEAR_Command::getGetoptArgs('package-dependencies', $s, $l);
-$phpunit->assertEquals('', $s, 'short package-dependencies'); 
+$phpunit->assertEquals('', $s, 'short package-dependencies');
 $phpunit->assertEquals(array (), $l, 'long package-dependencies');
 PEAR_Command::getGetoptArgs('package-validate', $s, $l);
-$phpunit->assertEquals('', $s, 'short package-validate'); 
+$phpunit->assertEquals('', $s, 'short package-validate');
 $phpunit->assertEquals(array (), $l, 'long package-validate');
 PEAR_Command::getGetoptArgs('remote-info', $s, $l);
-$phpunit->assertEquals('', $s, 'short remote-info'); 
+$phpunit->assertEquals('', $s, 'short remote-info');
 $phpunit->assertEquals(array (), $l, 'long remote-info');
 PEAR_Command::getGetoptArgs('remote-list', $s, $l);
-$phpunit->assertEquals('c:', $s, 'short remote-list'); 
+$phpunit->assertEquals('c:', $s, 'short remote-list');
 $phpunit->assertEquals(array ('channel='), $l, 'long remote-list');
 PEAR_Command::getGetoptArgs('run-tests', $s, $l);
-$phpunit->assertEquals('ri:lqsputc:x', $s, 'short run-tests'); 
+$phpunit->assertEquals('ri:lqsputc:x', $s, 'short run-tests');
 $phpunit->assertEquals(array (
     'recur',
     'ini=',
@@ -261,16 +261,16 @@ $phpunit->assertEquals(array (
     'cgi=',
     'coverage'), $l, 'long run-tests');
 PEAR_Command::getGetoptArgs('search', $s, $l);
-$phpunit->assertEquals('c:ai', $s, 'short search'); 
+$phpunit->assertEquals('c:ai', $s, 'short search');
 $phpunit->assertEquals(array ('channel=', 'allchannels', 'channelinfo'), $l, 'long search');
 PEAR_Command::getGetoptArgs('shell-test', $s, $l);
-$phpunit->assertEquals('', $s, 'short shell-test'); 
+$phpunit->assertEquals('', $s, 'short shell-test');
 $phpunit->assertEquals(array (), $l, 'long shell-test');
 PEAR_Command::getGetoptArgs('sign', $s, $l);
-$phpunit->assertEquals('v', $s, 'short sign'); 
+$phpunit->assertEquals('v', $s, 'short sign');
 $phpunit->assertEquals(array(0 => 'verbose',), $l, 'long sign');
 PEAR_Command::getGetoptArgs('uninstall', $s, $l);
-$phpunit->assertEquals('nrR:O', $s, 'short uninstall'); 
+$phpunit->assertEquals('nrR:O', $s, 'short uninstall');
 $phpunit->assertEquals(array (
   0 => 'nodeps',
   1 => 'register-only',
@@ -279,34 +279,36 @@ $phpunit->assertEquals(array (
   4 => 'offline',
 ), $l, 'long uninstall');
 PEAR_Command::getGetoptArgs('update-channels', $s, $l);
-$phpunit->assertEquals('', $s, 'short update-channels'); 
+$phpunit->assertEquals('', $s, 'short update-channels');
 $phpunit->assertEquals(array (), $l, 'long update-channels');
 PEAR_Command::getGetoptArgs('upgrade', $s, $l);
-$phpunit->assertEquals('flnrBZR:aoOp', $s, 'short upgrade'); 
+$phpunit->assertEquals('c:flnrBZR:aoOp', $s, 'short upgrade');
 $phpunit->assertEquals(array (
-  0 => 'force',
-  1 => 'loose',
-  2 => 'nodeps',
-  3 => 'register-only',
-  4 => 'nobuild',
-  5 => 'nocompress',
-  6 => 'installroot=',
-  7 => 'ignore-errors',
-  8 => 'alldeps',
-  9 => 'onlyreqdeps',
-  10 => 'offline',
-  11 => 'pretend',
+  0 => 'channel=',
+  1 => 'force',
+  2 => 'loose',
+  3 => 'nodeps',
+  4 => 'register-only',
+  5 => 'nobuild',
+  6 => 'nocompress',
+  7 => 'installroot=',
+  8 => 'ignore-errors',
+  9 => 'alldeps',
+  10 => 'onlyreqdeps',
+  11 => 'offline',
+  12 => 'pretend',
 ), $l, 'long upgrade');
 PEAR_Command::getGetoptArgs('upgrade-all', $s, $l);
-$phpunit->assertEquals('nrBZR:', $s, 'short upgrade-all'); 
+$phpunit->assertEquals('c:nrBZR:', $s, 'short upgrade-all');
 $phpunit->assertEquals(array (
-  0 => 'nodeps',
-  1 => 'register-only',
-  2 => 'nobuild',
-  3 => 'nocompress',
-  4 => 'installroot=',
-  5 => 'ignore-errors',
-  6 => 'loose',
+  0 => 'channel=',
+  1 => 'nodeps',
+  2 => 'register-only',
+  3 => 'nobuild',
+  4 => 'nocompress',
+  5 => 'installroot=',
+  6 => 'ignore-errors',
+  7 => 'loose',
 ), $l, 'long upgrade-all');
 $phpunit->assertEquals('Build an Extension From C Source'
     , PEAR_Command::getDescription('build'), 'build');
