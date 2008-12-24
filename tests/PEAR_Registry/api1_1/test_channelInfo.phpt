@@ -24,6 +24,10 @@ $ch->setName('test.test.test');
 $ch->setAlias('foo');
 $ch->setSummary('blah');
 $ch->setDefaultPEARProtocols();
+$ch->setBaseURL('REST1.0', 'http://pear.example.org/rest/');
+$ch->setBaseURL('REST1.1', 'http://pear.example.org/rest/');
+$ch->setBaseURL('REST1.2', 'http://pear.example.org/rest/');
+$ch->setBaseURL('REST1.3', 'http://pear.example.org/rest/');
 $reg->addChannel($ch);
 $phpunit->assertNoErrors('setup');
 $ret = $reg->channelInfo('snark');
@@ -43,190 +47,95 @@ $phpunit->assertEquals(array (
   'name' => 'test.test.test',
   'suggestedalias' => 'foo',
   'summary' => 'blah',
-  'servers' => 
+  'servers' =>
   array (
-    'primary' => 
+    'primary' =>
     array (
-      'xmlrpc' => 
+    'rest' =>
       array (
-        'function' => 
+        'baseurl' =>
         array (
-          0 => 
+          0 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.0',
             ),
-            '_content' => 'logintest',
+            '_content' => 'http://pear.example.org/rest/',
           ),
-          1 => 
+          1 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.1',
             ),
-            '_content' => 'package.listLatestReleases',
+            '_content' => 'http://pear.example.org/rest/',
           ),
-          2 => 
+          2 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.2',
             ),
-            '_content' => 'package.listAll',
+            '_content' => 'http://pear.example.org/rest/',
           ),
-          3 => 
+          3 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.3',
             ),
-            '_content' => 'package.info',
-          ),
-          4 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.getDownloadURL',
-          ),
-          5 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.1',
-            ),
-            '_content' => 'package.getDownloadURL',
-          ),
-          6 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.getDepDownloadURL',
-          ),
-          7 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.1',
-            ),
-            '_content' => 'package.getDepDownloadURL',
-          ),
-          8 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.search',
-          ),
-          9 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'channel.listAll',
+            '_content' => 'http://pear.example.org/rest/',
           ),
         ),
       ),
     ),
   ),
 ), $ret, 'foo');
+
 $phpunit->assertEquals(array (
   'name' => 'test.test.test',
   'suggestedalias' => 'foo',
   'summary' => 'blah',
-  'servers' => 
+  'servers' =>
   array (
-    'primary' => 
+    'primary' =>
     array (
-      'xmlrpc' => 
+      'rest' =>
       array (
-        'function' => 
+        'baseurl' =>
         array (
-          0 => 
+          0 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.0',
             ),
-            '_content' => 'logintest',
+            '_content' => 'http://pear.example.org/rest/',
           ),
-          1 => 
+          1 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.1',
             ),
-            '_content' => 'package.listLatestReleases',
+            '_content' => 'http://pear.example.org/rest/',
           ),
-          2 => 
+          2 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.2',
             ),
-            '_content' => 'package.listAll',
+            '_content' => 'http://pear.example.org/rest/',
           ),
-          3 => 
+          3 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.3',
             ),
-            '_content' => 'package.info',
-          ),
-          4 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.getDownloadURL',
-          ),
-          5 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.1',
-            ),
-            '_content' => 'package.getDownloadURL',
-          ),
-          6 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.getDepDownloadURL',
-          ),
-          7 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.1',
-            ),
-            '_content' => 'package.getDepDownloadURL',
-          ),
-          8 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.search',
-          ),
-          9 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'channel.listAll',
+            '_content' => 'http://pear.example.org/rest/',
           ),
         ),
       ),
@@ -237,93 +146,45 @@ $phpunit->assertEquals(array (
   'name' => 'test.test.test',
   'suggestedalias' => 'foo',
   'summary' => 'blah',
-  'servers' => 
+  'servers' =>
   array (
-    'primary' => 
+    'primary' =>
     array (
-      'xmlrpc' => 
+      'rest' =>
       array (
-        'function' => 
+        'baseurl' =>
         array (
-          0 => 
+          0 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.0',
             ),
-            '_content' => 'logintest',
+            '_content' => 'http://pear.example.org/rest/',
           ),
-          1 => 
+          1 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.1',
             ),
-            '_content' => 'package.listLatestReleases',
+            '_content' => 'http://pear.example.org/rest/',
           ),
-          2 => 
+          2 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.2',
             ),
-            '_content' => 'package.listAll',
+            '_content' => 'http://pear.example.org/rest/',
           ),
-          3 => 
+          3 =>
           array (
-            'attribs' => 
+            'attribs' =>
             array (
-              'version' => '1.0',
+              'type' => 'REST1.3',
             ),
-            '_content' => 'package.info',
-          ),
-          4 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.getDownloadURL',
-          ),
-          5 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.1',
-            ),
-            '_content' => 'package.getDownloadURL',
-          ),
-          6 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.getDepDownloadURL',
-          ),
-          7 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.1',
-            ),
-            '_content' => 'package.getDepDownloadURL',
-          ),
-          8 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'package.search',
-          ),
-          9 => 
-          array (
-            'attribs' => 
-            array (
-              'version' => '1.0',
-            ),
-            '_content' => 'channel.listAll',
+            '_content' => 'http://pear.example.org/rest/',
           ),
         ),
       ),
