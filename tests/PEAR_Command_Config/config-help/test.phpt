@@ -13,42 +13,42 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $e = $command->run('config-help', array(), array());
 $phpunit->assertNoErrors('test');
 $log = $fakelog->getLog();
-$log[0]['info']['data'] = array_slice($log[0]['info']['data'], 0, 29);
+$log[0]['info']['data'] = array_slice($log[0]['info']['data'], 0, 31);
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'Config help',
-      'headline' => 
+      'headline' =>
       array (
         0 => 'Name',
         1 => 'Type',
         2 => 'Description',
       ),
       'border' => true,
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 =>
         array (
           0 => 'master_server',
           1 => 'string',
           2 => 'name of the main PEAR server [NOT USED IN THIS VERSION]',
         ),
-        1 => 
+        1 =>
         array (
           0 => 'preferred_state',
           1 => 'set',
           2 => 'the installer will prefer releases with this state when installing packages without a version or state specified
 Valid set: stable beta alpha devel snapshot',
         ),
-        2 => 
+        2 =>
         array (
           0 => 'cache_dir',
           1 => 'directory',
           2 => 'directory which is used for XMLRPC cache',
         ),
-        3 => 
+        3 =>
         array (
           0 => 'php_dir',
           1 => 'directory',
@@ -128,6 +128,16 @@ Valid set: stable beta alpha devel snapshot',
           0 => 'php_bin',
           1 => 'file',
           2 => 'PHP CLI/CGI binary for executing scripts',
+        ),
+        array (
+          0 => 'php_prefix',
+          1 => 'string',
+          2 => '--program-prefix for php_bin\'s ./configure, used for pecl installs',
+        ),
+        array (
+          0 => 'php_suffix',
+          1 => 'string',
+          2 => '--program-suffix for php_bin\'s ./configure, used for pecl installs',
         ),
         array (
           0 => 'php_ini',
