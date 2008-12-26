@@ -137,6 +137,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
 
   Support for XML RPC channels has been dropped - The only ones that used it
   (pear.php.net and pecl.php.net) have used the REST interface for years now
+
+  Due to Request #14325 upgrade-all can be considered deprecated in favor of calling upgrade
+  with no parameters to replicate better what other package managers are doing.
  </notes>
  <contents>
   <dir name="/">
