@@ -458,70 +458,71 @@ Run post-installation scripts in package <package>, if any exist.
 
     function _parseIni($filename)
     {
-        if (file_exists($filename)) {
-            if (filesize($filename) > 300000) {
-                return PEAR::raiseError('php.ini "' . $filename . '" is too large, aborting');
-            }
-            ob_start();
-            phpinfo(INFO_GENERAL);
-            $info = ob_get_contents();
-            ob_end_clean();
-            $debug = function_exists('leak') ? '_debug' : '';
-            $ts = preg_match('/Thread Safety.+enabled/', $info) ? '_ts' : '';
-            $zend_extension_line = 'zend_extension' . $debug . $ts;
-            $all = @file($filename);
-            if (!$all) {
-                return PEAR::raiseError('php.ini "' . $filename .'" could not be read');
-            }
-            $zend_extensions = $extensions = array();
-            // assume this is right, but pull from the php.ini if it is found
-            $extension_dir = ini_get('extension_dir');
-            foreach ($all as $linenum => $line) {
-                $line = trim($line);
-                if (!$line) {
-                    continue;
-                }
-                if ($line[0] == ';') {
-                    continue;
-                }
-                if (strtolower(substr($line, 0, 13)) == 'extension_dir') {
-                    $line = trim(substr($line, 13));
-                    if ($line[0] == '=') {
-                        $x = trim(substr($line, 1));
-                        $x = explode(';', $x);
-                        $extension_dir = str_replace('"', '', array_shift($x));
-                        continue;
-                    }
-                }
-                if (strtolower(substr($line, 0, 9)) == 'extension') {
-                    $line = trim(substr($line, 9));
-                    if ($line[0] == '=') {
-                        $x = trim(substr($line, 1));
-                        $x = explode(';', $x);
-                        $extensions[$linenum] = str_replace('"', '', array_shift($x));
-                        continue;
-                    }
-                }
-                if (strtolower(substr($line, 0, strlen($zend_extension_line))) ==
-                      $zend_extension_line) {
-                    $line = trim(substr($line, strlen($zend_extension_line)));
-                    if ($line[0] == '=') {
-                        $x = trim(substr($line, 1));
-                        $x = explode(';', $x);
-                        $zend_extensions[$linenum] = str_replace('"', '', array_shift($x));
-                        continue;
-                    }
-                }
-            }
-            return array(
-                'extensions' => $extensions,
-                'zend_extensions' => $zend_extensions,
-                'extension_dir' => $extension_dir,
-                'all' => $all,
-            );
-        } else {
+        if (!file_exists($filename)) {
             return PEAR::raiseError('php.ini "' . $filename . '" does not exist');
         }
+
+        if (filesize($filename) > 300000) {
+            return PEAR::raiseError('php.ini "' . $filename . '" is too large, aborting');
+        }
+
+        ob_start();
+        phpinfo(INFO_GENERAL);
+        $info = ob_get_contents();
+        ob_end_clean();
+        $debug = function_exists('leak') ? '_debug' : '';
+        $ts = preg_match('/Thread Safety.+enabled/', $info) ? '_ts' : '';
+        $zend_extension_line = 'zend_extension' . $debug . $ts;
+        $all = @file($filename);
+        if (!$all) {
+            return PEAR::raiseError('php.ini "' . $filename .'" could not be read');
+        }
+        $zend_extensions = $extensions = array();
+        // assume this is right, but pull from the php.ini if it is found
+        $extension_dir = ini_get('extension_dir');
+        foreach ($all as $linenum => $line) {
+            $line = trim($line);
+            if (!$line) {
+                continue;
+            }
+            if ($line[0] == ';') {
+                continue;
+            }
+            if (strtolower(substr($line, 0, 13)) == 'extension_dir') {
+                $line = trim(substr($line, 13));
+                if ($line[0] == '=') {
+                    $x = trim(substr($line, 1));
+                    $x = explode(';', $x);
+                    $extension_dir = str_replace('"', '', array_shift($x));
+                    continue;
+                }
+            }
+            if (strtolower(substr($line, 0, 9)) == 'extension') {
+                $line = trim(substr($line, 9));
+                if ($line[0] == '=') {
+                    $x = trim(substr($line, 1));
+                    $x = explode(';', $x);
+                    $extensions[$linenum] = str_replace('"', '', array_shift($x));
+                    continue;
+                }
+            }
+            if (strtolower(substr($line, 0, strlen($zend_extension_line))) ==
+                  $zend_extension_line) {
+                $line = trim(substr($line, strlen($zend_extension_line)));
+                if ($line[0] == '=') {
+                    $x = trim(substr($line, 1));
+                    $x = explode(';', $x);
+                    $zend_extensions[$linenum] = str_replace('"', '', array_shift($x));
+                    continue;
+                }
+            }
+        }
+        return array(
+            'extensions' => $extensions,
+            'zend_extensions' => $zend_extensions,
+            'extension_dir' => $extension_dir,
+            'all' => $all,
+        );
     }
 
     // {{{ doInstall()
@@ -572,6 +573,7 @@ Run post-installation scripts in package <package>, if any exist.
         $otherpackages    = array();
         // parse params
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+
         foreach ($params as $param) {
             if (strpos($param, 'http://') === 0) {
                 $otherpackages[] = $param;
