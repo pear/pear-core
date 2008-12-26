@@ -140,6 +140,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 
   Due to Request #14325 upgrade-all can be considered deprecated in favor of calling upgrade
   with no parameters to replicate better what other package managers are doing.
+  upgrade-all will still work as intended.
  </notes>
  <contents>
   <dir name="/">
