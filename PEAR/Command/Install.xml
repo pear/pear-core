@@ -161,7 +161,7 @@ More than one package may be specified at once.
 </doc>
  </upgrade>
  <upgrade-all>
-  <summary>Upgrade All Packages</summary>
+  <summary>Upgrade All Packages [Deprecated in favor of calling upgrade with no parameters]</summary>
   <function>doInstall</function>
   <shortcut>ua</shortcut>
   <options>

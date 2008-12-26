@@ -205,7 +205,7 @@ upgrade anyway).
 More than one package may be specified at once.
 '),
         'upgrade-all' => array(
-            'summary' => 'Upgrade All Packages',
+            'summary' => 'Upgrade All Packages [Deprecated in favor of calling upgrade with no parameters]',
             'function' => 'doUpgradeAll',
             'shortcut' => 'ua',
             'options' => array(
