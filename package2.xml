@@ -117,7 +117,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Fix Bug #14558: PackageFile.php creates tmp directory outside configured temp_dir [cweiske]
 
   NOTE!
-  Functions that have been deprecated for 3+ years in PEAR_Common have been removed:
+  Functions that have been deprecated for 3+ years in PEAR_Common, please take a moment
+  to migrate over to one of the alternatives that have ben provided:
   * PEAR_Common->downloadHttp (use PEAR_Downloader->downloadHttp instead)
   * PEAR_Common->infoFromTgzFile (use PEAR_PackageFile->fromTgzFile instead)
   * PEAR_Common->infoFromDescriptionFile (use PEAR_PackageFile->fromPackageFile instead)
