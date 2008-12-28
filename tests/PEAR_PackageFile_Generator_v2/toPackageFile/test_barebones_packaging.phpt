@@ -41,7 +41,7 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-25" is not today'),
 ), 'errors');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 1,
     1 => 'Analyzing foo.php',
@@ -76,9 +76,11 @@ hi there</description>
   <api>alpha</api>
  </stability>
  <license>PHP License</license>
- <notes>here are the
+ <notes>
+here are the
 multi-line
-release notes</notes>
+release notes
+ </notes>
  <contents>
   <dir name="/">
    <file name="foo.php" role="php" />
