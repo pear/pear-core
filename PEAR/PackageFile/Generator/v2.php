@@ -181,7 +181,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 'be created from a real file');
         }
 
-        $pkgdir = dirname(realpath($pkgfile));
+        $pkgdir  = dirname(realpath($pkgfile));
         $pkgfile = basename($pkgfile);
 
         // {{{ Create the package file list
@@ -365,6 +365,17 @@ http://pear.php.net/dtd/package-2.0.xsd',
             unset($arr['_lastversion']);
         }
 
+        // Fix the notes a little bit
+        if (isset($arr['notes'])) {
+            $arr['notes'] = "\n" . $arr['notes'] . "\n";
+        }
+
+        if (isset($arr['changelog']) && !empty($arr['changelog'])) {
+            foreach ($arr['changelog']['release'] as &$c) {
+                $c['notes'] = "\n" . $c['notes'] . "\n";
+            }
+        }
+
         if ($state ^ PEAR_VALIDATE_PACKAGING && !isset($arr['bundle'])) {
             $use = $this->_recursiveXmlFilelist($arr['contents']['dir']['file']);
             unset($arr['contents']['dir']['file']);
@@ -546,12 +557,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
         $this->_serializedData = '';
         // serialize an array
         if (is_array($data)) {
-            if (isset($this->options['rootName'])) {
-                $tagName = $this->options['rootName'];
-            } else {
-                $tagName = 'array';
-            }
-
+            $tagName = isset($this->options['rootName']) ? $this->options['rootName'] : 'array';
             $this->_serializedData .= $this->_serializeArray($data, $tagName, $this->options['rootAttributes']);
         }
 
@@ -565,11 +571,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
         //  build xml declaration
         if ($this->options['addDecl']) {
             $atts = array();
-            if (isset($this->options['encoding']) ) {
-                $encoding = $this->options['encoding'];
-            } else {
-                $encoding = null;
-            }
+            $encoding = isset($this->options['encoding']) ? $this->options['encoding'] : null;
             $this->_serializedData = PEAR_PackageFile_Generator_v2_XML_Util::getXMLDeclaration('1.0', $encoding)
                                    . $this->options['linebreak']
                                    . $this->_serializedData;
@@ -591,7 +593,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
     */
     function getSerializedData()
     {
-        if ($this->_serializedData == null ) {
+        if ($this->_serializedData === null) {
             return  $this->raiseError('No serialized data available. Use XML_Serializer::serialize() first.', XML_SERIALIZER_ERROR_NO_SERIALIZATION);
         }
         return $this->_serializedData;
