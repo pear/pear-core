@@ -98,8 +98,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <notes>
   * Implement Request #12706: pear list -a hard to read [dufuz]
   * Implement Request #13927: install-pear.php should have option to set www_dir [timj]
-  * Implement Request #14324 Make the pear install command behave similar to apt-get [dufuz]
-  * Implement Request #14325 make pear upgrade with no params behave like pear upgrade-all [dufuz]
+  * Implement Request #14324: Make the pear install command behave similar to apt-get [dufuz]
+  * Implement Request #14325: make pear upgrade with no params behave like pear upgrade-all [dufuz]
 
   * Fix PHP Bug #43857: --program-suffix not always reflected everywhere [cellog]
 
