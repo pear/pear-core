@@ -353,7 +353,8 @@ class PEAR_PackageFile_Parser_v1
             case 'notes':
                 // try to "de-indent" release notes in case someone
                 // has been over-indenting their xml ;-)
-                $data = $this->_unIndent($this->cdata);
+                // Trim only on the right side
+                $data = rtrim($this->_unIndent($this->cdata));
                 if ($this->in_changelog) {
                     $this->current_release['release_notes'] = $data;
                 } else {
