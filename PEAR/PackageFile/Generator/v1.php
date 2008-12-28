@@ -521,6 +521,7 @@ class PEAR_PackageFile_Generator_v1
                 return $a;
             }
         }
+
         $arr = array(
             'attribs' => array(
                              'version' => '2.0',
@@ -550,6 +551,7 @@ class PEAR_PackageFile_Generator_v1
             );
             $arr['lead'][] = $new;
         }
+
         if (!isset($arr['lead'])) { // some people... you know?
             $arr['lead'] = array(
                 'name' => 'unknown',
@@ -558,9 +560,11 @@ class PEAR_PackageFile_Generator_v1
                 'active' => 'no',
             );
         }
+
         if (count($arr['lead']) == 1) {
             $arr['lead'] = $arr['lead'][0];
         }
+
         foreach ($maintainers as $maintainer) {
             if ($maintainer['role'] == 'lead') {
                 continue;
@@ -573,15 +577,19 @@ class PEAR_PackageFile_Generator_v1
             );
             $arr[$maintainer['role']][] = $new;
         }
+
         if (isset($arr['developer']) && count($arr['developer']) == 1) {
             $arr['developer'] = $arr['developer'][0];
         }
+
         if (isset($arr['contributor']) && count($arr['contributor']) == 1) {
             $arr['contributor'] = $arr['contributor'][0];
         }
+
         if (isset($arr['helper']) && count($arr['helper']) == 1) {
             $arr['helper'] = $arr['helper'][0];
         }
+
         $arr['date'] = $this->_packagefile->getDate();
         $arr['version'] =
             array(
@@ -605,6 +613,7 @@ class PEAR_PackageFile_Generator_v1
                 'gpl' => 'http://www.gnu.org/copyleft/gpl.html',
                 'apache' => 'http://www.opensource.org/licenses/apache2.0.php'
             );
+
         if (isset($licensemap[strtolower($this->_packagefile->getLicense())])) {
             $arr['license'] = array(
                 'attribs' => array('uri' =>
@@ -615,6 +624,7 @@ class PEAR_PackageFile_Generator_v1
             // don't use bogus uri
             $arr['license'] = $this->_packagefile->getLicense();
         }
+
         $arr['notes'] = $this->_packagefile->getNotes();
         $temp = array();
         $arr['contents'] = $this->_convertFilelist2_0($temp);
@@ -625,6 +635,7 @@ class PEAR_PackageFile_Generator_v1
             $arr['channel'] = 'pecl.php.net';
             $arr['providesextension'] = $arr['name']; // assumption
         }
+
         $arr[$release] = array();
         if ($this->_packagefile->getConfigureOptions()) {
             $arr[$release]['configureoption'] = $this->_packagefile->getConfigureOptions();
@@ -635,11 +646,13 @@ class PEAR_PackageFile_Generator_v1
                 $arr[$release]['configureoption'] = $arr[$release]['configureoption'][0];
             }
         }
+
         $this->_convertRelease2_0($arr[$release], $temp);
         if ($release == 'extsrcrelease' && count($arr[$release]) > 1) {
             // multiple extsrcrelease tags added in PEAR 1.4.1
             $arr['dependencies']['required']['pearinstaller']['min'] = '1.4.1';
         }
+
         if ($cl = $this->_packagefile->getChangelog()) {
             foreach ($cl as $release) {
                 $rel = array();
@@ -651,6 +664,7 @@ class PEAR_PackageFile_Generator_v1
                 if (!isset($release['release_state'])) {
                     $release['release_state'] = 'stable';
                 }
+
                 $rel['stability'] =
                     array(
                         'release' => $release['release_state'],
@@ -661,6 +675,7 @@ class PEAR_PackageFile_Generator_v1
                 } else {
                     $rel['date'] = date('Y-m-d');
                 }
+
                 if (isset($release['release_license'])) {
                     if (isset($licensemap[strtolower($release['release_license'])])) {
                         $uri = $licensemap[strtolower($release['release_license'])];
@@ -674,18 +689,22 @@ class PEAR_PackageFile_Generator_v1
                 } else {
                     $rel['license'] = $arr['license'];
                 }
+
                 if (!isset($release['release_notes'])) {
                     $release['release_notes'] = 'no release notes';
                 }
+
                 $rel['notes'] = $release['release_notes'];
                 $arr['changelog']['release'][] = $rel;
             }
         }
+
         $ret = new $class;
         $ret->setConfig($this->_packagefile->_config);
         if (isset($this->_packagefile->_logger) && is_object($this->_packagefile->_logger)) {
             $ret->setLogger($this->_packagefile->_logger);
         }
+
         $ret->fromArray($arr);
         return $ret;
     }
@@ -831,9 +850,9 @@ class PEAR_PackageFile_Generator_v1
     /**
      * Post-process special files with install-as/platform attributes and
      * make the release tag.
-     * 
+     *
      * This complex method follows this work-flow to create the release tags:
-     * 
+     *
      * <pre>
      * - if any install-as/platform exist, create a generic release and fill it with
      *   o <install as=..> tags for <file name=... install-as=...>
@@ -849,10 +868,10 @@ class PEAR_PackageFile_Generator_v1
      *   o <ignore> tags for <file name=... platform=other platform install-as=..>
      *   o <ignore> tags for <file name=... platform=!this platform install-as=..>
      * </pre>
-     * 
+     *
      * It does this by accessing the $package parameter, which contains an array with
      * indices:
-     * 
+     *
      *  - platform: mapping of file => OS the file should be installed on
      *  - install-as: mapping of file => installed name
      *  - osmap: mapping of OS => list of files that should be installed
@@ -866,7 +885,7 @@ class PEAR_PackageFile_Generator_v1
      */
     function _convertRelease2_0(&$release, $package)
     {
-        //- if any install-as/platform exist, create a generic release and fill it with 
+        //- if any install-as/platform exist, create a generic release and fill it with
         if (count($package['platform']) || count($package['install-as'])) {
             $generic = array();
             $genericIgnore = array();

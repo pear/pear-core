@@ -111,6 +111,7 @@ class PEAR_PackageFile_Parser_v2 extends PEAR_XMLParser
         if (isset($this->_logger)) {
             $ret->setLogger($this->_logger);
         }
+
         $ret->fromArray($this->_unserializedData);
         $ret->setPackagefile($file, $archive);
         return $ret;

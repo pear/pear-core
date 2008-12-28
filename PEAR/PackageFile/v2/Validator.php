@@ -2070,15 +2070,17 @@ class PEAR_PackageFile_v2_Validator
         if (!$this->_isValid) {
             return array();
         }
+
         $providesret = array();
-        $file = basename($srcinfo['source_file']);
-        $pn = $this->_pf->getPackage();
-        $pnl = strlen($pn);
+        $file        = basename($srcinfo['source_file']);
+        $pn          = isset($this->_pf) ? $this->_pf->getPackage() : '';
+        $pnl         = strlen($pn);
         foreach ($srcinfo['declared_classes'] as $class) {
             $key = "class;$class";
             if (isset($providesret[$key])) {
                 continue;
             }
+
             $providesret[$key] =
                 array('file'=> $file, 'type' => 'class', 'name' => $class);
             if (isset($srcinfo['inheritance'][$class])) {
@@ -2086,6 +2088,7 @@ class PEAR_PackageFile_v2_Validator
                     $srcinfo['inheritance'][$class];
             }
         }
+
         foreach ($srcinfo['declared_methods'] as $class => $methods) {
             foreach ($methods as $method) {
                 $function = "$class::$method";
@@ -2094,6 +2097,7 @@ class PEAR_PackageFile_v2_Validator
                     isset($providesret[$key])) {
                     continue;
                 }
+
                 $providesret[$key] =
                     array('file'=> $file, 'type' => 'function', 'name' => $function);
             }
@@ -2104,13 +2108,15 @@ class PEAR_PackageFile_v2_Validator
             if ($function{0} == '_' || isset($providesret[$key])) {
                 continue;
             }
+
             if (!strstr($function, '::') && strncasecmp($function, $pn, $pnl)) {
                 $warnings[] = "in1 " . $file . ": function \"$function\" not prefixed with package name \"$pn\"";
             }
+
             $providesret[$key] =
                 array('file'=> $file, 'type' => 'function', 'name' => $function);
         }
+
         return $providesret;
     }
 }
-?>
