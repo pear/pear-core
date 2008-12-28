@@ -576,9 +576,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
         }
 
 
-		if ($optionsBak !== null) {
-			$this->options = $optionsBak;
-		}
+        if ($optionsBak !== null) {
+            $this->options = $optionsBak;
+        }
 
         return  true;
     }
@@ -704,8 +704,8 @@ http://pear.php.net/dtd/package-2.0.xsd',
                     }
 
                     $string .= $this->options['linebreak'];
-        			//	do indentation
-                    if ($this->options['indent']!==null && $this->_tagDepth>0) {
+                    // do indentation
+                    if ($this->options['indent'] !== null && $this->_tagDepth > 0) {
                         $string .= str_repeat($this->options['indent'], $this->_tagDepth);
                     }
                 }
@@ -713,14 +713,14 @@ http://pear.php.net/dtd/package-2.0.xsd',
             }
         }
 
-		if ($this->options['scalarAsAttributes'] === true) {
-	        foreach ($array as $key => $value) {
-				if (is_scalar($value) && (PEAR_PackageFile_Generator_v2_XML_Util::isValidName($key) === true)) {
-					unset($array[$key]);
-					$attributes[$this->options['prependAttributes'].$key] = $value;
-				}
-			}
-		}
+        if ($this->options['scalarAsAttributes'] === true) {
+            foreach ($array as $key => $value) {
+                if (is_scalar($value) && (PEAR_PackageFile_Generator_v2_XML_Util::isValidName($key) === true)) {
+                    unset($array[$key]);
+                    $attributes[$this->options['prependAttributes'].$key] = $value;
+                }
+            }
+        }
 
         // check for empty array => create empty tag
         if (empty($array)) {
@@ -734,28 +734,28 @@ http://pear.php.net/dtd/package-2.0.xsd',
             $this->_tagDepth++;
             $tmp = $this->options['linebreak'];
             foreach ($array as $key => $value) {
-    			//	do indentation
-                if ($this->options['indent']!==null && $this->_tagDepth>0) {
+                // do indentation
+                if ($this->options['indent'] !== null && $this->_tagDepth > 0) {
                     $tmp .= str_repeat($this->options['indent'], $this->_tagDepth);
                 }
 
-    			//	copy key
-    			$origKey	=	$key;
-    			//	key cannot be used as tagname => use default tag
+                // copy key
+                $origKey = $key;
+                // key cannot be used as tagname => use default tag
                 $valid = PEAR_PackageFile_Generator_v2_XML_Util::isValidName($key);
-    	        if (PEAR::isError($valid)) {
-    	            if ($this->options['classAsTagName'] && is_object($value)) {
-    	                $key = get_class($value);
-    	            } else {
-            	        $key = $this->options['defaultTagName'];
-    	            }
-           	 	}
+                if (PEAR::isError($valid)) {
+                    if ($this->options['classAsTagName'] && is_object($value)) {
+                        $key = get_class($value);
+                    } else {
+                        $key = $this->options['defaultTagName'];
+                    }
+                }
                 $atts = array();
                 if ($this->options['typeHints'] === true) {
                     $atts[$this->options['typeAttribute']] = gettype($value);
-    				if ($key !== $origKey) {
-    					$atts[$this->options['keyAttribute']] = (string)$origKey;
-    				}
+                    if ($key !== $origKey) {
+                        $atts[$this->options['keyAttribute']] = (string)$origKey;
+                    }
 
                 }
                 if ($this->options['beautifyFilelist'] && $key == 'dir') {
@@ -798,9 +798,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 $tmp .= str_repeat($this->options['indent'], $this->_tagDepth);
             }
 
-    		if (trim($tmp) === '') {
-    			$tmp = null;
-    		}
+            if (trim($tmp) === '') {
+                $tmp = null;
+            }
 
             $tag = array(
                             'qname'      => $tagName,
