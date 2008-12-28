@@ -42,9 +42,11 @@ hi there</description>
   <api>alpha</api>
  </stability>
  <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
- <notes>here are the
+ <notes>
+here are the
 multi-line
-release notes</notes>
+release notes
+ </notes>
  <contents>
   <dir name="/">
    <dir name="sunger">
@@ -93,7 +95,8 @@ release notes</notes>
    </stability>
    <date>2004-10-28</date>
    <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
-   <notes>Installer:
+   <notes>
+Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
  * fix Bug #1249 display the right state when using --force option
  * fix Bug #2189 upgrade-all stops if dependancy fails
@@ -106,7 +109,8 @@ Other:
  * add PEAR_Exception class for PHP5 users
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
- * fix warning in PEAR_Registry for windows 98 users</notes>
+ * fix warning in PEAR_Registry for windows 98 users
+   </notes>
   </release>
   <release>
    <version>
@@ -119,7 +123,8 @@ Other:
    </stability>
    <date>2004-10-28</date>
    <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
-   <notes>Installer:
+   <notes>
+Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
  * fix Bug #1249 display the right state when using --force option
  * fix Bug #2189 upgrade-all stops if dependancy fails
@@ -132,7 +137,8 @@ Other:
  * add PEAR_Exception class for PHP5 users
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
- * fix warning in PEAR_Registry for windows 98 users</notes>
+ * fix warning in PEAR_Registry for windows 98 users
+   </notes>
   </release>
  </changelog>
 </package>', $e, 'xml');

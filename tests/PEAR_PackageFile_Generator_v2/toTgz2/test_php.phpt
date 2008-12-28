@@ -13,18 +13,22 @@ $save____dir = getcwd();
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 chdir($temp_path);
 require_once 'PEAR/Packager.php';
+
 $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'phprelease1.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'phprelease1.xml');
+
 $generator = &$pf->getDefaultGenerator();
-$packager = &new PEAR_Packager;
-$null = null;
+$packager  = &new PEAR_Packager;
+$null      = null;
 mkdir($temp_path . DIRECTORY_SEPARATOR . 'gron');
 $e = $generator->toTgz2($packager, $null, true, $temp_path . DIRECTORY_SEPARATOR . 'gron');
+
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-10" is not today'),
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-12-10" is not today'),
 ), 'errors');
+
 $phpunit->assertEquals(array (
   0 =>
   array (
@@ -44,10 +48,13 @@ $phpunit->assertEquals(array (
         DIRECTORY_SEPARATOR . 'foo.php',
   ),
 ), $fakelog->getLog(), 'packaging log');
-$pkg = &new PEAR_PackageFile($config);
+
+$pkg   = &new PEAR_PackageFile($config);
 $newpf = &$pkg->fromTgzFile($e, PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('errors');
+
 $xml = $newpf->getFileContents('package.xml');
+
 $phpunit->assertEquals('<?xml version="1.0" encoding="ISO-8859-1"?>
 <package packagerversion="' . $generator->getPackagerVersion() . '" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>foo</name>
@@ -72,9 +79,11 @@ hi there</description>
   <api>alpha</api>
  </stability>
  <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
- <notes>here are the
+ <notes>
+here are the
 multi-line
-release notes</notes>
+release notes
+ </notes>
  <contents>
   <dir name="/">
    <file baseinstalldir="freeb" md5sum="ed0384ad29e60110b310a02e95287ee6" name="sunger/foo.dat" role="data">
@@ -132,7 +141,8 @@ release notes</notes>
    </stability>
    <date>2004-10-28</date>
    <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
-   <notes>Installer:
+   <notes>
+Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
  * fix Bug #1249 display the right state when using --force option
  * fix Bug #2189 upgrade-all stops if dependancy fails
@@ -145,7 +155,8 @@ Other:
  * add PEAR_Exception class for PHP5 users
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
- * fix warning in PEAR_Registry for windows 98 users</notes>
+ * fix warning in PEAR_Registry for windows 98 users
+   </notes>
   </release>
   <release>
    <version>
@@ -158,7 +169,8 @@ Other:
    </stability>
    <date>2004-10-28</date>
    <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
-   <notes>Installer:
+   <notes>
+Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
  * fix Bug #1249 display the right state when using --force option
  * fix Bug #2189 upgrade-all stops if dependancy fails
@@ -171,16 +183,20 @@ Other:
  * add PEAR_Exception class for PHP5 users
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
- * fix warning in PEAR_Registry for windows 98 users</notes>
+ * fix warning in PEAR_Registry for windows 98 users
+   </notes>
   </release>
  </changelog>
 </package>', $xml, 'xml');
 
+
 $phpunit->assertEquals('<?php
 ?>', $newpf->getFileContents('foo.php'), 'foo.php content');
+
 $phpunit->assertEquals('<?php
 ?>', $newpf->getFileContents('sunger/foo.dat'), 'sunger/foo.dat content');
 chdir($save____dir);
+
 echo 'tests done';
 ?>
 --CLEAN--

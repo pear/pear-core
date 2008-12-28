@@ -10,14 +10,17 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'test_extension.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'test_extension.xml');
+
 $generator = &$pf->getDefaultGenerator();
 $e = &$generator->toV2();
 $phpunit->assertNoErrors('errors');
 $egen = &$e->getDefaultGenerator();
 $xml = $egen->toXml();
+
 $phpunit->assertEquals('<?xml version="1.0" encoding="UTF-8"?>
 <package packagerversion="' . $egen->getPackagerVersion() . '" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
 http://pear.php.net/dtd/tasks-1.0.xsd
@@ -69,7 +72,8 @@ http://snaps.php.net/win32/PECL_4_3/php_sqlite.dll
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license">PHP</license>
- <notes>Upgraded libsqlite to version 2.8.14
+ <notes>
+Upgraded libsqlite to version 2.8.14
 
 &quot;Fixed&quot; the bug where calling sqlite_query() with multiple SQL statements in a
 single string would not work if you looked at the return value.  The fix for
@@ -201,7 +205,8 @@ Fixed column name mangling bug
    </stability>
    <date>2003-06-21</date>
    <license uri="http://www.php.net/license">PHP</license>
-   <notes>Added:
+   <notes>
+Added:
 	sqlite_udf_encode_binary() and sqlite_udf_decode_binary() for
 	handling binary data in UDF callbacks.
 	sqlite_popen() for persistent db connections.
@@ -217,7 +222,6 @@ Fixed column name mangling bug
 	for compatibility with mysql and postgresql extensions.
 Fixed some build issues for thread-safe builds.
 Increase the default busy timeout interval to 60 seconds.
-
    </notes>
   </release>
  </changelog>

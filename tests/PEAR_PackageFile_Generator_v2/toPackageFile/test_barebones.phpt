@@ -67,9 +67,11 @@ hi there</description>
   <api>alpha</api>
  </stability>
  <license>PHP License</license>
- <notes>here are the
+ <notes>
+here are the
 multi-line
-release notes</notes>
+release notes
+ </notes>
  <contents>
   <dir name="/">
    <file name="foo.php" role="php" />
