@@ -10,6 +10,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $savedir = getcwd();
 chdir($temp_path);
 copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' . DIRECTORY_SEPARATOR . 'validv1.xml',
@@ -19,10 +20,12 @@ copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' . DIRECTORY_SEPARA
 touch($temp_path . DIRECTORY_SEPARATOR . 'foo.php');
 mkdir($temp_path . DIRECTORY_SEPARATOR . 'sunger');
 touch($temp_path . DIRECTORY_SEPARATOR . 'sunger' . DIRECTORY_SEPARATOR . 'foo.dat');
+
 $e = $command->run('convert', array(), array());
+
 $phpunit->assertNoErrors('1');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     'info' => 'Wrote new version 2.0 package.xml to ".' . DIRECTORY_SEPARATOR .
         'package2.xml"',
@@ -34,6 +37,7 @@ $pkg = &new PEAR_PackageFile($config);
 $pf = &$pkg->fromPackageFile($temp_path . DIRECTORY_SEPARATOR . 'package2.xml', PEAR_VALIDATE_NORMAL);
 $gen = &$pf->getDefaultGenerator();
 $contents = implode('', file($temp_path . DIRECTORY_SEPARATOR . 'package2.xml'));
+
 $phpunit->assertEquals('<?xml version="1.0" encoding="UTF-8"?>
 <package packagerversion="' . $gen->getPackagerVersion() . '" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
 http://pear.php.net/dtd/tasks-1.0.xsd
@@ -63,10 +67,10 @@ hi there
   <api>alpha</api>
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
- <notes>here are the
+ <notes>
+here are the
 multi-line
 release notes
-  
  </notes>
  <contents>
   <dir name="/">
@@ -117,7 +121,8 @@ release notes
    </stability>
    <date>2004-10-28</date>
    <license uri="http://www.php.net/license">PHP License</license>
-   <notes>Installer:
+   <notes>
+Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
  * fix Bug #1249 display the right state when using --force option
  * fix Bug #2189 upgrade-all stops if dependancy fails
@@ -131,7 +136,6 @@ Other:
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
-   
    </notes>
   </release>
   <release>
@@ -145,7 +149,8 @@ Other:
    </stability>
    <date>2004-10-28</date>
    <license uri="http://www.php.net/license">PHP License</license>
-   <notes>Installer:
+   <notes>
+Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
  * fix Bug #1249 display the right state when using --force option
  * fix Bug #2189 upgrade-all stops if dependancy fails
@@ -159,23 +164,23 @@ Other:
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
-   
    </notes>
   </release>
  </changelog>
 </package>
 ', $contents, 'contents 1');
+
 $e = $command->run('convert', array('flat' => true), array());
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "date" - Release Date "2004-11-27" is not today'),
 ), '1.1');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 1,
     1 => 'Analyzing foo.php',
   ),
-  1 => 
+  1 =>
   array (
     'info' => 'Wrote new version 2.0 package.xml to ".' . DIRECTORY_SEPARATOR .
         'package2.xml"',
@@ -187,6 +192,7 @@ $pkg = &new PEAR_PackageFile($config);
 $pf = &$pkg->fromPackageFile($temp_path . DIRECTORY_SEPARATOR . 'package2.xml', PEAR_VALIDATE_NORMAL);
 $gen = &$pf->getDefaultGenerator();
 $contents = implode('', file($temp_path . DIRECTORY_SEPARATOR . 'package2.xml'));
+
 $phpunit->assertEquals('<?xml version="1.0" encoding="UTF-8"?>
 <package packagerversion="' . $gen->getPackagerVersion() . '" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
 http://pear.php.net/dtd/tasks-1.0.xsd
@@ -216,10 +222,10 @@ hi there
   <api>alpha</api>
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
- <notes>here are the
+ <notes>
+here are the
 multi-line
 release notes
-  
  </notes>
  <contents>
   <dir name="/">
@@ -268,7 +274,8 @@ release notes
    </stability>
    <date>2004-10-28</date>
    <license uri="http://www.php.net/license">PHP License</license>
-   <notes>Installer:
+   <notes>
+Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
  * fix Bug #1249 display the right state when using --force option
  * fix Bug #2189 upgrade-all stops if dependancy fails
@@ -282,7 +289,6 @@ Other:
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
-   
    </notes>
   </release>
   <release>
@@ -296,7 +302,8 @@ Other:
    </stability>
    <date>2004-10-28</date>
    <license uri="http://www.php.net/license">PHP License</license>
-   <notes>Installer:
+   <notes>
+Installer:
  * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
  * fix Bug #1249 display the right state when using --force option
  * fix Bug #2189 upgrade-all stops if dependancy fails
@@ -310,7 +317,6 @@ Other:
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
-   
    </notes>
   </release>
  </changelog>
@@ -324,7 +330,7 @@ $e = $command->run('convert', array(), array($temp_path . DIRECTORY_SEPARATOR . 
     $temp_path . DIRECTORY_SEPARATOR . 'package3.xml'));
 $phpunit->assertNoErrors('2');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     'info' => 'Wrote new version 2.0 package.xml to "' . $temp_path . DIRECTORY_SEPARATOR .
         'package3.xml"',

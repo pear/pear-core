@@ -15,9 +15,10 @@ chdir($temp_path);
 copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' . DIRECTORY_SEPARATOR . 'bug11703.xml',
     $temp_path . DIRECTORY_SEPARATOR . 'package.xml');
 $e = $command->run('convert', array(), array());
+
 $phpunit->assertNoErrors('1');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     'info' => 'Wrote new version 2.0 package.xml to ".' . DIRECTORY_SEPARATOR .
         'package2.xml"',
@@ -29,6 +30,7 @@ $pkg = &new PEAR_PackageFile($config);
 $pf = &$pkg->fromPackageFile($temp_path . DIRECTORY_SEPARATOR . 'package2.xml', PEAR_VALIDATE_NORMAL);
 $gen = &$pf->getDefaultGenerator();
 $contents = implode('', file($temp_path . DIRECTORY_SEPARATOR . 'package2.xml'));
+
 $phpunit->assertEquals('<?xml version="1.0" encoding="UTF-8"?>
 <package packagerversion="' . $gen->getPackagerVersion() . '" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
 http://pear.php.net/dtd/tasks-1.0.xsd
@@ -87,7 +89,8 @@ Currently, the following decorators are provided:
   <api>beta</api>
  </stability>
  <license>BSD License</license>
- <notes>- fixed bug #9855: missing call to _prepare() in setLang()
+ <notes>
+- fixed bug #9855: missing call to _prepare() in setLang()
 - propagate errors in the decorators
 - fixed testsuite: added missing db_test_base.php file and
   fixed problem with class redeclaration
@@ -95,7 +98,6 @@ Currently, the following decorators are provided:
 - fixed setCharset() proxy in the Decorator
 - fixed bug #11482: missing return in Translation2_Admin_Container_mdb2::addLang()
   when the table already exists
-    
  </notes>
  <contents>
   <dir name="/">
@@ -173,7 +175,8 @@ Currently, the following decorators are provided:
    </stability>
    <date>2007-06-30</date>
    <license uri="http://www.example.com">BSD License</license>
-   <notes>- fixed bug #9855: missing call to _prepare() in setLang()
+   <notes>
+- fixed bug #9855: missing call to _prepare() in setLang()
 - propagate errors in the decorators
 - fixed testsuite: added missing db_test_base.php file and
   fixed problem with class redeclaration
@@ -181,7 +184,6 @@ Currently, the following decorators are provided:
 - fixed setCharset() proxy in the Decorator
 - fixed bug #11482: missing return in Translation2_Admin_Container_mdb2::addLang()
   when the table already exists
-      
    </notes>
   </release>
   <release>
@@ -195,7 +197,8 @@ Currently, the following decorators are provided:
    </stability>
    <date>2006-12-15</date>
    <license uri="http://www.example.com">BSD License</license>
-   <notes>- force MDB2_FETCHMODE_ORDERED in Translation2_Container_mdb2::getPage() to
+   <notes>
+- force MDB2_FETCHMODE_ORDERED in Translation2_Container_mdb2::getPage() to
   avoid error when using an existing db connection with fetchmode set to
   MDB2_FETCHMODE_ASSOC (bug #8734)
 - force lowercase keys in fetchLang() for Oracle compatibility (bug #8915)
@@ -210,7 +213,6 @@ Currently, the following decorators are provided:
 - added setLang() and setCacheOption() in CacheLiteFunction decorator (request #9301)
   (thanks to Sascha Grossenbacher)
 - fixed bug #5539: DefaultText decorator does not call _replaceParams()
-      
    </notes>
   </release>
   <release>
@@ -224,12 +226,12 @@ Currently, the following decorators are provided:
    </stability>
    <date>2006-09-07</date>
    <license uri="http://www.example.com">BSD License</license>
-   <notes>- fixed an error that would result in losing strings when getting a specific
+   <notes>
+- fixed an error that would result in losing strings when getting a specific
   language&apos;s string in Translation2_Admin_Decorator_Autoadd.
 - fixed bug #8287: addLang() SQL not compatible with MSSQL
 - fixed MDB/MDB2 test runner
 - fixed bug #8546: column/table names are not escaped in SQL queries
-      
    </notes>
   </release>
   <release>
@@ -243,14 +245,14 @@ Currently, the following decorators are provided:
    </stability>
    <date>2006-07-12</date>
    <license uri="http://www.example.com">BSD License</license>
-   <notes>- fixed bug #7058, issue with array_merge not respecting existing array keys
+   <notes>
+- fixed bug #7058, issue with array_merge not respecting existing array keys
 - request #7736: ability to specify CacheLite group for CacheLite Decorator
   (thanks to ajt at localhype dot net)
 - if an empty xml file is given, don&apos;t return an error (bug #7793)
 - propagate errors in getPage() and getOne() (bug #8127)
 - Fix Autoadd decorator, which was not adding entries for new string IDs for all languages,
   which made update() to fail on those strings.
-      
    </notes>
   </release>
   <release>
@@ -264,7 +266,8 @@ Currently, the following decorators are provided:
    </stability>
    <date>2006-02-22</date>
    <license uri="http://www.example.com">BSD License</license>
-   <notes>- Translation2_Decorator_Lang: append keys when fallback lang 
+   <notes>
+- Translation2_Decorator_Lang: append keys when fallback lang 
   contains more than current (request #5773)
 - Removed leftover code from the MDB admin container that caused
   inserting the same record twice (bug #6233)
@@ -277,7 +280,6 @@ Currently, the following decorators are provided:
   when the dbms is MySQL (thanks to AJ Tarachanowicz)
 - Fixed UNIQUE INDEX in Translation2_Admin::addLang(), one of the two columns
   got lost in a previous revision
-      
    </notes>
   </release>
   <release>
@@ -291,12 +293,12 @@ Currently, the following decorators are provided:
    </stability>
    <date>2005-10-04</date>
    <license uri="http://www.example.com">BSD License</license>
-   <notes>- changed license to BSD
+   <notes>
+- changed license to BSD
 - removeLang() used to drop the entire table if there weren&apos;t any languages left.
   Now it does so only if the $force parameter is set (request #4218 and #5142)
 - Translation2_Decorator now extends Translation2
 - fixed warning with the CacheLiteFunction decorator and PHP 5.1
-      
    </notes>
   </release>
   <release>
@@ -310,7 +312,8 @@ Currently, the following decorators are provided:
    </stability>
    <date>2005-06-28</date>
    <license uri="http://www.php.net/license">PHP License</license>
-   <notes>- added some options to the DefaultText decoration, now it is more customizable
+   <notes>
+- added some options to the DefaultText decoration, now it is more customizable
   (thanks to Rolf &apos;Red&apos; Ochsenbein)
 - added a __clone() method to clone the internal object references
   (bug #3641, patch by Olivier Guilyardi)
@@ -327,7 +330,6 @@ Currently, the following decorators are provided:
 - added setContainerOptions() method to alter some container options after 
   the object instantiation (bug #2508)
 - some minor fixes
-      
    </notes>
   </release>
   <release>
@@ -341,7 +343,8 @@ Currently, the following decorators are provided:
    </stability>
    <date>2005-01-30</date>
    <license uri="http://www.php.net/license">PHP License</license>
-   <notes>- added Translation2::getRaw()
+   <notes>
+- added Translation2::getRaw()
 - fixed bug #3068: Translation2_Admin::update() on multiple tables didn&apos;t insert
   new records for missing langs, only updated the existing ones.
 - fixed bug #3149: XML container didn&apos;t properly handle redundant strings
@@ -349,7 +352,6 @@ Currently, the following decorators are provided:
 - added t2xmlchk.php script to check if a XML file is Translation2 compliant
   (thanks to Olivier Guilyardi) 
 - added ErrorText decorator
-      
    </notes>
   </release>
   <release>
@@ -363,7 +365,8 @@ Currently, the following decorators are provided:
    </stability>
    <date>2004-12-24</date>
    <license uri="http://www.php.net/license">PHP License</license>
-   <notes>- renamed createNewLang() to addLang()  [BC break!]
+   <notes>
+- renamed createNewLang() to addLang()  [BC break!]
 - renamed addLangToAvailList() to addLangToList()
 - added Translation2_Admin::getPageNames()
 - added Translation2_Admin::updateLang()
@@ -372,7 +375,6 @@ Currently, the following decorators are provided:
   parameter subtitution as expected
 - updated dataobjectsimple container (alank)
 - some internal minor fixes and tweaks
-      
    </notes>
   </release>
   <release>
@@ -386,7 +388,8 @@ Currently, the following decorators are provided:
    </stability>
    <date>2004-11-20</date>
    <license uri="http://www.php.net/license">PHP License</license>
-   <notes>- added a complete TestSuite
+   <notes>
+- added a complete TestSuite
 - updated gettext docs
 - fixed typo in error code (TRANSLATION_ERROR_UNKNOWN_LANG =&gt; TRANSLATION2_ERROR_UNKNOWN_LANG)
 - fixed typo in the MDB Admin container [quote() =&gt; getTextValue()]
@@ -406,7 +409,6 @@ Currently, the following decorators are provided:
   * added &apos;encoding&apos; field
   * added removeLang()
   * other minor fixes and tweaks
-      
    </notes>
   </release>
   <release>
@@ -420,7 +422,8 @@ Currently, the following decorators are provided:
    </stability>
    <date>2004-11-11</date>
    <license uri="http://www.php.net/license">PHP License</license>
-   <notes>- Welcome to the new developers, Ian Eure and Michael Wallner
+   <notes>
+- Welcome to the new developers, Ian Eure and Michael Wallner
 - The last release contained an old gettext driver (bug #2503) (ieure)
 - Many portability fixes applied to the database containers (thanks to Ian Eure and
   Xavier Lembo for their suggestions and patches)
@@ -459,7 +462,6 @@ Currently, the following decorators are provided:
 - New Iconv decorator based on the one written by Sergey Korotkov
 - Added a new &quot;encoding&quot; column to the langsAvail table
 - New xml container by Olivier Guilyardi
-      
    </notes>
   </release>
   <release>
@@ -473,7 +475,8 @@ Currently, the following decorators are provided:
    </stability>
    <date>2004-05-05</date>
    <license uri="http://www.php.net/license">PHP License</license>
-   <notes>- BC break! Run the example to see what&apos;s new
+   <notes>
+- BC break! Run the example to see what&apos;s new
 - refactoring in progress:
   added a Decorator class and some subclasses to control
   the output (now you can set a stack of fallback languages,
@@ -485,7 +488,6 @@ Currently, the following decorators are provided:
   the old one is replaced by the new one.
 - added a MDB2 container
 - added a DB_DataObject container (by Alan Knowles)
-      
    </notes>
   </release>
   <release>
@@ -499,13 +501,13 @@ Currently, the following decorators are provided:
    </stability>
    <date>2004-02-05</date>
    <license uri="http://www.php.net/license">PHP License</license>
-   <notes>- added an experimental GNU gettext driver
+   <notes>
+- added an experimental GNU gettext driver
 - translate() now accepts a third parameter ($pageID)
 - PHP5 fix
 - renamed old getPage() to getRawPage()
 - new getPage() resorts to fallback lang and replaces parameters when needed
 - added error checking/codes
-      
    </notes>
   </release>
   <release>
@@ -519,8 +521,8 @@ Currently, the following decorators are provided:
    </stability>
    <date>2004-01-21</date>
    <license uri="http://www.php.net/license">PHP License</license>
-   <notes>First alpha release
-      
+   <notes>
+First alpha release
    </notes>
   </release>
  </changelog>
