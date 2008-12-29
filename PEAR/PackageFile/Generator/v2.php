@@ -374,7 +374,11 @@ http://pear.php.net/dtd/package-2.0.xsd',
         if (isset($arr['changelog']) && !empty($arr['changelog'])) {
             // Fix for inconsistency how the array is filled depending on the changelog release amount
             if (!isset($arr['changelog']['release'][0])) {
-                $arr['changelog']['release'][0] = $arr['changelog']['release'];
+                $release = $arr['changelog']['release'];
+                unset($arr['changelog']['release']);
+
+                $arr['changelog']['release']    = array();
+                $arr['changelog']['release'][0] = $release;
             }
 
             foreach ($arr['changelog']['release'] as &$c) {
