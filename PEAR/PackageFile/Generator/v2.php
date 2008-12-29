@@ -372,7 +372,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
         if (isset($arr['changelog']) && !empty($arr['changelog'])) {
             foreach ($arr['changelog']['release'] as &$c) {
-                $c['notes'] = "\n" . $c['notes'] . "\n";
+                if (isset($c['notes'])) {
+                    $c['notes'] = "\n" . $c['notes'] . "\n";
+                }
             }
         }
 
