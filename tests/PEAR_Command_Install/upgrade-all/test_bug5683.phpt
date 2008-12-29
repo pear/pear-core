@@ -9,9 +9,11 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $chan = $reg->getChannel('pear.php.net');
 $chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
 $reg->updateChannel($chan);
+
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/allreleases.xml",
 '<?xml version="1.0" encoding="UTF-8" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
