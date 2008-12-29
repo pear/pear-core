@@ -10,6 +10,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $reg = &$config->getRegistry();
 $c = &$reg->getChannel(strtolower('pear.php.net'));
 $c->setName('zornk.ornk.org');
@@ -17,22 +18,15 @@ $reg->addChannel($c);
 $c->setName('horde.orde.de');
 $reg->addChannel($c);
 $lastmod = $c->lastModified();
-$GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'channel.listAll',
-    null,
-    array(
-        array('pear.php.net'),
-        array('zornk.ornk.org'),
-        array('horde.orde.de'),
-    ));
-$pathtochannelxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'files'. DIRECTORY_SEPARATOR . 'pearchannel.xml';
-$GLOBALS['pearweb']->addHtmlConfig('http://pear.php.net/channel.xml', $pathtochannelxml);
-$pathtochannelxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'files'. DIRECTORY_SEPARATOR . 'zornkchannel.xml';
-$GLOBALS['pearweb']->addHtmlConfig('http://zornk.ornk.org/channel.xml', $pathtochannelxml);
-$pathtochannelxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'files'. DIRECTORY_SEPARATOR . 'hordechannel.xml';
-$GLOBALS['pearweb']->addHtmlConfig('http://horde.orde.de/channel.xml', $pathtochannelxml);
+
+$filesDir         = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'files'. DIRECTORY_SEPARATOR;
+$pathtochannelxml1 = $filesDir . 'pearchannel.xml';
+$pathtochannelxml2 = $filesDir . 'zornkchannel.xml';
+$pathtochannelxml3 = $filesDir . 'hordechannel.xml';
+
+$GLOBALS['pearweb']->addHtmlConfig('http://pear.php.net/channel.xml',   $pathtochannelxml1);
+$GLOBALS['pearweb']->addHtmlConfig('http://zornk.ornk.org/channel.xml', $pathtochannelxml2);
+$GLOBALS['pearweb']->addHtmlConfig('http://horde.orde.de/channel.xml',  $pathtochannelxml3);
 
 $e = $command->run('update-channels', array(), array());
 $phpunit->assertNoErrors('after');
@@ -86,6 +80,7 @@ $chan = $reg->getChannel('pear.php.net');
 $phpunit->assertIsA('PEAR_ChannelFile', $chan, 'updated ok?');
 $phpunit->assertEquals('pear.php.net', $chan->getName(), 'name ok?');
 $phpunit->assertEquals('foo', $chan->getSummary(), 'summary ok?');
+
 echo 'tests done';
 ?>
 --CLEAN--
