@@ -23,10 +23,10 @@ $pathtoAlphaAPC  = $packageDir . 'APC-1.4.0a1.tgz';
 $pathtoSmoogAPC  = $packageDir . 'APC-1.5.0a1.tgz';
 $pathtoAT        = $packageDir . 'Archive_Tar-1.5.0a1.tgz';
 
-$pearweb->addHtmlConfig('http://pear.php.net/get/APC-1.3.0.tgz', $pathtoStableAPC);
-$pearweb->addHtmlConfig('http://pear.php.net/get/APC-1.4.0a1.tgz', $pathtoAlphaAPC);
+$pearweb->addHtmlConfig('http://pear.php.net/get/APC-1.3.0.tgz',           $pathtoStableAPC);
+$pearweb->addHtmlConfig('http://pear.php.net/get/APC-1.4.0a1.tgz',         $pathtoAlphaAPC);
 $pearweb->addHtmlConfig('http://pear.php.net/get/Archive_Tar-1.5.0a1.tgz', $pathtoAT);
-$pearweb->addHtmlConfig('http://smoog/get/APC-1.5.0a1.tgz', $pathtoSmoogAPC);
+$pearweb->addHtmlConfig('http://smoog/get/APC-1.5.0a1.tgz',                $pathtoSmoogAPC);
 
 $pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(true,true,false),     array(
     'APC' =>
