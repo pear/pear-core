@@ -367,13 +367,20 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
         // Fix the notes a little bit
         if (isset($arr['notes'])) {
-            $arr['notes'] = "\n" . $arr['notes'] . "\n";
+            // This trims out the indenting, needs fixing
+            $arr['notes'] = "\n" . trim($arr['notes']) . "\n";
         }
 
         if (isset($arr['changelog']) && !empty($arr['changelog'])) {
+            // Fix for inconsistency how the array is filled depending on the changelog release amount
+            if (!isset($arr['changelog']['release'][0])) {
+                $arr['changelog']['release'][0] = $arr['changelog']['release'];
+            }
+
             foreach ($arr['changelog']['release'] as &$c) {
                 if (isset($c['notes'])) {
-                    $c['notes'] = "\n" . $c['notes'] . "\n";
+                    // This trims out the indenting, needs fixing
+                    $c['notes'] = "\n" . trim($c['notes']) . "\n";
                 }
             }
         }
