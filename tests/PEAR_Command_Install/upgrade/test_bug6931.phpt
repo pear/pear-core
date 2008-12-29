@@ -10,7 +10,9 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/allreleases.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/allreleases.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
     http://pear.php.net/dtd/rest.allreleases.xsd">
@@ -57,7 +59,9 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/allreleases.xml", '<
  <r><v>1.0.3</v><s>stable</s></r>
  <r><v>1.0.2</v><s>stable</s></r>
 </a>', 'text/xml');
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/1.4.5.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/1.4.5.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
 <r xmlns="http://pear.php.net/dtd/rest.release"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.release
     http://pear.php.net/dtd/rest.release.xsd">
@@ -139,7 +143,9 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/allreleases.xml", '<?xm
  <r><v>0.10</v><s>beta</s></r>
  <r><v>0.9</v><s>stable</s></r>
 </a>', 'text/xml');
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a12.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a12.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
 <r xmlns="http://pear.php.net/dtd/rest.release"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.release
     http://pear.php.net/dtd/rest.release.xsd">
@@ -295,8 +301,11 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.4.0a12.xml", '<?xml v
  <g>http://pear.php.net/get/PEAR-1.4.0a12</g>
  <x xlink:href="package.1.4.0a12.xml"/>
 </r>', 'text/xml');
+
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/deps.1.4.0a12.txt", 'a:3:{s:8:"required";a:4:{s:3:"php";a:2:{s:3:"min";s:3:"4.2";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:8:"1.4.0a10";}s:7:"package";a:3:{i:0;a:5:{s:4:"name";s:11:"Archive_Tar";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.1";s:11:"recommended";s:5:"1.3.1";s:7:"exclude";s:5:"1.3.0";}i:1;a:4:{s:4:"name";s:14:"Console_Getopt";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.2";s:11:"recommended";s:3:"1.2";}i:2;a:4:{s:4:"name";s:7:"XML_RPC";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:8:"1.2.0RC1";s:11:"recommended";s:5:"1.2.2";}}s:9:"extension";a:2:{i:0;a:1:{s:4:"name";s:3:"xml";}i:1;a:1:{s:4:"name";s:4:"pcre";}}}s:8:"optional";a:1:{s:7:"package";a:2:{i:0;a:3:{s:4:"name";s:17:"PEAR_Frontend_Web";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:5:"0.5.0";}i:1;a:3:{s:4:"name";s:17:"PEAR_Frontend_Gtk";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:5:"0.4.0";}}}s:5:"group";a:3:{i:0;a:2:{s:7:"attribs";a:2:{s:4:"hint";s:59:"adds the ability to install packages to a remote ftp server";s:4:"name";s:13:"remoteinstall";}s:7:"package";a:4:{s:4:"name";s:7:"Net_FTP";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:8:"1.3.0RC1";s:11:"recommended";s:5:"1.3.1";}}i:1;a:2:{s:7:"attribs";a:2:{s:4:"hint";s:26:"PEAR\'s web-based installer";s:4:"name";s:12:"webinstaller";}s:7:"package";a:3:{s:4:"name";s:17:"PEAR_Frontend_Web";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:5:"0.5.0";}}i:2;a:2:{s:7:"attribs";a:2:{s:4:"hint";s:30:"PEAR\'s PHP-GTK-based installer";s:4:"name";s:12:"gtkinstaller";}s:7:"package";a:3:{s:4:"name";s:17:"PEAR_Frontend_Gtk";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:5:"0.4.0";}}}}', 'text/xml');
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/archive_tar/allreleases.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/archive_tar/allreleases.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
     http://pear.php.net/dtd/rest.allreleases.xsd">
@@ -312,7 +321,9 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/archive_tar/allreleases.xml"
  <r><v>0.4</v><s>stable</s></r>
  <r><v>0.3</v><s>stable</s></r>
 </a>', 'text/xml');
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/archive_tar/1.3.1.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/archive_tar/1.3.1.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
 <r xmlns="http://pear.php.net/dtd/rest.release"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.release
     http://pear.php.net/dtd/rest.release.xsd">
@@ -336,7 +347,8 @@ loaded. Bz2 compression is also supported with the bz2 extension loaded.
  <x xlink:href="package.1.3.1.xml"/>
 </r>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/archive_tar/deps.1.3.1.txt", 'b:0;', 'text/xml');
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/console_getopt/allreleases.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/console_getopt/allreleases.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
     http://pear.php.net/dtd/rest.allreleases.xsd">
@@ -346,7 +358,8 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/console_getopt/allreleases.x
  <r><v>1.0</v><s>stable</s></r>
  <r><v>0.11</v><s>beta</s></r>
 </a>', 'text/xml');
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/console_getopt/1.2.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/console_getopt/1.2.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
 <r xmlns="http://pear.php.net/dtd/rest.release"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.release
     http://pear.php.net/dtd/rest.release.xsd">
@@ -368,7 +381,8 @@ short and long options.
  <x xlink:href="package.1.2.xml"/>
 </r>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/console_getopt/deps.1.2.txt", 'b:0;', 'text/xml');
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/1.4.3.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/1.4.3.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
 <r xmlns="http://pear.php.net/dtd/rest.release"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.release
     http://pear.php.net/dtd/rest.release.xsd">
@@ -389,7 +403,8 @@ It has support for HTTP/HTTPS transport, proxies and authentication.</d>
  <x xlink:href="package.1.4.3.xml"/>
 </r>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/deps.1.4.3.txt", 'a:1:{s:8:"required";a:2:{s:3:"php";a:1:{s:3:"min";s:5:"4.2.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}}}', 'text/xml');
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_frontend_web/allreleases.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_frontend_web/allreleases.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
     http://pear.php.net/dtd/rest.allreleases.xsd">
@@ -427,7 +442,8 @@ Also, support for post-install scripts on install, and package.xml 2.0
  <x xlink:href="package.0.5.0.xml"/>
 </r>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_frontend_web/deps.0.5.0.txt", 'a:3:{i:1;a:3:{s:4:"type";s:3:"pkg";s:3:"rel";s:3:"has";s:4:"name";s:20:"Net_UserAgent_Detect";}i:2;a:3:{s:4:"type";s:3:"pkg";s:3:"rel";s:3:"has";s:4:"name";s:16:"HTML_Template_IT";}i:3;a:4:{s:4:"type";s:3:"pkg";s:3:"rel";s:2:"ge";s:7:"version";s:7:"1.4.0a1";s:4:"name";s:4:"PEAR";}}', 'text/xml');
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_frontend_gtk/allreleases.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_frontend_gtk/allreleases.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
     http://pear.php.net/dtd/rest.allreleases.xsd">
@@ -438,7 +454,8 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_frontend_gtk/allrelease
  <r><v>0.2</v><s>snapshot</s></r>
  <r><v>0.1</v><s>snapshot</s></r>
 </a>', 'text/xml');
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_frontend_gtk/0.4.0.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_frontend_gtk/0.4.0.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
 <r xmlns="http://pear.php.net/dtd/rest.release"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.release
     http://pear.php.net/dtd/rest.release.xsd">
@@ -1037,7 +1054,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/packages.xml", '<?xml versio
  <p>XML_XUL</p>
 </a>', 'text/xml');
 $dir = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR;
+'packages'. DIRECTORY_SEPARATOR;
 $pearweb->addHTMLConfig('http://pear.php.net/get/PEAR-1.4.0a12.tgz', $dir . 'PEAR-1.4.0a12.tgz');
 $chan = $reg->getChannel('pear.php.net');
 $chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
