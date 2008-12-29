@@ -392,7 +392,7 @@ $phpunit->assertEquals('Update the Channel List'
     , PEAR_Command::getDescription('update-channels'), 'update-channels');
 $phpunit->assertEquals('Upgrade Package'
     , PEAR_Command::getDescription('upgrade'), 'upgrade');
-$phpunit->assertEquals('Upgrade All Packages'
+$phpunit->assertEquals('Upgrade All Packages [Deprecated in favor of calling upgrade with no parameters]'
     , PEAR_Command::getDescription('upgrade-all'), 'upgrade-all');
 echo 'tests done';
 ?>
