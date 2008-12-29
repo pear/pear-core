@@ -1,5 +1,5 @@
 --TEST--
-download-all command (REST)
+download-all command, --channel option (REST)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -38,7 +38,7 @@ $pearweb->addRESTConfig('http://smoog/rest/p/packages.xml',
 <a xmlns="http://pear.php.net/dtd/rest.allpackages"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allpackages
     http://pear.php.net/dtd/rest.allpackages.xsd">
-<c>smoog</c>
+ <c>smoog</c>
  <p>APC</p>
 </a>',
 'text/xml');
@@ -93,7 +93,7 @@ $pearweb->addRESTConfig('http://smoog/rest/r/apc/1.5.0a1.xml',
  <da>2005-04-17 18:40:51</da>
  <n>Release notes</n>
  <f>252733</f>
- <g>http://smoog/get/APC-1.5.a1</g>
+ <g>http://smoog/get/APC-1.5.0a1</g>
  <x xlink:href="package.1.5.0a1.xml"/>
 
 </r>',
@@ -117,6 +117,28 @@ $pearweb->addRESTConfig('http://pear.php.net/rest/r/apc/1.3.0.xml',
  <f>252733</f>
  <g>http://pear.php.net/get/APC-1.3.0</g>
  <x xlink:href="package.1.3.0.xml"/>
+
+</r>',
+'text/xml');
+
+$pearweb->addRESTConfig('http://pear.php.net/rest/r/apc/1.4.0a1.xml',
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/apc">APC</p>
+ <c>pear.php.net</c>
+ <v>1.4.0a1</v>
+ <st>alpha</st>
+ <l>PHP License</l>
+ <m>rasmus</m>
+ <s>Alternative PHP Cache</s>
+ <d>APC is the Alternative PHP Cache. It was conceived of to provide a free, open, and robust framework for caching and optimizing PHP intermediate code.</d>
+ <da>2006-04-17 18:40:51</da>
+ <n>Release notes</n>
+ <f>262733</f>
+ <g>http://pear.php.net/get/APC-1.4.0a1</g>
+ <x xlink:href="package.1.4.0a1.xml"/>
 
 </r>',
 'text/xml');
@@ -157,8 +179,9 @@ Correct Bug #9352 Bug on _dirCheck function over nfs path</n>
 </r>',
 'text/xml');
 
-$pearweb->addRESTConfig("http://smoog/rest/r/apc/deps.1.5.0a1.txt", 'a:1:{s:8:"required";a:2:{s:3:"php";a:2:{s:3:"min";s:3:"4.2";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0dev13";}}}', 'text/plain');
+$pearweb->addRESTConfig("http://smoog/rest/r/apc/deps.1.5.0a1.txt", 'a:1:{s:8:"required";a:2:{s:3:"php";a:1:{s:3:"min";s:5:"5.1.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:5:"1.4.0";}}}', 'text/plain');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/apc/deps.1.3.0.txt", 'b:0;', 'text/plain');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/apc/deps.1.4.0a1.txt", 'b:0;', 'text/plain');
 $pearweb->addRESTConfig('http://pear.php.net/rest/r/archive_tar/deps.1.5.0a1.txt', 'a:1:{s:8:"required";a:2:{s:3:"php";a:1:{s:3:"min";s:5:"4.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0b1";}}}', 'text/plain');
 
 $pearweb->addRESTConfig("http://pear.php.net/rest/p/packages.xml",
@@ -167,22 +190,37 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/packages.xml",
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allpackages
     http://pear.php.net/dtd/rest.allpackages.xsd">
 <c>pear.php.net</c>
+ <p>Archive_Tar</p>
  <p>APC</p>
 </a>',
 'text/xml');
 
+$pearweb->addRESTConfig("http://smoog/rest/p/apc/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xlink="http://www.w3.org/1999/xlink"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>APC</n>
+ <c>smoog</c>
+ <ca xlink:href="/rest/c/Caching">Caching</ca>
+ <l>PHP License</l>
+ <s>Alternative PHP Cache</s>
+
+ <d>APC is a free, open, and robust framework for caching and optimizing PHP intermediate code.</d>
+ <r xlink:href="/rest/r/apc"/>
+</p>',
+'text/xml');
+
 $pearweb->addRESTConfig("http://pear.php.net/rest/p/apc/info.xml",
-'<?xml version="1.0"?>
-<p xmlns="http://pear.php.net/dtd/rest.package"
-    xsi:schemaLocation="http://pear.php.net/dtd/rest.package
-    http://pear.php.net/dtd/rest.package.xsd">
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xlink="http://www.w3.org/1999/xlink"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
  <n>APC</n>
  <c>pear.php.net</c>
- <ca xlink:href="/rest/c/File+Formats">File Formats</ca>
+ <ca xlink:href="/rest/c/Caching">Caching</ca>
  <l>PHP License</l>
- <s>Zip file management class</s>
- <d>This class provides handling of zip files in PHP.
-It supports creating, listing, extracting and adding to zip files.</d>
+ <s>Alternative PHP Cache</s>
+
+ <d>APC is a free, open, and robust framework for caching and optimizing PHP intermediate code.</d>
  <r xlink:href="/rest/r/apc"/>
 </p>',
 'text/xml');
@@ -204,17 +242,19 @@ loaded. Bz2 compression is also supported with the bz2 extension loaded.</d>
 </p>',
 'text/xml');
 
-$config->set('preferred_state', 'stable');
+$_test_dep->setPEARVersion('1.4.0a1');
+$_test_dep->setPHPVersion('4.3.11');
 $save = getcwd();
 chdir($temp_path);
-$e = $command->run('download-all', array(), array());
-$phpunit->assertNoErrors('after');
-$phpunit->showall();
+$config->set('preferred_state', 'stable');
+$e = $command->run('download-all', array('channel' => 'smoog'), array());
+
+$phpunit->assertNoErrors('after 1');
 
 $phpunit->assertEquals(array (
   0 =>
   array (
-    'info' => 'Using Channel pear.php.net',
+    'info' => 'Using Channel smoog',
     'cmd' => 'no command',
   ),
   1 =>
@@ -227,17 +267,61 @@ $phpunit->assertEquals(array (
     'info' => 'Gathering release information, please wait...',
     'cmd' => 'no command',
   ),
+  3 =>
+  array (
+    0 => 0,
+    1 => 'Failed to download smoog/APC within preferred state "stable", latest release is version 1.5.0a1, stability "alpha", use "channel://smoog/APC-1.5.0a1" to install',
+  ),
+  4 =>
+  array (
+    0 => 0,
+    1 => 'Cannot initialize \'APC\', invalid or missing package file',
+  ),
+  5 =>
+  array (
+    'info' => 'Package "APC" is not valid',
+    'cmd' => 'no command',
+  ),
+  6 =>
+  array (
+    'info' => 'download failed',
+    'cmd' => 'no command',
+  ),
+)
+, $fakelog->getLog(), 'log 1');
+
+$config->set('preferred_state', 'alpha');
+$e = $command->run('download-all', array('channel' => 'smoog'), array());
+
+$phpunit->assertNoErrors('after');
+
+$phpunit->assertEquals(array (
+  0 =>
+  array (
+    'info' => 'Using Channel smoog',
+    'cmd' => 'no command',
+  ),
+  1 =>
+  array (
+    'info' => 'Using Preferred State of alpha',
+    'cmd' => 'no command',
+  ),
+  2 =>
+  array (
+    'info' => 'Gathering release information, please wait...',
+    'cmd' => 'no command',
+  ),
   array (
     0 => 3,
-    1 => 'Downloading "http://pear.php.net/get/APC-1.3.0.tgz"',
+    1 => 'Downloading "http://smoog/get/APC-1.5.0a1.tgz"',
   ),
   array (
     0 => 1,
-    1 => 'downloading APC-1.3.0.tgz ...',
+    1 => 'downloading APC-1.5.0a1.tgz ...',
   ),
   array (
     0 => 1,
-    1 => 'Starting to download APC-1.3.0.tgz (517 bytes)',
+    1 => 'Starting to download APC-1.5.0a1.tgz (686 bytes)',
   ),
   array (
     0 => 1,
@@ -245,40 +329,16 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 1,
-    1 => '...done: 517 bytes',
+    1 => '...done: 686 bytes',
   ),
   array (
-    'info' => 'File ' . $temp_path . DIRECTORY_SEPARATOR . 'APC-1.3.0.tgz downloaded',
+    'info' => 'File ' . $temp_path . DIRECTORY_SEPARATOR . 'APC-1.5.0a1.tgz downloaded',
     'cmd' => 'download',
   ),
 ), $fakelog->getLog(), 'log');
 
-$phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'APC-1.3.0.tgz', 'APC 1.3.0');
-$phpunit->assertEquals(array (
-  0 =>
-  array (
-    0 => 'http://pear.php.net/rest/p/packages.xml',
-    1 => '200',
-  ),
-  1 =>
-  array (
-    0 => 'http://pear.php.net/rest/r/apc/allreleases.xml',
-    1 => '200',
-  ),
-  array (
-    0 => 'http://pear.php.net/rest/p/apc/info.xml',
-    1 => '200',
-  ),
-  array (
-    0 => 'http://pear.php.net/rest/r/apc/1.3.0.xml',
-    1 => '200',
-  ),
-  array (
-    0 => 'http://pear.php.net/rest/r/apc/deps.1.3.0.txt',
-    1 => '200',
-  ),
-)
-, $pearweb->getRESTCalls(), 'rest calls');
+
+$phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'APC-1.5.0a1.tgz', 'APC 1.5.0a1');
 chdir($save);
 
 echo 'tests done';
