@@ -10,6 +10,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $reg = &$config->getRegistry();
 $pf = new PEAR_PackageFile_v1;
 $pf->setConfig($config);
@@ -27,6 +28,7 @@ $pf->addPhpDep('4.0.0', 'ge');
 $pf->validate();
 $phpunit->assertNoErrors('setup');
 $reg->addPackage2($pf);
+
 $pearweb->addXmlrpcConfig("empty", "package.listAll",     array(true, true),
      array(
     ));
