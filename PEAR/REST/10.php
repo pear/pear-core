@@ -705,8 +705,8 @@ class PEAR_REST_10
         $pinfo = $this->_rest->retrieveData($base . 'p/' . strtolower($package) . '/info.xml', false, false, $channel);
         if (PEAR::isError($pinfo)) {
             PEAR::popErrorHandling();
-            return PEAR::raiseError('Unknown package: "' . $package . '" (Debug: ' .
-                trim($pinfo->getMessage()) . ')');
+            return PEAR::raiseError('Unknown package: "' . $package . '" in channel "' . $channel . '" ' . "\n". 'Debug: ' .
+                $pinfo->getMessage());
         }
         $releases = array();
         $allreleases = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
