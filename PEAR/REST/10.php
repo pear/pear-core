@@ -273,6 +273,7 @@ class PEAR_REST_10
             return PEAR::raiseError('Package "' . $package . '" Version "' . $release['v'] .
                 '" does not have REST dependency information available');
         }
+
         $packagexml = unserialize($packagexml);
         if (!$packagexml) {
             $packagexml = array();
@@ -705,7 +706,7 @@ class PEAR_REST_10
         if (PEAR::isError($pinfo)) {
             PEAR::popErrorHandling();
             return PEAR::raiseError('Unknown package: "' . $package . '" (Debug: ' .
-                $pinfo->getMessage() . ')');
+                trim($pinfo->getMessage()) . ')');
         }
         $releases = array();
         $allreleases = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
