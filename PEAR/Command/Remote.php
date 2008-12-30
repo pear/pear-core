@@ -215,7 +215,7 @@ parameter.
             $info = $rest->packageInfo($base, $parsed['package'], $channel);
         }
 
-        if (PEAR::isError($info)) {
+        if (!isset($info) || PEAR::isError($info)) {
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($info);
         }
@@ -298,20 +298,23 @@ parameter.
         $reg = &$this->config->getRegistry();
         if (isset($options['channel'])) {
             $channel = $options['channel'];
-            if ($reg->channelExists($channel)) {
-                $this->config->set('default_channel', $channel);
-            } else {
+            if (!$reg->channelExists($channel)) {
                 return $this->raiseError("Channel \"$channel\" does not exist");
             }
+
+            $this->config->set('default_channel', $channel);
         }
+
         $list_options = false;
         if ($this->config->get('preferred_state') == 'stable') {
             $list_options = true;
         }
+
         $chan = $reg->getChannel($channel);
         if (PEAR::isError($e = $this->_checkChannelForStatus($channel, $chan))) {
             return $e;
         }
+
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
               $base = $chan->getBaseURL('REST1.1', $this->config->get('preferred_mirror'))) {
             // use faster list-all if available
@@ -327,12 +330,14 @@ parameter.
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError('The package list could not be fetched from the remote server. Please try again. (Debug info: "' . $available->getMessage() . '")');
         }
+
         $data = array(
             'caption' => 'All packages [Channel ' . $channel . ']:',
             'border' => true,
             'headline' => array('Package', 'Latest', 'Local'),
             'channel' => $channel,
             );
+
         if (isset($options['channelinfo'])) {
             // add full channelinfo
             $data['caption'] = 'Channel ' . $channel . ' All packages:';
@@ -412,6 +417,7 @@ parameter.
             $this->ui->outputData($data, $command);
             return true;
         }
+
         foreach ($local_pkgs as $name) {
             $info = &$reg->getPackage($name, $channel);
             $data['data']['Local'][] = array(
