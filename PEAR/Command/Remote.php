@@ -210,12 +210,17 @@ parameter.
         }
 
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
-              $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
+              $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))
+        ) {
             $rest = &$this->config->getREST('1.0', array());
             $info = $rest->packageInfo($base, $parsed['package'], $channel);
         }
 
-        if (!isset($info) || PEAR::isError($info)) {
+        if (!isset($info)) {
+            return $this->raiseError('No supported protocol was found');
+        }
+
+        if (PEAR::isError($info)) {
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($info);
         }
