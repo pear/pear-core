@@ -209,9 +209,8 @@ parameter.
             return $e;
         }
 
-        if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
-              $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))
-        ) {
+        $mirror = $this->config->get('preferred_mirror');
+        if ($chan->supportsREST($mirror) && $base = $chan->getBaseURL('REST1.0', $mirror)) {
             $rest = &$this->config->getREST('1.0', array());
             $info = $rest->packageInfo($base, $parsed['package'], $channel);
         }
