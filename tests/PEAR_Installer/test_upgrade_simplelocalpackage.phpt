@@ -180,9 +180,7 @@ Installer:
  * fix Request #2220 pear5 build fails on dual php4/php5 system
  * Major bug in Registry - false file conflicts on data/doc/test role
    was possible (and would happen if HTML_Template_IT was installed
-   and HTML_Template_Flexy installation was attempted)
-  
-',
+   and HTML_Template_Flexy installation was attempted)',
   'changelog' => 
   array (
     0 => 
@@ -203,9 +201,7 @@ Other:
  * add PEAR_Exception class for PHP5 users
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
- * fix warning in PEAR_Registry for windows 98 users
-   
-',
+ * fix warning in PEAR_Registry for windows 98 users',
     ),
   ),
   '_lastversion' => '1.4.0a1',

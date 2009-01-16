@@ -85,7 +85,7 @@ $phpunit->assertEquals(array (
  * the System class for quick handling of common operations
    with files and directories
  * the PEAR base class
-
+ 
 ',
   'maintainers' =>
   array (
