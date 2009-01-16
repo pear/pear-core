@@ -13,11 +13,10 @@ require_once 'PEAR/PackageFile.php';
 require_once 'PEAR/PackageFile/v1.php';
 
 $pf = new PEAR_PackageFile($config);
-$package = $pf->fromPackageFile(dirname(__FILE__) . DIRECTORY_SEPARATOR .
-    'test_install_subpackage' . DIRECTORY_SEPARATOR . 'package.xml', PEAR_VALIDATE_INSTALLING);
 
-$subpackage = $pf->fromPackageFile(dirname(__FILE__) . DIRECTORY_SEPARATOR .
-    'test_install_subpackage' . DIRECTORY_SEPARATOR . 'subpackage.xml', PEAR_VALIDATE_INSTALLING);
+$packageDir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'test_install_subpackage' . DIRECTORY_SEPARATOR;
+$package    = $pf->fromPackageFile($packageDir . 'package.xml', PEAR_VALIDATE_INSTALLING);
+$subpackage = $pf->fromPackageFile($packageDir . 'subpackage.xml', PEAR_VALIDATE_INSTALLING);
 
 $oldpackage = new PEAR_PackageFile_v1;
 $oldpackage->setConfig($config);
@@ -50,19 +49,23 @@ $installer->setOptions(array());
 $installer->sortPackagesForInstall($params);
 $err = $installer->setDownloadedPackages($params);
 $phpunit->assertEquals(array(
-  0 => 
+  0 =>
   array (
     0 => 3,
     1 => 'skipping installed package check of "pear/foo", version "1.1" will be downloaded and installed',
   ),
 ), $fakelog->getLog(), 'log');
+
 $phpunit->assertNoErrors('dl setup');
 $installer->install($dp2, array('upgrade' => true));
+
 $phpunit->assertNoErrors('install');
 $installer->install($dp1, array('upgrade' => true));
+
 $phpunit->assertNoErrors('install 2');
 $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . 'foo.php', 'foo.php');
 $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . 'bar.php', 'bar.php');
+
 echo 'tests done';
 ?>
 --CLEAN--

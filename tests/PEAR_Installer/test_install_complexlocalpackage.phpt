@@ -9,14 +9,15 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'depspackage.xml';
-$pathtobarxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'Bar-1.5.0.tgz';
-$pathtofoobarxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'Foobar-1.4.0a1.tgz';
+
+$packageDir       = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packages'. DIRECTORY_SEPARATOR;
+$pathtopackagexml = $packageDir . 'depspackage.xml';
+$pathtobarxml     = $packageDir . 'Bar-1.5.0.tgz';
+$pathtofoobarxml  = $packageDir . 'Foobar-1.4.0a1.tgz';
+
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Bar-1.5.0.tgz', $pathtobarxml);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Foobar-1.4.0a1.tgz', $pathtofoobarxml);
+
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
     array('1.0',
          array('type' => 'pkg', 'rel' => 'ge', 'version' => '1.0.0',
@@ -27,7 +28,7 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
 '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="1.4.0a1">
- <name>Bar</name>       
+ <name>Bar</name>
  <summary>PEAR Base System</summary>
  <description>The PEAR package contains:
  * the PEAR installer, for creating, distributing
@@ -165,7 +166,7 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
 '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0" packagerversion="1.4.0a1">
- <name>Foobar</name>       
+ <name>Foobar</name>
  <summary>PEAR Base System</summary>
  <description>The PEAR package contains:
  * the PEAR installer, for creating, distributing
@@ -377,80 +378,80 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 'setup',
     1 => 'self',
   ),
-  1 => 
+  1 =>
   array (
     0 => 'saveas',
     1 => 'Bar-1.5.0.tgz',
   ),
-  2 => 
+  2 =>
   array (
     0 => 'start',
-    1 => 
+    1 =>
     array (
       0 => 'Bar-1.5.0.tgz',
       1 => '2086',
     ),
   ),
-  3 => 
+  3 =>
   array (
     0 => 'bytesread',
     1 => 1024,
   ),
-  4 => 
+  4 =>
   array (
     0 => 'bytesread',
     1 => 2048,
   ),
-  5 => 
+  5 =>
   array (
     0 => 'bytesread',
     1 => 2086,
   ),
-  6 => 
+  6 =>
   array (
     0 => 'done',
     1 => 2086,
   ),
-  7 => 
+  7 =>
   array (
     0 => 'setup',
     1 => 'self',
   ),
-  8 => 
+  8 =>
   array (
     0 => 'saveas',
     1 => 'Foobar-1.4.0a1.tgz',
   ),
-  9 => 
+  9 =>
   array (
     0 => 'start',
-    1 => 
+    1 =>
     array (
       0 => 'Foobar-1.4.0a1.tgz',
       1 => '2063',
     ),
   ),
-  10 => 
+  10 =>
   array (
     0 => 'bytesread',
     1 => 1024,
   ),
-  11 => 
+  11 =>
   array (
     0 => 'bytesread',
     1 => 2048,
   ),
-  12 => 
+  12 =>
   array (
     0 => 'bytesread',
     1 => 2063,
   ),
-  13 => 
+  13 =>
   array (
     0 => 'done',
     1 => 2063,
@@ -463,30 +464,30 @@ $installer->setOptions($dp->getOptions());
 $ret = &$installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
-  'provides' => 
+  'provides' =>
   array (
-    'class;OS_Guess' => 
+    'class;OS_Guess' =>
     array (
       'type' => 'class',
       'name' => 'OS_Guess',
       'explicit' => true,
     ),
-    'class;System' => 
+    'class;System' =>
     array (
       'type' => 'class',
       'name' => 'System',
       'explicit' => true,
     ),
-    'function;md5_file' => 
+    'function;md5_file' =>
     array (
       'type' => 'function',
       'name' => 'md5_file',
       'explicit' => true,
     ),
   ),
-  'filelist' => 
+  'filelist' =>
   array (
-    'foo12.php' => 
+    'foo12.php' =>
     array (
       'role' => 'php',
       'md5sum' => 'ed0384ad29e60110b310a02e95287ee6',
@@ -508,39 +509,39 @@ $phpunit->assertEquals(array (
  * the System class for quick handling of common operations
    with files and directories
  * the PEAR base class
- 
+
 ',
-  'maintainers' => 
+  'maintainers' =>
   array (
-    0 => 
+    0 =>
     array (
       'handle' => 'ssb',
       'name' => 'Stig Bakken',
       'email' => 'stig@php.net',
       'role' => 'lead',
     ),
-    1 => 
+    1 =>
     array (
       'handle' => 'cellog',
       'name' => 'Greg Beaver',
       'email' => 'cellog@php.net',
       'role' => 'lead',
     ),
-    2 => 
+    2 =>
     array (
       'handle' => 'cox',
       'name' => 'Tomas V.V.Cox',
       'email' => 'cox@idecnet.com',
       'role' => 'lead',
     ),
-    3 => 
+    3 =>
     array (
       'handle' => 'pajoye',
       'name' => 'Pierre-Alain Joye',
       'email' => 'pajoye@pearfr.org',
       'role' => 'lead',
     ),
-    4 => 
+    4 =>
     array (
       'handle' => 'mj',
       'name' => 'Martin Jansen',
@@ -593,11 +594,11 @@ Installer:
  * Major bug in Registry - false file conflicts on data/doc/test role
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)
-  
+
 ',
-  'changelog' => 
+  'changelog' =>
   array (
-    0 => 
+    0 =>
     array (
       'version' => '1.3.3',
       'release_date' => '2004-10-28',
@@ -616,12 +617,12 @@ Other:
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
-    
+
 ',
     ),
   ),
   '_lastversion' => null,
-  'dirtree' => 
+  'dirtree' =>
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
   ),
@@ -637,30 +638,30 @@ $phpunit->assertEquals($ret, $info, 'test installation, Foobar');
 $ret = &$installer->install($result[1], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
-  'provides' => 
+  'provides' =>
   array (
-    'class;OS_Guess' => 
+    'class;OS_Guess' =>
     array (
       'type' => 'class',
       'name' => 'OS_Guess',
       'explicit' => true,
     ),
-    'class;System' => 
+    'class;System' =>
     array (
       'type' => 'class',
       'name' => 'System',
       'explicit' => true,
     ),
-    'function;md5_file' => 
+    'function;md5_file' =>
     array (
       'type' => 'function',
       'name' => 'md5_file',
       'explicit' => true,
     ),
   ),
-  'filelist' => 
+  'filelist' =>
   array (
-    'foo1.php' => 
+    'foo1.php' =>
     array (
       'role' => 'php',
       'md5sum' => 'ed0384ad29e60110b310a02e95287ee6',
@@ -682,39 +683,39 @@ $phpunit->assertEquals(array (
  * the System class for quick handling of common operations
    with files and directories
  * the PEAR base class
- 
+
 ',
-  'maintainers' => 
+  'maintainers' =>
   array (
-    0 => 
+    0 =>
     array (
       'handle' => 'ssb',
       'name' => 'Stig Bakken',
       'email' => 'stig@php.net',
       'role' => 'lead',
     ),
-    1 => 
+    1 =>
     array (
       'handle' => 'cellog',
       'name' => 'Greg Beaver',
       'email' => 'cellog@php.net',
       'role' => 'lead',
     ),
-    2 => 
+    2 =>
     array (
       'handle' => 'cox',
       'name' => 'Tomas V.V.Cox',
       'email' => 'cox@idecnet.com',
       'role' => 'lead',
     ),
-    3 => 
+    3 =>
     array (
       'handle' => 'pajoye',
       'name' => 'Pierre-Alain Joye',
       'email' => 'pajoye@pearfr.org',
       'role' => 'lead',
     ),
-    4 => 
+    4 =>
     array (
       'handle' => 'mj',
       'name' => 'Martin Jansen',
@@ -767,7 +768,7 @@ Installer:
  * Major bug in Registry - false file conflicts on data/doc/test role
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)
-  
+
 ',
   'release_deps' =>
   array (
@@ -778,9 +779,9 @@ Installer:
       'name' => 'Foobar',
     ),
   ),
-  'changelog' => 
+  'changelog' =>
   array (
-    0 => 
+    0 =>
     array (
       'version' => '1.3.3',
       'release_date' => '2004-10-28',
@@ -799,12 +800,12 @@ Other:
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
-    
+
 ',
     ),
   ),
   '_lastversion' => null,
-  'dirtree' => 
+  'dirtree' =>
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
   ),
@@ -821,30 +822,30 @@ $phpunit->assertEquals($ret, $info, 'test installation, Bar');
 $ret = &$installer->install($result[2], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
-  'provides' => 
+  'provides' =>
   array (
-    'class;OS_Guess' => 
+    'class;OS_Guess' =>
     array (
       'type' => 'class',
       'name' => 'OS_Guess',
       'explicit' => true,
     ),
-    'class;System' => 
+    'class;System' =>
     array (
       'type' => 'class',
       'name' => 'System',
       'explicit' => true,
     ),
-    'function;md5_file' => 
+    'function;md5_file' =>
     array (
       'type' => 'function',
       'name' => 'md5_file',
       'explicit' => true,
     ),
   ),
-  'filelist' => 
+  'filelist' =>
   array (
-    'foo.php' => 
+    'foo.php' =>
     array (
       'role' => 'php',
       'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
@@ -864,39 +865,39 @@ $phpunit->assertEquals(array (
  * the System class for quick handling of common operations
    with files and directories
  * the PEAR base class
- 
+
 ',
-  'maintainers' => 
+  'maintainers' =>
   array (
-    0 => 
+    0 =>
     array (
       'handle' => 'ssb',
       'role' => 'lead',
       'name' => 'Stig Bakken',
       'email' => 'stig@php.net',
     ),
-    1 => 
+    1 =>
     array (
       'handle' => 'cellog',
       'role' => 'lead',
       'name' => 'Greg Beaver',
       'email' => 'cellog@php.net',
     ),
-    2 => 
+    2 =>
     array (
       'handle' => 'cox',
       'role' => 'lead',
       'name' => 'Tomas V.V.Cox',
       'email' => 'cox@idecnet.com',
     ),
-    3 => 
+    3 =>
     array (
       'handle' => 'pajoye',
       'role' => 'lead',
       'name' => 'Pierre-Alain Joye',
       'email' => 'pajoye@pearfr.org',
     ),
-    4 => 
+    4 =>
     array (
       'handle' => 'mj',
       'role' => 'developer',
@@ -949,7 +950,7 @@ Installer:
  * Major bug in Registry - false file conflicts on data/doc/test role
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)
-  
+
 ',
   'release_deps' =>
   array (
@@ -961,7 +962,7 @@ Installer:
     ),
     2 =>
     array (
-      'type' => 'pkg', 
+      'type' => 'pkg',
       'rel' => 'not',
       'name' => 'Foo',
     ),
@@ -972,9 +973,9 @@ Installer:
       'name' => 'Bar',
     ),
   ),
-  'changelog' => 
+  'changelog' =>
   array (
-    0 => 
+    0 =>
     array (
       'version' => '1.3.3',
       'release_date' => '2004-10-28',
@@ -993,12 +994,12 @@ Other:
  * fix critical problem in package.xml for linux in 1.3.2
  * fix staticPopCallback() in PEAR_ErrorStack
  * fix warning in PEAR_Registry for windows 98 users
-   
+
 ',
     ),
   ),
   '_lastversion' => null,
-  'dirtree' => 
+  'dirtree' =>
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
   ),
