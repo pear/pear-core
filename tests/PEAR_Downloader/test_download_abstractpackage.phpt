@@ -8,10 +8,12 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'test-1.0.tgz';
+$dir = dirname(__FILE__) . DIRECTORY_SEPARATOR;
+require_once $dir . 'setup.php.inc';
+$pathtopackagexml = $dir .'packages'. DIRECTORY_SEPARATOR . 'test-1.0.tgz';
+
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.0.tgz', $pathtopackagexml);
+
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
     array(array('package' => 'test', 'channel' => 'pear.php.net'), 'stable'),
     array('version' => '1.0',
@@ -62,6 +64,7 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
 </package>
 ',
           'url' => 'http://www.example.com/test-1.0'));
+
 $dp = &new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array('test'));
@@ -82,6 +85,7 @@ $phpunit->assertEquals('test',
     $dlpackages[0]['pkg'], 'test');
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
+
 $phpunit->assertEquals(array (
   array (
     0 => 3,
@@ -104,6 +108,7 @@ $phpunit->assertEquals(array (
     1 => '...done: 785 bytes',
   ),
 ), $fakelog->getLog(), 'log messages');
+
 $phpunit->assertEquals(array (
   0 =>
   array (
@@ -135,6 +140,7 @@ $phpunit->assertEquals(array (
     1 => 785,
   ),
 ), $fakelog->getDownload(), 'download callback messages');
+
 echo 'tests done';
 ?>
 --CLEAN--
