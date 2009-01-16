@@ -68,23 +68,26 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/test/deps.1.0.txt", 'b:0;', 
 $dp = &new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array('test'));
+
 $phpunit->assertEquals(1, count($result), 'return');
 $phpunit->assertIsa('test_PEAR_Downloader_Package', $result[0], 'right class');
 $phpunit->assertIsa('PEAR_PackageFile_v1', $pf = $result[0]->getPackageFile(), 'right kind of pf');
 $phpunit->assertEquals('test', $pf->getPackage(), 'right package');
 $phpunit->assertEquals('pear.php.net', $pf->getChannel(), 'right channel');
+
 $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(1, count($dlpackages), 'downloaded packages count');
 $phpunit->assertEquals(3, count($dlpackages[0]), 'internals package count');
 $phpunit->assertEquals(array('file', 'info', 'pkg'), array_keys($dlpackages[0]), 'indexes');
+
 $phpunit->assertEquals($dp->getDownloadDir() . DIRECTORY_SEPARATOR . 'test-1.0.tgz',
     $dlpackages[0]['file'], 'file');
-$phpunit->assertIsa('PEAR_PackageFile_v1',
-    $dlpackages[0]['info'], 'info');
-$phpunit->assertEquals('test',
-    $dlpackages[0]['pkg'], 'test');
+$phpunit->assertIsa('PEAR_PackageFile_v1', $dlpackages[0]['info'], 'info');
+$phpunit->assertEquals('test', $dlpackages[0]['pkg'], 'test');
+
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
+
 $phpunit->assertEquals(array (
   array (
     0 => 3,
