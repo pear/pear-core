@@ -70,8 +70,8 @@ $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('test');
 
 $phpunit->assertErrors(array(
-    'package' => 'PEAR_Error', 'message' =>
-    'Cannot download non-local package "test"'
+    'package' => 'PEAR_Error',
+    'message' => 'Cannot download non-local package "test"'
 ), 'wrong error');
 $phpunit->assertEquals(array (), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
