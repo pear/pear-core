@@ -8,14 +8,18 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+$dir = dirname(__FILE__) . DIRECTORY_SEPARATOR;
+require_once $dir . 'setup.php.inc';
+
 $reg = &$config->getRegistry();
 $chan = &$reg->getChannel('pear.php.net');
 $chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
 $reg->updateChannel($chan);
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'test-1.0.tgz';
+
+$pathtopackagexml = $dir . 'packages'. DIRECTORY_SEPARATOR . 'test-1.0.tgz';
+
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.0.tgz', $pathtopackagexml);
+
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/test/allreleases.xml", '<?xml version="1.0"?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
@@ -29,6 +33,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/test/allreleases.xml", '<?xm
  <r><v>0.4</v><s>stable</s></r>
  <r><v>0.3</v><s>stable</s></r>
 </a>', 'text/xml');
+
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/test/1.0.xml", '<?xml version="1.0"?>
 <r xmlns="http://pear.php.net/dtd/rest.release"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.release
@@ -47,6 +52,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/test/1.0.xml", '<?xml versio
  <g>http://www.example.com/test-1.0</g>
  <x xlink:href="package.1.0.xml"/>
 </r>', 'text/xml');
+
 $pearweb->addRESTConfig("http://pear.php.net/rest/p/test/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
 <p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
  <n>test</n>
@@ -101,39 +107,41 @@ $phpunit->assertEquals(array (
     1 => '...done: 785 bytes',
   ),
 ), $fakelog->getLog(), 'log messages');
+
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 'setup',
     1 => 'self',
   ),
-  1 => 
+  1 =>
   array (
     0 => 'saveas',
     1 => 'test-1.0.tgz',
   ),
-  2 => 
+  2 =>
   array (
     0 => 'start',
-    1 => 
+    1 =>
     array (
       0 => 'test-1.0.tgz',
       1 => '785',
     ),
   ),
-  3 => 
+  3 =>
   array (
     0 => 'bytesread',
     1 => 785,
   ),
-  4 => 
+  4 =>
   array (
     0 => 'done',
     1 => 785,
   ),
 ), $fakelog->getDownload(), 'download callback messages');
+
 $phpunit->assertEquals(array(
-  0 => 
+  0 =>
   array (
     0 => 'http://pear.php.net/rest/r/test/allreleases.xml',
     1 => '200',
@@ -151,6 +159,7 @@ $phpunit->assertEquals(array(
     1 => '200',
   ),
 ), $pearweb->getRestCalls(), 'rest calls');
+
 echo 'tests done';
 ?>
 --CLEAN--
