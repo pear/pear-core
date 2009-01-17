@@ -15,6 +15,7 @@ $ch = new PEAR_ChannelFile;
 $ch->setName('smork');
 $ch->setSummary('smork');
 $ch->setBaseURL('REST1.0', 'http://smork/rest/');
+
 $reg = &$config->getRegistry();
 $phpunit->assertTrue($reg->addChannel($ch), 'smork setup');
 
@@ -29,6 +30,7 @@ $pathtofoobarxml  = $packageDir . 'Foobar-1.5.0a1.tgz';
 
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Bar-1.5.2.tgz', $pathtobarxml);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Foobar-1.5.0a1.tgz', $pathtofoobarxml);
+
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/bar/allreleases.xml",
 '<?xml version="1.0"?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
@@ -148,8 +150,11 @@ Features include
 PEAR_PackageFileManager is fully unit tested.
 The new PEAR_PackageFileManager2 class is not.</d>
  <r xlink:href="/rest/r/pear_packagefilemanager"/>
-</p>', 'text/xml');
-$pearweb->addRESTConfig("http://pear.php.net/rest/p/foobar/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+</p>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/foobar/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
 <p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
  <n>foobar</n>
  <c>pear.php.net</c>
@@ -177,8 +182,11 @@ Features include
 PEAR_PackageFileManager is fully unit tested.
 The new PEAR_PackageFileManager2 class is not.</d>
  <r xlink:href="/rest/r/pear_packagefilemanager"/>
-</p>', 'text/xml');
-$pearweb->addRESTConfig("http://smork/rest/p/foobar/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+</p>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://smork/rest/p/foobar/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
 <p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
  <n>foobar</n>
  <c>smork</c>
