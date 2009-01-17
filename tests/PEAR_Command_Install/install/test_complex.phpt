@@ -24,6 +24,7 @@ $pathtofoobarxml  = $packageDir . 'Foobar-1.5.0a1.tgz';
 
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Bar-1.5.2.tgz', $pathtobarxml);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Foobar-1.5.0a1.tgz', $pathtofoobarxml);
+
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
     array('2.0',
          array('name' => 'Bar', 'channel' => 'pear.php.net', 'min' => '1.0.0'),
