@@ -13,12 +13,13 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $_test_dep->setPhpversion('4.0');
 $_test_dep->setPEARVersion('1.4.0dev13');
 
-$mainpackage = dirname(__FILE__) . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'mainold-1.1.tgz';
-$requiredpackage = dirname(__FILE__) . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'required-1.1.tgz';
+$packageDir      = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages'. DIRECTORY_SEPARATOR;
+$mainpackage     = $packageDir . 'mainold-1.1.tgz';
+$requiredpackage = $packageDir . 'required-1.1.tgz';
+
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/mainold-1.1.tgz', $mainpackage);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/required-1.1.tgz', $requiredpackage);
+
 $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
     array(array('package' => 'mainold', 'channel' => 'pear.php.net'), 'stable'),
     array('version' => '1.1',
@@ -183,6 +184,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <phprelease/>
 </package>',
           'url' => 'http://www.example.com/required-1.1'));
+
 $dp = &newFakeDownloaderPackage(array());
 $result = $dp->initialize('mainold');
 $phpunit->assertNoErrors('after create 1');
@@ -195,7 +197,9 @@ $phpunit->assertNoErrors('setup');
 $_test_dep->setExtensions(array('bar' => '1.0'));
 $dldir = $dp->_downloader->getDownloadDir();
 $dp->_downloader->analyzeDependencies($params);
+
 $phpunit->assertEquals(array(), $params, 'all things removed');
+
 $phpunit->assertEquals(array (
   array (
     0 => 3,
@@ -222,7 +226,9 @@ $phpunit->assertEquals(array (
     1 => 'pear/mainold requires PHP extension "foo"',
   ),
 ), $fakelog->getLog(), 'end log');
+
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');
+
 echo 'tests done';
 ?>
 --CLEAN--
