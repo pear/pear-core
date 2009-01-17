@@ -10,65 +10,69 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $reg = &$config->getRegistry();
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'test-1.0.tgz';
-$pathtopackagexml2 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'test-1.0.tar';
+$chan = &$reg->getChannel('pear.php.net');
+$chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
+$reg->updateChannel($chan);
+
+$packageDir       = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packages'. DIRECTORY_SEPARATOR;
+$pathtopackagexml =  $packageDir . 'test-1.0.tgz';
+$pathtopackagexml2 = $packageDir . 'test-1.0.tar';
+
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.0.tgz', $pathtopackagexml);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.0.tar', $pathtopackagexml2);
-$GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
-    array(array('package' => 'test', 'channel' => 'pear.php.net'), 'stable'),
-    array('version' => '1.0',
-          'info' =>
-          '<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="1.4.0dev13">
- <name>test</name>
- <summary>test</summary>
- <description>test
- </description>
- <maintainers>
-  <maintainer>
-   <user>cellog</user>
-   <name>Greg Beaver</name>
-   <email>cellog@php.net</email>
-   <role>lead</role>
-  </maintainer>
-  </maintainers>
- <release>
-  <version>1.0</version>
-  <date>2004-10-10</date>
-  <license>PHP License</license>
-  <state>stable</state>
-  <notes>test
-  </notes>
-  <filelist>
-   <file role="php" baseinstalldir="test" md5sum="31140babf23de55c049f8b56818133eb" name="test/test.php"/>
-   <file role="php" baseinstalldir="test" md5sum="31140babf23de55c049f8b56818133eb" install-as="hi.php" name="test/test2.php"/>
-   <file role="php" baseinstalldir="test" md5sum="31140babf23de55c049f8b56818133eb" platform="windows" install-as="another.php" name="test/test3.php"/>
-   <file role="data" baseinstalldir="test" md5sum="31140babf23de55c049f8b56818133eb" name="test/test4.php">
-    <replace from="@1@" to="version" type="package-info"/>
-    <replace from="@2@" to="data_dir" type="pear-config"/>
-    <replace from="@3@" to="DIRECTORY_SEPARATOR" type="php-const"/>
-   </file>
-  </filelist>
- </release>
- <changelog>
-   <release>
-    <version>1.0</version>
-    <date>2004-10-10</date>
-    <license>PHP License</license>
-    <state>stable</state>
-    <notes>test
-    </notes>
-   </release>
- </changelog>
-</package>',
-          'url' => 'http://www.example.com/test-1.0'));
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/test/allreleases.xml", '<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>test</p>
+ <c>pear.php.net</c>
+ <r><v>1.1</v><s>devel</s></r>
+ <r><v>1.0</v><s>stable</s></r>
+ <r><v>0.10-b1</v><s>beta</s></r>
+ <r><v>0.9</v><s>stable</s></r>
+ <r><v>0.4</v><s>stable</s></r>
+ <r><v>0.3</v><s>stable</s></r>
+</a>', 'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/test/1.0.xml", '<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/test">test</p>
+ <c>pear.php.net</c>
+ <v>1.0</v>
+ <st>alpha</st>
+ <l>PHP License</l>
+ <m>cellog</m>
+ <s>test</s>
+ <d>test</d>
+ <da>2005-04-17 18:40:51</da>
+ <n>test</n>
+ <f>252733</f>
+ <g>http://www.example.com/test-1.0</g>
+ <x xlink:href="package.1.0.xml"/>
+</r>', 'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/test/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>test</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/test">test</ca>
+ <l>PHP License</l>
+ <s>test</s>
+ <d>test</d>
+ <r xlink:href="/rest/r/test"/>
+</p>', 'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/test/deps.1.0.txt", 'b:0;', 'text/plain');
+
 mkdir($temp_path . DIRECTORY_SEPARATOR . 'bloob');
 chdir($temp_path . DIRECTORY_SEPARATOR . 'bloob');
 $e = $command->run('download', array(), array('test'));
+
 $phpunit->assertNoErrors('download');
 $phpunit->assertEquals(array (
   array (
@@ -97,6 +101,7 @@ $phpunit->assertEquals(array (
     'cmd' => 'download',
   ),
 ), $fakelog->getLog(), 'log');
+
 $phpunit->assertEquals(array (
   0 =>
   array (
@@ -154,6 +159,7 @@ $phpunit->assertEquals(array (
     'cmd' => 'download',
   ),
 ), $fakelog->getLog(), '--nocompress log');
+
 $phpunit->assertEquals(array (
   0 =>
   array (
@@ -215,6 +221,7 @@ $phpunit->assertEquals(array (
     1 => 6656,
   ),
 ), $fakelog->getDownload(), 'download --nocompress log');
+
 echo 'tests done';
 ?>
 --CLEAN--
