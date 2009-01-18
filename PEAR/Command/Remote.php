@@ -257,10 +257,13 @@ parameter.
         if (PEAR::isError($e = $this->_checkChannelForStatus($channel, $chan))) {
             return $e;
         }
+
         $list_options = false;
         if ($this->config->get('preferred_state') == 'stable') {
             $list_options = true;
         }
+
+        $available = array();
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
               $base = $chan->getBaseURL('REST1.1', $this->config->get('preferred_mirror'))) {
             // use faster list-all if available
@@ -276,6 +279,7 @@ parameter.
             $this->config->set('default_channel', $savechannel);
             return $this->raiseError($available);
         }
+
         $i = $j = 0;
         $data = array(
             'caption' => 'Channel ' . $channel . ' Available packages:',
@@ -283,7 +287,8 @@ parameter.
             'headline' => array('Package', 'Version'),
             'channel' => $channel
             );
-        if (count($available)==0) {
+
+        if (count($available) == 0) {
             $data = '(no packages available yet)';
         } else {
             foreach ($available as $name => $info) {
