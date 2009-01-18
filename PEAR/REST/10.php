@@ -494,6 +494,7 @@ class PEAR_REST_10
                     $next += .1;
                 }
             }
+
             if ($basic) { // remote-list command
                 if ($dostable) {
                     $latest = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
@@ -716,9 +717,11 @@ class PEAR_REST_10
             if (!class_exists('PEAR_PackageFile_v2')) {
                 require_once 'PEAR/PackageFile/v2.php';
             }
+
             if (!is_array($allreleases['r']) || !isset($allreleases['r'][0])) {
                 $allreleases['r'] = array($allreleases['r']);
             }
+
             $pf = new PEAR_PackageFile_v2;
             foreach ($allreleases['r'] as $release) {
                 $ds = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/deps.' .
@@ -726,16 +729,20 @@ class PEAR_REST_10
                 if (PEAR::isError($ds)) {
                     continue;
                 }
+
                 if (!isset($latest)) {
                     $latest = $release['v'];
                 }
+
                 $pf->setDeps(unserialize($ds));
                 $ds = $pf->getDeps();
                 $info = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package)
                     . '/' . $release['v'] . '.xml', false, false, $channel);
+
                 if (PEAR::isError($info)) {
                     continue;
                 }
+
                 $releases[$release['v']] = array(
                     'doneby' => $info['m'],
                     'license' => $info['l'],
@@ -750,6 +757,7 @@ class PEAR_REST_10
         } else {
             $latest = '';
         }
+
         PEAR::popErrorHandling();
         if (isset($pinfo['dc']) && isset($pinfo['dp'])) {
             if (is_array($pinfo['dp'])) {
@@ -762,6 +770,11 @@ class PEAR_REST_10
         } else {
             $deprecated = false;
         }
+
+        if (!isset($latest)) {
+            $latest = '';
+        }
+
         return array(
             'name' => $pinfo['n'],
             'channel' => $pinfo['c'],
