@@ -19,33 +19,38 @@ class PEAR_test_mock_pearweb
     {
         if (!isset($this->_config) || !is_array($this->_config)) {
             $ret = $this->tryParentREST($address);
-            if ($this->_continue) {
-                if (!$ret) {
-                    return $this->do304($address);
-                }
-                return $this->do200() .
-                "ETag: 12345678910\n" .
-                "Last-Modified: 12345678910\n" .
-                'Content-Type: ' . $ret[2]['content-type'] . "\n" .
-                'Content-Length: ' . $ret[2]['content-length'] . "\n\n" .
-                $ret[0];
+            if (!$this->_continue) {
+                die('No REST config for URL ' . $address);
             }
-            die('No REST config for URL ' . $address);
+
+            if (!$ret) {
+                return $this->do304($address);
+            }
+
+            return $this->do200() .
+            "ETag: 12345678910\n" .
+            "Last-Modified: 12345678910\n" .
+            'Content-Type: ' . $ret[2]['content-type'] . "\n" .
+            'Content-Length: ' . $ret[2]['content-length'] . "\n\n" .
+            $ret[0];
         }
+
         if (!isset($this->_config['rest'][$address])) {
             $ret = $this->tryParentREST($address);
-            if ($this->_continue) {
-                if (!$ret) {
-                    return $this->do304($address);
-                }
-                return $this->do200() .
-                "ETag: 12345678910\n" .
-                "Last-Modified: 12345678910\n" .
-                'Content-Type: ' . $ret[2]['content-type'] . "\n" .
-                'Content-Length: ' . $ret[2]['content-length'] . "\n\n" .
-                $ret[0];
+            if (!$this->_continue) {
+                die('No REST config for URL ' . $address);
             }
-            die('No REST config for URL ' . $address);
+
+            if (!$ret) {
+                return $this->do304($address);
+            }
+
+            return $this->do200() .
+            "ETag: 12345678910\n" .
+            "Last-Modified: 12345678910\n" .
+            'Content-Type: ' . $ret[2]['content-type'] . "\n" .
+            'Content-Length: ' . $ret[2]['content-length'] . "\n\n" .
+            $ret[0];
         } else {
             if (!$this->_config['rest'][$address][0]) {
                 $this->_restCalls[] = array($address, '404');
