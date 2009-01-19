@@ -17,7 +17,18 @@ $csize = filesize($pathtochannelxml);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.0.tgz', $pathtopackagexml);
 $GLOBALS['pearweb']->addHtmlConfig('http://pear.foo.com/channel.xml', $pathtochannelxml);
 
-
+$pearweb->addRESTConfig("http://pear.foo.com/rest/r/test/allreleases2.xml", '<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>test</p>
+ <c>pear.foo.com</c>
+ <r>
+  <v>1.0</v>
+  <s>beta</s>
+  <m>4.3</m>
+ </r>
+</a>', 'text/xml');
 
 $dp = &newDownloaderPackage(array());
 $dp->_downloader->config->set('auto_discover', 1);
