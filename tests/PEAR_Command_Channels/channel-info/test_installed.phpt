@@ -22,34 +22,20 @@ $ch->fromXmlString('<?xml version="1.0" encoding="ISO-8859-1" ?>
  <validatepackage version="1.0">PEAR_Validate</validatepackage>
  <servers>
   <primary>
-   <xmlrpc>
-    <function version="1.0">logintest</function>
-    <function version="1.0">package.listLatestReleases</function>
-    <function version="1.0">package.listAll</function>
-    <function version="1.0">package.info</function>
-    <function version="1.0">package.getDownloadURL</function>
-    <function version="1.0">channel.listAll</function>
-    <function version="1.0">channel.update</function>
-   </xmlrpc>
-   <soap>
-    <function version="1.0">package.listLatestReleases</function>
-    <function version="1.0">package.listAll</function>
-   </soap>
+   <rest>
+    <baseurl type="REST1.0">http://pear.php.net/rest/</baseurl>
+    <baseurl type="REST1.1">http://pear.php.net/rest/</baseurl>
+    <baseurl type="REST1.2">http://pear.php.net/rest/</baseurl>
+    <baseurl type="REST1.3">http://pear.php.net/rest/</baseurl>
+   </rest>
   </primary>
   <mirror host="poor.php.net">
-   <xmlrpc>
-    <function version="1.0">logintest</function>
-    <function version="1.0">package.listLatestReleases</function>
-    <function version="1.0">package.listAll</function>
-    <function version="1.0">package.info</function>
-    <function version="1.0">package.getDownloadURL</function>
-    <function version="1.0">channel.listAll</function>
-    <function version="1.0">channel.update</function>
-   </xmlrpc>
-   <soap>
-    <function version="1.0">package.listLatestReleases</function>
-    <function version="1.0">package.listAll</function>
-   </soap>
+   <rest>
+    <baseurl type="REST1.0">http://poor.php.net/rest/</baseurl>
+    <baseurl type="REST1.1">http://poor.php.net/rest/</baseurl>
+    <baseurl type="REST1.2">http://poor.php.net/rest/</baseurl>
+    <baseurl type="REST1.3">http://poor.php.net/rest/</baseurl>
+   </rest>
   </mirror>
  </servers>
 </channel>');
@@ -58,177 +44,117 @@ $reg->addChannel($ch);
 $e = $command->run('channel-info', array(), array('froo'));
 $phpunit->assertNoErrors('1');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
-      'main' => 
+      'main' =>
       array (
         'caption' => 'Channel froo Information:',
         'border' => true,
-        'data' => 
+        'data' =>
         array (
-          'server' => 
+          'server' =>
           array (
             0 => 'Name and Server',
             1 => 'froo',
           ),
-          'summary' => 
+          'summary' =>
           array (
             0 => 'Summary',
             1 => 'PHP Extension and Application Repository',
           ),
-          'vpackage' => 
+          'vpackage' =>
           array (
             0 => 'Validation Package Name',
             1 => 'PEAR_Validate',
           ),
-          'vpackageversion' => 
+          'vpackageversion' =>
           array (
             0 => 'Validation Package Version',
             1 => '1.0',
           ),
         ),
       ),
-      'protocols' => 
+      'protocols' =>
       array (
-        'data' => 
+        'data' =>
         array (
-          0 => 
+          0 =>
           array (
-            0 => 'xmlrpc',
-            1 => '1.0',
-            2 => 'logintest',
+            0 => 'rest',
+            1 => 'REST1.0',
+            2 => 'http://pear.php.net/rest/',
           ),
-          1 => 
+          1 =>
           array (
-            0 => 'xmlrpc',
-            1 => '1.0',
-            2 => 'package.listLatestReleases',
+            0 => 'rest',
+            1 => 'REST1.1',
+            2 => 'http://pear.php.net/rest/',
           ),
-          2 => 
+          2 =>
           array (
-            0 => 'xmlrpc',
-            1 => '1.0',
-            2 => 'package.listAll',
+            0 => 'rest',
+            1 => 'REST1.2',
+            2 => 'http://pear.php.net/rest/',
           ),
-          3 => 
+          3 =>
           array (
-            0 => 'xmlrpc',
-            1 => '1.0',
-            2 => 'package.info',
-          ),
-          4 => 
-          array (
-            0 => 'xmlrpc',
-            1 => '1.0',
-            2 => 'package.getDownloadURL',
-          ),
-          5 => 
-          array (
-            0 => 'xmlrpc',
-            1 => '1.0',
-            2 => 'channel.listAll',
-          ),
-          6 => 
-          array (
-            0 => 'xmlrpc',
-            1 => '1.0',
-            2 => 'channel.update',
-          ),
-          7 => 
-          array (
-            0 => 'soap',
-            1 => '1.0',
-            2 => 'package.listLatestReleases',
-          ),
-          8 => 
-          array (
-            0 => 'soap',
-            1 => '1.0',
-            2 => 'package.listAll',
+            0 => 'rest',
+            1 => 'REST1.3',
+            2 => 'http://pear.php.net/rest/',
           ),
         ),
         'caption' => 'Server Capabilities',
-        'headline' => 
+        'headline' =>
         array (
           0 => 'Type',
           1 => 'Version/REST type',
           2 => 'Function Name/REST base',
         ),
       ),
-      'mirrors' => 
+      'mirrors' =>
       array (
-        'data' => 
+        'data' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'poor.php.net',
           ),
         ),
         'caption' => 'Channel froo Mirrors:',
       ),
-      'mirrorprotocols0' => 
+      'mirrorprotocols0' =>
       array (
-        'data' => 
+        'data' =>
         array (
-          0 => 
+          0 =>
           array (
-            0 => 'xmlrpc',
-            1 => '1.0',
-            2 => 'logintest',
+            0 => 'rest',
+            1 => 'REST1.0',
+            2 => 'http://poor.php.net/rest/',
           ),
-          1 => 
+          1 =>
           array (
-            0 => 'xmlrpc',
-            1 => '1.0',
-            2 => 'package.listLatestReleases',
+            0 => 'rest',
+            1 => 'REST1.1',
+            2 => 'http://poor.php.net/rest/',
           ),
-          2 => 
+          2 =>
           array (
-            0 => 'xmlrpc',
-            1 => '1.0',
-            2 => 'package.listAll',
+            0 => 'rest',
+            1 => 'REST1.2',
+            2 => 'http://poor.php.net/rest/',
           ),
-          3 => 
+          3 =>
           array (
-            0 => 'xmlrpc',
-            1 => '1.0',
-            2 => 'package.info',
-          ),
-          4 => 
-          array (
-            0 => 'xmlrpc',
-            1 => '1.0',
-            2 => 'package.getDownloadURL',
-          ),
-          5 => 
-          array (
-            0 => 'xmlrpc',
-            1 => '1.0',
-            2 => 'channel.listAll',
-          ),
-          6 => 
-          array (
-            0 => 'xmlrpc',
-            1 => '1.0',
-            2 => 'channel.update',
-          ),
-          7 => 
-          array (
-            0 => 'soap',
-            1 => '1.0',
-            2 => 'package.listLatestReleases',
-          ),
-          8 => 
-          array (
-            0 => 'soap',
-            1 => '1.0',
-            2 => 'package.listAll',
+            0 => 'rest',
+            1 => 'REST1.3',
+            2 => 'http://poor.php.net/rest/',
           ),
         ),
         'caption' => 'Mirror poor.php.net Capabilities',
-        'headline' => 
+        'headline' =>
         array (
           0 => 'Type',
           1 => 'Version/REST type',
