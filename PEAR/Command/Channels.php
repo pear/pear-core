@@ -286,30 +286,7 @@ password via the system\'s process list.
         $data['data'] = array();
         $data['caption'] = 'Server Capabilities';
         $data['headline'] = array('Type', 'Version/REST type', 'Function Name/REST base');
-        $capabilities = $chan->getFunctions('xmlrpc');
-        $soaps = $chan->getFunctions('soap');
-        if ($capabilities || $soaps || $chan->supportsREST()) {
-            if ($capabilities) {
-                if (!isset($capabilities[0])) {
-                    $capabilities = array($capabilities);
-                }
-
-                foreach ($capabilities as $protocol) {
-                    $data['data'][] = array('xmlrpc', $protocol['attribs']['version'],
-                        $protocol['_content']);
-                }
-            }
-
-            if ($soaps) {
-                if (!isset($soaps[0])) {
-                    $soaps = array($soaps);
-                }
-                foreach ($soaps as $protocol) {
-                    $data['data'][] = array('soap', $protocol['attribs']['version'],
-                        $protocol['_content']);
-                }
-            }
-
+        if ($chan->supportsREST()) {
             if ($chan->supportsREST()) {
                 $funcs = $chan->getFunctions('rest');
                 if (!isset($funcs[0])) {
@@ -339,29 +316,7 @@ password via the system\'s process list.
                 $data['data'] = array();
                 $data['caption'] = 'Mirror ' . $mirror['attribs']['host'] . ' Capabilities';
                 $data['headline'] = array('Type', 'Version/REST type', 'Function Name/REST base');
-                $capabilities = $chan->getFunctions('xmlrpc', $mirror['attribs']['host']);
-                $soaps = $chan->getFunctions('soap', $mirror['attribs']['host']);
-                if ($capabilities || $soaps || $chan->supportsREST($mirror['attribs']['host'])) {
-                    if ($capabilities) {
-                        if (!isset($capabilities[0])) {
-                            $capabilities = array($capabilities);
-                        }
-                        foreach ($capabilities as $protocol) {
-                            $data['data'][] = array('xmlrpc', $protocol['attribs']['version'],
-                                $protocol['_content']);
-                        }
-                    }
-
-                    if ($soaps) {
-                        if (!isset($soaps[0])) {
-                            $soaps = array($soaps);
-                        }
-                        foreach ($soaps as $protocol) {
-                            $data['data'][] = array('soap', $protocol['attribs']['version'],
-                                $protocol['_content']);
-                        }
-                    }
-
+                if ($chan->supportsREST($mirror['attribs']['host'])) {
                     if ($chan->supportsREST($mirror['attribs']['host'])) {
                         $funcs = $chan->getFunctions('rest', $mirror['attribs']['host']);
                         if (!isset($funcs[0])) {
