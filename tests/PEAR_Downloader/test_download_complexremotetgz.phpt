@@ -9,28 +9,48 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'PEAR1-1.4.0a1.tgz';
-$pathtobarxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'Bar-1.5.0.tgz';
-$pathtofoobarxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'Foobar-1.4.0a1.tgz';
+
+$packageDir       = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packages'. DIRECTORY_SEPARATOR;
+$pathtopackagexml = $packageDir . 'PEAR1-1.4.0a1.tgz';
+$pathtobarxml     = $packageDir . 'Bar-1.5.0.tgz';
+$pathtofoobarxml  = $packageDir . 'Foobar-1.4.0a1.tgz';
+
+$reg = &$config->getRegistry();
+$chan = &$reg->getChannel('pear.php.net');
+$chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
+$reg->updateChannel($chan);
+
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/PEAR1-1.4.0a1.tgz', $pathtopackagexml);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Bar-1.5.0.tgz', $pathtobarxml);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Foobar-1.4.0a1.tgz', $pathtofoobarxml);
-$GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
-    array('1.0',
-         array('type' => 'pkg', 'rel' => 'ge', 'version' => '1.0.0',
-               'name' => 'Bar', 'channel' => 'pear.php.net', 'package' => 'Bar'),
-         array('channel' => 'pear.php.net', 'package' => 'PEAR1', 'version' => '1.4.0a1'), 'alpha'),
-    array('version' => '1.5.0',
-          'info' =>
-'<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="1.4.0a1">
- <name>Bar</name>       
- <summary>PEAR Base System</summary>
- <description>The PEAR package contains:
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/bar/allreleases.xml",
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>Bar</p>
+ <c>pear.php.net</c>
+ <r><v>1.5.0</v><s>stable</s></r>
+</a>', 'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/bar/deps.1.5.0.txt",
+    'a:1:{s:8:"required";a:3:{s:3:"php";a:2:{s:3:"min";s:5:"4.3.6";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}s:7:"package";a:2:{s:4:"name";s:6:"Foobar";s:7:"channel";s:12:"pear.php.net";}}}',
+    'text/plain');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/bar/1.5.0.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/bar">Bar</p>
+ <c>pear.php.net</c>
+ <v>1.5.0</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>cellog</m>
+ <s>PEAR Base System</s>
+ <d>The PEAR package contains:
  * the PEAR installer, for creating, distributing
    and installing packages
  * the alpha-quality PEAR_Exception PHP5 error handling mechanism
@@ -40,136 +60,74 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
    where PHP is running on
  * the System class for quick handling of common operations
    with files and directories
- * the PEAR base class
- </description>
- <maintainers>
-  <maintainer>
-   <user>ssb</user>
-   <name>Stig Bakken</name>
-   <email>stig@php.net</email>
-   <role>lead</role>
-  </maintainer>
-  <maintainer>
-   <user>cellog</user>
-   <name>Greg Beaver</name>
-   <email>cellog@php.net</email>
-   <role>lead</role>
-  </maintainer>
-  <maintainer>
-   <user>cox</user>
-   <name>Tomas V.V.Cox</name>
-   <email>cox@idecnet.com</email>
-   <role>lead</role>
-  </maintainer>
-  <maintainer>
-   <user>pajoye</user>
-   <name>Pierre-Alain Joye</name>
-   <email>pajoye@pearfr.org</email>
-   <role>lead</role>
-  </maintainer>
-  <maintainer>
-   <user>mj</user>
-   <name>Martin Jansen</name>
-   <email>mj@php.net</email>
-   <role>developer</role>
-  </maintainer>
-  </maintainers>
- <release>
-  <version>1.5.0</version>
-  <date>2004-12-27</date>
-  <license>PHP License</license>
-  <state>stable</state>
-  <notes>Installer Roles/Tasks:
+ * the PEAR base class</d>
+ <da>2005-04-17 18:40:51</da>
+ <n>Release notes</n>
+ <f>252733</f>
+ <g>http://www.example.com/Bar-1.5.0</g>
+ <x xlink:href="package.1.5.0.xml"/>
 
- * package.xml 2.0 uses a command pattern, allowing extensibility
- * implement the replace, postinstallscript, and preinstallscript tasks
+</r>', 'text/xml');
 
-Installer Dependency Support:
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/bar/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>bar</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>PEAR_PackageFileManager takes an existing package.xml file and updates it with a new filelist and changelog</s>
+ <d>This package revolutionizes the maintenance of PEAR packages.  With a few parameters,
+the entire package.xml is automatically updated with a listing of all files in a package.
+Features include
+ - manages the new package.xml 2.0 format in PEAR 1.4.0
+ - can detect PHP and extension dependencies using PHP_CompatInfo
+ - reads in an existing package.xml file, and only changes the release/changelog
+ - a plugin system for retrieving files in a directory.  Currently two plugins
+   exist, one for standard recursive directory content listing, and one that
+   reads the CVS/Entries files and generates a file listing based on the contents
+   of a checked out CVS repository
+ - incredibly flexible options for assigning install roles to files/directories
+ - ability to ignore any file based on a * ? wildcard-enabled string(s)
+ - ability to include only files that match a * ? wildcard-enabled string(s)
+ - ability to manage dependencies
+ - can output the package.xml in any directory, and read in the package.xml
+   file from any directory.
+ - can specify a different name for the package.xml file
 
- * package.xml 2.0 has continued to improve and evolve
- * Downloader/Package.php is now used to coordinate downloading.  Old code
-   has not yet been deleted, as error handling is crappy right now.  Uninstall
-   ordering is broken, and needs to be redone.
- * Pre-download dependency resolution works, mostly.
- * There is no way to disable dependency resolution at the moment, this will be done.
- * Dependency2.php is used by the new PEAR_Downloader_Channel to resolve dependencies
-   and include downloaded files in the calculations.
- * DependencyDB.php is used to resolve complex dependencies between installed packages
-   and any dependencies installed later (a conflicts/not dependency cannot be honored
-   without this DB)
+PEAR_PackageFileManager is fully unit tested.
+The new PEAR_PackageFileManager2 class is not.</d>
+ <r xlink:href="/rest/r/bar"/>
+</p>',
+'text/xml');
 
-Installer Channel Support:
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/foobar/allreleases.xml",
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>Foobar</p>
+ <c>pear.php.net</c>
+ <r><v>1.4.0a1</v><s>stable</s></r>
+</a>', 'text/xml');
 
- * channel XSD is available on pearweb
- * add channel.listAll and channel.update to default PEAR protocols
- * add ability to &quot;pear channel-update channelname&quot; to
-   retrieve updates manually for individual channels
- * fix channel.xml generation to use a valid schema declaration
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/foobar/deps.1.4.0a1.txt",
+    'a:1:{s:8:"required";a:2:{s:3:"php";a:2:{s:3:"min";s:5:"4.3.6";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}}}',
+    'text/plain');
 
-Installer:
-
- * with --remoteconfig option, it is possible to remotely install and uninstall packages
-   to an FTP server.  It works by mirroring a local installation, and requires a
-   special, separate local install.
- * Channels implemented
- * Bug #1242: array-to-string conversion
- * fix Bug #2189 upgrade-all stops if dependancy fails
- * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
- * fix Bug #1420 Parser bug for T_DOUBLE_COLON
- * fix Request #2220 pear5 build fails on dual php4/php5 system
- * Major bug in Registry - false file conflicts on data/doc/test role
-   was possible (and would happen if HTML_Template_IT was installed
-   and HTML_Template_Flexy installation was attempted)
-  </notes>
-  <deps>
-   <dep type="pkg" rel="has">Foobar</dep>
-  </deps>
-  <provides type="class" name="OS_Guess" />
-  <provides type="class" name="System" />
-  <provides type="function" name="md5_file" />
-  <filelist>
-   <file role="php" md5sum="ed0384ad29e60110b310a02e95287ee6" name="foo1.php"/>
-  </filelist>
- </release>
- <changelog>
-   <release>
-    <version>1.3.3</version>
-    <date>2004-10-28</date>
-    <state>stable</state>
-    <notes>Installer:
- * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
- * fix Bug #1249 display the right state when using --force option
- * fix Bug #2189 upgrade-all stops if dependancy fails
- * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
- * fix Bug #1420 Parser bug for T_DOUBLE_COLON
- * fix Request #2220 pear5 build fails on dual php4/php5 system
- * fix Bug #1163  pear makerpm fails with packages that supply role=&quot;doc&quot;
-
-Other:
- * add PEAR_Exception class for PHP5 users
- * fix critical problem in package.xml for linux in 1.3.2
- * fix staticPopCallback() in PEAR_ErrorStack
- * fix warning in PEAR_Registry for windows 98 users
-    </notes>
-   </release>
- </changelog>
-</package>
-',
-          'url' => 'http://www.example.com/Bar-1.5.0'));
-$GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
-    array('1.0',
-         array('type' => 'pkg', 'rel' => 'has',
-               'name' => 'Foobar',
-               'channel' => 'pear.php.net', 'package' => 'Foobar'),
-         array('channel' => 'pear.php.net', 'package' => 'Bar', 'version' => '1.5.0'), 'alpha'),
-    array('version' => '1.4.0a1',
-          'info' =>
-'<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="1.4.0a1">
- <name>Foobar</name>       
- <summary>PEAR Base System</summary>
- <description>The PEAR package contains:
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/foobar/1.4.0a1.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/foobar">Foobar</p>
+ <c>pear.php.net</c>
+ <v>1.4.0a1</v>
+ <st>alpha</st>
+ <l>PHP License</l>
+ <m>cellog</m>
+ <s>PEAR Base System</s>
+ <d>The PEAR package contains:
  * the PEAR installer, for creating, distributing
    and installing packages
  * the alpha-quality PEAR_Exception PHP5 error handling mechanism
@@ -179,131 +137,66 @@ $GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL'
    where PHP is running on
  * the System class for quick handling of common operations
    with files and directories
- * the PEAR base class
- </description>
- <maintainers>
-  <maintainer>
-   <user>ssb</user>
-   <name>Stig Bakken</name>
-   <email>stig@php.net</email>
-   <role>lead</role>
-  </maintainer>
-  <maintainer>
-   <user>cellog</user>
-   <name>Greg Beaver</name>
-   <email>cellog@php.net</email>
-   <role>lead</role>
-  </maintainer>
-  <maintainer>
-   <user>cox</user>
-   <name>Tomas V.V.Cox</name>
-   <email>cox@idecnet.com</email>
-   <role>lead</role>
-  </maintainer>
-  <maintainer>
-   <user>pajoye</user>
-   <name>Pierre-Alain Joye</name>
-   <email>pajoye@pearfr.org</email>
-   <role>lead</role>
-  </maintainer>
-  <maintainer>
-   <user>mj</user>
-   <name>Martin Jansen</name>
-   <email>mj@php.net</email>
-   <role>developer</role>
-  </maintainer>
-  </maintainers>
- <release>
-  <version>1.4.0a1</version>
-  <date>2004-12-27</date>
-  <license>PHP License</license>
-  <state>alpha</state>
-  <notes>Installer Roles/Tasks:
+ * the PEAR base class</d>
+ <da>2005-04-17 18:40:51</da>
+ <n>Release notes</n>
+ <f>252733</f>
+ <g>http://www.example.com/Foobar-1.4.0a1</g>
+ <x xlink:href="package.1.4.0a1.xml"/>
 
- * package.xml 2.0 uses a command pattern, allowing extensibility
- * implement the replace, postinstallscript, and preinstallscript tasks
+</r>',
+'text/xml');
 
-Installer Dependency Support:
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/foobar/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>foobar</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>PEAR_PackageFileManager takes an existing package.xml file and updates it with a new filelist and changelog</s>
+ <d>This package revolutionizes the maintenance of PEAR packages.  With a few parameters,
+the entire package.xml is automatically updated with a listing of all files in a package.
+Features include
+ - manages the new package.xml 2.0 format in PEAR 1.4.0
+ - can detect PHP and extension dependencies using PHP_CompatInfo
+ - reads in an existing package.xml file, and only changes the release/changelog
+ - a plugin system for retrieving files in a directory.  Currently two plugins
+   exist, one for standard recursive directory content listing, and one that
+   reads the CVS/Entries files and generates a file listing based on the contents
+   of a checked out CVS repository
+ - incredibly flexible options for assigning install roles to files/directories
+ - ability to ignore any file based on a * ? wildcard-enabled string(s)
+ - ability to include only files that match a * ? wildcard-enabled string(s)
+ - ability to manage dependencies
+ - can output the package.xml in any directory, and read in the package.xml
+   file from any directory.
+ - can specify a different name for the package.xml file
 
- * package.xml 2.0 has continued to improve and evolve
- * Downloader/Package.php is now used to coordinate downloading.  Old code
-   has not yet been deleted, as error handling is crappy right now.  Uninstall
-   ordering is broken, and needs to be redone.
- * Pre-download dependency resolution works, mostly.
- * There is no way to disable dependency resolution at the moment, this will be done.
- * Dependency2.php is used by the new PEAR_Downloader_Channel to resolve dependencies
-   and include downloaded files in the calculations.
- * DependencyDB.php is used to resolve complex dependencies between installed packages
-   and any dependencies installed later (a conflicts/not dependency cannot be honored
-   without this DB)
+PEAR_PackageFileManager is fully unit tested.
+The new PEAR_PackageFileManager2 class is not.</d>
+ <r xlink:href="/rest/r/pear_packagefilemanager"/>
+</p>',
+'text/xml');
 
-Installer Channel Support:
-
- * channel XSD is available on pearweb
- * add channel.listAll and channel.update to default PEAR protocols
- * add ability to &quot;pear channel-update channelname&quot; to
-   retrieve updates manually for individual channels
- * fix channel.xml generation to use a valid schema declaration
-
-Installer:
-
- * with --remoteconfig option, it is possible to remotely install and uninstall packages
-   to an FTP server.  It works by mirroring a local installation, and requires a
-   special, separate local install.
- * Channels implemented
- * Bug #1242: array-to-string conversion
- * fix Bug #2189 upgrade-all stops if dependancy fails
- * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
- * fix Bug #1420 Parser bug for T_DOUBLE_COLON
- * fix Request #2220 pear5 build fails on dual php4/php5 system
- * Major bug in Registry - false file conflicts on data/doc/test role
-   was possible (and would happen if HTML_Template_IT was installed
-   and HTML_Template_Flexy installation was attempted)
-  </notes>
-  <provides type="class" name="OS_Guess" />
-  <provides type="class" name="System" />
-  <provides type="function" name="md5_file" />
-  <filelist>
-   <file role="php" md5sum="ed0384ad29e60110b310a02e95287ee6" name="foo12.php"/>
-  </filelist>
- </release>
- <changelog>
-   <release>
-    <version>1.3.3</version>
-    <date>2004-10-28</date>
-    <state>stable</state>
-    <notes>Installer:
- * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
- * fix Bug #1249 display the right state when using --force option
- * fix Bug #2189 upgrade-all stops if dependancy fails
- * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
- * fix Bug #1420 Parser bug for T_DOUBLE_COLON
- * fix Request #2220 pear5 build fails on dual php4/php5 system
- * fix Bug #1163  pear makerpm fails with packages that supply role=&quot;doc&quot;
-
-Other:
- * add PEAR_Exception class for PHP5 users
- * fix critical problem in package.xml for linux in 1.3.2
- * fix staticPopCallback() in PEAR_ErrorStack
- * fix warning in PEAR_Registry for windows 98 users
-    </notes>
-   </release>
- </changelog>
-</package>',
-          'url' => 'http://www.example.com/Foobar-1.4.0a1'));
 $_test_dep->setPHPVersion('4.3.11');
 $_test_dep->setPEARVersion('1.4.0a1');
+
 $dp = &new test_PEAR_Downloader($fakelog, array('alldeps' => true), $config);
 $phpunit->assertNoErrors('after create');
 $config->set('preferred_state', 'alpha');
+
 $result = &$dp->download(array('http://www.example.com/PEAR1-1.4.0a1.tgz'));
 $phpunit->assertEquals(3, count($result), 'return');
+
 $phpunit->assertIsa('test_PEAR_Downloader_Package', $result[0], 'right class 0');
-$phpunit->assertIsa('PEAR_Downloader_Package', $result[1], 'right class 1');
-$phpunit->assertIsa('PEAR_Downloader_Package', $result[2], 'right class 2');
-$phpunit->assertIsa('PEAR_PackageFile_v1', $pf = $result[0]->getPackageFile(), 'right kind of pf 0');
+$phpunit->assertIsa('PEAR_Downloader_Package',      $result[1], 'right class 1');
+$phpunit->assertIsa('PEAR_Downloader_Package',      $result[2], 'right class 2');
+
+$phpunit->assertIsa('PEAR_PackageFile_v1', $pf  = $result[0]->getPackageFile(), 'right kind of pf 0');
 $phpunit->assertIsa('PEAR_PackageFile_v1', $pf1 = $result[1]->getPackageFile(), 'right kind of pf 1');
 $phpunit->assertIsa('PEAR_PackageFile_v1', $pf2 = $result[2]->getPackageFile(), 'right kind of pf 2');
+
 $phpunit->assertEquals('PEAR1', $pf->getPackage(), 'right package');
 $phpunit->assertEquals('pear.php.net', $pf->getChannel(), 'right channel');
 $phpunit->assertEquals('Bar', $pf1->getPackage(), 'right package 1');
@@ -397,119 +290,119 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 'setup',
     1 => 'self',
   ),
-  1 => 
+  1 =>
   array (
     0 => 'saveas',
     1 => 'PEAR1-1.4.0a1.tgz',
   ),
-  2 => 
+  2 =>
   array (
     0 => 'start',
-    1 => 
+    1 =>
     array (
       0 => 'PEAR1-1.4.0a1.tgz',
       1 => '2112',
     ),
   ),
-  3 => 
+  3 =>
   array (
     0 => 'bytesread',
     1 => 1024,
   ),
-  4 => 
+  4 =>
   array (
     0 => 'bytesread',
     1 => 2048,
   ),
-  5 => 
+  5 =>
   array (
     0 => 'bytesread',
     1 => 2112,
   ),
-  6 => 
+  6 =>
   array (
     0 => 'done',
     1 => 2112,
   ),
-  7 => 
+  7 =>
   array (
     0 => 'setup',
     1 => 'self',
   ),
-  8 => 
+  8 =>
   array (
     0 => 'saveas',
     1 => 'Bar-1.5.0.tgz',
   ),
-  9 => 
+  9 =>
   array (
     0 => 'start',
-    1 => 
+    1 =>
     array (
       0 => 'Bar-1.5.0.tgz',
       1 => '2085',
     ),
   ),
-  10 => 
+  10 =>
   array (
     0 => 'bytesread',
     1 => 1024,
   ),
-  11 => 
+  11 =>
   array (
     0 => 'bytesread',
     1 => 2048,
   ),
-  12 => 
+  12 =>
   array (
     0 => 'bytesread',
     1 => 2085,
   ),
-  13 => 
+  13 =>
   array (
     0 => 'done',
     1 => 2085,
   ),
-  14 => 
+  14 =>
   array (
     0 => 'setup',
     1 => 'self',
   ),
-  15 => 
+  15 =>
   array (
     0 => 'saveas',
     1 => 'Foobar-1.4.0a1.tgz',
   ),
-  16 => 
+  16 =>
   array (
     0 => 'start',
-    1 => 
+    1 =>
     array (
       0 => 'Foobar-1.4.0a1.tgz',
       1 => '2062',
     ),
   ),
-  17 => 
+  17 =>
   array (
     0 => 'bytesread',
     1 => 1024,
   ),
-  18 => 
+  18 =>
   array (
     0 => 'bytesread',
     1 => 2048,
   ),
-  19 => 
+  19 =>
   array (
     0 => 'bytesread',
     1 => 2062,
   ),
-  20 => 
+  20 =>
   array (
     0 => 'done',
     1 => 2062,
