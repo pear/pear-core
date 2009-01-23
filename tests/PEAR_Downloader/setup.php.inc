@@ -79,8 +79,7 @@ $reg->updateChannel($chan);
 test_PEAR_Dependency2::singleton($config);
 function &newDownloader($options)
 {
-    global $config;
+    global $config, $fakelog;
     $downloader = &new test_PEAR_Downloader($fakelog, $options, $config);
     return $downloader;
 }
-?>
