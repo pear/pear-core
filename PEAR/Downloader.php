@@ -439,6 +439,7 @@ class PEAR_Downloader extends PEAR_Common
             $pf = &$params[$i]->download();
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($pf)) {
+                var_dump($pf->getMessage());
                 if (!isset($this->_options['soft'])) {
                     $this->log(1, $pf->getMessage());
                     $this->log(0, 'Error: cannot download "' .
@@ -817,92 +818,33 @@ class PEAR_Downloader extends PEAR_Common
         $base2 = false;
 
         $preferred_mirror = $this->config->get('preferred_mirror');
-        if ($chan->supportsREST($preferred_mirror) &&
-              (($base2 = $chan->getBaseURL('REST1.3', $preferred_mirror)) ||
-              ($base = $chan->getBaseURL('REST1.0', $preferred_mirror)))
+        if (!$chan->supportsREST($preferred_mirror) ||
+              (
+               !($base2 = $chan->getBaseURL('REST1.3', $preferred_mirror))
+               &&
+               !($base = $chan->getBaseURL('REST1.0', $preferred_mirror))
+              )
         ) {
-            if ($base2) {
-                $rest = &$this->config->getREST('1.3', $this->_options);
-                $base = $base2;
-            } else {
-                $rest = &$this->config->getREST('1.0', $this->_options);
-            }
-
-            if (!isset($parr['version']) && !isset($parr['state']) && $version
-                  && !PEAR::isError($version)
-                  && !isset($this->_options['downloadonly'])) {
-                $url = $rest->getDownloadURL($base, $parr, $state, $version, $chan->getName());
-            } else {
-                $url = $rest->getDownloadURL($base, $parr, $state, false, $chan->getName());
-            }
-
-            if (PEAR::isError($url)) {
-                $this->configSet('default_channel', $curchannel);
-                return $url;
-            }
-
-            if ($parr['channel'] != $curchannel) {
-                $this->configSet('default_channel', $curchannel);
-            }
-
-            if (!is_array($url)) {
-                return $url;
-            }
-
-            $url['raw'] = false; // no checking is necessary for REST
-            if (!is_array($url['info'])) {
-                return PEAR::raiseError('Invalid remote dependencies retrieved from REST - ' .
-                    'this should never happen');
-            }
-
-            if (!isset($this->_options['force']) &&
-                  !isset($this->_options['downloadonly']) &&
-                  $version &&
-                  !PEAR::isError($version) &&
-                  !isset($parr['group'])) {
-                if (version_compare($version, $url['version'], '>=')) {
-                    return PEAR::raiseError($this->_registry->parsedPackageNameToString(
-                        $parr, true) . ' is already installed and is newer than detected ' .
-                        'release version ' . $url['version'], -976);
-                }
-            }
-
-            if (isset($url['info']['required']) || $url['compatible']) {
-                require_once 'PEAR/PackageFile/v2.php';
-                $pf = new PEAR_PackageFile_v2;
-                $pf->setRawChannel($parr['channel']);
-                if ($url['compatible']) {
-                    $pf->setRawCompatible($url['compatible']);
-                }
-            } else {
-                require_once 'PEAR/PackageFile/v1.php';
-                $pf = new PEAR_PackageFile_v1;
-            }
-
-            $pf->setRawPackage($url['package']);
-            $pf->setDeps($url['info']);
-            if ($url['compatible']) {
-                $pf->setCompatible($url['compatible']);
-            }
-
-            $pf->setRawState($url['stability']);
-            $url['info'] = &$pf;
-            if (!extension_loaded("zlib") || isset($this->_options['nocompress'])) {
-                $ext = '.tar';
-            } else {
-                $ext = '.tgz';
-            }
-
-            if (is_array($url) && isset($url['url'])) {
-                $url['url'] .= $ext;
-            }
-
-            return $url;
-        } else {
             return $this->raiseError($parr['channel'] . ' is using a unsupported protocal - This should never happens.');
         }
 
+        if ($base2) {
+            $rest = &$this->config->getREST('1.3', $this->_options);
+            $base = $base2;
+        } else {
+            $rest = &$this->config->getREST('1.0', $this->_options);
+        }
+
+        if (!isset($parr['version']) && !isset($parr['state']) && $version
+              && !PEAR::isError($version)
+              && !isset($this->_options['downloadonly'])) {
+            $url = $rest->getDownloadURL($base, $parr, $state, $version, $chan->getName());
+        } else {
+            $url = $rest->getDownloadURL($base, $parr, $state, false, $chan->getName());
+        }
+
         if (PEAR::isError($url)) {
+            $this->configSet('default_channel', $curchannel);
             return $url;
         }
 
@@ -910,39 +852,55 @@ class PEAR_Downloader extends PEAR_Common
             $this->configSet('default_channel', $curchannel);
         }
 
-        if (isset($url['__PEAR_ERROR_CLASS__'])) {
-            return PEAR::raiseError($url['message']);
-        }
-
         if (!is_array($url)) {
             return $url;
         }
 
-        $url['raw'] = $url['info'];
-        if (isset($this->_options['downloadonly'])) {
-            $pkg = &$this->getPackagefileObject($this->config, $this->debug);
+        $url['raw'] = false; // no checking is necessary for REST
+        if (!is_array($url['info'])) {
+            return PEAR::raiseError('Invalid remote dependencies retrieved from REST - ' .
+                'this should never happen');
+        }
+
+        if (!isset($this->_options['force']) &&
+              !isset($this->_options['downloadonly']) &&
+              $version &&
+              !PEAR::isError($version) &&
+              !isset($parr['group'])
+        ) {
+            if (version_compare($version, $url['version'], '=')) {
+                return PEAR::raiseError($this->_registry->parsedPackageNameToString(
+                    $parr, true) . ' is already installed and is the same as the ' .
+                    'released version ' . $url['version'], -976);
+            }
+
+            if (version_compare($version, $url['version'], '>')) {
+                return PEAR::raiseError($this->_registry->parsedPackageNameToString(
+                    $parr, true) . ' is already installed and is newer than detected ' .
+                    'released version ' . $url['version'], -976);
+            }
+        }
+
+        if (isset($url['info']['required']) || $url['compatible']) {
+            require_once 'PEAR/PackageFile/v2.php';
+            $pf = new PEAR_PackageFile_v2;
+            $pf->setRawChannel($parr['channel']);
+            if ($url['compatible']) {
+                $pf->setRawCompatible($url['compatible']);
+            }
         } else {
-            PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-            if (PEAR::isError($dir = $this->getDownloadDir())) {
-                PEAR::staticPopErrorHandling();
-                return $dir;
-            }
-            PEAR::staticPopErrorHandling();
-            $pkg = &$this->getPackagefileObject($this->config, $this->debug, $dir);
+            require_once 'PEAR/PackageFile/v1.php';
+            $pf = new PEAR_PackageFile_v1;
         }
 
-        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        $pinfo = &$pkg->fromXmlString($url['info'], PEAR_VALIDATE_DOWNLOADING, 'remote');
-        PEAR::staticPopErrorHandling();
-        if (PEAR::isError($pinfo)) {
-            if (!isset($this->_options['soft'])) {
-                $this->log(0, $pinfo->getMessage());
-            }
-
-            return PEAR::raiseError('Remote package.xml is not valid - this should never happen');
+        $pf->setRawPackage($url['package']);
+        $pf->setDeps($url['info']);
+        if ($url['compatible']) {
+            $pf->setCompatible($url['compatible']);
         }
 
-        $url['info'] = &$pinfo;
+        $pf->setRawState($url['stability']);
+        $url['info'] = &$pf;
         if (!extension_loaded("zlib") || isset($this->_options['nocompress'])) {
             $ext = '.tar';
         } else {
@@ -1083,49 +1041,9 @@ class PEAR_Downloader extends PEAR_Common
             }
 
             return $url;
-        } else {
-            return $this->raiseError($parr['channel'] . ' is using a unsupported protocal - This should never happens.');
         }
 
-        if ($this->config->get('default_channel') != $curchannel) {
-            $this->configSet('default_channel', $curchannel);
-        }
-
-        if (!is_array($url)) {
-            return $url;
-        }
-
-        if (isset($url['__PEAR_ERROR_CLASS__'])) {
-            return PEAR::raiseError($url['message']);
-        }
-
-        $url['raw'] = $url['info'];
-        $pkg = &$this->getPackagefileObject($this->config, $this->debug);
-        PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        $pinfo = &$pkg->fromXmlString($url['info'], PEAR_VALIDATE_DOWNLOADING, 'remote');
-        PEAR::staticPopErrorHandling();
-        if (PEAR::isError($pinfo)) {
-            if (!isset($this->_options['soft'])) {
-                $this->log(0, $pinfo->getMessage());
-            }
-
-            return PEAR::raiseError('Remote package.xml is not valid - this should never happen');
-        }
-
-        $url['info'] = &$pinfo;
-        if (is_array($url)) {
-            if (!extension_loaded("zlib") || isset($this->_options['nocompress'])) {
-                $ext = '.tar';
-            } else {
-                $ext = '.tgz';
-            }
-
-            if (isset($url['url'])) {
-                $url['url'] .= $ext;
-            }
-        }
-
-        return $url;
+        return $this->raiseError($parr['channel'] . ' is using a unsupported protocal - This should never happens.');
     }
     // }}}
     // {{{ getPackageDownloadUrl()
