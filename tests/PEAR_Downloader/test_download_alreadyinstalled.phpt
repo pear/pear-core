@@ -80,7 +80,7 @@ $phpunit->assertEquals(0, count($dlpackages), 'downloaded packages count');
 $phpunit->assertEquals(array (
   array (
     0 => 0,
-    1 => 'pear/test is already installed and is newer than detected release version 1.0',
+    1 => 'pear/test is already installed and is the same as the released version 1.0',
   ),
   1 =>
   array (
@@ -105,7 +105,7 @@ $phpunit->assertEquals(0, count($dlpackages), 'downloaded packages count');
 $phpunit->assertEquals(array (
   array (
     0 => 0,
-    1 => 'pear/test is already installed and is newer than detected release version 1.0',
+    1 => 'pear/test is already installed and is the same as the released version 1.0',
   ),
   1 =>
   array (
