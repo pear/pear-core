@@ -1429,32 +1429,33 @@ class PEAR_Config extends PEAR
             $ret = $this->configuration[$layer]['__channels'][$channel][$key];
         }
 
-        if ($key == 'preferred_mirror') {
-            if ($ret !== null) {
-                $reg = &$this->getRegistry($layer);
-                if (is_object($reg)) {
-                    $chan = &$reg->getChannel($channel);
-                    if (PEAR::isError($chan)) {
-                        return $channel;
-                    }
-
-                    if (!$chan->getMirror($ret) && $chan->getName() != $ret) {
-                        return $channel; // mirror does not exist
-                    }
-                }
-
-                return $ret;
-            }
-
-            if ($channel != $this->getDefaultChannel($layer)) {
-                return $channel; // we must use the channel name as the preferred mirror
-                                 // if the user has not chosen an alternate
-            }
-
-            return $this->getDefaultChannel($layer);
+        if ($key != 'preferred_mirror') {
+            return $ret;
         }
 
-        return $ret;
+
+        if ($ret !== null) {
+            $reg = &$this->getRegistry($layer);
+            if (is_object($reg)) {
+                $chan = &$reg->getChannel($channel);
+                if (PEAR::isError($chan)) {
+                    return $channel;
+                }
+
+                if (!$chan->getMirror($ret) && $chan->getName() != $ret) {
+                    return $channel; // mirror does not exist
+                }
+            }
+
+            return $ret;
+        }
+
+        if ($channel != $this->getDefaultChannel($layer)) {
+            return $channel; // we must use the channel name as the preferred mirror
+                             // if the user has not chosen an alternate
+        }
+
+        return $this->getDefaultChannel($layer);
     }
 
     /**
