@@ -8,9 +8,9 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'test_initialize_downloadurl'. DIRECTORY_SEPARATOR . 'test-1.0.tgz';
+$dir = dirname(__FILE__) . DIRECTORY_SEPARATOR;
+require_once $dir . 'setup.php.inc';
+$pathtopackagexml = $dir .'test_initialize_downloadurl'. DIRECTORY_SEPARATOR . 'test-1.0.tgz';
 
 $reg = &$config->getRegistry();
 $chan = &$reg->getChannel('pear.php.net');
