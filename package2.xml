@@ -35,7 +35,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <name>Greg Beaver</name>
   <user>cellog</user>
   <email>cellog@php.net</email>
-  <active>yes</active>
+  <active>no</active>
  </lead>
  <lead>
   <name>Pierre-Alain Joye</name>
@@ -55,12 +55,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>cox@idecnet.com</email>
   <active>no</active>
  </lead>
- <developer>
+ <lead>
   <name>Helgi Thormar</name>
   <user>dufuz</user>
   <email>dufuz@php.net</email>
   <active>yes</active>
- </developer>
+ </lead>
  <developer>
   <name>Tias Guns</name>
   <user>tias</user>
