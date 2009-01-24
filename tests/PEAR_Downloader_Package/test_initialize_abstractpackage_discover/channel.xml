@@ -6,16 +6,12 @@ http://pear.php.net/dtd/channel-1.0.xsd">
  <summary>Auto-discovered channel</summary>
  <servers>
   <primary host="pear.foo.com">
-   <xmlrpc>
-    <function version="1.0">logintest</function>
-    <function version="1.0">package.listLatestReleases</function>
-    <function version="1.0">package.listAll</function>
-    <function version="1.0">package.info</function>
-    <function version="1.0">package.getDownloadURL</function>
-    <function version="1.0">package.getDepDownloadURL</function>
-    <function version="1.0">channel.update</function>
-    <function version="1.0">channel.listAll</function>
-   </xmlrpc>
+    <rest>
+    <baseurl type="REST1.0">http://pear.foo.com/rest/</baseurl>
+    <baseurl type="REST1.1">http://pear.foo.com/rest/</baseurl>
+    <baseurl type="REST1.2">http://pear.foo.com/rest/</baseurl>
+    <baseurl type="REST1.3">http://pear.foo.com/rest/</baseurl>
+    </rest>
   </primary>
  </servers>
 </channel>
