@@ -439,7 +439,6 @@ class PEAR_Downloader extends PEAR_Common
             $pf = &$params[$i]->download();
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($pf)) {
-                var_dump($pf->getMessage());
                 if (!isset($this->_options['soft'])) {
                     $this->log(1, $pf->getMessage());
                     $this->log(0, 'Error: cannot download "' .
@@ -825,7 +824,7 @@ class PEAR_Downloader extends PEAR_Common
                !($base = $chan->getBaseURL('REST1.0', $preferred_mirror))
               )
         ) {
-            return $this->raiseError($parr['channel'] . ' is using a unsupported protocal - This should never happens.');
+            return $this->raiseError($parr['channel'] . ' is using a unsupported protocal - This should never happen.');
         }
 
         if ($base2) {
@@ -1043,7 +1042,7 @@ class PEAR_Downloader extends PEAR_Common
             return $url;
         }
 
-        return $this->raiseError($parr['channel'] . ' is using a unsupported protocal - This should never happens.');
+        return $this->raiseError($parr['channel'] . ' is using a unsupported protocal - This should never happen.');
     }
     // }}}
     // {{{ getPackageDownloadUrl()
@@ -1394,15 +1393,14 @@ class PEAR_Downloader extends PEAR_Common
     function _setupGraph($t, $reg, &$deplinks, &$nodes, $package)
     {
         foreach ($t as $dep) {
-            $depchannel = !isset($dep['channel']) ?
-                '__uri': $dep['channel'];
+            $depchannel = !isset($dep['channel']) ? '__uri': $dep['channel'];
             $dname = $reg->parsedPackageNameToString(
                   array(
                       'channel' => $depchannel,
                       'package' => strtolower($dep['name']),
                   ));
-            if (isset($nodes[$dname]))
-            {
+
+            if (isset($nodes[$dname])) {
                 if (!isset($deplinks[$dname])) {
                     $deplinks[$dname] = array();
                 }
@@ -1413,8 +1411,7 @@ class PEAR_Downloader extends PEAR_Common
 
     function _dependsOn($a, $b)
     {
-        return $this->_checkDepTree(strtolower($a->getChannel()), strtolower($a->getPackage()),
-            $b);
+        return $this->_checkDepTree(strtolower($a->getChannel()), strtolower($a->getPackage()), $b);
     }
 
     function _checkDepTree($channel, $package, $b, $checked = array())
@@ -1423,10 +1420,12 @@ class PEAR_Downloader extends PEAR_Common
         if (!isset($this->_depTree[$channel][$package])) {
             return false;
         }
+
         if (isset($this->_depTree[$channel][$package][strtolower($b->getChannel())]
               [strtolower($b->getPackage())])) {
             return true;
         }
+
         foreach ($this->_depTree[$channel][$package] as $ch => $packages) {
             foreach ($packages as $pa => $true) {
                 if ($this->_checkDepTree($ch, $pa, $b, $checked)) {
@@ -1434,6 +1433,7 @@ class PEAR_Downloader extends PEAR_Common
                 }
             }
         }
+
         return false;
     }
 
