@@ -213,42 +213,43 @@ class PEAR_XMLParser
                 $value['value'] = $data;
                 break;
         }
+
         $parent = array_pop($this->_valStack);
         if ($parent === null) {
             $this->_unserializedData = &$value['value'];
             $this->_root = &$value['name'];
             return true;
-        } else {
-            // parent has to be an array
-            if (!isset($parent['children']) || !is_array($parent['children'])) {
-                $parent['children'] = array();
-                if ($parent['type'] != 'array') {
-                    $parent['type'] = 'array';
-                }
-            }
-
-            if (!empty($value['name'])) {
-                // there already has been a tag with this name
-                if (in_array($value['name'], $parent['childrenKeys'])) {
-                    // no aggregate has been created for this tag
-                    if (!in_array($value['name'], $parent['aggregKeys'])) {
-                        if (isset($parent['children'][$value['name']])) {
-                            $parent['children'][$value['name']] = array($parent['children'][$value['name']]);
-                        } else {
-                            $parent['children'][$value['name']] = array();
-                        }
-                        array_push($parent['aggregKeys'], $value['name']);
-                    }
-                    array_push($parent['children'][$value['name']], $value['value']);
-                } else {
-                    $parent['children'][$value['name']] = &$value['value'];
-                    array_push($parent['childrenKeys'], $value['name']);
-                }
-            } else {
-                array_push($parent['children'],$value['value']);
-            }
-            array_push($this->_valStack, $parent);
         }
+
+        // parent has to be an array
+        if (!isset($parent['children']) || !is_array($parent['children'])) {
+            $parent['children'] = array();
+            if ($parent['type'] != 'array') {
+                $parent['type'] = 'array';
+            }
+        }
+
+        if (!empty($value['name'])) {
+            // there already has been a tag with this name
+            if (in_array($value['name'], $parent['childrenKeys'])) {
+                // no aggregate has been created for this tag
+                if (!in_array($value['name'], $parent['aggregKeys'])) {
+                    if (isset($parent['children'][$value['name']])) {
+                        $parent['children'][$value['name']] = array($parent['children'][$value['name']]);
+                    } else {
+                        $parent['children'][$value['name']] = array();
+                    }
+                    array_push($parent['aggregKeys'], $value['name']);
+                }
+                array_push($parent['children'][$value['name']], $value['value']);
+            } else {
+                $parent['children'][$value['name']] = &$value['value'];
+                array_push($parent['childrenKeys'], $value['name']);
+            }
+        } else {
+            array_push($parent['children'],$value['value']);
+        }
+        array_push($this->_valStack, $parent);
 
         $this->_depth--;
     }
