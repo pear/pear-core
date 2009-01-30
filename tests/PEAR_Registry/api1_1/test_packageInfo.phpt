@@ -115,21 +115,21 @@ array(
 ), $ret, 'maintainers');
 $ret = $reg->packageInfo($pf2->getPackage(), 'release_deps', $pf2->getChannel());
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     'type' => 'php',
     'rel' => 'le',
     'version' => '5.0.0',
     'optional' => 'no',
   ),
-  1 => 
+  1 =>
   array (
     'type' => 'php',
     'rel' => 'ge',
     'version' => '4.2.0',
     'optional' => 'no',
   ),
-  2 => 
+  2 =>
   array (
     'type' => 'pkg',
     'channel' => 'pear.php.net',
@@ -138,7 +138,7 @@ $phpunit->assertEquals(array (
     'version' => '1.4.0a1',
     'optional' => 'no',
   ),
-  3 => 
+  3 =>
   array (
     'type' => 'pkg',
     'channel' => 'floop',
@@ -156,6 +156,7 @@ unset($ret['pear.php.net'][0]['_lastmodified']);
 ksort($ret);
 $phpunit->assertEquals(array(
 '__uri' => array(),
+'doc.php.net' => array(),
 'grob' => array($pf2->getArray(true)),
 'pear.php.net' => array($pf->getArray()),
 'pecl.php.net' => array()), $ret, 'default whole shebang');

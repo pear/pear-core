@@ -11,6 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
+channel doc.php.net:
 channel pear.php.net:
 channel pecl.php.net:
 dump done

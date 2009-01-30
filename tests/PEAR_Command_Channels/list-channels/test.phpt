@@ -14,30 +14,34 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $e = $command->run('list-channels', array(), array());
 $phpunit->assertNoErrors('1');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'Registered Channels:',
       'border' => true,
-      'headline' => 
+      'headline' =>
       array (
         0 => 'Channel',
         1 => 'Summary',
       ),
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 => array (
+          0 => 'doc.php.net',
+          1 => 'PHP Documentation Team',
+        ),
+        1 =>
         array (
           0 => 'pear.php.net',
           1 => 'PHP Extension and Application Repository',
         ),
-        1 => 
+        2 =>
         array (
           0 => 'pecl.php.net',
           1 => 'PHP Extension Community Library',
         ),
-        2 => 
+        3 =>
         array (
           0 => '__uri',
           1 => 'Pseudo-channel for static packages',
@@ -57,35 +61,40 @@ $reg->addChannel($ch);
 $e = $command->run('list-channels', array(), array());
 $phpunit->assertNoErrors('1');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'Registered Channels:',
       'border' => true,
-      'headline' => 
+      'headline' =>
       array (
         0 => 'Channel',
         1 => 'Summary',
       ),
-      'data' => 
+      'data' =>
       array (
-        0 => 
+        0 =>
+        array (
+          0 => 'doc.php.net',
+          1 => 'PHP Documentation Team',
+        ),
+        1 =>
         array (
           0 => 'fake',
           1 => 'fake',
         ),
-        1 => 
+        2 =>
         array (
           0 => 'pear.php.net',
           1 => 'PHP Extension and Application Repository',
         ),
-        2 =>
+        3 =>
         array (
           0 => 'pecl.php.net',
           1 => 'PHP Extension Community Library',
         ),
-        3 => 
+        4 =>
         array (
           0 => '__uri',
           1 => 'Pseudo-channel for static packages',

@@ -25,6 +25,9 @@ $phpunit->assertEquals(array(
   '__uri' =>
   array (
   ),
+  'doc.php.net' =>
+  array (
+  ),
   'pear.php.net' =>
   array (
   ),
@@ -88,6 +91,9 @@ uksort($a, 'strcasecmp');
 
 $phpunit->assertEquals(array(
   '__uri' =>
+  array (
+  ),
+  'doc.php.net' =>
   array (
   ),
   'grob' =>
