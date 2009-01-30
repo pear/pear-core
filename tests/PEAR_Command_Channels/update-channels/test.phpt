@@ -34,40 +34,50 @@ $phpunit->showall();
 $phpunit->assertEquals(array (
   0 =>
   array (
-    'info' => 'Updating channel "horde.orde.de"',
+    'info' => 'Updating channel "doc.php.net"',
     'cmd' => 'channel-update',
   ),
   1 =>
   array (
-    'info' => 'Update of Channel "horde.orde.de" succeeded',
-    'cmd' => 'no command',
+    'info' => 'Cannot retrieve channel.xml for channel "doc.php.net" (File http://doc.php.net:80/channel.xml not valid (received: HTTP/1.1 404 http://doc.php.net/channel.xml Is not valid))',
+    'cmd' => 'update-channels',
   ),
   2 =>
   array (
-    'info' => 'Updating channel "pear.php.net"',
+    'info' => 'Updating channel "horde.orde.de"',
     'cmd' => 'channel-update',
   ),
   3 =>
   array (
-    'info' => 'Update of Channel "pear.php.net" succeeded',
+    'info' => 'Update of Channel "horde.orde.de" succeeded',
     'cmd' => 'no command',
   ),
   4 =>
   array (
-    'info' => 'Updating channel "pecl.php.net"',
+    'info' => 'Updating channel "pear.php.net"',
     'cmd' => 'channel-update',
   ),
   5 =>
   array (
+    'info' => 'Update of Channel "pear.php.net" succeeded',
+    'cmd' => 'no command',
+  ),
+  6 =>
+  array (
+    'info' => 'Updating channel "pecl.php.net"',
+    'cmd' => 'channel-update',
+  ),
+  7 =>
+  array (
     'info' => 'Cannot retrieve channel.xml for channel "pecl.php.net" (File http://pecl.php.net:80/channel.xml not valid (received: HTTP/1.1 404 http://pecl.php.net/channel.xml Is not valid))',
     'cmd' => 'update-channels',
   ),
-  6 =>
+  8 =>
   array (
     'info' => 'Updating channel "zornk.ornk.org"',
     'cmd' => 'channel-update',
   ),
-  7 =>
+  9 =>
   array (
     'info' => 'Update of Channel "zornk.ornk.org" succeeded',
     'cmd' => 'no command',

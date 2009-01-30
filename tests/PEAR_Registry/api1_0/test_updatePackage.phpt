@@ -17,6 +17,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $subreg = new PEAR_Registry($statedir);
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
+channel doc.php.net:
 channel pear.php.net:
 channel pecl.php.net:
 dump done
@@ -25,6 +26,7 @@ dump done
 $reg->addPackage("pkg1", array("name" => "pkg1", "version" => "1.0", "filelist" => $files1, 'maintainers' => array()));
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
+channel doc.php.net:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 channel pecl.php.net:
@@ -34,6 +36,7 @@ dump done
 $subreg = new PEAR_Registry($statedir);
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
+channel doc.php.net:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 channel pecl.php.net:
@@ -44,6 +47,7 @@ $reg->addPackage("pkg2", array("name" => "pkg2", "version" => "2.0", "filelist" 
 $reg->addPackage("pkg3", array("name" => "pkg3", "version" => "3.0", "filelist" => $files3, 'maintainers' => array()));
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
+channel doc.php.net:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 pkg2: version="2.0" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set
@@ -57,6 +61,7 @@ $phpunit->assertTrue($reg->updatePackage("pkg2", array("version" => "2.1", 'main
 
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
+channel doc.php.net:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 pkg2: version="2.1" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set
@@ -66,6 +71,7 @@ dump done
 ', $reg, 'after updating pkg2');
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
+channel doc.php.net:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 pkg2: version="2.1" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set
@@ -78,6 +84,7 @@ $phpunit->assertTrue($reg->updatePackage("pkg3", array("version" => "3.1b1", "st
     , 'update pkg3 return');
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
+channel doc.php.net:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 pkg2: version="2.1" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set
@@ -90,6 +97,7 @@ $phpunit->assertTrue($reg->updatePackage("pkg3", array("filelist" => $files3_new
     'second update pkg3 return');
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
+channel doc.php.net:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 pkg2: version="2.1" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set

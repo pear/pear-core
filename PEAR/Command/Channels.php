@@ -359,6 +359,10 @@ password via the system\'s process list.
             return $this->raiseError('Cannot delete the pecl.php.net channel');
         }
 
+        if ($channel == 'doc.php.net') {
+            return $this->raiseError('Cannot delete the doc.php.net channel');
+        }
+
         if ($channel == '__uri') {
             return $this->raiseError('Cannot delete the __uri pseudo-channel');
         }

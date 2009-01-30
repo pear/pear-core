@@ -236,7 +236,9 @@ generate both package.xml.
                     'PEAR_PackageFileManager-based script is an option');
                 }
 
-                if ($dep['channel'] != 'pear.php.net' && $dep['channel'] != 'pecl.php.net') {
+                if ($dep['channel'] != 'pear.php.net'
+                    && $dep['channel'] != 'pecl.php.net'
+                    && $dep['channel'] != 'doc.php.net') {
                     return $this->raiseError('Cannot safely convert "' . $packagexml . '"' .
                     ' contains dependency on a non-standard channel package.  Using a ' .
                     'PEAR_PackageFileManager-based script is an option');
@@ -300,7 +302,9 @@ generate both package.xml.
                     'PEAR_PackageFileManager-based script is an option');
                 }
 
-                if ($dep['channel'] != 'pear.php.net' && $dep['channel'] != 'pecl.php.net') {
+                if ($dep['channel'] != 'pear.php.net'
+                    && $dep['channel'] != 'pecl.php.net'
+                    && $dep['channel'] != 'doc.php.net') {
                     return $this->raiseError('Cannot safely convert "' . $packagexml . '"' .
                     ' contains dependency on a non-standard channel package.  Using a ' .
                     'PEAR_PackageFileManager-based script is an option');

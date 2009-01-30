@@ -110,6 +110,11 @@ class PEAR_Registry extends PEAR
     var $_peclChannel;
 
     /**
+     * @var false|PEAR_ChannelFile
+     */
+    var $_docChannel;
+
+    /**
      * @var PEAR_DependencyDB
      */
     var $_dependencyDB;
@@ -195,6 +200,7 @@ class PEAR_Registry extends PEAR
             if (!is_dir($this->channelsdir) ||
                   !file_exists($this->channelsdir . $ds . 'pear.php.net.reg') ||
                   !file_exists($this->channelsdir . $ds . 'pecl.php.net.reg') ||
+                  !file_exists($this->channelsdir . $ds . 'doc.php.net.reg') ||
                   !file_exists($this->channelsdir . $ds . '__uri.reg')) {
                 if (!file_exists($this->channelsdir . $ds . 'pear.php.net.reg')) {
                     $pear_channel = $this->_pearChannel;
@@ -243,6 +249,30 @@ class PEAR_Registry extends PEAR
 
                     $pecl_channel->validate();
                     $this->_addChannel($pecl_channel);
+                }
+
+                if (!file_exists($this->channelsdir . $ds . 'doc.php.net.reg')) {
+                    $doc_channel = $this->_docChannel;
+                    if (!is_a($doc_channel, 'PEAR_ChannelFile') || !$doc_channel->validate()) {
+                        if (!class_exists('PEAR_ChannelFile')) {
+                            require_once 'PEAR/ChannelFile.php';
+                        }
+
+                        $doc_channel = new PEAR_ChannelFile;
+                        $doc_channel->setName('doc.php.net');
+                        $doc_channel->setAlias('phpdocs');
+                        $doc_channel->setServer('doc.php.net');
+                        $doc_channel->setSummary('PHP Documentation Team');
+                        $doc_channel->setDefaultPEARProtocols();
+                        $doc_channel->setBaseURL('REST1.0', 'http://doc.php.net/Chiara_PEAR_Server_REST/');
+                        $doc_channel->setBaseURL('REST1.1', 'http://doc.php.net/Chiara_PEAR_Server_REST/');
+                    } else {
+                        $doc_channel->setName('doc.php.net');
+                        $doc_channel->setAlias('doc');
+                    }
+
+                    $doc_channel->validate();
+                    $this->_addChannel($doc_channel);
                 }
 
                 if (!file_exists($this->channelsdir . $ds . '__uri.reg')) {
@@ -369,6 +399,7 @@ class PEAR_Registry extends PEAR
         if (!file_exists($this->channelsdir)) {
             if (!file_exists($this->channelsdir . $ds . 'pear.php.net.reg') ||
                   !file_exists($this->channelsdir . $ds . 'pecl.php.net.reg') ||
+                  !file_exists($this->channelsdir . $ds . 'doc.php.net.reg') ||
                   !file_exists($this->channelsdir . $ds . '__uri.reg')) {
                 $init = true;
             }
@@ -536,6 +567,10 @@ class PEAR_Registry extends PEAR
                 return 'pecl.php.net';
             }
 
+            if ($channel == 'doc.php.net') {
+                return 'doc.php.net';
+            }
+
             if ($channel == '__uri') {
                 return '__uri';
             }
@@ -564,6 +599,10 @@ class PEAR_Registry extends PEAR
 
             if ($channel == 'pecl.php.net') {
                 return 'pecl';
+            }
+
+            if ($channel == 'doc.php.net') {
+                return 'phpdocs';
             }
 
             return false;
@@ -864,6 +903,10 @@ class PEAR_Registry extends PEAR
             return true;
         }
 
+        if (!$a && $channel == 'doc.php.net') {
+            return true;
+        }
+
         return $a;
     }
 
@@ -899,7 +942,7 @@ class PEAR_Registry extends PEAR
                 }
             }
         } else {
-            if ($update && !in_array($channel->getName(), array('pear.php.net', 'pecl.php.net'))) {
+            if ($update && !in_array($channel->getName(), array('pear.php.net', 'pecl.php.net', 'doc.php.net'))) {
                 return false;
             }
         }
@@ -977,6 +1020,10 @@ class PEAR_Registry extends PEAR
         }
 
         if ($this->_getChannelFromAlias($channel) == 'pecl.php.net') {
+            return false;
+        }
+
+        if ($this->_getChannelFromAlias($channel) == 'doc.php.net') {
             return false;
         }
 
@@ -1122,7 +1169,7 @@ class PEAR_Registry extends PEAR
     {
         $channellist = array();
         if (!file_exists($this->channelsdir) || !is_dir($this->channelsdir)) {
-            return array('pear.php.net', 'pecl.php.net', '__uri');
+            return array('pear.php.net', 'pecl.php.net', 'doc.php.net', '__uri');
         }
 
         $dp = opendir($this->channelsdir);
@@ -1147,6 +1194,11 @@ class PEAR_Registry extends PEAR
         if (!in_array('pecl.php.net', $channellist)) {
             $channellist[] = 'pecl.php.net';
         }
+
+        if (!in_array('doc.php.net', $channellist)) {
+            $channellist[] = 'doc.php.net';
+        }
+
 
         if (!in_array('__uri', $channellist)) {
             $channellist[] = '__uri';
@@ -1452,6 +1504,23 @@ class PEAR_Registry extends PEAR
             $pear_channel->setValidationPackage('PEAR_Validator_PECL', '1.0');
             return $pear_channel;
         }
+
+        if ($this->_getChannelFromAlias($channel) == 'doc.php.net') {
+            // the registry is not properly set up, so use defaults
+            if (!class_exists('PEAR_ChannelFile')) {
+                require_once 'PEAR/ChannelFile.php';
+            }
+
+            $doc_channel = new PEAR_ChannelFile;
+            $doc_channel->setName('doc.php.net');
+            $doc_channel->setAlias('phpdocs');
+            $doc_channel->setSummary('PHP Documentation Team');
+            $doc_channel->setDefaultPEARProtocols();
+            $doc_channel->setBaseURL('REST1.0', 'http://doc.php.net/Chiara_PEAR_Server_REST/');
+            $doc_channel->setBaseURL('REST1.1', 'http://doc.php.net/Chiara_PEAR_Server_REST/');
+            return $doc_channel;
+        }
+
 
         if ($this->_getChannelFromAlias($channel) == '__uri') {
             // the registry is not properly set up, so use defaults

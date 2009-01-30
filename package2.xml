@@ -103,6 +103,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Implement Request #14504: add a channel parameter support to the upgrade function [dufuz]
     - Options -c ezc and --channel=ezc got added to upgrade and upgrade-all to allow for
       channel specific upgrades
+  * Implemented Request #15566: Add doc.php.net as a default channel [dufuz / saltybeagle]
 
   * Fix PHP Bug #43857: --program-suffix not always reflected everywhere [cellog]
 

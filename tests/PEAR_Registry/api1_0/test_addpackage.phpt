@@ -11,6 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
+channel doc.php.net:
 channel pear.php.net:
 channel pecl.php.net:
 dump done
@@ -19,6 +20,7 @@ dump done
 $phpunit->assertTrue($reg->addPackage("pkg1", array("name" => "pkg1", "version" => "1.0", "filelist" => $files1, 'maintainers' => array())), 'add pkg1 return');
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
+channel doc.php.net:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 channel pecl.php.net:
@@ -28,6 +30,7 @@ dump done
 $subreg = new PEAR_Registry($statedir);
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
+channel doc.php.net:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 channel pecl.php.net:
@@ -39,6 +42,7 @@ $phpunit->assertTrue($reg->addPackage("pkg2", array("name" => "pkg2", "version" 
 $phpunit->assertTrue($reg->addPackage("pkg3", array("name" => "pkg3", "version" => "3.0", "filelist" => $files3, 'maintainers' => array())), 'add pkg3 return');
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
+channel doc.php.net:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 pkg2: version="2.0" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set
@@ -50,6 +54,7 @@ dump done
 $subreg = new PEAR_Registry($statedir);
 $phpunit->assertRegEquals('dumping registry...
 channel __uri:
+channel doc.php.net:
 channel pear.php.net:
 pkg1: version="1.0" filelist=array(pkg1-1.php[role=php],pkg1-2.php[role=php,baseinstalldir=pkg1]) maintainers="Array" _lastmodified is set
 pkg2: version="2.0" filelist=array(pkg2-1.php[role=php],pkg2-2.php[role=php,baseinstalldir=pkg2]) maintainers="Array" _lastmodified is set
