@@ -100,6 +100,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Implement Request #13927: install-pear.php should have option to set www_dir [timj]
   * Implement Request #14324: Make the pear install command behave similar to apt-get [dufuz]
   * Implement Request #14325: make pear upgrade with no params behave like pear upgrade-all [dufuz]
+  * Implement Request #14504: add a channel parameter support to the upgrade function [dufuz]
+    - Options -c ezc and --channel=ezc got added to upgrade and upgrade-all to allow for
+      channel specific upgrades
 
   * Fix PHP Bug #43857: --program-suffix not always reflected everywhere [cellog]
 
@@ -115,6 +118,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Fix Bug #14287: cannot upgrade from stable to beta via -beta when config is set to stable [dufuz]
   * Fix Bug #14437: openbasedir warning when loading config [dufuz]
   * Fix Bug #14558: PackageFile.php creates tmp directory outside configured temp_dir [cweiske]
+
+  PEAR_PackageFile_Generator_v2_XML_Util removed in favor of syncing with latest XML_Util which does
+  everything the forked version had altered.
 
   NOTE!
   Functions that have been deprecated for 3+ years in PEAR_Common, please take a moment
