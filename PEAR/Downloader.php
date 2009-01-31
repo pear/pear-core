@@ -283,7 +283,7 @@ class PEAR_Downloader extends PEAR_Common
             }
 
             if (PEAR::isError($err)) {
-                if (!isset($this->_options['soft'])) {
+                if (!isset($this->_options['soft']) && $err->getMessage() !== '') {
                     $this->log(0, $err->getMessage());
                 }
 
@@ -291,14 +291,14 @@ class PEAR_Downloader extends PEAR_Common
                 if (is_object($param)) {
                     $param = $param->getChannel() . '/' . $param->getPackage();
                 }
-                $this->pushError('Package "' . $param . '" is not valid',
-                    PEAR_INSTALLER_SKIPPED);
+                $this->pushError('Package "' . $param . '" is not valid', PEAR_INSTALLER_SKIPPED);
             } else {
                 do {
                     if ($params[$i] && $params[$i]->getType() == 'local') {
                         // bug #7090 skip channel.xml check for local packages
                         break;
                     }
+
                     if ($params[$i] && !isset($channelschecked[$params[$i]->getChannel()]) &&
                           !isset($this->_options['offline'])) {
                         $channelschecked[$params[$i]->getChannel()] = true;

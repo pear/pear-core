@@ -214,7 +214,12 @@ class PEAR_Downloader_Package
                         $param = $this->_registry->parsedPackageNameToString($param, true);
                     }
 
-                    return PEAR::raiseError("Cannot initialize '$param', invalid or missing package file");
+                    if (!isset($options['soft'])) {
+                        $this->_downloader->log(2, "Cannot initialize '$param', invalid or missing package file");
+                    }
+
+                    // Passing no message back - already logged above
+                    return PEAR::raiseError();
                 }
 
                 if (PEAR::isError($err) && !isset($options['soft'])) {
@@ -225,8 +230,12 @@ class PEAR_Downloader_Package
                     $param = $this->_registry->parsedPackageNameToString($param, true);
                 }
 
-                return PEAR::raiseError(
-                    "Cannot initialize '$param', invalid or missing package file");
+                if (!isset($options['soft'])) {
+                    $this->_downloader->log(2, "Cannot initialize '$param', invalid or missing package file");
+                }
+
+                // Passing no message back - already logged above
+                return PEAR::raiseError();
             }
         }
 
