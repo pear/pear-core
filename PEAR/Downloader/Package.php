@@ -1789,6 +1789,7 @@ class PEAR_Downloader_Package
             }
         }
 
+        $preferred_state = $this->_config->get('preferred_state');
         if (!isset($info['url'])) {
             if ($this->isInstalled($info)) {
                 if ($isdependency && version_compare($info['version'],
@@ -1815,7 +1816,7 @@ class PEAR_Downloader_Package
                     }
 
                     if (!in_array($info['info']->getState(),
-                          PEAR_Common::betterStates($this->_config->get('preferred_state'), true))) {
+                          PEAR_Common::betterStates($preferred_state, true))) {
                         if ($optional) {
                             // don't spit out confusing error message
                             return $this->_downloader->_getPackageDownloadUrl(
@@ -1823,7 +1824,7 @@ class PEAR_Downloader_Package
                                       'channel' => $pname['channel'],
                                       'version' => $info['version']));
                         }
-                        $vs = ' within preferred state "' . $this->_config->get('preferred_state') .
+                        $vs = ' within preferred state "' . $preferred_state .
                             '"';
                     } else {
                         if (!class_exists('PEAR_Dependency2')) {
@@ -1841,8 +1842,7 @@ class PEAR_Downloader_Package
                         $instead = '';
                     }
                 } else {
-                    $vs = ' within preferred state "' . $this->_config->get(
-                        'preferred_state') . '"';
+                    $vs = ' within preferred state "' . $preferred_state . '"';
                 }
 
                 if (!isset($options['soft'])) {
@@ -1881,7 +1881,7 @@ class PEAR_Downloader_Package
                         require_once 'PEAR/Common.php';
                     }
                     if (!in_array($info['info']->getState(),
-                          PEAR_Common::betterStates($this->_config->get('preferred_state'), true))) {
+                          PEAR_Common::betterStates($preferred_state, true))) {
                         if ($optional) {
                             // don't spit out confusing error message, and don't die on
                             // optional dep failure!
@@ -1890,7 +1890,7 @@ class PEAR_Downloader_Package
                                       'channel' => $pname['channel'],
                                       'version' => $info['version']));
                         }
-                        $vs = ' within preferred state "' . $this->_config->get('preferred_state') .
+                        $vs = ' within preferred state "' . $preferred_state .
                             '"';
                     } else {
                         if (!class_exists('PEAR_Dependency2')) {
@@ -1907,9 +1907,9 @@ class PEAR_Downloader_Package
                         $vs = PEAR_Dependency2::_getExtraString($pname);
                     }
                 } else {
-                    $vs = ' within preferred state "' . $this->_downloader->config->get(
-                        'preferred_state') . '"';
+                    $vs = ' within preferred state "' . $this->_downloader->config->get('preferred_state') . '"';
                 }
+
                 $options = $this->_downloader->getOptions();
                 // this is only set by the "download-all" command
                 if (isset($options['ignorepreferred_state'])) {
@@ -1926,6 +1926,7 @@ class PEAR_Downloader_Package
                             PEAR_DOWNLOADER_PACKAGE_STATE);
                     return $err;
                 }
+
                 $err = PEAR::raiseError(
                     'Failed to download ' . $this->_registry->parsedPackageNameToString(
                         array('channel' => $pname['channel'], 'package' => $pname['package']),
@@ -1939,6 +1940,7 @@ class PEAR_Downloader_Package
                 return $err;
             }
         }
+
         if (isset($info['deprecated']) && $info['deprecated']) {
             $this->_downloader->log(0,
                 'WARNING: "' .
@@ -1949,6 +1951,7 @@ class PEAR_Downloader_Package
                     $this->_registry->parsedPackageNameToString($info['deprecated'], true) .
                 '"');
         }
+
         return $info;
     }
 }
