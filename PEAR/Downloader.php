@@ -328,7 +328,7 @@ class PEAR_Downloader extends PEAR_Common
                             break;
                         }
                         $this->log(0, 'WARNING: channel "' . $params[$i]->getChannel() . '" has ' .
-                            'updated its protocols, use "channel-update ' . $params[$i]->getChannel() .
+                            'updated its protocols, use "' . PEAR_RUNTYPE . ' channel-update ' . $params[$i]->getChannel() .
                             '" to update');
                     }
                 } while (false);
