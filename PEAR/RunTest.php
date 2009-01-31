@@ -393,14 +393,14 @@ class PEAR_RunTest
             $text .= "\n" . 'xdebug_stop_code_coverage();' .
                 "\n" . '} // end coverage_shutdown()' .
                 "\n" . 'register_shutdown_function("coverage_shutdown");';
-            $text .= "\n" . 'xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);' . "\n";
+            $text .= "\n" . 'xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);' . "\n?>";
 
             $len_f = 5;
             if (substr($section_text['FILE'], 0, 5) != '<?php'
                 && substr($section_text['FILE'], 0, 2) == '<?') {
                 $len_f = 2;
             }
-            $text .= substr($section_text['FILE'], $len_f, strlen($section_text['FILE']));
+            $text .= $section_text['FILE'];
 
             $this->save_text($temp_file, $text);
         } else {
