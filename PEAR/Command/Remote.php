@@ -184,7 +184,7 @@ parameter.
         PEAR::staticPopErrorHandling();
         if (!PEAR::isError($a) && $a) {
             $this->ui->outputData('WARNING: channel "' . $channel . '" has ' .
-                'updated its protocols, use "channel-update ' . $channel .
+                'updated its protocols, use "' . PEAR_RUNTYPE . ' channel-update ' . $channel .
                 '" to update');
         }
     }
