@@ -164,67 +164,72 @@ class PEAR_Downloader_Package
     function initialize($param)
     {
         $origErr = $this->_fromFile($param);
-        if (!$this->_valid) {
-            $options = $this->_downloader->getOptions();
-            if (isset($options['offline'])) {
-                if (PEAR::isError($origErr)) {
+        if ($this->_valid) {
+            return true;
+        }
+
+        $options = $this->_downloader->getOptions();
+        if (isset($options['offline'])) {
+            if (PEAR::isError($origErr) && !isset($options['soft'])) {
+                $this->_downloader->log(0, $origErr->getMessage());
+            }
+
+            return PEAR::raiseError('Cannot download non-local package "' . $param . '"');
+        }
+
+        $err = $this->_fromUrl($param);
+        if (PEAR::isError($err) || !$this->_valid) {
+            if ($this->_type == 'url') {
+                if (PEAR::isError($err) && !isset($options['soft'])) {
+                    $this->_downloader->log(0, $err->getMessage());
+                }
+
+                return PEAR::raiseError("Invalid or missing remote package file");
+            }
+
+            $err = $this->_fromString($param);
+            if (PEAR::isError($err) || !$this->_valid) {
+                if (PEAR::isError($err) && $err->getCode() == PEAR_DOWNLOADER_PACKAGE_STATE) {
+                    return false; // instruct the downloader to silently skip
+                }
+
+                if (isset($this->_type) && $this->_type == 'local' && PEAR::isError($origErr)) {
+                    if (is_array($origErr->getUserInfo())) {
+                        foreach ($origErr->getUserInfo() as $err) {
+                            if (is_array($err)) {
+                                $err = $err['message'];
+                            }
+
+                            if (!isset($options['soft'])) {
+                                $this->_downloader->log(0, $err);
+                            }
+                        }
+                    }
+
                     if (!isset($options['soft'])) {
                         $this->_downloader->log(0, $origErr->getMessage());
                     }
-                }
-                return PEAR::raiseError('Cannot download non-local package "' . $param . '"');
-            }
-            $err = $this->_fromUrl($param);
-            if (PEAR::isError($err) || !$this->_valid) {
-                if ($this->_type == 'url') {
-                    if (PEAR::isError($err)) {
-                        if (!isset($options['soft'])) {
-                            $this->_downloader->log(0, $err->getMessage());
-                        }
-                    }
-                    return PEAR::raiseError("Invalid or missing remote package file");
-                }
-                $err = $this->_fromString($param);
-                if (PEAR::isError($err) || !$this->_valid) {
-                    if (PEAR::isError($err) &&
-                          $err->getCode() == PEAR_DOWNLOADER_PACKAGE_STATE) {
-                        return false; // instruct the downloader to silently skip
-                    }
-                    if (isset($this->_type) && $this->_type == 'local' &&
-                          PEAR::isError($origErr)) {
-                        if (is_array($origErr->getUserInfo())) {
-                            foreach ($origErr->getUserInfo() as $err) {
-                                if (is_array($err)) {
-                                    $err = $err['message'];
-                                }
-                                if (!isset($options['soft'])) {
-                                    $this->_downloader->log(0, $err);
-                                }
-                            }
-                        }
-                        if (!isset($options['soft'])) {
-                            $this->_downloader->log(0, $origErr->getMessage());
-                        }
-                        if (is_array($param)) {
-                            $param = $this->_registry->parsedPackageNameToString($param,
-                                true);
-                        }
-                        return PEAR::raiseError(
-                            "Cannot initialize '$param', invalid or missing package file");
-                    }
-                    if (PEAR::isError($err)) {
-                        if (!isset($options['soft'])) {
-                            $this->_downloader->log(0, $err->getMessage());
-                        }
-                    }
+
                     if (is_array($param)) {
                         $param = $this->_registry->parsedPackageNameToString($param, true);
                     }
-                    return PEAR::raiseError(
-                        "Cannot initialize '$param', invalid or missing package file");
+
+                    return PEAR::raiseError("Cannot initialize '$param', invalid or missing package file");
                 }
+
+                if (PEAR::isError($err) && !isset($options['soft'])) {
+                    $this->_downloader->log(0, $err->getMessage());
+                }
+
+                if (is_array($param)) {
+                    $param = $this->_registry->parsedPackageNameToString($param, true);
+                }
+
+                return PEAR::raiseError(
+                    "Cannot initialize '$param', invalid or missing package file");
             }
         }
+
         return true;
     }
 
@@ -1633,9 +1638,9 @@ class PEAR_Downloader_Package
     function _fromString($param)
     {
         $options = $this->_downloader->getOptions();
+        $channel = $this->_config->get('default_channel');
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-        $pname = $this->_registry->parsePackageName($param,
-            $this->_config->get('default_channel'));
+        $pname = $this->_registry->parsePackageName($param, $channel);
         PEAR::popErrorHandling();
         if (PEAR::isError($pname)) {
             if ($pname->getCode() == 'invalid') {
@@ -1648,8 +1653,7 @@ class PEAR_Downloader_Package
                 if ($this->_downloader->discover($parsed['channel'])) {
                     if ($this->_config->get('auto_discover')) {
                         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
-                        $pname = $this->_registry->parsePackageName($param,
-                            $this->_config->get('default_channel'));
+                        $pname = $this->_registry->parsePackageName($param, $channel);
                         PEAR::popErrorHandling();
                     } else {
                         if (!isset($options['soft'])) {
@@ -1670,8 +1674,7 @@ class PEAR_Downloader_Package
                         $param = $this->_registry->parsedPackageNameToString($param);
                     }
 
-                    $err = PEAR::raiseError('invalid package name/package file "' .
-                        $param . '"');
+                    $err = PEAR::raiseError('invalid package name/package file "' . $param . '"');
                     $this->_valid = false;
                     return $err;
                 }
@@ -1680,8 +1683,7 @@ class PEAR_Downloader_Package
                     $this->_downloader->log(0, $pname->getMessage());
                 }
 
-                $err = PEAR::raiseError('invalid package name/package file "' .
-                    $param . '"');
+                $err = PEAR::raiseError('invalid package name/package file "' . $param . '"');
                 $this->_valid = false;
                 return $err;
             }
