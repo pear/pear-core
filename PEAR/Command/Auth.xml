@@ -1,11 +1,11 @@
 <commands version="1.0">
  <login>
   <summary>Connects and authenticates to remote server</summary>
-  <shortcut>li</shortcut>
   <function>doLogin</function>
+  <shortcut>li</shortcut>
   <options />
   <doc>&lt;channel name&gt;
-Log in to a remote channel server.  &lt;channel name&gt; is not supplied, 
+Log in to a remote channel server.  If &lt;channel name&gt; is not supplied,
 the default channel is used. To use remote functions in the installer
 that require any kind of privileges, you need to log in first.  The
 username and password you enter here will be stored in your per-user
@@ -15,8 +15,8 @@ operations on the remote server.</doc>
  </login>
  <logout>
   <summary>Logs out from the remote server</summary>
-  <shortcut>lo</shortcut>
   <function>doLogout</function>
+  <shortcut>lo</shortcut>
   <options />
   <doc>
 Logs out from the remote server.  This command does not actually
