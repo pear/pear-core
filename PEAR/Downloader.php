@@ -449,6 +449,7 @@ class PEAR_Downloader extends PEAR_Common
                 $somefailed = true;
                 continue;
             }
+
             $newparams[] = &$params[$i];
             $ret[] = array(
                 'file' => $pf->getArchiveFile(),
@@ -813,6 +814,11 @@ class PEAR_Downloader extends PEAR_Common
 
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         $version = $this->_registry->packageInfo($parr['package'], 'version', $parr['channel']);
+        $stability = $this->_registry->packageInfo($parr['package'], 'stability', $parr['channel']);
+        // package is installed - use the installed release stability level
+        if ($stability !== null) {
+            $state = $stability['release'];
+        }
         PEAR::staticPopErrorHandling();
         $base2 = false;
 
@@ -985,8 +991,9 @@ class PEAR_Downloader extends PEAR_Common
                 return PEAR::raiseError('Package "' . $param . '" is not valid');
             }
             return $info;
-        } elseif ($chan->supportsREST($this->config->get('preferred_mirror')) &&
-              $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
+        } elseif ($chan->supportsREST($this->config->get('preferred_mirror'))
+              && $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))
+        ) {
             $rest = &$this->config->getREST('1.0', $this->_options);
             $url = $rest->getDepDownloadURL($base, $xsdversion, $dep, $parr,
                     $state, $version, $chan->getName());
