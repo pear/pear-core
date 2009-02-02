@@ -96,8 +96,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
+  * Implement Request #11170: script to generate Command/[command].xml [dufuz]
   * Implement Request #11176: improve channel ... has updated its protocols message [dufuz]
   * Implement Request #12706: pear list -a hard to read [dufuz]
+  * Implement Request #11353: upgrade-all and upgrade commands to upgrade within the same stability level [dufuz]
   * Implement Request #13927: install-pear.php should have option to set www_dir [timj]
   * Implement Request #14324: Make the pear install command behave similar to apt-get [dufuz]
   * Implement Request #14325: make pear upgrade with no params behave like pear upgrade-all [dufuz]
