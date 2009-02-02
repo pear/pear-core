@@ -79,11 +79,12 @@ and the other as &quot;package2.xml&quot; in the archive&quot;
     <doc>Ignore changes that insert or delete blank lines</doc>
    </ignore-blank-lines>
    <brief>
+    <shortopt></shortopt>
     <doc>Report only whether the files differ, no details</doc>
    </brief>
    <dry-run>
     <shortopt>n</shortopt>
-    <doc>Don&apos;t do anything, just pretend</doc>
+    <doc>Don&#039;t do anything, just pretend</doc>
    </dry-run>
   </options>
   <doc>&lt;package.xml&gt;
@@ -116,15 +117,18 @@ of a specific release.
    </delete>
    <dry-run>
     <shortopt>n</shortopt>
-    <doc>Don&apos;t do anything, just pretend</doc>
+    <doc>Don&#039;t do anything, just pretend</doc>
    </dry-run>
   </options>
-  <doc>&lt;package.xml&gt;
+  <doc>&lt;package.xml&gt; [files...]
 Sets a CVS tag on all files in a package.  Use this command after you have
 packaged a distribution tarball with the &quot;package&quot; command to tag what
 revisions of what files were in that release.  If need to fix something
 after running cvstag once, but before the tarball is released to the public,
 use the &quot;slide&quot; option to move the release tag.
+
+to include files (such as a second package.xml, or tests not included in the
+release), pass them as additional parameters.
 </doc>
  </cvstag>
  <package-dependencies>
@@ -139,7 +143,12 @@ List all dependencies the package has.</doc>
   <summary>Sign a package distribution file</summary>
   <function>doSign</function>
   <shortcut>si</shortcut>
-  <options />
+  <options>
+   <verbose>
+    <shortopt>v</shortopt>
+    <doc>Display GnuPG output</doc>
+   </verbose>
+  </options>
   <doc>&lt;package-file&gt;
 Signs a package distribution (.tar or .tgz) file with GnuPG.</doc>
  </sign>
@@ -150,14 +159,14 @@ Signs a package distribution (.tar or .tgz) file with GnuPG.</doc>
   <options>
    <spec-template>
     <shortopt>t</shortopt>
-    <arg>FILE</arg>
     <doc>Use FILE as RPM spec file template</doc>
+    <arg>FILE</arg>
    </spec-template>
    <rpm-pkgname>
     <shortopt>p</shortopt>
-    <arg>FORMAT</arg>
     <doc>Use FORMAT as format string for RPM package name, %s is replaced
 by the PEAR package name, defaults to &quot;PEAR::%s&quot;.</doc>
+    <arg>FORMAT</arg>
    </rpm-pkgname>
   </options>
   <doc>&lt;package-file&gt;

@@ -22,7 +22,7 @@
    </soft>
    <nobuild>
     <shortopt>B</shortopt>
-    <doc>don&apos;t build C extensions</doc>
+    <doc>don&#039;t build C extensions</doc>
    </nobuild>
    <nocompress>
     <shortopt>Z</shortopt>
@@ -30,10 +30,11 @@
    </nocompress>
    <installroot>
     <shortopt>R</shortopt>
+    <doc>root directory used when installing files (ala PHP&#039;s INSTALL_ROOT)</doc>
     <arg>DIR</arg>
-    <doc>root directory used when installing files (ala PHP&apos;s INSTALL_ROOT)</doc>
    </installroot>
    <ignore-errors>
+    <shortopt></shortopt>
     <doc>force install even if there were errors</doc>
    </ignore-errors>
    <alldeps>
@@ -46,8 +47,8 @@
    </onlyreqdeps>
    <remoteconfig>
     <shortopt>F</shortopt>
-    <arg>URL</arg>
     <doc>also install to ftp site using remote config file (ftp://host.com/pear.conf)</doc>
+    <arg>URL</arg>
    </remoteconfig>
    <offline>
     <shortopt>O</shortopt>
@@ -71,7 +72,7 @@ anywhere on the net.
 package.xml.  Useful for testing, or for wrapping a PEAR package in
 another package manager such as RPM.
 
-&quot;Package[-version/state][.tar]&quot; : queries your default channel&apos;s server
+&quot;Package[-version/state][.tar]&quot; : queries your default channel&#039;s server
 ({config master_server}) and downloads the newest package with
 the preferred quality/state ({config preferred_state}).
 
@@ -105,7 +106,7 @@ four ways of specifying packages.
    </register-only>
    <nobuild>
     <shortopt>B</shortopt>
-    <doc>don&apos;t build C extensions</doc>
+    <doc>don&#039;t build C extensions</doc>
    </nobuild>
    <nocompress>
     <shortopt>Z</shortopt>
@@ -113,10 +114,11 @@ four ways of specifying packages.
    </nocompress>
    <installroot>
     <shortopt>R</shortopt>
+    <doc>root directory used when installing files (ala PHP&#039;s INSTALL_ROOT)</doc>
     <arg>DIR</arg>
-    <doc>root directory used when installing files (ala PHP&apos;s INSTALL_ROOT)</doc>
    </installroot>
    <ignore-errors>
+    <shortopt></shortopt>
     <doc>force install even if there were errors</doc>
    </ignore-errors>
    <alldeps>
@@ -129,8 +131,8 @@ four ways of specifying packages.
    </onlyreqdeps>
    <remoteconfig>
     <shortopt>F</shortopt>
-    <arg>URL</arg>
     <doc>also upgrade on ftp site using remote config file (ftp://host.com/pear.conf)</doc>
+    <arg>URL</arg>
    </remoteconfig>
    <offline>
     <shortopt>O</shortopt>
@@ -167,7 +169,7 @@ More than one package may be specified at once.
    </register-only>
    <nobuild>
     <shortopt>B</shortopt>
-    <doc>don&apos;t build C extensions</doc>
+    <doc>don&#039;t build C extensions</doc>
    </nobuild>
    <nocompress>
     <shortopt>Z</shortopt>
@@ -175,16 +177,17 @@ More than one package may be specified at once.
    </nocompress>
    <installroot>
     <shortopt>R</shortopt>
+    <doc>root directory used when installing files (ala PHP&#039;s INSTALL_ROOT)</doc>
     <arg>DIR</arg>
-    <doc>root directory used when installing files (ala PHP&apos;s INSTALL_ROOT)</doc>
    </installroot>
    <ignore-errors>
+    <shortopt></shortopt>
     <doc>force install even if there were errors</doc>
    </ignore-errors>
    <remoteconfig>
     <shortopt>F</shortopt>
-    <arg>URL</arg>
     <doc>also upgrade on ftp site using remote config file (ftp://host.com/pear.conf)</doc>
+    <arg>URL</arg>
    </remoteconfig>
   </options>
   <doc>
@@ -209,16 +212,17 @@ more stable.
    </register-only>
    <installroot>
     <shortopt>R</shortopt>
+    <doc>root directory used when installing files (ala PHP&#039;s INSTALL_ROOT)</doc>
     <arg>DIR</arg>
-    <doc>root directory used when installing files (ala PHP&apos;s INSTALL_ROOT)</doc>
    </installroot>
    <ignore-errors>
+    <shortopt></shortopt>
     <doc>force install even if there were errors</doc>
    </ignore-errors>
    <remoteconfig>
     <shortopt>F</shortopt>
-    <arg>URL</arg>
     <doc>also uninstall on ftp site using remote config file (ftp://host.com/pear.conf)</doc>
+    <arg>URL</arg>
    </remoteconfig>
    <offline>
     <shortopt>O</shortopt>
