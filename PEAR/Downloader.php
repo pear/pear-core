@@ -813,10 +813,10 @@ class PEAR_Downloader extends PEAR_Common
         }
 
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-        $version = $this->_registry->packageInfo($parr['package'], 'version', $parr['channel']);
+        $version   = $this->_registry->packageInfo($parr['package'], 'version', $parr['channel']);
         $stability = $this->_registry->packageInfo($parr['package'], 'stability', $parr['channel']);
         // package is installed - use the installed release stability level
-        if ($stability !== null) {
+        if (!isset($parr['state']) && $stability !== null) {
             $state = $stability['release'];
         }
         PEAR::staticPopErrorHandling();
