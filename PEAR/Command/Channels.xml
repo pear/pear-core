@@ -50,8 +50,8 @@ channel.xml.
    </force>
    <channel>
     <shortopt>c</shortopt>
-    <arg>CHANNEL</arg>
     <doc>will force download of new channel.xml if an existing channel name is used</doc>
+    <arg>CHANNEL</arg>
    </channel>
   </options>
   <doc>[&lt;channel.xml&gt;|&lt;channel name&gt;]
@@ -92,7 +92,7 @@ If &lt;channel name&gt; is in the format &quot;&lt;username&gt;:&lt;password&gt;
 &lt;username&gt; and &lt;password&gt; will be set as the login username/password for
 &lt;channel&gt;. Use caution when passing the username/password in this way, as
 it may allow other users on your computer to briefly view your username/
-password via the system's process list.
+password via the system&#039;s process list.
 </doc>
  </channel-discover>
 </commands>
