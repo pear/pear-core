@@ -295,6 +295,8 @@ class PEAR_Downloader extends PEAR_Common
                 if (!isset($this->_options['soft'])) {
                     $this->log(2, 'Package "' . $param . '" is not valid');
                 }
+
+                // Message logged above in a specific verbose mode, passing null to not show up on CLI
                 $this->pushError(null, PEAR_INSTALLER_SKIPPED);
             } else {
                 do {
