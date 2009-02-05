@@ -291,7 +291,11 @@ class PEAR_Downloader extends PEAR_Common
                 if (is_object($param)) {
                     $param = $param->getChannel() . '/' . $param->getPackage();
                 }
-                $this->pushError('Package "' . $param . '" is not valid', PEAR_INSTALLER_SKIPPED);
+
+                if (!isset($this->_options['soft'])) {
+                    $this->log(2, 'Package "' . $param . '" is not valid');
+                }
+                $this->pushError(null, PEAR_INSTALLER_SKIPPED);
             } else {
                 do {
                     if ($params[$i] && $params[$i]->getType() == 'local') {
