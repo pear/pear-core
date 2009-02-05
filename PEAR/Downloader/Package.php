@@ -1543,7 +1543,7 @@ class PEAR_Downloader_Package
 
     function _fromUrl($param, $saveparam = '')
     {
-        if (!is_array($param) && (preg_match('#^(http|ftp)://#', $param))) {
+        if (!is_array($param) && (preg_match('#^(http|https|ftp)://#', $param))) {
             $options = $this->_downloader->getOptions();
             $this->_type = 'url';
             $callback = $this->_downloader->ui ?
