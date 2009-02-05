@@ -617,7 +617,9 @@ parameter.
         $errors = $downloader->getErrorMsgs();
         if (count($errors)) {
             foreach ($errors as $error) {
-                $this->ui->outputData($error);
+                if ($error !== null) {
+                    $this->ui->outputData($error);
+                }
             }
 
             return $this->raiseError("$command failed");

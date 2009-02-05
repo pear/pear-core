@@ -678,10 +678,16 @@ Run post-installation scripts in package <package>, if any exist.
             $err = array();
             $err['data'] = array();
             foreach ($errors as $error) {
-                $err['data'][] = array($error);
+                if ($error !== null) {
+                    $err['data'][] = array($error);
+                }
             }
-            $err['headline'] = 'Install Errors';
-            $this->ui->outputData($err);
+
+            if (!empty($err['data'])) {
+                $err['headline'] = 'Install Errors';
+                $this->ui->outputData($err);
+            }
+
             if (!count($downloaded)) {
                 return $this->raiseError("$command failed");
             }
