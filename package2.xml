@@ -96,6 +96,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
+  * Implement Request #10825: Only display the "invalid or missing package file"-error if it makes sense [dufuz]
   * Implement Request #11170: script to generate Command/[command].xml [dufuz]
   * Implement Request #11176: improve channel ... has updated its protocols message [dufuz]
   * Implement Request #12706: pear list -a hard to read [dufuz]
