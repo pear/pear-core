@@ -38,6 +38,9 @@ for ($i = 0; $i < sizeof($argv); $i++) {
     if (ereg('package-(.*)\.xml$', $bn, $matches) ||
         ereg('([A-Za-z0-9_:]+)-.*\.(tar|tgz)$', $bn, $matches)) {
         $install_files[$matches[1]] = $arg;
+    } elseif ($arg == '-a') {
+        $cache_dir = $argv[$i+1];
+        $i++;
     } elseif ($arg == '--force') {
         $force = true;
     } elseif ($arg == '-d') {
@@ -54,6 +57,12 @@ for ($i = 0; $i < sizeof($argv); $i++) {
         $i++;
     } elseif ($arg == '-p') {
         $php_bin = $argv[$i+1];
+        $i++;
+    } elseif ($arg == '-o') {
+        $download_dir = $argv[$i+1];
+        $i++;
+    } elseif ($arg == '-t') {
+        $temp_dir = $argv[$i+1];
         $i++;
     } elseif ($arg == '--debug') {
         $debug = 1;
@@ -86,6 +95,11 @@ if (!empty($bin_dir)) {
     $config->set('bin_dir', $bin_dir, 'default');
 }
 
+// Cache files
+if (!empty($cache_dir)) {
+    $config->set('cache_dir', $cache_dir, 'default');
+}
+
 // Config files
 if (!empty($cfg_dir)) {
     $config->set('cfg_dir', $cfg_dir, 'default');
@@ -94,6 +108,16 @@ if (!empty($cfg_dir)) {
 // Web files
 if (!empty($www_dir)) {
     $config->set('www_dir', $www_dir, 'default');
+}
+
+// Downloaded files
+if (!empty($download_dir)) {
+    $config->set('download_dir', $download_dir, 'default');
+}
+
+// Temporary files
+if (!empty($temp_dir)) {
+    $config->set('temp_dir', $temp_dir, 'default');
 }
 
 // User supplied a dir prefix
