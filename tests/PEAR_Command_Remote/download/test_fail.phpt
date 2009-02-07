@@ -29,8 +29,8 @@ $phpunit->assertEquals( array (
     1 => 'Invalid or missing remote package file',
   ),
   array (
-    'info' => 'Package "http://www.example.com/bloo.tgz" is not valid',
-    'cmd' => 'no command',
+    0 => 2,
+    1 => 'Package "http://www.example.com/bloo.tgz" is not valid',
   ),
  )
 , $fakelog->getLog(), 'log');
