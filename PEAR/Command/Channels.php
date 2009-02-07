@@ -139,6 +139,30 @@ it may allow other users on your computer to briefly view your username/
 password via the system\'s process list.
 '
             ),
+        'channel-login' => array(
+            'summary' => 'Connects and authenticates to remote channel server',
+            'shortcut' => 'cli',
+            'function' => 'doLogin',
+            'options' => array(),
+            'doc' => '<channel name>
+Log in to a remote channel server.  If <channel name> is not supplied,
+the default channel is used. To use remote functions in the installer
+that require any kind of privileges, you need to log in first.  The
+username and password you enter here will be stored in your per-user
+PEAR configuration (~/.pearrc on Unix-like systems).  After logging
+in, your username and password will be sent along in subsequent
+operations on the remote server.',
+            ),
+        'channel-logout' => array(
+            'summary' => 'Logs out from the remote channel server',
+            'shortcut' => 'clo',
+            'function' => 'doLogout',
+            'options' => array(),
+            'doc' => '
+Logs out from the remote server.  This command does not actually
+connect to the remote server, it only deletes the stored username and
+password from your user configuration.',
+            )
         );
 
     /**
@@ -738,5 +762,100 @@ password via the system\'s process list.
         }
 
         $this->ui->outputData("Discovery of channel \"$channel\" succeeded", $command);
+    }
+
+    /**
+     * Execute the 'login' command.
+     *
+     * @param string $command command name
+     * @param array $options option_name => value
+     * @param array $params list of additional parameters
+     *
+     * @return bool TRUE on success or
+     * a PEAR error on failure
+     *
+     * @access public
+     */
+    function doLogin($command, $options, $params)
+    {
+        $reg = &$this->config->getRegistry();
+
+        // If a parameter is supplied, use that as the channel to log in to
+        $channel = isset($params[0]) ? $params[0] : $this->config->get('default_channel');
+
+        $chan = $reg->getChannel($channel);
+        if (PEAR::isError($chan)) {
+            return $this->raiseError($chan);
+        }
+
+        $server   = $this->config->get('preferred_mirror', null, $channel);
+        $username = $this->config->get('username',         null, $channel);
+        if (empty($username)) {
+            $username = isset($_ENV['USER']) ? $_ENV['USER'] : null;
+        }
+        $this->ui->outputData("Logging in to $server.", $command);
+
+        list($username, $password) = $this->ui->userDialog(
+            $command,
+            array('Username', 'Password'),
+            array('text',     'password'),
+            array($username,  '')
+            );
+        $username = trim($username);
+        $password = trim($password);
+
+        $ourfile = $this->config->getConfFile('user');
+        if (!$ourfile) {
+            $ourfile = $this->config->getConfFile('system');
+        }
+
+        $this->config->set('username', $username, 'user', $channel);
+        $this->config->set('password', $password, 'user', $channel);
+
+        if ($chan->supportsREST()) {
+            $ok = true;
+        }
+
+        if ($ok !== true) {
+            return $this->raiseError('Login failed!');
+        }
+
+        $this->ui->outputData("Logged in.", $command);
+        // avoid changing any temporary settings changed with -d
+        $ourconfig = new PEAR_Config($ourfile, $ourfile);
+        $ourconfig->set('username', $username, 'user', $channel);
+        $ourconfig->set('password', $password, 'user', $channel);
+        $ourconfig->store();
+
+        return true;
+    }
+
+    /**
+     * Execute the 'logout' command.
+     *
+     * @param string $command command name
+     * @param array $options option_name => value
+     * @param array $params list of additional parameters
+     *
+     * @return bool TRUE on success or
+     * a PEAR error on failure
+     *
+     * @access public
+     */
+    function doLogout($command, $options, $params)
+    {
+        $reg     = &$this->config->getRegistry();
+        $channel = $this->config->get('default_channel');
+        $chan    = $reg->getChannel($channel);
+        if (PEAR::isError($chan)) {
+            return $this->raiseError($chan);
+        }
+
+        $server = $this->config->get('preferred_mirror');
+        $this->ui->outputData("Logging out from $server.", $command);
+        $this->config->remove('username');
+        $this->config->remove('password');
+        $this->config->store();
+        return true;
     }
 }
