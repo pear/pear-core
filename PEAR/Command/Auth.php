@@ -19,13 +19,13 @@
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 0.1
+ * @deprecated since 1.8.0alpha1
  */
 
 /**
  * base class
  */
-require_once 'PEAR/Command/Common.php';
-require_once 'PEAR/Config.php';
+require_once 'PEAR/Command/Channels.php';
 
 /**
  * PEAR commands for login/logout
@@ -39,16 +39,19 @@ require_once 'PEAR/Config.php';
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 0.1
+ * @deprecated since 1.8.0alpha1
  */
-class PEAR_Command_Auth extends PEAR_Command_Common
+class PEAR_Command_Auth extends PEAR_Command_Channels
 {
     var $commands = array(
         'login' => array(
-            'summary' => 'Connects and authenticates to remote server',
+            'summary' => 'Connects and authenticates to remote server [Deprecated in favor of channel-login]',
             'shortcut' => 'li',
             'function' => 'doLogin',
             'options' => array(),
             'doc' => '<channel name>
+WARNING: This function is deprecated in favor of using channel-login
+
 Log in to a remote channel server.  If <channel name> is not supplied,
 the default channel is used. To use remote functions in the installer
 that require any kind of privileges, you need to log in first.  The
@@ -58,11 +61,13 @@ in, your username and password will be sent along in subsequent
 operations on the remote server.',
             ),
         'logout' => array(
-            'summary' => 'Logs out from the remote server',
+            'summary' => 'Logs out from the remote server [Deprecated in favor of channel-logout]',
             'shortcut' => 'lo',
             'function' => 'doLogout',
             'options' => array(),
             'doc' => '
+WARNING: This function is deprecated in favor of using channel-logout
+
 Logs out from the remote server.  This command does not actually
 connect to the remote server, it only deletes the stored username and
 password from your user configuration.',
@@ -77,105 +82,6 @@ password from your user configuration.',
      */
     function PEAR_Command_Auth(&$ui, &$config)
     {
-        parent::PEAR_Command_Common($ui, $config);
-    }
-
-    /**
-     * Execute the 'login' command.
-     *
-     * @param string $command command name
-     * @param array $options option_name => value
-     * @param array $params list of additional parameters
-     *
-     * @return bool TRUE on success or
-     * a PEAR error on failure
-     *
-     * @access public
-     */
-    function doLogin($command, $options, $params)
-    {
-        $reg = &$this->config->getRegistry();
-
-        // If a parameter is supplied, use that as the channel to log in to
-        if (isset($params[0])) {
-            $channel = $params[0];
-        } else {
-            $channel = $this->config->get('default_channel');
-        }
-
-        $chan = $reg->getChannel($channel);
-        if (PEAR::isError($chan)) {
-            return $this->raiseError($chan);
-        }
-
-        $server   = $this->config->get('preferred_mirror', null, $channel);
-        $username = $this->config->get('username', null, $channel);
-        if (empty($username)) {
-            $username = isset($_ENV['USER']) ? $_ENV['USER'] : null;
-        }
-        $this->ui->outputData("Logging in to $server.", $command);
-
-        list($username, $password) = $this->ui->userDialog(
-            $command,
-            array('Username', 'Password'),
-            array('text',     'password'),
-            array($username,  '')
-            );
-        $username = trim($username);
-        $password = trim($password);
-
-        $ourfile = $this->config->getConfFile('user');
-        if (!$ourfile) {
-            $ourfile = $this->config->getConfFile('system');
-        }
-
-        $this->config->set('username', $username, 'user', $channel);
-        $this->config->set('password', $password, 'user', $channel);
-
-        if ($chan->supportsREST()) {
-            $ok = true;
-        }
-
-        if ($ok !== true) {
-            return $this->raiseError('Login failed!');
-        }
-
-        $this->ui->outputData("Logged in.", $command);
-        // avoid changing any temporary settings changed with -d
-        $ourconfig = new PEAR_Config($ourfile, $ourfile);
-        $ourconfig->set('username', $username, 'user', $channel);
-        $ourconfig->set('password', $password, 'user', $channel);
-        $ourconfig->store();
-
-        return true;
-    }
-
-    /**
-     * Execute the 'logout' command.
-     *
-     * @param string $command command name
-     * @param array $options option_name => value
-     * @param array $params list of additional parameters
-     *
-     * @return bool TRUE on success or
-     * a PEAR error on failure
-     *
-     * @access public
-     */
-    function doLogout($command, $options, $params)
-    {
-        $reg     = &$this->config->getRegistry();
-        $channel = $this->config->get('default_channel');
-        $chan    = $reg->getChannel($channel);
-        if (PEAR::isError($chan)) {
-            return $this->raiseError($chan);
-        }
-
-        $server = $this->config->get('preferred_mirror');
-        $this->ui->outputData("Logging out from $server.", $command);
-        $this->config->remove('username');
-        $this->config->remove('password');
-        $this->config->store();
-        return true;
+        parent::PEAR_Command_Channels($ui, $config);
     }
 }
