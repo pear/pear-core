@@ -22,6 +22,8 @@ $phpunit->assertEquals(array (
   'channel-delete' => 'PEAR_Command_Channels',
   'channel-discover' => 'PEAR_Command_Channels',
   'channel-info' => 'PEAR_Command_Channels',
+  'channel-login' => 'PEAR_Command_Channels',
+  'channel-logout' => 'PEAR_Command_Channels',
   'channel-update' => 'PEAR_Command_Channels',
   'clear-cache' => 'PEAR_Command_Remote',
   'config-create' => 'PEAR_Command_Config',
@@ -74,6 +76,8 @@ $phpunit->assertEquals(array (
   'ch' => 'config-help',
   'cha' => 'channel-alias',
   'ci' => 'channel-info',
+  'cli' => 'channel-login',
+  'clo' => 'channel-logout',
   'coc' => 'config-create',
   'cs' => 'config-set',
   'csh' => 'config-show',
@@ -362,9 +366,9 @@ $phpunit->assertEquals('List Files In Installed Package'
     , PEAR_Command::getDescription('list-files'), 'list-files');
 $phpunit->assertEquals('List Available Upgrades'
     , PEAR_Command::getDescription('list-upgrades'), 'list-upgrades');
-$phpunit->assertEquals('Connects and authenticates to remote server'
+$phpunit->assertEquals('Connects and authenticates to remote server [Deprecated in favor of channel-login]'
     , PEAR_Command::getDescription('login'), 'login');
-$phpunit->assertEquals('Logs out from the remote server'
+$phpunit->assertEquals('Logs out from the remote server [Deprecated in favor of channel-logout]'
     , PEAR_Command::getDescription('logout'), 'logout');
 $phpunit->assertEquals('Builds an RPM spec file from a PEAR package'
     , PEAR_Command::getDescription('makerpm'), 'makerpm');
