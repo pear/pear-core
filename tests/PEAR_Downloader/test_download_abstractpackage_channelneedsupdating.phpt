@@ -90,7 +90,7 @@ $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
   array (
     0 => 0,
-    1 => 'WARNING: channel "pear.php.net" has updated its protocols, use "channel-update pear.php.net" to update',
+    1 => 'WARNING: channel "pear.php.net" has updated its protocols, use "pear channel-update pear.php.net" to update',
   ),
   array (
     0 => 3,

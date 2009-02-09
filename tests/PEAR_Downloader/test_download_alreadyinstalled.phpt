@@ -84,9 +84,13 @@ $phpunit->assertEquals(array (
   ),
   1 =>
   array (
-    0 => 0,
+    0 => 2,
     1 => 'Cannot initialize \'test\', invalid or missing package file',
   ),
+  array (
+    0 => 2,
+    1 => 'Package "test" is not valid',
+   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
 
@@ -109,9 +113,13 @@ $phpunit->assertEquals(array (
   ),
   1 =>
   array (
-    0 => 0,
+    0 => 2,
     1 => 'Cannot initialize \'test\', invalid or missing package file',
   ),
+  array (
+    0 => 2,
+    1 => 'Package "test" is not valid',
+   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
 
