@@ -69,7 +69,7 @@ $phpunit->assertErrors(
         ),
         array(
             'package' => 'PEAR_Error',
-            'message' => "Cannot initialize 'test', invalid or missing package file"
+            'message' => ""
         ),
     ), 'after initialize');
 
@@ -78,6 +78,10 @@ $phpunit->assertEquals(array (
     0 => 0,
     1 => 'Failed to download pear/test within preferred state "stable", latest release is version 0.2.0, stability "beta", use "channel://pear.php.net/test-0.2.0" to install'
   ),
+  array (
+    0 => 2,
+    1 => 'Cannot initialize \'test\', invalid or missing package file',
+   ),
 ), $fakelog->getLog(), 'log messages');
 
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
