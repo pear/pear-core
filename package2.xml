@@ -96,18 +96,24 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
+  * Implement Request #10373: if pref_state=stable and installed package=beta, allow up to latest beta version [dufuz]
+  * Implement Request #10581: login / logout should map to channel-login / channel-logout [dufuz]
   * Implement Request #10825: Only display the "invalid or missing package file"-error if it makes sense [dufuz]
   * Implement Request #11170: script to generate Command/[command].xml [dufuz]
   * Implement Request #11176: improve channel ... has updated its protocols message [dufuz]
   * Implement Request #12706: pear list -a hard to read [dufuz]
   * Implement Request #11353: upgrade-all and upgrade commands to upgrade within the same stability level [dufuz]
+  * Implement Request #13015: Add https discovery for channel.xml [dufuz / initial patch by Martin Roos]
   * Implement Request #13927: install-pear.php should have option to set www_dir [timj]
   * Implement Request #14324: Make the pear install command behave similar to apt-get [dufuz]
   * Implement Request #14325: make pear upgrade with no params behave like pear upgrade-all [dufuz]
+    - upgrade-all can be considered deprecated in favor of calling upgrade with no parameters to replicate
+      better what other package managers are doing. upgrade-all will still work as intended.
   * Implement Request #14504: add a channel parameter support to the upgrade function [dufuz]
     - Options -c ezc and --channel=ezc got added to upgrade and upgrade-all to allow for
       channel specific upgrades
-  * Implemented Request #15566: Add doc.php.net as a default channel [dufuz / saltybeagle]
+  * Implement Request #14556: install-pear-nozlib.phar should get download_dir config and other options [cweiske]
+  * Implement Request #15566: Add doc.php.net as a default channel [dufuz / saltybeagle]
 
   * Fix PHP Bug #43857: --program-suffix not always reflected everywhere [cellog]
 
@@ -121,8 +127,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Fix Bug #14210: pear list -ia brings warnings [dufuz]
   * Fix Bug #14274: PEAR packager mangles package.xml encoding, then complains about it [dufuz]
   * Fix Bug #14287: cannot upgrade from stable to beta via -beta when config is set to stable [dufuz]
+  * Fix Bug #14300: Package files themselves can not be served over https [dufuz / initial patch by Martin Roos]
   * Fix Bug #14437: openbasedir warning when loading config [dufuz]
   * Fix Bug #14558: PackageFile.php creates tmp directory outside configured temp_dir [cweiske]
+  * Fix Bug #14977: PEAR/Frontend.php doesn't require_once PEAR.php [dufuz]
   * Fix Bug #15750: Unreachable code in PEAR_Downloader [dufuz]
 
   PEAR_PackageFile_Generator_v2_XML_Util removed in favor of syncing with latest XML_Util which does
@@ -149,10 +157,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
 
   Support for XML RPC channels has been dropped - The only ones that used it
   (pear.php.net and pecl.php.net) have used the REST interface for years now
-
-  Due to Request #14325 upgrade-all can be considered deprecated in favor of calling upgrade
-  with no parameters to replicate better what other package managers are doing.
-  upgrade-all will still work as intended.
  </notes>
  <contents>
   <dir name="/">
@@ -519,6 +523,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <channel>pear.php.net</channel>
     <min>1.2</min>
     <recommended>1.2.3</recommended>
+   </package>
+   <package>
+    <name>XML_Util</name>
+    <channel>pear.php.net</channel>
+    <min>1.2.0</min>
+    <recommended>1.2.1</recommended>
    </package>
    <package>
     <name>PEAR_Frontend_Web</name>
