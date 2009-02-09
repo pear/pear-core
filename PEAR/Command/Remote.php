@@ -265,7 +265,8 @@ parameter.
 
         $available = array();
         if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
-              $base = $chan->getBaseURL('REST1.1', $this->config->get('preferred_mirror'))) {
+              $base = $chan->getBaseURL('REST1.1', $this->config->get('preferred_mirror'))
+        ) {
             // use faster list-all if available
             $rest = &$this->config->getREST('1.1', array());
             $available = $rest->listAll($base, $list_options, true, false, false, $chan->getName());

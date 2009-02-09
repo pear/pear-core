@@ -55,10 +55,12 @@ class PEAR_REST_11
         if (PEAR::isError($categorylist)) {
             return $categorylist;
         }
+
         $ret = array();
         if (!is_array($categorylist['c']) || !isset($categorylist['c'][0])) {
             $categorylist['c'] = array($categorylist['c']);
         }
+
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
 
         foreach ($categorylist['c'] as $progress => $category) {
@@ -79,6 +81,10 @@ class PEAR_REST_11
             }
 
             foreach ($packagesinfo['pi'] as $packageinfo) {
+                if (empty($packageinfo)) {
+                    continue;
+                }
+
                 $info = $packageinfo['p'];
                 $package = $info['n'];
                 $releases = isset($packageinfo['a']) ? $packageinfo['a'] : false;

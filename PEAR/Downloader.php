@@ -196,11 +196,18 @@ class PEAR_Downloader extends PEAR_Common
             require_once 'System.php';
         }
 
-        $a = $this->downloadHttp('http://' . $channel . '/channel.xml', $this->ui,
-            System::mktemp(array('-d')), $callback, false);
+        $tmp = System::mktemp(array('-d'));
+        $a   = $this->downloadHttp('http://' . $channel . '/channel.xml', $this->ui, $tmp, $callback, false);
         PEAR::popErrorHandling();
         if (PEAR::isError($a)) {
-            return false;
+            // Attempt to fallback to https automatically.
+            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+            $this->log(1, 'Attempting fallback to https instead of http on channel "' . $channel . '"...');
+            $a = $this->downloadHttp('https://' . $channel . '/channel.xml', $this->ui, $tmp, $callback, false);
+            PEAR::popErrorHandling();
+            if (PEAR::isError($a)) {
+                return false;
+            }
         }
 
         list($a, $lastmodified) = $a;
@@ -331,7 +338,15 @@ class PEAR_Downloader extends PEAR_Common
 
                         PEAR::staticPopErrorHandling();
                         if (PEAR::isError($a) || !$a) {
-                            break;
+                            // Attempt fallback to https automatically
+                            PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+                            $a = $this->downloadHttp('https://' . $mirror .
+                                '/channel.xml', $this->ui, $dir, null, $curchannel->lastModified());
+
+                            PEAR::staticPopErrorHandling();
+                            if (PEAR::isError($a) || !$a) {
+                                break;
+                            }
                         }
                         $this->log(0, 'WARNING: channel "' . $params[$i]->getChannel() . '" has ' .
                             'updated its protocols, use "' . PEAR_RUNTYPE . ' channel-update ' . $params[$i]->getChannel() .
@@ -1569,6 +1584,8 @@ class PEAR_Downloader extends PEAR_Common
             $port = (isset($info['scheme']) && $info['scheme'] == 'https') ? 443 : 80;
         }
 
+        $schema = (isset($info['scheme']) && $info['scheme'] == 'https') ? 'https' : 'http';
+
         if ($proxy_host != '') {
             $fp = @fsockopen($proxy_host, $proxy_port, $errno, $errstr);
             if (!$fp) {
@@ -1585,11 +1602,12 @@ class PEAR_Downloader extends PEAR_Common
                 $request = "GET $url HTTP/1.0\r\n";
             }
         } else {
+            $network_host = $host;
             if (isset($info['scheme']) && $info['scheme'] == 'https') {
-                $host = 'ssl://' . $host;
+                $network_host = 'ssl://' . $host;
             }
 
-            $fp = @fsockopen($host, $port, $errno, $errstr);
+            $fp = @fsockopen($network_host, $port, $errno, $errstr);
             if (!$fp) {
                 if ($callback) {
                     call_user_func($callback, 'connfailed', array($host, $port,
@@ -1656,18 +1674,18 @@ class PEAR_Downloader extends PEAR_Common
                 }
 
                 if (!in_array($reply, array(200, 301, 302, 303, 305, 307))) {
-                    return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)");
+                    return PEAR::raiseError("File $schema://$host:$port$path not valid (received: $line)");
                 }
             }
         }
 
         if ($reply != 200) {
             if (!isset($headers['location'])) {
-                return PEAR::raiseError("File http://$host:$port$path not valid (redirected but no location)");
+                return PEAR::raiseError("File $schema://$host:$port$path not valid (redirected but no location)");
             }
 
             if ($wasredirect > 4) {
-                return PEAR::raiseError("File http://$host:$port$path not valid (redirection looped more than 5 times)");
+                return PEAR::raiseError("File $schema://$host:$port$path not valid (redirection looped more than 5 times)");
             }
 
             $redirect = $wasredirect + 1;
