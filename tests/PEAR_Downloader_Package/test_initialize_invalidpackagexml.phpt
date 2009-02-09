@@ -21,13 +21,20 @@ $result = $dp->initialize($pathtopackagexml);
 $phpunit->assertErrors(
     array(
         'package' => 'PEAR_Error',
-        'message' => "Cannot initialize '$pathtopackagexml', invalid or missing package file"),
+        'message' => ""),
     'after initialize');
 $phpunit->assertEquals(array(
-    array(0, $message)),
-    $fakelog->getLog(), 'after initialize log');
+    array(
+        0,
+        $message
+    ),
+    array (
+        0 => 2,
+        1 => 'Cannot initialize \'' . $pathtopackagexml .'\', invalid or missing package file',
+    ),
+), $fakelog->getLog(), 'after initialize log');
 $phpunit->assertIsa('PEAR_Error', $result, 'no error returned');
-$phpunit->assertEquals("Cannot initialize '$pathtopackagexml', invalid or missing package file", $result->getMessage(), 'wrong error message');
+$phpunit->assertEquals("", $result->getMessage(), 'wrong error message');
 
 
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
@@ -36,17 +43,31 @@ $dp = &newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize($pathtopackagexml);
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v1', 'message' => 'Missing Package Name'),
-    array('package' => 'PEAR_Error', 'message' =>
-        "Cannot initialize '$pathtopackagexml', invalid or missing package file")),
+    array(
+        'package' => 'PEAR_PackageFile_v1',
+        'message' => 'Missing Package Name'
+    ),
+    array(
+        'package' => 'PEAR_Error',
+        'message' => ""
+    )
+),
         'after initialize');
 $phpunit->assertEquals(array(
-    array(0, 'Missing Package Name'),
-    array(0, 'Parsing of package.xml from file "' . $pathtopackagexml .
-        '" failed')), $fakelog->getLog(), 'after initialize log');
+    array(
+        0,
+        'Missing Package Name'
+    ),
+    array(
+        0,
+        'Parsing of package.xml from file "' . $pathtopackagexml .'" failed'),
+    array (
+        0 => 2,
+        1 => 'Cannot initialize \'' . $pathtopackagexml . '\', invalid or missing package file',
+   ),
+), $fakelog->getLog(), 'after initialize log');
 $phpunit->assertIsa('PEAR_Error', $result, 'no error returned');
-$phpunit->assertEquals("Cannot initialize '$pathtopackagexml', invalid or missing package file",
-    $result->getMessage(), 'wrong error message');
+$phpunit->assertEquals("", $result->getMessage(), 'wrong error message');
 
 
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
@@ -57,7 +78,7 @@ $result = $dp->initialize($pathtopackagexml);
 $phpunit->assertErrors(array(
     array(
         'package' => 'PEAR_Error',
-        'message' => "Cannot initialize '$pathtopackagexml', invalid or missing package file"
+        'message' => ""
     )
 ), 'after initialize');
 
@@ -68,7 +89,7 @@ $phpunit->assertEquals(array(
     ),
     array (
         0 => 2,
-        1 => 'Cannot initialize \'/media/Stewie/projects/pear/pear-core/tests/PEAR_Downloader_Package/test_initialize_invalidpackagexml/invalid.xml\', invalid or missing package file',
+        1 => 'Cannot initialize \'' . $pathtopackagexml . '\', invalid or missing package file',
     ),
 $fakelog->getLog(), 'after initialize log');
 $phpunit->assertIsa('PEAR_Error', $result, 'no error returned');
