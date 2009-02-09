@@ -62,8 +62,8 @@ $phpunit->assertEquals(array (
   'upgrade' => 'PEAR_Command_Install',
   'upgrade-all' => 'PEAR_Command_Install',
 ), PEAR_Command::getCommands(), 'getcommands');
-$phpunit->assertEquals(44, count(PEAR_Command::getCommands()), 'count commands');
-$phpunit->assertEquals(44, count(PEAR_Command::getShortcuts()), 'count shortcuts');
+$phpunit->assertEquals(46, count(PEAR_Command::getCommands()), 'count commands');
+$phpunit->assertEquals(46, count(PEAR_Command::getShortcuts()), 'count shortcuts');
 $phpunit->assertEquals(array (
   'b' => 'build',
   'bun' => 'bundle',
