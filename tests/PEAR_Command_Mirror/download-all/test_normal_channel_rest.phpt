@@ -274,13 +274,13 @@ $phpunit->assertEquals(array (
   ),
   4 =>
   array (
-    0 => 0,
+    0 => 2,
     1 => 'Cannot initialize \'APC\', invalid or missing package file',
   ),
   5 =>
   array (
-    'info' => 'Package "APC" is not valid',
-    'cmd' => 'no command',
+    0 => 2,
+    1 => 'Package "APC" is not valid',
   ),
   6 =>
   array (
