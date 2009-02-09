@@ -75,6 +75,11 @@ $phpunit->assertEquals(array(
     0 => 0,
     1 => 'invalid package name/package file "pear.foo.com/test"',
   ),
+  8 =>
+  array (
+    0 => 2,
+    1 => 'Cannot initialize \'pear.foo.com/test\', invalid or missing package file',
+   ),
 ), $logmsgs, 'log messages');
 
 $phpunit->assertEquals(array (

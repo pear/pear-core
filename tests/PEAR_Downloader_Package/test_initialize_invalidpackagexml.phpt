@@ -16,9 +16,12 @@ $phpunit->assertNoErrors('after create');
 $message = version_compare(phpversion(), '5.0.0', '<') ?
     'XML error: not well-formed (invalid token) at line 1' :
     'XML error: Empty document at line 1';
+
 $result = $dp->initialize($pathtopackagexml);
-$phpunit->assertErrors(array('package' => 'PEAR_Error', 'message' => 
-    "Cannot initialize '$pathtopackagexml', invalid or missing package file"),
+$phpunit->assertErrors(
+    array(
+        'package' => 'PEAR_Error',
+        'message' => "Cannot initialize '$pathtopackagexml', invalid or missing package file"),
     'after initialize');
 $phpunit->assertEquals(array(
     array(0, $message)),
@@ -52,13 +55,22 @@ $dp = &newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize($pathtopackagexml);
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_Error', 'message' =>
-        "Cannot initialize '$pathtopackagexml', invalid or missing package file"
-        )),
-        'after initialize');
+    array(
+        'package' => 'PEAR_Error',
+        'message' => "Cannot initialize '$pathtopackagexml', invalid or missing package file"
+    )
+), 'after initialize');
+
 $phpunit->assertEquals(array(
-    array(0, 'could not extract the package.xml file from "' .
-        $pathtopackagexml . '"')), $fakelog->getLog(), 'after initialize log');
+    array(
+        0,
+        'could not extract the package.xml file from "' . $pathtopackagexml . '"')
+    ),
+    array (
+        0 => 2,
+        1 => 'Cannot initialize \'/media/Stewie/projects/pear/pear-core/tests/PEAR_Downloader_Package/test_initialize_invalidpackagexml/invalid.xml\', invalid or missing package file',
+    ),
+$fakelog->getLog(), 'after initialize log');
 $phpunit->assertIsa('PEAR_Error', $result, 'no error returned');
 $phpunit->assertEquals("Cannot initialize '$pathtopackagexml', invalid or missing package file",
     $result->getMessage(), 'wrong error message');
