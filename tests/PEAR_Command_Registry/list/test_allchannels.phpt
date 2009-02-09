@@ -31,6 +31,26 @@ $workingcopy = array (
     ),
     'cmd' => 'list',
   ),
+  'doc.php.net' =>
+  array (
+    'info' =>
+    array (
+      'caption' => 'Installed packages, channel doc.php.net:',
+      'border' => true,
+      'data' =>
+      array (
+        0 =>
+        array (
+          0 => '(no packages installed)',
+        ),
+        1 =>
+        array (
+        ),
+      ),
+      'channel' => 'doc.php.net',
+    ),
+    'cmd' => 'list',
+  ),
   '__uri' =>
   array (
     'info' =>
@@ -176,6 +196,26 @@ $workingcopy = array (
         ),
       ),
       'channel' => '__uri',
+    ),
+    'cmd' => 'list',
+  ),
+  'doc.php.net' =>
+  array (
+    'info' =>
+    array (
+      'caption' => 'Installed packages, channel doc.php.net:',
+      'border' => true,
+      'data' =>
+      array (
+        0 =>
+        array (
+          0 => '(no packages installed)',
+        ),
+        1 =>
+        array (
+        ),
+      ),
+      'channel' => 'doc.php.net',
     ),
     'cmd' => 'list',
   ),
