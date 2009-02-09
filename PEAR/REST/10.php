@@ -73,6 +73,7 @@ class PEAR_REST_10
         if (!$states) {
             return PEAR::raiseError('"' . $prefstate . '" is not a valid state');
         }
+
         $state   = isset($packageinfo['state'])   ? $packageinfo['state']   : null;
         $version = isset($packageinfo['version']) ? $packageinfo['version'] : null;
         $info = $this->_rest->retrieveData($base . 'r/' . strtolower($package) . '/allreleases.xml', false, false, $channel);
@@ -80,18 +81,22 @@ class PEAR_REST_10
             return PEAR::raiseError('No releases available for package "' .
                 $channel . '/' . $package . '"');
         }
+
         if (!isset($info['r'])) {
             return false;
         }
+
         $release = $found = false;
         if (!is_array($info['r']) || !isset($info['r'][0])) {
             $info['r'] = array($info['r']);
         }
+
         foreach ($info['r'] as $release) {
             if (!isset($this->_rest->_options['force']) && ($installed &&
                   version_compare($release['v'], $installed, '<'))) {
                 continue;
             }
+
             if (isset($state)) {
                 // try our preferred state first
                 if ($release['s'] == $state) {
@@ -116,6 +121,7 @@ class PEAR_REST_10
                 }
             }
         }
+
         return $this->_returnDownloadURL($base, $package, $release, $info, $found, false, $channel);
     }
 

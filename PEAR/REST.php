@@ -304,23 +304,24 @@ class PEAR_REST
             return PEAR::raiseError('Cannot download from non-URL "' . $url . '"');
         }
 
-        $host = isset($info['host']) ? $info['host'] : null;
-        $port = isset($info['port']) ? $info['port'] : null;
-        $path = isset($info['path']) ? $info['path'] : null;
+        $host   = isset($info['host']) ? $info['host'] : null;
+        $port   = isset($info['port']) ? $info['port'] : null;
+        $path   = isset($info['path']) ? $info['path'] : null;
+        $schema = (isset($info['scheme']) && $info['scheme'] == 'https') ? 'https' : 'http';
 
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
         if ($this->config->get('http_proxy')&&
               $proxy = parse_url($this->config->get('http_proxy'))
         ) {
             $proxy_host = isset($proxy['host']) ? $proxy['host'] : null;
-            if (isset($proxy['scheme']) && $proxy['scheme'] == 'https') {
+            if ($schema === 'https') {
                 $proxy_host = 'ssl://' . $proxy_host;
             }
 
-            $proxy_port = isset($proxy['port']) ? $proxy['port'] : 8080;
-            $proxy_user = isset($proxy['user']) ? urldecode($proxy['user']) : null;
-            $proxy_pass = isset($proxy['pass']) ? urldecode($proxy['pass']) : null;
-
+            $proxy_port   = isset($proxy['port']) ? $proxy['port'] : 8080;
+            $proxy_user   = isset($proxy['user']) ? urldecode($proxy['user']) : null;
+            $proxy_pass   = isset($proxy['pass']) ? urldecode($proxy['pass']) : null;
+            $proxy_schema = (isset($proxy['scheme']) && $proxy['scheme'] == 'https') ? 'https' : 'http';
         }
 
         if (empty($port)) {
@@ -378,7 +379,7 @@ class PEAR_REST
                     -9276);
             }
         } else {
-            if (isset($info['scheme']) && $info['scheme'] == 'https') {
+            if ($schema === 'https') {
                 $host = 'ssl://' . $host;
             }
 
@@ -402,18 +403,18 @@ class PEAR_REST
                 }
 
                 if (!in_array($reply, array(200, 301, 302, 303, 305, 307))) {
-                    return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)");
+                    return PEAR::raiseError("File $schema://$host:$port$path not valid (received: $line)");
                 }
             }
         }
 
         if ($reply != 200) {
             if (!isset($headers['location'])) {
-                return PEAR::raiseError("File http://$host:$port$path not valid (redirected but no location)");
+                return PEAR::raiseError("File $schema://$host:$port$path not valid (redirected but no location)");
             }
 
             if ($wasredirect > 4) {
-                return PEAR::raiseError("File http://$host:$port$path not valid (redirection looped more than 5 times)");
+                return PEAR::raiseError("File $schema://$host:$port$path not valid (redirection looped more than 5 times)");
             }
 
             $redirect = $wasredirect + 1;

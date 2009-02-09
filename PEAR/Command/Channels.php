@@ -28,6 +28,8 @@
  */
 require_once 'PEAR/Command/Common.php';
 
+define('PEAR_COMMAND_CHANNELS_CHANNEL_EXISTS', -500);
+
 /**
  * PEAR commands for managing channels.
  *
@@ -162,7 +164,7 @@ operations on the remote server.',
 Logs out from the remote server.  This command does not actually
 connect to the remote server, it only deletes the stored username and
 password from your user configuration.',
-            )
+            ),
         );
 
     /**
@@ -488,7 +490,7 @@ password from your user configuration.',
         $reg = &$this->config->getRegistry();
         if ($reg->channelExists($channel->getName())) {
             return $this->raiseError('channel-add: Channel "' . $channel->getName() .
-                '" exists, use channel-update to update entry');
+                '" exists, use channel-update to update entry', PEAR_COMMAND_CHANNELS_CHANNEL_EXISTS);
         }
 
         $ret = $reg->addChannel($channel, $lastmodified);
@@ -549,8 +551,17 @@ password from your user configuration.',
                 $this->ui, $tmpdir, null, $lastmodified);
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($contents)) {
-                return $this->raiseError('Cannot retrieve channel.xml for channel "' .
-                    $c->getName() . '" (' . $contents->getMessage() . ')');
+                // Attempt to fall back to https
+                $this->ui->outputData("Channel \"$params[0]\" is not responding over http://, failed with message: " . $contents->getMessage());
+                $this->ui->outputData("Trying channel \"$params[0]\" over https:// instead");
+                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                $contents = $dl->downloadHttp('https://' . $c->getName() . '/channel.xml',
+                    $this->ui, $tmpdir, null, $lastmodified);
+                PEAR::staticPopErrorHandling();
+                if (PEAR::isError($contents)) {
+                    return $this->raiseError('Cannot retrieve channel.xml for channel "' .
+                        $c->getName() . '" (' . $contents->getMessage() . ')');
+                }
             }
 
             list($contents, $lastmodified) = $contents;
@@ -734,7 +745,7 @@ password from your user configuration.',
         $reg = &$this->config->getRegistry();
         if ($reg->channelExists($channel)) {
             if (!$reg->isAlias($channel)) {
-                return $this->raiseError("Channel \"$channel\" is already initialized");
+                return $this->raiseError("Channel \"$channel\" is already initialized", PEAR_COMMAND_CHANNELS_CHANNEL_EXISTS);
             }
 
             return $this->raiseError("A channel alias named \"$channel\" " .
@@ -746,8 +757,20 @@ password from your user configuration.',
         $err = $this->doAdd($command, $options, array('http://' . $channel . '/channel.xml'));
         $this->popErrorHandling();
         if (PEAR::isError($err)) {
-            return $this->raiseError("Discovery of channel \"$channel\" failed (" .
-                $err->getMessage() . ')');
+            if ($err->getCode() === PEAR_COMMAND_CHANNELS_CHANNEL_EXISTS) {
+                return $this->raiseError("Discovery of channel \"$channel\" failed (" .
+                    $err->getMessage() . ')');
+            }
+            // Attempt fetch via https
+            $this->ui->outputData("Discovering channel $channel over http:// failed with message: " . $err->getMessage());
+            $this->ui->outputData("Trying to discover channel $channel over https:// instead");
+            $this->pushErrorHandling(PEAR_ERROR_RETURN);
+            $err = $this->doAdd($command, $options, array('https://' . $channel . '/channel.xml'));
+            $this->popErrorHandling();
+            if (PEAR::isError($err)) {
+                return $this->raiseError("Discovery of channel \"$channel\" failed (" .
+                    $err->getMessage() . ')');
+            }
         }
 
         // Store username/password if they were given
