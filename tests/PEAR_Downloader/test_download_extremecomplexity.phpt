@@ -9,26 +9,24 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pkg1 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'pkg1-1.1.tgz';
-$pkg2 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'pkg2-1.1.tgz';
-$pkg3 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'pkg3-1.1.tgz';
-$pkg4 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'pkg4-1.1.tgz';
-$pkg5 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'pkg5-1.1.tgz';
-$pkg6 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'pkg6-1.1.tgz';
+
+$packageDir = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packages'. DIRECTORY_SEPARATOR;
+$pkg1 = $packageDir . 'pkg1-1.1.tgz';
+$pkg2 = $packageDir . 'pkg2-1.1.tgz';
+$pkg3 = $packageDir . 'pkg3-1.1.tgz';
+$pkg4 = $packageDir . 'pkg4-1.1.tgz';
+$pkg5 = $packageDir . 'pkg5-1.1.tgz';
+$pkg6 = $packageDir . 'pkg6-1.1.tgz';
+
 $GLOBALS['pearweb']->addHtmlConfig('http://pear.php.net/get/pkg1-1.1.tgz', $pkg1);
 $GLOBALS['pearweb']->addHtmlConfig('http://pear.php.net/get/pkg2-1.1.tgz', $pkg2);
 $GLOBALS['pearweb']->addHtmlConfig('http://pear.php.net/get/pkg3-1.1.tgz', $pkg3);
 $GLOBALS['pearweb']->addHtmlConfig('http://pear.php.net/get/pkg4-1.1.tgz', $pkg4);
 $GLOBALS['pearweb']->addHtmlConfig('http://pear.php.net/get/pkg5-1.1.tgz', $pkg5);
 $GLOBALS['pearweb']->addHtmlConfig('http://pear.php.net/get/pkg6-1.1.tgz', $pkg6);
+
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 => 
+  0 =>
   array (
     'package' => 'pkg1',
     'channel' => 'pear.php.net',
@@ -70,7 +68,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'ge',
@@ -79,7 +77,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'pkg2',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'pkg1',
@@ -123,7 +121,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'ge',
@@ -132,7 +130,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'pkg3',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'pkg2',
@@ -176,7 +174,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'ge',
@@ -185,7 +183,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'pkg4',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'pkg3',
@@ -228,7 +226,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'ge',
@@ -237,7 +235,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'pkg5',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'pkg3',
@@ -280,7 +278,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'ge',
@@ -289,7 +287,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'pkg6',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'pkg4',
@@ -329,7 +327,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
 ));
 $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
   0 => '1.0',
-  1 => 
+  1 =>
   array (
     'type' => 'pkg',
     'rel' => 'ge',
@@ -338,7 +336,7 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
     'channel' => 'pear.php.net',
     'package' => 'pkg6',
   ),
-  2 => 
+  2 =>
   array (
     'channel' => 'pear.php.net',
     'package' => 'pkg5',
@@ -380,11 +378,14 @@ $pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
 $_test_dep->setPHPversion('4.3.10');
 $dp = &new test_PEAR_Downloader($fakelog, array('alldeps' => true), $config);
 $phpunit->assertNoErrors('after create');
+
 $reg = &$config->getRegistry();
 $result = $dp->download(array('pkg1'));
 $phpunit->assertEquals(6, count($result), 'return');
+
 $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(6, count($dlpackages), 'downloaded packages count');
+
 $phpunit->assertEquals(array (
   array (
     0 => 3,
@@ -487,6 +488,7 @@ $phpunit->assertEquals(array (
     1 => '...done: 673 bytes',
    ),
 ), $fakelog->getLog(), 'log messages');
+
 echo 'tests done';
 ?>
 --CLEAN--
