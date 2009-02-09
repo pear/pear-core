@@ -39,45 +39,64 @@ $phpunit->assertEquals(array (
   ),
   1 =>
   array (
-    'info' => 'Cannot retrieve channel.xml for channel "doc.php.net" (File http://doc.php.net:80/channel.xml not valid (received: HTTP/1.1 404 http://doc.php.net/channel.xml Is not valid))',
+    'info' => 'Channel "doc.php.net" is not responding over http://, failed with message: File http://doc.php.net:80/channel.xml not valid (received: HTTP/1.1 404 http://doc.php.net/channel.xml Is not valid)',
+    'cmd' => 'no command',
+  ),
+  array (
+    'info' => 'Trying channel "doc.php.net" over https:// instead',
+    'cmd' => 'no command',
+  ),
+  3 =>
+  array (
+    'info' => 'Cannot retrieve channel.xml for channel "doc.php.net" (Cannot download non-http URL "https://doc.php.net/channel.xml")',
     'cmd' => 'update-channels',
   ),
-  2 =>
+  4 =>
   array (
     'info' => 'Updating channel "horde.orde.de"',
     'cmd' => 'channel-update',
   ),
-  3 =>
+  5 =>
   array (
     'info' => 'Update of Channel "horde.orde.de" succeeded',
     'cmd' => 'no command',
   ),
-  4 =>
+  6 =>
   array (
     'info' => 'Updating channel "pear.php.net"',
     'cmd' => 'channel-update',
   ),
-  5 =>
+  7 =>
   array (
     'info' => 'Update of Channel "pear.php.net" succeeded',
     'cmd' => 'no command',
   ),
-  6 =>
+  8 =>
   array (
     'info' => 'Updating channel "pecl.php.net"',
     'cmd' => 'channel-update',
   ),
-  7 =>
+  9 =>
   array (
-    'info' => 'Cannot retrieve channel.xml for channel "pecl.php.net" (File http://pecl.php.net:80/channel.xml not valid (received: HTTP/1.1 404 http://pecl.php.net/channel.xml Is not valid))',
+    'info' => 'Channel "pecl.php.net" is not responding over http://, failed with message: File http://pecl.php.net:80/channel.xml not valid (received: HTTP/1.1 404 http://pecl.php.net/channel.xml Is not valid)',
+    'cmd' => 'no command',
+  ),
+  10 =>
+  array (
+    'info' => 'Trying channel "pecl.php.net" over https:// instead',
+    'cmd' => 'no command',
+  ),
+  11 =>
+  array (
+    'info' => 'Cannot retrieve channel.xml for channel "pecl.php.net" (Cannot download non-http URL "https://pecl.php.net/channel.xml")',
     'cmd' => 'update-channels',
   ),
-  8 =>
+  12 =>
   array (
     'info' => 'Updating channel "zornk.ornk.org"',
     'cmd' => 'channel-update',
   ),
-  9 =>
+  13 =>
   array (
     'info' => 'Update of Channel "zornk.ornk.org" succeeded',
     'cmd' => 'no command',
