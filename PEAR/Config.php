@@ -48,8 +48,11 @@ if (!defined('PEAR_INSTALL_DIR') || !PEAR_INSTALL_DIR) {
 
 // default channel and preferred mirror is based on whether we are invoked through
 // the "pear" or the "pecl" command
+if (!defined('PEAR_RUNTYPE')) {
+    define('PEAR_RUNTYPE', 'pear');
+}
 
-if (!defined('PEAR_RUNTYPE') || PEAR_RUNTYPE == 'pear') {
+if (PEAR_RUNTYPE == 'pear') {
     define('PEAR_CONFIG_DEFAULT_CHANNEL', 'pear.php.net');
 } else {
     define('PEAR_CONFIG_DEFAULT_CHANNEL', 'pecl.php.net');
