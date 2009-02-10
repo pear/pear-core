@@ -17,6 +17,7 @@ class PEAR_Start extends PEAR
             'Console_Getopt',
             'PEAR',
             'Structures_Graph',
+            'XML_Util',
         );
     var $local_dir = array();
     var $origpwd;
