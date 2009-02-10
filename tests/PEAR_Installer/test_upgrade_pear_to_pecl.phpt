@@ -28,8 +28,10 @@ $phpunit->assertNoErrors('setup for upgrade');
 
 $fakelog->getLog();
 $fakelog->getDownload();
+
 $dp = &new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
 $phpunit->assertNoErrors('after create');
+
 $result = $dp->download(array($pathtopackagexml2));
 $phpunit->assertEquals(1, count($result), 'return');
 $phpunit->assertIsa('test_PEAR_Downloader_Package', $result[0], 'right class');
