@@ -9,44 +9,62 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+$packageDir       = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packages'. DIRECTORY_SEPARATOR;
+$pathtopackagexml = $packageDir . 'package2.xml';
+$pathtobarxml     = $packageDir . 'Bar-1.5.2.tgz';
+$pathtofoobarxml  = $packageDir . 'Foobar-1.5.0a1.tgz';
+
 $dp = &new PEAR_Downloader($fakelog, array(), $config);
-$result = &$dp->download(array(dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'simplebar.xml'));
+$result = &$dp->download(array($packageDir . 'simplebar.xml'));
 $installer->setOptions(array());
 $installer->sortPackagesForInstall($result);
 $installer->install($result[0]);
 $phpunit->assertNoErrors('initial Bar install');
 $fakelog->getLog();
 $fakelog->getDownload();
+
 $ch = new PEAR_ChannelFile;
 $ch->setName('smork');
 $ch->setSummary('smork');
-$ch->setDefaultPEARProtocols();
+$ch->setBaseURL('REST1.0', 'http://smork/rest/');
+
 $reg = &$config->getRegistry();
 $phpunit->assertTrue($reg->addChannel($ch), 'smork setup');
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'package2.xml';
-$pathtobarxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'Bar-1.5.2.tgz';
-$pathtofoobarxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'packages'. DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1.tgz';
-$GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Bar-1.5.2.tgz', $pathtobarxml);
+
+$chan = &$reg->getChannel('pear.php.net');
+$chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
+$reg->updateChannel($chan);
+
+$GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Bar-1.5.2.tgz',      $pathtobarxml);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/Foobar-1.5.0a1.tgz', $pathtofoobarxml);
-$GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
-    array('2.0',
-         array('name' => 'Bar', 'channel' => 'pear.php.net', 'min' => '1.0.0'),
-         array('channel' => 'pear.php.net', 'package' => 'PEAR1', 'version' => '1.5.0a1'), 'alpha', '1.4.0a1'),
-    array('version' => '1.5.2',
-          'info' =>
-          '<?xml version="1.0"?>
-<package packagerversion="1.4.0a1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
- <name>Bar</name>
- <channel>pear.php.net</channel>
- <summary>PEAR Base System</summary>
- <description>The PEAR package contains:
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/bar/allreleases.xml",
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>Bar</p>
+ <c>pear.php.net</c>
+ <r><v>1.5.2</v><s>stable</s></r>
+</a>', 'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/bar/deps.1.5.2.txt",
+    'a:1:{s:8:"required";a:3:{s:3:"php";a:2:{s:3:"min";s:5:"4.3.6";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}s:7:"package";a:2:{s:4:"name";s:6:"Foobar";s:7:"channel";s:5:"smork";}}}',
+    'text/plain');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/bar/1.5.2.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/bar">Bar</p>
+ <c>pear.php.net</c>
+ <v>1.5.2</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>cellog</m>
+ <s>PEAR Base System</s>
+ <d>The PEAR package contains:
  * the PEAR installer, for creating, distributing
    and installing packages
  * the alpha-quality PEAR_Exception PHP5 error handling mechanism
@@ -56,161 +74,42 @@ http://pear.php.net/dtd/package-2.0.xsd">
    where PHP is running on
  * the System class for quick handling of common operations
    with files and directories
- * the PEAR base class
- 
- </description>
- <lead>
-  <name>Stig Bakken</name>
-  <user>ssb</user>
-  <email>stig@php.net</email>
-  <active>yes</active>
- </lead>
- <lead>
-  <name>Greg Beaver</name>
-  <user>cellog</user>
-  <email>cellog@php.net</email>
-  <active>yes</active>
- </lead>
- <lead>
-  <name>Tomas V.V.Cox</name>
-  <user>cox</user>
-  <email>cox@idecnet.com</email>
-  <active>yes</active>
- </lead>
- <lead>
-  <name>Pierre-Alain Joye</name>
-  <user>pajoye</user>
-  <email>pajoye@pearfr.org</email>
-  <active>yes</active>
- </lead>
- <developer>
-  <name>Martin Jansen</name>
-  <user>mj</user>
-  <email>mj@php.net</email>
-  <active>yes</active>
- </developer>
- <date>2004-12-29</date>
- <time>14:14:48</time>
- <version>
-  <release>1.5.2</release>
-  <api>1.5.2</api>
- </version>
- <stability>
-  <release>stable</release>
-  <api>stable</api>
- </stability>
- <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
- <notes>Installer Roles/Tasks:
+ * the PEAR base class</d>
+ <da>2005-04-17 18:40:51</da>
+ <n>Release notes</n>
+ <f>252733</f>
+ <g>http://www.example.com/Bar-1.5.2</g>
+ <x xlink:href="package.1.5.2.xml"/>
 
- * package.xml 2.0 uses a command pattern, allowing extensibility
- * implement the replace, postinstallscript, and preinstallscript tasks
+</r>', 'text/xml');
 
-Installer Dependency Support:
+$pearweb->addRESTConfig("http://smork/rest/r/foobar/allreleases.xml",
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>Foobar</p>
+ <c>smork</c>
+ <r><v>1.5.0a1</v><s>stable</s></r>
+</a>', 'text/xml');
 
- * package.xml 2.0 has continued to improve and evolve
- * Downloader/Package.php is now used to coordinate downloading.  Old code
-   has not yet been deleted, as error handling is crappy right now.  Uninstall
-   ordering is broken, and needs to be redone.
- * Pre-download dependency resolution works, mostly.
- * There is no way to disable dependency resolution at the moment, this will be done.
- * Dependency2.php is used by the new PEAR_Downloader_Channel to resolve dependencies
-   and include downloaded files in the calculations.
- * DependencyDB.php is used to resolve complex dependencies between installed packages
-   and any dependencies installed later (a conflicts/not dependency cannot be honored
-   without this DB)
+$pearweb->addRESTConfig("http://smork/rest/r/foobar/deps.1.5.0a1.txt",
+    'a:1:{s:8:"required";a:2:{s:3:"php";a:2:{s:3:"min";s:5:"4.3.6";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}}}',
+    'text/plain');
 
-Installer Channel Support:
-
- * channel XSD is available on pearweb
- * add channel.listAll and channel.update to default PEAR protocols
- * add ability to &quot;pear channel-update channelname&quot; to
-   retrieve updates manually for individual channels
- * fix channel.xml generation to use a valid schema declaration
-
-Installer:
-
- * with --remoteconfig option, it is possible to remotely install and uninstall packages
-   to an FTP server.  It works by mirroring a local installation, and requires a
-   special, separate local install.
- * Channels implemented
- * Bug #1242: array-to-string conversion
- * fix Bug #2189 upgrade-all stops if dependancy fails
- * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
- * fix Bug #1420 Parser bug for T_DOUBLE_COLON
- * fix Request #2220 pear5 build fails on dual php4/php5 system
- * Major bug in Registry - false file conflicts on data/doc/test role
-   was possible (and would happen if HTML_Template_IT was installed
-   and HTML_Template_Flexy installation was attempted)
-  
- </notes>
- <contents>
-  <dir name="/">
-   <file name="foo1.php" role="php" />
-  </dir> <!-- / -->
- </contents>
- <dependencies>
-  <required>
-   <php>
-    <min>4.3.6</min>
-    <max>6.0.0</max>
-   </php>
-   <pearinstaller>
-    <min>1.4.0a1</min>
-   </pearinstaller>
-   <package>
-    <name>Foobar</name>
-    <channel>smork</channel>
-   </package>
-  </required>
- </dependencies>
- <phprelease />
- <changelog>
-  <release>
-   <version>
-    <release>1.3.3</release>
-    <api>1.3.3</api>
-   </version>
-   <stability>
-    <release>stable</release>
-    <api>stable</api>
-   </stability>
-   <date>2004-10-28</date>
-   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
-   <notes>Installer:
- * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
- * fix Bug #1249 display the right state when using --force option
- * fix Bug #2189 upgrade-all stops if dependancy fails
- * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
- * fix Bug #1420 Parser bug for T_DOUBLE_COLON
- * fix Request #2220 pear5 build fails on dual php4/php5 system
- * fix Bug #1163  pear makerpm fails with packages that supply role=&quot;doc&quot;
-
-Other:
- * add PEAR_Exception class for PHP5 users
- * fix critical problem in package.xml for linux in 1.3.2
- * fix staticPopCallback() in PEAR_ErrorStack
- * fix warning in PEAR_Registry for windows 98 users
-   
-   </notes>
-  </release>
- </changelog>
-</package>',
-          'url' => 'http://www.example.com/Bar-1.5.2'));
-$GLOBALS['pearweb']->addXmlrpcConfig('smork', 'package.getDepDownloadURL',
-    array('2.0',
-         array('name' => 'Foobar', 'channel' => 'smork'),
-         array('channel' => 'pear.php.net', 'package' => 'Bar', 'version' => '1.5.2'), 'alpha'),
-    array('version' => '1.5.0a1',
-          'info' =>
-          '<?xml version="1.0"?>
-<package packagerversion="1.4.0a1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
- <name>Foobar</name>
- <channel>smork</channel>
- <summary>PEAR Base System</summary>
- <description>The PEAR package contains:
+$pearweb->addRESTConfig("http://smork/rest/r/foobar/1.5.0a1.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/foobar">Foobar</p>
+ <c>smork</c>
+ <v>1.5.0a1</v>
+ <st>alpha</st>
+ <l>PHP License</l>
+ <m>cellog</m>
+ <s>PEAR Base System</s>
+ <d>The PEAR package contains:
  * the PEAR installer, for creating, distributing
    and installing packages
  * the alpha-quality PEAR_Exception PHP5 error handling mechanism
@@ -220,163 +119,140 @@ http://pear.php.net/dtd/package-2.0.xsd">
    where PHP is running on
  * the System class for quick handling of common operations
    with files and directories
- * the PEAR base class
- 
- </description>
- <lead>
-  <name>Stig Bakken</name>
-  <user>ssb</user>
-  <email>stig@php.net</email>
-  <active>yes</active>
- </lead>
- <lead>
-  <name>Greg Beaver</name>
-  <user>cellog</user>
-  <email>cellog@php.net</email>
-  <active>yes</active>
- </lead>
- <lead>
-  <name>Tomas V.V.Cox</name>
-  <user>cox</user>
-  <email>cox@idecnet.com</email>
-  <active>yes</active>
- </lead>
- <lead>
-  <name>Pierre-Alain Joye</name>
-  <user>pajoye</user>
-  <email>pajoye@pearfr.org</email>
-  <active>yes</active>
- </lead>
- <developer>
-  <name>Martin Jansen</name>
-  <user>mj</user>
-  <email>mj@php.net</email>
-  <active>yes</active>
- </developer>
- <date>2004-12-29</date>
- <time>14:18:11</time>
- <version>
-  <release>1.5.0a1</release>
-  <api>1.5.0a1</api>
- </version>
- <stability>
-  <release>alpha</release>
-  <api>alpha</api>
- </stability>
- <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
- <notes>Installer Roles/Tasks:
+ * the PEAR base class</d>
+ <da>2005-04-17 18:40:51</da>
+ <n>Release notes</n>
+ <f>252733</f>
+ <g>http://www.example.com/Foobar-1.5.0a1</g>
+ <x xlink:href="package.1.5.0a1.xml"/>
 
- * package.xml 2.0 uses a command pattern, allowing extensibility
- * implement the replace, postinstallscript, and preinstallscript tasks
+</r>',
+'text/xml');
 
-Installer Dependency Support:
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/bar/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>bar</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>PEAR_PackageFileManager takes an existing package.xml file and updates it with a new filelist and changelog</s>
+ <d>This package revolutionizes the maintenance of PEAR packages.  With a few parameters,
+the entire package.xml is automatically updated with a listing of all files in a package.
+Features include
+ - manages the new package.xml 2.0 format in PEAR 1.4.0
+ - can detect PHP and extension dependencies using PHP_CompatInfo
+ - reads in an existing package.xml file, and only changes the release/changelog
+ - a plugin system for retrieving files in a directory.  Currently two plugins
+   exist, one for standard recursive directory content listing, and one that
+   reads the CVS/Entries files and generates a file listing based on the contents
+   of a checked out CVS repository
+ - incredibly flexible options for assigning install roles to files/directories
+ - ability to ignore any file based on a * ? wildcard-enabled string(s)
+ - ability to include only files that match a * ? wildcard-enabled string(s)
+ - ability to manage dependencies
+ - can output the package.xml in any directory, and read in the package.xml
+   file from any directory.
+ - can specify a different name for the package.xml file
 
- * package.xml 2.0 has continued to improve and evolve
- * Downloader/Package.php is now used to coordinate downloading.  Old code
-   has not yet been deleted, as error handling is crappy right now.  Uninstall
-   ordering is broken, and needs to be redone.
- * Pre-download dependency resolution works, mostly.
- * There is no way to disable dependency resolution at the moment, this will be done.
- * Dependency2.php is used by the new PEAR_Downloader_Channel to resolve dependencies
-   and include downloaded files in the calculations.
- * DependencyDB.php is used to resolve complex dependencies between installed packages
-   and any dependencies installed later (a conflicts/not dependency cannot be honored
-   without this DB)
+PEAR_PackageFileManager is fully unit tested.
+The new PEAR_PackageFileManager2 class is not.</d>
+ <r xlink:href="/rest/r/pear_packagefilemanager"/>
+</p>',
+'text/xml');
 
-Installer Channel Support:
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/foobar/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>foobar</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>PEAR_PackageFileManager takes an existing package.xml file and updates it with a new filelist and changelog</s>
+ <d>This package revolutionizes the maintenance of PEAR packages.  With a few parameters,
+the entire package.xml is automatically updated with a listing of all files in a package.
+Features include
+ - manages the new package.xml 2.0 format in PEAR 1.4.0
+ - can detect PHP and extension dependencies using PHP_CompatInfo
+ - reads in an existing package.xml file, and only changes the release/changelog
+ - a plugin system for retrieving files in a directory.  Currently two plugins
+   exist, one for standard recursive directory content listing, and one that
+   reads the CVS/Entries files and generates a file listing based on the contents
+   of a checked out CVS repository
+ - incredibly flexible options for assigning install roles to files/directories
+ - ability to ignore any file based on a * ? wildcard-enabled string(s)
+ - ability to include only files that match a * ? wildcard-enabled string(s)
+ - ability to manage dependencies
+ - can output the package.xml in any directory, and read in the package.xml
+   file from any directory.
+ - can specify a different name for the package.xml file
 
- * channel XSD is available on pearweb
- * add channel.listAll and channel.update to default PEAR protocols
- * add ability to &quot;pear channel-update channelname&quot; to
-   retrieve updates manually for individual channels
- * fix channel.xml generation to use a valid schema declaration
+PEAR_PackageFileManager is fully unit tested.
+The new PEAR_PackageFileManager2 class is not.</d>
+ <r xlink:href="/rest/r/pear_packagefilemanager"/>
+</p>',
+'text/xml');
 
-Installer:
+$pearweb->addRESTConfig("http://smork/rest/p/foobar/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>foobar</n>
+ <c>smork</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>PEAR_PackageFileManager takes an existing package.xml file and updates it with a new filelist and changelog</s>
+ <d>This package revolutionizes the maintenance of PEAR packages.  With a few parameters,
+the entire package.xml is automatically updated with a listing of all files in a package.
+Features include
+ - manages the new package.xml 2.0 format in PEAR 1.4.0
+ - can detect PHP and extension dependencies using PHP_CompatInfo
+ - reads in an existing package.xml file, and only changes the release/changelog
+ - a plugin system for retrieving files in a directory.  Currently two plugins
+   exist, one for standard recursive directory content listing, and one that
+   reads the CVS/Entries files and generates a file listing based on the contents
+   of a checked out CVS repository
+ - incredibly flexible options for assigning install roles to files/directories
+ - ability to ignore any file based on a * ? wildcard-enabled string(s)
+ - ability to include only files that match a * ? wildcard-enabled string(s)
+ - ability to manage dependencies
+ - can output the package.xml in any directory, and read in the package.xml
+   file from any directory.
+ - can specify a different name for the package.xml file
 
- * with --remoteconfig option, it is possible to remotely install and uninstall packages
-   to an FTP server.  It works by mirroring a local installation, and requires a
-   special, separate local install.
- * Channels implemented
- * Bug #1242: array-to-string conversion
- * fix Bug #2189 upgrade-all stops if dependancy fails
- * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
- * fix Bug #1420 Parser bug for T_DOUBLE_COLON
- * fix Request #2220 pear5 build fails on dual php4/php5 system
- * Major bug in Registry - false file conflicts on data/doc/test role
-   was possible (and would happen if HTML_Template_IT was installed
-   and HTML_Template_Flexy installation was attempted)
-  
- </notes>
- <contents>
-  <dir name="/">
-   <file name="foo12.php" role="php" />
-  </dir> <!-- / -->
- </contents>
- <dependencies>
-  <required>
-   <php>
-    <min>4.3.6</min>
-    <max>6.0.0</max>
-   </php>
-   <pearinstaller>
-    <min>1.4.0a1</min>
-   </pearinstaller>
-  </required>
- </dependencies>
- <phprelease />
- <changelog>
-  <release>
-   <version>
-    <release>1.3.3</release>
-    <api>1.3.3</api>
-   </version>
-   <stability>
-    <release>stable</release>
-    <api>stable</api>
-   </stability>
-   <date>2004-10-28</date>
-   <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
-   <notes>Installer:
- * fix Bug #1186 raise a notice error on PEAR::Common $_packageName
- * fix Bug #1249 display the right state when using --force option
- * fix Bug #2189 upgrade-all stops if dependancy fails
- * fix Bug #1637 The use of interface causes warnings when packaging with PEAR
- * fix Bug #1420 Parser bug for T_DOUBLE_COLON
- * fix Request #2220 pear5 build fails on dual php4/php5 system
- * fix Bug #1163  pear makerpm fails with packages that supply role=&quot;doc&quot;
+PEAR_PackageFileManager is fully unit tested.
+The new PEAR_PackageFileManager2 class is not.</d>
+ <r xlink:href="/rest/r/pear_packagefilemanager"/>
+</p>',
+'text/xml');
 
-Other:
- * add PEAR_Exception class for PHP5 users
- * fix critical problem in package.xml for linux in 1.3.2
- * fix staticPopCallback() in PEAR_ErrorStack
- * fix warning in PEAR_Registry for windows 98 users
-   
-   </notes>
-  </release>
- </changelog>
-</package>',
-          'url' => 'http://www.example.com/Foobar-1.5.0a1'));
 $_test_dep->setPHPVersion('4.3.11');
 $_test_dep->setPEARVersion('1.4.0a1');
+
+$config->set('preferred_state', 'alpha');
 $dp = &new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
-$config->set('preferred_state', 'alpha');
+
 $result = &$dp->download(array($pathtopackagexml));
 $phpunit->assertEquals(1, count($result), 'return');
+
 $phpunit->assertIsa('test_PEAR_Downloader_Package', $result[0], 'right class 0');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf = $result[0]->getPackageFile(), 'right kind of pf 0');
+
 $phpunit->assertEquals('PEAR1', $pf->getPackage(), 'right package');
 $phpunit->assertEquals('pear.php.net', $pf->getChannel(), 'right channel');
+
 $dlpackages = $dp->getDownloadedPackages();
 $phpunit->assertEquals(1, count($dlpackages), 'downloaded packages count');
 $phpunit->assertEquals(3, count($dlpackages[0]), 'internals package count');
 $phpunit->assertEquals(array('file', 'info', 'pkg'), array_keys($dlpackages[0]), 'indexes');
+
 $phpunit->assertEquals($pathtopackagexml,
     $dlpackages[0]['file'], 'file');
 $phpunit->assertIsa('PEAR_PackageFile_v2',
     $dlpackages[0]['info'], 'info');
 $phpunit->assertEquals('PEAR1',
     $dlpackages[0]['pkg'], 'PEAR1');
+
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
@@ -387,14 +263,16 @@ $phpunit->assertEquals(array (
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
 ), $fakelog->getDownload(), 'download callback messages');
+
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
 $installer->setOptions($dp->getOptions());
+
 $ret = &$installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
-  'attribs' => 
+  'attribs' =>
   array (
     'version' => '2.0',
     'xmlns' => 'http://pear.php.net/dtd/package-2.0',
@@ -416,30 +294,30 @@ $phpunit->assertEquals(array (
  * the System class for quick handling of common operations
    with files and directories
  * the PEAR base class',
-  'lead' => 
+  'lead' =>
   array (
-    0 => 
+    0 =>
     array (
       'name' => 'Stig Bakken',
       'user' => 'ssb',
       'email' => 'stig@php.net',
       'active' => 'yes',
     ),
-    1 => 
+    1 =>
     array (
       'name' => 'Tomas V.V.Cox',
       'user' => 'cox',
       'email' => 'cox@idecnet.com',
       'active' => 'yes',
     ),
-    2 => 
+    2 =>
     array (
       'name' => 'Pierre-Alain Joye',
       'user' => 'pajoye',
       'email' => 'pajoye@pearfr.org',
       'active' => 'yes',
     ),
-    3 => 
+    3 =>
     array (
       'name' => 'Greg Beaver',
       'user' => 'cellog',
@@ -447,7 +325,7 @@ $phpunit->assertEquals(array (
       'active' => 'yes',
     ),
   ),
-  'developer' => 
+  'developer' =>
   array (
     'name' => 'Martin Jansen',
     'user' => 'mj',
@@ -455,36 +333,36 @@ $phpunit->assertEquals(array (
     'active' => 'yes',
   ),
   'date' => '2004-09-30',
-  'version' => 
+  'version' =>
   array (
     'release' => '1.5.0a1',
     'api' => '1.4.0',
   ),
-  'stability' => 
+  'stability' =>
   array (
     'release' => 'alpha',
     'api' => 'alpha',
   ),
-  'license' => 
+  'license' =>
   array (
-    'attribs' => 
+    'attribs' =>
     array (
       'uri' => 'http://www.php.net/license/3_0.txt',
     ),
     '_content' => 'PHP License',
   ),
   'notes' => 'stuff',
-  'contents' => 
+  'contents' =>
   array (
-    'dir' => 
+    'dir' =>
     array (
-      'attribs' => 
+      'attribs' =>
       array (
         'name' => '/',
       ),
-      'file' => 
+      'file' =>
       array (
-        'attribs' => 
+        'attribs' =>
         array (
           'name' => 'foo.php',
           'role' => 'php',
@@ -492,28 +370,28 @@ $phpunit->assertEquals(array (
       ),
     ),
   ),
-  'dependencies' => 
+  'dependencies' =>
   array (
-    'required' => 
+    'required' =>
     array (
-      'php' => 
+      'php' =>
       array (
         'min' => '4.2.0',
         'max' => '6.0.0',
       ),
-      'pearinstaller' => 
+      'pearinstaller' =>
       array (
         'min' => '1.4.0dev13',
       ),
-      'package' => 
+      'package' =>
       array (
-        0 => 
+        0 =>
         array (
           'name' => 'Foo',
           'channel' => 'pear.php.net',
           'conflicts' => '',
         ),
-        1 => 
+        1 =>
         array (
           'name' => 'Bar',
           'channel' => 'pear.php.net',
@@ -523,9 +401,9 @@ $phpunit->assertEquals(array (
     ),
   ),
   'phprelease' => '',
-  'filelist' => 
+  'filelist' =>
   array (
-    'foo.php' => 
+    'foo.php' =>
     array (
       'name' => 'foo.php',
       'role' => 'php',
@@ -534,34 +412,34 @@ $phpunit->assertEquals(array (
     ),
   ),
   '_lastversion' => null,
-  'dirtree' => 
+  'dirtree' =>
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
   ),
-  'old' => 
+  'old' =>
   array (
     'version' => '1.5.0a1',
     'release_date' => '2004-09-30',
     'release_state' => 'alpha',
     'release_license' => 'PHP License',
     'release_notes' => 'stuff',
-    'release_deps' => 
+    'release_deps' =>
     array (
-      0 => 
+      0 =>
       array (
         'type' => 'php',
         'rel' => 'le',
         'version' => '6.0.0',
         'optional' => 'no',
       ),
-      1 => 
+      1 =>
       array (
         'type' => 'php',
         'rel' => 'ge',
         'version' => '4.2.0',
         'optional' => 'no',
       ),
-      2 => 
+      2 =>
       array (
         'type' => 'pkg',
         'channel' => 'pear.php.net',
@@ -570,14 +448,14 @@ $phpunit->assertEquals(array (
         'version' => '1.4.0dev13',
         'optional' => 'no',
       ),
-      3 => 
+      3 =>
       array (
         'type' => 'pkg',
         'channel' => 'pear.php.net',
         'name' => 'Foo',
         'rel' => 'not',
       ),
-      4 => 
+      4 =>
       array (
         'type' => 'pkg',
         'channel' => 'pear.php.net',
@@ -587,9 +465,9 @@ $phpunit->assertEquals(array (
         'optional' => 'no',
       ),
     ),
-    'maintainers' => 
+    'maintainers' =>
     array (
-      0 => 
+      0 =>
       array (
         'name' => 'Stig Bakken',
         'email' => 'stig@php.net',
@@ -597,7 +475,7 @@ $phpunit->assertEquals(array (
         'handle' => 'ssb',
         'role' => 'lead',
       ),
-      1 => 
+      1 =>
       array (
         'name' => 'Tomas V.V.Cox',
         'email' => 'cox@idecnet.com',
@@ -605,7 +483,7 @@ $phpunit->assertEquals(array (
         'handle' => 'cox',
         'role' => 'lead',
       ),
-      2 => 
+      2 =>
       array (
         'name' => 'Pierre-Alain Joye',
         'email' => 'pajoye@pearfr.org',
@@ -613,7 +491,7 @@ $phpunit->assertEquals(array (
         'handle' => 'pajoye',
         'role' => 'lead',
       ),
-      3 => 
+      3 =>
       array (
         'name' => 'Greg Beaver',
         'email' => 'cellog@php.net',
@@ -621,7 +499,7 @@ $phpunit->assertEquals(array (
         'handle' => 'cellog',
         'role' => 'lead',
       ),
-      4 => 
+      4 =>
       array (
         'name' => 'Martin Jansen',
         'email' => 'mj@php.net',
@@ -636,11 +514,13 @@ $phpunit->assertEquals(array (
 , $ret, 'return of install 2');
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
     'installed file');
+
 $reg = &$config->getRegistry();
 $info = $reg->packageInfo('PEAR1');
 $phpunit->assertTrue(isset($info['_lastmodified']), 'lastmodified is set?');
 unset($info['_lastmodified']);
 $phpunit->assertEquals($ret, $info, 'test installation, PEAR1');
+
 echo 'tests done';
 ?>
 --CLEAN--
