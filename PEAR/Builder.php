@@ -97,14 +97,15 @@ class PEAR_Builder extends PEAR_Common
         if (!file_exists($dir) || !is_dir($dir) || !chdir($dir)) {
             return $this->raiseError("could not chdir to $dir");
         }
+
         // packages that were in a .tar have the packagefile in this directory
         $vdir = $pkg->getPackage() . '-' . $pkg->getVersion();
         if (file_exists($dir) && is_dir($vdir)) {
-            if (chdir($vdir)) {
-                $dir = getcwd();
-            } else {
+            if (!chdir($vdir)) {
                 return $this->raiseError("could not chdir to " . realpath($vdir));
             }
+
+            $dir = getcwd();
         }
 
         $this->log(2, "building in $dir");
@@ -129,7 +130,7 @@ class PEAR_Builder extends PEAR_Common
             $buildtype = $matches[2];
         }
 
-        if (preg_match('/(.*)?\s-\s(\d+).*?(\d+)/',$this->_lastline,$matches)) {
+        if (preg_match('/(.*)?\s-\s(\d+).*?(\d+)/', $this->_lastline, $matches)) {
             if ($matches[2]) {
                 // there were errors in the build
                 return $this->raiseError("There were errors during compilation.");
@@ -151,7 +152,7 @@ class PEAR_Builder extends PEAR_Common
                     $buildtype.'").*?'.
                     '\/out:"(.*?)"/is';
 
-        if ($dsptext && preg_match($regex,$dsptext,$matches)) {
+        if ($dsptext && preg_match($regex, $dsptext, $matches)) {
             // what we get back is a relative path to the output file itself.
             $outfile = realpath($matches[2]);
         } else {
@@ -262,9 +263,11 @@ class PEAR_Builder extends PEAR_Common
                            ' config variable php_suffix does not match');
             }
         }
+
+
         $this->current_callback = $callback;
         if (PEAR_OS == "Windows") {
-            return $this->_build_win32($descfile,$callback);
+            return $this->_build_win32($descfile, $callback);
         }
         if (PEAR_OS != 'Unix') {
             return $this->raiseError("building extensions not supported on this platform");
@@ -381,10 +384,9 @@ class PEAR_Builder extends PEAR_Common
         }
         $built_files = array();
         $prefix = exec($this->config->get('php_prefix')
-                                . "phpize" .
-                                $this->config->get('php_suffix') . " --prefix");
-        $this->_harvestInstDir($prefix, $inst_dir . DIRECTORY_SEPARATOR . $prefix,
-                               $built_files);
+                        . "php-config" .
+                       $this->config->get('php_suffix') . " --prefix");
+        $this->_harvestInstDir($prefix, $inst_dir . DIRECTORY_SEPARATOR . $prefix, $built_files);
         chdir($old_cwd);
         return $built_files;
     }
@@ -460,11 +462,8 @@ class PEAR_Builder extends PEAR_Common
         if ($callback && isset($olddbg)) {
             $callback[0]->debug = $olddbg;
         }
-        if (is_resource($pp)) {
-            $exitcode = pclose($pp);
-        } else {
-            $exitcode = -1;
-        }
+
+        $exitcode = is_resource($pp) ? pclose($pp) : -1;
         return ($exitcode == 0);
     }
 
