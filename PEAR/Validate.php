@@ -458,7 +458,6 @@ class PEAR_Validate
                 return false;
             }
 
-
             if ($this->_state == PEAR_VALIDATE_PACKAGING &&
                   $this->_packagexml->getDate() != date('Y-m-d')) {
                 $this->_addWarning('date', 'Release Date "' .
@@ -477,8 +476,8 @@ class PEAR_Validate
             // default of no time value set
             return true;
         }
-        // packager automatically sets time, so only validate if
-        // pear validate is called
+
+        // packager automatically sets time, so only validate if pear validate is called
         if ($this->_state = PEAR_VALIDATE_NORMAL) {
             if (!preg_match('/\d\d:\d\d:\d\d/',
                   $this->_packagexml->getTime())) {
@@ -486,12 +485,15 @@ class PEAR_Validate
                     $this->_packagexml->getTime() . '"');
                 return false;
             }
-            if (strtotime($this->_packagexml->getTime()) == -1) {
+
+            $result = preg_match('|\d{2}\:\d{2}\:\d{2}|', $this->_packagexml->getTime(), $matches);
+            if ($result === false || empty($matches)) {
                 $this->_addFailure('time', 'invalid release time "' .
                     $this->_packagexml->getTime() . '"');
                 return false;
             }
         }
+
         return true;
     }
 
@@ -631,4 +633,3 @@ class PEAR_Validate
         return true;
     }
 }
-?>
