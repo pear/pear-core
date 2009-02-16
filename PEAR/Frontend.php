@@ -23,7 +23,7 @@
 /**
  * Include error handling
  */
-require_once 'PEAR.php';
+//require_once 'PEAR.php';
 
 /**
  * Which user interface class is being used.
