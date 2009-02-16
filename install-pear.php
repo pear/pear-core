@@ -3,6 +3,11 @@
 /* $Id$ */
 
 error_reporting(1803);
+
+if (ini_get('date.timezone') === '' && function_exists('date_default_timezone_set')) {
+    date_default_timezone_set('UTC');
+}
+
 $pear_dir = dirname(__FILE__);
 ini_set('include_path', '');
 if (function_exists('mb_internal_encoding')) {
