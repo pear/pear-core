@@ -107,9 +107,18 @@ class test_PEAR_REST extends PEAR_REST {
         return $data;
     }
 }
+
 require_once 'PEAR/REST/10.php';
 class test_PEAR_REST_10 extends PEAR_REST_10 {
     function test_PEAR_REST_10($config, $options = array())
+    {
+        $this->_rest = &new test_PEAR_REST($config, $options);
+    }
+}
+
+require_once 'PEAR/REST/13.php';
+class test_PEAR_REST_13 extends PEAR_REST_13 {
+    function test_PEAR_REST_13($config, $options = array())
     {
         $this->_rest = &new test_PEAR_REST($config, $options);
     }
