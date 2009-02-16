@@ -1584,7 +1584,7 @@ class PEAR_Downloader extends PEAR_Common
             $port = (isset($info['scheme']) && $info['scheme'] == 'https') ? 443 : 80;
         }
 
-        $schema = (isset($info['scheme']) && $info['scheme'] == 'https') ? 'https' : 'http';
+        $scheme = (isset($info['scheme']) && $info['scheme'] == 'https') ? 'https' : 'http';
 
         if ($proxy_host != '') {
             $fp = @fsockopen($proxy_host, $proxy_port, $errno, $errstr);
@@ -1674,18 +1674,18 @@ class PEAR_Downloader extends PEAR_Common
                 }
 
                 if (!in_array($reply, array(200, 301, 302, 303, 305, 307))) {
-                    return PEAR::raiseError("File $schema://$host:$port$path not valid (received: $line)");
+                    return PEAR::raiseError("File $scheme://$host:$port$path not valid (received: $line)");
                 }
             }
         }
 
         if ($reply != 200) {
             if (!isset($headers['location'])) {
-                return PEAR::raiseError("File $schema://$host:$port$path not valid (redirected but no location)");
+                return PEAR::raiseError("File $scheme://$host:$port$path not valid (redirected but no location)");
             }
 
             if ($wasredirect > 4) {
-                return PEAR::raiseError("File $schema://$host:$port$path not valid (redirection looped more than 5 times)");
+                return PEAR::raiseError("File $scheme://$host:$port$path not valid (redirection looped more than 5 times)");
             }
 
             $redirect = $wasredirect + 1;
