@@ -10,6 +10,7 @@ class test_PEAR_REST extends PEAR_REST {
         if (!isset($info['scheme']) || !in_array($info['scheme'], array('http', 'https'))) {
             return PEAR::raiseError('Cannot download non-http URL "' . $url . '"');
         }
+
         if (!isset($info['host'])) {
             return PEAR::raiseError('Cannot download from non-URL "' . $url . '"');
         } else {
@@ -314,67 +315,99 @@ class test_PEAR_Downloader extends PEAR_Downloader {
         if ($callback) {
             call_user_func($callback, 'setup', array(&$ui));
         }
+
         $info = parse_url($url);
-        if (!isset($info['scheme']) || $info['scheme'] != 'http') {
+        $info = parse_url($url);
+        if (!isset($info['scheme']) || !in_array($info['scheme'], array('http', 'https'))) {
             return PEAR::raiseError('Cannot download non-http URL "' . $url . '"');
         }
+
         if (!isset($info['host'])) {
             return PEAR::raiseError('Cannot download from non-URL "' . $url . '"');
-        } else {
-            $host = @$info['host'];
-            $port = @$info['port'];
-            $path = @$info['path'];
         }
+
+        $host = isset($info['host']) ? $info['host'] : null;
+        $port = isset($info['port']) ? $info['port'] : null;
+        $path = isset($info['path']) ? $info['path'] : null;
+
         if (isset($this)) {
             $config = &$this->config;
         } else {
             $config = &PEAR_Config::singleton();
         }
-        $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
-        if ($config->get('http_proxy')&&
-              $proxy = parse_url($config->get('http_proxy'))) {
-            $proxy_host = @$proxy['host'];
-            $proxy_port = @$proxy['port'];
-            $proxy_user = @$proxy['user'];
-            $proxy_pass = @$proxy['pass'];
 
-            if ($proxy_port == '') {
-                $proxy_port = 8080;
+        $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
+        if ($config->get('http_proxy') && $proxy = parse_url($config->get('http_proxy'))) {
+            $proxy_host = isset($proxy['host']) ? $proxy['host'] : null;
+            if (isset($proxy['scheme']) && $proxy['scheme'] == 'https') {
+                $proxy_host = 'ssl://' . $proxy_host;
             }
+            $proxy_port = isset($proxy['port']) ? $proxy['port'] : 8080;
+            $proxy_user = isset($proxy['user']) ? urldecode($proxy['user']) : null;
+            $proxy_pass = isset($proxy['pass']) ? urldecode($proxy['pass']) : null;
+
             if ($callback) {
                 call_user_func($callback, 'message', "Using HTTP proxy $host:$port");
             }
         }
+
         if (empty($port)) {
-            $port = 80;
+            $port = (isset($info['scheme']) && $info['scheme'] == 'https') ? 443 : 80;
         }
+
+        $scheme = (isset($info['scheme']) && $info['scheme'] == 'https') ? 'https' : 'http';
+
         // use _pearweb to get file
         $retrieved = explode("\n", $GLOBALS['pearweb']->receiveHttp($url));
+
         $headers = array();
         $line = array_shift($retrieved);
         while (strlen(trim($line))) {
-            if (preg_match('/^([^:]+):\s+(.*)\s*$/', $line, $matches)) {
+            if (preg_match('/^([^:]+):\s+(.*)\s*\\z/', $line, $matches)) {
                 $headers[strtolower($matches[1])] = trim($matches[2]);
             } elseif (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
-                if ($matches[1] != 200) {
-                    return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)");
+                $reply = (int)$matches[1];
+                if ($reply == 304 && ($lastmodified || ($lastmodified === false))) {
+                    return false;
+                }
+
+                if (!in_array($reply, array(200, 301, 302, 303, 305, 307))) {
+                    return PEAR::raiseError("File $scheme://$host:$port$path not valid (received: $line)");
                 }
             }
             $line = array_shift($retrieved);
         }
+
+        if ($reply != 200) {
+            if (!isset($headers['location'])) {
+                return PEAR::raiseError("File $scheme://$host:$port$path not valid (redirected but no location)");
+            }
+
+            if ($wasredirect > 4) {
+                return PEAR::raiseError("File $scheme://$host:$port$path not valid (redirection looped more than 5 times)");
+            }
+
+            $redirect = $wasredirect + 1;
+            return $this->downloadHttp($headers['location'],
+                    $ui, $save_dir, $callback, $lastmodified, $accept);
+        }
+
         $retrieved = join("\n", $retrieved);
+
         if (isset($headers['content-disposition']) &&
-            preg_match('/\sfilename=\"([^;]*\S)\"\s*(;|$)/', $headers['content-disposition'], $matches)) {
+            preg_match('/\sfilename=\"([^;]*\S)\"\s*(;|\\z)/', $headers['content-disposition'], $matches)) {
             $save_as = basename($matches[1]);
         } else {
             $save_as = basename($url);
         }
+
         if ($callback) {
             $tmp = call_user_func($callback, 'saveas', $save_as);
             if ($tmp) {
                 $save_as = $tmp;
             }
         }
+
         $dest_file = $save_dir . DIRECTORY_SEPARATOR . $save_as;
         if (!$wp = @fopen($dest_file, 'wb')) {
             if ($callback) {
