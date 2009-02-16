@@ -48,7 +48,7 @@ $phpunit->assertEquals(array (
   ),
   3 =>
   array (
-    'info' => 'Cannot retrieve channel.xml for channel "doc.php.net" (File https://doc.php.net:80/channel.xml not valid (received: HTTP/1.1 404 https://doc.php.net/channel.xml Is not valid))',
+    'info' => 'Cannot retrieve channel.xml for channel "doc.php.net" (File https://doc.php.net:443/channel.xml not valid (received: HTTP/1.1 404 https://doc.php.net/channel.xml Is not valid))',
     'cmd' => 'update-channels',
   ),
   4 =>
@@ -88,7 +88,7 @@ $phpunit->assertEquals(array (
   ),
   11 =>
   array (
-    'info' => 'Cannot retrieve channel.xml for channel "pecl.php.net" (File https://pecl.php.net:80/channel.xml not valid (received: HTTP/1.1 404 https://pecl.php.net/channel.xml Is not valid))',
+    'info' => 'Cannot retrieve channel.xml for channel "pecl.php.net" (File https://pecl.php.net:443/channel.xml not valid (received: HTTP/1.1 404 https://pecl.php.net/channel.xml Is not valid))',
     'cmd' => 'update-channels',
   ),
   12 =>
