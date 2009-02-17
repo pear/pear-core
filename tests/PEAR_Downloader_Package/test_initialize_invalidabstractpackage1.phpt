@@ -19,6 +19,7 @@ $reg->updateChannel($chan);
 
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.0.tgz', $pathtopackagexml);
 
+$pearweb->addRESTConfig("http://pecl.php.net/rest/r/test/allreleases.xml", false, false);
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/test/allreleases.xml", false, false);
 
 $dp = &newDownloaderPackage(array());
@@ -28,11 +29,23 @@ $result = $dp->initialize('test');
 $phpunit->assertErrors(array(
     array(
         'package' => 'PEAR_Error',
-        'message' => 'No releases for package "pear/test" exist'
+        'message' => 'No releases available for package "pear.php.net/test"'
     ),
     array(
         'package' => 'PEAR_Error',
-        'message' => "Cannot initialize 'test', invalid or missing package file"
+        'message' => 'No releases available for package "pecl.php.net/test"'
+    ),
+    array(
+        'package' => 'PEAR_Error',
+        'message' => ''
+    ),
+    array(
+        'package' => 'PEAR_Error',
+        'message' => 'File http://pear.php.net:80/rest/r/test/allreleases.xml not valid (received: HTTP/1.1 404 http://pear.php.net/rest/r/test/allreleases.xml Is not valid)',
+    ),
+    array(
+        'package' => 'PEAR_Error',
+        'message' => 'File http://pecl.php.net:80/rest/r/test/allreleases.xml not valid (received: HTTP/1.1 404 http://pecl.php.net/rest/r/test/allreleases.xml Is not valid)',
     ),
 ), 'after initialize');
 
@@ -41,6 +54,10 @@ $phpunit->assertEquals(array (
     0 => 0,
     1 => 'No releases available for package "pear.php.net/test"',
   ),
+  array (
+    0 => 2,
+    1 => 'Cannot initialize \'test\', invalid or missing package file',
+   ),
 ), $fakelog->getLog(), 'log messages');
 
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
