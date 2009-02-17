@@ -9,65 +9,67 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$mainpackage = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'test_mergeDependencies'. DIRECTORY_SEPARATOR . 'main-1.0.tgz';
-$requiredpackage = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'test_mergeDependencies'. DIRECTORY_SEPARATOR . 'foo-1.0.tgz';
+$packageDir      = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'test_mergeDependencies'. DIRECTORY_SEPARATOR;
+$mainpackage     = $packageDir . 'main-1.0.tgz';
+$requiredpackage = $packageDir . 'foo-1.0.tgz';
+
+$reg = &$config->getRegistry();
+$chan = &$reg->getChannel('pear.php.net');
+$chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
+$reg->updateChannel($chan);
+
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/main-1.0.tgz', $mainpackage);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/foo-1.0.tgz', $requiredpackage);
-$GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
-    array(array('package' => 'main', 'channel' => 'pear.php.net'), 'stable'),
-    array('version' => '1.1',
-          'info' =>
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/main/allreleases.xml",
 '<?xml version="1.0"?>
-<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
- <name>main</name>
- <channel>pear.php.net</channel>
- <summary>Main Package</summary>
- <description>Main Package</description>
- <lead>
-  <name>Greg Beaver</name>
-  <user>cellog</user>
-  <email>cellog@php.net</email>
-  <active>yes</active>
- </lead>
- <date>2004-09-30</date>
- <version>
-  <release>1.0</release>
-  <api>1.0</api>
- </version>
- <stability>
-  <release>stable</release>
-  <api>stable</api>
- </stability>
- <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
- <notes>test</notes>
- <contents>
-  <dir name="/">
-   <file baseinstalldir="/" name="main.php" role="php" />
-  </dir> <!-- / -->
- </contents>
- <dependencies>
-  <required>
-   <php>
-    <min>4.2</min>
-    <max>6.0.0</max>
-   </php>
-   <pearinstaller>
-    <min>1.4.0dev13</min>
-   </pearinstaller>
-   <package>
-    <name>foo</name>
-    <uri>http://www.example.com/foo-1.0</uri>
-   </package>
-  </required>
- </dependencies>
- <phprelease/>
-</package>',
-          'url' => 'http://www.example.com/main-1.0'));
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>main</p>
+ <c>pear.php.net</c>
+ <r><v>1.0</v><s>stable</s></r>
+</a>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/main/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>main</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>Main Package</s>
+ <d>Main Package</d>
+ <r xlink:href="/rest/r/main"/>
+</p>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/main/1.0.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/main">main</p>
+ <c>pear.php.net</c>
+ <v>1.0</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>cellog</m>
+ <s>Main Package</s>
+ <d>Main Package</d>
+ <da>2004-09-30</da>
+ <n>test</n>
+ <f>639</f>
+ <g>http://www.example.com/main-1.0</g>
+ <x xlink:href="package.1.0.xml"/>
+</r>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/main/deps.1.0.txt",
+'a:1:{s:8:"required";a:3:{s:3:"php";a:2:{s:3:"min";s:5:"4.2.0";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}s:7:"package";a:2:{s:4:"name";s:3:"foo";s:3:"uri";s:30:"http://www.example.com/foo-1.0";}}}',
+'text/plain');
+
 $dp = &newDownloaderPackage(array());
 $result = $dp->initialize('main');
 $phpunit->assertNoErrors('after create 1');
@@ -77,10 +79,13 @@ $dp->detectDependencies($params);
 $phpunit->assertNoErrors('after detect');
 $phpunit->assertEquals(array(
 ), $fakelog->getLog(), 'log messages');
+
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');
 $phpunit->assertEquals(1, count($params), 'detectDependencies');
 $result = PEAR_Downloader_Package::mergeDependencies($params);
 $phpunit->assertNoErrors('after merge 1');
+
+$log = $fakelog->getLog();
 $phpunit->assertEquals(array (
   array (
     0 => 3,
@@ -102,47 +107,52 @@ $phpunit->assertEquals(array (
     0 => 1,
     1 => '...done: 639 bytes',
   ),
-), $fakelog->getLog(), 'log messages');
+), $log, 'log messages');
+
+$dl = $fakelog->getDownload();
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 'setup',
     1 => 'self',
   ),
-  1 => 
+  1 =>
   array (
     0 => 'saveas',
     1 => 'foo-1.0.tgz',
   ),
-  2 => 
+  2 =>
   array (
     0 => 'start',
-    1 => 
+    1 =>
     array (
       0 => 'foo-1.0.tgz',
       1 => '639',
     ),
   ),
-  3 => 
+  3 =>
   array (
     0 => 'bytesread',
     1 => 639,
   ),
-  4 => 
+  4 =>
   array (
     0 => 'done',
     1 => 639,
   ),
-), $fakelog->getDownload(), 'download callback messages');
+), $dl, 'download callback messages');
+
 $phpunit->assertTrue($result, 'first return');
 $phpunit->assertEquals(2, count($params), 'mergeDependencies');
 $phpunit->assertEquals('main', $params[0]->getPackage(), 'main package');
 $phpunit->assertEquals('foo', $params[1]->getPackage(), 'foo package');
+
 $result = PEAR_Downloader_Package::mergeDependencies($params);
 $phpunit->assertNoErrors('after merge 2');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');
 $phpunit->assertFalse($result, 'second return');
+
 echo 'tests done';
 ?>
 --CLEAN--
