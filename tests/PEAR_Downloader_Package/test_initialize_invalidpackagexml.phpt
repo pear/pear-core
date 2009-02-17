@@ -82,19 +82,21 @@ $phpunit->assertErrors(array(
     )
 ), 'after initialize');
 
-$phpunit->assertEquals(array(
+$phpunit->assertEquals(
     array(
-        0,
-        'could not extract the package.xml file from "' . $pathtopackagexml . '"')
-    ),
-    array (
-        0 => 2,
-        1 => 'Cannot initialize \'' . $pathtopackagexml . '\', invalid or missing package file',
+        array(
+            0,
+            'could not extract the package.xml file from "' . $pathtopackagexml . '"'
+        ),
+        array (
+            0 => 2,
+            1 => 'Cannot initialize \'' . $pathtopackagexml . '\', invalid or missing package file',
+        ),
     ),
 $fakelog->getLog(), 'after initialize log');
+
 $phpunit->assertIsa('PEAR_Error', $result, 'no error returned');
-$phpunit->assertEquals("Cannot initialize '$pathtopackagexml', invalid or missing package file",
-    $result->getMessage(), 'wrong error message');
+$phpunit->assertEquals('', $result->getMessage(), 'wrong error message');
 echo 'tests done';
 ?>
 --CLEAN--
