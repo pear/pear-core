@@ -67,6 +67,10 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/main/1.1.xml",
 </r>',
 'text/xml');
 
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/main/deps.1.1.txt",
+'a:1:{s:8:"required";a:3:{s:3:"php";a:2:{s:3:"min";s:5:"4.2.0";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}s:7:"package";a:3:{s:4:"name";s:8:"required";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.1";}}}',
+'text/plain');
+
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/required/allreleases.xml",
 '<?xml version="1.0"?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
@@ -112,8 +116,9 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/required/1.1.xml",
 </r>',
 'text/xml');
 
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/main/deps.1.1.txt", 'a:1:{s:8:"required";a:2:{s:3:"php";a:2:{s:3:"min";s:3:"4.2";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0dev13";}s:7:"package";a:3:{s:4:"name";s:11:"required";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:5:"1.1";}}}', 'text/plain');
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/required/deps.1.1.txt", 'a:1:{s:8:"required";a:2:{s:3:"php";a:2:{s:3:"min";s:3:"4.2";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0dev13";}}}', 'text/plain');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/required/deps.1.1.txt",
+'a:1:{s:8:"required";a:2:{s:3:"php";a:2:{s:3:"min";s:5:"4.2.0";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}}}',
+'text/plain');
 
 $dp = &newDownloaderPackage(array());
 $result = $dp->initialize('main');
