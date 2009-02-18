@@ -29,7 +29,7 @@ $phpunit->assertErrors(array(
     ),
     array(
         'package' => 'PEAR_Error',
-        'message' => "Cannot initialize 'pear.foo.com/test', invalid or missing package file",
+        'message' => "",
     )
 ), 'wrong errors');
 
