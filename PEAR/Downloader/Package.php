@@ -672,7 +672,7 @@ class PEAR_Downloader_Package
         $skipnames = array();
         foreach ($deps as $dep) {
             $nodownload = false;
-            if ($dep['type'] == 'pkg') {
+            if (isset ($dep['type']) && $dep['type'] === 'pkg') {
                 $dep['channel'] = 'pear.php.net';
                 $dep['package'] = $dep['name'];
                 switch ($dep['rel']) {
