@@ -66,7 +66,7 @@ if (!empty($home)) {
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
 $phpunit = &new PEAR_PHPTest(true);
 $fakelog = new fake_log;
-$config = &PEAR_Config::singleton($temp_path . '/pear.ini');
+$config = &test_PEAR_Config::singleton($temp_path . '/pear.ini');
 $reg = &$config->getRegistry();
 $chan = $reg->getChannel('pear.php.net');
 $chan->resetFunctions('rest');
