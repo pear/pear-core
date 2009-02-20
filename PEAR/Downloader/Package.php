@@ -450,6 +450,8 @@ class PEAR_Downloader_Package
                         $ret = $this->_detect2Dep($dep, $pname, 'required', $params);
                         if (is_array($ret)) {
                             $this->_downloadDeps[] = $ret;
+                        } elseif (PEAR::isError($ret) && !isset($options['soft'])) {
+                            $this->_downloader->log(0, $ret->getMessage());
                         }
                     }
                 } else {
@@ -459,6 +461,8 @@ class PEAR_Downloader_Package
                         $ret = $this->_detect2Dep($dep, $pname, 'required', $params);
                         if (is_array($ret)) {
                             $this->_downloadDeps[] = $ret;
+                        } elseif (PEAR::isError($ret) && !isset($options['soft'])) {
+                            $this->_downloader->log(0, $ret->getMessage());
                         }
                     }
                 }
@@ -488,7 +492,12 @@ class PEAR_Downloader_Package
                         unset($dep['package']);
                     }
 
-                    if (!($ret = $this->_detect2Dep($dep, $pname, 'optional', $params))) {
+                    $ret = $this->_detect2Dep($dep, $pname, 'optional', $params);
+                    if (PEAR::isError($ret) && !isset($options['soft'])) {
+                        $this->_downloader->log(0, $ret->getMessage());
+                    }
+
+                    if (!$ret) {
                         $dep['package'] = $dep['name'];
                         $skip = count($skipnames) ?
                             $skipnames[count($skipnames) - 1] : '';
@@ -572,6 +581,8 @@ class PEAR_Downloader_Package
                             $group['attribs']['name'] . '"', $params);
                         if (is_array($ret)) {
                             $this->_downloadDeps[] = $ret;
+                        } elseif (PEAR::isError($ret) && !isset($options['soft'])) {
+                            $this->_downloader->log(0, $ret->getMessage());
                         }
                     }
                 } else {
@@ -580,6 +591,8 @@ class PEAR_Downloader_Package
                         $group['attribs']['name'] . '"', $params);
                     if (is_array($ret)) {
                         $this->_downloadDeps[] = $ret;
+                    } elseif (PEAR::isError($ret) && !isset($options['soft'])) {
+                        $this->_downloader->log(0, $ret->getMessage());
                     }
                 }
             }
@@ -1762,12 +1775,13 @@ class PEAR_Downloader_Package
             return false;
         }
 
-        if (!$info) {
+        if ($info === false) {
             if (!is_string($param)) {
                 $saveparam = ", cannot download \"$param\"";
             } else {
                 $saveparam = '';
             }
+
             // no releases exist
             return PEAR::raiseError('No releases for package "' .
                 $this->_registry->parsedPackageNameToString($pname, true) . '" exist' . $saveparam);
