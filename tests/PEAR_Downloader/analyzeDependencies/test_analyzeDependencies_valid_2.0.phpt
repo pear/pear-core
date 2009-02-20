@@ -24,279 +24,255 @@ $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/required-1.1.tgz', $r
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/sub1-1.0.tgz', $sub1package);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/sub2-1.0.tgz', $sub2package);
 
-$GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDownloadURL',
-    array(array('package' => 'main', 'channel' => 'pear.php.net', 'group' => 'foo'), 'stable'),
-    array('version' => '1.0',
-          'info' =>
+$reg = &$config->getRegistry();
+$chan = &$reg->getChannel('pear.php.net');
+$chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
+$reg->updateChannel($chan);
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/main/allreleases.xml",
 '<?xml version="1.0"?>
-<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
- <name>main</name>
- <channel>pear.php.net</channel>
- <summary>Main Package</summary>
- <description>Main Package</description>
- <lead>
-  <name>Greg Beaver</name>
-  <user>cellog</user>
-  <email>cellog@php.net</email>
-  <active>yes</active>
- </lead>
- <date>2004-09-30</date>
- <version>
-  <release>1.0</release>
-  <api>1.0</api>
- </version>
- <stability>
-  <release>stable</release>
-  <api>stable</api>
- </stability>
- <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
- <notes>test</notes>
- <contents>
-  <dir name="/">
-   <file baseinstalldir="/" name="main.php" role="php" />
-  </dir> <!-- / -->
- </contents>
- <dependencies>
-  <required>
-   <php>
-    <min>4.2</min>
-    <max>6.0.0</max>
-   </php>
-   <pearinstaller>
-    <min>1.4.0dev13</min>
-   </pearinstaller>
-   <package>
-    <name>required</name>
-    <channel>pear.php.net</channel>
-    <min>1.1</min>
-   </package>
-  </required>
-  <optional>
-   <package>
-    <name>optional</name>
-    <channel>pear.php.net</channel>
-    <min>1.1</min>
-   </package>
-  </optional>
-  <group name="foo" hint="testing group">
-   <package>
-    <name>sub1</name>
-    <channel>pear.php.net</channel>
-    <min>1.1</min>
-   </package>
-   <package>
-    <name>sub2</name>
-    <channel>pear.php.net</channel>
-    <min>1.1</min>
-   </package>
-  </group>
- </dependencies>
- <phprelease/>
-</package>',
-          'url' => 'http://www.example.com/main-1.0'));
-$GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
-    array('2.0', array('name' => 'required', 'channel' => 'pear.php.net', 'min' => '1.1'),
-        array('channel' => 'pear.php.net', 'package' => 'main', 'version' => '1.0'), 'stable'),
-    array('version' => '1.1',
-          'info' =>
-          '<?xml version="1.0"?>
-<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
- <name>required</name>
- <channel>pear.php.net</channel>
- <summary>Required Package</summary>
- <description>Required Package</description>
- <lead>
-  <name>Greg Beaver</name>
-  <user>cellog</user>
-  <email>cellog@php.net</email>
-  <active>yes</active>
- </lead>
- <date>2004-09-30</date>
- <version>
-  <release>1.1</release>
-  <api>1.1</api>
- </version>
- <stability>
-  <release>stable</release>
-  <api>stable</api>
- </stability>
- <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
- <notes>test</notes>
- <contents>
-  <dir name="/">
-   <file baseinstalldir="/" name="required.php" role="php" />
-  </dir> <!-- / -->
- </contents>
- <dependencies>
-  <required>
-   <php>
-    <min>4.2</min>
-    <max>6.0.0</max>
-   </php>
-   <pearinstaller>
-    <min>1.4.0dev13</min>
-   </pearinstaller>
-  </required>
- </dependencies>
- <phprelease/>
-</package>',
-          'url' => 'http://www.example.com/required-1.1'));
-$GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
-    array('2.0', array('name' => 'optional', 'channel' => 'pear.php.net', 'min' => '1.1'),
-        array('channel' => 'pear.php.net', 'package' => 'main', 'version' => '1.0'), 'stable'),
-    array('version' => '1.1',
-          'info' =>
-          '<?xml version="1.0"?>
-<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
- <name>optional</name>
- <channel>pear.php.net</channel>
- <summary>Required Package</summary>
- <description>Required Package</description>
- <lead>
-  <name>Greg Beaver</name>
-  <user>cellog</user>
-  <email>cellog@php.net</email>
-  <active>yes</active>
- </lead>
- <date>2004-09-30</date>
- <version>
-  <release>1.1</release>
-  <api>1.1</api>
- </version>
- <stability>
-  <release>stable</release>
-  <api>stable</api>
- </stability>
- <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
- <notes>test</notes>
- <contents>
-  <dir name="/">
-   <file baseinstalldir="/" name="required.php" role="php" />
-  </dir> <!-- / -->
- </contents>
- <dependencies>
-  <required>
-   <php>
-    <min>4.2</min>
-    <max>6.0.0</max>
-   </php>
-   <pearinstaller>
-    <min>1.4.0dev13</min>
-   </pearinstaller>
-  </required>
- </dependencies>
- <phprelease/>
-</package>',
-          'url' => 'http://www.example.com/optional-1.1'));
-$GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
-    array('2.0', array('name' => 'sub1', 'channel' => 'pear.php.net', 'min' => '1.1'),
-        array('channel' => 'pear.php.net', 'package' => 'main', 'version' => '1.0'), 'stable'),
-    array('version' => '1.1',
-          'info' =>
-          '<?xml version="1.0"?>
-<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
- <name>sub1</name>
- <channel>pear.php.net</channel>
- <summary>Subgroup Package 1</summary>
- <description>Subgroup Package 1</description>
- <lead>
-  <name>Greg Beaver</name>
-  <user>cellog</user>
-  <email>cellog@php.net</email>
-  <active>yes</active>
- </lead>
- <date>2004-09-30</date>
- <version>
-  <release>1.1</release>
-  <api>1.1</api>
- </version>
- <stability>
-  <release>stable</release>
-  <api>stable</api>
- </stability>
- <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
- <notes>test</notes>
- <contents>
-  <dir name="/">
-   <file baseinstalldir="/" name="sub1.php" role="php" />
-  </dir> <!-- / -->
- </contents>
- <dependencies>
-  <required>
-   <php>
-    <min>4.0</min>
-    <max>6.0.0</max>
-   </php>
-   <pearinstaller>
-    <min>1.4.0dev13</min>
-   </pearinstaller>
-  </required>
- </dependencies>
- <phprelease/>
-</package>',
-          'url' => 'http://www.example.com/sub1-1.1'));
-$GLOBALS['pearweb']->addXmlrpcConfig('pear.php.net', 'package.getDepDownloadURL',
-    array('2.0', array('name' => 'sub2', 'channel' => 'pear.php.net', 'min' => '1.1'),
-        array('channel' => 'pear.php.net', 'package' => 'main', 'version' => '1.0'), 'stable'),
-    array('version' => '1.1',
-          'info' =>
-          '<?xml version="1.0"?>
-<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
- <name>sub2</name>
- <channel>pear.php.net</channel>
- <summary>Subgroup Package 2</summary>
- <description>Subgroup Package 2</description>
- <lead>
-  <name>Greg Beaver</name>
-  <user>cellog</user>
-  <email>cellog@php.net</email>
-  <active>yes</active>
- </lead>
- <date>2004-09-30</date>
- <version>
-  <release>1.1</release>
-  <api>1.1</api>
- </version>
- <stability>
-  <release>stable</release>
-  <api>stable</api>
- </stability>
- <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
- <notes>test</notes>
- <contents>
-  <dir name="/">
-   <file baseinstalldir="/" name="sub1.php" role="php" />
-  </dir> <!-- / -->
- </contents>
- <dependencies>
-  <required>
-   <php>
-    <min>4.0</min>
-    <max>6.0.0</max>
-   </php>
-   <pearinstaller>
-    <min>1.4.0dev13</min>
-   </pearinstaller>
-  </required>
- </dependencies>
- <phprelease/>
-</package>',
-          'url' => 'http://www.example.com/sub2-1.1'));
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>main</p>
+ <c>pear.php.net</c>
+ <r><v>1.0</v><s>stable</s></r>
+</a>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/main/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>main</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>Main Package</s>
+ <d>Main Package</d>
+ <r xlink:href="/rest/r/main"/>
+</p>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/main/1.0.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/main">main</p>
+ <c>pear.php.net</c>
+ <v>1.0</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>cellog</m>
+ <s>Main Package</s>
+ <d>Main Package</d>
+ <da>2004-09-30</da>
+ <n>test</n>
+ <f>639</f>
+ <g>http://www.example.com/main-1.0</g>
+ <x xlink:href="package.1.0.xml"/>
+</r>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/main/deps.1.0.txt",
+'a:3:{s:8:"required";a:3:{s:3:"php";a:2:{s:3:"min";s:5:"4.2.0";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:10:"1.4.0dev13";}s:7:"package";a:3:{s:4:"name";s:8:"required";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.1";}}s:8:"optional";a:1:{s:7:"package";a:3:{s:4:"name";s:8:"optional";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.1";}}s:5:"group";a:2:{s:7:"attribs";a:2:{s:4:"name";s:3:"foo";s:4:"hint";s:13:"testing group";}s:7:"package";a:2:{i:0;a:3:{s:4:"name";s:4:"sub1";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.1";}i:1;a:3:{s:4:"name";s:4:"sub2";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.1";}}}}',
+'text/plain');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/required/allreleases.xml",
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>required</p>
+ <c>pear.php.net</c>
+ <r><v>1.1</v><s>stable</s></r>
+</a>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/required/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>required</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>Required Package</s>
+ <d>Required Package</d>
+ <r xlink:href="/rest/r/main"/>
+</p>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/required/1.1.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/required">required</p>
+ <c>pear.php.net</c>
+ <v>1.1</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>cellog</m>
+ <s>Required Package</s>
+ <d>Required Package</d>
+ <da>2004-09-30</da>
+ <n>test</n>
+ <f>639</f>
+ <g>http://www.example.com/required-1.1</g>
+ <x xlink:href="package.1.1.xml"/>
+</r>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/required/deps.1.1.txt",
+'a:1:{s:8:"required";a:2:{s:3:"php";a:2:{s:3:"min";s:5:"4.2.0";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:10:"1.4.0dev13";}}}',
+'text/plain');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/optional/allreleases.xml",
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>optional</p>
+ <c>pear.php.net</c>
+ <r><v>1.1</v><s>stable</s></r>
+</a>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/optional/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>optional</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>Required Package</s>
+ <d>Required Package</d>
+ <r xlink:href="/rest/r/optional"/>
+</p>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/optional/1.1.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/optional">optional</p>
+ <c>pear.php.net</c>
+ <v>1.1</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>cellog</m>
+ <s>Optional Package</s>
+ <d>Optional Package</d>
+ <da>2004-09-30</da>
+ <n>test</n>
+ <f>639</f>
+ <g>http://www.example.com/optional-1.1</g>
+ <x xlink:href="package.1.1.xml"/>
+</r>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/optional/deps.1.1.txt",
+'a:1:{s:8:"required";a:2:{s:3:"php";a:2:{s:3:"min";s:5:"4.2.0";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:10:"1.4.0dev13";}}}',
+'text/plain');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/sub1/allreleases.xml",
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>sub1</p>
+ <c>pear.php.net</c>
+ <r><v>1.1</v><s>stable</s></r>
+</a>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/sub1/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>sub1</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>Sub Package1</s>
+ <d>Sub Package1</d>
+ <r xlink:href="/rest/r/sub1"/>
+</p>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/sub1/1.1.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/sub1">sub1</p>
+ <c>pear.php.net</c>
+ <v>1.1</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>cellog</m>
+ <s>Sub Package 1</s>
+ <d>Sub Package 1</d>
+ <da>2004-11-10</da>
+ <n>test</n>
+ <f>639</f>
+ <g>http://www.example.com/sub1-1.1</g>
+ <x xlink:href="package.1.1.xml"/>
+</r>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/sub1/deps.1.1.txt",
+'a:1:{s:8:"required";a:2:{s:3:"php";a:2:{s:3:"min";s:3:"4.0";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:10:"1.4.0dev13";}}}',
+'text/plain');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/sub2/allreleases.xml",
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>sub2</p>
+ <c>pear.php.net</c>
+ <r><v>1.1</v><s>stable</s></r>
+</a>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/sub2/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>sub2</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>Sub Package 2</s>
+ <d>Sub Package 2</d>
+ <r xlink:href="/rest/r/sub2"/>
+</p>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/sub2/1.1.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/sub2">sub2</p>
+ <c>pear.php.net</c>
+ <v>1.1</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>cellog</m>
+ <s>Main Package</s>
+ <d>Main Package</d>
+ <da>2004-12-10</da>
+ <n>test</n>
+ <f>639</f>
+ <g>http://www.example.com/sub2-1.1</g>
+ <x xlink:href="package.1.1.xml"/>
+</r>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/sub2/deps.1.1.txt",
+'a:1:{s:8:"required";a:2:{s:3:"php";a:2:{s:3:"min";s:5:"4.2.0";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:10:"1.4.0dev13";}}}',
+'text/plain');
 
 $dp = &newFakeDownloaderPackage(array('alldeps' => true));
 $result = $dp->initialize('main#foo');
