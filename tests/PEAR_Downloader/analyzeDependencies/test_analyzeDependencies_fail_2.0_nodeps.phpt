@@ -137,10 +137,12 @@ $phpunit->assertNoErrors('after create 1');
 $params = array(&$dp);
 $dp->detectDependencies($params);
 $phpunit->assertNoErrors('after detect');
+
+$log = $fakelog->getLog();
 $phpunit->assertEquals(array (
   array (
     0 => 0,
-    1 => 'No releases for package "pear/required" exist',
+    1 => 'Package "pear.php.net/main" dependency "pear.php.net/required" has no releases',
   ),
   array (
     0 => 3,
@@ -148,13 +150,17 @@ $phpunit->assertEquals(array (
   ),
   array (
     0 => 0,
-    1 => 'No releases for package "pear/optional" exist',
+    1 => 'Package "pear.php.net/main" dependency "pear.php.net/optional" has no releases',
+  ),
+  array (
+    0 => 1,
+    1 => 'Did not download optional dependencies: pear/optional, use --alldeps to download automatically',
   ),
   array (
     0 => 0,
-    1 => 'No releases for package "pear/sub2" exist',
+    1 => 'Package "pear.php.net/main" dependency "pear.php.net/sub2" has no releases',
   ),
-), $fakelog->getLog(), 'log messages');
+), $log, 'log messages');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download callback messages');
 $phpunit->assertEquals(1, count($params), 'detectDependencies');
 $result = PEAR_Downloader_Package::mergeDependencies($params);
