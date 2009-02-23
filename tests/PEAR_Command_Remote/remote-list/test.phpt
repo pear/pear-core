@@ -1,5 +1,5 @@
 --TEST--
-remote-list command
+remote-list command - REST 1.0
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
@@ -10,7 +10,12 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $reg = &$config->getRegistry();
+$chan = &$reg->getChannel('pear.php.net');
+$chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
+$reg->updateChannel($chan);
+
 $pf = new PEAR_PackageFile_v1;
 $pf->setConfig($config);
 $pf->setPackage('Archive_Zip');
@@ -26,5437 +31,1201 @@ $pf->addFile('', 'foo.dat', array('role' => 'data'));
 $pf->validate();
 $phpunit->assertNoErrors('setup');
 $reg->addPackage2($pf);
-$pearweb->addXmlrpcConfig("empty", "package.listAll",     array(
-        true, true,
-    ),     array(
-    ));
-$pearweb->addXmlrpcConfig("smoog", "package.listAll",     array(
-    0 =>
-        true, true,
-    ),     array(
-    'APC' =>
-        array(
-        'packageid' =>
-            "220",
-        'categoryid' =>
-            "3",
-        'category' =>
-            "Caching",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Alternative PHP Cache",
-        'description' =>
-            "APC is the Alternative PHP Cache. It was conceived of to provide a free, open, and robust framework for caching and optimizing PHP intermediate code.",
-        'lead' =>
-            "rasmus",
-        'stable' =>
-            "2.0.4",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    ));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.listAll",     array(
-        true, true, false,
-    ),     array(
-    'APC' =>
-        array(
-        'packageid' =>
-            "220",
-        'categoryid' =>
-            "3",
-        'category' =>
-            "Caching",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Alternative PHP Cache",
-        'description' =>
-            "APC is the Alternative PHP Cache. It was conceived of to provide a free, open, and robust framework for caching and optimizing PHP intermediate code.",
-        'lead' =>
-            "rasmus",
-        'stable' =>
-            "2.0.4",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'apd' =>
-        array(
-        'packageid' =>
-            "118",
-        'categoryid' =>
-            "25",
-        'category' =>
-            "PHP",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "A full-featured engine-level profiler/debugger",
-        'description' =>
-            "APD is a full-featured profiler/debugger that is loaded as a zend_extension.  It aims to be an analog of C\'s gprof or Perl\'s Devel::DProf.",
-        'lead' =>
-            "gschlossnagle",
-        'stable' =>
-            "1.0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Archive_Tar' =>
-        array(
-        'packageid' =>
-            "24",
-        'categoryid' =>
-            "33",
-        'category' =>
-            "File Formats",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Tar file management class",
-        'description' =>
-            "This class provides handling of tar files in PHP.
-It supports creating, listing, extracting and adding to tar files.
-Gzip support is available if PHP has the zlib extension built-in or
-loaded. Bz2 compression is also supported with the bz2 extension loaded.",
-        'lead' =>
-            "vblavet",
-        'stable' =>
-            "1.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Auth' =>
-        array(
-        'packageid' =>
-            "2",
-        'categoryid' =>
-            "1",
-        'category' =>
-            "Authentication",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Creating an authentication system.",
-        'description' =>
-            "The PEAR::Auth package provides methods for creating an authentication
-system using PHP.
 
-Currently it supports the following storage containers to read/write
-the login data:
 
-* All databases supported by the PEAR database layer
-* All databases supported by the MDB database layer
-* All databases supported by the MDB2 database layer
-* Plaintext files
-* LDAP servers
-* POP3 servers
-* IMAP servers
-* vpopmail accounts
-* RADIUS
-* SAMBA password files
-* SOAP",
-        'lead' =>
-            "yavo",
-        'stable' =>
-            "1.2.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Auth_HTTP' =>
-        array(
-        'packageid' =>
-            "1",
-        'categoryid' =>
-            "1",
-        'category' =>
-            "Authentication",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "HTTP authentication",
-        'description' =>
-            "The PEAR::Auth_HTTP class provides methods for creating an HTTP
-authentication system using PHP, that is similar to Apache\'s
-realm-based .htaccess authentication.",
-        'lead' =>
-            "hirokawa",
-        'stable' =>
-            "2.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Auth_PrefManager' =>
-        array(
-        'packageid' =>
-            "144",
-        'categoryid' =>
-            "1",
-        'category' =>
-            "Authentication",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Preferences management class",
-        'description' =>
-            "Preference Manager is a class to handle user preferences in a web application, looking them up in a table
-using a combination of their userid, and the preference name to get a value, and (optionally) returning
-a default value for the preference if no value could be found for that user.
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/packages.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+<a xmlns="http://pear.php.net/dtd/rest.allpackages"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allpackages
+    http://pear.php.net/dtd/rest.allpackages.xsd">
+<c>pear.php.net</c>
+ <p>Archive_Tar</p>
+ <p>Archive_Zip</p>
+ <p>AsteriskManager</p>
+ <p>Auth</p>
+ <p>Auth_HTTP</p>
+ <p>Auth_PrefManager</p>
+ <p>Auth_PrefManager2</p>
+ <p>Auth_RADIUS</p>
+ <p>Auth_SASL</p>
+ <p>Benchmark</p>
+ <p>Cache</p>
+ <p>Cache_Lite</p>
+ <p>Calendar</p>
+ <p>CodeGen</p>
+ <p>CodeGen_MySQL</p>
+ <p>CodeGen_MySQL_Plugin</p>
+ <p>CodeGen_MySQL_UDF</p>
+ <p>CodeGen_PECL</p>
+ <p>Config</p>
+ <p>Console_Color</p>
+ <p>Console_CommandLine</p>
+ <p>Console_Getargs</p>
+ <p>Console_Getopt</p>
+ <p>Console_GetoptPlus</p>
+ <p>Console_ProgressBar</p>
+ <p>Console_Table</p>
+ <p>Contact_AddressBook</p>
+ <p>Contact_Vcard_Build</p>
+ <p>Contact_Vcard_Parse</p>
+ <p>Crypt_Blowfish</p>
+ <p>Crypt_CBC</p>
+ <p>Crypt_CHAP</p>
+ <p>Crypt_DiffieHellman</p>
+ <p>Crypt_GPG</p>
+ <p>Crypt_HMAC</p>
+ <p>Crypt_HMAC2</p>
+ <p>Crypt_MicroID</p>
+ <p>Crypt_RC4</p>
+ <p>Crypt_RSA</p>
+ <p>Crypt_Xtea</p>
+ <p>Crypt_XXTEA</p>
+ <p>Date</p>
+ <p>Date_Holidays</p>
+ <p>Date_Holidays_Austria</p>
+ <p>Date_Holidays_Brazil</p>
+ <p>Date_Holidays_Denmark</p>
+ <p>Date_Holidays_Discordian</p>
+ <p>Date_Holidays_EnglandWales</p>
+ <p>Date_Holidays_Germany</p>
+ <p>Date_Holidays_Iceland</p>
+ <p>Date_Holidays_Ireland</p>
+ <p>Date_Holidays_Italy</p>
+ <p>Date_Holidays_Japan</p>
+ <p>Date_Holidays_Netherlands</p>
+ <p>Date_Holidays_Norway</p>
+ <p>Date_Holidays_PHPdotNet</p>
+ <p>Date_Holidays_Romania</p>
+ <p>Date_Holidays_Slovenia</p>
+ <p>Date_Holidays_Sweden</p>
+ <p>Date_Holidays_Ukraine</p>
+ <p>Date_Holidays_UNO</p>
+ <p>Date_Holidays_USA</p>
+ <p>DB</p>
+ <p>DBA</p>
+ <p>DBA_Relational</p>
+ <p>DB_ado</p>
+ <p>DB_DataObject</p>
+ <p>DB_DataObject_FormBuilder</p>
+ <p>DB_ldap</p>
+ <p>DB_ldap2</p>
+ <p>DB_NestedSet</p>
+ <p>DB_NestedSet2</p>
+ <p>DB_odbtp</p>
+ <p>DB_Pager</p>
+ <p>DB_QueryTool</p>
+ <p>DB_Sqlite_Tools</p>
+ <p>DB_Table</p>
+ <p>Event_Dispatcher</p>
+ <p>Event_SignalEmitter</p>
+ <p>File</p>
+ <p>File_Archive</p>
+ <p>File_Bittorrent</p>
+ <p>File_Bittorrent2</p>
+ <p>File_Cabinet</p>
+ <p>File_CSV</p>
+ <p>File_CSV_DataSource</p>
+ <p>File_DeliciousLibrary</p>
+ <p>File_DICOM</p>
+ <p>File_DNS</p>
+ <p>File_Find</p>
+ <p>File_Fortune</p>
+ <p>File_Fstab</p>
+ <p>File_Gettext</p>
+ <p>File_HtAccess</p>
+ <p>File_IMC</p>
+ <p>File_Infopath</p>
+ <p>File_MARC</p>
+ <p>File_Mogile</p>
+ <p>File_Ogg</p>
+ <p>File_Passwd</p>
+ <p>File_PDF</p>
+ <p>File_SearchReplace</p>
+ <p>File_Sitemap</p>
+ <p>File_SMBPasswd</p>
+ <p>File_Util</p>
+ <p>File_XSPF</p>
+ <p>FSM</p>
+ <p>Games_Chess</p>
+ <p>Genealogy_Gedcom</p>
+ <p>Gtk2_EntryDialog</p>
+ <p>Gtk2_ExceptionDump</p>
+ <p>Gtk2_FileDrop</p>
+ <p>Gtk2_IndexedComboBox</p>
+ <p>Gtk2_PHPConfig</p>
+ <p>Gtk2_ScrollingLabel</p>
+ <p>Gtk2_VarDump</p>
+ <p>Gtk_FileDrop</p>
+ <p>Gtk_MDB_Designer</p>
+ <p>Gtk_ScrollingLabel</p>
+ <p>Gtk_Styled</p>
+ <p>Gtk_VarDump</p>
+ <p>HTML_AJAX</p>
+ <p>HTML_BBCodeParser</p>
+ <p>HTML_Common</p>
+ <p>HTML_Common2</p>
+ <p>HTML_Crypt</p>
+ <p>HTML_CSS</p>
+ <p>HTML_Entities</p>
+ <p>HTML_Form</p>
+ <p>HTML_Javascript</p>
+ <p>HTML_Menu</p>
+ <p>HTML_Page</p>
+ <p>HTML_Page2</p>
+ <p>HTML_Progress</p>
+ <p>HTML_Progress2</p>
+ <p>HTML_QuickForm</p>
+ <p>HTML_QuickForm2</p>
+ <p>HTML_QuickForm_advmultiselect</p>
+ <p>HTML_QuickForm_altselect</p>
+ <p>HTML_QuickForm_CAPTCHA</p>
+ <p>HTML_QuickForm_Controller</p>
+ <p>HTML_QuickForm_DHTMLRulesTableless</p>
+ <p>HTML_QuickForm_ElementGrid</p>
+ <p>HTML_QuickForm_Livesearch</p>
+ <p>HTML_QuickForm_Renderer_Tableless</p>
+ <p>HTML_QuickForm_Rule_Spelling</p>
+ <p>HTML_QuickForm_SelectFilter</p>
+ <p>HTML_Safe</p>
+ <p>HTML_Select</p>
+ <p>HTML_Select_Common</p>
+ <p>HTML_Table</p>
+ <p>HTML_Table_Matrix</p>
+ <p>HTML_TagCloud</p>
+ <p>HTML_Template_Flexy</p>
+ <p>HTML_Template_IT</p>
+ <p>HTML_Template_PHPLIB</p>
+ <p>HTML_Template_Sigma</p>
+ <p>HTML_Template_Xipe</p>
+ <p>HTML_TreeMenu</p>
+ <p>HTTP</p>
+ <p>HTTP_Client</p>
+ <p>HTTP_Download</p>
+ <p>HTTP_FloodControl</p>
+ <p>HTTP_Header</p>
+ <p>HTTP_Request</p>
+ <p>HTTP_Request2</p>
+ <p>HTTP_Server</p>
+ <p>HTTP_Session</p>
+ <p>HTTP_Session2</p>
+ <p>HTTP_SessionServer</p>
+ <p>HTTP_Upload</p>
+ <p>HTTP_WebDAV_Client</p>
+ <p>HTTP_WebDAV_Server</p>
+ <p>I18N</p>
+ <p>I18Nv2</p>
+ <p>I18N_UnicodeNormalizer</p>
+ <p>I18N_UnicodeString</p>
+ <p>Image_3D</p>
+ <p>Image_Barcode</p>
+ <p>Image_Canvas</p>
+ <p>Image_Color</p>
+ <p>Image_Color2</p>
+ <p>Image_GIS</p>
+ <p>Image_Graph</p>
+ <p>Image_GraphViz</p>
+ <p>Image_IPTC</p>
+ <p>Image_JpegMarkerReader</p>
+ <p>Image_JpegXmpReader</p>
+ <p>Image_MonoBMP</p>
+ <p>Image_Puzzle</p>
+ <p>Image_Remote</p>
+ <p>Image_Text</p>
+ <p>Image_Tools</p>
+ <p>Image_Transform</p>
+ <p>Image_WBMP</p>
+ <p>Image_XBM</p>
+ <p>Inline_C</p>
+ <p>LiveUser</p>
+ <p>LiveUser_Admin</p>
+ <p>Log</p>
+ <p>Mail</p>
+ <p>Mail_IMAP</p>
+ <p>Mail_IMAPv2</p>
+ <p>Mail_Mbox</p>
+ <p>Mail_Mime</p>
+ <p>Mail_mimeDecode</p>
+ <p>Mail_Queue</p>
+ <p>Math_Basex</p>
+ <p>Math_BigInteger</p>
+ <p>Math_BinaryUtils</p>
+ <p>Math_Combinatorics</p>
+ <p>Math_Complex</p>
+ <p>Math_Derivative</p>
+ <p>Math_Fibonacci</p>
+ <p>Math_Finance</p>
+ <p>Math_Fraction</p>
+ <p>Math_Histogram</p>
+ <p>Math_Integer</p>
+ <p>Math_Matrix</p>
+ <p>Math_Numerical_RootFinding</p>
+ <p>Math_Polynomial</p>
+ <p>Math_Quaternion</p>
+ <p>Math_RPN</p>
+ <p>Math_Stats</p>
+ <p>Math_TrigOp</p>
+ <p>Math_Vector</p>
+ <p>MDB</p>
+ <p>MDB2</p>
+ <p>MDB2_Driver_fbsql</p>
+ <p>MDB2_Driver_ibase</p>
+ <p>MDB2_Driver_mssql</p>
+ <p>MDB2_Driver_mysql</p>
+ <p>MDB2_Driver_mysqli</p>
+ <p>MDB2_Driver_oci8</p>
+ <p>MDB2_Driver_pgsql</p>
+ <p>MDB2_Driver_querysim</p>
+ <p>MDB2_Driver_sqlite</p>
+ <p>MDB2_Schema</p>
+ <p>MDB2_TableBrowser</p>
+ <p>MDB_QueryTool</p>
+ <p>Message</p>
+ <p>MIME_Type</p>
+ <p>MP3_Id</p>
+ <p>MP3_IDv2</p>
+ <p>MP3_Playlist</p>
+ <p>Net_CDDB</p>
+ <p>Net_CheckIP</p>
+ <p>Net_CheckIP2</p>
+ <p>Net_Curl</p>
+ <p>Net_Cyrus</p>
+ <p>Net_Dict</p>
+ <p>Net_Dig</p>
+ <p>Net_DIME</p>
+ <p>Net_DNS</p>
+ <p>Net_DNSBL</p>
+ <p>Net_Finger</p>
+ <p>Net_FTP</p>
+ <p>Net_FTP2</p>
+ <p>Net_GameServerQuery</p>
+ <p>Net_Gearman</p>
+ <p>Net_Geo</p>
+ <p>Net_GeoIP</p>
+ <p>Net_Growl</p>
+ <p>Net_HL7</p>
+ <p>Net_Ident</p>
+ <p>Net_IDNA</p>
+ <p>Net_IMAP</p>
+ <p>Net_IPv4</p>
+ <p>Net_IPv6</p>
+ <p>Net_IRC</p>
+ <p>Net_LDAP</p>
+ <p>Net_LDAP2</p>
+ <p>Net_LMTP</p>
+ <p>Net_MAC</p>
+ <p>Net_Monitor</p>
+ <p>Net_MPD</p>
+ <p>Net_Nmap</p>
+ <p>Net_NNTP</p>
+ <p>Net_Ping</p>
+ <p>Net_POP3</p>
+ <p>Net_Portscan</p>
+ <p>Net_Server</p>
+ <p>Net_Sieve</p>
+ <p>Net_SmartIRC</p>
+ <p>Net_SMPP</p>
+ <p>Net_SMPP_Client</p>
+ <p>Net_SMS</p>
+ <p>Net_SMTP</p>
+ <p>Net_Socket</p>
+ <p>Net_Traceroute</p>
+ <p>Net_URL</p>
+ <p>Net_URL2</p>
+ <p>Net_URL_Mapper</p>
+ <p>Net_UserAgent_Detect</p>
+ <p>Net_UserAgent_Mobile</p>
+ <p>Net_UserAgent_Mobile_GPS</p>
+ <p>Net_Vpopmaild</p>
+ <p>Net_Whois</p>
+ <p>Net_Wifi</p>
+ <p>Numbers_Roman</p>
+ <p>Numbers_Words</p>
+ <p>OLE</p>
+ <p>OpenDocument</p>
+ <p>Pager</p>
+ <p>Pager_Sliding</p>
+ <p>Payment_Clieop</p>
+ <p>Payment_DTA</p>
+ <p>Payment_PayPal_SOAP</p>
+ <p>Payment_Process</p>
+ <p>PEAR</p>
+ <p>pearweb</p>
+ <p>pearweb_channelxml</p>
+ <p>pearweb_gopear</p>
+ <p>pearweb_index</p>
+ <p>pearweb_phars</p>
+ <p>PEAR_Command_Packaging</p>
+ <p>PEAR_Delegator</p>
+ <p>PEAR_ErrorStack</p>
+ <p>PEAR_Frontend_Gtk</p>
+ <p>PEAR_Frontend_Gtk2</p>
+ <p>PEAR_Frontend_Web</p>
+ <p>PEAR_Info</p>
+ <p>PEAR_PackageFileManager</p>
+ <p>PEAR_PackageFileManager2</p>
+ <p>PEAR_PackageFileManager_Cli</p>
+ <p>PEAR_PackageFileManager_Frontend</p>
+ <p>PEAR_PackageFileManager_Frontend_Web</p>
+ <p>PEAR_PackageFileManager_GUI_Gtk</p>
+ <p>PEAR_PackageFileManager_Plugins</p>
+ <p>PEAR_PackageUpdate</p>
+ <p>PEAR_PackageUpdate_Gtk2</p>
+ <p>PEAR_PackageUpdate_Web</p>
+ <p>PEAR_RemoteInstaller</p>
+ <p>PEAR_Size</p>
+ <p>PHPDoc</p>
+ <p>PhpDocumentor</p>
+ <p>PHPUnit</p>
+ <p>PHPUnit2</p>
+ <p>PHP_Annotation</p>
+ <p>PHP_Archive</p>
+ <p>PHP_ArrayOf</p>
+ <p>PHP_Beautifier</p>
+ <p>PHP_CodeSniffer</p>
+ <p>PHP_Compat</p>
+ <p>PHP_CompatInfo</p>
+ <p>PHP_Debug</p>
+ <p>PHP_DocBlockGenerator</p>
+ <p>PHP_Fork</p>
+ <p>PHP_FunctionCallTracer</p>
+ <p>PHP_LexerGenerator</p>
+ <p>PHP_Parser</p>
+ <p>PHP_ParserGenerator</p>
+ <p>PHP_Parser_DocblockParser</p>
+ <p>PHP_Shell</p>
+ <p>PHP_UML</p>
+ <p>QA_Peardoc_Coverage</p>
+ <p>RDF</p>
+ <p>RDF_N3</p>
+ <p>RDF_NTriple</p>
+ <p>RDF_RDQL</p>
+ <p>Science_Chemistry</p>
+ <p>ScriptReorganizer</p>
+ <p>Search_Mnogosearch</p>
+ <p>Services_Akismet</p>
+ <p>Services_Akismet2</p>
+ <p>Services_Amazon</p>
+ <p>Services_Amazon_S3</p>
+ <p>Services_Amazon_SQS</p>
+ <p>Services_Atlassian_Crowd</p>
+ <p>Services_Blogging</p>
+ <p>Services_Compete</p>
+ <p>Services_Delicious</p>
+ <p>Services_Digg</p>
+ <p>Services_DynDNS</p>
+ <p>Services_Ebay</p>
+ <p>Services_ExchangeRates</p>
+ <p>Services_Facebook</p>
+ <p>Services_GeoNames</p>
+ <p>Services_Google</p>
+ <p>Services_Hatena</p>
+ <p>Services_oEmbed</p>
+ <p>Services_OpenSearch</p>
+ <p>Services_Pingback</p>
+ <p>Services_ProjectHoneyPot</p>
+ <p>Services_SharedBook</p>
+ <p>Services_Technorati</p>
+ <p>Services_TinyURL</p>
+ <p>Services_Trackback</p>
+ <p>Services_TwitPic</p>
+ <p>Services_Twitter</p>
+ <p>Services_urlTea</p>
+ <p>Services_W3C_CSSValidator</p>
+ <p>Services_W3C_HTMLValidator</p>
+ <p>Services_Weather</p>
+ <p>Services_Webservice</p>
+ <p>Services_Yadis</p>
+ <p>Services_Yahoo</p>
+ <p>Services_Yahoo_JP</p>
+ <p>Services_YouTube</p>
+ <p>SOAP</p>
+ <p>SOAP_Interop</p>
+ <p>Spreadsheet_Excel_Writer</p>
+ <p>SQL_Parser</p>
+ <p>Stream_SHM</p>
+ <p>Stream_Var</p>
+ <p>Structures_BibTex</p>
+ <p>Structures_DataGrid</p>
+ <p>Structures_DataGrid_DataSource_Array</p>
+ <p>Structures_DataGrid_DataSource_CSV</p>
+ <p>Structures_DataGrid_DataSource_DataObject</p>
+ <p>Structures_DataGrid_DataSource_DB</p>
+ <p>Structures_DataGrid_DataSource_DBQuery</p>
+ <p>Structures_DataGrid_DataSource_DBTable</p>
+ <p>Structures_DataGrid_DataSource_Excel</p>
+ <p>Structures_DataGrid_DataSource_MDB2</p>
+ <p>Structures_DataGrid_DataSource_PDO</p>
+ <p>Structures_DataGrid_DataSource_RSS</p>
+ <p>Structures_DataGrid_DataSource_XML</p>
+ <p>Structures_DataGrid_Renderer_Console</p>
+ <p>Structures_DataGrid_Renderer_CSV</p>
+ <p>Structures_DataGrid_Renderer_Flexy</p>
+ <p>Structures_DataGrid_Renderer_HTMLSortForm</p>
+ <p>Structures_DataGrid_Renderer_HTMLTable</p>
+ <p>Structures_DataGrid_Renderer_Pager</p>
+ <p>Structures_DataGrid_Renderer_Smarty</p>
+ <p>Structures_DataGrid_Renderer_XLS</p>
+ <p>Structures_DataGrid_Renderer_XML</p>
+ <p>Structures_DataGrid_Renderer_XUL</p>
+ <p>Structures_Form</p>
+ <p>Structures_Form_Gtk2</p>
+ <p>Structures_Graph</p>
+ <p>Structures_LinkedList</p>
+ <p>System_Command</p>
+ <p>System_Daemon</p>
+ <p>System_Folders</p>
+ <p>System_Mount</p>
+ <p>System_ProcWatch</p>
+ <p>System_SharedMemory</p>
+ <p>System_Socket</p>
+ <p>System_WinDrives</p>
+ <p>Testing_DocTest</p>
+ <p>Testing_FIT</p>
+ <p>Testing_Selenium</p>
+ <p>Text_CAPTCHA</p>
+ <p>Text_CAPTCHA_Numeral</p>
+ <p>Text_Diff</p>
+ <p>Text_Figlet</p>
+ <p>Text_Highlighter</p>
+ <p>Text_Huffman</p>
+ <p>Text_LanguageDetect</p>
+ <p>Text_Password</p>
+ <p>Text_PathNavigator</p>
+ <p>Text_Spell_Audio</p>
+ <p>Text_Statistics</p>
+ <p>Text_TeXHyphen</p>
+ <p>Text_Wiki</p>
+ <p>Text_Wiki_BBCode</p>
+ <p>Text_Wiki_Cowiki</p>
+ <p>Text_Wiki_Creole</p>
+ <p>Text_Wiki_Doku</p>
+ <p>Text_Wiki_Mediawiki</p>
+ <p>Text_Wiki_Tiki</p>
+ <p>Translation</p>
+ <p>Translation2</p>
+ <p>Tree</p>
+ <p>UDDI</p>
+ <p>URI_Template</p>
+ <p>Validate</p>
+ <p>Validate_AR</p>
+ <p>Validate_AT</p>
+ <p>Validate_AU</p>
+ <p>Validate_BE</p>
+ <p>Validate_CA</p>
+ <p>Validate_CH</p>
+ <p>Validate_DE</p>
+ <p>Validate_DK</p>
+ <p>Validate_ES</p>
+ <p>Validate_FI</p>
+ <p>Validate_Finance</p>
+ <p>Validate_Finance_CreditCard</p>
+ <p>Validate_FR</p>
+ <p>Validate_HU</p>
+ <p>Validate_IE</p>
+ <p>Validate_IN</p>
+ <p>Validate_IS</p>
+ <p>Validate_ISPN</p>
+ <p>Validate_IT</p>
+ <p>Validate_LV</p>
+ <p>Validate_NL</p>
+ <p>Validate_NZ</p>
+ <p>Validate_PL</p>
+ <p>Validate_ptBR</p>
+ <p>Validate_RU</p>
+ <p>Validate_UK</p>
+ <p>Validate_US</p>
+ <p>Validate_ZA</p>
+ <p>Var_Dump</p>
+ <p>VersionControl_SVN</p>
+ <p>VFS</p>
+ <p>XML_Beautifier</p>
+ <p>XML_CSSML</p>
+ <p>XML_DB_eXist</p>
+ <p>XML_DTD</p>
+ <p>XML_FastCreate</p>
+ <p>XML_Feed_Parser</p>
+ <p>XML_fo2pdf</p>
+ <p>XML_FOAF</p>
+ <p>XML_GRDDL</p>
+ <p>XML_HTMLSax</p>
+ <p>XML_HTMLSax3</p>
+ <p>XML_image2svg</p>
+ <p>XML_Indexing</p>
+ <p>XML_MXML</p>
+ <p>XML_NITF</p>
+ <p>XML_Parser</p>
+ <p>XML_Query2XML</p>
+ <p>XML_RDDL</p>
+ <p>XML_RPC</p>
+ <p>XML_RPC2</p>
+ <p>XML_RSS</p>
+ <p>XML_SaxFilters</p>
+ <p>XML_Serializer</p>
+ <p>XML_sql2xml</p>
+ <p>XML_Statistics</p>
+ <p>XML_SVG</p>
+ <p>XML_svg2image</p>
+ <p>XML_Transformer</p>
+ <p>XML_Tree</p>
+ <p>XML_Util</p>
+ <p>XML_Wddx</p>
+ <p>XML_XPath</p>
+ <p>XML_XPath2</p>
+ <p>XML_XSLT_Wrapper</p>
+ <p>XML_XUL</p>
+</a>', 'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/archive_tar/stable.txt", '1.3.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/archive_zip/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/asteriskmanager/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/auth/stable.txt", '1.6.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/auth_http/stable.txt", '2.1.6', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/auth_prefmanager/stable.txt", '1.2.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/auth_prefmanager2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/auth_radius/stable.txt", '1.0.6', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/auth_sasl/stable.txt", '1.0.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/benchmark/stable.txt", '1.2.7', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/cache/stable.txt", '1.5.5', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/cache_lite/stable.txt", '1.7.4', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/calendar/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/codegen/stable.txt", '1.0.5', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/codegen_mysql/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/codegen_mysql_plugin/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/codegen_mysql_udf/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/codegen_pecl/stable.txt", '1.1.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/config/stable.txt", '1.10.11', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/console_color/stable.txt", '1.0.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/console_commandline/stable.txt", '1.0.6', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/console_getargs/stable.txt", '1.3.4', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/console_getopt/stable.txt", '1.2.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/console_getoptplus/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/console_progressbar/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/console_table/stable.txt", '1.1.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/contact_addressbook/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/contact_vcard_build/stable.txt", '1.1.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/contact_vcard_parse/stable.txt", '1.31.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/crypt_blowfish/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/crypt_cbc/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/crypt_chap/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/crypt_diffiehellman/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/crypt_gpg/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/crypt_hmac/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/crypt_hmac2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/crypt_microid/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/crypt_rc4/stable.txt", '1.0.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/crypt_rsa/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/crypt_xtea/stable.txt", '1.1.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/crypt_xxtea/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date/stable.txt", '1.4.7', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_austria/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_brazil/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_denmark/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_discordian/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_englandwales/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_germany/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_iceland/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_ireland/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_italy/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_japan/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_netherlands/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_norway/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_phpdotnet/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_romania/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_slovenia/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_sweden/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_ukraine/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_uno/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/date_holidays_usa/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/db/stable.txt", '1.7.13', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/dba/stable.txt", '1.1.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/dba_relational/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/db_ado/stable.txt", '1.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/db_dataobject/stable.txt", '1.8.8', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/db_dataobject_formbuilder/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/db_ldap/stable.txt", '1.2.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/db_ldap2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/db_nestedset/stable.txt", '1.2.4', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/db_nestedset2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/db_odbtp/stable.txt", '1.0.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/db_pager/stable.txt", '0.7', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/db_querytool/stable.txt", '1.1.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/db_sqlite_tools/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/db_table/stable.txt", '1.5.6', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/event_dispatcher/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/event_signalemitter/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file/stable.txt", '1.3.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_archive/stable.txt", '1.5.4', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_bittorrent/stable.txt", '1.1.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_bittorrent2/stable.txt", '1.2.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_cabinet/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_csv/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_csv_datasource/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_deliciouslibrary/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_dicom/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_dns/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_find/stable.txt", '1.3.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_fortune/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_fstab/stable.txt", '2.0.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_gettext/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_htaccess/stable.txt", '1.2.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_imc/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_infopath/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_marc/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_mogile/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_ogg/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_passwd/stable.txt", '1.1.7', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_pdf/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_searchreplace/stable.txt", '1.1.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_sitemap/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_smbpasswd/stable.txt", '1.0.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_util/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/file_xspf/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/fsm/stable.txt", '1.3.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/games_chess/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/genealogy_gedcom/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/gtk2_entrydialog/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/gtk2_exceptiondump/stable.txt", '1.1.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/gtk2_filedrop/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/gtk2_indexedcombobox/stable.txt", '1.1.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/gtk2_phpconfig/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/gtk2_scrollinglabel/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/gtk2_vardump/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/gtk_filedrop/stable.txt", '1.0.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/gtk_mdb_designer/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/gtk_scrollinglabel/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/gtk_styled/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/gtk_vardump/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_ajax/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_bbcodeparser/stable.txt", '1.2.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_common/stable.txt", '1.2.4', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_common2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_crypt/stable.txt", '1.3.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_css/stable.txt", '1.5.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_entities/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_form/stable.txt", '1.3.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_javascript/stable.txt", '1.1.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_menu/stable.txt", '2.1.4', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_page/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_page2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_progress/stable.txt", '1.2.6', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_progress2/stable.txt", '2.4.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_quickform/stable.txt", '3.2.10', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_quickform2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_quickform_advmultiselect/stable.txt", '1.4.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_quickform_altselect/stable.txt", '1.1.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_quickform_captcha/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_quickform_controller/stable.txt", '1.0.9', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_quickform_dhtmlrulestableless/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_quickform_elementgrid/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_quickform_livesearch/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_quickform_renderer_tableless/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_quickform_rule_spelling/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_quickform_selectfilter/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_safe/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_select/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_select_common/stable.txt", '1.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_table/stable.txt", '1.8.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_table_matrix/stable.txt", '1.0.9', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_tagcloud/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_template_flexy/stable.txt", '1.3.4', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_template_it/stable.txt", '1.2.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_template_phplib/stable.txt", '1.4.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_template_sigma/stable.txt", '1.2.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_template_xipe/stable.txt", '1.7.6', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/html_treemenu/stable.txt", '1.2.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/http/stable.txt", '1.4.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/http_client/stable.txt", '1.2.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/http_download/stable.txt", '1.1.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/http_floodcontrol/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/http_header/stable.txt", '1.2.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/http_request/stable.txt", '1.4.4', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/http_request2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/http_server/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/http_session/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/http_session2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/http_sessionserver/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/http_upload/stable.txt", '0.9.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/http_webdav_client/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/http_webdav_server/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/i18n/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/i18nv2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/i18n_unicodenormalizer/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/i18n_unicodestring/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_3d/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_barcode/stable.txt", '1.1.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_canvas/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_color/stable.txt", '1.0.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_color2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_gis/stable.txt", '1.1.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_graph/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_graphviz/stable.txt", '1.2.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_iptc/stable.txt", '1.0.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_jpegmarkerreader/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_jpegxmpreader/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_monobmp/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_puzzle/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_remote/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_text/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_tools/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_transform/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_wbmp/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/image_xbm/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/inline_c/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/liveuser/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/liveuser_admin/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/log/stable.txt", '1.11.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mail/stable.txt", '1.1.14', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mail_imap/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mail_imapv2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mail_mbox/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mail_mime/stable.txt", '1.5.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mail_mimedecode/stable.txt", '1.5.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mail_queue/stable.txt", '1.2.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_basex/stable.txt", '0.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_biginteger/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_binaryutils/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_combinatorics/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_complex/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_derivative/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_fibonacci/stable.txt", '0.8', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_finance/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_fraction/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_histogram/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_integer/stable.txt", '0.8', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_matrix/stable.txt", '0.8.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_numerical_rootfinding/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_polynomial/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_quaternion/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_rpn/stable.txt", '1.1.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_stats/stable.txt", '0.8.5', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_trigop/stable.txt", '1.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/math_vector/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mdb/stable.txt", '1.3.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mdb2/stable.txt", '2.4.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mdb2_driver_fbsql/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mdb2_driver_ibase/stable.txt", '1.4.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mdb2_driver_mssql/stable.txt", '1.2.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mdb2_driver_mysql/stable.txt", '1.4.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mdb2_driver_mysqli/stable.txt", '1.4.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mdb2_driver_oci8/stable.txt", '1.4.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mdb2_driver_pgsql/stable.txt", '1.4.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mdb2_driver_querysim/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mdb2_driver_sqlite/stable.txt", '1.4.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mdb2_schema/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mdb2_tablebrowser/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mdb_querytool/stable.txt", '1.2.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/message/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mime_type/stable.txt", '1.2.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mp3_id/stable.txt", '1.2.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mp3_idv2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/mp3_playlist/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_cddb/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_checkip/stable.txt", '1.2.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_checkip2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_curl/stable.txt", '1.2.5', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_cyrus/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_dict/stable.txt", '1.0.5', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_dig/stable.txt", '0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_dime/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_dns/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_dnsbl/stable.txt", '1.3.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_finger/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_ftp/stable.txt", '1.3.7', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_ftp2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_gameserverquery/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_gearman/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_geo/stable.txt", '1.0.4', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_geoip/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_growl/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_hl7/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_ident/stable.txt", '1.1.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_idna/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_imap/stable.txt", '1.0.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_ipv4/stable.txt", '1.3.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_ipv6/stable.txt", '1.0.5', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_irc/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_ldap/stable.txt", '1.1.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_ldap2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_lmtp/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_mac/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_monitor/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_mpd/stable.txt", '1.0.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_nmap/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_nntp/stable.txt", '1.4.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_ping/stable.txt", '2.4.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_pop3/stable.txt", '1.3.6', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_portscan/stable.txt", '1.0.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_server/stable.txt", '1.0.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_sieve/stable.txt", '1.1.6', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_smartirc/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_smpp/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_smpp_client/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_sms/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_smtp/stable.txt", '1.3.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_socket/stable.txt", '1.0.9', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_traceroute/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_url/stable.txt", '1.0.15', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_url2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_url_mapper/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_useragent_detect/stable.txt", '2.5.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_useragent_mobile/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_useragent_mobile_gps/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_vpopmaild/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_whois/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/net_wifi/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/numbers_roman/stable.txt", '1.0.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/numbers_words/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/ole/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/opendocument/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pager/stable.txt", '2.4.7', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pager_sliding/stable.txt", '1.6', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/payment_clieop/stable.txt", '0.1.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/payment_dta/stable.txt", '1.2.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/payment_paypal_soap/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/payment_process/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/stable.txt", '1.7.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pearweb/stable.txt", '1.17.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pearweb_channelxml/stable.txt", '1.13.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pearweb_gopear/stable.txt", '1.1.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pearweb_index/stable.txt", '1.16.13', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pearweb_phars/stable.txt", '1.4.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_command_packaging/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_delegator/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_errorstack/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_frontend_gtk/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_frontend_gtk2/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_frontend_web/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_info/stable.txt", '1.9.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_packagefilemanager/stable.txt", '1.6.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_packagefilemanager2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_packagefilemanager_cli/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_packagefilemanager_frontend/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_packagefilemanager_frontend_web/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_packagefilemanager_gui_gtk/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_packagefilemanager_plugins/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_packageupdate/stable.txt", '1.0.4', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_packageupdate_gtk2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_packageupdate_web/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_remoteinstaller/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_size/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/phpdoc/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/phpdocumentor/stable.txt", '1.4.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/phpunit/stable.txt", '1.3.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/phpunit2/stable.txt", '2.3.6', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_annotation/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_archive/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_arrayof/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_beautifier/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_codesniffer/stable.txt", '1.1.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_compat/stable.txt", '1.5.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_compatinfo/stable.txt", '1.8.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_debug/stable.txt", '1.0.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_docblockgenerator/stable.txt", '1.1.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_fork/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_functioncalltracer/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_lexergenerator/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_parser/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_parsergenerator/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_parser_docblockparser/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_shell/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/php_uml/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/qa_peardoc_coverage/stable.txt", '1.1.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/rdf/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/rdf_n3/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/rdf_ntriple/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/rdf_rdql/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/science_chemistry/stable.txt", '1.1.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/scriptreorganizer/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/search_mnogosearch/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_akismet/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_akismet2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_amazon/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_amazon_s3/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_amazon_sqs/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_atlassian_crowd/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_blogging/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_compete/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_delicious/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_digg/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_dyndns/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_ebay/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_exchangerates/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_facebook/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_geonames/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_google/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_hatena/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_oembed/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_opensearch/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_pingback/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_projecthoneypot/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_sharedbook/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_technorati/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_tinyurl/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_trackback/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_twitpic/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_twitter/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_urltea/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_w3c_cssvalidator/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_w3c_htmlvalidator/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_weather/stable.txt", '1.4.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_webservice/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_yadis/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_yahoo/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_yahoo_jp/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/services_youtube/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/soap/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/soap_interop/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/spreadsheet_excel_writer/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/sql_parser/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/stream_shm/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/stream_var/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_bibtex/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_datasource_array/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_datasource_csv/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_datasource_dataobject/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_datasource_db/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_datasource_dbquery/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_datasource_dbtable/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_datasource_excel/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_datasource_mdb2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_datasource_pdo/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_datasource_rss/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_datasource_xml/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_renderer_console/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_renderer_csv/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_renderer_flexy/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_renderer_htmlsortform/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_renderer_htmltable/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_renderer_pager/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_renderer_smarty/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_renderer_xls/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_renderer_xml/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_datagrid_renderer_xul/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_form/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_form_gtk2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_graph/stable.txt", '1.0.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/structures_linkedlist/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/system_command/stable.txt", '1.0.6', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/system_daemon/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/system_folders/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/system_mount/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/system_procwatch/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/system_sharedmemory/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/system_socket/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/system_windrives/stable.txt", '1.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/testing_doctest/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/testing_fit/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/testing_selenium/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_captcha/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_captcha_numeral/stable.txt", '1.2.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_diff/stable.txt", '1.1.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_figlet/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_highlighter/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_huffman/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_languagedetect/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_password/stable.txt", '1.1.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_pathnavigator/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_spell_audio/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_statistics/stable.txt", '1.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_texhyphen/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_wiki/stable.txt", '1.2.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_wiki_bbcode/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_wiki_cowiki/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_wiki_creole/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_wiki_doku/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_wiki_mediawiki/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/text_wiki_tiki/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/translation/stable.txt", '1.2.6pl1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/translation2/stable.txt", '2.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/tree/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/uddi/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/uri_template/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_ar/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_at/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_au/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_be/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_ca/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_ch/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_de/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_dk/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_es/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_fi/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_finance/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_finance_creditcard/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_fr/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_hu/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_ie/stable.txt", '1.0.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_in/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_is/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_ispn/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_it/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_lv/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_nl/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_nz/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_pl/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_ptbr/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_ru/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_uk/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_us/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/validate_za/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/var_dump/stable.txt", '1.0.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/versioncontrol_svn/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/vfs/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_beautifier/stable.txt", '1.2.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_cssml/stable.txt", '1.1.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_db_exist/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_dtd/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_fastcreate/stable.txt", '1.0.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_feed_parser/stable.txt", '1.0.3', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_fo2pdf/stable.txt", '0.98', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_foaf/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_grddl/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_htmlsax/stable.txt", '2.1.2', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_htmlsax3/stable.txt", '3.0.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_image2svg/stable.txt", '0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_indexing/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_mxml/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_nitf/stable.txt", '1.1.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_parser/stable.txt", '1.3.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_query2xml/stable.txt", '1.7.0', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rddl/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/stable.txt", '1.5.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc2/stable.txt", '1.0.5', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rss/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_saxfilters/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_serializer/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_sql2xml/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_statistics/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_svg/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_svg2image/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_transformer/stable.txt", '1.1.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_tree/stable.txt", '1.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_util/stable.txt", '1.2.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_wddx/stable.txt", '1.0.1', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_xpath/stable.txt", '1.2.4', 'text/xml');
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_xpath2/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_xslt_wrapper/stable.txt", false, false);
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_xul/stable.txt", false, false);
 
-It is designed to be used alongside the PEAR Auth class, but can be used with anything that allows you
-to obtain the user\'s id - including your own code.",
-        'lead' =>
-            "jellybob",
-        'stable' =>
-            "1.1.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Auth_RADIUS' =>
-        array(
-        'packageid' =>
-            "170",
-        'categoryid' =>
-            "1",
-        'category' =>
-            "Authentication",
-        'license' =>
-            "BSD",
-        'summary' =>
-            "Wrapper Classes for the RADIUS PECL.",
-        'description' =>
-            "This package provides wrapper-classes for the RADIUS PECL.
-There are different Classes for the different authentication methods.
-If you are using CHAP-MD5 or MS-CHAP you need also the Crypt_CHAP package.
-If you are using MS-CHAP you need also the mhash and mcrypt extension.",
-        'lead' =>
-            "mbretter",
-        'stable' =>
-            "1.0.4",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Auth_SASL' =>
-        array(
-        'packageid' =>
-            "123",
-        'categoryid' =>
-            "1",
-        'category' =>
-            "Authentication",
-        'license' =>
-            "BSD",
-        'summary' =>
-            "Abstraction of various SASL mechanism responses",
-        'description' =>
-            "Provides code to generate responses to common SASL mechanisms, including:
-o Digest-MD5
-o CramMD5
-o Plain
-o Anonymous
-o Login (Pseudo mechanism)",
-        'lead' =>
-            "damian",
-        'stable' =>
-            "1.0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Benchmark' =>
-        array(
-        'packageid' =>
-            "53",
-        'categoryid' =>
-            "2",
-        'category' =>
-            "Benchmarking",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Framework to benchmark PHP scripts or function calls.",
-        'description' =>
-            "Framework to benchmark PHP scripts or function calls.",
-        'lead' =>
-            "sebastian",
-        'stable' =>
-            "1.2.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'bz2' =>
-        array(
-        'packageid' =>
-            "209",
-        'categoryid' =>
-            "33",
-        'category' =>
-            "File Formats",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "A Bzip2 management extension",
-        'description' =>
-            "Bz2 is an extension to create and parse bzip2 compressed data.",
-        'lead' =>
-            "sterling",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Cache' =>
-        array(
-        'packageid' =>
-            "40",
-        'categoryid' =>
-            "3",
-        'category' =>
-            "Caching",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Framework for caching of arbitrary data.",
-        'description' =>
-            "With the PEAR Cache you can cache the result of certain function
-calls, as well as the output of a whole script run or share data
-between applications.",
-        'lead' =>
-            "dufuz",
-        'stable' =>
-            "1.5.4",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Cache_Lite' =>
-        array(
-        'packageid' =>
-            "99",
-        'categoryid' =>
-            "3",
-        'category' =>
-            "Caching",
-        'license' =>
-            "lgpl",
-        'summary' =>
-            "Fast and Safe little cache system",
-        'description' =>
-            "This package is a little cache system optimized for file containers. It is fast and safe (because it uses file locking and/or anti-corruption tests).",
-        'lead' =>
-            "fab",
-        'stable' =>
-            "1.3.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Config' =>
-        array(
-        'packageid' =>
-            "3",
-        'categoryid' =>
-            "4",
-        'category' =>
-            "Configuration",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Your configurations swiss-army knife.",
-        'description' =>
-            "The Config package provides methods for configuration manipulation.
-* Creates configurations from scratch
-* Parses and outputs different formats (XML, PHP, INI, Apache...)
-* Edits existing configurations
-* Converts configurations to other formats
-* Allows manipulation of sections, comments, directives...
-* Parses configurations into a tree structure
-* Provides XPath like access to directives",
-        'lead' =>
-            "mansion",
-        'stable' =>
-            "1.10.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Console_Getargs' =>
-        array(
-        'packageid' =>
-            "333",
-        'categoryid' =>
-            "5",
-        'category' =>
-            "Console",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "A command-line arguments parser",
-        'description' =>
-            "The Console_Getargs package implements a Command Line arguments and
-parameters parser for your CLI applications. It performs some basic
-arguments validation and automatically creates a formatted help text,
-based on the given configuration.",
-        'lead' =>
-            "scottmattocks",
-        'stable' =>
-            "1.2.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Console_Getopt' =>
-        array(
-        'packageid' =>
-            "67",
-        'categoryid' =>
-            "5",
-        'category' =>
-            "Console",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Command-line option parser",
-        'description' =>
-            "This is a PHP implementation of \"getopt\" supporting both
-short and long options.",
-        'lead' =>
-            "andrei",
-        'stable' =>
-            "1.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Console_Table' =>
-        array(
-        'packageid' =>
-            "109",
-        'categoryid' =>
-            "5",
-        'category' =>
-            "Console",
-        'license' =>
-            "BSD",
-        'summary' =>
-            "Class that makes it easy to build console style tables",
-        'description' =>
-            "Provides methods such as addRow(), insertRow(), addCol() etc to build Console
-tables. Can be with or without headers, and has various configurable options.",
-        'lead' =>
-            "xnoguer",
-        'stable' =>
-            "1.0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Contact_Vcard_Build' =>
-        array(
-        'packageid' =>
-            "191",
-        'categoryid' =>
-            "33",
-        'category' =>
-            "File Formats",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Build (create) and fetch vCard 2.1 and 3.0 text blocks.",
-        'description' =>
-            "Allows you to programmatically create a vCard, version 2.1 or 3.0, and fetch the vCard text.",
-        'lead' =>
-            "pmjones",
-        'stable' =>
-            "1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Contact_Vcard_Parse' =>
-        array(
-        'packageid' =>
-            "186",
-        'categoryid' =>
-            "33",
-        'category' =>
-            "File Formats",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Parse vCard 2.1 and 3.0 files.",
-        'description' =>
-            "Allows you to parse vCard files and text blocks, and get back an array of the elements of each vCard in the file or text.",
-        'lead' =>
-            "pmjones",
-        'stable' =>
-            "1.30",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'crack' =>
-        array(
-        'packageid' =>
-            "293",
-        'categoryid' =>
-            "29",
-        'category' =>
-            "Tools and Utilities",
-        'license' =>
-            "Artistic",
-        'summary' =>
-            "\"Good Password\" Checking Utility: Keep your users\' passwords reasonably safe from dictionary based attacks",
-        'description' =>
-            "This package provides an interface to the cracklib (libcrack) libraries that come standard on most unix-like distributions. This allows you to check passwords against dictionaries of words to ensure some minimal level of password security.
-
-From the cracklib README
-CrackLib makes literally hundreds of tests to determine whether you\'ve
-chosen a bad password.
-
-* It tries to generate words from your username and gecos entry to tries
-to match them against what you\'ve chosen.
-
-* It checks for simplistic patterns.
-
-* It then tries to reverse-engineer your password into a dictionary
-word, and searches for it in your dictionary.
-
-- after all that, it\'s PROBABLY a safe(-ish) password. 8-)
-
-
-The crack extension requires cracklib (libcrack) 2.7, some kind of word dictionary, and the proper header files (crack.h and packer.h) to build. For cracklib RPMs for Red Hat systems and a binary distribution for Windows systems, visit http://www.dragonstrider.com/cracklib.",
-        'lead' =>
-            "skettler",
-        'stable' =>
-            "0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Crypt_CBC' =>
-        array(
-        'packageid' =>
-            "48",
-        'categoryid' =>
-            "6",
-        'category' =>
-            "Encryption",
-        'license' =>
-            "PHP 2.02",
-        'summary' =>
-            "A class to emulate Perl\'s Crypt::CBC module.",
-        'description' =>
-            "A class to emulate Perl\'s Crypt::CBC module.",
-        'lead' =>
-            "cmv",
-        'stable' =>
-            "0.4",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Crypt_CHAP' =>
-        array(
-        'packageid' =>
-            "169",
-        'categoryid' =>
-            "6",
-        'category' =>
-            "Encryption",
-        'license' =>
-            "BSD",
-        'summary' =>
-            "Generating CHAP packets.",
-        'description' =>
-            "This package provides Classes for generating CHAP packets.
-Currently these types of CHAP are supported:
-* CHAP-MD5
-* MS-CHAPv1
-* MS-CHAPv2
-For MS-CHAP the mhash and mcrypt extensions must be loaded.",
-        'lead' =>
-            "mbretter",
-        'stable' =>
-            "1.0.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Crypt_RC4' =>
-        array(
-        'packageid' =>
-            "50",
-        'categoryid' =>
-            "6",
-        'category' =>
-            "Encryption",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Encryption class for RC4 encryption",
-        'description' =>
-            "RC4 encryption class",
-        'lead' =>
-            "zyprexia",
-        'stable' =>
-            "1.0.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Crypt_Xtea' =>
-        array(
-        'packageid' =>
-            "110",
-        'categoryid' =>
-            "6",
-        'category' =>
-            "Encryption",
-        'license' =>
-            "PHP 2.02",
-        'summary' =>
-            "A class that implements the Tiny Encryption Algorithm (TEA) (New Variant).",
-        'description' =>
-            "A class that implements the Tiny Encryption Algorithm (TEA) (New Variant).
-This class does not depend on mcrypt.
-Since the latest fix handles properly dealing with unsigned integers,
-which where solved by introducing new functions _rshift(), _add(), the
-speed of the encryption and decryption has radically dropped.
-Do not use for large amounts of data.
-Original code from http://vader.brad.ac.uk/tea/source.shtml#new_ansi
-Currently to be found at: http://www.simonshepherd.supanet.com/source.shtml#new_ansi",
-        'lead' =>
-            "jderks",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'cybermut' =>
-        array(
-        'packageid' =>
-            "199",
-        'categoryid' =>
-            "18",
-        'category' =>
-            "Payment",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "CyberMut Paiement System",
-        'description' =>
-            "This extension gives you the possibility to use the CyberMut Paiement System of the Credit Mutuel (French Bank).",
-        'lead' =>
-            "nicos",
-        'stable' =>
-            "1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'cyrus' =>
-        array(
-        'packageid' =>
-            "210",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "An extension which eases the manipulation of Cyrus IMAP servers.",
-        'description' =>
-            "An extension which eases the manipulation of Cyrus IMAP servers.",
-        'lead' =>
-            "sterling",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Date' =>
-        array(
-        'packageid' =>
-            "57",
-        'categoryid' =>
-            "8",
-        'category' =>
-            "Date and Time",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Date and Time Zone Classes",
-        'description' =>
-            "Generic classes for representation and manipulation of
-dates, times and time zones without the need of timestamps,
-which is a huge limitation for php programs.  Includes time zone data,
-time zone conversions and many date/time conversions.
-It does not rely on 32-bit system date stamps, so
-you can display calendars and compare dates that date
-pre 1970 and post 2038. This package also provides a class
-to convert date strings between Gregorian and Human calendar formats.",
-        'lead' =>
-            "pajoye",
-        'stable' =>
-            "1.4.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'DB' =>
-        array(
-        'packageid' =>
-            "46",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Database Abstraction Layer",
-        'description' =>
-            "DB is a database abstraction layer providing:
-* an OO-style query API
-* portability features that make programs written for one DBMS work with other DBMS\'s
-* a DSN (data source name) format for specifying database servers
-* prepare/execute (bind) emulation for databases that don\'t support it natively
-* a result object for each query response
-* portable error codes
-* sequence emulation
-* sequential and non-sequential row fetching as well as bulk fetching
-* formats fetched rows as associative arrays, ordered arrays or objects
-* row limit support
-* transactions support
-* table information interface
-* DocBook and PHPDoc API documentation
-
-DB layers itself on top of PHP\'s existing database
-extensions.  The currently supported extensions are:
-dbase, fbsql, interbase, informix, msql, mssql, mysql,
-mysqli, oci8, odbc, pgsql, sqlite and sybase.
-
-DB is compatible with both PHP 4 and PHP 5.",
-        'lead' =>
-            "danielc",
-        'stable' =>
-            "1.6.8",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'DBA' =>
-        array(
-        'packageid' =>
-            "85",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "LGPL",
-        'summary' =>
-            "Berkely-style database abstraction class",
-        'description' =>
-            "DBA is a wrapper for the php DBA functions. It includes a file-based emulator and provides a uniform, object-based interface for the Berkeley-style database systems.",
-        'lead' =>
-            "busterb",
-        'stable' =>
-            "1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'DB_ado' =>
-        array(
-        'packageid' =>
-            "68",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "LGPL",
-        'summary' =>
-            "DB driver which use MS ADODB library",
-        'description' =>
-            "DB_ado is a database independent query interface definition for Microsoft\'s ADODB library using PHP\'s COM extension.
-This class allows you to connect to different data sources like MS Access, MS SQL Server, Oracle and other RDBMS on a Win32 operating system.
-Moreover the possibility exists to use MS Excel spreadsheets, XML, text files and other not relational data as data source.",
-        'lead' =>
-            "alexios",
-        'stable' =>
-            "1.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'DB_DataObject' =>
-        array(
-        'packageid' =>
-            "80",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "An SQL Builder, Object Interface to Database Tables",
-        'description' =>
-            "DataObject performs 2 tasks:
-  1. Builds SQL statements based on the objects vars and the builder methods.
-  2. acts as a datastore for a table row.
-  The core class is designed to be extended for each of your tables so that you put the
-  data logic inside the data classes.
-  included is a Generator to make your configuration files and your base classes.
-  nd",
-        'lead' =>
-            "alan_k",
-        'stable' =>
-            "1.7.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'DB_ldap' =>
-        array(
-        'packageid' =>
-            "101",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "LGPL",
-        'summary' =>
-            "DB interface to LDAP server",
-        'description' =>
-            "The PEAR::DB_ldap class provides a DB compliant interface to LDAP servers",
-        'lead' =>
-            "ludoo",
-        'stable' =>
-            "1.1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'DB_NestedSet' =>
-        array(
-        'packageid' =>
-            "187",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "API to build and query nested sets",
-        'description' =>
-            "DB_NestedSet let\'s you create trees with infinite depth
-inside a relational database.
-The package provides a way to
-o create/update/delete nodes
-o query nodes, trees and subtrees
-o copy (clone) nodes, trees and subtrees
-o move nodes, trees and subtrees
-o Works with PEAR::DB, PEAR::MDB, PEAR::MDB2
-o output the tree with
-  - PEAR::HTML_TreeMenu
-  - TigraMenu (http://www.softcomplex.com/products/tigra_menu/)
-  - CoolMenus (http://www.dhtmlcentral.com/projects/coolmenus/)
-  - PEAR::Image_GraphViz (http://pear.php.net/package/Image_GraphViz)
-  - PEAR::HTML_Menu",
-        'lead' =>
-            "datenpunk",
-        'stable' =>
-            "1.2.4",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'DB_odbtp' =>
-        array(
-        'packageid' =>
-            "397",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "DB interface for ODBTP",
-        'description' =>
-            "DB_odbtp is a PEAR DB driver that uses the ODBTP extension to connect to a database.
-It can be used to remotely access any Win32-ODBC accessible database from any platform.",
-        'lead' =>
-            "rtwitty",
-        'stable' =>
-            "1.0.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'DB_Pager' =>
-        array(
-        'packageid' =>
-            "31",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "LGPL",
-        'summary' =>
-            "Retrieve and return information of database result sets",
-        'description' =>
-            "This class handles all the stuff needed for displaying
-paginated results from a database query of Pear DB.
-including fetching only the needed rows and giving extensive information
-for helping build an HTML or GTK query result display.",
-        'lead' =>
-            "quipo",
-        'stable' =>
-            "0.7",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'DB_QueryTool' =>
-        array(
-        'packageid' =>
-            "163",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "An OO-interface for easily retrieving and modifying data in a DB.",
-        'description' =>
-            "This package is an OO-abstraction to the SQL-Query language, it provides methods such
-as setWhere, setOrder, setGroup, setJoin, etc. to easily build queries.
-It also provides an easy to learn interface that interacts nicely with HTML-forms using
-arrays that contain the column data, that shall be updated/added in a DB.
-This package bases on an SQL-Builder which lets you easily build
-SQL-Statements and execute them.",
-        'lead' =>
-            "quipo",
-        'stable' =>
-            "0.11.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'enchant' =>
-        array(
-        'packageid' =>
-            "302",
-        'categoryid' =>
-            "36",
-        'category' =>
-            "Text",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "libenchant binder, support near all spelling tools",
-        'description' =>
-            "Enchant is a binder for libenchant. Libenchant provides a common
-API for many spell libraries:
-- aspell/pspell (intended to replace ispell)
-- hspell (hebrew)
-- ispell
-- myspell (OpenOffice project, mozilla)
-- uspell (primarily Yiddish, Hebrew, and Eastern European languages)
-A plugin system allows to add custom spell support.
-see www.abisource.com/enchant/",
-        'lead' =>
-            "iliaa",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'File' =>
-        array(
-        'packageid' =>
-            "43",
-        'categoryid' =>
-            "9",
-        'category' =>
-            "File System",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Common file and directory routines",
-        'description' =>
-            "Provides easy access to read/write to files along with
-some common routines to deal with paths. Also provides
-interface for handling CSV files.",
-        'lead' =>
-            "mike",
-        'stable' =>
-            "1.0.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'File_Find' =>
-        array(
-        'packageid' =>
-            "27",
-        'categoryid' =>
-            "9",
-        'category' =>
-            "File System",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "A Class the facillitates the search of filesystems",
-        'description' =>
-            "File_Find, created as a replacement for its Perl counterpart, also named
-File_Find, is a directory searcher, which handles, globbing, recursive
-directory searching, as well as a slew of other cool features.?",
-        'lead' =>
-            "tuupola",
-        'stable' =>
-            "0.2.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'File_Fstab' =>
-        array(
-        'packageid' =>
-            "328",
-        'categoryid' =>
-            "33",
-        'category' =>
-            "File Formats",
-        'license' =>
-            "PHP License v3.0",
-        'summary' =>
-            "Read and write fstab files",
-        'description' =>
-            "File_Fstab is an easy-to-use package which can read & write UNIX fstab files. It presents a pleasant object-oriented interface to the fstab.
-Features:
-* Supports blockdev, label, and UUID specification of mount device.
-* Extendable to parse non-standard fstab formats by defining a new Entry class for that format.
-* Easily examine and set mount options for an entry.
-* Stable, functional interface.
-* Fully documented with PHPDoc.",
-        'lead' =>
-            "ieure",
-        'stable' =>
-            "2.0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'File_HtAccess' =>
-        array(
-        'packageid' =>
-            "131",
-        'categoryid' =>
-            "33",
-        'category' =>
-            "File Formats",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Manipulate .htaccess files",
-        'description' =>
-            "Provides methods to create and manipulate .htaccess files.",
-        'lead' =>
-            "tuupola",
-        'stable' =>
-            "1.1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'File_Passwd' =>
-        array(
-        'packageid' =>
-            "128",
-        'categoryid' =>
-            "33",
-        'category' =>
-            "File Formats",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Manipulate many kinds of password files",
-        'description' =>
-            "Provides methods to manipulate and authenticate against standard Unix,
-SMB server, AuthUser (.htpasswd), AuthDigest (.htdigest), CVS pserver
-and custom formatted password files.",
-        'lead' =>
-            "mike",
-        'stable' =>
-            "1.1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'File_SearchReplace' =>
-        array(
-        'packageid' =>
-            "45",
-        'categoryid' =>
-            "9",
-        'category' =>
-            "File System",
-        'license' =>
-            "BSD",
-        'summary' =>
-            "Performs search and replace routines",
-        'description' =>
-            "Provides various functions to perform search/replace
-on files. Preg/Ereg regex supported along with faster
-but more basic str_replace routine.",
-        'lead' =>
-            "tal",
-        'stable' =>
-            "1.0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'File_SMBPasswd' =>
-        array(
-        'packageid' =>
-            "198",
-        'categoryid' =>
-            "33",
-        'category' =>
-            "File Formats",
-        'license' =>
-            "BSD",
-        'summary' =>
-            "Class for managing SAMBA style password files.",
-        'description' =>
-            "With this package, you can maintain smbpasswd-files, usualy used by SAMBA.",
-        'lead' =>
-            "mbretter",
-        'stable' =>
-            "1.0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'fribidi' =>
-        array(
-        'packageid' =>
-            "190",
-        'categoryid' =>
-            "28",
-        'category' =>
-            "Internationalization",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Implementation of the Unicode BiDi algorithm",
-        'description' =>
-            "A PHP frontend to the FriBidi library: an implementation of the unicode Bidi algorithm,
-provides means for handling right-to-left text.",
-        'lead' =>
-            "tal",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'FSM' =>
-        array(
-        'packageid' =>
-            "134",
-        'categoryid' =>
-            "31",
-        'category' =>
-            "Processing",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Finite State Machine",
-        'description' =>
-            "The FSM package provides a simple class that implements a Finite State Machine.",
-        'lead' =>
-            "jon",
-        'stable' =>
-            "1.2.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_BBCodeParser' =>
-        array(
-        'packageid' =>
-            "229",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "This is a parser to replace UBB style tags with their html equivalents.",
-        'description' =>
-            "This is a parser to replace UBB style tags with their html equivalents.
- It does not simply do some regex calls, but is complete stack based parse engine. This ensures that all tags are properly nested, if not, extra tags are added to maintain the nesting. This parser should only produce xhtml 1.0 compliant code. All tags are validated and so are all their attributes. It should be easy to extend this parser with your own tags.",
-        'lead' =>
-            "sjr",
-        'stable' =>
-            "1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_Common' =>
-        array(
-        'packageid' =>
-            "69",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "PEAR::HTML_Common is a base class for other HTML classes.",
-        'description' =>
-            "The PEAR::HTML_Common package provides methods for html code display and attributes handling.
-* Methods to set, remove, update html attributes.
-* Handles comments in HTML code.
-* Handles layout, tabs, line endings for nicer HTML code.",
-        'lead' =>
-            "avb",
-        'stable' =>
-            "1.2.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_Crypt' =>
-        array(
-        'packageid' =>
-            "112",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Encrypts text which is later decoded using javascript on the client side",
-        'description' =>
-            "The PEAR::HTML_Crypt provides methods to encrypt text, which
-   can be later be decrypted using JavaScript on the client side
-
-   This is very useful to prevent spam robots collecting email
-   addresses from your site, included is a method to add mailto
-   links to the text being generated",
-        'lead' =>
-            "mikedransfield",
-        'stable' =>
-            "1.2.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_CSS' =>
-        array(
-        'packageid' =>
-            "233",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License 3.0",
-        'summary' =>
-            "HTML_CSS is a class for generating CSS declarations.",
-        'description' =>
-            "HTML_CSS provides a simple interface for generating
-a stylesheet declaration. It is completely standards compliant, and
-has some great features:
-* Simple OO interface to CSS definitions
-* Can parse existing CSS (string or file)
-* Output to
-    - Inline stylesheet declarations
-    - Document internal stylesheet declarations
-    - Standalone stylesheet declarations
-    - Array of definitions
-    - File
-
-In addition, it shares the following with HTML_Common based classes:
-* Indent style support
-* Line ending style",
-        'lead' =>
-            "farell",
-        'stable' =>
-            "0.2.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_Form' =>
-        array(
-        'packageid' =>
-            "157",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Simple HTML form package",
-        'description' =>
-            "This is a simple HTML form generator.  It supports all the
-HTML form element types including file uploads, may return
-or print the form, just individual form elements or the full
-form in \"table mode\" with a fixed layout.
-
-This package has been superceded by HTML_QuickForm.",
-        'lead' =>
-            "danielc",
-        'stable' =>
-            "1.1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_Javascript' =>
-        array(
-        'packageid' =>
-            "93",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP 3.0",
-        'summary' =>
-            "Provides an interface for creating simple JS scripts.",
-        'description' =>
-            "Provides two classes:
-HTML_Javascript for performing basic JS operations.
-HTML_Javascript_Convert for converting variables
-Allow output data to a file, to the standart output(print), or return",
-        'lead' =>
-            "alan_k",
-        'stable' =>
-            "1.1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_Menu' =>
-        array(
-        'packageid' =>
-            "243",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Generates HTML menus from multidimensional hashes.",
-        'description' =>
-            "With the HTML_Menu class one can easily create and maintain a
-navigation structure for websites, configuring it via a multidimensional
-hash structure. Different modes for the HTML output are supported.",
-        'lead' =>
-            "uw",
-        'stable' =>
-            "2.1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_Progress' =>
-        array(
-        'packageid' =>
-            "235",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License 3.0",
-        'summary' =>
-            "How to include a loading bar in your XHTML documents quickly and easily.",
-        'description' =>
-            "This package provides a way to add a loading bar fully customizable in existing XHTML documents.
-Your browser should accept DHTML feature.
-
-Features:
-- create horizontal, vertival bar and also circle, ellipse and polygons (square, rectangle)
-- allows usage of existing external StyleSheet and/or JavaScript
-- all elements (progress, cells, string) are customizable by their html properties
-- percent/string is floating all around the progress meter
-- compliant with all CSS/XHMTL standards
-- integration with all template engines is very easy
-- implements Observer design pattern. It is possible to add Listeners
-- adds a customizable UI monitor pattern to display a progress bar.
-  User-end can abort progress at any time.
-- Look and feel can be sets by internal API or external config file
-- Allows many progress meter on same page without uses of iframe solution
-- Since release 1.2.0 you may display new shapes like: circle, ellipse, square and rectangle.",
-        'lead' =>
-            "farell",
-        'stable' =>
-            "1.2.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_QuickForm' =>
-        array(
-        'packageid' =>
-            "58",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "The PEAR::HTML_QuickForm package provides methods for creating, validating, processing HTML forms.",
-        'description' =>
-            "The HTML_QuickForm package provides methods for dynamically create, validate and render HTML forms.
-
-Features:
-* More than 20 ready-to-use form elements.
-* XHTML compliant generated code.
-* Numerous mixable and extendable validation rules.
-* Automatic server-side validation and filtering.
-* On request javascript code generation for client-side validation.
-* File uploads support.
-* Total customization of form rendering.
-* Support for external template engines (ITX, Sigma, Flexy, Smarty).
-* Pluggable elements, rules and renderers extensions.",
-        'lead' =>
-            "avb",
-        'stable' =>
-            "3.2.4pl1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_QuickForm_Controller' =>
-        array(
-        'packageid' =>
-            "245",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "The add-on to HTML_QuickForm package that allows building of multipage forms",
-        'description' =>
-            "The package is essentially an implementation of a PageController pattern.
-Architecture:
-* Controller class that examines HTTP requests and manages form values persistence across requests.
-* Page class (subclass of QuickForm) representing a single page of the form.
-* Business logic is contained in subclasses of Action class.
-Cool features:
-* Includes several default Actions that allow easy building of multipage forms.
-* Includes usage examples for common usage cases (single-page form, wizard, tabbed form).",
-        'lead' =>
-            "avb",
-        'stable' =>
-            "1.0.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_Select_Common' =>
-        array(
-        'packageid' =>
-            "165",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "BSD",
-        'summary' =>
-            "Some small classes to handle common &lt;select&gt; lists",
-        'description' =>
-            "Provides &lt;select&gt; lists for:
-o Country
-o UK counties
-o US States
-o FR Departements",
-        'lead' =>
-            "derick",
-        'stable' =>
-            "1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_Table' =>
-        array(
-        'packageid' =>
-            "70",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "PEAR::HTML_Table makes the design of HTML tables easy, flexible, reusable and efficient.",
-        'description' =>
-            "The PEAR::HTML_Table package provides methods for easy and efficient design of HTML tables.
-* Lots of customization options.
-* Tables can be modified at any time.
-* The logic is the same as standard HTML editors.
-* Handles col and rowspans.
-* PHP code is shorter, easier to read and to maintain.
-* Tables options can be reused.",
-        'lead' =>
-            "dufuz",
-        'stable' =>
-            "1.5",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_Table_Matrix' =>
-        array(
-        'packageid' =>
-            "327",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License v3.0",
-        'summary' =>
-            "Autofill a table with data",
-        'description' =>
-            "HTML_Table_Matrix is an extension to HTML_Table which allows you to easily fill up a table with data.
-Features:
-- It uses Filler classes to determine how the data gets filled in the table. With a custom Filler, you can fill data in up, down, forwards, backwards, diagonally, randomly or any other way you like.
-- Comes with Fillers to fill left-to-right-top-to-bottom and right-to-left-top-to-bottom.
-- Abstract Filler methods keep the code clean & easy to understand.
-- Table height or width may be omitted, and it will figure out the correct table size based on the data you provide.
-- It integrates handily with Pager to create pleasant pageable table layouts, such as for an image gallery. Just specify a height or width, Filler, and feed it the data returned from Pager.
-- Table may be constrained to a specific height or width, and excess data will be ignored.
-- Fill offset may be specified, to leave room for a table header, or other elements in the table.
-- Fully documented with PHPDoc.
-- Includes fully functional example code.",
-        'lead' =>
-            "ieure",
-        'stable' =>
-            "1.0.6",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_Template_Flexy' =>
-        array(
-        'packageid' =>
-            "111",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "An extremely powerful Tokenizer driven Template engine",
-        'description' =>
-            "HTML_Template_Flexy started it\'s life as a simplification of HTML_Template_Xipe,
-however in Version 0.2, It became one of the first template engine to use a real Lexer,
-rather than regex\'es, making it possible to do things like ASP.net or Cold Fusion tags.
-However, it still has a very simple set of goals.
-- Very Simple API,
-   o easy to learn...
-   o prevents to much logic going in templates
-- Easy to write document\'able code
-   o By using object vars for a template rather than \'assign\', you
-     can use phpdoc comments to list what variable you use.
-- Editable in WYSIWYG editors
-   o you can create full featured templates, that doesnt get broken every time you edit with
-     Dreamweaver(tm) or Mozzila editor
-   o Uses namespaced attributes to add looping/conditionals
-- Extremely Fast,
-   o runtime is at least 4 time smaller than most other template engines (eg. Smarty)
-   o uses compiled templates, as a result it is many times faster on blocks and loops than
-     than Regex templates (eg. IT/phplib)
-- Safer (for cross site scripting attacks)
-   o All variables default to be output as HTML escaped (overridden with the :h modifier)
-- Multilanguage support
-   o Parses strings out of template, so you can build translation tools
-   o Compiles language specific templates (so translation is only done once, not on every request)
-- Full dynamic element support (like ASP.NET), so you can pick elements to replace at runtime
-
-Features:
-- {variable} to echo \$object->variable
-- {method()} to echo \$object->method();
-- {foreach:var,key,value} to PHP foreach loops
-- tag attributes FLEXY:FOREACH, FLEXY:IF for looping and conditional HTML inclusion
-- {if:variable} to PHP If statement
-- {if:method()} to PHP If statement
-- {else:} and {end:} to close or alternate If statements
-- FORM to HTML_Template_Flexy_Element\'s
-- replacement of INPUT, TEXTAREA and SELECT tags with HTML_Template_Flexy_Element code
-  use FLEXY:IGNORE (inherited) and FLEXY:IGNOREONLY (single) to prevent replacements
-- FLEXY:START/FLEXY:STARTCHILDREN tags to define where template starts/finishes
-- support for urlencoded braces {} in HTML attributes.
-- documentation in the pear manual
-
-- examples at http://cvs.php.net/cvs.php/pear/HTML_Template_Flexy/tests/
-
-** The long term plan for Flexy is to be integrated as a backend for the
-Future Template Package (A BC wrapper will be made available - as I need
-to use it too!)",
-        'lead' =>
-            "alan_k",
-        'stable' =>
-            "1.1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_Template_IT' =>
-        array(
-        'packageid' =>
-            "108",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Integrated Templates",
-        'description' =>
-            "HTML_Template_IT:
-Simple template API.
-The Isotemplate API is somewhat tricky for a beginner although it is the best
-one you can build. template::parse() [phplib template = Isotemplate] requests
-you to name a source and a target where the current block gets parsed into.
-Source and target can be block names or even handler names. This API gives you
-a maximum of fexibility but you always have to know what you do which is
-quite unusual for php skripter like me.
-
-I noticed that I do not any control on which block gets parsed into which one.
-If all blocks are within one file, the script knows how they are nested and in
-which way you have to parse them. IT knows that inner1 is a child of block2, there\'s
-no need to tell him about this.
-Features :
-  * Nested blocks
-  * Include external file
-  * Custom tags format (default {mytag})
-
-HTML_Template_ITX :
-With this class you get the full power of the phplib template class.
-You may have one file with blocks in it but you have as well one main file
-and multiple files one for each block. This is quite usefull when you have
-user configurable websites. Using blocks not in the main template allows
-you to modify some parts of your layout easily.",
-        'lead' =>
-            "uw",
-        'stable' =>
-            "1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_Template_PHPLIB' =>
-        array(
-        'packageid' =>
-            "168",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "LGPL",
-        'summary' =>
-            "preg_* based template system.",
-        'description' =>
-            "The popular Template system from PHPLIB ported to PEAR. It has some
-features that can\'t be found currently in the original version like
-fallback paths. It has minor improvements and cleanup in the code as
-well as some speed improvements.",
-        'lead' =>
-            "bjoern",
-        'stable' =>
-            "1.3.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_Template_Sigma' =>
-        array(
-        'packageid' =>
-            "189",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "An implementation of Integrated Templates API with template \'compilation\' added",
-        'description' =>
-            "HTML_Template_Sigma implements Integrated Templates API designed by Ulf Wendel.
-
-Features:
-* Nested blocks. Nesting is controlled by the engine.
-* Ability to include files from within template: &lt;!-- INCLUDE --&gt;
-* Automatic removal of empty blocks and unknown variables (methods to manually tweak/override this are also available)
-* Methods for runtime addition and replacement of blocks in templates
-* Ability to insert simple function calls into templates: func_uppercase(\'Hello world!\') and to define callback functions for these
-* \'Compiled\' templates: the engine has to parse a template file using regular expressions to find all the blocks and variable placeholders. This is a very \"expensive\" operation and is an overkill to do on every page request: templates seldom change on production websites. Thus this feature: an internal representation of the template structure is saved into a file and this file gets loaded instead of the source one on subsequent requests (unless the source changes)
-* PHPUnit-based tests to define correct behaviour
-* Usage examples for most of the features are available, look in the docs/ directory",
-        'lead' =>
-            "avb",
-        'stable' =>
-            "1.1.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_Template_Xipe' =>
-        array(
-        'packageid' =>
-            "162",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "A simple, fast and powerful template engine.",
-        'description' =>
-            "The template engine is a compiling engine, all templates are compiled into PHP-files.
-This will make the delivery of the files faster on the next request, since the template
-doesn\'t need to be compiled again. If the template changes it will be recompiled.
-
-There is no new template language to learn. Beside the default mode, there is a set of constructs
-since version 1.6 which allow you to edit your templates with WYSIWYG editors.
-
-By default the template engine uses indention for building blocks (you can turn that off).
-This feature was inspired by Python and by the need I felt to force myself
-to write proper HTML-code, using proper indentions, to make the code better readable.
-
-Every template is customizable in multiple ways. You can configure each
-template or an entire directory to use different delimiters, caching parameters, etc.
-via either an XML-file or a XML-chunk which you simply write anywhere inside the tpl-code.
-
-Using the Cache the final file can also be cached (i.e. a resulting HTML-file).
-The caching options can be customized as needed. The cache can reduce the server
-load by very much, since the entire php-file doesn\'t need to be processed again,
-the resulting client-readable data are simply delivered right from the cache
-(the data are saved using php\'s output buffering).
-
-The template engine is prepared to be used for multi-language applications too.
-If you i.e. use the PEAR::I18N for translating the template,
-the compiled templates need to be saved under a different name for each language.
-The template engine is prepared for that too, it saves the compiled template including the
-language code if required (i.e. a compiled index.tpl which is saved for english gets the filename index.tpl.en.php).",
-        'lead' =>
-            "dufuz",
-        'stable' =>
-            "1.7.6",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTML_TreeMenu' =>
-        array(
-        'packageid' =>
-            "77",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "BSD",
-        'summary' =>
-            "Provides an api to create a HTML tree",
-        'description' =>
-            "PHP Based api creates a tree structure using a couple of
-small PHP classes. This can then be converted to javascript
-using the printMenu() method. The tree is  dynamic in
-IE 4 or higher, NN6/Mozilla and Opera 7, and maintains state
-(the collapsed/expanded status of the branches) by using cookies.
-Other browsers display the tree fully expanded. Each node can
-have an optional link and icon. New API in 1.1 with many changes
-(see CVS for changelog) and new features, of which most came
-from Chip Chapin (http://www.chipchapin.com).",
-        'lead' =>
-            "richard",
-        'stable' =>
-            "1.1.9",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTTP' =>
-        array(
-        'packageid' =>
-            "5",
-        'categoryid' =>
-            "11",
-        'category' =>
-            "HTTP",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Miscellaneous HTTP utilities",
-        'description' =>
-            "The HTTP class is a class with static methods for doing
-miscellaneous HTTP related stuff like date formatting,
-language negotiation or HTTP redirection.",
-        'lead' =>
-            "mike",
-        'stable' =>
-            "1.3.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTTP_Client' =>
-        array(
-        'packageid' =>
-            "213",
-        'categoryid' =>
-            "11",
-        'category' =>
-            "HTTP",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Easy way to perform multiple HTTP requests and process their results",
-        'description' =>
-            "The HTTP_Client class wraps around HTTP_Request and provides a higher level interface
-for performing multiple HTTP requests.
-
-Features:
-* Manages cookies and referrers between requests
-* Handles HTTP redirection
-* Has methods to set default headers and request parameters
-* Implements the Subject-Observer design pattern: the base class sends
-events to listeners that do the response processing.",
-        'lead' =>
-            "avb",
-        'stable' =>
-            "1.0.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTTP_Header' =>
-        array(
-        'packageid' =>
-            "164",
-        'categoryid' =>
-            "11",
-        'category' =>
-            "HTTP",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "OO interface to modify and handle HTTP headers and status codes.",
-        'description' =>
-            "This class provides methods to set/modify HTTP headers
-and status codes including an HTTP caching facility.
-It also provides methods for checking Status types.",
-        'lead' =>
-            "mike",
-        'stable' =>
-            "1.1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTTP_Request' =>
-        array(
-        'packageid' =>
-            "33",
-        'categoryid' =>
-            "11",
-        'category' =>
-            "HTTP",
-        'license' =>
-            "BSD",
-        'summary' =>
-            "Provides an easy way to perform HTTP requests",
-        'description' =>
-            "Supports GET/POST/HEAD/TRACE/PUT/DELETE, Basic authentication, Proxy,
-Proxy Authentication, SSL, file uploads etc.",
-        'lead' =>
-            "avb",
-        'stable' =>
-            "1.2.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'HTTP_Upload' =>
-        array(
-        'packageid' =>
-            "20",
-        'categoryid' =>
-            "11",
-        'category' =>
-            "HTTP",
-        'license' =>
-            "LGPL",
-        'summary' =>
-            "Easy and secure managment of files submitted via HTML Forms",
-        'description' =>
-            "This class provides an advanced file uploader system for file uploads made
-from html forms. Features:
- * Can handle from one file to multiple files.
- * Safe file copying from tmp dir.
- * Easy detecting mechanism of valid upload, missing upload or error.
- * Gives extensive information about the uploaded file.
- * Rename uploaded files in different ways: as it is, safe or unique
- * Validate allowed file extensions
- * Multiple languages error messages support (es, en, de, fr, it, nl, pt_BR)",
-        'lead' =>
-            "antonio",
-        'stable' =>
-            "0.9.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'huffman' =>
-        array(
-        'packageid' =>
-            "385",
-        'categoryid' =>
-            "29",
-        'category' =>
-            "Tools and Utilities",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Huffman compression is a lossless compression algorithm that is ideal for compressing textual data.",
-        'description' =>
-            "Huffman compression belongs into a family of algorithms with a variable codeword length. That means that individual symbols (characters in a text file for instance) are replaced by bit sequences that have a distinct length. So symbols that occur a lot in a file are given a short sequence while other that are used seldom get a longer bit sequence.",
-        'lead' =>
-            "mnx",
-        'stable' =>
-            "0.2.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Image_Barcode' =>
-        array(
-        'packageid' =>
-            "142",
-        'categoryid' =>
-            "12",
-        'category' =>
-            "Images",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Barcode generation",
-        'description' =>
-            "With PEAR::Image_Barcode class you can create a barcode representation of a
-given string.
-
-This class uses GD function because this the generated graphic can be any of
-GD supported supported image types.",
-        'lead' =>
-            "msmarcal",
-        'stable' =>
-            "0.5",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Image_Color' =>
-        array(
-        'packageid' =>
-            "35",
-        'categoryid' =>
-            "12",
-        'category' =>
-            "Images",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Manage and handles color data and conversions.",
-        'description' =>
-            "Manage and handles color data and conversions.",
-        'lead' =>
-            "jasonlotito",
-        'stable' =>
-            "1.0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Image_GIS' =>
-        array(
-        'packageid' =>
-            "151",
-        'categoryid' =>
-            "12",
-        'category' =>
-            "Images",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Visualization of GIS data.",
-        'description' =>
-            "Generating maps on demand can be a hard job as most often you don\'t
-have the maps you need in digital form.
-But you can generate your own maps based on raw, digital data files
-which are available for free on the net.
-This package provides a parser for the most common format for
-geographical data, the Arcinfo/E00 format as well as renderers to
-produce images using GD or Scalable Vector Graphics (SVG).",
-        'lead' =>
-            "ostborn",
-        'stable' =>
-            "1.1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Image_GraphViz' =>
-        array(
-        'packageid' =>
-            "39",
-        'categoryid' =>
-            "12",
-        'category' =>
-            "Images",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Interface to AT&T\'s GraphViz tools",
-        'description' =>
-            "The GraphViz class allows for the creation of and the work with
- directed and undirected graphs and their visualization with
- AT&T\'s GraphViz tools.",
-        'lead' =>
-            "sebastian",
-        'stable' =>
-            "1.0.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Image_IPTC' =>
-        array(
-        'packageid' =>
-            "194",
-        'categoryid' =>
-            "12",
-        'category' =>
-            "Images",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Extract, modify, and save IPTC data",
-        'description' =>
-            "This package provides a mechanism for modifying IPTC header information. The class abstracts the functionality of iptcembed() and iptcparse() in addition to providing methods that properly handle replacing IPTC header fields back into image files.",
-        'lead' =>
-            "polone",
-        'stable' =>
-            "1.0.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Log' =>
-        array(
-        'packageid' =>
-            "8",
-        'categoryid' =>
-            "13",
-        'category' =>
-            "Logging",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Logging utilities",
-        'description' =>
-            "The Log framework provides an abstracted logging system.  It supports logging to console, file, syslog, SQL, Sqlite, mail and mcal targets.  It also provides a subject - observer mechanism.",
-        'lead' =>
-            "jon",
-        'stable' =>
-            "1.8.7",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'lzf' =>
-        array(
-        'packageid' =>
-            "262",
-        'categoryid' =>
-            "36",
-        'category' =>
-            "Text",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "LZF compression.",
-        'description' =>
-            "This package handles LZF de/compression.",
-        'lead' =>
-            "mg",
-        'stable' =>
-            "1.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Mail' =>
-        array(
-        'packageid' =>
-            "72",
-        'categoryid' =>
-            "14",
-        'category' =>
-            "Mail",
-        'license' =>
-            "PHP/BSD",
-        'summary' =>
-            "Class that provides multiple interfaces for sending emails",
-        'description' =>
-            "PEAR\'s Mail:: package defines the interface for implementing mailers under the PEAR hierarchy, and provides supporting functions useful in multiple mailer backends. Currently supported are native PHP mail() function, sendmail and SMTP. This package also provides a RFC 822 Email address list validation utility class.",
-        'lead' =>
-            "jon",
-        'stable' =>
-            "1.1.4",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'mailparse' =>
-        array(
-        'packageid' =>
-            "143",
-        'categoryid' =>
-            "14",
-        'category' =>
-            "Mail",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Email message manipulation",
-        'description' =>
-            "Mailparse is an extension for parsing and working with email messages.
-It can deal with rfc822 and rfc2045 (MIME) compliant messages.",
-        'lead' =>
-            "wez",
-        'stable' =>
-            "2.0b",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Mail_Mime' =>
-        array(
-        'packageid' =>
-            "21",
-        'categoryid' =>
-            "14",
-        'category' =>
-            "Mail",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Provides classes to create and decode mime messages.",
-        'description' =>
-            "  Provides classes to deal with creation and manipulation of mime messages:
-
-* mime.php: Create mime email, with html, attachments, embedded images etc.
-
-* mimePart.php: Advanced method of creating mime messages.
-
-* mimeDecode.php: Decodes mime messages to a usable structure.
-
-* xmail.dtd: An XML DTD to acompany the getXML() method of the decoding class.
-
-* xmail.xsl: An XSLT stylesheet to transform the output of the getXML() method back to an email",
-        'lead' =>
-            "cipri",
-        'stable' =>
-            "1.2.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Mail_Queue' =>
-        array(
-        'packageid' =>
-            "113",
-        'categoryid' =>
-            "14",
-        'category' =>
-            "Mail",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Class for put mails in queue and send them later in background.",
-        'description' =>
-            "Class to handle mail queue managment.
-Wrapper for PEAR::Mail and PEAR::DB (or PEAR::MDB/MDB2).
-It can load, save and send saved mails in background
-and also backup some mails.
-
-The Mail_Queue class puts mails in a temporary container,
-waiting to be fed to the MTA (Mail Transport Agent),
-and sends them later (e.g. a certain amount of mails
-every few minutes) by crontab or in other way.",
-        'lead' =>
-            "chief",
-        'stable' =>
-            "1.1.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Math_Basex' =>
-        array(
-        'packageid' =>
-            "147",
-        'categoryid' =>
-            "15",
-        'category' =>
-            "Math",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Simple class for converting base set of numbers with a customizable character base set.",
-        'description' =>
-            "Base X conversion class",
-        'lead' =>
-            "zyprexia",
-        'stable' =>
-            "0.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Math_Fibonacci' =>
-        array(
-        'packageid' =>
-            "153",
-        'categoryid' =>
-            "15",
-        'category' =>
-            "Math",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Package to calculate and manipulate Fibonacci numbers",
-        'description' =>
-            "The Fibonacci series is constructed using the formula:
-      F(n) = F(n - 1) + F (n - 2),
-By convention F(0) = 0, and F(1) = 1.
-An alternative formula that uses the Golden Ratio can also be used:
-      F(n) = (PHI^n - phi^n)/sqrt(5) [Lucas\' formula],
-where PHI = (1 + sqrt(5))/2 is the Golden Ratio, and
-      phi = (1 - sqrt(5))/2 is its reciprocal
-Requires Math_Integer, and can be used with big integers if the GMP or
-the BCMATH libraries are present.",
-        'lead' =>
-            "jmcastagnetto",
-        'stable' =>
-            "0.8",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Math_Integer' =>
-        array(
-        'packageid' =>
-            "152",
-        'categoryid' =>
-            "15",
-        'category' =>
-            "Math",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Package to represent and manipulate integers",
-        'description' =>
-            "The class Math_Integer can represent integers bigger than the
-signed longs that are the default of PHP, if either the GMP or
-the BCMATH (bundled with PHP) are present. Otherwise it will fall
-back to the internal integer representation.
-The Math_IntegerOp class defines operations on Math_Integer objects.",
-        'lead' =>
-            "jmcastagnetto",
-        'stable' =>
-            "0.8",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Math_Matrix' =>
-        array(
-        'packageid' =>
-            "202",
-        'categoryid' =>
-            "15",
-        'category' =>
-            "Math",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Class to represent matrices and matrix operations",
-        'description' =>
-            "Matrices are represented as 2 dimensional arrays of numbers.
-This class defines methods for matrix objects, as well as static methods
-to read, write and manipulate matrices, including methods to solve systems
-of linear equations (with and without iterative error correction).
-Requires the Math_Vector package.
-For running the unit tests you will need PHPUnit version 0.6.2 or older.",
-        'lead' =>
-            "jmcastagnetto",
-        'stable' =>
-            "0.8.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Math_RPN' =>
-        array(
-        'packageid' =>
-            "232",
-        'categoryid' =>
-            "15",
-        'category' =>
-            "Math",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Reverse Polish Notation.",
-        'description' =>
-            "Change Expression To RPN (Reverse Polish Notation) and evaluate it.",
-        'lead' =>
-            "mszczytowski",
-        'stable' =>
-            "1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Math_Stats' =>
-        array(
-        'packageid' =>
-            "60",
-        'categoryid' =>
-            "15",
-        'category' =>
-            "Math",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Classes to calculate statistical parameters",
-        'description' =>
-            "Package to calculate statistical parameters of numerical arrays
-of data. The data can be in a simple numerical array, or in a
-cummulative numerical array. A cummulative array, has the value
-as the index and the number of repeats as the value for the
-array item, e.g. \$data = array(3=>4, 2.3=>5, 1.25=>6, 0.5=>3).
-
-Nulls can be rejected, ignored or handled as zero values.
-
-Note: You should be using the latest release (0.9.0beta3 currently), as it fixes problems with the calculations of several of the statistics that exist in the stable release.",
-        'lead' =>
-            "jmcastagnetto",
-        'stable' =>
-            "0.8.5",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Math_TrigOp' =>
-        array(
-        'packageid' =>
-            "138",
-        'categoryid' =>
-            "15",
-        'category' =>
-            "Math",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Supplementary trigonometric functions",
-        'description' =>
-            "Static class with methods that implement supplementary trigonometric,
-inverse trigonometric, hyperbolic, and inverse hyperbolic functions.",
-        'lead' =>
-            "jmcastagnetto",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'MDB' =>
-        array(
-        'packageid' =>
-            "54",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "BSD style",
-        'summary' =>
-            "database abstraction layer",
-        'description' =>
-            "PEAR MDB is a merge of the PEAR DB and Metabase php database abstraction layers.
-It provides a common API for all support RDBMS. The main difference to most
-other DB abstraction packages is that MDB goes much further to ensure
-portability. Among other things MDB features:
-* An OO-style query API
-* A DSN (data source name) or array format for specifying database servers
-* Datatype abstraction and on demand datatype conversion
-* Portable error codes
-* Sequential and non sequential row fetching as well as bulk fetching
-* Ordered array and associative array for the fetched rows
-* Prepare/execute (bind) emulation
-* Sequence emulation
-* Replace emulation
-* Limited Subselect emulation
-* Row limit support
-* Transactions support
-* Large Object support
-* Index/Unique support
-* Module Framework to load advanced functionality on demand
-* Table information interface
-* RDBMS management methods (creating, dropping, altering)
-* RDBMS independent xml based schema definition management
-* Altering of a DB from a changed xml schema
-* Reverse engineering of xml schemas from an existing DB (currently only MySQL)
-* Full integration into the PEAR Framework
-* Wrappers for the PEAR DB and Metabase APIs
-* PHPDoc API documentation
-Currently supported RDBMS:
-MySQL
-PostGreSQL
-Oracle
-Frontbase
-Querysim
-Interbase/Firebird
-MSSQL",
-        'lead' =>
-            "lsmith",
-        'stable' =>
-            "1.3.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'MDB_QueryTool' =>
-        array(
-        'packageid' =>
-            "167",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "An OO-interface for easily retrieving and modifying data in a DB.",
-        'description' =>
-            "This package is an OO-abstraction to the SQL-Query language, it provides methods such
-as setWhere, setOrder, setGroup, setJoin, etc. to easily build queries.
-It also provides an easy to learn interface that interacts nicely with HTML-forms using
-arrays that contain the column data, that shall be updated/added in a DB.
-This package bases on an SQL-Builder which lets you easily build
-SQL-Statements and execute them.
-NB: this is just a MDB porting from the original DB_QueryTool
-written by Wolfram Kriesing and Paolo Panto (vision:produktion, wk@visionp.de).",
-        'lead' =>
-            "quipo",
-        'stable' =>
-            "0.11.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'memcache' =>
-        array(
-        'packageid' =>
-            "294",
-        'categoryid' =>
-            "25",
-        'category' =>
-            "PHP",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "memcached extension",
-        'description' =>
-            "Memcached is a caching daemon designed especially for
-dynamic web applications to decrease database load by
-storing objects in memory.
-This extension allows you to work with memcached through
-handy OO and procedural interfaces.",
-        'lead' =>
-            "tony2001",
-        'stable' =>
-            "1.4",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'MP3_ID' =>
-        array(
-        'packageid' =>
-            "211",
-        'categoryid' =>
-            "33",
-        'category' =>
-            "File Formats",
-        'license' =>
-            "LGPL",
-        'summary' =>
-            "Read/Write MP3-Tags",
-        'description' =>
-            "The class offers methods for reading and
-writing information tags (version 1) in MP3 files.",
-        'lead' =>
-            "alexmerz",
-        'stable' =>
-            "1.1.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_CheckIP' =>
-        array(
-        'packageid' =>
-            "9",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Check the syntax of IPv4 addresses",
-        'description' =>
-            "This package validates IPv4 addresses.",
-        'lead' =>
-            "mj",
-        'stable' =>
-            "1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_Curl' =>
-        array(
-        'packageid' =>
-            "30",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Net_Curl provides an OO interface to PHP\'s cURL extension",
-        'description' =>
-            "Provides an OO interface to PHP\'s curl extension",
-        'lead' =>
-            "gurugeek",
-        'stable' =>
-            "0.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_Dict' =>
-        array(
-        'packageid' =>
-            "114",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Interface to the DICT Protocol",
-        'description' =>
-            "This class provides a simple API to the DICT Protocol handling all the network related issues
-and providing DICT responses in PHP datatypes
-to make it easy for a developer to use DICT
-servers in their programs.",
-        'lead' =>
-            "cnb",
-        'stable' =>
-            "1.0.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_Dig' =>
-        array(
-        'packageid' =>
-            "49",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP 2.02",
-        'summary' =>
-            "The PEAR::Net_Dig class should be a nice, friendly OO interface to the dig command",
-        'description' =>
-            "Net_Dig class is no longer being maintained.  Use of Net_DNS is recommended instead.  A brief tutorial on how to migrate to Net_DNS is listed below.",
-        'lead' =>
-            "cmv",
-        'stable' =>
-            "0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_DNS' =>
-        array(
-        'packageid' =>
-            "59",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "LGPL 2.1",
-        'summary' =>
-            "Resolver library used to communicate with a DNS server",
-        'description' =>
-            "A resolver library used to communicate with a name server to perform DNS queries, zone transfers, dynamic DNS updates, etc.  Creates an object hierarchy from a DNS server\'s response, which allows you to view all of the information given by the DNS server.  It bypasses the system\'s resolver library and communicates directly with the server.",
-        'lead' =>
-            "ekilfoil",
-        'stable' =>
-            "0.03",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_Finger' =>
-        array(
-        'packageid' =>
-            "158",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "The PEAR::Net_Finger class provides a tool for querying Finger Servers",
-        'description' =>
-            "Wrapper class for finger calls.",
-        'lead' =>
-            "nohn",
-        'stable' =>
-            "1.0.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_FTP' =>
-        array(
-        'packageid' =>
-            "148",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Net_FTP provides an OO interface to the PHP FTP functions plus some additions",
-        'description' =>
-            "Net_FTP allows you to communicate with FTP servers in a more comfortable way
-than the native FTP functions of PHP do. The class implements everything nativly
-supported by PHP and additionally features like recursive up- and downloading,
-dircreation and chmodding. It although implements an observer pattern to allow
-for example the view of a progress bar.",
-        'lead' =>
-            "toby",
-        'stable' =>
-            "1.3.0RC1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_Geo' =>
-        array(
-        'packageid' =>
-            "55",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Geographical locations based on Internet address",
-        'description' =>
-            "Obtains geographical information based on IP number, domain name, or AS number. Makes use of CAIDA Net_Geo lookup or locaizer extension.",
-        'lead' =>
-            "graeme",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_Ident' =>
-        array(
-        'packageid' =>
-            "122",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Identification Protocol implementation",
-        'description' =>
-            "The PEAR::Net_Ident implements Identification Protocol according to RFC
-1413.
-The Identification Protocol (a.k.a., \"ident\", a.k.a., \"the Ident
-Protocol\") provides a means to determine the identity of a user of a
-particular TCP connection.  Given a TCP port number pair, it returns a
-character string which identifies the owner of that connection on the
-server\'s system.",
-        'lead' =>
-            "nepto",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_IMAP' =>
-        array(
-        'packageid' =>
-            "181",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Provides an implementation of the IMAP protocol",
-        'description' =>
-            "Provides an implementation of the IMAP4Rev1 protocol using PEAR\'s Net_Socket and the optional Auth_SASL class.",
-        'lead' =>
-            "damian",
-        'stable' =>
-            "1.0.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_IPv4' =>
-        array(
-        'packageid' =>
-            "106",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP 2.0",
-        'summary' =>
-            "IPv4 network calculations and validation",
-        'description' =>
-            "Class used for calculating IPv4 (AF_INET family) address information
-such as network as network address, broadcast address, and IP address
-validity.",
-        'lead' =>
-            "ekilfoil",
-        'stable' =>
-            "1.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_IPv6' =>
-        array(
-        'packageid' =>
-            "10",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Check and validate IPv6 addresses",
-        'description' =>
-            "The class allows you to:
-* check if an addresse is an IPv6 addresse
-* compress/uncompress IPv6 addresses
-* check for an IPv4 compatible ending in an IPv6 adresse",
-        'lead' =>
-            "alexmerz",
-        'stable' =>
-            "1.0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_LMTP' =>
-        array(
-        'packageid' =>
-            "197",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Provides an implementation of the RFC2033 LMTP protocol",
-        'description' =>
-            "Provides an implementation of the RFC2033 LMTP using PEAR\'s Net_Socket and Auth_SASL class.",
-        'lead' =>
-            "damian",
-        'stable' =>
-            "1.0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_NNTP' =>
-        array(
-        'packageid' =>
-            "11",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "W3C",
-        'summary' =>
-            "Implementation of the NNTP protocol",
-        'description' =>
-            "Package for communicating with NNTP/USENET servers. Includes features like post, view, list, authentication, overview, etc.
-
-------------------------------------------------------------------------------
-
-ATTENTION!!!
-
-Due to PHP bug #27822 (fixed in v4.3.6) and #28055 (fixed in v4.3.7) the Net_NNTP v0.10.x performs \'rather\' slow when being used on v4.3.1-6.</b> Due to the bugs the connection validation in isConnected() doesn\'t works as intended...
-
-- PHP4.2 is not affected.
-
-- PHP4.3.7-dev (12/05-04) is confirmed functional.
-
-- PHP5.0 is still not supported.(unreleased CVS code should now support at PHP5.0 (rc3). Be warned though! It hasn\'t been heavily tested! For now one should use
-Net/Socket.php v1.13 from CVS, since Net_Socket v1.0.2 hangs...)
-
-------------------------------------------------------------------------------
-
-The new protocol implementation (v0.3+) is to considered beta state. The error handling is a lot better than in v0.2, but is still a little weak, since the error codes/messages is not done yet (PEAR_Error objects IS returned, but often only the server\'s response messages is returned). All expected NNTP errors are are caught though...
-
-------------------------------------------------------------------------------
-
-MAINTAINED versions of Net_NNTP:
-
-0.11.x (beta)
-
-- Backward compatible drop in replacement for v0.2.x
-- This is going to become the v1.0 release
-
-------------------------------------------------------------------------------
-
-DEPRECATED versions of Net_NNTP:
-
-0.2.x (stable) - no further development - only critical bugs will be fixed!
-
-- Rather outdated, but widely used.
-
-
-0.1 (stable) - no further development - use v0.2.x instead
-
-- NOT binary-safe !!!
-
-------------------------------------------------------------------------------
-
-UNMAINTAINED (development) versions of Net_NNTP:
-
-0.10.x (alpha) - no further development - use v0.11.x instead
-
-- (merges v0.3.3 and v0.9.4 into one package)
-- Backward compatible drop in replacement for v0.2.x
-- The Net_NNTP class from v0.9.x is now called Net_NNTP_Realtime. The backward compatibility with v0.2.x (and v0.3.x) is only included to allow existing projects to function. (please ;) use the Net_NNTP_Realtime class in new projects...
-
-
-0.9.x (alpha) - no further development - use v0.10.x instead
-
-- A few method names have changed, so it does not maintain full backward compatibility with v0.2.x
-- A new protocol implementation has replaced the original one, and the behavior of a few methods has changed. Two new (experimental) classes, Header and Message, has been added to ease the development. (The clasic API is actually considered beta state, but due to the two new classes the package has to be considered alpha state)...
-- If backward compatibility with v0.2 is a requirement, the new protocol implementation from v0.9 is also avalible in v0.3 (which is actually a modified v0.9, where some of the new features has been left out).
-
-
-0.3.x (beta) - no further development - use v0.10.x instead
-
-- v0.10.0 includes an excat copy of the classes in v0.3.3
-- Backward compatible drop in replacement for v0.2.x
-- An amputated backport of v0.9.x. It uses the new protocol implememtation from v0.9.x, but preserves backward compatibility with v0.2.x. (The new alpha state code has been left out, and the methods which has been renamed still function as usual even though they are now only aliases to their replacements).
-- This version was created to allow people who require backward compatibility with v0.2.x to use/test the new protocol implementation.
-- (Not all changes in v0.9.x relate to v0.3.x, so don\'t expect this backport to be updated each time a new v0.9.x release is rolled out)
-- (Please don\'t use the old method names for new projects)
-
-------------------------------------------------------------------------------
-
-People who\'ve put work into Net_NNTP (in order of appearance):
-
-Martin Kaltoft <martin@nitro.dk>, Lead
-- Initial code.
-
-Thomas V.V.Cox <cox@idecnet.com>, Developer
-- A lot of new methods (including authentication)
-
-Morgan Christiansson <mog@linux.nu>, Contributor
-- A few new methods
-
-Alexander Merz <alexmerz@php.net>, Contributor
-- PEAR?ifing of original code
-- Documentation (v0.1)
-
-Heino H. Gehlsen <heino@php.net>, Lead
-- Total rewrite based on new protocol class
-- Documentation (v0.10)",
-        'lead' =>
-            "heino",
-        'stable' =>
-            "0.2.5",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_Ping' =>
-        array(
-        'packageid' =>
-            "12",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Execute ping",
-        'description' =>
-            "OS independet wrapper class for executing ping calls",
-        'lead' =>
-            "jan",
-        'stable' =>
-            "2.4",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_POP3' =>
-        array(
-        'packageid' =>
-            "25",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "BSD",
-        'summary' =>
-            "Provides a POP3 class to access POP3 server.",
-        'description' =>
-            "Provides a POP3 class to access POP3 server. Support all POP3 commands
-including UIDL listings, APOP authentication,DIGEST-MD5 and CRAM-MD5 using optional Auth_SASL package",
-        'lead' =>
-            "gschlossnagle",
-        'stable' =>
-            "1.3.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_Portscan' =>
-        array(
-        'packageid' =>
-            "23",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP 2.02",
-        'summary' =>
-            "Portscanner utilities.",
-        'description' =>
-            "The Net_Portscan package allows one to perform basic portscanning
-functions with PHP. It supports checking an individual port or
-checking a whole range of ports on a machine.",
-        'lead' =>
-            "mj",
-        'stable' =>
-            "1.0.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_Sieve' =>
-        array(
-        'packageid' =>
-            "71",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "BSD",
-        'summary' =>
-            "Handles talking to timsieved",
-        'description' =>
-            "Provides an API to talk to the timsieved server that comes
-with Cyrus IMAPd. Can be used to install, remove, mark active etc
-sieve scripts.",
-        'lead' =>
-            "damian",
-        'stable' =>
-            "1.1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_SmartIRC' =>
-        array(
-        'packageid' =>
-            "146",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "LGPL",
-        'summary' =>
-            "Net_SmartIRC is a PHP class for communication with IRC networks",
-        'description' =>
-            "Net_SmartIRC is a PHP class for communication with IRC networks,
-which conforms to the RFC 2812 (IRC protocol).
-It\'s an API that handles all IRC protocol messages.
-This class is designed for creating IRC bots, chats and show irc related info on webpages.
-
-Full featurelist of Net_SmartIRC
--------------------------------------
-- full object oriented programmed
-- every received IRC message is parsed into an ircdata object
-  (it contains following info: from, nick, ident, host, channel, message, type, rawmessage)
-- actionhandler for the API
-  on different types of messages (channel/notice/query/kick/join..) callbacks can be registered
-- messagehandler for the API
-  class based messagehandling, using IRC reply codes
-- time events
-  callbacks to methods in intervals
-- send/receive floodprotection
-- detects and changes nickname on nickname collisions
-- autoreconnect, if connection is lost
-- autoretry for connecting to IRC servers
-- debugging/logging system with log levels (destination can be file, stdout, syslog or browserout)
-- supports fsocks and PHP socket extension
-- supports PHP 4.1.x to 4.3.2 (also PHP 5.0.0b1)
-- sendbuffer with a queue that has 3 priority levels (high, medium, low) plus a bypass level (critical)
-- channel syncing (tracking of users/modes/topic etc in objects)
-- user syncing (tracking the user in channels, nick/ident/host/realname/server/hopcount in objects)
-- when channel syncing is acticated the following functions are available:
-  isJoined
-  isOpped
-  isVoiced
-  isBanned
-- on reconnect all joined channels will be rejoined, also when keys are used
-- own CTCP version reply can be set
-- IRC commands:
-  pass
-  op
-  deop
-  voice
-  devoice
-  ban
-  unban
-  join
-  part
-  action
-  message
-  notice
-  query
-  ctcp
-  mode
-  topic
-  nick
-  invite
-  list
-  names
-  kick
-  who
-  whois
-  whowas
-  quit",
-        'lead' =>
-            "meebey",
-        'stable' =>
-            "0.5.5p1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_SMTP' =>
-        array(
-        'packageid' =>
-            "90",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Provides an implementation of the SMTP protocol",
-        'description' =>
-            "Provides an implementation of the SMTP protocol using PEAR\'s Net_Socket class.",
-        'lead' =>
-            "jon",
-        'stable' =>
-            "1.2.6",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_Socket' =>
-        array(
-        'packageid' =>
-            "64",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Network Socket Interface",
-        'description' =>
-            "Net_Socket is a class interface to TCP sockets.  It provides blocking
-and non-blocking operation, with different reading and writing modes
-(byte-wise, block-wise, line-wise and special formats like network
-byte-order ip addresses).",
-        'lead' =>
-            "chagenbu",
-        'stable' =>
-            "1.0.4",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_URL' =>
-        array(
-        'packageid' =>
-            "34",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "BSD",
-        'summary' =>
-            "Easy parsing of Urls",
-        'description' =>
-            "Provides easy parsing of URLs and their constituent parts.",
-        'lead' =>
-            "richard",
-        'stable' =>
-            "1.0.14",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_UserAgent_Detect' =>
-        array(
-        'packageid' =>
-            "62",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP 2.01",
-        'summary' =>
-            "Net_UserAgent_Detect determines the Web browser, version, and platform from an HTTP user agent string",
-        'description' =>
-            "The Net_UserAgent object does a number of tests on an HTTP user
-agent string.  The results of these tests are available via methods of
-the object.
-
-This module is based upon the JavaScript browser detection code
-available at http://www.mozilla.org/docs/web-developer/sniffer/browser_type.html.
-This module had many influences from the lib/Browser.php code in
-version 1.3 of Horde.",
-        'lead' =>
-            "jrust",
-        'stable' =>
-            "2.0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Net_Whois' =>
-        array(
-        'packageid' =>
-            "13",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "The PEAR::Net_Whois class provides a tool to query internet domain name and network number directory services",
-        'description' =>
-            "The PEAR::Net_Whois looks up records in the databases maintained by several Network Information Centers (NICs).",
-        'lead' =>
-            "svenasse",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Numbers_Roman' =>
-        array(
-        'packageid' =>
-            "29",
-        'categoryid' =>
-            "17",
-        'category' =>
-            "Numbers",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Provides methods for converting to and from Roman Numerals.",
-        'description' =>
-            "Numbers_Roman provides static methods for converting to and from Roman
-numerals. It supports Roman numerals in both uppercase and lowercase
-styles and conversion for and to numbers up to 5 999 999",
-        'lead' =>
-            "gurugeek",
-        'stable' =>
-            "0.2.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'oci8' =>
-        array(
-        'packageid' =>
-            "277",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Oracle Call Interface(OCI) wrapper",
-        'description' =>
-            "This module allows you to access Oracle9/8/7 database.
-It wraps the Oracle Call Interface (OCI).",
-        'lead' =>
-            "tony2001",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'odbtp' =>
-        array(
-        'packageid' =>
-            "323",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "LGPL",
-        'summary' =>
-            "ODBTP client functions",
-        'description' =>
-            "This extension provides a set of ODBTP, Open Database Transport
-Protocol, client functions. ODBTP allows any platform to remotely
-use the ODBC facilities installed on a Win32 host to connect to a database.  Linux and UNIX clients can use this
-extension to access Win32 databases like MS SQL Server, MS Access
-and Visual FoxPro.",
-        'lead' =>
-            "rtwitty",
-        'stable' =>
-            "1.1.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Pager' =>
-        array(
-        'packageid' =>
-            "32",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Data paging class",
-        'description' =>
-            "It takes an array of data as input and page it according to various parameters. It also builds links within a specified range, and allows complete customization of the output (it even works with mod_rewrite).
-Two operating modes available: \"Jumping\" and \"Sliding\" window style.",
-        'lead' =>
-            "quipo",
-        'stable' =>
-            "2.2.4",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Pager_Sliding' =>
-        array(
-        'packageid' =>
-            "136",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Sliding Window Pager.",
-        'description' =>
-            "It takes an array of data as input and page it according to various parameters. It also builds links within a specified range, and allows complete customization of the output (it even works with mod_rewrite). It is compatible with PEAR::Pager\'s API.
-
-[Deprecated]Use PEAR::Pager v2.x with \$mode = \'Sliding\' instead",
-        'lead' =>
-            "quipo",
-        'stable' =>
-            "1.6",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Paradox' =>
-        array(
-        'packageid' =>
-            "268",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "An extension to read Paradox files",
-        'description' =>
-            "Paradox is an extension to read and write Paradox .DB and .PX files.
-It can handle almost all field types and binary large objects stored
-in .MB files.",
-        'lead' =>
-            "steinm",
-        'stable' =>
-            "1.3.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'parsekit' =>
-        array(
-        'packageid' =>
-            "331",
-        'categoryid' =>
-            "25",
-        'category' =>
-            "PHP",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "PHP Opcode Analyser",
-        'description' =>
-            "Provides a userspace interpretation of the opcodes generated by the Zend engine compiler built into PHP.
-This extension is meant for development and debug purposes only and contains some code which is potentially non-threadsafe.",
-        'lead' =>
-            "pollita",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Payment_Clieop' =>
-        array(
-        'packageid' =>
-            "51",
-        'categoryid' =>
-            "18",
-        'category' =>
-            "Payment",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "These classes can create a clieop03 file for you which you can send to a Dutch Bank. Ofcourse you need also a Dutch bank account.",
-        'description' =>
-            "Clieop03 generation classes",
-        'lead' =>
-            "zyprexia",
-        'stable' =>
-            "0.1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Payment_DTA' =>
-        array(
-        'packageid' =>
-            "244",
-        'categoryid' =>
-            "18",
-        'category' =>
-            "Payment",
-        'license' =>
-            "BSD style",
-        'summary' =>
-            "Creates DTA files containing money transaction data (Germany).",
-        'description' =>
-            "Payment_DTA provides functions to create DTA files used in Germany to exchange informations about money transactions with banks or online banking programs.",
-        'lead' =>
-            "hstainer",
-        'stable' =>
-            "1.00",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'pdflib' =>
-        array(
-        'packageid' =>
-            "355",
-        'categoryid' =>
-            "36",
-        'category' =>
-            "Text",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Creating PDF on the fly with the PDFlib library",
-        'description' =>
-            "This extension wraps the PDFlib programming library
-for processing PDF on the fly, created by Thomas Merz.
-
-PDFlib is available under the PDFlib Lite License
-(http://www.pdflib.com/pdffiles/PDFlib-Lite-license.pdf)
-and for commercial licensing.",
-        'lead' =>
-            "steinm",
-        'stable' =>
-            "2.0.4",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'PEAR' =>
-        array(
-        'packageid' =>
-            "14",
-        'categoryid' =>
-            "19",
-        'category' =>
-            "PEAR",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "PEAR Base System",
-        'description' =>
-            "The PEAR package contains:
- * the PEAR installer, for creating, distributing
-   and installing packages
- * the alpha-quality PEAR_Exception php5-only exception class
- * the beta-quality PEAR_ErrorStack advanced error handling mechanism
- * the PEAR_Error error handling mechanism
- * the OS_Guess class for retrieving info about the OS
-   where PHP is running on
- * the System class for quick handling common operations
-   with files and directories
- * the PEAR base class",
-        'lead' =>
-            "cellog",
-        'stable' =>
-            "1.3.3.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'PEAR_Info' =>
-        array(
-        'packageid' =>
-            "195",
-        'categoryid' =>
-            "19",
-        'category' =>
-            "PEAR",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Show Information about your PEAR install and its packages",
-        'description' =>
-            "This package generates a comprehensive information page for your current PEAR install.
-* The format for the page is similar to that for phpinfo() except using PEAR colors.
-* Has complete PEAR Credits (based on the packages you have installed).
-* Will show if there is a newer version than the one presently installed (and what its state is)
-* Each package has an anchor in the form pkg_PackageName - where PackageName is a case-sensitive PEAR package name",
-        'lead' =>
-            "davey",
-        'stable' =>
-            "1.5.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'PEAR_PackageFileManager' =>
-        array(
-        'packageid' =>
-            "227",
-        'categoryid' =>
-            "19",
-        'category' =>
-            "PEAR",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "PEAR_PackageFileManager takes an existing package.xml file and updates it with a new filelist and changelog",
-        'description' =>
-            "This package revolutionizes the maintenance of PEAR packages.  With a few parameters,
-the entire package.xml is automatically updated with a listing of all files in a package.
-Features include
- - reads in an existing package.xml file, and only changes the release/changelog
- - a plugin system for retrieving files in a directory.  Currently two plugins
-   exist, one for standard recursive directory content listing, and one that
-   reads the CVS/Entries files and generates a file listing based on the contents
-   of a checked out CVS repository
- - incredibly flexible options for assigning install roles to files/directories
- - ability to ignore any file based on a * ? wildcard-enabled string(s)
- - ability to include only files that match a * ? wildcard-enabled string(s)
- - ability to manage dependencies
- - can output the package.xml in any directory, and read in the package.xml
-   file from any directory.
- - can specify a different name for the package.xml file
-
-As of version 1.2.0, PEAR_PackageFileManager is fully unit tested.",
-        'lead' =>
-            "cellog",
-        'stable' =>
-            "1.2.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'perl' =>
-        array(
-        'packageid' =>
-            "305",
-        'categoryid' =>
-            "25",
-        'category' =>
-            "PHP",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Embedded Perl.",
-        'description' =>
-            "This extension embeds Perl Interpreter into PHP. It allows execute Perl files, evaluate Perl code, access Perl variables and instantiate Perl objects.",
-        'lead' =>
-            "dmitry",
-        'stable' =>
-            "0.6",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'PhpDocumentor' =>
-        array(
-        'packageid' =>
-            "137",
-        'categoryid' =>
-            "29",
-        'category' =>
-            "Tools and Utilities",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "The phpDocumentor package provides automatic documenting of php api directly from the source.",
-        'description' =>
-            "The phpDocumentor tool is a standalone auto-documentor similar to JavaDoc
-written in PHP.  It differs from PHPDoc in that it is MUCH faster, parses a much
-wider range of php files, and comes with many customizations including 11 HTML
-templates, windows help file CHM output, PDF output, and XML DocBook peardoc2
-output for use with documenting PEAR.  In addition, it can do PHPXref source
-code highlighting and linking.
-
-Features (short list):
--output in HTML, PDF (directly), CHM (with windows help compiler), XML DocBook
--very fast
--web and command-line interface
--fully customizable output with Smarty-based templates
--recognizes JavaDoc-style documentation with special tags customized for PHP 4
--automatic linking, class inheritance diagrams and intelligent override
--customizable source code highlighting, with phpxref-style cross-referencing
--parses standard README/CHANGELOG/INSTALL/FAQ files and includes them
- directly in documentation
--generates a todo list from @todo tags in source
--generates multiple documentation sets based on @access private, @internal and
- {@internal} tags
--example php files can be placed directly in documentation with highlighting
- and phpxref linking using the @example tag
--linking between external manual and API documentation is possible at the
- sub-section level in all output formats
--easily extended for specific documentation needs with Converter
--full documentation of every feature, manual can be generated directly from
- the source code with \"phpdoc -c makedocs\" in any format desired.
--current manual always available at http://www.phpdoc.org/manual.php
--user .ini files can be used to control output, multiple outputs can be
- generated at once
-
-**WARNING**:
-To use the web interface, you must set PEAR\'s data_dir to a subdirectory of
-document root.
-
-If browsing to http://localhost/index.php displays /path/to/htdocs/index.php,
-set data_dir to a subdirectory of /path/to/htdocs:
-
-$ pear config-set data_dir /path/to/htdocs/pear
-$ pear install PhpDocumentor
-
-http://localhost/pear/PhpDocumentor is the web interface",
-        'lead' =>
-            "cellog",
-        'stable' =>
-            "1.2.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'PHPUnit' =>
-        array(
-        'packageid' =>
-            "38",
-        'categoryid' =>
-            "43",
-        'category' =>
-            "Testing",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Regression testing framework for unit tests.",
-        'description' =>
-            "PHPUnit is a regression testing framework used by the developer who implements unit tests in PHP.",
-        'lead' =>
-            "sebastian",
-        'stable' =>
-            "1.1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'PHPUnit2' =>
-        array(
-        'packageid' =>
-            "308",
-        'categoryid' =>
-            "43",
-        'category' =>
-            "Testing",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Regression testing framework for unit tests.",
-        'description' =>
-            "PHPUnit is a regression testing framework used by the developer who implements unit tests in PHP.",
-        'lead' =>
-            "sebastian",
-        'stable' =>
-            "2.1.4",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'PHP_Compat' =>
-        array(
-        'packageid' =>
-            "338",
-        'categoryid' =>
-            "25",
-        'category' =>
-            "PHP",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Provides missing functionality for older versions of PHP",
-        'description' =>
-            "PHP_Compat provides missing functionality in the form of
-Constants and Functions for older versions of PHP.",
-        'lead' =>
-            "aidan",
-        'stable' =>
-            "1.3.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'ps' =>
-        array(
-        'packageid' =>
-            "299",
-        'categoryid' =>
-            "36",
-        'category' =>
-            "Text",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "An extension to create PostScript files",
-        'description' =>
-            "ps is an extension similar to the pdf extension but for creating PostScript files. Its api is modelled after the pdf extension.",
-        'lead' =>
-            "steinm",
-        'stable' =>
-            "1.3.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'radius' =>
-        array(
-        'packageid' =>
-            "149",
-        'categoryid' =>
-            "1",
-        'category' =>
-            "Authentication",
-        'license' =>
-            "BSD",
-        'summary' =>
-            "Radius client library",
-        'description' =>
-            "This package is based on the libradius of FreeBSD, with some modifications and extensions.
-This PECL provides full support for RADIUS authentication (RFC 2865) and RADIUS accounting (RFC 2866),
-works on Unix and on Windows. Its an easy way to authenticate your users against the user-database of your
-OS (for example against Windows Active-Directory via IAS).",
-        'lead' =>
-            "mbretter",
-        'stable' =>
-            "1.2.4",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Science_Chemistry' =>
-        array(
-        'packageid' =>
-            "15",
-        'categoryid' =>
-            "21",
-        'category' =>
-            "Science",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Classes to manipulate chemical objects: atoms, molecules, etc.",
-        'description' =>
-            "General classes to represent Atoms, Molecules and Macromolecules.  Also
-parsing code for PDB, CML and XYZ file formats.  Examples of parsing and
-conversion to/from chemical structure formats. Includes a utility class with
-information on the Elements in the Periodic Table.",
-        'lead' =>
-            "jmcastagnetto",
-        'stable' =>
-            "1.1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Services_Weather' =>
-        array(
-        'packageid' =>
-            "260",
-        'categoryid' =>
-            "23",
-        'category' =>
-            "Web Services",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "This class acts as an interface to various online weather-services.",
-        'description' =>
-            "Services_Weather searches for given locations and retrieves current
-weather data and, dependent on the used service, also forecasts. Up to
-now, GlobalWeather from CapeScience, Weather XML from EJSE (US only),
-a XOAP service from Weather.com and METAR/TAF from NOAA are supported.
-Further services will get included, if they become available, have a
-usable API and are properly documented.",
-        'lead' =>
-            "eru",
-        'stable' =>
-            "1.3.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'spplus' =>
-        array(
-        'packageid' =>
-            "133",
-        'categoryid' =>
-            "18",
-        'category' =>
-            "Payment",
-        'license' =>
-            "LGPL",
-        'summary' =>
-            "SPPLUS Paiement System",
-        'description' =>
-            "This extension gives you the possibility to use the SPPLUS Paiement System of the Caisse d\'Epargne (French Bank).",
-        'lead' =>
-            "nicos",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'SQLite' =>
-        array(
-        'packageid' =>
-            "193",
-        'categoryid' =>
-            "7",
-        'category' =>
-            "Database",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "SQLite database bindings",
-        'description' =>
-            "SQLite is a C library that implements an embeddable SQL database engine.
-Programs that link with the SQLite library can have SQL database access
-without running a separate RDBMS process.
-This extension allows you to access SQLite databases from within PHP.
-Windows binary for PHP 4.3 is available from:
-http://snaps.php.net/win32/PECL_4_3/php_sqlite.dll
-**Note that this extension is built into PHP 5 by default**",
-        'lead' =>
-            "iliaa",
-        'stable' =>
-            "1.0.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Stream_SHM' =>
-        array(
-        'packageid' =>
-            "161",
-        'categoryid' =>
-            "35",
-        'category' =>
-            "Streams",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Shared Memory Stream",
-        'description' =>
-            "The Stream_SHM package provides a class that can be registered with stream_register_wrapper() in order to have stream-based shared-memory access.",
-        'lead' =>
-            "sklar",
-        'stable' =>
-            "1.0.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Stream_Var' =>
-        array(
-        'packageid' =>
-            "241",
-        'categoryid' =>
-            "35",
-        'category' =>
-            "Streams",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Allows stream based access to any variable.",
-        'description' =>
-            "Stream_Var can be registered as a stream with stream_register_wrapper() and allows stream based acces to variables in any scope. Arrays are treated as directories, so it\'s possible to replace temporary directories and files in your application with variables.",
-        'lead' =>
-            "schst",
-        'stable' =>
-            "1.0.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Structures_Graph' =>
-        array(
-        'packageid' =>
-            "296",
-        'categoryid' =>
-            "27",
-        'category' =>
-            "Structures",
-        'license' =>
-            "LGPL",
-        'summary' =>
-            "Graph datastructure manipulation library",
-        'description' =>
-            "Structures_Graph is a package for creating and manipulating graph datastructures. It allows building of directed
-and undirected graphs, with data and metadata stored in nodes. The library provides functions for graph traversing
-as well as for characteristic extraction from the graph topology.",
-        'lead' =>
-            "sergiosgc",
-        'stable' =>
-            "1.0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'System_Command' =>
-        array(
-        'packageid' =>
-            "74",
-        'categoryid' =>
-            "5",
-        'category' =>
-            "Console",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "PEAR::System_Command is a commandline execution interface.",
-        'description' =>
-            "System_Command is a commandline execution interface.
-Running functions from the commandline can be risky if the proper precautions are
-not taken to escape the shell arguments and reaping the exit status properly.  This class
-provides a formal interface to both, so that you can run a system command as comfortably as
-you would run a php function, with full pear error handling as results on failure.
-It is important to note that this class, unlike other implementations, distinguishes between
-output to stderr and output to stdout.  It also reports the exit status of the command.
-So in every sense of the word, it gives php shell capabilities.",
-        'lead' =>
-            "dallen",
-        'stable' =>
-            "1.0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'System_Mount' =>
-        array(
-        'packageid' =>
-            "346",
-        'categoryid' =>
-            "37",
-        'category' =>
-            "System",
-        'license' =>
-            "PHP License v3.0",
-        'summary' =>
-            "Mount and unmount devices in fstab",
-        'description' =>
-            "System_Mount provides a simple interface to deal with mounting and unmounting devices listed in the system\'s fstab.
-
-Features:
-* Very compact, easy-to-read code, based on File_Fstab.
-* Examines mount options to determine if a device can be mounted or not.
-* Extremely easy to use.
-* Fully documented with PHPDoc.",
-        'lead' =>
-            "ieure",
-        'stable' =>
-            "1.0.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'TCLink' =>
-        array(
-        'packageid' =>
-            "160",
-        'categoryid' =>
-            "18",
-        'category' =>
-            "Payment",
-        'license' =>
-            "LGPL",
-        'summary' =>
-            "Enables credit card processing via the TrustCommerce payment gateway",
-        'description' =>
-            "This package provides a module for using TCLink directly from PHP scripts.
-TCLink is a thin client library to allow your e-commerce servers to connect
-to the TrustCommerce payment gateway.",
-        'lead' =>
-            "witten",
-        'stable' =>
-            "3.4.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'tcpwrap' =>
-        array(
-        'packageid' =>
-            "263",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "tcpwrappers binding.",
-        'description' =>
-            "This package handles /etc/hosts.allow and /etc/hosts.deny files.",
-        'lead' =>
-            "mg",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Text_Password' =>
-        array(
-        'packageid' =>
-            "207",
-        'categoryid' =>
-            "36",
-        'category' =>
-            "Text",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Creating passwords with PHP.",
-        'description' =>
-            "Text_Password allows one to create pronounceable and unpronounceable
-passwords. The full functional range is explained in the manual at
-http://pear.php.net/manual/.",
-        'lead' =>
-            "olivier",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Text_Statistics' =>
-        array(
-        'packageid' =>
-            "171",
-        'categoryid' =>
-            "27",
-        'category' =>
-            "Structures",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Compute readability indexes for documents.",
-        'description' =>
-            "Text_Statistics allows for computation of readability indexes for
-text documents.",
-        'lead' =>
-            "gschlossnagle",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'tidy' =>
-        array(
-        'packageid' =>
-            "236",
-        'categoryid' =>
-            "10",
-        'category' =>
-            "HTML",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "Tidy HTML Repairing and Parsing",
-        'description' =>
-            "Tidy is a binding for the Tidy HTML clean and repair utility which
-allows you to parse, diagnose, repair, and otherwise manipulate HTML,
-XHTML and XML documents quickly.",
-        'lead' =>
-            "iliaa",
-        'stable' =>
-            "1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Translation' =>
-        array(
-        'packageid' =>
-            "124",
-        'categoryid' =>
-            "28",
-        'category' =>
-            "Internationalization",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Class for creating multilingual websites.",
-        'description' =>
-            "Class allows storing and retrieving all the strings on multilingual site in a database. The class connects to any database using PEAR::DB extension. The object should be created for every page. While creation all the strings connected with specific page and the strings connected with all the pages on the site are loaded into variable, so access to them is quite fast and does not overload database server connection.",
-        'lead' =>
-            "quipo",
-        'stable' =>
-            "1.2.6pl1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'uuid' =>
-        array(
-        'packageid' =>
-            "216",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "UUID support functions",
-        'description' =>
-            "This extension provides functions to generate and analyse
-universally unique identifiers (UUIDs). It depends on the
-external libuuid. This library is available on most linux
-systems, its source is bundled with the ext2fs tools.",
-        'lead' =>
-            "hholzgra",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Var_Dump' =>
-        array(
-        'packageid' =>
-            "103",
-        'categoryid' =>
-            "25",
-        'category' =>
-            "PHP",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Provides methods for dumping structured information about a variable.",
-        'description' =>
-            "The Var_Dump class is a wrapper for the var_dump function.
-
-The var_dump function displays structured information about expressions that includes its type and value. Arrays are explored recursively with values indented to show structure.
-
-The Var_Dump class captures the output of the var_dump function, by using output control functions, and then uses external renderer classes for displaying the result in various graphical ways :
-* Simple text,
-* HTML/XHTML text,
-* HTML/XHTML table,
-* XML,
-* ...",
-        'lead' =>
-            "fredericpoeydomenge",
-        'stable' =>
-            "1.0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'xattr' =>
-        array(
-        'packageid' =>
-            "380",
-        'categoryid' =>
-            "9",
-        'category' =>
-            "File System",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Extended attributes.",
-        'description' =>
-            "This package allows to manipulate extended attributes on filesystems that support them. Requires libattr from Linux XFS project.",
-        'lead' =>
-            "mg",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'Xdebug' =>
-        array(
-        'packageid' =>
-            "214",
-        'categoryid' =>
-            "25",
-        'category' =>
-            "PHP",
-        'license' =>
-            "BSD style",
-        'summary' =>
-            "Provides functions for function traces and profiling",
-        'description' =>
-            "The Xdebug extension helps you debugging your script by providing a lot of
-valuable debug information. The debug information that Xdebug can provide
-includes the following:
-
-    * stack and function traces in error messages with:
-          o full parameter display for user defined functions
-          o function name, file name and line indications
-          o support for member functions
-    * memory allocation
-    * protection for infinite recursions
-
-Xdebug also provides:
-
-    * profiling information for PHP scripts
-    * script execution analysis
-    * capabilities to debug your scripts interactively with a debug client",
-        'lead' =>
-            "derick",
-        'stable' =>
-            "1.3.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'xdiff' =>
-        array(
-        'packageid' =>
-            "283",
-        'categoryid' =>
-            "36",
-        'category' =>
-            "Text",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "File differences/patches.",
-        'description' =>
-            "This extension creates and applies patches to both text and binary files.",
-        'lead' =>
-            "mg",
-        'stable' =>
-            "1.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'xmlReader' =>
-        array(
-        'packageid' =>
-            "330",
-        'categoryid' =>
-            "22",
-        'category' =>
-            "XML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Provides fast, non-cached, forward-only access to XML data.",
-        'description' =>
-            "This extension wraps the libxml xmlReader API. The reader acts as a cursor
-going forward on the document stream and stopping at each node in the way.
-xmlReader is similar to SAX though uses a much simpler API.",
-        'lead' =>
-            "rrichards",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'XML_Beautifier' =>
-        array(
-        'packageid' =>
-            "256",
-        'categoryid' =>
-            "22",
-        'category' =>
-            "XML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Class to format XML documents.",
-        'description' =>
-            "XML_Beautifier will add indentation and linebreaks to you XML files, replace all entities, format your comments and makes your document easier to read. You can influence the way your document is beautified with several options.",
-        'lead' =>
-            "schst",
-        'stable' =>
-            "1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'XML_CSSML' =>
-        array(
-        'packageid' =>
-            "61",
-        'categoryid' =>
-            "22",
-        'category' =>
-            "XML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "The PEAR::XML_CSSML package provides methods for creating cascading style sheets (CSS) from an XML standard called CSSML.",
-        'description' =>
-            "The best way to describe this library is to classify it as a template system for generating cascading style sheets (CSS). It is ideal for storing all of the CSS in a single location and allowing it to be parsed as needed at runtime (or from cache) using both general and browser filters specified in the attribute for the style tags. It can be driven with either the libxslt pear extenstion (part of xmldom) or the xslt extension (part of the sablotron libraries).
-
-You may see an example usage of this class at the follow url:
-
-http://mojave.mojavelinux.com/forum/viewtopic.php?p=22#22
-
-Users may post questions or comments about the class at this location.
-
-My hope is that such a system becomes the standard for the organization of stylesheet information in the future.",
-        'lead' =>
-            "dallen",
-        'stable' =>
-            "1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'XML_fo2pdf' =>
-        array(
-        'packageid' =>
-            "16",
-        'categoryid' =>
-            "22",
-        'category' =>
-            "XML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Converts a xsl-fo file to pdf/ps/pcl/text/etc with the help of apache-fop",
-        'description' =>
-            "Converts a xsl-fo file to pdf/ps/pcl/text/etc with the help of apache-fop",
-        'lead' =>
-            "chregu",
-        'stable' =>
-            "0.98",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'XML_HTMLSax' =>
-        array(
-        'packageid' =>
-            "203",
-        'categoryid' =>
-            "22",
-        'category' =>
-            "XML",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "A SAX parser for HTML and other badly formed XML documents",
-        'description' =>
-            "XML_HTMLSax is a SAX based XML parser for badly formed XML documents, such as HTML.
-  The original code base was developed by Alexander Zhukov and published at http://sourceforge.net/projects/phpshelve/. Alexander kindly gave permission to modify the code and license for inclusion in PEAR.
-
-  PEAR::XML_HTMLSax provides an API very similar to the native PHP XML extension (http://www.php.net/xml), allowing handlers using one to be easily adapted to the other. The key difference is HTMLSax will not break on badly formed XML, allowing it to be used for parsing HTML documents. Otherwise HTMLSax supports all the handlers available from Expat except namespace and external entity handlers. Provides methods for handling XML escapes as well as JSP/ASP opening and close tags.
-
-  Version 1.x introduced an API similar to the native SAX extension but used a slow character by character approach to parsing.
-
-  Version 2.x has had it\'s internals completely overhauled to use a Lexer, delivering performance *approaching* that of the native XML extension, as well as a radically improved, modular design that makes adding further functionality easy.
-
-  Version 3.x is about fine tuning the API, behaviour and providing a mechanism to distinguish HTML \"quirks\" from badly formed HTML (later functionality not yet implemented)
-
-  A big thanks to Jeff Moore (lead developer of WACT: http://wact.sourceforge.net) who\'s largely responsible for new design, as well input from other members at Sitepoint\'s Advanced PHP forums: http://www.sitepointforums.com/showthread.php?threadid=121246.
-
-  Thanks also to Marcus Baker (lead developer of SimpleTest: http://www.lastcraft.com/simple_test.php) for sorting out the unit tests.",
-        'lead' =>
-            "hfuecks",
-        'stable' =>
-            "2.1.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'XML_image2svg' =>
-        array(
-        'packageid' =>
-            "66",
-        'categoryid' =>
-            "22",
-        'category' =>
-            "XML",
-        'license' =>
-            "PHP 2.02",
-        'summary' =>
-            "Image to SVG conversion",
-        'description' =>
-            "The class converts images, such as of the format JPEG, PNG and GIF to a standalone SVG representation. The image is being encoded by the PHP native encode_base64() function. You can use it to get back a complete SVG file, which is based on a predefinded, easy adaptable template file, or you can take the encoded file as a return value, using the get() method. Due to the encoding by base64, the SVG files will increase approx. 30% in size compared to the conventional image.",
-        'lead' =>
-            "urs",
-        'stable' =>
-            "0.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'XML_NITF' =>
-        array(
-        'packageid' =>
-            "188",
-        'categoryid' =>
-            "22",
-        'category' =>
-            "XML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Parse NITF documents.",
-        'description' =>
-            "This package provides a NITF XML parser. The parser was designed with NITF version 3.1, but should be forward-compatible when new versions of the NITF DTD are produced. Various methods for accessing the major elements of the document, such as the hedline(s), byline, and lede are provided. This class was originally tested against the Associated Press\'s (AP) XML data feed.",
-        'lead' =>
-            "polone",
-        'stable' =>
-            "1.0.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'XML_Parser' =>
-        array(
-        'packageid' =>
-            "56",
-        'categoryid' =>
-            "22",
-        'category' =>
-            "XML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "XML parsing class based on PHP\'s bundled expat",
-        'description' =>
-            "This is an XML parser based on PHPs built-in xml extension.
-It supports two basic modes of operation: \"func\" and \"event\".  In \"func\" mode, it will look for a function named after each element (xmltag_ELEMENT for start tags and xmltag_ELEMENT_ for end tags), and in \"event\" mode it uses a set of generic callbacks.
-
-Since version 1.2.0 there\'s a new XML_Parser_Simple class that makes parsing of most XML documents easier, by automatically providing a stack for the elements.
-Furthermore its now possible to split the parser from the handler object, so you do not have to extend XML_Parser anymore in order to parse a document with it.",
-        'lead' =>
-            "schst",
-        'stable' =>
-            "1.2.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'XML_RPC' =>
-        array(
-        'packageid' =>
-            "17",
-        'categoryid' =>
-            "23",
-        'category' =>
-            "Web Services",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "PHP implementation of the XML-RPC protocol",
-        'description' =>
-            "This is a PEAR-ified version of Useful inc\'s XML-RPC
-for PHP.  It has support for HTTP transport, proxies and authentication.",
-        'lead' =>
-            "ssb",
-        'stable' =>
-            "1.1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'XML_RSS' =>
-        array(
-        'packageid' =>
-            "22",
-        'categoryid' =>
-            "22",
-        'category' =>
-            "XML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "RSS parser",
-        'description' =>
-            "Parser for Resource Description Framework (RDF) Site Summary (RSS)
-documents.",
-        'lead' =>
-            "mj",
-        'stable' =>
-            "0.9.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'XML_SVG' =>
-        array(
-        'packageid' =>
-            "221",
-        'categoryid' =>
-            "22",
-        'category' =>
-            "XML",
-        'license' =>
-            "LGPL",
-        'summary' =>
-            "XML_SVG API",
-        'description' =>
-            "This package provides an object-oriented API for building SVG documents.",
-        'lead' =>
-            "yunosh",
-        'stable' =>
-            "0.0.3",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'XML_Transformer' =>
-        array(
-        'packageid' =>
-            "37",
-        'categoryid' =>
-            "22",
-        'category' =>
-            "XML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "XML Transformations in PHP",
-        'description' =>
-            "The XML Transformer allows the binding of PHP functionality to XML tags to transform an XML document without the need for and the limitations of XSLT.",
-        'lead' =>
-            "sebastian",
-        'stable' =>
-            "1.1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'XML_Tree' =>
-        array(
-        'packageid' =>
-            "19",
-        'categoryid' =>
-            "22",
-        'category' =>
-            "XML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Represent XML data in a tree structure",
-        'description' =>
-            "Allows for the building of XML data structures using a tree
-representation, without the need for an extension like DOMXML.",
-        'lead' =>
-            "davey",
-        'stable' =>
-            "1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'XML_Util' =>
-        array(
-        'packageid' =>
-            "234",
-        'categoryid' =>
-            "22",
-        'category' =>
-            "XML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "XML utility class.",
-        'description' =>
-            "Selection of methods that are often needed when working with XML documents. Functionality includes creating of attribute lists from arrays, creation of tags, validation of XML names and more.",
-        'lead' =>
-            "schst",
-        'stable' =>
-            "1.1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'XML_Wddx' =>
-        array(
-        'packageid' =>
-            "309",
-        'categoryid' =>
-            "22",
-        'category' =>
-            "XML",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Wddx pretty serializer and deserializer",
-        'description' =>
-            "XML_Wddx does 2 things:
-a) a drop in replacement for the XML_Wddx extension (if it\'s not built in)
-b) produce an editable wddx file (with indenting etc.) and uses CDATA, rather than char tags
-This package contains 2 static method:
-XML_Wddx:serialize(\$value)
-XML_Wddx:deserialize(\$value)
-should be 90% compatible with wddx_deserialize(), and the deserializer will use wddx_deserialize if it is built in..
-No support for recordsets is available at present in the PHP version of the deserializer.",
-        'lead' =>
-            "alan_k",
-        'stable' =>
-            "1.0.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'yaz' =>
-        array(
-        'packageid' =>
-            "322",
-        'categoryid' =>
-            "16",
-        'category' =>
-            "Networking",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "a Z39.50 client for PHP",
-        'description' =>
-            "This extension implements a Z39.50 client for PHP using the YAZ toolkit.
-
-Find more information at:
-  http://www.indexdata.dk/phpyaz/
-  http://www.indexdata.dk/yaz/",
-        'lead' =>
-            "dickmeiss",
-        'stable' =>
-            "1.0.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'zip' =>
-        array(
-        'packageid' =>
-            "208",
-        'categoryid' =>
-            "33",
-        'category' =>
-            "File Formats",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "A zip management extension",
-        'description' =>
-            "Zip is an extension to read zip files.",
-        'lead' =>
-            "sterling",
-        'stable' =>
-            "1.0",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    'zlib_filter' =>
-        array(
-        'packageid' =>
-            "315",
-        'categoryid' =>
-            "35",
-        'category' =>
-            "Streams",
-        'license' =>
-            "PHP",
-        'summary' =>
-            "zlib filter implementation backport for PHP 5.0",
-        'description' =>
-            "RFC 1951 inflate/deflate stream filter implementation.  Performs inline compression/decompression using the deflate method on any PHP I/O stream.  The data produced by this filter, while compatable with the payload portion of an RFC 1952 gzip file, does not include headers or tailers for full RFC 1952 gzip compatability.  To achieve this format, use the compress.zlib:// fopen wrapper built directly into PHP.",
-        'lead' =>
-            "pollita",
-        'stable' =>
-            "1.1",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    ));
 $reg = &$config->getRegistry();
 $ch = new PEAR_ChannelFile;
 $ch->setName('smoog');
-$ch->setSUmmary('smoog');
-$ch->setDefaultPEARProtocols();
+$ch->setSummary('smoog');
+$ch->setBaseURL('REST1.0', 'http://smoog/rest/');
 $reg->addChannel($ch);
+
+$pearweb->addRESTConfig('http://smoog/rest/p/packages.xml',
+'<?xml version="1.0" ?>
+<a xmlns="http://pear.php.net/dtd/rest.allpackages"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allpackages
+    http://pear.php.net/dtd/rest.allpackages.xsd">
+ <c>smoog</c>
+ <p>APC</p>
+</a>',
+'text/xml');
+
+$pearweb->addRESTConfig('http://smoog/rest/r/apc/allreleases.xml',
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>APC</p>
+ <c>smoog</c>
+ <r>
+  <v>2.0.4</v>
+  <s>stable</s>
+ </r>
+</a>',
+'text/xml');
+
+$pearweb->addRESTConfig('http://smoog/rest/r/apc/2.0.4.xml',
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/apc">APC</p>
+ <c>smoog</c>
+ <v>2.0.4</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>rasmus</m>
+ <s>Alternative PHP Cache</s>
+ <d>APC is the Alternative PHP Cache. It was conceived of to provide a free, open, and robust framework for caching and optimizing PHP intermediate code.</d>
+ <da>2005-04-17 18:40:51</da>
+ <n>Release notes</n>
+ <f>252733</f>
+ <g>http://smoog/get/APC-2.0.4/g>
+ <x xlink:href="package.2.0.4.xml"/>
+</r>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://smoog/rest/r/apc/stable.txt", '2.0.4', 'text/xml');
+
 $ch->setName('empty');
 $reg->addChannel($ch);
+
 $e = $command->run('remote-list', array(), array());
 $phpunit->assertNoErrors('pear.php.net');
 //$phpunit->showall();
-$phpunit->assertEquals(array (
+
+$log = $fakelog->getLog();
+$phpunit->assertEquals(
+array (
   0 =>
+  array (
+    0 => 'Retrieving data...0%',
+    1 => false,
+  ),
+  1 =>
+  array (
+    0 => '.',
+    1 => false,
+  ),
+  2 =>
+  array (
+    0 => '.',
+    1 => false,
+  ),
+  3 =>
+  array (
+    0 => '.',
+    1 => false,
+  ),
+  4 =>
+  array (
+    0 => '.',
+    1 => false,
+  ),
+  5 =>
+  array (
+    0 => '50%',
+    1 => false,
+  ),
+  6 =>
+  array (
+    0 => '.',
+    1 => false,
+  ),
+  7 =>
+  array (
+    0 => '.',
+    1 => false,
+  ),
+  8 =>
+  array (
+    0 => '.',
+    1 => false,
+  ),
+  9 =>
+  array (
+    0 => '.',
+    1 => false,
+  ),
+  10 =>
   array (
     'info' =>
     array (
@@ -5472,916 +1241,2715 @@ $phpunit->assertEquals(array (
       array (
         0 =>
         array (
-          0 => 'APC',
-          1 => '2.0.4',
+          0 => 'Archive_Tar',
+          1 => '-n/a-',
         ),
         1 =>
         array (
-          0 => 'apd',
-          1 => '1.0.1',
+          0 => 'Archive_Zip',
+          1 => '-n/a-',
         ),
         2 =>
         array (
-          0 => 'Archive_Tar',
-          1 => '1.2',
+          0 => 'AsteriskManager',
+          1 => '-n/a-',
         ),
         3 =>
         array (
           0 => 'Auth',
-          1 => '1.2.3',
+          1 => '-n/a-',
         ),
         4 =>
         array (
           0 => 'Auth_HTTP',
-          1 => '2.0',
+          1 => '-n/a-',
         ),
         5 =>
         array (
           0 => 'Auth_PrefManager',
-          1 => '1.1.3',
+          1 => '-n/a-',
         ),
         6 =>
         array (
-          0 => 'Auth_RADIUS',
-          1 => '1.0.4',
+          0 => 'Auth_PrefManager2',
+          1 => '-n/a-',
         ),
         7 =>
         array (
-          0 => 'Auth_SASL',
-          1 => '1.0.1',
+          0 => 'Auth_RADIUS',
+          1 => '-n/a-',
         ),
         8 =>
         array (
-          0 => 'Benchmark',
-          1 => '1.2.1',
+          0 => 'Auth_SASL',
+          1 => '-n/a-',
         ),
         9 =>
         array (
-          0 => 'bz2',
-          1 => '1.0',
+          0 => 'Benchmark',
+          1 => '-n/a-',
         ),
         10 =>
         array (
           0 => 'Cache',
-          1 => '1.5.4',
+          1 => '-n/a-',
         ),
         11 =>
         array (
           0 => 'Cache_Lite',
-          1 => '1.3.1',
+          1 => '-n/a-',
         ),
         12 =>
         array (
-          0 => 'Config',
-          1 => '1.10.3',
+          0 => 'Calendar',
+          1 => '-n/a-',
         ),
         13 =>
         array (
-          0 => 'Console_Getargs',
-          1 => '1.2.1',
+          0 => 'CodeGen',
+          1 => '-n/a-',
         ),
         14 =>
         array (
-          0 => 'Console_Getopt',
-          1 => '1.2',
+          0 => 'CodeGen_MySQL',
+          1 => '-n/a-',
         ),
         15 =>
         array (
-          0 => 'Console_Table',
-          1 => '1.0.1',
+          0 => 'CodeGen_MySQL_Plugin',
+          1 => '-n/a-',
         ),
         16 =>
         array (
-          0 => 'Contact_Vcard_Build',
-          1 => '1.1',
+          0 => 'CodeGen_MySQL_UDF',
+          1 => '-n/a-',
         ),
         17 =>
         array (
-          0 => 'Contact_Vcard_Parse',
-          1 => '1.30',
+          0 => 'CodeGen_PECL',
+          1 => '-n/a-',
         ),
         18 =>
         array (
-          0 => 'crack',
-          1 => '0.1',
+          0 => 'Config',
+          1 => '-n/a-',
         ),
         19 =>
         array (
-          0 => 'Crypt_CBC',
-          1 => '0.4',
+          0 => 'Console_Color',
+          1 => '-n/a-',
         ),
         20 =>
         array (
-          0 => 'Crypt_CHAP',
-          1 => '1.0.0',
+          0 => 'Console_CommandLine',
+          1 => '-n/a-',
         ),
         21 =>
         array (
-          0 => 'Crypt_RC4',
-          1 => '1.0.2',
+          0 => 'Console_Getargs',
+          1 => '-n/a-',
         ),
         22 =>
         array (
-          0 => 'Crypt_Xtea',
-          1 => '1.0',
+          0 => 'Console_Getopt',
+          1 => '-n/a-',
         ),
         23 =>
         array (
-          0 => 'cybermut',
-          1 => '1.1',
+          0 => 'Console_GetoptPlus',
+          1 => '-n/a-',
         ),
         24 =>
         array (
-          0 => 'cyrus',
-          1 => '1.0',
+          0 => 'Console_ProgressBar',
+          1 => '-n/a-',
         ),
         25 =>
         array (
-          0 => 'Date',
-          1 => '1.4.3',
+          0 => 'Console_Table',
+          1 => '-n/a-',
         ),
         26 =>
         array (
-          0 => 'DB',
-          1 => '1.6.8',
+          0 => 'Contact_AddressBook',
+          1 => '-n/a-',
         ),
         27 =>
         array (
-          0 => 'DBA',
-          1 => '1.1',
+          0 => 'Contact_Vcard_Build',
+          1 => '-n/a-',
         ),
         28 =>
         array (
-          0 => 'DB_ado',
-          1 => '1.3',
+          0 => 'Contact_Vcard_Parse',
+          1 => '-n/a-',
         ),
         29 =>
         array (
-          0 => 'DB_DataObject',
-          1 => '1.7.2',
+          0 => 'Crypt_Blowfish',
+          1 => '-n/a-',
         ),
         30 =>
         array (
-          0 => 'DB_ldap',
-          1 => '1.1.0',
+          0 => 'Crypt_CBC',
+          1 => '-n/a-',
         ),
         31 =>
         array (
-          0 => 'DB_NestedSet',
-          1 => '1.2.4',
+          0 => 'Crypt_CHAP',
+          1 => '-n/a-',
         ),
         32 =>
         array (
-          0 => 'DB_odbtp',
-          1 => '1.0.2',
+          0 => 'Crypt_DiffieHellman',
+          1 => '-n/a-',
         ),
         33 =>
         array (
-          0 => 'DB_Pager',
-          1 => '0.7',
+          0 => 'Crypt_GPG',
+          1 => '-n/a-',
         ),
         34 =>
         array (
-          0 => 'DB_QueryTool',
-          1 => '0.11.1',
+          0 => 'Crypt_HMAC',
+          1 => '-n/a-',
         ),
         35 =>
         array (
-          0 => 'enchant',
-          1 => '1.0',
+          0 => 'Crypt_HMAC2',
+          1 => '-n/a-',
         ),
         36 =>
         array (
-          0 => 'File',
-          1 => '1.0.3',
+          0 => 'Crypt_MicroID',
+          1 => '-n/a-',
         ),
         37 =>
         array (
-          0 => 'File_Find',
-          1 => '0.2.0',
+          0 => 'Crypt_RC4',
+          1 => '-n/a-',
         ),
         38 =>
         array (
-          0 => 'File_Fstab',
-          1 => '2.0.1',
+          0 => 'Crypt_RSA',
+          1 => '-n/a-',
         ),
         39 =>
         array (
-          0 => 'File_HtAccess',
-          1 => '1.1.0',
+          0 => 'Crypt_Xtea',
+          1 => '-n/a-',
         ),
         40 =>
         array (
-          0 => 'File_Passwd',
-          1 => '1.1.1',
+          0 => 'Crypt_XXTEA',
+          1 => '-n/a-',
         ),
         41 =>
         array (
-          0 => 'File_SearchReplace',
-          1 => '1.0.1',
+          0 => 'Date',
+          1 => '-n/a-',
         ),
         42 =>
         array (
-          0 => 'File_SMBPasswd',
-          1 => '1.0.1',
+          0 => 'Date_Holidays',
+          1 => '-n/a-',
         ),
         43 =>
         array (
-          0 => 'fribidi',
-          1 => '1.0',
+          0 => 'Date_Holidays_Austria',
+          1 => '-n/a-',
         ),
         44 =>
         array (
-          0 => 'FSM',
-          1 => '1.2.1',
+          0 => 'Date_Holidays_Brazil',
+          1 => '-n/a-',
         ),
         45 =>
         array (
-          0 => 'HTML_BBCodeParser',
-          1 => '1.1',
+          0 => 'Date_Holidays_Denmark',
+          1 => '-n/a-',
         ),
         46 =>
         array (
-          0 => 'HTML_Common',
-          1 => '1.2.1',
+          0 => 'Date_Holidays_Discordian',
+          1 => '-n/a-',
         ),
         47 =>
         array (
-          0 => 'HTML_Crypt',
-          1 => '1.2.2',
+          0 => 'Date_Holidays_EnglandWales',
+          1 => '-n/a-',
         ),
         48 =>
         array (
-          0 => 'HTML_CSS',
-          1 => '0.2.0',
+          0 => 'Date_Holidays_Germany',
+          1 => '-n/a-',
         ),
         49 =>
         array (
-          0 => 'HTML_Form',
-          1 => '1.1.0',
+          0 => 'Date_Holidays_Iceland',
+          1 => '-n/a-',
         ),
         50 =>
         array (
-          0 => 'HTML_Javascript',
-          1 => '1.1.0',
+          0 => 'Date_Holidays_Ireland',
+          1 => '-n/a-',
         ),
         51 =>
         array (
-          0 => 'HTML_Menu',
-          1 => '2.1.1',
+          0 => 'Date_Holidays_Italy',
+          1 => '-n/a-',
         ),
         52 =>
         array (
-          0 => 'HTML_Progress',
-          1 => '1.2.0',
+          0 => 'Date_Holidays_Japan',
+          1 => '-n/a-',
         ),
         53 =>
         array (
-          0 => 'HTML_QuickForm',
-          1 => '3.2.4pl1',
+          0 => 'Date_Holidays_Netherlands',
+          1 => '-n/a-',
         ),
         54 =>
         array (
-          0 => 'HTML_QuickForm_Controller',
-          1 => '1.0.3',
+          0 => 'Date_Holidays_Norway',
+          1 => '-n/a-',
         ),
         55 =>
         array (
-          0 => 'HTML_Select_Common',
-          1 => '1.1',
+          0 => 'Date_Holidays_PHPdotNet',
+          1 => '-n/a-',
         ),
         56 =>
         array (
-          0 => 'HTML_Table',
-          1 => '1.5',
+          0 => 'Date_Holidays_Romania',
+          1 => '-n/a-',
         ),
         57 =>
         array (
-          0 => 'HTML_Table_Matrix',
-          1 => '1.0.6',
+          0 => 'Date_Holidays_Slovenia',
+          1 => '-n/a-',
         ),
         58 =>
         array (
-          0 => 'HTML_Template_Flexy',
-          1 => '1.1.0',
+          0 => 'Date_Holidays_Sweden',
+          1 => '-n/a-',
         ),
         59 =>
         array (
-          0 => 'HTML_Template_IT',
-          1 => '1.1',
+          0 => 'Date_Holidays_Ukraine',
+          1 => '-n/a-',
         ),
         60 =>
         array (
-          0 => 'HTML_Template_PHPLIB',
-          1 => '1.3.1',
+          0 => 'Date_Holidays_UNO',
+          1 => '-n/a-',
         ),
         61 =>
         array (
-          0 => 'HTML_Template_Sigma',
-          1 => '1.1.2',
+          0 => 'Date_Holidays_USA',
+          1 => '-n/a-',
         ),
         62 =>
         array (
-          0 => 'HTML_Template_Xipe',
-          1 => '1.7.6',
+          0 => 'DB',
+          1 => '-n/a-',
         ),
         63 =>
         array (
-          0 => 'HTML_TreeMenu',
-          1 => '1.1.9',
+          0 => 'DBA',
+          1 => '-n/a-',
         ),
         64 =>
         array (
-          0 => 'HTTP',
-          1 => '1.3.3',
+          0 => 'DBA_Relational',
+          1 => '-n/a-',
         ),
         65 =>
         array (
-          0 => 'HTTP_Client',
-          1 => '1.0.0',
+          0 => 'DB_ado',
+          1 => '-n/a-',
         ),
         66 =>
         array (
-          0 => 'HTTP_Header',
-          1 => '1.1.1',
+          0 => 'DB_DataObject',
+          1 => '-n/a-',
         ),
         67 =>
         array (
-          0 => 'HTTP_Request',
-          1 => '1.2.3',
+          0 => 'DB_DataObject_FormBuilder',
+          1 => '-n/a-',
         ),
         68 =>
         array (
-          0 => 'HTTP_Upload',
-          1 => '0.9.1',
+          0 => 'DB_ldap',
+          1 => '-n/a-',
         ),
         69 =>
         array (
-          0 => 'huffman',
-          1 => '0.2.0',
+          0 => 'DB_ldap2',
+          1 => '-n/a-',
         ),
         70 =>
         array (
-          0 => 'Image_Barcode',
-          1 => '0.5',
+          0 => 'DB_NestedSet',
+          1 => '-n/a-',
         ),
         71 =>
         array (
-          0 => 'Image_Color',
-          1 => '1.0.1',
+          0 => 'DB_NestedSet2',
+          1 => '-n/a-',
         ),
         72 =>
         array (
-          0 => 'Image_GIS',
-          1 => '1.1.1',
+          0 => 'DB_odbtp',
+          1 => '-n/a-',
         ),
         73 =>
         array (
-          0 => 'Image_GraphViz',
-          1 => '1.0.3',
+          0 => 'DB_Pager',
+          1 => '-n/a-',
         ),
         74 =>
         array (
-          0 => 'Image_IPTC',
-          1 => '1.0.2',
+          0 => 'DB_QueryTool',
+          1 => '-n/a-',
         ),
         75 =>
         array (
-          0 => 'Log',
-          1 => '1.8.7',
+          0 => 'DB_Sqlite_Tools',
+          1 => '-n/a-',
         ),
         76 =>
         array (
-          0 => 'lzf',
-          1 => '1.3',
+          0 => 'DB_Table',
+          1 => '-n/a-',
         ),
         77 =>
         array (
-          0 => 'Mail',
-          1 => '1.1.4',
+          0 => 'Event_Dispatcher',
+          1 => '-n/a-',
         ),
         78 =>
         array (
-          0 => 'mailparse',
-          1 => '2.0b',
+          0 => 'Event_SignalEmitter',
+          1 => '-n/a-',
         ),
         79 =>
         array (
-          0 => 'Mail_Mime',
-          1 => '1.2.1',
+          0 => 'File',
+          1 => '-n/a-',
         ),
         80 =>
         array (
-          0 => 'Mail_Queue',
-          1 => '1.1.3',
+          0 => 'File_Archive',
+          1 => '-n/a-',
         ),
         81 =>
         array (
-          0 => 'Math_Basex',
-          1 => '0.3',
+          0 => 'File_Bittorrent',
+          1 => '-n/a-',
         ),
         82 =>
         array (
-          0 => 'Math_Fibonacci',
-          1 => '0.8',
+          0 => 'File_Bittorrent2',
+          1 => '-n/a-',
         ),
         83 =>
         array (
-          0 => 'Math_Integer',
-          1 => '0.8',
+          0 => 'File_Cabinet',
+          1 => '-n/a-',
         ),
         84 =>
         array (
-          0 => 'Math_Matrix',
-          1 => '0.8.0',
+          0 => 'File_CSV',
+          1 => '-n/a-',
         ),
         85 =>
         array (
-          0 => 'Math_RPN',
-          1 => '1.1',
+          0 => 'File_CSV_DataSource',
+          1 => '-n/a-',
         ),
         86 =>
         array (
-          0 => 'Math_Stats',
-          1 => '0.8.5',
+          0 => 'File_DeliciousLibrary',
+          1 => '-n/a-',
         ),
         87 =>
         array (
-          0 => 'Math_TrigOp',
-          1 => '1.0',
+          0 => 'File_DICOM',
+          1 => '-n/a-',
         ),
         88 =>
         array (
-          0 => 'MDB',
-          1 => '1.3.0',
+          0 => 'File_DNS',
+          1 => '-n/a-',
         ),
         89 =>
         array (
-          0 => 'MDB_QueryTool',
-          1 => '0.11.1',
+          0 => 'File_Find',
+          1 => '-n/a-',
         ),
         90 =>
         array (
-          0 => 'memcache',
-          1 => '1.4',
+          0 => 'File_Fortune',
+          1 => '-n/a-',
         ),
         91 =>
         array (
-          0 => 'MP3_ID',
-          1 => '1.1.3',
+          0 => 'File_Fstab',
+          1 => '-n/a-',
         ),
         92 =>
         array (
-          0 => 'Net_CheckIP',
-          1 => '1.1',
+          0 => 'File_Gettext',
+          1 => '-n/a-',
         ),
         93 =>
         array (
-          0 => 'Net_Curl',
-          1 => '0.2',
+          0 => 'File_HtAccess',
+          1 => '-n/a-',
         ),
         94 =>
         array (
-          0 => 'Net_Dict',
-          1 => '1.0.3',
+          0 => 'File_IMC',
+          1 => '-n/a-',
         ),
         95 =>
         array (
-          0 => 'Net_Dig',
-          1 => '0.1',
+          0 => 'File_Infopath',
+          1 => '-n/a-',
         ),
         96 =>
         array (
-          0 => 'Net_DNS',
-          1 => '0.03',
+          0 => 'File_MARC',
+          1 => '-n/a-',
         ),
         97 =>
         array (
-          0 => 'Net_Finger',
-          1 => '1.0.0',
+          0 => 'File_Mogile',
+          1 => '-n/a-',
         ),
         98 =>
         array (
-          0 => 'Net_FTP',
-          1 => '1.3.0RC1',
+          0 => 'File_Ogg',
+          1 => '-n/a-',
         ),
         99 =>
         array (
-          0 => 'Net_Geo',
-          1 => '1.0',
+          0 => 'File_Passwd',
+          1 => '-n/a-',
         ),
         100 =>
         array (
-          0 => 'Net_Ident',
-          1 => '1.0',
+          0 => 'File_PDF',
+          1 => '-n/a-',
         ),
         101 =>
         array (
-          0 => 'Net_IMAP',
-          1 => '1.0.3',
+          0 => 'File_SearchReplace',
+          1 => '-n/a-',
         ),
         102 =>
         array (
-          0 => 'Net_IPv4',
-          1 => '1.2',
+          0 => 'File_Sitemap',
+          1 => '-n/a-',
         ),
         103 =>
         array (
-          0 => 'Net_IPv6',
-          1 => '1.0.1',
+          0 => 'File_SMBPasswd',
+          1 => '-n/a-',
         ),
         104 =>
         array (
-          0 => 'Net_LMTP',
-          1 => '1.0.1',
+          0 => 'File_Util',
+          1 => '-n/a-',
         ),
         105 =>
         array (
-          0 => 'Net_NNTP',
-          1 => '0.2.5',
+          0 => 'File_XSPF',
+          1 => '-n/a-',
         ),
         106 =>
         array (
-          0 => 'Net_Ping',
-          1 => '2.4',
+          0 => 'FSM',
+          1 => '-n/a-',
         ),
         107 =>
         array (
-          0 => 'Net_POP3',
-          1 => '1.3.3',
+          0 => 'Games_Chess',
+          1 => '-n/a-',
         ),
         108 =>
         array (
-          0 => 'Net_Portscan',
-          1 => '1.0.2',
+          0 => 'Genealogy_Gedcom',
+          1 => '-n/a-',
         ),
         109 =>
         array (
-          0 => 'Net_Sieve',
-          1 => '1.1.0',
+          0 => 'Gtk2_EntryDialog',
+          1 => '-n/a-',
         ),
         110 =>
         array (
-          0 => 'Net_SmartIRC',
-          1 => '0.5.5p1',
+          0 => 'Gtk2_ExceptionDump',
+          1 => '-n/a-',
         ),
         111 =>
         array (
-          0 => 'Net_SMTP',
-          1 => '1.2.6',
+          0 => 'Gtk2_FileDrop',
+          1 => '-n/a-',
         ),
         112 =>
         array (
-          0 => 'Net_Socket',
-          1 => '1.0.4',
+          0 => 'Gtk2_IndexedComboBox',
+          1 => '-n/a-',
         ),
         113 =>
         array (
-          0 => 'Net_URL',
-          1 => '1.0.14',
+          0 => 'Gtk2_PHPConfig',
+          1 => '-n/a-',
         ),
         114 =>
         array (
-          0 => 'Net_UserAgent_Detect',
-          1 => '2.0.1',
+          0 => 'Gtk2_ScrollingLabel',
+          1 => '-n/a-',
         ),
         115 =>
         array (
-          0 => 'Net_Whois',
-          1 => '1.0',
+          0 => 'Gtk2_VarDump',
+          1 => '-n/a-',
         ),
         116 =>
         array (
-          0 => 'Numbers_Roman',
-          1 => '0.2.0',
+          0 => 'Gtk_FileDrop',
+          1 => '-n/a-',
         ),
         117 =>
         array (
-          0 => 'oci8',
-          1 => '1.0',
+          0 => 'Gtk_MDB_Designer',
+          1 => '-n/a-',
         ),
         118 =>
         array (
-          0 => 'odbtp',
-          1 => '1.1.2',
+          0 => 'Gtk_ScrollingLabel',
+          1 => '-n/a-',
         ),
         119 =>
         array (
-          0 => 'Pager',
-          1 => '2.2.4',
+          0 => 'Gtk_Styled',
+          1 => '-n/a-',
         ),
         120 =>
         array (
-          0 => 'Pager_Sliding',
-          1 => '1.6',
+          0 => 'Gtk_VarDump',
+          1 => '-n/a-',
         ),
         121 =>
         array (
-          0 => 'Paradox',
-          1 => '1.3.0',
+          0 => 'HTML_AJAX',
+          1 => '-n/a-',
         ),
         122 =>
         array (
-          0 => 'parsekit',
-          1 => '1.0',
+          0 => 'HTML_BBCodeParser',
+          1 => '-n/a-',
         ),
         123 =>
         array (
-          0 => 'Payment_Clieop',
-          1 => '0.1.1',
+          0 => 'HTML_Common',
+          1 => '-n/a-',
         ),
         124 =>
         array (
-          0 => 'Payment_DTA',
-          1 => '1.00',
+          0 => 'HTML_Common2',
+          1 => '-n/a-',
         ),
         125 =>
         array (
-          0 => 'pdflib',
-          1 => '2.0.4',
+          0 => 'HTML_Crypt',
+          1 => '-n/a-',
         ),
         126 =>
         array (
-          0 => 'PEAR',
-          1 => '1.3.3.1',
+          0 => 'HTML_CSS',
+          1 => '-n/a-',
         ),
         127 =>
         array (
-          0 => 'PEAR_Info',
-          1 => '1.5.2',
+          0 => 'HTML_Entities',
+          1 => '-n/a-',
         ),
         128 =>
         array (
-          0 => 'PEAR_PackageFileManager',
-          1 => '1.2.1',
+          0 => 'HTML_Form',
+          1 => '-n/a-',
         ),
         129 =>
         array (
-          0 => 'perl',
-          1 => '0.6',
+          0 => 'HTML_Javascript',
+          1 => '-n/a-',
         ),
         130 =>
         array (
-          0 => 'PhpDocumentor',
-          1 => '1.2.3',
+          0 => 'HTML_Menu',
+          1 => '-n/a-',
         ),
         131 =>
         array (
-          0 => 'PHPUnit',
-          1 => '1.1.1',
+          0 => 'HTML_Page',
+          1 => '-n/a-',
         ),
         132 =>
         array (
-          0 => 'PHPUnit2',
-          1 => '2.1.4',
+          0 => 'HTML_Page2',
+          1 => '-n/a-',
         ),
         133 =>
         array (
-          0 => 'PHP_Compat',
-          1 => '1.3.1',
+          0 => 'HTML_Progress',
+          1 => '-n/a-',
         ),
         134 =>
         array (
-          0 => 'ps',
-          1 => '1.3.0',
+          0 => 'HTML_Progress2',
+          1 => '-n/a-',
         ),
         135 =>
         array (
-          0 => 'radius',
-          1 => '1.2.4',
+          0 => 'HTML_QuickForm',
+          1 => '-n/a-',
         ),
         136 =>
         array (
-          0 => 'Science_Chemistry',
-          1 => '1.1.0',
+          0 => 'HTML_QuickForm2',
+          1 => '-n/a-',
         ),
         137 =>
         array (
-          0 => 'Services_Weather',
-          1 => '1.3.1',
+          0 => 'HTML_QuickForm_advmultiselect',
+          1 => '-n/a-',
         ),
         138 =>
         array (
-          0 => 'spplus',
-          1 => '1.0',
+          0 => 'HTML_QuickForm_altselect',
+          1 => '-n/a-',
         ),
         139 =>
         array (
-          0 => 'SQLite',
-          1 => '1.0.3',
+          0 => 'HTML_QuickForm_CAPTCHA',
+          1 => '-n/a-',
         ),
         140 =>
         array (
-          0 => 'Stream_SHM',
-          1 => '1.0.0',
+          0 => 'HTML_QuickForm_Controller',
+          1 => '-n/a-',
         ),
         141 =>
         array (
-          0 => 'Stream_Var',
-          1 => '1.0.0',
+          0 => 'HTML_QuickForm_DHTMLRulesTableless',
+          1 => '-n/a-',
         ),
         142 =>
         array (
-          0 => 'Structures_Graph',
-          1 => '1.0.1',
+          0 => 'HTML_QuickForm_ElementGrid',
+          1 => '-n/a-',
         ),
         143 =>
         array (
-          0 => 'System_Command',
-          1 => '1.0.1',
+          0 => 'HTML_QuickForm_Livesearch',
+          1 => '-n/a-',
         ),
         144 =>
         array (
-          0 => 'System_Mount',
-          1 => '1.0.0',
+          0 => 'HTML_QuickForm_Renderer_Tableless',
+          1 => '-n/a-',
         ),
         145 =>
         array (
-          0 => 'TCLink',
-          1 => '3.4.0',
+          0 => 'HTML_QuickForm_Rule_Spelling',
+          1 => '-n/a-',
         ),
         146 =>
         array (
-          0 => 'tcpwrap',
-          1 => '1.0',
+          0 => 'HTML_QuickForm_SelectFilter',
+          1 => '-n/a-',
         ),
         147 =>
         array (
-          0 => 'Text_Password',
-          1 => '1.0',
+          0 => 'HTML_Safe',
+          1 => '-n/a-',
         ),
         148 =>
         array (
-          0 => 'Text_Statistics',
-          1 => '1.0',
+          0 => 'HTML_Select',
+          1 => '-n/a-',
         ),
         149 =>
         array (
-          0 => 'tidy',
-          1 => '1.1',
+          0 => 'HTML_Select_Common',
+          1 => '-n/a-',
         ),
         150 =>
         array (
-          0 => 'Translation',
-          1 => '1.2.6pl1',
+          0 => 'HTML_Table',
+          1 => '-n/a-',
         ),
         151 =>
         array (
-          0 => 'uuid',
-          1 => '1.0',
+          0 => 'HTML_Table_Matrix',
+          1 => '-n/a-',
         ),
         152 =>
         array (
-          0 => 'Var_Dump',
-          1 => '1.0.1',
+          0 => 'HTML_TagCloud',
+          1 => '-n/a-',
         ),
         153 =>
         array (
-          0 => 'xattr',
-          1 => '1.0',
+          0 => 'HTML_Template_Flexy',
+          1 => '-n/a-',
         ),
         154 =>
         array (
-          0 => 'Xdebug',
-          1 => '1.3.2',
+          0 => 'HTML_Template_IT',
+          1 => '-n/a-',
         ),
         155 =>
         array (
-          0 => 'xdiff',
-          1 => '1.2',
+          0 => 'HTML_Template_PHPLIB',
+          1 => '-n/a-',
         ),
         156 =>
         array (
-          0 => 'xmlReader',
-          1 => '1.0',
+          0 => 'HTML_Template_Sigma',
+          1 => '-n/a-',
         ),
         157 =>
         array (
-          0 => 'XML_Beautifier',
-          1 => '1.1',
+          0 => 'HTML_Template_Xipe',
+          1 => '-n/a-',
         ),
         158 =>
         array (
-          0 => 'XML_CSSML',
-          1 => '1.1',
+          0 => 'HTML_TreeMenu',
+          1 => '-n/a-',
         ),
         159 =>
         array (
-          0 => 'XML_fo2pdf',
-          1 => '0.98',
+          0 => 'HTTP',
+          1 => '-n/a-',
         ),
         160 =>
         array (
-          0 => 'XML_HTMLSax',
-          1 => '2.1.2',
+          0 => 'HTTP_Client',
+          1 => '-n/a-',
         ),
         161 =>
         array (
-          0 => 'XML_image2svg',
-          1 => '0.1',
+          0 => 'HTTP_Download',
+          1 => '-n/a-',
         ),
         162 =>
         array (
-          0 => 'XML_NITF',
-          1 => '1.0.0',
+          0 => 'HTTP_FloodControl',
+          1 => '-n/a-',
         ),
         163 =>
         array (
-          0 => 'XML_Parser',
-          1 => '1.2.1',
+          0 => 'HTTP_Header',
+          1 => '-n/a-',
         ),
         164 =>
         array (
-          0 => 'XML_RPC',
-          1 => '1.1.0',
+          0 => 'HTTP_Request',
+          1 => '-n/a-',
         ),
         165 =>
         array (
-          0 => 'XML_RSS',
-          1 => '0.9.2',
+          0 => 'HTTP_Request2',
+          1 => '-n/a-',
         ),
         166 =>
         array (
-          0 => 'XML_SVG',
-          1 => '0.0.3',
+          0 => 'HTTP_Server',
+          1 => '-n/a-',
         ),
         167 =>
         array (
-          0 => 'XML_Transformer',
-          1 => '1.1.0',
+          0 => 'HTTP_Session',
+          1 => '-n/a-',
         ),
         168 =>
         array (
-          0 => 'XML_Tree',
-          1 => '1.1',
+          0 => 'HTTP_Session2',
+          1 => '-n/a-',
         ),
         169 =>
         array (
-          0 => 'XML_Util',
-          1 => '1.1.0',
+          0 => 'HTTP_SessionServer',
+          1 => '-n/a-',
         ),
         170 =>
         array (
-          0 => 'XML_Wddx',
-          1 => '1.0.0',
+          0 => 'HTTP_Upload',
+          1 => '-n/a-',
         ),
         171 =>
         array (
-          0 => 'yaz',
-          1 => '1.0.2',
+          0 => 'HTTP_WebDAV_Client',
+          1 => '-n/a-',
         ),
         172 =>
         array (
-          0 => 'zip',
-          1 => '1.0',
+          0 => 'HTTP_WebDAV_Server',
+          1 => '-n/a-',
         ),
         173 =>
         array (
-          0 => 'zlib_filter',
-          1 => '1.1',
+          0 => 'I18N',
+          1 => '-n/a-',
+        ),
+        174 =>
+        array (
+          0 => 'I18Nv2',
+          1 => '-n/a-',
+        ),
+        175 =>
+        array (
+          0 => 'I18N_UnicodeNormalizer',
+          1 => '-n/a-',
+        ),
+        176 =>
+        array (
+          0 => 'I18N_UnicodeString',
+          1 => '-n/a-',
+        ),
+        177 =>
+        array (
+          0 => 'Image_3D',
+          1 => '-n/a-',
+        ),
+        178 =>
+        array (
+          0 => 'Image_Barcode',
+          1 => '-n/a-',
+        ),
+        179 =>
+        array (
+          0 => 'Image_Canvas',
+          1 => '-n/a-',
+        ),
+        180 =>
+        array (
+          0 => 'Image_Color',
+          1 => '-n/a-',
+        ),
+        181 =>
+        array (
+          0 => 'Image_Color2',
+          1 => '-n/a-',
+        ),
+        182 =>
+        array (
+          0 => 'Image_GIS',
+          1 => '-n/a-',
+        ),
+        183 =>
+        array (
+          0 => 'Image_Graph',
+          1 => '-n/a-',
+        ),
+        184 =>
+        array (
+          0 => 'Image_GraphViz',
+          1 => '-n/a-',
+        ),
+        185 =>
+        array (
+          0 => 'Image_IPTC',
+          1 => '-n/a-',
+        ),
+        186 =>
+        array (
+          0 => 'Image_JpegMarkerReader',
+          1 => '-n/a-',
+        ),
+        187 =>
+        array (
+          0 => 'Image_JpegXmpReader',
+          1 => '-n/a-',
+        ),
+        188 =>
+        array (
+          0 => 'Image_MonoBMP',
+          1 => '-n/a-',
+        ),
+        189 =>
+        array (
+          0 => 'Image_Puzzle',
+          1 => '-n/a-',
+        ),
+        190 =>
+        array (
+          0 => 'Image_Remote',
+          1 => '-n/a-',
+        ),
+        191 =>
+        array (
+          0 => 'Image_Text',
+          1 => '-n/a-',
+        ),
+        192 =>
+        array (
+          0 => 'Image_Tools',
+          1 => '-n/a-',
+        ),
+        193 =>
+        array (
+          0 => 'Image_Transform',
+          1 => '-n/a-',
+        ),
+        194 =>
+        array (
+          0 => 'Image_WBMP',
+          1 => '-n/a-',
+        ),
+        195 =>
+        array (
+          0 => 'Image_XBM',
+          1 => '-n/a-',
+        ),
+        196 =>
+        array (
+          0 => 'Inline_C',
+          1 => '-n/a-',
+        ),
+        197 =>
+        array (
+          0 => 'LiveUser',
+          1 => '-n/a-',
+        ),
+        198 =>
+        array (
+          0 => 'LiveUser_Admin',
+          1 => '-n/a-',
+        ),
+        199 =>
+        array (
+          0 => 'Log',
+          1 => '-n/a-',
+        ),
+        200 =>
+        array (
+          0 => 'Mail',
+          1 => '-n/a-',
+        ),
+        201 =>
+        array (
+          0 => 'Mail_IMAP',
+          1 => '-n/a-',
+        ),
+        202 =>
+        array (
+          0 => 'Mail_IMAPv2',
+          1 => '-n/a-',
+        ),
+        203 =>
+        array (
+          0 => 'Mail_Mbox',
+          1 => '-n/a-',
+        ),
+        204 =>
+        array (
+          0 => 'Mail_Mime',
+          1 => '-n/a-',
+        ),
+        205 =>
+        array (
+          0 => 'Mail_mimeDecode',
+          1 => '-n/a-',
+        ),
+        206 =>
+        array (
+          0 => 'Mail_Queue',
+          1 => '-n/a-',
+        ),
+        207 =>
+        array (
+          0 => 'Math_Basex',
+          1 => '-n/a-',
+        ),
+        208 =>
+        array (
+          0 => 'Math_BigInteger',
+          1 => '-n/a-',
+        ),
+        209 =>
+        array (
+          0 => 'Math_BinaryUtils',
+          1 => '-n/a-',
+        ),
+        210 =>
+        array (
+          0 => 'Math_Combinatorics',
+          1 => '-n/a-',
+        ),
+        211 =>
+        array (
+          0 => 'Math_Complex',
+          1 => '-n/a-',
+        ),
+        212 =>
+        array (
+          0 => 'Math_Derivative',
+          1 => '-n/a-',
+        ),
+        213 =>
+        array (
+          0 => 'Math_Fibonacci',
+          1 => '-n/a-',
+        ),
+        214 =>
+        array (
+          0 => 'Math_Finance',
+          1 => '-n/a-',
+        ),
+        215 =>
+        array (
+          0 => 'Math_Fraction',
+          1 => '-n/a-',
+        ),
+        216 =>
+        array (
+          0 => 'Math_Histogram',
+          1 => '-n/a-',
+        ),
+        217 =>
+        array (
+          0 => 'Math_Integer',
+          1 => '-n/a-',
+        ),
+        218 =>
+        array (
+          0 => 'Math_Matrix',
+          1 => '-n/a-',
+        ),
+        219 =>
+        array (
+          0 => 'Math_Numerical_RootFinding',
+          1 => '-n/a-',
+        ),
+        220 =>
+        array (
+          0 => 'Math_Polynomial',
+          1 => '-n/a-',
+        ),
+        221 =>
+        array (
+          0 => 'Math_Quaternion',
+          1 => '-n/a-',
+        ),
+        222 =>
+        array (
+          0 => 'Math_RPN',
+          1 => '-n/a-',
+        ),
+        223 =>
+        array (
+          0 => 'Math_Stats',
+          1 => '-n/a-',
+        ),
+        224 =>
+        array (
+          0 => 'Math_TrigOp',
+          1 => '-n/a-',
+        ),
+        225 =>
+        array (
+          0 => 'Math_Vector',
+          1 => '-n/a-',
+        ),
+        226 =>
+        array (
+          0 => 'MDB',
+          1 => '-n/a-',
+        ),
+        227 =>
+        array (
+          0 => 'MDB2',
+          1 => '-n/a-',
+        ),
+        228 =>
+        array (
+          0 => 'MDB2_Driver_fbsql',
+          1 => '-n/a-',
+        ),
+        229 =>
+        array (
+          0 => 'MDB2_Driver_ibase',
+          1 => '-n/a-',
+        ),
+        230 =>
+        array (
+          0 => 'MDB2_Driver_mssql',
+          1 => '-n/a-',
+        ),
+        231 =>
+        array (
+          0 => 'MDB2_Driver_mysql',
+          1 => '-n/a-',
+        ),
+        232 =>
+        array (
+          0 => 'MDB2_Driver_mysqli',
+          1 => '-n/a-',
+        ),
+        233 =>
+        array (
+          0 => 'MDB2_Driver_oci8',
+          1 => '-n/a-',
+        ),
+        234 =>
+        array (
+          0 => 'MDB2_Driver_pgsql',
+          1 => '-n/a-',
+        ),
+        235 =>
+        array (
+          0 => 'MDB2_Driver_querysim',
+          1 => '-n/a-',
+        ),
+        236 =>
+        array (
+          0 => 'MDB2_Driver_sqlite',
+          1 => '-n/a-',
+        ),
+        237 =>
+        array (
+          0 => 'MDB2_Schema',
+          1 => '-n/a-',
+        ),
+        238 =>
+        array (
+          0 => 'MDB2_TableBrowser',
+          1 => '-n/a-',
+        ),
+        239 =>
+        array (
+          0 => 'MDB_QueryTool',
+          1 => '-n/a-',
+        ),
+        240 =>
+        array (
+          0 => 'Message',
+          1 => '-n/a-',
+        ),
+        241 =>
+        array (
+          0 => 'MIME_Type',
+          1 => '-n/a-',
+        ),
+        242 =>
+        array (
+          0 => 'MP3_Id',
+          1 => '-n/a-',
+        ),
+        243 =>
+        array (
+          0 => 'MP3_IDv2',
+          1 => '-n/a-',
+        ),
+        244 =>
+        array (
+          0 => 'MP3_Playlist',
+          1 => '-n/a-',
+        ),
+        245 =>
+        array (
+          0 => 'Net_CDDB',
+          1 => '-n/a-',
+        ),
+        246 =>
+        array (
+          0 => 'Net_CheckIP',
+          1 => '-n/a-',
+        ),
+        247 =>
+        array (
+          0 => 'Net_CheckIP2',
+          1 => '-n/a-',
+        ),
+        248 =>
+        array (
+          0 => 'Net_Curl',
+          1 => '-n/a-',
+        ),
+        249 =>
+        array (
+          0 => 'Net_Cyrus',
+          1 => '-n/a-',
+        ),
+        250 =>
+        array (
+          0 => 'Net_Dict',
+          1 => '-n/a-',
+        ),
+        251 =>
+        array (
+          0 => 'Net_Dig',
+          1 => '-n/a-',
+        ),
+        252 =>
+        array (
+          0 => 'Net_DIME',
+          1 => '-n/a-',
+        ),
+        253 =>
+        array (
+          0 => 'Net_DNS',
+          1 => '-n/a-',
+        ),
+        254 =>
+        array (
+          0 => 'Net_DNSBL',
+          1 => '-n/a-',
+        ),
+        255 =>
+        array (
+          0 => 'Net_Finger',
+          1 => '-n/a-',
+        ),
+        256 =>
+        array (
+          0 => 'Net_FTP',
+          1 => '-n/a-',
+        ),
+        257 =>
+        array (
+          0 => 'Net_FTP2',
+          1 => '-n/a-',
+        ),
+        258 =>
+        array (
+          0 => 'Net_GameServerQuery',
+          1 => '-n/a-',
+        ),
+        259 =>
+        array (
+          0 => 'Net_Gearman',
+          1 => '-n/a-',
+        ),
+        260 =>
+        array (
+          0 => 'Net_Geo',
+          1 => '-n/a-',
+        ),
+        261 =>
+        array (
+          0 => 'Net_GeoIP',
+          1 => '-n/a-',
+        ),
+        262 =>
+        array (
+          0 => 'Net_Growl',
+          1 => '-n/a-',
+        ),
+        263 =>
+        array (
+          0 => 'Net_HL7',
+          1 => '-n/a-',
+        ),
+        264 =>
+        array (
+          0 => 'Net_Ident',
+          1 => '-n/a-',
+        ),
+        265 =>
+        array (
+          0 => 'Net_IDNA',
+          1 => '-n/a-',
+        ),
+        266 =>
+        array (
+          0 => 'Net_IMAP',
+          1 => '-n/a-',
+        ),
+        267 =>
+        array (
+          0 => 'Net_IPv4',
+          1 => '-n/a-',
+        ),
+        268 =>
+        array (
+          0 => 'Net_IPv6',
+          1 => '-n/a-',
+        ),
+        269 =>
+        array (
+          0 => 'Net_IRC',
+          1 => '-n/a-',
+        ),
+        270 =>
+        array (
+          0 => 'Net_LDAP',
+          1 => '-n/a-',
+        ),
+        271 =>
+        array (
+          0 => 'Net_LDAP2',
+          1 => '-n/a-',
+        ),
+        272 =>
+        array (
+          0 => 'Net_LMTP',
+          1 => '-n/a-',
+        ),
+        273 =>
+        array (
+          0 => 'Net_MAC',
+          1 => '-n/a-',
+        ),
+        274 =>
+        array (
+          0 => 'Net_Monitor',
+          1 => '-n/a-',
+        ),
+        275 =>
+        array (
+          0 => 'Net_MPD',
+          1 => '-n/a-',
+        ),
+        276 =>
+        array (
+          0 => 'Net_Nmap',
+          1 => '-n/a-',
+        ),
+        277 =>
+        array (
+          0 => 'Net_NNTP',
+          1 => '-n/a-',
+        ),
+        278 =>
+        array (
+          0 => 'Net_Ping',
+          1 => '-n/a-',
+        ),
+        279 =>
+        array (
+          0 => 'Net_POP3',
+          1 => '-n/a-',
+        ),
+        280 =>
+        array (
+          0 => 'Net_Portscan',
+          1 => '-n/a-',
+        ),
+        281 =>
+        array (
+          0 => 'Net_Server',
+          1 => '-n/a-',
+        ),
+        282 =>
+        array (
+          0 => 'Net_Sieve',
+          1 => '-n/a-',
+        ),
+        283 =>
+        array (
+          0 => 'Net_SmartIRC',
+          1 => '-n/a-',
+        ),
+        284 =>
+        array (
+          0 => 'Net_SMPP',
+          1 => '-n/a-',
+        ),
+        285 =>
+        array (
+          0 => 'Net_SMPP_Client',
+          1 => '-n/a-',
+        ),
+        286 =>
+        array (
+          0 => 'Net_SMS',
+          1 => '-n/a-',
+        ),
+        287 =>
+        array (
+          0 => 'Net_SMTP',
+          1 => '-n/a-',
+        ),
+        288 =>
+        array (
+          0 => 'Net_Socket',
+          1 => '-n/a-',
+        ),
+        289 =>
+        array (
+          0 => 'Net_Traceroute',
+          1 => '-n/a-',
+        ),
+        290 =>
+        array (
+          0 => 'Net_URL',
+          1 => '-n/a-',
+        ),
+        291 =>
+        array (
+          0 => 'Net_URL2',
+          1 => '-n/a-',
+        ),
+        292 =>
+        array (
+          0 => 'Net_URL_Mapper',
+          1 => '-n/a-',
+        ),
+        293 =>
+        array (
+          0 => 'Net_UserAgent_Detect',
+          1 => '-n/a-',
+        ),
+        294 =>
+        array (
+          0 => 'Net_UserAgent_Mobile',
+          1 => '-n/a-',
+        ),
+        295 =>
+        array (
+          0 => 'Net_UserAgent_Mobile_GPS',
+          1 => '-n/a-',
+        ),
+        296 =>
+        array (
+          0 => 'Net_Vpopmaild',
+          1 => '-n/a-',
+        ),
+        297 =>
+        array (
+          0 => 'Net_Whois',
+          1 => '-n/a-',
+        ),
+        298 =>
+        array (
+          0 => 'Net_Wifi',
+          1 => '-n/a-',
+        ),
+        299 =>
+        array (
+          0 => 'Numbers_Roman',
+          1 => '-n/a-',
+        ),
+        300 =>
+        array (
+          0 => 'Numbers_Words',
+          1 => '-n/a-',
+        ),
+        301 =>
+        array (
+          0 => 'OLE',
+          1 => '-n/a-',
+        ),
+        302 =>
+        array (
+          0 => 'OpenDocument',
+          1 => '-n/a-',
+        ),
+        303 =>
+        array (
+          0 => 'Pager',
+          1 => '-n/a-',
+        ),
+        304 =>
+        array (
+          0 => 'Pager_Sliding',
+          1 => '-n/a-',
+        ),
+        305 =>
+        array (
+          0 => 'Payment_Clieop',
+          1 => '-n/a-',
+        ),
+        306 =>
+        array (
+          0 => 'Payment_DTA',
+          1 => '-n/a-',
+        ),
+        307 =>
+        array (
+          0 => 'Payment_PayPal_SOAP',
+          1 => '-n/a-',
+        ),
+        308 =>
+        array (
+          0 => 'Payment_Process',
+          1 => '-n/a-',
+        ),
+        309 =>
+        array (
+          0 => 'PEAR',
+          1 => '-n/a-',
+        ),
+        310 =>
+        array (
+          0 => 'pearweb',
+          1 => '-n/a-',
+        ),
+        311 =>
+        array (
+          0 => 'pearweb_channelxml',
+          1 => '-n/a-',
+        ),
+        312 =>
+        array (
+          0 => 'pearweb_gopear',
+          1 => '-n/a-',
+        ),
+        313 =>
+        array (
+          0 => 'pearweb_index',
+          1 => '-n/a-',
+        ),
+        314 =>
+        array (
+          0 => 'pearweb_phars',
+          1 => '-n/a-',
+        ),
+        315 =>
+        array (
+          0 => 'PEAR_Command_Packaging',
+          1 => '-n/a-',
+        ),
+        316 =>
+        array (
+          0 => 'PEAR_Delegator',
+          1 => '-n/a-',
+        ),
+        317 =>
+        array (
+          0 => 'PEAR_ErrorStack',
+          1 => '-n/a-',
+        ),
+        318 =>
+        array (
+          0 => 'PEAR_Frontend_Gtk',
+          1 => '-n/a-',
+        ),
+        319 =>
+        array (
+          0 => 'PEAR_Frontend_Gtk2',
+          1 => '-n/a-',
+        ),
+        320 =>
+        array (
+          0 => 'PEAR_Frontend_Web',
+          1 => '-n/a-',
+        ),
+        321 =>
+        array (
+          0 => 'PEAR_Info',
+          1 => '-n/a-',
+        ),
+        322 =>
+        array (
+          0 => 'PEAR_PackageFileManager',
+          1 => '-n/a-',
+        ),
+        323 =>
+        array (
+          0 => 'PEAR_PackageFileManager2',
+          1 => '-n/a-',
+        ),
+        324 =>
+        array (
+          0 => 'PEAR_PackageFileManager_Cli',
+          1 => '-n/a-',
+        ),
+        325 =>
+        array (
+          0 => 'PEAR_PackageFileManager_Frontend',
+          1 => '-n/a-',
+        ),
+        326 =>
+        array (
+          0 => 'PEAR_PackageFileManager_Frontend_Web',
+          1 => '-n/a-',
+        ),
+        327 =>
+        array (
+          0 => 'PEAR_PackageFileManager_GUI_Gtk',
+          1 => '-n/a-',
+        ),
+        328 =>
+        array (
+          0 => 'PEAR_PackageFileManager_Plugins',
+          1 => '-n/a-',
+        ),
+        329 =>
+        array (
+          0 => 'PEAR_PackageUpdate',
+          1 => '-n/a-',
+        ),
+        330 =>
+        array (
+          0 => 'PEAR_PackageUpdate_Gtk2',
+          1 => '-n/a-',
+        ),
+        331 =>
+        array (
+          0 => 'PEAR_PackageUpdate_Web',
+          1 => '-n/a-',
+        ),
+        332 =>
+        array (
+          0 => 'PEAR_RemoteInstaller',
+          1 => '-n/a-',
+        ),
+        333 =>
+        array (
+          0 => 'PEAR_Size',
+          1 => '-n/a-',
+        ),
+        334 =>
+        array (
+          0 => 'PHPDoc',
+          1 => '-n/a-',
+        ),
+        335 =>
+        array (
+          0 => 'PhpDocumentor',
+          1 => '-n/a-',
+        ),
+        336 =>
+        array (
+          0 => 'PHPUnit',
+          1 => '-n/a-',
+        ),
+        337 =>
+        array (
+          0 => 'PHPUnit2',
+          1 => '-n/a-',
+        ),
+        338 =>
+        array (
+          0 => 'PHP_Annotation',
+          1 => '-n/a-',
+        ),
+        339 =>
+        array (
+          0 => 'PHP_Archive',
+          1 => '-n/a-',
+        ),
+        340 =>
+        array (
+          0 => 'PHP_ArrayOf',
+          1 => '-n/a-',
+        ),
+        341 =>
+        array (
+          0 => 'PHP_Beautifier',
+          1 => '-n/a-',
+        ),
+        342 =>
+        array (
+          0 => 'PHP_CodeSniffer',
+          1 => '-n/a-',
+        ),
+        343 =>
+        array (
+          0 => 'PHP_Compat',
+          1 => '-n/a-',
+        ),
+        344 =>
+        array (
+          0 => 'PHP_CompatInfo',
+          1 => '-n/a-',
+        ),
+        345 =>
+        array (
+          0 => 'PHP_Debug',
+          1 => '-n/a-',
+        ),
+        346 =>
+        array (
+          0 => 'PHP_DocBlockGenerator',
+          1 => '-n/a-',
+        ),
+        347 =>
+        array (
+          0 => 'PHP_Fork',
+          1 => '-n/a-',
+        ),
+        348 =>
+        array (
+          0 => 'PHP_FunctionCallTracer',
+          1 => '-n/a-',
+        ),
+        349 =>
+        array (
+          0 => 'PHP_LexerGenerator',
+          1 => '-n/a-',
+        ),
+        350 =>
+        array (
+          0 => 'PHP_Parser',
+          1 => '-n/a-',
+        ),
+        351 =>
+        array (
+          0 => 'PHP_ParserGenerator',
+          1 => '-n/a-',
+        ),
+        352 =>
+        array (
+          0 => 'PHP_Parser_DocblockParser',
+          1 => '-n/a-',
+        ),
+        353 =>
+        array (
+          0 => 'PHP_Shell',
+          1 => '-n/a-',
+        ),
+        354 =>
+        array (
+          0 => 'PHP_UML',
+          1 => '-n/a-',
+        ),
+        355 =>
+        array (
+          0 => 'QA_Peardoc_Coverage',
+          1 => '-n/a-',
+        ),
+        356 =>
+        array (
+          0 => 'RDF',
+          1 => '-n/a-',
+        ),
+        357 =>
+        array (
+          0 => 'RDF_N3',
+          1 => '-n/a-',
+        ),
+        358 =>
+        array (
+          0 => 'RDF_NTriple',
+          1 => '-n/a-',
+        ),
+        359 =>
+        array (
+          0 => 'RDF_RDQL',
+          1 => '-n/a-',
+        ),
+        360 =>
+        array (
+          0 => 'Science_Chemistry',
+          1 => '-n/a-',
+        ),
+        361 =>
+        array (
+          0 => 'ScriptReorganizer',
+          1 => '-n/a-',
+        ),
+        362 =>
+        array (
+          0 => 'Search_Mnogosearch',
+          1 => '-n/a-',
+        ),
+        363 =>
+        array (
+          0 => 'Services_Akismet',
+          1 => '-n/a-',
+        ),
+        364 =>
+        array (
+          0 => 'Services_Akismet2',
+          1 => '-n/a-',
+        ),
+        365 =>
+        array (
+          0 => 'Services_Amazon',
+          1 => '-n/a-',
+        ),
+        366 =>
+        array (
+          0 => 'Services_Amazon_S3',
+          1 => '-n/a-',
+        ),
+        367 =>
+        array (
+          0 => 'Services_Amazon_SQS',
+          1 => '-n/a-',
+        ),
+        368 =>
+        array (
+          0 => 'Services_Atlassian_Crowd',
+          1 => '-n/a-',
+        ),
+        369 =>
+        array (
+          0 => 'Services_Blogging',
+          1 => '-n/a-',
+        ),
+        370 =>
+        array (
+          0 => 'Services_Compete',
+          1 => '-n/a-',
+        ),
+        371 =>
+        array (
+          0 => 'Services_Delicious',
+          1 => '-n/a-',
+        ),
+        372 =>
+        array (
+          0 => 'Services_Digg',
+          1 => '-n/a-',
+        ),
+        373 =>
+        array (
+          0 => 'Services_DynDNS',
+          1 => '-n/a-',
+        ),
+        374 =>
+        array (
+          0 => 'Services_Ebay',
+          1 => '-n/a-',
+        ),
+        375 =>
+        array (
+          0 => 'Services_ExchangeRates',
+          1 => '-n/a-',
+        ),
+        376 =>
+        array (
+          0 => 'Services_Facebook',
+          1 => '-n/a-',
+        ),
+        377 =>
+        array (
+          0 => 'Services_GeoNames',
+          1 => '-n/a-',
+        ),
+        378 =>
+        array (
+          0 => 'Services_Google',
+          1 => '-n/a-',
+        ),
+        379 =>
+        array (
+          0 => 'Services_Hatena',
+          1 => '-n/a-',
+        ),
+        380 =>
+        array (
+          0 => 'Services_oEmbed',
+          1 => '-n/a-',
+        ),
+        381 =>
+        array (
+          0 => 'Services_OpenSearch',
+          1 => '-n/a-',
+        ),
+        382 =>
+        array (
+          0 => 'Services_Pingback',
+          1 => '-n/a-',
+        ),
+        383 =>
+        array (
+          0 => 'Services_ProjectHoneyPot',
+          1 => '-n/a-',
+        ),
+        384 =>
+        array (
+          0 => 'Services_SharedBook',
+          1 => '-n/a-',
+        ),
+        385 =>
+        array (
+          0 => 'Services_Technorati',
+          1 => '-n/a-',
+        ),
+        386 =>
+        array (
+          0 => 'Services_TinyURL',
+          1 => '-n/a-',
+        ),
+        387 =>
+        array (
+          0 => 'Services_Trackback',
+          1 => '-n/a-',
+        ),
+        388 =>
+        array (
+          0 => 'Services_TwitPic',
+          1 => '-n/a-',
+        ),
+        389 =>
+        array (
+          0 => 'Services_Twitter',
+          1 => '-n/a-',
+        ),
+        390 =>
+        array (
+          0 => 'Services_urlTea',
+          1 => '-n/a-',
+        ),
+        391 =>
+        array (
+          0 => 'Services_W3C_CSSValidator',
+          1 => '-n/a-',
+        ),
+        392 =>
+        array (
+          0 => 'Services_W3C_HTMLValidator',
+          1 => '-n/a-',
+        ),
+        393 =>
+        array (
+          0 => 'Services_Weather',
+          1 => '-n/a-',
+        ),
+        394 =>
+        array (
+          0 => 'Services_Webservice',
+          1 => '-n/a-',
+        ),
+        395 =>
+        array (
+          0 => 'Services_Yadis',
+          1 => '-n/a-',
+        ),
+        396 =>
+        array (
+          0 => 'Services_Yahoo',
+          1 => '-n/a-',
+        ),
+        397 =>
+        array (
+          0 => 'Services_Yahoo_JP',
+          1 => '-n/a-',
+        ),
+        398 =>
+        array (
+          0 => 'Services_YouTube',
+          1 => '-n/a-',
+        ),
+        399 =>
+        array (
+          0 => 'SOAP',
+          1 => '-n/a-',
+        ),
+        400 =>
+        array (
+          0 => 'SOAP_Interop',
+          1 => '-n/a-',
+        ),
+        401 =>
+        array (
+          0 => 'Spreadsheet_Excel_Writer',
+          1 => '-n/a-',
+        ),
+        402 =>
+        array (
+          0 => 'SQL_Parser',
+          1 => '-n/a-',
+        ),
+        403 =>
+        array (
+          0 => 'Stream_SHM',
+          1 => '-n/a-',
+        ),
+        404 =>
+        array (
+          0 => 'Stream_Var',
+          1 => '-n/a-',
+        ),
+        405 =>
+        array (
+          0 => 'Structures_BibTex',
+          1 => '-n/a-',
+        ),
+        406 =>
+        array (
+          0 => 'Structures_DataGrid',
+          1 => '-n/a-',
+        ),
+        407 =>
+        array (
+          0 => 'Structures_DataGrid_DataSource_Array',
+          1 => '-n/a-',
+        ),
+        408 =>
+        array (
+          0 => 'Structures_DataGrid_DataSource_CSV',
+          1 => '-n/a-',
+        ),
+        409 =>
+        array (
+          0 => 'Structures_DataGrid_DataSource_DataObject',
+          1 => '-n/a-',
+        ),
+        410 =>
+        array (
+          0 => 'Structures_DataGrid_DataSource_DB',
+          1 => '-n/a-',
+        ),
+        411 =>
+        array (
+          0 => 'Structures_DataGrid_DataSource_DBQuery',
+          1 => '-n/a-',
+        ),
+        412 =>
+        array (
+          0 => 'Structures_DataGrid_DataSource_DBTable',
+          1 => '-n/a-',
+        ),
+        413 =>
+        array (
+          0 => 'Structures_DataGrid_DataSource_Excel',
+          1 => '-n/a-',
+        ),
+        414 =>
+        array (
+          0 => 'Structures_DataGrid_DataSource_MDB2',
+          1 => '-n/a-',
+        ),
+        415 =>
+        array (
+          0 => 'Structures_DataGrid_DataSource_PDO',
+          1 => '-n/a-',
+        ),
+        416 =>
+        array (
+          0 => 'Structures_DataGrid_DataSource_RSS',
+          1 => '-n/a-',
+        ),
+        417 =>
+        array (
+          0 => 'Structures_DataGrid_DataSource_XML',
+          1 => '-n/a-',
+        ),
+        418 =>
+        array (
+          0 => 'Structures_DataGrid_Renderer_Console',
+          1 => '-n/a-',
+        ),
+        419 =>
+        array (
+          0 => 'Structures_DataGrid_Renderer_CSV',
+          1 => '-n/a-',
+        ),
+        420 =>
+        array (
+          0 => 'Structures_DataGrid_Renderer_Flexy',
+          1 => '-n/a-',
+        ),
+        421 =>
+        array (
+          0 => 'Structures_DataGrid_Renderer_HTMLSortForm',
+          1 => '-n/a-',
+        ),
+        422 =>
+        array (
+          0 => 'Structures_DataGrid_Renderer_HTMLTable',
+          1 => '-n/a-',
+        ),
+        423 =>
+        array (
+          0 => 'Structures_DataGrid_Renderer_Pager',
+          1 => '-n/a-',
+        ),
+        424 =>
+        array (
+          0 => 'Structures_DataGrid_Renderer_Smarty',
+          1 => '-n/a-',
+        ),
+        425 =>
+        array (
+          0 => 'Structures_DataGrid_Renderer_XLS',
+          1 => '-n/a-',
+        ),
+        426 =>
+        array (
+          0 => 'Structures_DataGrid_Renderer_XML',
+          1 => '-n/a-',
+        ),
+        427 =>
+        array (
+          0 => 'Structures_DataGrid_Renderer_XUL',
+          1 => '-n/a-',
+        ),
+        428 =>
+        array (
+          0 => 'Structures_Form',
+          1 => '-n/a-',
+        ),
+        429 =>
+        array (
+          0 => 'Structures_Form_Gtk2',
+          1 => '-n/a-',
+        ),
+        430 =>
+        array (
+          0 => 'Structures_Graph',
+          1 => '-n/a-',
+        ),
+        431 =>
+        array (
+          0 => 'Structures_LinkedList',
+          1 => '-n/a-',
+        ),
+        432 =>
+        array (
+          0 => 'System_Command',
+          1 => '-n/a-',
+        ),
+        433 =>
+        array (
+          0 => 'System_Daemon',
+          1 => '-n/a-',
+        ),
+        434 =>
+        array (
+          0 => 'System_Folders',
+          1 => '-n/a-',
+        ),
+        435 =>
+        array (
+          0 => 'System_Mount',
+          1 => '-n/a-',
+        ),
+        436 =>
+        array (
+          0 => 'System_ProcWatch',
+          1 => '-n/a-',
+        ),
+        437 =>
+        array (
+          0 => 'System_SharedMemory',
+          1 => '-n/a-',
+        ),
+        438 =>
+        array (
+          0 => 'System_Socket',
+          1 => '-n/a-',
+        ),
+        439 =>
+        array (
+          0 => 'System_WinDrives',
+          1 => '-n/a-',
+        ),
+        440 =>
+        array (
+          0 => 'Testing_DocTest',
+          1 => '-n/a-',
+        ),
+        441 =>
+        array (
+          0 => 'Testing_FIT',
+          1 => '-n/a-',
+        ),
+        442 =>
+        array (
+          0 => 'Testing_Selenium',
+          1 => '-n/a-',
+        ),
+        443 =>
+        array (
+          0 => 'Text_CAPTCHA',
+          1 => '-n/a-',
+        ),
+        444 =>
+        array (
+          0 => 'Text_CAPTCHA_Numeral',
+          1 => '-n/a-',
+        ),
+        445 =>
+        array (
+          0 => 'Text_Diff',
+          1 => '-n/a-',
+        ),
+        446 =>
+        array (
+          0 => 'Text_Figlet',
+          1 => '-n/a-',
+        ),
+        447 =>
+        array (
+          0 => 'Text_Highlighter',
+          1 => '-n/a-',
+        ),
+        448 =>
+        array (
+          0 => 'Text_Huffman',
+          1 => '-n/a-',
+        ),
+        449 =>
+        array (
+          0 => 'Text_LanguageDetect',
+          1 => '-n/a-',
+        ),
+        450 =>
+        array (
+          0 => 'Text_Password',
+          1 => '-n/a-',
+        ),
+        451 =>
+        array (
+          0 => 'Text_PathNavigator',
+          1 => '-n/a-',
+        ),
+        452 =>
+        array (
+          0 => 'Text_Spell_Audio',
+          1 => '-n/a-',
+        ),
+        453 =>
+        array (
+          0 => 'Text_Statistics',
+          1 => '-n/a-',
+        ),
+        454 =>
+        array (
+          0 => 'Text_TeXHyphen',
+          1 => '-n/a-',
+        ),
+        455 =>
+        array (
+          0 => 'Text_Wiki',
+          1 => '-n/a-',
+        ),
+        456 =>
+        array (
+          0 => 'Text_Wiki_BBCode',
+          1 => '-n/a-',
+        ),
+        457 =>
+        array (
+          0 => 'Text_Wiki_Cowiki',
+          1 => '-n/a-',
+        ),
+        458 =>
+        array (
+          0 => 'Text_Wiki_Creole',
+          1 => '-n/a-',
+        ),
+        459 =>
+        array (
+          0 => 'Text_Wiki_Doku',
+          1 => '-n/a-',
+        ),
+        460 =>
+        array (
+          0 => 'Text_Wiki_Mediawiki',
+          1 => '-n/a-',
+        ),
+        461 =>
+        array (
+          0 => 'Text_Wiki_Tiki',
+          1 => '-n/a-',
+        ),
+        462 =>
+        array (
+          0 => 'Translation',
+          1 => '-n/a-',
+        ),
+        463 =>
+        array (
+          0 => 'Translation2',
+          1 => '-n/a-',
+        ),
+        464 =>
+        array (
+          0 => 'Tree',
+          1 => '-n/a-',
+        ),
+        465 =>
+        array (
+          0 => 'UDDI',
+          1 => '-n/a-',
+        ),
+        466 =>
+        array (
+          0 => 'URI_Template',
+          1 => '-n/a-',
+        ),
+        467 =>
+        array (
+          0 => 'Validate',
+          1 => '-n/a-',
+        ),
+        468 =>
+        array (
+          0 => 'Validate_AR',
+          1 => '-n/a-',
+        ),
+        469 =>
+        array (
+          0 => 'Validate_AT',
+          1 => '-n/a-',
+        ),
+        470 =>
+        array (
+          0 => 'Validate_AU',
+          1 => '-n/a-',
+        ),
+        471 =>
+        array (
+          0 => 'Validate_BE',
+          1 => '-n/a-',
+        ),
+        472 =>
+        array (
+          0 => 'Validate_CA',
+          1 => '-n/a-',
+        ),
+        473 =>
+        array (
+          0 => 'Validate_CH',
+          1 => '-n/a-',
+        ),
+        474 =>
+        array (
+          0 => 'Validate_DE',
+          1 => '-n/a-',
+        ),
+        475 =>
+        array (
+          0 => 'Validate_DK',
+          1 => '-n/a-',
+        ),
+        476 =>
+        array (
+          0 => 'Validate_ES',
+          1 => '-n/a-',
+        ),
+        477 =>
+        array (
+          0 => 'Validate_FI',
+          1 => '-n/a-',
+        ),
+        478 =>
+        array (
+          0 => 'Validate_Finance',
+          1 => '-n/a-',
+        ),
+        479 =>
+        array (
+          0 => 'Validate_Finance_CreditCard',
+          1 => '-n/a-',
+        ),
+        480 =>
+        array (
+          0 => 'Validate_FR',
+          1 => '-n/a-',
+        ),
+        481 =>
+        array (
+          0 => 'Validate_HU',
+          1 => '-n/a-',
+        ),
+        482 =>
+        array (
+          0 => 'Validate_IE',
+          1 => '-n/a-',
+        ),
+        483 =>
+        array (
+          0 => 'Validate_IN',
+          1 => '-n/a-',
+        ),
+        484 =>
+        array (
+          0 => 'Validate_IS',
+          1 => '-n/a-',
+        ),
+        485 =>
+        array (
+          0 => 'Validate_ISPN',
+          1 => '-n/a-',
+        ),
+        486 =>
+        array (
+          0 => 'Validate_IT',
+          1 => '-n/a-',
+        ),
+        487 =>
+        array (
+          0 => 'Validate_LV',
+          1 => '-n/a-',
+        ),
+        488 =>
+        array (
+          0 => 'Validate_NL',
+          1 => '-n/a-',
+        ),
+        489 =>
+        array (
+          0 => 'Validate_NZ',
+          1 => '-n/a-',
+        ),
+        490 =>
+        array (
+          0 => 'Validate_PL',
+          1 => '-n/a-',
+        ),
+        491 =>
+        array (
+          0 => 'Validate_ptBR',
+          1 => '-n/a-',
+        ),
+        492 =>
+        array (
+          0 => 'Validate_RU',
+          1 => '-n/a-',
+        ),
+        493 =>
+        array (
+          0 => 'Validate_UK',
+          1 => '-n/a-',
+        ),
+        494 =>
+        array (
+          0 => 'Validate_US',
+          1 => '-n/a-',
+        ),
+        495 =>
+        array (
+          0 => 'Validate_ZA',
+          1 => '-n/a-',
+        ),
+        496 =>
+        array (
+          0 => 'Var_Dump',
+          1 => '-n/a-',
+        ),
+        497 =>
+        array (
+          0 => 'VersionControl_SVN',
+          1 => '-n/a-',
+        ),
+        498 =>
+        array (
+          0 => 'VFS',
+          1 => '-n/a-',
+        ),
+        499 =>
+        array (
+          0 => 'XML_Beautifier',
+          1 => '-n/a-',
+        ),
+        500 =>
+        array (
+          0 => 'XML_CSSML',
+          1 => '-n/a-',
+        ),
+        501 =>
+        array (
+          0 => 'XML_DB_eXist',
+          1 => '-n/a-',
+        ),
+        502 =>
+        array (
+          0 => 'XML_DTD',
+          1 => '-n/a-',
+        ),
+        503 =>
+        array (
+          0 => 'XML_FastCreate',
+          1 => '-n/a-',
+        ),
+        504 =>
+        array (
+          0 => 'XML_Feed_Parser',
+          1 => '-n/a-',
+        ),
+        505 =>
+        array (
+          0 => 'XML_fo2pdf',
+          1 => '-n/a-',
+        ),
+        506 =>
+        array (
+          0 => 'XML_FOAF',
+          1 => '-n/a-',
+        ),
+        507 =>
+        array (
+          0 => 'XML_GRDDL',
+          1 => '-n/a-',
+        ),
+        508 =>
+        array (
+          0 => 'XML_HTMLSax',
+          1 => '-n/a-',
+        ),
+        509 =>
+        array (
+          0 => 'XML_HTMLSax3',
+          1 => '-n/a-',
+        ),
+        510 =>
+        array (
+          0 => 'XML_image2svg',
+          1 => '-n/a-',
+        ),
+        511 =>
+        array (
+          0 => 'XML_Indexing',
+          1 => '-n/a-',
+        ),
+        512 =>
+        array (
+          0 => 'XML_MXML',
+          1 => '-n/a-',
+        ),
+        513 =>
+        array (
+          0 => 'XML_NITF',
+          1 => '-n/a-',
+        ),
+        514 =>
+        array (
+          0 => 'XML_Parser',
+          1 => '-n/a-',
+        ),
+        515 =>
+        array (
+          0 => 'XML_Query2XML',
+          1 => '-n/a-',
+        ),
+        516 =>
+        array (
+          0 => 'XML_RDDL',
+          1 => '-n/a-',
+        ),
+        517 =>
+        array (
+          0 => 'XML_RPC',
+          1 => '-n/a-',
+        ),
+        518 =>
+        array (
+          0 => 'XML_RPC2',
+          1 => '-n/a-',
+        ),
+        519 =>
+        array (
+          0 => 'XML_RSS',
+          1 => '-n/a-',
+        ),
+        520 =>
+        array (
+          0 => 'XML_SaxFilters',
+          1 => '-n/a-',
+        ),
+        521 =>
+        array (
+          0 => 'XML_Serializer',
+          1 => '-n/a-',
+        ),
+        522 =>
+        array (
+          0 => 'XML_sql2xml',
+          1 => '-n/a-',
+        ),
+        523 =>
+        array (
+          0 => 'XML_Statistics',
+          1 => '-n/a-',
+        ),
+        524 =>
+        array (
+          0 => 'XML_SVG',
+          1 => '-n/a-',
+        ),
+        525 =>
+        array (
+          0 => 'XML_svg2image',
+          1 => '-n/a-',
+        ),
+        526 =>
+        array (
+          0 => 'XML_Transformer',
+          1 => '-n/a-',
+        ),
+        527 =>
+        array (
+          0 => 'XML_Tree',
+          1 => '-n/a-',
+        ),
+        528 =>
+        array (
+          0 => 'XML_Util',
+          1 => '-n/a-',
+        ),
+        529 =>
+        array (
+          0 => 'XML_Wddx',
+          1 => '-n/a-',
+        ),
+        530 =>
+        array (
+          0 => 'XML_XPath',
+          1 => '-n/a-',
+        ),
+        531 =>
+        array (
+          0 => 'XML_XPath2',
+          1 => '-n/a-',
+        ),
+        532 =>
+        array (
+          0 => 'XML_XSLT_Wrapper',
+          1 => '-n/a-',
+        ),
+        533 =>
+        array (
+          0 => 'XML_XUL',
+          1 => '-n/a-',
         ),
       ),
     ),
     'cmd' => 'remote-list',
   ),
 )
-, $fakelog->getLog(), 'pear log');
-$e = $command->run('remote-list', array('channel' => 'smoog'), array());
+, $log, 'smoog log');
+
+$phpunit->assertNoErrors('smoog');
+$e = $command->run('remote-list', array('channel' => 'empty'), array());
 $phpunit->assertEquals(array (
   0 =>
   array (
+    0 => 'Retrieving data...0%',
+    1 => false,
+  ),
+  1 =>
+  array (
     'info' =>
     array (
-      'caption' => 'Channel smoog Available packages:',
+      'caption' => 'Channel empty Available packages:',
       'border' => true,
       'headline' =>
       array (
         0 => 'Package',
         1 => 'Version',
       ),
-      'channel' => 'smoog',
+      'channel' => 'empty',
       'data' =>
       array (
         0 =>
         array (
           0 => 'APC',
-          1 => '2.0.4',
+          1 => '-n/a-',
         ),
       ),
     ),
     'cmd' => 'remote-list',
-  ),
-), $fakelog->getLog(), 'smoog log');
-$phpunit->assertNoErrors('smoog');
-$e = $command->run('remote-list', array('channel' => 'empty'), array());
-$phpunit->assertEquals(array (
-  0 =>
-  array (
-    'info' => '(no packages available yet)',
-    'cmd' => 'remote-list',
   )
 ), $fakelog->getLog(), 'empty log');
 $phpunit->assertNoErrors('empty');
+
 echo 'tests done';
 ?>
 --CLEAN--
