@@ -293,8 +293,8 @@ parameter.
             $data = '(no packages available yet)';
         } else {
             foreach ($available as $name => $info) {
-                $data['data'][] = array($name, (isset($info['stable']) && $info['stable'])
-                    ? $info['stable'] : '-n/a-');
+                $version = (isset($info['stable']) && $info['stable']) ? $info['stable'] : '-n/a-';
+                $data['data'][] = array($name, $version);
             }
         }
         $this->ui->outputData($data, $command);
@@ -669,6 +669,7 @@ parameter.
                 return $e;
             }
 
+            $latest = array();
             if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
                   $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
                 $rest = &$this->config->getREST('1.0', array());
