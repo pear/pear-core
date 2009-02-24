@@ -58,11 +58,13 @@ class PEAR_ChannelFile_Parser extends PEAR_XMLParser
         if (PEAR::isError($err = parent::parse($data, $file))) {
             return $err;
         }
+
         $ret = new PEAR_ChannelFile;
         $ret->setConfig($this->_config);
         if (isset($this->_logger)) {
             $ret->setLogger($this->_logger);
         }
+
         $ret->fromArray($this->_unserializedData);
         // make sure the filelist is in the easy to read format needed
         $ret->flattenFilelist();
@@ -70,4 +72,3 @@ class PEAR_ChannelFile_Parser extends PEAR_XMLParser
         return $ret;
     }
 }
-?>

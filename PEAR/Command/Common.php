@@ -265,6 +265,8 @@ class PEAR_Command_Common extends PEAR
                         $func = $this->commands[$cmd]['function'];
                     }
                     $command = $cmd;
+
+                    //$command = $this->commands[$cmd]['function'];
                     break;
                 }
             }
