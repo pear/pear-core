@@ -412,5 +412,3 @@ class PEAR_Command
     }
     // }}}
 }
-
-?>

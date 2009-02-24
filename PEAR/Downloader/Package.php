@@ -1106,10 +1106,8 @@ class PEAR_Downloader_Package
                 return $param['uri'] == $this->getURI();
             }
 
-            $package = isset($param['package']) ? $param['package'] :
-                $param['info']->getPackage();
-            $channel = isset($param['channel']) ? $param['channel'] :
-                $param['info']->getChannel();
+            $package = isset($param['package']) ? $param['package'] : $param['info']->getPackage();
+            $channel = isset($param['channel']) ? $param['channel'] : $param['info']->getChannel();
             if (isset($param['rel'])) {
                 if (!class_exists('PEAR_Dependency2')) {
                     require_once 'PEAR/Dependency2.php';
@@ -1355,6 +1353,7 @@ class PEAR_Downloader_Package
             if (!$param->isBundle()) {
                 continue;
             }
+
             $bundles[] = $i;
             $pf = &$param->getPackageFile();
             $newdeps = array();
@@ -1481,11 +1480,13 @@ class PEAR_Downloader_Package
         if (!is_array($params)) {
             return false;
         }
+
         foreach ($params as $obj) {
             if ($obj->isEqual($param)) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -1776,11 +1777,7 @@ class PEAR_Downloader_Package
         }
 
         if ($info === false) {
-            if (!is_string($param)) {
-                $saveparam = ", cannot download \"$param\"";
-            } else {
-                $saveparam = '';
-            }
+            $saveparam = !is_string($param) ? ", cannot download \"$param\"" : '';
 
             // no releases exist
             return PEAR::raiseError('No releases for package "' .
