@@ -4,17 +4,11 @@
  *
  * PHP versions 4 and 5
  *
- * LICENSE: This source file is subject to version 3.0 of the PHP license
- * that is available through the world-wide-web at the following URI:
- * http://www.php.net/license/3_0.txt.  If you did not receive a copy of
- * the PHP License and are unable to obtain it through the web, please
- * send a note to license@php.net so we can mail you a copy immediately.
- *
  * @category   pear
  * @package    System
  * @author     Tomas V.V.Cox <cox@idecnet.com>
- * @copyright  1997-2008 The PHP Group
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @copyright  1997-2009 The Authors
+ * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 0.1
@@ -56,7 +50,7 @@ $GLOBALS['_System_temp_files'] = array();
 * @package    System
 * @author     Tomas V.V. Cox <cox@idecnet.com>
 * @copyright  1997-2006 The PHP Group
-* @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+* @license    http://opensource.org/licenses/bsd-license.php New BSD License
 * @version    Release: @package_version@
 * @link       http://pear.php.net/package/PEAR
 * @since      Class available since Release 0.1
@@ -246,6 +240,7 @@ class System
         if (PEAR::isError($opts)) {
             return System::raiseError($opts);
         }
+
         $mode = 0777; // default mode
         foreach ($opts[0] as $opt) {
             if ($opt[0] == 'p') {
@@ -262,6 +257,7 @@ class System
                 $mode = $opt[1];
             }
         }
+
         $ret = true;
         if (isset($create_parents)) {
             foreach ($opts[1] as $dir) {
@@ -271,11 +267,13 @@ class System
                     array_unshift($dirstack, $dir);
                     $dir = dirname($dir);
                 }
+
                 while ($newdir = array_shift($dirstack)) {
                     if (!is_writeable(dirname($newdir))) {
                         $ret = false;
                         break;
                     }
+
                     if (!mkdir($newdir, $mode)) {
                         $ret = false;
                     }
@@ -288,6 +286,7 @@ class System
                 }
             }
         }
+
         return $ret;
     }
 
@@ -387,6 +386,7 @@ class System
         if (PEAR::isError($opts)) {
             return System::raiseError($opts);
         }
+
         foreach ($opts[0] as $opt) {
             if ($opt[0] == 'd') {
                 $tmp_is_dir = true;
@@ -394,13 +394,16 @@ class System
                 $tmpdir = $opt[1];
             }
         }
+
         $prefix = (isset($opts[1][0])) ? $opts[1][0] : 'tmp';
         if (!isset($tmpdir)) {
             $tmpdir = System::tmpdir();
         }
+
         if (!System::mkDir(array('-p', $tmpdir))) {
             return false;
         }
+
         $tmp = tempnam($tmpdir, $prefix);
         if (isset($tmp_is_dir)) {
             unlink($tmp); // be careful possible race condition here
@@ -408,15 +411,17 @@ class System
                 return System::raiseError("Unable to create temporary directory $tmpdir");
             }
         }
+
         $GLOBALS['_System_temp_files'][] = $tmp;
         if (isset($tmp_is_dir)) {
-            $GLOBALS['_System_temp_files'][] = dirname($tmp);
+            //$GLOBALS['_System_temp_files'][] = dirname($tmp);
         }
 
         if ($first_time) {
             PEAR::registerShutdownFunc(array('System', '_removeTmpFiles'));
             $first_time = false;
         }
+
         return $tmp;
     }
 

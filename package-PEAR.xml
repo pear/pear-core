@@ -89,7 +89,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
  <release>
   <version>1.8.0alpha1</version>
   <date>2008-07-14</date>
-  <license>PHP License</license>
+  <license>New BSD License</license>
   <state>alpha</state>
  <notes>
   * Implement Request #12706: pear list -a hard to read [dufuz]
@@ -465,6 +465,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
      <replace from="@include_path@" to="php_dir" type="pear-config"/>
     </file>
    </dir>
+   <file role="doc" name="LICENSE" />
    <file role="doc" name="INSTALL" />
    <file role="data" name="package.dtd"/>
    <file role="data" name="template.spec"/>
