@@ -20,8 +20,8 @@
  * @category   pear
  * @package    PEAR
  * @author     Greg Beaver <cellog@php.net>
- * @copyright  2005-2006 The PHP Group
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @copyright  2005-2009 The Authors
+ * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @version    CVS: $Id$
  */
 
