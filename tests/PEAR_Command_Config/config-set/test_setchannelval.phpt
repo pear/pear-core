@@ -10,27 +10,32 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'php', $config->get('php_dir'), $config->get('php_dir', 'user', '__uri'), 'setup');
+
 $command->run('config-set', array('channel' => '__uri'), array('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'poo'));
 $phpunit->assertNoErrors('after opt user');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     'info' => 'config-set succeeded',
     'cmd' => 'config-set',
   ),
 ), $fakelog->getLog(), 'ui log, opt user');
+
 $phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'poo', $config->get('php_dir', 'user', '__uri'), 'php_dir opt system');
 $phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'php', $config->get('php_dir', 'system', '__uri'), 'setup opt system');
+
 $command->run('config-set', array('channel' => '__uri'), array('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'poo', 'system'));
 $phpunit->assertNoErrors('after');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     'info' => 'config-set succeeded',
     'cmd' => 'config-set',
   ),
 ), $fakelog->getLog(), 'ui log opt system');
+
 $phpunit->assertEquals($temp_path . DIRECTORY_SEPARATOR . 'poo', $config->get('php_dir', 'system', '__uri'), 'php_dir system opt');
 $configinfo = array('master_server' => $server,
     'preferred_state' => 'stable',
@@ -53,6 +58,7 @@ $phpunit->assertEquals($configinfo, $info, 'saved 1');
 $info = explode("\n", implode('', file($temp_path . DIRECTORY_SEPARATOR . 'pear.conf')));
 $info = unserialize($info[1]);
 $phpunit->assertEquals($configinfo, $info, 'saved 2');
+
 echo 'tests done';
 ?>
 --CLEAN--
