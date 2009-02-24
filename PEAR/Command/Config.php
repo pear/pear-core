@@ -253,7 +253,6 @@ and uninstall).
             $layer = 'user';
         } else {
             $layer = $params[2];
-            array_push($params, $layer);
         }
 
         array_push($params, $channel);
@@ -309,14 +308,14 @@ and uninstall).
                              array('/', '/', '/'),
                             $root);
         if ($root{0} != '/') {
-            if (isset($options['windows'])) {
-                if (!preg_match('/^[A-Za-z]:/', $root)) {
-                    return PEAR::raiseError('Root directory must be an absolute path beginning ' .
-                        'with "\\" or "C:\\", was: "' . $root . '"');
-                }
-            } else {
+            if (!isset($options['windows'])) {
                 return PEAR::raiseError('Root directory must be an absolute path beginning ' .
                     'with "/", was: "' . $root . '"');
+            }
+
+            if (!preg_match('/^[A-Za-z]:/', $root)) {
+                return PEAR::raiseError('Root directory must be an absolute path beginning ' .
+                    'with "\\" or "C:\\", was: "' . $root . '"');
             }
         }
 
@@ -325,10 +324,8 @@ and uninstall).
             $root = str_replace('/', '\\', $root);
         }
 
-        if (!file_exists($params[1])) {
-            if (!@touch($params[1])) {
-                return PEAR::raiseError('Could not create "' . $params[1] . '"');
-            }
+        if (!file_exists($params[1]) && !@touch($params[1])) {
+            return PEAR::raiseError('Could not create "' . $params[1] . '"');
         }
 
         $params[1] = realpath($params[1]);
