@@ -94,7 +94,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <release>alpha</release>
   <api>stable</api>
  </stability>
- <license uri="http://www.php.net/license">PHP License</license>
+ <license uri="http://opensource.org/licenses/bsd-license.php New BSD License">New BSD License</license>
  <notes>
   * Implement Request #10373: if pref_state=stable and installed package=beta, allow up to latest beta version [dufuz]
   * Implement Request #10581: login / logout should map to channel-login / channel-logout [dufuz]
@@ -116,6 +116,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Implement Request #15566: Add doc.php.net as a default channel [dufuz / saltybeagle]
 
   * Fix PHP Bug #43857: --program-suffix not always reflected everywhere [cellog]
+  * Fix PHP Bug #47323: strotime warnings in make install [dufuz]
 
   * Fix Bug #13908: pear info command and maintainers inactive not mentioned [dufuz]
   * Fix Bug #13926: install-pear.php does not set cfg_dir if -d option set with no -c option [timj]
@@ -478,6 +479,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
      <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
     </file>
    </dir> <!-- /scripts -->
+   <file name="LICENSE" role="doc" />
    <file name="INSTALL" role="doc" />
    <file name="package.dtd" role="data" />
    <file name="PEAR.php" role="php">
