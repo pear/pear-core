@@ -1,6 +1,7 @@
 --TEST--
 login command
 --SKIPIF--
+skip
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
