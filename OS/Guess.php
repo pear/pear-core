@@ -4,18 +4,12 @@
  *
  * PHP versions 4 and 5
  *
- * LICENSE: This source file is subject to version 3.0 of the PHP license
- * that is available through the world-wide-web at the following URI:
- * http://www.php.net/license/3_0.txt.  If you did not receive a copy of
- * the PHP License and are unable to obtain it through the web, please
- * send a note to license@php.net so we can mail you a copy immediately.
- *
  * @category   pear
  * @package    PEAR
  * @author     Stig Bakken <ssb@php.net>
  * @author     Gregory Beaver <cellog@php.net>
- * @copyright  1997-2008 The PHP Group
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @copyright  1997-2009 The Authors
+ * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since PEAR 0.1
@@ -91,8 +85,8 @@
  * @package    PEAR
  * @author     Stig Bakken <ssb@php.net>
  * @author     Gregory Beaver <cellog@php.net>
- * @copyright  1997-2008 The PHP Group
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @copyright  1997-2009 The Authors
+ * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 0.1
@@ -158,7 +152,8 @@ class OS_Guess
             case 'Linux' :
                 $extra = $this->_detectGlibcVersion();
                 // use only the first two digits from the kernel version
-                $release = ereg_replace('^([[:digit:]]+\.[[:digit:]]+).*', '\1', $parts[2]);
+                //$release = ereg_replace('^([[:digit:]]+\.[[:digit:]]+).*', '\1', $parts[2]);
+                $release = preg_replace('/^([0-9]+\.[0-9]+).*/', '\1', $parts[2]);
                 break;
             case 'Mac' :
                 $sysname = 'darwin';
@@ -176,7 +171,8 @@ class OS_Guess
                         $cpu = 'powerpc';
                     }
                 }
-                $release = ereg_replace('^([[:digit:]]+\.[[:digit:]]+).*', '\1', $parts[2]);
+                //$release = ereg_replace('^([[:digit:]]+\.[[:digit:]]+).*', '\1', $parts[2]);
+                $release = preg_replace('/^([0-9]+\.[0-9]+).*/', '\1', $parts[2]);
                 break;
             default:
                 $release = ereg_replace('-.*', '', $parts[2]);
@@ -223,6 +219,7 @@ class OS_Guess
                         }
                         continue;
                     }
+
                     if (strpos($line, '__GLIBC_MINOR__'))  {
                         // got the minor version number
                         // #define __GLIBC_MINOR__ version
@@ -240,6 +237,7 @@ class OS_Guess
                 }
                 return $glibc = 'glibc' . trim($glibc_major) . "." . trim($glibc_minor) ;
             } // no cpp
+
             $tmpfile = System::mktemp("glibctest");
             $fp = fopen($tmpfile, "w");
             fwrite($fp, "#include <features.h>\n__GLIBC__ __GLIBC_MINOR__\n");
@@ -249,6 +247,7 @@ class OS_Guess
                 if ($line{0} == '#' || trim($line) == '') {
                     continue;
                 }
+
                 if (list($major, $minor) = explode(' ', trim($line))) {
                     break;
                 }
@@ -256,15 +255,18 @@ class OS_Guess
             pclose($cpp);
             unlink($tmpfile);
         } // features.h
+
         if (!($major && $minor) && @is_link('/lib/libc.so.6')) {
             // Let's try reading the libc.so.6 symlink
             if (ereg('^libc-(.*)\.so$', basename(readlink('/lib/libc.so.6')), $matches)) {
                 list($major, $minor) = explode('.', $matches[1]);
             }
         }
+
         if (!($major && $minor)) {
             return $glibc = '';
         }
+
         return $glibc = "glibc{$major}.{$minor}";
     }
 
@@ -328,8 +330,8 @@ class OS_Guess
     function _matchFragment($fragment, $value)
     {
         if (strcspn($fragment, '*?') < strlen($fragment)) {
-            $reg = '^' . str_replace(array('*', '?', '/'), array('.*', '.', '\\/'), $fragment) . '$';
-            return eregi($reg, $value);
+            $reg = '/^' . str_replace(array('*', '?', '/'), array('.*', '.', '\\/'), $fragment) . '\\z/';
+            return preg_match($reg, $value);
         }
         return ($fragment == '*' || !strcasecmp($fragment, $value));
     }
