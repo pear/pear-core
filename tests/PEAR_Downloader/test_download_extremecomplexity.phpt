@@ -25,357 +25,299 @@ $GLOBALS['pearweb']->addHtmlConfig('http://pear.php.net/get/pkg4-1.1.tgz', $pkg4
 $GLOBALS['pearweb']->addHtmlConfig('http://pear.php.net/get/pkg5-1.1.tgz', $pkg5);
 $GLOBALS['pearweb']->addHtmlConfig('http://pear.php.net/get/pkg6-1.1.tgz', $pkg6);
 
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDownloadURL", array (
-  0 =>
-  array (
-    'package' => 'pkg1',
-    'channel' => 'pear.php.net',
-  ),
-  1 => 'stable',
-), array (
-  'version' => '1.1',
-  'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0">
-  <name>pkg1</name>
-  <summary>required test for PEAR_Installer</summary>
-  <description>fake package</description>
-  <maintainers>
-    <maintainer>
-      <user>fakeuser</user>
-      <name>Joe Shmoe</name>
-      <email>nobody@example.com</email>
-      <role>lead</role>
-    </maintainer>
-  </maintainers>
-  <release>
-    <version>1.1</version>
-    <date>2003-09-09</date>
-    <license>PHP License</license>
-    <state>stable</state>
-    <notes>required dependency test</notes>
-    <deps>
-      <dep type="pkg" rel="ge" version="1.0">pkg2</dep>
-    </deps>
-    <filelist>
-      <file role="php" baseinstalldir="grob" name="zoorb.php"/>
-      <file role="php" baseinstalldir="grob" name="goompness\\oggbrzitzkee.php"/>
-      <file role="php" baseinstalldir="grob" name="goompness\\Mopreeb.php"/>
-    </filelist>
-  </release>
-</package>',
-  'url' => 'http://pear.php.net/get/pkg1-1.1',
-));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
-  0 => '1.0',
-  1 =>
-  array (
-    'type' => 'pkg',
-    'rel' => 'ge',
-    'version' => '1.0',
-    'name' => 'pkg2',
-    'channel' => 'pear.php.net',
-    'package' => 'pkg2',
-  ),
-  2 =>
-  array (
-    'channel' => 'pear.php.net',
-    'package' => 'pkg1',
-    'version' => '1.1',
-  ),
-  3 => 'stable',
-), array (
-  'version' => '1.1',
-  'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0">
-  <name>pkg2</name>
-  <summary>required test for PEAR_Installer</summary>
-  <description>fake package</description>
-  <maintainers>
-    <maintainer>
-      <user>fakeuser</user>
-      <name>Joe Shmoe</name>
-      <email>nobody@example.com</email>
-      <role>lead</role>
-    </maintainer>
-  </maintainers>
-  <release>
-    <version>1.1</version>
-    <date>2003-09-09</date>
-    <license>PHP License</license>
-    <state>stable</state>
-    <notes>required dependency test</notes>
-    <deps>
-      <dep type="pkg" rel="ge" version="1.0">pkg3</dep>
-      <dep type="php" rel="ge" version="1.0"/>
-    </deps>
-    <filelist>
-      <file role="php" baseinstalldir="borg" name="zoorb.php"/>
-      <file role="php" baseinstalldir="borg" name="goompness\\oggbrzitzkee.php"/>
-      <file role="php" baseinstalldir="borg" name="goompness\\Mopreeb.php"/>
-    </filelist>
-  </release>
-</package>',
-  'url' => 'http://pear.php.net/get/pkg2-1.1',
-));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
-  0 => '1.0',
-  1 =>
-  array (
-    'type' => 'pkg',
-    'rel' => 'ge',
-    'version' => '1.0',
-    'name' => 'pkg3',
-    'channel' => 'pear.php.net',
-    'package' => 'pkg3',
-  ),
-  2 =>
-  array (
-    'channel' => 'pear.php.net',
-    'package' => 'pkg2',
-    'version' => '1.1',
-  ),
-  3 => 'stable',
-), array (
-  'version' => '1.1',
-  'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0">
-  <name>pkg3</name>
-  <summary>required test for PEAR_Installer</summary>
-  <description>fake package</description>
-  <maintainers>
-    <maintainer>
-      <user>fakeuser</user>
-      <name>Joe Shmoe</name>
-      <email>nobody@example.com</email>
-      <role>lead</role>
-    </maintainer>
-  </maintainers>
-  <release>
-    <version>1.1</version>
-    <date>2003-09-09</date>
-    <license>PHP License</license>
-    <state>stable</state>
-    <notes>required dependency test</notes>
-    <deps>
-      <dep type="pkg" rel="ge" version="1.0">pkg4</dep>
-      <dep type="pkg" rel="ge" version="1.0">pkg5</dep>
-    </deps>
-    <filelist>
-      <file role="php" baseinstalldir="borger" name="zoorb.php"/>
-      <file role="php" baseinstalldir="borger" name="goompness\\oggbrzitzkee.php"/>
-      <file role="php" baseinstalldir="borger" name="goompness\\Mopreeb.php"/>
-    </filelist>
-  </release>
-</package>',
-  'url' => 'http://pear.php.net/get/pkg3-1.1',
-));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
-  0 => '1.0',
-  1 =>
-  array (
-    'type' => 'pkg',
-    'rel' => 'ge',
-    'version' => '1.0',
-    'name' => 'pkg4',
-    'channel' => 'pear.php.net',
-    'package' => 'pkg4',
-  ),
-  2 =>
-  array (
-    'channel' => 'pear.php.net',
-    'package' => 'pkg3',
-    'version' => '1.1',
-  ),
-  3 => 'stable',
-), array (
-  'version' => '1.1',
-  'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0">
-  <name>pkg4</name>
-  <summary>required test for PEAR_Installer</summary>
-  <description>fake package</description>
-  <maintainers>
-    <maintainer>
-      <user>fakeuser</user>
-      <name>Joe Shmoe</name>
-      <email>nobody@example.com</email>
-      <role>lead</role>
-    </maintainer>
-  </maintainers>
-  <release>
-    <version>1.1</version>
-    <date>2003-09-09</date>
-    <license>PHP License</license>
-    <state>stable</state>
-    <notes>required dependency test</notes>
-    <deps>
-      <dep type="pkg" rel="ge" version="1.0">pkg6</dep>
-    </deps>
-    <filelist>
-      <file role="php" baseinstalldir="snarf" name="zoorb.php"/>
-      <file role="php" baseinstalldir="snarf" name="goompness\\oggbrzitzkee.php"/>
-      <file role="php" baseinstalldir="snarf" name="goompness\\Mopreeb.php"/>
-    </filelist>
-  </release>
-</package>',
-  'url' => 'http://pear.php.net/get/pkg4-1.1',
-));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
-  0 => '1.0',
-  1 =>
-  array (
-    'type' => 'pkg',
-    'rel' => 'ge',
-    'version' => '1.0',
-    'name' => 'pkg5',
-    'channel' => 'pear.php.net',
-    'package' => 'pkg5',
-  ),
-  2 =>
-  array (
-    'channel' => 'pear.php.net',
-    'package' => 'pkg3',
-    'version' => '1.1',
-  ),
-  3 => 'stable',
-), array (
-  'version' => '1.1',
-  'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0">
-  <name>pkg5</name>
-  <summary>required test for PEAR_Installer</summary>
-  <description>fake package</description>
-  <maintainers>
-    <maintainer>
-      <user>fakeuser</user>
-      <name>Joe Shmoe</name>
-      <email>nobody@example.com</email>
-      <role>lead</role>
-    </maintainer>
-  </maintainers>
-  <release>
-    <version>1.1</version>
-    <date>2003-09-09</date>
-    <license>PHP License</license>
-    <state>stable</state>
-    <notes>required dependency test</notes>
-    <deps>
-      <dep type="pkg" rel="ge" version="1.0">pkg6</dep>
-    </deps>
-    <filelist>
-      <file role="php" baseinstalldir="barf" name="zoorb.php"/>
-      <file role="php" baseinstalldir="barf" name="goompness\\oggbrzitzkee.php"/>
-      <file role="php" baseinstalldir="barf" name="goompness\\Mopreeb.php"/>
-    </filelist>
-  </release>
-</package>',
-  'url' => 'http://pear.php.net/get/pkg5-1.1',
-));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
-  0 => '1.0',
-  1 =>
-  array (
-    'type' => 'pkg',
-    'rel' => 'ge',
-    'version' => '1.0',
-    'name' => 'pkg6',
-    'channel' => 'pear.php.net',
-    'package' => 'pkg6',
-  ),
-  2 =>
-  array (
-    'channel' => 'pear.php.net',
-    'package' => 'pkg4',
-    'version' => '1.1',
-  ),
-  3 => 'stable',
-), array (
-  'version' => '1.1',
-  'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0">
-  <name>pkg6</name>
-  <summary>required test for PEAR_Installer</summary>
-  <description>fake package</description>
-  <maintainers>
-    <maintainer>
-      <user>fakeuser</user>
-      <name>Joe Shmoe</name>
-      <email>nobody@example.com</email>
-      <role>lead</role>
-    </maintainer>
-  </maintainers>
-  <release>
-    <version>1.1</version>
-    <date>2003-09-09</date>
-    <license>PHP License</license>
-    <state>stable</state>
-    <notes>required dependency test</notes>
-    <filelist>
-      <file role="php" baseinstalldir="groob" name="zoorb.php"/>
-      <file role="php" baseinstalldir="groob" name="goompness\\oggbrzitzkee.php"/>
-      <file role="php" baseinstalldir="groob" name="goompness\\Mopreeb.php"/>
-    </filelist>
-  </release>
-</package>',
-  'url' => 'http://pear.php.net/get/pkg6-1.1',
-));
-$pearweb->addXmlrpcConfig("pear.php.net", "package.getDepDownloadURL", array (
-  0 => '1.0',
-  1 =>
-  array (
-    'type' => 'pkg',
-    'rel' => 'ge',
-    'version' => '1.0',
-    'name' => 'pkg6',
-    'channel' => 'pear.php.net',
-    'package' => 'pkg6',
-  ),
-  2 =>
-  array (
-    'channel' => 'pear.php.net',
-    'package' => 'pkg5',
-    'version' => '1.1',
-  ),
-  3 => 'stable',
-), array (
-  'version' => '1.1',
-  'info' => '<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0">
-  <name>pkg6</name>
-  <summary>required test for PEAR_Installer</summary>
-  <description>fake package</description>
-  <maintainers>
-    <maintainer>
-      <user>fakeuser</user>
-      <name>Joe Shmoe</name>
-      <email>nobody@example.com</email>
-      <role>lead</role>
-    </maintainer>
-  </maintainers>
-  <release>
-    <version>1.1</version>
-    <date>2003-09-09</date>
-    <license>PHP License</license>
-    <state>stable</state>
-    <notes>required dependency test</notes>
-    <filelist>
-      <file role="php" baseinstalldir="groob" name="zoorb.php"/>
-      <file role="php" baseinstalldir="groob" name="goompness\\oggbrzitzkee.php"/>
-      <file role="php" baseinstalldir="groob" name="goompness\\Mopreeb.php"/>
-    </filelist>
-  </release>
-</package>',
-  'url' => 'http://pear.php.net/get/pkg6-1.1',
-));
+$reg = &$config->getRegistry();
+$chan = &$reg->getChannel('pear.php.net');
+$chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
+$reg->updateChannel($chan);
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg1/allreleases.xml",
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>pkg1</p>
+ <c>pear.php.net</c>
+ <r><v>1.1</v><s>stable</s></r>
+</a>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg2/allreleases.xml",
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>pkg2</p>
+ <c>pear.php.net</c>
+ <r><v>1.1</v><s>stable</s></r>
+</a>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg3/allreleases.xml",
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>pkg3</p>
+ <c>pear.php.net</c>
+ <r><v>1.1</v><s>stable</s></r>
+</a>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg4/allreleases.xml",
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>pkg4</p>
+ <c>pear.php.net</c>
+ <r><v>1.1</v><s>stable</s></r>
+</a>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg5/allreleases.xml",
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>pkg5</p>
+ <c>pear.php.net</c>
+ <r><v>1.1</v><s>stable</s></r>
+</a>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg6/allreleases.xml",
+'<?xml version="1.0"?>
+<a xmlns="http://pear.php.net/dtd/rest.allreleases"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
+    http://pear.php.net/dtd/rest.allreleases.xsd">
+ <p>pkg6</p>
+ <c>pear.php.net</c>
+ <r><v>1.1</v><s>stable</s></r>
+</a>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/pkg1/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>pkg1</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>required test for PEAR_Installer</s>
+ <d>fake package</d>
+ <r xlink:href="/rest/r/pkg1"/>
+</p>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/pkg2/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>pkg2</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>required test for PEAR_Installer</s>
+ <d>fake package</d>
+ <r xlink:href="/rest/r/pkg2"/>
+</p>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/pkg3/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>pkg3</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>required test for PEAR_Installer</s>
+ <d>fake package</d>
+ <r xlink:href="/rest/r/pkg3"/>
+</p>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/pkg4/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>pkg4</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>required test for PEAR_Installer</s>
+ <d>fake package</d>
+ <r xlink:href="/rest/r/pkg4"/>
+</p>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/pkg5/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>pkg5</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>required test for PEAR_Installer</s>
+ <d>fake package</d>
+ <r xlink:href="/rest/r/pkg5"/>
+</p>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/p/pkg6/info.xml",
+'<?xml version="1.0" encoding="UTF-8" ?>
+<p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
+ <n>pkg6</n>
+ <c>pear.php.net</c>
+ <ca xlink:href="/rest/c/PEAR">PEAR</ca>
+ <l>PHP License 3.0</l>
+ <s>required test for PEAR_Installer</s>
+ <d>fake package</d>
+ <r xlink:href="/rest/r/pkg6"/>
+</p>',
+'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg1/1.1.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/pkg1">pkg1</p>
+ <c>pear.php.net</c>
+ <v>1.1</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>fakeuser</m>
+ <s>fake package required for PEAR Installer</s>
+ <d>fake package</d>
+ <da>2004-04-17 18:40:51</da>
+ <n>required dependency test</n>
+ <f>700</f>
+ <g>http://pear.php.net/get/pkg1-1.1</g>
+ <x xlink:href="package.1.1.xml"/>
+</r>', 'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg2/1.1.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/pkg2">pkg2</p>
+ <c>pear.php.net</c>
+ <v>1.1</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>fakeuser</m>
+ <s>fake package required for PEAR Installer</s>
+ <d>fake package</d>
+ <da>2004-04-17 18:40:51</da>
+ <n>required dependency test</n>
+ <f>700</f>
+ <g>http://pear.php.net/get/pkg2-1.1</g>
+ <x xlink:href="package.1.1.xml"/>
+</r>', 'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg3/1.1.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/pkg3">pkg3</p>
+ <c>pear.php.net</c>
+ <v>1.1</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>fakeuser</m>
+ <s>fake package required for PEAR Installer</s>
+ <d>fake package</d>
+ <da>2004-04-17 18:40:51</da>
+ <n>required dependency test</n>
+ <f>700</f>
+ <g>http://pear.php.net/get/pkg3-1.1</g>
+ <x xlink:href="package.1.1.xml"/>
+</r>', 'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg4/1.1.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/pkg4">pkg4</p>
+ <c>pear.php.net</c>
+ <v>1.1</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>fakeuser</m>
+ <s>fake package required for PEAR Installer</s>
+ <d>fake package</d>
+ <da>2004-04-17 18:40:51</da>
+ <n>required dependency test</n>
+ <f>700</f>
+ <g>http://pear.php.net/get/pkg4-1.1</g>
+ <x xlink:href="package.1.1.xml"/>
+</r>', 'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg5/1.1.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/pkg5">pkg5</p>
+ <c>pear.php.net</c>
+ <v>1.1</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>fakeuser</m>
+ <s>fake package required for PEAR Installer</s>
+ <d>fake package</d>
+ <da>2004-04-17 18:40:51</da>
+ <n>required dependency test</n>
+ <f>700</f>
+ <g>http://pear.php.net/get/pkg5-1.1</g>
+ <x xlink:href="package.1.1.xml"/>
+</r>', 'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg6/1.1.xml",
+'<?xml version="1.0"?>
+<r xmlns="http://pear.php.net/dtd/rest.release"
+    xsi:schemaLocation="http://pear.php.net/dtd/rest.release
+    http://pear.php.net/dtd/rest.release.xsd">
+ <p xlink:href="/rest/p/pkg6">pkg6</p>
+ <c>pear.php.net</c>
+ <v>1.1</v>
+ <st>stable</st>
+ <l>PHP License</l>
+ <m>fakeuser</m>
+ <s>fake package required for PEAR Installer</s>
+ <d>fake package</d>
+ <da>2004-04-17 18:40:51</da>
+ <n>required dependency test</n>
+ <f>700</f>
+ <g>http://pear.php.net/get/pkg6-1.1</g>
+ <x xlink:href="package.1.1.xml"/>
+</r>', 'text/xml');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg1/deps.1.1.txt",
+'a:1:{s:8:"required";a:3:{s:3:"php";a:2:{s:3:"min";s:5:"4.3.6";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}s:7:"package";a:3:{s:4:"name";s:4:"pkg2";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.1";}}}',
+'text/plain');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg2/deps.1.1.txt",
+'a:1:{s:8:"required";a:3:{s:3:"php";a:2:{s:3:"min";s:5:"4.3.6";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}s:7:"package";a:3:{s:4:"name";s:4:"pkg3";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.1";}}}',
+'text/plain');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg3/deps.1.1.txt",
+'a:1:{s:8:"required";a:3:{s:3:"php";a:2:{s:3:"min";s:5:"4.3.6";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}s:7:"package";a:2:{i:0;a:3:{s:4:"name";s:4:"pkg4";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.1";}i:1;a:3:{s:4:"name";s:4:"pkg5";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.1";}}}}',
+'text/plain');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg4/deps.1.1.txt",
+'a:1:{s:8:"required";a:3:{s:3:"php";a:2:{s:3:"min";s:5:"4.3.6";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}s:7:"package";a:3:{s:4:"name";s:4:"pkg6";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.1";}}}',
+'text/plain');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg5/deps.1.1.txt",
+'a:1:{s:8:"required";a:3:{s:3:"php";a:2:{s:3:"min";s:5:"4.3.6";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}s:7:"package";a:3:{s:4:"name";s:4:"pkg6";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:3:"1.1";}}}',
+'text/plain');
+
+$pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg6/deps.1.1.txt", 'b:0;', 'text/plain');
 
 $_test_dep->setPHPversion('4.3.10');
+$_test_dep->setPEARversion('1.4.0a1');
 $dp = &new test_PEAR_Downloader($fakelog, array('alldeps' => true), $config);
 $phpunit->assertNoErrors('after create');
 
