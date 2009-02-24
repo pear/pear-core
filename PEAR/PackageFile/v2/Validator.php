@@ -238,14 +238,17 @@ class PEAR_PackageFile_v2_Validator
                 }
             }
         }
+
         if ($fail) {
             return false;
         }
+
         $list = $this->_packageInfo['contents'];
         if (isset($list['dir']) && is_array($list['dir']) && isset($list['dir'][0])) {
             $this->_multipleToplevelDirNotAllowed();
             return $this->_isValid = 0;
         }
+
         $this->_validateFilelist();
         $this->_validateRelease();
         if (!$this->_stack->hasErrors()) {
@@ -281,6 +284,7 @@ class PEAR_PackageFile_v2_Validator
                 }
             }
         }
+
         $this->_pf->_isValid = $this->_isValid = !$this->_stack->hasErrors('error');
         if ($this->_isValid && $state == PEAR_VALIDATE_PACKAGING && !$this->_filesValid) {
             if ($this->_pf->getPackageType() == 'bundle') {
@@ -297,9 +301,11 @@ class PEAR_PackageFile_v2_Validator
                 }
             }
         }
+
         if ($this->_isValid) {
             return $this->_pf->_isValid = $this->_isValid = $state;
         }
+
         return $this->_pf->_isValid = $this->_isValid = 0;
     }
 

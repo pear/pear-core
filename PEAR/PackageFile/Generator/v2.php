@@ -61,7 +61,7 @@ class PEAR_PackageFile_Generator_v2
         'indentAttributes'   => false,                 // indent the attributes, if set to '_auto', it will indent attributes so they all start at the same column
         'mode'               => 'simplexml',             // use 'simplexml' to use parent name as tagname if transforming an indexed array
         'addDoctype'         => false,                 // add a doctype declaration
-        'doctype'            => null,                  // supply a string or an array with id and uri ({@see PEAR_PackageFile_Generator_v2_PEAR_PackageFile_Generator_v2_XML_Util::getDoctypeDeclaration()}
+        'doctype'            => null,                  // supply a string or an array with id and uri ({@see XML_Util::getDoctypeDeclaration()}
         'rootName'           => 'package',                  // name of the root tag
         'rootAttributes'     => array(
             'version' => '2.0',
@@ -576,7 +576,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
         // add doctype declaration
         if ($this->options['addDoctype'] === true) {
-            $this->_serializedData = PEAR_PackageFile_Generator_v2_XML_Util::getDoctypeDeclaration($tagName, $this->options['doctype'])
+            $this->_serializedData = XML_Util::getDoctypeDeclaration($tagName, $this->options['doctype'])
                                    . $this->options['linebreak']
                                    . $this->_serializedData;
         }
@@ -585,7 +585,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
         if ($this->options['addDecl']) {
             $atts = array();
             $encoding = isset($this->options['encoding']) ? $this->options['encoding'] : null;
-            $this->_serializedData = PEAR_PackageFile_Generator_v2_XML_Util::getXMLDeclaration('1.0', $encoding)
+            $this->_serializedData = XML_Util::getXMLDeclaration('1.0', $encoding)
                                    . $this->options['linebreak']
                                    . $this->_serializedData;
         }
@@ -648,7 +648,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
     * @param    string  $tagName     name of the root tag
     * @param    array   $attributes  attributes for the root tag
     * @return   string  $string      serialized data
-    * @uses     PEAR_PackageFile_Generator_v2_XML_Util::isValidName() to check, whether key has to be substituted
+    * @uses     XML_Util::isValidName() to check, whether key has to be substituted
     */
     function _serializeArray(&$array, $tagName = null, $attributes = array())
     {
@@ -730,7 +730,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
 
         if ($this->options['scalarAsAttributes'] === true) {
             foreach ($array as $key => $value) {
-                if (is_scalar($value) && (PEAR_PackageFile_Generator_v2_XML_Util::isValidName($key) === true)) {
+                if (is_scalar($value) && (XML_Util::isValidName($key) === true)) {
                     unset($array[$key]);
                     $attributes[$this->options['prependAttributes'].$key] = $value;
                 }
@@ -757,7 +757,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 // copy key
                 $origKey = $key;
                 // key cannot be used as tagname => use default tag
-                $valid = PEAR_PackageFile_Generator_v2_XML_Util::isValidName($key);
+                $valid = XML_Util::isValidName($key);
                 if (PEAR::isError($valid)) {
                     if ($this->options['classAsTagName'] && is_object($value)) {
                         $key = get_class($value);
@@ -877,10 +877,9 @@ http://pear.php.net/dtd/package-2.0.xsd',
         if (is_scalar($tag['content']) || is_null($tag['content'])) {
             if ($this->options['encoding'] == 'UTF-8' &&
                   version_compare(phpversion(), '5.0.0', 'lt')) {
-                $encoding = PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_UTF8_XML;
-            } else {
-                $encoding = PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_XML;
+                $tag = utf8_encode($tag);
             }
+            $encoding = PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_XML;
             $tag = PEAR_PackageFile_Generator_v2_XML_Util::createTagFromArray($tag, $replaceEntities, $multiline, $indent, $this->options['linebreak'], $encoding);
         } elseif (is_array($tag['content'])) {
             $tag    =   $this->_serializeArray($tag['content'], $tag['qname'], $tag['attributes']);
@@ -893,6 +892,8 @@ http://pear.php.net/dtd/package-2.0.xsd',
         return  $tag;
     }
 }
+
+require_once 'XML/Util.php';
 
 // well, it's one way to do things without extra deps ...
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
@@ -984,20 +985,8 @@ define("PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_UTF8_XML", 4);
  * @author   Stephan Schmidt <schst@php.net>
  * @author   Gregory Beaver <cellog@php.net>
  */
-class PEAR_PackageFile_Generator_v2_XML_Util {
-
-   /**
-    * return API version
-    *
-    * @access   public
-    * @static
-    * @return   string  $version API version
-    */
-    function apiVersion()
-    {
-        return "0.6";
-    }
-
+class PEAR_PackageFile_Generator_v2_XML_Util
+{
    /**
     * replace XML entities
     *
@@ -1020,14 +1009,6 @@ class PEAR_PackageFile_Generator_v2_XML_Util {
     function replaceEntities($string, $replaceEntities = PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_XML)
     {
         switch ($replaceEntities) {
-            case PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_UTF8_XML:
-                return strtr(utf8_encode($string),array(
-                                          '&'  => '&amp;',
-                                          '>'  => '&gt;',
-                                          '<'  => '&lt;',
-                                          '"'  => '&quot;',
-                                          '\'' => '&apos;' ));
-                break;
             case PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_XML:
                 return strtr($string,array(
                                           '&'  => '&amp;',
@@ -1045,157 +1026,6 @@ class PEAR_PackageFile_Generator_v2_XML_Util {
             case PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_HTML:
                 return htmlspecialchars($string);
                 break;
-        }
-        return $string;
-    }
-
-   /**
-    * build an xml declaration
-    *
-    * <code>
-    * require_once 'XML/Util.php';
-    *
-    * // get an XML declaration:
-    * $xmlDecl = PEAR_PackageFile_Generator_v2_XML_Util::getXMLDeclaration("1.0", "UTF-8", true);
-    * </code>
-    *
-    * @access   public
-    * @static
-    * @param    string  $version     xml version
-    * @param    string  $encoding    character encoding
-    * @param    boolean $standAlone  document is standalone (or not)
-    * @return   string  $decl xml declaration
-    * @uses     PEAR_PackageFile_Generator_v2_XML_Util::attributesToString() to serialize the attributes of the XML declaration
-    */
-    function getXMLDeclaration($version = "1.0", $encoding = null, $standalone = null)
-    {
-        $attributes = array(
-                            "version" => $version,
-                           );
-        // add encoding
-        if ($encoding !== null) {
-            $attributes["encoding"] = $encoding;
-        }
-        // add standalone, if specified
-        if ($standalone !== null) {
-            $attributes["standalone"] = $standalone ? "yes" : "no";
-        }
-
-        return sprintf("<?xml%s?>", PEAR_PackageFile_Generator_v2_XML_Util::attributesToString($attributes, false));
-    }
-
-   /**
-    * build a document type declaration
-    *
-    * <code>
-    * require_once 'XML/Util.php';
-    *
-    * // get a doctype declaration:
-    * $xmlDecl = PEAR_PackageFile_Generator_v2_XML_Util::getDocTypeDeclaration("rootTag","myDocType.dtd");
-    * </code>
-    *
-    * @access   public
-    * @static
-    * @param    string  $root         name of the root tag
-    * @param    string  $uri          uri of the doctype definition (or array with uri and public id)
-    * @param    string  $internalDtd  internal dtd entries
-    * @return   string  $decl         doctype declaration
-    * @since    0.2
-    */
-    function getDocTypeDeclaration($root, $uri = null, $internalDtd = null)
-    {
-        if (is_array($uri)) {
-            $ref = sprintf( ' PUBLIC "%s" "%s"', $uri["id"], $uri["uri"] );
-        } elseif (!empty($uri)) {
-            $ref = sprintf( ' SYSTEM "%s"', $uri );
-        } else {
-            $ref = "";
-        }
-
-        if (empty($internalDtd)) {
-            return sprintf("<!DOCTYPE %s%s>", $root, $ref);
-        } else {
-            return sprintf("<!DOCTYPE %s%s [\n%s\n]>", $root, $ref, $internalDtd);
-        }
-    }
-
-   /**
-    * create string representation of an attribute list
-    *
-    * <code>
-    * require_once 'XML/Util.php';
-    *
-    * // build an attribute string
-    * $att = array(
-    *              "foo"   =>  "bar",
-    *              "argh"  =>  "tomato"
-    *            );
-    *
-    * $attList = PEAR_PackageFile_Generator_v2_XML_Util::attributesToString($att);
-    * </code>
-    *
-    * @access   public
-    * @static
-    * @param    array         $attributes        attribute array
-    * @param    boolean|array $sort              sort attribute list alphabetically, may also be an assoc array containing the keys 'sort', 'multiline', 'indent', 'linebreak' and 'entities'
-    * @param    boolean       $multiline         use linebreaks, if more than one attribute is given
-    * @param    string        $indent            string used for indentation of multiline attributes
-    * @param    string        $linebreak         string used for linebreaks of multiline attributes
-    * @param    integer       $entities          setting for entities in attribute values (one of PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_NONE, PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_XML, PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_XML_REQUIRED, PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_HTML)
-    * @return   string                           string representation of the attributes
-    * @uses     PEAR_PackageFile_Generator_v2_XML_Util::replaceEntities() to replace XML entities in attribute values
-    * @todo     allow sort also to be an options array
-    */
-    function attributesToString($attributes, $sort = true, $multiline = false, $indent = '    ', $linebreak = "\n", $entities = PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_XML)
-    {
-        /**
-         * second parameter may be an array
-         */
-        if (is_array($sort)) {
-            if (isset($sort['multiline'])) {
-                $multiline = $sort['multiline'];
-            }
-            if (isset($sort['indent'])) {
-                $indent = $sort['indent'];
-            }
-            if (isset($sort['linebreak'])) {
-                $multiline = $sort['linebreak'];
-            }
-            if (isset($sort['entities'])) {
-                $entities = $sort['entities'];
-            }
-            if (isset($sort['sort'])) {
-                $sort = $sort['sort'];
-            } else {
-                $sort = true;
-            }
-        }
-        $string = '';
-        if (is_array($attributes) && !empty($attributes)) {
-            if ($sort) {
-                ksort($attributes);
-            }
-            if( !$multiline || count($attributes) == 1) {
-                foreach ($attributes as $key => $value) {
-                    if ($entities != PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_NONE) {
-                        $value = PEAR_PackageFile_Generator_v2_XML_Util::replaceEntities($value, $entities);
-                    }
-                    $string .= ' '.$key.'="'.$value.'"';
-                }
-            } else {
-                $first = true;
-                foreach ($attributes as $key => $value) {
-                    if ($entities != PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_NONE) {
-                        $value = PEAR_PackageFile_Generator_v2_XML_Util::replaceEntities($value, $entities);
-                    }
-                    if ($first) {
-                        $string .= " ".$key.'="'.$value.'"';
-                        $first = false;
-                    } else {
-                        $string .= $linebreak.$indent.$key.'="'.$value.'"';
-                    }
-                }
-            }
         }
         return $string;
     }
@@ -1228,7 +1058,11 @@ class PEAR_PackageFile_Generator_v2_XML_Util {
     * @see      PEAR_PackageFile_Generator_v2_XML_Util::createTagFromArray()
     * @uses     PEAR_PackageFile_Generator_v2_XML_Util::createTagFromArray() to create the tag
     */
-    function createTag($qname, $attributes = array(), $content = null, $namespaceUri = null, $replaceEntities = PEAR_PackageFile_Generator_v2_XML_Util_REPLACE_ENTITIES, $multiline = false, $indent = "_auto", $linebreak = "\n", $encoding = PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_XML)
+    function createTag($qname, $attributes = array(),
+                       $content = null, $namespaceUri = null,
+                       $replaceEntities = PEAR_PackageFile_Generator_v2_XML_Util_REPLACE_ENTITIES,
+                       $multiline = false, $indent = "_auto", $linebreak = "\n",
+                       $encoding = PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_XML)
     {
         $tag = array(
                      "qname"      => $qname,
@@ -1284,17 +1118,19 @@ class PEAR_PackageFile_Generator_v2_XML_Util {
     * @param    string  $linebreak         string used for linebreaks
     * @return   string  $string            XML tag
     * @see      PEAR_PackageFile_Generator_v2_XML_Util::createTag()
-    * @uses     PEAR_PackageFile_Generator_v2_XML_Util::attributesToString() to serialize the attributes of the tag
-    * @uses     PEAR_PackageFile_Generator_v2_XML_Util::splitQualifiedName() to get local part and namespace of a qualified name
+    * @uses     XML_Util::attributesToString() to serialize the attributes of the tag
+    * @uses     XML_Util::splitQualifiedName() to get local part and namespace of a qualified name
     */
-    function createTagFromArray($tag, $replaceEntities = PEAR_PackageFile_Generator_v2_XML_Util_REPLACE_ENTITIES, $multiline = false, $indent = "_auto", $linebreak = "\n", $encoding = PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_XML)
+    function createTagFromArray($tag, $replaceEntities = PEAR_PackageFile_Generator_v2_XML_Util_REPLACE_ENTITIES,
+                                $multiline = false, $indent = "_auto", $linebreak = "\n",
+                                $encoding = PEAR_PackageFile_Generator_v2_XML_Util_ENTITIES_XML)
     {
         if (isset($tag["content"]) && !is_scalar($tag["content"])) {
-            return PEAR_PackageFile_Generator_v2_XML_Util::raiseError( "Supplied non-scalar value as tag content", PEAR_PackageFile_Generator_v2_XML_Util_ERROR_NON_SCALAR_CONTENT );
+            return XML_Util::raiseError( "Supplied non-scalar value as tag content", PEAR_PackageFile_Generator_v2_XML_Util_ERROR_NON_SCALAR_CONTENT );
         }
 
         if (!isset($tag['qname']) && !isset($tag['localPart'])) {
-            return PEAR_PackageFile_Generator_v2_XML_Util::raiseError( 'You must either supply a qualified name (qname) or local tag name (localPart).', PEAR_PackageFile_Generator_v2_XML_Util_ERROR_NO_TAG_NAME );
+            return XML_Util::raiseError( 'You must either supply a qualified name (qname) or local tag name (localPart).', PEAR_PackageFile_Generator_v2_XML_Util_ERROR_NO_TAG_NAME );
         }
 
         // if no attributes hav been set, use empty attributes
@@ -1312,7 +1148,7 @@ class PEAR_PackageFile_Generator_v2_XML_Util {
             }
         // namespace URI is set, but no namespace
         } elseif (isset($tag["namespaceUri"]) && !isset($tag["namespace"])) {
-            $parts = PEAR_PackageFile_Generator_v2_XML_Util::splitQualifiedName($tag["qname"]);
+            $parts = XML_Util::splitQualifiedName($tag["qname"]);
             $tag["localPart"] = $parts["localPart"];
             if (isset($parts["namespace"])) {
                 $tag["namespace"] = $parts["namespace"];
@@ -1337,232 +1173,17 @@ class PEAR_PackageFile_Generator_v2_XML_Util {
         }
 
         // create attribute list
-        $attList    =   PEAR_PackageFile_Generator_v2_XML_Util::attributesToString($tag["attributes"], true, $multiline, $indent, $linebreak );
+        $attList    =   XML_Util::attributesToString($tag["attributes"], true, $multiline, $indent, $linebreak );
         if (!isset($tag["content"]) || (string)$tag["content"] == '') {
             $tag    =   sprintf("<%s%s />", $tag["qname"], $attList);
         } else {
             if ($replaceEntities == PEAR_PackageFile_Generator_v2_XML_Util_REPLACE_ENTITIES) {
                 $tag["content"] = PEAR_PackageFile_Generator_v2_XML_Util::replaceEntities($tag["content"], $encoding);
             } elseif ($replaceEntities == PEAR_PackageFile_Generator_v2_XML_Util_CDATA_SECTION) {
-                $tag["content"] = PEAR_PackageFile_Generator_v2_XML_Util::createCDataSection($tag["content"]);
+                $tag["content"] = XML_Util::createCDataSection($tag["content"]);
             }
             $tag    =   sprintf("<%s%s>%s</%s>", $tag["qname"], $attList, $tag["content"], $tag["qname"] );
         }
         return  $tag;
     }
-
-   /**
-    * create a start element
-    *
-    * <code>
-    * require_once 'XML/Util.php';
-    *
-    * // create an XML start element:
-    * $tag = PEAR_PackageFile_Generator_v2_XML_Util::createStartElement("myNs:myTag", array("foo" => "bar") ,"http://www.w3c.org/myNs#");
-    * </code>
-    *
-    * @access   public
-    * @static
-    * @param    string  $qname             qualified tagname (including namespace)
-    * @param    array   $attributes        array containg attributes
-    * @param    string  $namespaceUri      URI of the namespace
-    * @param    boolean $multiline         whether to create a multiline tag where each attribute gets written to a single line
-    * @param    string  $indent            string used to indent attributes (_auto indents attributes so they start at the same column)
-    * @param    string  $linebreak         string used for linebreaks
-    * @return   string  $string            XML start element
-    * @see      PEAR_PackageFile_Generator_v2_XML_Util::createEndElement(), PEAR_PackageFile_Generator_v2_XML_Util::createTag()
-    */
-    function createStartElement($qname, $attributes = array(), $namespaceUri = null, $multiline = false, $indent = '_auto', $linebreak = "\n")
-    {
-        // if no attributes hav been set, use empty attributes
-        if (!isset($attributes) || !is_array($attributes)) {
-            $attributes = array();
-        }
-
-        if ($namespaceUri != null) {
-            $parts = PEAR_PackageFile_Generator_v2_XML_Util::splitQualifiedName($qname);
-        }
-
-        // check for multiline attributes
-        if ($multiline === true) {
-            if ($indent === "_auto") {
-                $indent = str_repeat(" ", (strlen($qname)+2));
-            }
-        }
-
-        if ($namespaceUri != null) {
-            // is a namespace given
-            if (isset($parts["namespace"]) && !empty($parts["namespace"])) {
-                $attributes["xmlns:".$parts["namespace"]] = $namespaceUri;
-            } else {
-                // define this Uri as the default namespace
-                $attributes["xmlns"] = $namespaceUri;
-            }
-        }
-
-        // create attribute list
-        $attList    =   PEAR_PackageFile_Generator_v2_XML_Util::attributesToString($attributes, true, $multiline, $indent, $linebreak);
-        $element    =   sprintf("<%s%s>", $qname, $attList);
-        return  $element;
-    }
-
-   /**
-    * create an end element
-    *
-    * <code>
-    * require_once 'XML/Util.php';
-    *
-    * // create an XML start element:
-    * $tag = PEAR_PackageFile_Generator_v2_XML_Util::createEndElement("myNs:myTag");
-    * </code>
-    *
-    * @access   public
-    * @static
-    * @param    string  $qname             qualified tagname (including namespace)
-    * @return   string  $string            XML end element
-    * @see      PEAR_PackageFile_Generator_v2_XML_Util::createStartElement(), PEAR_PackageFile_Generator_v2_XML_Util::createTag()
-    */
-    function createEndElement($qname)
-    {
-        $element    =   sprintf("</%s>", $qname);
-        return  $element;
-    }
-
-   /**
-    * create an XML comment
-    *
-    * <code>
-    * require_once 'XML/Util.php';
-    *
-    * // create an XML start element:
-    * $tag = PEAR_PackageFile_Generator_v2_XML_Util::createComment("I am a comment");
-    * </code>
-    *
-    * @access   public
-    * @static
-    * @param    string  $content           content of the comment
-    * @return   string  $comment           XML comment
-    */
-    function createComment($content)
-    {
-        $comment    =   sprintf("<!-- %s -->", $content);
-        return  $comment;
-    }
-
-   /**
-    * create a CData section
-    *
-    * <code>
-    * require_once 'XML/Util.php';
-    *
-    * // create a CData section
-    * $tag = PEAR_PackageFile_Generator_v2_XML_Util::createCDataSection("I am content.");
-    * </code>
-    *
-    * @access   public
-    * @static
-    * @param    string  $data              data of the CData section
-    * @return   string  $string            CData section with content
-    */
-    function createCDataSection($data)
-    {
-        return  sprintf("<![CDATA[%s]]>", $data);
-    }
-
-   /**
-    * split qualified name and return namespace and local part
-    *
-    * <code>
-    * require_once 'XML/Util.php';
-    *
-    * // split qualified tag
-    * $parts = PEAR_PackageFile_Generator_v2_XML_Util::splitQualifiedName("xslt:stylesheet");
-    * </code>
-    * the returned array will contain two elements:
-    * <pre>
-    * array(
-    *       "namespace" => "xslt",
-    *       "localPart" => "stylesheet"
-    *      );
-    * </pre>
-    *
-    * @access public
-    * @static
-    * @param  string    $qname      qualified tag name
-    * @param  string    $defaultNs  default namespace (optional)
-    * @return array     $parts      array containing namespace and local part
-    */
-    function splitQualifiedName($qname, $defaultNs = null)
-    {
-        if (strstr($qname, ':')) {
-            $tmp = explode(":", $qname);
-            return array(
-                          "namespace" => $tmp[0],
-                          "localPart" => $tmp[1]
-                        );
-        }
-        return array(
-                      "namespace" => $defaultNs,
-                      "localPart" => $qname
-                    );
-    }
-
-   /**
-    * check, whether string is valid XML name
-    *
-    * <p>XML names are used for tagname, attribute names and various
-    * other, lesser known entities.</p>
-    * <p>An XML name may only consist of alphanumeric characters,
-    * dashes, undescores and periods, and has to start with a letter
-    * or an underscore.
-    * </p>
-    *
-    * <code>
-    * require_once 'XML/Util.php';
-    *
-    * // verify tag name
-    * $result = PEAR_PackageFile_Generator_v2_XML_Util::isValidName("invalidTag?");
-    * if (PEAR_PackageFile_Generator_v2_XML_Util::isError($result)) {
-    *    print "Invalid XML name: " . $result->getMessage();
-    * }
-    * </code>
-    *
-    * @access  public
-    * @static
-    * @param   string  $string string that should be checked
-    * @return  mixed   $valid  true, if string is a valid XML name, PEAR error otherwise
-    * @todo    support for other charsets
-    */
-    function isValidName($string)
-    {
-        // check for invalid chars
-        if (!preg_match("/^[[:alnum:]_\-.]\\z/", $string{0})) {
-            return PEAR_PackageFile_Generator_v2_XML_Util::raiseError( "XML names may only start with letter or underscore", PEAR_PackageFile_Generator_v2_XML_Util_ERROR_INVALID_START );
-        }
-
-        // check for invalid chars
-        if (!preg_match("/^([a-zA-Z_]([a-zA-Z0-9_\-\.]*)?:)?[a-zA-Z_]([a-zA-Z0-9_\-\.]+)?\\z/", $string)) {
-            return PEAR_PackageFile_Generator_v2_XML_Util::raiseError( "XML names may only contain alphanumeric chars, period, hyphen, colon and underscores", PEAR_PackageFile_Generator_v2_XML_Util_ERROR_INVALID_CHARS );
-         }
-        // XML name is valid
-        return true;
-    }
-
-   /**
-    * replacement for PEAR_PackageFile_Generator_v2_XML_Util::raiseError
-    *
-    * Avoids the necessity to always require
-    * PEAR.php
-    *
-    * @access   public
-    * @param    string      error message
-    * @param    integer     error code
-    * @return   object PEAR_Error
-    */
-    function raiseError($msg, $code)
-    {
-        require_once 'PEAR.php';
-        return PEAR::raiseError($msg, $code);
-    }
 }
-?>
