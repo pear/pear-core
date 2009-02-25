@@ -450,7 +450,7 @@ class PEAR_Config extends PEAR
         'cache_dir' => array(
             'type' => 'directory',
             'default' => PEAR_CONFIG_DEFAULT_CACHE_DIR,
-            'doc' => 'directory which is used for XMLRPC cache',
+            'doc' => 'directory which is used for web service cache',
             'prompt' => 'PEAR Installer cache directory',
             'group' => 'File Locations (Advanced)',
             ),
