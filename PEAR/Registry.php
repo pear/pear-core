@@ -276,7 +276,8 @@ class PEAR_Registry extends PEAR
 
                     $private = new PEAR_ChannelFile;
                     $private->setName('__uri');
-                    $private->addFunction('xmlrpc', '1.0', '****');
+                    $private->setDefaultPEARProtocols();
+                    $private->setBaseURL('REST1.0', '****');
                     $private->setSummary('Pseudo-channel for static packages');
                     $this->_addChannel($private);
                 }
@@ -1524,7 +1525,8 @@ class PEAR_Registry extends PEAR
 
             $private = new PEAR_ChannelFile;
             $private->setName('__uri');
-            $private->addFunction('xmlrpc', '1.0', '****');
+            $private->setDefaultPEARProtocols();
+            $private->setBaseURL('REST1.0', '****');
             $private->setSummary('Pseudo-channel for static packages');
             return $private;
         }
