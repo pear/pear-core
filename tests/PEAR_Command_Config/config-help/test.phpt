@@ -46,7 +46,7 @@ Valid set: stable beta alpha devel snapshot',
         array (
           0 => 'cache_dir',
           1 => 'directory',
-          2 => 'directory which is used for XMLRPC cache',
+          2 => 'directory which is used for web service cache',
         ),
         3 =>
         array (

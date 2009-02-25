@@ -26,7 +26,7 @@ $phpunit->assertEquals('directory where documentation is installed', $config->ge
 $phpunit->assertEquals('directory where loadable extensions are installed', $config->getDocs('ext_dir'), 'ext_dir');
 $phpunit->assertEquals('directory where regression tests are installed', $config->getDocs('test_dir'), 'test_dir');
 $phpunit->assertEquals('directory where executables are installed', $config->getDocs('bin_dir'), 'bin_dir');
-$phpunit->assertEquals('directory which is used for XMLRPC cache', $config->getDocs('cache_dir'), 'cache_dir');
+$phpunit->assertEquals('directory which is used for web service cache', $config->getDocs('cache_dir'), 'cache_dir');
 $phpunit->assertEquals('PHP CLI/CGI binary for executing scripts', $config->getDocs('php_bin'), 'php_bin');
 
 $phpunit->assertEquals('(maintainers) your PEAR account name', $config->getDocs('username'), 'username');
