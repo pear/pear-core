@@ -10,10 +10,12 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $reg = &$config->getRegistry();
 $chan = &$reg->getChannel('pear.php.net');
 $chan->setBaseUrl('REST1.0', 'http://pear.php.net/rest/');
 $reg->updateChannel($chan);
+
 $pearweb->addRESTConfig("http://pear.php.net/rest/p/archive_zip/info.xml", '<?xml version="1.0"?>
 <p xmlns="http://pear.php.net/dtd/rest.package"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.package
