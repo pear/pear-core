@@ -92,34 +92,50 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>New BSD License</license>
   <state>alpha</state>
  <notes>
+  * Implement Request #10373: if pref_state=stable and installed package=beta, allow up to latest beta version [dufuz]
+  * Implement Request #10581: login / logout should map to channel-login / channel-logout [dufuz]
+  * Implement Request #10825: Only display the "invalid or missing package file"-error if it makes sense [dufuz]
+  * Implement Request #11170: script to generate Command/[command].xml [dufuz]
+  * Implement Request #11176: improve channel ... has updated its protocols message [dufuz]
   * Implement Request #12706: pear list -a hard to read [dufuz]
+  * Implement Request #11353: upgrade-all and upgrade commands to upgrade within the same stability level [dufuz]
+  * Implement Request #13015: Add https discovery for channel.xml [dufuz / initial patch by Martin Roos]
   * Implement Request #13927: install-pear.php should have option to set www_dir [timj]
-  * Implement Request #14324 Make the pear install command behave similar to apt-get [dufuz]
-  * Implement Request #14325 make pear upgrade with no params behave like pear upgrade-all [dufuz]
+  * Implement Request #14324: Make the pear install command behave similar to apt-get [dufuz]
+  * Implement Request #14325: make pear upgrade with no params behave like pear upgrade-all [dufuz]
+    - upgrade-all can be considered deprecated in favor of calling upgrade with no parameters to replicate
+      better what other package managers are doing. upgrade-all will still work as intended.
+  * Implement Request #14504: add a channel parameter support to the upgrade function [dufuz]
+    - Options -c ezc and --channel=ezc got added to upgrade and upgrade-all to allow for
+      channel specific upgrades
+  * Implement Request #14556: install-pear-nozlib.phar should get download_dir config and other options [cweiske]
+  * Implement Request #15566: Add doc.php.net as a default channel [dufuz / saltybeagle]
 
   * Fix PHP Bug #43857: --program-suffix not always reflected everywhere [cellog]
+  * Fix PHP Bug #47323: strotime warnings in make install [dufuz]
 
   * Fix Bug #13908: pear info command and maintainers inactive not mentioned [dufuz]
-  * Fix Bug #13926: install-pear.php does not set cfg_dir if -d option set with no
-                    -c option [timj]
+  * Fix Bug #13926: install-pear.php does not set cfg_dir if -d option set with no -c option [timj]
   * Fix Bug #13943: tests fail when php.exe path contains spaces [dufuz / jorrit]
   * Fix Bug #13953: config-set/config-show with channel alias fail [cellog]
-  * Fix Bug #13958: When a phpt tests exit() or die() xdebug coverage is not generated,
-                    patch by izi (David Jean Louis) [izi / dufuz]
+  * Fix Bug #13958: When a phpt tests exit() or die() xdebug coverage is not generated, patch by izi (David Jean Louis) [izi / dufuz]
   * Fix Bug #14041: Unpredictable unit test processing sequence [dufuz]
   * Fix Bug #14140: Strict warning not suppressed in the shutdown function [dufuz]
   * Fix Bug #14210: pear list -ia brings warnings [dufuz]
-  * Fix Bug #14274: PEAR packager mangles package.xml encoding, then complains about
-                    it [dufuz]
-  * Fix Bug #14287: cannot upgrade from stable to beta via -beta when config is set
-                    to stable [dufuz]
+  * Fix Bug #14274: PEAR packager mangles package.xml encoding, then complains about it [dufuz]
+  * Fix Bug #14287: cannot upgrade from stable to beta via -beta when config is set to stable [dufuz]
+  * Fix Bug #14300: Package files themselves can not be served over https [dufuz / initial patch by Martin Roos]
   * Fix Bug #14437: openbasedir warning when loading config [dufuz]
-  * Fix Bug #14558: PackageFile.php creates tmp directory outside configured
-                    temp_dir [cweiske]
+  * Fix Bug #14558: PackageFile.php creates tmp directory outside configured temp_dir [cweiske]
+  * Fix Bug #14977: PEAR/Frontend.php doesn't require_once PEAR.php [dufuz]
+  * Fix Bug #15750: Unreachable code in PEAR_Downloader [dufuz]
 
+  PEAR_PackageFile_Generator_v2_XML_Util removed in favor of syncing with latest XML_Util which does
+  everything the forked version had altered.
 
   NOTE!
-  Functions that have been deprecated for 3+ years in PEAR_Common have been removed:
+  Functions that have been deprecated for 3+ years in PEAR_Common, please take a moment
+  to migrate over to one of the alternatives that have ben provided:
   * PEAR_Common->downloadHttp (use PEAR_Downloader->downloadHttp instead)
   * PEAR_Common->infoFromTgzFile (use PEAR_PackageFile->fromTgzFile instead)
   * PEAR_Common->infoFromDescriptionFile (use PEAR_PackageFile->fromPackageFile instead)
@@ -138,6 +154,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
 
   Support for XML RPC channels has been dropped - The only ones that used it
   (pear.php.net and pecl.php.net) have used the REST interface for years now
+
+  Move codebase from the PHP License to New BSD 2 clause license
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
