@@ -193,24 +193,17 @@ $phpunit->assertEquals(array (
     1 => 'Notice: package "pear/mainold" optional dependency "pear/optional" will not be automatically downloaded',
   ),
   array (
-    0 => 3,
-    1 => 'Notice: package "pear/mainold" required dependency "pear/required" will not be automatically downloaded',
-  ),
-  array (
     0 => 1,
-    1 => 'Did not download dependencies: pear/optional, pear/required, use --alldeps or --onlyreqdeps to download automatically',
-  ),
-  array (
-    0 => 0,
-    1 => 'pear/mainold can optionally use package "pear/optional" (version >= 1.1)',
-  ),
-  array (
-    0 => 0,
-    1 => 'pear/mainold requires package "pear/required" (version >= 1.1)',
+    1 => 'Did not download optional dependencies: pear/optional, use --alldeps to download automatically',
   ),
   array (
     0 => 0,
     1 => 'pear/mainold requires PHP extension "foo"',
+
+  ),
+  array (
+    0 => 0,
+    1 => 'pear/mainold can optionally use package "pear/optional" (version >= 1.1)',
   ),
 ), $fakelog->getLog(), 'end log');
 
