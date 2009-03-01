@@ -22,7 +22,7 @@
    and HTML_Template_Flexy installation was attempted)
   </notes>
   <deps>
-   <dep type="pkg" rel="has">radius</dep>
+   <dep type="pkg" rel="has">peclpkg</dep>
   </deps>
   <filelist>
    <dir name="/">
