@@ -12,21 +12,22 @@ error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 
 $reg = &$config->getRegistry();
-$chan = $reg->getChannel('pecl.php.net');
-$chan->setBaseURL('REST1.0', 'http://pecl.php.net/rest/');
-$reg->updateChannel($chan);
-
-$reg = &$config->getRegistry();
 $chan = $reg->getChannel('pear.php.net');
 $chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
 $reg->updateChannel($chan);
 
+$chan = $reg->getChannel('pecl.php.net');
+$chan->setBaseURL('REST1.0', 'http://pecl.php.net/rest/');
+$reg->updateChannel($chan);
+
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packages'. DIRECTORY_SEPARATOR . 'dependsonpecl.xml';
-PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
+$pathtopackage    = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packages'. DIRECTORY_SEPARATOR . 'peclpkg-1.3.0.tgz';
+
+
+$pearweb->addHtmlConfig('http://pecl.php.net/get/peclpkg-1.3.0.tgz', $pathtopackage);
 
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/radius/allreleases.xml", false, false);
 
-PEAR::popErrorHandling();
 
 $pearweb->addRESTConfig("http://pecl.php.net/rest/r/radius/allreleases.xml", '<?xml version="1.0" encoding="UTF-8" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
@@ -79,73 +80,6 @@ $pearweb->addRESTConfig("http://pecl.php.net/rest/r/radius/1.3.0.xml", '<?xml ve
 
 $pearweb->addRESTConfig("http://pecl.php.net/rest/r/radius/deps.1.3.0.txt", 'a:1:{s:8:"required";a:2:{s:3:"php";a:1:{s:3:"min";s:5:"4.2.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0b1";}}}', 'text/xml');
 
-/*
-
-$pearweb->addXmlrpcConfig("pecl.php.net", "package.getDepDownloadURL", array (
-  0 => '2.0',
-  1 =>
-  array (
-    'channel' => 'pecl.php.net',
-    'name' => 'radius',
-  ),
-  2 =>
-  array (
-    'channel' => 'pear.php.net',
-    'package' => 'PEAR',
-    'version' => '1.4.0a1',
-  ),
-  3 => 'stable',
-),     array('version' => '1.5.2',
-             'info' => '<?xml version="1.0"?>
-<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
- <name>peclpkg</name>
- <channel>pecl.php.net</channel>
- <summary>extension package source package</summary>
- <description>extension source
- </description>
- <lead>
-  <name>Greg Beaver</name>
-  <user>cellog</user>
-  <email>cellog@php.net</email>
-  <active>yes</active>
- </lead>
- <date>2004-09-30</date>
- <version>
-  <release>1.3.0</release>
-  <api>1.3.0</api>
- </version>
- <stability>
-  <release>stable</release>
-  <api>stable</api>
- </stability>
- <license uri="http://www.php.net/license/3_0.txt">PHP License</license>
- <notes>stuff
- </notes>
- <contents>
-  <dir name="/">
-   <file name="foo.php" role="src"/>
-  </dir>
- </contents>
- <dependencies>
-  <required>
-   <php>
-    <min>4.2.0</min>
-   </php>
-   <pearinstaller>
-    <min>1.4.0dev13</min>
-   </pearinstaller>
-  </required>
- </dependencies>
- <providesextension>extpkg</providesextension>
- <extsrcrelease/>
-</package>',
-             'url' => 'http://pecl.php.net/get/peclpackage-1.3.0')
-);
-*/
-
 $res = $command->run('install', array(), array($pathtopackagexml));
 $phpunit->assertErrors(array(
     array(
@@ -160,6 +94,7 @@ $phpunit->assertErrors(array(
 
 $dl = &$command->getDownloader(1, array());
 
+$log = $fakelog->getLog();
 $phpunit->assertEquals(array (
   array (
     0 => 3,
@@ -187,7 +122,7 @@ $phpunit->assertEquals(array (
     ),
     'cmd' => 'no command',
   ),
-), $fakelog->getLog(), 'log messages');
+), $log, 'log messages');
 
 $phpunit->assertEquals( array (
   0 =>
