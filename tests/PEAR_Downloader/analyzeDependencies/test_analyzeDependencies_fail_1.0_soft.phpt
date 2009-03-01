@@ -184,10 +184,12 @@ $phpunit->assertNoErrors('setup');
 $_test_dep->setExtensions(array('bar' => '1.0'));
 $dldir = $dp->_downloader->getDownloadDir();
 $dp->_downloader->analyzeDependencies($params);
-$phpunit->assertEquals(array(), $params, 'empty array');
+
+$phpunit->assertEquals(1, count($params), 'all things removed except for required packages');
 $phpunit->assertEquals(array (
 ), $fakelog->getLog(), 'end log');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'end download');
+
 echo 'tests done';
 ?>
 --CLEAN--
