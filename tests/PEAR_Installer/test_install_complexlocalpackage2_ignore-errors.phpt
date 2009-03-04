@@ -247,19 +247,15 @@ $phpunit->assertEquals(3, count($dlpackages[1]), 'internals package count 1');
 $phpunit->assertEquals(array('file', 'info', 'pkg'), array_keys($dlpackages[0]), 'indexes');
 $phpunit->assertEquals(array('file', 'info', 'pkg'), array_keys($dlpackages[1]), 'indexes 1');
 
-$phpunit->assertEquals($pathtopackagexml,
-    $dlpackages[0]['file'], 'file');
-$phpunit->assertIsa('PEAR_PackageFile_v2',
-    $dlpackages[0]['info'], 'info');
-$phpunit->assertEquals('PEAR1',
-    $dlpackages[0]['pkg'], 'PEAR1');
+$phpunit->assertEquals($pathtopackagexml,  $dlpackages[0]['file'], 'file');
+$phpunit->assertIsa('PEAR_PackageFile_v2', $dlpackages[0]['info'], 'info');
+$phpunit->assertEquals('PEAR1',            $dlpackages[0]['pkg'], 'PEAR1');
 $phpunit->assertEquals($result[1]->_downloader->getDownloadDir() . DIRECTORY_SEPARATOR .
     'Bar-1.5.2.tgz',
     $dlpackages[1]['file'], 'file 1');
-$phpunit->assertIsa('PEAR_PackageFile_v2',
-    $dlpackages[1]['info'], 'info 1');
-$phpunit->assertEquals('Bar',
-    $dlpackages[1]['pkg'], 'Bar');
+
+$phpunit->assertIsa('PEAR_PackageFile_v2', $dlpackages[1]['info'], 'info 1');
+$phpunit->assertEquals('Bar',              $dlpackages[1]['pkg'], 'Bar');
 
 $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
@@ -334,10 +330,12 @@ $phpunit->assertEquals(array (
     1 => 2213,
   ),
 ), $fakelog->getDownload(), 'download callback messages');
+
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
 $installer->setOptions($dp->getOptions());
+
 $ret = &$installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
@@ -684,8 +682,8 @@ Installer:
   ),
   'xsdversion' => '2.0',
 ), $ret, 'return of install');
-$phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo1.php',
-    'installed file');
+
+$phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo1.php', 'installed file');
 $reg = &$config->getRegistry();
 $info = $reg->packageInfo('Bar');
 $phpunit->assertTrue(isset($info['_lastmodified']), 'lastmodified is set?');
@@ -936,13 +934,14 @@ $phpunit->assertEquals(array (
   'xsdversion' => '2.0',
 )
 , $ret, 'return of install 2');
-$phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
-    'installed file');
+
+$phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php', 'installed file');
 $reg = &$config->getRegistry();
 $info = $reg->packageInfo('PEAR1');
 $phpunit->assertTrue(isset($info['_lastmodified']), 'lastmodified is set?');
 unset($info['_lastmodified']);
 $phpunit->assertEquals($ret, $info, 'test installation, PEAR1');
+
 echo 'tests done';
 ?>
 --CLEAN--
