@@ -295,7 +295,7 @@ if ($fetype == 'Gtk' || $fetype == 'Gtk2') {
         if (strlen($opt) == 1) {
             $cmdoptions = $cmd->getOptions($command);
             foreach ($cmdoptions as $o => $d) {
-                if (@$d['shortopt'] == $opt) {
+                if (isset($d['shortopt']) && $d['shortopt'] == $opt) {
                     $opts[$o] = $value;
                 }
             }
