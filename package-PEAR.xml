@@ -127,6 +127,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * Fix Bug #14300: Package files themselves can not be served over https [dufuz / initial patch by Martin Roos]
   * Fix Bug #14437: openbasedir warning when loading config [dufuz]
   * Fix Bug #14558: PackageFile.php creates tmp directory outside configured temp_dir [cweiske]
+  * Fix Bug #14947: downloadHttp() is missing Host part of the HTTP Request when using Proxy [ifeghali]
   * Fix Bug #14977: PEAR/Frontend.php doesn't require_once PEAR.php [dufuz]
   * Fix Bug #15750: Unreachable code in PEAR_Downloader [dufuz]
 
