@@ -1591,9 +1591,11 @@ class PEAR_Downloader extends PEAR_Common
             }
 
             if ($lastmodified === false || $lastmodified) {
-                $request = "GET $url HTTP/1.1\r\n";
+                $request  = "GET $url HTTP/1.1\r\n";
+                $request .= "Host: $host:$port\r\n";
             } else {
-                $request = "GET $url HTTP/1.0\r\n";
+                $request  = "GET $url HTTP/1.0\r\n";
+                $request .= "Host: $host\r\n";
             }
         } else {
             $network_host = $host;
