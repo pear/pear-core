@@ -794,7 +794,7 @@ class PEAR_Installer extends PEAR_Downloader
 
         }
         // }}}
-        $m = sizeof($errors);
+        $m = count($errors);
         if ($m > 0) {
             foreach ($errors as $error) {
                 if (!isset($this->_options['soft'])) {
@@ -806,6 +806,7 @@ class PEAR_Installer extends PEAR_Downloader
                 return false;
             }
         }
+
         $this->_dirtree = array();
         // {{{ really commit the transaction
         foreach ($this->file_operations as $i => $tr) {
@@ -813,6 +814,7 @@ class PEAR_Installer extends PEAR_Downloader
                 // support removal of non-existing backups
                 continue;
             }
+
             list($type, $data) = $tr;
             switch ($type) {
                 case 'backup':
@@ -1214,9 +1216,22 @@ class PEAR_Installer extends PEAR_Downloader
                     foreach ($tmp as $file => $info) {
                         if (is_array($info)) {
                             if (strtolower($info[1]) == strtolower($param->getPackage()) &&
-                                  strtolower($info[0]) == strtolower($param->getChannel())) {
+                                  strtolower($info[0]) == strtolower($param->getChannel())
+                            ) {
+                                if (isset($parentreg['filelist'][$file])) {
+                                    unset($parentreg['filelist'][$file]);
+                                } else{
+                                    $pos     = strpos($file, '/');
+                                    $basedir = substr($file, 0, $pos);
+                                    $file2   = substr($file, $pos + 1);
+                                    if (isset($parentreg['filelist'][$file2]['baseinstalldir'])
+                                        && $parentreg['filelist'][$file2]['baseinstalldir'] === $basedir
+                                    ) {
+                                        unset($parentreg['filelist'][$file2]);
+                                    }
+                                }
+
                                 unset($test[$file]);
-                                unset($parentreg['filelist'][$file]);
                             }
                         } else {
                             if (strtolower($param->getChannel()) != 'pear.php.net') {
@@ -1224,8 +1239,20 @@ class PEAR_Installer extends PEAR_Downloader
                             }
 
                             if (strtolower($info) == strtolower($param->getPackage())) {
+                                if (isset($parentreg['filelist'][$file])) {
+                                    unset($parentreg['filelist'][$file]);
+                                } else{
+                                    $pos     = strpos($file, '/');
+                                    $basedir = substr($file, 0, $pos);
+                                    $file2   = substr($file, $pos + 1);
+                                    if (isset($parentreg['filelist'][$file2]['baseinstalldir'])
+                                        && $parentreg['filelist'][$file2]['baseinstalldir'] === $basedir
+                                    ) {
+                                        unset($parentreg['filelist'][$file2]);
+                                    }
+                                }
+
                                 unset($test[$file]);
-                                unset($parentreg['filelist'][$file]);
                             }
                         }
                     }
@@ -1248,7 +1275,7 @@ class PEAR_Installer extends PEAR_Downloader
                     }
                 }
 
-                if (sizeof($test)) {
+                if (count($test)) {
                     $msg = "$channel/$pkgname: conflicting files found:\n";
                     $longest = max(array_map("strlen", array_keys($test)));
                     $fmt = "%${longest}s (%s)\n";
@@ -1370,15 +1397,13 @@ class PEAR_Installer extends PEAR_Downloader
         $pkg->setLastInstalledVersion($installregistry->packageInfo($pkg->getPackage(),
             'version', $pkg->getChannel()));
         foreach ($filelist as $file => $atts) {
+            $this->expectError(PEAR_INSTALLER_FAILED);
             if ($pkg->getPackagexmlVersion() == '1.0') {
-                $this->expectError(PEAR_INSTALLER_FAILED);
                 $res = $this->_installFile($file, $atts, $tmp_path, $options);
-                $this->popExpect();
             } else {
-                $this->expectError(PEAR_INSTALLER_FAILED);
                 $res = $this->_installFile2($pkg, $file, $atts, $tmp_path, $options);
-                $this->popExpect();
             }
+            $this->popExpect();
 
             if (PEAR::isError($res)) {
                 if (empty($options['ignore-errors'])) {
