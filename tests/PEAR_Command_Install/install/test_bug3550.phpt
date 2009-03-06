@@ -17,6 +17,8 @@ $chan = &$reg->getChannel('pear.php.net');
 $chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
 $reg->updateChannel($chan);
 
+$GLOBALS['pearweb']->addHtmlConfig('http://pear.php.net/get/PEAR_Frontend_Web-0.4.tgz', $packageDir . 'PEAR_Frontend_Web-0.4.tgz');
+
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_frontend_web/allreleases.xml", '<?xml version="1.0" encoding="UTF-8" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"     xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
