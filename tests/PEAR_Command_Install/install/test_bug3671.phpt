@@ -531,13 +531,6 @@ $config->set('preferred_state', 'alpha');
 
 $res = $command->run('install', array(), array('pear#webinstaller'));
 
-$phpunit->assertErrors(array(
-    array(
-        'package' => 'PEAR_Error',
-        'message' => 'install failed'
-    ),
-), 'after install');
-
 $phpunit->assertEquals(array(
    array (
     0 => 3,
