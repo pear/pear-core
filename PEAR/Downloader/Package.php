@@ -1802,14 +1802,34 @@ class PEAR_Downloader_Package
         $preferred_state = $this->_config->get('preferred_state');
         if (!isset($info['url'])) {
             if ($this->isInstalled($info)) {
-                if ($isdependency && version_compare($info['version'],
-                      $this->_registry->packageInfo($info['info']->getPackage(),
-                            'version', $info['info']->getChannel()), '<=')) {
+                $package_version = $this->_registry->packageInfo($info['info']->getPackage(),
+                            'version', $info['info']->getChannel());
+                if ($isdependency && version_compare($info['version'], $package_version, '<=')) {
                     // ignore bogus errors of "failed to download dependency"
                     // if it is already installed and the one that would be
                     // downloaded is older or the same version (Bug #7219)
                     return false;
                 }
+            }
+
+            if ($info['version'] === $package_version) {
+                if (!isset($options['soft'])) {
+                    $this->_downloader->log(1, 'WARNING: failed to download ' . $pname['channel'] .
+                        '/' . $pname['package'] . '-' . $pname['version'] . ', additionally the suggested version' .
+                        ' (' . $package_version . ') is the same as the locally installed one.');
+                }
+
+                return false;
+            }
+
+            if (version_compare($info['version'], $package_version, '<=')) {
+                if (!isset($options['soft'])) {
+                    $this->_downloader->log(1, 'WARNING: failed to download ' . $pname['channel'] .
+                        '/' . $pname['package'] . '-' . $pname['version'] . ', additionally the suggested version' .
+                        ' (' . $info['version'] . ') is a lower version than the locally installed one (' . $package_version . ').');
+                }
+
+                return false;
             }
 
             $instead =  ', will instead download version ' . $info['version'] .
@@ -1943,7 +1963,7 @@ class PEAR_Downloader_Package
                 // the state against the installed package, this allows upgrades for packages
                 // with lower stability than the preferred_state
                 $stability = $this->_registry->packageInfo($pname['package'], 'stability', $pname['channel']);
-                if ($stability === null
+                if (!$this->isInstalled($info)
                     || !in_array($info['info']->getState(), PEAR_Common::betterStates($stability['release'], true))
                 ) {
                     $err = PEAR::raiseError(
