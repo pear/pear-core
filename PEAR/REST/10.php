@@ -627,19 +627,23 @@ class PEAR_REST_10
         if (PEAR::isError($packagelist)) {
             return $packagelist;
         }
+
         $ret = array();
         if (!is_array($packagelist) || !isset($packagelist['p'])) {
             return $ret;
         }
+
         if (!is_array($packagelist['p'])) {
             $packagelist['p'] = array($packagelist['p']);
         }
+
         foreach ($packagelist['p'] as $package) {
             if (!isset($installed[strtolower($package)])) {
                 continue;
             }
+
             $inst_version = $reg->packageInfo($package, 'version', $channel);
-            $inst_state = $reg->packageInfo($package, 'release_state', $channel);
+            $inst_state   = $reg->packageInfo($package, 'release_state', $channel);
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             $info = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
                 '/allreleases.xml', false, false, $channel);
@@ -647,15 +651,18 @@ class PEAR_REST_10
             if (PEAR::isError($info)) {
                 continue; // no remote releases
             }
+
             if (!isset($info['r'])) {
                 continue;
             }
-            $found = false;
-            $release = false;
+
+            $release = $found = false;
             if (!is_array($info['r']) || !isset($info['r'][0])) {
                 $info['r'] = array($info['r']);
             }
+
             // $info['r'] is sorted by version number
+            usort($info['r'], array($this, '_sortReleasesByVersionNumber'));
             foreach ($info['r'] as $release) {
                 if ($inst_version && version_compare($release['v'], $inst_version, '<=')) {
                     // not newer than the one installed
@@ -683,20 +690,24 @@ class PEAR_REST_10
                     }
                 }
             }
+
             if (!$found) {
                 continue;
             }
+
             $relinfo = $this->_rest->retrieveCacheFirst($base . 'r/' . strtolower($package) . '/' .
                 $release['v'] . '.xml', false, false, $channel);
             if (PEAR::isError($relinfo)) {
                 return $relinfo;
             }
+
             $ret[$package] = array(
-                    'version' => $release['v'],
-                    'state' => $release['s'],
-                    'filesize' => $relinfo['f'],
-                );
+                'version'  => $release['v'],
+                'state'    => $release['s'],
+                'filesize' => $relinfo['f'],
+            );
         }
+
         return $ret;
     }
 
@@ -803,10 +814,31 @@ class PEAR_REST_10
         if ($i === false) {
             return false;
         }
+
         if ($include) {
             $i--;
         }
+
         return array_slice($states, $i + 1);
     }
+
+    /**
+     * Sort releases by version number
+     *
+     * @access private
+     */
+    function _sortReleasesByVersionNumber($a, $b)
+    {
+        if (version_compare($a['v'], $b['v'], '=')) {
+            return 0;
+        }
+
+        if (version_compare($a['v'], $b['v'], '>')) {
+            return -1;
+        }
+
+        if (version_compare($a['v'], $b['v'], '<')) {
+            return 1;
+        }
+    }
 }
-?>
