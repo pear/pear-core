@@ -1801,9 +1801,9 @@ class PEAR_Downloader_Package
 
         $preferred_state = $this->_config->get('preferred_state');
         if (!isset($info['url'])) {
+            $package_version = $this->_registry->packageInfo($info['info']->getPackage(),
+            'version', $info['info']->getChannel());
             if ($this->isInstalled($info)) {
-                $package_version = $this->_registry->packageInfo($info['info']->getPackage(),
-                            'version', $info['info']->getChannel());
                 if ($isdependency && version_compare($info['version'], $package_version, '<=')) {
                     // ignore bogus errors of "failed to download dependency"
                     // if it is already installed and the one that would be
