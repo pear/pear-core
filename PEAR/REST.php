@@ -82,21 +82,19 @@ class PEAR_REST
             return $ret;
         }
 
+        $file = $trieddownload = false;
         if (!isset($this->_options['offline'])) {
             $trieddownload = true;
             $file = $this->downloadHttp($url, $cacheId ? $cacheId['lastChange'] : false, $accept, $channel);
-        } else {
-            $trieddownload = false;
-            $file = false;
         }
 
         if (PEAR::isError($file)) {
-            if ($file->getCode() == -9276) {
-                $trieddownload = false;
-                $file = false; // use local copy if available on socket connect error
-            } else {
+            if ($file->getCode() !== -9276) {
                 return $file;
             }
+
+            $trieddownload = false;
+            $file = false; // use local copy if available on socket connect error
         }
 
         if (!$file) {
@@ -110,13 +108,13 @@ class PEAR_REST
         }
 
         if (is_array($file)) {
-            $headers = $file[2];
+            $headers      = $file[2];
             $lastmodified = $file[1];
-            $content = $file[0];
+            $content      = $file[0];
         } else {
-            $content = $file;
+            $headers      = array();
             $lastmodified = false;
-            $headers = array();
+            $content      = $file;
         }
 
         if ($forcestring) {
@@ -235,16 +233,18 @@ class PEAR_REST
             fwrite($fp, serialize(array(
                 'age'        => time(),
                 'lastChange' => $cacheid['lastChange'],
-                )));
+                ))
+            );
 
             fclose($fp);
             return true;
-        } else {
-            fwrite($fp, serialize(array(
-                'age'        => time(),
-                'lastChange' => $lastmodified,
-                )));
         }
+
+        fwrite($fp, serialize(array(
+            'age'        => time(),
+            'lastChange' => $lastmodified,
+            ))
+        );
 
         fclose($fp);
         $fp = @fopen($cachefile, 'wb');
@@ -369,8 +369,7 @@ class PEAR_REST
         if ($proxy_host != '') {
             $fp = @fsockopen($proxy_host, $proxy_port, $errno, $errstr, 15);
             if (!$fp) {
-                return PEAR::raiseError("Connection to `$proxy_host:$proxy_port' failed: $errstr",
-                    -9276);
+                return PEAR::raiseError("Connection to `$proxy_host:$proxy_port' failed: $errstr", -9276);
             }
         } else {
             if ($schema === 'https') {
