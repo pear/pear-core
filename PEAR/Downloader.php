@@ -535,6 +535,9 @@ class PEAR_Downloader extends PEAR_Common
                     $depchecker = &$this->getDependency2Object($this->config, $this->getOptions(),
                         $param->getParsedPackage(), PEAR_VALIDATE_DOWNLOADING);
                     $send = $param->getPackageFile();
+                    if ($send === null) {
+                        $send = $param->getDownloadURL();
+                    }
 
                     $installcheck = $depchecker->validatePackage($send, $this, $params);
                     if (PEAR::isError($installcheck)) {
