@@ -658,9 +658,7 @@ Run post-installation scripts in package <package>, if any exist.
         }
 
         $this->downloader = &$this->getDownloader($this->ui, $options, $this->config);
-        $errors     = array();
-        $binaries   = array();
-        $downloaded = array();
+        $errors = $downloaded = $binaries   = array();
         $downloaded = &$this->downloader->download($packages);
         if (PEAR::isError($downloaded)) {
             return $this->raiseError($downloaded);
