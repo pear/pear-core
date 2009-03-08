@@ -154,8 +154,6 @@ $phpunit->assertTrue($res, 'result');
 $fakelog->getLog();
 $fakelog->getDownload();
 $res = $command->run('install', array(), array('PEAR_Frontend_Web-beta'));
-$phpunit->assertErrors(array(array('package' => 'PEAR_Error', 'message' => 'install failed')),
-'after install');
 
 $phpunit->assertEquals( array (
   0 =>
