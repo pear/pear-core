@@ -1861,21 +1861,26 @@ class PEAR_Registry extends PEAR
 
     function updatePackage2($info)
     {
+
         if (!is_object($info)) {
             return $this->updatePackage($info['package'], $info, $merge);
         }
+
         if (!$info->validate(PEAR_VALIDATE_DOWNLOADING)) {
             return false;
         }
+
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
+
         $ret = $this->_updatePackage2($info);
         $this->_unlock();
         if ($ret) {
             $this->_dependencyDB->uninstallPackage($info);
             $this->_dependencyDB->installPackage($info);
         }
+
         return $ret;
     }
 

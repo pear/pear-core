@@ -1227,6 +1227,7 @@ class PEAR_Downloader extends PEAR_Common
             $nodes[$pname]->setData($packages[$i]);
             $depgraph->addNode($nodes[$pname]);
         }
+
         $deplinks = array();
         foreach ($nodes as $package => $node) {
             $pf = &$node->getData();
@@ -1234,36 +1235,41 @@ class PEAR_Downloader extends PEAR_Common
             if (!$pdeps) {
                 continue;
             }
+
             if ($pf->getPackagexmlVersion() == '1.0') {
                 foreach ($pdeps as $dep) {
                     if ($dep['type'] != 'pkg' ||
                           (isset($dep['optional']) && $dep['optional'] == 'yes')) {
                         continue;
                     }
+
                     $dname = $reg->parsedPackageNameToString(
                           array(
                               'channel' => 'pear.php.net',
                               'package' => strtolower($dep['name']),
                           ));
-                    if (isset($nodes[$dname]))
-                    {
+
+                    if (isset($nodes[$dname])) {
                         if (!isset($deplinks[$dname])) {
                             $deplinks[$dname] = array();
                         }
+
                         $deplinks[$dname][$package] = 1;
                         // dependency is in installed packages
                         continue;
                     }
+
                     $dname = $reg->parsedPackageNameToString(
                           array(
                               'channel' => 'pecl.php.net',
                               'package' => strtolower($dep['name']),
                           ));
-                    if (isset($nodes[$dname]))
-                    {
+
+                    if (isset($nodes[$dname])) {
                         if (!isset($deplinks[$dname])) {
                             $deplinks[$dname] = array();
                         }
+
                         $deplinks[$dname][$package] = 1;
                         // dependency is in installed packages
                         continue;
@@ -1278,58 +1284,71 @@ class PEAR_Downloader extends PEAR_Common
                     if (!isset($t[0])) {
                         $t = array($t);
                     }
+
                     $this->_setupGraph($t, $reg, $deplinks, $nodes, $package);
                 }
+
                 if (isset($pdeps['group'])) {
                     if (!isset($pdeps['group'][0])) {
                         $pdeps['group'] = array($pdeps['group']);
                     }
+
                     foreach ($pdeps['group'] as $group) {
                         if (isset($group['subpackage'])) {
                             $t = $group['subpackage'];
                             if (!isset($t[0])) {
                                 $t = array($t);
                             }
+
                             $this->_setupGraph($t, $reg, $deplinks, $nodes, $package);
                         }
                     }
                 }
+
                 if (isset($pdeps['optional']['subpackage'])) {
                     $t = $pdeps['optional']['subpackage'];
                     if (!isset($t[0])) {
                         $t = array($t);
                     }
+
                     $this->_setupGraph($t, $reg, $deplinks, $nodes, $package);
                 }
+
                 if (isset($pdeps['required']['package'])) {
                     $t = $pdeps['required']['package'];
                     if (!isset($t[0])) {
                         $t = array($t);
                     }
+
                     $this->_setupGraph($t, $reg, $deplinks, $nodes, $package);
                 }
+
                 if (isset($pdeps['group'])) {
                     if (!isset($pdeps['group'][0])) {
                         $pdeps['group'] = array($pdeps['group']);
                     }
+
                     foreach ($pdeps['group'] as $group) {
                         if (isset($group['package'])) {
                             $t = $group['package'];
                             if (!isset($t[0])) {
                                 $t = array($t);
                             }
+
                             $this->_setupGraph($t, $reg, $deplinks, $nodes, $package);
                         }
                     }
                 }
             }
         }
+
         $this->_detectDepCycle($deplinks);
         foreach ($deplinks as $dependent => $parents) {
             foreach ($parents as $parent => $unused) {
                 $nodes[$dependent]->connectTo($nodes[$parent]);
             }
         }
+
         $installOrder = Structures_Graph_Manipulator_TopologicalSorter::sort($depgraph);
         $ret = array();
         for ($i = 0; $i < count($installOrder); $i++) {
@@ -1342,6 +1361,7 @@ class PEAR_Downloader extends PEAR_Common
                           ))]->getData();
             }
         }
+
         $packages = $ret;
         return;
     }

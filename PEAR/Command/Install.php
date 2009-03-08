@@ -647,7 +647,6 @@ Run post-installation scripts in package <package>, if any exist.
                 array_map(array($reg, 'parsedPackageNameToString'), $abstractpackages);
         }
 
-
         $packages = array_merge($abstractpackages, $otherpackages);
         if (!count($packages)) {
             $c = '';
@@ -720,6 +719,7 @@ Run post-installation scripts in package <package>, if any exist.
                         $this->ui->outputData('ERROR: ' .$oldinfo->getMessage());
                         continue;
                     }
+
                     // we just installed a different package than requested,
                     // let's change the param and info so that the rest of this works
                     $param = $info[0];
