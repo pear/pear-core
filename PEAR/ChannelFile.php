@@ -631,12 +631,14 @@ class PEAR_ChannelFile
                     array('package' => $content));
             }
         }
-        if (isset($info['servers']['primary']['attribs']['port']) &&
+
+        if (isset($info['servers']['primary']['attribs'], $info['servers']['primary']['attribs']['port']) &&
               !is_numeric($info['servers']['primary']['attribs']['port'])) {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_PORT,
                 array('port' => $info['servers']['primary']['attribs']['port']));
         }
-        if (isset($info['servers']['primary']['attribs']['ssl']) &&
+
+        if (isset($info['servers']['primary']['attribs'], $info['servers']['primary']['attribs']['ssl']) &&
               $info['servers']['primary']['attribs']['ssl'] != 'yes') {
             $this->_validateError(PEAR_CHANNELFILE_ERROR_INVALID_SSL,
                 array('ssl' => $info['servers']['primary']['attribs']['ssl'],
