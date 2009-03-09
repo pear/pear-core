@@ -474,7 +474,7 @@ parameter.
         }
 
         $savechannel = $channel = $this->config->get('default_channel');
-        $package = $params[0];
+        $package = strtolower($params[0]);
         $summary = isset($params[1]) ? $params[1] : false;
         if (isset($options['channel'])) {
             $reg = &$this->config->getRegistry();
