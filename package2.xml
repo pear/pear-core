@@ -137,9 +137,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Fix Bug #15979: Package files incorrectly removed when splitting a package into multiple pkgs [dufuz]
   * Fix Bug #15914: pear upgrade installs different version if desired version not found [dufuz]
 
-  PEAR_PackageFile_Generator_v2_XML_Util removed in favor of syncing with latest XML_Util which does
-  everything the forked version had altered.
-
   NOTE!
   Functions that have been deprecated for 3+ years in PEAR_Common, please take a moment
   to migrate over to one of the alternatives that have ben provided:
@@ -160,7 +157,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   to upgrade to this release but no guarantees will be made that it will work properly.
 
   Support for XML RPC channels has been dropped - The only ones that used it
-  (pear.php.net and pecl.php.net) have used the REST interface for years now
+  (pear.php.net and pecl.php.net) have used the REST interface for years now.
+  SOAP support also removed as it was only proof of concept.
 
   Move codebase from the PHP License to New BSD 2 clause license
  </notes>
