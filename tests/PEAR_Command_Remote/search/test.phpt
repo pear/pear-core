@@ -124,44 +124,6 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/archive_tar/allreleases.xml"
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/archive_tar/deps.1.3.2.txt", 'a:1:{s:8:"required";a:2:{s:3:"php";a:1:{s:3:"min";s:5:"4.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0b1";}}}', 'text/xml');
 
 
-/*
-$pearweb->addXmlrpcConfig("pear.php.net", "package.search",     array('Ar', false, true, true, true),     array(
-    'Archive_Tar' =>
-        array(
-        'packageid' =>
-            "24",
-        'categoryid' =>
-            "33",
-        'category' =>
-            "File Formats",
-        'license' =>
-            "PHP License",
-        'summary' =>
-            "Tar file management class",
-        'description' =>
-            "This class provides handling of tar files in PHP.
-It supports creating, listing, extracting and adding to tar files.
-Gzip support is available if PHP has the zlib extension built-in or
-loaded. Bz2 compression is also supported with the bz2 extension loaded.",
-        'lead' =>
-            "vblavet",
-        'stable' =>
-            "1.2",
-        'unstable' =>
-            false,
-        'state' =>
-            "stable",
-        'deps' =>
-            array(
-            ),
-        ),
-    )
-);
-$pearweb->addXmlrpcConfig("pear.php.net", "package.search",     array('XZ', false, true, true, true),     array(
-    )
-);
-*/
-
 $e = $command->run('search', array(), array('Ar'));
 $phpunit->assertNoErrors('after');
 $phpunit->assertTrue($e, 'after');
@@ -212,7 +174,7 @@ $phpunit->assertEquals(array (
   ),
   1 =>
    array (
-    'info' => 'no packages found that match pattern "XZ", for channel pear.php.net.',
+    'info' => 'no packages found that match pattern "xz", for channel pear.php.net.',
     'cmd' => 'no command',
    ),
 ), $fakelog->getLog(), 'log notfound');
