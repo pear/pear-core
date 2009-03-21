@@ -92,7 +92,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>New BSD License</license>
   <state>alpha</state>
  <notes>
-empty
+  * Fix Bug #16045: E_Notice: Undefined index: channel in PEAR/DependencyDB.php [dufuz]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
