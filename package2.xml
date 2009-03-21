@@ -96,7 +96,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php New BSD License">New BSD License</license>
  <notes>
-Empty
+  * Fix Bug #16045: E_Notice: Undefined index: channel in PEAR/DependencyDB.php [dufuz]
  </notes>
  <contents>
   <dir name="/">
