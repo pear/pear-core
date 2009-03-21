@@ -228,7 +228,8 @@ class PEAR_DependencyDB
         foreach ($depend as $info) {
             $temp = $this->getDependencies($info);
             foreach ($temp as $dep) {
-                if (strtolower($dep['dep']['channel']) == $channel &&
+                if (isset($dep['dep'], $dep['dep']['channel'], $dep['dep']['name']) &&
+                      strtolower($dep['dep']['channel']) == $channel &&
                       strtolower($dep['dep']['name']) == $package
                 ) {
                     if (!isset($dependencies[$info['channel']])) {
