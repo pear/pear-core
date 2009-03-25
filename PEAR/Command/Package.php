@@ -385,9 +385,9 @@ used for automated conversion or learning the format.
             return $this->raiseError("$command: missing parameter: $help[0]");
         }
 
-        $file = realpath($params[0]);
+        $packageFile = realpath($params[0]);
         $obj  = &$this->getPackageFile($this->config, $this->_debug);
-        $info = $obj->fromAnyFile($file, PEAR_VALIDATE_NORMAL);
+        $info = $obj->fromAnyFile($packageFile, PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
@@ -437,7 +437,12 @@ used for automated conversion or learning the format.
             $files = array_merge($files, $params);
         }
 
+        $dir = dirname($packageFile);
+        $dir = substr($dir, strrpos($dir, '/') + 1);
         foreach ($files as $file) {
+            if (!file_exists($file)) {
+                $file = $dir . DIRECTORY_SEPARATOR . $file;
+            }
             $command .= ' ' . escapeshellarg($file);
         }
 
