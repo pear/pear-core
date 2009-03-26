@@ -126,6 +126,14 @@ class PEAR_REST
             switch ($headers['content-type']) {
                 case 'text/xml' :
                 case 'application/xml' :
+                case 'text/plain' :
+                    if ($headers['content-type'] === 'text/plain') {
+                        $check = substr($content, 0, 5);
+                        if ($check !== '<?xml') {
+                            break;
+                        }
+                    }
+
                     $parser = new PEAR_XMLParser;
                     PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                     $err = $parser->parse($content);
