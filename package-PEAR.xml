@@ -94,6 +94,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
  <notes>
   * Fix Bug #14331: pear cvstag only works from inside the package directory [dufuz]
   * Fix Bug #16045: E_Notice: Undefined index: channel in PEAR/DependencyDB.php [dufuz]
+
+  * Implemented Request #11230: better error message when mirror not in channel.xml file [dufuz]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
