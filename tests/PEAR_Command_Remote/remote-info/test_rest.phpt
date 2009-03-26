@@ -4396,12 +4396,28 @@ before compiling it.',
         ),
         '1.2b3' =>
         array (
-          'doneby' => '<',
-          'license' => '<',
-          'summary' => '<',
-          'description' => '<',
-          'releasedate' => '<',
-          'releasenotes' => '<',
+          'doneby' => 'cox',
+          'license' => 'PHP License',
+          'summary' => 'PEAR Base System',
+          'description' => 'The PEAR package contains:
+ * the PEAR base class
+ * the PEAR_Error error handling mechanism
+ * the PEAR installer, for creating, distributing
+   and installing packages',
+          'releasedate' => '2003-08-03 19:45:00',
+          'releasenotes' => '* Changed license from PHP 2.02 to 3.0
+* Added support for optional dependencies
+* Made upgrade and uninstall package case insensitive
+* pear makerpm, now works and generates a better system independant spec file
+* pear install|build pecl-package, now exposes the compilation progress
+* Installer now checks dependencies on package uninstall
+* Added proxy support for remote commands using the xmlrcp C ext (Adam Ashley)
+* Added the command "download-all" (Alex Merz)
+* Made package dependency checking back to work
+* Added support for spaces in path names (Greg)
+* Added new pear "bundle" command, which downloads and uncompress a PECL package.
+The main purpouse of this command is for easily adding extensions to the PHP sources
+before compiling it.',
           'state' => 'beta',
           'deps' =>
           array (
