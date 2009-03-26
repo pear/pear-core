@@ -100,6 +100,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Fix Bug #16045: E_Notice: Undefined index: channel in PEAR/DependencyDB.php [dufuz]
 
   * Implemented Request #11230: better error message when mirror not in channel.xml file [dufuz]
+  * Implemented Request #13150: Add support for following HTTP 302 redirects [dufuz]
  </notes>
  <contents>
   <dir name="/">
