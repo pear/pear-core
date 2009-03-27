@@ -87,10 +87,10 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.8.0alpha2</version>
-  <date>2009-03-09</date>
+  <version>1.8.0RC1</version>
+  <date>2009-03-27</date>
   <license>New BSD License</license>
-  <state>alpha</state>
+  <state>beta</state>
  <notes>
   * Fix Bug #14331: pear cvstag only works from inside the package directory [dufuz]
   * Fix Bug #16045: E_Notice: Undefined index: channel in PEAR/DependencyDB.php [dufuz]
