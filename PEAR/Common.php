@@ -154,11 +154,6 @@ class PEAR_Common extends PEAR
     var $current_path = null;
 
     /**
-     * PEAR_SourceAnalyzer instance
-     * @var object
-     */
-    var $source_analyzer = null;
-    /**
      * Flag variable used to mark a valid package file
      * @var boolean
      * @access private
