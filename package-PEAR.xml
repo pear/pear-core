@@ -87,17 +87,11 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.8.0RC1</version>
+  <version>1.8.0RC2</version>
   <date>2009-03-27</date>
   <license>New BSD License</license>
   <state>beta</state>
  <notes>
-  * Fix Bug #14331: pear cvstag only works from inside the package directory [dufuz]
-  * Fix Bug #16045: E_Notice: Undefined index: channel in PEAR/DependencyDB.php [dufuz]
-
-  * Implemented Request #11230: better error message when mirror not in channel.xml file [dufuz]
-  * Implemented Request #13150: Add support for following HTTP 302 redirects [dufuz]
-
   Remove custom XML_Util class in favor of using upstream XML_Util package as dependency
  </notes>
   <provides type="class" name="OS_Guess"/>
@@ -664,6 +658,19 @@ http://pear.php.net/dtd/package-1.0.xsd">
 
   Move codebase from the PHP License to New BSD 2 clause license
  </notes>
+  </release>
+  <release>
+   <version>1.8.0RC1</version>
+   <date>2009-03-27</date>
+   <license>New BSD License</license>
+   <state>beta</state>
+   <notes>
+  * Fix Bug #14331: pear cvstag only works from inside the package directory [dufuz]
+  * Fix Bug #16045: E_Notice: Undefined index: channel in PEAR/DependencyDB.php [dufuz]
+
+  * Implemented Request #11230: better error message when mirror not in channel.xml file [dufuz]
+  * Implemented Request #13150: Add support for following HTTP 302 redirects [dufuz]
+   </notes>
   </release>
  </changelog>
 </package>
