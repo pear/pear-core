@@ -97,6 +97,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
 
   * Implemented Request #11230: better error message when mirror not in channel.xml file [dufuz]
   * Implemented Request #13150: Add support for following HTTP 302 redirects [dufuz]
+
+  Remove custom XML_Util class in favor of using upstream XML_Util package as dependency
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
