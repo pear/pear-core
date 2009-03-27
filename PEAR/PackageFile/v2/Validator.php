@@ -1846,15 +1846,19 @@ class PEAR_PackageFile_v2_Validator
                 'Parser error: token_get_all() function must exist to analyze source code, PHP may have been compiled with --disable-tokenizer');
             return false;
         }
+
         if (!defined('T_DOC_COMMENT')) {
             define('T_DOC_COMMENT', T_COMMENT);
         }
+
         if (!defined('T_INTERFACE')) {
             define('T_INTERFACE', -1);
         }
+
         if (!defined('T_IMPLEMENTS')) {
             define('T_IMPLEMENTS', -1);
         }
+
         if ($string) {
             $contents = $file;
         } else {
@@ -1868,12 +1872,13 @@ class PEAR_PackageFile_v2_Validator
         // Silence this function so we can catch PHP Warnings and show our own custom message
         $tokens = @token_get_all($contents);
         if (isset($php_errormsg)) {
-            $pn = $this->_pf->getPackage();
-            $this->_stack->push(__FUNCTION__, 'warning',
-                    array('file' => $file, 'package' => $pn),
-                    'in %file%: Could not process file for unkown reasons,' .
-                    ' possibly a PHP parse error in %file% from %package%');
-
+            if (isset($this->_stack)) {
+                $pn = $this->_pf->getPackage();
+                $this->_stack->push(__FUNCTION__, 'warning',
+                        array('file' => $file, 'package' => $pn),
+                        'in %file%: Could not process file for unkown reasons,' .
+                        ' possibly a PHP parse error in %file% from %package%');
+            }
         }
 /*
         for ($i = 0; $i < sizeof($tokens); $i++) {
@@ -1914,6 +1919,7 @@ class PEAR_PackageFile_v2_Validator
                 $token = $tokens[$i];
                 $data = '';
             }
+
             if ($inquote) {
                 if ($token != '"' && $token != T_END_HEREDOC) {
                     continue;
@@ -1922,6 +1928,7 @@ class PEAR_PackageFile_v2_Validator
                     continue;
                 }
             }
+
             switch ($token) {
                 case T_WHITESPACE :
                     continue;
@@ -1957,8 +1964,14 @@ class PEAR_PackageFile_v2_Validator
                     $interface = true;
                 case T_CLASS:
                     if (($current_class_level != -1) || ($current_function_level != -1)) {
-                        $this->_stack->push(__FUNCTION__, 'error', array('file' => $file),
-                        'Parser error: invalid PHP found in file "%file%"');
+                        if (isset($this->_stack)) {
+                            $this->_stack->push(__FUNCTION__, 'error', array('file' => $file),
+                            'Parser error: invalid PHP found in file "%file%"');
+                        } else {
+                            PEAR::raiseError("Parser error: invalid PHP found in file \"$file\"",
+                                PEAR_COMMON_ERROR_INVALIDPHP);
+                        }
+
                         return false;
                     }
                 case T_FUNCTION:
@@ -1972,13 +1985,21 @@ class PEAR_PackageFile_v2_Validator
                         if (in_array(strtolower($data),
                             array('public', 'private', 'protected', 'abstract',
                                   'interface', 'implements', 'throw')
-                                 )) {
-                            $this->_stack->push(__FUNCTION__, 'warning', array(
-                                'file' => $file),
-                                'Error, PHP5 token encountered in %file%,' .
-                                ' analysis should be in PHP5');
+                                 )
+                        ) {
+                            if (isset($this->_stack)) {
+                                $this->_stack->push(__FUNCTION__, 'warning', array(
+                                    'file' => $file),
+                                    'Error, PHP5 token encountered in %file%,' .
+                                    ' analysis should be in PHP5');
+                            } else {
+                                PEAR::raiseError('Error: PHP5 token encountered in ' . $file .
+                                    'packaging should be done in PHP 5');
+                                return false;
+                            }
                         }
                     }
+
                     if ($look_for == T_CLASS) {
                         $current_class = $data;
                         $current_class_level = $brace_level;
@@ -2002,11 +2023,13 @@ class PEAR_PackageFile_v2_Validator
                             $current_function = $data;
                             $declared_functions[] = $current_function;
                         }
+
                         $current_function_level = $brace_level;
                         $m = array();
                     } elseif ($look_for == T_NEW) {
                         $used_classes[$data] = true;
                     }
+
                     $look_for = 0;
                     continue 2;
                 case T_VARIABLE:
@@ -2023,17 +2046,26 @@ class PEAR_PackageFile_v2_Validator
                     continue 2;
                 case T_DOUBLE_COLON:
                     if (!($tokens[$i - 1][0] == T_WHITESPACE || $tokens[$i - 1][0] == T_STRING)) {
-                        $this->_stack->push(__FUNCTION__, 'warning', array('file' => $file),
-                            'Parser error: invalid PHP found in file "%file%"');
+                        if (isset($this->_stack)) {
+                            $this->_stack->push(__FUNCTION__, 'warning', array('file' => $file),
+                                'Parser error: invalid PHP found in file "%file%"');
+                        } else {
+                            PEAR::raiseError("Parser error: invalid PHP found in file \"$file\"",
+                                PEAR_COMMON_ERROR_INVALIDPHP);
+                        }
+
                         return false;
                     }
+
                     $class = $tokens[$i - 1][1];
                     if (strtolower($class) != 'parent') {
                         $used_classes[$class] = true;
                     }
+
                     continue 2;
             }
         }
+
         return array(
             "source_file" => $file,
             "declared_classes" => $declared_classes,
@@ -2043,7 +2075,7 @@ class PEAR_PackageFile_v2_Validator
             "used_classes" => array_diff(array_keys($used_classes), $nodeps),
             "inheritance" => $extends,
             "implements" => $implements,
-            );
+        );
     }
 
     /**

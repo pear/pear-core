@@ -192,6 +192,7 @@ class PEAR_Common extends PEAR
                 if (!class_exists('System')) {
                     require_once 'System.php';
                 }
+
                 System::rm(array('-rf', $file));
             } elseif (file_exists($file)) {
                 unlink($file);
@@ -255,6 +256,7 @@ class PEAR_Common extends PEAR
             if (!class_exists('PEAR_Frontend')) {
                 require_once 'PEAR/Frontend.php';
             }
+
             $ui = &PEAR_Frontend::singleton();
             if (is_a($ui, 'PEAR_Frontend')) {
                 $ui->log($msg, $append_crlf);
@@ -277,18 +279,16 @@ class PEAR_Common extends PEAR
      */
     function mkTempDir($tmpdir = '')
     {
-        if ($tmpdir) {
-            $topt = array('-t', $tmpdir);
-        } else {
-            $topt = array();
-        }
+        $topt = $tmpdir ? array('-t', $tmpdir) : array();
         $topt = array_merge($topt, array('-d', 'pear'));
         if (!class_exists('System')) {
             require_once 'System.php';
         }
+
         if (!$tmpdir = System::mktemp($topt)) {
             return false;
         }
+
         $this->addTempFile($tmpdir);
         return $tmpdir;
     }
@@ -452,6 +452,7 @@ class PEAR_Common extends PEAR
         if (file_exists($path) && is_readable($path)) {
             return true;
         }
+
         $ipath = explode(PATH_SEPARATOR, ini_get('include_path'));
         foreach ($ipath as $include) {
             $test = realpath($include . DIRECTORY_SEPARATOR . $path);
@@ -459,6 +460,7 @@ class PEAR_Common extends PEAR
                 return true;
             }
         }
+
         return false;
     }
 
@@ -485,8 +487,10 @@ class PEAR_Common extends PEAR
                     $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
                 }
             }
+
             return $pf;
         }
+
         return $this->_postProcessValidPackagexml($pf);
     }
 
@@ -513,8 +517,10 @@ class PEAR_Common extends PEAR
                     $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
                 }
             }
+
             return $pf;
         }
+
         return $this->_postProcessValidPackagexml($pf);
     }
 
@@ -541,8 +547,10 @@ class PEAR_Common extends PEAR
                     $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
                 }
             }
+
             return $pf;
         }
+
         return $this->_postProcessValidPackagexml($pf);
     }
 
@@ -606,10 +614,13 @@ class PEAR_Common extends PEAR
                         $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
                     }
                 }
+
                 return $pf;
             }
+
             return $this->_postProcessValidPackagexml($pf);
         }
+
         return $info;
     }
 
@@ -626,7 +637,7 @@ class PEAR_Common extends PEAR
      */
     function xmlFromInfo($pkginfo)
     {
-        $config = &PEAR_Config::singleton();
+        $config      = &PEAR_Config::singleton();
         $packagefile = &new PEAR_PackageFile($config);
         $pf = &$packagefile->fromArray($pkginfo);
         $gen = &$pf->getDefaultGenerator();
@@ -648,7 +659,7 @@ class PEAR_Common extends PEAR
      */
     function validatePackageInfo($info, &$errors, &$warnings, $dir_prefix = '')
     {
-        $config = &PEAR_Config::singleton();
+        $config      = &PEAR_Config::singleton();
         $packagefile = &new PEAR_PackageFile($config);
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         if (strpos($info, '<?xml') !== false) {
@@ -656,6 +667,7 @@ class PEAR_Common extends PEAR
         } else {
             $pf = &$packagefile->fromAnyFile($info, PEAR_VALIDATE_NORMAL);
         }
+
         PEAR::staticPopErrorHandling();
         if (PEAR::isError($pf)) {
             $errs = $pf->getUserinfo();
@@ -668,8 +680,10 @@ class PEAR_Common extends PEAR
                     }
                 }
             }
+
             return false;
         }
+
         return true;
     }
 
@@ -699,12 +713,14 @@ class PEAR_Common extends PEAR
         if (isset($this->_packageName)) {
             $pn = $this->_packageName;
         }
+
         $pnl = strlen($pn);
         foreach ($srcinfo['declared_classes'] as $class) {
             $key = "class;$class";
             if (isset($this->pkginfo['provides'][$key])) {
                 continue;
             }
+
             $this->pkginfo['provides'][$key] =
                 array('file'=> $file, 'type' => 'class', 'name' => $class);
             if (isset($srcinfo['inheritance'][$class])) {
@@ -712,6 +728,7 @@ class PEAR_Common extends PEAR
                     $srcinfo['inheritance'][$class];
             }
         }
+
         foreach ($srcinfo['declared_methods'] as $class => $methods) {
             foreach ($methods as $method) {
                 $function = "$class::$method";
@@ -720,6 +737,7 @@ class PEAR_Common extends PEAR
                     isset($this->pkginfo['provides'][$key])) {
                     continue;
                 }
+
                 $this->pkginfo['provides'][$key] =
                     array('file'=> $file, 'type' => 'function', 'name' => $function);
             }
@@ -730,9 +748,11 @@ class PEAR_Common extends PEAR
             if ($function{0} == '_' || isset($this->pkginfo['provides'][$key])) {
                 continue;
             }
+
             if (!strstr($function, '::') && strncasecmp($function, $pn, $pnl)) {
                 $warnings[] = "in1 " . $file . ": function \"$function\" not prefixed with package name \"$pn\"";
             }
+
             $this->pkginfo['provides'][$key] =
                 array('file'=> $file, 'type' => 'function', 'name' => $function);
         }
@@ -747,191 +767,12 @@ class PEAR_Common extends PEAR
      */
     function analyzeSourceCode($file)
     {
-        if (!function_exists("token_get_all")) {
-            return false;
+        if (!class_exists('PEAR_PackageFile_v2_Validator')) {
+            require_once 'PEAR/PackageFile/v2/Validator.php';
         }
-        if (!defined('T_DOC_COMMENT')) {
-            define('T_DOC_COMMENT', T_COMMENT);
-        }
-        if (!defined('T_INTERFACE')) {
-            define('T_INTERFACE', -1);
-        }
-        if (!defined('T_IMPLEMENTS')) {
-            define('T_IMPLEMENTS', -1);
-        }
-        if (!$fp = @fopen($file, "r")) {
-            return false;
-        }
-        fclose($fp);
-        $contents = file_get_contents($file);
-        $tokens = token_get_all($contents);
-/*
-        for ($i = 0; $i < sizeof($tokens); $i++) {
-            @list($token, $data) = $tokens[$i];
-            if (is_string($token)) {
-                var_dump($token);
-            } else {
-                print token_name($token) . ' ';
-                var_dump(rtrim($data));
-            }
-        }
-*/
-        $look_for = 0;
-        $paren_level = 0;
-        $bracket_level = 0;
-        $brace_level = 0;
-        $lastphpdoc = '';
-        $current_class = '';
-        $current_interface = '';
-        $current_class_level = -1;
-        $current_function = '';
-        $current_function_level = -1;
-        $declared_classes = array();
-        $declared_interfaces = array();
-        $declared_functions = array();
-        $declared_methods = array();
-        $used_classes = array();
-        $used_functions = array();
-        $extends = array();
-        $implements = array();
-        $nodeps = array();
-        $inquote = false;
-        $interface = false;
-        for ($i = 0; $i < sizeof($tokens); $i++) {
-            if (is_array($tokens[$i])) {
-                list($token, $data) = $tokens[$i];
-            } else {
-                $token = $tokens[$i];
-                $data = '';
-            }
-            if ($inquote) {
-                if ($token != '"') {
-                    continue;
-                } else {
-                    $inquote = false;
-                    continue;
-                }
-            }
-            switch ($token) {
-                case T_WHITESPACE:
-                    continue;
-                case ';':
-                    if ($interface) {
-                        $current_function = '';
-                        $current_function_level = -1;
-                    }
-                    break;
-                case '"':
-                    $inquote = true;
-                    break;
-                case T_CURLY_OPEN:
-                case T_DOLLAR_OPEN_CURLY_BRACES:
-                case '{': $brace_level++; continue 2;
-                case '}':
-                    $brace_level--;
-                    if ($current_class_level == $brace_level) {
-                        $current_class = '';
-                        $current_class_level = -1;
-                    }
-                    if ($current_function_level == $brace_level) {
-                        $current_function = '';
-                        $current_function_level = -1;
-                    }
-                    continue 2;
-                case '[': $bracket_level++; continue 2;
-                case ']': $bracket_level--; continue 2;
-                case '(': $paren_level++;   continue 2;
-                case ')': $paren_level--;   continue 2;
-                case T_INTERFACE:
-                    $interface = true;
-                case T_CLASS:
-                    if (($current_class_level != -1) || ($current_function_level != -1)) {
-                        PEAR::raiseError("Parser error: invalid PHP found in file \"$file\"",
-                            PEAR_COMMON_ERROR_INVALIDPHP);
-                        return false;
-                    }
-                case T_FUNCTION:
-                case T_NEW:
-                case T_EXTENDS:
-                case T_IMPLEMENTS:
-                    $look_for = $token;
-                    continue 2;
-                case T_STRING:
-                    if (version_compare(zend_version(), '2.0', '<')) {
-                        if (in_array(strtolower($data),
-                            array('public', 'private', 'protected', 'abstract',
-                                  'interface', 'implements', 'throw')
-                                 )) {
-                            PEAR::raiseError('Error: PHP5 token encountered in ' . $file .
-                            'packaging should be done in PHP 5');
-                            return false;
-                        }
-                    }
-                    if ($look_for == T_CLASS) {
-                        $current_class = $data;
-                        $current_class_level = $brace_level;
-                        $declared_classes[] = $current_class;
-                    } elseif ($look_for == T_INTERFACE) {
-                        $current_interface = $data;
-                        $current_class_level = $brace_level;
-                        $declared_interfaces[] = $current_interface;
-                    } elseif ($look_for == T_IMPLEMENTS) {
-                        $implements[$current_class] = $data;
-                    } elseif ($look_for == T_EXTENDS) {
-                        $extends[$current_class] = $data;
-                    } elseif ($look_for == T_FUNCTION) {
-                        if ($current_class) {
-                            $current_function = "$current_class::$data";
-                            $declared_methods[$current_class][] = $data;
-                        } elseif ($current_interface) {
-                            $current_function = "$current_interface::$data";
-                            $declared_methods[$current_interface][] = $data;
-                        } else {
-                            $current_function = $data;
-                            $declared_functions[] = $current_function;
-                        }
-                        $current_function_level = $brace_level;
-                        $m = array();
-                    } elseif ($look_for == T_NEW) {
-                        $used_classes[$data] = true;
-                    }
-                    $look_for = 0;
-                    continue 2;
-                case T_VARIABLE:
-                    $look_for = 0;
-                    continue 2;
-                case T_DOC_COMMENT:
-                case T_COMMENT:
-                    if (preg_match('!^/\*\*\s!', $data)) {
-                        $lastphpdoc = $data;
-                        if (preg_match_all('/@nodep\s+(\S+)/', $lastphpdoc, $m)) {
-                            $nodeps = array_merge($nodeps, $m[1]);
-                        }
-                    }
-                    continue 2;
-                case T_DOUBLE_COLON:
-                    if (!($tokens[$i - 1][0] == T_WHITESPACE || $tokens[$i - 1][0] == T_STRING)) {
-                        PEAR::raiseError("Parser error: invalid PHP found in file \"$file\"",
-                            PEAR_COMMON_ERROR_INVALIDPHP);
-                        return false;
-                    }
-                    $class = $tokens[$i - 1][1];
-                    if (strtolower($class) != 'parent') {
-                        $used_classes[$class] = true;
-                    }
-                    continue 2;
-            }
-        }
-        return array(
-            "source_file" => $file,
-            "declared_classes" => $declared_classes,
-            "declared_interfaces" => $declared_interfaces,
-            "declared_methods" => $declared_methods,
-            "declared_functions" => $declared_functions,
-            "used_classes" => array_diff(array_keys($used_classes), $nodeps),
-            "inheritance" => $extends,
-            "implements" => $implements,
-            );
+
+        $a = new PEAR_PackageFile_v2_Validator;
+        return $a->analyzeSourceCode($file);
     }
 
     function detectDependencies($any, $status_callback = null)
