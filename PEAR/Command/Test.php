@@ -116,7 +116,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
         $log = new PEAR_Common;
         $log->ui = &$this->ui; // slightly hacky, but it will work
         $tests = array();
-        $depth = isset($options['recur']) ? 4 : 1;
+        $depth = isset($options['recur']) ? 14 : 1;
 
         if (!count($params)) {
             $params[] = '.';
@@ -174,9 +174,12 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                     continue;
                 }
 
-                $dir = System::find(array($p, '-type', 'f',
-                                            '-maxdepth', $depth,
-                                            '-name', '*.phpt'));
+                $args  = array($p, '-type', 'f', '-name', '*.phpt');
+                if (!isset($options['recur'])) {
+                    $args[] = '-maxdepth';
+                    $args[] = 1;
+                }
+                $dir   = System::find($args);
                 $tests = array_merge($tests, $dir);
             } else {
                 if (isset($options['phpunit'])) {
@@ -199,9 +202,14 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                 if (!preg_match('/\.phpt\\z/', $p)) {
                     $p .= '.phpt';
                 }
-                $dir = System::find(array(dirname($p), '-type', 'f',
-                                            '-maxdepth', $depth,
-                                            '-name', $p));
+
+
+                $args  = array(dirname($p), '-type', 'f', '-name', $p);
+                if (!isset($options['recur'])) {
+                    $args[] = '-maxdepth';
+                    $args[] = 1;
+                }
+                $dir   = System::find($args);
                 $tests = array_merge($tests, $dir);
             }
         }
