@@ -66,22 +66,12 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         }
     }
 
-    function _displayLine($text)
-    {
-        print "$this->lp$text\n";
-    }
-
-    function _display($text)
-    {
-        print $text;
-    }
-
     /**
      * @param object PEAR_Error object
      */
-    function displayError($eobj)
+    function displayError($e)
     {
-        return $this->_displayLine($eobj->getMessage());
+        return $this->_displayLine($e->getMessage());
     }
 
     /**
@@ -98,40 +88,29 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                     exit(1);
                 }
 
-                $trace = debug_backtrace();
                 $raised = false;
-                foreach ($trace as $i => $frame) {
+                foreach (debug_backtrace() as $i => $frame) {
                     if (!$raised) {
-                        if (isset($frame['class']) && strtolower($frame['class']) ==
-                              'pear' && strtolower($frame['function']) == 'raiseerror') {
+                        if (isset($frame['class'])
+                            && strtolower($frame['class']) == 'pear'
+                            && strtolower($frame['function']) == 'raiseerror'
+                        ) {
                             $raised = true;
                         } else {
                             continue;
                         }
                     }
-                    if (!isset($frame['class'])) {
-                        $frame['class'] = '';
-                    }
-                    if (!isset($frame['type'])) {
-                        $frame['type'] = '';
-                    }
-                    if (!isset($frame['function'])) {
-                        $frame['function'] = '';
-                    }
-                    if (!isset($frame['line'])) {
-                        $frame['line'] = '';
-                    }
+
+                    $frame['class']    = !isset($frame['class'])    ? '' : $frame['class'];
+                    $frame['type']     = !isset($frame['type'])     ? '' : $frame['type'];
+                    $frame['function'] = !isset($frame['function']) ? '' : $frame['function'];
+                    $frame['line']     = !isset($frame['line'])     ? '' : $frame['line'];
                     $this->_displayLine("#$i: $frame[class]$frame[type]$frame[function] $frame[line]");
                 }
             }
         }
-        exit(1);
-    }
 
-    function _displayHeading($title)
-    {
-        print $this->lp.$this->bold($title)."\n";
-        print $this->lp.str_repeat("=", strlen($title))."\n";
+        exit(1);
     }
 
     /**
@@ -235,7 +214,8 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                             if (!is_array($var) || !isset($var['prompt']) ||
                                   !isset($var['name']) ||
                                   ($var['name'] != $group['param'][$i]['name']) ||
-                                  ($var['type'] != $group['param'][$i]['type'])) {
+                                  ($var['type'] != $group['param'][$i]['type'])
+                            ) {
                                 $this->outputData('postinstall', 'Error: post-install script ' .
                                     'modified the variables or prompts, severe security risk. ' .
                                     'Will instead use the defaults from the package.xml');
@@ -254,6 +234,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 if (!isset($answers)) {
                     $answers = array();
                 }
+
                 array_unshift($completedPhases, $group['id']);
                 if (!$script->run($answers, $group['id'])) {
                     $script->run($completedPhases, '_undoOnError');
@@ -274,8 +255,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
      */
     function confirmDialog($params)
     {
-        $answers = array();
-        $prompts = $types = array();
+        $answers = $prompts = $types = array();
         foreach ($params as $param) {
             $prompts[$param['name']] = $param['prompt'];
             $types[$param['name']]   = $param['type'];
@@ -295,7 +275,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             }
 
             $answers = $this->userDialog('', $prompts, $types, $answers);
-            $tried = true;
+            $tried   = true;
         } while (is_array($answers) && count(array_filter($answers)) != count($prompts));
 
         return $answers;
@@ -308,16 +288,12 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         }
 
         $testprompts = array_keys($prompts);
-        $result = $defaults;
-
-        if (!defined('STDIN')) {
-            define('STDIN', fopen('php://stdin', 'r'));
-        }
+        $result      = $defaults;
 
         reset($prompts);
-        if (count($prompts) === 1 && $types[key($prompts)] == 'yesno') {
+        if (count($prompts) === 1) {
             foreach ($prompts as $key => $prompt) {
-                $type = $types[$key];
+                $type    = $types[$key];
                 $default = @$defaults[$key];
                 print "$prompt ";
                 if ($default) {
@@ -325,13 +301,10 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                 }
                 print ": ";
 
-                $line = fgets(STDIN, 2048);
-                if ($default && trim($line) == "") {
-                    $result[$key] = $default;
-                } else {
-                    $result[$key] = trim($line);
-                }
+                $line         = fgets(STDIN, 2048);
+                $result[$key] =  ($default && trim($line) == '') ? $default : trim($line);
             }
+
             return $result;
         }
 
@@ -339,7 +312,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         while (true) {
             $descLength = max(array_map('strlen', $prompts));
             $descFormat = "%-{$descLength}s";
-            $last = count($prompts);
+            $last       = count($prompts);
 
             $i = 0;
             foreach ($prompts as $n => $var) {
@@ -358,8 +331,8 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             }
 
             if (isset($testprompts[(int)$tmp - 1])) {
-                $var  = $testprompts[(int)$tmp - 1];
-                $desc = $prompts[$var];
+                $var     = $testprompts[(int)$tmp - 1];
+                $desc    = $prompts[$var];
                 $current = @$result[$var];
                 print "$desc [$current] : ";
                 $tmp = trim(fgets(STDIN, 1024));
@@ -378,10 +351,6 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             }
 
             $first_run = false;
-        }
-
-        if (!defined('STDOUT')) {
-            fclose(STDIN);
         }
 
         return $result;
@@ -412,6 +381,172 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         return false;
     }
 
+    function outputData($data, $command = '_default')
+    {
+        switch ($command) {
+            case 'channel-info':
+                foreach ($data as $type => $section) {
+                    if ($type == 'main') {
+                        $section['data'] = array_values($section['data']);
+                    }
+
+                    $this->outputData($section);
+                }
+                break;
+            case 'install':
+            case 'upgrade':
+            case 'upgrade-all':
+                if (isset($data['release_warnings'])) {
+                    $this->_displayLine('');
+                    $this->_startTable(array(
+                        'border' => false,
+                        'caption' => 'Release Warnings'
+                    ));
+                    $this->_tableRow(array($data['release_warnings']), null, array(1 => array('wrap' => 55)));
+                    $this->_endTable();
+                    $this->_displayLine('');
+                }
+
+                $this->_displayLine($data['data']);
+                break;
+            case 'search':
+                $this->_startTable($data);
+                if (isset($data['headline']) && is_array($data['headline'])) {
+                    $this->_tableRow($data['headline'], array('bold' => true), array(1 => array('wrap' => 55)));
+                }
+
+                foreach($data['data'] as $category) {
+                    foreach($category as $pkg) {
+                        $this->_tableRow($pkg, null, array(1 => array('wrap' => 55)));
+                    }
+                }
+
+                $this->_endTable();
+                break;
+            case 'list-all':
+                if (!isset($data['data'])) {
+                      $this->_displayLine('No packages in channel');
+                      break;
+                }
+
+                $this->_startTable($data);
+                if (isset($data['headline']) && is_array($data['headline'])) {
+                    $this->_tableRow($data['headline'], array('bold' => true), array(1 => array('wrap' => 55)));
+                }
+
+                foreach($data['data'] as $category) {
+                    foreach($category as $pkg) {
+                        unset($pkg[4], $pkg[5]);
+                        $this->_tableRow($pkg, null, array(1 => array('wrap' => 55)));
+                    }
+                }
+
+                $this->_endTable();
+                break;
+            case 'config-show':
+                $data['border'] = false;
+                $opts = array(
+                    0 => array('wrap' => 30),
+                    1 => array('wrap' => 20),
+                    2 => array('wrap' => 35)
+                );
+
+                $this->_startTable($data);
+                if (isset($data['headline']) && is_array($data['headline'])) {
+                    $this->_tableRow($data['headline'], array('bold' => true), $opts);
+                }
+
+                foreach ($data['data'] as $group) {
+                    foreach ($group as $value) {
+                        if ($value[2] == '') {
+                            $value[2] = "<not set>";
+                        }
+
+                        $this->_tableRow($value, null, $opts);
+                    }
+                }
+
+                $this->_endTable();
+                break;
+            case 'remote-info':
+                $d = $data;
+                $data = array(
+                    'caption' => 'Package details:',
+                    'border'  => false,
+                    'data'    => array(
+                        array("Latest",      $data['stable']),
+                        array("Installed",   $data['installed']),
+                        array("Package",     $data['name']),
+                        array("License",     $data['license']),
+                        array("Category",    $data['category']),
+                        array("Summary",     $data['summary']),
+                        array("Description", $data['description']),
+                    ),
+                );
+
+                if (isset($d['deprecated']) && $d['deprecated']) {
+                    $conf = &PEAR_Config::singleton();
+                    $reg = $conf->getRegistry();
+                    $name = $reg->parsedPackageNameToString($d['deprecated'], true);
+                    $data['data'][] = array('Deprecated! use', $name);
+                }
+            default: {
+                if (is_array($data)) {
+                    $this->_startTable($data);
+                    $count = count($data['data'][0]);
+                    if ($count == 2) {
+                        $opts = array(0 => array('wrap' => 25),
+                                      1 => array('wrap' => 48)
+                        );
+                    } elseif ($count == 3) {
+                        $opts = array(0 => array('wrap' => 30),
+                                      1 => array('wrap' => 20),
+                                      2 => array('wrap' => 35)
+                        );
+                    } else {
+                        $opts = null;
+                    }
+                    if (isset($data['headline']) && is_array($data['headline'])) {
+                        $this->_tableRow($data['headline'],
+                                         array('bold' => true),
+                                         $opts);
+                    }
+
+                    foreach($data['data'] as $row) {
+                        $this->_tableRow($row, null, $opts);
+                    }
+                    $this->_endTable();
+                } else {
+                    $this->_displayLine($data);
+                }
+            }
+        }
+    }
+
+    function log($text, $append_crlf = true)
+    {
+        if ($append_crlf) {
+            return $this->_displayLine($text);
+        }
+
+        return $this->_display($text);
+    }
+
+    function bold($text)
+    {
+        if (empty($this->term['bold'])) {
+            return strtoupper($text);
+        }
+
+        return $this->term['bold'] . $text . $this->term['normal'];
+    }
+
+    function _displayHeading($title)
+    {
+        print $this->lp.$this->bold($title)."\n";
+        print $this->lp.str_repeat("=", strlen($title))."\n";
+    }
+
     function _startTable($params = array())
     {
         $params['table_data'] = array();
@@ -427,7 +562,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         for ($i = 0; $i < count($columns); $i++) {
             $col = &$columns[$i];
             if (isset($colparams[$i]) && !empty($colparams[$i]['wrap'])) {
-                $col = wordwrap($col, $colparams[$i]['wrap'], "\n", 0);
+                $col = wordwrap($col, $colparams[$i]['wrap']);
             }
 
             if (strpos($col, "\n") !== false) {
@@ -460,8 +595,8 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             }
         }
 
-        if (sizeof($columns) > $this->params['ncols']) {
-            $this->params['ncols'] = sizeof($columns);
+        if (count($columns) > $this->params['ncols']) {
+            $this->params['ncols'] = count($columns);
         }
 
         $new_row = array(
@@ -585,152 +720,13 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
         }
     }
 
-    function outputData($data, $command = '_default')
+    function _displayLine($text)
     {
-        switch ($command) {
-            case 'channel-info':
-                foreach ($data as $type => $section) {
-                    if ($type == 'main') {
-                        $section['data'] = array_values($section['data']);
-                    }
-                    $this->outputData($section);
-                }
-                break;
-            case 'install':
-            case 'upgrade':
-            case 'upgrade-all':
-                if (isset($data['release_warnings'])) {
-                    $this->_displayLine('');
-                    $this->_startTable(array(
-                        'border' => false,
-                        'caption' => 'Release Warnings'
-                        ));
-                    $this->_tableRow(array($data['release_warnings']), null, array(1 => array('wrap' => 55)));
-                    $this->_endTable();
-                    $this->_displayLine('');
-                }
-                $this->_displayLine($data['data']);
-                break;
-            case 'search':
-                $this->_startTable($data);
-                if (isset($data['headline']) && is_array($data['headline'])) {
-                    $this->_tableRow($data['headline'], array('bold' => true), array(1 => array('wrap' => 55)));
-                }
-
-                foreach($data['data'] as $category) {
-                    foreach($category as $pkg) {
-                        $this->_tableRow($pkg, null, array(1 => array('wrap' => 55)));
-                    }
-                };
-                $this->_endTable();
-                break;
-            case 'list-all':
-                if (!isset($data['data'])) {
-                      $this->_displayLine('No packages in channel');
-                      break;
-                }
-                $this->_startTable($data);
-                if (isset($data['headline']) && is_array($data['headline'])) {
-                    $this->_tableRow($data['headline'], array('bold' => true), array(1 => array('wrap' => 55)));
-                }
-
-                foreach($data['data'] as $category) {
-                    foreach($category as $pkg) {
-                        unset($pkg[4]);
-                        unset($pkg[5]);
-                        $this->_tableRow($pkg, null, array(1 => array('wrap' => 55)));
-                    }
-                };
-                $this->_endTable();
-                break;
-            case 'config-show':
-                $data['border'] = false;
-                $opts = array(0 => array('wrap' => 30),
-                              1 => array('wrap' => 20),
-                              2 => array('wrap' => 35));
-                $this->_startTable($data);
-                if (isset($data['headline']) && is_array($data['headline'])) {
-                    $this->_tableRow($data['headline'],
-                                     array('bold' => true),
-                                     $opts);
-                }
-                foreach($data['data'] as $group) {
-                    foreach($group as $value) {
-                        if ($value[2] == '') {
-                            $value[2] = "<not set>";
-                        }
-                        $this->_tableRow($value, null, $opts);
-                    }
-                }
-                $this->_endTable();
-                break;
-            case 'remote-info':
-                $d = $data;
-                $data = array(
-                    'caption' => 'Package details:',
-                    'border' => false,
-                    'data' => array(
-                        array("Latest",    $data['stable']),
-                        array("Installed", $data['installed']),
-                        array("Package",   $data['name']),
-                        array("License",   $data['license']),
-                        array("Category",  $data['category']),
-                        array("Summary",   $data['summary']),
-                        array("Description", $data['description']),
-                        ),
-                    );
-                    if (isset($d['deprecated']) && $d['deprecated']) {
-                        $conf = &PEAR_Config::singleton();
-                        $reg = $conf->getRegistry();
-                        $name = $reg->parsedPackageNameToString($d['deprecated'], true);
-                        $data['data'][] = array('Deprecated! use', $name);
-                    }
-            default: {
-                if (is_array($data)) {
-                    $this->_startTable($data);
-                    $count = count($data['data'][0]);
-                    if ($count == 2) {
-                        $opts = array(0 => array('wrap' => 25),
-                                      1 => array('wrap' => 48)
-                        );
-                    } elseif ($count == 3) {
-                        $opts = array(0 => array('wrap' => 30),
-                                      1 => array('wrap' => 20),
-                                      2 => array('wrap' => 35)
-                        );
-                    } else {
-                        $opts = null;
-                    }
-                    if (isset($data['headline']) && is_array($data['headline'])) {
-                        $this->_tableRow($data['headline'],
-                                         array('bold' => true),
-                                         $opts);
-                    }
-
-                    foreach($data['data'] as $row) {
-                        $this->_tableRow($row, null, $opts);
-                    }
-                    $this->_endTable();
-                } else {
-                    $this->_displayLine($data);
-                }
-            }
-        }
+        print "$this->lp$text\n";
     }
 
-    function log($text, $append_crlf = true)
+    function _display($text)
     {
-        if ($append_crlf) {
-            return $this->_displayLine($text);
-        }
-        return $this->_display($text);
-    }
-
-    function bold($text)
-    {
-        if (empty($this->term['bold'])) {
-            return strtoupper($text);
-        }
-        return $this->term['bold'] . $text . $this->term['normal'];
+        print $text;
     }
 }
