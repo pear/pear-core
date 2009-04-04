@@ -87,15 +87,17 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </helper>
  <date>2009-03-27</date>
  <version>
-  <release>1.8.0RC2</release>
+  <release>1.8.0</release>
   <api>1.8.0</api>
  </version>
  <stability>
-  <release>beta</release>
+  <release>stable</release>
   <api>stable</api>
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php New BSD License">New BSD License</license>
  <notes>
+  * Fix Bug #16057:-r is limited to 4 directories in depth
+
   Remove custom XML_Util class in favor of using upstream XML_Util package as dependency
  </notes>
  <contents>

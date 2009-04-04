@@ -87,11 +87,13 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.8.0RC2</version>
+  <version>1.8.0</version>
   <date>2009-03-27</date>
   <license>New BSD License</license>
-  <state>beta</state>
+  <state>stable</state>
  <notes>
+  * Fix Bug #16057:-r is limited to 4 directories in depth
+
   Remove custom XML_Util class in favor of using upstream XML_Util package as dependency
  </notes>
   <provides type="class" name="OS_Guess"/>
