@@ -175,12 +175,6 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                 }
 
                 $args  = array($p, '-type', 'f', '-name', '*.phpt');
-                if (!isset($options['recur'])) {
-                    $args[] = '-maxdepth';
-                    $args[] = 1;
-                }
-                $dir   = System::find($args);
-                $tests = array_merge($tests, $dir);
             } else {
                 if (isset($options['phpunit'])) {
                     if (preg_match('/AllTests\.php\\z/i', $p)) {
@@ -203,15 +197,16 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
                     $p .= '.phpt';
                 }
 
-
                 $args  = array(dirname($p), '-type', 'f', '-name', $p);
-                if (!isset($options['recur'])) {
-                    $args[] = '-maxdepth';
-                    $args[] = 1;
-                }
-                $dir   = System::find($args);
-                $tests = array_merge($tests, $dir);
             }
+
+            if (!isset($options['recur'])) {
+                $args[] = '-maxdepth';
+                $args[] = 1;
+            }
+
+            $dir   = System::find($args);
+            $tests = array_merge($tests, $dir);
         }
 
         $ini_settings = '';
