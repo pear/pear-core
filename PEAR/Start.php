@@ -118,7 +118,7 @@ class PEAR_Start extends PEAR
             if ($this->php_bin && !is_file($this->php_bin . $phpexe)) {
                 $this->php_bin = '';
             } else {
-                if (!ereg(":", $this->php_bin)) {
+                if (strpos($this->php_bin, ':') === 0) {
                     $this->php_bin = getcwd() . DIRECTORY_SEPARATOR . $this->php_bin;
                 }
             }
