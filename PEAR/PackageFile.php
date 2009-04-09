@@ -342,7 +342,7 @@ class PEAR_PackageFile
             if ($name == 'package.xml') {
                 $xml = $name;
                 break;
-            } elseif (ereg('package.xml$', $name, $match)) {
+            } elseif (preg_match('/package.xml$/', $name, $match)) {
                 $xml = $name;
                 break;
             }
