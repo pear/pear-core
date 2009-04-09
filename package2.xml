@@ -96,6 +96,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php New BSD License">New BSD License</license>
  <notes>
+  * Fix Bug #14792: Bad md5sum for some files [dufuz]
   * Fix Bug #16057:-r is limited to 4 directories in depth [dufuz]
   * Fix Bug #16077: PEAR5::getStaticProperty does not return a reference to the property [dufuz]
 
