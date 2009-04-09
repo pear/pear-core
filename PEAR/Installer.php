@@ -587,8 +587,7 @@ class PEAR_Installer extends PEAR_Downloader
                 }
 
                 foreach ($atts as $tag => $raw) {
-                    $tag = str_replace(array($pkg->getTasksNs() . ':', '-'),
-                        array('', '_'), $tag);
+                    $tag = str_replace(array($pkg->getTasksNs() . ':', '-'), array('', '_'), $tag);
                     $task = "PEAR_Task_$tag";
                     $task = &new $task($this->config, $this, PEAR_TASK_INSTALL);
                     if (!$task->isScript()) { // scripts are only handled after installation
@@ -601,8 +600,10 @@ class PEAR_Installer extends PEAR_Downloader
                         if (PEAR::isError($res)) {
                             return $res;
                         }
+
                         $contents = $res; // save changes
                     }
+
                     $wp = @fopen($dest_file, "wb");
                     if (!is_resource($wp)) {
                         return $this->raiseError("failed to create $dest_file: $php_errormsg",
@@ -620,8 +621,14 @@ class PEAR_Installer extends PEAR_Downloader
 
             // {{{ check the md5
             if (isset($md5sum)) {
+                // Make sure the original md5 sum matches with expected
                 if (strtolower($md5sum) === strtolower($attribs['md5sum'])) {
                     $this->log(2, "md5sum ok: $final_dest_file");
+
+                    if (isset($contents)) {
+                        // set md5 sum based on $content in case any tasks were run.
+                        $real_atts['attribs']['md5sum'] = md5($contents);
+                    }
                 } else {
                     if (empty($options['force'])) {
                         // delete the file
