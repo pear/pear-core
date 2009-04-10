@@ -324,7 +324,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <file name="Config.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
-    <file name="Dependency.php" role="php" />
     <file name="DependencyDB.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
