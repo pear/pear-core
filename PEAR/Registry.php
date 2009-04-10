@@ -22,10 +22,10 @@
 require_once 'PEAR.php';
 require_once 'PEAR/DependencyDB.php';
 
-define('PEAR_REGISTRY_ERROR_LOCK',   -2);
-define('PEAR_REGISTRY_ERROR_FORMAT', -3);
-define('PEAR_REGISTRY_ERROR_FILE',   -4);
-define('PEAR_REGISTRY_ERROR_CONFLICT', -5);
+define('PEAR_REGISTRY_ERROR_LOCK',         -2);
+define('PEAR_REGISTRY_ERROR_FORMAT',       -3);
+define('PEAR_REGISTRY_ERROR_FILE',         -4);
+define('PEAR_REGISTRY_ERROR_CONFLICT',     -5);
 define('PEAR_REGISTRY_ERROR_CHANNEL_FILE', -6);
 
 /**
@@ -138,7 +138,7 @@ class PEAR_Registry extends PEAR
         $this->setInstallDir($pear_install_dir);
         $this->_pearChannel = $pear_channel;
         $this->_peclChannel = $pecl_channel;
-        $this->_config = false;
+        $this->_config      = false;
     }
 
     function setInstallDir($pear_install_dir = PEAR_INSTALL_DIR)
@@ -146,9 +146,9 @@ class PEAR_Registry extends PEAR
         $ds = DIRECTORY_SEPARATOR;
         $this->install_dir = $pear_install_dir;
         $this->channelsdir = $pear_install_dir.$ds.'.channels';
-        $this->statedir = $pear_install_dir.$ds.'.registry';
-        $this->filemap  = $pear_install_dir.$ds.'.filemap';
-        $this->lockfile = $pear_install_dir.$ds.'.lock';
+        $this->statedir    = $pear_install_dir.$ds.'.registry';
+        $this->filemap     = $pear_install_dir.$ds.'.filemap';
+        $this->lockfile    = $pear_install_dir.$ds.'.lock';
     }
 
     function hasWriteAccess()
