@@ -26,10 +26,9 @@ Table of Contents
 1. Fixing bugs/Adding features
 2. Writing regression tests
 3. Releasing PEAR
-4. synchronizing PEAR with the PHP release (PHP < 5.1.0)
-5. synchronizing PEAR with the PHP release (PHP >= 5.1.0)
-6. http://go-pear.org and testing
-7. pear.php.net and xmlrpc/rest
+4. synchronizing PEAR with the PHP release (PHP >= 5.1.0)
+5. http://pear.php.net/go-pear and testing
+6. pear.php.net and rest
 
 1. FIXING BUGS/ADDING FEATURES
 ------------------------------
@@ -37,7 +36,7 @@ Table of Contents
 In most cases, bugs or features are opened at the official bug tracker
 located at:
 
-http://pear.php.net/bugs/search.php?cmd=display&package_name[]=PEAR&status=Open
+http://pear.php.net/package/PEAR/bugs
 
 When you fix a bug, or implement feature requested, please follow this checklist:
 
@@ -49,7 +48,7 @@ When you fix a bug, or implement feature requested, please follow this checklist
    find.  If you fix bug #12345 name the test "bug12345.phpt."  If the bug was in
    the PEAR_Installer class, please save it in pear-core/tests/PEAR_Installer/bug12345.phpt
 3) fix the bug, or add the new feature.
-4) upgrade your local PEAR installation via "pear upgrade --force package2.xml"
+4) upgrade your local PEAR installation via "pear upgrade -f package2.xml"
 5) do a few simple tests to see if you have fixed the bug.  This should include
    running the regression test that you wrote.  If the test is named bug12345.phpt,
    use "pear run-tests tests/PEAR_Installer/bug12345.phpt" from the pear-core directory
@@ -62,7 +61,7 @@ When you fix a bug, or implement feature requested, please follow this checklist
    of failure.
 8) add an entry to the release notes in both package2.xml and package-PEAR.xml.
    Please use the full bug summary as in:
-   * fix Bug #12345: Foo failure in --packagingroot option
+   * Fix Bug #12345: Foo failure in --packagingroot option [your pear username]
 9) Don't be afraid to ask the older developers for help or clarification!!
 
 2. WRITING REGRESSION TESTS
@@ -106,92 +105,7 @@ When releasing a new version of PEAR, follow these simple steps:
 6) After another week, when it is clear that PEAR is working, you may need to coordinate
    the release with PHP developers.
 
-4. SYNCHRONIZING PEAR WITH THE PHP RELEASE (PHP < 5.1.0)
---------------------------------------------------------
-
-Probably the most complicated and confusing aspect of maintaining the PEAR package
-is coordinating the release of PEAR inside PHP itself.
-
-The best thing you can do to learn more is to read the php-internals@lists.php.net
-mailing list to familiarize yourself with the quirks and customs of the PHP release
-process.  Here are some essential points to be aware of:
-
-- each minor version of PHP (5.1.x, 5.2.x, 6.0.x, etc.) has a single coordinator of
-  all activity known as the Release Master (RM).  For PHP 4.4.x, for instance, the
-  release master is Derick Rethans.  For PHP 5.1.x, the release master is Ilia
-  Alshanetsky.  These are the people you need to contact to make any changes.
-- Although many public issues are resolved on the internals mailing list, it is
-  to your advantage to get to know the internals folks on IRC as well.  Most can be
-  found on EFNet on a non-poublic channel.  Just go to #pear and you can be directed to
-  speak to one of them if you ask by name.  Again, this is a you-should-already-know-
-  what-to-do kind of situation, so if you don't know, you need to ask an older PEAR
-  developer to handle the situation.
-
-For PHP 5.0.x and earlier, PEAR is managed simply by updating the packages found in
-php-src/pear/packages.  For instance, if there is a newer release of PEAR to be uploaded,
-you need to perform these steps to update the PHP 4.4 branch:
-
-cvs -d :pserver:yourcvs@cvs.php.net:/repository login [replace yourcvs with your login]
-cvs -d :pserver:yourcvs@cvs.php.net:/repository co -r PHP_4_4 php-src
-cd php-src/pear/packages
-rm PEAR-1.4.6.tar [replace 1.4.6 with the current version]
-cvs remove PEAR-1.4.6.tar
-pear download -Z PEAR-stable
-cvs add PEAR-1.4.7.tar [replace 1.4.7 with the latest stable version]
-cd ../..
-make install-pear
-make install-pear INSTALL_ROOT=/home/youruser
-[if there are any problems, debug and try again]
-cd pear/packages
-cvs commit -m "update to PEAR version 1.4.7"
-
-Note that the way that installation of PEAR works is that there is essentially
-an extracted version of PEAR 1.4.5 found in php-src/pear/PEAR that has several important
-replacements already performed.  These include:
-
- - version @PEAR-VER@ replaced in php-src/pear/PEAR/Dependency2.php
- - version @package_version@ replaced in php-src/pear/PEAR/PackageFile/Generator/v2.php
-
-and so on.
-
-If there is a bug in the PEAR installer itself that prevents proper installation of
-PEAR using the "install-pear" option of PHP's makefile, you will need to fix the extracted
-version of PEAR, which usually involves doing some work with patching.
-
-In order to maintain PEAR inside the PHP distribution, you MUST have a unix machine
-on which to test your changes.  cygwin or some other alternative on windows is not enough.
-
-The windows build of PHP < 5.1.0 is far simpler to maintain than the unix version.  All
-that is required is to simply update the version numbers in pear-core/make-pear-bundle.php,
-which should look something like this:
-
-<?php
-/* This is a list of packages and versions
- * that will be used to create the PEAR folder
- * in the windows snapshot.
- * See win32/build/mkdist.php for more details
- * $Id$
- */
-$packages  = array(
-// required packages for the installer
-"PEAR"                  =>    "1.5.1",
-"Console_Getopt"        =>    "1.2.1",
-"Archive_Tar"           =>    "1.3.2",
-"Structures_Graph"      =>    "1.0.2",
-
-// required packages for the web frontend
-"PEAR_Frontend_Web"     =>    "0.4",
-"HTML_Template_IT"      =>    "1.1",
-"Net_UserAgent_Detect"  =>    "2.0.1",
-);
-
-?>
-
-This file is used to grab the proper versions of software at packaging time, and is
-used in conjunction with go-pear.bat and http://pear.php.net/go-pear to install the
-files interactively.
-
-5. SYNCHRONIZING PEAR WITH THE PHP RELEASE (PHP >= 5.1.0)
+4. SYNCHRONIZING PEAR WITH THE PHP RELEASE (PHP >= 5.1.0)
 --------------------------------------------------------
 
 PHP 5.1.0 and newer make use of a new technology, the PHP archive, or "phar".
@@ -236,11 +150,10 @@ is located in pear-core/go-pear-phar.php.  This file ultimately loads
 pear-core/PEAR/Start.php and pear-core/PEAR/Start/CLI.php.  These files are based off
 of the code in the web-based go-pear, which is discussed in the next section.
 
-6. HTTP://GO-PEAR.ORG AND TESTING
+5. HTTP://PEAR.PHP.NET/GO-PEAR AND TESTING
 ---------------------------------
 
-One of the most common methods used to install PEAR is via go-pear.org, which is an
-alias for http://pear.php.net/go-pear
+One of the most common methods used to install PEAR is http://pear.php.net/go-pear
 
 go-pear is actually a file located in CVS at cvs.php.net in pearweb/public_html/go-pear
 and it contains, in a single PHP file, all of the code necessary to download PEAR and run
@@ -258,13 +171,15 @@ enshrine you in the halls of glory for at least a year or so :).
 The main thing to remember is that you need to be aware of how go-pear works, so
 that you can be aware of its needs in relation to PEAR.
 
-7. PEAR.PHP.NET AND XMLRPC/REST
+6. PEAR.PHP.NET AND REST
 -------------------------------
 
 Perhaps the most complex aspect of maintaining the PEAR installer is the interaction
-with pear.php.net.  The PEAR installer uses two protocols to access package information,
-XML-RPC (XML remote procedure call) and REST (Representative State Transfer) to represent
-abstract meta-data about packages, and to respond to specific queries about this data.
+with pear.php.net.  The PEAR installer uses one protocols to access package information,
+REST (Representative State Transfer) to represent abstract meta-data about packages,
+and to respond to specific queries about this data.
+There used to be support for XML-RPC (XML remote procedure call) in older version of PEAR
+but got removed due to XML-RPC backends being obsoleted and not used anywhere.
 
 PEAR prior to version 1.4.0 exclusively uses XML-RPC, and specifically interacts with
 http://pear.php.net/xmlrpc.php, which is located at cvs.php.net in
@@ -291,8 +206,7 @@ server.  Consider all changes with care!
 
 To implement a new feature or fix a bug, if you need to access some information
 remotely in a different way, always attempt to do this with the existing layout first.
-Only add new REST, and never new XML-RPC code, as XML-RPC is deprecated and will be
-phased out at the earliest possible convenience.
+Only add new REST as XML-RPC has bee phased out and the installer contains no such code.
 
 If you plan to maintain the remote access portion of PEAR, it is imperative to
 become intimately familiar with how the website works.  Check out pearweb from
