@@ -75,10 +75,12 @@ norunnie:
                         $codepath,
                         $testpath . '/pear2coverage.db');
     if (file_exists(__DIR__ . '/coverage')) {
+        echo "Removing old coverage HTML...";
         foreach (new \DirectoryIterator(__DIR__ . '/coverage') as $file) {
             if ($file->isDot()) continue;
             unlink($file->getPathName());
         }
+        echo "done\n";
     } else {
         mkdir(__DIR__ . '/coverage');
     }
