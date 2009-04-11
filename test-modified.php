@@ -75,7 +75,7 @@ norunnie:
                         $codepath,
                         $testpath . '/pear2coverage.db');
     if (file_exists(__DIR__ . '/test')) {
-        foreach (new \DirectoryIterator(__DIR__ . '/test') as $file) {
+        foreach (new \DirectoryIterator(__DIR__ . '/coverage') as $file) {
             if ($file->isDot()) continue;
             unlink($file->getPathName());
         }
