@@ -74,7 +74,7 @@ norunnie:
     $a = new Aggregator($testpath,
                         $codepath,
                         $testpath . '/pear2coverage.db');
-    if (file_exists(__DIR__ . '/test')) {
+    if (file_exists(__DIR__ . '/coverage')) {
         foreach (new \DirectoryIterator(__DIR__ . '/coverage') as $file) {
             if ($file->isDot()) continue;
             unlink($file->getPathName());
