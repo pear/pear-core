@@ -118,7 +118,7 @@ cvs -d :pserver:yourcvs@cvs.php.net:/repository co pear-core
 cd pear-core/PEAR
 mkdir go-pear-tarballs
 cd go-pear-tarballs
-pear download -Z PEAR-stable Archive_Tar-stable Console_Getopt-stable
+pear download -Z PEAR-stable Archive_Tar-stable Console_Getopt-stable XML_Util-stable
 cd ../..
 pear install PHP_Archive
 php make-installpear-nozlib-phar.php
