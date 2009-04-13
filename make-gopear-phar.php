@@ -12,11 +12,14 @@
  * $ pear download -Z Archive_Tar
  * $ pear download -Z Console_Getopt
  * $ pear download -Z Structures_Graph
+ * $ pear download -Z XML_Util
  * </pre>
  *
  * Next, check out pear/Structure_Graph and copy it into pear-core/
  *
  * Next, check out pear/Console_Getopt and copy it into pear-core/
+ * 
+ * Next, check out pear/XML_Util and copy it into pear-core/
  *
  * finally, run this script using PHP 5.1's cli php
 
@@ -173,6 +176,7 @@ $creator->addDir($peardir . DIRECTORY_SEPARATOR . 'PEAR', array(),
     ), false, $peardir);
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'PEAR.php', 'PEAR.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Archive/Tar.php', 'Archive/Tar.php');
+$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'XML_Util/Util.php', 'XML/Util.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Console/Getopt.php', 'Console/Getopt.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'System.php', 'System.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'OS/Guess.php', 'OS/Guess.php');
