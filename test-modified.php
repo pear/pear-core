@@ -2,6 +2,7 @@
 namespace {
 $path = false;
 $force = false;
+$norender = false;
 if (isset($_SERVER['argv'][1])) {
     $arg = $_SERVER['argv'][1];
     if ($arg === '--force') {
@@ -9,7 +10,30 @@ if (isset($_SERVER['argv'][1])) {
         if (!isset($_SERVER['argv'][2])) {
             goto skippy;
         }
-        $arg = $_SERVER['argv'][2];
+        // check if we only want to rebuild the coverage db
+        if ($_SERVER['argv'][2] === '--norender') {
+            $norender = true;
+            if (!isset($_SERVER['argv'][3])) {
+                goto skippy;
+            }
+            $arg = $_SERVER['argv'][3];
+        } else {
+            $arg = $_SERVER['argv'][2];
+        }
+    } elseif ($arg === '--norender') {
+        $norender = true;
+        if (!isset($_SERVER['argv'][2])) {
+            goto skippy;
+        }
+        if ($_SERVER['argv'][2] === '--force') {
+            $force = true;
+            if (!isset($_SERVER['argv'][3])) {
+                goto skippy;
+            }
+            $arg = $_SERVER['argv'][3];
+        } else {
+            $arg = $_SERVER['argv'][2];
+        }
     }
     $path = realpath($arg);
     if ($path) {
@@ -22,13 +46,14 @@ if (!$path) {
 }
 if (!$path) {
     die("Usage:
-php test-modified.php --force
+php test-modified.php [--force] [--norender] [/path/to/all]
+ --force:
  Generate coverage even if no changes or failed tests
-php test-modified.php /path/to/all
+ --norender:
+ Do not generate coverage html files, just rebuild the database
+ /path/to/all:
  Pass in path to checkout of http://svn.pear.php.net/PEAR2/all,
  by default, we assume ../all
-php test-modified.php --force /path/to/all
- Force coverage generation and pass in path to all
 ");
 }
 function __autoload($c)
@@ -48,9 +73,9 @@ $test = new PEAR_Command_Test($cli, $config);
 error_reporting($e);
 }
 namespace PEAR2\Pyrus\Developer\CoverageAnalyzer {
-    $codepath = realpath(__DIR__ . '/PEAR');
+    $codepath = realpath(__DIR__);
     $testpath = realpath(__DIR__ . '/tests');
-    $sqlite = new Sqlite($codepath, $testpath . '/pear2coverage.db');
+    $sqlite = new Sqlite($testpath . '/pear2coverage.db', $codepath, $testpath);
     $modified = $sqlite->getModifiedTests();
     if (!$force && !count($modified)) {
         echo "No changes to coverage needed.  Bye!\n";
@@ -74,6 +99,9 @@ norunnie:
     $a = new Aggregator($testpath,
                         $codepath,
                         $testpath . '/pear2coverage.db');
+    if ($norender) {
+        exit;
+    }
     if (file_exists(__DIR__ . '/coverage')) {
         echo "Removing old coverage HTML...";
         foreach (new \DirectoryIterator(__DIR__ . '/coverage') as $file) {
