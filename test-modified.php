@@ -73,7 +73,26 @@ $test = new PEAR_Command_Test($cli, $config);
 error_reporting($e);
 }
 namespace PEAR2\Pyrus\Developer\CoverageAnalyzer {
-    $codepath = realpath(__DIR__);
+    $pear = @fopen('PEAR.php', 'r', 1);
+    if (!$pear) {
+        die("Install PEAR before attempting to run the tests\n");
+    }
+    fclose($pear);
+    $olddir = getcwd();
+try_again:
+    foreach (explode(PATH_SEPARATOR, get_include_path()) as $includepath) {
+        if (file_exists($includepath . DIRECTORY_SEPARATOR . 'PEAR.php')) {
+            if ($includepath === '.') {
+                chdir('tests');
+                goto try_again;
+            }
+            $codepath = $includepath;
+            break;
+        }
+    }
+    if (!isset($codepath)) {
+        die("Something is wrong - PEAR.php exists, but was not within include_path\n");
+    }
     $testpath = realpath(__DIR__ . '/tests');
     $sqlite = new Sqlite($testpath . '/pear2coverage.db', $codepath, $testpath);
     $modified = $sqlite->getModifiedTests();
@@ -88,6 +107,7 @@ namespace PEAR2\Pyrus\Developer\CoverageAnalyzer {
     chdir($testpath);
     error_reporting(0);
     $test->doRunTests('run-tests', array('coverage' => true), $modified);
+    chdir($olddir);
     error_reporting($e);
     chdir($dir);
     if (!$force && file_exists($testpath . '/run-tests.log')) {
