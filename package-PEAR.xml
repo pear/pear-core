@@ -267,9 +267,6 @@ http://pear.php.net/dtd/package-1.0.xsd">
      <file role="php" name="13.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
-     <file role="php" name="14.php">
-      <replace from="@package_version@" to="version" type="package-info"/>
-     </file>
     </dir>
     <dir name="Task">
      <dir name="Postinstallscript">
