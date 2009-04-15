@@ -87,16 +87,12 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.8.0</version>
-  <date>2009-04-10</date>
+  <version>1.8.1</version>
+  <date>2009-04-15</date>
   <license>New BSD License</license>
   <state>stable</state>
  <notes>
-  * Fix Bug #14792: Bad md5sum for files with replaced content [dufuz]
-  * Fix Bug #16057:-r is limited to 4 directories in depth [dufuz]
-  * Fix Bug #16077: PEAR5::getStaticProperty does not return a reference to the property [dufuz]
-
-  Remove custom XML_Util class in favor of using upstream XML_Util package as dependency
+  * Fix Bug #16099 	PEAR crash on PHP4 (parse error) [dufuz]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -271,6 +267,9 @@ http://pear.php.net/dtd/package-1.0.xsd">
      <file role="php" name="13.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
+     <file role="php" name="14.php">
+      <replace from="@package_version@" to="version" type="package-info"/>
+     </file>
     </dir>
     <dir name="Task">
      <dir name="Postinstallscript">
@@ -430,6 +429,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
    <file role="php" name="PEAR.php">
     <replace from="@package_version@" to="version" type="package-info"/>
    </file>
+   <file role="php" name="PEAR5.php" />
    <file role="doc" name="README" />
    <file role="php" name="System.php">
     <replace from="@package_version@" to="version" type="package-info"/>
@@ -617,5 +617,14 @@ Alpha1 Release Notes:
   Move codebase from the PHP License to New BSD 2 clause license
    </notes>
   </release>
+ <release>
+  <version>1.8.1</version>
+  <date>2009-04-15</date>
+  <license>New BSD License</license>
+  <state>stable</state>
+ <notes>
+  * Fix Bug #16099 	PEAR crash on PHP4 (parse error) [dufuz]
+ </notes>
+ </release>
  </changelog>
 </package>
