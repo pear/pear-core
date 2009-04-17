@@ -377,7 +377,8 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 $arr['changelog']['release'][0] = $release;
             }
 
-            foreach ($arr['changelog']['release'] as &$c) {
+            foreach (array_keys($arr['changelog']['release']) as $key) {
+                $c =& $arr['changelog']['release'][$key];
                 if (isset($c['notes'])) {
                     // This trims out the indenting, needs fixing
                     $c['notes'] = "\n" . trim($c['notes']) . "\n";
@@ -871,7 +872,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
             if ($this->options['encoding'] == 'UTF-8' &&
                   version_compare(phpversion(), '5.0.0', 'lt')
             ) {
-                $tag = utf8_encode($tag);
+                $tag['content'] = utf8_encode($tag['content']);
             }
 
             if ($replaceEntities === true) {
