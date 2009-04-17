@@ -262,8 +262,15 @@ class PEAR_Downloader_Package
 
             if ($info != $newinfo) {
                 do {
-                    if ($info['package'] == 'pecl.php.net' && $newinfo['package'] == 'pear.php.net') {
-                        $info['package'] = 'pear.php.net';
+                    if ($info['channel'] == 'pecl.php.net' && $newinfo['channel'] == 'pear.php.net') {
+                        $info['channel'] = 'pear.php.net';
+                        if ($info == $newinfo) {
+                            // skip the channel check if a pecl package says it's a PEAR package
+                            break;
+                        }
+                    }
+                    if ($info['channel'] == 'pear.php.net' && $newinfo['channel'] == 'pecl.php.net') {
+                        $info['channel'] = 'pecl.php.net';
                         if ($info == $newinfo) {
                             // skip the channel check if a pecl package says it's a PEAR package
                             break;
