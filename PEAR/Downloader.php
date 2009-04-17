@@ -848,7 +848,7 @@ class PEAR_Downloader extends PEAR_Common
                !($base = $chan->getBaseURL('REST1.0', $preferred_mirror))
               )
         ) {
-            return $this->raiseError($parr['channel'] . ' is using a unsupported protocal - This should never happen.');
+            return $this->raiseError($parr['channel'] . ' is using a unsupported protocol - This should never happen.');
         }
 
         if ($base2) {
@@ -1067,7 +1067,7 @@ class PEAR_Downloader extends PEAR_Common
             return $url;
         }
 
-        return $this->raiseError($parr['channel'] . ' is using a unsupported protocal - This should never happen.');
+        return $this->raiseError($parr['channel'] . ' is using a unsupported protocol - This should never happen.');
     }
     // }}}
     // {{{ getPackageDownloadUrl()
