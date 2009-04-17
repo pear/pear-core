@@ -97,6 +97,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://opensource.org/licenses/bsd-license.php New BSD License">New BSD License</license>
  <notes>
   * Fix Bug #16108: PEAR_PackageFile_Generator_v2 PHP4 parse error when running upgrade-all [dufuz]
+  * Fix Bug #16113: Installing certain packages fails due incorrect encoding handling [dufuz]
  </notes>
  <contents>
   <dir name="/">

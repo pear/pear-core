@@ -93,6 +93,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <state>stable</state>
  <notes>
   * Fix Bug #16108: PEAR_PackageFile_Generator_v2 PHP4 parse error when running upgrade-all [dufuz]
+  * Fix Bug #16113: Installing certain packages fails due incorrect encoding handling [dufuz]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
