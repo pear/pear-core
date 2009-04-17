@@ -28,7 +28,7 @@ $pathtopackagexml2 = $packageDir . 'SQLite-1.0.4.tgz';
 
 $pearweb->addHtmlConfig('http://pecl.php.net/get/SQLite-1.0.4.tgz', $pathtopackagexml2);
 
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/sqlite/allreleases.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+$pearweb->addRESTConfig("http://pecl.php.net/rest/r/sqlite/allreleases.xml", '<?xml version="1.0" encoding="UTF-8" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
     http://pear.php.net/dtd/rest.allreleases.xsd">
@@ -43,7 +43,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/sqlite/allreleases.xml", '<?
  <r><v>0.9b</v><s>beta</s></r>
 </a>', 'text/xml');
 
-$pearweb->addRESTConfig("http://pear.php.net/rest/p/sqlite/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+$pearweb->addRESTConfig("http://pecl.php.net/rest/p/sqlite/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
 <p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
  <n>SQLite</n>
  <c>pecl.php.net</c>
@@ -61,7 +61,7 @@ http://snaps.php.net/win32/PECL_4_3/php_sqlite.dll
  <r xlink:href="/rest/r/sqlite"/>
 </p>', 'text/xml');
 
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/sqlite/1.0.4.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+$pearweb->addRESTConfig("http://pecl.php.net/rest/r/sqlite/1.0.4.xml", '<?xml version="1.0" encoding="UTF-8" ?>
 <r xmlns="http://pear.php.net/dtd/rest.release"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.release
     http://pear.php.net/dtd/rest.release.xsd">
@@ -94,7 +94,7 @@ this case is to use the new sqlite_exec() function instead. (Stas)
  <x xlink:href="package.1.0.4.xml"/>
 </r>', 'text/xml');
 
-$pearweb->addRESTConfig("http://pear.php.net/rest/r/sqlite/deps.1.0.4.txt", 'b:0;', 'text/plain');
+$pearweb->addRESTConfig("http://pecl.php.net/rest/r/sqlite/deps.1.0.4.txt", 'b:0;', 'text/plain');
 
 $dp = &new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
 $result = $dp->download(array($pathtopackagexml));
@@ -116,7 +116,7 @@ $phpunit->assertEquals(array(),         $reg->listPackages('pecl'), 'pecl');
 $dp = &new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
 $phpunit->assertNoErrors('after create');
 
-$result = $dp->download(array('SQLite'));
+$result = $dp->download(array('pecl.php.net/SQLite'));
 $phpunit->assertEquals(1, count($result), 'return');
 $phpunit->assertIsa('test_PEAR_Downloader_Package', $result[0], 'right class');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf = $result[0]->getPackageFile(), 'right kind of pf');
