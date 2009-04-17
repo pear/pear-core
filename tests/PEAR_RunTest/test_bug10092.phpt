@@ -7,10 +7,10 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 }
 ?>
 --INI--
-open_basedir=hooba
+include_path=hooba
 --FILE--
 <?php
-var_dump(ini_get('open_basedir'));
+var_dump(ini_get('include_path'));
 ?>
 --EXPECT--
 string(5) "hooba"
