@@ -271,10 +271,6 @@ $after = $dp->getDownloadedPackages();
 $phpunit->assertEquals(0, count($after), 'after getdp count');
 $phpunit->assertEquals(array (
   array (
-    0 => 1,
-    1 => 'WARNING: failed to download smork/Foobar within preferred state "stable", will instead download version 1.5.0a1, stability "alpha"',
-  ),
-  array (
     0 => 3,
     1 => 'Downloading "http://www.example.com/Bar-1.5.2.tgz"',
   ),
