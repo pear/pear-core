@@ -10230,9 +10230,12 @@ $command->_reset_downloader();
 $command->run('upgrade-all', array(), array());
 
 $phpunit->assertNoErrors('after upgrade');
+
+$log = array_slice($fakelog->getLog(), 0, 5);
+usort($log, function($a, $b) {return strnatcasecmp($a['info']['data'], $b['info']['data']);});
+
 $phpunit->assertEquals(
 array (
-  0 =>
   array (
     'info' =>
     array (
@@ -10240,15 +10243,6 @@ array (
     ),
     'cmd' => 'upgrade-all',
   ),
-  1 =>
-  array (
-    'info' =>
-    array (
-      'data' => 'Will upgrade channel://pear.php.net/xml_rpc',
-    ),
-    'cmd' => 'upgrade-all',
-  ),
-  2 =>
   array (
     'info' =>
     array (
@@ -10256,7 +10250,6 @@ array (
     ),
     'cmd' => 'upgrade-all',
   ),
-  3 =>
   array (
     'info' =>
     array (
@@ -10264,7 +10257,6 @@ array (
     ),
     'cmd' => 'upgrade-all',
   ),
-  4 =>
   array (
     'info' =>
     array (
@@ -10272,14 +10264,14 @@ array (
     ),
     'cmd' => 'upgrade-all',
   ),
-  5 =>
   array (
-    0 => 3,
-    1 => 'Notice: package "pear/File" required dependency "pear/PEAR" will not be automatically downloaded',
+    'info' =>
+    array (
+      'data' => 'Will upgrade channel://pear.php.net/xml_rpc',
+    ),
+    'cmd' => 'upgrade-all',
   ),
-), array_slice($fakelog->getLog(), 0, 6),
-'upgrade-all log');
-
+  ), $log, 'same log entries');
 $reg = &$config->getRegistry();
 $phpunit->assertEquals('1.1.0RC5', $reg->packageInfo('File', 'version'),             'File');
 $phpunit->assertEquals('1.1.1',    $reg->packageInfo('Net_Sieve', 'version'),        'Net_Sieve');

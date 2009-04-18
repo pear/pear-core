@@ -10,7 +10,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 $dir = dirname(__FILE__)  . DIRECTORY_SEPARATOR;
 require_once $dir . 'setup.php.inc';
-$pathtopackagexml = $dir . 'test_initialize_downloadurl'. DIRECTORY_SEPARATOR . 'test-1.0.tgz';
+$pathtopackagexml = $dir . 'test_initialize_downloadurl'. DIRECTORY_SEPARATOR . 'testfoo-1.0.tgz';
 $pathtochannelxml = $dir . 'test_initialize_abstractpackage_discover'. DIRECTORY_SEPARATOR . 'channel.xml';
 $csize = filesize($pathtochannelxml);
 
@@ -25,7 +25,7 @@ $pearweb->addRESTConfig("http://pear.foo.com/rest/r/test/allreleases2.xml", '<?x
  <c>pear.foo.com</c>
  <r>
   <v>1.0</v>
-  <s>beta</s>
+  <s>stable</s>
   <m>4.3</m>
  </r>
 </a>', 'text/xml');
@@ -38,7 +38,7 @@ $pearweb->addRESTConfig("http://pear.foo.com/rest/r/test/allreleases.xml", '<?xm
  <c>pear.foo.com</c>
  <r>
   <v>1.0</v>
-  <s>beta</s>
+  <s>stable</s>
  </r>
 </a>', 'text/xml');
 
@@ -72,7 +72,15 @@ $pearweb->addRESTConfig("http://pear.foo.com/rest/r/test/1.0.xml", '<?xml versio
  <x xlink:href="package.1.0.xml"/>
 </r>', 'text/xml');
 
-$pearweb->addRESTConfig("http://pear.foo.com/rest/r/test/deps.1.0.txt", 'b:0;', 'text/plain');
+$pearweb->addRESTConfig("http://pear.foo.com/rest/r/test/deps.1.0.txt", serialize(
+    array(
+        'required' =>
+        array(
+            'php' => '4.0.0',
+            'pearinstaller' => '1.4.0b1',
+        )
+    )
+    ), 'text/plain');
 
 $dp = &newDownloaderPackage(array());
 $dp->_downloader->config->set('auto_discover', 1);

@@ -83,7 +83,7 @@ $pearweb->addRESTConfig("http://smork/rest/r/foobar/allreleases.xml",
     http://pear.php.net/dtd/rest.allreleases.xsd">
  <p>Foobar</p>
  <c>smork</c>
- <r><v>1.5.0a1</v><s>stable</s></r>
+ <r><v>1.5.0a1</v><s>alpha</s></r>
 </a>', 'text/xml');
 
 $pearweb->addRESTConfig("http://smork/rest/r/foobar/deps.1.5.0a1.txt",
