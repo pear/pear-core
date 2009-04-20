@@ -37,8 +37,8 @@ echo 'tests done';
 ?>
 --CLEAN--
 <?php
+unlink(dirname(__FILE__) . '/packagefiles/DB_Table/DB_Table-1.5.0RC3.tar');
 require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
-unlink(dirname(__FILE__) . '/packagesfiles/DB_Table/DB_Table-1.5.0RC3.tar');
 ?>
 --EXPECT--
 tests done
