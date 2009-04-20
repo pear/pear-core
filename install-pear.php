@@ -180,8 +180,6 @@ if (isset($suffix)) {
         $config->set('php_suffix', $suffix, 'system');
     }
 }
-echo "dangit\n";
-exit;
 
 /* Print PEAR Conf (useful for debuging do NOT REMOVE) */
 if ($debug) {
