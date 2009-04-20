@@ -191,6 +191,7 @@ $creator->addDir($peardir . DIRECTORY_SEPARATOR . 'PEAR', array(),
         '*PEAR/XMLParser.php',
     ), false, $peardir);
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'PEAR.php', 'PEAR.php');
+$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'PEAR5.php', 'PEAR5.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Archive/Tar.php', 'Archive/Tar.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'XML_Util/Util.php', 'XML/Util.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Console/Getopt.php', 'Console/Getopt.php');
