@@ -10232,7 +10232,8 @@ $command->run('upgrade-all', array(), array());
 $phpunit->assertNoErrors('after upgrade');
 
 $log = array_slice($fakelog->getLog(), 0, 5);
-usort($log, function($a, $b) {return strnatcasecmp($a['info']['data'], $b['info']['data']);});
+function poop($a, $b) {return strnatcasecmp($a['info']['data'], $b['info']['data']);}
+usort($log, 'poop');
 
 $phpunit->assertEquals(
 array (
