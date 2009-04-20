@@ -48,6 +48,12 @@ for ($i = 0; $i < sizeof($argv); $i++) {
         $i++;
     } elseif ($arg == '--force') {
         $force = true;
+    } elseif ($arg == '-dp') {
+        $prefix = $argv[$i+1];
+        $i++;
+    } elseif ($arg == '-ds') {
+        $suffix = $argv[$i+1];
+        $i++;
     } elseif ($arg == '-d') {
         $with_dir = $argv[$i+1];
         $i++;
@@ -149,9 +155,34 @@ if (!empty($with_dir)) {
         $config->set('cache_dir', $cdir);
     }
 }
+
+// PHP executable
 if (!empty($php_bin)) {
     $config->set('php_bin', $php_bin);
 }
+
+// PHP prefix
+if (isset($prefix)) {
+    if ($prefix != 'a') {
+        if ($prefix[0] == 'a') {
+            $prefix = substr($prefix, 1);
+        }
+        $config->set('php_prefix', $prefix, 'system');
+    }
+}
+
+// PHP suffix
+if (isset($suffix)) {
+    if ($suffix != 'a') {
+        if ($suffix[0] == 'a') {
+            $suffix = substr($suffix, 1);
+        }
+        $config->set('php_suffix', $suffix, 'system');
+    }
+}
+echo "dangit\n";
+exit;
+
 /* Print PEAR Conf (useful for debuging do NOT REMOVE) */
 if ($debug) {
     sort($keys);
