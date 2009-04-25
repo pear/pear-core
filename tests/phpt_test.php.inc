@@ -1,5 +1,7 @@
 <?php
-date_default_timezone_set('UTC');
+if (version_compare(PHP_VERSION, '5', '>=')) {
+    date_default_timezone_set('UTC');
+}
 
 @include_once 'Text/Diff.php';
 @include_once 'Text/Diff/Renderer.php';
