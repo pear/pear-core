@@ -553,7 +553,7 @@ class PEAR_Dependency2
             }
         }
 
-        if (version_compare($pearversion, $dep['min'], '<')) {
+        if (version_compare($pearversion, $dep['min'], '<=')) {
             if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
                 return $this->raiseError('%s requires PEAR Installer' . $extra .
                     ', installed version is ' . $pearversion);
@@ -564,7 +564,7 @@ class PEAR_Dependency2
         }
 
         if (isset($dep['max'])) {
-            if (version_compare($pearversion, $dep['max'], '>')) {
+            if (version_compare($pearversion, $dep['max'], '>=')) {
                 if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
                     return $this->raiseError('%s requires PEAR Installer' . $extra .
                         ', installed version is ' . $pearversion);
