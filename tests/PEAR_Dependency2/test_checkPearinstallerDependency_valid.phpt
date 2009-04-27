@@ -38,6 +38,24 @@ $result = $dep->validatePearinstallerDependency(
     ));
 $phpunit->assertNoErrors('exclude 3');
 $phpunit->assertTrue($result, 'exclude 3');
+
+$result = $dep->validatePearinstallerDependency(
+    array(
+        'min' => '4.3.11',
+        'max' => '5.0.0',
+        'exclude' => array('4.3.9','4.3.10')
+    ));
+$phpunit->assertNoErrors('min bounds');
+$phpunit->assertTrue($result, 'min bounds');
+
+$result = $dep->validatePearinstallerDependency(
+    array(
+        'min' => '4.3.8',
+        'max' => '4.3.11',
+        'exclude' => array('4.3.9','4.3.10')
+    ));
+$phpunit->assertNoErrors('max bounds');
+$phpunit->assertTrue($result, 'max bounds');
 echo 'tests done';
 ?>
 --CLEAN--
