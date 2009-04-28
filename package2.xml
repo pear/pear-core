@@ -99,7 +99,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Fix Bug #16108: PEAR_PackageFile_Generator_v2 PHP4 parse error when running upgrade-all [dufuz]
   * Fix Bug #16113: Installing certain packages fails due incorrect encoding handling [dufuz]
   * Fix Bug #16122: PEAR RunTest failed to run as expected [dufuz]
-  * Fix pearinstaller dep validation of min/max bounds [cellog]
  </notes>
  <contents>
   <dir name="/">
