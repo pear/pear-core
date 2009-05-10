@@ -933,7 +933,10 @@ $text
         if ($section_text['CLEAN']) {
             // perform test cleanup
             $this->save_text($temp_clean, $section_text['CLEAN']);
-            $this->system_with_timeout("$this->_php $temp_clean");
+            $output = $this->system_with_timeout("$this->_php $temp_clean  2>&1");
+            if (strlen($output[1])) {
+                echo "BORKED --CLEAN-- section! output:\n", $output[1];
+            }
             if (file_exists($temp_clean)) {
                 unlink($temp_clean);
             }
