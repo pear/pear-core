@@ -39,7 +39,7 @@ class PEAR_REST
 
     function PEAR_REST(&$config, $options = array())
     {
-        $this->config = &$config;
+        $this->config   = &$config;
         $this->_options = $options;
     }
 
@@ -213,11 +213,9 @@ class PEAR_REST
      */
     function saveCache($url, $contents, $lastmodified, $nochange = false, $cacheid = null)
     {
-        $cacheidfile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
-            md5($url) . 'rest.cacheid';
-
-        $cachefile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
-            md5($url) . 'rest.cachefile';
+        $cachedir    = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR . md5($url);
+        $cacheidfile = $cachedir . 'rest.cacheid';
+        $cachefile   = $cachedir . 'rest.cachefile';
 
         if ($cacheid === null && $nochange) {
             $cacheid = unserialize(implode('', file($cacheidfile)));
