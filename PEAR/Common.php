@@ -564,23 +564,11 @@ class PEAR_Common extends PEAR
         // changelog is not converted to old format.
         $arr = $pf->toArray(true);
         $arr = array_merge($arr, $arr['old']);
-        unset($arr['old']);
-        unset($arr['xsdversion']);
-        unset($arr['contents']);
-        unset($arr['compatible']);
-        unset($arr['channel']);
-        unset($arr['uri']);
-        unset($arr['dependencies']);
-        unset($arr['phprelease']);
-        unset($arr['extsrcrelease']);
-        unset($arr['zendextsrcrelease']);
-        unset($arr['extbinrelease']);
-        unset($arr['zendextbinrelease']);
-        unset($arr['bundle']);
-        unset($arr['lead']);
-        unset($arr['developer']);
-        unset($arr['helper']);
-        unset($arr['contributor']);
+        unset($arr['old'], $arr['xsdversion'], $arr['contents'], $arr['compatible'],
+              $arr['channel'], $arr['uri'], $arr['dependencies'], $arr['phprelease'],
+              $arr['extsrcrelease'], $arr['zendextsrcrelease'], $arr['extbinrelease'],
+              $arr['zendextbinrelease'], $arr['bundle'], $arr['lead'], $arr['developer'],
+              $arr['helper'], $arr['contributor']);
         $arr['filelist'] = $pf->getFilelist();
         $this->pkginfo = $arr;
         return $arr;
