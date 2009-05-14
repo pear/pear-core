@@ -1774,11 +1774,13 @@ class PEAR_Registry extends PEAR
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
+
         $ret = $this->_deleteChannel($channel);
         $this->_unlock();
         if ($ret && is_a($this->_config, 'PEAR_Config')) {
             $this->_config->setChannels($this->listChannels());
         }
+
         return $ret;
     }
 
@@ -1792,20 +1794,20 @@ class PEAR_Registry extends PEAR
      */
     function addChannel($channel, $lastmodified = false, $update = false)
     {
-        if (!is_a($channel, 'PEAR_ChannelFile')) {
+        if (!is_a($channel, 'PEAR_ChannelFile') || !$channel->validate()) {
             return false;
         }
-        if (!$channel->validate()) {
-            return false;
-        }
+
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
+
         $ret = $this->_addChannel($channel, $update, $lastmodified);
         $this->_unlock();
         if (!$update && $ret && is_a($this->_config, 'PEAR_Config')) {
             $this->_config->setChannels($this->listChannels());
         }
+
         return $ret;
     }
 
@@ -1817,12 +1819,9 @@ class PEAR_Registry extends PEAR
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
             return $e;
         }
+
         $file = $this->_packageFileName($package, $channel);
-        if (file_exists($file)) {
-            $ret = @unlink($file);
-        } else {
-            $ret = false;
-        }
+        $ret  = file_exists($file) ? @unlink($file) : false;
         $this->_rebuildFileMap();
         $this->_unlock();
         $p = array('channel' => $channel, 'package' => $package);
