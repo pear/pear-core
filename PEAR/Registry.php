@@ -258,8 +258,9 @@ class PEAR_Registry extends PEAR
                         $doc_channel->setServer('doc.php.net');
                         $doc_channel->setSummary('PHP Documentation Team');
                         $doc_channel->setDefaultPEARProtocols();
-                        $doc_channel->setBaseURL('REST1.0', 'http://doc.php.net/Chiara_PEAR_Server_REST/');
-                        $doc_channel->setBaseURL('REST1.1', 'http://doc.php.net/Chiara_PEAR_Server_REST/');
+                        $doc_channel->setBaseURL('REST1.0', 'http://doc.php.net/rest/');
+                        $doc_channel->setBaseURL('REST1.1', 'http://doc.php.net/rest/');
+                        $doc_channel->setBaseURL('REST1.3', 'http://doc.php.net/rest/');
                     } else {
                         $doc_channel->setName('doc.php.net');
                         $doc_channel->setAlias('doc');
@@ -1511,8 +1512,9 @@ class PEAR_Registry extends PEAR
             $doc_channel->setAlias('phpdocs');
             $doc_channel->setSummary('PHP Documentation Team');
             $doc_channel->setDefaultPEARProtocols();
-            $doc_channel->setBaseURL('REST1.0', 'http://doc.php.net/Chiara_PEAR_Server_REST/');
-            $doc_channel->setBaseURL('REST1.1', 'http://doc.php.net/Chiara_PEAR_Server_REST/');
+            $doc_channel->setBaseURL('REST1.0', 'http://doc.php.net/rest/');
+            $doc_channel->setBaseURL('REST1.1', 'http://doc.php.net/rest/');
+            $doc_channel->setBaseURL('REST1.3', 'http://doc.php.net/rest/');
             return $doc_channel;
         }
 
