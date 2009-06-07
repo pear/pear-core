@@ -94,7 +94,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <release>stable</release>
   <api>stable</api>
  </stability>
- <license uri="http://opensource.org/licenses/bsd-license.php New BSD License">New BSD License</license>
+ <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
   * Fix Bug #16108: PEAR_PackageFile_Generator_v2 PHP4 parse error when running upgrade-all [dufuz]
   * Fix Bug #16113: Installing certain packages fails due incorrect encoding handling [dufuz]
@@ -562,7 +562,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <api>stable</api>
    </stability>
    <date>2009-03-09</date>
-   <license uri="http://opensource.org/licenses/bsd-license.php New BSD License">New BSD License</license>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
    <notes>
   * Implement Request #10373: if pref_state=stable and installed package=beta, allow up to latest beta version [dufuz]
   * Implement Request #10581: login / logout should map to channel-login / channel-logout [dufuz]
@@ -641,7 +641,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <release>beta</release>
     <api>stable</api>
    </stability>
-   <license uri="http://opensource.org/licenses/bsd-license.php New BSD License">New BSD License</license>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
    <notes>
   * Fix Bug #14331: pear cvstag only works from inside the package directory [dufuz]
   * Fix Bug #16045: E_Notice: Undefined index: channel in PEAR/DependencyDB.php [dufuz]
@@ -660,7 +660,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <license uri="http://opensource.org/licenses/bsd-license.php New BSD License">New BSD License</license>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
    <notes>
 Changes since RC1:
   * Fix Bug #14792: Bad md5sum for files with replaced content [dufuz]
@@ -754,7 +754,7 @@ Alpha1 Release Notes:
   <release>stable</release>
   <api>stable</api>
  </stability>
- <license uri="http://opensource.org/licenses/bsd-license.php New BSD License">New BSD License</license>
+ <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
   * Fix Bug #16099 	PEAR crash on PHP4 (parse error) [dufuz]
  </notes>
