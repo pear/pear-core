@@ -459,6 +459,22 @@ class PEAR_Common extends PEAR
         return false;
     }
 
+    function _postProcessChecks($pf)
+    {
+        if (!PEAR::isError($pf)) {
+            return $this->_postProcessValidPackagexml($pf);
+        }
+
+        $errs = $pf->getUserinfo();
+        if (is_array($errs)) {
+            foreach ($errs as $error) {
+                $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
+            }
+        }
+
+        return $pf;
+    }
+
     /**
      * Returns information about a package file.  Expects the name of
      * a gzipped tar file as input.
@@ -475,18 +491,7 @@ class PEAR_Common extends PEAR
     {
         $packagefile = &new PEAR_PackageFile($this->config);
         $pf = &$packagefile->fromTgzFile($file, PEAR_VALIDATE_NORMAL);
-        if (PEAR::isError($pf)) {
-            $errs = $pf->getUserinfo();
-            if (is_array($errs)) {
-                foreach ($errs as $error) {
-                    $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
-                }
-            }
-
-            return $pf;
-        }
-
-        return $this->_postProcessValidPackagexml($pf);
+        return $this->_postProcessChecks($pf);
     }
 
     /**
@@ -505,18 +510,7 @@ class PEAR_Common extends PEAR
     {
         $packagefile = &new PEAR_PackageFile($this->config);
         $pf = &$packagefile->fromPackageFile($descfile, PEAR_VALIDATE_NORMAL);
-        if (PEAR::isError($pf)) {
-            $errs = $pf->getUserinfo();
-            if (is_array($errs)) {
-                foreach ($errs as $error) {
-                    $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
-                }
-            }
-
-            return $pf;
-        }
-
-        return $this->_postProcessValidPackagexml($pf);
+        return $this->_postProcessChecks($pf);
     }
 
     /**
@@ -535,18 +529,7 @@ class PEAR_Common extends PEAR
     {
         $packagefile = &new PEAR_PackageFile($this->config);
         $pf = &$packagefile->fromXmlString($data, PEAR_VALIDATE_NORMAL, false);
-        if (PEAR::isError($pf)) {
-            $errs = $pf->getUserinfo();
-            if (is_array($errs)) {
-                foreach ($errs as $error) {
-                    $e = $this->raiseError($error['message'], $error['code'], null, null, $error);
-                }
-            }
-
-            return $pf;
-        }
-
-        return $this->_postProcessValidPackagexml($pf);
+        return $this->_postProcessChecks($pf);
     }
 
     /**
