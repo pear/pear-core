@@ -114,9 +114,10 @@ operations on the remote server.</doc>
   <function>doLogout</function>
   <shortcut>clo</shortcut>
   <options />
-  <doc>
-Logs out from the remote server.  This command does not actually
-connect to the remote server, it only deletes the stored username and
-password from your user configuration.</doc>
+  <doc>&lt;channel name&gt;
+Logs out from a remote channel server.  If &lt;channel name&gt; is not supplied,
+the default channel is used. This command does not actually connect to the
+remote server, it only deletes the stored username and password from your user
+configuration.</doc>
  </channel-logout>
 </commands>
