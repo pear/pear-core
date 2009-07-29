@@ -1831,13 +1831,17 @@ class PEAR_Config extends PEAR
      *
      * @param string config key
      * @param string (optional) config layer
+     * @param string (optional) channel (defaults to default channel)
      * @return bool TRUE on success, FALSE on failure
      *
      * @access public
      */
-    function remove($key, $layer = 'user')
+    function remove($key, $layer = 'user', $channel = null)
     {
-        $channel = $this->getDefaultChannel();
+        if ($channel === null) {
+            $channel = $this->getDefaultChannel();
+        }
+
         if ($channel !== 'pear.php.net') {
             if (isset($this->configuration[$layer]['__channels'][$channel][$key])) {
                 unset($this->configuration[$layer]['__channels'][$channel][$key]);
