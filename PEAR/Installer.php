@@ -1126,7 +1126,6 @@ class PEAR_Installer extends PEAR_Downloader
      *
      * @return array|PEAR_Error package info if successful
      */
-
     function install($pkgfile, $options = array())
     {
         $this->_options = $options;
@@ -1394,11 +1393,7 @@ class PEAR_Installer extends PEAR_Downloader
         }
 
         $p = &$installregistry->getPackage($pkgname, $channel);
-        if (empty($options['register-only']) && $p) {
-            $dirtree = $p->getDirTree();
-        } else {
-            $dirtree = false;
-        }
+        $dirtree = (empty($options['register-only']) && $p) ? $p->getDirTree() : false;
 
         $pkg->resetFilelist();
         $pkg->setLastInstalledVersion($installregistry->packageInfo($pkg->getPackage(),
@@ -1571,11 +1566,8 @@ class PEAR_Installer extends PEAR_Downloader
             }
 
             $copyto = $this->_prependPath($dest, $packagingroot);
-            if ($copyto != $dest) {
-                $this->log(1, "Installing '$dest' as '$copyto'");
-            } else {
-                $this->log(1, "Installing '$dest'");
-            }
+            $extra  = $copyto != $dest ? " as '$copyto'" : '';
+            $this->log(1, "Installing '$dest'$extra");
 
             $copydir = dirname($copyto);
             // pretty much nothing happens if we are only registering the install
@@ -1604,24 +1596,20 @@ class PEAR_Installer extends PEAR_Downloader
                 }
             }
 
+
+            $data = array(
+                'role'         => $role,
+                'name'         => $bn,
+                'installed_as' => $dest,
+                'php_api'      => $ext['php_api'],
+                'zend_mod_api' => $ext['zend_mod_api'],
+                'zend_ext_api' => $ext['zend_ext_api'],
+            );
+
             if ($filelist->getPackageXmlVersion() == '1.0') {
-                $filelist->installedFile($bn, array(
-                    'role' => $role,
-                    'name' => $bn,
-                    'installed_as' => $dest,
-                    'php_api' => $ext['php_api'],
-                    'zend_mod_api' => $ext['zend_mod_api'],
-                    'zend_ext_api' => $ext['zend_ext_api'],
-                    ));
+                $filelist->installedFile($bn, $data);
             } else {
-                $filelist->installedFile($bn, array('attribs' => array(
-                    'role' => $role,
-                    'name' => $bn,
-                    'installed_as' => $dest,
-                    'php_api' => $ext['php_api'],
-                    'zend_mod_api' => $ext['zend_mod_api'],
-                    'zend_ext_api' => $ext['zend_ext_api'],
-                    )));
+                $filelist->installedFile($bn, array('attribs' => $data));
             }
         }
     }
@@ -1648,11 +1636,8 @@ class PEAR_Installer extends PEAR_Downloader
      */
     function uninstall($package, $options = array())
     {
-        if (isset($options['installroot'])) {
-            $this->config->setInstallRoot($options['installroot']);
-        } else {
-            $this->config->setInstallRoot('');
-        }
+        $installRoot = isset($options['installroot']) ? $options['installroot'] : '';
+        $this->config->setInstallRoot($installRoot);
 
         $this->installroot = '';
         $this->_registry = &$this->config->getRegistry();
@@ -1745,15 +1730,16 @@ class PEAR_Installer extends PEAR_Downloader
                 }
             } else {
                 $this->startFileTransaction();
-                if ($dirtree = $pkg->getDirTree()) {
-                    // attempt to delete empty directories
-                    uksort($dirtree, array($this, '_sortDirs'));
-                    foreach($dirtree as $dir => $notused) {
-                        $this->addFileOperation('rmdir', array($dir));
-                    }
-                } else {
+                $dirtree = $pkg->getDirTree();
+                if ($dirtree === false) {
                     $this->configSet('default_channel', $savechannel);
                     return $this->_registry->deletePackage($package, $channel);
+                }
+
+                // attempt to delete empty directories
+                uksort($dirtree, array($this, '_sortDirs'));
+                foreach($dirtree as $dir => $notused) {
+                    $this->addFileOperation('rmdir', array($dir));
                 }
 
                 if (!$this->commitFileTransaction()) {

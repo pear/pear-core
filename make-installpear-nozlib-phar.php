@@ -18,7 +18,7 @@
  * Next, check out pear/Structure_Graph and copy it into pear-core/
  *
  * Next, check out pear/Console_Getopt and copy it into pear-core/
- * 
+ *
  * Next, check out pear/XML_Util and copy it into pear-core/
  *
  *
@@ -45,6 +45,7 @@ if (empty($dp)) {
     die("while locating packages to install: opendir('" .
         dirname(__FILE__) . "/PEAR/go-pear-tarballs') failed");
 }
+
 $packages = array();
 while (false !== ($entry = readdir($dp))) {
     if ($entry{0} == '.' || !in_array(substr($entry, -4), array('.tar'))) {
@@ -57,6 +58,7 @@ while (false !== ($entry = readdir($dp))) {
     }
     $packages[$matches[1]] = $entry;
 }
+
 $packages['PEAR'] = $pearentry;
 $x = explode(PATH_SEPARATOR, get_include_path());
 $y = array();
@@ -66,7 +68,8 @@ foreach ($x as $path) {
     }
     $y[] = $path;
 }
-// remove current dir, we will otherwise include CVS files, which is not good
+
+// remove current dir, we will otherwise include SVN files, which is not good
 set_include_path(implode(PATH_SEPARATOR, $y));
 require_once 'PEAR/PackageFile.php';
 require_once 'PEAR/Config.php';
@@ -88,6 +91,7 @@ foreach ($packages as $name => $package) {
     $install_files .= "'$name' => 'phar://install-pear-nozlib.phar/$package'," . "\n";
     $creator->addFile("PEAR/go-pear-tarballs/$package", "$package");
 }
+
 $install_files .= ');';
 echo "install_files is $install_files";
 
@@ -190,13 +194,15 @@ $creator->addDir($peardir . DIRECTORY_SEPARATOR . 'PEAR', array(),
         '*PEAR/Validate.php',
         '*PEAR/XMLParser.php',
     ), false, $peardir);
+
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'PEAR.php', 'PEAR.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'PEAR5.php', 'PEAR5.php');
+$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'System.php', 'System.php');
+$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'OS/Guess.php', 'OS/Guess.php');
+
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Archive/Tar.php', 'Archive/Tar.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'XML_Util/Util.php', 'XML/Util.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Console/Getopt.php', 'Console/Getopt.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'System.php', 'System.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'OS/Guess.php', 'OS/Guess.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph.php', 'Structures/Graph.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph/Node.php', 'Structures/Graph/Node.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph/Manipulator/AcyclicTest.php', 'Structures/Graph/Manipulator/AcyclicTest.php');

@@ -92,7 +92,10 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>New BSD License</license>
   <state>stable</state>
  <notes>
+  * Implement Request #16213: add alias to list-channels output [dufuz]
+  * Implement Request #16378: pear svntag [dufuz]
   * Implement Request #16386: PEAR_Config::remove() does not support specifying a channel [timj]
+  * Implement Request #16396: package-dependencies should allow package names [dufuz]
 
   * Fix Bug #16108: PEAR_PackageFile_Generator_v2 PHP4 parse error when running upgrade-all [dufuz]
   * Fix Bug #16113: Installing certain packages fails due incorrect encoding handling [dufuz]

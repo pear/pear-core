@@ -1019,6 +1019,14 @@ class PEAR_ChannelFile
         switch ($version) {
             case '1.0' :
                 $this->resetREST($mirror);
+
+                if (!isset($this->_channelInfo['servers'])) {
+                    $this->_channelInfo['servers'] = array('primary' =>
+                        array('rest' => array()));
+                } elseif (!isset($this->_channelInfo['servers']['primary'])) {
+                    $this->_channelInfo['servers']['primary'] = array('rest' => array());
+                }
+
                 return true;
             break;
             default :

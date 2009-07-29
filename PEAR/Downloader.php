@@ -139,7 +139,6 @@ class PEAR_Downloader extends PEAR_Common
      * @var string
      */
     var $_downloadDir;
-    // {{{ PEAR_Downloader()
 
     /**
      * @param PEAR_Frontend_*
@@ -757,8 +756,6 @@ class PEAR_Downloader extends PEAR_Common
         $this->_downloadDir = $dir;
     }
 
-    // }}}
-    // {{{ configSet()
     function configSet($key, $value, $layer = 'user', $channel = false)
     {
         $this->config->set($key, $value, $layer, $channel);
@@ -769,8 +766,6 @@ class PEAR_Downloader extends PEAR_Common
         }
     }
 
-    // }}}
-    // {{{ setOptions()
     function setOptions($options)
     {
         $this->_options = $options;
@@ -782,8 +777,6 @@ class PEAR_Downloader extends PEAR_Common
     {
         return $this->_options;
     }
-
-    // }}}
 
     /**
      * For simpler unit-testing
@@ -799,8 +792,6 @@ class PEAR_Downloader extends PEAR_Common
         $a = &new PEAR_PackageFile($c, $d, $t);
         return $a;
     }
-
-    // {{{ _getPackageDownloadUrl()
 
     /**
      * @param array output of {@link parsePackageName()}
@@ -936,8 +927,6 @@ class PEAR_Downloader extends PEAR_Common
 
         return $url;
     }
-    // }}}
-    // {{{ getDepPackageDownloadUrl()
 
     /**
      * @param array dependency array
@@ -1069,8 +1058,6 @@ class PEAR_Downloader extends PEAR_Common
 
         return $this->raiseError($parr['channel'] . ' is using a unsupported protocol - This should never happen.');
     }
-    // }}}
-    // {{{ getPackageDownloadUrl()
 
     /**
      * @deprecated in favor of _getPackageDownloadUrl
@@ -1095,9 +1082,6 @@ class PEAR_Downloader extends PEAR_Common
         return $package;
     }
 
-    // }}}
-    // {{{ getDownloadedPackages()
-
     /**
      * Retrieve a list of downloaded packages after a call to {@link download()}.
      *
@@ -1111,9 +1095,6 @@ class PEAR_Downloader extends PEAR_Common
         $this->_toDownload = array();
         return $ret;
     }
-
-    // }}}
-    // {{{ _downloadCallback()
 
     function _downloadCallback($msg, $params = null)
     {
@@ -1147,9 +1128,6 @@ class PEAR_Downloader extends PEAR_Common
             $this->ui->_downloadCallback($msg, $params);
     }
 
-    // }}}
-    // {{{ _prependPath($path, $prepend)
-
     function _prependPath($path, $prepend)
     {
         if (strlen($prepend) > 0) {
@@ -1166,8 +1144,6 @@ class PEAR_Downloader extends PEAR_Common
         }
         return $path;
     }
-    // }}}
-    // {{{ pushError($errmsg, $code)
 
     /**
      * @param string
@@ -1177,9 +1153,6 @@ class PEAR_Downloader extends PEAR_Common
     {
         array_push($this->_errorStack, array($errmsg, $code));
     }
-
-    // }}}
-    // {{{ getErrorMsgs()
 
     function getErrorMsgs()
     {
@@ -1192,10 +1165,10 @@ class PEAR_Downloader extends PEAR_Common
         return $msgs;
     }
 
-    // }}}
-
     /**
      * for BC
+     *
+     * @deprecated
      */
     function sortPkgDeps(&$packages, $uninstall = false)
     {
@@ -1354,7 +1327,7 @@ class PEAR_Downloader extends PEAR_Common
 
         $installOrder = Structures_Graph_Manipulator_TopologicalSorter::sort($depgraph);
         $ret = array();
-        for ($i = 0; $i < count($installOrder); $i++) {
+        for ($i = 0, $count = count($installOrder); $i < $count; $i++) {
             foreach ($installOrder[$i] as $index => $sortedpackage) {
                 $data = &$installOrder[$i][$index]->getData();
                 $ret[] = &$nodes[$reg->parsedPackageNameToString(
@@ -1389,6 +1362,7 @@ class PEAR_Downloader extends PEAR_Common
                         if (count($deplinks[$dep]) == 0) {
                             unset($deplinks[$dep]);
                         }
+
                         continue 3;
                     }
                 }
@@ -1403,25 +1377,30 @@ class PEAR_Downloader extends PEAR_Common
             $visited = array();
             return;
         }
+
         // this happens when a parent has a dep cycle on another dependency
         // but the child is not part of the cycle
         if (isset($visited[$dep])) {
             return false;
         }
+
         $visited[$dep] = 1;
         if ($test == $dep) {
             return true;
         }
+
         if (isset($deplinks[$dep])) {
             if (in_array($test, array_keys($deplinks[$dep]), true)) {
                 return true;
             }
+
             foreach ($deplinks[$dep] as $parent => $unused) {
                 if ($this->_testCycle($test, $deplinks, $parent)) {
                     return true;
                 }
             }
         }
+
         return false;
     }
 
@@ -1755,6 +1734,7 @@ class PEAR_Downloader extends PEAR_Common
                 return PEAR::raiseError("$dest_file: write failed ($php_errormsg)");
             }
         }
+
         fclose($fp);
         fclose($wp);
         if ($callback) {
@@ -1765,6 +1745,7 @@ class PEAR_Downloader extends PEAR_Common
             if (isset($headers['etag'])) {
                 $lastmodified = array('ETag' => $headers['etag']);
             }
+
             if (isset($headers['last-modified'])) {
                 if (is_array($lastmodified)) {
                     $lastmodified['Last-Modified'] = $headers['last-modified'];
