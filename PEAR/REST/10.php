@@ -351,12 +351,15 @@ class PEAR_REST_10
         if (PEAR::isError($packagelist)) {
             return $packagelist;
         }
+
         if (!is_array($packagelist) || !isset($packagelist['p'])) {
             return array();
         }
+
         if (!is_array($packagelist['p'])) {
             $packagelist['p'] = array($packagelist['p']);
         }
+
         return $packagelist['p'];
     }
 
@@ -377,10 +380,12 @@ class PEAR_REST_10
         if (PEAR::isError($packagelist)) {
             return $packagelist;
         }
+
         if (!is_array($packagelist) || !isset($packagelist['p'])) {
             $ret = array();
             return $ret;
         }
+
         if (!is_array($packagelist['p'])) {
             $packagelist['p'] = array($packagelist['p']);
         }
@@ -397,6 +402,7 @@ class PEAR_REST_10
                     $categories[$cat] = $inf['ca'];
                 }
         }
+
         return array_values($categories);
     }
 
@@ -415,9 +421,11 @@ class PEAR_REST_10
         if (PEAR::isError($packagelist)) {
             return $packagelist;
         }
+
         if (!is_array($packagelist) || !isset($packagelist['p'])) {
             return array();
         }
+
         if (!is_array($packagelist['p']) ||
             !isset($packagelist['p'][0])) { // only 1 pkg
             $packagelist = array($packagelist['p']);
