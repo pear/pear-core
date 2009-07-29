@@ -154,10 +154,11 @@ operations on the remote server.',
             'shortcut' => 'clo',
             'function' => 'doLogout',
             'options' => array(),
-            'doc' => '
-Logs out from the remote server.  This command does not actually
-connect to the remote server, it only deletes the stored username and
-password from your user configuration.',
+            'doc' => '<channel name>
+Logs out from a remote channel server.  If <channel name> is not supplied,
+the default channel is used. This command does not actually connect to the
+remote server, it only deletes the stored username and password from your user
+configuration.',
             ),
         );
 
@@ -862,16 +863,19 @@ password from your user configuration.',
     function doLogout($command, $options, $params)
     {
         $reg     = &$this->config->getRegistry();
-        $channel = $this->config->get('default_channel');
+
+        // If a parameter is supplied, use that as the channel to log in to
+        $channel = isset($params[0]) ? $params[0] : $this->config->get('default_channel');
+
         $chan    = $reg->getChannel($channel);
         if (PEAR::isError($chan)) {
             return $this->raiseError($chan);
         }
 
-        $server = $this->config->get('preferred_mirror');
+        $server = $this->config->get('preferred_mirror', null, $channel);
         $this->ui->outputData("Logging out from $server.", $command);
-        $this->config->remove('username');
-        $this->config->remove('password');
+        $this->config->remove('username', 'user', $channel);
+        $this->config->remove('password', 'user', $channel);
         $this->config->store();
         return true;
     }
