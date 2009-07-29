@@ -502,8 +502,18 @@ used for automated conversion or learning the format.
         }
 
         $command .= ' -m "Tagging the ' . $version  . ' release" \ ' . "\n";
-        $command .= '  ' . $path['from'] . ' \ ' . "\n";
-        $command .= '  ' . $releaseTag;
+
+        $dir   = dirname($packageFile);
+        $dir   = substr($dir, strrpos($dir, '/') + 1);
+        $files = array_keys($info->getFilelist());
+        foreach ($files as $file) {
+            if (!file_exists($file)) {
+                $file = $dir . DIRECTORY_SEPARATOR . $file;
+            }
+            $command .= ' ' . escapeshellarg($file);
+        }
+
+        $command .= ' ' . $releaseTag;
 
         if ($this->config->get('verbose') > 1) {
             $this->output .= "+ $command\n";
