@@ -204,15 +204,16 @@ class PEAR_Registry extends PEAR
                         }
 
                         $pear_channel = new PEAR_ChannelFile;
-                        $pear_channel->setName('pear.php.net');
                         $pear_channel->setAlias('pear');
                         $pear_channel->setServer('pear.php.net');
                         $pear_channel->setSummary('PHP Extension and Application Repository');
                         $pear_channel->setDefaultPEARProtocols();
                         $pear_channel->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
                         $pear_channel->setBaseURL('REST1.1', 'http://pear.php.net/rest/');
+                        $pear_channel->setBaseURL('REST1.3', 'http://pear.php.net/rest/');
+                        $pear_channel->setBaseURL('REST1.4', 'http://pear.php.net/rest/');
                     } else {
-                        $pear_channel->setName('pear.php.net');
+                        $pear_channel->setServer('pear.php.net');
                         $pear_channel->setAlias('pear');
                     }
 
@@ -228,7 +229,6 @@ class PEAR_Registry extends PEAR
                         }
 
                         $pecl_channel = new PEAR_ChannelFile;
-                        $pecl_channel->setName('pecl.php.net');
                         $pecl_channel->setAlias('pecl');
                         $pecl_channel->setServer('pecl.php.net');
                         $pecl_channel->setSummary('PHP Extension Community Library');
@@ -237,7 +237,7 @@ class PEAR_Registry extends PEAR
                         $pecl_channel->setBaseURL('REST1.1', 'http://pecl.php.net/rest/');
                         $pecl_channel->setValidationPackage('PEAR_Validator_PECL', '1.0');
                     } else {
-                        $pecl_channel->setName('pecl.php.net');
+                        $pecl_channel->setServer('pecl.php.net');
                         $pecl_channel->setAlias('pecl');
                     }
 
@@ -253,7 +253,6 @@ class PEAR_Registry extends PEAR
                         }
 
                         $doc_channel = new PEAR_ChannelFile;
-                        $doc_channel->setName('doc.php.net');
                         $doc_channel->setAlias('phpdocs');
                         $doc_channel->setServer('doc.php.net');
                         $doc_channel->setSummary('PHP Documentation Team');
@@ -262,7 +261,7 @@ class PEAR_Registry extends PEAR
                         $doc_channel->setBaseURL('REST1.1', 'http://doc.php.net/rest/');
                         $doc_channel->setBaseURL('REST1.3', 'http://doc.php.net/rest/');
                     } else {
-                        $doc_channel->setName('doc.php.net');
+                        $doc_channel->setServer('doc.php.net');
                         $doc_channel->setAlias('doc');
                     }
 
@@ -1476,12 +1475,13 @@ class PEAR_Registry extends PEAR
             }
 
             $pear_channel = new PEAR_ChannelFile;
-            $pear_channel->setName('pear.php.net');
+            $pear_channel->setServer('pear.php.net');
             $pear_channel->setAlias('pear');
             $pear_channel->setSummary('PHP Extension and Application Repository');
             $pear_channel->setDefaultPEARProtocols();
             $pear_channel->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
             $pear_channel->setBaseURL('REST1.1', 'http://pear.php.net/rest/');
+            $pear_channel->setBaseURL('REST1.3', 'http://pear.php.net/rest/');
             return $pear_channel;
         }
 
@@ -1491,7 +1491,7 @@ class PEAR_Registry extends PEAR
                 require_once 'PEAR/ChannelFile.php';
             }
             $pear_channel = new PEAR_ChannelFile;
-            $pear_channel->setName('pecl.php.net');
+            $pear_channel->setServer('pecl.php.net');
             $pear_channel->setAlias('pecl');
             $pear_channel->setSummary('PHP Extension Community Library');
             $pear_channel->setDefaultPEARProtocols();
@@ -1508,7 +1508,7 @@ class PEAR_Registry extends PEAR
             }
 
             $doc_channel = new PEAR_ChannelFile;
-            $doc_channel->setName('doc.php.net');
+            $doc_channel->setServer('doc.php.net');
             $doc_channel->setAlias('phpdocs');
             $doc_channel->setSummary('PHP Documentation Team');
             $doc_channel->setDefaultPEARProtocols();
