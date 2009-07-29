@@ -92,9 +92,13 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>New BSD License</license>
   <state>stable</state>
  <notes>
+  * Implement Request #16386: PEAR_Config::remove() does not support specifying a channel [timj]
+
   * Fix Bug #16108: PEAR_PackageFile_Generator_v2 PHP4 parse error when running upgrade-all [dufuz]
   * Fix Bug #16113: Installing certain packages fails due incorrect encoding handling [dufuz]
   * Fix Bug #16122: PEAR RunTest failed to run as expected [dufuz]
+  * Fix Bug #16387: channel-logout does not support logging out from a non-default channel [timj]
+  * Fix the shutdown functions where a index might not exist and thus raise a notice [derick]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -267,6 +271,9 @@ http://pear.php.net/dtd/package-1.0.xsd">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="13.php">
+      <replace from="@package_version@" to="version" type="package-info"/>
+     </file>
+     <file role="php" name="14.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
     </dir>
