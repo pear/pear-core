@@ -60,6 +60,7 @@ if (!isset($_SERVER['argv']) && !isset($argv) && !isset($HTTP_SERVER_VARS['argv'
     echo 'ERROR: either use the CLI php executable, or set register_argc_argv=On in php.ini';
     exit(1);
 }
+
 $argv = Console_Getopt::readPHPArgv();
 // fix CGI sapi oddity - the -- in pear.bat/pear is not removed
 if (php_sapi_name() != 'cli' && isset($argv[1]) && $argv[1] == '--') {
@@ -67,12 +68,8 @@ if (php_sapi_name() != 'cli' && isset($argv[1]) && $argv[1] == '--') {
     $argv = array_values($argv);
 }
 $progname = PEAR_RUNTYPE;
-if (in_array('getopt2', get_class_methods('Console_Getopt'))) {
-    array_shift($argv);
-    $options = Console_Getopt::getopt2($argv, "c:C:d:D:Gh?sSqu:vV");
-} else {
-    $options = Console_Getopt::getopt($argv, "c:C:d:D:Gh?sSqu:vV");
-}
+array_shift($argv);
+$options = Console_Getopt::getopt2($argv, "c:C:d:D:Gh?sSqu:vV");
 if (PEAR::isError($options)) {
     usage($options);
 }
@@ -245,7 +242,6 @@ if ($store_user_config) {
 }
 
 $command = (isset($options[1][0])) ? $options[1][0] : null;
-
 if (empty($command) && ($store_user_config || $store_system_config)) {
     exit;
 }
@@ -261,6 +257,7 @@ if ($fetype == 'Gtk' || $fetype == 'Gtk2') {
     if ($command == 'help') {
         usage(null, @$options[1][1]);
     }
+
     if (!$config->validConfiguration()) {
         PEAR::raiseError('CRITICAL ERROR: no existing valid configuration files found in files ' .
             "'$pear_user_config' or '$pear_system_config', please copy an existing configuration" .
@@ -276,15 +273,13 @@ if ($fetype == 'Gtk' || $fetype == 'Gtk2') {
 
     $short_args = $long_args = null;
     PEAR_Command::getGetoptArgs($command, $short_args, $long_args);
-    if (in_array('getopt2', get_class_methods('Console_Getopt'))) {
-        array_shift($options[1]);
-        $tmp = Console_Getopt::getopt2($options[1], $short_args, $long_args);
-    } else {
-        $tmp = Console_Getopt::getopt($options[1], $short_args, $long_args);
-    }
+    array_shift($options[1]);
+    $tmp = Console_Getopt::getopt2($options[1], $short_args, $long_args);
+
     if (PEAR::isError($tmp)) {
         break;
     }
+
     list($tmpopt, $params) = $tmp;
     $opts = array();
     foreach ($tmpopt as $foo => $tmp2) {
@@ -292,6 +287,7 @@ if ($fetype == 'Gtk' || $fetype == 'Gtk2') {
         if ($value === null) {
             $value = true; // options without args
         }
+
         if (strlen($opt) == 1) {
             $cmdoptions = $cmd->getOptions($command);
             foreach ($cmdoptions as $o => $d) {
@@ -305,10 +301,12 @@ if ($fetype == 'Gtk' || $fetype == 'Gtk2') {
             }
         }
     }
+
     $ok = $cmd->run($command, $opts, $params);
     if ($ok === false) {
         PEAR::raiseError("unknown command `$command'");
     }
+
     if (PEAR::isError($ok)) {
         PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array($ui, "displayFatalError"));
         PEAR::raiseError($ok);
@@ -326,6 +324,7 @@ function usage($error = null, $helpsubject = null)
     } elseif ($error !== null) {
         fputs($stderr, "$error\n");
     }
+
     if ($helpsubject != null) {
         $put = cmdHelp($helpsubject);
     } else {
@@ -384,12 +383,14 @@ function cmdHelp($command)
         if (is_string($help)) {
             return "$progname $command [options] $help\n";
         }
+
         if ($help[1] === null) {
             return "$progname $command $help[0]";
-        } else {
-            return "$progname $command [options] $help[0]\n$help[1]";
         }
+
+        return "$progname $command [options] $help[0]\n$help[1]";
     }
+
     return "Command '$command' is not valid, try '$progname help'";
 }
 
