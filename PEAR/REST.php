@@ -56,7 +56,6 @@ class PEAR_REST
      */
     function retrieveCacheFirst($url, $accept = false, $forcestring = false, $channel = false)
     {
-
         $cachefile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
             md5($url) . 'rest.cachefile';
 
