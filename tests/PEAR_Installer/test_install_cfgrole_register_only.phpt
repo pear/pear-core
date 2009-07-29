@@ -32,7 +32,7 @@ $installer->setOptions($dp->getOptions());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
-$ret = &$installer->install($result[0], $dp->getOptions());
+$ret = $installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
   'attribs' =>
@@ -191,7 +191,7 @@ $installer->setOptions($dp->getOptions());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
-$ret = &$installer->install($result[0], $dp->getOptions());
+$ret = $installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertFileNotExists($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR .  'PEAR' . DIRECTORY_SEPARATOR . 'foo.php',
     'installed file');

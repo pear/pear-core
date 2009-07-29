@@ -32,10 +32,10 @@ $installer->setOptions($dp->getOptions());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
-$ret = &$installer->install($result[0], $dp->getOptions());
+$ret = $installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
-  'attribs' => 
+  'attribs' =>
   array (
     'version' => '2.0',
     'xmlns' => 'http://pear.php.net/dtd/package-2.0',
@@ -47,7 +47,7 @@ $phpunit->assertEquals(array (
   'channel' => 'pear.php.net',
   'summary' => 'PEAR Base System',
   'description' => 'The PEAR package contains:',
-  'lead' => 
+  'lead' =>
   array (
     'name' => 'Stig Bakken',
     'user' => 'ssb',
@@ -55,36 +55,36 @@ $phpunit->assertEquals(array (
     'active' => 'yes',
   ),
   'date' => '2004-09-30',
-  'version' => 
+  'version' =>
   array (
     'release' => '1.4.0',
     'api' => '1.4.0',
   ),
-  'stability' => 
+  'stability' =>
   array (
     'release' => 'stable',
     'api' => 'stable',
   ),
-  'license' => 
+  'license' =>
   array (
-    'attribs' => 
+    'attribs' =>
     array (
       'uri' => 'http://www.php.net/license/3_0.txt',
     ),
     '_content' => 'PHP License',
   ),
   'notes' => 'Installer Roles/Tasks:',
-  'contents' => 
+  'contents' =>
   array (
-    'dir' => 
+    'dir' =>
     array (
-      'attribs' => 
+      'attribs' =>
       array (
         'name' => '/',
       ),
-      'file' => 
+      'file' =>
       array (
-        'attribs' => 
+        'attribs' =>
         array (
           'name' => 'foo.php',
           'role' => 'cfg',
@@ -92,24 +92,24 @@ $phpunit->assertEquals(array (
       ),
     ),
   ),
-  'dependencies' => 
+  'dependencies' =>
   array (
-    'required' => 
+    'required' =>
     array (
-      'php' => 
+      'php' =>
       array (
         'min' => '4.2',
       ),
-      'pearinstaller' => 
+      'pearinstaller' =>
       array (
         'min' => '1.7.0',
       ),
     ),
   ),
   'phprelease' => '',
-  'filelist' => 
+  'filelist' =>
   array (
-    'foo.php' => 
+    'foo.php' =>
     array (
       'name' => 'foo.php',
       'role' => 'cfg',
@@ -119,27 +119,27 @@ $phpunit->assertEquals(array (
     ),
   ),
   '_lastversion' => NULL,
-  'dirtree' => 
+  'dirtree' =>
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR . 'PEAR' => true,
   ),
-  'old' => 
+  'old' =>
   array (
     'version' => '1.4.0',
     'release_date' => '2004-09-30',
     'release_state' => 'stable',
     'release_license' => 'PHP License',
     'release_notes' => 'Installer Roles/Tasks:',
-    'release_deps' => 
+    'release_deps' =>
     array (
-      0 => 
+      0 =>
       array (
         'type' => 'php',
         'rel' => 'ge',
         'version' => '4.2',
         'optional' => 'no',
       ),
-      1 => 
+      1 =>
       array (
         'type' => 'pkg',
         'channel' => 'pear.php.net',
@@ -149,9 +149,9 @@ $phpunit->assertEquals(array (
         'optional' => 'no',
       ),
     ),
-    'maintainers' => 
+    'maintainers' =>
     array (
-      0 => 
+      0 =>
       array (
         'name' => 'Stig Bakken',
         'email' => 'stig@php.net',
@@ -179,7 +179,7 @@ $installer->setOptions($dp->getOptions());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
-$ret = &$installer->install($result[0], $dp->getOptions());
+$ret = $installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR .  'PEAR' . DIRECTORY_SEPARATOR . 'foo.php',
     'installed file');
@@ -203,7 +203,7 @@ $installer->setOptions($dp->getOptions());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
-$ret = &$installer->install($result[0], $dp->getOptions());
+$ret = $installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'cfg' . DIRECTORY_SEPARATOR .  'PEAR' . DIRECTORY_SEPARATOR . 'foo.php',
     'installed file');
@@ -226,7 +226,7 @@ $installer->setOptions($dp->getOptions());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
-$ret = &$installer->install($result[0], $dp->getOptions());
+$ret = $installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $arr = $fakelog->getLog();
 $phpunit->assertEquals(array (

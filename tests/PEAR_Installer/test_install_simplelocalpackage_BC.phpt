@@ -12,7 +12,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'simplepackage.xml';
 
-$ret = &$installer->install($pathtopackagexml);
+$ret = $installer->install($pathtopackagexml);
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
   'provides' =>

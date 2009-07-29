@@ -194,21 +194,27 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/xml_rpc/info.xml", '<?xml ve
 It has support for HTTP/HTTPS transport, proxies and authentication.</d>
  <r xlink:href="/rest/r/xml_rpc"/>
 </p>', 'text/xml');
+
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/deps.1.4.4.txt", 'b:0;', 'text/xml');
+
 $pearweb->addHTMLConfig('http://pear.php.net/get/XML_RPC-1.4.4.tgz', $dir . 'XML_RPC-1.4.4.tgz');
+
 $command->run('install', array(), array($dir . 'PEAR-1.4.3.tgz', $dir . 'XML_RPC-1.4.3.tgz',
     $dir . 'Console_Getopt-1.2.tgz', $dir . 'Archive_Tar-1.3.1.tgz'));
 $phpunit->assertNoErrors('setup');
 $phpunit->assertEquals(4, count($reg->listPackages()), 'num packages');
 $phpunit->assertEquals('1.4.3', $reg->packageInfo('PEAR', 'version'), 'PEAR version');
 $phpunit->assertEquals('1.4.3', $reg->packageInfo('XML_RPC', 'version'), 'XML_RPC version');
+
 unset($GLOBALS['__Stupid_php4_a']); // reset downloader
 $_test_dep->setExtensions(array()); // make PEAR upgrade fail
+
 $command->run('upgrade', array(), array($dir . 'PEAR-1.4.4.tgz'));
 $phpunit->assertNoErrors('full test');
 $phpunit->assertEquals(4, count($reg->listPackages()), 'num packages 2');
 $phpunit->assertEquals('1.4.3', $reg->packageInfo('PEAR', 'version'), 'PEAR version 2');
 $phpunit->assertEquals('1.4.3', $reg->packageInfo('XML_RPC', 'version'), 'XML_RPC version 2');
+
 echo 'tests done';
 ?>
 --CLEAN--

@@ -11,6 +11,14 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 
+$dir = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packages'. DIRECTORY_SEPARATOR;
+$chan = $reg->getChannel('pear.php.net');
+$chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
+$chan->setBaseURL('REST1.1', 'http://pear.php.net/rest/');
+$reg->updateChannel($chan);
+
+$pearweb->addHTMLConfig('http://pear.php.net/get/PEAR-1.4.0a12.tgz', $dir . 'PEAR-1.4.0a12.tgz');
+
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/xml_rpc/allreleases.xml",
 '<?xml version="1.0" encoding="UTF-8" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
@@ -1053,16 +1061,13 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/packages.xml", '<?xml versio
  <p>XML_XSLT_Wrapper</p>
  <p>XML_XUL</p>
 </a>', 'text/xml');
-$dir = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-'packages'. DIRECTORY_SEPARATOR;
-$pearweb->addHTMLConfig('http://pear.php.net/get/PEAR-1.4.0a12.tgz', $dir . 'PEAR-1.4.0a12.tgz');
-$chan = $reg->getChannel('pear.php.net');
-$chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
-$chan->setBaseURL('REST1.1', 'http://pear.php.net/rest/');
-$reg->updateChannel($chan);
+
+
+
 $_test_dep->setPHPVersion('4.3.10');
 $_test_dep->setPEARVersion('1.4.8');
 $_test_dep->setExtensions(array('xml' => 0, 'pcre' => 1));
+
 $command->run('install', array(), array($dir . 'PEAR-1.4.8.tgz',
     $dir . 'Console_Getopt-1.2.tgz', $dir . 'Archive_Tar-1.3.1.tgz', $dir . 'XML_RPC-1.4.3.tgz'));
 $phpunit->assertNoErrors('setup');
@@ -1071,6 +1076,7 @@ $phpunit->assertEquals(4, count($reg->listPackages()), 'num packages');
 $fakelog->getLog();
 $fakelog->getDownload();
 unset($GLOBALS['__Stupid_php4_a']); // reset downloader
+
 $command->run('upgrade', array(), array('PEAR-alpha'));
 $phpunit->assertNoErrors('full test');
 $phpunit->assertEquals(array (
@@ -1081,6 +1087,7 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'bug part');
 $phpunit->assertEquals(array(), $fakelog->getDownload(), 'download bug part');
+
 echo 'tests done';
 ?>
 --CLEAN--

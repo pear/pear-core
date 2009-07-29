@@ -39,7 +39,7 @@ $installer->setOptions($dp->getOptions());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
-$ret = &$installer->install($result[0], $dp->getOptions());
+$ret = $installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
   'provides' =>
