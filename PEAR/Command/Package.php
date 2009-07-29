@@ -467,7 +467,7 @@ used for automated conversion or learning the format.
         }
         pclose($fp);
 
-        if (strpos($out, 'item="modified"')) {
+        if (!isset($options['quiet']) && strpos($out, 'item="modified"')) {
             $params = array(array(
                 'name' => 'modified',
                 'type' => 'yesno',
