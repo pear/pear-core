@@ -36,11 +36,11 @@ $installer->setOptions($dp->getOptions());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
-$ret = &$installer->install($result[0], $dp->getOptions());
-$ret = &$installer->install($result[1], $dp->getOptions());
-$ret = &$installer->install($result[2], $dp->getOptions());
-$ret = &$installer->install($result[3], $dp->getOptions());
-$ret = &$installer->install($result[4], $dp->getOptions());
+$ret = $installer->install($result[0], $dp->getOptions());
+$ret = $installer->install($result[1], $dp->getOptions());
+$ret = $installer->install($result[2], $dp->getOptions());
+$ret = $installer->install($result[3], $dp->getOptions());
+$ret = $installer->install($result[4], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $fakelog->getLog();
 
@@ -56,12 +56,12 @@ $phpunit->assertErrors(
     ),
 'after BB uninstall');
 $phpunit->assertEquals(array(
-  0 => 
+  0 =>
   array (
     0 => 0,
     1 => '"pear/BB" can be optionally used by installed package pear/RR',
   ),
-  1 => 
+  1 =>
   array (
     0 => 0,
     1 => '"pear/BB" is required by installed package pear/QQ',
@@ -80,7 +80,7 @@ $phpunit->assertErrors(
     ),
 'after SG uninstall');
 $phpunit->assertEquals(array(
-  0 => 
+  0 =>
   array (
     0 => 0,
     1 => '"pear/SG" is required by installed package pear/AA',
@@ -99,7 +99,7 @@ $phpunit->assertErrors(
     ),
 'after RR uninstall');
 $phpunit->assertEquals(array(
-  0 => 
+  0 =>
   array (
     0 => 0,
     1 => '"pear/RR" is required by installed package pear/SG',
@@ -119,7 +119,7 @@ $phpunit->assertErrors(
     ),
 'after AA uninstall');
 $phpunit->assertEquals(array(
-  0 => 
+  0 =>
   array (
     0 => 0,
     1 => '"pear/AA" is required by installed package pear/RR',
@@ -139,7 +139,7 @@ $phpunit->assertErrors(
     ),
 'after QQ uninstall (QQ SG)');
 $phpunit->assertEquals(array(
-  0 => 
+  0 =>
   array (
     0 => 0,
     1 => '"pear/QQ" is required by installed package pear/SG',
@@ -154,7 +154,7 @@ $phpunit->assertErrors(
     ),
 'after SG (QQ SG) uninstall');
 $phpunit->assertEquals(array(
-  0 => 
+  0 =>
   array (
     0 => 0,
     1 => '"pear/SG" is required by installed package pear/AA',

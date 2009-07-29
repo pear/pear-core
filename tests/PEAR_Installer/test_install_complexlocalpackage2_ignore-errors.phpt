@@ -336,7 +336,7 @@ $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
 $installer->setOptions($dp->getOptions());
 
-$ret = &$installer->install($result[0], $dp->getOptions());
+$ret = $installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
   'attribs' =>
@@ -691,7 +691,7 @@ unset($info['_lastmodified']);
 $phpunit->assertEquals($ret, $info, 'test installation, Bar');
 
 
-$ret = &$installer->install($result[1], $dp->getOptions());
+$ret = $installer->install($result[1], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
   'attribs' =>

@@ -74,10 +74,10 @@ $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
 $installer->setOptions($dp->getOptions());
-$ret = &$installer->install($result[0], $dp->getOptions());
+$ret = $installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
-  'attribs' => 
+  'attribs' =>
   array (
     'packagerversion' => '1.4.0a1',
     'version' => '2.0',
@@ -100,30 +100,30 @@ $phpunit->assertEquals(array (
  * the System class for quick handling of common operations
    with files and directories
  * the PEAR base class',
-  'lead' => 
+  'lead' =>
   array (
-    0 => 
+    0 =>
     array (
       'name' => 'Stig Bakken',
       'user' => 'ssb',
       'email' => 'stig@php.net',
       'active' => 'yes',
     ),
-    1 => 
+    1 =>
     array (
       'name' => 'Greg Beaver',
       'user' => 'cellog',
       'email' => 'cellog@php.net',
       'active' => 'yes',
     ),
-    2 => 
+    2 =>
     array (
       'name' => 'Tomas V.V.Cox',
       'user' => 'cox',
       'email' => 'cox@idecnet.com',
       'active' => 'yes',
     ),
-    3 => 
+    3 =>
     array (
       'name' => 'Pierre-Alain Joye',
       'user' => 'pajoye',
@@ -131,7 +131,7 @@ $phpunit->assertEquals(array (
       'active' => 'yes',
     ),
   ),
-  'developer' => 
+  'developer' =>
   array (
     'name' => 'Martin Jansen',
     'user' => 'mj',
@@ -140,19 +140,19 @@ $phpunit->assertEquals(array (
   ),
   'date' => '2004-12-29',
   'time' => '14:28:55',
-  'version' => 
+  'version' =>
   array (
     'release' => '1.5.0a1',
     'api' => '1.5.0a1',
   ),
-  'stability' => 
+  'stability' =>
   array (
     'release' => 'alpha',
     'api' => 'alpha',
   ),
-  'license' => 
+  'license' =>
   array (
-    'attribs' => 
+    'attribs' =>
     array (
       'uri' => 'http://www.php.net/license/3_0.txt',
     ),
@@ -199,17 +199,17 @@ Installer:
  * Major bug in Registry - false file conflicts on data/doc/test role
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)',
-  'contents' => 
+  'contents' =>
   array (
-    'dir' => 
+    'dir' =>
     array (
-      'attribs' => 
+      'attribs' =>
       array (
         'name' => '/',
       ),
-      'file' => 
+      'file' =>
       array (
-        'attribs' => 
+        'attribs' =>
         array (
           'md5sum' => 'ed0384ad29e60110b310a02e95287ee6',
           'name' => 'foo12.php',
@@ -218,40 +218,40 @@ Installer:
       ),
     ),
   ),
-  'dependencies' => 
+  'dependencies' =>
   array (
-    'required' => 
+    'required' =>
     array (
-      'php' => 
+      'php' =>
       array (
         'min' => '4.3.6',
         'max' => '6.0.0',
       ),
-      'pearinstaller' => 
+      'pearinstaller' =>
       array (
         'min' => '1.4.0a1',
       ),
     ),
   ),
   'phprelease' => '',
-  'changelog' => 
+  'changelog' =>
   array (
-    'release' => 
+    'release' =>
     array (
-      'version' => 
+      'version' =>
       array (
         'release' => '1.3.3',
         'api' => '1.3.3',
       ),
-      'stability' => 
+      'stability' =>
       array (
         'release' => 'stable',
         'api' => 'stable',
       ),
       'date' => '2004-10-28',
-      'license' => 
+      'license' =>
       array (
-        'attribs' => 
+        'attribs' =>
         array (
           'uri' => 'http://www.php.net/license/3_0.txt',
         ),
@@ -273,9 +273,9 @@ Other:
  * fix warning in PEAR_Registry for windows 98 users',
     ),
   ),
-  'filelist' => 
+  'filelist' =>
   array (
-    'foo12.php' => 
+    'foo12.php' =>
     array (
       'md5sum' => 'ed0384ad29e60110b310a02e95287ee6',
       'name' => 'foo12.php',
@@ -284,11 +284,11 @@ Other:
     ),
   ),
   '_lastversion' => null,
-  'dirtree' => 
+  'dirtree' =>
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
   ),
-  'old' => 
+  'old' =>
   array (
     'version' => '1.5.0a1',
     'release_date' => '2004-12-29',
@@ -335,23 +335,23 @@ Installer:
  * Major bug in Registry - false file conflicts on data/doc/test role
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)',
-    'release_deps' => 
+    'release_deps' =>
     array (
-      0 => 
+      0 =>
       array (
         'type' => 'php',
         'rel' => 'le',
         'version' => '6.0.0',
         'optional' => 'no',
       ),
-      1 => 
+      1 =>
       array (
         'type' => 'php',
         'rel' => 'ge',
         'version' => '4.3.6',
         'optional' => 'no',
       ),
-      2 => 
+      2 =>
       array (
         'type' => 'pkg',
         'channel' => 'pear.php.net',
@@ -361,9 +361,9 @@ Installer:
         'optional' => 'no',
       ),
     ),
-    'maintainers' => 
+    'maintainers' =>
     array (
-      0 => 
+      0 =>
       array (
         'name' => 'Stig Bakken',
         'email' => 'stig@php.net',
@@ -371,7 +371,7 @@ Installer:
         'handle' => 'ssb',
         'role' => 'lead',
       ),
-      1 => 
+      1 =>
       array (
         'name' => 'Greg Beaver',
         'email' => 'cellog@php.net',
@@ -379,7 +379,7 @@ Installer:
         'handle' => 'cellog',
         'role' => 'lead',
       ),
-      2 => 
+      2 =>
       array (
         'name' => 'Tomas V.V.Cox',
         'email' => 'cox@idecnet.com',
@@ -387,7 +387,7 @@ Installer:
         'handle' => 'cox',
         'role' => 'lead',
       ),
-      3 => 
+      3 =>
       array (
         'name' => 'Pierre-Alain Joye',
         'email' => 'pajoye@pearfr.org',
@@ -395,7 +395,7 @@ Installer:
         'handle' => 'pajoye',
         'role' => 'lead',
       ),
-      4 => 
+      4 =>
       array (
         'name' => 'Martin Jansen',
         'email' => 'mj@php.net',
@@ -415,10 +415,10 @@ $phpunit->assertTrue(isset($info['_lastmodified']), 'lastmodified is set?');
 unset($info['_lastmodified']);
 $phpunit->assertEquals($ret, $info, 'test installation, Foobar');
 
-$ret = &$installer->install($result[1], $dp->getOptions());
+$ret = $installer->install($result[1], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
-  'attribs' => 
+  'attribs' =>
   array (
     'packagerversion' => '1.4.0a1',
     'version' => '2.0',
@@ -441,30 +441,30 @@ $phpunit->assertEquals(array (
  * the System class for quick handling of common operations
    with files and directories
  * the PEAR base class',
-  'lead' => 
+  'lead' =>
   array (
-    0 => 
+    0 =>
     array (
       'name' => 'Stig Bakken',
       'user' => 'ssb',
       'email' => 'stig@php.net',
       'active' => 'yes',
     ),
-    1 => 
+    1 =>
     array (
       'name' => 'Greg Beaver',
       'user' => 'cellog',
       'email' => 'cellog@php.net',
       'active' => 'yes',
     ),
-    2 => 
+    2 =>
     array (
       'name' => 'Tomas V.V.Cox',
       'user' => 'cox',
       'email' => 'cox@idecnet.com',
       'active' => 'yes',
     ),
-    3 => 
+    3 =>
     array (
       'name' => 'Pierre-Alain Joye',
       'user' => 'pajoye',
@@ -472,7 +472,7 @@ $phpunit->assertEquals(array (
       'active' => 'yes',
     ),
   ),
-  'developer' => 
+  'developer' =>
   array (
     'name' => 'Martin Jansen',
     'user' => 'mj',
@@ -481,19 +481,19 @@ $phpunit->assertEquals(array (
   ),
   'date' => '2004-12-29',
   'time' => '21:06:11',
-  'version' => 
+  'version' =>
   array (
     'release' => '1.5.2',
     'api' => '1.5.2',
   ),
-  'stability' => 
+  'stability' =>
   array (
     'release' => 'stable',
     'api' => 'stable',
   ),
-  'license' => 
+  'license' =>
   array (
-    'attribs' => 
+    'attribs' =>
     array (
       'uri' => 'http://www.php.net/license/3_0.txt',
     ),
@@ -540,17 +540,17 @@ Installer:
  * Major bug in Registry - false file conflicts on data/doc/test role
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)',
-  'contents' => 
+  'contents' =>
   array (
-    'dir' => 
+    'dir' =>
     array (
-      'attribs' => 
+      'attribs' =>
       array (
         'name' => '/',
       ),
-      'file' => 
+      'file' =>
       array (
-        'attribs' => 
+        'attribs' =>
         array (
           'md5sum' => 'ed0384ad29e60110b310a02e95287ee6',
           'name' => 'foo1.php',
@@ -559,20 +559,20 @@ Installer:
       ),
     ),
   ),
-  'dependencies' => 
+  'dependencies' =>
   array (
-    'required' => 
+    'required' =>
     array (
-      'php' => 
+      'php' =>
       array (
         'min' => '4.3.6',
         'max' => '6.0.0',
       ),
-      'pearinstaller' => 
+      'pearinstaller' =>
       array (
         'min' => '1.4.0a1',
       ),
-      'package' => 
+      'package' =>
       array (
         'name' => 'Foobar',
         'channel' => 'smork',
@@ -580,24 +580,24 @@ Installer:
     ),
   ),
   'phprelease' => '',
-  'changelog' => 
+  'changelog' =>
   array (
-    'release' => 
+    'release' =>
     array (
-      'version' => 
+      'version' =>
       array (
         'release' => '1.3.3',
         'api' => '1.3.3',
       ),
-      'stability' => 
+      'stability' =>
       array (
         'release' => 'stable',
         'api' => 'stable',
       ),
       'date' => '2004-10-28',
-      'license' => 
+      'license' =>
       array (
-        'attribs' => 
+        'attribs' =>
         array (
           'uri' => 'http://www.php.net/license/3_0.txt',
         ),
@@ -619,9 +619,9 @@ Other:
  * fix warning in PEAR_Registry for windows 98 users',
     ),
   ),
-  'filelist' => 
+  'filelist' =>
   array (
-    'foo1.php' => 
+    'foo1.php' =>
     array (
       'md5sum' => 'ed0384ad29e60110b310a02e95287ee6',
       'name' => 'foo1.php',
@@ -630,11 +630,11 @@ Other:
     ),
   ),
   '_lastversion' => null,
-  'dirtree' => 
+  'dirtree' =>
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
   ),
-  'old' => 
+  'old' =>
   array (
     'version' => '1.5.2',
     'release_date' => '2004-12-29',
@@ -681,23 +681,23 @@ Installer:
  * Major bug in Registry - false file conflicts on data/doc/test role
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)',
-    'release_deps' => 
+    'release_deps' =>
     array (
-      0 => 
+      0 =>
       array (
         'type' => 'php',
         'rel' => 'le',
         'version' => '6.0.0',
         'optional' => 'no',
       ),
-      1 => 
+      1 =>
       array (
         'type' => 'php',
         'rel' => 'ge',
         'version' => '4.3.6',
         'optional' => 'no',
       ),
-      2 => 
+      2 =>
       array (
         'type' => 'pkg',
         'channel' => 'pear.php.net',
@@ -706,7 +706,7 @@ Installer:
         'version' => '1.4.0a1',
         'optional' => 'no',
       ),
-      3 => 
+      3 =>
       array (
         'type' => 'pkg',
         'channel' => 'smork',
@@ -715,9 +715,9 @@ Installer:
         'optional' => 'no',
       ),
     ),
-    'maintainers' => 
+    'maintainers' =>
     array (
-      0 => 
+      0 =>
       array (
         'name' => 'Stig Bakken',
         'email' => 'stig@php.net',
@@ -725,7 +725,7 @@ Installer:
         'handle' => 'ssb',
         'role' => 'lead',
       ),
-      1 => 
+      1 =>
       array (
         'name' => 'Greg Beaver',
         'email' => 'cellog@php.net',
@@ -733,7 +733,7 @@ Installer:
         'handle' => 'cellog',
         'role' => 'lead',
       ),
-      2 => 
+      2 =>
       array (
         'name' => 'Tomas V.V.Cox',
         'email' => 'cox@idecnet.com',
@@ -741,7 +741,7 @@ Installer:
         'handle' => 'cox',
         'role' => 'lead',
       ),
-      3 => 
+      3 =>
       array (
         'name' => 'Pierre-Alain Joye',
         'email' => 'pajoye@pearfr.org',
@@ -749,7 +749,7 @@ Installer:
         'handle' => 'pajoye',
         'role' => 'lead',
       ),
-      4 => 
+      4 =>
       array (
         'name' => 'Martin Jansen',
         'email' => 'mj@php.net',
@@ -770,10 +770,10 @@ unset($info['_lastmodified']);
 $phpunit->assertEquals($ret, $info, 'test installation, Bar');
 
 
-$ret = &$installer->install($result[2], $dp->getOptions());
+$ret = $installer->install($result[2], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
-  'attribs' => 
+  'attribs' =>
   array (
     'packagerversion' => '1.4.0a1',
     'version' => '2.0',
@@ -796,30 +796,30 @@ $phpunit->assertEquals(array (
  * the System class for quick handling of common operations
    with files and directories
  * the PEAR base class',
-  'lead' => 
+  'lead' =>
   array (
-    0 => 
+    0 =>
     array (
       'name' => 'Stig Bakken',
       'user' => 'ssb',
       'email' => 'stig@php.net',
       'active' => 'yes',
     ),
-    1 => 
+    1 =>
     array (
       'name' => 'Tomas V.V.Cox',
       'user' => 'cox',
       'email' => 'cox@idecnet.com',
       'active' => 'yes',
     ),
-    2 => 
+    2 =>
     array (
       'name' => 'Pierre-Alain Joye',
       'user' => 'pajoye',
       'email' => 'pajoye@pearfr.org',
       'active' => 'yes',
     ),
-    3 => 
+    3 =>
     array (
       'name' => 'Greg Beaver',
       'user' => 'cellog',
@@ -827,7 +827,7 @@ $phpunit->assertEquals(array (
       'active' => 'yes',
     ),
   ),
-  'developer' => 
+  'developer' =>
   array (
     'name' => 'Martin Jansen',
     'user' => 'mj',
@@ -836,36 +836,36 @@ $phpunit->assertEquals(array (
   ),
   'date' => '2004-12-29',
   'time' => '21:09:08',
-  'version' => 
+  'version' =>
   array (
     'release' => '1.5.0a1',
     'api' => '1.4.0',
   ),
-  'stability' => 
+  'stability' =>
   array (
     'release' => 'alpha',
     'api' => 'alpha',
   ),
-  'license' => 
+  'license' =>
   array (
-    'attribs' => 
+    'attribs' =>
     array (
       'uri' => 'http://www.php.net/license/3_0.txt',
     ),
     '_content' => 'PHP License',
   ),
   'notes' => 'stuff',
-  'contents' => 
+  'contents' =>
   array (
-    'dir' => 
+    'dir' =>
     array (
-      'attribs' => 
+      'attribs' =>
       array (
         'name' => '/',
       ),
-      'file' => 
+      'file' =>
       array (
-        'attribs' => 
+        'attribs' =>
         array (
           'md5sum' => 'ed0384ad29e60110b310a02e95287ee6',
           'name' => 'foo.php',
@@ -874,28 +874,28 @@ $phpunit->assertEquals(array (
       ),
     ),
   ),
-  'dependencies' => 
+  'dependencies' =>
   array (
-    'required' => 
+    'required' =>
     array (
-      'php' => 
+      'php' =>
       array (
         'min' => '4.2.0',
         'max' => '6.0.0',
       ),
-      'pearinstaller' => 
+      'pearinstaller' =>
       array (
         'min' => '1.4.0dev13',
       ),
-      'package' => 
+      'package' =>
       array (
-        0 => 
+        0 =>
         array (
           'name' => 'Foo',
           'channel' => 'pear.php.net',
           'conflicts' => '',
         ),
-        1 => 
+        1 =>
         array (
           'name' => 'Bar',
           'channel' => 'pear.php.net',
@@ -905,9 +905,9 @@ $phpunit->assertEquals(array (
     ),
   ),
   'phprelease' => '',
-  'filelist' => 
+  'filelist' =>
   array (
-    'foo.php' => 
+    'foo.php' =>
     array (
       'md5sum' => 'ed0384ad29e60110b310a02e95287ee6',
       'name' => 'foo.php',
@@ -916,34 +916,34 @@ $phpunit->assertEquals(array (
     ),
   ),
   '_lastversion' => null,
-  'dirtree' => 
+  'dirtree' =>
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
   ),
-  'old' => 
+  'old' =>
   array (
     'version' => '1.5.0a1',
     'release_date' => '2004-12-29',
     'release_state' => 'alpha',
     'release_license' => 'PHP License',
     'release_notes' => 'stuff',
-    'release_deps' => 
+    'release_deps' =>
     array (
-      0 => 
+      0 =>
       array (
         'type' => 'php',
         'rel' => 'le',
         'version' => '6.0.0',
         'optional' => 'no',
       ),
-      1 => 
+      1 =>
       array (
         'type' => 'php',
         'rel' => 'ge',
         'version' => '4.2.0',
         'optional' => 'no',
       ),
-      2 => 
+      2 =>
       array (
         'type' => 'pkg',
         'channel' => 'pear.php.net',
@@ -952,14 +952,14 @@ $phpunit->assertEquals(array (
         'version' => '1.4.0dev13',
         'optional' => 'no',
       ),
-      3 => 
+      3 =>
       array (
         'type' => 'pkg',
         'channel' => 'pear.php.net',
         'name' => 'Foo',
         'rel' => 'not',
       ),
-      4 => 
+      4 =>
       array (
         'type' => 'pkg',
         'channel' => 'pear.php.net',
@@ -969,9 +969,9 @@ $phpunit->assertEquals(array (
         'optional' => 'no',
       ),
     ),
-    'maintainers' => 
+    'maintainers' =>
     array (
-      0 => 
+      0 =>
       array (
         'name' => 'Stig Bakken',
         'email' => 'stig@php.net',
@@ -979,7 +979,7 @@ $phpunit->assertEquals(array (
         'handle' => 'ssb',
         'role' => 'lead',
       ),
-      1 => 
+      1 =>
       array (
         'name' => 'Tomas V.V.Cox',
         'email' => 'cox@idecnet.com',
@@ -987,7 +987,7 @@ $phpunit->assertEquals(array (
         'handle' => 'cox',
         'role' => 'lead',
       ),
-      2 => 
+      2 =>
       array (
         'name' => 'Pierre-Alain Joye',
         'email' => 'pajoye@pearfr.org',
@@ -995,7 +995,7 @@ $phpunit->assertEquals(array (
         'handle' => 'pajoye',
         'role' => 'lead',
       ),
-      3 => 
+      3 =>
       array (
         'name' => 'Greg Beaver',
         'email' => 'cellog@php.net',
@@ -1003,7 +1003,7 @@ $phpunit->assertEquals(array (
         'handle' => 'cellog',
         'role' => 'lead',
       ),
-      4 => 
+      4 =>
       array (
         'name' => 'Martin Jansen',
         'email' => 'mj@php.net',

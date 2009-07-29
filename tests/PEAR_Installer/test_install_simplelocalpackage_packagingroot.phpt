@@ -40,15 +40,15 @@ $installer->setOptions($dp->getOptions());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
-$ret = &$installer->install($result[0], $dp->getOptions());
+$ret = $installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
   'provides' =>
   array (
   ),
-  'filelist' => 
+  'filelist' =>
   array (
-    'proot.php' => 
+    'proot.php' =>
     array (
       'role' => 'php',
       'replacements' =>
@@ -79,7 +79,7 @@ $phpunit->assertEquals(array (
  * the PEAR base class
  
 ',
-  'maintainers' => 
+  'maintainers' =>
   array (
     array (
       'handle' => 'cellog',
@@ -95,7 +95,7 @@ $phpunit->assertEquals(array (
   'release_notes' => 'test packagingroot option
 ',
   '_lastversion' => null,
-  'dirtree' => 
+  'dirtree' =>
   array (
     $php_dir => true,
   ),

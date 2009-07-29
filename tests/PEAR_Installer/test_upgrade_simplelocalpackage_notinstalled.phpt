@@ -39,33 +39,33 @@ $installer->setOptions($dp->getOptions());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
-$ret = &$installer->install($result[0], $dp->getOptions());
+$ret = $installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
-  'provides' => 
+  'provides' =>
   array (
-    'class;OS_Guess' => 
+    'class;OS_Guess' =>
     array (
       'type' => 'class',
       'name' => 'OS_Guess',
       'explicit' => true,
     ),
-    'class;System' => 
+    'class;System' =>
     array (
       'type' => 'class',
       'name' => 'System',
       'explicit' => true,
     ),
-    'function;md5_file' => 
+    'function;md5_file' =>
     array (
       'type' => 'function',
       'name' => 'md5_file',
       'explicit' => true,
     ),
   ),
-  'filelist' => 
+  'filelist' =>
   array (
-    'foo.php' => 
+    'foo.php' =>
     array (
       'role' => 'php',
       'installed_as' => $temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
@@ -87,37 +87,37 @@ $phpunit->assertEquals(array (
  * the PEAR base class
  
 ',
-  'maintainers' => 
+  'maintainers' =>
   array (
-    0 => 
+    0 =>
     array (
       'handle' => 'ssb',
       'role' => 'lead',
       'name' => 'Stig Bakken',
       'email' => 'stig@php.net',
     ),
-    1 => 
+    1 =>
     array (
       'handle' => 'cellog',
       'role' => 'lead',
       'name' => 'Greg Beaver',
       'email' => 'cellog@php.net',
     ),
-    2 => 
+    2 =>
     array (
       'handle' => 'cox',
       'role' => 'lead',
       'name' => 'Tomas V.V.Cox',
       'email' => 'cox@idecnet.com',
     ),
-    3 => 
+    3 =>
     array (
       'handle' => 'pajoye',
       'role' => 'lead',
       'name' => 'Pierre-Alain Joye',
       'email' => 'pajoye@pearfr.org',
     ),
-    4 => 
+    4 =>
     array (
       'handle' => 'mj',
       'role' => 'developer',
@@ -170,9 +170,9 @@ Installer:
  * Major bug in Registry - false file conflicts on data/doc/test role
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)',
-  'changelog' => 
+  'changelog' =>
   array (
-    0 => 
+    0 =>
     array (
       'version' => '1.3.3',
       'release_date' => '2004-10-28',
@@ -194,7 +194,7 @@ Other:
     ),
   ),
   '_lastversion' => null,
-  'dirtree' => 
+  'dirtree' =>
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
   ),

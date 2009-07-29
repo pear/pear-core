@@ -8,9 +8,13 @@ $skiptrace1 = &PEAR::getStaticProperty('PEAR_Error', 'skiptrace1');
 $skiptrace1 = true;
 var_dump(PEAR::getStaticProperty('PEAR_Error', 'skiptrace1'));
 
-$skiptrace = &PEAR5::getStaticProperty('PEAR_Error', 'skiptrace');
-$skiptrace = true;
-var_dump(PEAR5::getStaticProperty('PEAR_Error', 'skiptrace'));
+if (version_compare(PHP_VERSION, '5', '>=')) {
+    $skiptrace = &PEAR5::getStaticProperty('PEAR_Error', 'skiptrace');
+    $skiptrace = true;
+    var_dump(PEAR5::getStaticProperty('PEAR_Error', 'skiptrace'));
+} else {
+    var_dump(true);
+}
 ?>
 --EXPECT--
 bool(true)

@@ -41,10 +41,10 @@ $installer->setOptions($dp->getOptions());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
 $phpunit->assertNoErrors('set of downloaded packages');
-$ret = &$installer->install($result[0], $dp->getOptions());
+$ret = $installer->install($result[0], $dp->getOptions());
 $phpunit->assertNoErrors('after install');
 $phpunit->assertEquals(array (
-  'attribs' => 
+  'attribs' =>
   array (
     'version' => '2.0',
     'xmlns' => 'http://pear.php.net/dtd/package-2.0',
@@ -66,30 +66,30 @@ $phpunit->assertEquals(array (
  * the System class for quick handling of common operations
    with files and directories
  * the PEAR base class',
-  'lead' => 
+  'lead' =>
   array (
-    0 => 
+    0 =>
     array (
       'name' => 'Stig Bakken',
       'user' => 'ssb',
       'email' => 'stig@php.net',
       'active' => 'yes',
     ),
-    1 => 
+    1 =>
     array (
       'name' => 'Tomas V.V.Cox',
       'user' => 'cox',
       'email' => 'cox@idecnet.com',
       'active' => 'yes',
     ),
-    2 => 
+    2 =>
     array (
       'name' => 'Pierre-Alain Joye',
       'user' => 'pajoye',
       'email' => 'pajoye@pearfr.org',
       'active' => 'yes',
     ),
-    3 => 
+    3 =>
     array (
       'name' => 'Greg Beaver',
       'user' => 'cellog',
@@ -97,7 +97,7 @@ $phpunit->assertEquals(array (
       'active' => 'yes',
     ),
   ),
-  'developer' => 
+  'developer' =>
   array (
     'name' => 'Martin Jansen',
     'user' => 'mj',
@@ -105,19 +105,19 @@ $phpunit->assertEquals(array (
     'active' => 'yes',
   ),
   'date' => '2004-09-30',
-  'version' => 
+  'version' =>
   array (
     'release' => '1.4.0a1',
     'api' => '1.4.0',
   ),
-  'stability' => 
+  'stability' =>
   array (
     'release' => 'alpha',
     'api' => 'alpha',
   ),
-  'license' => 
+  'license' =>
   array (
-    'attribs' => 
+    'attribs' =>
     array (
       'uri' => 'http://www.php.net/license/3_0.txt',
     ),
@@ -164,17 +164,17 @@ Installer:
  * Major bug in Registry - false file conflicts on data/doc/test role
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)',
-  'contents' => 
+  'contents' =>
   array (
-    'dir' => 
+    'dir' =>
     array (
-      'attribs' => 
+      'attribs' =>
       array (
         'name' => '/',
       ),
-      'file' => 
+      'file' =>
       array (
-        'attribs' => 
+        'attribs' =>
         array (
           'name' => 'foo.php',
           'role' => 'php',
@@ -182,40 +182,40 @@ Installer:
       ),
     ),
   ),
-  'dependencies' => 
+  'dependencies' =>
   array (
-    'required' => 
+    'required' =>
     array (
-      'php' => 
+      'php' =>
       array (
         'min' => '4.2',
         'max' => '6.0.0',
       ),
-      'pearinstaller' => 
+      'pearinstaller' =>
       array (
         'min' => '1.4.0dev13',
       ),
     ),
   ),
   'phprelease' => '',
-  'changelog' => 
+  'changelog' =>
   array (
-    'release' => 
+    'release' =>
     array (
-      'version' => 
+      'version' =>
       array (
         'release' => '1.3.3',
         'api' => '1.3.0',
       ),
-      'stability' => 
+      'stability' =>
       array (
         'release' => 'stable',
         'api' => 'stable',
       ),
       'date' => '2004-10-28',
-      'license' => 
+      'license' =>
       array (
-        'attribs' => 
+        'attribs' =>
         array (
           'uri' => 'http://www.php.net/license/3_0.txt',
         ),
@@ -237,9 +237,9 @@ Other:
  * fix warning in PEAR_Registry for windows 98 users',
     ),
   ),
-  'filelist' => 
+  'filelist' =>
   array (
-    'foo.php' => 
+    'foo.php' =>
     array (
       'name' => 'foo.php',
       'role' => 'php',
@@ -248,11 +248,11 @@ Other:
     ),
   ),
   '_lastversion' => null,
-  'dirtree' => 
+  'dirtree' =>
   array (
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
   ),
-  'old' => 
+  'old' =>
   array (
     'version' => '1.4.0a1',
     'release_date' => '2004-09-30',
@@ -299,23 +299,23 @@ Installer:
  * Major bug in Registry - false file conflicts on data/doc/test role
    was possible (and would happen if HTML_Template_IT was installed
    and HTML_Template_Flexy installation was attempted)',
-    'release_deps' => 
+    'release_deps' =>
     array (
-      0 => 
+      0 =>
       array (
         'type' => 'php',
         'rel' => 'le',
         'version' => '6.0.0',
         'optional' => 'no',
       ),
-      1 => 
+      1 =>
       array (
         'type' => 'php',
         'rel' => 'ge',
         'version' => '4.2',
         'optional' => 'no',
       ),
-      2 => 
+      2 =>
       array (
         'type' => 'pkg',
         'channel' => 'pear.php.net',
@@ -325,9 +325,9 @@ Installer:
         'optional' => 'no',
       ),
     ),
-    'maintainers' => 
+    'maintainers' =>
     array (
-      0 => 
+      0 =>
       array (
         'name' => 'Stig Bakken',
         'email' => 'stig@php.net',
@@ -335,7 +335,7 @@ Installer:
         'handle' => 'ssb',
         'role' => 'lead',
       ),
-      1 => 
+      1 =>
       array (
         'name' => 'Tomas V.V.Cox',
         'email' => 'cox@idecnet.com',
@@ -343,7 +343,7 @@ Installer:
         'handle' => 'cox',
         'role' => 'lead',
       ),
-      2 => 
+      2 =>
       array (
         'name' => 'Pierre-Alain Joye',
         'email' => 'pajoye@pearfr.org',
@@ -351,7 +351,7 @@ Installer:
         'handle' => 'pajoye',
         'role' => 'lead',
       ),
-      3 => 
+      3 =>
       array (
         'name' => 'Greg Beaver',
         'email' => 'cellog@php.net',
@@ -359,7 +359,7 @@ Installer:
         'handle' => 'cellog',
         'role' => 'lead',
       ),
-      4 => 
+      4 =>
       array (
         'name' => 'Martin Jansen',
         'email' => 'mj@php.net',
