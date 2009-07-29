@@ -210,7 +210,8 @@ release), pass them as additional parameters.
             'shortcut' => 'pd',
             'options' => array(),
             'doc' => '
-List all dependencies the package has.'
+List all dependencies the package has.
+Can take a tgz / tar file or a package name of an installed package.'
             ),
         'sign' => array(
             'summary' => 'Sign a package distribution file',
@@ -756,8 +757,14 @@ used for automated conversion or learning the format.
             return $this->raiseError("bad parameter(s), try \"help $command\"");
         }
 
-        $obj  = &$this->getPackageFile($this->config, $this->_debug);
-        $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
+        $obj = &$this->getPackageFile($this->config, $this->_debug);
+        if (is_file($params[0])) {
+           $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
+        } else {
+            $reg  = $this->config->getRegistry();
+            $info = $obj->fromArray($reg->packageInfo($params[0]));
+        }
+
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }

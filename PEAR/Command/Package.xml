@@ -170,7 +170,8 @@ release), pass them as additional parameters.
   <shortcut>pd</shortcut>
   <options />
   <doc>
-List all dependencies the package has.</doc>
+List all dependencies the package has.
+Can take a tgz / tar file or a package name of an installed package.</doc>
  </package-dependencies>
  <sign>
   <summary>Sign a package distribution file</summary>
