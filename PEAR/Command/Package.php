@@ -134,6 +134,39 @@ Using the -r or -R option you may compare the current code with that
 of a specific release.
 ',
             ),
+         'svntag' => array(
+             'summary' => 'Set SVN Release Tag',
+             'function' => 'doSvnTag',
+             'shortcut' => 'sv',
+             'options' => array(
+                 'quiet' => array(
+                     'shortopt' => 'q',
+                     'doc' => 'Be quiet',
+                     ),
+                 'slide' => array(
+                     'shortopt' => 'F',
+                     'doc' => 'Move (slide) tag if it exists',
+                     ),
+                 'delete' => array(
+                     'shortopt' => 'd',
+                     'doc' => 'Remove tag',
+                     ),
+                 'dry-run' => array(
+                     'shortopt' => 'n',
+                     'doc' => 'Don\'t do anything, just pretend',
+                     ),
+                 ),
+             'doc' => '<package.xml> [files...]
+ Sets a SVN tag on all files in a package.  Use this command after you have
+ packaged a distribution tarball with the "package" command to tag what
+ revisions of what files were in that release.  If need to fix something
+ after running cvstag once, but before the tarball is released to the public,
+ use the "slide" option to move the release tag.
+
+ to include files (such as a second package.xml, or tests not included in the
+ release), pass them as additional parameters.
+ ',
+             ),
         'cvstag' => array(
             'summary' => 'Set CVS Release Tag',
             'function' => 'doCvsTag',
@@ -372,6 +405,168 @@ used for automated conversion or learning the format.
         }
 
         $this->_displayValidationResults($err, $warn);
+        $this->ui->outputData($this->output, $command);
+        return true;
+    }
+
+    function doSvnTag($command, $options, $params)
+    {
+        $this->output = '';
+        $_cmd = $command;
+        if (count($params) < 1) {
+            $help = $this->getHelp($command);
+            return $this->raiseError("$command: missing parameter: $help[0]");
+        }
+
+        $packageFile = realpath($params[0]);
+        $dir = dirname($packageFile);
+        $dir = substr($dir, strrpos($dir, '/') + 1);
+        $obj  = &$this->getPackageFile($this->config, $this->_debug);
+        $info = $obj->fromAnyFile($packageFile, PEAR_VALIDATE_NORMAL);
+        if (PEAR::isError($info)) {
+            return $this->raiseError($info);
+        }
+
+        $err = $warn = array();
+        if (!$info->validate()) {
+            foreach ($info->getValidationWarnings() as $error) {
+                if ($error['level'] == 'warning') {
+                    $warn[] = $error['message'];
+                } else {
+                    $err[] = $error['message'];
+                }
+            }
+        }
+
+        if (!$this->_displayValidationResults($err, $warn, true)) {
+            $this->ui->outputData($this->output, $command);
+            return $this->raiseError('SVN tag failed');
+        }
+
+        $version    = $info->getVersion();
+        $package    = $info->getName();
+        $svntag     = "release-$version";
+        $command = 'svn';
+        if (isset($options['quiet'])) {
+            $command .= ' -q';
+        }
+
+        $command .= ' copy';
+        if (isset($options['delete'])) {
+            return $this->_svnRemoveTag($version, $package, $svntag, $packageFile, $options);
+        }
+
+        $path = $this->_svnFindPath($packageFile);
+
+        // Check if there are any modified files
+        $fp = popen('svn st --xml ' . dirname($packageFile), "r");
+        $out = '';
+        while ($line = fgets($fp, 1024)) {
+            $out .= rtrim($line)."\n";
+        }
+        pclose($fp);
+
+        if (strpos($out, 'item="modified"')) {
+            $params = array(array(
+                'name' => 'modified',
+                'type' => 'yesno',
+                'default' => 'no',
+                'prompt' => 'You have files in your SVN checkout (' . $path['from']  . ') that have been modified but not commited, do you still want to tag ' . $version . '?',
+            ));
+            $answers = $this->ui->confirmDialog($params);
+
+            if (!in_array($answers['modified'], array('y', 'yes', 'on', '1'))) {
+                return true;
+            }
+        }
+
+        if (isset($options['slide'])) {
+            $this->_svnRemoveTag($version, $package, $svntag, $packageFile, $options);
+        }
+
+        // Check if tag already exists
+        $releaseTag = $path['base'] . 'tags/' . $svntag;
+        $existsCommand = 'svn ls ' . $path['base'] . 'tags/';
+
+        $fp = popen($existsCommand, "r");
+        $out = '';
+        while ($line = fgets($fp, 1024)) {
+            $out .= rtrim($line)."\n";
+        }
+        pclose($fp);
+
+        if (in_array($svntag . '/', explode("\n", $out))) {
+            $this->ui->outputData($this->output, $command);
+            return $this->raiseError('SVN tag ' . $svntag . ' for ' . $package . ' already exists.');
+        }
+
+        $command .= ' -m "Tagging the ' . $version  . ' release" \ ' . "\n";
+        $command .= '  ' . $path['from'] . ' \ ' . "\n";
+        $command .= '  ' . $releaseTag;
+
+        if ($this->config->get('verbose') > 1) {
+            $this->output .= "+ $command\n";
+        }
+
+        $this->output .= "+ $command\n";
+        if (empty($options['dry-run'])) {
+            $fp = popen($command, "r");
+            while ($line = fgets($fp, 1024)) {
+                $this->output .= rtrim($line)."\n";
+            }
+            pclose($fp);
+        }
+
+        $this->ui->outputData($this->output, $_cmd);
+        return true;
+    }
+
+    function _svnFindPath($file)
+    {
+        $xml = '';
+        $command = "svn info --xml $file";
+        $fp = popen($command, "r");
+        while ($line = fgets($fp, 1024)) {
+            $xml .= rtrim($line)."\n";
+        }
+        pclose($fp);
+        $url_tag = strpos($xml, '<url>');
+        $url = substr($xml, $url_tag + 5, strpos($xml, '</url>', $url_tag + 5) - ($url_tag + 5));
+
+        $path = array();
+        $path['from'] = substr($url, 0, strrpos($url, '/'));
+        $path['base'] = substr($path['from'], 0, strrpos($path['from'], '/') + 1);
+        return $path;
+    }
+
+    function _svnRemoveTag($version, $package, $tag, $packageFile, $options)
+    {
+        $command = 'svn';
+
+        if (isset($options['quiet'])) {
+            $command .= ' -q';
+        }
+
+        $command .= ' remove';
+        $command .= ' -m "Removing tag for the ' . $version  . ' release."';
+
+        $path = $this->_svnFindPath($packageFile);
+        $command .= ' ' . $path['base'] . 'tags/' . $tag;
+
+
+        if ($this->config->get('verbose') > 1) {
+            $this->output .= "+ $command\n";
+        }
+
+        $this->output .= "+ $command\n";
+        if (empty($options['dry-run'])) {
+            $fp = popen($command, "r");
+            while ($line = fgets($fp, 1024)) {
+                $this->output .= rtrim($line)."\n";
+            }
+            pclose($fp);
+        }
+
         $this->ui->outputData($this->output, $command);
         return true;
     }

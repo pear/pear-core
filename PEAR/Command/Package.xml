@@ -94,6 +94,39 @@ Using the -r or -R option you may compare the current code with that
 of a specific release.
 </doc>
  </cvsdiff>
+ <svntag>
+  <summary>Set SVN Release Tag</summary>
+  <function>doSvnTag</function>
+  <shortcut>sv</shortcut>
+  <options>
+   <quiet>
+    <shortopt>q</shortopt>
+    <doc>Be quiet</doc>
+   </quiet>
+   <slide>
+    <shortopt>F</shortopt>
+    <doc>Move (slide) tag if it exists</doc>
+   </slide>
+   <delete>
+    <shortopt>d</shortopt>
+    <doc>Remove tag</doc>
+   </delete>
+   <dry-run>
+    <shortopt>n</shortopt>
+    <doc>Don&#039;t do anything, just pretend</doc>
+   </dry-run>
+  </options>
+  <doc>&lt;package.xml&gt; [files...]
+ Sets a SVN tag on all files in a package.  Use this command after you have
+ packaged a distribution tarball with the &quot;package&quot; command to tag what
+ revisions of what files were in that release.  If need to fix something
+ after running cvstag once, but before the tarball is released to the public,
+ use the &quot;slide&quot; option to move the release tag.
+
+ to include files (such as a second package.xml, or tests not included in the
+ release), pass them as additional parameters.
+ </doc>
+ </svntag>
  <cvstag>
   <summary>Set CVS Release Tag</summary>
   <function>doCvsTag</function>
