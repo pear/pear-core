@@ -4,7 +4,7 @@
  *
  * PHP version 5.1+
  *
- * To use, in pear-core/PEAR create a directory
+ * To use, in pear-core create a directory
  * named go-pear-tarballs, and run these commands in the directory
  *
  * <pre>
@@ -38,34 +38,36 @@ function replaceVersion($contents, $path)
     return str_replace(array('@PEAR-VER@', '@package_version@'), $GLOBALS['pearver'], $contents);
 }
 
-$peardir = dirname(__FILE__);
+$peardir    = dirname(__FILE__);
+$outputFile = 'install-pear-nozlib.phar';
 
-$dp = @opendir(dirname(__FILE__) . '/PEAR/go-pear-tarballs');
-if (empty($dp)) {
-    die("while locating packages to install: opendir('" .
-        dirname(__FILE__) . "/PEAR/go-pear-tarballs') failed");
+$dp = @scandir($peardir . '/go-pear-tarballs');
+if ($dp === false) {
+    die("while locating packages to install: opendir('" . $peardir . "/go-pear-tarballs') failed");
 }
 
 $packages = array();
-while (false !== ($entry = readdir($dp))) {
+foreach ($dp as $entry) {
     if ($entry{0} == '.' || !in_array(substr($entry, -4), array('.tar'))) {
         continue;
     }
+
     ereg('([A-Za-z0-9_:]+)-.*\.tar$', $entry, $matches);
     if ($matches[1] == 'PEAR') {
-    	$pearentry = $entry;
-    	continue;
+        $pearentry = $entry;
+        continue;
     }
+
     $packages[$matches[1]] = $entry;
 }
-
 $packages['PEAR'] = $pearentry;
-$x = explode(PATH_SEPARATOR, get_include_path());
+
 $y = array();
-foreach ($x as $path) {
+foreach (explode(PATH_SEPARATOR, get_include_path()) as $path) {
     if ($path == '.') {
         continue;
     }
+
     $y[] = $path;
 }
 
@@ -80,16 +82,23 @@ chdir($peardir);
 
 $pkg = &new PEAR_PackageFile($config);
 $pf = $pkg->fromPackageFile($peardir . DIRECTORY_SEPARATOR . 'package2.xml', PEAR_VALIDATE_NORMAL);
+if (PEAR::isError($pf)) {
+    foreach ($pf->getUserInfo() as $warn) {
+        echo $warn['message'] . "\n";
+    }
+    die($pf->getMessage());
+}
 $pearver = $pf->getVersion();
 
-$creator = new PHP_Archive_Creator('index.php', 'install-pear-nozlib.phar'); // no compression
+$creator = new PHP_Archive_Creator('index.php', $outputFile); // no compression
 $creator->useDefaultFrontController('PEAR.php');
 $creator->useSHA1Signature();
+
 $install_files = '$install_files = array(';
 foreach ($packages as $name => $package) {
     echo "$name => $package\n";
-    $install_files .= "'$name' => 'phar://install-pear-nozlib.phar/$package'," . "\n";
-    $creator->addFile("PEAR/go-pear-tarballs/$package", "$package");
+    $install_files .= "'$name' => 'phar://' . $outputFile . '/$package'," . "\n";
+    $creator->addFile("go-pear-tarballs/$package", "$package");
 }
 
 $install_files .= ');';
@@ -102,7 +111,7 @@ $commandcontents = str_replace(
         '$install_files = array();'
     ),
     array(
-        'include_once \'phar://install-pear-nozlib.phar/',
+        'include_once \'phar://' . $outputFile . '/',
         $install_files
     ), $commandcontents);
 $creator->addString($commandcontents, 'index.php');
@@ -113,7 +122,7 @@ $commandcontents = str_replace(
         "\$file = str_replace('_', '/', \$uiclass) . '.php';"
     ),
     array(
-        "\$file = 'phar://install-pear-nozlib.phar/' . str_replace('_', '/', \$uiclass) . '.php';"
+        "\$file = 'phar://' . $outputFile . '/' . str_replace('_', '/', \$uiclass) . '.php';"
     ), $commandcontents);
 $commandcontents = replaceVersion($commandcontents, '');
 $creator->addString($commandcontents, 'PEAR/Frontend.php');
@@ -124,7 +133,7 @@ $commandcontents = str_replace(
         '$fp = @fopen("PEAR/Task/$taskfile.php", \'r\', true);',
     ),
     array(
-        '$fp = @fopen("phar://install-pear-nozlib.phar/PEAR/Task/$taskfile.php", \'r\', true);'
+        '$fp = @fopen("phar://' . $outputFile . '/PEAR/Task/$taskfile.php", \'r\', true);'
     ), $commandcontents);
 $commandcontents = replaceVersion($commandcontents, '');
 $commandcontents = $creator->tokenMagicRequire($commandcontents, 'a.php');
@@ -207,6 +216,6 @@ $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph/Node.php', 'Structures/Graph/Node.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph/Manipulator/AcyclicTest.php', 'Structures/Graph/Manipulator/AcyclicTest.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph/Manipulator/TopologicalSorter.php', 'Structures/Graph/Manipulator/TopologicalSorter.php');
+
 $creator->useSHA1Signature();
-$creator->savePhar(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'install-pear-nozlib.phar');
-?>
+$creator->savePhar(dirname(__FILE__) . DIRECTORY_SEPARATOR . $outputFile);
