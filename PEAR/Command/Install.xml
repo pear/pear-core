@@ -230,7 +230,7 @@ more stable.
     <arg>DIR</arg>
    </installroot>
    <ignore-errors>
-    <shortopt>f</shortopt>
+    <shortopt></shortopt>
     <doc>force install even if there were errors</doc>
    </ignore-errors>
    <offline>
@@ -255,7 +255,7 @@ channel not in your default channel ({config default_channel})
     <arg>DIR</arg>
    </destination>
    <force>
-    <shortopt></shortopt>
+    <shortopt>f</shortopt>
     <doc>Force the unpacking even if there were errors in the package</doc>
    </force>
   </options>

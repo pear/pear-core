@@ -186,11 +186,12 @@ configuration.',
         $data = array(
             'caption' => 'Registered Channels:',
             'border' => true,
-            'headline' => array('Channel', 'Summary')
+            'headline' => array('Channel', 'Alias', 'Summary')
             );
         foreach ($registered as $channel) {
             $data['data'][] = array($channel->getName(),
-                                      $channel->getSummary());
+                                    $channel->getAlias(),
+                                    $channel->getSummary());
         }
 
         if (count($registered) === 0) {

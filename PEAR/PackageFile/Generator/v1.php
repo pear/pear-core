@@ -1215,16 +1215,15 @@ class PEAR_PackageFile_Generator_v1
      */
     function _processMultipleDepsName($deps)
     {
-        $tests = array();
+        $ret = $tests = array();
         foreach ($deps as $name => $dep) {
             foreach ($dep as $d) {
                 $tests[$name][] = $this->_processDep($d);
             }
         }
+
         foreach ($tests as $name => $test) {
-            $php = array();
-            $min = array();
-            $max = array();
+            $max = $min = $php = array();
             $php['name'] = $name;
             foreach ($test as $dep) {
                 if (!$dep) {

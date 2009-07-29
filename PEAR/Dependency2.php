@@ -346,7 +346,8 @@ class PEAR_Dependency2
         }
 
         if (!isset($dep['min']) && !isset($dep['max']) &&
-              !isset($dep['recommended']) && !isset($dep['exclude'])) {
+            !isset($dep['recommended']) && !isset($dep['exclude'])
+        ) {
             if ($loaded) {
                 if (isset($dep['conflicts'])) {
                     if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
@@ -359,24 +360,24 @@ class PEAR_Dependency2
                 }
 
                 return true;
-            } else {
-                if (isset($dep['conflicts'])) {
-                    return true;
-                }
+            }
 
-                if ($required) {
-                    if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
-                        return $this->raiseError('%s requires PHP extension "' .
-                            $dep['name'] . '"' . $extra);
-                    }
+            if (isset($dep['conflicts'])) {
+                return true;
+            }
 
-                    return $this->warning('warning: %s requires PHP extension "' .
+            if ($required) {
+                if (!isset($this->_options['nodeps']) && !isset($this->_options['force'])) {
+                    return $this->raiseError('%s requires PHP extension "' .
                         $dep['name'] . '"' . $extra);
                 }
 
-                return $this->warning('%s can optionally use PHP extension "' .
+                return $this->warning('warning: %s requires PHP extension "' .
                     $dep['name'] . '"' . $extra);
             }
+
+            return $this->warning('%s can optionally use PHP extension "' .
+                $dep['name'] . '"' . $extra);
         }
 
         if (!$loaded) {

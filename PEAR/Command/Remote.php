@@ -664,9 +664,21 @@ parameter.
             }
 
             $latest = array();
-            if ($chan->supportsREST($this->config->get('preferred_mirror')) &&
-                  $base = $chan->getBaseURL('REST1.0', $this->config->get('preferred_mirror'))) {
-                $rest = &$this->config->getREST('1.0', array());
+            $preferred_mirror = $this->config->get('preferred_mirror');
+            if ($chan->supportsREST($preferred_mirror) &&
+                (
+                   ($base2 = $chan->getBaseURL('REST1.4', $preferred_mirror)) ||
+                   ($base  = $chan->getBaseURL('REST1.0', $preferred_mirror))
+                )
+
+            ) {
+                if ($base2) {
+                    $rest = &$this->config->getREST('1.4', array());
+                    $base = $base2;
+                } else {
+                    $rest = &$this->config->getREST('1.0', array());
+                }
+
                 if (empty($state) || $state == 'any') {
                     $state = false;
                 } else {

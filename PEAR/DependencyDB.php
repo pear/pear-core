@@ -164,18 +164,19 @@ class PEAR_DependencyDB
     {
         if (!is_file($this->_depdb)) {
             $this->rebuildDB();
-        } else {
-            $depdb = $this->_getDepDB();
-            // Datatype format has been changed, rebuild the Deps DB
-            if ($depdb['_version'] < $this->_version) {
-                $this->rebuildDB();
-            }
+            return;
+        }
 
-            if ($depdb['_version']{0} > $this->_version{0}) {
-                return PEAR::raiseError('Dependency database is version ' .
-                    $depdb['_version'] . ', and we are version ' .
-                    $this->_version . ', cannot continue');
-            }
+        $depdb = $this->_getDepDB();
+        // Datatype format has been changed, rebuild the Deps DB
+        if ($depdb['_version'] < $this->_version) {
+            $this->rebuildDB();
+        }
+
+        if ($depdb['_version']{0} > $this->_version{0}) {
+            return PEAR::raiseError('Dependency database is version ' .
+                $depdb['_version'] . ', and we are version ' .
+                $this->_version . ', cannot continue');
         }
     }
 
@@ -741,13 +742,6 @@ class PEAR_DependencyDB
                     break;
                 }
             }
-
-            if (!$found) {
-                $data['packages'][$depchannel][$dep['name']][] = array(
-                    'channel' => $channel,
-                    'package' => $package
-                );
-            }
         } else {
             if (!isset($data['packages'])) {
                 $data['packages'] = array();
@@ -761,6 +755,10 @@ class PEAR_DependencyDB
                 $data['packages'][$depchannel][$dep['name']] = array();
             }
 
+            $found = true;
+        }
+
+        if (!$found) {
             $data['packages'][$depchannel][$dep['name']][] = array(
                 'channel' => $channel,
                 'package' => $package

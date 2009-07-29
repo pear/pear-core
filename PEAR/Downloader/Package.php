@@ -659,8 +659,7 @@ class PEAR_Downloader_Package
         // we can't determine whether upgrade is necessary until we know what
         // version would be downloaded
         if (!isset($options['force']) && $this->isInstalled($ret, $oper)) {
-            $version = $this->_installRegistry->packageInfo($dep['name'], 'version',
-                $dep['channel']);
+            $version = $this->_installRegistry->packageInfo($dep['name'], 'version', $dep['channel']);
             $dep['package'] = $dep['name'];
             if (!isset($options['soft'])) {
                 $this->_downloader->log(3, $this->getShortName() . ': Skipping ' . $group .
@@ -737,8 +736,7 @@ class PEAR_Downloader_Package
                     $newdep = $newdep[0];
                     $newdep['channel'] = 'pecl.php.net';
                     $chan = 'pecl.php.net';
-                    $url =
-                        $this->_downloader->_getDepPackageDownloadUrl($newdep, $pname);
+                    $url = $this->_downloader->_getDepPackageDownloadUrl($newdep, $pname);
                     $obj = &$this->_installRegistry->getPackage($dep['name']);
                     if (PEAR::isError($url)) {
                         PEAR::popErrorHandling();
@@ -822,8 +820,7 @@ class PEAR_Downloader_Package
                         'optional';
                     $dep['package'] = $dep['name'];
                     if (isset($newdep)) {
-                        $version = $this->_installRegistry->packageInfo($newdep['name'], 'version',
-                            $newdep['channel']);
+                        $version = $this->_installRegistry->packageInfo($newdep['name'], 'version', $newdep['channel']);
                     } else {
                         $version = $this->_installRegistry->packageInfo($dep['name'], 'version');
                     }
@@ -1142,6 +1139,7 @@ class PEAR_Downloader_Package
                     $channel = 'pear.php.net';
                 }
             }
+
             return (strtolower($package) == strtolower($this->getPackage()) &&
                 $channel == $this->getChannel() &&
                 version_compare($newdep['min'], $this->getVersion(), '<=') &&
@@ -1286,13 +1284,9 @@ class PEAR_Downloader_Package
             if (!$param) {
                 continue;
             }
-            if ($param->getPackage()) {
-                if ($ignoreGroups) {
-                    $group = '';
-                } else {
-                    $group = $param->getGroup();
-                }
 
+            if ($param->getPackage()) {
+                $group = $ignoreGroups ? '' : $param->getGroup();
                 $pnames[$i] = $param->getChannel() . '/' .
                     $param->getPackage() . '-' . $param->getVersion() . '#' . $group;
             }

@@ -1205,8 +1205,11 @@ Run post-installation scripts in package <package>, if any exist.
 
                 $preferred_mirror = $this->config->get('preferred_mirror', null, $channel);
                 if ($chan->supportsREST($preferred_mirror) &&
-                      $base = $chan->getBaseURL('REST1.0', $preferred_mirror))
-                {
+                    (
+                       ($base2 = $chan->getBaseURL('REST1.4', $preferred_mirror)) ||
+                       ($base  = $chan->getBaseURL('REST1.0', $preferred_mirror))
+                    )
+                ) {
                     $dorest = true;
                 }
 
@@ -1218,10 +1221,15 @@ Run post-installation scripts in package <package>, if any exist.
                 }
 
                 if ($dorest) {
-                    $rest = &$this->config->getREST('1.0', array());
-                    $installed = array_flip($reg->listPackages($channel));
+                    if ($base2) {
+                        $rest = &$this->config->getREST('1.4', array());
+                        $base = $base2;
+                    } else {
+                        $rest = &$this->config->getREST('1.0', array());
+                    }
 
-                    $latest = $rest->listLatestUpgrades($base, $state, $installed, $channel, $reg);
+                    $installed = array_flip($reg->listPackages($channel));
+                    $latest    = $rest->listLatestUpgrades($base, $state, $installed, $channel, $reg);
                 }
 
                 PEAR::staticPopErrorHandling();
