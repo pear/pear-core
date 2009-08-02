@@ -97,6 +97,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * Implement Request #16386: PEAR_Config::remove() does not support specifying a channel [timj]
   * Implement Request #16396: package-dependencies should allow package names [dufuz]
 
+  * Fix Bug #11181: pear requests channel.xml from main server instead from mirror [dufuz]
+  * Fix Bug #14493: pear install --offline doesn't print out errors [dufuz]
   * Fix Bug #11348: pear package-dependencies isn't well explained [dufuz]
   * Fix Bug #16108: PEAR_PackageFile_Generator_v2 PHP4 parse error when running upgrade-all [dufuz]
   * Fix Bug #16113: Installing certain packages fails due incorrect encoding handling [dufuz]
