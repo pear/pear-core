@@ -29,44 +29,44 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v2', 'message' => 'Channel validator warning: field "providesextension" - package name "pecl_http" is different from extension name "http"'),
 ), 'afterwards');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 0,
     1 => 'WARNING: Channel validator warning: field "providesextension" - package name "pecl_http" is different from extension name "http"',
   ),
-  1 => 
+  1 =>
   array (
     0 => 'Warning: Channel validator warning: field "providesextension" - package name "pecl_http" is different from extension name "http"',
     1 => true,
   ),
-  2 => 
+  2 =>
   array (
     0 => 'Attempting to process the second package file',
     1 => true,
   ),
-  3 => 
+  3 =>
   array (
     0 => 'Warning: Channel validator warning: field "date" - Release Date "2005-01-01" is not today',
     1 => true,
   ),
-  4 => 
+  4 =>
   array (
     0 => 'Warning: Channel validator warning: field "providesextension" - package name "pecl_http" is different from extension name "http"',
     1 => true,
   ),
-  5 => 
+  5 =>
   array (
     0 => 'Package pecl_http-0.16.0.tgz done',
     1 => true,
   ),
-  6 => 
+  6 =>
   array (
-    0 => 'Tag the released code with "pear cvstag package2.xml"',
+    0 => 'Tag the released code with "pear svntag package2.xml"',
     1 => true,
   ),
-  7 => 
+  7 =>
   array (
-    0 => '(or set the CVS tag RELEASE_0_16_0 by hand)',
+    0 => '(or set the SVN tag release-0.16.0 by hand)',
     1 => true,
   ),
 ), $fakelog->getLog(), 'log');
