@@ -169,9 +169,9 @@ release), pass them as additional parameters.
   <function>doPackageDependencies</function>
   <shortcut>pd</shortcut>
   <options />
-  <doc>
+  <doc>&lt;package-file&gt; or &lt;package.xml&gt; or &lt;install-package-name&gt;
 List all dependencies the package has.
-Can take a tgz / tar file or a package name of an installed package.</doc>
+Can take a tgz / tar file, package.xml or a package name of an installed package.</doc>
  </package-dependencies>
  <sign>
   <summary>Sign a package distribution file</summary>

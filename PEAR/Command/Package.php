@@ -209,9 +209,9 @@ release), pass them as additional parameters.
             'function' => 'doPackageDependencies',
             'shortcut' => 'pd',
             'options' => array(),
-            'doc' => '
+            'doc' => '<package-file> or <package.xml> or <install-package-name>
 List all dependencies the package has.
-Can take a tgz / tar file or a package name of an installed package.'
+Can take a tgz / tar file, package.xml or a package name of an installed package.'
             ),
         'sign' => array(
             'summary' => 'Sign a package distribution file',
