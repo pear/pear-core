@@ -8,18 +8,8 @@
  * named go-pear-tarballs, and run these commands in the directory
  *
  * <pre>
- * $ pear download -Z PEAR
- * $ pear download -Z Archive_Tar
- * $ pear download -Z Console_Getopt
- * $ pear download -Z Structures_Graph
- * $ pear download -Z XML_Util
+ * $ pear download -Z PEAR Archive_Tar Console_Getopt Structures_Graph XML_Util
  * </pre>
- *
- * Next, check out pear/Structure_Graph and copy it into pear-core/
- *
- * Next, check out pear/Console_Getopt and copy it into pear-core/
- *
- * Next, check out pear/XML_Util and copy it into pear-core/
  *
  * finally, run this script using PHP 5.1's cli php
 

@@ -501,6 +501,7 @@ class PEAR_ChannelFile
         if (!isset($info['baseurl'][0])) {
             $info['baseurl'] = array($info['baseurl']);
         }
+
         foreach ($info['baseurl'] as $url) {
             $ret .= "$indent <baseurl type=\"" . $url['attribs']['type'] . "\"";
             $ret .= ">" . $url['_content'] . "</baseurl>\n";
@@ -687,15 +688,17 @@ class PEAR_ChannelFile
         if (!isset($functions[0])) {
             $functions = array($functions);
         }
+
         foreach ($functions as $function) {
             if (!isset($function['_content']) || empty($function['_content'])) {
                 $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_FUNCTIONNAME,
                     array('parent' => $parent, 'protocol' => $protocol));
             }
+
             if ($protocol == 'rest') {
                 if (!isset($function['attribs']['type']) ||
                       empty($function['attribs']['type'])) {
-                    $this->_validateError(PEAR_CHANNELFILE_ERROR_NO_BASEURLTYPE,
+                    $this->_validateError(PEAR_CHANNELFILE_ERROR_NOBASEURLTYPE,
                         array('parent' => $parent, 'protocol' => $protocol));
                 }
             } else {
