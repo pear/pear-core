@@ -23,28 +23,33 @@ $phpunit->assertEquals(array (
       'headline' =>
       array (
         0 => 'Channel',
-        1 => 'Summary',
+        1 => 'Alias',
+        2 => 'Summary',
       ),
       'data' =>
       array (
         0 => array (
           0 => 'doc.php.net',
-          1 => 'PHP Documentation Team',
+          1 => 'phpdocs',
+          2 => 'PHP Documentation Team',
         ),
         1 =>
         array (
           0 => 'pear.php.net',
-          1 => 'PHP Extension and Application Repository',
+          1 => 'pear',
+          2 => 'PHP Extension and Application Repository',
         ),
         2 =>
         array (
           0 => 'pecl.php.net',
-          1 => 'PHP Extension Community Library',
+          1 => 'pecl',
+          2 => 'PHP Extension Community Library',
         ),
         3 =>
         array (
           0 => '__uri',
-          1 => 'Pseudo-channel for static packages',
+          1 => '__uri',
+          2 => 'Pseudo-channel for static packages',
         ),
       ),
     ),
@@ -70,34 +75,38 @@ $phpunit->assertEquals(array (
       'headline' =>
       array (
         0 => 'Channel',
-        1 => 'Summary',
+        1 => 'Alias',
+        2 => 'Summary',
       ),
       'data' =>
       array (
-        0 =>
-        array (
+        0 => array (
           0 => 'doc.php.net',
-          1 => 'PHP Documentation Team',
+          1 => 'phpdocs',
+          2 => 'PHP Documentation Team',
         ),
-        1 =>
-        array (
+        1 => array (
           0 => 'fake',
           1 => 'fake',
+          2 => 'fake',
         ),
         2 =>
         array (
           0 => 'pear.php.net',
-          1 => 'PHP Extension and Application Repository',
+          1 => 'pear',
+          2 => 'PHP Extension and Application Repository',
         ),
         3 =>
         array (
           0 => 'pecl.php.net',
-          1 => 'PHP Extension Community Library',
+          1 => 'pecl',
+          2 => 'PHP Extension Community Library',
         ),
         4 =>
         array (
           0 => '__uri',
-          1 => 'Pseudo-channel for static packages',
+          1 => '__uri',
+          2 => 'Pseudo-channel for static packages',
         ),
       ),
     ),
