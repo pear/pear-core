@@ -86,7 +86,7 @@ $creator->useSHA1Signature();
 $install_files = '$install_files = array(';
 foreach ($packages as $name => $package) {
     echo "$name => $package\n";
-    $install_files .= "'$name' => 'phar://' . $outputFile . '/$package'," . "\n";
+    $install_files .= "'$name' => 'phar://" . $outputFile . "/$package'," . "\n";
     $creator->addFile("go-pear-tarballs/$package", "$package");
 }
 
