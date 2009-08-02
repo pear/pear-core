@@ -106,15 +106,15 @@ $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb');
 $contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb')));
 $phpunit->assertEquals(array (
   '_version' => '1.0',
-  'dependencies' => 
+  'dependencies' =>
   array (
-    'grob' => 
+    'grob' =>
     array (
-      'foo' => 
+      'foo' =>
       array (
-        0 => 
+        0 =>
         array (
-          'dep' => 
+          'dep' =>
           array (
             'name' => 'frong',
             'channel' => 'floop',
@@ -125,13 +125,13 @@ $phpunit->assertEquals(array (
       ),
     ),
   ),
-  'packages' => 
+  'packages' =>
   array (
-    'floop' => 
+    'floop' =>
     array (
-      'frong' => 
+      'frong' =>
       array (
-        0 => 
+        0 =>
         array (
           'channel' => 'grob',
           'package' => 'foo',
@@ -140,6 +140,7 @@ $phpunit->assertEquals(array (
     ),
   ),
 ), $contents, 'depdb');
+
 $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.filemap', 'filemap');
 $contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.filemap')));
 ksort($contents['php']);
@@ -182,6 +183,7 @@ $pf2->addGroupPackageDepWithChannel('package', 'flong', 'jorp', 'pear.php.net');
 $pf2->addGroupPackageDepWithURI('subpackage', 'flong', 'meme', 'http://example.com');
 $ret = $reg->getInstalledGroup($pf2->getDependencyGroup('flong'));
 $phpunit->assertFalse($ret, 'failure test');
+
 echo 'tests done';
 ?>
 --CLEAN--

@@ -213,7 +213,7 @@ $command->run('upgrade', array(), array($dir . 'PEAR-1.4.4.tgz'));
 $phpunit->assertNoErrors('full test');
 $phpunit->assertEquals(4, count($reg->listPackages()), 'num packages 2');
 $phpunit->assertEquals('1.4.3', $reg->packageInfo('PEAR', 'version'), 'PEAR version 2');
-$phpunit->assertEquals('1.4.4', $reg->packageInfo('XML_RPC', 'version'), 'XML_RPC version 2');
+$phpunit->assertEquals('1.4.3', $reg->packageInfo('XML_RPC', 'version'), 'XML_RPC version 2');
 
 echo 'tests done';
 ?>

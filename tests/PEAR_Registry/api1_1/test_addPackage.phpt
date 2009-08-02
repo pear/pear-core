@@ -5,12 +5,14 @@ PEAR_Registry->addPackage() (API v1.1)
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
+
 require_once 'PEAR/Registry.php';
 $pv = phpversion() . '';
 $av = $pv{0} == '4' ? 'apiversion' : 'apiVersion';
 if (!in_array($av, get_class_methods('PEAR_Registry'))) {
     echo 'skip';
 }
+
 if (PEAR_Registry::apiVersion() != '1.1') {
     echo 'skip';
 }
@@ -19,6 +21,7 @@ if (PEAR_Registry::apiVersion() != '1.1') {
 <?php
 error_reporting(1803);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+
 $pf = new PEAR_PackageFile_v1;
 $pf->setConfig($config);
 $pf->setSummary('sum');
@@ -51,6 +54,7 @@ $phpunit->assertEquals($pf->getArray(), $contents, 'pf1 file saved');
 
 $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb');
 $contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb')));
+
 $phpunit->assertEquals(array (
   '_version' => '1.0',
   'dependencies' =>

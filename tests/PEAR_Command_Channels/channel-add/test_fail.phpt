@@ -25,7 +25,7 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_ChannelFile', 'message' => 'No version number found in <channel> tag'),
 ), 'no params');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     'info' => 'Error: No version number found in <channel> tag',
     'cmd' => 'no command',
@@ -39,13 +39,16 @@ $ch->setDefaultPEARProtocols();
 $fp = fopen($temp_path . DIRECTORY_SEPARATOR . 'fakechannel.xml', 'wb');
 fwrite($fp, $ch->toXml());
 fclose($fp);
+
 $e = $command->run('channel-add', array(), array($temp_path . DIRECTORY_SEPARATOR . 'fakechannel.xml'));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => 'channel-add: Channel "pear.php.net" exists,' .
         ' use channel-update to update entry'),
 ), 'no params');
+
 $phpunit->assertEquals(array (
 ), $fakelog->getLog(), 'log, bad file');
+
 echo 'tests done';
 ?>
 --CLEAN--
