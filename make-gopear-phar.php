@@ -91,7 +91,7 @@ $commandcontents = str_replace(
         "\$file = str_replace('_', '/', \$uiclass) . '.php';"
     ),
     array(
-        "\$file = 'phar://' . $outputFile . '/' . str_replace('_', '/', \$uiclass) . '.php';"
+        "\$file = 'phar://" . $outputFile . "/' . str_replace('_', '/', \$uiclass) . '.php';"
     ), $commandcontents);
 $commandcontents = replaceVersion($commandcontents, '');
 $creator->addString($commandcontents, 'PEAR/Frontend.php');
