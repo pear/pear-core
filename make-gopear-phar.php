@@ -77,8 +77,8 @@ $creator->useDefaultFrontController('PEAR.php');
 $creator->useSHA1Signature();
 
 foreach ($packages as $package) {
-    echo "adding go-pear-tarballs/$package\n";
-    $creator->addFile("go-pear-tarballs/$package", "go-pear-tarballs/$package");
+    echo "adding PEAR/go-pear-tarballs/$package\n";
+    $creator->addFile("go-pear-tarballs/$package", "PEAR/go-pear-tarballs/$package");
 }
 
 $commandcontents = file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'go-pear-phar.php');
