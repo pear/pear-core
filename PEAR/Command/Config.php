@@ -242,7 +242,9 @@ and uninstall).
             return $this->raiseError('Channel "' . $params[1] . '" does not exist');
         }
 
-        if ($params[0] == 'preferred_mirror' && !$reg->channelExists($params[1])) {
+        if ($params[0] == 'preferred_mirror'
+            && !$reg->mirrorExists($channel, $params[1])
+        ) {
             $msg  = 'Channel Mirror "' . $params[1] . '" does not exist';
             $msg .= ' in your registry for channel "' . $channel . '".';
             $msg .= "\n" . 'Attempt to run "pear channel-update ' . $channel .'"';
