@@ -8,7 +8,7 @@
 $dir = 'PEAR/Command/';
 foreach (scandir($dir) as $file) {
     $file = explode('.', $file);
-    if (isset($file[1]) && $file[1] === 'php') {
+    if (isset($file[1]) && $file[1] === 'php' && $file[0] != 'Common') {
         generateXML($file[0]);
     }
 }
