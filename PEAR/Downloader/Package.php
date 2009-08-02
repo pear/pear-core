@@ -165,6 +165,12 @@ class PEAR_Downloader_Package
         $options = $this->_downloader->getOptions();
         if (isset($options['offline'])) {
             if (PEAR::isError($origErr) && !isset($options['soft'])) {
+                foreach ($origErr->getUserInfo() as $userInfo) {
+                    if (isset($userInfo['message'])) {
+                        $this->_downloader->log(0, $userInfo['message']);
+                    }
+                }
+
                 $this->_downloader->log(0, $origErr->getMessage());
             }
 
