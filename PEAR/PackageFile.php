@@ -205,9 +205,10 @@ class PEAR_PackageFile
                 return $pf;
             }
 
-            if (!$pf->validate($state)) {
+            if (!$pf->validate($state)) {;
                 if ($this->_config->get('verbose') > 0
-                    && $this->_logger && $pf->getValidationWarnings(false)) {
+                    && $this->_logger && $pf->getValidationWarnings(false)
+                ) {
                     foreach ($pf->getValidationWarnings(false) as $warning) {
                         $this->_logger->log(0, 'ERROR: ' . $warning['message']);
                     }
@@ -323,11 +324,11 @@ class PEAR_PackageFile
             $ret = PEAR::raiseError("Could not get contents of package \"$file\"".
                                      '. Invalid tgz file.');
             return $ret;
-        } else {
-            if (!count($content) && !@is_file($file)) {
-                $ret = PEAR::raiseError("could not open file \"$file\"");
-                return $ret;
-            }
+        }
+
+        if (!count($content) && !@is_file($file)) {
+            $ret = PEAR::raiseError("could not open file \"$file\"");
+            return $ret;
         }
 
         $xml      = null;

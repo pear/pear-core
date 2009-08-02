@@ -563,8 +563,7 @@ Run post-installation scripts in package <package>, if any exist.
             }
         }
 
-        $abstractpackages = array();
-        $otherpackages    = array();
+        $abstractpackages = $otherpackages = array();
         // parse params
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
 
@@ -658,7 +657,7 @@ Run post-installation scripts in package <package>, if any exist.
         }
 
         $this->downloader = &$this->getDownloader($this->ui, $options, $this->config);
-        $errors = $downloaded = $binaries   = array();
+        $errors = $downloaded = $binaries = array();
         $downloaded = &$this->downloader->download($packages);
         if (PEAR::isError($downloaded)) {
             return $this->raiseError($downloaded);
@@ -703,8 +702,7 @@ Run post-installation scripts in package <package>, if any exist.
             return true;
         }
 
-        $extrainfo = array();
-        $binaries  = array();
+        $binaries = $extrainfo = array();
         foreach ($downloaded as $param) {
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $info = $this->installer->install($param, $options);
