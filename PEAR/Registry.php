@@ -883,6 +883,7 @@ class PEAR_Registry extends PEAR
 
     /**
      * Determine whether a channel exists in the registry
+     *
      * @param string Channel name
      * @param bool if true, then aliases will be ignored
      * @return boolean
@@ -903,6 +904,26 @@ class PEAR_Registry extends PEAR
         }
 
         return $a;
+    }
+
+    /**
+     * Determine whether a mirror exists within the deafult channel in the registry
+     *
+     * @param string Channel name
+     * @param string Mirror name
+     *
+     * @return boolean
+     */
+    function _mirrorExists($channel, $mirror)
+    {
+        $data = $this->_channelInfo($channel);
+        foreach ($data['servers']['mirror'] as $m) {
+            if ($m['attribs']['host'] == $mirror) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -1571,6 +1592,23 @@ class PEAR_Registry extends PEAR
     }
 
     // }}}
+
+    /**
+     * @param string channel name mirror is in
+     * @param string mirror name
+     *
+     * @return bool
+     */
+    function mirrorExists($channel, $mirror)
+    {
+        if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
+            return $e;
+        }
+
+        $ret = $this->_mirrorExists($channel, $mirror);
+        $this->_unlock();
+        return $ret;
+    }
 
     // {{{ isAlias()
 
