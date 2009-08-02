@@ -13,7 +13,9 @@ if (!extension_loaded('zlib')) {
 <?php
 error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
+
+$path = dirname(__FILE__)  . DIRECTORY_SEPARATOR;
+$pathtopackagexml = $path .
     'packages'. DIRECTORY_SEPARATOR . 'Archive_Tar-1.2.tgz';
 $ap = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'Archive_Tar';
 chdir($temp_path);
@@ -45,9 +47,9 @@ $phpunit->assertEquals(
     'docs/Archive_Tar.txt same'
     );
 $phpunit->assertEquals(array(
-  0 => 
+  0 =>
   array (
-    'info' => 'Package ready at \'/home/user/workspace/pear-core/tests/PEAR_Command_Install/testinstallertemp/ext/Archive_Tar\'',
+    'info' => "Package ready at '" . dirname($path) . "/testinstallertemp/ext/Archive_Tar'",
     'cmd' => 'no command',
   ),
 ), $fakelog->getLog(), 'log messages');
