@@ -306,7 +306,8 @@ class PEAR_Downloader extends PEAR_Common
                     }
 
                     if ($params[$i] && !isset($channelschecked[$params[$i]->getChannel()]) &&
-                          !isset($this->_options['offline'])) {
+                          !isset($this->_options['offline'])
+                    ) {
                         $channelschecked[$params[$i]->getChannel()] = true;
                         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
                         if (!class_exists('System')) {
