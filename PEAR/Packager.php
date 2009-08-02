@@ -163,6 +163,12 @@ class PEAR_Packager extends PEAR_Common
                 $this->log(1, 'Tag the released code with "pear cvstag ' .
                     $main->getPackageFile() . '"');
                 $this->log(1, "(or set the CVS tag $cvstag by hand)");
+            } elseif (file_exists("$pkgdir/.svn")) {
+                $svnversion = preg_replace('/[^a-z0-9]/i', '.', $pf->getVersion());
+                $svntag = "release-$svnversion";
+                $this->log(1, 'Tag the released code with "pear svntag ' .
+                    $main->getPackageFile() . '"');
+                $this->log(1, "(or set the SVN tag $svntag by hand)");
             }
         } else { // this branch is executed for single packagefile packaging
             $gen = &$pf->getDefaultGenerator();
@@ -182,6 +188,11 @@ class PEAR_Packager extends PEAR_Common
                 $cvstag = "RELEASE_$cvsversion";
                 $this->log(1, "Tag the released code with `pear cvstag $pkgfile'");
                 $this->log(1, "(or set the CVS tag $cvstag by hand)");
+            } elseif (file_exists("$pkgdir/.svn")) {
+                $svnversion = preg_replace('/[^a-z0-9]/i', '.', $pf->getVersion());
+                $svntag = "release-$svnversion";
+                $this->log(1, "Tag the released code with `pear svntag $pkgfile'");
+                $this->log(1, "(or set the SVN tag $svntag by hand)");
             }
         }
 
