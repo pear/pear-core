@@ -324,10 +324,9 @@ class PEAR_Downloader extends PEAR_Common
                             break;
                         }
 
-                        $mirror = $this->config->get('preferred_mirror', null,
-                                                     $params[$i]->getChannel());
-                        $a = $this->downloadHttp('http://' . $mirror .
-                            '/channel.xml', $this->ui, $dir, null, $curchannel->lastModified());
+                        $mirror = $this->config->get('preferred_mirror', null, $params[$i]->getChannel());
+                        $url    = 'http://' . $mirror . '/channel.xml';
+                        $a = $this->downloadHttp($url, $this->ui, $dir, null, $curchannel->lastModified());
 
                         PEAR::staticPopErrorHandling();
                         if (PEAR::isError($a) || !$a) {
