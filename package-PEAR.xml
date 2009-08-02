@@ -97,10 +97,12 @@ http://pear.php.net/dtd/package-1.0.xsd">
   * Implement Request #16386: PEAR_Config::remove() does not support specifying a channel [timj]
   * Implement Request #16396: package-dependencies should allow package names [dufuz]
 
+  * Fix Bug #11348: pear package-dependencies isn't well explained [dufuz]
   * Fix Bug #16108: PEAR_PackageFile_Generator_v2 PHP4 parse error when running upgrade-all [dufuz]
   * Fix Bug #16113: Installing certain packages fails due incorrect encoding handling [dufuz]
   * Fix Bug #16122: PEAR RunTest failed to run as expected [dufuz]
   * Fix Bug #16387: channel-logout does not support logging out from a non-default channel [timj]
+  * Fix Bug #16444: Setting preferred mirror fails [dufuz]
   * Fix the shutdown functions where a index might not exist and thus raise a notice [derick]
  </notes>
   <provides type="class" name="OS_Guess"/>
