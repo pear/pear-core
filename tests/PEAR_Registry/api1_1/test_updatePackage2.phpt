@@ -76,15 +76,15 @@ $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'depdb');
 $contents = unserialize(implode('', file($php_dir . DIRECTORY_SEPARATOR . '.depdb')));
 $phpunit->assertEquals(array (
   '_version' => '1.0',
-  'dependencies' => 
+  'dependencies' =>
   array (
-    'grob' => 
+    'grob' =>
     array (
-      'foo' => 
+      'foo' =>
       array (
-        0 => 
+        0 =>
         array (
-          'dep' => 
+          'dep' =>
           array (
             'name' => 'frong',
             'channel' => 'floop',
@@ -105,13 +105,13 @@ $phpunit->assertEquals(array (
       ),
     ),
   ),
-  'packages' => 
+  'packages' =>
   array (
-    'floop' => 
+    'floop' =>
     array (
-      'frong' => 
+      'frong' =>
       array (
-        0 => 
+        0 =>
         array (
           'channel' => 'grob',
           'package' => 'foo',
