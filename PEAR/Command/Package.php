@@ -768,7 +768,7 @@ used for automated conversion or learning the format.
         }
 
         $obj = &$this->getPackageFile($this->config, $this->_debug);
-        if (is_file($params[0])) {
+        if (is_file($params[0]) || strpos($params[0], '.xml') > 0) {
            $info = $obj->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
         } else {
             $reg  = $this->config->getRegistry();
