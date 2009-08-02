@@ -4,14 +4,19 @@
  * Outputs the XML to stdout.
  */
 
+echo "Starting the XML generation process\n\n";
+
 // Name of the command, eg 'Remote' for Remote.php's XML output
 $dir = 'PEAR/Command/';
 foreach (scandir($dir) as $file) {
     $file = explode('.', $file);
     if (isset($file[1]) && $file[1] === 'php' && $file[0] != 'Common') {
+        echo "Generating XML for " . $file[0] . " \n";
         generateXML($file[0]);
     }
 }
+
+echo "\nDone.\n";
 
 function generateXML($name)
 {
@@ -39,7 +44,12 @@ function generateXML($name)
             foreach($docs['options'] as $option => $opt_docs) {
                 $option = htmlentities($option, ENT_QUOTES, 'UTF-8', false);
                 $xml .= '   <'.$option.'>'."\n";
-                $xml .= '    <shortopt>'.htmlentities($opt_docs['shortopt'], ENT_QUOTES, 'UTF-8', false)."</shortopt>\n";
+                $xml .= '    <shortopt>';
+                if (isset($opt_docs['shortopt'])) {
+                    $xml .= htmlentities($opt_docs['shortopt'], ENT_QUOTES, 'UTF-8', false);
+                }
+
+                $xml .= "</shortopt>\n";
                 $xml .= '    <doc>'.htmlentities($opt_docs['doc'], ENT_QUOTES, 'UTF-8', false)."</doc>\n";
                 if (isset($opt_docs['arg']) && $opt_docs['arg'] != '') {
                     $xml .= '    <arg>'.htmlentities($opt_docs['arg'], ENT_QUOTES, 'UTF-8', false)."</arg>\n";
