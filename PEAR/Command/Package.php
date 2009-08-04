@@ -446,7 +446,7 @@ used for automated conversion or learning the format.
 
         $version    = $info->getVersion();
         $package    = $info->getName();
-        $svntag     = "release-$version";
+        $svntag     = "$package-$version";
         $command = 'svn';
         if (isset($options['quiet'])) {
             $command .= ' -q';
