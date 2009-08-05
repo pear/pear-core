@@ -500,7 +500,7 @@ used for automated conversion or learning the format.
             $this->ui->outputData($this->output, $command);
             return $this->raiseError('SVN tag ' . $svntag . ' for ' . $package . ' already exists.');
         } else {
-            $makeCommand = 'svn mkdir ' . $releaseTag;
+            $makeCommand = 'svn mkdir -m "Preparing the release of ' . $releaseTag . '" ' . $releaseTag;
             $this->output .= "+ $makeCommand\n";
             if (empty($options['dry-run'])) {
                 // We ned to create the tag dir.
