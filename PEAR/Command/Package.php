@@ -499,6 +499,19 @@ used for automated conversion or learning the format.
         if (in_array($svntag . '/', explode("\n", $out))) {
             $this->ui->outputData($this->output, $command);
             return $this->raiseError('SVN tag ' . $svntag . ' for ' . $package . ' already exists.');
+        } else {
+            $makeCommand = 'svn mkdir ' . $releaseTag;
+            $this->output .= "+ $makeCommand\n";
+            if (empty($options['dry-run'])) {
+                // We ned to create the tag dir.
+                $fp = popen($makeCommand, "r");
+                $out = '';
+                while ($line = fgets($fp, 1024)) {
+                    $out .= rtrim($line)."\n";
+                }
+                pclose($fp);
+                $this->output .= "$out\n";
+            }
         }
 
         $command .= ' -m "Tagging the ' . $version  . ' release" \\' . "\n";
