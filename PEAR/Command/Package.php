@@ -501,7 +501,7 @@ used for automated conversion or learning the format.
             return $this->raiseError('SVN tag ' . $svntag . ' for ' . $package . ' already exists.');
         }
 
-        $command .= ' -m "Tagging the ' . $version  . ' release" \ ' . "\n";
+        $command .= ' -m "Tagging the ' . $version  . ' release" \\' . "\n";
 
         $dir   = dirname($packageFile);
         $dir   = substr($dir, strrpos($dir, '/') + 1);
