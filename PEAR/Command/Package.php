@@ -503,7 +503,7 @@ used for automated conversion or learning the format.
             $makeCommand = 'svn mkdir -m "Preparing the release of ' . $releaseTag . '" ' . $releaseTag;
             $this->output .= "+ $makeCommand\n";
             if (empty($options['dry-run'])) {
-                // We ned to create the tag dir.
+                // We need to create the tag dir.
                 $fp = popen($makeCommand, "r");
                 $out = '';
                 while ($line = fgets($fp, 1024)) {
