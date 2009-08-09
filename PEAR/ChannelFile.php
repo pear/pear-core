@@ -498,13 +498,15 @@ class PEAR_ChannelFile
     function _makeRestXml($info, $indent)
     {
         $ret = $indent . "<rest>\n";
-        if (!isset($info['baseurl'][0])) {
+        if (isset($info['baseurl']) && !isset($info['baseurl'][0])) {
             $info['baseurl'] = array($info['baseurl']);
         }
 
-        foreach ($info['baseurl'] as $url) {
-            $ret .= "$indent <baseurl type=\"" . $url['attribs']['type'] . "\"";
-            $ret .= ">" . $url['_content'] . "</baseurl>\n";
+        if (isset($info['baseurl'])) {
+            foreach ($info['baseurl'] as $url) {
+                $ret .= "$indent <baseurl type=\"" . $url['attribs']['type'] . "\"";
+                $ret .= ">" . $url['_content'] . "</baseurl>\n";
+            }
         }
         $ret .= $indent . "</rest>\n";
         return $ret;
