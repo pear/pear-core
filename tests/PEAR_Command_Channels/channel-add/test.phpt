@@ -14,6 +14,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $ch = new PEAR_ChannelFile;
 $ch->setName('fake');
 $ch->setSummary('fake');
+$ch->setBaseURL('REST1.0', 'http://pear.example.com/rest');
 $ch->setDefaultPEARProtocols();
 
 $fp = fopen($temp_path . DIRECTORY_SEPARATOR . 'fakechannel.xml', 'wb');
