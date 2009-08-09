@@ -66,7 +66,7 @@ $phpunit->assertEquals(array (
   ),
   7 =>
   array (
-    0 => '(or set the SVN tag release-0.16.0 by hand)',
+    0 => '(or set the SVN tag pecl_http-0.16.0 by hand)',
     1 => true,
   ),
 ), $fakelog->getLog(), 'log');
