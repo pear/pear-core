@@ -107,6 +107,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   * Fix Bug #16108: PEAR_PackageFile_Generator_v2 PHP4 parse error when running upgrade-all [dufuz]
   * Fix Bug #16113: Installing certain packages fails due incorrect encoding handling [dufuz]
   * Fix Bug #16122: PEAR RunTest failed to run as expected [dufuz]
+  * Fix Bug #16366: compiling 5.2.10 leads to non-functioning pear [dufuz]
   * Fix Bug #16387: channel-logout does not support logging out from a non-default channel [timj]
   * Fix Bug #16444: Setting preferred mirror fails [dufuz]
   * Fix the shutdown functions where a index might not exist and thus raise a notice [derick]
