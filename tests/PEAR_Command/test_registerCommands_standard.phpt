@@ -57,13 +57,14 @@ $phpunit->assertEquals(array (
   'search' => 'PEAR_Command_Remote',
   'shell-test' => 'PEAR_Command_Registry',
   'sign' => 'PEAR_Command_Package',
+  'svntag' => 'PEAR_Command_Package',
   'uninstall' => 'PEAR_Command_Install',
   'update-channels' => 'PEAR_Command_Channels',
   'upgrade' => 'PEAR_Command_Install',
   'upgrade-all' => 'PEAR_Command_Install',
 ), PEAR_Command::getCommands(), 'getcommands');
-$phpunit->assertEquals(46, count(PEAR_Command::getCommands()), 'count commands');
-$phpunit->assertEquals(46, count(PEAR_Command::getShortcuts()), 'count shortcuts');
+$phpunit->assertEquals(47, count(PEAR_Command::getCommands()), 'count commands');
+$phpunit->assertEquals(47, count(PEAR_Command::getShortcuts()), 'count shortcuts');
 $phpunit->assertEquals(array (
   'b' => 'build',
   'bun' => 'bundle',
@@ -107,6 +108,7 @@ $phpunit->assertEquals(array (
   'si' => 'sign',
   'sp' => 'search',
   'st' => 'shell-test',
+  'sv' => 'svntag',
   'ua' => 'upgrade-all',
   'uc' => 'update-channels',
   'un' => 'uninstall',
