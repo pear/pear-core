@@ -87,11 +87,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </helper>
  <date>2009-04-15</date>
  <version>
-  <release>1.8.2</release>
-  <api>1.8.2</api>
+  <release>1.9.0RC1</release>
+  <api>1.9.0RC1</api>
  </version>
  <stability>
-  <release>stable</release>
+  <release>beta</release>
   <api>stable</api>
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
@@ -270,9 +270,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="13.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="14.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
     </dir> <!-- /PEAR/REST -->

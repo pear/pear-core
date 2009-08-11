@@ -87,10 +87,10 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.8.2</version>
+  <version>1.9.0RC1</version>
   <date>2009-04-15</date>
   <license>New BSD License</license>
-  <state>stable</state>
+  <state>beta</state>
  <notes>
   * Implement Request #16213: add alias to list-channels output [dufuz]
   * Implement Request #16378: pear svntag [dufuz]
@@ -278,9 +278,6 @@ http://pear.php.net/dtd/package-1.0.xsd">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
      <file role="php" name="13.php">
-      <replace from="@package_version@" to="version" type="package-info"/>
-     </file>
-     <file role="php" name="14.php">
       <replace from="@package_version@" to="version" type="package-info"/>
      </file>
     </dir>
