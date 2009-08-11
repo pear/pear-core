@@ -849,14 +849,15 @@ class PEAR_Downloader extends PEAR_Common
             $rest = &$this->config->getREST('1.0', $this->_options);
         }
 
+        $downloadVersion = false;
         if (!isset($parr['version']) && !isset($parr['state']) && $version
               && !PEAR::isError($version)
-              && !isset($this->_options['downloadonly'])) {
-            $url = $rest->getDownloadURL($base, $parr, $state, $version, $chan->getName());
-        } else {
-            $url = $rest->getDownloadURL($base, $parr, $state, false, $chan->getName());
+              && !isset($this->_options['downloadonly'])
+        ) {
+            $downloadVersion = $version;
         }
 
+        $url = $rest->getDownloadURL($base, $parr, $state, $downloadVersion, $chan->getName());
         if (PEAR::isError($url)) {
             $this->configSet('default_channel', $curchannel);
             return $url;
