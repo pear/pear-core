@@ -88,7 +88,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
  </maintainers>
  <release>
   <version>1.9.0RC1</version>
-  <date>2009-04-15</date>
+  <date>2009-08-11</date>
   <license>New BSD License</license>
   <state>beta</state>
  <notes>
@@ -635,6 +635,29 @@ Alpha1 Release Notes:
   <state>stable</state>
  <notes>
   * Fix Bug #16099 	PEAR crash on PHP4 (parse error) [dufuz]
+ </notes>
+ </release>
+ <release>
+  <version>1.9.0RC1</version>
+  <date>2009-08-11</date>
+  <license>New BSD License</license>
+  <state>beta</state>
+ <notes>
+  * Implement Request #16213: add alias to list-channels output [dufuz]
+  * Implement Request #16378: pear svntag [dufuz]
+  * Implement Request #16386: PEAR_Config::remove() does not support specifying a channel [timj]
+  * Implement Request #16396: package-dependencies should allow package names [dufuz]
+
+  * Fix Bug #11181: pear requests channel.xml from main server instead from mirror [dufuz]
+  * Fix Bug #14493: pear install --offline doesn't print out errors [dufuz]
+  * Fix Bug #11348: pear package-dependencies isn't well explained [dufuz]
+  * Fix Bug #16108: PEAR_PackageFile_Generator_v2 PHP4 parse error when running upgrade-all [dufuz]
+  * Fix Bug #16113: Installing certain packages fails due incorrect encoding handling [dufuz]
+  * Fix Bug #16122: PEAR RunTest failed to run as expected [dufuz]
+  * Fix Bug #16366: compiling 5.2.10 leads to non-functioning pear [dufuz]
+  * Fix Bug #16387: channel-logout does not support logging out from a non-default channel [timj]
+  * Fix Bug #16444: Setting preferred mirror fails [dufuz]
+  * Fix the shutdown functions where a index might not exist and thus raise a notice [derick]
  </notes>
  </release>
  </changelog>
