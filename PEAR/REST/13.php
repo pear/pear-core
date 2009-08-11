@@ -54,17 +54,18 @@ class PEAR_REST_13 extends PEAR_REST_10
      */
     function getDownloadURL($base, $packageinfo, $prefstate, $installed, $channel = false)
     {
-        $channel = $packageinfo['channel'];
-        $package = $packageinfo['package'];
         $states = $this->betterStates($prefstate, true);
         if (!$states) {
             return PEAR::raiseError('"' . $prefstate . '" is not a valid state');
         }
 
-        $state   = isset($packageinfo['state'])   ? $packageinfo['state']   : null;
-        $version = isset($packageinfo['version']) ? $packageinfo['version'] : null;
-        $info = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
-            '/allreleases2.xml');
+        $channel  = $packageinfo['channel'];
+        $package  = $packageinfo['package'];
+        $state    = isset($packageinfo['state'])   ? $packageinfo['state']   : null;
+        $version  = isset($packageinfo['version']) ? $packageinfo['version'] : null;
+        $restFile = $base . 'r/' . strtolower($package) . '/allreleases2.xml';
+
+        $info = $this->_rest->retrieveData($restFile, false, false, $channel);
         if (PEAR::isError($info)) {
             return PEAR::raiseError('No releases available for package "' .
                 $channel . '/' . $package . '"');
@@ -144,17 +145,18 @@ class PEAR_REST_13 extends PEAR_REST_10
     function getDepDownloadURL($base, $xsdversion, $dependency, $deppackage,
                                $prefstate = 'stable', $installed = false, $channel = false)
     {
-        $channel = $dependency['channel'];
-        $package = $dependency['name'];
         $states = $this->betterStates($prefstate, true);
         if (!$states) {
             return PEAR::raiseError('"' . $prefstate . '" is not a valid state');
         }
 
-        $state   = isset($dependency['state'])   ? $dependency['state']   : null;
-        $version = isset($dependency['version']) ? $dependency['version'] : null;
-        $info = $this->_rest->retrieveData($base . 'r/' . strtolower($package) .
-            '/allreleases2.xml');
+        $channel  = $dependency['channel'];
+        $package  = $dependency['name'];
+        $state    = isset($dependency['state'])   ? $dependency['state']   : null;
+        $version  = isset($dependency['version']) ? $dependency['version'] : null;
+        $restFile = $base . 'r/' . strtolower($package) .'/allreleases2.xml';
+
+        $info = $this->_rest->retrieveData($restFile, false, false, $channel);
         if (PEAR::isError($info)) {
             return PEAR::raiseError('Package "' . $deppackage['channel'] . '/' . $deppackage['package']
                 . '" dependency "' . $channel . '/' . $package . '" has no releases');
@@ -204,9 +206,7 @@ class PEAR_REST_13 extends PEAR_REST_10
             }
         }
 
-        $found = false;
-        $release = false;
-        $skippedphp = false;
+        $skippedphp = $found = $release = false;
         if (!is_array($info['r']) || !isset($info['r'][0])) {
             $info['r'] = array($info['r']);
         }
