@@ -1139,7 +1139,7 @@ class PEAR_Installer extends PEAR_Downloader
         } else {
             $descfile = $pkgfile;
             $tmpdir   = '';
-            $pkg      = &$this->_parsePackageXml($descfile, $tmpdir);
+            $pkg      = $this->_parsePackageXml($descfile, $tmpdir);
             if (PEAR::isError($pkg)) {
                 return $pkg;
             }
