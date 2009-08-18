@@ -26,8 +26,8 @@ $ch->setBaseURL('REST1.1', 'http://pear.phpunit.de/Chiara_PEAR_Server_REST/');
 
 $phpunit->assertTrue($reg->addChannel($ch), 'PHPUnit channel setup');
 
-$pearweb->addHTMLConfig('http://pear.phpunit.de/get/PHPUnit-3.4.0beta1', $dir . 'PHPUnit-3.4.0beta1.tgz');
-$pearweb->addHTMLConfig('http://pear.phpunit.de/get/PHPUnit-3.3.12',     $dir . 'PHPUnit-3.3.12.tgz');
+$pearweb->addHTMLConfig('http://pear.phpunit.de/get/PHPUnit-3.4.0beta1.tgz', $dir . 'PHPUnit-3.4.0beta1.tgz');
+$pearweb->addHTMLConfig('http://pear.phpunit.de/get/PHPUnit-3.3.12.tgz',     $dir . 'PHPUnit-3.3.12.tgz');
 
 $pearweb->addRESTConfig("http://pear.phpunit.de/Chiara_PEAR_Server_REST/p/phpunit/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
 <p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
@@ -405,12 +405,12 @@ $fakelog->getLog();
 $fakelog->getDownload();
 unset($GLOBALS['__Stupid_php4_a']); // reset downloader
 
-//$command->run('upgrade', array(), array('phpunit/phpunit-3.4.0beta1'));
-//$phpunit->assertNoErrors('full test');
-//
-//$phpunit->assertEquals(array (), $fakelog->getLog(), 'bug part');
-//$phpunit->assertEquals(array(),  $fakelog->getDownload(), 'download bug part');
-//$phpunit->assertEquals('3.4.0beta1', $reg->packageInfo('phpunit/phpunit', 'version'), 'PHPUnit version');
+$command->run('upgrade', array(), array('phpunit/phpunit-3.4.0beta1'));
+$phpunit->assertNoErrors('full test');
+
+$phpunit->assertEquals(array(), $fakelog->getLog(), 'bug part');
+$phpunit->assertEquals(array(),  $fakelog->getDownload(), 'download bug part');
+$phpunit->assertEquals('3.4.0beta1', $reg->packageInfo('phpunit/phpunit', 'version'), 'PHPUnit version');
 
 echo 'tests done';
 ?>

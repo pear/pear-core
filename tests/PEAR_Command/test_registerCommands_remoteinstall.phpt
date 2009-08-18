@@ -40,8 +40,11 @@ $phpunit->assertEquals(array (
   'install' => 'PEAR_Command_Install',
   'list' => 'PEAR_Command_Registry',
   'list-all' => 'PEAR_Command_Remote',
+  'list-categories' => 'PEAR_Command_Categories',
+  'list-category' => 'PEAR_Command_Categories',
   'list-channels' => 'PEAR_Command_Channels',
   'list-files' => 'PEAR_Command_Registry',
+  'list-packages' => 'PEAR_Command_Categories',
   'list-upgrades' => 'PEAR_Command_Remote',
   'login' => 'PEAR_Command_Auth',
   'logout' => 'PEAR_Command_Auth',
@@ -67,13 +70,15 @@ $phpunit->assertEquals(array (
   'upgrade' => 'PEAR_Command_Install',
   'upgrade-all' => 'PEAR_Command_Install',
 ), PEAR_Command::getCommands(), 'getcommands');
-$phpunit->assertEquals(51, count(PEAR_Command::getCommands()), 'count commands');
-$phpunit->assertEquals(51, count(PEAR_Command::getShortcuts()), 'count shortcuts');
+$phpunit->assertEquals(54, count(PEAR_Command::getCommands()), 'count commands');
+$phpunit->assertEquals(54, count(PEAR_Command::getShortcuts()), 'count shortcuts');
 $phpunit->assertEquals(array (
   'b' => 'build',
   'bun' => 'bundle',
   'c2' => 'convert',
   'ca' => 'channel-add',
+  'cat' => 'list-category',
+  'cats' => 'list-categories',
   'cc' => 'clear-cache',
   'cd' => 'cvsdiff',
   'cde' => 'channel-delete',
@@ -100,6 +105,7 @@ $phpunit->assertEquals(array (
   'lc' => 'list-channels',
   'li' => 'login',
   'lo' => 'logout',
+  'lp' => 'list-packages',
   'lu' => 'list-upgrades',
   'p' => 'package',
   'pd' => 'package-dependencies',
