@@ -550,7 +550,13 @@ class PEAR_RunTest
                     fclose($fp);
                     $section_text['EXPECT'] = file_get_contents($f);
                 }
-                $wanted = preg_replace('/\r\n/', "\n", trim($section_text['EXPECT']));
+
+                if (isset($section_text['EXPECT'])) {
+                    $wanted = preg_replace('/\r\n/', "\n", trim($section_text['EXPECT']));
+                } else {
+                    $wanted = '';
+                }
+
                 // compare and leave on success
                 if (!$returnfail && 0 == strcmp($output, $wanted)) {
                     if (file_exists($temp_file)) {
