@@ -16,7 +16,16 @@ $phpunit->assertNoErrors('after create');
 
 // 5.2.9 and up has the proper error msg again
 $php5 = (version_compare(phpversion(), '5.0.0', '>=') && version_compare(phpversion(), '5.2.8', '<='));
-$message = $php5 ? 'XML error: Empty document at line 1' : 'XML error: Not well-formed (invalid token) at line 1';
+if ($php5) {
+    $message = 'XML error: Empty document at line 1';
+} else {
+    // PHP 4 has Not lower case
+    if (version_compare(phpversion(), '5.0.0', '<')) {
+        $message = 'XML error: not well-formed (invalid token) at line 1';
+    } else {
+        $message = 'XML error: Not well-formed (invalid token) at line 1';
+    }
+}
 
 $result = $dp->initialize($pathtopackagexml);
 $phpunit->assertErrors(

@@ -15,7 +15,17 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 
 // 5.2.9 and up has the proper error msg again
 $php5 = (version_compare(phpversion(), '5.0.0', '>=') && version_compare(phpversion(), '5.2.8', '<='));
-$message = $php5 ? 'XML error: Empty document at line 1' : 'XML error: Not well-formed (invalid token) at line 1';
+
+if ($php5) {
+    $message = 'XML error: Empty document at line 1';
+} else {
+    // PHP 4 has Not as lowercase
+    if (version_compare(phpversion(), '5.0.0', '<')) {
+        $message = 'XML error: not well-formed (invalid token) at line 1';
+    } else {
+        $message = 'XML error: Not well-formed (invalid token) at line 1';
+    }
+}
 
 $ret = $common->infoFromString('\\goober');
 $phpunit->assertErrors(array(
