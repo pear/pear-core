@@ -85,7 +85,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2009-08-11</date>
+ <date>2009-08-18</date>
  <version>
   <release>1.9.0RC1</release>
   <api>1.9.0RC1</api>
@@ -772,7 +772,7 @@ Alpha1 Release Notes:
  </notes>
   </release>
   <release>
-    <date>2009-08-11</date>
+    <date>2009-08-18</date>
     <version>
      <release>1.9.0RC1</release>
      <api>1.9.0RC1</api>
