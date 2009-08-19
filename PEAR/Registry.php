@@ -211,7 +211,7 @@ class PEAR_Registry extends PEAR
                         $pear_channel->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
                         $pear_channel->setBaseURL('REST1.1', 'http://pear.php.net/rest/');
                         $pear_channel->setBaseURL('REST1.3', 'http://pear.php.net/rest/');
-                        $pear_channel->setBaseURL('REST1.4', 'http://pear.php.net/rest/');
+                        //$pear_channel->setBaseURL('REST1.4', 'http://pear.php.net/rest/');
                     } else {
                         $pear_channel->setServer('pear.php.net');
                         $pear_channel->setAlias('pear');

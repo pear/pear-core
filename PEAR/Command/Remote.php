@@ -664,10 +664,11 @@ parameter.
             }
 
             $latest = array();
+            $base2  = false;
             $preferred_mirror = $this->config->get('preferred_mirror');
             if ($chan->supportsREST($preferred_mirror) &&
                 (
-                   ($base2 = $chan->getBaseURL('REST1.4', $preferred_mirror)) ||
+                   //($base2 = $chan->getBaseURL('REST1.4', $preferred_mirror)) ||
                    ($base  = $chan->getBaseURL('REST1.0', $preferred_mirror))
                 )
 

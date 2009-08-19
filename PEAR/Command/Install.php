@@ -1201,10 +1201,11 @@ Run post-installation scripts in package <package>, if any exist.
                     return $this->raiseError($chan);
                 }
 
+                $base2 = false;
                 $preferred_mirror = $this->config->get('preferred_mirror', null, $channel);
                 if ($chan->supportsREST($preferred_mirror) &&
                     (
-                       ($base2 = $chan->getBaseURL('REST1.4', $preferred_mirror)) ||
+                       //($base2 = $chan->getBaseURL('REST1.4', $preferred_mirror)) ||
                        ($base  = $chan->getBaseURL('REST1.0', $preferred_mirror))
                     )
                 ) {
