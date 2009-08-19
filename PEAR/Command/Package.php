@@ -447,12 +447,7 @@ used for automated conversion or learning the format.
         $version    = $info->getVersion();
         $package    = $info->getName();
         $svntag     = "$package-$version";
-        $command = 'svn';
-        if (isset($options['quiet'])) {
-            $command .= ' -q';
-        }
 
-        $command .= ' copy';
         if (isset($options['delete'])) {
             return $this->_svnRemoveTag($version, $package, $svntag, $packageFile, $options);
         }
@@ -498,7 +493,7 @@ used for automated conversion or learning the format.
 
         if (in_array($svntag . '/', explode("\n", $out))) {
             $this->ui->outputData($this->output, $command);
-            return $this->raiseError('SVN tag ' . $svntag . ' for ' . $package . ' already exists.');
+            #return $this->raiseError('SVN tag ' . $svntag . ' for ' . $package . ' already exists.');
         } else {
             $makeCommand = 'svn mkdir -m "Preparing the release of ' . $releaseTag . '" ' . $releaseTag;
             $this->output .= "+ $makeCommand\n";
@@ -514,6 +509,12 @@ used for automated conversion or learning the format.
             }
         }
 
+        $command = 'svn';
+        if (isset($options['quiet'])) {
+            $command .= ' -q';
+        }
+
+        $command .= ' copy';
         $command .= ' -m "Tagging the ' . $version  . ' release" \\' . "\n";
 
         $dir   = dirname($packageFile);
@@ -560,6 +561,7 @@ used for automated conversion or learning the format.
         $path = array();
         $path['from'] = substr($url, 0, strrpos($url, '/'));
         $path['base'] = substr($path['from'], 0, strrpos($path['from'], '/') + 1);
+
         return $path;
     }
 
