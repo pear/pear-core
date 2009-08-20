@@ -88,11 +88,11 @@ http://pear.php.net/dtd/package-1.0.xsd">
  </maintainers>
  <release>
   <version>1.9.0RC2</version>
-  <date>2009-08-18</date>
+  <date>2009-08-20</date>
   <license>New BSD License</license>
   <state>beta</state>
  <notes>
-  * REST 1.4 file was occasionally being included but file didn't exit [dufuz]
+  * REST 1.4 file was occasionally being included but REST 1.4 is not intended for this release cycle [dufuz]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -644,6 +644,15 @@ Alpha1 Release Notes:
   * Fix Bug #16387: channel-logout does not support logging out from a non-default channel [timj]
   * Fix Bug #16444: Setting preferred mirror fails [dufuz]
   * Fix the shutdown functions where a index might not exist and thus raise a notice [derick]
+ </notes>
+ </release>
+ <release>
+  <version>1.9.0RC2</version>
+  <date>2009-08-20</date>
+  <license>New BSD License</license>
+  <state>beta</state>
+ <notes>
+  * REST 1.4 file was occasionally being included but REST 1.4 is not intended for this release cycle [dufuz]
  </notes>
  </release>
  </changelog>
