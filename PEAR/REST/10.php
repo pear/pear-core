@@ -484,7 +484,7 @@ class PEAR_REST_10
         }
         if ($this->_rest->config->get('verbose') > 0) {
             $ui = &PEAR_Frontend::singleton();
-            $ui->log('Retrieving data...0%', false);
+            $ui->log('Retrieving data...0%', true);
         }
         $ret = array();
         if (!is_array($packagelist) || !isset($packagelist['p'])) {
