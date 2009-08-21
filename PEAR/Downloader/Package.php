@@ -1822,7 +1822,7 @@ class PEAR_Downloader_Package
             if ($info['version'] === $package_version) {
                 if (!isset($options['soft'])) {
                     $this->_downloader->log(1, 'WARNING: failed to download ' . $pname['channel'] .
-                        '/' . $pname['package'] . '-' . $pname['version'] . ', additionally the suggested version' .
+                        '/' . $pname['package'] . '-' . $package_version. ', additionally the suggested version' .
                         ' (' . $package_version . ') is the same as the locally installed one.');
                 }
 
@@ -1832,7 +1832,7 @@ class PEAR_Downloader_Package
             if (version_compare($info['version'], $package_version, '<=')) {
                 if (!isset($options['soft'])) {
                     $this->_downloader->log(1, 'WARNING: failed to download ' . $pname['channel'] .
-                        '/' . $pname['package'] . '-' . $pname['version'] . ', additionally the suggested version' .
+                        '/' . $pname['package'] . '-' . $package_version . ', additionally the suggested version' .
                         ' (' . $info['version'] . ') is a lower version than the locally installed one (' . $package_version . ').');
                 }
 
