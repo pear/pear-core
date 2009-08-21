@@ -243,7 +243,10 @@ and uninstall).
         }
 
         if ($params[0] == 'preferred_mirror'
-            && !$reg->mirrorExists($channel, $params[1])
+            && (
+                !$reg->mirrorExists($channel, $params[1]) &&
+                (!$reg->channelExists($params[1]) || $channel != $params[1])
+            )
         ) {
             $msg  = 'Channel Mirror "' . $params[1] . '" does not exist';
             $msg .= ' in your registry for channel "' . $channel . '".';
