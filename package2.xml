@@ -85,10 +85,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2009-08-20</date>
+ <date>2009-08-21</date>
  <version>
-  <release>1.9.0RC2</release>
-  <api>1.9.0RC2</api>
+  <release>1.9.0RC3</release>
+  <api>1.9.0RC3</api>
  </version>
  <stability>
   <release>beta</release>
@@ -96,7 +96,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-  * REST 1.4 file was occasionally being included but REST 1.4 is not intended for this release cycle [dufuz]
+  * Improved svntag support to handle packages like PEAR it self [dufuz]
  </notes>
  <contents>
   <dir name="/">
@@ -799,6 +799,21 @@ Alpha1 Release Notes:
     <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
     <notes>
   * REST 1.4 file was occasionally being included but REST 1.4 is not intended for this release cycle [dufuz]
+    </notes>
+  </release>
+  <release>
+    <date>2009-08-21</date>
+    <version>
+     <release>1.9.0RC3</release>
+     <api>1.9.0RC3</api>
+    </version>
+    <stability>
+     <release>beta</release>
+     <api>stable</api>
+    </stability>
+    <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+    <notes>
+     * Improved svntag support to handle packages like PEAR it self [dufuz]
     </notes>
   </release>
  </changelog>
