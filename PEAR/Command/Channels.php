@@ -674,7 +674,7 @@ configuration.',
             return $this->raiseError('No channel alias specified');
         }
 
-        if (count($params) !== 2) {
+        if (count($params) !== 2 || (!empty($params[1]) && $params[1]{0} == '-')) {
             return $this->raiseError(
                 'Invalid format, correct is: channel-alias channel alias');
         }
