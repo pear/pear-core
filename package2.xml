@@ -97,6 +97,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
   * Fixed a problem where the original channel could not be set as a preferred_mirror again [dufuz]
+  * Make sure channel aliases can't be made to start with - [dufuz]
+  * Fixed couple of stray notices [dufuz]
  </notes>
  <contents>
   <dir name="/">
