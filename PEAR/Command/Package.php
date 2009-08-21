@@ -481,7 +481,7 @@ used for automated conversion or learning the format.
         }
 
         // Check if tag already exists
-        $releaseTag = $path['base'] . 'tags/' . $svntag;
+        $releaseTag = $path['local']['base'] . 'tags/' . $svntag;
         $existsCommand = 'svn ls ' . $path['base'] . 'tags/';
 
         $fp = popen($existsCommand, "r");
@@ -493,9 +493,9 @@ used for automated conversion or learning the format.
 
         if (in_array($svntag . '/', explode("\n", $out))) {
             $this->ui->outputData($this->output, $command);
-            #return $this->raiseError('SVN tag ' . $svntag . ' for ' . $package . ' already exists.');
+            return $this->raiseError('SVN tag ' . $svntag . ' for ' . $package . ' already exists.');
         } else {
-            $makeCommand = 'svn mkdir -m "Preparing the release of ' . $releaseTag . '" ' . $releaseTag;
+            $makeCommand = 'svn mkdir ' . $releaseTag;
             $this->output .= "+ $makeCommand\n";
             if (empty($options['dry-run'])) {
                 // We need to create the tag dir.
@@ -514,25 +514,35 @@ used for automated conversion or learning the format.
             $command .= ' -q';
         }
 
-        $command .= ' copy';
-        $command .= ' -m "Tagging the ' . $version  . ' release" \\' . "\n";
+        $command .= ' copy --parents ';
 
         $dir   = dirname($packageFile);
         $dir   = substr($dir, strrpos($dir, '/') + 1);
         $files = array_keys($info->getFilelist());
+        $commands = array();
         foreach ($files as $file) {
             if (!file_exists($file)) {
                 $file = $dir . DIRECTORY_SEPARATOR . $file;
             }
-            $command .= ' ' . escapeshellarg($file);
+            $commands[] = $command . ' ' . escapeshellarg($file) . ' ' .
+                          escapeshellarg($releaseTag . DIRECTORY_SEPARATOR . $file);
         }
-
-        $command .= ' ' . $releaseTag;
 
         if ($this->config->get('verbose') > 1) {
-            $this->output .= "+ $command\n";
+            $this->output .= implode("\n", $commands) . "\n";
         }
 
+        if (empty($options['dry-run'])) {
+            foreach ($commands as $command) {
+                $fp = popen($command, "r");
+                while ($line = fgets($fp, 1024)) {
+                    $this->output .= rtrim($line)."\n";
+                }
+                pclose($fp);
+            }
+        }
+
+        $command = 'svn ci -m "Tagging the ' . $version  . ' release" ' . $releaseTag . "\n";
         $this->output .= "+ $command\n";
         if (empty($options['dry-run'])) {
             $fp = popen($command, "r");
@@ -561,6 +571,13 @@ used for automated conversion or learning the format.
         $path = array();
         $path['from'] = substr($url, 0, strrpos($url, '/'));
         $path['base'] = substr($path['from'], 0, strrpos($path['from'], '/') + 1);
+
+        // Figure out the local paths
+        $pos = strpos($file, '/trunk/');
+        if ($pos === false) {
+            $pos = strpos($file, '/branches/');
+        }
+        $path['local']['base'] = substr($file, 0, $pos + 1);
 
         return $path;
     }
