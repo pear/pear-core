@@ -87,12 +87,12 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.9.0RC3</version>
+  <version>1.9.0RC4</version>
   <date>2009-08-21</date>
   <license>New BSD License</license>
   <state>beta</state>
  <notes>
-  * Improved svntag support to handle packages like PEAR it self [dufuz]
+  * Fixed a problem where the original channel could not be set as a preferred_mirror again [dufuz]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
