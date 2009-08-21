@@ -917,6 +917,10 @@ class PEAR_Registry extends PEAR
     function _mirrorExists($channel, $mirror)
     {
         $data = $this->_channelInfo($channel);
+        if (!isset($data['servers']['mirror'])) {
+            return false;
+        }
+
         foreach ($data['servers']['mirror'] as $m) {
             if ($m['attribs']['host'] == $mirror) {
                 return true;
