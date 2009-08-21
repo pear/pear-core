@@ -528,10 +528,7 @@ used for automated conversion or learning the format.
                           escapeshellarg($releaseTag . DIRECTORY_SEPARATOR . $file);
         }
 
-        if ($this->config->get('verbose') > 1) {
-            $this->output .= implode("\n", $commands) . "\n";
-        }
-
+        $this->output .= implode("\n", $commands) . "\n";
         if (empty($options['dry-run'])) {
             foreach ($commands as $command) {
                 $fp = popen($command, "r");
