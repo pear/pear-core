@@ -266,7 +266,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/php_archive/allreleases.xml"
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/php_archive/deps.0.5.0.txt", 'a:3:{i:1;a:4:{s:4:"type";s:3:"php";s:3:"rel";s:2:"ge";s:7:"version";s:5:"4.3.0";s:8:"optional";s:2:"no";}i:2;a:5:{s:4:"type";s:3:"pkg";s:3:"rel";s:2:"ge";s:7:"version";s:5:"1.3.5";s:8:"optional";s:2:"no";s:4:"name";s:4:"PEAR";}i:3;a:5:{s:4:"type";s:3:"pkg";s:3:"rel";s:2:"ge";s:7:"version";s:5:"1.3.1";s:8:"optional";s:2:"no";s:4:"name";s:11:"Archive_Tar";}}', 'text/plain');
 $command->run('list-all', array(), array());
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 'http://pear.php.net/rest/p/packages.xml',
     1 => '200',
@@ -291,62 +291,62 @@ $phpunit->assertEquals(array (
     0 => 'http://pear.php.net/rest/r/archive_zip/allreleases.xml',
     1 => '404',
   ),
-  6 => 
+  6 =>
   array (
     0 => 'http://pear.php.net/rest/p/auth/info.xml',
     1 => '200',
   ),
-  7 => 
+  7 =>
   array (
     0 => 'http://pear.php.net/rest/r/auth/allreleases.xml',
     1 => '200',
   ),
-  8 => 
+  8 =>
   array (
     0 => 'http://pear.php.net/rest/r/auth/deps.1.3.0r3.txt',
     1 => '200',
   ),
-  9 => 
+  9 =>
   array (
     0 => 'http://pear.php.net/rest/p/net_ftp/info.xml',
     1 => '200',
   ),
-  10 => 
+  10 =>
   array (
     0 => 'http://pear.php.net/rest/r/net_ftp/allreleases.xml',
     1 => '200',
   ),
-  11 => 
+  11 =>
   array (
     0 => 'http://pear.php.net/rest/r/net_ftp/deps.1.3.1.txt',
     1 => '200',
   ),
-  12 => 
+  12 =>
   array (
     0 => 'http://pear.php.net/rest/p/pear/info.xml',
     1 => '200',
   ),
-  13 => 
+  13 =>
   array (
     0 => 'http://pear.php.net/rest/r/pear/allreleases.xml',
     1 => '200',
   ),
-  14 => 
+  14 =>
   array (
     0 => 'http://pear.php.net/rest/r/pear/deps.1.4.0a11.txt',
     1 => '200',
   ),
-  15 => 
+  15 =>
   array (
     0 => 'http://pear.php.net/rest/p/php_archive/info.xml',
     1 => '200',
   ),
-  16 => 
+  16 =>
   array (
     0 => 'http://pear.php.net/rest/r/php_archive/allreleases.xml',
     1 => '200',
   ),
-  17 => 
+  17 =>
   array (
     0 => 'http://pear.php.net/rest/r/php_archive/deps.0.5.0.txt',
     1 => '200',
@@ -355,7 +355,7 @@ $phpunit->assertEquals(array (
 $phpunit->assertEquals(array (
   array (
     0 => 'Retrieving data...0%',
-    1 => false,
+    1 => true,
   ),
   array (
     0 => '.',
@@ -378,43 +378,43 @@ $phpunit->assertEquals(array (
     1 => false,
   ),
   array (
-    'info' => 
+    'info' =>
     array (
       'caption' => 'All packages [Channel pear.php.net]:',
       'border' => true,
-      'headline' => 
+      'headline' =>
       array (
         0 => 'Package',
         1 => 'Latest',
         2 => 'Local',
       ),
       'channel' => 'pear.php.net',
-      'data' => 
+      'data' =>
       array (
-        'File Formats' => 
+        'File Formats' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Archive_Tar',
             1 => '1.3.1',
             2 => NULL,
             3 => 'Tar file management class',
-            4 => 
+            4 =>
             array (
             ),
           ),
         ),
-        'Authentication' => 
+        'Authentication' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Auth',
             1 => '1.3.0r3',
             2 => NULL,
             3 => 'Creating an authentication system.',
-            4 => 
+            4 =>
             array (
-              0 => 
+              0 =>
               array (
                 'type' => 'pkg',
                 'rel' => 'ge',
@@ -422,7 +422,7 @@ $phpunit->assertEquals(array (
                 'optional' => 'yes',
                 'name' => 'File_Passwd',
               ),
-              1 => 
+              1 =>
               array (
                 'type' => 'pkg',
                 'rel' => 'ge',
@@ -430,35 +430,35 @@ $phpunit->assertEquals(array (
                 'optional' => 'yes',
                 'name' => 'Net_POP3',
               ),
-              2 => 
+              2 =>
               array (
                 'type' => 'pkg',
                 'rel' => 'has',
                 'optional' => 'yes',
                 'name' => 'DB',
               ),
-              3 => 
+              3 =>
               array (
                 'type' => 'pkg',
                 'rel' => 'has',
                 'optional' => 'yes',
                 'name' => 'MDB',
               ),
-              4 => 
+              4 =>
               array (
                 'type' => 'pkg',
                 'rel' => 'has',
                 'optional' => 'yes',
                 'name' => 'MDB2',
               ),
-              5 => 
+              5 =>
               array (
                 'type' => 'pkg',
                 'rel' => 'has',
                 'optional' => 'yes',
                 'name' => 'Auth_RADIUS',
               ),
-              6 => 
+              6 =>
               array (
                 'type' => 'pkg',
                 'rel' => 'has',
@@ -468,17 +468,17 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        'Networking' => 
+        'Networking' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Net_FTP',
             1 => '1.3.1',
             2 => NULL,
             3 => 'Net_FTP provides an OO interface to the PHP FTP functions and some more advanced features in addition.',
-            4 => 
+            4 =>
             array (
-              0 => 
+              0 =>
               array (
                 'type' => 'pkg',
                 'channel' => 'pear.php.net',
@@ -490,17 +490,17 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        'PEAR' => 
+        'PEAR' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/PEAR',
             1 => '1.4.0a11',
             2 => NULL,
             3 => 'PEAR Base System',
-            4 => 
+            4 =>
             array (
-              0 => 
+              0 =>
               array (
                 'type' => 'pkg',
                 'channel' => 'pear.php.net',
@@ -509,7 +509,7 @@ $phpunit->assertEquals(array (
                 'version' => '1.4.0a1',
                 'optional' => 'no',
               ),
-              1 => 
+              1 =>
               array (
                 'type' => 'pkg',
                 'channel' => 'pear.php.net',
@@ -518,7 +518,7 @@ $phpunit->assertEquals(array (
                 'version' => '1.1',
                 'optional' => 'no',
               ),
-              2 => 
+              2 =>
               array (
                 'type' => 'pkg',
                 'channel' => 'pear.php.net',
@@ -527,7 +527,7 @@ $phpunit->assertEquals(array (
                 'version' => '1.2',
                 'optional' => 'no',
               ),
-              3 => 
+              3 =>
               array (
                 'type' => 'pkg',
                 'channel' => 'pear.php.net',
@@ -536,7 +536,7 @@ $phpunit->assertEquals(array (
                 'version' => '1.2.0RC1',
                 'optional' => 'no',
               ),
-              4 => 
+              4 =>
               array (
                 'type' => 'pkg',
                 'channel' => 'pear.php.net',
@@ -545,7 +545,7 @@ $phpunit->assertEquals(array (
                 'version' => '0.5.0',
                 'optional' => 'yes',
               ),
-              5 => 
+              5 =>
               array (
                 'type' => 'pkg',
                 'channel' => 'pear.php.net',
@@ -557,17 +557,17 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        'PHP' => 
+        'PHP' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/PHP_Archive',
             1 => '0.5.0',
             2 => NULL,
             3 => 'Create and Use PHP Archive files',
-            4 => 
+            4 =>
             array (
-              0 => 
+              0 =>
               array (
                 'type' => 'pkg',
                 'rel' => 'ge',
@@ -575,7 +575,7 @@ $phpunit->assertEquals(array (
                 'optional' => 'no',
                 'name' => 'PEAR',
               ),
-              1 => 
+              1 =>
               array (
                 'type' => 'pkg',
                 'rel' => 'ge',
@@ -586,17 +586,17 @@ $phpunit->assertEquals(array (
             ),
           ),
         ),
-        'Local' => 
+        'Local' =>
         array (
-          0 => 
+          0 =>
           array (
             0 => 'pear/Archive_Zip',
             1 => '',
             2 => '1.0.0',
             3 => 'foo',
-            4 => 
+            4 =>
             array (
-              0 => 
+              0 =>
               array (
                 'type' => 'php',
                 'rel' => 'ge',

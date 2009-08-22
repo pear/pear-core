@@ -131,7 +131,7 @@ $phpunit->assertEquals(array (
   0 =>
   array (
     0 => 'Retrieving data...0%',
-    1 => false,
+    1 => true,
   ),
   1 =>
   array (
@@ -170,7 +170,7 @@ $phpunit->assertEquals(array (
   0 =>
   array (
     0 => 'Retrieving data...0%',
-    1 => false,
+    1 => true,
   ),
   1 =>
    array (
