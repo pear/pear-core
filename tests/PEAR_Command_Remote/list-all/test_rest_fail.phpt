@@ -772,7 +772,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/codegen/info.xml", '<?xml ve
  <ca xlink:href="/rest/c/Tools+and+Utilities">Tools and Utilities</ca>
  <l>PHP</l>
  <s>Tool to create Code generaters that operate on XML descriptions</s>
- <d>This is an \'abstract\' package, it provides the base 
+ <d>This is an \'abstract\' package, it provides the base
 framework for applications like CodeGen_PECL and
 CodeGen_MySqlUDF (not released yet).</d>
  <r xlink:href="/rest/r/codegen"/>
@@ -798,7 +798,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/codegen_mysql_udf/info.xml",
  <l>PHP</l>
  <s>Tool to generate MySQL UDF extensions from an XML description</s>
  <d>UDF_Gen is a code generator for MySQL User Defined Function (UDF)
-extensions similar to PECL_Gen for PHP. 
+extensions similar to PECL_Gen for PHP.
 It reads in configuration options, function prototypes and code fragments
 from an XML description file and generates a complete ready-to-compile
 UDF extension.
@@ -824,8 +824,8 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/codegen_pecl/info.xml", '<?x
  <ca xlink:href="/rest/c/Tools+and+Utilities">Tools and Utilities</ca>
  <l>PHP</l>
  <s>Tool to generate PECL extensions from an XML description</s>
- <d>CodeGen_PECL (formerly known as PECL_Gen) is a pure PHP replacement 
-for the ext_skel shell script that comes with the PHP 4 source. 
+ <d>CodeGen_PECL (formerly known as PECL_Gen) is a pure PHP replacement
+for the ext_skel shell script that comes with the PHP 4 source.
 It reads in configuration options, function prototypes and code fragments
 from an XML description file and generates a complete ready-to-compile
 PECL extension.</d>
@@ -1820,7 +1820,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/db_sqlite_tools/info.xml", '
  <ca xlink:href="/rest/c/Database">Database</ca>
  <l>BSD License</l>
  <s>DB_Sqlite_Tools is an object oriented interface to effectively manage and backup Sqlite databases.</s>
- <d>DB_Sqlite_Tools is an object oriented interface to effectively manage and backup Sqlite databases.It extends the existing functionality by providing a comprehensive solution for database backup, live 
+ <d>DB_Sqlite_Tools is an object oriented interface to effectively manage and backup Sqlite databases.It extends the existing functionality by providing a comprehensive solution for database backup, live
   replication, export in XML format, performance optmization and other functionalities like the insertion and retrieval of encrypted data from an Sqlite database without any external extension.</d>
  <r xlink:href="/rest/r/db_sqlite_tools"/>
 </p>', 'text/xml');
@@ -1879,12 +1879,12 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/event_dispatcher/info.xml", 
  <l>BSD License</l>
  <s>Dispatch notifications using PHP callbacks</s>
  <d>The Event_Dispatcher acts as a notification dispatch table.
-It is used to notify other objects of interesting things. This 
-information is encapsulated in Event_Notification objects. Client 
+It is used to notify other objects of interesting things. This
+information is encapsulated in Event_Notification objects. Client
 objects register themselves with the Event_Dispatcher as observers of
-specific notifications posted by other objects. When an event occurs, 
+specific notifications posted by other objects. When an event occurs,
 an object posts an appropriate notification to the Event_Dispatcher.
-The Event_Dispatcher dispatches a message to each registered 
+The Event_Dispatcher dispatches a message to each registered
 observer, passing the notification as the sole argument.</d>
  <r xlink:href="/rest/r/event_dispatcher"/>
 </p>', 'text/xml');
@@ -2058,8 +2058,8 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/file_find/info.xml", '<?xml 
  <ca xlink:href="/rest/c/File+System">File System</ca>
  <l>PHP</l>
  <s>A Class the facillitates the search of filesystems</s>
- <d>File_Find, created as a replacement for its Perl counterpart, also named 
-File_Find, is a directory searcher, which handles, globbing, recursive 
+ <d>File_Find, created as a replacement for its Perl counterpart, also named
+File_Find, is a directory searcher, which handles, globbing, recursive
 directory searching, as well as a slew of other cool features.</d>
  <r xlink:href="/rest/r/file_find"/>
 </p>', 'text/xml');
@@ -2249,8 +2249,8 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/file_passwd/info.xml", '<?xm
  <ca xlink:href="/rest/c/File+Formats">File Formats</ca>
  <l>PHP</l>
  <s>Manipulate many kinds of password files</s>
- <d>Provides methods to manipulate and authenticate against standard Unix, 
-SMB server, AuthUser (.htpasswd), AuthDigest (.htdigest), CVS pserver 
+ <d>Provides methods to manipulate and authenticate against standard Unix,
+SMB server, AuthUser (.htpasswd), AuthDigest (.htdigest), CVS pserver
 and custom formatted password files.</d>
  <r xlink:href="/rest/r/file_passwd"/>
 </p>', 'text/xml');
@@ -2440,7 +2440,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/gtk_filedrop/info.xml", '<?x
  <ca xlink:href="/rest/c/Gtk+Components">Gtk Components</ca>
  <l>PHP License</l>
  <s>Make Gtk widgets accept file drops</s>
- <d>A class which makes it easy to make a GtkWidget accept 
+ <d>A class which makes it easy to make a GtkWidget accept
   the dropping of files or folders</d>
  <r xlink:href="/rest/r/gtk_filedrop"/>
 </p>', 'text/xml');
@@ -2471,14 +2471,14 @@ it features
   - add delete columns
   - support for NotNull, Indexes, Sequences , Unique Indexes and  defaults
   - works totally in non-connected mode (eg. no database or setting up required)
-  
+
   - stores in MDB like xml file.
   - saves to any supported database SQL create tables files.
   - screenshots at http://devel.akbkhome.com/screenshots/Gtk_MDB/
-  
-  
-Future enhancements: 
-  - real MDB schema exports 
+
+
+Future enhancements:
+  - real MDB schema exports
   - relationships = with lines etc.
 Note: the primary aim is to generate SQL files, (so that I can get my work done)
 however it is eventually planned to support MDB schema\'s fully.. - just a matter of time..
@@ -2532,10 +2532,10 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/gtk_styled/info.xml", '<?xml
  <s>PHP-GTK pseudo-widgets that mimic GtkData based objects and allow the look and feel to be controlled by the programmer.</s>
  <d>While it is possible to control some style elements of a GtkScrollBar,
 other elements cannot be controlled so easily. Items such as the images
-at the begining and end (usually arrows) and the scroll bar that is 
-dragged to scroll the element cannot be changed. This leads to 
+at the begining and end (usually arrows) and the scroll bar that is
+dragged to scroll the element cannot be changed. This leads to
 applications that either must conform to the windowing systems look
-and feel or appear incomplete. The goal of this family of PHP-GTK 
+and feel or appear incomplete. The goal of this family of PHP-GTK
 classes is to provide all the same functionality as a normal scroll
 bar but allow the user to have better control over the look and feel.</d>
  <r xlink:href="/rest/r/gtk_styled"/>
@@ -2684,11 +2684,11 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/html_crypt/info.xml", '<?xml
  <ca xlink:href="/rest/c/HTML">HTML</ca>
  <l>PHP License</l>
  <s>Encrypts text which is later decoded using javascript on the client side</s>
- <d>The PEAR::HTML_Crypt provides methods to encrypt text, which 
+ <d>The PEAR::HTML_Crypt provides methods to encrypt text, which
    can be later be decrypted using JavaScript on the client side
- 
+
    This is very useful to prevent spam robots collecting email
-   addresses from your site, included is a method to add mailto 
+   addresses from your site, included is a method to add mailto
    links to the text being generated</d>
  <r xlink:href="/rest/r/html_crypt"/>
 </p>', 'text/xml');
@@ -2714,7 +2714,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/html_css/info.xml", '<?xml v
  <ca xlink:href="/rest/c/HTML">HTML</ca>
  <l>PHP License 3.0</l>
  <s>HTML_CSS is a class for generating CSS declarations.</s>
- <d>HTML_CSS provides a simple interface for generating a stylesheet declaration. 
+ <d>HTML_CSS provides a simple interface for generating a stylesheet declaration.
 It is completely standards compliant, and has some great features:
 * Simple OO interface to CSS definitions
 * Can parse existing CSS (string or file)
@@ -2820,8 +2820,8 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/html_menu/info.xml", '<?xml 
  <ca xlink:href="/rest/c/HTML">HTML</ca>
  <l>PHP License</l>
  <s>Generates HTML menus from multidimensional hashes.</s>
- <d>With the HTML_Menu class one can easily create and maintain a 
-navigation structure for websites, configuring it via a multidimensional 
+ <d>With the HTML_Menu class one can easily create and maintain a
+navigation structure for websites, configuring it via a multidimensional
 hash structure. Different modes for the HTML output are supported.</d>
  <r xlink:href="/rest/r/html_menu"/>
 </p>', 'text/xml');
@@ -3226,7 +3226,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/html_table/info.xml", '<?xml
 * Lots of customization options.
 * Tables can be modified at any time.
 * The logic is the same as standard HTML editors.
-* Handles col and rowspans. 
+* Handles col and rowspans.
 * PHP code is shorter, easier to read and to maintain.
 * Tables options can be reused.
 
@@ -3292,23 +3292,23 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/html_template_flexy/info.xml
  <ca xlink:href="/rest/c/HTML">HTML</ca>
  <l>PHP License</l>
  <s>An extremely powerful Tokenizer driven Template engine</s>
- <d>HTML_Template_Flexy started it\'s life as a simplification of HTML_Template_Xipe, 
+ <d>HTML_Template_Flexy started it\'s life as a simplification of HTML_Template_Xipe,
 however in Version 0.2, It became one of the first template engine to use a real Lexer,
-rather than regex\'es, making it possible to do things like ASP.net or Cold Fusion tags. 
+rather than regex\'es, making it possible to do things like ASP.net or Cold Fusion tags.
 However, it still has a very simple set of goals.
-- Very Simple API, 
+- Very Simple API,
    o easy to learn...
    o prevents to much logic going in templates
 - Easy to write document\'able code
-   o By using object vars for a template rather than \'assign\', you 
+   o By using object vars for a template rather than \'assign\', you
      can use phpdoc comments to list what variable you use.
 - Editable in WYSIWYG editors
-   o you can create full featured templates, that doesnt get broken every time you edit with 
+   o you can create full featured templates, that doesnt get broken every time you edit with
      Dreamweaver(tm) or Mozilla editor
-   o Uses namespaced attributes to add looping/conditionals  
-- Extremely Fast, 
+   o Uses namespaced attributes to add looping/conditionals
+- Extremely Fast,
    o runtime is at least 4 time smaller than most other template engines (eg. Smarty)
-   o uses compiled templates, as a result it is many times faster on blocks and loops than 
+   o uses compiled templates, as a result it is many times faster on blocks and loops than
      than Regex templates (eg. IT/phplib)
 - Safer (for cross site scripting attacks)
    o All variables default to be output as HTML escaped (overridden with the :h modifier)
@@ -3329,13 +3329,13 @@ Features:
 - replacement of INPUT, TEXTAREA and SELECT tags with HTML_Template_Flexy_Element code
   use FLEXY:IGNORE (inherited) and FLEXY:IGNOREONLY (single) to prevent replacements
 - FLEXY:START/FLEXY:STARTCHILDREN tags to define where template starts/finishes
-- support for urlencoded braces {} in HTML attributes.  
+- support for urlencoded braces {} in HTML attributes.
 - documentation in the pear manual
 
 - examples at http://cvs.php.net/cvs.php/pear/HTML_Template_Flexy/tests/
 
-** The long term plan for Flexy is to be integrated as a backend for the 
-Future Template Package (A BC wrapper will be made available - as I need 
+** The long term plan for Flexy is to be integrated as a backend for the
+Future Template Package (A BC wrapper will be made available - as I need
 to use it too!)</d>
  <r xlink:href="/rest/r/html_template_flexy"/>
 </p>', 'text/xml');
@@ -3515,7 +3515,7 @@ via either an XML-file or a XML-chunk which you simply write anywhere inside the
 Using the Cache the final file can also be cached (i.e. a resulting HTML-file).
 The caching options can be customized as needed. The cache can reduce the server
 load by very much, since the entire php-file doesn\'t need to be processed again,
-the resulting client-readable data are simply delivered right from the cache 
+the resulting client-readable data are simply delivered right from the cache
 (the data are saved using php\'s output buffering).
 
 The template engine is prepared to be used for multi-language applications too.
@@ -3593,7 +3593,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/http/info.xml", '<?xml versi
  <ca xlink:href="/rest/c/HTTP">HTTP</ca>
  <l>PHP License</l>
  <s>Miscellaneous HTTP utilities</s>
- <d>The HTTP class is a class with static methods for doing 
+ <d>The HTTP class is a class with static methods for doing
 miscellaneous HTTP related stuff like date formatting,
 language negotiation or HTTP redirection.</d>
  <r xlink:href="/rest/r/http"/>
@@ -3629,14 +3629,14 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/http_client/info.xml", '<?xm
  <ca xlink:href="/rest/c/HTTP">HTTP</ca>
  <l>PHP License</l>
  <s>Easy way to perform multiple HTTP requests and process their results</s>
- <d>The HTTP_Client class wraps around HTTP_Request and provides a higher level interface 
+ <d>The HTTP_Client class wraps around HTTP_Request and provides a higher level interface
 for performing multiple HTTP requests.
 
 Features:
 * Manages cookies and referrers between requests
 * Handles HTTP redirection
 * Has methods to set default headers and request parameters
-* Implements the Subject-Observer design pattern: the base class sends 
+* Implements the Subject-Observer design pattern: the base class sends
 events to listeners that do the response processing.</d>
  <r xlink:href="/rest/r/http_client"/>
 </p>', 'text/xml');
@@ -3661,7 +3661,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/http_download/info.xml", '<?
  <ca xlink:href="/rest/c/HTTP">HTTP</ca>
  <l>PHP</l>
  <s>Send HTTP Downloads</s>
- <d>Provides an interface to easily send hidden files or any arbitrary data to 
+ <d>Provides an interface to easily send hidden files or any arbitrary data to
 HTTP clients.  HTTP_Download can gain its data from variables, files or
 stream resources.
 
@@ -3716,7 +3716,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/http_header/info.xml", '<?xm
  <ca xlink:href="/rest/c/HTTP">HTTP</ca>
  <l>PHP License</l>
  <s>OO interface to modify and handle HTTP headers and status codes.</s>
- <d>This class provides methods to set/modify HTTP headers 
+ <d>This class provides methods to set/modify HTTP headers
 and status codes including an HTTP caching facility.
 It also provides methods for checking Status types.</d>
  <r xlink:href="/rest/r/http_header"/>
@@ -3840,10 +3840,10 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/http_session2/info.xml", '<?
  <ca xlink:href="/rest/c/HTTP">HTTP</ca>
  <l>PHP License</l>
  <s>PHP5 Session Handler</s>
- <d>PHP5 Object-oriented interface to the session_* family functions it 
-                    provides extra features such as database storage for session data using DB 
-                    package. Supported containers are Creole, PEAR::DB and PEAR::MDB. It introduces 
-                    new methods like isNew(), useCookies(), setExpire(), setIdle(), isExpired(), 
+ <d>PHP5 Object-oriented interface to the session_* family functions it
+                    provides extra features such as database storage for session data using DB
+                    package. Supported containers are Creole, PEAR::DB and PEAR::MDB. It introduces
+                    new methods like isNew(), useCookies(), setExpire(), setIdle(), isExpired(),
                     isIdled() and others.</d>
  <r xlink:href="/rest/r/http_session2"/>
 </p>', 'text/xml');
@@ -4000,11 +4000,11 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/i18nv2/info.xml", '<?xml ver
  <ca xlink:href="/rest/c/Internationalization">Internationalization</ca>
  <l>PHP</l>
  <s>Internationalization</s>
- <d>This package provides basic support to localize your application, 
+ <d>This package provides basic support to localize your application,
 like locale based formatting of dates, numbers and currencies.
 
-Beside that it attempts to provide an OS independent way to setlocale() 
-and aims to provide language, country and currency names translated into 
+Beside that it attempts to provide an OS independent way to setlocale()
+and aims to provide language, country and currency names translated into
 many languages.
 
 Short descriptions of provided classes:
@@ -4025,20 +4025,20 @@ Decorators for lists like I18Nv2_Country and I18Nv2_Language:
  - HtmlSelect           ready to use HTML select element facility
  - Filter               exclude or include elements of a list
 
-Translations of language, country and currency names are 
+Translations of language, country and currency names are
 more or less completely available in the following languages:
 =============================================================
- Afar, Afrikaans, Albanian, Amharic, Arabic, Armenian, Assamese, Azerbaijani, 
- Basque, Belarusian, Bengali, Bulgarian, Catalan, Chinese, Cornish, Croatian, 
- Czech, Danish, Divehi, Dutch, Dzongkha, English, Esperanto, Estonian, Faroese, 
- Finnish, French, Gallegan, Georgian, German, Greek, Gujarati, Hebrew, Hindi, 
- Hungarian, Icelandic, Indonesian, Inuktitut, Irish, Italian, Japanese, 
- Kalaallisut, Kannada, Kazakh, Khmer, Kirghiz, Korean, Lao, Latvian, Lithuanian, 
- Macedonian, Malay, Malayalam, Maltese, Manx, Marathi, Mongolian, 
- Norwegian Bokmal, Norwegian Nynorsk, Oriya, Oromo, Pashto (Pushto), 
- Persian, Polish, Portuguese, Punjabi, Romanian, Russian, Sanskrit, Serbian, 
- Serbo-Croatian, Slovak, Slovenian, Somali, Spanish, Swahili, Swedish, Tamil, 
- Tatar, Telugu, Thai, Tigrinya, Turkish, Ukrainian, Urdu, Uzbek, Vietnamese 
+ Afar, Afrikaans, Albanian, Amharic, Arabic, Armenian, Assamese, Azerbaijani,
+ Basque, Belarusian, Bengali, Bulgarian, Catalan, Chinese, Cornish, Croatian,
+ Czech, Danish, Divehi, Dutch, Dzongkha, English, Esperanto, Estonian, Faroese,
+ Finnish, French, Gallegan, Georgian, German, Greek, Gujarati, Hebrew, Hindi,
+ Hungarian, Icelandic, Indonesian, Inuktitut, Irish, Italian, Japanese,
+ Kalaallisut, Kannada, Kazakh, Khmer, Kirghiz, Korean, Lao, Latvian, Lithuanian,
+ Macedonian, Malay, Malayalam, Maltese, Manx, Marathi, Mongolian,
+ Norwegian Bokmal, Norwegian Nynorsk, Oriya, Oromo, Pashto (Pushto),
+ Persian, Polish, Portuguese, Punjabi, Romanian, Russian, Sanskrit, Serbian,
+ Serbo-Croatian, Slovak, Slovenian, Somali, Spanish, Swahili, Swedish, Tamil,
+ Tatar, Telugu, Thai, Tigrinya, Turkish, Ukrainian, Urdu, Uzbek, Vietnamese
  and Welsh
 
 FINAL NOTE:
@@ -4102,7 +4102,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/image_3d/info.xml", '<?xml v
  <ca xlink:href="/rest/c/Images">Images</ca>
  <l>LGPL</l>
  <s>This class allows the rendering of 3 dimensional images using PHP and ext/GD.</s>
- <d>Image_3D is a highly object oriented PHP5 package 
+ <d>Image_3D is a highly object oriented PHP5 package
 that allows the creation of 3 dimensional images
 using PHP and the GD extension, which is bundled
 with PHP.
@@ -5035,9 +5035,9 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/math_matrix/info.xml", '<?xm
  <ca xlink:href="/rest/c/Math">Math</ca>
  <l>PHP</l>
  <s>Class to represent matrices and matrix operations</s>
- <d>Matrices are represented as 2 dimensional arrays of numbers. 
-This class defines methods for matrix objects, as well as static methods 
-to read, write and manipulate matrices, including methods to solve systems 
+ <d>Matrices are represented as 2 dimensional arrays of numbers.
+This class defines methods for matrix objects, as well as static methods
+to read, write and manipulate matrices, including methods to solve systems
 of linear equations (with and without iterative error correction).
 Requires the Math_Vector package.
 For running the unit tests you will need PHPUnit version 0.6.2 or older.</d>
@@ -5091,7 +5091,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/math_quaternion/info.xml", '
  <d>Classes that represent and manipulate quaternions. Contain definitions
 for basic arithmetic functions in a static class.
 Quaternions are an extension of the idea of complex numbers, and
-a quaternion is defined as: 
+a quaternion is defined as:
     q = a + b*i + c*j + d*k
 In 1844 Hamilton described a system in which numbers were composed of
 a real part and 3 imaginary and independent parts (i,j,k), such that:
@@ -5144,7 +5144,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/math_stats/info.xml", '<?xml
  <l>PHP</l>
  <s>Classes to calculate statistical parameters</s>
  <d>Package to calculate statistical parameters of numerical arrays
-of data. The data can be in a simple numerical array, or in a 
+of data. The data can be in a simple numerical array, or in a
 cummulative numerical array. A cummulative array, has the value
 as the index and the number of repeats as the value for the
 array item, e.g. $data = array(3=&gt;4, 2.3=&gt;5, 1.25=&gt;6, 0.5=&gt;3).
@@ -5804,9 +5804,9 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/net_dict/info.xml", '<?xml v
  <ca xlink:href="/rest/c/Networking">Networking</ca>
  <l>PHP</l>
  <s>Interface to the DICT Protocol</s>
- <d>This class provides a simple API to the DICT Protocol handling all the network related issues 
-and providing DICT responses in PHP datatypes 
-to make it easy for a developer to use DICT 
+ <d>This class provides a simple API to the DICT Protocol handling all the network related issues
+and providing DICT responses in PHP datatypes
+to make it easy for a developer to use DICT
 servers in their programs.</d>
  <r xlink:href="/rest/r/net_dict"/>
 </p>', 'text/xml');
@@ -6266,8 +6266,8 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/net_ldap/info.xml", '<?xml v
  <ca xlink:href="/rest/c/Networking">Networking</ca>
  <l>LGPL</l>
  <s>OO interface for searching and manipulating LDAP-entries</s>
- <d>Net Ldap is a clone of Perls Net::LDAP object interface to 
-ldapservers. It does not contain all of Net::LDAPs features, 
+ <d>Net Ldap is a clone of Perls Net::LDAP object interface to
+ldapservers. It does not contain all of Net::LDAPs features,
 but has:
 * A simple OO-interface to connections, searches and entries.
 * Support for tls and ldap v3.
@@ -6953,9 +6953,9 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/net_wifi/info.xml", '<?xml v
  <ca xlink:href="/rest/c/Networking">Networking</ca>
  <l>PHP License</l>
  <s>Scans for wireless networks</s>
- <d>Net_Wifi utilizes the command line tools &quot;iwconfig&quot; and &quot;iwlist&quot; to get information 
-    about wireless lan interfaces on the system and the current configuration. 
-    The class enables you to scan for wireless networks 
+ <d>Net_Wifi utilizes the command line tools &quot;iwconfig&quot; and &quot;iwlist&quot; to get information
+    about wireless lan interfaces on the system and the current configuration.
+    The class enables you to scan for wireless networks
     and get a bunch of information about them.</d>
  <r xlink:href="/rest/r/net_wifi"/>
 </p>', 'text/xml');
@@ -6977,8 +6977,8 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/numbers_roman/info.xml", '<?
  <ca xlink:href="/rest/c/Numbers">Numbers</ca>
  <l>PHP</l>
  <s>Provides methods for converting to and from Roman Numerals.</s>
- <d>Numbers_Roman provides static methods for converting to and from Roman 
-numerals. It supports Roman numerals in both uppercase and lowercase 
+ <d>Numbers_Roman provides static methods for converting to and from Roman
+numerals. It supports Roman numerals in both uppercase and lowercase
 styles and conversion for and to numbers up to 5 999 999</d>
  <r xlink:href="/rest/r/numbers_roman"/>
 </p>', 'text/xml');
@@ -7010,7 +7010,7 @@ If your system does not support such long numbers you can
 call Numbers_Words::toWords() with just a string.
 
 With the Numbers_Words::toCurrency($num, $locale, \'USD\') method
-you can convert a number (decimal and fraction part) to words with currency name. 
+you can convert a number (decimal and fraction part) to words with currency name.
 
 The following languages are supported:
     * bg (Bulgarian) by Kouber Saparev
@@ -7461,7 +7461,7 @@ Features include
  - can output the package.xml in any directory, and read in the package.xml
    file from any directory.
  - can specify a different name for the package.xml file
- 
+
 PEAR_PackageFileManager is fully unit tested.
 The new PEAR_PackageFileManager2 class is not.</d>
  <r xlink:href="/rest/r/pear_packagefilemanager"/>
@@ -7629,7 +7629,7 @@ Features (short list):
 -current manual always available at http://www.phpdoc.org/manual.php
 -user .ini files can be used to control output, multiple outputs can be
  generated at once
- 
+
 **WARNING**:
 To use the web interface, you must set PEAR\'s data_dir to a subdirectory of
 document root.
@@ -8241,8 +8241,8 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/services_exchangerates/info.
  <l>PHP License</l>
  <s>Performs currency conversion</s>
  <d>Extendable to work with any source that provides exchange rate data, this class downloads
-exchange rates and the name of each currency (US Dollar, Euro, Maltese Lira, etc.) and 
-converts between any two of the available currencies (the actual number of currencies 
+exchange rates and the name of each currency (US Dollar, Euro, Maltese Lira, etc.) and
+converts between any two of the available currencies (the actual number of currencies
 supported depends on the exchange rate feed used).</d>
  <r xlink:href="/rest/r/services_exchangerates"/>
 </p>', 'text/xml');
@@ -8500,7 +8500,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/spreadsheet_excel_writer/inf
  <ca xlink:href="/rest/c/File+Formats">File Formats</ca>
  <l>LGPL</l>
  <s>Package for generating Excel spreadsheets</s>
- <d>Spreadsheet_Excel_Writer was born as a porting of the Spreadsheet::WriteExcel Perl module to PHP. 
+ <d>Spreadsheet_Excel_Writer was born as a porting of the Spreadsheet::WriteExcel Perl module to PHP.
 It allows writing of Excel spreadsheets without the need for COM objects.
 It supports formulas, images (BMP) and all kinds of formatting for text and cells.
 It currently supports the BIFF5 format (Excel 5.0), so functionality appeared in the latest Excel versions is not yet available.</d>
@@ -8661,7 +8661,7 @@ not taken to escape the shell arguments and reaping the exit status properly.  T
 provides a formal interface to both, so that you can run a system command as comfortably as
 you would run a php function, with full pear error handling as results on failure.
 It is important to note that this class, unlike other implementations, distinguishes between
-output to stderr and output to stdout.  It also reports the exit status of the command.  
+output to stderr and output to stdout.  It also reports the exit status of the command.
 So in every sense of the word, it gives php shell capabilities.</d>
  <r xlink:href="/rest/r/system_command"/>
 </p>', 'text/xml');
@@ -8893,14 +8893,14 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/text_highlighter/info.xml", 
  <s>Syntax highlighting</s>
  <d>Text_Highlighter is a package for syntax highlighting.
 
-It provides a base class provining all the functionality, 
+It provides a base class provining all the functionality,
 and a descendent classes geneator class.
 
 The main idea is to simplify creation of subclasses
 implementing syntax highlighting for particular language.
 Subclasses do not implement any new functioanality,
 they just provide syntax highlighting rules.
-The rules sources are in XML format. 
+The rules sources are in XML format.
 
 To create a highlighter for a language, there is no need
 to code a new class manually. Simply describe the rules
@@ -9399,47 +9399,47 @@ if (version_compare(phpversion(), '5.0.0', 'lt')) {
     ), 'errors');
 }
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 'Retrieving data...0%',
-    1 => false,
+    1 => true,
   ),
-  1 => 
+  1 =>
   array (
     0 => '.',
     1 => false,
   ),
-  2 => 
+  2 =>
   array (
     0 => '.',
     1 => false,
   ),
-  3 => 
+  3 =>
   array (
     0 => '.',
     1 => false,
   ),
-  4 => 
+  4 =>
   array (
     0 => '.',
     1 => false,
   ),
-  5 => 
+  5 =>
   array (
     0 => '50%',
     1 => false,
   ),
-  6 => 
+  6 =>
   array (
     0 => '.',
     1 => false,
   ),
-  7 => 
+  7 =>
   array (
     0 => '.',
     1 => false,
   ),
-  8 => 
+  8 =>
   array (
     0 => '.',
     1 => false,
