@@ -85,7 +85,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2009-08-21</date>
+ <date>2009-08-23</date>
  <version>
   <release>1.9.0RC4</release>
   <api>1.9.0RC4</api>
@@ -98,6 +98,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <notes>
   * Fixed a problem where the original channel could not be set as a preferred_mirror again [dufuz]
   * Make sure channel aliases can't be made to start with - [dufuz]
+  * Output issues with pear search [dufuz]
   * Fixed couple of stray notices [dufuz]
  </notes>
  <contents>
@@ -817,6 +818,24 @@ Alpha1 Release Notes:
     <notes>
      * Improved svntag support to handle packages like PEAR it self [dufuz]
     </notes>
+  </release>
+  <release>
+ <date>2009-08-23</date>
+ <version>
+  <release>1.9.0RC4</release>
+  <api>1.9.0RC4</api>
+ </version>
+ <stability>
+  <release>beta</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+ <notes>
+  * Fixed a problem where the original channel could not be set as a preferred_mirror again [dufuz]
+  * Make sure channel aliases can't be made to start with - [dufuz]
+  * Output issues with pear search [dufuz]
+  * Fixed couple of stray notices [dufuz]
+ </notes>
   </release>
  </changelog>
 </package>
