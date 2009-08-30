@@ -40,8 +40,8 @@ $debug = false;
 for ($i = 0; $i < sizeof($argv); $i++) {
     $arg = $argv[$i];
     $bn = basename($arg);
-    if (ereg('package-(.*)\.xml$', $bn, $matches) ||
-        ereg('([A-Za-z0-9_:]+)-.*\.(tar|tgz)$', $bn, $matches)) {
+    if (preg_match('/package-(.*)\.xml$/', $bn, $matches) ||
+        preg_match('/([A-Za-z0-9_:]+)-.*\.(tar|tgz)$/', $bn, $matches)) {
         $install_files[$matches[1]] = $arg;
     } elseif ($arg == '-a') {
         $cache_dir = $argv[$i+1];
