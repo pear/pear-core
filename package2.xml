@@ -85,7 +85,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2009-09-XX</date>
+ <date>2009-09-03</date>
  <version>
   <release>1.9.0</release>
   <api>1.9.0</api>
@@ -832,6 +832,21 @@ Alpha1 Release Notes:
   * Make sure channel aliases can't be made to start with - [dufuz]
   * Output issues with pear search [dufuz]
   * Fixed couple of stray notices [dufuz]
+ </notes>
+  </release>
+  <release>
+ <date>2009-09-03</date>
+ <version>
+  <release>1.9.0</release>
+  <api>1.9.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+ <notes>
+  * Fix  Bug #16547: The phar for PEAR installer uses ereg() which is deprecated [dufuz]
  </notes>
   </release>
  </changelog>
