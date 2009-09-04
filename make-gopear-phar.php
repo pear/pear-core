@@ -32,7 +32,7 @@ $outputFile = 'go-pear.phar';
 
 $dp = @scandir($peardir . '/go-pear-tarballs');
 if ($dp === false) {
-    die("while locating packages to install: opendir('" . $peardir . "/go-pear-tarballs') failed");
+    die("while locating packages to install: opendir('" . $peardir . "/go-pear-tarballs') failed\n");
 }
 
 $packages = array();
@@ -62,7 +62,7 @@ $config = &PEAR_Config::singleton();
 
 chdir($peardir);
 
-$pkg = &new PEAR_PackageFile($config);
+$pkg = new PEAR_PackageFile($config);
 $pf = $pkg->fromPackageFile($peardir . DIRECTORY_SEPARATOR . 'package2.xml', PEAR_VALIDATE_NORMAL);
 if (PEAR::isError($pf)) {
     foreach ($pf->getUserInfo() as $warn) {
