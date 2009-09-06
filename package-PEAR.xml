@@ -87,12 +87,12 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.9.0</version>
-  <date>2009-09-03</date>
+  <version>1.9.1</version>
+  <date>2009-09-XX</date>
   <license>New BSD License</license>
   <state>stable</state>
  <notes>
-  * Fix  Bug #16547: The phar for PEAR installer uses ereg() which is deprecated [dufuz]
+  * svntag improvements, tag package files passed into the command and better directory checks [dufuz]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -683,6 +683,15 @@ Alpha1 Release Notes:
   <state>stable</state>
  <notes>
   * Fix  Bug #16547: The phar for PEAR installer uses ereg() which is deprecated [dufuz]
+ </notes>
+ </release>
+ <release>
+  <version>1.9.1</version>
+  <date>2009-09-XX</date>
+  <license>New BSD License</license>
+  <state>stable</state>
+ <notes>
+  * svntag improvements, tag package files passed into the command and better directory checks [dufuz]
  </notes>
  </release>
  </changelog>
