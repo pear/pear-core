@@ -85,10 +85,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2009-09-03</date>
+ <date>2009-09-XX</date>
  <version>
-  <release>1.9.0</release>
-  <api>1.9.0</api>
+  <release>1.9.1</release>
+  <api>1.9.1</api>
  </version>
  <stability>
   <release>stable</release>
@@ -96,7 +96,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-  * Fix  Bug #16547: The phar for PEAR installer uses ereg() which is deprecated [dufuz]
+  * svntag improvements, tag package files passed into the command and better directory checks [dufuz]
  </notes>
  <contents>
   <dir name="/">
@@ -847,6 +847,21 @@ Alpha1 Release Notes:
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
   * Fix  Bug #16547: The phar for PEAR installer uses ereg() which is deprecated [dufuz]
+ </notes>
+  </release>
+  <release>
+ <date>2009-09-XX</date>
+ <version>
+  <release>1.9.1</release>
+  <api>1.9.1</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+ <notes>
+ * svntag improvements, tag package files passed into the command and better directory checks [dufuz]
  </notes>
   </release>
  </changelog>
