@@ -40,7 +40,7 @@ go-pear
 =======
 For users who cannot perform the above steps, or who wish to obtain the
 latest PEAR with a slightly higher risk of failure, use go-pear.  go-pear
-is obtained by downloading http://go-pear.org and saving it as go-pear.php.
+is obtained by downloading http://pear.php.net/go-pear and saving it as go-pear.php.
 After downloading, simply run "php go-pear.php" or open it in a web browser
 (windows only) to download and install PEAR.
 
