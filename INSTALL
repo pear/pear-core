@@ -28,13 +28,14 @@ and run the go-pear command.
 
 Unix
 ====
-make sure you have enabled default extensions, and if you want faster
-downloads, enable the zlib extension.  You must also enable the CLI
-SAPI with the --enable-cli extension directive.  After this, simply run:
-
-make install-pear
-
-and PEAR will be automatically configured for you.
+When compiling PHP from source, you simply need to include the
+--with-pear directive on the "./configure" command.  This is "on"
+by default in most PHP versions, but it doesn't hurt to list it
+explicitly.  You should also consider enabling the zlib extension via
+--enable-zlib, so that the PEAR installer will be able to handle gzipped
+files (i.e. smaller package files for faster downloads).  Later, when you
+run "make install" to install PHP itself, part of the process will be
+prompts that ask you where you want PEAR to be installed.
 
 go-pear
 =======
