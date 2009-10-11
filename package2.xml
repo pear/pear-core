@@ -457,7 +457,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>Structures_Graph</name>
     <channel>pear.php.net</channel>
     <min>1.0.2</min>
-    <recommended>1.0.2</recommended>
    </package>
    <package>
     <name>Console_Getopt</name>
@@ -850,7 +849,7 @@ Alpha1 Release Notes:
  </notes>
   </release>
   <release>
- <date>2009-09-XX</date>
+ <date>2009-10-10</date>
  <version>
   <release>1.9.1</release>
   <api>1.9.1</api>
