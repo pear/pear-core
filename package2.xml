@@ -97,7 +97,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
   * svntag improvements, tag package files passed into the command and better directory checks [dufuz]
-  * rely on Structures_Graph minimum version instead of recommended version [saltybeagle]
  </notes>
  <contents>
   <dir name="/">
@@ -458,6 +457,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <name>Structures_Graph</name>
     <channel>pear.php.net</channel>
     <min>1.0.2</min>
+    <recommended>1.0.2</recommended>
    </package>
    <package>
     <name>Console_Getopt</name>
