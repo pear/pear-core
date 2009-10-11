@@ -88,11 +88,12 @@ http://pear.php.net/dtd/package-1.0.xsd">
  </maintainers>
  <release>
   <version>1.9.1</version>
-  <date>2009-09-11</date>
+  <date>2009-10-11</date>
   <license>New BSD License</license>
   <state>stable</state>
  <notes>
   * svntag improvements, tag package files passed into the command and better directory checks [dufuz]
+  * rely on Structures_Graph minimum version instead of recommended version [saltybeagle]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
