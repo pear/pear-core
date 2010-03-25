@@ -333,7 +333,7 @@ class PEAR_REST
             $request = "GET $path HTTP/1.1\r\n";
         }
 
-        $request .= "Host: $host:$port\r\n";
+        $request .= "Host: $host\r\n";
         $ifmodifiedsince = '';
         if (is_array($lastmodified)) {
             if (isset($lastmodified['Last-Modified'])) {
