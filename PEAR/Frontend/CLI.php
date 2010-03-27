@@ -512,9 +512,13 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                                          $opts);
                     }
 
-                    foreach($data['data'] as $row) {
-                        $this->_tableRow($row, null, $opts);
-                    }
+                    if (is_array($data['data'])) {
+                        foreach($data['data'] as $row) {
+                            $this->_tableRow($row, null, $opts);
+                        }
+                    } else {
+                        $this->_tableRow(array($data['data']), null, $opts);
+                     }
                     $this->_endTable();
                 } else {
                     $this->_displayLine($data);
