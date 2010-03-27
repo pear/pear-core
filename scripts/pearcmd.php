@@ -318,18 +318,17 @@ if ($fetype == 'Gtk' || $fetype == 'Gtk2') {
 function usage($error = null, $helpsubject = null)
 {
     global $progname, $all_commands;
-    $stderr = fopen('php://stderr', 'w');
+    $stdout = fopen('php://stdout', 'w');
     if (PEAR::isError($error)) {
-        fputs($stderr, $error->getMessage() . "\n");
+        fputs($stdout, $error->getMessage() . "\n");
     } elseif ($error !== null) {
-        fputs($stderr, "$error\n");
+        fputs($stdout, "$error\n");
     }
 
     if ($helpsubject != null) {
         $put = cmdHelp($helpsubject);
     } else {
-        $put =
-            "Commands:\n";
+        $put = "Commands:\n";
         $maxlen = max(array_map("strlen", $all_commands));
         $formatstr = "%-{$maxlen}s  %s\n";
         ksort($all_commands);
@@ -342,8 +341,8 @@ function usage($error = null, $helpsubject = null)
             "Type \"$progname help shortcuts\" to list all command shortcuts.\n".
             "Type \"$progname help <command>\" to get the help for the specified command.";
     }
-    fputs($stderr, "$put\n");
-    fclose($stderr);
+    fputs($stdout, "$put\n");
+    fclose($stdout);
     exit(1);
 }
 
