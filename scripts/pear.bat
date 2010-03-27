@@ -3,15 +3,9 @@
 REM ----------------------------------------------------------------------
 REM PHP version 5
 REM ----------------------------------------------------------------------
-REM Copyright (c) 1997-2004 The PHP Group
+REM Copyright (c) 1997-2010 The Authors
 REM ----------------------------------------------------------------------
-REM  This source file is subject to version 3.0 of the PHP license, 
-REM  that is bundled with this package in the file LICENSE, and is
-REM  available at through the world-wide-web at
-REM  http://www.php.net/license/3_0.txt. 
-REM  If you did not receive a copy of the PHP license and are unable to
-REM  obtain it through the world-wide-web, please send a note to
-REM  license@php.net so we can mail you a copy immediately.
+REM http://opensource.org/licenses/bsd-license.php New BSD License
 REM ----------------------------------------------------------------------
 REM  Authors:     Alexander Merz (alexmerz@php.net)
 REM ----------------------------------------------------------------------
