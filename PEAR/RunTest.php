@@ -370,9 +370,8 @@ class PEAR_RunTest
         // We've satisfied the preconditions - run the test!
         if (isset($this->_options['coverage']) && $this->xdebug_loaded) {
             $xdebug_file = $temp_dir . DIRECTORY_SEPARATOR . $main_file_name . 'xdebug';
-            $text = '<?php';
-            $text .= "\n" . 'function coverage_shutdown() {' .
-                     "\n" . '    $xdebug = var_export(xdebug_get_code_coverage(), true);';
+            $text = "\n" . 'function coverage_shutdown() {' .
+                    "\n" . '    $xdebug = var_export(xdebug_get_code_coverage(), true);';
             if (!function_exists('file_put_contents')) {
                 $text .= "\n" . '    $fh = fopen(\'' . $xdebug_file . '\', "wb");' .
                         "\n" . '    if ($fh !== false) {' .
@@ -388,9 +387,26 @@ class PEAR_RunTest
                 "\n" . 'register_shutdown_function("coverage_shutdown");';
             $text .= "\n" . 'xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);' . "\n?>";
 
-            $text .= $section_text['FILE'];
+            // Workaround for http://pear.php.net/bugs/bug.php?id=17292
+            $lines     = explode("\n", $section_text['FILE']);
+            $numLines  = count($lines);
+            $namespace = '';
 
-            $this->save_text($temp_file, $text);
+            for ($i = 0; $i < $numLines; $i++) {
+                $lines[$i] = trim($lines[$i]);
+
+                if ($lines[$i] == '<?' || $lines[$i] == '<?php') {
+                    unset($lines[$i]);
+                }
+
+                if (substr($lines[$i], 0, 9) == 'namespace') {
+                    $namespace = $lines[$i] . "\n";
+                    unset($lines[$i]);
+                    break;
+                }
+            }
+
+            $this->save_text($temp_file, "<?php\n" . $namespace . join("\n", $lines));
         } else {
             $this->save_text($temp_file, $section_text['FILE']);
         }
