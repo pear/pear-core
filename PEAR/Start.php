@@ -88,16 +88,21 @@ class PEAR_Start extends PEAR
                 }
             }
 
+            $slash = "\\";
+            if (strrpos($this->prefix, '\\') === (strlen($this->prefix) - 1)) {
+                $slash = '';
+            }
+
             $this->localInstall = false;
             $this->bin_dir   = '$prefix';
-            $this->temp_dir   = '$prefix\tmp';
-            $this->download_dir   = '$prefix\tmp';
-            $this->php_dir   = '$prefix\pear';
-            $this->doc_dir   = '$prefix\docs';
-            $this->data_dir  = '$prefix\data';
-            $this->test_dir  = '$prefix\tests';
-            $this->www_dir  = '$prefix\www';
-            $this->cfg_dir  = '$prefix\cfg';
+            $this->temp_dir   = '$prefix' . $slash . 'tmp';
+            $this->download_dir   = '$prefix' . $slash . 'tmp';
+            $this->php_dir   = '$prefix' . $slash . 'pear';
+            $this->doc_dir   = '$prefix' . $slash . 'docs';
+            $this->data_dir  = '$prefix' . $slash . 'data';
+            $this->test_dir  = '$prefix' . $slash . 'tests';
+            $this->www_dir  = '$prefix' . $slash . 'www';
+            $this->cfg_dir  = '$prefix' . $slash . 'cfg';
             $this->pear_conf = PEAR_CONFIG_SYSCONFDIR . '\\pear.ini';
             /*
              * Detects php.exe
@@ -237,6 +242,7 @@ class PEAR_Start extends PEAR
             };
             $_ENV['TMPDIR'] = $_ENV['TEMP'] = $this->prefix . '/tmp';
         }
+
         return @chdir($this->ptmp);
     }
 

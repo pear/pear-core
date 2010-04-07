@@ -22,7 +22,7 @@ class PEAR_Start_CLI extends PEAR_Start
         }
         $this->origpwd = getcwd();
         $this->config = array_keys($this->configPrompt);
-        
+
         // make indices run from 1...
         array_unshift($this->config, "");
         unset($this->config[0]);
@@ -65,14 +65,12 @@ class PEAR_Start_CLI extends PEAR_Start
 Are you installing a system-wide PEAR or a local copy?
 (system|local) [system] : ";
             $tmp = trim(fgets($this->tty, 1024));
-            if (!empty($tmp)) {
-                if (strtolower($tmp) !== 'system') {
-                    print "Please confirm local copy by typing 'yes' : ";
-                    $tmp = trim(fgets($this->tty, 1024));
-                    if (strtolower($tmp) == 'yes') {
-                        $this->localInstall = true;
-                        $this->pear_conf = '$prefix\\pear.ini';
-                    }
+            if (!empty($tmp) && strtolower($tmp) !== 'system') {
+                print "Please confirm local copy by typing 'yes' : ";
+                $tmp = trim(fgets($this->tty, 1024));
+                if (strtolower($tmp) == 'yes') {
+                    $this->localInstall = true;
+                    $this->pear_conf = '$prefix\\pear.ini';
                 }
             }
         } else {
@@ -103,7 +101,7 @@ accept these locations.
                 }
                 printf("%2d. $this->descFormat : %s\n", $n, $this->configPrompt[$var], $fullvar);
             }
-    
+
             print "\n$this->first-$this->last, 'all' or Enter to continue: ";
             $tmp = trim(fgets($this->tty, 1024));
             if (empty($tmp)) {
@@ -116,6 +114,7 @@ Please, enter the php.exe path.
                     break;
                 }
             }
+
             if (isset($this->config[(int)$tmp])) {
                 $var = $this->config[(int)$tmp];
                 $desc = $this->configPrompt[$var];
@@ -240,13 +239,16 @@ End If
             fclose($fh);
             $wshSaved  = true;
         }
-        exec('cscript ' . $cscript . ' "' . $label . '" //noLogo', $arPath);
+
+        exec('cscript ' . escapeshellarg($cscript) . ' "' . escapeshellarg($label) . '" //noLogo', $arPath);
         if (!count($arPath) || $arPath[0]=='' || $arPath[0]=='cancel') {
             return '';
         } elseif ($arPath[0]=='invalid') {
             echo "Invalid Path.\n";
             return '';
         }
+
+        @unlink($cscript);
         return $arPath[0];
     }
 
@@ -316,7 +318,7 @@ contain the PEAR PHP directory you just specified:
 If the specified directory is also not in the include_path used by
 your scripts, you will have problems getting any PEAR packages working.
 ";
-    
+
             if ($php_ini = $this->getPhpiniPath()) {
                 print "\n\nWould you like to alter php.ini <$php_ini>? [Y/n] : ";
                 $alter_phpini = !stristr(fgets($this->tty, 1024), "n");
@@ -336,20 +338,20 @@ configuration to make sure $this->php_dir is in your include_path.
                     }
                 }
             }
-    
+
         print "
 Current include path           : ".ini_get('include_path')."
 Configured directory           : $this->php_dir
 Currently used php.ini (guess) : $php_ini
 ";
-    
+
             print "Press Enter to continue: ";
             fgets($this->tty, 1024);
         }
-    
+
         $pear_cmd = $this->bin_dir . DIRECTORY_SEPARATOR . 'pear';
         $pear_cmd = OS_WINDOWS ? strtolower($pear_cmd).'.bat' : $pear_cmd;
-    
+
         // check that the installed pear and the one in the path are the same (if any)
         $pear_old = System::which(OS_WINDOWS ? 'pear.bat' : 'pear', $this->bin_dir);
         if ($pear_old && ($pear_old != $pear_cmd)) {
@@ -366,9 +368,9 @@ Currently used php.ini (guess) : $php_ini
                       "be sure to use the new $pear_cmd command\n";
             }
         }
-    
+
         print "\nThe 'pear' command is now at your service at $pear_cmd\n";
-    
+
         // Alert the user if the pear cmd is not in PATH
         $old_dir = $pear_old ? dirname($pear_old) : false;
         if (!$this->which('pear', $old_dir)) {
@@ -378,7 +380,7 @@ Currently used php.ini (guess) : $php_ini
 ** '$this->bin_dir' to your PATH environment variable.
 
 ";
-    
+
         print "Run it without parameters to see the available actions, try 'pear list'
 to see what packages are installed, or 'pear help' for help.
 
@@ -391,7 +393,7 @@ Thanks for using go-pear!
 
 ";
         }
-    
+
         if (OS_WINDOWS && !$this->localInstall) {
             $this->win32CreateRegEnv();
         }
@@ -419,7 +421,7 @@ Thanks for using go-pear!
             {
                 unset($dirs[$key]);
             }
-    
+
             foreach ($dirs as $dir) {
                 $dir = str_replace('\\\\', '\\', $dir);
                 if (!strlen($dir)) {
@@ -506,7 +508,7 @@ Thanks for using go-pear!
             } else {
                 $newPath[0] = $this->php_dir;
             }
-    
+
             foreach ($arrayPath as $path) {
                 $newPath[]= $path;
             }
@@ -584,7 +586,7 @@ php.ini <$pathIni> include_path updated.
                 '"PHP_PEAR_DATA_DIR"="' . addslashes($this->data_dir) . '"' . $nl .
                 '"PHP_PEAR_PHP_BIN"="' . addslashes($this->php_bin) . '"' . $nl .
                 '"PHP_PEAR_TEST_DIR"="' . addslashes($this->test_dir) . '"' . $nl;
-    
+
         $fh = fopen($this->prefix . DIRECTORY_SEPARATOR . 'PEAR_ENV.reg', 'wb');
         if($fh){
             fwrite($fh, $reg, strlen($reg));
