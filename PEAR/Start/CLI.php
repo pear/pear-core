@@ -69,8 +69,13 @@ Are you installing a system-wide PEAR or a local copy?
                 print "Please confirm local copy by typing 'yes' : ";
                 $tmp = trim(fgets($this->tty, 1024));
                 if (strtolower($tmp) == 'yes') {
+                    $slash = "\\";
+                    if (strrpos($this->prefix, '\\') === (strlen($this->prefix) - 1)) {
+                        $slash = '';
+                    }
+
                     $this->localInstall = true;
-                    $this->pear_conf = '$prefix\\pear.ini';
+                    $this->pear_conf = '$prefix' . $slash . 'pear.ini';
                 }
             }
         } else {
