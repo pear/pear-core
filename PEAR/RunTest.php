@@ -388,11 +388,6 @@ class PEAR_RunTest
                 "\n" . 'register_shutdown_function("coverage_shutdown");';
             $text .= "\n" . 'xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);' . "\n?>";
 
-            $len_f = 5;
-            if (substr($section_text['FILE'], 0, 5) != '<?php'
-                && substr($section_text['FILE'], 0, 2) == '<?') {
-                $len_f = 2;
-            }
             $text .= $section_text['FILE'];
 
             $this->save_text($temp_file, $text);
