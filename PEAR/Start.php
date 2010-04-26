@@ -67,9 +67,11 @@ class PEAR_Start extends PEAR
             'test_dir' => 'Tests directory',
             'pear_conf' => 'Name of configuration file',
         );
+
     var $localInstall;
     var $PEARConfig;
     var $tarball = array();
+
     function PEAR_Start()
     {
         parent::PEAR();
@@ -173,6 +175,7 @@ class PEAR_Start extends PEAR
         if (is_array($_ENV) && isset($_ENV[$var])) {
             return $_ENV[$var];
         }
+
         return getenv($var);
     }
 
@@ -188,6 +191,7 @@ class PEAR_Start extends PEAR
             return PEAR::raiseError("while locating packages to install: opendir('" .
                 dirname(__FILE__) . "/go-pear-tarballs') failed");
         }
+
         $potentials = array();
         while (false !== ($entry = readdir($dp))) {
             if ($entry{0} == '.' || !in_array(substr($entry, -4), array('.tar', '.tgz'))) {
@@ -195,6 +199,7 @@ class PEAR_Start extends PEAR
             }
             $potentials[] = $entry;
         }
+
         closedir($dp);
         $notfound = array();
         foreach ($this->corePackages as $package) {
@@ -206,12 +211,15 @@ class PEAR_Start extends PEAR
                     continue 2;
                 }
             }
+
             $notfound[] = $package;
         }
+
         if (count($notfound)) {
             return PEAR::raiseError("No tarballs found for core packages: " .
                     implode(', ', $notfound));
         }
+
         $this->tarball = array_merge($this->tarball, $potentials);
     }
 
@@ -223,8 +231,8 @@ class PEAR_Start extends PEAR
             if (!$res) {
                 return PEAR::raiseError('mkdir ' . $this->prefix . '/tmp ... failed');
             }
-            $_temp = tempnam($this->prefix . '/tmp', 'gope');
 
+            $_temp = tempnam($this->prefix . '/tmp', 'gope');
             System::rm(array('-rf', $_temp));
             System::mkdir(array('-p','-m', '0700', $_temp));
             $this->ptmp = $this->prefix . '/tmp';
@@ -259,20 +267,24 @@ class PEAR_Start extends PEAR
             } else {
                 exec('"' . $this->php_bin . '/php" -v', $res);
             }
+
             if (is_array($res)) {
                 if (isset($res[0]) && strpos($res[0],"(cli)")) {
                     return 'cli';
                 }
+
                 if (isset($res[0]) && strpos($res[0],"cgi")) {
                     return 'cgi';
                 }
+
                 if (isset($res[0]) && strpos($res[0],"cgi-fcgi")) {
                     return 'cgi';
-                } else {
-                    return 'unknown';
                 }
+
+                return 'unknown';
             }
         }
+
         return 'unknown';
     }
 

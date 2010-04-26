@@ -126,6 +126,7 @@ Please, enter the php.exe path.
                 $current = $this->$var;
                 if (WIN32GUI && $var != 'pear_conf'){
                     $tmp = $this->win32BrowseForFolder("Choose a Folder for $desc [$current] :");
+                    $tmp.= '\\';
                 } else {
                     print "(Use \$prefix as a shortcut for '$this->prefix', etc.)
 $desc [$current] : ";
@@ -599,7 +600,7 @@ php.ini <$pathIni> include_path updated.
             echo "
 
 * WINDOWS ENVIRONMENT VARIABLES *
-For convenience, a REG file is available under $this->prefix\\PEAR_ENV.reg .
+For convenience, a REG file is available under $this->prefixPEAR_ENV.reg .
 This file creates ENV variables for the current user.
 
 Double-click this file to add it to the current user registry.
