@@ -9,7 +9,7 @@ $packages  = array(
 // required packages for the installer
 "PEAR"                  =>    "1.4.10",
 "Console_Getopt"        =>    "1.2",
-"Archive_Tar"           =>    "1.3.1",
+"Archive_Tar"           =>    "1.3.6",
 
 // required packages for the web frontend
 "PEAR_Frontend_Web"     =>    "0.5.1",
