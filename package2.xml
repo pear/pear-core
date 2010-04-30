@@ -85,9 +85,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2010-03-26</date>
+ <date>2010-04-30</date>
  <version>
-  <release>1.9.1RC1</release>
+  <release>1.9.1</release>
   <api>1.9.1</api>
  </version>
  <stability>
@@ -97,6 +97,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
   * svntag improvements, tag package files passed into the command and better directory checks [dufuz]
+  * rely on Structures_Graph minimum version instead of recommended version [saltybeagle]
   * Fix Bug #12613: running go-pear.phar from C:\ fails [dufuz]
   * Fix Bug #14841: Installing pear into directory with space fails [dufuz]
   * Fix Bug #16644: pear.bat returns syntax error when parenthesis are in install path. [dufuz] [patch by bwaters (Bryan Waters)]
