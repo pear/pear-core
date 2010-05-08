@@ -424,7 +424,9 @@ installed package.'
 
         $info = $fp = false;
         $reg = &$this->config->getRegistry();
-        if ((file_exists($params[0]) && is_file($params[0]) && !is_dir($params[0])) || $fp = @fopen($params[0], 'r')) {
+        if (is_file($params[0]) && !is_dir($params[0]) &&
+            (file_exists($params[0]) || $fp = @fopen($params[0], 'r'))
+        ) {
             if ($fp) {
                 fclose($fp);
             }
