@@ -486,10 +486,16 @@ class PEAR
             $message     = $message->getMessage();
         }
 
-        if (isset($this) && isset($this->_expected_errors) && sizeof($this->_expected_errors) > 0 && sizeof($exp = end($this->_expected_errors))) {
+        if (
+            isset($this) &&
+            isset($this->_expected_errors) &&
+            count($this->_expected_errors) > 0 &&
+            count($exp = end($this->_expected_errors))
+        ) {
             if ($exp[0] == "*" ||
                 (is_int(reset($exp)) && in_array($code, $exp)) ||
-                (is_string(reset($exp)) && in_array($message, $exp))) {
+                (is_string(reset($exp)) && in_array($message, $exp))
+            ) {
                 $mode = PEAR_ERROR_RETURN;
             }
         }
@@ -559,7 +565,7 @@ class PEAR
 
     function staticPushErrorHandling($mode, $options = null)
     {
-        $stack = &$GLOBALS['_PEAR_error_handler_stack'];
+        $stack       = &$GLOBALS['_PEAR_error_handler_stack'];
         $def_mode    = &$GLOBALS['_PEAR_default_error_mode'];
         $def_options = &$GLOBALS['_PEAR_default_error_options'];
         $stack[] = array($def_mode, $def_options);
@@ -759,7 +765,11 @@ function _PEAR_call_destructors()
     }
 
     // Now call the shutdown functions
-    if (isset($GLOBALS['_PEAR_shutdown_funcs']) AND is_array($GLOBALS['_PEAR_shutdown_funcs']) AND !empty($GLOBALS['_PEAR_shutdown_funcs'])) {
+    if (
+        isset($GLOBALS['_PEAR_shutdown_funcs']) &&
+        is_array($GLOBALS['_PEAR_shutdown_funcs']) &&
+        !empty($GLOBALS['_PEAR_shutdown_funcs'])
+    ) {
         foreach ($GLOBALS['_PEAR_shutdown_funcs'] as $value) {
             call_user_func_array($value[0], $value[1]);
         }
