@@ -88,7 +88,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
  </maintainers>
  <release>
   <version>1.9.1</version>
-  <date>2010-04-30</date>
+  <date>2010-05-26</date>
   <license>New BSD License</license>
   <state>stable</state>
  <notes>
