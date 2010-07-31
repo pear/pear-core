@@ -286,7 +286,10 @@ parameter.
         if (count($available) == 0) {
             $data = '(no packages available yet)';
         } else {
-            foreach ($available as $name => $info) {
+            $packages = array_keys($available);
+            natcasesort($packages);
+            foreach ($packages as $name) {
+                $info = $available[$name];
                 $version = (isset($info['stable']) && $info['stable']) ? $info['stable'] : '-n/a-';
                 $data['data'][] = array($name, $version);
             }
@@ -350,17 +353,21 @@ parameter.
         }
         $local_pkgs = $reg->listPackages($channel);
 
-        foreach ($available as $name => $info) {
+        $packages = array_keys($available);
+        natcasesort($packages);
+        foreach ($packages as $name) {
+            $info = $available[$name];
             $installed = $reg->packageInfo($name, null, $channel);
             if (is_array($installed['version'])) {
                 $installed['version'] = $installed['version']['release'];
             }
+
             $desc = $info['summary'];
             if (isset($params[$name])) {
                 $desc .= "\n\n".$info['description'];
             }
-            if (isset($options['mode']))
-            {
+
+            if (isset($options['mode'])) {
                 if ($options['mode'] == 'installed' && !isset($installed['version'])) {
                     continue;
                 }
@@ -373,6 +380,7 @@ parameter.
                     continue;
                 }
             }
+
             $pos = array_search(strtolower($name), $local_pkgs);
             if ($pos !== false) {
                 unset($local_pkgs[$pos]);
@@ -413,7 +421,7 @@ parameter.
                     isset($info['deps']) ? $info['deps'] : null,
                 );
             }
-            $data['data'][$info['category']][] = $packageinfo;
+            $data['data']['all'][] = $packageinfo;
         }
 
         if (isset($options['mode']) && in_array($options['mode'], array('notinstalled', 'upgrades'))) {
@@ -532,7 +540,10 @@ parameter.
             $available = array();
         }
 
-        foreach ($available as $name => $info) {
+        $packages = array_keys($available);
+        natcasesort($packages);
+        foreach ($packages as $name) {
+            $info = $available[$name];
             $installed = $reg->packageInfo($name, null, $channel);
             $desc = $info['summary'];
             if (isset($params[$name]))
@@ -566,7 +577,7 @@ parameter.
                     $desc,
                 );
             }
-            $data['data'][$info['category']][] = $packageinfo;
+            $data['data']['all'][] = $packageinfo;
         }
 
         $this->ui->outputData($data, $command);
