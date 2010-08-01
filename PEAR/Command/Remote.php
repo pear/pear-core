@@ -415,7 +415,7 @@ parameter.
                     isset($info['deps']) ? $info['deps'] : null,
                 );
             }
-            $data['data']['all'][] = $packageinfo;
+            $data['data'][$info['category']][] = $packageinfo;
         }
 
         if (isset($options['mode']) && in_array($options['mode'], array('notinstalled', 'upgrades'))) {
