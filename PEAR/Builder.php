@@ -220,7 +220,7 @@ class PEAR_Builder extends PEAR_Common
     /**
      * Build an extension from source.  Runs "phpize" in the source
      * directory, but compiles in a temporary directory
-     * (/var/tmp/pear-build-USER/PACKAGE-VERSION).
+     * (TMPDIR/pear-build-USER/PACKAGE-VERSION).
      *
      * @param string|PEAR_PackageFile_v* $descfile path to XML package description file, or
      *               a PEAR_PackageFile object
@@ -330,7 +330,8 @@ class PEAR_Builder extends PEAR_Common
         if(!$user=getenv('USER')){
             $user='defaultuser';
         }
-        $build_basedir = "/var/tmp/pear-build-$user";
+
+        $build_basedir = System::mktemp("-d pear-build-" . $user);
         $build_dir = "$build_basedir/$vdir";
         $inst_dir = "$build_basedir/install-$vdir";
         $this->log(1, "building in $build_dir");
