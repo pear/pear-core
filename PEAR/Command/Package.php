@@ -577,13 +577,13 @@ used for automated conversion or learning the format.
         $url = substr($xml, $url_tag + 5, strpos($xml, '</url>', $url_tag + 5) - ($url_tag + 5));
 
         $path = array();
-        $path['from'] = substr($url, 0, strrpos($url, '/'));
-        $path['base'] = substr($path['from'], 0, strrpos($path['from'], '/') + 1);
+        $path['from'] = substr($url, 0, strrpos($url, DIRECTORY_SEPARATOR));
+        $path['base'] = substr($path['from'], 0, strrpos($path['from'], DIRECTORY_SEPARATOR) + 1);
 
-        // Figure out the local paths
-        $pos = strpos($file, '/trunk/');
+        // Figure out the local paths - see http://pear.php.net/bugs/17463
+        $pos = strpos($file, DIRECTORY_SEPARATOR . 'trunk' . DIRECTORY_SEPARATOR);
         if ($pos === false) {
-            $pos = strpos($file, '/branches/');
+            $pos = strpos($file, DIRECTORY_SEPARATOR . 'branches' . DIRECTORY_SEPARATOR);
         }
         $path['local']['base'] = substr($file, 0, $pos + 1);
 
