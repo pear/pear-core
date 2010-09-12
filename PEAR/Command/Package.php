@@ -481,8 +481,8 @@ used for automated conversion or learning the format.
         }
 
         // Check if tag already exists
-        $releaseTag = $path['local']['base'] . 'tags/' . $svntag;
-        $existsCommand = 'svn ls ' . $path['base'] . 'tags/';
+        $releaseTag = $path['local']['base'] . 'tags' . DIRECTORY_SEPARATOR . $svntag;
+        $existsCommand = 'svn ls ' . $path['base'] . 'tags' . DIRECTORY_SEPARATOR;
 
         $fp = popen($existsCommand, "r");
         $out = '';
@@ -491,7 +491,7 @@ used for automated conversion or learning the format.
         }
         pclose($fp);
 
-        if (in_array($svntag . '/', explode("\n", $out))) {
+        if (in_array($svntag . DIRECTORY_SEPARATOR, explode("\n", $out))) {
             $this->ui->outputData($this->output, $command);
             return $this->raiseError('SVN tag ' . $svntag . ' for ' . $package . ' already exists.');
         } elseif (file_exists($path['local']['base'] . 'tags') === false) {
@@ -521,7 +521,7 @@ used for automated conversion or learning the format.
         $command .= ' copy --parents ';
 
         $dir   = dirname($packageFile);
-        $dir   = substr($dir, strrpos($dir, '/') + 1);
+        $dir   = substr($dir, strrpos($dir, DIRECTORY_SEPARATOR) + 1);
         $files = array_keys($info->getFilelist());
         if (!in_array(basename($packageFile))) {
             $files[] = basename($packageFile);
@@ -605,7 +605,7 @@ used for automated conversion or learning the format.
         $command .= ' -m "Removing tag for the ' . $version  . ' release."';
 
         $path = $this->_svnFindPath($packageFile);
-        $command .= ' ' . $path['base'] . 'tags/' . $tag;
+        $command .= ' ' . $path['base'] . 'tags' . DIRECTORY_SEPARATOR . $tag;
 
 
         if ($this->config->get('verbose') > 1) {
