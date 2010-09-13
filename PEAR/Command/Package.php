@@ -421,7 +421,7 @@ used for automated conversion or learning the format.
 
         $packageFile = realpath($params[0]);
         $dir = dirname($packageFile);
-        $dir = substr($dir, strrpos($dir, '/') + 1);
+        $dir = substr($dir, strrpos($dir, DIRECTORY_SEPARATOR) + 1);
         $obj  = &$this->getPackageFile($this->config, $this->_debug);
         $info = $obj->fromAnyFile($packageFile, PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
@@ -482,7 +482,7 @@ used for automated conversion or learning the format.
 
         // Check if tag already exists
         $releaseTag = $path['local']['base'] . 'tags' . DIRECTORY_SEPARATOR . $svntag;
-        $existsCommand = 'svn ls ' . $path['base'] . 'tags' . DIRECTORY_SEPARATOR;
+        $existsCommand = 'svn ls ' . $path['base'] . 'tags/';
 
         $fp = popen($existsCommand, "r");
         $out = '';
@@ -580,8 +580,8 @@ used for automated conversion or learning the format.
         $url = substr($xml, $url_tag + 5, strpos($xml, '</url>', $url_tag + 5) - ($url_tag + 5));
 
         $path = array();
-        $path['from'] = substr($url, 0, strrpos($url, DIRECTORY_SEPARATOR));
-        $path['base'] = substr($path['from'], 0, strrpos($path['from'], DIRECTORY_SEPARATOR) + 1);
+        $path['from'] = substr($url, 0, strrpos($url, '/'));
+        $path['base'] = substr($path['from'], 0, strrpos($path['from'], '/') + 1);
 
         // Figure out the local paths - see http://pear.php.net/bugs/17463
         $pos = strpos($file, DIRECTORY_SEPARATOR . 'trunk' . DIRECTORY_SEPARATOR);
@@ -605,7 +605,7 @@ used for automated conversion or learning the format.
         $command .= ' -m "Removing tag for the ' . $version  . ' release."';
 
         $path = $this->_svnFindPath($packageFile);
-        $command .= ' ' . $path['base'] . 'tags' . DIRECTORY_SEPARATOR . $tag;
+        $command .= ' ' . $path['base'] . 'tags/' . $tag;
 
 
         if ($this->config->get('verbose') > 1) {
