@@ -42,8 +42,6 @@ define('PEAR_INSTALLER_NOBINARY', -240);
  */
 class PEAR_Installer extends PEAR_Downloader
 {
-    // {{{ properties
-
     /** name of the package directory, for example Foo-1.0
      * @var string
      */
@@ -105,10 +103,6 @@ class PEAR_Installer extends PEAR_Downloader
      */
     var $file_operations = array();
 
-    // }}}
-
-    // {{{ constructor
-
     /**
      * PEAR_Installer constructor.
      *
@@ -134,16 +128,12 @@ class PEAR_Installer extends PEAR_Downloader
         $this->_registry = &$config->getRegistry();
     }
 
-    // }}}
-
     function _removeBackups($files)
     {
         foreach ($files as $path) {
             $this->addFileOperation('removebackup', array($path));
         }
     }
-
-    // {{{ _deletePackageFiles()
 
     /**
      * Delete a package's installed files, does not remove empty directories.
@@ -203,9 +193,6 @@ class PEAR_Installer extends PEAR_Downloader
         return true;
     }
 
-    // }}}
-    // {{{ _installFile()
-
     /**
      * @param string filename
      * @param array attributes from <file> tag in package.xml
@@ -215,7 +202,7 @@ class PEAR_Installer extends PEAR_Downloader
      */
     function _installFile($file, $atts, $tmp_path, $options)
     {
-        // {{{ return if this file is meant for another platform
+        // return if this file is meant for another platform
         static $os;
         if (!isset($this->_registry)) {
             $this->_registry = &$this->config->getRegistry();
@@ -239,10 +226,9 @@ class PEAR_Installer extends PEAR_Downloader
                 return PEAR_INSTALLER_SKIPPED;
             }
         }
-        // }}}
 
         $channel = $this->pkginfo->getChannel();
-        // {{{ assemble the destination paths
+        // assemble the destination paths
         switch ($atts['role']) {
             case 'src':
             case 'extsrc':
@@ -304,7 +290,6 @@ class PEAR_Installer extends PEAR_Downloader
         if (preg_match('~/\.\.(/|\\z)|^\.\./~', str_replace('\\', '/', $dest_file))) {
             return $this->raiseError("SECURITY ERROR: file $file (installed to $dest_file) contains parent directory reference ..", PEAR_INSTALLER_FAILED);
         }
-        // }}}
 
         if (empty($this->_options['register-only']) &&
               (!file_exists($dest_dir) || !is_dir($dest_dir))) {
@@ -333,7 +318,7 @@ class PEAR_Installer extends PEAR_Downloader
                     $md5sum = md5_file($dest_file);
                 }
             } else {
-                // {{{ file with replacements
+                // file with replacements
                 if (!file_exists($orig_file)) {
                     return $this->raiseError("file does not exist",
                                              PEAR_INSTALLER_FAILED);
@@ -410,10 +395,9 @@ class PEAR_Installer extends PEAR_Downloader
                 }
 
                 fclose($wp);
-                // }}}
             }
 
-            // {{{ check the md5
+            // check the md5
             if (isset($md5sum)) {
                 if (strtolower($md5sum) === strtolower($atts['md5sum'])) {
                     $this->log(2, "md5sum ok: $final_dest_file");
@@ -439,8 +423,8 @@ class PEAR_Installer extends PEAR_Downloader
                     }
                 }
             }
-            // }}}
-            // {{{ set file permissions
+
+            // set file permissions
             if (!OS_WINDOWS) {
                 if ($atts['role'] == 'script') {
                     $mode = 0777 & ~(int)octdec($this->config->get('umask'));
@@ -458,7 +442,6 @@ class PEAR_Installer extends PEAR_Downloader
                     }
                 }
             }
-            // }}}
 
             if ($atts['role'] == 'src') {
                 rename($dest_file, $final_dest_file);
@@ -486,9 +469,6 @@ class PEAR_Installer extends PEAR_Downloader
         return PEAR_INSTALLER_OK;
     }
 
-    // }}}
-    // {{{ _installFile2()
-
     /**
      * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
      * @param string filename
@@ -505,7 +485,7 @@ class PEAR_Installer extends PEAR_Downloader
         }
 
         $channel = $pkg->getChannel();
-        // {{{ assemble the destination paths
+        // assemble the destination paths
         if (!in_array($atts['attribs']['role'],
               PEAR_Installer_Role::getValidRoles($pkg->getPackageType()))) {
             return $this->raiseError('Invalid role `' . $atts['attribs']['role'] .
@@ -540,7 +520,6 @@ class PEAR_Installer extends PEAR_Downloader
 
         $dest_dir  = dirname($final_dest_file);
         $dest_file = $dest_dir . DIRECTORY_SEPARATOR . '.tmp' . basename($final_dest_file);
-        // }}}
 
         if (empty($this->_options['register-only'])) {
             if (!file_exists($dest_dir) || !is_dir($dest_dir)) {
@@ -619,7 +598,7 @@ class PEAR_Installer extends PEAR_Downloader
                 }
             }
 
-            // {{{ check the md5
+            // check the md5
             if (isset($md5sum)) {
                 // Make sure the original md5 sum matches with expected
                 if (strtolower($md5sum) === strtolower($attribs['md5sum'])) {
@@ -654,8 +633,7 @@ class PEAR_Installer extends PEAR_Downloader
                 $real_atts['attribs']['md5sum'] = md5_file($dest_file);
             }
 
-            // }}}
-            // {{{ set file permissions
+            //set file permissions
             if (!OS_WINDOWS) {
                 if ($role->isExecutable()) {
                     $mode = 0777 & ~(int)octdec($this->config->get('umask'));
@@ -673,7 +651,6 @@ class PEAR_Installer extends PEAR_Downloader
                     }
                 }
             }
-            // }}}
 
             if ($attribs['role'] == 'src') {
                 rename($dest_file, $final_dest_file);
@@ -694,9 +671,6 @@ class PEAR_Installer extends PEAR_Downloader
         //$this->log(2, "installed: $dest_file");
         return PEAR_INSTALLER_OK;
     }
-
-    // }}}
-    // {{{ addFileOperation()
 
     /**
      * Add a file operation to the current file transaction.
@@ -738,9 +712,6 @@ class PEAR_Installer extends PEAR_Downloader
         $this->file_operations[] = array($type, $data);
     }
 
-    // }}}
-    // {{{ startFileTransaction()
-
     function startFileTransaction($rollback_in_case = false)
     {
         if (count($this->file_operations) && $rollback_in_case) {
@@ -749,16 +720,11 @@ class PEAR_Installer extends PEAR_Downloader
         $this->file_operations = array();
     }
 
-    // }}}
-    // {{{ commitFileTransaction()
-
     function commitFileTransaction()
     {
-        $n = count($this->file_operations);
-        $this->log(2, "about to commit $n file operations");
-        // {{{ first, check permissions and such manually
+        //first, check permissions and such manually
         $errors = array();
-        foreach ($this->file_operations as $tr) {
+        foreach ($this->file_operations as $key => $tr) {
             list($type, $data) = $tr;
             switch ($type) {
                 case 'rename':
@@ -781,6 +747,7 @@ class PEAR_Installer extends PEAR_Downloader
                     if (!file_exists($data[0])) {
                         $this->log(2, "warning: file $data[0] doesn't exist, can't be deleted");
                     }
+
                     // check that directory is writable
                     if (file_exists($data[0])) {
                         if (!is_writable(dirname($data[0]))) {
@@ -795,12 +762,34 @@ class PEAR_Installer extends PEAR_Downloader
                                 fclose($fp);
                             }
                         }
+
+                        /* Verify we are not deleting a file owned by another package
+                         * This can happen when a file moves from package A to B in
+                         * an upgrade ala http://pear.php.net/17986
+                         */
+                        if ($this->pkginfo->getName() == 'PHPUnit') {
+                            $info = array(
+                                'package' => strtolower($this->pkginfo->getName()),
+                                'channel' => strtolower($this->pkginfo->getChannel()),
+                            );
+                            $result = $this->_registry->checkFileMap($data[0], $info, '1.1');
+                            if (is_array($result)) {
+                                $res = array_diff($result, $info);
+                                if (!empty($res)) {
+                                    $new = $this->_registry->getPackage($result[1], $result[0]);
+                                    $this->file_operations[$key] = false;
+                                    $this->log(3, "file $data[0] was scheduled for removal from {$this->pkginfo->getName()} but is owned by {$new->getChannel()}/{$new->getName()}, removal has been cancelled.");
+                                }
+                            }
+                        }
                     }
                     break;
             }
-
         }
-        // }}}
+
+        $n = count($this->file_operations);
+        $this->log(2, "about to commit $n file operations for " . $this->pkginfo->getName());
+
         $m = count($errors);
         if ($m > 0) {
             foreach ($errors as $error) {
@@ -815,7 +804,7 @@ class PEAR_Installer extends PEAR_Downloader
         }
 
         $this->_dirtree = array();
-        // {{{ really commit the transaction
+        // really commit the transaction
         foreach ($this->file_operations as $i => $tr) {
             if (!$tr) {
                 // support removal of non-existing backups
@@ -936,14 +925,11 @@ class PEAR_Installer extends PEAR_Downloader
                     break;
             }
         }
-        // }}}
+
         $this->log(2, "successfully committed $n file operations");
         $this->file_operations = array();
         return true;
     }
-
-    // }}}
-    // {{{ rollbackFileTransaction()
 
     function rollbackFileTransaction()
     {
@@ -988,17 +974,11 @@ class PEAR_Installer extends PEAR_Downloader
         $this->file_operations = array();
     }
 
-    // }}}
-    // {{{ mkDirHier($dir)
-
     function mkDirHier($dir)
     {
         $this->addFileOperation('mkdir', array($dir));
         return parent::mkDirHier($dir);
     }
-
-    // }}}
-    // {{{ download()
 
     /**
      * Download any files and their dependencies, if necessary
@@ -1033,15 +1013,12 @@ class PEAR_Installer extends PEAR_Downloader
         return $ret;
     }
 
-    // }}}
-    // {{{ _parsePackageXml()
-
     function _parsePackageXml(&$descfile, &$tmpdir)
     {
         if (substr($descfile, -4) == '.xml') {
             $tmpdir = false;
         } else {
-            // {{{ Decompress pack in tmp dir -------------------------------------
+            // Decompress pack in tmp dir
 
             // To allow relative package file names
             $descfile = realpath($descfile);
@@ -1050,10 +1027,9 @@ class PEAR_Installer extends PEAR_Downloader
                 return $tmpdir;
             }
             $this->log(3, '+ tmp dir created at ' . $tmpdir);
-            // }}}
         }
 
-        // Parse xml file -----------------------------------------------
+        // Parse xml file
         $pkg = new PEAR_PackageFile($this->config, $this->debug, $tmpdir);
         PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
         $p = &$pkg->fromAnyFile($descfile, PEAR_VALIDATE_INSTALLING);
@@ -1074,7 +1050,6 @@ class PEAR_Installer extends PEAR_Downloader
         return $p;
     }
 
-    // }}}
     /**
      * Set the list of PEAR_Downloader_Package objects to allow more sane
      * dependency validation
@@ -1105,8 +1080,6 @@ class PEAR_Installer extends PEAR_Downloader
     {
         return $this->_downloadedPackages;
     }
-
-    // {{{ install()
 
     /**
      * Installs the files within the package file specified.
@@ -1188,7 +1161,7 @@ class PEAR_Installer extends PEAR_Downloader
             $this->installroot = '';
         }
 
-        // {{{ checks to do when not in "force" mode
+        // checks to do when not in "force" mode
         if (empty($options['force']) &&
               (file_exists($this->config->get('php_dir')) &&
                is_dir($this->config->get('php_dir')))) {
@@ -1303,7 +1276,6 @@ class PEAR_Installer extends PEAR_Downloader
                 }
             }
         }
-        // }}}
 
         $this->startFileTransaction();
 
@@ -1359,7 +1331,7 @@ class PEAR_Installer extends PEAR_Downloader
             }
         }
 
-        // {{{ Copy files to dest dir ---------------------------------------
+        // Copy files to dest dir
 
         // info from the package it self we want to access from _installFile
         $this->pkginfo = &$pkg;
@@ -1379,7 +1351,7 @@ class PEAR_Installer extends PEAR_Downloader
         }
 
         $this->configSet('default_channel', $channel);
-        // {{{ install files
+        // install files
 
         $ver = $pkg->getPackagexmlVersion();
         if (version_compare($ver, '2.0', '>=')) {
@@ -1428,16 +1400,14 @@ class PEAR_Installer extends PEAR_Downloader
                 $pkg->installedFile($file, $atts);
             }
         }
-        // }}}
 
-        // {{{ compile and install source files
+        // compile and install source files
         if ($this->source_files > 0 && empty($options['nobuild'])) {
             if (PEAR::isError($err =
                   $this->_compileSourceFiles($savechannel, $pkg))) {
                 return $err;
             }
         }
-        // }}}
 
         if (isset($backedup)) {
             $this->_removeBackups($backedup);
@@ -1448,12 +1418,11 @@ class PEAR_Installer extends PEAR_Downloader
             $this->configSet('default_channel', $savechannel);
             return $this->raiseError("commit failed", PEAR_INSTALLER_FAILED);
         }
-        // }}}
 
         $ret          = false;
         $installphase = 'install';
         $oldversion   = false;
-        // {{{ Register that the package is installed -----------------------
+        // Register that the package is installed
         if (empty($options['upgrade'])) {
             // if 'force' is used, replace the info in registry
             $usechannel = $channel;
@@ -1524,9 +1493,6 @@ class PEAR_Installer extends PEAR_Downloader
         return $pkg->toArray(true);
     }
 
-    // }}}
-
-    // {{{ _compileSourceFiles()
     /**
      * @param string
      * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
@@ -1596,7 +1562,6 @@ class PEAR_Installer extends PEAR_Downloader
                 }
             }
 
-
             $data = array(
                 'role'         => $role,
                 'name'         => $bn,
@@ -1614,12 +1579,10 @@ class PEAR_Installer extends PEAR_Downloader
         }
     }
 
-    // }}}
     function &getUninstallPackages()
     {
         return $this->_downloadedPackages;
     }
-    // {{{ uninstall()
 
     /**
      * Uninstall a package
@@ -1701,7 +1664,7 @@ class PEAR_Installer extends PEAR_Downloader
         $this->pkginfo = &$pkg;
         // pretty much nothing happens if we are only registering the uninstall
         if (empty($options['register-only'])) {
-            // {{{ Delete the files
+            // Delete the files
             $this->startFileTransaction();
             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
             if (PEAR::isError($err = $this->_deletePackageFiles($package, $channel))) {
@@ -1753,7 +1716,6 @@ class PEAR_Installer extends PEAR_Downloader
                     }
                 }
             }
-            // }}}
         }
 
         $this->configSet('default_channel', $savechannel);
@@ -1798,18 +1760,12 @@ class PEAR_Installer extends PEAR_Downloader
         return 0;
     }
 
-    // }}}
-    // {{{ _sortDirs()
     function _sortDirs($a, $b)
     {
         if (strnatcmp($a, $b) == -1) return 1;
         if (strnatcmp($a, $b) == 1) return -1;
         return 0;
     }
-
-    // }}}
-
-    // {{{ _buildCallback()
 
     function _buildCallback($what, $data)
     {
@@ -1818,6 +1774,4 @@ class PEAR_Installer extends PEAR_Downloader
             $this->ui->outputData(rtrim($data), 'build');
         }
     }
-
-    // }}}
 }
