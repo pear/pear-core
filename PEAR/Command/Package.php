@@ -523,7 +523,7 @@ used for automated conversion or learning the format.
         $dir   = dirname($packageFile);
         $dir   = substr($dir, strrpos($dir, DIRECTORY_SEPARATOR) + 1);
         $files = array_keys($info->getFilelist());
-        if (!in_array(basename($packageFile))) {
+        if (!in_array(basename($packageFile), $files)) {
             $files[] = basename($packageFile);
         }
 
