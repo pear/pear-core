@@ -21,7 +21,9 @@ if (!defined('PEAR_RUNTYPE')) {
     // this is defined in peclcmd.php as 'pecl'
     define('PEAR_RUNTYPE', 'pear');
 }
+
 define('PEAR_IGNORE_BACKTRACE', 1);
+
 /**
  * @nodep Gtk
  */
@@ -32,6 +34,7 @@ if ('@include_path@' != '@'.'include_path'.'@') {
     // this is a raw, uninstalled pear, either a cvs checkout, or php distro
     $raw = true;
 }
+
 @ini_set('allow_url_fopen', true);
 if (!ini_get('safe_mode')) {
     @set_time_limit(0);
@@ -67,6 +70,7 @@ if (php_sapi_name() != 'cli' && isset($argv[1]) && $argv[1] == '--') {
     unset($argv[1]);
     $argv = array_values($argv);
 }
+
 $progname = PEAR_RUNTYPE;
 array_shift($argv);
 $options = Console_Getopt::getopt2($argv, "c:C:d:D:Gh?sSqu:vV");
@@ -274,14 +278,40 @@ if ($fetype == 'Gtk' || $fetype == 'Gtk2') {
     $short_args = $long_args = null;
     PEAR_Command::getGetoptArgs($command, $short_args, $long_args);
     array_shift($options[1]);
-    $tmp = Console_Getopt::getopt2($options[1], $short_args, $long_args);
+
+    $skip_unknown = $progname === 'pecl' ? true : false;
+    $tmp = Console_Getopt::getopt2($options[1], $short_args, $long_args, $skip_unknown);
 
     if (PEAR::isError($tmp)) {
         break;
     }
 
-    list($tmpopt, $params) = $tmp;
     $opts = array();
+    // Gather any extra params which may be passed on to compile
+    if ($skip_unknown === true) {
+        $o = $options[1];
+        foreach (str_split($short_args) as $sa) {
+          $pos = array_search('-' . $sa, $o);
+          if ($pos !== false) {
+            unset($o[$pos]);
+          }
+        }
+
+        foreach ($long_args as $la) {
+          $pos = array_search('--' . $la, $o);
+          if ($pos !== false) {
+            unset($o[$pos]);
+          }
+        }
+
+        reset($o);
+        array_pop($o);
+        if (!empty($o)) {
+            $opts['__compile_configureoptions'] = $o;
+        }
+    }
+
+    list($tmpopt, $params) = $tmp;
     foreach ($tmpopt as $foo => $tmp2) {
         list($opt, $value) = $tmp2;
         if ($value === null) {

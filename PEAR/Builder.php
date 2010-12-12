@@ -240,7 +240,7 @@ class PEAR_Builder extends PEAR_Common
      *
      * @see PEAR_Builder::_runCommand
      */
-    function build($descfile, $callback = null)
+    function build($descfile, $callback = null, $options = array())
     {
         if (preg_match('/(\\/|\\\\|^)([^\\/\\\\]+)?php(.+)?$/',
                        $this->config->get('php_bin'), $matches)) {
@@ -325,6 +325,12 @@ class PEAR_Builder extends PEAR_Common
             }
         }
         // }}} end of interactive part
+
+        if (!$configure_options && !empty($options)) {
+            foreach ($options as $op) {
+                $configure_command .= ' ' . $op;
+            }
+        }
 
         // FIXME make configurable
         if(!$user=getenv('USER')){
