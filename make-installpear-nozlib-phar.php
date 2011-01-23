@@ -27,12 +27,11 @@ function replaceVersion($contents, $path)
     return str_replace(array('@PEAR-VER@', '@package_version@'), $GLOBALS['pearver'], $contents);
 }
 
-$peardir    = dirname(__FILE__);
 $outputFile = 'install-pear-nozlib.phar';
 
-$dp = @scandir($peardir . '/go-pear-tarballs');
+$dp = @scandir(__DIR__ . '/go-pear-tarballs');
 if ($dp === false) {
-    die("while locating packages to install: opendir('" . $peardir . "/go-pear-tarballs') failed\n");
+    die("while locating packages to install: opendir('" . __DIR__ . "/go-pear-tarballs') failed\n");
 }
 
 $packages = array();
@@ -67,10 +66,10 @@ require_once 'PEAR/Config.php';
 require_once 'PHP/Archive/Creator.php';
 $config = &PEAR_Config::singleton();
 
-chdir($peardir);
+chdir(__DIR__);
 
 $pkg = new PEAR_PackageFile($config);
-$pf = $pkg->fromPackageFile($peardir . DIRECTORY_SEPARATOR . 'package2.xml', PEAR_VALIDATE_NORMAL);
+$pf = $pkg->fromPackageFile(__DIR__ . DIRECTORY_SEPARATOR . 'package2.xml', PEAR_VALIDATE_NORMAL);
 if (PEAR::isError($pf)) {
     foreach ($pf->getUserInfo() as $warn) {
         echo $warn['message'] . "\n";
@@ -93,7 +92,7 @@ foreach ($packages as $name => $package) {
 $install_files .= ');';
 echo "install_files is $install_files";
 
-$commandcontents = file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'install-pear.php');
+$commandcontents = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'install-pear.php');
 $commandcontents = str_replace(
     array(
         'include_once \'',
@@ -105,7 +104,7 @@ $commandcontents = str_replace(
     ), $commandcontents);
 $creator->addString($commandcontents, 'index.php');
 
-$commandcontents = file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . '/PEAR/Frontend.php');
+$commandcontents = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '/PEAR/Frontend.php');
 $commandcontents = str_replace(
     array(
         "\$file = str_replace('_', '/', \$uiclass) . '.php';"
@@ -116,7 +115,7 @@ $commandcontents = str_replace(
 $commandcontents = replaceVersion($commandcontents, '');
 $creator->addString($commandcontents, 'PEAR/Frontend.php');
 
-$commandcontents = file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . '/PEAR/PackageFile/v2.php');
+$commandcontents = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '/PEAR/PackageFile/v2.php');
 $commandcontents = str_replace(
     array(
         '$fp = @fopen("PEAR/Task/$taskfile.php", \'r\', true);',
@@ -130,12 +129,12 @@ $creator->addString($commandcontents, 'PEAR/PackageFile/v2.php');
 
 $creator->addMagicRequireCallback(array($creator, 'limitedSmartMagicRequire'));
 $creator->addMagicRequireCallback('replaceVersion');
-$creator->addFile($peardir . '/PEAR/Command.php', 'PEAR/Command.php');
+$creator->addFile(__DIR__ . '/PEAR/Command.php', 'PEAR/Command.php');
 
 $creator->clearMagicRequire();
 $creator->addMagicRequireCallback(array($creator, 'tokenMagicRequire'));
 $creator->addMagicRequireCallback('replaceVersion');
-$creator->addDir($peardir . DIRECTORY_SEPARATOR . 'PEAR', array(),
+$creator->addDir(__DIR__ . DIRECTORY_SEPARATOR . 'PEAR', array(),
     array(
         '*PEAR/Dependency2.php',
         '*PEAR/PackageFile/Generator/v1.php',
@@ -191,20 +190,22 @@ $creator->addDir($peardir . DIRECTORY_SEPARATOR . 'PEAR', array(),
         '*PEAR/Start/CLI.php',
         '*PEAR/Validate.php',
         '*PEAR/XMLParser.php',
-    ), false, $peardir);
+    ), false, __DIR__);
 
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'PEAR.php', 'PEAR.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'PEAR5.php', 'PEAR5.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'System.php', 'System.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'OS/Guess.php', 'OS/Guess.php');
+$creator->addFile(__DIR__ . DIRECTORY_SEPARATOR . 'PEAR.php', 'PEAR.php');
+$creator->addFile(__DIR__ . DIRECTORY_SEPARATOR . 'PEAR5.php', 'PEAR5.php');
+$creator->addFile(__DIR__ . DIRECTORY_SEPARATOR . 'System.php', 'System.php');
+$creator->addFile(__DIR__ . DIRECTORY_SEPARATOR . 'OS/Guess.php', 'OS/Guess.php');
 
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Archive/Tar.php', 'Archive/Tar.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'XML_Util/Util.php', 'XML/Util.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Console/Getopt.php', 'Console/Getopt.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph.php', 'Structures/Graph.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph/Node.php', 'Structures/Graph/Node.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph/Manipulator/AcyclicTest.php', 'Structures/Graph/Manipulator/AcyclicTest.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph/Manipulator/TopologicalSorter.php', 'Structures/Graph/Manipulator/TopologicalSorter.php');
+// Add external packages
+$creator->addFile(__DIR__ . DIRECTORY_SEPARATOR . 'PEAR/Exception.php', 'PEAR/Exception.php');
+$creator->addFile(__DIR__ . DIRECTORY_SEPARATOR . 'Archive/Tar.php', 'Archive/Tar.php');
+$creator->addFile(__DIR__ . DIRECTORY_SEPARATOR . 'XML_Util/Util.php', 'XML/Util.php');
+$creator->addFile(__DIR__ . DIRECTORY_SEPARATOR . 'Console/Getopt.php', 'Console/Getopt.php');
+$creator->addFile(__DIR__ . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph.php', 'Structures/Graph.php');
+$creator->addFile(__DIR__ . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph/Node.php', 'Structures/Graph/Node.php');
+$creator->addFile(__DIR__ . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph/Manipulator/AcyclicTest.php', 'Structures/Graph/Manipulator/AcyclicTest.php');
+$creator->addFile(__DIR__ . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph/Manipulator/TopologicalSorter.php', 'Structures/Graph/Manipulator/TopologicalSorter.php');
 
 $creator->useSHA1Signature();
-$creator->savePhar(dirname(__FILE__) . DIRECTORY_SEPARATOR . $outputFile);
+$creator->savePhar(__DIR__ . DIRECTORY_SEPARATOR . $outputFile);
