@@ -553,7 +553,7 @@ class PEAR_Downloader extends PEAR_Common
                     }
 
                     $failed = false;
-                    if (isset($deps['required'])) {
+                    if (isset($deps['required']) && is_array($deps['required'])) {
                         foreach ($deps['required'] as $type => $dep) {
                             // note: Dependency2 will never return a PEAR_Error if ignore-errors
                             // is specified, so soft is needed to turn off logging
@@ -587,7 +587,7 @@ class PEAR_Downloader extends PEAR_Common
                             }
                         }
 
-                        if (isset($deps['optional'])) {
+                        if (isset($deps['optional']) && is_array($deps['optional'])) {
                             foreach ($deps['optional'] as $type => $dep) {
                                 if (!isset($dep[0])) {
                                     if (PEAR::isError($e =
