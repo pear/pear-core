@@ -100,7 +100,10 @@ class PEAR_REST
             $ret = $this->getCache($url);
             if (!PEAR::isError($ret) && $trieddownload) {
                 // reset the age of the cache if the server says it was unmodified
-                $this->saveCache($url, $ret, null, true, $cacheId);
+                $result = $this->saveCache($url, $ret, null, true, $cacheId);
+                if (PEAR::isError($result)) {
+                    return PEAR::raiseErro($result->getMessage());
+                }
             }
 
             return $ret;
@@ -117,7 +120,11 @@ class PEAR_REST
         }
 
         if ($forcestring) {
-            $this->saveCache($url, $content, $lastmodified, false, $cacheId);
+            $result = $this->saveCache($url, $content, $lastmodified, false, $cacheId);
+            if (PEAR::isError($result)) {
+                return PEAR::raiseErro($result->getMessage());
+            }
+
             return $content;
         }
 
@@ -153,7 +160,11 @@ class PEAR_REST
             $content = $parser->getData();
         }
 
-        $this->saveCache($url, $content, $lastmodified, false, $cacheId);
+        $result = $this->saveCache($url, $content, $lastmodified, false, $cacheId);
+        if (PEAR::isError($result)) {
+            return PEAR::raiseErro($result->getMessage());
+        }
+
         return $content;
     }
 
@@ -212,57 +223,65 @@ class PEAR_REST
      */
     function saveCache($url, $contents, $lastmodified, $nochange = false, $cacheid = null)
     {
-        $cachedir    = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR . md5($url);
-        $cacheidfile = $cachedir . 'rest.cacheid';
-        $cachefile   = $cachedir . 'rest.cachefile';
+        $cache_dir   = $this->config->get('cache_dir');
+        $d           = $cache_dir . DIRECTORY_SEPARATOR . md5($url);
+        $cacheidfile = $d . 'rest.cacheid';
+        $cachefile   = $d . 'rest.cachefile';
 
         if ($cacheid === null && $nochange) {
             $cacheid = unserialize(implode('', file($cacheidfile)));
         }
 
-        $fp = @fopen($cacheidfile, 'wb');
-        if (!$fp) {
-            $cache_dir = $this->config->get('cache_dir');
+        if (is_link($cacheidfile)) {
+            return PEAR::raiseError('SECURITY ERROR: Will not write to ' . $cacheidfile . ' as it is symlinked to ' . readlink($cacheidfile) . ' - Possible symlink attack');
+        }
+
+        if (is_link($cachefile)) {
+            return PEAR::raiseError('SECURITY ERROR: Will not write to ' . $cacheidfile . ' as it is symlinked to ' . readlink($cacheidfile) . ' - Possible symlink attack');
+        }
+
+        $cacheidfile_fp = @fopen($cacheidfile, 'wb');
+        if (!$cacheidfile_fp) {
             if (is_dir($cache_dir)) {
-                return false;
+                return PEAR::raiseError("The value of config option cache_dir ($cache_dir) is not a directory. ");
             }
 
             System::mkdir(array('-p', $cache_dir));
-            $fp = @fopen($cacheidfile, 'wb');
-            if (!$fp) {
-                return false;
+            $cacheidfile_fp = @fopen($cacheidfile, 'wb');
+            if (!$cacheidfile_fp) {
+                return PEAR::raiseError("Could not open $cacheidfile for writing.");
             }
         }
 
         if ($nochange) {
-            fwrite($fp, serialize(array(
+            fwrite($cacheidfile_fp, serialize(array(
                 'age'        => time(),
                 'lastChange' => $cacheid['lastChange'],
                 ))
             );
 
-            fclose($fp);
+            fclose($cacheidfile_fp);
             return true;
         }
 
-        fwrite($fp, serialize(array(
+        fwrite($cacheidfile_fp, serialize(array(
             'age'        => time(),
             'lastChange' => $lastmodified,
             ))
         );
+        fclose($cacheidfile_fp);
 
-        fclose($fp);
-        $fp = @fopen($cachefile, 'wb');
-        if (!$fp) {
+        $cachefile_fp = @fopen($cachefile, 'wb');
+        if (!$cachefile_fp) {
             if (file_exists($cacheidfile)) {
                 @unlink($cacheidfile);
             }
 
-            return false;
+            return PEAR::raiseError("Could not open $cacheidfile for writing.");
         }
 
-        fwrite($fp, serialize($contents));
-        fclose($fp);
+        fwrite($cachefile_fp, serialize($contents));
+        fclose($cachefile_fp);
         return true;
     }
 
