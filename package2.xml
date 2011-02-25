@@ -93,7 +93,10 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-* Fixed [SECURITY]: Symlink attack in PEAR install [dufuz]
+* Fixed Bug #18056 [SECURITY]: Symlink attack in PEAR install [dufuz]
+
+This feature is implemented as a result of the above fix
+* Implemented Request #16648: Use TMPDIR for builds instead of /var/tmp [dufuz]
  </notes>
  <contents>
   <dir name="/">
