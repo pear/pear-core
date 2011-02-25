@@ -421,7 +421,7 @@ used for automated conversion or learning the format.
 
         $packageFile = realpath($params[0]);
         $dir = dirname($packageFile);
-        $dir = substr($dir, strrpos($dir, '/') + 1);
+        $dir = substr($dir, strrpos($dir, DIRECTORY_SEPARATOR) + 1);
         $obj  = &$this->getPackageFile($this->config, $this->_debug);
         $info = $obj->fromAnyFile($packageFile, PEAR_VALIDATE_NORMAL);
         if (PEAR::isError($info)) {
@@ -481,7 +481,7 @@ used for automated conversion or learning the format.
         }
 
         // Check if tag already exists
-        $releaseTag = $path['local']['base'] . 'tags/' . $svntag;
+        $releaseTag = $path['local']['base'] . 'tags' . DIRECTORY_SEPARATOR . $svntag;
         $existsCommand = 'svn ls ' . $path['base'] . 'tags/';
 
         $fp = popen($existsCommand, "r");
@@ -491,7 +491,7 @@ used for automated conversion or learning the format.
         }
         pclose($fp);
 
-        if (in_array($svntag . '/', explode("\n", $out))) {
+        if (in_array($svntag . DIRECTORY_SEPARATOR, explode("\n", $out))) {
             $this->ui->outputData($this->output, $command);
             return $this->raiseError('SVN tag ' . $svntag . ' for ' . $package . ' already exists.');
         } elseif (file_exists($path['local']['base'] . 'tags') === false) {
@@ -521,8 +521,11 @@ used for automated conversion or learning the format.
         $command .= ' copy --parents ';
 
         $dir   = dirname($packageFile);
-        $dir   = substr($dir, strrpos($dir, '/') + 1);
+        $dir   = substr($dir, strrpos($dir, DIRECTORY_SEPARATOR) + 1);
         $files = array_keys($info->getFilelist());
+        if (!in_array(basename($packageFile), $files)) {
+            $files[] = basename($packageFile);
+        }
 
         array_shift($params);
         if (count($params)) {
@@ -580,10 +583,10 @@ used for automated conversion or learning the format.
         $path['from'] = substr($url, 0, strrpos($url, '/'));
         $path['base'] = substr($path['from'], 0, strrpos($path['from'], '/') + 1);
 
-        // Figure out the local paths
-        $pos = strpos($file, '/trunk/');
+        // Figure out the local paths - see http://pear.php.net/bugs/17463
+        $pos = strpos($file, DIRECTORY_SEPARATOR . 'trunk' . DIRECTORY_SEPARATOR);
         if ($pos === false) {
-            $pos = strpos($file, '/branches/');
+            $pos = strpos($file, DIRECTORY_SEPARATOR . 'branches' . DIRECTORY_SEPARATOR);
         }
         $path['local']['base'] = substr($file, 0, $pos + 1);
 
