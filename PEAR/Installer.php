@@ -758,7 +758,7 @@ class PEAR_Installer extends PEAR_Downloader
         $this->log(2, "about to commit $n file operations");
         // {{{ first, check permissions and such manually
         $errors = array();
-        foreach ($this->file_operations as $tr) {
+        foreach ($this->file_operations as $key => $tr) {
             list($type, $data) = $tr;
             switch ($type) {
                 case 'rename':
@@ -795,12 +795,34 @@ class PEAR_Installer extends PEAR_Downloader
                                 fclose($fp);
                             }
                         }
+
+                        /* Verify we are not deleting a file owned by another package
+                         * This can happen when a file moves from package A to B in
+                         * an upgrade ala http://pear.php.net/17986
+                         */
+                        $info = array(
+                            'package' => strtolower($this->pkginfo->getName()),
+                            'channel' => strtolower($this->pkginfo->getChannel()),
+                        );
+                        $result = $this->_registry->checkFileMap($data[0], $info, '1.1');
+                        if (is_array($result)) {
+                            $res = array_diff($result, $info);
+                            if (!empty($res)) {
+                                $new = $this->_registry->getPackage($result[1], $result[0]);
+                                $this->file_operations[$key] = false;
+                                $this->log(3, "file $data[0] was scheduled for removal from {$this->pkginfo->getName()} but is owned by {$new->getChannel()}/{$new->getName()}, removal has been cancelled.");
+                            }
+                        }
                     }
                     break;
             }
 
         }
         // }}}
+
+        $n = count($this->file_operations);
+        $this->log(2, "about to commit $n file operations for " . $this->pkginfo->getName());
+
         $m = count($errors);
         if ($m > 0) {
             foreach ($errors as $error) {
