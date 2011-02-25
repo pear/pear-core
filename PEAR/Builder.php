@@ -250,6 +250,7 @@ class PEAR_Builder extends PEAR_Common
                            ' appears to have a prefix ' . $matches[2] . ', but' .
                            ' config variable php_prefix does not match');
             }
+
             if (isset($matches[3]) && strlen($matches[3]) &&
                 trim($matches[3]) != trim($this->config->get('php_suffix'))) {
                 $this->log(0, 'WARNING: php_bin ' . $this->config->get('php_bin') .
@@ -258,14 +259,15 @@ class PEAR_Builder extends PEAR_Common
             }
         }
 
-
         $this->current_callback = $callback;
         if (PEAR_OS == "Windows") {
             return $this->_build_win32($descfile, $callback);
         }
+
         if (PEAR_OS != 'Unix') {
             return $this->raiseError("building extensions not supported on this platform");
         }
+
         if (is_object($descfile)) {
             $pkg = $descfile;
             $descfile = $pkg->getPackageFile();
@@ -284,14 +286,17 @@ class PEAR_Builder extends PEAR_Common
             }
             $dir = dirname($descfile);
         }
+
         $old_cwd = getcwd();
         if (!file_exists($dir) || !is_dir($dir) || !chdir($dir)) {
             return $this->raiseError("could not chdir to $dir");
         }
+
         $vdir = $pkg->getPackage() . '-' . $pkg->getVersion();
         if (is_dir($vdir)) {
             chdir($vdir);
         }
+
         $dir = getcwd();
         $this->log(2, "building in $dir");
         putenv('PATH=' . $this->config->get('bin_dir') . ':' . getenv('PATH'));
@@ -302,8 +307,19 @@ class PEAR_Builder extends PEAR_Common
         if (PEAR::isError($err)) {
             return $err;
         }
+
         if (!$err) {
             return $this->raiseError("`phpize' failed");
+        }
+
+        // Figure out what params have been passed in to us already - formatting fixing
+        $opts = array();
+        if (!empty($options)) {
+            foreach ($options as $op) {
+                $op = str_replace('--', '', $op);
+                list($name, $value) = explode('=', $op);
+                $opts[] = $name;
+            }
         }
 
         // {{{ start of interactive part
@@ -311,6 +327,11 @@ class PEAR_Builder extends PEAR_Common
         $configure_options = $pkg->getConfigureOptions();
         if ($configure_options) {
             foreach ($configure_options as $o) {
+                // skip params that have been passed already
+                if (in_array($o['name'], $opts)) {
+                    continue;
+                }
+
                 $default = array_key_exists('default', $o) ? $o['default'] : null;
                 list($r) = $this->ui->userDialog('build',
                                                  array($o['prompt']),
@@ -326,38 +347,39 @@ class PEAR_Builder extends PEAR_Common
         }
         // }}} end of interactive part
 
-        if (!$configure_options && !empty($options)) {
+        // Set any options that were passed in.
+        if (!empty($options)) {
             foreach ($options as $op) {
                 $configure_command .= ' ' . $op;
             }
         }
 
         // FIXME make configurable
-        if(!$user=getenv('USER')){
-            $user='defaultuser';
+        if (!$user = getenv('USER')){
+            $user = 'defaultuser';
         }
 
-        $build_basedir = System::mktemp("-d pear-build-" . $user);
+        $tmpdir = $this->config->get('temp_dir');
+        $build_basedir = System::mktemp(" -t $tmpdir -d pear-build-$user");
         $build_dir = "$build_basedir/$vdir";
         $inst_dir = "$build_basedir/install-$vdir";
         $this->log(1, "building in $build_dir");
         if (is_dir($build_dir)) {
             System::rm(array('-rf', $build_dir));
         }
+
         if (!System::mkDir(array('-p', $build_dir))) {
             return $this->raiseError("could not create build dir: $build_dir");
         }
+
         $this->addTempFile($build_dir);
         if (!System::mkDir(array('-p', $inst_dir))) {
             return $this->raiseError("could not create temporary install dir: $inst_dir");
         }
         $this->addTempFile($inst_dir);
 
-        if (getenv('MAKE')) {
-            $make_command = getenv('MAKE');
-        } else {
-            $make_command = 'make';
-        }
+        $make_command = getenv('MAKE') ? getenv('MAKE') : 'make';
+
         $to_run = array(
             $configure_command,
             $make_command,
@@ -379,10 +401,12 @@ class PEAR_Builder extends PEAR_Common
                 return $this->raiseError("`$cmd' failed");
             }
         }
+
         if (!($dp = opendir("modules"))) {
             chdir($old_cwd);
             return $this->raiseError("no `modules' directory found");
         }
+
         $built_files = array();
         $prefix = exec($this->config->get('php_prefix')
                         . "php-config" .
