@@ -415,10 +415,17 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                     $this->_tableRow($data['headline'], array('bold' => true), array(1 => array('wrap' => 55)));
                 }
 
+                $packages = array();
                 foreach($data['data'] as $category) {
-                    foreach($category as $pkg) {
-                        $this->_tableRow($pkg, null, array(1 => array('wrap' => 55)));
+                    foreach($category as $name => $pkg) {
+                        $packages[$pkg[0]] = $pkg;
                     }
+                }
+
+                $p = array_keys($packages);
+                natcasesort($p);
+                foreach ($p as $name) {
+                    $this->_tableRow($packages[$name], null, array(1 => array('wrap' => 55)));
                 }
 
                 $this->_endTable();
@@ -434,11 +441,19 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                     $this->_tableRow($data['headline'], array('bold' => true), array(1 => array('wrap' => 55)));
                 }
 
+                $packages = array();
                 foreach($data['data'] as $category) {
-                    foreach($category as $pkg) {
-                        unset($pkg[4], $pkg[5]);
-                        $this->_tableRow($pkg, null, array(1 => array('wrap' => 55)));
+                    foreach($category as $name => $pkg) {
+                        $packages[$pkg[0]] = $pkg;
                     }
+                }
+
+                $p = array_keys($packages);
+                natcasesort($p);
+                foreach ($p as $name) {
+                    $pkg = $packages[$name];
+                    unset($pkg[4], $pkg[5]);
+                    $this->_tableRow($pkg, null, array(1 => array('wrap' => 55)));
                 }
 
                 $this->_endTable();
