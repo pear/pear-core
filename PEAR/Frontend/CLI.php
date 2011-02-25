@@ -396,7 +396,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
             case 'install':
             case 'upgrade':
             case 'upgrade-all':
-                if (isset($data['release_warnings'])) {
+                if (is_array($data) && isset($data['release_warnings'])) {
                     $this->_displayLine('');
                     $this->_startTable(array(
                         'border' => false,
@@ -407,7 +407,7 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
                     $this->_displayLine('');
                 }
 
-                $this->_displayLine($data['data']);
+                $this->_displayLine(is_array($data) ? $data['data'] : $data);
                 break;
             case 'search':
                 $this->_startTable($data);
