@@ -91,10 +91,19 @@
   <license>New BSD License</license>
   <state>stable</state>
   <notes>
-* Fixed Bug #18056 [SECURITY]: Symlink attack in PEAR install [dufuz]
+  Bugs:
+  * Fixed Bug #17463: Regression: On Windows, svntag [patch by doconnor]
+  * Fixed Bug #17641: pecl-list doesn't sort packages by name [dufuz]
+  * Fixed Bug #17781: invalid argument warning on foreach due to an empty optional dependencie [dufuz]
+  * Fixed Bug #17801: PEAR run-tests wrongly detects php-cgi [patch by David Jean Louis (izi)]
+  * Fixed Bug #17839: pear svntag does not tag package.xml file [dufuz]
+  * Fixed Bug #17986: PEAR Installer cannot handle files moved between packages [dufuz]
+  * Fixed Bug #17997: Strange output if directories are not writeable [dufuz]
+  * Fixed Bug #18001: PEAR/RunTest coverage fails [dufuz]
+  * Fixed Bug #18056 [SECURITY]: Symlink attack in PEAR install [dufuz]
 
-This feature is implemented as a result of the above fix
-* Implemented Request #16648: Use TMPDIR for builds instead of /var/tmp [dufuz]
+  This feature is implemented as a result of #18056
+  * Implemented Request #16648: Use TMPDIR for builds instead of /var/tmp [dufuz]
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.4.0"/>
