@@ -754,8 +754,6 @@ class PEAR_Installer extends PEAR_Downloader
 
     function commitFileTransaction()
     {
-        $n = count($this->file_operations);
-        $this->log(2, "about to commit $n file operations");
         // {{{ first, check permissions and such manually
         $errors = array();
         foreach ($this->file_operations as $key => $tr) {
