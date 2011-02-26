@@ -93,302 +93,311 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-* Fixed Bug #18056 [SECURITY]: Symlink attack in PEAR install [dufuz]
+  Bugs:
+  * Fixed Bug #17463: Regression: On Windows, svntag [patch by doconnor]
+  * Fixed Bug #17641: pecl-list doesn't sort packages by name [dufuz]
+  * Fixed Bug #17781: invalid argument warning on foreach due to an empty optional dependencie [dufuz]
+  * Fixed Bug #17801: PEAR run-tests wrongly detects php-cgi [patch by David Jean Louis (izi)]
+  * Fixed Bug #17839: pear svntag does not tag package.xml file [dufuz]
+  * Fixed Bug #17986: PEAR Installer cannot handle files moved between packages [dufuz]
+  * Fixed Bug #17997: Strange output if directories are not writeable [dufuz]
+  * Fixed Bug #18001: PEAR/RunTest coverage fails [dufuz]
+  * Fixed Bug #18056 [SECURITY]: Symlink attack in PEAR install [dufuz]
 
-This feature is implemented as a result of the above fix
-* Implemented Request #16648: Use TMPDIR for builds instead of /var/tmp [dufuz]
+  This feature is implemented as a result of #18056
+  * Implemented Request #16648: Use TMPDIR for builds instead of /var/tmp [dufuz]
  </notes>
  <contents>
   <dir name="/">
-   <file md5sum="3d9c9883c2a7c0747155dada2f26be37" name="OS/Guess.php" role="php">
+   <file name="OS/Guess.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="c530153bde718e2028c5ee0edcde919f" name="PEAR/ChannelFile/Parser.php" role="php">
+   <file name="PEAR/ChannelFile/Parser.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="8fd87e64002e11fd86eb2f3fbfee6599" name="PEAR/Command/Auth.xml" role="php" />
-   <file md5sum="2d274a61760df9acf36f88d2cdcbc5bf" name="PEAR/Command/Auth.php" role="php">
+   <file name="PEAR/Command/Auth.xml" role="php" />
+   <file name="PEAR/Command/Auth.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="73602fd7f051eaf8d37452d0e3063bdb" name="PEAR/Command/Build.xml" role="php" />
-   <file md5sum="1e823a289a01f5c817ac4eff1296c50d" name="PEAR/Command/Build.php" role="php">
+   <file name="PEAR/Command/Build.xml" role="php" />
+   <file name="PEAR/Command/Build.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="6d5aab4d4308c3005b5f584c7783a031" name="PEAR/Command/Channels.xml" role="php" />
-   <file md5sum="4a4e8ca23b0faa4f84c140e6b5258d33" name="PEAR/Command/Channels.php" role="php">
+   <file name="PEAR/Command/Channels.xml" role="php" />
+   <file name="PEAR/Command/Channels.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="4ce219083b34cde9e2a5141488f39335" name="PEAR/Command/Common.php" role="php">
+   <file name="PEAR/Command/Common.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="91f189cb9423b5e87ee0abc5ea1a2be3" name="PEAR/Command/Config.xml" role="php" />
-   <file md5sum="47bc731edd8c51466d075789cd8135f3" name="PEAR/Command/Config.php" role="php">
+   <file name="PEAR/Command/Config.xml" role="php" />
+   <file name="PEAR/Command/Config.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="2db0386b865d3f9a29f9126728722ece" name="PEAR/Command/Install.xml" role="php" />
-   <file md5sum="a4507a5aa3ee2b63a89e8aec734ed634" name="PEAR/Command/Install.php" role="php">
+   <file name="PEAR/Command/Install.xml" role="php" />
+   <file name="PEAR/Command/Install.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="5cb62a04c0a268f4edd64a49a3895c92" name="PEAR/Command/Mirror.xml" role="php" />
-   <file md5sum="9019af267ac15bce27aa81f1839f9bc6" name="PEAR/Command/Mirror.php" role="php">
+   <file name="PEAR/Command/Mirror.xml" role="php" />
+   <file name="PEAR/Command/Mirror.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="6c3061a594644e49b0648798dce6de32" name="PEAR/Command/Package.xml" role="php" />
-   <file md5sum="942478fbb01914eec4e86e8f8f6b5f81" name="PEAR/Command/Package.php" role="php">
+   <file name="PEAR/Command/Package.xml" role="php" />
+   <file name="PEAR/Command/Package.php" role="php">
     <tasks:replace from="@DATA-DIR@" to="data_dir" type="pear-config" />
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="28dc842ea725d8787b9f9c3dbca5aa22" name="PEAR/Command/Pickle.xml" role="php" />
-   <file md5sum="a9cdb1e95f4811b94b65c8150c009351" name="PEAR/Command/Pickle.php" role="php">
+   <file name="PEAR/Command/Pickle.xml" role="php" />
+   <file name="PEAR/Command/Pickle.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="49b046cfc14747f0365e02e9c3f0e6dc" name="PEAR/Command/Registry.xml" role="php" />
-   <file md5sum="7bea09a9680753183ffaa6b5cf8489d9" name="PEAR/Command/Registry.php" role="php">
+   <file name="PEAR/Command/Registry.xml" role="php" />
+   <file name="PEAR/Command/Registry.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="29c02e823879b4e3e291f6b36fb339f1" name="PEAR/Command/Remote.xml" role="php" />
-   <file md5sum="7ad01351a46c780f5b2b3ca46b7f2b7e" name="PEAR/Command/Remote.php" role="php">
+   <file name="PEAR/Command/Remote.xml" role="php" />
+   <file name="PEAR/Command/Remote.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="a50c32015005e0761cc3b04679b29ed0" name="PEAR/Command/Test.xml" role="php" />
-   <file md5sum="b10de7e19df1b028b45f0fd0cef3cea2" name="PEAR/Command/Test.php" role="php">
+   <file name="PEAR/Command/Test.xml" role="php" />
+   <file name="PEAR/Command/Test.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="035af3c0e87018b816c77de4613dad7e" name="PEAR/Downloader/Package.php" role="php">
+   <file name="PEAR/Downloader/Package.php" role="php">
     <tasks:replace from="@PEAR-VER@" to="version" type="package-info" />
    </file>
-   <file md5sum="2ad448f52de31562cb1aa6d4544c9a21" name="PEAR/Frontend/CLI.php" role="php">
+   <file name="PEAR/Frontend/CLI.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="419793dcb9405b83c715b46991957170" name="PEAR/Installer/Role/Common.php" role="php">
+   <file name="PEAR/Installer/Role/Common.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="d8c62e6275e3aaa7784290912406092c" name="PEAR/Installer/Role/Cfg.xml" role="php" />
-   <file md5sum="71ee455e864d6ab1caf127b093cf69b9" name="PEAR/Installer/Role/Cfg.php" role="php">
+   <file name="PEAR/Installer/Role/Cfg.xml" role="php" />
+   <file name="PEAR/Installer/Role/Cfg.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="89a4a2a286e842d45a98974f40a0565c" name="PEAR/Installer/Role/Data.xml" role="php" />
-   <file md5sum="c328326a8aa119281006a547ac6851fe" name="PEAR/Installer/Role/Data.php" role="php">
+   <file name="PEAR/Installer/Role/Data.xml" role="php" />
+   <file name="PEAR/Installer/Role/Data.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="b1ce0fe105251c3b75209d6518ee69ac" name="PEAR/Installer/Role/Doc.xml" role="php" />
-   <file md5sum="8831a5742304fb11b12a7106ca9aae48" name="PEAR/Installer/Role/Doc.php" role="php">
+   <file name="PEAR/Installer/Role/Doc.xml" role="php" />
+   <file name="PEAR/Installer/Role/Doc.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="af71c0ad42d16a323afe24a4f884ef15" name="PEAR/Installer/Role/Ext.xml" role="php" />
-   <file md5sum="c578fcb78bc555bb120c01d7c9daa38f" name="PEAR/Installer/Role/Ext.php" role="php">
+   <file name="PEAR/Installer/Role/Ext.xml" role="php" />
+   <file name="PEAR/Installer/Role/Ext.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="ef88f0321d3e481c2130c95122cf76d8" name="PEAR/Installer/Role/Php.xml" role="php" />
-   <file md5sum="6356cfb0741d160e16a82ee75f989b76" name="PEAR/Installer/Role/Php.php" role="php">
+   <file name="PEAR/Installer/Role/Php.xml" role="php" />
+   <file name="PEAR/Installer/Role/Php.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="746461dc3b48af6d24094cb0211608f2" name="PEAR/Installer/Role/Script.xml" role="php" />
-   <file md5sum="4393edd772da70ee4e6a30fda0720abf" name="PEAR/Installer/Role/Script.php" role="php">
+   <file name="PEAR/Installer/Role/Script.xml" role="php" />
+   <file name="PEAR/Installer/Role/Script.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="e147d63f168ea156fc2be38caaa63804" name="PEAR/Installer/Role/Src.xml" role="php" />
-   <file md5sum="543aae5ae1079a43afcefc3e8b717a35" name="PEAR/Installer/Role/Src.php" role="php">
+   <file name="PEAR/Installer/Role/Src.xml" role="php" />
+   <file name="PEAR/Installer/Role/Src.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="a24b596ec987aa5688fc19e8ed4e97ea" name="PEAR/Installer/Role/Test.xml" role="php" />
-   <file md5sum="fae5cee222cd1afccb43a58f942387d4" name="PEAR/Installer/Role/Test.php" role="php">
+   <file name="PEAR/Installer/Role/Test.xml" role="php" />
+   <file name="PEAR/Installer/Role/Test.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="7641e71c5785bb33a4261ebe25ed0fd7" name="PEAR/Installer/Role/Www.xml" role="php" />
-   <file md5sum="d32da89753298476b60a6987d98b88be" name="PEAR/Installer/Role/Www.php" role="php">
+   <file name="PEAR/Installer/Role/Www.xml" role="php" />
+   <file name="PEAR/Installer/Role/Www.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="3dba76d8cad0ee633749b215fa2f7bbb" name="PEAR/Installer/Role.php" role="php">
+   <file name="PEAR/Installer/Role.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="eff7ba0329cfb00fe57bee018024edca" name="PEAR/PackageFile/Generator/v1.php" role="php">
+   <file name="PEAR/PackageFile/Generator/v1.php" role="php">
     <tasks:replace from="@PEAR-VER@" to="version" type="package-info" />
    </file>
-   <file md5sum="a4de32c380f15e9a01dcbd07a2fa1062" name="PEAR/PackageFile/Generator/v2.php" role="php">
+   <file name="PEAR/PackageFile/Generator/v2.php" role="php">
     <tasks:replace from="@PEAR-VER@" to="version" type="package-info" />
    </file>
-   <file md5sum="7d3828c0f41aadc34d948f5215c4cd66" name="PEAR/PackageFile/Parser/v1.php" role="php">
+   <file name="PEAR/PackageFile/Parser/v1.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="a5f847fdba24116593efc223425a9609" name="PEAR/PackageFile/Parser/v2.php" role="php">
+   <file name="PEAR/PackageFile/Parser/v2.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="e964916c2b8fb5e1e947baa6dcc909d9" name="PEAR/PackageFile/v2/rw.php" role="php">
+   <file name="PEAR/PackageFile/v2/rw.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="feebfc45a40c46bfa7665237fb8ed5f2" name="PEAR/PackageFile/v2/Validator.php" role="php">
+   <file name="PEAR/PackageFile/v2/Validator.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="43d3f37727760235681fdf026a43fc64" name="PEAR/PackageFile/v1.php" role="php">
+   <file name="PEAR/PackageFile/v1.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="a1bf67f5d7009889e2ba2dcb0fb635c1" name="PEAR/PackageFile/v2.php" role="php">
+   <file name="PEAR/PackageFile/v2.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="cedbfe0e711e6f0d2bb6b1e0e7f12274" name="PEAR/REST/10.php" role="php">
+   <file name="PEAR/REST/10.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="93150a26f1a37747f5e2051deae71288" name="PEAR/REST/11.php" role="php">
+   <file name="PEAR/REST/11.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="58734baedca9a15f3013a8e5e21db229" name="PEAR/REST/13.php" role="php">
+   <file name="PEAR/REST/13.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="7e8d7f5385ee8bf9150cf1f8145432dc" name="PEAR/Task/Postinstallscript/rw.php" role="php">
+   <file name="PEAR/Task/Postinstallscript/rw.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="402e525ad2549c443f0a2d27f83df600" name="PEAR/Task/Replace/rw.php" role="php">
+   <file name="PEAR/Task/Replace/rw.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="d0116f3e8c7f0226dc1056b77185f53c" name="PEAR/Task/Unixeol/rw.php" role="php">
+   <file name="PEAR/Task/Unixeol/rw.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="eaf19cd57b5c132c350380572d81b901" name="PEAR/Task/Windowseol/rw.php" role="php">
+   <file name="PEAR/Task/Windowseol/rw.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="5b3adb4dc3798b128c05a1fc87fe1440" name="PEAR/Task/Common.php" role="php">
+   <file name="PEAR/Task/Common.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="e2ef901aeb745899ef48e29bcadf9409" name="PEAR/Task/Postinstallscript.php" role="php">
+   <file name="PEAR/Task/Postinstallscript.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="20b9fce126804204841f9f394f476f38" name="PEAR/Task/Replace.php" role="php">
+   <file name="PEAR/Task/Replace.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="a98e009b3b41aa2efdeab4c34c56bbda" name="PEAR/Task/Unixeol.php" role="php">
+   <file name="PEAR/Task/Unixeol.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="81453f45f1c0aa142ac7e829ec40e6c7" name="PEAR/Task/Windowseol.php" role="php">
+   <file name="PEAR/Task/Windowseol.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="720035513393e7331b196ab39a3dc822" name="PEAR/Validator/PECL.php" role="php">
+   <file name="PEAR/Validator/PECL.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="0b0570ebd3e3124e88cb7f520f533bbb" name="PEAR/Autoloader.php" role="php">
+   <file name="PEAR/Autoloader.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="a5b7b9ee6a402ffd4855a22ccc3328e3" name="PEAR/Builder.php" role="php">
+   <file name="PEAR/Builder.php" role="php">
     <tasks:replace from="@PEAR-VER@" to="version" type="package-info" />
    </file>
-   <file md5sum="6bd29d53837ee18034e8ea7bb1a5c97c" name="PEAR/ChannelFile.php" role="php">
+   <file name="PEAR/ChannelFile.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="cc6f2699a388214e35a2d2bad21cd13d" name="PEAR/Command.php" role="php">
+   <file name="PEAR/Command.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="4fa7f5017ea636ef7101698a3633cb31" name="PEAR/Common.php" role="php">
+   <file name="PEAR/Common.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="8986d72091e1b2ca4d711ebc9fd716fe" name="PEAR/Config.php" role="php">
+   <file name="PEAR/Config.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="db6b82926708f636ca619b3e061dffae" name="PEAR/DependencyDB.php" role="php">
+   <file name="PEAR/DependencyDB.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="d4da6b74965e332e7f5dde3e391d4156" name="PEAR/Dependency2.php" role="php">
+   <file name="PEAR/Dependency2.php" role="php">
     <tasks:replace from="@PEAR-VER@" to="version" type="package-info" />
    </file>
-   <file md5sum="0646fba5c60d4b906889973c8e7ac6ae" name="PEAR/Downloader.php" role="php">
+   <file name="PEAR/Downloader.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="77c31950fa502d9e565653141a1f3637" name="PEAR/ErrorStack.php" role="php">
+   <file name="PEAR/ErrorStack.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="424a61a67dbd5f9f3ed5fc3be2b9ac54" name="PEAR/Exception.php" role="php">
+   <file name="PEAR/Exception.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="e0e4cbcec4a972fbad779d0f9d323120" name="PEAR/FixPHP5PEARWarnings.php" role="php" />
-   <file md5sum="8d04ed7e4179548d69d0040163cb7250" name="PEAR/Frontend.php" role="php">
+   <file name="PEAR/FixPHP5PEARWarnings.php" role="php" />
+   <file name="PEAR/Frontend.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="994655f8cc16f97cd0a241c6d548f484" name="PEAR/Installer.php" role="php">
+   <file name="PEAR/Installer.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="ad5eb9913cd7324545f3583df670e551" name="PEAR/PackageFile.php" role="php">
+   <file name="PEAR/PackageFile.php" role="php">
     <tasks:replace from="@PEAR-VER@" to="version" type="package-info" />
    </file>
-   <file md5sum="46a8ccf2a1662f008d793b0d07dfaf34" name="PEAR/Packager.php" role="php">
+   <file name="PEAR/Packager.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="289853b317cab761b6752f146feeb483" name="PEAR/Registry.php" role="php">
+   <file name="PEAR/Registry.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="f789969ce01f02afc38272fe4d76bd7a" name="PEAR/REST.php" role="php">
+   <file name="PEAR/REST.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="b9a5d829d6897724d14b2b52b8986d74" name="PEAR/RunTest.php" role="php">
+   <file name="PEAR/RunTest.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="cc4aa49c5296f475054a3054d2c33170" name="PEAR/Validate.php" role="php">
+   <file name="PEAR/Validate.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="de6c3f7f8676896a36eef666c751987e" name="PEAR/XMLParser.php" role="php">
+   <file name="PEAR/XMLParser.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file baseinstalldir="/" md5sum="1b655ab71a82e0b32e4d01f644f04ab9" name="scripts/pear.bat" role="script">
+   <file baseinstalldir="/" name="scripts/pear.bat" role="script">
     <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
     <tasks:windowseol />
    </file>
-   <file baseinstalldir="/" md5sum="37035c37e7af3616fde055312abf7853" name="scripts/peardev.bat" role="script">
+   <file baseinstalldir="/" name="scripts/peardev.bat" role="script">
     <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
     <tasks:windowseol />
    </file>
-   <file baseinstalldir="/" md5sum="3f382ec0c119b46a24df51ac5f6d2297" name="scripts/pecl.bat" role="script">
+   <file baseinstalldir="/" name="scripts/pecl.bat" role="script">
     <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
     <tasks:windowseol />
    </file>
-   <file baseinstalldir="/" md5sum="5b495a3de3c6092bfbd93806937a0e4e" name="scripts/pear.sh" role="script">
+   <file baseinstalldir="/" name="scripts/pear.sh" role="script">
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
     <tasks:replace from="@pear_version@" to="version" type="package-info" />
     <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
     <tasks:unixeol />
    </file>
-   <file baseinstalldir="/" md5sum="c69b7eb6cf9198ef8f03a19dcb57ca42" name="scripts/peardev.sh" role="script">
+   <file baseinstalldir="/" name="scripts/peardev.sh" role="script">
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
     <tasks:replace from="@pear_version@" to="version" type="package-info" />
     <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
     <tasks:unixeol />
    </file>
-   <file baseinstalldir="/" md5sum="d00c55f2aa48052c25db271e044e7551" name="scripts/pecl.sh" role="script">
+   <file baseinstalldir="/" name="scripts/pecl.sh" role="script">
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
     <tasks:replace from="@pear_version@" to="version" type="package-info" />
     <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
     <tasks:unixeol />
    </file>
-   <file baseinstalldir="/" md5sum="ec19ff8205b9fe9468ac567386ffc435" name="scripts/pearcmd.php" role="php">
+   <file baseinstalldir="/" name="scripts/pearcmd.php" role="php">
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
     <tasks:replace from="@pear_version@" to="version" type="package-info" />
     <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
    </file>
-   <file baseinstalldir="/" md5sum="320849b646e4cdaeca543af666524e73" name="scripts/peclcmd.php" role="php">
+   <file baseinstalldir="/" name="scripts/peclcmd.php" role="php">
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
     <tasks:replace from="@pear_version@" to="version" type="package-info" />
     <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
    </file>
-   <file md5sum="45b44486d8090de17b2a8b4211fab247" name="LICENSE" role="doc" />
-   <file md5sum="dca60ef14e3f43b5fe0c31a33f1b7311" name="INSTALL" role="doc" />
-   <file md5sum="4a49bc83a392934e57af45c70a589fda" name="package.dtd" role="data" />
-   <file md5sum="1a8f67d58009372a6cbcddd638b128cf" name="PEAR5.php" role="php" />
-   <file md5sum="40a050880b2bfbaa71add94087e22db1" name="PEAR.php" role="php">
+   <file name="LICENSE" role="doc" />
+   <file name="INSTALL" role="doc" />
+   <file name="package.dtd" role="data" />
+   <file name="PEAR5.php" role="php" />
+   <file name="PEAR.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="d3b517006b304817731eb77cc2154258" name="README" role="doc" />
-   <file md5sum="99b954d9ba836df49368170e77748c8a" name="System.php" role="php">
+   <file name="README" role="doc" />
+   <file name="System.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file md5sum="acd010e3bc43c0f72df584acde7b9158" name="template.spec" role="data" />
+   <file name="template.spec" role="data" />
   </dir>
  </contents>
  <dependencies>
@@ -415,7 +424,7 @@ This feature is implemented as a result of the above fix
     <name>Structures_Graph</name>
     <channel>pear.php.net</channel>
     <min>1.0.2</min>
-    <recommended>1.0.3</recommended>
+    <recommended>1.0.4</recommended>
    </package>
    <package>
     <name>Console_Getopt</name>
