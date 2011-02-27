@@ -17,69 +17,8 @@ require_once 'PEAR/PackageFile/v2/Validator.php';
 $validator = new PEAR_PackageFile_v2_Validator;
 $validator->_stack = new PEAR_ErrorStack('PEAR_PackageFile_v2', false, null);
 
-$phpunit->assertFalse($validator->analyzeSourceCode('=+"\\//452'), 'invalid filename');
-
 $testdir = $statedir;
 @mkdir($testdir);
-
-$test1 = '
-<?php
-::error();
-?>
-';
-$fp = fopen($testdir . DIRECTORY_SEPARATOR . 'test1.php', 'w');
-fwrite($fp, $test1);
-fclose($fp);
-
-$ret = $validator->analyzeSourceCode($testdir . DIRECTORY_SEPARATOR . 'test1.php');
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' =>
-    'Parser error: invalid PHP found in file "' . $testdir . DIRECTORY_SEPARATOR . 'test1.php"')),
-    'invalid php');
-$phpunit->assertFalse($ret, 'wrong return value, invalid php in file');
-unlink($testdir . DIRECTORY_SEPARATOR . 'test1.php');
-
-$test3 = '
-<?php
-class test
-{
-    class test2 {
-    }
-}
-?>
-';
-$fp = fopen($testdir . DIRECTORY_SEPARATOR . 'test3.php', 'w');
-fwrite($fp, $test3);
-fclose($fp);
-
-$ret = $validator->analyzeSourceCode($testdir . DIRECTORY_SEPARATOR . 'test3.php');
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' =>
-    'Parser error: invalid PHP found in file "' . $testdir . DIRECTORY_SEPARATOR . 'test3.php"')),
-    'more invalid php');
-$phpunit->assertFalse($ret, 'wrong return value, 2nd invalid PHP test');
-unlink($testdir . DIRECTORY_SEPARATOR . 'test3.php');
-
-$test4 = '
-<?php
-function test()
-{
-    class test2 {
-    }
-}
-?>
-';
-$fp = fopen($testdir . DIRECTORY_SEPARATOR . 'test4.php', 'w');
-fwrite($fp, $test4);
-fclose($fp);
-
-$ret = $validator->analyzeSourceCode($testdir . DIRECTORY_SEPARATOR . 'test4.php');
-$phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' =>
-    'Parser error: invalid PHP found in file "' . $testdir . DIRECTORY_SEPARATOR . 'test4.php"')),
-    '3rd invalid php');
-$phpunit->assertFalse($ret, 'wrong return value, 3rd invalid PHP test');
-unlink($testdir . DIRECTORY_SEPARATOR . 'test4.php');
 
 $test5 = '
 <?php
@@ -157,6 +96,7 @@ $phpunit->assertEquals(array (
   array (
   ),
 ), $ret, 'wrong return value, 1st valid PHP test');
+
 echo 'tests done';
 ?>
 --CLEAN--
