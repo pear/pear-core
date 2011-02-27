@@ -103,6 +103,7 @@
   * Fixed Bug #17997: Strange output if directories are not writeable [dufuz]
   * Fixed Bug #18001: PEAR/RunTest coverage fails [dufuz]
   * Fixed Bug #18056 [SECURITY]: Symlink attack in PEAR install [dufuz]
+  * Fixed Bug #18218: "pear package" does not allow the use of late static binding [dufuz and Christer Edvartsen]
   * Fixed Bug #18238: Wrong return code from "pear help" [till]
   * Fixed Bug #18308: Broken error message about missing channel validator [yunosh]
 
