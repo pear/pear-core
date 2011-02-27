@@ -2044,7 +2044,8 @@ class PEAR_PackageFile_v2_Validator
                     }
                     continue 2;
                 case T_DOUBLE_COLON:
-                    if (!($tokens[$i - 1][0] == T_WHITESPACE || $tokens[$i - 1][0] == T_STRING)) {
+                    $token = $tokens[$i - 1][0];
+                    if (!($token == T_WHITESPACE || $token == T_STRING || $token == T_STATIC)) {
                         if (isset($this->_stack)) {
                             $this->_stack->push(__FUNCTION__, 'warning', array('file' => $file),
                                 'Parser error: invalid PHP found in file "%file%"');
