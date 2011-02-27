@@ -373,6 +373,10 @@ function usage($error = null, $helpsubject = null)
     }
     fputs($stdout, "$put\n");
     fclose($stdout);
+
+    if ($error === null) {
+        exit(0);
+    }
     exit(1);
 }
 
