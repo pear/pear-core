@@ -38,31 +38,31 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'log messages');
 $phpunit->assertEquals(array (
-  0 => 
+  0 =>
   array (
     0 => 'setup',
     1 => 'self',
   ),
-  1 => 
+  1 =>
   array (
     0 => 'saveas',
     1 => 'test-1.0.tgz',
   ),
-  2 => 
+  2 =>
   array (
     0 => 'start',
-    1 => 
+    1 =>
     array (
       0 => 'test-1.0.tgz',
       1 => '786',
     ),
   ),
-  3 => 
+  3 =>
   array (
     0 => 'bytesread',
     1 => 786,
   ),
-  4 => 
+  4 =>
   array (
     0 => 'done',
     1 => 786,
@@ -71,7 +71,7 @@ $phpunit->assertEquals(array (
 $phpunit->assertTrue($result, 'after initialize');
 $phpunit->assertNotNull($file = &$dp->getPackageFile(), 'downloadable test');
 $phpunit->assertEquals('test', $file->getPackage(), 'package name test');
-$phpunit->assertEquals($dp->_downloader->getDownloadDir() . '/package.xml',
+$phpunit->assertEquals($dp->_downloader->getDownloadDir() . DIRECTORY_SEPARATOR . '*/package.xml',
     $file->getPackageFile(), 'package location test');
 $phpunit->assertEquals($dp->_downloader->getDownloadDir() . DIRECTORY_SEPARATOR . 'test-1.0.tgz',
     $file->getArchiveFile(), 'package archive location test');

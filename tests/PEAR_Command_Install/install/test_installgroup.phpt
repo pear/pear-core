@@ -215,7 +215,7 @@ if (OS_WINDOWS) {
   9 =>
   array (
     0 => 3,
-    1 => '+ cp ' . $temp_path . '/tmp/Console_Getopt-1.2/Console/Getopt.php ' . $temp_path . '/php/Console/.tmpGetopt.php',
+    1 => '+ cp ' . $temp_path . '/tmp' . DIRECTORY_SEPARATOR . '*/Console_Getopt-1.2/Console/Getopt.php ' . $temp_path . '/php/Console/.tmpGetopt.php',
   ),
   10 =>
   array (
@@ -240,7 +240,7 @@ if (OS_WINDOWS) {
   14 =>
   array (
     0 => 2,
-    1 => 'about to commit 4 file operations',
+    1 => 'about to commit 4 file operations for Console_Getopt',
   ),
   15 =>
   array (

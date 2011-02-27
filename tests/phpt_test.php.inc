@@ -276,10 +276,32 @@ class PEAR_PHPTest
         if ($trace === null) {
             $trace = debug_backtrace();
         }
+
         $this->assertNoErrors($message, $trace);
-        if (str_replace(array("\r", "\n"), array('', ''),
-            var_export($control, true)) != str_replace(array("\r", "\n"), array('', ''),
-            var_export($test, true))) {
+
+        $c = str_replace(array("\r", "\n"), array('', ''), var_export($control, true));
+        $t = str_replace(array("\r", "\n"), array('', ''), var_export($test, true));
+
+        if ($c != $t) {
+            // Figure out if there is a * glob going on
+            $quoted = str_replace('\*', '(.*?)', preg_quote($c, '/'));
+            preg_match_all("|$quoted|", $t, $matches);
+            if (!empty($quoted)) {
+                unset($matches[0]);
+
+                // preg_match_all puts the newest find at the top, so right to left is needed
+                foreach ($matches as $match) {
+                    foreach ($match as $m) {
+                        $c = preg_replace('|\*|', $m, $c, 1);
+                    }
+                }
+
+                if ($c == $t) {
+                    return true;
+                }
+            }
+
+
             $this->_failTest($trace, $message);
             if (class_exists('Text_Diff')) {
                 echo "Diff of expecting/received:\n";
@@ -288,7 +310,7 @@ class PEAR_PHPTest
                     explode("\n", var_export($test, true)));
 
                 // Output the diff in unified format.
-                $renderer = &new Text_Diff_Renderer_unified();
+                $renderer = &new Text_Diff_Renderer_unified;
                 echo $renderer->render($diff);
                 if ($this->_diffonly) {
                     return false;
@@ -301,6 +323,7 @@ class PEAR_PHPTest
             echo "\n";
             return false;
         }
+
         return true;
     }
 

@@ -239,6 +239,7 @@ $phpunit->assertNoErrors('setup');
 $phpunit->assertEquals(4, count($reg->listPackages()), 'num packages');
 $phpunit->assertEquals('1.4.3', $reg->packageInfo('PEAR', 'version'), 'PEAR version');
 $phpunit->assertEquals('1.4.3', $reg->packageInfo('XML_RPC', 'version'), 'XML_RPC version');
+
 unset($GLOBALS['__Stupid_php4_a']); // reset downloader
 $command->run('upgrade', array(), array($dir . 'PEAR-1.4.4.tgz'));
 $phpunit->assertNoErrors('full test');

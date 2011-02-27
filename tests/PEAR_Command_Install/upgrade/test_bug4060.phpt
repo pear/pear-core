@@ -1436,7 +1436,7 @@ if (OS_WINDOWS) {
       18 =>
       array (
         0 => 3,
-        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmpsample.sql',
+        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'sample.sql ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmpsample.sql',
       ),
       19 =>
       array (
@@ -1456,7 +1456,7 @@ if (OS_WINDOWS) {
       22 =>
       array (
         0 => 3,
-        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_basic_simple.php',
+        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_basic_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_basic_simple.php',
       ),
       23 =>
       array (
@@ -1476,7 +1476,7 @@ if (OS_WINDOWS) {
       26 =>
       array (
         0 => 3,
-        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_get.php',
+        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_get.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_get.php',
       ),
       27 =>
       array (
@@ -1496,7 +1496,7 @@ if (OS_WINDOWS) {
       30 =>
       array (
         0 => 3,
-        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_post.php',
+        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_post.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_post.php',
       ),
       31 =>
       array (
@@ -1516,7 +1516,7 @@ if (OS_WINDOWS) {
       34 =>
       array (
         0 => 3,
-        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_simple.php',
+        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'test_digest_simple.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Auth_HTTP' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . '.tmptest_digest_simple.php',
       ),
       35 =>
       array (
@@ -1536,7 +1536,7 @@ if (OS_WINDOWS) {
       38 =>
       array (
         0 => 3,
-        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'Auth_HTTP.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . '.tmpHTTP.php',
+        1 => '+ cp ' . $nicedldir . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'Auth_HTTP-2.1.6RC1' . DIRECTORY_SEPARATOR . 'Auth_HTTP.php ' . $temp_path . '' . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . '.tmpHTTP.php',
       ),
       39 =>
       array (
@@ -1731,7 +1731,7 @@ if (OS_WINDOWS) {
       77 =>
       array (
         0 => 2,
-        1 => 'about to commit 3 file operations',
+        1 => 'about to commit 3 file operations for Auth_HTTP',
       ),
       78 =>
       array (
@@ -1849,7 +1849,7 @@ if (OS_WINDOWS) {
   19 =>
   array (
     0 => 3,
-    1 => '+ cp ' . $temp_path . '/tmp/Auth_HTTP-2.1.6RC1/tests/sample.sql ' . $temp_path . '/test/Auth_HTTP/tests/.tmpsample.sql',
+    1 => '+ cp ' . $temp_path . '/tmp'. DIRECTORY_SEPARATOR . '*/Auth_HTTP-2.1.6RC1/tests/sample.sql ' . $temp_path . '/test/Auth_HTTP/tests/.tmpsample.sql',
   ),
   20 =>
   array (
@@ -1874,7 +1874,7 @@ if (OS_WINDOWS) {
   24 =>
   array (
     0 => 3,
-    1 => '+ cp ' . $temp_path . '/tmp/Auth_HTTP-2.1.6RC1/tests/test_basic_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_basic_simple.php',
+    1 => '+ cp ' . $temp_path . '/tmp'. DIRECTORY_SEPARATOR . '*/Auth_HTTP-2.1.6RC1/tests/test_basic_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_basic_simple.php',
   ),
   25 =>
   array (
@@ -1899,7 +1899,7 @@ if (OS_WINDOWS) {
   29 =>
   array (
     0 => 3,
-    1 => '+ cp ' . $temp_path . '/tmp/Auth_HTTP-2.1.6RC1/tests/test_digest_get.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_get.php',
+    1 => '+ cp ' . $temp_path . '/tmp' . DIRECTORY_SEPARATOR . '*/Auth_HTTP-2.1.6RC1/tests/test_digest_get.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_get.php',
   ),
   30 =>
   array (
@@ -1924,7 +1924,7 @@ if (OS_WINDOWS) {
   34 =>
   array (
     0 => 3,
-    1 => '+ cp ' . $temp_path . '/tmp/Auth_HTTP-2.1.6RC1/tests/test_digest_post.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_post.php',
+    1 => '+ cp ' . $temp_path . '/tmp' . DIRECTORY_SEPARATOR . '*/Auth_HTTP-2.1.6RC1/tests/test_digest_post.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_post.php',
   ),
   35 =>
   array (
@@ -1949,7 +1949,7 @@ if (OS_WINDOWS) {
   39 =>
   array (
     0 => 3,
-    1 => '+ cp ' . $temp_path . '/tmp/Auth_HTTP-2.1.6RC1/tests/test_digest_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_simple.php',
+    1 => '+ cp ' . $temp_path . '/tmp' . DIRECTORY_SEPARATOR . '*/Auth_HTTP-2.1.6RC1/tests/test_digest_simple.php ' . $temp_path . '/test/Auth_HTTP/tests/.tmptest_digest_simple.php',
   ),
   40 =>
   array (
@@ -1974,7 +1974,7 @@ if (OS_WINDOWS) {
   44 =>
   array (
     0 => 3,
-    1 => '+ cp ' . $temp_path . '/tmp/Auth_HTTP-2.1.6RC1/Auth_HTTP.php ' . $temp_path . '/php/Auth/.tmpHTTP.php',
+    1 => '+ cp ' . $temp_path . '/tmp' . DIRECTORY_SEPARATOR . '*/Auth_HTTP-2.1.6RC1/Auth_HTTP.php ' . $temp_path . '/php/Auth/.tmpHTTP.php',
   ),
   45 =>
   array (
@@ -2029,7 +2029,7 @@ if (OS_WINDOWS) {
   55 =>
   array (
     0 => 2,
-    1 => 'about to commit 36 file operations',
+    1 => 'about to commit 36 file operations for Auth_HTTP',
   ),
   56 =>
   array (
@@ -2204,7 +2204,7 @@ if (OS_WINDOWS) {
   90 =>
   array (
     0 => 2,
-    1 => 'about to commit 3 file operations',
+    1 => 'about to commit 3 file operations for Auth_HTTP',
   ),
   91 =>
   array (

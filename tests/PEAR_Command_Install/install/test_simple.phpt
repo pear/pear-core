@@ -84,7 +84,7 @@ if (OS_WINDOWS) {
       4 =>
       array (
         0 => 2,
-        1 => 'about to commit 3 file operations',
+        1 => 'about to commit 3 file operations for PEAR',
       ),
       5 =>
       array (
