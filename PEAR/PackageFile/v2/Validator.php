@@ -256,11 +256,10 @@ class PEAR_PackageFile_v2_Validator
                 $validator = $chan->getValidationObject($this->_pf->getPackage());
                 if (!$validator) {
                     $this->_stack->push(__FUNCTION__, 'error',
-                        array_merge(
-                            array('channel' => $chan->getName(),
-                                  'package' => $this->_pf->getPackage()),
-                              $valpack
-                            ),
+                        array('channel' => $chan->getName(),
+                              'package' => $this->_pf->getPackage(),
+                              'name'    => $valpack['_content'],
+                              'version' => $valpack['attribs']['version']),
                         'package "%channel%/%package%" cannot be properly validated without ' .
                         'validation package "%channel%/%name%-%version%"');
                     return $this->_isValid = 0;
