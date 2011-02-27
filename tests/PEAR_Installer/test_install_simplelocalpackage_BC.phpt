@@ -172,8 +172,9 @@ Other:
     $temp_path . DIRECTORY_SEPARATOR . 'php' => true,
   ),
 ), $ret, 'return of install');
-$phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
-    'installed file');
+
+$phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',  'installed file');
+
 $reg = &$config->getRegistry();
 $info = $reg->packageInfo('PEAR');
 $phpunit->assertTrue(isset($info['_lastmodified']), 'lastmodified is set?');

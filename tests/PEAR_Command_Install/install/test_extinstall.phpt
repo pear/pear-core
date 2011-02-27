@@ -410,7 +410,7 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $tmpdir . '.tmpfoo12.php',
+        1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $tmpdir . '.tmpfoo12.php',
       ),
       array (
         0 => 2,
@@ -430,7 +430,7 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 2,
-        1 => 'about to commit 3 file operations',
+        1 => 'about to commit 3 file operations for Foobar',
       ),
       array (
         0 => 3,
@@ -453,7 +453,7 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 3,
-        1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . ''  . DIRECTORY_SEPARATOR . 'Bar-1.5.2'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $tmpdir . '.tmpfoo1.php',
+        1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . ''  . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . 'Bar-1.5.2'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $tmpdir . '.tmpfoo1.php',
       ),
       array (
         0 => 2,
@@ -473,7 +473,7 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 2,
-        1 => 'about to commit 3 file operations',
+        1 => 'about to commit 3 file operations for Bar',
       ),
       array (
         0 => 3,
@@ -512,7 +512,7 @@ if (OS_WINDOWS) {
       ),
       array (
         0 => 2,
-        1 => 'about to commit 3 file operations',
+        1 => 'about to commit 3 file operations for PEAR1',
       ),
       array (
         0 => 3,
