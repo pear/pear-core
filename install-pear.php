@@ -1,5 +1,5 @@
 <?php
-
+while (@ob_end_flush());
 /* $Id$ */
 
 error_reporting(1803);
