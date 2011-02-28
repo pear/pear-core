@@ -91,6 +91,9 @@
   <license>New BSD License</license>
   <state>stable</state>
   <notes>
+Important! This is a security fix release. The advisory can be found at
+http://pear.php.net/advisory-20110228.txt
+
   Bugs:
   * Fixed Bug #17463: Regression: On Windows, svntag [patch by doconnor]
   * Fixed Bug #17641: pecl-list doesn't sort packages by name [dufuz]
@@ -661,6 +664,9 @@ Alpha1 Release Notes:
     <license>New BSD License</license>
     <state>stable</state>
     <notes>
+Important! This is a security fix release. The advisory can be found at
+http://pear.php.net/advisory-20110228.txt
+
     Bugs:
     * Fixed Bug #17463: Regression: On Windows, svntag [patch by doconnor]
     * Fixed Bug #17641: pecl-list doesn't sort packages by name [dufuz]
