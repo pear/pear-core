@@ -84,7 +84,7 @@
  <date>2011-02-28</date>
  <time>18:30:00</time>
  <version>
-  <release>1.9.2</release>
+  <release>1.9.3</release>
   <api>1.9.2</api>
  </version>
  <stability>
@@ -93,25 +93,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-Important! This is a security fix release. The advisory can be found at
-http://pear.php.net/advisory-20110228.txt
-
-  Bugs:
-  * Fixed Bug #17463: Regression: On Windows, svntag [patch by doconnor]
-  * Fixed Bug #17641: pecl-list doesn't sort packages by name [dufuz]
-  * Fixed Bug #17781: invalid argument warning on foreach due to an empty optional dependencie [dufuz]
-  * Fixed Bug #17801: PEAR run-tests wrongly detects php-cgi [patch by David Jean Louis (izi)]
-  * Fixed Bug #17839: pear svntag does not tag package.xml file [dufuz]
-  * Fixed Bug #17986: PEAR Installer cannot handle files moved between packages [dufuz]
-  * Fixed Bug #17997: Strange output if directories are not writeable [dufuz]
-  * Fixed Bug #18001: PEAR/RunTest coverage fails [dufuz]
-  * Fixed Bug #18056 [SECURITY]: Symlink attack in PEAR install [dufuz]
-  * Fixed Bug #18218: "pear package" does not allow the use of late static binding [dufuz and Christer Edvartsen]
-  * Fixed Bug #18238: Wrong return code from "pear help" [till]
-  * Fixed Bug #18308: Broken error message about missing channel validator [yunosh]
-
-  This feature is implemented as a result of #18056
-  * Implemented Request #16648: Use TMPDIR for builds instead of /var/tmp [dufuz]
+  * Fixed Bug #18340: raiseErro typo [doconnor]
  </notes>
  <contents>
   <dir name="/">
