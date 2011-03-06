@@ -102,7 +102,7 @@ class PEAR_REST
                 // reset the age of the cache if the server says it was unmodified
                 $result = $this->saveCache($url, $ret, null, true, $cacheId);
                 if (PEAR::isError($result)) {
-                    return PEAR::raiseErro($result->getMessage());
+                    return PEAR::raiseError($result->getMessage());
                 }
             }
 
@@ -122,7 +122,7 @@ class PEAR_REST
         if ($forcestring) {
             $result = $this->saveCache($url, $content, $lastmodified, false, $cacheId);
             if (PEAR::isError($result)) {
-                return PEAR::raiseErro($result->getMessage());
+                return PEAR::raiseError($result->getMessage());
             }
 
             return $content;
@@ -162,7 +162,7 @@ class PEAR_REST
 
         $result = $this->saveCache($url, $content, $lastmodified, false, $cacheId);
         if (PEAR::isError($result)) {
-            return PEAR::raiseErro($result->getMessage());
+            return PEAR::raiseError($result->getMessage());
         }
 
         return $content;
