@@ -382,15 +382,11 @@ class PEAR_RunTest
                 $text .= "\n" . '    file_put_contents(\'' . $xdebug_file . '\', $xdebug);';
             }
 
-            $text .= "\n" . 'xdebug_stop_code_coverage();' .
-                "\n" . '} // end coverage_shutdown()' .
-                "\n" . 'register_shutdown_function("coverage_shutdown");';
-            $text .= "\n" . 'xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);' . "\n";
-
             // Workaround for http://pear.php.net/bugs/bug.php?id=17292
-            $lines     = explode("\n", $section_text['FILE']);
-            $numLines  = count($lines);
-            $namespace = '';
+            $lines             = explode("\n", $section_text['FILE']);
+            $numLines          = count($lines);
+            $namespace         = '';
+            $coverage_shutdown = 'coverage_shutdown';
 
             for ($i = 0; $i < $numLines; $i++) {
                 $lines[$i] = trim($lines[$i]);
@@ -400,13 +396,21 @@ class PEAR_RunTest
                 }
 
                 if (isset($lines[$i]) && substr($lines[$i], 0, 9) == 'namespace') {
-                    $namespace = $lines[$i] . "\n";
+                    $namespace         = substr($lines[$i], 10, -1);
+                    $coverage_shutdown = $namespace . '\\coverage_shutdown';
+                    $namespace         = "namespace " . $namespace . ";\n";
+
                     unset($lines[$i]);
                     break;
                 }
             }
 
-            $this->save_text($temp_file, "<?php\n" . $namespace . "\n" . $text  . "\n" . implode("\n", $lines));
+            $text .= "\n" . 'xdebug_stop_code_coverage();' .
+                "\n" . '} // end coverage_shutdown()' .
+                "\n" . 'register_shutdown_function("' . $coverage_shutdown . '");';
+            $text .= "\n" . 'xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);' . "\n";
+
+            $this->save_text($temp_file, "<?php\n" . $namespace . $text  . "\n" . implode("\n", $lines));
         } else {
             $this->save_text($temp_file, $section_text['FILE']);
         }
