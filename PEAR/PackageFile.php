@@ -186,7 +186,7 @@ class PEAR_PackageFile
      */
     function &fromXmlString($data, $state, $file, $archive = false)
     {
-        if (preg_match('/<package[^>]+version="([0-9]+\.[0-9]+)"/', $data, $packageversion)) {
+        if (preg_match('/<package[^>]+version=[\'"]([0-9]+\.[0-9]+)[\'"]/', $data, $packageversion)) {
             if (!in_array($packageversion[1], array('1.0', '2.0', '2.1'))) {
                 return PEAR::raiseError('package.xml version "' . $packageversion[1] .
                     '" is not supported, only 1.0, 2.0, and 2.1 are supported.');
@@ -232,7 +232,7 @@ class PEAR_PackageFile
             }
 
             return $pf;
-        } elseif (preg_match('/<package[^>]+version="([^"]+)"/', $data, $packageversion)) {
+        } elseif (preg_match('/<package[^>]+version=[\'"]([^"\']+)[\'"]/', $data, $packageversion)) {
             $a = PEAR::raiseError('package.xml file "' . $file .
                 '" has unsupported package.xml <package> version "' . $packageversion[1] . '"');
             return $a;
@@ -429,7 +429,6 @@ class PEAR_PackageFile
         $ret = &PEAR_PackageFile::fromXmlString($data, $state, $descfile, $archive);
         return $ret;
     }
-
 
     /**
      * Create a PEAR_PackageFile_v* from a .tgz archive or package.xml file.
