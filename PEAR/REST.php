@@ -228,59 +228,75 @@ class PEAR_REST
         $cacheidfile = $d . 'rest.cacheid';
         $cachefile   = $d . 'rest.cachefile';
 
+        if (!is_dir($cache_dir)) {
+            if (System::mkdir(array('-p', $cache_dir) === false)) {
+              return PEAR::raiseError("The value of config option cache_dir ($cache_dir) is not a directory and attempts to create the directory failed.");
+            }
+        }
+
         if ($cacheid === null && $nochange) {
             $cacheid = unserialize(implode('', file($cacheidfile)));
         }
 
-        if (is_link($cacheidfile)) {
-            return PEAR::raiseError('SECURITY ERROR: Will not write to ' . $cacheidfile . ' as it is symlinked to ' . readlink($cacheidfile) . ' - Possible symlink attack');
-        }
+        $idData = serialize(array(
+            'age'        => time(),
+            'lastChange' => ($nochange ? $cacheid['lastChange'] : $lastmodified),
+        ));
 
-        if (is_link($cachefile)) {
-            return PEAR::raiseError('SECURITY ERROR: Will not write to ' . $cacheidfile . ' as it is symlinked to ' . readlink($cacheidfile) . ' - Possible symlink attack');
-        }
-
-        $cacheidfile_fp = @fopen($cacheidfile, 'wb');
-        if (!$cacheidfile_fp) {
-            if (is_dir($cache_dir)) {
-                return PEAR::raiseError("The value of config option cache_dir ($cache_dir) is not a directory. ");
-            }
-
-            System::mkdir(array('-p', $cache_dir));
-            $cacheidfile_fp = @fopen($cacheidfile, 'wb');
-            if (!$cacheidfile_fp) {
-                return PEAR::raiseError("Could not open $cacheidfile for writing.");
-            }
-        }
-
-        if ($nochange) {
-            fwrite($cacheidfile_fp, serialize(array(
-                'age'        => time(),
-                'lastChange' => $cacheid['lastChange'],
-                ))
-            );
-
-            fclose($cacheidfile_fp);
+        $result = $this->saveCacheFile($cacheidfile, $idData);
+        if (PEAR::isError($result)) {
+            return $result;
+        } elseif ($nochange) {
             return true;
         }
 
-        fwrite($cacheidfile_fp, serialize(array(
-            'age'        => time(),
-            'lastChange' => $lastmodified,
-            ))
-        );
-        fclose($cacheidfile_fp);
-
-        $cachefile_fp = @fopen($cachefile, 'wb');
-        if (!$cachefile_fp) {
+        $result = $this->saveCacheFile($cachefile, serialize($contents));
+        if (PEAR::isError($result)) {
             if (file_exists($cacheidfile)) {
-                @unlink($cacheidfile);
+              @unlink($cacheidfile);
             }
 
-            return PEAR::raiseError("Could not open $cacheidfile for writing.");
+            return $result;
         }
 
-        fwrite($cachefile_fp, serialize($contents));
+        return true;
+    }
+
+    function saveCacheFile($file, $contents)
+    {
+        $len = strlen($contents);
+
+        $cachefile_fp = @fopen($file, 'xb'); // x is the O_CREAT|O_EXCL mode
+        if ($cachefile_fp !== false) { // create file
+            if (fwrite($cachefile_fp, $contents, $len) < $len) {
+                fclose($cachefile_fp);
+                return PEAR::raiseError("Could not write $file.");
+            }
+        } else { // update file
+            $cachefile_lstat = lstat($file);
+            $cachefile_fp = @fopen($file, 'wb');
+            if (!$cachefile_fp) {
+                return PEAR::raiseError("Could not open $file for writing.");
+            }
+
+            $cachefile_fstat = fstat($cachefile_fp);
+            if (
+              $cachefile_lstat['mode'] == $cachefile_fstat['mode'] &&
+              $cachefile_lstat['ino']  == $cachefile_fstat['ino'] &&
+              $cachefile_lstat['dev']  == $cachefile_fstat['dev'] &&
+              $cachefile_fstat['nlink'] === 1
+            ) {
+                if (fwrite($cachefile_fp, $contents, $len) < $len) {
+                    fclose($cachefile_fp);
+                    return PEAR::raiseError("Could not write $file.");
+                }
+            } else {
+                fclose($cachefile_fp);
+                $link = function_exists('readlink') ? readlink($file) : $file;
+                return PEAR::raiseError('SECURITY ERROR: Will not write to ' . $file . ' as it is symlinked to ' . $link . ' - Possible symlink attack');
+            }
+        }
+
         fclose($cachefile_fp);
         return true;
     }
