@@ -489,7 +489,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <subpackage>
     <name>PEAR_Exception</name>
     <channel>pear.php.net</channel>
-    <min>1.0.0</min>
+    <min>1.0.0beta1</min>
    </subpackage>
    <extension>
     <name>xml</name>
