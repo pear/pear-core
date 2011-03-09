@@ -87,23 +87,19 @@ http://pear.php.net/dtd/package-1.0.xsd">
   </maintainer>
  </maintainers>
  <release>
-  <version>1.9.1</version>
+  <version>1.10.0beta1</version>
   <date>2010-05-26</date>
   <license>New BSD License</license>
   <state>stable</state>
  <notes>
-  * svntag improvements, tag package files passed into the command and better directory checks [dufuz]
-  * rely on Structures_Graph minimum version instead of recommended version [saltybeagle]
-  * Fix Bug #12613: running go-pear.phar from C:\ fails [dufuz]
-  * Fix Bug #14841: Installing pear into directory with space fails [dufuz]
-  * Fix Bug #16644: pear.bat returns syntax error when parenthesis are in install path. [dufuz] [patch by bwaters (Bryan Waters)]
-  * Fix Bug #16767: Use of Depreciated HTML Attributes in the Exception class [dufuz] [patch by fuhrysteve (Stephen J. Fuhry)]
-  * Fix Bug #16864: "pear list-upgrades -i" issues E_WARNINGS [dufuz] [patch by rquadling (Richard Quadling)]
-  * Fix Bug #17220: command `pear help` outputs to stderr instead of stdout [dufuz]
-  * Fix Bug #17234: channel-discover adds port to HTTP Host header [dufuz]
-  * Fix Bug #17292: Code Coverage in PEAR_RunTest does not work with namespaces [sebastian]
-  * Fix Bug #17359: loadExtension() fails over missing dl() when used in multithread env [dufuz]
-  * Fix Bug #17378: pear info $package fails if directory with that name exists [dufuz]
+  Moved PEAR_Exception into it's own package so people can start putting dependency on PEAR_Exception
+  instead of depending on PEAR when the Exception class is the only thing being used.
+
+  Features:
+  * A configure parameter can now be passed to install / upgrade for pecl such as
+    pecl install --with-option=dir memcached
+    This allows for customized setups while still having the benefit of using the pear
+    installer. (pear will not remember the configure params for the next upgrade)
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
@@ -111,8 +107,9 @@ http://pear.php.net/dtd/package-1.0.xsd">
    <dep type="php" rel="ge" version="4.4.0"/>
    <dep type="pkg" rel="ge" version="1.3.3">PEAR</dep>
    <dep type="pkg" rel="ge" version="1.3.7">Archive_Tar</dep>
-   <dep type="pkg" rel="ge" version="1.2">Console_Getopt</dep>
-   <dep type="pkg" rel="ge" version="1.0.2">Structures_Graph</dep>
+   <dep type="pkg" rel="ge" version="1.3.0">Console_Getopt</dep>
+   <dep type="pkg" rel="ge" version="1.0.4">Structures_Graph</dep>
+   <dep type="pkg" rel="ge" version="1.0.0" optional="yes">PEAR_Exception</dep>
    <dep type="pkg" rel="ge" version="0.5.0" optional="yes">PEAR_Frontend_Web</dep>
    <dep type="pkg" rel="ge" version="0.4.0" optional="yes">PEAR_Frontend_Gtk</dep>
    <dep type="ext" rel="has">xml</dep>
@@ -349,9 +346,6 @@ http://pear.php.net/dtd/package-1.0.xsd">
      <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="ErrorStack.php">
-     <replace from="@package_version@" to="version" type="package-info"/>
-    </file>
-    <file role="php" name="Exception.php">
      <replace from="@package_version@" to="version" type="package-info"/>
     </file>
     <file role="php" name="FixPHP5PEARWarnings.php"/>
@@ -698,11 +692,22 @@ Alpha1 Release Notes:
  </release>
  <release>
   <version>1.9.1</version>
-  <date>2009-09-XX</date>
+  <date>2010-05-26</date>
   <license>New BSD License</license>
   <state>stable</state>
  <notes>
   * svntag improvements, tag package files passed into the command and better directory checks [dufuz]
+  * rely on Structures_Graph minimum version instead of recommended version [saltybeagle]
+  * Fix Bug #12613: running go-pear.phar from C:\ fails [dufuz]
+  * Fix Bug #14841: Installing pear into directory with space fails [dufuz]
+  * Fix Bug #16644: pear.bat returns syntax error when parenthesis are in install path. [dufuz] [patch by bwaters (Bryan Waters)]
+  * Fix Bug #16767: Use of Depreciated HTML Attributes in the Exception class [dufuz] [patch by fuhrysteve (Stephen J. Fuhry)]
+  * Fix Bug #16864: "pear list-upgrades -i" issues E_WARNINGS [dufuz] [patch by rquadling (Richard Quadling)]
+  * Fix Bug #17220: command `pear help` outputs to stderr instead of stdout [dufuz]
+  * Fix Bug #17234: channel-discover adds port to HTTP Host header [dufuz]
+  * Fix Bug #17292: Code Coverage in PEAR_RunTest does not work with namespaces [sebastian]
+  * Fix Bug #17359: loadExtension() fails over missing dl() when used in multithread env [dufuz]
+  * Fix Bug #17378: pear info $package fails if directory with that name exists [dufuz]
  </notes>
  </release>
  </changelog>
