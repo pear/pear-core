@@ -87,8 +87,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </helper>
  <date>2010-05-26</date>
  <version>
-  <release>1.9.2</release>
-  <api>1.9.0</api>
+  <release>1.10.0beta1</release>
+  <api>1.10.0</api>
  </version>
  <stability>
   <release>stable</release>
