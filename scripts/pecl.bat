@@ -110,6 +110,6 @@ ECHO The current value is:
 ECHO %PHP_PEAR_PHP_BIN%
 GOTO END
 :RUN
-"%PHP_PEAR_PHP_BIN%" -C -n -d output_buffering=1 -d safe_mode=0 -d "include_path='%PHP_PEAR_INSTALL_DIR%'" -d register_argc_argv="On" -d variables_order=EGPCS -f "%PHP_PEAR_INSTALL_DIR%\peclcmd.php" -- %1 %2 %3 %4 %5 %6 %7 %8 %9
+"%PHP_PEAR_PHP_BIN%" -C -n -d date.timezone=UTC -d output_buffering=1 -d safe_mode=0 -d "include_path='%PHP_PEAR_INSTALL_DIR%'" -d register_argc_argv="On" -d variables_order=EGPCS -f "%PHP_PEAR_INSTALL_DIR%\peclcmd.php" -- %1 %2 %3 %4 %5 %6 %7 %8 %9
 :END
 @ECHO ON
