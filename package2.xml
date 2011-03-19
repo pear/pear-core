@@ -95,6 +95,7 @@
  <notes>
   * Fixed Bug #18340: raiseErro typo [doconnor]
   * Fixed Bug #18349: package.xml version not recognized when single quoted [dufuz]
+  * Fixed Bug #18364: date.timezone errors for sh/bat files when TZ is not set in php.ini [dufuz]
   * Fixed a problem in RunTest and code coverage. Correctly register the
     code coverage shutdown function in case we are inside a namespace. [sebastian]
  </notes>
