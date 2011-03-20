@@ -799,6 +799,10 @@ class PEAR_PackageFile_v2
     {
         unset($pinfo['old']);
         unset($pinfo['xsdversion']);
+        // If the changelog isn't an array then it was passed in as an empty tag
+        if (isset($pinfo['changelog']) && !is_array($pinfo['changelog'])) {
+          unset($pinfo['changelog']);
+        }
         $this->_incomplete = false;
         $this->_packageInfo = $pinfo;
     }
