@@ -93,6 +93,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
+  * Fixed Bug #17744: Empty changelog causes fatal error in setChangelogentry [dufuz]
   * Fixed Bug #18340: raiseErro typo [doconnor]
   * Fixed Bug #18349: package.xml version not recognized when single quoted [dufuz]
   * Fixed Bug #18364: date.timezone errors for sh/bat files when TZ is not set in php.ini [dufuz]
