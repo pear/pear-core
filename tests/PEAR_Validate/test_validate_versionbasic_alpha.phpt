@@ -9,9 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'Parser'. DIRECTORY_SEPARATOR .
-    'test_basicparse'. DIRECTORY_SEPARATOR . 'package.xml';
+
 $pf = &$v2parser->parse('<?xml version="1.0"?>
 <package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
 http://pear.php.net/dtd/tasks-1.0.xsd
@@ -330,14 +328,14 @@ $pf->setReleaseVersion('1.4.0a1');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 1.4.0a1 alpha');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
     array (
       'field' => 'date',
       'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures attempt 1.4.0a1 alpha');
@@ -346,14 +344,14 @@ $pf->setReleaseVersion('0.2.5');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 0.2.5 alpha');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
     array (
       'field' => 'date',
       'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures attempt 0.2.5 alpha');
@@ -362,9 +360,9 @@ $pf->setReleaseVersion('1.4.2a1');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 1.4.2a1 alpha');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'version',
       'reason' => 'bugfix versions (1.3.x where x > 0) probably should not be alpha or beta',
@@ -374,7 +372,7 @@ $phpunit->assertEquals(array (
       'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures attempt 1.4.2a1 alpha');
@@ -383,9 +381,9 @@ $pf->setReleaseVersion('1.4.0');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 1.4.0 alpha');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'version',
       'reason' => 'version 1.4.0 probably should not be alpha or beta',
@@ -395,7 +393,7 @@ $phpunit->assertEquals(array (
       'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures attempt 1.4.0 alpha');
@@ -404,9 +402,9 @@ $pf->setReleaseVersion('1.4.00000');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 1.4.00000 alpha');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'version',
       'reason' => 'version 1.4.0 probably should not be alpha or beta',
@@ -416,7 +414,7 @@ $phpunit->assertEquals(array (
       'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures attempt 1.4.00000 alpha');
@@ -425,9 +423,9 @@ $pf->setReleaseVersion('000.2.5');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 000.2.5 alpha');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'version',
       'reason' => 'version "000.2.5" should be "0.2.5"',
@@ -437,7 +435,7 @@ $phpunit->assertEquals(array (
       'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures attempt 000.2.5 alpha');
@@ -446,9 +444,9 @@ $pf->setReleaseVersion('2.5.0');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 2.5.0 alpha');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'version',
       'reason' => 'major versions greater than 1 are not allowed for packages ' .
@@ -459,7 +457,7 @@ $phpunit->assertEquals(array (
       'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures attempt 2.5.0 alpha');

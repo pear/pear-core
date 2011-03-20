@@ -9,9 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'Parser'. DIRECTORY_SEPARATOR .
-    'test_basicparse'. DIRECTORY_SEPARATOR . 'package.xml';
+
 $pf = &$v2parser->parse('<?xml version="1.0"?>
 <package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
 http://pear.php.net/dtd/tasks-1.0.xsd
@@ -330,20 +328,20 @@ $pf->setReleaseStability('devel');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 1.0.4 devel');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'version',
       'reason' => 'packages with devel stability must be < version 1.0.0',
     ),
-    1 => 
+    1 =>
     array (
       'field' => 'date',
       'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures attempt 1.0.4 devel');
@@ -353,20 +351,20 @@ $pf->setReleaseStability('devel');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 000.4.3 devel');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'version',
       'reason' => 'version "000.4.3" should be "0.4.3"',
     ),
-    1 => 
+    1 =>
     array (
       'field' => 'date',
       'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures attempt 000.4.3 devel');
@@ -376,14 +374,14 @@ $pf->setReleaseStability('devel');
 $res = $val->validate(PEAR_VALIDATE_PACKAGING);
 $phpunit->assertTrue($res, 'attempt 0.4.5 devel');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
     array (
       'field' => 'date',
       'reason' => 'Release Date "2004-09-30" is not today',
     ),
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures attempt 0.4.5 devel');

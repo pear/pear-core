@@ -9,9 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'Parser'. DIRECTORY_SEPARATOR .
-    'test_basicparse'. DIRECTORY_SEPARATOR . 'package.xml';
+
 $pf = &$v2parser->parse('<?xml version="1.0"?>
 <package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
 http://pear.php.net/dtd/tasks-1.0.xsd
@@ -327,12 +325,12 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertFalse($res, '2:20:45');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'time',
       'reason' => 'invalid release time "2:20:45"',
@@ -345,12 +343,12 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertFalse($res, '20:34:5');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'time',
       'reason' => 'invalid release time "20:34:5"',
@@ -363,12 +361,12 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertFalse($res, '20:3:50');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'time',
       'reason' => 'invalid release time "20:3:50"',
@@ -382,12 +380,12 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertFalse($res, '2500000:30:50');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'time',
       'reason' => 'invalid release time "2500000:30:50"',
@@ -400,10 +398,10 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertTrue($res, '16:30:50');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures 16:30:50');

@@ -9,9 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'Parser'. DIRECTORY_SEPARATOR .
-    'test_basicparse'. DIRECTORY_SEPARATOR . 'package.xml';
+
 $pf = &$v2parser->parse('<?xml version="1.0"?>
 <package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
 http://pear.php.net/dtd/tasks-1.0.xsd
@@ -328,12 +326,12 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertFalse($res, '200-04-01');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'date',
       'reason' => 'invalid release date "200-04-01"',
@@ -346,12 +344,12 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertFalse($res, '2004_04-01');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'date',
       'reason' => 'invalid release date "2004_04-01"',
@@ -364,12 +362,12 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertFalse($res, '2004-04-0');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'date',
       'reason' => 'invalid release date "2004-04-0"',
@@ -383,12 +381,12 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertFalse($res, 'way future-04-05');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'date',
       'reason' => 'invalid release date "' . str_repeat('141341', 5000) . '-04-05"',
@@ -401,10 +399,10 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertTrue($res, '2004-04-05');
 $phpunit->showall();
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures 2004-04-05');
