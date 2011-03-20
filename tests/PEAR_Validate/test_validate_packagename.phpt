@@ -9,9 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
-    'Parser'. DIRECTORY_SEPARATOR .
-    'test_basicparse'. DIRECTORY_SEPARATOR . 'package.xml';
+
 $pf = &$v2parser->parse('<?xml version="1.0"?>
 <package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
 http://pear.php.net/dtd/tasks-1.0.xsd
@@ -329,15 +327,15 @@ $pf->setExtends('blah');
 $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertTrue($res, 'extends');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'package',
       'reason' => 'package PEAR extends package blah and so the name should have a postfix equal to the major version like "blah1"',
     ),
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures extends');
@@ -348,15 +346,15 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('extends no postfix');
 $phpunit->assertTrue($res, 'extends no postfix');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
-    0 => 
+    0 =>
     array (
       'field' => 'package',
       'reason' => 'package blah extends package blah and so the name should have a postfix equal to the major version like "blah2"',
     ),
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'failures extends no postfix');
@@ -367,10 +365,10 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('extends good');
 $phpunit->assertTrue($res, 'extends good');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'no failures');
@@ -381,10 +379,10 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('extends good');
 $phpunit->assertTrue($res, 'extends good');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'no failures');
@@ -395,10 +393,10 @@ $res = $val->validate(PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('extends good');
 $phpunit->assertTrue($res, 'extends good');
 $phpunit->assertEquals(array (
-  'warnings' => 
+  'warnings' =>
   array (
   ),
-  'errors' => 
+  'errors' =>
   array (
   ),
 ), $val->getFailures(), 'no failures');
