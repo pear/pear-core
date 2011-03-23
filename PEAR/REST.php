@@ -229,7 +229,7 @@ class PEAR_REST
         $cachefile   = $d . 'rest.cachefile';
 
         if (!is_dir($cache_dir)) {
-            if (System::mkdir(array('-p', $cache_dir) === false)) {
+            if (System::mkdir(array('-p', $cache_dir)) === false) {
               return PEAR::raiseError("The value of config option cache_dir ($cache_dir) is not a directory and attempts to create the directory failed.");
             }
         }
