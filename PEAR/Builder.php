@@ -287,6 +287,14 @@ class PEAR_Builder extends PEAR_Common
             $dir = dirname($descfile);
         }
 
+        // Find config. outside of normal path - e.g. config.m4
+        foreach (array_keys($pkg->getInstallationFileList()) as $item) {
+          if (stristr($item, 'config.')) {
+            $dir .= DIRECTORY_SEPARATOR . dirname($item);
+            break;
+          }
+        }
+
         $old_cwd = getcwd();
         if (!file_exists($dir) || !is_dir($dir) || !chdir($dir)) {
             return $this->raiseError("could not chdir to $dir");

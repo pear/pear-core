@@ -100,6 +100,8 @@
   * Fixed Bug #18388: Parenteses error in REST.php line 232 [dufuz]
   * Fixed a problem in RunTest and code coverage. Correctly register the
     code coverage shutdown function in case we are inside a namespace. [sebastian]
+  * Fixed a bug with extensions not providing their config.m4 and co in the root directory of
+    their pecl package but rather in a sub directory, such as xhprof. [dufuz]
  </notes>
  <contents>
   <dir name="/">
