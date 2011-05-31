@@ -287,6 +287,14 @@ class PEAR_Builder extends PEAR_Common
             $dir = dirname($descfile);
         }
 
+        // Find config. outside of normal path - e.g. config.m4
+        foreach (array_keys($pkg->getInstallationFileList()) as $item) {
+          if (stristr($item, 'config.')) {
+            $dir .= DIRECTORY_SEPARATOR . dirname($item);
+            break;
+          }
+        }
+
         $old_cwd = getcwd();
         if (!file_exists($dir) || !is_dir($dir) || !chdir($dir)) {
             return $this->raiseError("could not chdir to $dir");
@@ -412,6 +420,7 @@ class PEAR_Builder extends PEAR_Common
                         . "php-config" .
                        $this->config->get('php_suffix') . " --prefix");
         $this->_harvestInstDir($prefix, $inst_dir . DIRECTORY_SEPARATOR . $prefix, $built_files);
+
         chdir($old_cwd);
         return $built_files;
     }
@@ -433,10 +442,12 @@ class PEAR_Builder extends PEAR_Common
         if ($what != 'cmdoutput') {
             return;
         }
+
         $this->log(1, rtrim($data));
         if (preg_match('/You should update your .aclocal.m4/', $data)) {
             return;
         }
+
         $matches = array();
         if (preg_match('/^\s+(\S[^:]+):\s+(\d{8})/', $data, $matches)) {
             $member = preg_replace('/[^a-z]/', '_', strtolower($matches[1]));
