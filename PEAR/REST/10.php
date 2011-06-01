@@ -292,6 +292,10 @@ class PEAR_REST_10
 
         $allinfo = $this->_rest->retrieveData($base . 'r/' . $packageLower .
             '/allreleases.xml', false, false, $channel);
+        if (PEAR::isError($allinfo)) {
+            return $allinfo;
+        }
+
         if (!is_array($allinfo['r']) || !isset($allinfo['r'][0])) {
             $allinfo['r'] = array($allinfo['r']);
         }
