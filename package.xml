@@ -95,7 +95,7 @@
   * Fixed Bug #18340: raiseErro typo [doconnor]
   * Fixed Bug #18349: package.xml version not recognized when single quoted [dufuz]
   * Fixed Bug #18364: date.timezone errors for sh/bat files when TZ is not set in php.ini [dufuz]
-  * Fixed Bug #18388: Parenteses error in REST.php line 232 [dufuz]
+  * Fixed Bug #18388: Parentheses error in REST.php line 232 [dufuz]
   * Fixed Bug #18428: invalid preg_match patterns [glen]
   * Fixed Bug #18486: REST/10.php does not check error condition [dufuz]
   * Fixed a problem in RunTest and code coverage. Correctly register the
