@@ -104,6 +104,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
     pecl install --with-option=dir memcached
     This allows for customized setups while still having the benefit of using the pear
     installer. (pear will not remember the configure params for the next upgrade)
+
+  Bug Fixes:
+  * Bug #18581: "config-get -c" not returning channel's configuration when using alias [dufuz]
  </notes>
  <contents>
   <dir name="/">
