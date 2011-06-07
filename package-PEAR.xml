@@ -92,18 +92,8 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>New BSD License</license>
   <state>stable</state>
  <notes>
-  * svntag improvements, tag package files passed into the command and better directory checks [dufuz]
-  * rely on Structures_Graph minimum version instead of recommended version [saltybeagle]
-  * Fix Bug #12613: running go-pear.phar from C:\ fails [dufuz]
-  * Fix Bug #14841: Installing pear into directory with space fails [dufuz]
-  * Fix Bug #16644: pear.bat returns syntax error when parenthesis are in install path. [dufuz] [patch by bwaters (Bryan Waters)]
-  * Fix Bug #16767: Use of Depreciated HTML Attributes in the Exception class [dufuz] [patch by fuhrysteve (Stephen J. Fuhry)]
-  * Fix Bug #16864: "pear list-upgrades -i" issues E_WARNINGS [dufuz] [patch by rquadling (Richard Quadling)]
-  * Fix Bug #17220: command `pear help` outputs to stderr instead of stdout [dufuz]
-  * Fix Bug #17234: channel-discover adds port to HTTP Host header [dufuz]
-  * Fix Bug #17292: Code Coverage in PEAR_RunTest does not work with namespaces [sebastian]
-  * Fix Bug #17359: loadExtension() fails over missing dl() when used in multithread env [dufuz]
-  * Fix Bug #17378: pear info $package fails if directory with that name exists [dufuz]
+  Bug Fixes:
+  * Bug #18581: "config-get -c" not returning channel's configuration when using alias [dufuz]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

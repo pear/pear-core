@@ -205,12 +205,13 @@ and uninstall).
                 return $this->raiseError("config-get expects 1 or 2 parameters");
         }
 
-        $channel = isset($options['channel']) ? $options['channel'] : $this->config->get('default_channel');
         $reg = &$this->config->getRegistry();
+        $channel = isset($options['channel']) ? $options['channel'] : $this->config->get('default_channel');
         if (!$reg->channelExists($channel)) {
             return $this->raiseError('Channel "' . $channel . '" does not exist');
         }
 
+        $channel = $reg->channelName($channel);
         $this->ui->outputData($this->config->get($config_key, $layer, $channel), $command);
         return true;
     }

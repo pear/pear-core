@@ -93,17 +93,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-  * Fixed Bug #17744: Empty changelog causes fatal error in setChangelogentry [dufuz]
-  * Fixed Bug #18340: raiseErro typo [doconnor]
-  * Fixed Bug #18349: package.xml version not recognized when single quoted [dufuz]
-  * Fixed Bug #18364: date.timezone errors for sh/bat files when TZ is not set in php.ini [dufuz]
-  * Fixed Bug #18388: Parentheses error in REST.php line 232 [dufuz]
-  * Fixed Bug #18428: invalid preg_match patterns [glen]
-  * Fixed Bug #18486: REST/10.php does not check error condition [dufuz]
-  * Fixed a problem in RunTest and code coverage. Correctly register the
-    code coverage shutdown function in case we are inside a namespace. [sebastian]
-  * Fixed a bug with extensions not providing their config.m4 and co in the root directory of
-    their pecl package but rather in a sub directory, such as xhprof. [dufuz]
+  Bug Fixes:
+  * Bug #18581: "config-get -c" not returning channel's configuration when using alias [dufuz]
  </notes>
  <contents>
   <dir name="/">
