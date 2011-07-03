@@ -289,7 +289,7 @@ class PEAR_Builder extends PEAR_Common
 
         // Find config. outside of normal path - e.g. config.m4
         foreach (array_keys($pkg->getInstallationFileList()) as $item) {
-          if (stristr($item, 'config.')) {
+          if (stristr(basename($item), 'config.m4')) {
             $dir .= DIRECTORY_SEPARATOR . dirname($item);
             break;
           }
