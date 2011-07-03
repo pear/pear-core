@@ -103,6 +103,7 @@ http://pear.php.net/dtd/package-1.0.xsd">
 
   Bug Fixes:
   * Bug #18581: "config-get -c" not returning channel's configuration when using alias [dufuz]
+  * Bug #18639: regression: installing xdebug fails most likely due to another fix [dufuz]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>
