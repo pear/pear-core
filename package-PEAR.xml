@@ -92,16 +92,21 @@ http://pear.php.net/dtd/package-1.0.xsd">
   <license>New BSD License</license>
   <state>stable</state>
  <notes>
-  Moved PEAR_Exception into it's own package so people can start putting dependency on PEAR_Exception
-  instead of depending on PEAR when the Exception class is the only thing being used.
+  PEAR_Exception has moved into it's own package so people can start putting dependency on PEAR_Exception
+  instead of depending on PEAR when the Exception class is the only thing required.
 
   Features:
   * A configure parameter can now be passed to install / upgrade for pecl such as
     pecl install --with-option=dir memcached
     This allows for customized setups while still having the benefit of using the pear
-    installer. (pear will not remember the configure params for the next upgrade)
+    installer.
+    (pear will not remember the configure params for the next upgrade)
+  * All System (the class) functions can now take in spaced paths as long as they are surrounded in quotes.
+    Prior to this it was possible to do that by passing all values in as an array (related to #18362, #18440)
 
   Bug Fixes:
+  * Bug #18362: A whitespace TEMP_DIR path breaks install/upgrade functionality [dufuz]
+  * Bug #18440: bad tmp folder path on install : Unable to create path for C:/Program/tmp [dufuz]
   * Bug #18581: "config-get -c" not returning channel's configuration when using alias [dufuz]
   * Bug #18639: regression: installing xdebug fails most likely due to another fix [dufuz]
  </notes>
