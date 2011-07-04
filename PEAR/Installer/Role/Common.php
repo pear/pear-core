@@ -72,47 +72,53 @@ class PEAR_Installer_Role_Common
      */
     function processInstallation($pkg, $atts, $file, $tmp_path, $layer = null)
     {
-        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . 
-            ucfirst(str_replace('pear_installer_role_', '', strtolower(get_class($this)))));
-        if (PEAR::isError($roleInfo)) {
-            return $roleInfo;
+        $role = $this->getRoleFromClass();
+        $info = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . $role);
+        if (PEAR::isError($info)) {
+            return $info;
         }
-        if (!$roleInfo['locationconfig']) {
+
+        if (!$info['locationconfig']) {
             return false;
         }
-        if ($roleInfo['honorsbaseinstall']) {
-            $dest_dir = $save_destdir = $this->config->get($roleInfo['locationconfig'], $layer,
+
+        if ($info['honorsbaseinstall']) {
+            $dest_dir = $save_destdir = $this->config->get($info['locationconfig'], $layer,
                 $pkg->getChannel());
             if (!empty($atts['baseinstalldir'])) {
                 $dest_dir .= DIRECTORY_SEPARATOR . $atts['baseinstalldir'];
             }
-        } elseif ($roleInfo['unusualbaseinstall']) {
-            $dest_dir = $save_destdir = $this->config->get($roleInfo['locationconfig'],
+        } elseif ($info['unusualbaseinstall']) {
+            $dest_dir = $save_destdir = $this->config->get($info['locationconfig'],
                     $layer, $pkg->getChannel()) . DIRECTORY_SEPARATOR . $pkg->getPackage();
             if (!empty($atts['baseinstalldir'])) {
                 $dest_dir .= DIRECTORY_SEPARATOR . $atts['baseinstalldir'];
             }
         } else {
-            $dest_dir = $save_destdir = $this->config->get($roleInfo['locationconfig'],
+            $save_destdir = $dest_dir = $this->config->get($info['locationconfig'],
                     $layer, $pkg->getChannel()) . DIRECTORY_SEPARATOR . $pkg->getPackage();
         }
+
         if (dirname($file) != '.' && empty($atts['install-as'])) {
             $dest_dir .= DIRECTORY_SEPARATOR . dirname($file);
         }
+
         if (empty($atts['install-as'])) {
             $dest_file = $dest_dir . DIRECTORY_SEPARATOR . basename($file);
         } else {
             $dest_file = $dest_dir . DIRECTORY_SEPARATOR . $atts['install-as'];
         }
+
         $orig_file = $tmp_path . DIRECTORY_SEPARATOR . $file;
 
         // Clean up the DIRECTORY_SEPARATOR mess
         $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
-        
+
         list($dest_dir, $dest_file, $orig_file) = preg_replace(array('!\\\\+!', '!/!', "!$ds2+!"),
                                                     array(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR,
                                                           DIRECTORY_SEPARATOR),
                                                     array($dest_dir, $dest_file, $orig_file));
+
         return array($save_destdir, $dest_dir, $dest_file, $orig_file);
     }
 
@@ -122,12 +128,13 @@ class PEAR_Installer_Role_Common
      */
     function getLocationConfig()
     {
-        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . 
-            ucfirst(str_replace('pear_installer_role_', '', strtolower(get_class($this)))));
-        if (PEAR::isError($roleInfo)) {
-            return $roleInfo;
+        $role = ucfirst(str_replace('pear_installer_role_', '', strtolower(get_class($this))));
+        $info = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . $role);
+        if (PEAR::isError($info)) {
+            return $info;
         }
-        return $roleInfo['locationconfig'];
+
+        return $info['locationconfig'];
     }
 
     /**
@@ -143,32 +150,40 @@ class PEAR_Installer_Role_Common
 
     function isExecutable()
     {
-        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . 
-            ucfirst(str_replace('pear_installer_role_', '', strtolower(get_class($this)))));
-        if (PEAR::isError($roleInfo)) {
-            return $roleInfo;
+        $role = $this->getRoleFromClass();
+        $info = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . $role);
+        if (PEAR::isError($info)) {
+            return $info;
         }
-        return $roleInfo['executable'];
+
+        return $info['executable'];
     }
 
     function isInstallable()
     {
-        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . 
-            ucfirst(str_replace('pear_installer_role_', '', strtolower(get_class($this)))));
-        if (PEAR::isError($roleInfo)) {
-            return $roleInfo;
+        $role = $this->getRoleFromClass();
+        $info = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . $role);
+        if (PEAR::isError($info)) {
+            return $info;
         }
-        return $roleInfo['installable'];
+
+        return $info['installable'];
     }
 
     function isExtension()
     {
-        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . 
-            ucfirst(str_replace('pear_installer_role_', '', strtolower(get_class($this)))));
-        if (PEAR::isError($roleInfo)) {
-            return $roleInfo;
+        $role = $this->getRoleFromClass();
+        $info = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . $role);
+        if (PEAR::isError($info)) {
+            return $info;
         }
-        return $roleInfo['phpextension'];
+
+        return $info['phpextension'];
+    }
+
+    function getRoleFromClass()
+    {
+        $lower = strtolower(get_class($this));
+        return ucfirst(str_replace('pear_installer_role_', '', $lower));
     }
 }
-?>
