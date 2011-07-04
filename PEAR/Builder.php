@@ -289,7 +289,7 @@ class PEAR_Builder extends PEAR_Common
 
         // Find config. outside of normal path - e.g. config.m4
         foreach (array_keys($pkg->getInstallationFileList()) as $item) {
-          if (stristr(basename($item), 'config.m4')) {
+          if (stristr(basename($item), 'config.m4') && dirname($item) != '.') {
             $dir .= DIRECTORY_SEPARATOR . dirname($item);
             break;
           }
@@ -346,7 +346,7 @@ class PEAR_Builder extends PEAR_Common
         }
 
         $tmpdir = $this->config->get('temp_dir');
-        $build_basedir = System::mktemp(" -t $tmpdir -d pear-build-$user");
+        $build_basedir = System::mktemp(' -t "' . $tmpdir . '" -d "pear-build-' . $user . '"');
         $build_dir = "$build_basedir/$vdir";
         $inst_dir = "$build_basedir/install-$vdir";
         $this->log(1, "building in $build_dir");
