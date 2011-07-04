@@ -85,6 +85,7 @@ class PEAR_Builder extends PEAR_Common
                 return $pkg;
             }
         }
+
         $dir = dirname($descfile);
         $old_cwd = getcwd();
 
@@ -108,6 +109,7 @@ class PEAR_Builder extends PEAR_Common
         if (!file_exists("$dir/$dsp")) {
             return $this->raiseError("The DSP $dsp does not exist.");
         }
+
         // XXX TODO: make release build type configurable
         $command = 'msdev '.$dsp.' /MAKE "'.$pkg->getPackage(). ' - Release"';
 
@@ -152,6 +154,7 @@ class PEAR_Builder extends PEAR_Common
         } else {
             return $this->raiseError("Could not retrieve output information from $dsp.");
         }
+
         // realpath returns false if the file doesn't exist
         if ($outfile && copy($outfile, "$dir/$out")) {
             $outfile = "$dir/$out";
@@ -289,7 +292,7 @@ class PEAR_Builder extends PEAR_Common
 
         // Find config. outside of normal path - e.g. config.m4
         foreach (array_keys($pkg->getInstallationFileList()) as $item) {
-          if (stristr(basename($item), 'config.m4')) {
+          if (stristr(basename($item), 'config.m4') && dirname($item) != '.') {
             $dir .= DIRECTORY_SEPARATOR . dirname($item);
             break;
           }
@@ -368,7 +371,7 @@ class PEAR_Builder extends PEAR_Common
         }
 
         $tmpdir = $this->config->get('temp_dir');
-        $build_basedir = System::mktemp(" -t $tmpdir -d pear-build-$user");
+        $build_basedir = System::mktemp(' -t "' . $tmpdir . '" -d "pear-build-' . $user . '"');
         $build_dir = "$build_basedir/$vdir";
         $inst_dir = "$build_basedir/install-$vdir";
         $this->log(1, "building in $build_dir");
@@ -397,6 +400,7 @@ class PEAR_Builder extends PEAR_Common
         if (!file_exists($build_dir) || !is_dir($build_dir) || !chdir($build_dir)) {
             return $this->raiseError("could not chdir to $build_dir");
         }
+
         putenv('PHP_PEAR_VERSION=@PEAR-VER@');
         foreach ($to_run as $cmd) {
             $err = $this->_runCommand($cmd, $callback);
@@ -404,6 +408,7 @@ class PEAR_Builder extends PEAR_Common
                 chdir($old_cwd);
                 return $err;
             }
+
             if (!$err) {
                 chdir($old_cwd);
                 return $this->raiseError("`$cmd' failed");
@@ -483,6 +488,7 @@ class PEAR_Builder extends PEAR_Common
         if (!$pp) {
             return $this->raiseError("failed to run `$command'");
         }
+
         if ($callback && $callback[0]->debug == 1) {
             $olddbg = $callback[0]->debug;
             $callback[0]->debug = 2;
@@ -495,6 +501,7 @@ class PEAR_Builder extends PEAR_Common
                 $this->log(2, rtrim($line));
             }
         }
+
         if ($callback && isset($olddbg)) {
             $callback[0]->debug = $olddbg;
         }
@@ -509,8 +516,10 @@ class PEAR_Builder extends PEAR_Common
             if ($this->debug >= $level) {
                 call_user_func($this->current_callback, 'output', $msg);
             }
+
             return;
         }
+
         return PEAR_Common::log($level, $msg);
     }
 }

@@ -974,7 +974,7 @@ used for automated conversion or learning the format.
         $tar = new Archive_Tar($params[0]);
 
         $tmpdir = $this->config->get('temp_dir');
-        $tmpdir = System::mktemp(" -t $tmpdir -d pearsign");
+        $tmpdir = System::mktemp(' -t "' . $tmpdir . '" -d pearsign');
         if (!$tar->extractList('package2.xml package.xml package.sig', $tmpdir)) {
             return $this->raiseError("failed to extract tar file");
         }
