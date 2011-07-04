@@ -59,3 +59,12 @@ $phpunit->assertEquals(array(
     'cmd'  => 'config-get',
   ),
 ), $fakelog->getLog(), 'Alias channel name config-get');
+
+echo 'tests done';
+?>
+--CLEAN--
+<?php
+require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
+?>
+--EXPECT--
+tests done
