@@ -210,7 +210,7 @@ class PEAR_Installer extends PEAR_Downloader
 
         if (isset($atts['platform'])) {
             if (empty($os)) {
-                $os = new OS_Guess();
+                $os = new OS_Guess;
             }
 
             if (strlen($atts['platform']) && $atts['platform']{0} == '!') {
@@ -291,8 +291,10 @@ class PEAR_Installer extends PEAR_Downloader
             return $this->raiseError("SECURITY ERROR: file $file (installed to $dest_file) contains parent directory reference ..", PEAR_INSTALLER_FAILED);
         }
 
-        if (empty($this->_options['register-only']) &&
-              (!file_exists($dest_dir) || !is_dir($dest_dir))) {
+        if (
+            empty($this->_options['register-only']) &&
+            (!file_exists($dest_dir) || !is_dir($dest_dir))
+        ) {
             if (!$this->mkDirHier($dest_dir)) {
                 return $this->raiseError("failed to mkdir $dest_dir",
                                          PEAR_INSTALLER_FAILED);
@@ -356,10 +358,12 @@ class PEAR_Installer extends PEAR_Downloader
                         } else {
                             $to = $this->config->get($a['to'], null, $channel);
                         }
+
                         if (is_null($to)) {
                             if (!isset($options['soft'])) {
                                 $this->log(0, "invalid pear-config replacement: $a[to]");
                             }
+
                             continue;
                         }
                     } elseif ($a['type'] == 'package-info') {
@@ -369,9 +373,11 @@ class PEAR_Installer extends PEAR_Downloader
                             if (!isset($options['soft'])) {
                                 $this->log(0, "invalid package-info replacement: $a[to]");
                             }
+
                             continue;
                         }
                     }
+
                     if (!is_null($to)) {
                         $subst_from[] = $a['from'];
                         $subst_to[] = $to;
@@ -426,11 +432,12 @@ class PEAR_Installer extends PEAR_Downloader
 
             // set file permissions
             if (!OS_WINDOWS) {
+                $umask = $this->config->get('umask');
                 if ($atts['role'] == 'script') {
-                    $mode = 0777 & ~(int)octdec($this->config->get('umask'));
+                    $mode = 0777 & ~(int)octdec($umask);
                     $this->log(3, "+ chmod +x $dest_file");
                 } else {
-                    $mode = 0666 & ~(int)octdec($this->config->get('umask'));
+                    $mode = 0666 & ~(int)octdec($umask);
                 }
 
                 if ($atts['role'] != 'src') {
@@ -486,8 +493,8 @@ class PEAR_Installer extends PEAR_Downloader
 
         $channel = $pkg->getChannel();
         // assemble the destination paths
-        if (!in_array($atts['attribs']['role'],
-              PEAR_Installer_Role::getValidRoles($pkg->getPackageType()))) {
+        $roles = PEAR_Installer_Role::getValidRoles($pkg->getPackageType());
+        if (!in_array($atts['attribs']['role'], $roles)) {
             return $this->raiseError('Invalid role `' . $atts['attribs']['role'] .
                     "' for file $file");
         }
@@ -514,8 +521,7 @@ class PEAR_Installer extends PEAR_Downloader
 
         $final_dest_file = $installed_as = $dest_file;
         if (isset($this->_options['packagingroot'])) {
-            $final_dest_file = $this->_prependPath($final_dest_file,
-                $this->_options['packagingroot']);
+            $final_dest_file = $this->_prependPath($final_dest_file, $this->_options['packagingroot']);
         }
 
         $dest_dir  = dirname($final_dest_file);
@@ -1100,7 +1106,7 @@ class PEAR_Installer extends PEAR_Downloader
             }
         }
 
-        $tmpdir   = dirname($descfile);
+        $tmpdir = dirname($descfile);
         if (realpath($descfile) != realpath($pkgfile)) {
             // Use the temp_dir since $descfile can contain the download dir path
             $tmpdir = $this->config->get('temp_dir', null, 'pear.php.net');
@@ -1112,7 +1118,7 @@ class PEAR_Installer extends PEAR_Downloader
             }
         }
 
-        $pkgname = $pkg->getName();
+        $name    = $pkg->getName();
         $channel = $pkg->getChannel();
         if (isset($this->_options['packagingroot'])) {
             $regdir = $this->_prependPath(
@@ -1152,7 +1158,7 @@ class PEAR_Installer extends PEAR_Downloader
         if (empty($options['force']) &&
               (file_exists($this->config->get('php_dir')) &&
                is_dir($this->config->get('php_dir')))) {
-            $testp = $channel == 'pear.php.net' ? $pkgname : array($channel, $pkgname);
+            $testp = $channel == 'pear.php.net' ? $name : array($channel, $name);
             $instfilelist = $pkg->getInstallationFileList(true);
             if (PEAR::isError($instfilelist)) {
                 return $instfilelist;
@@ -1242,7 +1248,7 @@ class PEAR_Installer extends PEAR_Downloader
                 }
 
                 if (count($test)) {
-                    $msg = "$channel/$pkgname: conflicting files found:\n";
+                    $msg = "$channel/$name: conflicting files found:\n";
                     $longest = max(array_map("strlen", array_keys($test)));
                     $fmt = "%${longest}s (%s)\n";
                     foreach ($test as $file => $info) {
@@ -1269,31 +1275,31 @@ class PEAR_Installer extends PEAR_Downloader
         if (empty($options['upgrade']) && empty($options['soft'])) {
             // checks to do only when installing new packages
             if ($channel == 'pecl.php.net') {
-                $test = $installregistry->packageExists($pkgname, $channel);
+                $test = $installregistry->packageExists($name, $channel);
                 if (!$test) {
-                    $test = $installregistry->packageExists($pkgname, 'pear.php.net');
+                    $test = $installregistry->packageExists($name, 'pear.php.net');
                 }
             } else {
-                $test = $installregistry->packageExists($pkgname, $channel);
+                $test = $installregistry->packageExists($name, $channel);
             }
 
             if (empty($options['force']) && $test) {
-                return $this->raiseError("$channel/$pkgname is already installed");
+                return $this->raiseError("$channel/$name is already installed");
             }
         } else {
             $usechannel = $channel;
             if ($channel == 'pecl.php.net') {
-                $test = $installregistry->packageExists($pkgname, $channel);
+                $test = $installregistry->packageExists($name, $channel);
                 if (!$test) {
-                    $test = $installregistry->packageExists($pkgname, 'pear.php.net');
+                    $test = $installregistry->packageExists($name, 'pear.php.net');
                     $usechannel = 'pear.php.net';
                 }
             } else {
-                $test = $installregistry->packageExists($pkgname, $channel);
+                $test = $installregistry->packageExists($name, $channel);
             }
 
             if ($test) {
-                $v1 = $installregistry->packageInfo($pkgname, 'version', $usechannel);
+                $v1 = $installregistry->packageInfo($name, 'version', $usechannel);
                 $v2 = $pkg->getVersion();
                 $cmp = version_compare("$v1", "$v2", 'gt');
                 if (empty($options['force']) && !version_compare("$v2", "$v1", 'gt')) {
@@ -1302,7 +1308,7 @@ class PEAR_Installer extends PEAR_Downloader
 
                 if (empty($options['register-only'])) {
                     // when upgrading, remove old release's files first:
-                    if (PEAR::isError($err = $this->_deletePackageFiles($pkgname, $usechannel,
+                    if (PEAR::isError($err = $this->_deletePackageFiles($name, $usechannel,
                           true))) {
                         if (!isset($options['ignore-errors'])) {
                             return $this->raiseError($err);
@@ -1333,29 +1339,23 @@ class PEAR_Installer extends PEAR_Downloader
         }
 
         if (substr($pkgfile, -4) != '.xml') {
-            $tmpdir .= DIRECTORY_SEPARATOR . $pkgname . '-' . $pkg->getVersion();
+            $tmpdir .= DIRECTORY_SEPARATOR . $name . '-' . $pkg->getVersion();
         }
 
         $this->configSet('default_channel', $channel);
         // install files
 
-        $ver = $pkg->getPackagexmlVersion();
-        if (version_compare($ver, '2.0', '>=')) {
-            $filelist = $pkg->getInstallationFilelist();
-        } else {
-            $filelist = $pkg->getFileList();
-        }
-
+        $filelist = $pkg->getInstallationFilelist();
         if (PEAR::isError($filelist)) {
             return $filelist;
         }
 
-        $p = &$installregistry->getPackage($pkgname, $channel);
+        $p = &$installregistry->getPackage($name, $channel);
         $dirtree = (empty($options['register-only']) && $p) ? $p->getDirTree() : false;
 
         $pkg->resetFilelist();
-        $pkg->setLastInstalledVersion($installregistry->packageInfo($pkg->getPackage(),
-            'version', $pkg->getChannel()));
+        $version = $installregistry->packageInfo($pkg->getPackage(), 'version', $pkg->getChannel());
+        $pkg->setLastInstalledVersion($version);
         foreach ($filelist as $file => $atts) {
             $this->expectError(PEAR_INSTALLER_FAILED);
             if ($pkg->getPackagexmlVersion() == '1.0') {
@@ -1417,18 +1417,18 @@ class PEAR_Installer extends PEAR_Downloader
             // if 'force' is used, replace the info in registry
             $usechannel = $channel;
             if ($channel == 'pecl.php.net') {
-                $test = $installregistry->packageExists($pkgname, $channel);
+                $test = $installregistry->packageExists($name, $channel);
                 if (!$test) {
-                    $test = $installregistry->packageExists($pkgname, 'pear.php.net');
+                    $test = $installregistry->packageExists($name, 'pear.php.net');
                     $usechannel = 'pear.php.net';
                 }
             } else {
-                $test = $installregistry->packageExists($pkgname, $channel);
+                $test = $installregistry->packageExists($name, $channel);
             }
 
             if (!empty($options['force']) && $test) {
-                $oldversion = $installregistry->packageInfo($pkgname, 'version', $usechannel);
-                $installregistry->deletePackage($pkgname, $usechannel);
+                $oldversion = $installregistry->packageInfo($name, 'version', $usechannel);
+                $installregistry->deletePackage($name, $usechannel);
             }
             $ret = $installregistry->addPackage2($pkg);
         } else {
@@ -1444,13 +1444,13 @@ class PEAR_Installer extends PEAR_Downloader
 
             $usechannel = $channel;
             if ($channel == 'pecl.php.net') {
-                $test = $installregistry->packageExists($pkgname, $channel);
+                $test = $installregistry->packageExists($name, $channel);
                 if (!$test) {
-                    $test = $installregistry->packageExists($pkgname, 'pear.php.net');
+                    $test = $installregistry->packageExists($name, 'pear.php.net');
                     $usechannel = 'pear.php.net';
                 }
             } else {
-                $test = $installregistry->packageExists($pkgname, $channel);
+                $test = $installregistry->packageExists($name, $channel);
             }
 
             // new: upgrade installs a package if it isn't installed
@@ -1458,7 +1458,7 @@ class PEAR_Installer extends PEAR_Downloader
                 $ret = $installregistry->addPackage2($pkg);
             } else {
                 if ($usechannel != $channel) {
-                    $installregistry->deletePackage($pkgname, $usechannel);
+                    $installregistry->deletePackage($name, $usechannel);
                     $ret = $installregistry->addPackage2($pkg);
                 } else {
                     $ret = $installregistry->updatePackage2($pkg);
@@ -1469,7 +1469,7 @@ class PEAR_Installer extends PEAR_Downloader
 
         if (!$ret) {
             $this->configSet('default_channel', $savechannel);
-            return $this->raiseError("Adding package $channel/$pkgname to registry failed");
+            return $this->raiseError("Adding package $channel/$name to registry failed");
         }
         // }}}
 
