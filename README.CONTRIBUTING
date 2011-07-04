@@ -15,7 +15,7 @@ the PEAR package, and how to properly do maintenance.
 
 This document assumes two things:
 
-1) you have already applied for a CVS account at http://www.php.net/cvs-php.php
+1) you have already applied for a SVN account at http://www.php.net/svn-php.php
 2) you have already applied for a PEAR account at http://pear.php.net/account-request.php
 
 Fear not!  PEAR is slowly but surely evolving, and this document will hopefully only
@@ -113,8 +113,7 @@ PHP 5.1.0 and newer make use of a new technology, the PHP archive, or "phar".
 The UNIX build of PHP uses install-pear-nozlib.phar, and the windows build uses
 go-pear.phar.  To create these files, follow these simple steps:
 
-cvs -d :pserver:yourcvs@cvs.php.net:/repository login [replace yourcvs with your login]
-cvs -d :pserver:yourcvs@cvs.php.net:/repository co pear-core
+svn checkout --username YOURUSERNAME https://svn.php.net/repository/pear/pear-core
 cd pear-core/PEAR
 mkdir go-pear-tarballs
 cd go-pear-tarballs
@@ -128,7 +127,7 @@ Note that PHP 5.1 is required in order to create the archives, and they can be c
 on either unix or windows.
 
 Now, these files need to reside in the document root of pear.php.net.  However, the
-files are stored in cvs at pear/installphars and are released as the package
+files are stored in svn at pear/installphars and are released as the package
 pearweb_phars.
 
 As such, you will need to ask someone with karma to commit them if you do not have karma,
@@ -155,7 +154,7 @@ of the code in the web-based go-pear, which is discussed in the next section.
 
 One of the most common methods used to install PEAR is http://pear.php.net/go-pear
 
-go-pear is actually a file located in CVS at cvs.php.net in pearweb/public_html/go-pear
+go-pear is actually a file located in SVN at svn.php.net in pearweb/public_html/go-pear
 and it contains, in a single PHP file, all of the code necessary to download PEAR and run
 it.  Unfortunately, this also makes it difficult to debug and to maintain, as there are
 more than a few hacks to make it work within a single file.  However, it does the best
@@ -182,7 +181,7 @@ There used to be support for XML-RPC (XML remote procedure call) in older versio
 but got removed due to XML-RPC backends being obsoleted and not used anywhere.
 
 PEAR prior to version 1.4.0 exclusively uses XML-RPC, and specifically interacts with
-http://pear.php.net/xmlrpc.php, which is located at cvs.php.net in
+http://pear.php.net/xmlrpc.php, which is located at svn.php.net in
 pearweb/public_html/xmlrpc.php.  This file in turn accesses
 pearweb/include/pear-database.php, which contains all of the specific functions used by
 the PEAR installer.  pear-database.php contains a number of xml-rpc functions not used
@@ -210,7 +209,7 @@ Only add new REST as XML-RPC has bee phased out and the installer contains no su
 
 If you plan to maintain the remote access portion of PEAR, it is imperative to
 become intimately familiar with how the website works.  Check out pearweb from
-CVS and study it, set up a local copy and take a day to make it work - this is no
+SVN and study it, set up a local copy and take a day to make it work - this is no
 small endeavor, I assure you, but it is worth it for local testing.
 
 Once you have a working local mirror, simply update your local channel.xml for PEAR
