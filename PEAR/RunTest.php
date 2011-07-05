@@ -389,8 +389,6 @@ class PEAR_RunTest
             $coverage_shutdown = 'coverage_shutdown';
 
             for ($i = 0; $i < $numLines; $i++) {
-                $lines[$i] = trim($lines[$i]);
-
                 if ($lines[$i] == '<?' || $lines[$i] == '<?php') {
                     unset($lines[$i]);
                 }
