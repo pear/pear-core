@@ -1402,23 +1402,24 @@ class PEAR_Installer extends PEAR_Downloader
             return $this->raiseError("commit failed", PEAR_INSTALLER_FAILED);
         }
 
+        // See if package already exists
+        $usechannel = $channel;
+        if ($channel == 'pecl.php.net') {
+            $test = $installregistry->packageExists($name, $channel);
+            if (!$test) {
+                $test = $installregistry->packageExists($name, 'pear.php.net');
+                $usechannel = 'pear.php.net';
+            }
+        } else {
+            $test = $installregistry->packageExists($name, $channel);
+        }
+
         $ret          = false;
         $installphase = 'install';
         $oldversion   = false;
         // Register that the package is installed
         if (empty($options['upgrade'])) {
             // if 'force' is used, replace the info in registry
-            $usechannel = $channel;
-            if ($channel == 'pecl.php.net') {
-                $test = $installregistry->packageExists($name, $channel);
-                if (!$test) {
-                    $test = $installregistry->packageExists($name, 'pear.php.net');
-                    $usechannel = 'pear.php.net';
-                }
-            } else {
-                $test = $installregistry->packageExists($name, $channel);
-            }
-
             if (!empty($options['force']) && $test) {
                 $oldversion = $installregistry->packageInfo($name, 'version', $usechannel);
                 $installregistry->deletePackage($name, $usechannel);
@@ -1433,17 +1434,6 @@ class PEAR_Installer extends PEAR_Downloader
                     $this->addFileOperation('rmdir', array($dir));
                 }
                 $this->commitFileTransaction();
-            }
-
-            $usechannel = $channel;
-            if ($channel == 'pecl.php.net') {
-                $test = $installregistry->packageExists($name, $channel);
-                if (!$test) {
-                    $test = $installregistry->packageExists($name, 'pear.php.net');
-                    $usechannel = 'pear.php.net';
-                }
-            } else {
-                $test = $installregistry->packageExists($name, $channel);
             }
 
             // new: upgrade installs a package if it isn't installed
