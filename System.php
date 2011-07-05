@@ -71,6 +71,23 @@ class System
     function _parseArgs($argv, $short_options, $long_options = null)
     {
         if (!is_array($argv) && $argv !== null) {
+            /*
+            // Quote all items that are a short option
+            $av = preg_split('/(\A| )--?[a-z0-9]+[ =]?((?<!\\\\)((,\s*)|((?<!,)\s+))?)/i', $argv, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_OFFSET_CAPTURE);
+            $offset = 0;
+            foreach ($av as $a) {
+                $b = trim($a[0]);
+                if ($b{0} == '"' || $b{0} == "'") {
+                    continue;
+                }
+
+                $escape = escapeshellarg($b);
+                $pos = $a[1] + $offset;
+                $argv = substr_replace($argv, $escape, $pos, strlen($b));
+                $offset += 2;
+            }
+            */
+
             // Find all items, quoted or otherwise
             preg_match_all("/(?:[\"'])(.*?)(?:['\"])|([^\s]+)/", $argv, $av);
             $argv = $av[1];
