@@ -5,7 +5,7 @@ if test "x$PHP_PEAR_PHP_BIN" != "x"; then
   PHP="$PHP_PEAR_PHP_BIN"
 else
   if test "@php_bin@" = '@'php_bin'@'; then
-    PHP=php 
+    PHP=php
   else
     PHP="@php_bin@"
   fi
@@ -18,11 +18,11 @@ if test "x$PHP_PEAR_INSTALL_DIR" != "x"; then
 else
   if test "@php_dir@" = '@'php_dir'@'; then
     INCDIR=`dirname $0`
-    INCARG=""  
+    INCARG=""
   else
     INCDIR="@php_dir@"
     INCARG="-d include_path=@php_dir@"
   fi
 fi
 
-exec $PHP -d memory_limit="-1" -C -q $INCARG -d output_buffering=1 -d open_basedir="" -d safe_mode=0 -d register_argc_argv="On" -d auto_prepend_file="" -d variables_order=EGPCS -d auto_append_file="" $INCDIR/pearcmd.php "$@"
+exec $PHP -d date.timezone=UTC -d memory_limit="-1" -C -q $INCARG -d output_buffering=1 -d open_basedir="" -d safe_mode=0 -d register_argc_argv="On" -d auto_prepend_file="" -d variables_order=EGPCS -d auto_append_file="" $INCDIR/pearcmd.php "$@"

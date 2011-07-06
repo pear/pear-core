@@ -364,7 +364,7 @@ Run post-installation scripts in package <package>, if any exist.
             $info = ob_get_contents();
             ob_end_clean();
             $debug = function_exists('leak') ? '_debug' : '';
-            $ts = preg_match('Thread Safety.+enabled', $info) ? '_ts' : '';
+            $ts = preg_match('/Thread Safety.+enabled/', $info) ? '_ts' : '';
             $enable = 'zend_extension' . $debug . $ts;
         }
         foreach ($ini[$search] as $line => $extension) {
@@ -417,7 +417,7 @@ Run post-installation scripts in package <package>, if any exist.
             $info = ob_get_contents();
             ob_end_clean();
             $debug = function_exists('leak') ? '_debug' : '';
-            $ts = preg_match('Thread Safety.+enabled', $info) ? '_ts' : '';
+            $ts = preg_match('/Thread Safety.+enabled/', $info) ? '_ts' : '';
             $enable = 'zend_extension' . $debug . $ts;
         }
         $found = false;
@@ -774,7 +774,7 @@ Run post-installation scripts in package <package>, if any exist.
                                 $info = ob_get_contents();
                                 ob_end_clean();
                                 $debug = function_exists('leak') ? '_debug' : '';
-                                $ts = preg_match('Thread Safety.+enabled', $info) ? '_ts' : '';
+                                $ts = preg_match('/Thread Safety.+enabled/', $info) ? '_ts' : '';
                                 $exttype = 'zend_extension' . $debug . $ts;
                             }
                             $extrainfo[] = 'You should add "' . $exttype . '=' .
@@ -1035,7 +1035,7 @@ Run post-installation scripts in package <package>, if any exist.
                                     $info = ob_get_contents();
                                     ob_end_clean();
                                     $debug = function_exists('leak') ? '_debug' : '';
-                                    $ts = preg_match('Thread Safety.+enabled', $info) ? '_ts' : '';
+                                    $ts = preg_match('/Thread Safety.+enabled/', $info) ? '_ts' : '';
                                     $exttype = 'zend_extension' . $debug . $ts;
                                 }
                                 $this->ui->outputData('Unable to remove "' . $exttype . '=' .

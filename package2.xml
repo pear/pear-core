@@ -81,10 +81,10 @@
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2011-02-28</date>
- <time>18:30:00</time>
+ <date>2011-06-04</date>
+ <time>15:30:00</time>
  <version>
-  <release>1.9.2</release>
+  <release>1.9.3</release>
   <api>1.9.2</api>
  </version>
  <stability>
@@ -93,25 +93,17 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-Important! This is a security fix release. The advisory can be found at
-http://pear.php.net/advisory-20110228.txt
-
-  Bugs:
-  * Fixed Bug #17463: Regression: On Windows, svntag [patch by doconnor]
-  * Fixed Bug #17641: pecl-list doesn't sort packages by name [dufuz]
-  * Fixed Bug #17781: invalid argument warning on foreach due to an empty optional dependencie [dufuz]
-  * Fixed Bug #17801: PEAR run-tests wrongly detects php-cgi [patch by David Jean Louis (izi)]
-  * Fixed Bug #17839: pear svntag does not tag package.xml file [dufuz]
-  * Fixed Bug #17986: PEAR Installer cannot handle files moved between packages [dufuz]
-  * Fixed Bug #17997: Strange output if directories are not writeable [dufuz]
-  * Fixed Bug #18001: PEAR/RunTest coverage fails [dufuz]
-  * Fixed Bug #18056 [SECURITY]: Symlink attack in PEAR install [dufuz]
-  * Fixed Bug #18218: "pear package" does not allow the use of late static binding [dufuz and Christer Edvartsen]
-  * Fixed Bug #18238: Wrong return code from "pear help" [till]
-  * Fixed Bug #18308: Broken error message about missing channel validator [yunosh]
-
-  This feature is implemented as a result of #18056
-  * Implemented Request #16648: Use TMPDIR for builds instead of /var/tmp [dufuz]
+  * Fixed Bug #17744: Empty changelog causes fatal error in setChangelogentry [dufuz]
+  * Fixed Bug #18340: raiseErro typo [doconnor]
+  * Fixed Bug #18349: package.xml version not recognized when single quoted [dufuz]
+  * Fixed Bug #18364: date.timezone errors for sh/bat files when TZ is not set in php.ini [dufuz]
+  * Fixed Bug #18388: Parentheses error in REST.php line 232 [dufuz]
+  * Fixed Bug #18428: invalid preg_match patterns [glen]
+  * Fixed Bug #18486: REST/10.php does not check error condition [dufuz]
+  * Fixed a problem in RunTest and code coverage. Correctly register the
+    code coverage shutdown function in case we are inside a namespace. [sebastian]
+  * Fixed a bug with extensions not providing their config.m4 and co in the root directory of
+    their pecl package but rather in a sub directory, such as xhprof. [dufuz]
  </notes>
  <contents>
   <dir name="/">
