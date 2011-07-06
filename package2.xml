@@ -81,11 +81,11 @@
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2011-06-04</date>
+ <date>2011-07-06</date>
  <time>15:30:00</time>
  <version>
-  <release>1.9.3</release>
-  <api>1.9.2</api>
+  <release>1.9.4</release>
+  <api>1.9.4</api>
  </version>
  <stability>
   <release>stable</release>
@@ -93,17 +93,16 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-  * Fixed Bug #17744: Empty changelog causes fatal error in setChangelogentry [dufuz]
-  * Fixed Bug #18340: raiseErro typo [doconnor]
-  * Fixed Bug #18349: package.xml version not recognized when single quoted [dufuz]
-  * Fixed Bug #18364: date.timezone errors for sh/bat files when TZ is not set in php.ini [dufuz]
-  * Fixed Bug #18388: Parentheses error in REST.php line 232 [dufuz]
-  * Fixed Bug #18428: invalid preg_match patterns [glen]
-  * Fixed Bug #18486: REST/10.php does not check error condition [dufuz]
-  * Fixed a problem in RunTest and code coverage. Correctly register the
-    code coverage shutdown function in case we are inside a namespace. [sebastian]
-  * Fixed a bug with extensions not providing their config.m4 and co in the root directory of
-    their pecl package but rather in a sub directory, such as xhprof. [dufuz]
+  Bug Fixes:
+  * Bug #17350: "pear install --force" doesn't uninstall files from previous pkg versions [dufuz]
+  * Bug #18362: A whitespace TEMP_DIR path breaks install/upgrade functionality [dufuz]
+  * Bug #18440: bad tmp folder path on install : Unable to create path for C:/Program/tmp [dufuz]
+  * Bug #18581: "config-get -c" not returning channel's configuration when using alias [dufuz]
+  * Bug #18639: regression: installing xdebug fails most likely due to another fix [dufuz]
+
+  Features
+  * All System (the class) functions can now take in spaced paths as long as they are surrounded in quotes.
+    Prior to this it was possible to do that by passing all values in as an array (by product of #18362, #18440) [dufuz]
  </notes>
  <contents>
   <dir name="/">
@@ -865,6 +864,32 @@ http://pear.php.net/advisory-20110228.txt
     This feature is implemented as a result of #18056
     * Implemented Request #16648: Use TMPDIR for builds instead of /var/tmp [dufuz]
    </notes>
+  </release>
+  <release>
+ <date>2011-06-04</date>
+ <time>15:30:00</time>
+ <version>
+  <release>1.9.3</release>
+  <api>1.9.2</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+ <notes>
+  * Fixed Bug #17744: Empty changelog causes fatal error in setChangelogentry [dufuz]
+  * Fixed Bug #18340: raiseErro typo [doconnor]
+  * Fixed Bug #18349: package.xml version not recognized when single quoted [dufuz]
+  * Fixed Bug #18364: date.timezone errors for sh/bat files when TZ is not set in php.ini [dufuz]
+  * Fixed Bug #18388: Parentheses error in REST.php line 232 [dufuz]
+  * Fixed Bug #18428: invalid preg_match patterns [glen]
+  * Fixed Bug #18486: REST/10.php does not check error condition [dufuz]
+  * Fixed a problem in RunTest and code coverage. Correctly register the
+    code coverage shutdown function in case we are inside a namespace. [sebastian]
+  * Fixed a bug with extensions not providing their config.m4 and co in the root directory of
+    their pecl package but rather in a sub directory, such as xhprof. [dufuz]
+ </notes>
   </release>
  </changelog>
 </package>

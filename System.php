@@ -71,9 +71,17 @@ class System
     function _parseArgs($argv, $short_options, $long_options = null)
     {
         if (!is_array($argv) && $argv !== null) {
-            $argv = preg_split('/\s+/', $argv, -1, PREG_SPLIT_NO_EMPTY);
+            // Find all items, quoted or otherwise
+            preg_match_all("/(?:[\"'])(.*?)(?:['\"])|([^\s]+)/", $argv, $av);
+            $argv = $av[1];
+            foreach ($av[2] as $k => $a) {
+                if (empty($a)) {
+                    continue;
+                }
+                $argv[$k] = trim($a) ;
+            }
         }
-        return Console_Getopt::getopt2($argv, $short_options);
+        return Console_Getopt::getopt2($argv, $short_options, $long_options);
     }
 
     /**
