@@ -351,7 +351,7 @@ class PEAR_PackageFile
             }
         }
 
-        $tmpdir = System::mktemp('-t ' . $this->_config->get('temp_dir') . ' -d pear');
+        $tmpdir = System::mktemp('-t "' . $this->_config->get('temp_dir') . '" -d pear');
         if ($tmpdir === false) {
             $ret = PEAR::raiseError("there was a problem with getting the configured temp directory");
             return $ret;

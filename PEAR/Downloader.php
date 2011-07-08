@@ -190,7 +190,7 @@ class PEAR_Downloader extends PEAR_Common
         }
 
         $tmpdir = $this->config->get('temp_dir');
-        $tmp = System::mktemp("-d -t $tmpdir");
+        $tmp = System::mktemp('-d -t "' . $tmpdir . '"');
         $a   = $this->downloadHttp('http://' . $channel . '/channel.xml', $this->ui, $tmp, $callback, false);
         PEAR::popErrorHandling();
         if (PEAR::isError($a)) {
