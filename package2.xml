@@ -84,7 +84,7 @@
  <date>2011-07-06</date>
  <time>15:30:00</time>
  <version>
-  <release>1.9.4</release>
+  <release>1.9.5</release>
   <api>1.9.4</api>
  </version>
  <stability>
@@ -94,15 +94,7 @@
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
   Bug Fixes:
-  * Bug #17350: "pear install --force" doesn't uninstall files from previous pkg versions [dufuz]
-  * Bug #18362: A whitespace TEMP_DIR path breaks install/upgrade functionality [dufuz]
-  * Bug #18440: bad tmp folder path on install : Unable to create path for C:/Program/tmp [dufuz]
-  * Bug #18581: "config-get -c" not returning channel's configuration when using alias [dufuz]
-  * Bug #18639: regression: installing xdebug fails most likely due to another fix [dufuz]
-
-  Features
-  * All System (the class) functions can now take in spaced paths as long as they are surrounded in quotes.
-    Prior to this it was possible to do that by passing all values in as an array (by product of #18362, #18440) [dufuz]
+  * Bug #18656: E_WARNING errors from is_a() usage in PEAR::isError on PHP 5.4+ [dufuz]
  </notes>
  <contents>
   <dir name="/">
@@ -889,6 +881,31 @@ http://pear.php.net/advisory-20110228.txt
     code coverage shutdown function in case we are inside a namespace. [sebastian]
   * Fixed a bug with extensions not providing their config.m4 and co in the root directory of
     their pecl package but rather in a sub directory, such as xhprof. [dufuz]
+ </notes>
+  </release>
+  <release>
+ <date>2011-07-06</date>
+ <time>15:30:00</time>
+ <version>
+  <release>1.9.4</release>
+  <api>1.9.4</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+ <notes>
+  Bug Fixes:
+  * Bug #17350: "pear install --force" doesn't uninstall files from previous pkg versions [dufuz]
+  * Bug #18362: A whitespace TEMP_DIR path breaks install/upgrade functionality [dufuz]
+  * Bug #18440: bad tmp folder path on install : Unable to create path for C:/Program/tmp [dufuz]
+  * Bug #18581: "config-get -c" not returning channel's configuration when using alias [dufuz]
+  * Bug #18639: regression: installing xdebug fails most likely due to another fix [dufuz]
+
+  Features
+  * All System (the class) functions can now take in spaced paths as long as they are surrounded in quotes.
+    Prior to this it was possible to do that by passing all values in as an array (by product of #18362, #18440) [dufuz]
  </notes>
   </release>
  </changelog>
