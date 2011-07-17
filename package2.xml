@@ -94,7 +94,6 @@
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
   Bug Fixes:
-  * Bug #18656: E_WARNING errors from is_a() usage in PEAR::isError on PHP 5.4+ [dufuz]
  </notes>
  <contents>
   <dir name="/">
