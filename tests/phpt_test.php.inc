@@ -315,6 +315,9 @@ class PEAR_PHPTest
                 if ($this->_diffonly) {
                     return false;
                 }
+            } else {
+                echo "\nNOTE: install Text_Diff, then re-run the tests.\n"
+                    . "The error output will be much easier to read.\n\n";
             }
             echo "Expecting:\n";
             var_export($control);
