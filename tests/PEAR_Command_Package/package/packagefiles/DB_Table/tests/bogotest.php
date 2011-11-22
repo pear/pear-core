@@ -5,8 +5,6 @@ require_once 'DB.php';
 require_once 'DB/Table.php';
 require_once 'Var_Dump.php';
 
-error_reporting(E_ALL);
-
 class example extends DB_Table {
 	
 	var $col = array(

@@ -8,7 +8,6 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $e = $command->run('info', array(), array(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'Console_Getopt-1.2.1.tgz'));

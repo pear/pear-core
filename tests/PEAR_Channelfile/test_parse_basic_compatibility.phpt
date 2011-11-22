@@ -9,7 +9,6 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 
-error_reporting(1803);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $chf = new PEAR_ChannelFile(true);
 $chf->fromXmlString($first = '<?xml version="1.0" encoding="ISO-8859-1" ?>
