@@ -8,7 +8,6 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
 $save____dir = getcwd();
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 chdir($temp_path);

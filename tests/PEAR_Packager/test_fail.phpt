@@ -8,7 +8,6 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 touch($temp_path . DIRECTORY_SEPARATOR . 'bloob.xml');
 $ret = $packager->package($temp_path . DIRECTORY_SEPARATOR . 'bloob.xml');

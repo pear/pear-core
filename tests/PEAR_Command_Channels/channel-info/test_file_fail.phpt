@@ -8,7 +8,6 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $c = '<?xml version="1.0" encoding="ISO-8859-1" ?>
 <channel version="1.0" xmlns="http://pear.php.net/channel-1.0"

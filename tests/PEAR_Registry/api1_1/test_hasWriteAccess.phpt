@@ -21,7 +21,6 @@ safe_mode_include_dir=/
 safe_mode_allowed_env_vars=HOME,PHP_
 --FILE--
 <?php
-error_reporting(1803);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 if (OS_UNIX) {
     $phpunit->assertErrorsF(array(

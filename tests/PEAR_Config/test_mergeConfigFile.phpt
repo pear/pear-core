@@ -8,7 +8,6 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $config = new PEAR_Config(dirname(__FILE__) . DIRECTORY_SEPARATOR . 
     'ini' . DIRECTORY_SEPARATOR . 'user2.input', $temp_path .

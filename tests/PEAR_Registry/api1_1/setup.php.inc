@@ -1,5 +1,4 @@
 <?php
-error_reporting(1803);
 include_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'pear_registry_inc.php.inc';
 include_once "PEAR/Registry.php";
 include_once "PEAR/ChannelFile.php";

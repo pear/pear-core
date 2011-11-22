@@ -11,7 +11,6 @@ if (!@include_once 'PEAR/Command/Packaging.php') {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 
 // This test requires PEAR_Command_Packaging to be installed to work
