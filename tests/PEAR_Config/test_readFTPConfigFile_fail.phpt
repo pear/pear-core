@@ -15,7 +15,6 @@ if (!PEAR_Common::isIncludeable('Net/FTP.php') || !PEAR_Common::isIncludeable('P
 ?>
 --FILE--
 <?php
-error_reporting(1803);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $config = &new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini', $temp_path .
     DIRECTORY_SEPARATOR . 'nofile');

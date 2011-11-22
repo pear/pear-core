@@ -12,7 +12,6 @@ if (!($fp = @fsockopen('pear.php.net', 80))) {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
 require_once 'System.php';
 
  /*******************

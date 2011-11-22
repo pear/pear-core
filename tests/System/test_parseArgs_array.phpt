@@ -8,7 +8,6 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
 require_once 'System.php';
 
 $opts = System::_parseArgs(array('-t R:\applications\PHP 5.3\tmp', '-d', 'pear'), 't:d');

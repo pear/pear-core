@@ -3,16 +3,19 @@ PEAR_Registry->hasWriteAccess() (API v1.1)
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
-    echo 'skip';
+    die('skip use "pear run-tests" to execute these tests');
+}
+if (version_compare(PHP_VERSION, '5.4', '>=')) {
+    die('skip safe mode no longer exists');
 }
 require_once 'PEAR/Registry.php';
 $pv = phpversion() . '';
 $av = $pv{0} == '4' ? 'apiversion' : 'apiVersion';
 if (!in_array($av, get_class_methods('PEAR_Registry'))) {
-    echo 'skip';
+    die('skip missing PEAR_Registry');
 }
 if (PEAR_Registry::apiVersion() != '1.1') {
-    echo 'skip';
+    die('skip test is for API Version 1.1.');
 }
 ?>
 --INI--
@@ -21,7 +24,6 @@ safe_mode_include_dir=/
 safe_mode_allowed_env_vars=HOME,PHP_
 --FILE--
 <?php
-error_reporting(1803);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 if (OS_UNIX) {
     $phpunit->assertErrorsF(array(

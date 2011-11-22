@@ -8,7 +8,6 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
 $ds = DIRECTORY_SEPARATOR;
 require_once dirname(dirname(__FILE__)) . $ds . 'setup.php.inc';
 $reg = $config->getRegistry();
