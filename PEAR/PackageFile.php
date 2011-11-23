@@ -170,6 +170,9 @@ class PEAR_PackageFile
         } else {
             $obj = &$this->factory('1.0');
         }
+        if (!$obj) {
+            return PEAR::raiseError('Invalid package version.');
+        }
 
         if ($this->_logger) {
             $obj->setLogger($this->_logger);
