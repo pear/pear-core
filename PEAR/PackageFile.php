@@ -119,7 +119,7 @@ class PEAR_PackageFile
     /**
      * Create a PEAR_PackageFile_v* of a given version.
      * @param   int $version
-     * @return  PEAR_PackageFile_v1|PEAR_PackageFile_v1
+     * @return  PEAR_PackageFile_v1|PEAR_PackageFile_v2|false
      */
     function &factory($version)
     {
@@ -141,7 +141,7 @@ class PEAR_PackageFile
      * WARNING: no validation is performed, the array is assumed to be valid,
      * always parse from xml if you want validation.
      * @param   array $arr
-     * @return PEAR_PackageFileManager_v1|PEAR_PackageFileManager_v2
+     * @return PEAR_PackageFileManager_v1|PEAR_PackageFileManager_v2|PEAR_Error
      * @uses    factory() to construct the returned object.
      */
     function &fromArray($arr)
@@ -157,7 +157,15 @@ class PEAR_PackageFile
             return $obj;
         }
 
-        if (isset($arr['package']['attribs']['version'])) {
+        // The extensive tests are necessary due to changes in PHP 5.4.
+        if (is_array($arr)
+            && array_key_exists('package', $arr)
+            && is_array($arr['package'])
+            && array_key_exists('attribs', $arr['package'])
+            && is_array($arr['package']['attribs'])
+            && array_key_exists('version', $arr['package']['attribs'])
+            && !empty($arr['package']['attribs']['version']))
+		{
             $obj = &$this->factory($arr['package']['attribs']['version']);
         } else {
             $obj = &$this->factory('1.0');
