@@ -449,7 +449,11 @@ class PEAR_PHPTest
                         }
                         print ")";
                     } else {
-                        print " $k=\"$v\"";
+                        if (is_array($v)) {
+                            print " $k=\"Array\"";
+                        } else {
+                            print " $k=\"$v\"";
+                        }
                     }
                 }
                 print "\n";
