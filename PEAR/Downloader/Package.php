@@ -1672,7 +1672,7 @@ class PEAR_Downloader_Package
                         if (!isset($options['soft'])) {
                             $this->_downloader->log(0, 'Channel "' . $parsed['channel'] .
                                 '" is not initialized, use ' .
-                                '"pear channel-discover ' . $parsed['channel'] . '" to initialize' .
+                                '"pear channel-discover ' . $parsed['channel'] . '" to initialize ' .
                                 'or pear config-set auto_discover 1');
                         }
                     }
