@@ -380,7 +380,7 @@ Run post-installation scripts in package <package>, if any exist.
             $newini = array();
         }
         foreach ($binaries as $binary) {
-            if ($ini['extension_dir']) {
+            if (!$this->config->get('ext_dir') && $ini['extension_dir']) {
                 $binary = basename($binary);
             }
             $newini[] = $enable . '="' . $binary . '"' . (OS_UNIX ? "\n" : "\r\n");
