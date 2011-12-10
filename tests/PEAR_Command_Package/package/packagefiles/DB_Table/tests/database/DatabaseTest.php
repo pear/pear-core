@@ -1,10 +1,8 @@
 <?php
-#require_once 'PHPUnit/TestCase.php';
-require_once 'PHPUnit2/Framework/TestCase.php';
+require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'DB/Table/Database.php';
 
-#class DatbaseBaseTest extends PHPUnit_TestCase {
-class DatabaseTest extends PHPUnit2_Framework_TestCase {
+class DatabaseTest extends PHPUnit_Framework_TestCase {
 
     var $insert  = true;
 
