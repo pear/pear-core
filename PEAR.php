@@ -249,6 +249,9 @@ class PEAR
      */
     function isError($data, $code = null)
     {
+        if (!is_object($data)) {
+             return false;
+        }
         if (!is_a($data, 'PEAR_Error')) {
             return false;
         }
