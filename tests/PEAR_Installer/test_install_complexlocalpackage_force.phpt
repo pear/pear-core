@@ -418,8 +418,7 @@ $phpunit->assertTrue(isset($info['_lastmodified']), 'lastmodified is set?');
 unset($info['_lastmodified']);
 $phpunit->assertEquals($ret, $info, 'test installation, PEAR1');
 if (!OS_WINDOWS) {
-    // Don't forget umask ! permission of new file is 0666
-    $umask = decoct(0666 & ( 0777 - umask()));
+    $umask = decoct(0666 & ~(int)octdec($config->get('umask')));
     $phpunit->assertEquals(array (
       0 =>
       array (
