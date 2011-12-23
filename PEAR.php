@@ -487,6 +487,12 @@ class PEAR
             $error_class = $message->getType();
             $message->error_message_prefix = '';
             $message     = $message->getMessage();
+
+            // Make sure right data gets passed.
+            $r = new ReflectionClass($error_class);
+            $c = $r->getConstructor();
+            $p = array_shift($c->getParameters());
+            $skipmsg = ($p->getName() != 'message');
         }
 
         if (
