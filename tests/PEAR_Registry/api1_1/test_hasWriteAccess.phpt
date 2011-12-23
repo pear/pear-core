@@ -24,7 +24,9 @@ safe_mode_include_dir=/
 safe_mode_allowed_env_vars=HOME,PHP_
 --FILE--
 <?php
+$prior_er = error_reporting(error_reporting() & ~E_WARNING);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
+error_reporting($prior_er);
 if (OS_UNIX) {
     $phpunit->assertErrorsF(array(
         array('package' => 'PEAR_Error', 'message' => 'registerRoles: opendir(%sPEAR/Installer/Role) failed: does not exist/is not directory')
