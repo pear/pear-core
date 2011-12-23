@@ -459,7 +459,7 @@ class PEAR_RunTest
             $env['REQUEST_METHOD'] = 'POST';
 
             $this->save_text($tmp_post, $request);
-            $cmd = "$this->_php$pass_options$ini_settings_all \"$temp_file\" 2>&1 < $tmp_post";
+            $cmd = "$this->_php $pass_options $ini_settings_all \"$temp_file\" 2>&1 < $tmp_post";
         } elseif (array_key_exists('POST', $section_text) && !empty($section_text['POST'])) {
             $post = trim($section_text['POST']);
             $this->save_text($tmp_post, $post);
@@ -469,7 +469,7 @@ class PEAR_RunTest
             $env['CONTENT_TYPE']   = 'application/x-www-form-urlencoded';
             $env['CONTENT_LENGTH'] = $content_length;
 
-            $cmd = "$this->_php$pass_options$ini_settings_all \"$temp_file\" 2>&1 < $tmp_post";
+            $cmd = "$this->_php $pass_options $ini_settings_all \"$temp_file\" 2>&1 < $tmp_post";
         } else {
             $env['REQUEST_METHOD'] = 'GET';
             $env['CONTENT_TYPE']   = '';
@@ -753,7 +753,7 @@ $text
         $warn = false;
         if (array_key_exists('SKIPIF', $section_text) && trim($section_text['SKIPIF'])) {
             $this->save_text($temp_skipif, $section_text['SKIPIF']);
-            $output = $this->system_with_timeout("$this->_php$ini_settings -f \"$temp_skipif\"");
+            $output = $this->system_with_timeout("$this->_php $ini_settings -f \"$temp_skipif\"");
             $output = $output[1];
             $loutput = ltrim($output);
             unlink($temp_skipif);
