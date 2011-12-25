@@ -50,7 +50,11 @@ $phpunit->assertEquals(array (
   'package-validate' => 'PEAR_Command_Package',
   'pickle' => 'PEAR_Command_Pickle',
   'remote-info' => 'PEAR_Command_Remote',
+  'remote-install' => 'PEAR_Command_Remoteinstall',
   'remote-list' => 'PEAR_Command_Remote',
+  'remote-uninstall' => 'PEAR_Command_Remoteinstall',
+  'remote-upgrade' => 'PEAR_Command_Remoteinstall',
+  'remote-upgrade-all' => 'PEAR_Command_Remoteinstall',
   'run-scripts' => 'PEAR_Command_Install',
   'run-tests' => 'PEAR_Command_Test',
   'search' => 'PEAR_Command_Remote',
@@ -62,8 +66,8 @@ $phpunit->assertEquals(array (
   'upgrade' => 'PEAR_Command_Install',
   'upgrade-all' => 'PEAR_Command_Install',
 ), PEAR_Command::getCommands(), 'getcommands');
-$phpunit->assertEquals(47, count(PEAR_Command::getCommands()), 'count commands');
-$phpunit->assertEquals(47, count(PEAR_Command::getShortcuts()), 'count shortcuts');
+$phpunit->assertEquals(51, count(PEAR_Command::getCommands()), 'count commands');
+$phpunit->assertEquals(51, count(PEAR_Command::getShortcuts()), 'count shortcuts');
 $phpunit->assertEquals(array (
   'b' => 'build',
   'bun' => 'bundle',
@@ -89,6 +93,7 @@ $phpunit->assertEquals(array (
   'fl' => 'list-files',
   'i' => 'install',
   'in' => 'info',
+  'inr' => 'remote-install',
   'l' => 'list',
   'la' => 'list-all',
   'lc' => 'list-channels',
@@ -109,9 +114,12 @@ $phpunit->assertEquals(array (
   'st' => 'shell-test',
   'sv' => 'svntag',
   'ua' => 'upgrade-all',
+  'uar' => 'remote-upgrade-all',
   'uc' => 'update-channels',
   'un' => 'uninstall',
+  'unr' => 'remote-uninstall',
   'up' => 'upgrade',
+  'upr' => 'remote-upgrade',
 ), PEAR_Command::getShortcuts(), 'getshortcuts');
 PEAR_Command::getGetoptArgs('build', $s, $l);
 $phpunit->assertEquals('', $s, 'short build');
