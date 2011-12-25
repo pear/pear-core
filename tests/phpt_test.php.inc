@@ -1,13 +1,49 @@
 <?php
+
+/*
+ * Set include path so tests can be run from anywhere.
+ */
+
+if ('@php_dir@' == '@'.'php_dir'.'@') {
+    // This package hasn't been installed, use parent of this dir.
+    $php_dir = dirname(dirname(__FILE__));
+} else {
+    $php_dir = '@php_dir@';
+}
+
+$dirs = array(
+    dirname($_SERVER['PHP_SELF']),
+    dirname(dirname($_SERVER['PHP_SELF'])),
+    dirname(__FILE__),
+    $php_dir,
+    '.',
+);
+
+$dirs = array_merge($dirs, explode(PATH_SEPARATOR, get_include_path()));
+$dirs = array_unique($dirs);
+set_include_path(implode(PATH_SEPARATOR, $dirs));
+
+/*
+ * Ensure time consistency.
+ */
+
 if (function_exists('date_default_timezone_set')) {
     date_default_timezone_set('UTC');
 }
 
+/**#@+
+ * Obtain the classes needed for all tests.
+ */
 @include_once 'Text/Diff.php';
 @include_once 'Text/Diff/Renderer.php';
 @include_once 'Text/Diff/Renderer/unified.php';
 require_once 'PEAR/ErrorStack.php';
 require_once 'PEAR.php';
+/**#@-*/
+
+/**
+ * Helper class for testing
+ */
 class PEAR_PHPTest
 {
     var $_diffonly;

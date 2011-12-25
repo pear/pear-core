@@ -1,10 +1,10 @@
 <?php
-set_include_path(get_include_path().PATH_SEPARATOR.getcwd()); // allows chdir
+require_once dirname(dirname(__FILE__)) . '/phpt_test.php.inc';
+require_once 'download_test_classes.php.inc';
 
 $server = 'pear.Chiara';
 //$server = 'test.pear.php.net';
 $temp_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 
 cleanall($temp_path);
 $statedir = $temp_path;

@@ -1,11 +1,10 @@
 <?php
-include_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'pear_registry_inc.php.inc';
+require_once dirname(dirname(dirname(__FILE__))) . '/phpt_test.php.inc';
+require_once 'download_test_classes.php.inc';
+
 include_once "PEAR/Registry.php";
 include_once "PEAR/ChannelFile.php";
 include_once "PEAR/PackageFile/v1.php";
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
-set_include_path(get_include_path().PATH_SEPARATOR.getcwd()); // allows chdir
 
 // ------------------------------------------------------------------------- //
 

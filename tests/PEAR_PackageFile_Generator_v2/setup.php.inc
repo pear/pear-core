@@ -1,10 +1,10 @@
 <?php
+require_once dirname(dirname(__FILE__)) . '/phpt_test.php.inc';
+require_once 'download_test_classes.php.inc';
+
 require_once 'PEAR/PackageFile/Generator/v2.php';
 require_once 'PEAR/PackageFile/Parser/v2.php';
 require_once 'PEAR/PackageFile/v2.php';
-set_include_path(get_include_path().PATH_SEPARATOR.getcwd()); // allows chdir
-
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 
 $temp_path = $statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
 cleanall($statedir);
