@@ -547,6 +547,10 @@ class PEAR_Dependency2
     function validatePearinstallerDependency($dep)
     {
         $pearversion = $this->getPEARVersion();
+        if (array_key_exists('PEAR_RUNTESTS_PEAR_VERSION_RETURN', $GLOBALS)) {
+            // A means for testing pear-core in local repositories.
+            return $GLOBALS['PEAR_RUNTESTS_PEAR_VERSION_RETURN'];
+        }
         $extra = $this->_getExtraString($dep);
         if (isset($dep['exclude'])) {
             if (!is_array($dep['exclude'])) {

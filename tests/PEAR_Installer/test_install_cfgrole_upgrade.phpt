@@ -26,7 +26,9 @@ fclose($fp);
 
 $dp = &new PEAR_Downloader($fakelog, array('offline' => true), $config);
 $phpunit->assertNoErrors('after create');
+$GLOBALS['PEAR_RUNTESTS_PEAR_VERSION_RETURN'] = true;
 $result = $dp->download(array($c1));
+unset($GLOBALS['PEAR_RUNTESTS_PEAR_VERSION_RETURN']);
 $after = $dp->getDownloadedPackages();
 
 $installer->setOptions($dp->getOptions());
