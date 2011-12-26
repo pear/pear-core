@@ -11,8 +11,10 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $downloader = &new PEAR_Downloader($fakelog, array(), $config);
 $installer = &new PEAR_Installer($fakelog);
+$GLOBALS['PEAR_RUNTESTS_PEAR_VERSION_RETURN'] = true;
 $downloaded = &$downloader->download(array(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'Console_Getopt-1.2.1.tgz'));
+unset($GLOBALS['PEAR_RUNTESTS_PEAR_VERSION_RETURN']);
 $phpunit->assertNoErrors('"download"');
 $phpunit->assertEquals(array(), $downloader->getErrorMsgs(), 'downloader errmessages');
 $installer->setOptions(array());
