@@ -6,7 +6,7 @@ require_once 'PEAR/PackageFile/Generator/v2.php';
 require_once 'PEAR/PackageFile/Parser/v2.php';
 require_once 'PEAR/PackageFile/v2.php';
 
-$temp_path = $statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
+$statedir = $temp_path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'pear-core-test';
 cleanall($statedir);
 mkdir($statedir);
 $config = serialize(

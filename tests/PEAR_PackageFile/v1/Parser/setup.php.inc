@@ -6,7 +6,7 @@ require_once 'PEAR/PackageFile/Parser/v1.php';
 require_once 'PEAR/Config.php';
 
 register_shutdown_function('cleanall');
-$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'registry_tester';
+$statedir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'pear-core-test';
 cleanall($statedir);
 mkdir($statedir);
 $config = serialize(

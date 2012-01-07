@@ -77,9 +77,8 @@ function copyItem($name, $nested = false)
     }
 }
 
-$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
+$statedir = $temp_path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'pear-core-test';
 cleanall();
-$temp_path = $statedir;
 if (!is_dir($temp_path)) {
     mkdir($temp_path);
 }

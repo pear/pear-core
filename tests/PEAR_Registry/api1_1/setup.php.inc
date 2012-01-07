@@ -8,7 +8,7 @@ include_once "PEAR/PackageFile/v1.php";
 
 // ------------------------------------------------------------------------- //
 
-$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
+$statedir = $temp_path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'pear-core-test';
 cleanall();
 
 $files1 = array(
@@ -67,7 +67,6 @@ $files3_new = array(
     );
 mkdir($statedir);
 $phpunit = &new PEAR_PHPTest(true);
-$temp_path = $statedir;
 if (!is_dir($temp_path)) {
     mkdir($temp_path);
 }
