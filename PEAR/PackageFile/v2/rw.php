@@ -236,12 +236,15 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
             }
             $info = $this->_packageInfo[$role];
             if (!isset($info[0])) {
-                if ($info['user'] == $handle) {
+                if (isset($info['user']) && $info['user'] == $handle) {
                     $found = true;
                     break;
                 }
             }
             foreach ($info as $i => $maintainer) {
+                if (!isset($maintainer['user'])) {
+                    continue;
+                }
                 if ($maintainer['user'] == $handle) {
                     $found = $i;
                     break 2;
