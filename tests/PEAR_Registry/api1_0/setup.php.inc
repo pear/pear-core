@@ -4,7 +4,7 @@ require_once 'download_test_classes.php.inc';
 
 include_once "PEAR/Registry.php";
 
-$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
+$statedir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'pear-core-test';
 cleanall();
 
 $files1 = array(

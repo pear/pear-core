@@ -4,7 +4,7 @@ require_once 'download_test_classes.php.inc';
 
 require_once 'PEAR/RunTest.php';
 
-$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
+$statedir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'pear-core-test';
 cleanall();
 mkdir($statedir);
 

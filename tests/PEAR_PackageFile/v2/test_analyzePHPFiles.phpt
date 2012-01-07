@@ -126,7 +126,7 @@ $phpunit->assertErrors(array(
      $temp_path . DIRECTORY_SEPARATOR . 'test4.php"'),
 ), 'pre-errors');
 $phpunit->assertEquals(array (
-  'source_file' => '/testinstallertemp/test5.php',
+  'source_file' => $testdir . '/test5.php',
   'declared_classes' => 
   array (
     0 => 'test2',
