@@ -24,12 +24,18 @@ safe_mode_include_dir=/
 safe_mode_allowed_env_vars=HOME,PHP_
 --FILE--
 <?php
+// Disable warnings temporarily to avoid safe mode kvetching about realpath().
+$prior_er = error_reporting(error_reporting() & ~E_WARNING);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-if (OS_UNIX) {
+error_reporting($prior_er);
+
+// Permissions issues only come up on installed version.
+if (OS_UNIX && '@PEAR-VER@' != '@'.'PEAR-VER'.'@') {
     $phpunit->assertErrorsF(array(
         array('package' => 'PEAR_Error', 'message' => 'registerRoles: opendir(%sPEAR/Installer/Role) failed: does not exist/is not directory')
     ), 'err');
 }
+
 if (OS_WINDOWS) {
     $reg->install_dir = '/';
 } else {

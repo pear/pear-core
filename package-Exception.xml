@@ -60,8 +60,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <exclude>5.1.5</exclude>
    </php>
    <pearinstaller>
-    <min>1.9.2</min>
-    <exclude>1.9.2</exclude>
+    <min>1.9.3</min>
+    <exclude>1.9.3</exclude>
     <conflicts/>
    </pearinstaller>
   </required>

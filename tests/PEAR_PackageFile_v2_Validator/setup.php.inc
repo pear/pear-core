@@ -6,9 +6,8 @@ require_once 'PEAR/PackageFile/Parser/v2.php';
 require_once 'PEAR/PackageFile/v2.php';
 require_once 'PEAR/Config.php';
 
-$statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
+$statedir = $temp_path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'pear-core-test';
 cleanall($statedir);
-$temp_path = $statedir;
 if (!is_dir($temp_path)) {
     mkdir($temp_path);
 }

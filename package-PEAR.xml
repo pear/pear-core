@@ -101,15 +101,6 @@ http://pear.php.net/dtd/package-1.0.xsd">
     This allows for customized setups while still having the benefit of using the pear
     installer.
     (pear will not remember the configure params for the next upgrade)
-  * All System (the class) functions can now take in spaced paths as long as they are surrounded in quotes.
-    Prior to this it was possible to do that by passing all values in as an array (related to #18362, #18440)
-
-  Bug Fixes:
-  * Bug #17350: "pear install --force" doesn't uninstall files from previous pkg versions [dufuz]
-  * Bug #18362: A whitespace TEMP_DIR path breaks install/upgrade functionality [dufuz]
-  * Bug #18440: bad tmp folder path on install : Unable to create path for C:/Program/tmp [dufuz]
-  * Bug #18581: "config-get -c" not returning channel's configuration when using alias [dufuz]
-  * Bug #18639: regression: installing xdebug fails most likely due to another fix [dufuz]
  </notes>
   <provides type="class" name="OS_Guess"/>
   <provides type="class" name="System"/>

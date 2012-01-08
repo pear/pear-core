@@ -4,9 +4,8 @@ require_once 'download_test_classes.php.inc';
 
 require_once 'PEAR/Packager.php';
 
-$temp_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
+$statedir = $temp_path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'pear-core-test';
 cleanall($temp_path);
-$statedir = $temp_path;
 if (!is_dir($temp_path)) {
     mkdir($temp_path);
 }

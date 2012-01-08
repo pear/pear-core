@@ -450,8 +450,7 @@ if (OS_WINDOWS) {
       ),
     ), $fakelog->getLog(), 'log');
 } else {
-    // Don't forget umask ! permission of new file is 0666
-    $umask = decoct(0666 & ( 0777 - umask()));
+    $umask = decoct(0666 & ~(int)octdec($config->get('umask')));
     $phpunit->assertEquals(array (
       0 =>
       array (

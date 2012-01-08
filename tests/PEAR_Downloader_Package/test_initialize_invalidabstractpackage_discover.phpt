@@ -63,7 +63,7 @@ $phpunit->assertEquals(array(
   5 =>
   array (
     0 => 0,
-    1 => 'Channel "pear.foo.com" is not initialized, use "pear channel-discover pear.foo.com" to initializeor pear config-set auto_discover 1',
+    1 => 'Channel "pear.foo.com" is not initialized, use "pear channel-discover pear.foo.com" to initialize or pear config-set auto_discover 1',
   ),
   6 =>
   array (

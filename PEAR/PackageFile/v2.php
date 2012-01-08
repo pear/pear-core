@@ -1167,15 +1167,18 @@ class PEAR_PackageFile_v2
         if (isset($this->_packageInfo['filelist']) && !$preserve) {
             return $this->_packageInfo['filelist'];
         }
+
         $this->flattenFilelist();
         if ($contents = $this->getContents()) {
             $ret = array();
             if (!isset($contents['dir'])) {
                 return false;
             }
+
             if (!isset($contents['dir']['file'][0])) {
                 $contents['dir']['file'] = array($contents['dir']['file']);
             }
+
             foreach ($contents['dir']['file'] as $file) {
                 $name = $file['attribs']['name'];
                 if (!$preserve) {
@@ -1183,11 +1186,14 @@ class PEAR_PackageFile_v2
                 }
                 $ret[$name] = $file;
             }
+
             if (!$preserve) {
                 $this->_packageInfo['filelist'] = $ret;
             }
+
             return $ret;
         }
+
         return false;
     }
 
@@ -1241,10 +1247,12 @@ class PEAR_PackageFile_v2
         if (isset($contents['dir']['attribs']['baseinstalldir'])) {
             $base = $contents['dir']['attribs']['baseinstalldir'];
         }
+
         if (isset($this->_packageInfo['bundle'])) {
             return PEAR::raiseError(
                 'Exception: bundles should be handled in download code only');
         }
+
         $release = $this->getReleases();
         if ($release) {
             if (!isset($release[0])) {
@@ -1252,10 +1260,12 @@ class PEAR_PackageFile_v2
                     if ($forfilecheck) {
                         return $this->getFilelist();
                     }
+
                     return $contents;
                 }
                 $release = array($release);
             }
+
             $depchecker = &$this->getPEARDependency2($this->_config, array(),
                 array('channel' => $this->getChannel(), 'package' => $this->getPackage()),
                 PEAR_VALIDATE_INSTALLING);
@@ -1268,6 +1278,7 @@ class PEAR_PackageFile_v2
                             if (!isset($conditions[0])) {
                                 $conditions = array($conditions);
                             }
+
                             foreach ($conditions as $condition) {
                                 $ret = $depchecker->{"validate{$type}Dependency"}($condition);
                                 if (PEAR::isError($ret)) {
@@ -1276,9 +1287,11 @@ class PEAR_PackageFile_v2
                                 }
                             }
                         }
+
                         PEAR::popErrorHandling();
                     }
                 }
+
                 // this is the release to use
                 if (isset($instance['filelist'])) {
                     // ignore files
@@ -1290,6 +1303,7 @@ class PEAR_PackageFile_v2
                             unset ($contents[$ig['attribs']['name']]);
                         }
                     }
+
                     // install files as this name
                     if (isset($instance['filelist']['install'])) {
                         $installas = isset($instance['filelist']['install'][0]) ?
@@ -1301,19 +1315,23 @@ class PEAR_PackageFile_v2
                         }
                     }
                 }
+
                 if ($forfilecheck) {
                     foreach ($contents as $file => $attrs) {
                         $contents[$file] = $attrs['attribs'];
                     }
                 }
+
                 return $contents;
             }
         } else { // simple release - no installconditions or install-as
             if ($forfilecheck) {
                 return $this->getFilelist();
             }
+
             return $contents;
         }
+
         // no releases matched
         return PEAR::raiseError('No releases in package.xml matched the existing operating ' .
             'system, extensions installed, or architecture, cannot install');
