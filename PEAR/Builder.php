@@ -424,7 +424,11 @@ class PEAR_Builder extends PEAR_Common
         $prefix = exec($this->config->get('php_prefix')
                         . "php-config" .
                        $this->config->get('php_suffix') . " --prefix");
-        $this->_harvestInstDir($prefix, $inst_dir . DIRECTORY_SEPARATOR . $prefix, $built_files);
+        $ext_dir = $this->config->get('ext_dir');
+        if (!$ext_dir) {
+            $ext_dir = $prefix;
+        }
+        $this->_harvestInstDir($ext_dir, $inst_dir . DIRECTORY_SEPARATOR . $prefix, $built_files);
 
         chdir($old_cwd);
         return $built_files;
