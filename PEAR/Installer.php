@@ -783,7 +783,10 @@ class PEAR_Installer extends PEAR_Downloader
                             if (!empty($res)) {
                                 $new = $this->_registry->getPackage($result[1], $result[0]);
                                 $this->file_operations[$key] = false;
-                                $this->log(3, "file $data[0] was scheduled for removal from {$this->pkginfo->getName()} but is owned by {$new->getChannel()}/{$new->getName()}, removal has been cancelled.");
+                                $pkginfoName = $this->pkginfo->getName();
+                                $newChannel  = $new->getChannel();
+                                $newPackage  = $new->getName();
+                                $this->log(3, "file $data[0] was scheduled for removal from $pkginfoName but is owned by $newChannel/$newPackage, removal has been cancelled.");
                             }
                         }
                     }
