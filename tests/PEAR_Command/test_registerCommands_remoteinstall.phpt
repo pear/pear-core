@@ -5,6 +5,7 @@ PEAR_Command::factory()
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
+require_once dirname(dirname(__FILE__)) . '/phpt_test.php.inc';
 if (@!include_once 'PEAR/Command/Remoteinstall.php') {
     die('skip standard test will be used');
 }
@@ -39,11 +40,8 @@ $phpunit->assertEquals(array (
   'install' => 'PEAR_Command_Install',
   'list' => 'PEAR_Command_Registry',
   'list-all' => 'PEAR_Command_Remote',
-  'list-categories' => 'PEAR_Command_Categories',
-  'list-category' => 'PEAR_Command_Categories',
   'list-channels' => 'PEAR_Command_Channels',
   'list-files' => 'PEAR_Command_Registry',
-  'list-packages' => 'PEAR_Command_Categories',
   'list-upgrades' => 'PEAR_Command_Remote',
   'login' => 'PEAR_Command_Auth',
   'logout' => 'PEAR_Command_Auth',
@@ -69,15 +67,13 @@ $phpunit->assertEquals(array (
   'upgrade' => 'PEAR_Command_Install',
   'upgrade-all' => 'PEAR_Command_Install',
 ), PEAR_Command::getCommands(), 'getcommands');
-$phpunit->assertEquals(54, count(PEAR_Command::getCommands()), 'count commands');
-$phpunit->assertEquals(54, count(PEAR_Command::getShortcuts()), 'count shortcuts');
+$phpunit->assertEquals(51, count(PEAR_Command::getCommands()), 'count commands');
+$phpunit->assertEquals(51, count(PEAR_Command::getShortcuts()), 'count shortcuts');
 $phpunit->assertEquals(array (
   'b' => 'build',
   'bun' => 'bundle',
   'c2' => 'convert',
   'ca' => 'channel-add',
-  'cat' => 'list-category',
-  'cats' => 'list-categories',
   'cc' => 'clear-cache',
   'cd' => 'cvsdiff',
   'cde' => 'channel-delete',
@@ -104,7 +100,6 @@ $phpunit->assertEquals(array (
   'lc' => 'list-channels',
   'li' => 'login',
   'lo' => 'logout',
-  'lp' => 'list-packages',
   'lu' => 'list-upgrades',
   'p' => 'package',
   'pd' => 'package-dependencies',
@@ -214,12 +209,12 @@ $phpunit->assertEquals(array (
   5 => 'nobuild',
   6 => 'nocompress',
   7 => 'installroot=',
-  'packagingroot=',
-  'ignore-errors',
-  'alldeps',
-  'onlyreqdeps',
-  'offline',
-  'pretend',
+  8 => 'packagingroot=',
+  9 => 'ignore-errors',
+  10 => 'alldeps',
+  11 => 'onlyreqdeps',
+  12 => 'offline',
+  13 => 'pretend',
 ), $l, 'long install');
 PEAR_Command::getGetoptArgs('list', $s, $l);
 $phpunit->assertEquals('c:ai', $s, 'short list');
@@ -263,64 +258,9 @@ $phpunit->assertEquals(array (), $l, 'long package-validate');
 PEAR_Command::getGetoptArgs('remote-info', $s, $l);
 $phpunit->assertEquals('', $s, 'short remote-info');
 $phpunit->assertEquals(array (), $l, 'long remote-info');
-PEAR_Command::getGetoptArgs('remote-install', $s, $l);
-$phpunit->assertEquals('fnrsBZR:aoF:Op', $s, 'short remote-install');
-$phpunit->assertEquals( array (
-  0 => 'force',
-  1 => 'nodeps',
-  2 => 'register-only',
-  3 => 'soft',
-  4 => 'nobuild',
-  5 => 'nocompress',
-  6 => 'installroot=',
-  7 => 'ignore-errors',
-  8 => 'alldeps',
-  9 => 'onlyreqdeps',
-  10 => 'remoteconfig=',
-  11 => 'offline',
-  12 => 'pretend',
- )
-, $l, 'long remote-install');
 PEAR_Command::getGetoptArgs('remote-list', $s, $l);
 $phpunit->assertEquals('c:', $s, 'short remote-list');
 $phpunit->assertEquals(array ('channel='), $l, 'long remote-list');
-PEAR_Command::getGetoptArgs('remote-uninstall', $s, $l);
-$phpunit->assertEquals('nrR:F:O', $s, 'short remote-uninstall');
-$phpunit->assertEquals(array (
-  0 => 'nodeps',
-  1 => 'register-only',
-  2 => 'installroot=',
-  3 => 'ignore-errors',
-  4 => 'remoteconfig=',
-  5 => 'offline',
-), $l, 'long remote-uninstall');
-PEAR_Command::getGetoptArgs('remote-upgrade', $s, $l);
-$phpunit->assertEquals('fnrBZR:aoF:Op', $s, 'short remote-upgrade');
-$phpunit->assertEquals(array (
-  0 => 'force',
-  1 => 'nodeps',
-  2 => 'register-only',
-  3 => 'nobuild',
-  4 => 'nocompress',
-  5 => 'installroot=',
-  6 => 'ignore-errors',
-  7 => 'alldeps',
-  8 => 'onlyreqdeps',
-  9 => 'remoteconfig=',
-  10 => 'offline',
-  11 => 'pretend',
-), $l, 'long remote-upgrade');
-PEAR_Command::getGetoptArgs('remote-upgrade-all', $s, $l);
-$phpunit->assertEquals('nrBZR:F:', $s, 'short remote-upgrade-all');
-$phpunit->assertEquals(array (
-  0 => 'nodeps',
-  1 => 'register-only',
-  2 => 'nobuild',
-  3 => 'nocompress',
-  4 => 'installroot=',
-  5 => 'ignore-errors',
-  6 => 'remoteconfig=',
-), $l, 'long remote-upgrade-all');
 PEAR_Command::getGetoptArgs('run-tests', $s, $l);
 $phpunit->assertEquals('ri:lqsputc:x', $s, 'short run-tests');
 $phpunit->assertEquals(array (
@@ -333,17 +273,16 @@ $phpunit->assertEquals(array (
     'phpunit',
     'tapoutput',
     'cgi=',
-    'coverage',
-    ), $l, 'long run-tests');
+    'coverage'), $l, 'long run-tests');
 PEAR_Command::getGetoptArgs('search', $s, $l);
 $phpunit->assertEquals('c:ai', $s, 'short search');
-$phpunit->assertEquals(array ('channel=', 'allchannels', 'channelinfo',), $l, 'long search');
+$phpunit->assertEquals(array ('channel=', 'allchannels', 'channelinfo'), $l, 'long search');
 PEAR_Command::getGetoptArgs('shell-test', $s, $l);
 $phpunit->assertEquals('', $s, 'short shell-test');
 $phpunit->assertEquals(array (), $l, 'long shell-test');
 PEAR_Command::getGetoptArgs('sign', $s, $l);
 $phpunit->assertEquals('v', $s, 'short sign');
-$phpunit->assertEquals(array ('verbose'), $l, 'long sign');
+$phpunit->assertEquals(array(0 => 'verbose',), $l, 'long sign');
 PEAR_Command::getGetoptArgs('uninstall', $s, $l);
 $phpunit->assertEquals('nrR:O', $s, 'short uninstall');
 $phpunit->assertEquals(array (

@@ -48,7 +48,7 @@ $phpunit->assertEquals(
 $phpunit->assertEquals(array(
   0 =>
   array (
-    'info' => "Package ready at '" . dirname($path) . "/testinstallertemp/ext/Archive_Tar'",
+    'info' => "Package ready at '" . $temp_path  . "/ext/Archive_Tar'",
     'cmd' => 'no command',
   ),
 ), $fakelog->getLog(), 'log messages');

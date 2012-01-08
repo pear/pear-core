@@ -1,10 +1,10 @@
-<?php
+s<?php
 require_once dirname(dirname(__FILE__)) . '/phpt_test.php.inc';
 require_once 'download_test_classes.php.inc';
 
 $server = 'pear.Chiara';
 //$server = 'test.pear.php.net';
-$temp_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
+$statedir = $temp_path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'pear-core-test';
 
 cleanall($temp_path);
 $statedir = $temp_path;

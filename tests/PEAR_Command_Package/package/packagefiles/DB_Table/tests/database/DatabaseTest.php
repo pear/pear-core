@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'DB/Table/Database.php';
 
@@ -91,3 +92,5 @@ class DatabaseTest extends PHPUnit_Framework_TestCase {
 
 ?>
 
+=======
+>>>>>>> e366111ff709813c3c6c68d25f761c573f741408

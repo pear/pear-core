@@ -1,6 +1,6 @@
 <?php
 
-$temp_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
+$temp_path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'pear-core-test';
 function cleanall($dir = null)
 {
     if ($dir !== null) {

@@ -3,7 +3,11 @@ require_once dirname(dirname(__FILE__)) . '/phpt_test.php.inc';
 require_once 'download_test_classes.php.inc';
 
 require_once 'PEAR/Common.php';
+<<<<<<< HEAD
 $statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
+=======
+$statedir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'pear-core-test';
+>>>>>>> e366111ff709813c3c6c68d25f761c573f741408
 
 cleanall($statedir);
 if (!is_dir($statedir)) {

@@ -1576,10 +1576,6 @@ class PEAR_Registry extends PEAR
         return $ret;
     }
 
-    // }}}
-
-    // {{{ channelExists()
-
     /**
      * @param string channel name
      * @param bool if true, then aliases will be ignored
@@ -1594,8 +1590,6 @@ class PEAR_Registry extends PEAR
         $this->_unlock();
         return $ret;
     }
-
-    // }}}
 
     /**
      * @param string channel name mirror is in
@@ -1614,8 +1608,6 @@ class PEAR_Registry extends PEAR
         return $ret;
     }
 
-    // {{{ isAlias()
-
     /**
      * Determines whether the parameter is an alias of a channel
      * @param string
@@ -1630,9 +1622,6 @@ class PEAR_Registry extends PEAR
         $this->_unlock();
         return $ret;
     }
-
-    // }}}
-    // {{{ packageInfo()
 
     /**
      * @param string|null
@@ -1649,9 +1638,6 @@ class PEAR_Registry extends PEAR
         $this->_unlock();
         return $ret;
     }
-
-    // }}}
-    // {{{ channelInfo()
 
     /**
      * Retrieve a raw array of channel data.
@@ -1671,8 +1657,6 @@ class PEAR_Registry extends PEAR
         $this->_unlock();
         return $ret;
     }
-
-    // }}}
 
     /**
      * @param string
@@ -1699,7 +1683,6 @@ class PEAR_Registry extends PEAR
         $this->_unlock();
         return $ret;
     }
-    // {{{ listPackages()
 
     function listPackages($channel = false)
     {
@@ -1711,9 +1694,6 @@ class PEAR_Registry extends PEAR
         return $ret;
     }
 
-    // }}}
-    // {{{ listAllPackages()
-
     function listAllPackages()
     {
         if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
@@ -1724,9 +1704,6 @@ class PEAR_Registry extends PEAR
         return $ret;
     }
 
-    // }}}
-    // {{{ listChannel()
-
     function listChannels()
     {
         if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
@@ -1736,9 +1713,6 @@ class PEAR_Registry extends PEAR
         $this->_unlock();
         return $ret;
     }
-
-    // }}}
-    // {{{ addPackage()
 
     /**
      * Add an installed package to the registry
@@ -1770,9 +1744,6 @@ class PEAR_Registry extends PEAR
         return $ret;
     }
 
-    // }}}
-    // {{{ addPackage2()
-
     function addPackage2($info)
     {
         if (!is_object($info)) {
@@ -1790,9 +1761,6 @@ class PEAR_Registry extends PEAR
         return $ret;
     }
 
-    // }}}
-    // {{{ updateChannel()
-
     /**
      * For future expandibility purposes, separate this
      * @param PEAR_ChannelFile
@@ -1804,9 +1772,6 @@ class PEAR_Registry extends PEAR
         }
         return $this->addChannel($channel, $lastmodified, true);
     }
-
-    // }}}
-    // {{{ deleteChannel()
 
     /**
      * Deletion fails if there are any packages installed from the channel
@@ -1827,9 +1792,6 @@ class PEAR_Registry extends PEAR
 
         return $ret;
     }
-
-    // }}}
-    // {{{ addChannel()
 
     /**
      * @param PEAR_ChannelFile Channel object
@@ -1855,9 +1817,6 @@ class PEAR_Registry extends PEAR
         return $ret;
     }
 
-    // }}}
-    // {{{ deletePackage()
-
     function deletePackage($package, $channel = 'pear.php.net')
     {
         if (PEAR::isError($e = $this->_lock(LOCK_EX))) {
@@ -1872,9 +1831,6 @@ class PEAR_Registry extends PEAR
         $this->_dependencyDB->uninstallPackage($p);
         return $ret;
     }
-
-    // }}}
-    // {{{ updatePackage()
 
     function updatePackage($package, $info, $merge = true)
     {
@@ -1898,9 +1854,6 @@ class PEAR_Registry extends PEAR
         }
         return $ret;
     }
-
-    // }}}
-    // {{{ updatePackage2()
 
     function updatePackage2($info)
     {
@@ -1927,8 +1880,6 @@ class PEAR_Registry extends PEAR
         return $ret;
     }
 
-    // }}}
-    // {{{ getChannel()
     /**
      * @param string channel name
      * @param bool whether to strictly return raw channels (no aliases)
@@ -1947,8 +1898,6 @@ class PEAR_Registry extends PEAR
         return $ret;
     }
 
-    // }}}
-    // {{{ getPackage()
     /**
      * @param string package name
      * @param string channel name
@@ -1963,8 +1912,6 @@ class PEAR_Registry extends PEAR
         $this->_unlock();
         return $pf;
     }
-
-    // }}}
 
     /**
      * Get PEAR_PackageFile_v[1/2] objects representing the contents of
@@ -2009,7 +1956,6 @@ class PEAR_Registry extends PEAR
         return $ret;
     }
 
-    // {{{ getChannelValidator()
     /**
      * @param string channel name
      * @return PEAR_Validate|false
@@ -2023,8 +1969,7 @@ class PEAR_Registry extends PEAR
         $val = $chan->getValidationObject();
         return $val;
     }
-    // }}}
-    // {{{ getChannels()
+
     /**
      * @param string channel name
      * @return array an array of PEAR_ChannelFile objects representing every installed channel
@@ -2045,9 +1990,6 @@ class PEAR_Registry extends PEAR
         $this->_unlock();
         return $ret;
     }
-
-    // }}}
-    // {{{ checkFileMap()
 
     /**
      * Test whether a file or set of files belongs to a package.
@@ -2131,8 +2073,6 @@ class PEAR_Registry extends PEAR
         return false;
     }
 
-    // }}}
-    // {{{ flush()
     /**
      * Force a reload of the filemap
      * @since 1.5.0RC3
@@ -2143,8 +2083,6 @@ class PEAR_Registry extends PEAR
         clearstatcache(); // ensure that the next read gets the full, current filemap
     }
 
-    // }}}
-    // {{{ apiVersion()
     /**
      * Get the expected API version.  Channels API is version 1.1, as it is backwards
      * compatible with 1.0
@@ -2154,8 +2092,6 @@ class PEAR_Registry extends PEAR
     {
         return '1.1';
     }
-    // }}}
-
 
     /**
      * Parse a package name, or validate a parsed package name array
