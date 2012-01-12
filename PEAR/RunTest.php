@@ -459,7 +459,7 @@ class PEAR_RunTest
             $env['REQUEST_METHOD'] = 'POST';
 
             $this->save_text($tmp_post, $request);
-            $cmd = "$this->_php $pass_options $ini_settings_all \"$temp_file\" 2>&1 < $tmp_post";
+            $cmd = "$this->_php $pass_options $ini_settings_all \"$temp_file\" 2>&1 < \"$tmp_post\"";
         } elseif (array_key_exists('POST', $section_text) && !empty($section_text['POST'])) {
             $post = trim($section_text['POST']);
             $this->save_text($tmp_post, $post);
@@ -469,7 +469,7 @@ class PEAR_RunTest
             $env['CONTENT_TYPE']   = 'application/x-www-form-urlencoded';
             $env['CONTENT_LENGTH'] = $content_length;
 
-            $cmd = "$this->_php $pass_options $ini_settings_all \"$temp_file\" 2>&1 < $tmp_post";
+            $cmd = "$this->_php $pass_options $ini_settings_all \"$temp_file\" 2>&1 < \"$tmp_post\"";
         } else {
             $env['REQUEST_METHOD'] = 'GET';
             $env['CONTENT_TYPE']   = '';
@@ -960,7 +960,7 @@ $text
         if ($section_text['CLEAN']) {
             // perform test cleanup
             $this->save_text($temp_clean, $section_text['CLEAN']);
-            $output = $this->system_with_timeout("$this->_php $temp_clean  2>&1");
+            $output = $this->system_with_timeout("$this->_php \"$temp_clean\"  2>&1");
             if (strlen($output[1])) {
                 echo "BORKED --CLEAN-- section! output:\n", $output[1];
             }
