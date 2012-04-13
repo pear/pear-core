@@ -370,7 +370,7 @@ class PEAR_Config extends PEAR
             ),
         'auto_discover' => array(
             'type' => 'integer',
-            'default' => 0,
+            'default' => 1,
             'doc' => 'whether to automatically discover new channels',
             'prompt' => 'Auto-discover new Channels',
             'group' => 'Internet Access',
