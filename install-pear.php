@@ -75,8 +75,14 @@ for ($i = 0; $i < sizeof($argv); $i++) {
     } elseif ($arg == '-t') {
         $temp_dir = $argv[$i+1];
         $i++;
+    } elseif ($arg == '-A') {
+        $data_dir = $argv[$i+1];
+        $i++;
     } elseif ($arg == '-D') {
         $doc_dir = $argv[$i+1];
+        $i++;
+    } elseif ($arg == '-T') {
+        $test_dir = $argv[$i+1];
         $i++;
     } elseif ($arg == '--debug') {
         $debug = 1;
@@ -139,6 +145,16 @@ if (!empty($doc_dir)) {
     $config->set('doc_dir', $doc_dir, 'default');
 }
 
+// Data files
+if (!empty($data_dir)) {
+    $config->set('data_dir', $data_dir, 'default');
+}
+
+// Unit tests
+if (!empty($test_dir)) {
+    $config->set('test_dir', $test_dir, 'default');
+}
+
 // User supplied a dir prefix
 if (!empty($with_dir)) {
     $ds = DIRECTORY_SEPARATOR;
@@ -146,8 +162,12 @@ if (!empty($with_dir)) {
     if (empty($doc_dir)) {
         $config->set('doc_dir', $with_dir . $ds . 'doc', 'default');
     }
-    $config->set('data_dir', $with_dir . $ds . 'data', 'default');
-    $config->set('test_dir', $with_dir . $ds . 'test', 'default');
+    if (empty($data_dir)) {
+        $config->set('data_dir', $with_dir . $ds . 'data', 'default');
+    }
+    if (empty($test_dir)) {
+        $config->set('test_dir', $with_dir . $ds . 'test', 'default');
+    }
     if (empty($www_dir)) {
         $config->set('www_dir', $with_dir . $ds . 'htdocs', 'default');
     }
