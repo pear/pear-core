@@ -43,7 +43,7 @@ for ($i = 0; $i < sizeof($argv); $i++) {
     if (preg_match('/package-(.*)\.xml$/', $bn, $matches) ||
         preg_match('/([A-Za-z0-9_:]+)-.*\.(tar|tgz)$/', $bn, $matches)) {
         $install_files[$matches[1]] = $arg;
-    } elseif ($arg == '-a') {
+    } elseif ($arg == '-a' || $arg == '--cache') {
         $cache_dir = $argv[$i+1];
         $i++;
     } elseif ($arg == '--force') {
@@ -54,34 +54,34 @@ for ($i = 0; $i < sizeof($argv); $i++) {
     } elseif ($arg == '-ds') {
         $suffix = $argv[$i+1];
         $i++;
-    } elseif ($arg == '-d') {
+    } elseif ($arg == '-d' || $arg == '--dir') {
         $with_dir = $argv[$i+1];
         $i++;
-    } elseif ($arg == '-b') {
+    } elseif ($arg == '-b' || $arg == '--bin') {
         $bin_dir = $argv[$i+1];
         $i++;
-    } elseif ($arg == '-c') {
+    } elseif ($arg == '-c' || $arg == '--config') {
         $cfg_dir = $argv[$i+1];
         $i++;
-    } elseif ($arg == '-w') {
+    } elseif ($arg == '-w' || $arg == '--www') {
         $www_dir = $argv[$i+1];
         $i++;
-    } elseif ($arg == '-p') {
+    } elseif ($arg == '-p' || $arg == '--php') {
         $php_bin = $argv[$i+1];
         $i++;
-    } elseif ($arg == '-o') {
+    } elseif ($arg == '-o' || $arg == '--download') {
         $download_dir = $argv[$i+1];
         $i++;
-    } elseif ($arg == '-t') {
+    } elseif ($arg == '-t' || $arg == '--temp') {
         $temp_dir = $argv[$i+1];
         $i++;
-    } elseif ($arg == '-A') {
+    } elseif ($arg == '-A' || $arg == '--data') {
         $data_dir = $argv[$i+1];
         $i++;
-    } elseif ($arg == '-D') {
+    } elseif ($arg == '-D' || $arg == '--doc') {
         $doc_dir = $argv[$i+1];
         $i++;
-    } elseif ($arg == '-T') {
+    } elseif ($arg == '-T' || $arg == '--test') {
         $test_dir = $argv[$i+1];
         $i++;
     } elseif ($arg == '--debug') {
