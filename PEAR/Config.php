@@ -87,6 +87,13 @@ if (getenv('PHP_PEAR_INSTALL_DIR')) {
     }
 }
 
+// Default for metadata_dir
+if (getenv('PHP_PEAR_METADATA_DIR')) {
+    define('PEAR_CONFIG_DEFAULT_METADATA_DIR', getenv('PHP_PEAR_METADATA_DIR'));
+} else {
+    define('PEAR_CONFIG_DEFAULT_METADATA_DIR', '');
+}
+
 // Default for ext_dir
 if (getenv('PHP_PEAR_EXTENSION_DIR')) {
     define('PEAR_CONFIG_DEFAULT_EXT_DIR', getenv('PHP_PEAR_EXTENSION_DIR'));
@@ -398,6 +405,13 @@ class PEAR_Config extends PEAR
             'prompt' => 'PEAR directory',
             'group' => 'File Locations',
             ),
+        'metadata_dir' => array(
+            'type' => 'directory',
+            'default' => PEAR_CONFIG_DEFAULT_METADATA_DIR,
+            'doc' => 'directory where metadata files are installed (registry, filemap, channels, ...)',
+            'prompt' => 'PEAR metadata directory',
+            'group' => 'File Locations',
+            ),
         'ext_dir' => array(
             'type' => 'directory',
             'default' => PEAR_CONFIG_DEFAULT_EXT_DIR,
@@ -647,7 +661,9 @@ class PEAR_Config extends PEAR
             $this->configuration['default'][$key] = $info['default'];
         }
 
-        $this->_registry['default'] = &new PEAR_Registry($this->configuration['default']['php_dir']);
+        $this->_registry['default'] = &new PEAR_Registry(
+            $this->configuration['default']['php_dir'], false, false,
+            $this->configuration['default']['metadata_dir']);
         $this->_registry['default']->setConfig($this, false);
         $this->_regInitialized['default'] = false;
         //$GLOBALS['_PEAR_Config_instance'] = &$this;
@@ -754,7 +770,9 @@ class PEAR_Config extends PEAR
         $this->configuration[$layer] = $data;
         $this->_setupChannels();
         if (!$this->_noRegistry && ($phpdir = $this->get('php_dir', $layer, 'pear.php.net'))) {
-            $this->_registry[$layer] = &new PEAR_Registry($phpdir);
+            $this->_registry[$layer] = &new PEAR_Registry(
+                $phpdir, false, false,
+                $this->get('metadata_dir', $layer, 'pear.php.net'));
             $this->_registry[$layer]->setConfig($this, false);
             $this->_regInitialized[$layer] = false;
         } else {
@@ -911,7 +929,9 @@ class PEAR_Config extends PEAR
 
         $this->_setupChannels();
         if (!$this->_noRegistry && ($phpdir = $this->get('php_dir', $layer, 'pear.php.net'))) {
-            $this->_registry[$layer] = &new PEAR_Registry($phpdir);
+            $this->_registry[$layer] = &new PEAR_Registry(
+                $phpdir, false, false,
+                $this->get('metadata_dir', $layer, 'pear.php.net'));
             $this->_registry[$layer]->setConfig($this, false);
             $this->_regInitialized[$layer] = false;
         } else {
@@ -1604,7 +1624,9 @@ class PEAR_Config extends PEAR
 
                 if (!is_object($this->_registry[$layer])) {
                     if ($phpdir = $this->get('php_dir', $layer, 'pear.php.net')) {
-                        $this->_registry[$layer] = &new PEAR_Registry($phpdir);
+                        $this->_registry[$layer] = &new PEAR_Registry(
+                            $phpdir, false, false,
+                            $this->get('metadata_dir', $layer, 'pear.php.net'));
                         $this->_registry[$layer]->setConfig($this, false);
                         $this->_regInitialized[$layer] = false;
                     } else {
@@ -2087,8 +2109,9 @@ class PEAR_Config extends PEAR
                 if ($layer == 'ftp' || !isset($this->_registry[$layer])) {
                     continue;
                 }
-                $this->_registry[$layer] =
-                    &new PEAR_Registry($this->get('php_dir', $layer, 'pear.php.net'));
+                $this->_registry[$layer] = &new PEAR_Registry(
+                    $this->get('php_dir', $layer, 'pear.php.net'), false, false,
+                    $this->get('metadata_dir', $layer, 'pear.php.net'));
                 $this->_registry[$layer]->setConfig($this, false);
                 $this->_regInitialized[$layer] = false;
             }
