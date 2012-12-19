@@ -129,11 +129,13 @@ class PEAR_REST
         }
 
         if (isset($headers['content-type'])) {
-            switch ($headers['content-type']) {
+            $content_type = explode(";", $headers['content-type']);
+            $content_type = $content_type[0];
+            switch ($content_type) {
                 case 'text/xml' :
                 case 'application/xml' :
                 case 'text/plain' :
-                    if ($headers['content-type'] === 'text/plain') {
+                    if ($content_type === 'text/plain') {
                         $check = substr($content, 0, 5);
                         if ($check !== '<?xml') {
                             break;
