@@ -783,8 +783,14 @@ Run post-installation scripts in package <package>, if any exist.
                                 $ts = preg_match('/Thread Safety.+enabled/', $info) ? '_ts' : '';
                                 $exttype = 'zend_extension' . $debug . $ts;
                             }
+                            if ($exttype == 'zend_extension') {
+                                $extpath = $atts['installed_as'];
+                            }
+                            else {
+                                $extpath = $pinfo[1]['basename'];
+                            }
                             $extrainfo[] = 'You should add "' . $exttype . '=' .
-                                $pinfo[1]['basename'] . '" to php.ini';
+                                $extpath . '" to php.ini';
                         } else {
                             $extrainfo[] = 'Extension ' . $instpkg->getProvidesExtension() .
                                 ' enabled in php.ini';
