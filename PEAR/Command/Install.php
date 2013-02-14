@@ -785,8 +785,7 @@ Run post-installation scripts in package <package>, if any exist.
                             }
                             if ($exttype == 'zend_extension') {
                                 $extpath = $atts['installed_as'];
-                            }
-                            else {
+                            } else {
                                 $extpath = $pinfo[1]['basename'];
                             }
                             $extrainfo[] = 'You should add "' . $exttype . '=' .
