@@ -774,6 +774,7 @@ Run post-installation scripts in package <package>, if any exist.
                             if ($param->getPackageType() == 'extsrc' ||
                                   $param->getPackageType() == 'extbin') {
                                 $exttype = 'extension';
+                                $extpath = $pinfo[1]['basename'];
                             } else {
                                 ob_start();
                                 phpinfo(INFO_GENERAL);
@@ -782,9 +783,10 @@ Run post-installation scripts in package <package>, if any exist.
                                 $debug = function_exists('leak') ? '_debug' : '';
                                 $ts = preg_match('/Thread Safety.+enabled/', $info) ? '_ts' : '';
                                 $exttype = 'zend_extension' . $debug . $ts;
+                                $extpath = $atts['installed_as'];
                             }
                             $extrainfo[] = 'You should add "' . $exttype . '=' .
-                                $pinfo[1]['basename'] . '" to php.ini';
+                                $extpath . '" to php.ini';
                         } else {
                             $extrainfo[] = 'Extension ' . $instpkg->getProvidesExtension() .
                                 ' enabled in php.ini';
