@@ -776,7 +776,7 @@ Run post-installation scripts in package <package>, if any exist.
                                 $exttype = 'extension';
                                 $extpath = $pinfo[1]['basename'];
                             } else {
-                                if (version_compare(PHP_VERSION, '5.3.0', '<=')) {
+                                if (version_compare(PHP_VERSION, '5.3.0', '<')) {
                                     ob_start();
                                     phpinfo(INFO_GENERAL);
                                     $info = ob_get_contents();
