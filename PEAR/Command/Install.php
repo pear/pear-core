@@ -790,6 +790,11 @@ Run post-installation scripts in package <package>, if any exist.
                                 $exttype = 'zend_extension' . $debug . $ts;
                                 $extpath = $atts['installed_as'];
                             }
+                            if ($exttype == 'zend_extension') {
+                                $extpath = $atts['installed_as'];
+                            } else {
+                                $extpath = $pinfo[1]['basename'];
+                            }
                             $extrainfo[] = 'You should add "' . $exttype . '=' .
                                 $extpath . '" to php.ini';
                         } else {
