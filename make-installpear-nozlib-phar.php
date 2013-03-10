@@ -53,7 +53,7 @@ if ($dp === false) {
     die("while locating packages to install: scandir('" . $tardir. "') failed\n");
 }
 
-$required = array('Archive_Tar', 'Console_Getopt', 'PEAR', 'Structures_Graph', 'XML_Util');
+$required = array('Archive_Tar', 'Console_Getopt', 'Structures_Graph', 'XML_Util');
 $packages = array();
 foreach ($dp as $entry) {
     if ($entry{0} == '.' || !in_array(substr($entry, -4), array('.tar'))) {
@@ -163,7 +163,7 @@ $creator->clearMagicRequire();
 $creator->addMagicRequireCallback(array($creator, 'tokenMagicRequire'));
 $creator->addMagicRequireCallback('replaceVersion');
 
-$creator->addDir($tardir . '/tmp/PEAR', array(), array('*PEAR/*'), false, $tardir . '/tmp');
+$creator->addDir($tardir . '/tmp/PEAR', array('*PEAR/Frontend.php', '*PEAR/PackageFile/v2.php', '*PEAR/Command.php'), array('*PEAR/*'), false, $tardir . '/tmp');
 
 $creator->addFile($tardir . '/tmp/PEAR.php', 'PEAR.php');
 $creator->addFile($tardir . '/tmp/PEAR5.php', 'PEAR5.php');
@@ -171,7 +171,6 @@ $creator->addFile($tardir . '/tmp/System.php', 'System.php');
 $creator->addFile($tardir . '/tmp/OS/Guess.php', 'OS/Guess.php');
 
 // Other packages
-$creator->addFile($tardir . '/tmp/PEAR/Exception.php', 'PEAR/Exception.php');
 $creator->addFile($tardir . '/tmp/Archive/Tar.php', 'Archive/Tar.php');
 $creator->addFile($tardir . '/tmp/Util.php', 'XML/Util.php');
 $creator->addFile($tardir . '/tmp/Console/Getopt.php', 'Console/Getopt.php');
