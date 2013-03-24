@@ -144,7 +144,13 @@ $creator->clearMagicRequire();
 $creator->addMagicRequireCallback(array($creator, 'tokenMagicRequire'));
 $creator->addMagicRequireCallback('replaceVersion');
 
-$creator->addDir($tardir . '/tmp/PEAR', array(), array('*PEAR/*'), false, $tardir . '/tmp');
+$ignores = array(
+    '*PEAR/Frontend.php',
+    '*PEAR/PackageFile/v2.php',
+    '*PEAR/Command.php',
+);
+
+$creator->addDir($tardir . '/tmp/PEAR', $ignores, array('*PEAR/*'), false, $tardir . '/tmp');
 
 $creator->addFile($tardir . '/tmp/PEAR.php', 'PEAR.php');
 $creator->addFile($tardir . '/tmp/PEAR5.php', 'PEAR5.php');
