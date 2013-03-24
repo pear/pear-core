@@ -61,11 +61,6 @@ foreach ($dp as $entry) {
     }
 
     preg_match('|([A-Za-z0-9_:]+)-.*?\.tar$|', $entry, $matches);
-    if ($matches[1] == 'PEAR') {
-        $pearentry = $entry;
-        continue;
-    }
-
     $package = strstr($entry, '-', true);
     $key = array_search($package, $required);
     if ($key !== false) {
@@ -74,7 +69,6 @@ foreach ($dp as $entry) {
 
     $packages[$matches[1]] = $entry;
 }
-$packages['PEAR'] = $pearentry;
 
 if (!empty($required)) {
     die('Following packages were not available in tar format in go-pear-tarballs: ' . implode(', ', $required). "\n");
