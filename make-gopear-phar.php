@@ -161,7 +161,7 @@ $creator->addFile($tardir . '/tmp/Structures/Graph/Node.php', 'Structures/Graph/
 $creator->addFile($tardir . '/tmp/Structures/Graph/Manipulator/AcyclicTest.php', 'Structures/Graph/Manipulator/AcyclicTest.php');
 $creator->addFile($tardir . '/tmp/Structures/Graph/Manipulator/TopologicalSorter.php', 'Structures/Graph/Manipulator/TopologicalSorter.php');
 
-// Include Start scripts speficially since they are never in the releases
+// Include Start scripts specifically since they are never in the releases
 $creator->addFile(__DIR__ . '/PEAR/Start.php', 'PEAR/Start.php');
 $creator->addFile(__DIR__ . '/PEAR/Start/CLI.php', 'PEAR/Start/CLI.php');
 
