@@ -60,12 +60,7 @@ foreach ($dp as $entry) {
         continue;
     }
 
-    ereg('([A-Za-z0-9_:]+)-.*\.tar$', $entry, $matches);
-    if ($matches[1] == 'PEAR') {
-        $pearentry = $entry;
-        continue;
-    }
-
+    preg_match('|([A-Za-z0-9_:]+)-.*?\.tar$|', $entry, $matches);
     $package = strstr($entry, '-', true);
     $key = array_search($package, $required);
     if ($key !== false) {
@@ -74,7 +69,6 @@ foreach ($dp as $entry) {
 
     $packages[$matches[1]] = $entry;
 }
-$packages['PEAR'] = $pearentry;
 
 if (!empty($required)) {
     die('Following packages were not available in tar format in go-pear-tarballs: ' . implode(', ', $required). "\n");
@@ -163,7 +157,13 @@ $creator->clearMagicRequire();
 $creator->addMagicRequireCallback(array($creator, 'tokenMagicRequire'));
 $creator->addMagicRequireCallback('replaceVersion');
 
-$creator->addDir($tardir . '/tmp/PEAR', array(), array('*PEAR/*'), false, $tardir . '/tmp');
+$ignores = array(
+    '*PEAR/Frontend.php',
+    '*PEAR/PackageFile/v2.php',
+    '*PEAR/Command.php',
+);
+
+$creator->addDir($tardir . '/tmp/PEAR', $ignores, array('*PEAR/*'), false, $tardir . '/tmp');
 
 $creator->addFile($tardir . '/tmp/PEAR.php', 'PEAR.php');
 $creator->addFile($tardir . '/tmp/PEAR5.php', 'PEAR5.php');
@@ -171,7 +171,6 @@ $creator->addFile($tardir . '/tmp/System.php', 'System.php');
 $creator->addFile($tardir . '/tmp/OS/Guess.php', 'OS/Guess.php');
 
 // Other packages
-$creator->addFile($tardir . '/tmp/PEAR/Exception.php', 'PEAR/Exception.php');
 $creator->addFile($tardir . '/tmp/Archive/Tar.php', 'Archive/Tar.php');
 $creator->addFile($tardir . '/tmp/Util.php', 'XML/Util.php');
 $creator->addFile($tardir . '/tmp/Console/Getopt.php', 'Console/Getopt.php');
@@ -180,7 +179,7 @@ $creator->addFile($tardir . '/tmp/Structures/Graph/Node.php', 'Structures/Graph/
 $creator->addFile($tardir . '/tmp/Structures/Graph/Manipulator/AcyclicTest.php', 'Structures/Graph/Manipulator/AcyclicTest.php');
 $creator->addFile($tardir . '/tmp/Structures/Graph/Manipulator/TopologicalSorter.php', 'Structures/Graph/Manipulator/TopologicalSorter.php');
 
-// Include Start scripts speficially since they are never in the releases
+// Include Start scripts specifically since they are never in the releases
 $creator->addFile(__DIR__ . '/PEAR/Start.php', 'PEAR/Start.php');
 $creator->addFile(__DIR__ . '/PEAR/Start/CLI.php', 'PEAR/Start/CLI.php');
 
