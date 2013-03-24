@@ -165,7 +165,6 @@ $creator->addFile($tardir . '/tmp/System.php', 'System.php');
 $creator->addFile($tardir . '/tmp/OS/Guess.php', 'OS/Guess.php');
 
 // Other packages
-$creator->addFile($tardir . '/tmp/PEAR/Exception.php', 'PEAR/Exception.php');
 $creator->addFile($tardir . '/tmp/Archive/Tar.php', 'Archive/Tar.php');
 $creator->addFile($tardir . '/tmp/Util.php', 'XML/Util.php');
 $creator->addFile($tardir . '/tmp/Console/Getopt.php', 'Console/Getopt.php');
