@@ -117,7 +117,7 @@ BC for the same reason. Check php.net/pdo for information on the pdo API.
 - phpdoc fixes in regards to flipped fetchmode
 - remove renegate mysql code in sqlite driver
     
-";}i:2;a:5:{s:7:"version";s:10:"2.0.0beta3";s:12:"release_date";s:10:"2005-03-06";s:15:"release_license";s:11:"BSD License";s:13:"release_state";s:4:"beta";s:13:"release_notes";s:7526:"Warning: this release features numerous BC breaks to make the MDB2 API be as
+";}i:2;a:5:{s:7:"version";s:10:"2.0.0beta3";s:12:"release_date";s:10:"2005-03-06";s:15:"release_license";s:11:"BSD License";s:13:"release_state";s:4:"beta";s:13:"release_notes";s:7527:"Warning: this release features numerous BC breaks to make the MDB2 API be as
 similar as possible as the ext/pdo API! The next release is likely to also break
 BC for the same reason. Check php.net/pdo for information on the pdo API.
 
