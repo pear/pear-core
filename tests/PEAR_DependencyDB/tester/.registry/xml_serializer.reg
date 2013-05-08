@@ -24,7 +24,7 @@ uses XML_Util to validate tagname
 serializer does not break on resources anymore
 added support for __sleep() and __wakeup()
     
-";}i:2;a:5:{s:7:"version";s:3:"0.5";s:12:"release_date";s:10:"2003-08-14";s:15:"release_license";s:11:"PHP License";s:13:"release_state";s:4:"beta";s:13:"release_notes";s:285:"Unserializer is now able to unserialize XML files w/o type hints by automatically transforming multiple occurences of the same tag to an indexed array
+";}i:2;a:5:{s:7:"version";s:3:"0.5";s:12:"release_date";s:10:"2003-08-14";s:15:"release_license";s:11:"PHP License";s:13:"release_state";s:4:"beta";s:13:"release_notes";s:285:"Unserializer is now able to unserialize XML files w/o type hints by automatically transforming multiple occurrences of the same tag to an indexed array
 This is now similar to ext/simpleXML in PHP5 that means it can be used to parse any XML file, try it with your favorite RSS feed
     
 ";}i:3;a:5:{s:7:"version";s:3:"0.6";s:12:"release_date";s:10:"2003-08-21";s:15:"release_license";s:11:"PHP License";s:13:"release_state";s:4:"beta";s:13:"release_notes";s:398:"Unserializer is able to return the name of the root tag,
@@ -50,7 +50,7 @@ XML_Unserializer:
 * added option: tagMap, to change the names of the tags while parsing
 
 Both:
-* removed bug that occured when instantiating w/o options (reported by Alan Knowles),
+* removed bug that occurred when instantiating w/o options (reported by Alan Knowles),
 * added options: keyAttribute, typeAttribute and classAtribute to allow user to specify attribute names for typehints,
 * added resetOptions(),
 * added setOption(),

@@ -169,7 +169,7 @@ the Last-Modified header is updated and the actual body will be sent.</p>
 http.cache_log is set and the cache attempt was successful.</p>
 <h2 id="http_cache_etag">bool http_cache_etag([string etag])</h2>
 <p>Attempts to cache the sent entity by its ETag, either supplied or generated <br />
-by the hash algorythm specified by the INI setting "http.etag_mode".</p>
+by the hash algorithm specified by the INI setting "http.etag_mode".</p>
 <p>If the clients "If-None-Match" header matches the supplied/calculated<br />
 ETag, the body is considered cached on the clients side and<br />
 a "304 Not Modified" status code is issued.</p>
@@ -178,7 +178,7 @@ a "304 Not Modified" status code is issued.</p>
 "http.cache_log" is set and the cache attempt was successful.</p>
 <h2 id="ob_etaghandler">string ob_etaghandler(string data, int mode)</h2>
 <p>For use with ob_start().  Output buffer handler generating an ETag with<br />
-the hash algorythm specified with the INI setting "http.etag_mode".</p>
+the hash algorithm specified with the INI setting "http.etag_mode".</p>
 <h2 id="http_throttle">void http_throttle(double sec[, int bytes = 40960])</h2>
 <p>Sets the throttle delay and send buffer size for use with http_send() API.<br />
 Provides a basic throttling mechanism, which will yield the current process<br />

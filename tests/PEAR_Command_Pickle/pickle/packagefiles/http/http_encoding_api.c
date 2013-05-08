@@ -62,7 +62,7 @@ PHP_HTTP_API const char *_http_encoding_dechunk(const char *encoded, size_t enco
 		if (n_ptr == e_ptr) {
 			/*
 			 * if this is the first turn and there doesn't seem to be a chunk
-			 * size at the begining of the body, do not fail on apparently
+			 * size at the beginning of the body, do not fail on apparently
 			 * not encoded data and return a copy
 			 */
 			if (e_ptr == encoded) {

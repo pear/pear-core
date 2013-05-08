@@ -1,7 +1,7 @@
 - Transparent binary encoding of return values from PHP callback functions.
 
 - Add user-space callback for the authorizer function (this is potentially
-  very slow, so it needs to be implemented carefully).
+  very slow, so it needs to be implemented carefuly).
 
 - Add user-space callback to handle busy databases.
 

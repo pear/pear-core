@@ -1527,7 +1527,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.2.xml", '<?xml versio
 * Changed license from PHP 2.02 to 3.0
 * Added support for optional dependencies
 * Made upgrade and uninstall package case insensitive
-* pear makerpm, now works and generates a better system independant spec file
+* pear makerpm, now works and generates a better system independent spec file
 * pear install|build pecl-package, now exposes the compilation progress
 * Installer now checks dependencies on package uninstall
 * Added proxy support for remote commands using the xmlrcp C ext (Adam Ashley)
@@ -1565,7 +1565,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.2b5.xml", '<?xml vers
  <n>* Changed license from PHP 2.02 to 3.0
 * Added support for optional dependencies
 * Made upgrade and uninstall package case insensitive
-* pear makerpm, now works and generates a better system independant spec file
+* pear makerpm, now works and generates a better system independent spec file
 * pear install|build pecl-package, now exposes the compilation progress
 * Installer now checks dependencies on package uninstall
 * Added proxy support for remote commands using the xmlrcp C ext (Adam Ashley)
@@ -1603,7 +1603,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.2b4.xml", '<?xml vers
  <n>* Changed license from PHP 2.02 to 3.0
 * Added support for optional dependencies
 * Made upgrade and uninstall package case insensitive
-* pear makerpm, now works and generates a better system independant spec file
+* pear makerpm, now works and generates a better system independent spec file
 * pear install|build pecl-package, now exposes the compilation progress
 * Installer now checks dependencies on package uninstall
 * Added proxy support for remote commands using the xmlrcp C ext (Adam Ashley)
@@ -1641,7 +1641,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.2b3.xml", '<?xml vers
  <n>* Changed license from PHP 2.02 to 3.0
 * Added support for optional dependencies
 * Made upgrade and uninstall package case insensitive
-* pear makerpm, now works and generates a better system independant spec file
+* pear makerpm, now works and generates a better system independent spec file
 * pear install|build pecl-package, now exposes the compilation progress
 * Installer now checks dependencies on package uninstall
 * Added proxy support for remote commands using the xmlrcp C ext (Adam Ashley)
@@ -1678,7 +1678,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.2b2.xml", '<?xml vers
  <n>* Changed license from PHP 2.02 to 3.0
 * Added support for optional dependencies
 * Made upgrade and uninstall package case insensitive
-* pear makerpm, now works and generates a better system independant spec file
+* pear makerpm, now works and generates a better system independent spec file
 * pear install|build &lt;pecl-package&gt;, now exposes the compilation progress
 * Added new pear bundle command, which downloads and uncompress a &lt;pecl-package&gt;.
 The main purpouse of this command is for easily adding extensions to the PHP sources
@@ -1709,7 +1709,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear/1.2b1.xml", '<?xml vers
  <da>2003-06-23 10:07:00</da>
  <n>* Changed license from PHP 2.02 to 3.0
 * Added support for optional dependencies
-* pear makerpm, now works and generates a better system independant spec file
+* pear makerpm, now works and generates a better system independent spec file
 * pear install|build &lt;pecl-package&gt;, now exposes the compilation progress
 * Added new pear bundle command, which downloads and uncompress a &lt;pecl-package&gt;.
 The main purpouse of this command is for easily adding extensions to the PHP sources
@@ -4317,7 +4317,7 @@ System Class:
 * Changed license from PHP 2.02 to 3.0
 * Added support for optional dependencies
 * Made upgrade and uninstall package case insensitive
-* pear makerpm, now works and generates a better system independant spec file
+* pear makerpm, now works and generates a better system independent spec file
 * pear install|build pecl-package, now exposes the compilation progress
 * Installer now checks dependencies on package uninstall
 * Added proxy support for remote commands using the xmlrcp C ext (Adam Ashley)
@@ -4347,7 +4347,7 @@ before compiling it.',
           'releasenotes' => '* Changed license from PHP 2.02 to 3.0
 * Added support for optional dependencies
 * Made upgrade and uninstall package case insensitive
-* pear makerpm, now works and generates a better system independant spec file
+* pear makerpm, now works and generates a better system independent spec file
 * pear install|build pecl-package, now exposes the compilation progress
 * Installer now checks dependencies on package uninstall
 * Added proxy support for remote commands using the xmlrcp C ext (Adam Ashley)
@@ -4377,7 +4377,7 @@ before compiling it.',
           'releasenotes' => '* Changed license from PHP 2.02 to 3.0
 * Added support for optional dependencies
 * Made upgrade and uninstall package case insensitive
-* pear makerpm, now works and generates a better system independant spec file
+* pear makerpm, now works and generates a better system independent spec file
 * pear install|build pecl-package, now exposes the compilation progress
 * Installer now checks dependencies on package uninstall
 * Added proxy support for remote commands using the xmlrcp C ext (Adam Ashley)
@@ -4407,7 +4407,7 @@ before compiling it.',
           'releasenotes' => '* Changed license from PHP 2.02 to 3.0
 * Added support for optional dependencies
 * Made upgrade and uninstall package case insensitive
-* pear makerpm, now works and generates a better system independant spec file
+* pear makerpm, now works and generates a better system independent spec file
 * pear install|build pecl-package, now exposes the compilation progress
 * Installer now checks dependencies on package uninstall
 * Added proxy support for remote commands using the xmlrcp C ext (Adam Ashley)
@@ -4436,7 +4436,7 @@ before compiling it.',
           'releasenotes' => '* Changed license from PHP 2.02 to 3.0
 * Added support for optional dependencies
 * Made upgrade and uninstall package case insensitive
-* pear makerpm, now works and generates a better system independant spec file
+* pear makerpm, now works and generates a better system independent spec file
 * pear install|build <pecl-package>, now exposes the compilation progress
 * Added new pear bundle command, which downloads and uncompress a <pecl-package>.
 The main purpouse of this command is for easily adding extensions to the PHP sources
@@ -4459,7 +4459,7 @@ before compiling it.',
           'releasedate' => '2003-06-23 10:07:00',
           'releasenotes' => '* Changed license from PHP 2.02 to 3.0
 * Added support for optional dependencies
-* pear makerpm, now works and generates a better system independant spec file
+* pear makerpm, now works and generates a better system independent spec file
 * pear install|build <pecl-package>, now exposes the compilation progress
 * Added new pear bundle command, which downloads and uncompress a <pecl-package>.
 The main purpouse of this command is for easily adding extensions to the PHP sources

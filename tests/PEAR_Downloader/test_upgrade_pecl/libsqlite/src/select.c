@@ -62,7 +62,7 @@ Select *sqliteSelectNew(
 }
 
 /*
-** Given 1 to 3 identifiers preceeding the JOIN keyword, determine the
+** Given 1 to 3 identifiers preceding the JOIN keyword, determine the
 ** type of join.  Return an integer constant that expresses that type
 ** in terms of the following bit values:
 **
@@ -1224,7 +1224,7 @@ static void computeLimitRegisters(Parse *pParse, Select *p){
   ** all rows.  It is the same as no limit. If the comparision is
   ** p->nLimit>=0 then "LIMIT 0" show no rows at all.
   ** "LIMIT -1" always shows all rows.  There is some
-  ** contraversy about what the correct behavior should be.
+  ** controversy about what the correct behavior should be.
   ** The current implementation interprets "LIMIT 0" to mean
   ** no rows.
   */

@@ -82,7 +82,7 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
     * @param string $command the command
     * @param array $options the command options before the command
     * @param array $params the stuff after the command name
-    * @return bool true if succesful
+    * @return bool true if successful
     * @throw PEAR_Error
     */
     function doDownloadAll($command, $options, $params)

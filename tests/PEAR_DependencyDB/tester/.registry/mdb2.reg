@@ -155,7 +155,7 @@ All drivers:
 
 - transaction API moved over to PDO: removed autoCommit(), added beginTransaction()
   and refactored commit() (it doesn't start a new transaction automatically anymore)
-- reworked handling of uncommited transaction for persistant connections when
+- reworked handling of uncommitted transaction for persistant connections when
   a given connection is no longer in use
 
 - added 'disable_query' option to be able to disable the execution of all queries
@@ -215,7 +215,7 @@ MySQL driver:
 
 MSSQL driver:
 - added code in MDB2_Driver_mssql::connect() to better handle date values
-  independant of ini and locale settings inside the server
+  independent of ini and locale settings inside the server
 - use comma, rather than colon, to delimit port in MDB2_driver_mssql::connect().
   Bug 2140. (danielc)
 - unified mssql standalone query with sqlite, mysql and others (not tested on

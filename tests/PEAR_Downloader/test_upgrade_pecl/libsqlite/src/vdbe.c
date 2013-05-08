@@ -712,7 +712,7 @@ case OP_String: {
 **
 ** Push the value of variable P1 onto the stack.  A variable is
 ** an unknown in the original SQL string as handed to sqlite_compile().
-** Any occurance of the '?' character in the original SQL is considered
+** Any occurrence of the '?' character in the original SQL is considered
 ** a variable.  Variables in the SQL string are number from left to
 ** right beginning with 1.  The values of variables are set using the
 ** sqlite_bind() API.

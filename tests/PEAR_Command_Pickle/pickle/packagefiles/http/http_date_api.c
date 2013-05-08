@@ -231,7 +231,7 @@ PHP_HTTP_API time_t _http_parse_date(const char *date)
 
 				if ((tz_offset == -1) && ((end - date) == 4) && (val < 1300) &&
 					(indate < date) && ((date[-1] == '+' || date[-1] == '-'))) {
-					/* four digits and a value less than 1300 and it is preceeded with
+					/* four digits and a value less than 1300 and it is preceded with
 					a plus or minus. This is a time zone indication. */
 					found = 1;
 					tz_offset = (val / 100 * 60 + val % 100) * 60;

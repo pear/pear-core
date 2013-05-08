@@ -168,8 +168,8 @@ Bug Fixes:
   
 Changes:
   * DebugLevel(1) now displays native errors from database when queries fail.
-  * Result Field names now stored seperately from Result Object
-  * free() method added, to clean up memory instantly, if you are doing alot of queries.
+  * Result Field names now stored separately from Result Object
+  * free() method added, to clean up memory instantly, if you are doing a lot of queries.
       = Cleans Result Fields, Result Object, NumRows returned in Connection object.
   * include path is used to do file hunting if factory fails to find file.
   * DB is lazy loaded on connection.b
@@ -427,7 +427,7 @@ New Features
 - fix generator for postgres and mdb - use unique keys and look for 'nextval' as keys.
 - fix no key insert bug (G Moxley Kempster)
 - fix empty table bug in generator (Robert Janeczek)
-- staticAutoloadTable(), now handles parse errors in included files alot cleaner
+- staticAutoloadTable(), now handles parse errors in included files a lot cleaner
 - added dependancies on PHP4.3, DB 1.3 and Validate (although Validate is optional)
 - added table prefix to count query (Richard Wallace)
     
