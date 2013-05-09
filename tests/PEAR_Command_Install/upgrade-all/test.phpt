@@ -6413,9 +6413,9 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/net_ipv6/info.xml", '<?xml v
  <l>PHP License</l>
  <s>Check and validate IPv6 addresses</s>
  <d>The class allows you to:
-* check if an addresse is an IPv6 addresse
+* check if an address is an IPv6 addresse
 * compress/uncompress IPv6 addresses
-* check for an IPv4 compatible ending in an IPv6 addresse</d>
+* check for an IPv4 compatible ending in an IPv6 address</d>
  <r xlink:href="/rest/r/net_ipv6"/>
 </p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/net_ipv6/allreleases.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
