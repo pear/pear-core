@@ -6567,7 +6567,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/net_nntp/info.xml", '<?xml v
 
 -----------------------------
 
-This package uses a rather conservative release cycle: New features won\'t go beta until they are truely ready for use in a production environment.
+This package uses a rather conservative release cycle: New features won\'t go beta until they are truly ready for use in a production environment.
 
 -----------------------------
 
@@ -8308,7 +8308,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/search_mnogosearch/info.xml"
  <c>pear.php.net</c>
  <ca xlink:href="/rest/c/Tools+and+Utilities">Tools and Utilities</ca>
  <l>PHP License 2.02</l>
- <s>Wrapper classes for the mnoGoSearch extention</s>
+ <s>Wrapper classes for the mnoGoSearch extension</s>
  <d>This package provides wrapper classes for the mnoGoSearch search engine. The package has two central classes &quot;Search_Mnogosearch&quot; and &quot;Search_Mnogosearch_Result&quot;. The class &quot;Search_Mnogosearch&quot; gives an object that represents the search and the &quot;Search_Mnogosearch_Result&quot; the result. The usage is just like the usage in the &quot;DB&quot; and &quot;DB_result&quot; classes.</d>
  <r xlink:href="/rest/r/search_mnogosearch"/>
 </p>', 'text/xml');
