@@ -190,7 +190,7 @@ if (!empty($with_dir)) {
         $config->set('cfg_dir', $with_dir . $ds . 'cfg', 'default');
     }
     if (empty($man_dir)) {
-        $config->set('man_dir', $with_dir $ds . 'local' . $ds . 'man', 'default');
+        $config->set('man_dir', $with_dir . $ds . 'local' . $ds . 'man', 'default');
     }
     if (!is_writable($config->get('cache_dir'))) {
         include_once 'System.php';
