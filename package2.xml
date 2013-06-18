@@ -427,6 +427,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
      <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
     </file>
    </dir> <!-- /scripts -->
+   <dir man1>
+    <file name="pear.1" role="man">
+    <file name="peardev.1" role="man">
+    <file name="pecl.1" role="man">
+   </dir> <!-- /man1 -->
    <file name="LICENSE" role="doc" />
    <file name="INSTALL" role="doc" />
    <file name="package.dtd" role="data" />
@@ -548,6 +553,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <ignore name="scripts/peardev.sh" />
    <ignore name="scripts/pear.sh" />
    <ignore name="scripts/pecl.sh" />
+   <ignore name="man1/pear.1" />
+   <ignore name="man1/peardev.1" />
+   <ignore name="man1/pecl.1" />
   </filelist>
  </phprelease>
  <phprelease>
