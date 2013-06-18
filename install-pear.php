@@ -91,6 +91,9 @@ for ($i = 0; $i < sizeof($argv); $i++) {
         $debug = 1;
     } elseif ($arg == '--extremedebug') {
         $debug = 2;
+    } elseif ($arg == '-m') {
+        $man_dir = $argv[$i+1];
+        $i++;
     }
 }
 
@@ -131,6 +134,11 @@ if (!empty($cfg_dir)) {
 // Web files
 if (!empty($www_dir)) {
     $config->set('www_dir', $www_dir, 'default');
+}
+
+// Manual pages
+if (!empty($man_dir)) {
+    $config->set('man_dir', $man_dir, 'default');
 }
 
 // Downloaded files
@@ -180,6 +188,9 @@ if (!empty($with_dir)) {
     }
     if (empty($cfg_dir)) {
         $config->set('cfg_dir', $with_dir . $ds . 'cfg', 'default');
+    }
+    if (empty($man_dir)) {
+        $config->set('man_dir', $with_dir $ds . 'local' . $ds . 'man', 'default');
     }
     if (!is_writable($config->get('cache_dir'))) {
         include_once 'System.php';
