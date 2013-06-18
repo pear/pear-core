@@ -105,6 +105,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     This allows for customized setups while still having the benefit of using the pear
     installer.
     (pear will not remember the configure params for the next upgrade)
+  * A new man_dir role, and configure option, to be used to install unix manual pages
  </notes>
  <contents>
   <dir name="/">
@@ -218,6 +219,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
       </file>
       <file name="Www.xml" role="php"/>
       <file name="Www.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Man.xml" role="php"/>
+      <file name="Man.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /PEAR/Installer/Role -->
