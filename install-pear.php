@@ -91,7 +91,7 @@ for ($i = 0; $i < sizeof($argv); $i++) {
         $debug = 1;
     } elseif ($arg == '--extremedebug') {
         $debug = 2;
-    } elseif ($arg == '-m') {
+    } elseif ($arg == '-M' || $arg == '--man') {) {
         $man_dir = $argv[$i+1];
         $i++;
     }
