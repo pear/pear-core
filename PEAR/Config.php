@@ -680,7 +680,7 @@ class PEAR_Config extends PEAR
             $this->configuration['default'][$key] = $info['default'];
         }
 
-        $this->_registry['default'] = &new PEAR_Registry(
+        $this->_registry['default'] = new PEAR_Registry(
             $this->configuration['default']['php_dir'], false, false,
             $this->configuration['default']['metadata_dir']);
         $this->_registry['default']->setConfig($this, false);
@@ -731,7 +731,7 @@ class PEAR_Config extends PEAR
             return $GLOBALS['_PEAR_Config_instance'];
         }
 
-        $t_conf = &new PEAR_Config($user_file, $system_file, false, $strict);
+        $t_conf = new PEAR_Config($user_file, $system_file, false, $strict);
         if ($t_conf->_errorsFound > 0) {
              return $t_conf->lastError;
         }
@@ -791,7 +791,7 @@ class PEAR_Config extends PEAR
         $this->configuration[$layer] = $data;
         $this->_setupChannels();
         if (!$this->_noRegistry && ($phpdir = $this->get('php_dir', $layer, 'pear.php.net'))) {
-            $this->_registry[$layer] = &new PEAR_Registry(
+            $this->_registry[$layer] = new PEAR_Registry(
                 $phpdir, false, false,
                 $this->get('metadata_dir', $layer, 'pear.php.net'));
             $this->_registry[$layer]->setConfig($this, false);
@@ -822,7 +822,7 @@ class PEAR_Config extends PEAR
                 return PEAR::raiseError('PEAR_RemoteInstaller must be installed to use remote config');
             }
 
-            $this->_ftp = &new PEAR_FTP;
+            $this->_ftp = new PEAR_FTP;
             $this->_ftp->pushErrorHandling(PEAR_ERROR_RETURN);
             $e = $this->_ftp->init($path);
             if (PEAR::isError($e)) {
@@ -950,7 +950,7 @@ class PEAR_Config extends PEAR
 
         $this->_setupChannels();
         if (!$this->_noRegistry && ($phpdir = $this->get('php_dir', $layer, 'pear.php.net'))) {
-            $this->_registry[$layer] = &new PEAR_Registry(
+            $this->_registry[$layer] = new PEAR_Registry(
                 $phpdir, false, false,
                 $this->get('metadata_dir', $layer, 'pear.php.net'));
             $this->_registry[$layer]->setConfig($this, false);
@@ -1615,7 +1615,7 @@ class PEAR_Config extends PEAR
         if ($key == 'php_dir' && !$this->_noRegistry) {
             if (!isset($this->_registry[$layer]) ||
                   $value != $this->_registry[$layer]->install_dir) {
-                $this->_registry[$layer] = &new PEAR_Registry($value);
+                $this->_registry[$layer] = new PEAR_Registry($value);
                 $this->_regInitialized[$layer] = false;
                 $this->_registry[$layer]->setConfig($this, false);
             }
@@ -1645,7 +1645,7 @@ class PEAR_Config extends PEAR
 
                 if (!is_object($this->_registry[$layer])) {
                     if ($phpdir = $this->get('php_dir', $layer, 'pear.php.net')) {
-                        $this->_registry[$layer] = &new PEAR_Registry(
+                        $this->_registry[$layer] = new PEAR_Registry(
                             $phpdir, false, false,
                             $this->get('metadata_dir', $layer, 'pear.php.net'));
                         $this->_registry[$layer]->setConfig($this, false);
@@ -2078,7 +2078,7 @@ class PEAR_Config extends PEAR
             require_once 'PEAR/REST/' . $version . '.php';
         }
 
-        $remote = &new $class($this, $options);
+        $remote = new $class($this, $options);
         return $remote;
     }
 
@@ -2130,7 +2130,7 @@ class PEAR_Config extends PEAR
                 if ($layer == 'ftp' || !isset($this->_registry[$layer])) {
                     continue;
                 }
-                $this->_registry[$layer] = &new PEAR_Registry(
+                $this->_registry[$layer] = new PEAR_Registry(
                     $this->get('php_dir', $layer, 'pear.php.net'), false, false,
                     $this->get('metadata_dir', $layer, 'pear.php.net'));
                 $this->_registry[$layer]->setConfig($this, false);
