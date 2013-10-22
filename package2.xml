@@ -429,14 +429,14 @@ http://pear.php.net/dtd/package-2.0.xsd">
      <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
     </file>
    </dir> <!-- /scripts -->
-   <dir man1>
-    <file name="pear.1" role="man" />
+   <dir name="man1">
+    <file name="pear.1" role="man">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
     <file name="peardev.1" role="man" />
     <file name="pecl.1" role="man" />
    </dir> <!-- /man1 -->
-   <dir man5>
+   <dir name="man5">
     <file name="pear.conf.5" role="man" />
    </dir> <!-- /man5 -->
    <file name="LICENSE" role="doc" />
