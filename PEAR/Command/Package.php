@@ -962,6 +962,11 @@ used for automated conversion or learning the format.
             return $this->raiseError("only support 'gpg' for signature type");
         }
 
+        $sig_bin = $this->config->get('sig_bin');
+        if (empty($sig_bin) || !file_exists($sig_bin)) {
+            return $this->raiseError("can't access gpg binary: $sig_bin");
+        }
+
         require_once 'System.php';
         require_once 'Archive/Tar.php';
 
@@ -1009,7 +1014,7 @@ used for automated conversion or learning the format.
         }
 
         $devnull = (isset($options['verbose'])) ? '' : ' 2>/dev/null';
-        $gpg = popen("gpg --batch --passphrase-fd 0 --armor --detach-sign --output $tmpdir/package.sig $tmpdir/$packagexml" . $devnull, "w");
+        $gpg = popen(escapeshellcmd($sig_bin) . " --batch --passphrase-fd 0 --armor --detach-sign --output $tmpdir/package.sig $tmpdir/$packagexml" . $devnull, "w");
         if (!$gpg) {
             return $this->raiseError("gpg command failed");
         }
