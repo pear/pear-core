@@ -967,6 +967,11 @@ used for automated conversion or learning the format.
             return $this->raiseError("can't access gpg binary: $sig_bin");
         }
 
+        $keydir = trim($this->config->get('sig_keydir'));
+        if (strlen($keydir) && !file_exists($keydir)) {
+            return $this->raiseError("sig_keydir '$keydir' doesn't exist or is not accessible");
+        }
+
         require_once 'System.php';
         require_once 'Archive/Tar.php';
 
@@ -1013,8 +1018,16 @@ used for automated conversion or learning the format.
             $input[0] = '';
         }
 
-        $devnull = (isset($options['verbose'])) ? '' : ' 2>/dev/null';
-        $gpg = popen(escapeshellcmd($sig_bin) . " --batch --passphrase-fd 0 --armor --detach-sign --output $tmpdir/package.sig $tmpdir/$packagexml" . $devnull, "w");
+        $cmd = escapeshellcmd($sig_bin) . " --batch --passphrase-fd 0 --armor --detach-sign --output $tmpdir/package.sig";
+        if (strlen($keydir)) {
+            $cmd .= " --homedir " . escapeshellarg($keydir);
+        }
+        $cmd .= " $tmpdir/$packagexml";
+        if (isset($options['verbose'])) {
+            $cmd .= ' 2>/dev/null';
+        }
+
+        $gpg = popen($cmd, "w");
         if (!$gpg) {
             return $this->raiseError("gpg command failed");
         }
