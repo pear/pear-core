@@ -1018,7 +1018,12 @@ used for automated conversion or learning the format.
             $input[0] = '';
         }
 
+        $keyid = trim($this->config->get('sig_keyid'));
+
         $cmd = escapeshellcmd($sig_bin) . " --batch --passphrase-fd 0 --armor --detach-sign --output $tmpdir/package.sig";
+        if (strlen($keyid)) {
+            $cmd .= " --default-key " . escapeshellarg($keyid);
+        }
         if (strlen($keydir)) {
             $cmd .= " --homedir " . escapeshellarg($keydir);
         }
