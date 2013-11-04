@@ -958,6 +958,10 @@ used for automated conversion or learning the format.
             return $this->raiseError("bad parameter(s), try \"help $command\"");
         }
 
+        if ($this->config->get('sig_type') != 'gpg') {
+            return $this->raiseError("only support 'gpg' for signature type");
+        }
+
         require_once 'System.php';
         require_once 'Archive/Tar.php';
 
