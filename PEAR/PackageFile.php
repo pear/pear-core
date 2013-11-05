@@ -344,20 +344,24 @@ class PEAR_PackageFile
             return $ret;
         }
 
+        $sig      = null;
         $xml      = null;
         $origfile = $file;
         foreach ($content as $file) {
             $name = $file['filename'];
-            if ($name == 'package2.xml') { // allow a .tgz to distribute both versions
+            if (is_null($xml) &&
+                (($name == 'package2.xml') ||
+                 ($name == 'package.xml') ||
+                 preg_match('/package.xml$/', $name, $match))) {
+                // allow a .tgz to distribute both versions
                 $xml = $name;
-                break;
             }
 
-            if ($name == 'package.xml') {
-                $xml = $name;
-                break;
-            } elseif (preg_match('/package.xml$/', $name, $match)) {
-                $xml = $name;
+            if (is_null($sig) && ($name == 'package.sig')) {
+                $sig = $name;
+            }
+
+            if (!is_null($sig) && !is_null($xml)) {
                 break;
             }
         }
@@ -373,7 +377,7 @@ class PEAR_PackageFile
         $this->_extractErrors();
         PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, array($this, '_extractErrors'));
 
-        if (!$xml || !$tar->extractList(array($xml), $tmpdir)) {
+        if (!$xml || !$tar->extractList(array_values(array_filter(array($sig, $xml))), $tmpdir)) {
             $extra = implode("\n", $this->_extractErrors());
             if ($extra) {
                 $extra = ' ' . $extra;
@@ -386,6 +390,20 @@ class PEAR_PackageFile
         }
 
         PEAR::staticPopErrorHandling();
+
+        // Check sig, if it exists.
+        if (!is_null($sig)) {
+            require_once 'PEAR/Gnupg.php';
+            $gnupg = new PEAR_Gnupg($this->_config);
+            $result = $gnupg->validateSig(
+                "$tmpdir/$xml",
+                "$tmpdir/$sig"
+            );
+            if (PEAR::isError($result)) {
+                return $result;
+            }
+        }
+
         $ret = &PEAR_PackageFile::fromPackageFile("$tmpdir/$xml", $state, $origfile);
         return $ret;
     }
@@ -459,11 +477,22 @@ class PEAR_PackageFile
         if (is_dir($info)) {
             $dir_name = realpath($info);
             if (file_exists($dir_name . '/package.xml')) {
+                $fname = $dir_name . '/package.xml';
                 $info = PEAR_PackageFile::fromPackageFile($dir_name .  '/package.xml', $state);
             } elseif (file_exists($dir_name .  '/package2.xml')) {
+                $fname = $dir_name . '/package2.xml';
                 $info = PEAR_PackageFile::fromPackageFile($dir_name .  '/package2.xml', $state);
             } else {
-                $info = PEAR::raiseError("No package definition found in '$info' directory");
+                return PEAR::raiseError("No package definition found in '$info' directory");
+            }
+
+            if (file_exists($dir_name . '/package.sig')) {
+                require_once 'PEAR/Gnupg.php';
+                $gnupg = new PEAR_Gnupg($this->_config);
+                $result = $gnupg->validateSig($fname, $dir_name . '/package.sig');
+                if (PEAR::isError($result)) {
+                    return $result;
+                }
             }
 
             return $info;
