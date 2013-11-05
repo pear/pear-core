@@ -966,7 +966,10 @@ used for automated conversion or learning the format.
             return $this->raiseError("bad parameter(s), try \"help $command\"");
         }
 
-        $cmd = $this->createGpgCmd();
+        require_once 'PEAR/Gnupg.php';
+
+        $gnupg = new PEAR_Gnupg($this->config);
+        $cmd = $gnupg->createGpgCmd();
         if (PEAR::isError($cmd)) {
             return $cmd;
         }
@@ -1046,7 +1049,10 @@ used for automated conversion or learning the format.
             return $this->raiseError("bad parameter(s), try \"help $command\"");
         }
 
-        $cmd = $this->createGpgCmd();
+        require_once 'PEAR/Gnupg.php';
+
+        $gnupg = new PEAR_Gnupg($this->config);
+        $cmd = $gnupg->createGpgCmd();
         if (PEAR::isError($cmd)) {
             return $cmd;
         }
@@ -1070,37 +1076,6 @@ used for automated conversion or learning the format.
 
         $this->ui->outputData("Key(s) imported.", $command);
         return true;
-    }
-
-    function createGpgCmd()
-    {
-        if ($this->config->get('sig_type') != 'gpg') {
-            return $this->raiseError("only support 'gpg' for signature type");
-        }
-
-        $sig_bin = $this->config->get('sig_bin');
-        if (empty($sig_bin) || !file_exists($sig_bin)) {
-            return $this->raiseError("can't access gpg binary: $sig_bin");
-        }
-
-        $keyid = trim($this->config->get('sig_keyid'));
-
-        $keydir = trim($this->config->get('sig_keydir'));
-        if (strlen($keydir) &&
-            !file_exists($keydir) &&
-            !@mkdir($keydir)) {
-            return $this->raiseError("sig_keydir '$keydir' doesn't exist or is not accessible");
-        }
-
-        $cmd = escapeshellcmd($sig_bin);
-        if (strlen($keyid)) {
-            $cmd .= " --default-key " . escapeshellarg($keyid);
-        }
-        if (strlen($keydir)) {
-            $cmd .= " --homedir " . escapeshellarg($keydir);
-        }
-
-        return $cmd;
     }
 
     /**
