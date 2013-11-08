@@ -2046,7 +2046,7 @@ class PEAR_PackageFile_v2_Validator
                     continue 2;
                 case T_DOUBLE_COLON:
                     $token = $tokens[$i - 1][0];
-                    if (!($token == T_WHITESPACE || $token == T_STRING || $token == T_STATIC)) {
+                    if (!($token == T_WHITESPACE || $token == T_STRING || $token == T_STATIC || ($token == T_VARIABLE && version_compare(phpversion(), '5.3.0', '>=')))) {
                         if (isset($this->_stack)) {
                             $this->_stack->push(__FUNCTION__, 'warning', array('file' => $file),
                                 'Parser error: invalid PHP found in file "%file%"');
