@@ -226,6 +226,14 @@ Can take a tgz / tar file, package.xml or a package name of an installed package
             'doc' => '<package-file>
 Signs a package distribution (.tar or .tgz) file with GnuPG.',
             ),
+        'sign-import' => array(
+            'summary' => 'Imports keys for signing/verifying package files',
+            'function' => 'doSignImport',
+            'shortcut' => 'sii',
+            'options' => array(),
+            'doc' => '<key-location>
+Imports the GnuPG key(s) at this location.',
+            ),
         'makerpm' => array(
             'summary' => 'Builds an RPM spec file from a PEAR package',
             'function' => 'doMakeRPM',
@@ -958,18 +966,9 @@ used for automated conversion or learning the format.
             return $this->raiseError("bad parameter(s), try \"help $command\"");
         }
 
-        if ($this->config->get('sig_type') != 'gpg') {
-            return $this->raiseError("only support 'gpg' for signature type");
-        }
-
-        $sig_bin = $this->config->get('sig_bin');
-        if (empty($sig_bin) || !file_exists($sig_bin)) {
-            return $this->raiseError("can't access gpg binary: $sig_bin");
-        }
-
-        $keydir = trim($this->config->get('sig_keydir'));
-        if (strlen($keydir) && !file_exists($keydir)) {
-            return $this->raiseError("sig_keydir '$keydir' doesn't exist or is not accessible");
+        $cmd = $this->createGpgCmd();
+        if (PEAR::isError($cmd)) {
+            return $cmd;
         }
 
         require_once 'System.php';
@@ -1018,16 +1017,7 @@ used for automated conversion or learning the format.
             $input[0] = '';
         }
 
-        $keyid = trim($this->config->get('sig_keyid'));
-
-        $cmd = escapeshellcmd($sig_bin) . " --batch --passphrase-fd 0 --armor --detach-sign --output $tmpdir/package.sig";
-        if (strlen($keyid)) {
-            $cmd .= " --default-key " . escapeshellarg($keyid);
-        }
-        if (strlen($keydir)) {
-            $cmd .= " --homedir " . escapeshellarg($keydir);
-        }
-        $cmd .= " $tmpdir/$packagexml";
+        $cmd .= " --batch --passphrase-fd 0 --armor --detach-sign --output " . escapeshellarg("$tmpdir/package.sig") . " " . escapeshellarg("$tmpdir/$packagexml");
         if (isset($options['verbose'])) {
             $cmd .= ' 2>/dev/null';
         }
@@ -1048,6 +1038,69 @@ used for automated conversion or learning the format.
 
         $this->ui->outputData("Package signed.", $command);
         return true;
+    }
+
+    function doSignImport($command, $options, $params)
+    {
+        if (count($params) !== 1) {
+            return $this->raiseError("bad parameter(s), try \"help $command\"");
+        }
+
+        $cmd = $this->createGpgCmd();
+        if (PEAR::isError($cmd)) {
+            return $cmd;
+        }
+
+        $key = @file_get_contents($params[0]);
+        if ($key === false) {
+            return $this->raiseError("could not load keys from $key");
+        }
+
+        $cmd .= " --import";
+
+        $gpg = popen($cmd, "w");
+        if (!$gpg) {
+            return $this->raiseError("gpg command failed");
+        }
+
+        fwrite($gpg, "$key\n");
+        if (pclose($gpg)) {
+            return $this->raiseError("gpg import failed");
+        }
+
+        $this->ui->outputData("Key(s) imported.", $command);
+        return true;
+    }
+
+    function createGpgCmd()
+    {
+        if ($this->config->get('sig_type') != 'gpg') {
+            return $this->raiseError("only support 'gpg' for signature type");
+        }
+
+        $sig_bin = $this->config->get('sig_bin');
+        if (empty($sig_bin) || !file_exists($sig_bin)) {
+            return $this->raiseError("can't access gpg binary: $sig_bin");
+        }
+
+        $keyid = trim($this->config->get('sig_keyid'));
+
+        $keydir = trim($this->config->get('sig_keydir'));
+        if (strlen($keydir) &&
+            !file_exists($keydir) &&
+            !@mkdir($keydir)) {
+            return $this->raiseError("sig_keydir '$keydir' doesn't exist or is not accessible");
+        }
+
+        $cmd = escapeshellcmd($sig_bin);
+        if (strlen($keyid)) {
+            $cmd .= " --default-key " . escapeshellarg($keyid);
+        }
+        if (strlen($keydir)) {
+            $cmd .= " --homedir " . escapeshellarg($keydir);
+        }
+
+        return $cmd;
     }
 
     /**

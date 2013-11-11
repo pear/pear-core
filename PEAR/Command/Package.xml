@@ -186,6 +186,14 @@ Can take a tgz / tar file, package.xml or a package name of an installed package
   <doc>&lt;package-file&gt;
 Signs a package distribution (.tar or .tgz) file with GnuPG.</doc>
  </sign>
+ <sign-import>
+  <summary>Imports keys for signing/verifying package files</summary>
+  <function>doSignImport</function>
+  <shortcut>sii</shortcut>
+  <options />
+  <doc>&lt;key-location&gt;
+Imports the GnuPG key(s) at this location.</doc>
+ </sign-import>
  <makerpm>
   <summary>Builds an RPM spec file from a PEAR package</summary>
   <function>doMakeRPM</function>
