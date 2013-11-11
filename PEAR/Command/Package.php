@@ -1017,7 +1017,7 @@ used for automated conversion or learning the format.
             $input[0] = '';
         }
 
-        $cmd .= " --batch --passphrase-fd 0 --armor --detach-sign --output $tmpdir/package.sig $tmpdir/$packagexml";
+        $cmd .= " --batch --passphrase-fd 0 --armor --detach-sign --output " . escapeshellarg("$tmpdir/package.sig") . " " . escapeshellarg("$tmpdir/$packagexml");
         if (isset($options['verbose'])) {
             $cmd .= ' 2>/dev/null';
         }
