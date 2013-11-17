@@ -92,6 +92,7 @@
                baseinstalldir CDATA              #IMPLIED
                platform       CDATA              #IMPLIED
                md5sum         CDATA              #IMPLIED
+               sha1sum        CDATA              #IMPLIED
                name           CDATA              #REQUIRED
                install-as     CDATA              #IMPLIED>
 

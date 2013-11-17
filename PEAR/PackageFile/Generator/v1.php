@@ -103,6 +103,9 @@ class PEAR_PackageFile_Generator_v1
                 if (!isset($atts['md5sum'])) {
                     $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($file));
                 }
+                if (!isset($atts['sha1sum'])) {
+                    $this->_packagefile->setFileAttribute($fname, 'sha1sum', sha1_file($file));
+                }
                 $packager->log(2, "Adding file $fname");
             }
         }
@@ -326,6 +329,9 @@ class PEAR_PackageFile_Generator_v1
                     if (isset($fa['md5sum'])) {
                         $ret .= " md5sum=\"$fa[md5sum]\"";
                     }
+                    if (isset($fa['sha1sum'])) {
+                        $ret .= " sha1sum=\"$fa[sha1sum]\"";
+                    }
                     if (isset($fa['platform'])) {
                         $ret .= " platform=\"$fa[platform]\"";
                     }
@@ -433,6 +439,9 @@ class PEAR_PackageFile_Generator_v1
         }
         if (isset($attributes['md5sum'])) {
             $ret .= " md5sum=\"$attributes[md5sum]\"";
+        }
+        if (isset($attributes['sha1sum'])) {
+            $ret .= " sha1sum=\"$attributes[sha1sum]\"";
         }
         if (isset($attributes['platform'])) {
             $ret .= " platform=\"$attributes[platform]\"";

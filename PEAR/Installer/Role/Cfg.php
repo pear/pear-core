@@ -39,6 +39,13 @@ class PEAR_Installer_Role_Cfg extends PEAR_Installer_Role_Common
     var $md5 = null;
 
     /**
+     * The SHA1 hash of the original file.
+     *
+     * @var string
+     */
+    var $sha1 = null;
+
+    /**
      * Do any unusual setup here
      * @param PEAR_Installer
      * @param PEAR_PackageFile_v2
@@ -52,8 +59,12 @@ class PEAR_Installer_Role_Cfg extends PEAR_Installer_Role_Common
         $package = $reg->getPackage($pkg->getPackage(), $pkg->getChannel());
         if ($package) {
             $filelist = $package->getFilelist();
-            if (isset($filelist[$file]) && isset($filelist[$file]['md5sum'])) {
-                $this->md5 = $filelist[$file]['md5sum'];
+            if (isset($filelist[$file])) {
+                if (isset($filelist[$file]['sha1sum'])) {
+                    $this->sha1 = $filelist[$file]['sha1sum'];
+                } elseif (isset($filelist[$file]['md5sum'])) {
+                    $this->md5 = $filelist[$file]['md5sum'];
+                }
             }
         }
     }
@@ -62,9 +73,17 @@ class PEAR_Installer_Role_Cfg extends PEAR_Installer_Role_Common
     {
         $test = parent::processInstallation($pkg, $atts, $file, $tmp_path, $layer);
         if (@file_exists($test[2]) && @file_exists($test[3])) {
-            $md5 = md5_file($test[2]);
+            // Try sha1 first
+            if (!is_null($this->sha1)) {
+                $sha1 = sha1_file($test[2]);
+                $mod = ($sha1 !== $this->sha1 && $sha1 !== sha1_file($test[3]));
+            } else {
+                $md5 = md5_file($test[2]);
+                $mod = ($md5 !== $this->md5 && $md5 !== md5_file($test[3]));
+            }
+
             // configuration has already been installed, check for mods
-            if ($md5 !== $this->md5 && $md5 !== md5_file($test[3])) {
+            if ($mod) {
                 // configuration has been modified, so save our version as
                 // configfile-version
                 $old = $test[2];

@@ -316,8 +316,12 @@ class PEAR_Installer extends PEAR_Downloader
                 }
 
                 $this->log(3, "+ cp $orig_file $dest_file");
-                if (isset($atts['md5sum'])) {
-                    $md5sum = md5_file($dest_file);
+                if (isset($atts['sha1sum'])) {
+                    $hash = sha1_file($dest_file);
+                    $htype = 'sha1sum';
+                } elseif (isset($atts['md5sum'])) {
+                    $hash = md5_file($dest_file);
+                    $htype = 'md5sum';
                 }
             } else {
                 // file with replacements
@@ -331,8 +335,12 @@ class PEAR_Installer extends PEAR_Downloader
                     $contents = '';
                 }
 
-                if (isset($atts['md5sum'])) {
-                    $md5sum = md5($contents);
+                if (isset($atts['sha1sum'])) {
+                    $hash = sha1($contents);
+                    $htype = 'sha1sum';
+                } elseif (isset($atts['md5sum'])) {
+                    $hash = md5($contents);
+                    $htype = 'md5sum';
                 }
 
                 $subst_from = $subst_to = array();
@@ -403,10 +411,10 @@ class PEAR_Installer extends PEAR_Downloader
                 fclose($wp);
             }
 
-            // check the md5
-            if (isset($md5sum)) {
-                if (strtolower($md5sum) === strtolower($atts['md5sum'])) {
-                    $this->log(2, "md5sum ok: $final_dest_file");
+            // check the hash
+            if (isset($hash)) {
+                if (strtolower($hash) === strtolower($atts[$htype])) {
+                    $this->log(2, $htype . " ok: $final_dest_file");
                 } else {
                     if (empty($options['force'])) {
                         // delete the file
@@ -415,16 +423,16 @@ class PEAR_Installer extends PEAR_Downloader
                         }
 
                         if (!isset($options['ignore-errors'])) {
-                            return $this->raiseError("bad md5sum for file $final_dest_file",
+                            return $this->raiseError("bad " . $htype . " for file $final_dest_file",
                                                  PEAR_INSTALLER_FAILED);
                         }
 
                         if (!isset($options['soft'])) {
-                            $this->log(0, "warning : bad md5sum for file $final_dest_file");
+                            $this->log(0, "warning : bad " . $htype . " for file $final_dest_file");
                         }
                     } else {
                         if (!isset($options['soft'])) {
-                            $this->log(0, "warning : bad md5sum for file $final_dest_file");
+                            $this->log(0, "warning : bad " . $htype . " for file $final_dest_file");
                         }
                     }
                 }
@@ -553,8 +561,12 @@ class PEAR_Installer extends PEAR_Downloader
                 }
 
                 $this->log(3, "+ cp $orig_file $dest_file");
-                if (isset($attribs['md5sum'])) {
-                    $md5sum = md5_file($dest_file);
+                if (isset($attribs['sha1sum'])) {
+                    $hash = sha1_file($dest_file);
+                    $htype = 'sha1sum';
+                } elseif (isset($attribs['md5sum'])) {
+                    $hash = md5_file($dest_file);
+                    $htype = 'md5sum';
                 }
             } else { // file with tasks
                 if (!file_exists($orig_file)) {
@@ -567,8 +579,12 @@ class PEAR_Installer extends PEAR_Downloader
                     $contents = '';
                 }
 
-                if (isset($attribs['md5sum'])) {
-                    $md5sum = md5($contents);
+                if (isset($attribs['sha1sum'])) {
+                    $hash = sha1($contents);
+                    $htype = 'sha1sum';
+                } elseif (isset($attribs['md5sum'])) {
+                    $hash = md5($contents);
+                    $htype = 'md5sum';
                 }
 
                 foreach ($atts as $tag => $raw) {
@@ -604,15 +620,17 @@ class PEAR_Installer extends PEAR_Downloader
                 }
             }
 
-            // check the md5
-            if (isset($md5sum)) {
-                // Make sure the original md5 sum matches with expected
-                if (strtolower($md5sum) === strtolower($attribs['md5sum'])) {
-                    $this->log(2, "md5sum ok: $final_dest_file");
+            // check the hash
+            if (isset($hash)) {
+                // Make sure the original hash sum matches with expected
+                if (strtolower($hash) === strtolower($attribs[$htype])) {
+                    $this->log(2, $htype . " ok: $final_dest_file");
 
                     if (isset($contents)) {
-                        // set md5 sum based on $content in case any tasks were run.
-                        $real_atts['attribs']['md5sum'] = md5($contents);
+                        // set hash sum based on $content in case any tasks were run.
+                        $real_atts['attribs'][$htype] = ($htype == 'sha1sum')
+                            ? sha1($contents)
+                            : md5($contents);
                     }
                 } else {
                     if (empty($options['force'])) {
@@ -622,21 +640,23 @@ class PEAR_Installer extends PEAR_Downloader
                         }
 
                         if (!isset($options['ignore-errors'])) {
-                            return $this->raiseError("bad md5sum for file $final_dest_file",
+                            return $this->raiseError("bad " . $htype . " for file $final_dest_file",
                                                      PEAR_INSTALLER_FAILED);
                         }
 
                         if (!isset($options['soft'])) {
-                            $this->log(0, "warning : bad md5sum for file $final_dest_file");
+                            $this->log(0, "warning : bad " . $htype . " for file $final_dest_file");
                         }
                     } else {
                         if (!isset($options['soft'])) {
-                            $this->log(0, "warning : bad md5sum for file $final_dest_file");
+                            $this->log(0, "warning : bad " . $htype . " for file $final_dest_file");
                         }
                     }
                 }
             } else {
-                $real_atts['attribs']['md5sum'] = md5_file($dest_file);
+                $real_atts['attribs'][$htype] = ($htype == 'sha1sum')
+                    ? sha1_file($dest_file)
+                    : md5_file($dest_file);
             }
 
             //set file permissions

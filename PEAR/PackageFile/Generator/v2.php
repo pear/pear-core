@@ -261,6 +261,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                 chmod($tfile, $origperms);
                 $filelist[$i++] = $tfile;
                 $this->_packagefile->setFileAttribute($fname, 'md5sum', md5_file($tfile), $i - 1);
+                $this->_packagefile->setFileAttribute($fname, 'sha1sum', sha1_file($tfile), $i - 1);
                 $packager->log(2, "Adding file $fname");
             }
         }

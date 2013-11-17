@@ -995,7 +995,8 @@ class PEAR_PackageFile_v2_Validator
         } else {
             $struc = array(
                 '*dir->name->?baseinstalldir',
-                '*file->name->role->?baseinstalldir->?md5sum'
+                '*file->name->role->?baseinstalldir->?md5sum',
+                '*file->name->role->?baseinstalldir->?sha1sum'
             );
             if (isset($list['dir']) && isset($list['file'])) {
                 // stave off validation errors without requiring a set order.
