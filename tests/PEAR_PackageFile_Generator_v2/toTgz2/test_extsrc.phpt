@@ -79,11 +79,11 @@ release notes
  </notes>
  <contents>
   <dir name="/">
-   <file baseinstalldir="freeb" md5sum="ed0384ad29e60110b310a02e95287ee6" name="sunger/foo.dat" role="data">
+   <file baseinstalldir="freeb" md5sum="ed0384ad29e60110b310a02e95287ee6" name="sunger/foo.dat" role="data" sha1sum="9c8a8626c44946691f545b212909180320bbb17a">
     <tasks:replace from="@pv@" to="version" type="package-info" />
    </file>
    <file baseinstalldir="freeb" md5sum="' . (OS_WINDOWS ? 'ed0384ad29e60110b310a02e95287ee6' :
-    '452925d5182994846dbe3b9518db84d8') . '" name="foo.php" role="src">
+    '452925d5182994846dbe3b9518db84d8') . '" name="foo.php" role="src" sha1sum="fdd988798afd78a5627443362271f9b5fb80a7dd">
     <tasks:replace from="@pv@" to="version" type="package-info" />
    </file>
   </dir>
