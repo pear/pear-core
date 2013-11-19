@@ -68,11 +68,11 @@ release notes
   </configureoptions>
   <filelist>
    <dir name="sunger">
-    <file role="data" baseinstalldir="freeb" md5sum="ed0384ad29e60110b310a02e95287ee6" install-as="merbl.dat" name="foo.dat">
+    <file role="data" baseinstalldir="freeb" md5sum="ed0384ad29e60110b310a02e95287ee6" sha1sum="9c8a8626c44946691f545b212909180320bbb17a" install-as="merbl.dat" name="foo.dat">
      <replace from="@pv@" to="version" type="package-info"/>
     </file>
    </dir> <!-- /sunger -->
-   <file role="php" baseinstalldir="freeb" md5sum="9df02b4a6fafef4e9be2962bfeaed509" install-as="merbl.php" name="foo.php">
+   <file role="php" baseinstalldir="freeb" md5sum="9df02b4a6fafef4e9be2962bfeaed509" sha1sum="2cf006a36432e8244d18dec86b57a38c4a8cfe75" install-as="merbl.php" name="foo.php">
     <replace from="@pv@" to="version" type="package-info"/>
    </file>
   </filelist>
