@@ -17,7 +17,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $php5 = (version_compare(phpversion(), '5.0.0', '>=') && version_compare(phpversion(), '5.2.8', '<='));
 
 if (defined("HHVM_VERSION")) {
-    $message = 'XML error: Not well-formed (invalid token) at line 1';
+    $message = 'XML error: not well-formed (invalid token) at line 1';
 } else if ($php5) {
     $message = 'XML error: Empty document at line 1';
 } else {
