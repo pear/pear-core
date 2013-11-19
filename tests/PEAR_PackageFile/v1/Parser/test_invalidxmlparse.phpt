@@ -11,7 +11,9 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pathtopackagexml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'package.xml';
 $result = &$parser->parse('<xmlbad', PEAR_VALIDATE_NORMAL, $pathtopackagexml);
-if (version_compare(phpversion(), '5.0.0', '<')) {
+if (defined("HHVM_VERSION")) {
+    $message = 'XML error: unclosed token at line 1';  
+} else if (version_compare(phpversion(), '5.0.0', '<')) {
     $message = 'XML error: unclosed token at line 1';
 } elseif (version_compare(phpversion(), '5.0.3', '<')) {
     $message = 'XML error: XML_ERR_GT_REQUIRED at line 1';
