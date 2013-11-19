@@ -316,6 +316,7 @@ class PEAR_Installer extends PEAR_Downloader
                 }
 
                 $this->log(3, "+ cp $orig_file $dest_file");
+                $htype = '';
                 if (isset($atts['sha1sum'])) {
                     $hash = sha1_file($dest_file);
                     $htype = 'sha1sum';
@@ -561,6 +562,7 @@ class PEAR_Installer extends PEAR_Downloader
                 }
 
                 $this->log(3, "+ cp $orig_file $dest_file");
+                $htype = '';
                 if (isset($attribs['sha1sum'])) {
                     $hash = sha1_file($dest_file);
                     $htype = 'sha1sum';
