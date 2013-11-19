@@ -301,7 +301,8 @@ class PEAR_Installer extends PEAR_Downloader
             }
             $this->log(3, "+ mkdir $dest_dir");
         }
-
+    
+        $htype = '';
         // pretty much nothing happens if we are only registering the install
         if (empty($this->_options['register-only'])) {
             if (empty($atts['replacements'])) {
@@ -316,7 +317,7 @@ class PEAR_Installer extends PEAR_Downloader
                 }
 
                 $this->log(3, "+ cp $orig_file $dest_file");
-                $htype = '';
+                
                 if (isset($atts['sha1sum'])) {
                     $hash = sha1_file($dest_file);
                     $htype = 'sha1sum';
@@ -549,6 +550,7 @@ class PEAR_Installer extends PEAR_Downloader
         $attribs = $atts['attribs'];
         unset($atts['attribs']);
         // pretty much nothing happens if we are only registering the install
+        $htype = '';
         if (empty($this->_options['register-only'])) {
             if (!count($atts)) { // no tasks
                 if (!file_exists($orig_file)) {
@@ -562,7 +564,7 @@ class PEAR_Installer extends PEAR_Downloader
                 }
 
                 $this->log(3, "+ cp $orig_file $dest_file");
-                $htype = '';
+
                 if (isset($attribs['sha1sum'])) {
                     $hash = sha1_file($dest_file);
                     $htype = 'sha1sum';
