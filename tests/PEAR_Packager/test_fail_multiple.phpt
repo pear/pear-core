@@ -20,7 +20,9 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => 'Cannot package, errors in second package file'),
 ), 'ret');
 $phpunit->assertIsa('PEAR_Error', $ret, 'bloob.xml');
-if (version_compare(phpversion(), '5.0.0', '>=')) {
+if (defined("HHVM_VERSION")) {
+    $errmsg = 'XML error: no element found at line 1';    
+} elseif (version_compare(phpversion(), '5.0.0', '>=')) {
     if (version_compare(phpversion(), '5.0.3', '>=')) {
         //yeesh, make up your mind, php devs!
         $errmsg = 'XML error: Invalid document end at line 1';
