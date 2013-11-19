@@ -20,7 +20,7 @@ $phpunit->assertErrors(array(
 touch($temp_path . DIRECTORY_SEPARATOR . 'smong.xml');
 $e = $command->run('info', array(), array($temp_path . DIRECTORY_SEPARATOR . 'smong.xml'));
 if (defined("HHVM_VERSION")) {
-    $errmsg = 'no element found';
+    $err = 'no element found';
 } else if (version_compare(phpversion(), '5.0.0', '>=')) {
     if (version_compare(phpversion(), '5.0.3', '>=')) {
         $err = 'Invalid document end';
