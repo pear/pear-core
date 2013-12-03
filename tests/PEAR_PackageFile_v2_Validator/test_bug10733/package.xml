@@ -589,8 +589,8 @@ Added more components:
 * STD (The commandline constants)
 
 Other changes:
-* Removed the seperate files for STDIN/STDOUT/STDERR
-* Removed the seperate files for FILE_USE_INCLUDE_PATH/FILE_APPEND
+* Removed the separate files for STDIN/STDOUT/STDERR
+* Removed the separate files for FILE_USE_INCLUDE_PATH/FILE_APPEND
   </notes>
   </release>
   

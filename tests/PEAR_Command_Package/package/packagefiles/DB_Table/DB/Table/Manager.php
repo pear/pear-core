@@ -1505,7 +1505,7 @@ class DB_Table_Manager {
     * @param string $table The table name.
     * 
     * @return mixed Array with all indexes or a PEAR_Error when an error
-    * occured.
+    * occurred.
     * 
     */
 

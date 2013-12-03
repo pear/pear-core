@@ -35,7 +35,7 @@ added 'overrideOptions' option that can be used to restore the default options f
 added 'keyAttribute' option to XML_Unserializer,
 added Todo list
     
-";}i:4;a:5:{s:7:"version";s:3:"0.8";s:12:"release_date";s:10:"2003-09-23";s:15:"release_license";s:11:"PHP License";s:13:"release_state";s:4:"beta";s:13:"release_notes";s:1532:"XML_Serializer:
+";}i:4;a:5:{s:7:"version";s:3:"0.8";s:12:"release_date";s:10:"2003-09-23";s:15:"release_license";s:11:"PHP License";s:13:"release_state";s:4:"beta";s:13:"release_notes";s:1533:"XML_Serializer:
 * added option: scalarAsAttribute to create tags with attributes from an array or object,
 * added option: prependAttributes to enable a prepend string for attributes (ensure they are different from type hints),
 * added option: attributeIndent to allow multiline tags, if a tag has several attributes; this makes it easier to read (requested by Yavor Shahpasov),
@@ -50,7 +50,7 @@ XML_Unserializer:
 * added option: tagMap, to change the names of the tags while parsing
 
 Both:
-* removed bug that occured when instantiating w/o options (reported by Alan Knowles),
+* removed bug that occurred when instantiating w/o options (reported by Alan Knowles),
 * added options: keyAttribute, typeAttribute and classAtribute to allow user to specify attribute names for typehints,
 * added resetOptions(),
 * added setOption(),

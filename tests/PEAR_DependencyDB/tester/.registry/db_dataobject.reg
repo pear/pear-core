@@ -41,7 +41,7 @@ Bugs Fixed.
             #4203 - schema mess with postgres.
                     generator_strip_schema=1
                     will strip the schema part from the name of the table.
-  * fix bug #4168 - if connection test is sucessfull, dont try and
+  * fix bug #4168 - if connection test is successfull, dont try and
                     connect.. (performance improvement)
   * fix bug #4040 - prevent toArray from calling getLink and getLinks
   * fix bug #4019 - createTables uses sets up options for DB
@@ -168,8 +168,8 @@ Bug Fixes:
   
 Changes:
   * DebugLevel(1) now displays native errors from database when queries fail.
-  * Result Field names now stored seperately from Result Object
-  * free() method added, to clean up memory instantly, if you are doing alot of queries.
+  * Result Field names now stored separately from Result Object
+  * free() method added, to clean up memory instantly, if you are doing a lot of queries.
       = Cleans Result Fields, Result Object, NumRows returned in Connection object.
   * include path is used to do file hunting if factory fails to find file.
   * DB is lazy loaded on connection.b
@@ -245,7 +245,7 @@ so it can be used to test connections.
 * fix bug #612 databaseStructure('databasename') will output the ini file structure array , with __keys
 * fix bug #611 corrected comment about NO_OVERLOAD
 * fix bug #603 to prevent clearing of queries after fetch, use the option keep_query_after_fetch = 1
-* fix bug #359 (again) - _link_loaded array should only contain links that where sucessfully loaded
+* fix bug #359 (again) - _link_loaded array should only contain links that where successfully loaded
     
 ";}i:17;a:4:{s:7:"version";s:5:"1.5.1";s:12:"release_date";s:10:"2004-01-22";s:13:"release_state";s:6:"stable";s:13:"release_notes";s:391:"Bug fix release.
 Fixes
@@ -427,7 +427,7 @@ New Features
 - fix generator for postgres and mdb - use unique keys and look for 'nextval' as keys.
 - fix no key insert bug (G Moxley Kempster)
 - fix empty table bug in generator (Robert Janeczek)
-- staticAutoloadTable(), now handles parse errors in included files alot cleaner
+- staticAutoloadTable(), now handles parse errors in included files a lot cleaner
 - added dependancies on PHP4.3, DB 1.3 and Validate (although Validate is optional)
 - added table prefix to count query (Richard Wallace)
     

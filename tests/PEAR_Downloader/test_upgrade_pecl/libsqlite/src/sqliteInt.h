@@ -280,7 +280,7 @@ struct Db {
 ** Allowed values for the DB.flags field.
 **
 ** The DB_Locked flag is set when the first OP_Transaction or OP_Checkpoint
-** opcode is emitted for a database.  This prevents multiple occurances
+** opcode is emitted for a database.  This prevents multiple occurrences
 ** of those opcodes for the same database in the same program.  Similarly,
 ** the DB_Cookie flag is set when the OP_VerifyCookie opcode is emitted,
 ** and prevents duplicate OP_VerifyCookies from taking up space and slowing
@@ -523,7 +523,7 @@ struct Table {
 **
 ** Each REFERENCES clause generates an instance of the following structure
 ** which is attached to the from-table.  The to-table need not exist when
-** the from-table is created.  The existance of the to-table is not checked
+** the from-table is created.  The existence of the to-table is not checked
 ** until an attempt is made to insert data into the from-table.
 **
 ** The sqlite.aFKey hash table stores pointers to this structure

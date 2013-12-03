@@ -625,7 +625,7 @@ class DB_Table_QuickForm {
             //   - not a valid object
             //   - a valid object, but a method 'createElement' doesn't exist
             //   - not a valid method name
-            // - if an error occured in 'createElement' or in the method
+            // - if an error occurred in 'createElement' or in the method
             
         default:
             
