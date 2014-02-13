@@ -39,7 +39,7 @@
  </stability>
  <license>BSD, revised</license>
  <notes><![CDATA[
-+ Added ext/zlib independant GZIP support
++ Added ext/zlib independent GZIP support
 + Added HttpRequestPool::getAttachedRequests() and getFinishedRequests()
 + Added experimental thread safety for builds linking against libcurl-gnutls
 + Improved the chunked decoder

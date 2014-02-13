@@ -466,7 +466,7 @@ PHP_FUNCTION(http_cache_last_modified)
 /* {{{ proto bool http_cache_etag([string etag])
  *
  * Attempts to cache the sent entity by its ETag, either supplied or generated 
- * by the hash algorythm specified by the INI setting "http.etag_mode".
+ * by the hash algorithm specified by the INI setting "http.etag_mode".
  *
  * If the clients "If-None-Match" header matches the supplied/calculated
  * ETag, the body is considered cached on the clients side and
@@ -493,7 +493,7 @@ PHP_FUNCTION(http_cache_etag)
 /* {{{ proto string ob_etaghandler(string data, int mode)
  *
  * For use with ob_start().  Output buffer handler generating an ETag with
- * the hash algorythm specified with the INI setting "http.etag_mode".
+ * the hash algorithm specified with the INI setting "http.etag_mode".
  */
 PHP_FUNCTION(ob_etaghandler)
 {
@@ -1419,7 +1419,7 @@ PHP_FUNCTION(http_build_query)
  * Compress data with the HTTP compatible GZIP encoding.
  * 
  * Expects the first parameter to be a string which contains the data that
- * should be encoded.  Additionally accepts an optional in paramter specifying
+ * should be encoded.  Additionally accepts an optional in parameter specifying
  * the compression level, where -1 is default, 0 is no compression and 9 is
  * best compression ratio.
  * 

@@ -704,7 +704,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/file_smbpasswd/info.xml", '<
  <ca xlink:href="/rest/c/File+Formats">File Formats</ca>
  <l>BSD</l>
  <s>Class for managing SAMBA style password files.</s>
- <d>With this package, you can maintain smbpasswd-files, usualy used by SAMBA.</d>
+ <d>With this package, you can maintain smbpasswd-files, usually used by SAMBA.</d>
  <r xlink:href="/rest/r/file_smbpasswd"/>
 </p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/file_smbpasswd/1.0.2.xml", '<?xml version="1.0" encoding="UTF-8" ?>
@@ -720,7 +720,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/file_smbpasswd/1.0.2.xml", '
  <l>BSD</l>
  <m>mbretter</m>
  <s>Class for managing SAMBA style password files.</s>
- <d>With this package, you can maintain smbpasswd-files, usualy used by SAMBA.
+ <d>With this package, you can maintain smbpasswd-files, usually used by SAMBA.
 </d>
  <da>2005-05-08 05:11:38</da>
  <n>* The Account Flags field had the wrong length.

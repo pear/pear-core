@@ -11,7 +11,7 @@ the line required for PHP 4 PHPUnit framework is commented out.
 The tests are not yet fully automated - determination of correctness
 of some of the tests requires either inspection of the results, or 
 comparison to the results of a previous run (i.e., simple regression 
-testing). Succesful outputs are thus provided with each test. Fully
+testing). Successful outputs are thus provided with each test. Fully
 automated versions of these tests will be provided in a future 
 release.
 

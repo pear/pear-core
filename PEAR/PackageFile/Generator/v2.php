@@ -70,7 +70,7 @@ http://pear.php.net/dtd/package-2.0
 http://pear.php.net/dtd/package-2.0.xsd',
         ),               // attributes of the root tag
         'attributesArray'    => 'attribs',                  // all values in this key will be treated as attributes
-        'contentName'        => '_content',                   // this value will be used directly as content, instead of creating a new tag, may only be used in conjuction with attributesArray
+        'contentName'        => '_content',                   // this value will be used directly as content, instead of creating a new tag, may only be used in conjunction with attributesArray
         'beautifyFilelist'   => false,
         'encoding' => 'UTF-8',
     );

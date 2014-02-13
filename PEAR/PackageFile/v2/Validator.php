@@ -1875,7 +1875,7 @@ class PEAR_PackageFile_v2_Validator
                 $pn = $this->_pf->getPackage();
                 $this->_stack->push(__FUNCTION__, 'warning',
                         array('file' => $file, 'package' => $pn),
-                        'in %file%: Could not process file for unkown reasons,' .
+                        'in %file%: Could not process file for unknown reasons,' .
                         ' possibly a PHP parse error in %file% from %package%');
             }
         }

@@ -181,7 +181,7 @@ if (isset($suffix)) {
     }
 }
 
-/* Print PEAR Conf (useful for debuging do NOT REMOVE) */
+/* Print PEAR Conf (useful for debugging do NOT REMOVE) */
 if ($debug) {
     sort($keys);
     foreach ($keys as $key) {
