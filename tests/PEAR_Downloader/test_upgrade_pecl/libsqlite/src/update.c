@@ -338,7 +338,7 @@ void sqliteUpdate(
     /* Loop over every record that needs updating.  We have to load
     ** the old data for each record to be updated because some columns
     ** might not change and we will need to copy the old value.
-    ** Also, the old data is needed to delete the old index entires.
+    ** Also, the old data is needed to delete the old index entries.
     ** So make the cursor point at the old record.
     */
     if( !row_triggers_exist ){

@@ -169,7 +169,7 @@ the Last-Modified header is updated and the actual body will be sent.</p>
 http.cache_log is set and the cache attempt was successful.</p>
 <h2 id="http_cache_etag">bool http_cache_etag([string etag])</h2>
 <p>Attempts to cache the sent entity by its ETag, either supplied or generated <br />
-by the hash algorythm specified by the INI setting "http.etag_mode".</p>
+by the hash algorithm specified by the INI setting "http.etag_mode".</p>
 <p>If the clients "If-None-Match" header matches the supplied/calculated<br />
 ETag, the body is considered cached on the clients side and<br />
 a "304 Not Modified" status code is issued.</p>
@@ -178,7 +178,7 @@ a "304 Not Modified" status code is issued.</p>
 "http.cache_log" is set and the cache attempt was successful.</p>
 <h2 id="ob_etaghandler">string ob_etaghandler(string data, int mode)</h2>
 <p>For use with ob_start().  Output buffer handler generating an ETag with<br />
-the hash algorythm specified with the INI setting "http.etag_mode".</p>
+the hash algorithm specified with the INI setting "http.etag_mode".</p>
 <h2 id="http_throttle">void http_throttle(double sec[, int bytes = 40960])</h2>
 <p>Sets the throttle delay and send buffer size for use with http_send() API.<br />
 Provides a basic throttling mechanism, which will yield the current process<br />
@@ -340,7 +340,7 @@ See http_get() for a full list of available options.</p>
 <h2 id="http_gzencode">string http_gzencode(string data[, int level = -1])</h2>
 <p>Compress data with the HTTP compatible GZIP encoding.</p>
 <p>Expects the first parameter to be a string which contains the data that<br />
-should be encoded.  Additionally accepts an optional in paramter specifying<br />
+should be encoded.  Additionally accepts an optional in parameter specifying<br />
 the compression level, where -1 is default, 0 is no compression and 9 is<br />
 best compression ratio.</p>
 <p>Returns the encoded string on success, or NULL on failure.</p>
@@ -614,7 +614,7 @@ Affects only POST and custom requests.</p>
 Affects only POST and custom requests. Cannot be used with raw post data.</p>
 <p>Expects a string parameter containing the form element name, and a string<br />
 paremeter containing the path to the file which should be uploaded.<br />
-Additionally accepts an optional string parameter which chould contain<br />
+Additionally accepts an optional string parameter which could contain<br />
 the content type of the file.</p>
 <p>Returns TRUE on success, or FALSE if the content type seems not to contain a <br />
 primary and a secondary content type part.</p>
@@ -924,12 +924,12 @@ which the data to send will be read.</p>
 <p>Returns the previously set path to the file to send as string.</p>
 <h3 id="HttpResponse_send">static bool HttpResponse::send([bool clean_ob = true])</h3>
 <p>Finally send the entity.</p>
-<p>Accepts an optional boolean parameter, specifying wheter the ouput<br />
+<p>Accepts an optional boolean parameter, specifying wheter the output<br />
 buffers should be discarded prior sending.  A successful caching attempt<br />
 will cause a script termination, and write a log entry if the INI setting<br />
 http.cache_log is set.</p>
 <p>Returns TRUE on success, or FALSE on failure.</p>
-<p>Throws HttpHeaderException, HttpResponseException if http.onyl_excpetions is TRUE.</p>
+<p>Throws HttpHeaderException, HttpResponseException if http.onyl_exceptions is TRUE.</p>
 <p>Example:</p><pre><blockquote><code><span style="color: #000000"><br />
 <span style="color: #0000BB">&lt;?php<br />HttpResponse</span><span style="color: #007700">::</span><span style="color: #0000BB">setCache</span><span style="color: #007700">(</span><span style="color: #0000BB">true</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">HttpResponse</span><span style="color: #007700">::</span><span style="color: #0000BB">setContentType</span><span style="color: #007700">(</span><span style="color: #DD0000">'application/pdf'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">HttpResponse</span><span style="color: #007700">::</span><span style="color: #0000BB">setContentDisposition</span><span style="color: #007700">(</span><span style="color: #DD0000">"$user.pdf"</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">false</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">HttpResponse</span><span style="color: #007700">::</span><span style="color: #0000BB">setFile</span><span style="color: #007700">(</span><span style="color: #DD0000">'sheet.pdf'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">HttpResponse</span><span style="color: #007700">::</span><span style="color: #0000BB">send</span><span style="color: #007700">();<br /></span><span style="color: #0000BB">?&gt;</span><br />
 </span></code></blockquote></p>

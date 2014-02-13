@@ -611,7 +611,7 @@ class PEAR_Dependency2
      * @param boolean whether this is a required dependency
      * @param array a list of downloaded packages to be installed, if any
      * @param boolean if true, then deps on pear.php.net that fail will also check
-     *                against pecl.php.net packages to accomodate extensions that have
+     *                against pecl.php.net packages to accommodate extensions that have
      *                moved to pecl.php.net from pear.php.net
      */
     function validatePackageDependency($dep, $required, $params, $depv1 = false)

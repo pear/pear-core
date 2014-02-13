@@ -127,7 +127,7 @@ id(A) ::= ID(X).         {A = X;}
   OF OFFSET PRAGMA RAISE REPLACE RESTRICT ROW STATEMENT
   TEMP TRIGGER VACUUM VIEW.
 
-// Define operator precedence early so that this is the first occurance
+// Define operator precedence early so that this is the first occurrence
 // of the operator tokens in the grammer.  Keeping the operators together
 // causes them to be assigned integer values that are close together,
 // which keeps parser tables smaller.

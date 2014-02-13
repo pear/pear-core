@@ -280,7 +280,7 @@ struct Db {
 ** Allowed values for the DB.flags field.
 **
 ** The DB_Locked flag is set when the first OP_Transaction or OP_Checkpoint
-** opcode is emitted for a database.  This prevents multiple occurances
+** opcode is emitted for a database.  This prevents multiple occurrences
 ** of those opcodes for the same database in the same program.  Similarly,
 ** the DB_Cookie flag is set when the OP_VerifyCookie opcode is emitted,
 ** and prevents duplicate OP_VerifyCookies from taking up space and slowing
@@ -523,7 +523,7 @@ struct Table {
 **
 ** Each REFERENCES clause generates an instance of the following structure
 ** which is attached to the from-table.  The to-table need not exist when
-** the from-table is created.  The existance of the to-table is not checked
+** the from-table is created.  The existence of the to-table is not checked
 ** until an attempt is made to insert data into the from-table.
 **
 ** The sqlite.aFKey hash table stores pointers to this structure
@@ -532,7 +532,7 @@ struct Table {
 ** field.
 */
 struct FKey {
-  Table *pFrom;     /* The table that constains the REFERENCES clause */
+  Table *pFrom;     /* The table that constrains the REFERENCES clause */
   FKey *pNextFrom;  /* Next foreign key in pFrom */
   char *zTo;        /* Name of table that the key points to */
   FKey *pNextTo;    /* Next foreign key that points to zTo */
@@ -967,7 +967,7 @@ struct Trigger {
   u8 iTabDb;              /* Database containing Trigger.table              */
   u8 op;                  /* One of TK_DELETE, TK_UPDATE, TK_INSERT         */
   u8 tr_tm;               /* One of TK_BEFORE, TK_AFTER */
-  Expr *pWhen;            /* The WHEN clause of the expresion (may be NULL) */
+  Expr *pWhen;            /* The WHEN clause of the expression (may be NULL) */
   IdList *pColumns;       /* If this is an UPDATE OF <column-list> trigger,
                              the <column-list> is stored here */
   int foreach;            /* One of TK_ROW or TK_STATEMENT */

@@ -391,7 +391,7 @@ class DB_Table_Manager {
 
         }
 
-        $result = DB_Table_Manager::_createIndexesAndContraints($db, $backend,
+        $result = DB_Table_Manager::_createIndexesAndConstraints($db, $backend,
                                                                 $table, $indexes);
         if (PEAR::isError($result)) {
             return $result;
@@ -768,7 +768,7 @@ class DB_Table_Manager {
                     var_dump($indexes);
                     echo "\n";
                 }
-                $result = DB_Table_Manager::_createIndexesAndContraints(
+                $result = DB_Table_Manager::_createIndexesAndConstraints(
                     $db, $backend, $table, $indexes);
                 if ($backend == 'mdb2') {
                     // restore user defined 'idxname_format' option
@@ -1505,7 +1505,7 @@ class DB_Table_Manager {
     * @param string $table The table name.
     * 
     * @return mixed Array with all indexes or a PEAR_Error when an error
-    * occured.
+    * occurred.
     * 
     */
 
@@ -1663,7 +1663,7 @@ class DB_Table_Manager {
 
    /**
     * 
-    * Create indexes and contraints.
+    * Create indexes and constraints.
     * 
     * @access private
     * 
@@ -1680,7 +1680,7 @@ class DB_Table_Manager {
     * 
     */
 
-    function _createIndexesAndContraints($db, $backend, $table, $indexes)
+    function _createIndexesAndConstraints($db, $backend, $table, $indexes)
     {
         if ($backend == 'mdb2') {
 
