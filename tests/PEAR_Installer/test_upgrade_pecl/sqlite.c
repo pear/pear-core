@@ -1012,7 +1012,7 @@ void sqlite_query(struct php_sqlite_db *db, char *sql, long sql_len, int mode, i
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", errtext);
 		sqlite_freemem(errtext);
 		goto terminate;
-	} else if (!res.vm) { /* emptry query */
+	} else if (!res.vm) { /* empty query */
 terminate:
 		if (return_value) {
 			RETURN_FALSE;

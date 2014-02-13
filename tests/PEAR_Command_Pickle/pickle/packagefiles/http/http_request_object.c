@@ -1412,7 +1412,7 @@ PHP_METHOD(HttpRequest, getRawPostData)
  * 
  * Expects a string parameter containing the form element name, and a string
  * paremeter containing the path to the file which should be uploaded.
- * Additionally accepts an optional string parameter which chould contain
+ * Additionally accepts an optional string parameter which could contain
  * the content type of the file.
  * 
  * Returns TRUE on success, or FALSE if the content type seems not to contain a 

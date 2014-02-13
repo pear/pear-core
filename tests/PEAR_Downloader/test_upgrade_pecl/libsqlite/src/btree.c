@@ -97,7 +97,7 @@ typedef struct OverflowPage OverflowPage;
 typedef struct FreelistInfo FreelistInfo;
 
 /*
-** All structures on a database page are aligned to 4-byte boundries.
+** All structures on a database page are aligned to 4-byte boundaries.
 ** This routine rounds up a number of bytes to the next multiple of 4.
 **
 ** This might need to change for computer architectures that require
@@ -330,7 +330,7 @@ struct MemPage {
   int idxParent;                 /* Index in pParent->apCell[] of this node */
   int nFree;                     /* Number of free bytes in u.aDisk[] */
   int nCell;                     /* Number of entries on this page */
-  Cell *apCell[MX_CELL+2];       /* All data entires in sorted order */
+  Cell *apCell[MX_CELL+2];       /* All data entries in sorted order */
 };
 
 /*
@@ -2594,7 +2594,7 @@ balance_cleanup:
 ** first Cell on root page.  This is necessary because an insert 
 ** or delete might change the number of cells on a page or delete
 ** a page entirely and we do not want to leave any cursors 
-** pointing to non-existant pages or cells.
+** pointing to non-existent pages or cells.
 */
 static int checkReadLocks(BtCursor *pCur){
   BtCursor *p;

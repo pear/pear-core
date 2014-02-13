@@ -794,7 +794,7 @@ PHP_METHOD(HttpMessage, setRequestMethod)
 		RETURN_FALSE;
 	}
 	if (SUCCESS != http_check_method(method)) {
-		http_error_ex(HE_WARNING, HTTP_E_REQUEST_METHOD, "Unkown request method: %s", method);
+		http_error_ex(HE_WARNING, HTTP_E_REQUEST_METHOD, "Unknown request method: %s", method);
 		RETURN_FALSE;
 	}
 

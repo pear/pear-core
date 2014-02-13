@@ -109,7 +109,7 @@ define('DB_TABLE_ERR_DECLARE_STRING',   -15);
 
 /**
  * Error code at create() time when you have an error in a 'decimal'
- * definition (usually becuase the 'size' or 'scope' are wrong).
+ * definition (usually because the 'size' or 'scope' are wrong).
  */
 define('DB_TABLE_ERR_DECLARE_DECIMAL',  -16);
 
@@ -2124,7 +2124,7 @@ class DB_Table extends DB_Table_Base
      * column name and the value is the default value for the generated
      * form element.  If null, uses all columns for this class.
      * 
-     * @return array An array of column defintions suitable for passing
+     * @return array An array of column definitions suitable for passing
      *               to DB_Table_QuickForm.
      *
      * @access public

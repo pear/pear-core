@@ -2302,7 +2302,7 @@ File_Fortune_Writer provides an interface for manipulating the contents of a
 fortune file. It allows you to write a complete fortune file and the associated
 binary header file from an array of fortunes. You may also add fortunes, delete
 fortunes, or update individual fortunes in a fortune file. All write operations
-will produce a binary header file to allow for greater compatability with the
+will produce a binary header file to allow for greater compatibility with the
 fortune and fortune-mod programs (as well as other fortune interfaces).</d>
  <r xlink:href="/rest/r/file_fortune"/>
 </p>', 'text/xml');
@@ -2542,7 +2542,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/file_smbpasswd/info.xml", '<
  <ca xlink:href="/rest/c/File+Formats">File Formats</ca>
  <l>BSD</l>
  <s>Class for managing SAMBA style password files.</s>
- <d>With this package, you can maintain smbpasswd-files, usualy used by SAMBA.</d>
+ <d>With this package, you can maintain smbpasswd-files, usually used by SAMBA.</d>
  <r xlink:href="/rest/r/file_smbpasswd"/>
 </p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/file_smbpasswd/allreleases.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
@@ -2739,7 +2739,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/gtk_styled/info.xml", '<?xml
  <s>PHP-GTK pseudo-widgets that mimic GtkData based objects and allow the look and feel to be controlled by the programmer.</s>
  <d>While it is possible to control some style elements of a GtkScrollBar,
 other elements cannot be controlled so easily. Items such as the images
-at the begining and end (usually arrows) and the scroll bar that is
+at the beginning and end (usually arrows) and the scroll bar that is
 dragged to scroll the element cannot be changed. This leads to
 applications that either must conform to the windowing systems look
 and feel or appear incomplete. The goal of this family of PHP-GTK
@@ -2966,7 +2966,7 @@ HTML form element types including file uploads, may return
 or print the form, just individual form elements or the full
 form in &quot;table mode&quot; with a fixed layout.
 
-This package has been superceded by HTML_QuickForm.</d>
+This package has been superseded by HTML_QuickForm.</d>
  <r xlink:href="/rest/r/html_form"/>
 </p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/html_form/allreleases.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
@@ -5770,7 +5770,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/mdb2_schema/info.xml", '<?xm
  <ca xlink:href="/rest/c/Database">Database</ca>
  <l>BSD License</l>
  <s>XML based database schema manager</s>
- <d>PEAR::MDB2_Schema enables users to maintain RDBMS independant schema
+ <d>PEAR::MDB2_Schema enables users to maintain RDBMS independent schema
 files in XML that can be used to create, alter and drop database entities
 and insert data into a database. Reverse engineering database schemas from
 existing databases is also supported. The format is compatible with both
@@ -6413,7 +6413,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/net_ipv6/info.xml", '<?xml v
  <l>PHP License</l>
  <s>Check and validate IPv6 addresses</s>
  <d>The class allows you to:
-* check if an addresse is an IPv6 addresse
+* check if an address is an IPv6 address
 * compress/uncompress IPv6 addresses
 * check for an IPv4 compatible ending in an IPv6 address</d>
  <r xlink:href="/rest/r/net_ipv6"/>
@@ -6567,7 +6567,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/net_nntp/info.xml", '<?xml v
 
 -----------------------------
 
-This package uses a rather conservative release cycle: New features won\'t go beta until they are truely ready for use in a production environment.
+This package uses a rather conservative release cycle: New features won\'t go beta until they are truly ready for use in a production environment.
 
 -----------------------------
 
@@ -6866,7 +6866,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/net_smpp/info.xml", '<?xml v
  <ca xlink:href="/rest/c/Networking">Networking</ca>
  <l>PHP License v3.0</l>
  <s>SMPP v3.4 protocol implementation</s>
- <d>Net_SMPP is an implementation of the SMPP (Short Message Peer-to-Peer) v3.4 protocol. SMPP is an open protocol used in the wireless industry to send and recieve SMS messages.
+ <d>Net_SMPP is an implementation of the SMPP (Short Message Peer-to-Peer) v3.4 protocol. SMPP is an open protocol used in the wireless industry to send and receive SMS messages.
 Net_SMPP does not provide a SMPP client or server, but they can easily be built with it.</d>
  <r xlink:href="/rest/r/net_smpp"/>
 </p>', 'text/xml');
@@ -8292,7 +8292,7 @@ It is highly recommended to follow the best practice detailed out below, when us
 3. Running of all tests - not only unit tests!
 4. Final building of the release to deploy.
 
-If the advanced pack mode strategy is used for packaging, a non-ScriptReorganized source code tree should be shipped together with the optimized one, to enable third parties to track down undiscoverd bugs.
+If the advanced pack mode strategy is used for packaging, a non-ScriptReorganized source code tree should be shipped together with the optimized one, to enable third parties to track down undiscovered bugs.
 
 Same applies for (complex) applications that are pharized, i.e. optimized and packaged with PHP_Archive, as well as for bcompiled scripts.
 
@@ -8308,7 +8308,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/search_mnogosearch/info.xml"
  <c>pear.php.net</c>
  <ca xlink:href="/rest/c/Tools+and+Utilities">Tools and Utilities</ca>
  <l>PHP License 2.02</l>
- <s>Wrapper classes for the mnoGoSearch extention</s>
+ <s>Wrapper classes for the mnoGoSearch extension</s>
  <d>This package provides wrapper classes for the mnoGoSearch search engine. The package has two central classes &quot;Search_Mnogosearch&quot; and &quot;Search_Mnogosearch_Result&quot;. The class &quot;Search_Mnogosearch&quot; gives an object that represents the search and the &quot;Search_Mnogosearch_Result&quot; the result. The usage is just like the usage in the &quot;DB&quot; and &quot;DB_result&quot; classes.</d>
  <r xlink:href="/rest/r/search_mnogosearch"/>
 </p>', 'text/xml');
@@ -9081,7 +9081,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/text_highlighter/info.xml", 
  <d>Text_Highlighter is a package for syntax highlighting.
 
 It provides a base class provining all the functionality,
-and a descendent classes geneator class.
+and a descendant classes geneator class.
 
 The main idea is to simplify creation of subclasses
 implementing syntax highlighting for particular language.
@@ -9223,7 +9223,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/text_wiki/info.xml", '<?xml 
  <ca xlink:href="/rest/c/Text">Text</ca>
  <l>LGPL</l>
  <s>Abstracts parsing and rendering rules for any markup as Wiki or BBCode in structured plain text.</s>
- <d>The text transformation is done in 2 steps, the parsers use rules to tokenize the content, renderers ouput the tokens and left text in the requested format.
+ <d>The text transformation is done in 2 steps, the parsers use rules to tokenize the content, renderers output the tokens and left text in the requested format.
 Used for versatile transformers as well as converters.</d>
  <r xlink:href="/rest/r/text_wiki"/>
 </p>', 'text/xml');
@@ -9738,7 +9738,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/text_highlighter/0.6.6.xml",
  <d>Text_Highlighter is a package for syntax highlighting.
 
 It provides a base class provining all the functionality,
-and a descendent classes geneator class.
+and a descendant classes geneator class.
 
 The main idea is to simplify creation of subclasses
 implementing syntax highlighting for particular language.
@@ -9774,7 +9774,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/text_wiki/1.0.1.xml", '<?xml
  <l>LGPL</l>
  <m>toggg</m>
  <s>Abstracts parsing and rendering rules for any markup as Wiki or BBCode in structured plain text.</s>
- <d>The text transformation is done in 2 steps, the parsers use rules to tokenize the content, renderers ouput the tokens and left text in the requested format.
+ <d>The text transformation is done in 2 steps, the parsers use rules to tokenize the content, renderers output the tokens and left text in the requested format.
 Used for versatile transformers as well as converters.
 
 </d>
@@ -10107,7 +10107,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/text_highlighter/0.6.2.xml",
  <d>Text_Highlighter is a package for syntax highlighting.
 
 It provides a base class provining all the functionality,
-and a descendent classes geneator class.
+and a descendant classes geneator class.
 
 The main idea is to simplify creation of subclasses
 implementing syntax highlighting for particular language.
