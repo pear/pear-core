@@ -1963,7 +1963,7 @@ class DB_Table_Database extends DB_Table_Base
      *
      * @see DB_Table::create()
      *
-     * @return boolean true on sucess (PEAR_Error on failure of any table)
+     * @return boolean true on success (PEAR_Error on failure of any table)
      * @access public
      */
     function createTables($flag = 'safe')

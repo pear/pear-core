@@ -151,7 +151,7 @@ class DB_Table_Manager_oci8 {
         $dbName = $this->_db->quoteSmart($dsn['database']);
         $index_name = $this->_db->quoteSmart($index_name);
         $table = $this->_db->quoteSmart($table);
-        $query = "SELECT * FROM all_contraints WHERE owner = $dbName AND table_name = $table AND index_name = $index_name";
+        $query = "SELECT * FROM all_constraints WHERE owner = $dbName AND table_name = $table AND index_name = $index_name";
         $result = $this->_db->query($query);
         if (PEAR::isError($result)) {
             return $result;

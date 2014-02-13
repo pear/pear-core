@@ -475,7 +475,7 @@ used for automated conversion or learning the format.
                 'name' => 'modified',
                 'type' => 'yesno',
                 'default' => 'no',
-                'prompt' => 'You have files in your SVN checkout (' . $path['from']  . ') that have been modified but not commited, do you still want to tag ' . $version . '?',
+                'prompt' => 'You have files in your SVN checkout (' . $path['from']  . ') that have been modified but not committed, do you still want to tag ' . $version . '?',
             ));
             $answers = $this->ui->confirmDialog($params);
 
