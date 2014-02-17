@@ -1,0 +1,68 @@
+{
+    "authors": [
+        {
+            "email": "cellog@php.net",
+            "name": "Greg Beaver",
+            "role": "Lead"
+        },
+        {
+            "email": "pierre@php.net",
+            "name": "Pierre-Alain Joye",
+            "role": "Lead"
+        },
+        {
+            "email": "stig@php.net",
+            "name": "Stig Bakken",
+            "role": "Lead"
+        },
+        {
+            "email": "cox@idecnet.com",
+            "name": "Tomas V.V.Cox",
+            "role": "Lead"
+        },
+        {
+            "email": "dufuz@php.net",
+            "name": "Helgi Thormar",
+            "role": "Lead"
+        },
+        {
+            "email": "tias@php.net",
+            "name": "Tias Guns",
+            "role": "Developer"
+        },
+        {
+            "email": "timj@php.net",
+            "name": "Tim Jackson",
+            "role": "Helper"
+        },
+        {
+            "email": "toggg@php.net",
+            "name": "Bertrand Gugger",
+            "role": "Helper"
+        },
+        {
+            "email": "mj@php.net",
+            "name": "Martin Jansen",
+            "role": "Helper"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "./"
+        ]
+    },
+    "description": "This is the definitive source of PEAR's core files.",
+    "license": "New BSD License",
+    "name": "pear/pear-core",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=PEAR",
+        "source": "https://github.com/pear/PEAR"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
