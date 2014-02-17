@@ -60,7 +60,8 @@
     },
     "type": "library",
     "require": {
-        "pear/pear_exception": "*"
+        "pear/pear_exception": "*",
+        "pear/archive_tar": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
