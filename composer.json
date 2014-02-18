@@ -51,6 +51,9 @@
             "./"
         ]
     },
+    "include-path": [
+        "./"
+    ],
     "description": "This is the definitive source of PEAR's core files.",
     "license": "New BSD License",
     "name": "pear/pear-core",
@@ -60,8 +63,16 @@
     },
     "type": "library",
     "require": {
-        "pear/pear_exception": "*",
-        "pear/archive_tar": "*"
+        "ext-pcre": "*",
+        "ext-xml": "*",
+        "pear/archive_tar": "*",
+        "pear/structures_graph": "*",
+        "pear/console_getopt": "*",
+        "pear/xml_util": "*"
+    },
+    "suggest": {
+        "pear/pear_frontend_gtk": "For GTK support",
+        "pear/pear_frontend_web": "For Web support"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
