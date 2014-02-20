@@ -1685,8 +1685,13 @@ class PEAR_PackageFile_v2
                             continue;
                         }
                         if ($dtype == 'pearinstaller') {
-                            $dep['name'] = 'PEAR';
-                            $dep['channel'] = 'pear.php.net';
+                            // Fix these errors by checking $dep is an array:
+                            // Warning: Illegal string offset 'name'
+                            // Warning: Illegal string offset 'channel'
+                            if (is_array($dep)) {
+                                $dep['name'] = 'PEAR';
+                                $dep['channel'] = 'pear.php.net';
+                            }
                         }
                         $s = array('type' => $map[$dtype]);
                         if (isset($dep['channel'])) {
