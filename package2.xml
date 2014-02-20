@@ -354,6 +354,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <file name="Installer.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
+    <file name="Gnupg.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
     <file name="PackageFile.php" role="php">
      <tasks:replace from="@PEAR-VER@" to="version" type="package-info" />
     </file>
