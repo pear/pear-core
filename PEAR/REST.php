@@ -133,6 +133,7 @@ class PEAR_REST
             $content_type = $content_type[0];
             switch ($content_type) {
                 case 'text/xml' :
+                case 'text/xml; charset=utf-8' :
                 case 'application/xml' :
                 case 'text/plain' :
                     if ($content_type === 'text/plain') {
