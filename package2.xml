@@ -106,8 +106,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
     installer.
     (pear will not remember the configure params for the next upgrade)
   * A new man_dir role, and configure option, to be used to install unix manual pages
-  * Add man pages for pear, pecl and peardev commands
-  * Add man page for pear.conf file.
+  * Install pear-man to get man pages for pear, pecl and peardev commands and for pear.conf file.
  </notes>
  <contents>
   <dir name="/">
@@ -432,16 +431,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
      <tasks:replace from="@include_path@" to="php_dir" type="pear-config" />
     </file>
    </dir> <!-- /scripts -->
-   <dir name="man1">
-    <file name="pear.1" role="man">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
-    <file name="peardev.1" role="man" />
-    <file name="pecl.1" role="man" />
-   </dir> <!-- /man1 -->
-   <dir name="man5">
-    <file name="pear.conf.5" role="man" />
-   </dir> <!-- /man5 -->
    <file name="LICENSE" role="doc" />
    <file name="INSTALL" role="doc" />
    <file name="package.dtd" role="data" />
@@ -563,10 +552,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <ignore name="scripts/peardev.sh" />
    <ignore name="scripts/pear.sh" />
    <ignore name="scripts/pecl.sh" />
-   <ignore name="man1/pear.1" />
-   <ignore name="man1/peardev.1" />
-   <ignore name="man1/pecl.1" />
-   <ignore name="man5/pear.conf.5" />
   </filelist>
  </phprelease>
  <phprelease>
