@@ -216,7 +216,7 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
                 $this->_packageInfo = $this->_insertBefore($this->_packageInfo, $testarr,
                     array(), $role);
             }
-            $this->_packageInfo[$role] =
+            $this->_packageInfo[$role][] =
                 array(
                     'name' => $name,
                     'user' => $handle,
