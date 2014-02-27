@@ -1136,8 +1136,10 @@ class PEAR_Installer extends PEAR_Downloader
         $tmpdir = dirname($descfile);
         if (realpath($descfile) != realpath($pkgfile)) {
             // Use the temp_dir since $descfile can contain the download dir path
-            $tmpdir = $this->config->get('temp_dir', null, 'pear.php.net');
-            $tmpdir = System::mktemp('-d -t "' . $tmpdir . '"');
+            if (!is_a($pkg, 'PEAR_PackageFile_v1')) {
+                $tmpdir = $this->config->get('temp_dir', null, 'pear.php.net');
+                $tmpdir = System::mktemp('-d -t "' . $tmpdir . '"');
+            }
 
             $tar = new Archive_Tar($pkgfile);
             if (!$tar->extract($tmpdir)) {
