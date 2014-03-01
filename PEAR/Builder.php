@@ -245,7 +245,7 @@ class PEAR_Builder extends PEAR_Common
      */
     function build($descfile, $callback = null, $options = array())
     {
-        if (preg_match('/(\\/|\\\\|^)([^\\/\\\\]+)?php(.+)?$/',
+        if (preg_match('/(\\/|\\\\|^)([^\\/\\\\]+)?php([^\\/\\\\]+)?$/',
                        $this->config->get('php_bin'), $matches)) {
             if (isset($matches[2]) && strlen($matches[2]) &&
                 trim($matches[2]) != trim($this->config->get('php_prefix'))) {
