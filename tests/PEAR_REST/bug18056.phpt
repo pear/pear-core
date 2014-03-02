@@ -11,6 +11,7 @@ if (strtolower(substr(PHP_OS, 0, 3)) == 'win'
 }
 --FILE--
 <?php
+require_once dirname(dirname(__FILE__)) . '/phpt_test.php.inc';
 require_once 'PEAR/REST.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_PRINT);
