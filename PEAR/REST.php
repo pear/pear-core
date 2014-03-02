@@ -273,19 +273,24 @@ class PEAR_REST
                 return PEAR::raiseError("Could not write $file.");
             }
         } else { // update file
-            $cachefile_lstat = lstat($file);
-            $cachefile_fp = @fopen($file, 'wb');
+            $cachefile_fp = @fopen($file, 'r+b'); // do not truncate file
             if (!$cachefile_fp) {
                 return PEAR::raiseError("Could not open $file for writing.");
             }
 
-            $cachefile_fstat = fstat($cachefile_fp);
-            if (
-              $cachefile_lstat['mode'] == $cachefile_fstat['mode'] &&
-              $cachefile_lstat['ino']  == $cachefile_fstat['ino'] &&
-              $cachefile_lstat['dev']  == $cachefile_fstat['dev'] &&
-              $cachefile_fstat['nlink'] === 1
-            ) {
+            if (OS_WINDOWS) {
+                $not_symlink     = !is_link($file); // see bug #18834
+            } else {
+                $cachefile_lstat = lstat($file);
+                $cachefile_fstat = fstat($cachefile_fp);
+                $not_symlink     = $cachefile_lstat['mode'] == $cachefile_fstat['mode']
+                                   && $cachefile_lstat['ino']  == $cachefile_fstat['ino']
+                                   && $cachefile_lstat['dev']  == $cachefile_fstat['dev']
+                                   && $cachefile_fstat['nlink'] === 1;
+            }
+
+            if ($not_symlink) {
+                ftruncate($cachefile_fp, 0); // NOW truncate
                 if (fwrite($cachefile_fp, $contents, $len) < $len) {
                     fclose($cachefile_fp);
                     return PEAR::raiseError("Could not write $file.");
