@@ -16,7 +16,7 @@
  * @link       http://pear.php.net/package/PEAR
  */
 
-ob_end_clean();
+@ob_end_clean();
 if (!defined('PEAR_RUNTYPE')) {
     // this is defined in peclcmd.php as 'pecl'
     define('PEAR_RUNTYPE', 'pear');
