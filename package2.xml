@@ -424,7 +424,7 @@
     <name>XML_Util</name>
     <channel>pear.php.net</channel>
     <min>1.2.0</min>
-    <recommended>1.2.1</recommended>
+    <recommended>1.2.3</recommended>
    </package>
    <package>
     <name>PEAR_Frontend_Web</name>
