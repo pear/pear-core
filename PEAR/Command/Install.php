@@ -468,7 +468,7 @@ Run post-installation scripts in package <package>, if any exist.
         $ts = preg_match('/Thread Safety.+enabled/', $info) ? '_ts' : '';
         $zend_extension_line = 'zend_extension' . $debug . $ts;
         $all = @file($filename);
-        if (!$all) {
+        if ($all === false) {
             return PEAR::raiseError('php.ini "' . $filename .'" could not be read');
         }
         $zend_extensions = $extensions = array();
