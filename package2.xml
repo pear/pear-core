@@ -55,13 +55,19 @@
   <name>Helgi Thormar</name>
   <user>dufuz</user>
   <email>dufuz@php.net</email>
+  <active>no</active>
+ </lead>
+ <lead>
+  <name>Christian Weiske</name>
+  <user>cweiske</user>
+  <email>cweiske@php.net</email>
   <active>yes</active>
  </lead>
  <developer>
   <name>Tias Guns</name>
   <user>tias</user>
   <email>tias@php.net</email>
-  <active>yes</active>
+  <active>no</active>
  </developer>
  <helper>
   <name>Tim Jackson</name>
@@ -81,11 +87,11 @@
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2011-07-06</date>
- <time>15:30:00</time>
+ <date>2014-06-26</date>
+ <time>18:17:00</time>
  <version>
   <release>1.9.5</release>
-  <api>1.9.4</api>
+  <api>1.9.5</api>
  </version>
  <stability>
   <release>stable</release>
@@ -93,7 +99,21 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-  Bug Fixes:
+  Bug fixes:
+  * Fix bug #18343: Entities in file names decoded during packaging [cweiske]
+  * Fix bug #18665: pecl extensions not enabled in empty php.ini files [Louis Opter]
+  * Fix bug #18834: Do not truncate cache file if it is a symlink [avb]
+  * Fix bug #18892: Parse error in Installer.php [ashnazg]
+  * Fix bug #19482: fix pearcmd for include paths with trailing backslash [cweiske]
+  * Fix bug #19793: PHP Notice about ob_end_clean() [cweiske]
+  * Fix bug #20086: Invalid regexp in PEAR_Builder::build() [avb]
+  * Fix bug #20203: split content-type and get real mime type [Samu Voutilainen]
+  * Fix bug #20283: use full path for "zend_extension=..." [cweiske]
+  * Fix bug #20284: Reset interpreter before running --CLEAN-- section php-cgi run [Mats Lindh]
+  * Fix bug #20285: fix spelling mistakes [Veres Lajos]
+  * Fix bug #20286: Support access of static variables on objects in validator [cweiske]
+  * Fix bug: let pear run-tests fail when there are failed tests [cweiske]
+  * Prepare a test for bug #18056 / bug #18834 [avb]
  </notes>
  <contents>
   <dir name="/">
@@ -906,6 +926,37 @@ http://pear.php.net/advisory-20110228.txt
   * All System (the class) functions can now take in spaced paths as long as they are surrounded in quotes.
     Prior to this it was possible to do that by passing all values in as an array (by product of #18362, #18440) [dufuz]
  </notes>
+  </release>
+
+  <release>
+   <date>2014-06-26</date>
+   <time>18:17:00</time>
+   <version>
+    <release>1.9.5</release>
+    <api>1.9.5</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+  Bug fixes:
+  * Fix bug #18343: Entities in file names decoded during packaging [cweiske]
+  * Fix bug #18665: pecl extensions not enabled in empty php.ini files [Louis Opter]
+  * Fix bug #18834: Do not truncate cache file if it is a symlink [avb]
+  * Fix bug #18892: Parse error in Installer.php [ashnazg]
+  * Fix bug #19482: fix pearcmd for include paths with trailing backslash [cweiske]
+  * Fix bug #19793: PHP Notice about ob_end_clean() [cweiske]
+  * Fix bug #20086: Invalid regexp in PEAR_Builder::build() [avb]
+  * Fix bug #20203: split content-type and get real mime type [Samu Voutilainen]
+  * Fix bug #20283: use full path for "zend_extension=..." [cweiske]
+  * Fix bug #20284: Reset interpreter before running --CLEAN-- section php-cgi run [Mats Lindh]
+  * Fix bug #20285: fix spelling mistakes [Veres Lajos]
+  * Fix bug #20286: Support access of static variables on objects in validator [cweiske]
+  * Fix bug: let pear run-tests fail when there are failed tests [cweiske]
+  * Prepare a test for bug #18056 / bug #18834 [avb]
+   </notes>
   </release>
  </changelog>
 </package>
