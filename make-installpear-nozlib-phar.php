@@ -9,10 +9,12 @@
  *
  * <pre>
  * $ pear download -Z PEAR Archive_Tar Console_Getopt Structures_Graph XML_Util
+ * $ mkdir src && cd src
+ * $ for i in ../*.tar; do tar xvf $i; done
+ * $ mv *\/* .
  * </pre>
  *
- * finally, run this script using PHP 5.1's cli php
-
+ * finally, run this script using PHP 5.1's cli php in the main directory
  *
  * @category   pear
  * @package    PEAR
@@ -21,6 +23,7 @@
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @version    CVS: $Id$
  */
+error_reporting(error_reporting() & ~E_STRICT & ~E_DEPRECATED);
 
 function replaceVersion($contents, $path)
 {
@@ -28,6 +31,7 @@ function replaceVersion($contents, $path)
 }
 
 $peardir    = dirname(__FILE__);
+$srcdir     = dirname(__FILE__) . '/go-pear-tarballs/src/';
 $outputFile = 'install-pear-nozlib.phar';
 
 $dp = @scandir($peardir . '/go-pear-tarballs');
@@ -198,13 +202,13 @@ $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'PEAR5.php', 'PEAR5.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'System.php', 'System.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'OS/Guess.php', 'OS/Guess.php');
 
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Archive/Tar.php', 'Archive/Tar.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'XML_Util/Util.php', 'XML/Util.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Console/Getopt.php', 'Console/Getopt.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph.php', 'Structures/Graph.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph/Node.php', 'Structures/Graph/Node.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph/Manipulator/AcyclicTest.php', 'Structures/Graph/Manipulator/AcyclicTest.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'Structures_Graph/Structures/Graph/Manipulator/TopologicalSorter.php', 'Structures/Graph/Manipulator/TopologicalSorter.php');
+$creator->addFile($srcdir . DIRECTORY_SEPARATOR . 'Archive/Tar.php', 'Archive/Tar.php');
+$creator->addFile($srcdir . DIRECTORY_SEPARATOR . 'XML/Util.php', 'XML/Util.php');
+$creator->addFile($srcdir . DIRECTORY_SEPARATOR . 'Console/Getopt.php', 'Console/Getopt.php');
+$creator->addFile($srcdir . DIRECTORY_SEPARATOR . 'Structures/Graph.php', 'Structures/Graph.php');
+$creator->addFile($srcdir . DIRECTORY_SEPARATOR . 'Structures/Graph/Node.php', 'Structures/Graph/Node.php');
+$creator->addFile($srcdir . DIRECTORY_SEPARATOR . 'Structures/Graph/Manipulator/AcyclicTest.php', 'Structures/Graph/Manipulator/AcyclicTest.php');
+$creator->addFile($srcdir . DIRECTORY_SEPARATOR . 'Structures/Graph/Manipulator/TopologicalSorter.php', 'Structures/Graph/Manipulator/TopologicalSorter.php');
 
 $creator->useSHA1Signature();
 $creator->savePhar(dirname(__FILE__) . DIRECTORY_SEPARATOR . $outputFile);
