@@ -87,15 +87,15 @@
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2014-06-26</date>
+ <date>2014-06-28</date>
  <time>18:17:00</time>
  <version>
-  <release>1.9.5</release>
+  <release>1.9.5dev1</release>
   <api>1.9.5</api>
  </version>
  <stability>
-  <release>stable</release>
-  <api>stable</api>
+  <release>devel</release>
+  <api>devel</api>
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
@@ -930,15 +930,15 @@ http://pear.php.net/advisory-20110228.txt
   </release>
 
   <release>
-   <date>2014-06-26</date>
+   <date>2014-06-27</date>
    <time>18:17:00</time>
    <version>
-    <release>1.9.5</release>
+    <release>1.9.5dev1</release>
     <api>1.9.5</api>
    </version>
    <stability>
-    <release>stable</release>
-    <api>stable</api>
+    <release>devel</release>
+    <api>devel</api>
    </stability>
    <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
    <notes>
