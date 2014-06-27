@@ -143,7 +143,7 @@ class PEAR_Start extends PEAR
         } else {
             $this->prefix = dirname(PHP_BINDIR);
             $this->pear_conf = PEAR_CONFIG_SYSCONFDIR . '/pear.conf';
-            if (get_current_user() != 'root') {
+            if ($this->getCurrentUser() != 'root') {
                 $this->prefix = $this->safeGetenv('HOME') . '/pear';
                 $this->pear_conf = $this->safeGetenv('HOME') . '.pearrc';
             }
@@ -167,6 +167,21 @@ class PEAR_Start extends PEAR
             } elseif (@is_dir("$this->prefix/share/php/.registry")) {
                 $this->php_dir = '$prefix/share/php';
             }
+        }
+    }
+
+    /**
+     * Get the name of the user running the script.
+     * Only needed on unix for now.
+     *
+     * @return string Name of the user ("root", "cweiske")
+     */
+    function getCurrentUser()
+    {
+        if (isset($_ENV['USER'])) {
+            return $_ENV['USER'];
+        } else {
+            return trim(`whoami`);
         }
     }
 

@@ -112,6 +112,7 @@
   * Fix bug #20284: Reset interpreter before running --CLEAN-- section php-cgi run [Mats Lindh]
   * Fix bug #20285: fix spelling mistakes [Veres Lajos]
   * Fix bug #20286: Support access of static variables on objects in validator [cweiske]
+  * Fix bug #20321: Correctly detect name of current user during installation [cweiske]
   * Fix bug: let pear run-tests fail when there are failed tests [cweiske]
   * Prepare a test for bug #18056 / bug #18834 [avb]
  </notes>
@@ -954,6 +955,7 @@ http://pear.php.net/advisory-20110228.txt
   * Fix bug #20284: Reset interpreter before running --CLEAN-- section php-cgi run [Mats Lindh]
   * Fix bug #20285: fix spelling mistakes [Veres Lajos]
   * Fix bug #20286: Support access of static variables on objects in validator [cweiske]
+  * Fix bug #20321: Correctly detect name of current user during installation [cweiske]
   * Fix bug: let pear run-tests fail when there are failed tests [cweiske]
   * Prepare a test for bug #18056 / bug #18834 [avb]
    </notes>

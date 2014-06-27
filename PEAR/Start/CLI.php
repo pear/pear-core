@@ -79,7 +79,7 @@ Are you installing a system-wide PEAR or a local copy?
                 }
             }
         } else {
-            if (get_current_user() == 'root') {
+            if ($this->getCurrentUser() == 'root') {
                 return;
             }
             $this->pear_conf = $this->safeGetenv('HOME') . '/.pearrc';
