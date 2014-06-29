@@ -71,6 +71,7 @@ class PEAR_Start extends PEAR
     var $localInstall;
     var $PEARConfig;
     var $tarball = array();
+    var $ptmp;
 
     function PEAR_Start()
     {

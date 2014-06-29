@@ -10,6 +10,18 @@ class PEAR_Start_CLI extends PEAR_Start
     var $origpwd;
     var $tty;
 
+    /**
+     * Path to .vbs file for directory selection
+     * @var string
+     */
+    var $cscript;
+
+    /**
+     * SAPI for selected php.exe
+     * @var string
+     */
+    var $php_bin_sapi;
+
     function PEAR_Start_CLI()
     {
         parent::PEAR_Start();
@@ -39,6 +51,9 @@ class PEAR_Start_CLI extends PEAR_Start
     {
         if ($this->tty) {
             @fclose($this->tty);
+        }
+        if ($this->cscript) {
+            @unlink($this->cscript);
         }
     }
 
@@ -206,9 +221,7 @@ Press Enter to continue...";
      */
     function win32BrowseForFolder($label)
     {
-        static $wshSaved=false;
-        static $cscript='';
-    $wsh_browserfolder = 'Option Explicit
+        $wsh_browserfolder = 'Option Explicit
 Dim ArgObj, var1, var2, sa, sFld
 Set ArgObj = WScript.Arguments
 Const BIF_EDITBOX = &H10
@@ -238,15 +251,15 @@ Else
     WScript.Echo "cancel"
 End If
 ';
-        if( !$wshSaved){
-            $cscript = $this->ptmp . DIRECTORY_SEPARATOR . "bf.vbs";
-            $fh = fopen($cscript, "wb+");
+        if (!$this->cscript) {
+            $this->cscript = $this->ptmp . DIRECTORY_SEPARATOR . "bf.vbs";
+            // TODO: use file_put_contents()
+            $fh = fopen($this->cscript, "wb+");
             fwrite($fh, $wsh_browserfolder, strlen($wsh_browserfolder));
             fclose($fh);
-            $wshSaved  = true;
         }
 
-        exec('cscript ' . escapeshellarg($cscript) . ' "' . escapeshellarg($label) . '" //noLogo', $arPath);
+        exec('cscript ' . escapeshellarg($this->cscript) . ' "' . escapeshellarg($label) . '" //noLogo', $arPath);
         if (!count($arPath) || $arPath[0]=='' || $arPath[0]=='cancel') {
             return '';
         } elseif ($arPath[0]=='invalid') {
@@ -254,7 +267,6 @@ End If
             return '';
         }
 
-        @unlink($cscript);
         return $arPath[0];
     }
 
