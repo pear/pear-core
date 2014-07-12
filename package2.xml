@@ -87,19 +87,21 @@
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2014-06-28</date>
- <time>18:17:00</time>
+ <date>2014-07-12</date>
+ <time>14:22:23</time>
  <version>
-  <release>1.9.5dev1</release>
+  <release>1.9.5</release>
   <api>1.9.5</api>
  </version>
  <stability>
-  <release>devel</release>
-  <api>devel</api>
+  <release>stable</release>
+  <api>stable</api>
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-  Bug fixes:
+  No changes since 1.9.5dev1
+
+  Bug fixes in 1.9.5.dev1:
   * Fix bug #18343: Entities in file names decoded during packaging [cweiske]
   * Fix bug #18665: pecl extensions not enabled in empty php.ini files [Louis Opter]
   * Fix bug #18834: Do not truncate cache file if it is a symlink [avb]
@@ -960,5 +962,40 @@ http://pear.php.net/advisory-20110228.txt
   * Prepare a test for bug #18056 / bug #18834 [avb]
    </notes>
   </release>
+
+  <release>
+   <date>2014-07-12</date>
+   <time>14:22:23</time>
+   <version>
+    <release>1.9.5</release>
+    <api>1.9.5</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+  No changes since 1.9.5.dev1.
+
+  Bug fixes in 1.9.5.dev1:
+  * Fix bug #18343: Entities in file names decoded during packaging [cweiske]
+  * Fix bug #18665: pecl extensions not enabled in empty php.ini files [Louis Opter]
+  * Fix bug #18834: Do not truncate cache file if it is a symlink [avb]
+  * Fix bug #18892: Parse error in Installer.php [ashnazg]
+  * Fix bug #19482: fix pearcmd for include paths with trailing backslash [cweiske]
+  * Fix bug #19793: PHP Notice about ob_end_clean() [cweiske]
+  * Fix bug #20086: Invalid regexp in PEAR_Builder::build() [avb]
+  * Fix bug #20203: split content-type and get real mime type [Samu Voutilainen]
+  * Fix bug #20283: use full path for "zend_extension=..." [cweiske]
+  * Fix bug #20284: Reset interpreter before running --CLEAN-- section php-cgi run [Mats Lindh]
+  * Fix bug #20285: fix spelling mistakes [Veres Lajos]
+  * Fix bug #20286: Support access of static variables on objects in validator [cweiske]
+  * Fix bug #20321: Correctly detect name of current user during installation [cweiske]
+  * Fix bug: let pear run-tests fail when there are failed tests [cweiske]
+  * Prepare a test for bug #18056 / bug #18834 [avb]
+   </notes>
+  </release>
+
  </changelog>
 </package>
