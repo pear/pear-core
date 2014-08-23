@@ -600,7 +600,7 @@ php.ini <$pathIni> include_path updated.
             echo "
 
 * WINDOWS ENVIRONMENT VARIABLES *
-For convenience, a REG file is available under {$this->prefix}PEAR_ENV.reg .
+For convenience, a REG file is available under {$this->prefix}" . DIRECTORY_SEPARATOR . "PEAR_ENV.reg .
 This file creates ENV variables for the current user.
 
 Double-click this file to add it to the current user registry.
