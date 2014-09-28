@@ -28,7 +28,7 @@ define('PEAR_IGNORE_BACKTRACE', 1);
 //the space is needed for windows include paths with trailing backslash
 // http://pear.php.net/bugs/bug.php?id=19482
 if ('@include_path@ ' != '@'.'include_path'.'@ ') {
-    ini_set('include_path', trim('@include_path@ '));
+    ini_set('include_path', trim('@include_path@ '). PATH_SEPARATOR .  get_include_path());
     $raw = false;
 } else {
     // this is a raw, uninstalled pear, either a cvs checkout, or php distro
