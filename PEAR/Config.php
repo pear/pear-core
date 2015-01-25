@@ -1022,7 +1022,7 @@ class PEAR_Config extends PEAR
         }
 
         $size = filesize($file);
-        if (version_compare(phpversion(), '7.0.0-dev', '<')) {
+        if (function_exists('set_magic_quotes_runtime')) {
             $rt = get_magic_quotes_runtime();
             set_magic_quotes_runtime(0);
         }
@@ -1032,7 +1032,7 @@ class PEAR_Config extends PEAR
             return $this->raiseError('Configuration file "' . $file . '" is empty');
         }
 
-        if (version_compare(phpversion(), '7.0.0-dev', '<')) {
+        if (function_exists('set_magic_quotes_runtime')) {
             set_magic_quotes_runtime($rt);
         }
 

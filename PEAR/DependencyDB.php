@@ -550,14 +550,14 @@ class PEAR_DependencyDB
             return $err;
         }
 
-        if (version_compare(phpversion(), '7.0.0-dev', '<')) {
+        if (function_exists('set_magic_quotes_runtime')) {
             $rt = get_magic_quotes_runtime();
             set_magic_quotes_runtime(0);
         }
         clearstatcache();
         fclose($fp);
         $data = unserialize(file_get_contents($this->_depdb));
-        if (version_compare(phpversion(), '7.0.0-dev', '<')) {
+        if (function_exists('set_magic_quotes_runtime')) {
             set_magic_quotes_runtime($rt);
         }
         $this->_cache = $data;
@@ -581,12 +581,12 @@ class PEAR_DependencyDB
             return PEAR::raiseError("Could not open dependencies file `".$this->_depdb."' for writing");
         }
 
-        if (version_compare(phpversion(), '7.0.0-dev', '<')) {
+        if (function_exists('set_magic_quotes_runtime')) {
             $rt = get_magic_quotes_runtime();
             set_magic_quotes_runtime(0);
         }
         fwrite($fp, serialize($deps));
-        if (version_compare(phpversion(), '7.0.0-dev', '<')) {
+        if (function_exists('set_magic_quotes_runtime')) {
             set_magic_quotes_runtime($rt);
         }
         fclose($fp);
