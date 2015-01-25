@@ -1022,15 +1022,19 @@ class PEAR_Config extends PEAR
         }
 
         $size = filesize($file);
-        $rt = get_magic_quotes_runtime();
-        set_magic_quotes_runtime(0);
+        if (version_compare(phpversion(), '7.0.0-dev', '<')) {
+            $rt = get_magic_quotes_runtime();
+            set_magic_quotes_runtime(0);
+        }
         fclose($fp);
         $contents = file_get_contents($file);
         if (empty($contents)) {
             return $this->raiseError('Configuration file "' . $file . '" is empty');
         }
 
-        set_magic_quotes_runtime($rt);
+        if (version_compare(phpversion(), '7.0.0-dev', '<')) {
+            set_magic_quotes_runtime($rt);
+        }
 
         $version = false;
         if (preg_match('/^#PEAR_Config\s+(\S+)\s+/si', $contents, $matches)) {

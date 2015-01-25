@@ -550,12 +550,16 @@ class PEAR_DependencyDB
             return $err;
         }
 
-        $rt = get_magic_quotes_runtime();
-        set_magic_quotes_runtime(0);
+        if (version_compare(phpversion(), '7.0.0-dev', '<')) {
+            $rt = get_magic_quotes_runtime();
+            set_magic_quotes_runtime(0);
+        }
         clearstatcache();
         fclose($fp);
         $data = unserialize(file_get_contents($this->_depdb));
-        set_magic_quotes_runtime($rt);
+        if (version_compare(phpversion(), '7.0.0-dev', '<')) {
+            set_magic_quotes_runtime($rt);
+        }
         $this->_cache = $data;
         return $data;
     }
@@ -577,10 +581,14 @@ class PEAR_DependencyDB
             return PEAR::raiseError("Could not open dependencies file `".$this->_depdb."' for writing");
         }
 
-        $rt = get_magic_quotes_runtime();
-        set_magic_quotes_runtime(0);
+        if (version_compare(phpversion(), '7.0.0-dev', '<')) {
+            $rt = get_magic_quotes_runtime();
+            set_magic_quotes_runtime(0);
+        }
         fwrite($fp, serialize($deps));
-        set_magic_quotes_runtime($rt);
+        if (version_compare(phpversion(), '7.0.0-dev', '<')) {
+            set_magic_quotes_runtime($rt);
+        }
         fclose($fp);
         $this->_unlock();
         $this->_cache = $deps;
