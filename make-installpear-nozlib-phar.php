@@ -45,7 +45,7 @@ foreach ($dp as $entry) {
         continue;
     }
 
-    ereg('([A-Za-z0-9_:]+)-.*\.tar$', $entry, $matches);
+    preg_match('/([A-Za-z0-9_:]+)-.*?\.tar$/', $entry, $matches);
     if ($matches[1] == 'PEAR') {
         $pearentry = $entry;
         continue;
