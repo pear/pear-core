@@ -41,7 +41,6 @@ if (!ini_get('safe_mode')) {
 ob_implicit_flush(true);
 @ini_set('track_errors', true);
 @ini_set('html_errors', false);
-@ini_set('magic_quotes_runtime', false);
 $_PEAR_PHPDIR = '#$%^&*';
 set_error_handler('error_handler');
 

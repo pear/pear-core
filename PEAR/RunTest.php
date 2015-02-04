@@ -75,7 +75,6 @@ class PEAR_RunTest
         'error_append_string=',
         'auto_prepend_file=',
         'auto_append_file=',
-        'magic_quotes_runtime=0',
         'xdebug.default_enable=0',
         'allow_url_fopen=1',
     );
