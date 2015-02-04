@@ -112,6 +112,7 @@ class PEAR_PackageFile_v2_Validator
               isset($test['dependencies']['required']) &&
               isset($test['dependencies']['required']['pearinstaller']) &&
               isset($test['dependencies']['required']['pearinstaller']['min']) &&
+              '@package_version@' != '@package' . '_version@' &&
               version_compare('@package_version@',
                 $test['dependencies']['required']['pearinstaller']['min'], '<')
         ) {
