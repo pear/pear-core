@@ -24,7 +24,7 @@ fwrite($fp, 'start');
 fclose($fp);
 
 
-$dp = &new PEAR_Downloader($fakelog, array('offline' => true), $config);
+$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($c1));
 $after = $dp->getDownloadedPackages();
