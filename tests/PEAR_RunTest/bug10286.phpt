@@ -7,4 +7,4 @@ $oops->method();
 --EXPECTF--
 Notice: Undefined variable: oops in %sbug10286.php on line %d
 
-Fatal error: Call to a member function method() on a non-object in %sbug10286.php on line %d
+Fatal error: Call to a member function method() on %s in %sbug10286.php on line %d
