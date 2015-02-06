@@ -1,5 +1,5 @@
 --TEST--
-install command, bug 3671
+install command, bug #3671
 --SKIPIF--
 <?php
 if (!getenv('PHP_PEAR_RUNTESTS')) {
