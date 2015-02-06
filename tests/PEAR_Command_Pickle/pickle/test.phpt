@@ -59,16 +59,6 @@ $phpunit->assertEquals(array (
     0 => 'Package pecl_http-0.16.0.tgz done',
     1 => true,
   ),
-  6 =>
-  array (
-    0 => 'Tag the released code with "pear svntag package2.xml"',
-    1 => true,
-  ),
-  7 =>
-  array (
-    0 => '(or set the SVN tag pecl_http-0.16.0 by hand)',
-    1 => true,
-  ),
 ), $fakelog->getLog(), 'log');
 echo 'tests done';
 ?>
