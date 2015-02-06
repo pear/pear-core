@@ -5,6 +5,9 @@ install command, complex test
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
+if (strolower(substr(php_uname('s'), 0, 3)) == 'win') {
+    echo 'skip';
+}
 ?>
 --FILE--
 <?php
@@ -227,313 +230,10 @@ $phpunit->assertTrue($res, 'result');
 $dl = &$command->getDownloader(1, array());
 
 $tmpdir = $temp_path . DIRECTORY_SEPARATOR . 'php'  . DIRECTORY_SEPARATOR;
-if (OS_WINDOWS) {
-    $phpunit->assertEquals(array (
-  array (
-    0 => 3,
-    1 => 'Downloading "http://www.example.com/Bar-1.5.2.tgz"',
-  ),
-  array (
-    0 => 1,
-    1 => 'downloading Bar-1.5.2.tgz ...',
-  ),
-  array (
-    0 => 1,
-    1 => 'Starting to download Bar-1.5.2.tgz (2,213 bytes)',
-  ),
-  array (
-    0 => 1,
-    1 => '.',
-  ),
-  array (
-    0 => 1,
-    1 => '...done: 2,213 bytes',
-  ),
-  array (
-    0 => 3,
-    1 => 'Downloading "http://www.example.com/Foobar-1.5.0a1.tgz"',
-  ),
-  array (
-    0 => 1,
-    1 => 'downloading Foobar-1.5.0a1.tgz ...',
-  ),
-  array (
-    0 => 1,
-    1 => 'Starting to download Foobar-1.5.0a1.tgz (2,208 bytes)',
-  ),
-  array (
-    0 => 1,
-    1 => '...done: 2,208 bytes',
-  ),
-  array (
-    0 => 3,
-    1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $tmpdir . '.tmpfoo12.php',
-  ),
-  array (
-    0 => 2,
-    1 => 'md5sum ok: ' . $tmpdir . 'foo12.php',
-  ),
-  array (
-    0 => 3,
-    1 => 'adding to transaction: rename ' . $tmpdir . '.tmpfoo12.php ' . $tmpdir . 'foo12.php ',
-  ),
-  array (
-    0 => 3,
-    1 => 'adding to transaction: installed_as foo12.php ' . $tmpdir . 'foo12.php ' . $temp_path . '\\php \\',
-  ),
-  array (
-    0 => 2,
-    1 => 'about to commit 2 file operations',
-  ),
-  array (
-    0 => 3,
-    1 => '+ mv ' . $tmpdir . '.tmpfoo12.php ' . $tmpdir . 'foo12.php',
-  ),
-  array (
-    0 => 2,
-    1 => 'successfully committed 2 file operations',
-  ),
-  array (
-    'info' =>
-    array (
-      'data' => 'install ok: channel://smork/Foobar-1.5.0a1',
-    ),
-    'cmd' => 'install',
-  ),
-  array (
-    0 => 3,
-    1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . ''  . DIRECTORY_SEPARATOR . 'Bar-1.5.2'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $tmpdir . '.tmpfoo1.php',
-  ),
-  array (
-    0 => 2,
-    1 => 'md5sum ok: ' . $tmpdir . 'foo1.php',
-  ),
-  array (
-    0 => 3,
-    1 => 'adding to transaction: rename ' . $tmpdir . '.tmpfoo1.php ' . $tmpdir . 'foo1.php ',
-  ),
-  array (
-    0 => 3,
-    1 => 'adding to transaction: installed_as foo1.php ' . $tmpdir . 'foo1.php ' . $temp_path . '\\php \\',
-  ),
-  array (
-    0 => 2,
-    1 => 'about to commit 2 file operations',
-  ),
-  array (
-    0 => 3,
-    1 => '+ mv ' . $tmpdir . '.tmpfoo1.php ' . $tmpdir . 'foo1.php',
-  ),
-  array (
-    0 => 2,
-    1 => 'successfully committed 2 file operations',
-  ),
-  array (
-    'info' =>
-    array (
-      'data' => 'install ok: channel://pear.php.net/Bar-1.5.2',
-    ),
-    'cmd' => 'install',
-  ),
-  array (
-    0 => 3,
-    1 => '+ cp ' . dirname(__FILE__) . '\\packages\\foo.php ' . $tmpdir . '.tmpfoo.php',
-  ),
-  array (
-    0 => 3,
-    1 => 'adding to transaction: rename ' . $tmpdir . '.tmpfoo.php ' . $tmpdir . 'foo.php ',
-  ),
-  array (
-    0 => 3,
-    1 => 'adding to transaction: installed_as foo.php ' . $tmpdir . 'foo.php ' . $temp_path . '\\php \\',
-  ),
-  array (
-    0 => 2,
-    1 => 'about to commit 2 file operations',
-  ),
-  array (
-    0 => 3,
-    1 => '+ mv ' . $tmpdir . '.tmpfoo.php ' . $tmpdir . 'foo.php',
-  ),
-  array (
-    0 => 2,
-    1 => 'successfully committed 2 file operations',
-  ),
-  array (
-    'info' =>
-    array (
-      'data' => 'install ok: channel://pear.php.net/PEAR1-1.5.0a1',
-    ),
-    'cmd' => 'install',
-  ),
-), $fakelog->getLog(), 'log messages');
-} else {
-    // Don't forget umask ! permission of new file is 0666
-    $umask = decoct(0666 & ( 0777 - umask()));
-    $phpunit->assertEquals(array (
-      array (
-        0 => 3,
-        1 => 'Downloading "http://www.example.com/Bar-1.5.2.tgz"',
-      ),
-      array (
-        0 => 1,
-        1 => 'downloading Bar-1.5.2.tgz ...',
-      ),
-      array (
-        0 => 1,
-        1 => 'Starting to download Bar-1.5.2.tgz (2,213 bytes)',
-      ),
-      array (
-        0 => 1,
-        1 => '.',
-      ),
-      array (
-        0 => 1,
-        1 => '...done: 2,213 bytes',
-      ),
-      array (
-        0 => 3,
-        1 => 'Downloading "http://www.example.com/Foobar-1.5.0a1.tgz"',
-      ),
-      array (
-        0 => 1,
-        1 => 'downloading Foobar-1.5.0a1.tgz ...',
-      ),
-      array (
-        0 => 1,
-        1 => 'Starting to download Foobar-1.5.0a1.tgz (2,208 bytes)',
-      ),
-      array (
-        0 => 1,
-        1 => '...done: 2,208 bytes',
-      ),
-      array (
-        0 => 3,
-        1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . DIRECTORY_SEPARATOR . 'Foobar-1.5.0a1'  . DIRECTORY_SEPARATOR . 'foo12.php ' . $tmpdir . '.tmpfoo12.php',
-      ),
-      array (
-        0 => 2,
-        1 => 'md5sum ok: ' . $tmpdir . 'foo12.php',
-      ),
-      array (
-        0 => 3,
-        1 => 'adding to transaction: chmod '.$umask.' ' . $tmpdir . '.tmpfoo12.php',
-      ),
-      array (
-        0 => 3,
-        1 => 'adding to transaction: rename ' . $tmpdir . '.tmpfoo12.php ' . $tmpdir . 'foo12.php ',
-      ),
-      array (
-        0 => 3,
-        1 => 'adding to transaction: installed_as foo12.php ' . $tmpdir . 'foo12.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
-      ),
-      array (
-        0 => 2,
-        1 => 'about to commit 3 file operations',
-      ),
-      array (
-        0 => 3,
-        1 => '+ chmod '.$umask.' ' . $tmpdir . '.tmpfoo12.php',
-      ),
-      array (
-        0 => 3,
-        1 => '+ mv ' . $tmpdir . '.tmpfoo12.php ' . $tmpdir . 'foo12.php',
-      ),
-      array (
-        0 => 2,
-        1 => 'successfully committed 3 file operations',
-      ),
-      array (
-        'info' =>
-        array (
-          'data' => 'install ok: channel://smork/Foobar-1.5.0a1',
-        ),
-        'cmd' => 'install',
-      ),
-      array (
-        0 => 3,
-        1 => '+ cp ' . str_replace('\\\\', '\\', $dl->getDownloadDir()) . ''  . DIRECTORY_SEPARATOR . 'Bar-1.5.2'  . DIRECTORY_SEPARATOR . 'foo1.php ' . $tmpdir . '.tmpfoo1.php',
-      ),
-      array (
-        0 => 2,
-        1 => 'md5sum ok: ' . $tmpdir . 'foo1.php',
-      ),
-      array (
-        0 => 3,
-        1 => 'adding to transaction: chmod '.$umask.' ' . $tmpdir . '.tmpfoo1.php',
-      ),
-      array (
-        0 => 3,
-        1 => 'adding to transaction: rename ' . $tmpdir . '.tmpfoo1.php ' . $tmpdir . 'foo1.php ',
-      ),
-      array (
-        0 => 3,
-        1 => 'adding to transaction: installed_as foo1.php ' . $tmpdir . 'foo1.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
-      ),
-      array (
-        0 => 2,
-        1 => 'about to commit 3 file operations',
-      ),
-      array (
-        0 => 3,
-        1 => '+ chmod '.$umask.' ' . $tmpdir . '.tmpfoo1.php',
-      ),
-      array (
-        0 => 3,
-        1 => '+ mv ' . $tmpdir . '.tmpfoo1.php ' . $tmpdir . 'foo1.php',
-      ),
-      array (
-        0 => 2,
-        1 => 'successfully committed 3 file operations',
-      ),
-      array (
-        'info' =>
-        array (
-          'data' => 'install ok: channel://pear.php.net/Bar-1.5.2',
-        ),
-        'cmd' => 'install',
-      ),
-      array (
-        0 => 3,
-        1 => '+ cp ' . $packageDir . 'foo.php ' . $tmpdir . '.tmpfoo.php',
-      ),
-      array (
-        0 => 3,
-        1 => 'adding to transaction: chmod '.$umask.' ' . $tmpdir . '.tmpfoo.php',
-      ),
-      array (
-        0 => 3,
-        1 => 'adding to transaction: rename ' . $tmpdir . '.tmpfoo.php ' . $tmpdir . 'foo.php ',
-      ),
-      array (
-        0 => 3,
-        1 => 'adding to transaction: installed_as foo.php ' . $tmpdir . 'foo.php ' . $temp_path . DIRECTORY_SEPARATOR . 'php '  . DIRECTORY_SEPARATOR . '',
-      ),
-      array (
-        0 => 2,
-        1 => 'about to commit 3 file operations',
-      ),
-      array (
-        0 => 3,
-        1 => '+ chmod '.$umask.' ' . $tmpdir . '.tmpfoo.php',
-      ),
-      array (
-        0 => 3,
-        1 => '+ mv ' . $tmpdir . '.tmpfoo.php ' . $tmpdir . 'foo.php',
-      ),
-      array (
-        0 => 2,
-        1 => 'successfully committed 3 file operations',
-      ),
-      array (
-        'info' =>
-        array (
-          'data' => 'install ok: channel://pear.php.net/PEAR1-1.5.0a1',
-        ),
-        'cmd' => 'install',
-      ),
-    ), $fakelog->getLog(), 'log messages');
-}
+// Don't forget umask ! permission of new file is 0666
+$umask = decoct(0666 & ( 0777 - umask()));
+echoFakelog($fakelog);
+
 $phpunit->assertEquals(array (
   array (
     0 => 'http://pear.php.net/rest/r/bar/allreleases.xml',
@@ -575,5 +275,61 @@ echo 'tests done';
 <?php
 require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
 ?>
---EXPECT--
+--EXPECTF--
+3;Downloading "http://www.example.com/Bar-1.5.2.tgz"
+1;downloading Bar-1.5.2.tgz ...
+1;Starting to download Bar-1.5.2.tgz (2,213 bytes)
+1;.
+1;...done: 2,213 bytes
+3;Downloading "http://www.example.com/Foobar-1.5.0a1.tgz"
+1;downloading Foobar-1.5.0a1.tgz ...
+1;Starting to download Foobar-1.5.0a1.tgz (2,208 bytes)
+1;...done: 2,208 bytes
+3;+ cp %s/Foobar-1.5.0a1/foo12.php %s/php/.tmpfoo12.php
+2;md5sum ok: %s/php/foo12.php
+3;adding to transaction: chmod 6%d4 %s/php/.tmpfoo12.php
+3;adding to transaction: rename %s/php/.tmpfoo12.php %s/php/foo12.php 
+3;adding to transaction: installed_as foo12.php %s/php/foo12.php %s/php /
+2;about to commit 3 file operations for Foobar
+3;+ chmod 6%d4 %s/php/.tmpfoo12.php
+3;+ mv %s/php/.tmpfoo12.php %s/php/foo12.php
+2;successfully committed 3 file operations
+array (
+  'info' => 
+  array (
+    'data' => 'install ok: channel://smork/Foobar-1.5.0a1',
+  ),
+  'cmd' => 'install',
+)
+3;+ cp %s/Bar-1.5.2/foo1.php %s/php/.tmpfoo1.php
+2;md5sum ok: %s/php/foo1.php
+3;adding to transaction: chmod 6%d4 %s/php/.tmpfoo1.php
+3;adding to transaction: rename %s/php/.tmpfoo1.php %s/php/foo1.php 
+3;adding to transaction: installed_as foo1.php %s/php/foo1.php %s/php /
+2;about to commit 3 file operations for Bar
+3;+ chmod 6%d4 %s/php/.tmpfoo1.php
+3;+ mv %s/php/.tmpfoo1.php %s/php/foo1.php
+2;successfully committed 3 file operations
+array (
+  'info' => 
+  array (
+    'data' => 'install ok: channel://pear.php.net/Bar-1.5.2',
+  ),
+  'cmd' => 'install',
+)
+3;+ cp %s/PEAR_Command_Install/install/packages/foo.php %s/php/.tmpfoo.php
+3;adding to transaction: chmod 6%d4 %s/php/.tmpfoo.php
+3;adding to transaction: rename %s/php/.tmpfoo.php %s/php/foo.php 
+3;adding to transaction: installed_as foo.php %s/php/foo.php %s/php /
+2;about to commit 3 file operations for PEAR1
+3;+ chmod 6%d4 %s/php/.tmpfoo.php
+3;+ mv %s/php/.tmpfoo.php %s/php/foo.php
+2;successfully committed 3 file operations
+array (
+  'info' => 
+  array (
+    'data' => 'install ok: channel://pear.php.net/PEAR1-1.5.0a1',
+  ),
+  'cmd' => 'install',
+)
 tests done

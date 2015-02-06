@@ -5,6 +5,9 @@ install command, test pear install Installed#group where Installed is already in
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
+if (strolower(substr(php_uname('s'), 0, 3)) == 'win') {
+    echo 'skip';
+}
 ?>
 --FILE--
 <?php
@@ -79,200 +82,38 @@ $phpunit->assertNoErrors('after install');
 $phpunit->assertTrue($res, 'result');
 $phpunit->showAll();
 $dl = &$command->getDownloader(1, array());
-if (OS_WINDOWS) {
-    $phpunit->assertEquals(array (
-  0 =>
-  array (
-    0 => 1,
-    1 => 'Skipping package "pear/Installed", already installed as version 1.4.0a1',
-  ),
-  1 =>
-  array (
-    0 => 3,
-    1 => 'Downloading "http://pear.php.net/get/Console_Getopt-1.2.tgz"',
-  ),
-  2 =>
-  array (
-    0 => 1,
-    1 => 'downloading Console_Getopt-1.2.tgz ...',
-  ),
-  3 =>
-  array (
-    0 => 1,
-    1 => 'Starting to download Console_Getopt-1.2.tgz (3,371 bytes)',
-  ),
-  4 =>
-  array (
-    0 => 1,
-    1 => '.',
-  ),
-  5 =>
-  array (
-    0 => 1,
-    1 => '...done: 3,371 bytes',
-  ),
-  6 =>
-  array (
-    0 => 3,
-    1 => 'adding to transaction: mkdir ' . $temp_path . '\\php\\Console',
-  ),
-  7 =>
-  array (
-    0 => 2,
-    1 => '+ create dir ' . $temp_path . '\\php\\Console',
-  ),
-  8 =>
-  array (
-    0 => 3,
-    1 => '+ mkdir ' . $temp_path . '\\php\\Console',
-  ),
-  9 =>
-  array (
-    0 => 3,
-    1 => '+ cp ' . $temp_path . '\\tmp\\Console_Getopt-1.2\\Console\\Getopt.php ' . $temp_path . '\\php\\Console\\.tmpGetopt.php',
-  ),
-  10 =>
-  array (
-    0 => 2,
-    1 => 'md5sum ok: ' . $temp_path . '\\php\\Console\\Getopt.php',
-  ),
-  11 =>
-  array (
-    0 => 3,
-    1 => 'adding to transaction: rename ' . $temp_path . '\\php\\Console\\.tmpGetopt.php ' . $temp_path . '\\php\\Console\\Getopt.php ',
-  ),
-  12 =>
-  array (
-    0 => 3,
-    1 => 'adding to transaction: installed_as Console/Getopt.php ' . $temp_path . '\\php\\Console\\Getopt.php ' . $temp_path . '\\php \\Console',
-  ),
-  13 =>
-  array (
-    0 => 2,
-    1 => 'about to commit 3 file operations',
-  ),
-  14 =>
-  array (
-    0 => 3,
-    1 => '+ mv ' . $temp_path . '\\php\\Console\\.tmpGetopt.php ' . $temp_path . '\\php\\Console\\Getopt.php',
-  ),
-  15 =>
-  array (
-    0 => 2,
-    1 => 'successfully committed 3 file operations',
-  ),
-  16 =>
-  array (
-    'info' =>
-    array (
-      'data' => 'install ok: channel://pear.php.net/Console_Getopt-1.2',
-    ),
-    'cmd' => 'install',
-  ),
-)
-, $fakelog->getLog(), 'log');
-} else {
-    // Don't forget umask ! permission of new file is 0666
-    $umask = decoct(0666 & ( 0777 - umask()));
-    $phpunit->assertEquals(array (
-  array (
-    0 => 1,
-    1 => 'Skipping package "pear/Installed", already installed as version 1.4.0a1',
-  ),
-  array (
-    0 => 3,
-    1 => 'Downloading "http://pear.php.net/get/Console_Getopt-1.2.tgz"',
-  ),
-  array (
-    0 => 1,
-    1 => 'downloading Console_Getopt-1.2.tgz ...',
-  ),
-  array (
-    0 => 1,
-    1 => 'Starting to download Console_Getopt-1.2.tgz (3,371 bytes)',
-  ),
-  array (
-    0 => 1,
-    1 => '.',
-  ),
-  array (
-    0 => 1,
-    1 => '...done: 3,371 bytes',
-  ),
-  array (
-    0 => 3,
-    1 => 'adding to transaction: mkdir ' . $temp_path . '/php/Console',
-  ),
-  array (
-    0 => 2,
-    1 => '+ create dir ' . $temp_path . '/php/Console',
-  ),
-  8 =>
-  array (
-    0 => 3,
-    1 => '+ mkdir ' . $temp_path . '/php/Console',
-  ),
-  9 =>
-  array (
-    0 => 3,
-    1 => '+ cp ' . $temp_path . '/tmp/Console_Getopt-1.2/Console/Getopt.php ' . $temp_path . '/php/Console/.tmpGetopt.php',
-  ),
-  10 =>
-  array (
-    0 => 2,
-    1 => 'md5sum ok: ' . $temp_path . '/php/Console/Getopt.php',
-  ),
-  11 =>
-  array (
-    0 => 3,
-    1 => 'adding to transaction: chmod '.$umask.' ' . $temp_path . '/php/Console/.tmpGetopt.php',
-  ),
-  12 =>
-  array (
-    0 => 3,
-    1 => 'adding to transaction: rename ' . $temp_path . '/php/Console/.tmpGetopt.php ' . $temp_path . '/php/Console/Getopt.php ',
-  ),
-  13 =>
-  array (
-    0 => 3,
-    1 => 'adding to transaction: installed_as Console/Getopt.php ' . $temp_path . '/php/Console/Getopt.php ' . $temp_path . '/php /Console',
-  ),
-  14 =>
-  array (
-    0 => 2,
-    1 => 'about to commit 4 file operations',
-  ),
-  15 =>
-  array (
-    0 => 3,
-    1 => '+ chmod '.$umask.' ' . $temp_path . '/php/Console/.tmpGetopt.php',
-  ),
-  16 =>
-  array (
-    0 => 3,
-    1 => '+ mv ' . $temp_path . '/php/Console/.tmpGetopt.php ' . $temp_path . '/php/Console/Getopt.php',
-  ),
-  17 =>
-  array (
-    0 => 2,
-    1 => 'successfully committed 4 file operations',
-  ),
-  18 =>
-  array (
-    'info' =>
-    array (
-      'data' => 'install ok: channel://pear.php.net/Console_Getopt-1.2',
-    ),
-    'cmd' => 'install',
-  ),
-)
-, $fakelog->getLog(), 'log');
-}
+
+echoFakelog($fakelog);
 echo 'tests done';
 ?>
 --CLEAN--
 <?php
 require_once dirname(dirname(__FILE__)) . '/teardown.php.inc';
 ?>
---EXPECT--
+--EXPECTF--
+1;Skipping package "pear/Installed", already installed as version 1.4.0a1
+3;Downloading "http://pear.php.net/get/Console_Getopt-1.2.tgz"
+1;downloading Console_Getopt-1.2.tgz ...
+1;Starting to download Console_Getopt-1.2.tgz (3,371 bytes)
+1;.
+1;...done: 3,371 bytes
+3;adding to transaction: mkdir %s/php/Console
+2;+ create dir %s/php/Console
+3;+ mkdir %s/php/Console
+3;+ cp %s/Console_Getopt-1.2/Console/Getopt.php %s/php/Console/.tmpGetopt.php
+2;md5sum ok: %s/php/Console/Getopt.php
+3;adding to transaction: chmod 6%d4 %s/php/Console/.tmpGetopt.php
+3;adding to transaction: rename %s/php/Console/.tmpGetopt.php %s/php/Console/Getopt.php 
+3;adding to transaction: installed_as Console/Getopt.php %s/php/Console/Getopt.php %s/php /Console
+2;about to commit 4 file operations for Console_Getopt
+3;+ chmod 6%d4 %s/php/Console/.tmpGetopt.php
+3;+ mv %s/php/Console/.tmpGetopt.php %s/php/Console/Getopt.php
+2;successfully committed 4 file operations
+array (
+  'info' => 
+  array (
+    'data' => 'install ok: channel://pear.php.net/Console_Getopt-1.2',
+  ),
+  'cmd' => 'install',
+)
 tests done

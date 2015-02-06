@@ -5,6 +5,17 @@ $server = 'pear.Chiara';
 //$server = 'test.pear.php.net';
 $temp_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
 
+function echoFakelog($fakelog)
+{
+    foreach ($fakelog->getLog() as $logMsg) {
+        if (isset($logMsg['cmd'])) {
+            echo var_export($logMsg, true) . "\n";
+        } else {
+            echo implode(';', $logMsg) . "\n";
+        }
+    }
+}
+
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 
 cleanall($temp_path);
