@@ -1,5 +1,5 @@
 <?php
-set_include_path(get_include_path().PATH_SEPARATOR.getcwd()); // allows chdir
+set_include_path(getcwd().PATH_SEPARATOR.get_include_path()); // allows chdir
 
 
 require_once dirname(dirname(dirname(__FILE__))) . '/download_test_classes.php.inc';$server = 'pear.Chiara';

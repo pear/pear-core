@@ -1,6 +1,6 @@
 <?php
 require_once 'PEAR/Common.php';
-set_include_path(get_include_path().PATH_SEPARATOR.getcwd()); // allows chdir
+set_include_path(getcwd().PATH_SEPARATOR.get_include_path()); // allows chdir
 $statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
 
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';

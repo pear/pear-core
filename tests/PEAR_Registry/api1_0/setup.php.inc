@@ -3,7 +3,7 @@ error_reporting(1803);
 include_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'pear_registry_inc.php.inc';
 include_once "PEAR/Registry.php";
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
-set_include_path(get_include_path().PATH_SEPARATOR.getcwd()); // allows chdir
+set_include_path(getcwd().PATH_SEPARATOR.get_include_path()); // allows chdir
 
 // ------------------------------------------------------------------------- //
 

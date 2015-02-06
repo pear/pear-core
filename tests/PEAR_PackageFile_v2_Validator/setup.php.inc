@@ -2,7 +2,7 @@
 require_once 'PEAR/PackageFile/Parser/v2.php';
 require_once 'PEAR/PackageFile/v2.php';
 require_once 'PEAR/Config.php';
-set_include_path(get_include_path().PATH_SEPARATOR.getcwd()); // allows chdir
+set_include_path(getcwd().PATH_SEPARATOR.get_include_path()); // allows chdir
 
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
 
