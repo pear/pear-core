@@ -423,7 +423,7 @@ if (OS_WINDOWS) {
       3 =>
       array (
         0 => 2,
-        1 => 'about to commit 2 file operations',
+        1 => 'about to commit 2 file operations for PEAR1',
       ),
       4 =>
       array (
@@ -463,7 +463,7 @@ if (OS_WINDOWS) {
       4 =>
       array (
         0 => 2,
-        1 => 'about to commit 3 file operations',
+        1 => 'about to commit 3 file operations for PEAR1',
       ),
       5 =>
       array (

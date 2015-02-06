@@ -228,7 +228,7 @@ $phpunit->assertEquals(array (
   38 =>
   array (
     0 => 2,
-    1 => 'about to commit 38 file operations',
+    1 => 'about to commit 38 file operations for SOAP',
   ),
   39 =>
   array (
@@ -463,7 +463,7 @@ $phpunit->assertEquals(array (
   85 =>
   array (
     0 => 2,
-    1 => 'about to commit 7 file operations',
+    1 => 'about to commit 7 file operations for SOAP',
   ),
   86 =>
   array (
@@ -533,7 +533,7 @@ $phpunit->assertEquals(array (
   99 =>
   array (
     0 => 2,
-    1 => 'about to commit 4 file operations',
+    1 => 'about to commit 4 file operations for HTTP_Request',
   ),
   100 =>
   array (
@@ -583,7 +583,7 @@ $phpunit->assertEquals(array (
   109 =>
   array (
     0 => 2,
-    1 => 'about to commit 4 file operations',
+    1 => 'about to commit 4 file operations for HTTP_Request',
   ),
   110 =>
   array (
@@ -623,7 +623,7 @@ $phpunit->assertEquals(array (
   117 =>
   array (
     0 => 2,
-    1 => 'about to commit 1 file operations',
+    1 => 'about to commit 1 file operations for Net_Socket',
   ),
   118 =>
   array (
@@ -643,7 +643,7 @@ $phpunit->assertEquals(array (
   121 =>
   array (
     0 => 2,
-    1 => 'about to commit 1 file operations',
+    1 => 'about to commit 1 file operations for Net_Socket',
   ),
   122 =>
   array (
@@ -668,7 +668,7 @@ $phpunit->assertEquals(array (
   126 =>
   array (
     0 => 2,
-    1 => 'about to commit 2 file operations',
+    1 => 'about to commit 2 file operations for Net_URL',
   ),
   127 =>
   array (
@@ -703,7 +703,7 @@ $phpunit->assertEquals(array (
   133 =>
   array (
     0 => 2,
-    1 => 'about to commit 3 file operations',
+    1 => 'about to commit 3 file operations for Net_URL',
   ),
   134 =>
   array (
@@ -743,7 +743,7 @@ $phpunit->assertEquals(array (
   141 =>
   array (
     0 => 2,
-    1 => 'about to commit 3 file operations',
+    1 => 'about to commit 3 file operations for Net_DIME',
   ),
   142 =>
   array (
@@ -783,7 +783,7 @@ $phpunit->assertEquals(array (
   149 =>
   array (
     0 => 2,
-    1 => 'about to commit 3 file operations',
+    1 => 'about to commit 3 file operations for Net_DIME',
   ),
   150 =>
   array (
@@ -838,7 +838,7 @@ $phpunit->assertEquals(array (
   160 =>
   array (
     0 => 2,
-    1 => 'about to commit 5 file operations',
+    1 => 'about to commit 5 file operations for Mail_Mime',
   ),
   161 =>
   array (
@@ -883,7 +883,7 @@ $phpunit->assertEquals(array (
   169 =>
   array (
     0 => 2,
-    1 => 'about to commit 2 file operations',
+    1 => 'about to commit 2 file operations for Mail_Mime',
   ),
   170 =>
   array (
