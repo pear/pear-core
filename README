@@ -29,4 +29,12 @@ prior to use.
 
 Happy PHPing, we hope PEAR will be a great tool for your development work!
 
-$Id$
+
+Tests
+=====
+
+Run the tests without installation as follows:
+
+  $ ./scripts/pear.sh run-tests -r tests
+
+You should have the Text_Diff package installed to get nicer error output.

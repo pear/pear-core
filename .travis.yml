@@ -4,4 +4,5 @@ php:
   - 5.5
   - 5.4
 script:
-  - sh scripts/pear.sh run-tests -r tests
+  - umask 0022
+  - sh scripts/pear.sh run-tests -q -r tests
