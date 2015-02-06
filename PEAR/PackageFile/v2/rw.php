@@ -242,7 +242,7 @@ class PEAR_PackageFile_v2_rw extends PEAR_PackageFile_v2
                 }
             }
             foreach ($info as $i => $maintainer) {
-                if ($maintainer['user'] == $handle) {
+                if (is_array($maintainer) && $maintainer['user'] == $handle) {
                     $found = $i;
                     break 2;
                 }
