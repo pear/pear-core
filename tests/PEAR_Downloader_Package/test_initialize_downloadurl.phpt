@@ -71,8 +71,6 @@ $phpunit->assertEquals(array (
 $phpunit->assertTrue($result, 'after initialize');
 $phpunit->assertNotNull($file = &$dp->getPackageFile(), 'downloadable test');
 $phpunit->assertEquals('test', $file->getPackage(), 'package name test');
-$phpunit->assertEquals($dp->_downloader->getDownloadDir() . '/package.xml',
-    $file->getPackageFile(), 'package location test');
 $phpunit->assertEquals($dp->_downloader->getDownloadDir() . DIRECTORY_SEPARATOR . 'test-1.0.tgz',
     $file->getArchiveFile(), 'package archive location test');
 echo 'tests done';
