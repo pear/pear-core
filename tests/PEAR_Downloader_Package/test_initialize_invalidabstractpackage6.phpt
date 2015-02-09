@@ -9,7 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$dp = &newDownloaderPackage(array());
+$dp = newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize(array('channel' => 'foo', 'package' => 'test'));
 $phpunit->assertErrors(array(

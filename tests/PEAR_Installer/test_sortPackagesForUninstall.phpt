@@ -10,7 +10,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 require_once 'PEAR/PackageFile/v1.php';
-$package = &new PEAR_PackageFile_v1;
+$package = new PEAR_PackageFile_v1;
 $package->setConfig($config);
 $package->setLogger($fakelog);
 $package->setPackage('foo');
@@ -44,7 +44,7 @@ $params[] = $reg->getPackage('next');
 $params[] = $reg->getPackage('foo');
 $params[] = $reg->getPackage('bar');
 
-$dl = &new PEAR_Installer($fakelog);
+$dl = new PEAR_Installer($fakelog);
 $dl->sortPackagesForUninstall($params);
 $phpunit->assertEquals('foo', $params[0]->getPackage(), 'next');
 $phpunit->assertEquals('bar', $params[1]->getPackage(), 'bar');

@@ -11,7 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'simplepackage.xml';
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
+$dp = new test_PEAR_Downloader($fakelog, array(), $config);
 $result = $dp->download(array($pathtopackagexml));
 $installer->setOptions(array());
 $installer->sortPackagesForInstall($result);
@@ -22,7 +22,7 @@ $fakelog->getLog();
 $fakelog->getDownload();
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'simplepackageupgrade.xml';
-$dp = &new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($pathtopackagexml));
 $phpunit->assertEquals(1, count($result), 'return');

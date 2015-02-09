@@ -19,7 +19,7 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'PEARbundle-1.4.0a1.tgz';
 $_test_dep->setPHPVersion('4.3.11');
 $_test_dep->setPEARVersion('1.4.0a1');
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
+$dp = new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 $config->set('preferred_state', 'alpha');
 $result = &$dp->download(array($pathtopackagexml));

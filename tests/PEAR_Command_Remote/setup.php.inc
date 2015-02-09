@@ -72,7 +72,7 @@ if (!empty($home)) {
 require_once "PEAR/ChannelFile.php";
 require_once dirname(dirname(__FILE__)) . '/download_test_classes.php.inc';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
-$phpunit = &new PEAR_PHPTest(true);
+$phpunit = new PEAR_PHPTest(true);
 $fakelog = new fake_log;
 $config = &test_PEAR_Config::singleton($temp_path . '/pear.ini', $temp_path . '/pear.conf');
 $reg = &$config->getRegistry();
@@ -91,18 +91,18 @@ class test_PEAR_Command_Remote extends PEAR_Command_Remote
 
     function &getDownloader($options)
     {
-        $a = &new test_PEAR_Downloader($this->ui, $options, $this->config);
+        $a = new test_PEAR_Downloader($this->ui, $options, $this->config);
         return $a;
     }
 
     function &getInstaller()
     {
         if (!isset($GLOBALS['__Stupid_php4_b'])) {
-            $GLOBALS['__Stupid_php4_b'] = &new test_PEAR_Installer($this->ui, array(), $this->config);
+            $GLOBALS['__Stupid_php4_b'] = new test_PEAR_Installer($this->ui, array(), $this->config);
         }
         return $GLOBALS['__Stupid_php4_b'];
     }
 }
 test_PEAR_Dependency2::singleton($config);
-$command = &new test_PEAR_Command_Remote($fakelog, $config);
+$command = new test_PEAR_Command_Remote($fakelog, $config);
 ?>

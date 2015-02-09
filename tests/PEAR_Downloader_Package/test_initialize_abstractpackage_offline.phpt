@@ -65,7 +65,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/test/info.xml", '<?xml versi
 
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/test/deps.1.0.txt", 'b:0;', 'text/plain');
 
-$dp = &newDownloaderPackage(array('offline' => true));
+$dp = newDownloaderPackage(array('offline' => true));
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('test');
 

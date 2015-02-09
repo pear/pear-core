@@ -9,7 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$dep = &new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('create 1');
 
@@ -135,7 +135,7 @@ $result = $dep->validateExtensionDependency(
 $phpunit->assertNoErrors('extra optional');
 $phpunit->assertEquals(array('pear/mine can optionally use PHP extension "foo" (version <= 1.9, excluded versions: 1.8)'), $result, 'extra optional');
 
-$dep = &new test_PEAR_Dependency2($config, array('nodeps' => true), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array('nodeps' => true), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 
 $result = $dep->validateExtensionDependency(
@@ -147,7 +147,7 @@ $result = $dep->validateExtensionDependency(
 $phpunit->assertNoErrors('nodeps');
 $phpunit->assertEquals(array('warning: pear/mine requires PHP extension "foo" (version <= 1.9, excluded versions: 1.8)'), $result, 'nodeps');
 
-$dep = &new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 
 $result = $dep->validateExtensionDependency(

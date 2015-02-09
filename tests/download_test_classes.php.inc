@@ -113,7 +113,7 @@ require_once 'PEAR/REST/10.php';
 class test_PEAR_REST_10 extends PEAR_REST_10 {
     function test_PEAR_REST_10($config, $options = array())
     {
-        $this->_rest = &new test_PEAR_REST($config, $options);
+        $this->_rest = new test_PEAR_REST($config, $options);
     }
 }
 
@@ -121,7 +121,7 @@ require_once 'PEAR/REST/13.php';
 class test_PEAR_REST_13 extends PEAR_REST_13 {
     function test_PEAR_REST_13($config, $options = array())
     {
-        $this->_rest = &new test_PEAR_REST($config, $options);
+        $this->_rest = new test_PEAR_REST($config, $options);
     }
 }
 
@@ -148,7 +148,7 @@ class test_PEAR_Installer extends PEAR_Installer {
      */
     function &getPackagefileObject(&$c, $d, $dir = null)
     {
-        $a = &new test_PEAR_PackageFile($c, $d, $dir);
+        $a = new test_PEAR_PackageFile($c, $d, $dir);
         return $a;
     }
 
@@ -302,7 +302,7 @@ class test_PEAR_Downloader extends PEAR_Downloader {
      */
     function &getPackagefileObject(&$c, $d, $dir = null)
     {
-        $a = &new test_PEAR_PackageFile($c, $d, $dir);
+        $a = new test_PEAR_PackageFile($c, $d, $dir);
         return $a;
     }
 
@@ -467,7 +467,7 @@ class test_PEAR_Downloader extends PEAR_Downloader {
      * @param PEAR_Downloader
      * @return PEAR_Downloader_Package
      */
-    function &newDownloaderPackage(&$t)
+    function newDownloaderPackage(&$t)
     {
         $a = new test_PEAR_Downloader_Package($t);
         return $a;
@@ -510,7 +510,7 @@ class test_PEAR_Downloader_Package extends PEAR_Downloader_Package
      */
     function &getPackagefileObject(&$c, $d, $dir = null)
     {
-        $a = &new test_PEAR_PackageFile($c, $d, $dir);
+        $a = new test_PEAR_PackageFile($c, $d, $dir);
         return $a;
     }
 }
@@ -526,10 +526,10 @@ class test_PEAR_Dependency2 extends PEAR_Dependency2
                               $state = PEAR_VALIDATE_INSTALLING)
     {
         if (!isset($GLOBALS['_test_dep'])) {
-            $GLOBALS['_test_dep'] = &new test_PEAR_Dependency2($config,
+            $GLOBALS['_test_dep'] = new test_PEAR_Dependency2($config,
                 $installoptions, $package, $state);
         }
-        $a = &new test_PEAR_Dependency2($config, $installoptions, $package, $state);
+        $a = new test_PEAR_Dependency2($config, $installoptions, $package, $state);
         $a->setOS(@$GLOBALS['_test_dep']->getSysname());
         $a->setPHPVersion(@$GLOBALS['_test_dep']->phpversion());
         $a->sysname = @$GLOBALS['_test_dep']->sysname;
@@ -739,7 +739,7 @@ class test_PEAR_PackageFile_v2 extends PEAR_PackageFile_v2_rw
 {
     function &getPEARDownloader(&$i, $o, &$c)
     {
-        $z = &new test_PEAR_Downloader($i, $o, $c);
+        $z = new test_PEAR_Downloader($i, $o, $c);
         $GLOBALS['last_dl'] = &$z;
         return $z;
     }
@@ -755,7 +755,7 @@ class test_PEAR_PackageFile_v1 extends PEAR_PackageFile_v1
 {
     function &getPEARDownloader(&$i, $o, &$c)
     {
-        $z = &new test_PEAR_Downloader($i, $o, $c);
+        $z = new test_PEAR_Downloader($i, $o, $c);
         $GLOBALS['last_dl'] = &$z;
         return $z;
     }
@@ -773,7 +773,7 @@ class test_PEAR_Config extends PEAR_Config
     {
         $version = str_replace('.', '', $version);
         $class = 'test_PEAR_REST_' . $version;
-        $remote = &new $class($this, $options);
+        $remote = new $class($this, $options);
         return $remote;
     }
 
@@ -783,7 +783,7 @@ class test_PEAR_Config extends PEAR_Config
             return $GLOBALS['_PEAR_Config_instance'];
         }
         $GLOBALS['_PEAR_Config_instance'] =
-             &new test_PEAR_Config($user_file, $system_file);
+             new test_PEAR_Config($user_file, $system_file);
         return $GLOBALS['_PEAR_Config_instance'];
     }
 }

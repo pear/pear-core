@@ -15,7 +15,7 @@ mkdir($path);
 $config->set('temp_dir', $path);
 
 $c1 = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packages'. DIRECTORY_SEPARATOR . 'Foobar-1.4.0a1.tgz';
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
+$dp = new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($c1));
 

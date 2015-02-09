@@ -17,11 +17,11 @@ array(
 $fp = fopen($statedir . DIRECTORY_SEPARATOR . 'pear.ini', 'wb');
 fwrite($fp, $config, strlen($config));
 fclose($fp);
-$config = &new PEAR_Config($statedir . DIRECTORY_SEPARATOR . 'pear.ini');
+$config = new PEAR_Config($statedir . DIRECTORY_SEPARATOR . 'pear.ini');
 $parser = new PEAR_PackageFile_Parser_v1;
 $parser->setConfig($config);
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
-$phpunit = &new PEAR_PHPTest(true);
+$phpunit = new PEAR_PHPTest(true);
 $fakelog = new fake_log;
 $parser->setLogger($fakelog);
 ?>

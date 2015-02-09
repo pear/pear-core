@@ -271,7 +271,7 @@ The new PEAR_PackageFileManager2 class is not.</d>
 $_test_dep->setPHPVersion('4.3.11');
 $_test_dep->setPEARVersion('1.4.0a1');
 
-$dp = &new test_PEAR_Downloader($fakelog, array('alldeps' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('alldeps' => true), $config);
 $phpunit->assertNoErrors('after create');
 $result = &$dp->download(array('PEAR1-alpha'));
 $phpunit->assertEquals(3, count($result), 'return');

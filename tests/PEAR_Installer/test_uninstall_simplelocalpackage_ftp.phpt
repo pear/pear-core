@@ -26,14 +26,14 @@ if (defined('PATH_SEPARATOR')) {
 }
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 include_once dirname(__FILE__) . '/ftp_test_files/FTP.php.inc';
-$installer = &new test_PEAR_RemoteInstaller($fakelog);
+$installer = new test_PEAR_RemoteInstaller($fakelog);
 $ftp = &Net_FTP::singleton();
 $ftp->addRemoteFile('remote.ini', dirname(__FILE__) . DIRECTORY_SEPARATOR .
     'ftp_test_files' . DIRECTORY_SEPARATOR . 'remote.ini');
 $config->readFTPConfigFile('ftp://www.example.com/remote.ini');
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'simplepackage.xml';
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
+$dp = new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($pathtopackagexml));
 $phpunit->assertEquals(1, count($result), 'return');

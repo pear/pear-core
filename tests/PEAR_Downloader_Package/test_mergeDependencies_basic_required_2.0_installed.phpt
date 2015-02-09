@@ -136,7 +136,7 @@ $v1->setNotes('test');
 $v1->setVersion('1.0');
 $reg->addPackage2($v1);
 
-$dp = &newDownloaderPackage(array());
+$dp = newDownloaderPackage(array());
 $result = $dp->initialize('main');
 $phpunit->assertNoErrors('after create 1');
 
@@ -159,7 +159,7 @@ $phpunit->assertFalse($result, 'first return');
 $phpunit->assertEquals(1, count($params), 'mergeDependencies');
 $phpunit->assertEquals('main', $params[0]->getPackage(), 'main package');
 
-$dp = &newDownloaderPackage(array('upgrade' => true));
+$dp = newDownloaderPackage(array('upgrade' => true));
 $result = $dp->initialize('main');
 $phpunit->assertNoErrors('after create 1');
 

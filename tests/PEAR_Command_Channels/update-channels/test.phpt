@@ -104,7 +104,7 @@ $phpunit->assertEquals(array (
 )
 , $fakelog->getLog(), 'log');
 
-$reg = &new PEAR_Registry($temp_path . DIRECTORY_SEPARATOR . 'php');
+$reg = new PEAR_Registry($temp_path . DIRECTORY_SEPARATOR . 'php');
 $chan = $reg->getChannel('pear.php.net');
 $phpunit->assertIsA('PEAR_ChannelFile', $chan, 'updated ok?');
 $phpunit->assertEquals('pear.php.net', $chan->getName(), 'name ok?');

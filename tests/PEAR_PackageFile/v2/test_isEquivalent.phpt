@@ -10,8 +10,8 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 require_once 'PEAR/PackageFile/v1.php';
-$pf1 = &new test_PEAR_PackageFile_v1;
-$pf2 = &new PEAR_PackageFile_v2_rw;
+$pf1 = new test_PEAR_PackageFile_v1;
+$pf2 = new PEAR_PackageFile_v2_rw;
 $pf2->setConfig($config);
 $pf2->setPackageType('bundle');
 $phpunit->assertFalse($pf2->isEquivalent($pf1), 'bundle');

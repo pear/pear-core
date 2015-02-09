@@ -9,7 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$dep = &new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('create 1');
 
@@ -18,7 +18,7 @@ $result = $dep->validateArchDependency(array('pattern' => 'freebsd-*-i386'));
 $phpunit->assertNoErrors('foo');
 $phpunit->assertTrue($result, 'foo');
 
-$dep = &new test_PEAR_Dependency2($config, array('nodeps' => true), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array('nodeps' => true), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('create 1');
 
@@ -27,7 +27,7 @@ $result = $dep->validateArchDependency(array('pattern' => 'freebsd-*-i386'));
 $phpunit->assertNoErrors('foo');
 $phpunit->assertTrue($result, 'foo');
 
-$dep = &new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('create 1');
 

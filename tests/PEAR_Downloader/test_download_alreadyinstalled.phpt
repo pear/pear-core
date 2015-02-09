@@ -65,8 +65,8 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/test/info.xml", '<?xml versi
 
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/test/deps.1.0.txt", 'b:0;', 'text/plain');
 
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
-$pkg = &new test_PEAR_PackageFile($config);
+$dp = new test_PEAR_Downloader($fakelog, array(), $config);
+$pkg = new test_PEAR_PackageFile($config);
 $pkg->setLogger($fakelog);
 $pf = $pkg->fromTgzFile($pathtopackagexml, PEAR_VALIDATE_NORMAL);
 $registry = &$config->getRegistry();
@@ -95,8 +95,8 @@ $phpunit->assertEquals(array (
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
 
 /************************************* nodeps *********************************/
-$dp = &new test_PEAR_Downloader($fakelog, array('nodeps' => true), $config);
-$pkg = &new PEAR_PackageFile($config);
+$dp = new test_PEAR_Downloader($fakelog, array('nodeps' => true), $config);
+$pkg = new PEAR_PackageFile($config);
 $pf = $pkg->fromTgzFile($pathtopackagexml, PEAR_VALIDATE_NORMAL);
 $registry = &$config->getRegistry();
 $registry->addPackage2($pf);
@@ -124,7 +124,7 @@ $phpunit->assertEquals(array (
 $phpunit->assertEquals(array (), $fakelog->getDownload(), 'download callback messages');
 
 /************************************* force *********************************/
-$dp = &new test_PEAR_Downloader($fakelog, array('force' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('force' => true), $config);
 $result = $dp->download(array('test'));
 $phpunit->assertEquals(1, count($result), 'return');
 $phpunit->assertIsa('test_PEAR_Downloader_Package', $result[0], 'right class');

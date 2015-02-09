@@ -12,7 +12,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_initialize_downloadurl'. DIRECTORY_SEPARATOR . 'test-1.0.tgz';
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.0.tgz', $pathtopackagexml);
-$dp = &newDownloaderPackage(array());
+$dp = newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('http://www.example.com/test-1.0.tgz');
 $phpunit->assertEquals(array (

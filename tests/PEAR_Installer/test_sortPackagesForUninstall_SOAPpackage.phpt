@@ -20,7 +20,7 @@ $p6 = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'test_sortPackagesForUninstall' 
 for ($i = 1; $i <= 6; $i++) {
     $packages[] = ${"p$i"};
 }
-$dl = &new PEAR_Installer($fakelog);
+$dl = new PEAR_Installer($fakelog);
 $config = &test_PEAR_Config::singleton($temp_path . '/pear.ini', $temp_path . '/pear.conf');
 
 test_PEAR_Dependency2::singleton($config);
@@ -32,7 +32,7 @@ class test_PEAR_Command_Install extends PEAR_Command_Install
     function &getDownloader()
     {
         if (!isset($GLOBALS['__Stupid_php4_a'])) {
-            $GLOBALS['__Stupid_php4_a'] = &new test_PEAR_Downloader($this->ui, array(), $this->config);
+            $GLOBALS['__Stupid_php4_a'] = new test_PEAR_Downloader($this->ui, array(), $this->config);
         }
         return $GLOBALS['__Stupid_php4_a'];
     }
@@ -40,12 +40,12 @@ class test_PEAR_Command_Install extends PEAR_Command_Install
     function &getInstaller()
     {
         if (!isset($GLOBALS['__Stupid_php4_b'])) {
-            $GLOBALS['__Stupid_php4_b'] = &new test_PEAR_Installer($this->ui, array(), $this->config);
+            $GLOBALS['__Stupid_php4_b'] = new test_PEAR_Installer($this->ui, array(), $this->config);
         }
         return $GLOBALS['__Stupid_php4_b'];
     }
 }
-$command = &new test_PEAR_Command_Install($fakelog, $config);
+$command = new test_PEAR_Command_Install($fakelog, $config);
 $command->run('install', array(), $packages);
 $phpunit->assertNoErrors('after install');
 $fakelog->getLog();

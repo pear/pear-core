@@ -44,7 +44,7 @@ class Net_FTP extends PEAR
     function &singleton()
     {
         if (!isset($GLOBALS['_TEST_FTP'])) {
-            $GLOBALS['_TEST_FTP'] = &new Net_FTP(false, false, false);
+            $GLOBALS['_TEST_FTP'] = new Net_FTP(false, false, false);
         }
         return $GLOBALS['_TEST_FTP'];
     }

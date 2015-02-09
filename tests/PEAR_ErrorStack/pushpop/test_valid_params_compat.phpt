@@ -9,7 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$stack = &new PEAR_ErrorStack('test', false, false, true);
+$stack = new PEAR_ErrorStack('test', false, false, true);
 $z = $stack->push(2, 'exception', array('my' => 'param'), 'hello',
     array('test'), array(array('file' => 'boof', 'line' => 34)));
 $phpunit->assertIsa('pear_error', $z, 'not pear_error');

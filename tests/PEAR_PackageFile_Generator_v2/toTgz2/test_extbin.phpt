@@ -19,7 +19,7 @@ $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     DIRECTORY_SEPARATOR . 'extbinrelease1.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'extbinrelease1.xml');
 $generator = &$pf->getDefaultGenerator();
-$packager = &new PEAR_Packager;
+$packager = new PEAR_Packager;
 $null = null;
 mkdir($temp_path . DIRECTORY_SEPARATOR . 'gron');
 $e = $generator->toTgz2($packager, $null, true, $temp_path . DIRECTORY_SEPARATOR . 'gron');
@@ -44,7 +44,7 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'packaging log');
 
-$pkg = &new PEAR_PackageFile($config);
+$pkg = new PEAR_PackageFile($config);
 $newpf = &$pkg->fromTgzFile($e, PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('errors');
 $xml = $newpf->getFileContents('package.xml');

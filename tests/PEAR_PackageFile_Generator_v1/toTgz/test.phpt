@@ -17,7 +17,7 @@ $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     DIRECTORY_SEPARATOR . 'theworks.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'theworks.xml');
 $generator = &$pf->getDefaultGenerator();
-$packager = &new PEAR_Packager;
+$packager = new PEAR_Packager;
 $e = $generator->toTgz($packager);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'Channel validator error: field "date" - Release Date "2004-11-27" is not today'),
@@ -29,7 +29,7 @@ $phpunit->assertEquals(array (
     1 => 'Analyzing foo.php',
   ),
 ), $fakelog->getLog(), 'packaging log');
-$pkg = &new PEAR_PackageFile($config);
+$pkg = new PEAR_PackageFile($config);
 $newpf = &$pkg->fromTgzFile($e, PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('errors');
 $newg = &$newpf->getDefaultGenerator();

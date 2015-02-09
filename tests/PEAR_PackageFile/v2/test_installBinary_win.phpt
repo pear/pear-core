@@ -146,7 +146,7 @@ $reg = &$config->getRegistry();
 $reg->addChannel($cf);
 $phpunit->assertNoErrors('channel add');
 
-$a = &new test_PEAR_Installer($fakelog);
+$a = new test_PEAR_Installer($fakelog);
 $pf = new test_PEAR_PackageFile_v2;
 $pf->setConfig($config);
 $pf->setPackageType('extsrc');
@@ -173,7 +173,7 @@ $pf->setProvidesExtension('foo');
 
 $phpunit->assertNotFalse($pf->validate(), 'first pf');
 
-$dp = &newFakeDownloaderPackage(array());
+$dp = newFakeDownloaderPackage(array());
 $dp->setPackageFile($pf);
 $b = array(&$dp);
 $a->setDownloadedPackages($b);

@@ -64,9 +64,9 @@ if (!empty($home)) {
     putenv('HOME="'.$temp_path);
 }
 $config = &test_PEAR_Config::singleton($statedir . DIRECTORY_SEPARATOR . 'pear.ini');
-$packager = &new PEAR_Packager;
+$packager = new PEAR_Packager;
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
-$phpunit = &new PEAR_PHPTest(true);
+$phpunit = new PEAR_PHPTest(true);
 $fakelog = new fake_log;
 $packager->ui = &$fakelog; // fake PEAR_Common::log() out
 ?>

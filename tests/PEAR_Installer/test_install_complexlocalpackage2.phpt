@@ -223,7 +223,7 @@ $_test_dep->setPEARVersion('1.4.0a1');
 
 $phpunit->assertNoErrors('after create');
 $config->set('preferred_state', 'alpha');
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
+$dp = new test_PEAR_Downloader($fakelog, array(), $config);
 
 $result = &$dp->download(array($pathtopackagexml));
 $phpunit->assertEquals(3, count($result), 'return');

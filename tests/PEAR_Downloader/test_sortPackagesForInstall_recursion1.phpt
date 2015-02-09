@@ -20,7 +20,7 @@ $pf2 = new PEAR_PackageFile_v1;
 $pf2->setPackage('indirect');
 $pf2->addPackageDep('uberparent', '1.0', 'has');
 
-$dl = &newDownloader(array());
+$dl = newDownloader(array());
 require_once 'PEAR/Downloader/Package.php';
 $p1 = new PEAR_Downloader_Package($dl);
 $p1->setPackageFile($pf1);

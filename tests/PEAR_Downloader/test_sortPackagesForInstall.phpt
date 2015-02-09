@@ -33,7 +33,7 @@ $pf4->addPackageDep('nodeps', '', 'has');
 $pf5 = new PEAR_PackageFile_v1;
 $pf5->setPackage('nodeps');
 
-$dl = &newDownloader(array());
+$dl = newDownloader(array());
 require_once 'PEAR/Downloader/Package.php';
 $p1 = new PEAR_Downloader_Package($dl);
 $p1->setPackageFile($pf1);

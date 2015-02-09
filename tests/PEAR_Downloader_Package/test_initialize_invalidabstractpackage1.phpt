@@ -22,7 +22,7 @@ $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.0.tgz', $patht
 $pearweb->addRESTConfig("http://pecl.php.net/rest/r/test/allreleases.xml", false, false);
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/test/allreleases.xml", false, false);
 
-$dp = &newDownloaderPackage(array());
+$dp = newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('test');
 

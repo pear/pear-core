@@ -83,7 +83,7 @@ if (!empty($home)) {
 }
 require_once "PEAR/ChannelFile.php";
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
-$phpunit = &new PEAR_PHPTest(true);
+$phpunit = new PEAR_PHPTest(true);
 $fakelog = new fake_log;
 $config = &test_PEAR_Config::singleton($temp_path . '/pear.ini', $temp_path . '/pear.conf');
 $reg = &$config->getRegistry();
@@ -98,7 +98,7 @@ class test_PEAR_Command_Install extends PEAR_Command_Install
     function &getDownloader($a, $b)
     {
         if (!isset($GLOBALS['__Stupid_php4_a'])) {
-            $GLOBALS['__Stupid_php4_a'] = &new test_PEAR_Downloader($this->ui, $b, $this->config);
+            $GLOBALS['__Stupid_php4_a'] = new test_PEAR_Downloader($this->ui, $b, $this->config);
         }
         return $GLOBALS['__Stupid_php4_a'];
     }
@@ -106,7 +106,7 @@ class test_PEAR_Command_Install extends PEAR_Command_Install
     function &getInstaller()
     {
         if (!isset($GLOBALS['__Stupid_php4_b'])) {
-            $GLOBALS['__Stupid_php4_b'] = &new test_PEAR_Installer($this->ui, array(), $this->config);
+            $GLOBALS['__Stupid_php4_b'] = new test_PEAR_Installer($this->ui, array(), $this->config);
         }
         return $GLOBALS['__Stupid_php4_b'];
     }
@@ -116,5 +116,5 @@ class test_PEAR_Command_Install extends PEAR_Command_Install
         unset($GLOBALS['__Stupid_php4_a']);
     }
 }
-$command = &new test_PEAR_Command_Install($fakelog, $config);
+$command = new test_PEAR_Command_Install($fakelog, $config);
 ?>

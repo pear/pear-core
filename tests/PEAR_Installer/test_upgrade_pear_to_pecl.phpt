@@ -17,7 +17,7 @@ $packageDir        = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'test_upgrade_pe
 $pathtopackagexml  = $packageDir . 'package.xml';
 $pathtopackagexml2 = $packageDir . 'package2.xml';
 
-$dp = &new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
 $result = $dp->download(array($pathtopackagexml));
 $installer->setOptions(array());
 $installer->sortPackagesForInstall($result);
@@ -29,7 +29,7 @@ $phpunit->assertNoErrors('setup for upgrade');
 $fakelog->getLog();
 $fakelog->getDownload();
 
-$dp = &new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
 $phpunit->assertNoErrors('after create');
 
 $result = $dp->download(array($pathtopackagexml2));

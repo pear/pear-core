@@ -13,7 +13,7 @@ $_test_dep->setPEARVersion('1.4.0a1');
 $_test_dep->setPHPVersion('4.3.11');
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'simplepackage2.xml';
-$dp = &new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($pathtopackagexml));
 $phpunit->assertEquals(1, count($result), 'return');

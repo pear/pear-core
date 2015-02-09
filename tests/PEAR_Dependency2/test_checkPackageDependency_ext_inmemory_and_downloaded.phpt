@@ -15,7 +15,7 @@ $_test_dep->setExtensions(array('foo' => '1.2'));
 require_once 'PEAR/Downloader/Package.php';
 require_once 'PEAR/Downloader.php';
 $down = new PEAR_Downloader($fakelog, array(), $config);
-$dp = &new PEAR_Downloader_Package($down);
+$dp = new PEAR_Downloader_Package($down);
 $dp->initialize(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR .
     'extpackage.xml');
 $params = array(&$dp);

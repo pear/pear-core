@@ -18,7 +18,7 @@ function messagecallback(&$stack, $err)
     $wasCalled = true;
     return 'my silly message';
 }
-$stack = &new PEAR_ErrorStack('test1', 'messagecallback');
+$stack = new PEAR_ErrorStack('test1', 'messagecallback');
 $wasCalled = false;
 $stack->push(4, 'error', array('hello' => 6));
 $phpunit->assertTrue($wasCalled, 'message callback was not called!');

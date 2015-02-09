@@ -11,7 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_initialize_invalidpackagexml'. DIRECTORY_SEPARATOR . 'invalid.xml';
-$dp = &newDownloaderPackage(array());
+$dp = newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 
 // 5.2.9 and up has the proper error msg again
@@ -49,7 +49,7 @@ $phpunit->assertEquals("", $result->getMessage(), 'wrong error message');
 
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_initialize_invalidpackagexml'. DIRECTORY_SEPARATOR . 'package.xml';
-$dp = &newDownloaderPackage(array());
+$dp = newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize($pathtopackagexml);
 $phpunit->assertErrors(array(
@@ -82,7 +82,7 @@ $phpunit->assertEquals("", $result->getMessage(), 'wrong error message');
 
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_initialize_invalidpackagexml'. DIRECTORY_SEPARATOR . 'test-1.0.tgz';
-$dp = &newDownloaderPackage(array());
+$dp = newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize($pathtopackagexml);
 $phpunit->assertErrors(array(

@@ -21,7 +21,7 @@ $_test_dep->setOs('windows');
 $_test_dep->setPEARVersion('1.4.0dev13');
 $_test_dep->setPHPVersion('5.0.0');
 
-$pf = &new test_PEAR_PackageFile($config);
+$pf = new test_PEAR_PackageFile($config);
 $oldpackage = &$pf->fromPackageFile(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     'test_install_binary' . DIRECTORY_SEPARATOR . 'package.xml', PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('oldpackage');
@@ -146,7 +146,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 
 
 $phpunit->assertNoErrors('setup');
-$dp = &new test_PEAR_Downloader_Package($installer);
+$dp = new test_PEAR_Downloader_Package($installer);
 $dp->setPackageFile($package);
 $params = array(&$dp);
 $installer->setDownloadedPackages($params);

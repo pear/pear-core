@@ -9,7 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$dep = &new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
     'package' => 'foo'), PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('create 1');
 
@@ -42,7 +42,7 @@ $reg->addPackage2($package);
 $pkg2 = new PEAR_PackageFile_v2_rw;
 $pkg2->setPackage('bar');
 $pkg2->setChannel('pear.php.net');
-$dl = &new PEAR_Downloader($fakelog, array(), $config);
+$dl = new PEAR_Downloader($fakelog, array(), $config);
 $result = $dep->validatePackage($pkg2, $dl);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error',

@@ -72,9 +72,9 @@ if (!empty($home)) {
 require_once "PEAR/ChannelFile.php";
 require_once dirname(dirname(__FILE__)) . '/download_test_classes.php.inc';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
-$phpunit = &new PEAR_PHPTest(true);
+$phpunit = new PEAR_PHPTest(true);
 $fakelog = new fake_log;
-$config = &new test_PEAR_Config($temp_path . '/pear.ini', $temp_path . '/pear.conf');
+$config = new test_PEAR_Config($temp_path . '/pear.ini', $temp_path . '/pear.conf');
 require_once 'PEAR/Command/Auth.php';
-$command = &new PEAR_Command_Auth($fakelog, $config);
+$command = new PEAR_Command_Auth($fakelog, $config);
 ?>

@@ -68,7 +68,7 @@ $files3_new = array(
         ),
     );
 mkdir($statedir);
-$phpunit = &new PEAR_PHPTest(true);
+$phpunit = new PEAR_PHPTest(true);
 $temp_path = $statedir;
 if (!is_dir($temp_path)) {
     mkdir($temp_path);

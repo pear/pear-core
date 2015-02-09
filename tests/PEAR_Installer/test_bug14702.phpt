@@ -163,7 +163,7 @@ $_test_dep->setExtensions(array('pecl_http' => '1.6.0'));
 
 $pathtopackagexml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'bug14702'. DIRECTORY_SEPARATOR . 'package.xml';
 
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
+$dp = new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($pathtopackagexml));
 

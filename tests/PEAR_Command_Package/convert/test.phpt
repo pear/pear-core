@@ -33,7 +33,7 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'log 1');
 
-$pkg = &new PEAR_PackageFile($config);
+$pkg = new PEAR_PackageFile($config);
 $pf = &$pkg->fromPackageFile($temp_path . DIRECTORY_SEPARATOR . 'package2.xml', PEAR_VALIDATE_NORMAL);
 $gen = &$pf->getDefaultGenerator();
 $contents = implode('', file($temp_path . DIRECTORY_SEPARATOR . 'package2.xml'));
@@ -188,7 +188,7 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'log 1.1');
 
-$pkg = &new PEAR_PackageFile($config);
+$pkg = new PEAR_PackageFile($config);
 $pf = &$pkg->fromPackageFile($temp_path . DIRECTORY_SEPARATOR . 'package2.xml', PEAR_VALIDATE_NORMAL);
 $gen = &$pf->getDefaultGenerator();
 $contents = implode('', file($temp_path . DIRECTORY_SEPARATOR . 'package2.xml'));

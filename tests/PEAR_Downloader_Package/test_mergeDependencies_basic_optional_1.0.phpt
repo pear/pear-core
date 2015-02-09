@@ -119,7 +119,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/required/1.1.xml",
 
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/required/deps.1.1.txt", 'b:0;', 'text/plain');
 
-$dp = &newDownloaderPackage(array());
+$dp = newDownloaderPackage(array());
 $result = $dp->initialize('mainold');
 $phpunit->assertNoErrors('after create 1');
 

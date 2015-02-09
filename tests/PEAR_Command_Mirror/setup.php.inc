@@ -72,7 +72,7 @@ if (!empty($home)) {
 require_once "PEAR/ChannelFile.php";
 require_once dirname(dirname(__FILE__)) . '/download_test_classes.php.inc';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
-$phpunit = &new PEAR_PHPTest(true);
+$phpunit = new PEAR_PHPTest(true);
 $fakelog = new fake_log;
 $config = &test_PEAR_Config::singleton($temp_path . '/pear.ini', $temp_path . '/pear.conf');
 $reg = &$config->getRegistry();
@@ -86,7 +86,7 @@ class test_PEAR_Command_Remote extends PEAR_Command_Remote
 {
     function &getDownloader($options)
     {
-        $a = &new test_PEAR_Downloader($this->ui, $options, $this->config);
+        $a = new test_PEAR_Downloader($this->ui, $options, $this->config);
         return $a;
     }
 }
@@ -94,9 +94,9 @@ class test_PEAR_Command_Mirror extends PEAR_Command_Mirror
 {
     function &factory()
     {
-        $a = &new test_PEAR_Command_Remote($this->ui, $this->config);
+        $a = new test_PEAR_Command_Remote($this->ui, $this->config);
         return $a;
     }
 }
-$command = &new test_PEAR_Command_Mirror($fakelog, $config);
+$command = new test_PEAR_Command_Mirror($fakelog, $config);
 ?>

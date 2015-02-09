@@ -31,7 +31,7 @@ ini_restore('include_path');
 $ftp = &Net_FTP::singleton();
 $ftp->addRemoteFile('config.ini', dirname(__FILE__) . DIRECTORY_SEPARATOR .
     'test_readFTPConfigFile' . DIRECTORY_SEPARATOR . 'remote.ini');
-$config = &new PEAR_Config($temp_path .
+$config = new PEAR_Config($temp_path .
     DIRECTORY_SEPARATOR . 'nofile', $temp_path .
     DIRECTORY_SEPARATOR . 'nofile', 'ftp://example.com/config.ini');
 $phpunit->assertNoErrors('good ftp');

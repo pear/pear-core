@@ -81,7 +81,7 @@ class PEAR_test_mock_pearweb
     {
         require_once 'PEAR/REST.php';
         $a = new PEAR_Config;
-        $rest = &new PEAR_REST($a, array());
+        $rest = new PEAR_REST($a, array());
         PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
         $ret = $rest->downloadHttp($address, false);
         PEAR::popErrorHandling();

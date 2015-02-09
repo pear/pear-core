@@ -15,7 +15,7 @@ if (file_exists($statedir)) {
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $a = &PEAR_DependencyDB::singleton($config);
-$b = &new PEAR_DependencyDB;
+$b = new PEAR_DependencyDB;
 $phpunit->assertNotSame($a, $b, 'singleton 1');
 $c = &PEAR_DependencyDB::singleton($config);
 $c->hi = 1;

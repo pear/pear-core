@@ -12,7 +12,7 @@ error_reporting(1803);
 $ds = DIRECTORY_SEPARATOR;
 require_once dirname(dirname(__FILE__)) . $ds . 'setup.php.inc';
 $reg = $config->getRegistry();
-$pkg = &new PEAR_PackageFile($config);
+$pkg = new PEAR_PackageFile($config);
 $file = dirname(__FILE__) . $ds . $ds. 'packagefiles' . $ds . 'package2.xml';
 $info = $pkg->fromPackageFile($file, PEAR_VALIDATE_NORMAL);
 $reg->addPackage2($info);

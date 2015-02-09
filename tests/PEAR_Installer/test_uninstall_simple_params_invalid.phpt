@@ -42,7 +42,7 @@ $reg->addPackage2($package);
 
 $params[] = $reg->getPackage('next');
 
-$dl = &new PEAR_Installer($fakelog);
+$dl = new PEAR_Installer($fakelog);
 $dl->setUninstallPackages($params);
 $dl->uninstall('next');
 $phpunit->assertErrors(array(

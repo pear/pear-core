@@ -18,7 +18,7 @@ function contextcallback($code, $params, $trace)
     return array('hi' => 'there', 'you' => 'fool');
 }
     
-$stack = &new PEAR_ErrorStack('test', false, 'contextcallback');
+$stack = new PEAR_ErrorStack('test', false, 'contextcallback');
 $wasCalled = false;
 $stack->push(4, 'error', array('hello' => 6));
 $phpunit->assertTrue($wasCalled, 'context callback was not called!');

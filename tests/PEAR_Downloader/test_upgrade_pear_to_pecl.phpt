@@ -96,10 +96,10 @@ this case is to use the new sqlite_exec() function instead. (Stas)
 
 $pearweb->addRESTConfig("http://pecl.php.net/rest/r/sqlite/deps.1.0.4.txt", 'b:0;', 'text/plain');
 
-$dp = &new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
 $result = $dp->download(array($pathtopackagexml));
 
-$installer = &new test_PEAR_Installer($ui);
+$installer = new test_PEAR_Installer($ui);
 $installer->setOptions(array());
 $installer->sortPackagesForInstall($result);
 $installer->setDownloadedPackages($result);
@@ -113,7 +113,7 @@ $fakelog->getDownload();
 $phpunit->assertEquals(array('sqlite'), $reg->listPackages(),       'pear');
 $phpunit->assertEquals(array(),         $reg->listPackages('pecl'), 'pecl');
 
-$dp = &new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
 $phpunit->assertNoErrors('after create');
 
 $result = $dp->download(array('pecl.php.net/SQLite'));

@@ -14,7 +14,7 @@ $pathtopackagetgz = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_getFileContents'. DIRECTORY_SEPARATOR . 'package2.xml';
 require_once 'PEAR/PackageFile.php';
-$pkg = &new PEAR_PackageFile($config);
+$pkg = new PEAR_PackageFile($config);
 $pf = &$pkg->fromTgzFile($pathtopackagetgz, PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('valid xml parse');
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'return of valid parse');

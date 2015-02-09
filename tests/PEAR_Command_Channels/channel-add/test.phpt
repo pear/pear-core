@@ -31,7 +31,7 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'log');
 
-$reg = &new PEAR_Registry($temp_path . DIRECTORY_SEPARATOR . 'php');
+$reg = new PEAR_Registry($temp_path . DIRECTORY_SEPARATOR . 'php');
 $chan = $reg->getChannel('fake');
 $phpunit->assertIsA('PEAR_ChannelFile', $chan, 'added ok?');
 $phpunit->assertEquals('fake', $chan->getName(), 'name ok?');

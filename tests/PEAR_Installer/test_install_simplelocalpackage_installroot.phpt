@@ -11,7 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'packagingroot.xml';
-$dp = &new test_PEAR_Downloader($fakelog, array('installroot' => $temp_path . DIRECTORY_SEPARATOR .
+$dp = new test_PEAR_Downloader($fakelog, array('installroot' => $temp_path . DIRECTORY_SEPARATOR .
 'installroot'), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($pathtopackagexml));

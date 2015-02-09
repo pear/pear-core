@@ -13,8 +13,8 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $_test_dep->setPEARVersion('1.7.0');
 $_test_dep->setPHPVersion('4.3.11');
 
-$downloader = &new test_PEAR_Downloader($fakelog, array(), $config);
-$installer = &new test_PEAR_Installer($fakelog);
+$downloader = new test_PEAR_Downloader($fakelog, array(), $config);
+$installer = new test_PEAR_Installer($fakelog);
 $downloaded = &$downloader->download(array(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'Console_Getopt-1.2.1.tgz'));
 $phpunit->assertNoErrors('"download"');

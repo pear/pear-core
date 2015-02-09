@@ -283,12 +283,12 @@ class PEAR_PHPTest
             $this->_failTest($trace, $message);
             if (class_exists('Text_Diff')) {
                 echo "Diff of expecting/received:\n";
-                $diff = &new Text_Diff(
+                $diff = new Text_Diff(
                     explode("\n", var_export($control, true)),
                     explode("\n", var_export($test, true)));
 
                 // Output the diff in unified format.
-                $renderer = &new Text_Diff_Renderer_unified();
+                $renderer = new Text_Diff_Renderer_unified();
                 echo $renderer->render($diff);
                 if ($this->_diffonly) {
                     return false;
@@ -366,12 +366,12 @@ class PEAR_PHPTest
             $this->_failTest(debug_backtrace(), $message);
             if (class_exists('Text_Diff')) {
                 echo "Diff of expecting/received:\n";
-                $diff = &new Text_Diff(
+                $diff = new Text_Diff(
                     explode("\n", var_export($control, true)),
                     explode("\n", var_export($test, true)));
 
                 // Output the diff in unified format.
-                $renderer = &new Text_Diff_Renderer_unified();
+                $renderer = new Text_Diff_Renderer_unified();
                 echo $renderer->render($diff);
                 if ($this->_diffonly) {
                     return false;

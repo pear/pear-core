@@ -14,7 +14,7 @@ if (file_exists($statedir)) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$db = &new PEAR_DependencyDB;
+$db = new PEAR_DependencyDB;
 $db->setConfig($config);
 $db->assertDepsDB();
 $phpunit->assertFileExists($php_dir . DIRECTORY_SEPARATOR . '.depdb', 'setup');

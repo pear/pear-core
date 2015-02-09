@@ -318,7 +318,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/pkg6/deps.1.1.txt", 'b:0;', 
 
 $_test_dep->setPHPversion('4.3.10');
 $_test_dep->setPEARversion('1.4.0a1');
-$dp = &new test_PEAR_Downloader($fakelog, array('alldeps' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('alldeps' => true), $config);
 $phpunit->assertNoErrors('after create');
 
 $reg = &$config->getRegistry();

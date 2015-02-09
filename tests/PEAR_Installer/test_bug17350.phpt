@@ -19,7 +19,7 @@ $_test_dep->setPEARVersion('1.9.0');
 $_test_dep->setExtensions(array('pcre' => '1.0'));
 
 
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
+$dp = new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 
 $result = $dp->download(array($p1));
@@ -40,7 +40,7 @@ $_test_dep->setPHPVersion('5.3.0');
 $_test_dep->setPEARVersion('1.9.0');
 $_test_dep->setExtensions(array('pcre' => '1.0'));
 
-$dp = &new test_PEAR_Downloader($fakelog, array('force' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('force' => true), $config);
 $phpunit->assertNoErrors('after create 2');
 
 $result = $dp->download(array($p2));

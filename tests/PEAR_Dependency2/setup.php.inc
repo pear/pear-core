@@ -68,7 +68,7 @@ if (!empty($home)) {
 }
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'download_test_classes.php.inc';
-$phpunit = &new PEAR_PHPTest(true);
+$phpunit = new PEAR_PHPTest(true);
 $fakelog = new fake_log;
 require_once 'PEAR/Config.php';
 $config = &test_PEAR_Config::singleton($temp_path . '/pear.ini');
@@ -81,11 +81,11 @@ test_PEAR_Dependency2::singleton($config);
  * @param array
  * @return test_PEAR_Downloader_Package
  */
-function &newFakeDownloaderPackage($options)
+function newFakeDownloaderPackage($options)
 {
     global $config, $fakelog;
-    $downloader = &new test_PEAR_Downloader($fakelog, $options, $config);
-    $p = &new test_PEAR_Downloader_Package($downloader);
+    $downloader = new test_PEAR_Downloader($fakelog, $options, $config);
+    $p = new test_PEAR_Downloader_Package($downloader);
     return $p;
 }
 ?>

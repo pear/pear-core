@@ -16,7 +16,7 @@ chdir($temp_path);
 require_once 'PEAR/Packager.php';
 require_once 'PEAR/PackageFile/Parser/v1.php';
 
-$v1parser = &new PEAR_PackageFile_Parser_v1;
+$v1parser = new PEAR_PackageFile_Parser_v1;
 $v1parser->setConfig($config);
 $v1parser->setLogger($fakelog);
 $pf1 = &$v1parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
@@ -27,7 +27,7 @@ $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     DIRECTORY_SEPARATOR . 'phprelease1.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'phprelease1.xml');
 $generator = &$pf->getDefaultGenerator();
-$packager = &new PEAR_Packager;
+$packager = new PEAR_Packager;
 mkdir($temp_path . DIRECTORY_SEPARATOR . 'gron');
 $e = $generator->toTgz2($packager, $pf1, true, $temp_path . DIRECTORY_SEPARATOR . 'gron');
 
@@ -57,7 +57,7 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'packaging log');
 
-$pkg = &new PEAR_PackageFile($config);
+$pkg = new PEAR_PackageFile($config);
 $newpf = &$pkg->fromTgzFile($e, PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('errors');
 $xml = $newpf->getFileContents('package2.xml');

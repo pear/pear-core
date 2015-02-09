@@ -66,8 +66,8 @@ if (!empty($home)) {
 $config = &PEAR_Config::singleton($statedir . DIRECTORY_SEPARATOR . 'pear.ini');
 require_once dirname(dirname(__FILE__)) . '/download_test_classes.php.inc';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
-$phpunit = &new PEAR_PHPTest(true);
+$phpunit = new PEAR_PHPTest(true);
 $fakelog = new fake_log;
 
-$common = &new PEAR_Common;
+$common = new PEAR_Common;
 ?>

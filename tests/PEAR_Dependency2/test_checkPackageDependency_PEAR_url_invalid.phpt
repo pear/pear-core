@@ -9,7 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$dep = &new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('create 1');
 
@@ -33,7 +33,7 @@ $result = $dep->validatePackageDependency(
 $phpunit->assertEquals(array('pear/mine can optionally use package "http://www.example.com/foo-1.0.tgz"'), $result, 'optional');
 
 /****************************** nodeps *************************************/
-$dep = &new test_PEAR_Dependency2($config, array('nodeps' => true), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array('nodeps' => true), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 
 $result = $dep->validatePackageDependency(
@@ -55,7 +55,7 @@ $result = $dep->validatePackageDependency(
 $phpunit->assertEquals(array('pear/mine can optionally use package "http://www.example.com/foo-1.0.tgz"'), $result, 'nodeps optional');
 
 /****************************** force *************************************/
-$dep = &new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 
 $dep->setExtensions(array('foo' => '1.0'));

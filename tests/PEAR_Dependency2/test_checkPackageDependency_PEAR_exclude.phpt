@@ -9,7 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$dep = &new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('create 1');
 
@@ -80,7 +80,7 @@ $phpunit->assertErrors(array(
 ), 'versioned conflicts 2');
 
 // nodeps
-$dep = &new test_PEAR_Dependency2($config, array('nodeps' => true), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array('nodeps' => true), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 
 $result = $dep->validatePackageDependency(
@@ -97,7 +97,7 @@ $phpunit->assertEquals(array(), $fakelog->getLog(), 'exclude 2 log nodeps');
 $phpunit->assertEquals(array('warning: pear/mine is not compatible with installed package "pear/foo" version 1.0'), $result, 'exclude 2 nodeps');
 
 // force
-$dep = &new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array('force' => true), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 
 $result = $dep->validatePackageDependency(

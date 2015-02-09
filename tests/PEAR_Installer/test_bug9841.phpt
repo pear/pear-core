@@ -24,7 +24,7 @@ $_test_dep->setPEARVersion('1.5.0');
 $_test_dep->setExtensions(array('pcre' => '1.0'));
 
 
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
+$dp = new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 
 $result = $dp->download($packages);

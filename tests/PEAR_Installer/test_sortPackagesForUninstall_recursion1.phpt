@@ -37,7 +37,7 @@ $reg->addPackage2($package);
 $params[] = $reg->getPackage('bar');
 $params[] = $reg->getPackage('foo');
 
-$dl = &new PEAR_Installer($fakelog);
+$dl = new PEAR_Installer($fakelog);
 $dl->sortPackagesForUninstall($params);
 $phpunit->assertEquals('foo', $params[0]->getPackage(), 'foo');
 $phpunit->assertEquals('bar', $params[1]->getPackage(), 'bar');

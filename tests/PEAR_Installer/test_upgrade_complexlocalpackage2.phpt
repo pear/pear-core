@@ -15,7 +15,7 @@ $pathtopackagexml = $packageDir . 'package2.xml';
 $pathtobarxml     = $packageDir . 'Bar-1.5.2.tgz';
 $pathtofoobarxml  = $packageDir . 'Foobar-1.5.0a1.tgz';
 
-$dp = &new PEAR_Downloader($fakelog, array(), $config);
+$dp = new PEAR_Downloader($fakelog, array(), $config);
 $result = &$dp->download(array($packageDir . 'simplebar.xml'));
 $installer->setOptions(array());
 $installer->sortPackagesForInstall($result);
@@ -229,7 +229,7 @@ The new PEAR_PackageFileManager2 class is not.</d>
 $_test_dep->setPHPVersion('4.3.11');
 $_test_dep->setPEARVersion('1.4.0a1');
 
-$dp = &new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
 $phpunit->assertNoErrors('after create');
 $config->set('preferred_state', 'alpha');
 

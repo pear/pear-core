@@ -137,5 +137,5 @@ if (!empty($home)) {
 }
 $config = &PEAR_Config::singleton($statedir . DIRECTORY_SEPARATOR . 'pear.ini');
 
-$phpunit = &new PEAR_PHPTest(true);
+$phpunit = new PEAR_PHPTest(true);
 ?>

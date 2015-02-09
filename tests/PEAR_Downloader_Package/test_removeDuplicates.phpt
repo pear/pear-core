@@ -114,19 +114,19 @@ $GLOBALS['pearweb']->addRESTConfig('http://www.example.com/rest/r/test/package.1
 </package>
 ', 'text/xml');
 
-$dp1 = &newDownloaderPackage(array());
+$dp1 = newDownloaderPackage(array());
 $result = $dp1->initialize('test#subgroup');
 $phpunit->assertNoErrors('after create 1');
 
-$dp2 = &newDownloaderPackage(array());
+$dp2 = newDownloaderPackage(array());
 $result = $dp2->initialize('http://www.example.com/test-1.0.tgz');
 $phpunit->assertNoErrors('after create 2');
 
-$dp3 = &newDownloaderPackage(array());
+$dp3 = newDownloaderPackage(array());
 $result = $dp3->initialize($pathtopackagexml);
 $phpunit->assertNoErrors('after create 3');
 
-$dp4 = &newDownloaderPackage(array());
+$dp4 = newDownloaderPackage(array());
 $result = $dp4->initialize($pathtopackagexml2);
 $phpunit->assertNoErrors('after create 4');
 

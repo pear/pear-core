@@ -9,5 +9,5 @@ $statedir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'testinstallertemp';
 cleanall();
 mkdir($statedir);
 
-$phpunit = &new PEAR_PHPTest(true);
-$tester = &new PEAR_RunTest($fakelog);
+$phpunit = new PEAR_PHPTest(true);
+$tester = new PEAR_RunTest($fakelog);

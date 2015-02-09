@@ -183,7 +183,7 @@ $_test_dep->setPHPVersion('4.3.11');
 $_test_dep->setPEARVersion('1.4.0a1');
 
 $config->set('preferred_state', 'alpha');
-$dp = &new test_PEAR_Downloader($fakelog, array('ignore-errors' => true, 'soft' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('ignore-errors' => true, 'soft' => true), $config);
 $phpunit->assertNoErrors('after create');
 
 $result = &$dp->download(array($pathtopackagexml));

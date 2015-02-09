@@ -65,7 +65,7 @@ if (!empty($home)) {
     putenv('HOME="'.$temp_path);
 }
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
-$phpunit = &new PEAR_PHPTest(true);
+$phpunit = new PEAR_PHPTest(true);
 $fakelog = new fake_log;
 require_once 'PEAR/Config.php';
 $config = &PEAR_Config::singleton($temp_path . '/pear.ini');
@@ -74,11 +74,11 @@ test_PEAR_Dependency2::singleton($config);
  * @param array
  * @return test_PEAR_Downloader_Package
  */
-function &newFakeDownloaderPackage($options)
+function newFakeDownloaderPackage($options)
 {
     global $config, $fakelog;
-    $downloader = &new test_PEAR_Downloader($fakelog, $options, $config);
-    $p = &new test_PEAR_Downloader_Package($downloader);
+    $downloader = new test_PEAR_Downloader($fakelog, $options, $config);
+    $p = new test_PEAR_Downloader_Package($downloader);
     return $p;
 }
 require_once 'PEAR/PackageFile/Parser/v1.php';
@@ -86,8 +86,8 @@ require_once 'PEAR/PackageFile/Parser/v2.php';
 require_once 'PEAR/PackageFile/v1.php';
 require_once 'PEAR/PackageFile/v2.php';
 require_once 'PEAR/Validate.php';
-$v1parser = &new PEAR_PackageFile_Parser_v1;
-$v2parser = &new PEAR_PackageFile_Parser_v2;
+$v1parser = new PEAR_PackageFile_Parser_v1;
+$v2parser = new PEAR_PackageFile_Parser_v2;
 $v1parser->setConfig($config);
 $v2parser->setConfig($config);
 $val = new PEAR_Validate;

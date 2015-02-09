@@ -11,14 +11,14 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 error_reporting(1803);
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 require_once 'PEAR/ChannelFile.php';
-$reg = &new PEAR_Registry($temp_path . DIRECTORY_SEPARATOR . 'php');
+$reg = new PEAR_Registry($temp_path . DIRECTORY_SEPARATOR . 'php');
 $ch = new PEAR_ChannelFile;
 $ch->setName('__uri');
 $ch->setServer('server');
 $ch->setSummary('sum');
 $ch->setDefaultPEARProtocols();
 $reg->addChannel($ch);
-$config = &new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'zoo.ini', $temp_path . DIRECTORY_SEPARATOR . 'zoo.ini');
+$config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'zoo.ini', $temp_path . DIRECTORY_SEPARATOR . 'zoo.ini');
 $phpunit->assertIsa('PEAR_Registry', $config->getRegistry(), 'initial blank');
 $phpunit->assertIsa('PEAR_Registry', $config->getRegistry('default'), 'initial default');
 $phpunit->assertFalse($config->getRegistry('user'), 'initial user');

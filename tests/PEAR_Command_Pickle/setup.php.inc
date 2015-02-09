@@ -97,32 +97,32 @@ function copyItem($name, $loc = false)
     closedir($dp);
 }
 
-$phpunit = &new PEAR_PHPTest(true);
+$phpunit = new PEAR_PHPTest(true);
 $fakelog = new fake_log;
-$config = &new test_PEAR_Config($temp_path . '/pear.ini', $temp_path . '/pear.conf');
+$config = new test_PEAR_Config($temp_path . '/pear.ini', $temp_path . '/pear.conf');
 require_once 'PEAR/Command/Pickle.php';
 class test_PEAR_Command_Pickle extends PEAR_Command_Pickle
 {
     function &getPackageFile(&$c, $d = false, $t = null)
     {
-        $a = &new test_PEAR_PackageFile($c, $d, $t);
+        $a = new test_PEAR_PackageFile($c, $d, $t);
         $a->setLogger($GLOBALS['fakelog']);
         return $a;
     }
 
     function &getInstaller()
     {
-        $a = &new test_PEAR_Installer($this->ui, array(), $this->config);
+        $a = new test_PEAR_Installer($this->ui, array(), $this->config);
         return $a;
     }
 
     function &getPackager()
     {
         require_once 'PEAR/Packager.php';
-        $a = &new PEAR_Packager;
+        $a = new PEAR_Packager;
         $a->ui = &$GLOBALS['fakelog'];
         return  $a;
     }
 }
-$command = &new test_PEAR_Command_Pickle($fakelog, $config);
+$command = new test_PEAR_Command_Pickle($fakelog, $config);
 ?>

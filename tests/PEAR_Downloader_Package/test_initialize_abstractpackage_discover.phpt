@@ -82,7 +82,7 @@ $pearweb->addRESTConfig("http://pear.foo.com/rest/r/test/deps.1.0.txt", serializ
     )
     ), 'text/plain');
 
-$dp = &newDownloaderPackage(array());
+$dp = newDownloaderPackage(array());
 $dp->_downloader->config->set('auto_discover', 1);
 
 $phpunit->assertNoErrors('after create');

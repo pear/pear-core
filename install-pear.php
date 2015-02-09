@@ -200,7 +200,7 @@ $options['upgrade'] = true;
 $install_root = getenv('INSTALL_ROOT');
 if (!empty($install_root)) {
     $options['packagingroot'] = $install_root;
-    $reg = &new PEAR_Registry($options['packagingroot']);
+    $reg = new PEAR_Registry($options['packagingroot']);
 } else {
     $reg = $config->getRegistry('default');
 }

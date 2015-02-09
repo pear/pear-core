@@ -19,7 +19,7 @@ $c3 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'cfg3.xml';
 $c4 = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'cfg4.xml';
-$dp = &new test_PEAR_Downloader($fakelog, array('register-only' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('register-only' => true), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($c1));
 $after = $dp->getDownloadedPackages();
@@ -178,7 +178,7 @@ $phpunit->assertEquals( array (
  )
 , $info['filelist'], 'filelist');
 
-$dp = &new test_PEAR_Downloader($fakelog, array('register-only' => true, 'upgrade' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('register-only' => true, 'upgrade' => true), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($c2));
 $after = $dp->getDownloadedPackages();

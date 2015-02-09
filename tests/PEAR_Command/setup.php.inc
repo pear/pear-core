@@ -68,7 +68,7 @@ if (!empty($home)) {
 require_once "PEAR/Downloader.php";
 require_once dirname(dirname(__FILE__)) . '/download_test_classes.php.inc';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'phpt_test.php.inc';
-$phpunit = &new PEAR_PHPTest(true);
+$phpunit = new PEAR_PHPTest(true);
 $config = &PEAR_Config::singleton($temp_path . '/pear.ini');
 test_PEAR_Dependency2::singleton($config);
 require_once 'PEAR/Command.php';

@@ -24,7 +24,7 @@ fwrite($fp, 'start');
 fclose($fp);
 
 
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
+$dp = new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($c1));
 $after = $dp->getDownloadedPackages();
@@ -172,7 +172,7 @@ $fp = fopen($temp_path . DIRECTORY_SEPARATOR . 'foo.php', 'wb');
 fwrite($fp, 'next');
 fclose($fp);
 
-$dp = &new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
 $result = $dp->download(array($c2));
 $after = $dp->getDownloadedPackages();
 

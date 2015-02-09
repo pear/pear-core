@@ -9,14 +9,14 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$dep = &new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_DOWNLOADING);
 $phpunit->assertNoErrors('create 1');
 
 require_once 'PEAR/Downloader/Package.php';
 require_once 'PEAR/Downloader.php';
 $down = new PEAR_Downloader($fakelog, array(), $config);
-$dp = &new PEAR_Downloader_Package($down);
+$dp = new PEAR_Downloader_Package($down);
 $dp->initialize(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR .
     'package.xml');
 $params = array(&$dp);

@@ -11,7 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'test_initialize_packagexml'. DIRECTORY_SEPARATOR . 'package.xml';
-$dp = &newDownloaderPackage(array('offline' => true));
+$dp = newDownloaderPackage(array('offline' => true));
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize($pathtopackagexml);
 $phpunit->assertTrue($result, 'after initialize');

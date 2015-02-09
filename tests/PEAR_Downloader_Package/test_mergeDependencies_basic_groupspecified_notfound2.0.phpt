@@ -160,7 +160,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/sub2/deps.1.1.txt",
 'a:1:{s:8:"required";a:3:{s:3:"php";a:2:{s:3:"min";s:5:"4.3.0";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}}}',
 'text/plain');
 
-$dp = &newDownloaderPackage(array());
+$dp = newDownloaderPackage(array());
 $result = $dp->initialize('main#foo');
 $phpunit->assertNoErrors('after create 1');
 

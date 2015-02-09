@@ -98,7 +98,7 @@ $e = $command->run('list', array('allchannels' => true), array());
 $phpunit->assertEquals($actual, $fakelog->getLog(), 'no packages installed');
 
 $reg = &$config->getRegistry();
-$pkg = &new PEAR_PackageFile($config);
+$pkg = new PEAR_PackageFile($config);
 $i = $pkg->fromPackageFile(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     DIRECTORY_SEPARATOR . 'packagefiles' . DIRECTORY_SEPARATOR . 'package2.xml',
     PEAR_VALIDATE_NORMAL);

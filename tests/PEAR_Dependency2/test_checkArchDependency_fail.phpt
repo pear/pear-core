@@ -11,7 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 
 // normal
-$dep = &new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('create 1');
 
@@ -22,12 +22,12 @@ $phpunit->assertErrors(array(
 ), 'foo');
 $phpunit->assertIsa('PEAR_Error', $result, 'foo');
 
-$dep = &new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('create 1');
 
 // nodeps
-$dep = &new test_PEAR_Dependency2($config, array('nodeps' => true),
+$dep = new test_PEAR_Dependency2($config, array('nodeps' => true),
     array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('create 2');
@@ -37,7 +37,7 @@ $phpunit->assertNoErrors('nodeps ');
 $phpunit->assertEquals(array('warning: pear/mine Architecture dependency failed, does not match "aix-*-i386"'), $result, 'nodeps');
 
 // force
-$dep = &new test_PEAR_Dependency2($config, array('force' => true),
+$dep = new test_PEAR_Dependency2($config, array('force' => true),
     array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_INSTALLING);
 $phpunit->assertNoErrors('create 2');

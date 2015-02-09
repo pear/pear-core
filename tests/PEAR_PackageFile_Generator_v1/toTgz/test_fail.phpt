@@ -17,7 +17,7 @@ $pf = new PEAR_PackageFile_v1;
 $pf->setConfig($config);
 
 $generator = &$pf->getDefaultGenerator();
-$packager = &new PEAR_Packager;
+$packager = new PEAR_Packager;
 $e = $generator->toTgz($packager, true, $temp_path);
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile_v1', 'message' => 'Missing Package Name'),

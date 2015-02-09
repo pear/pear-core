@@ -24,7 +24,7 @@ $mainpackage = dirname(__FILE__) . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'package-bug4285.xml';
 $requiredpackage = dirname(__FILE__) . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'Chiara_XML_RPC5-0.3.0.tgz';
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
+$dp = new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($mainpackage, $requiredpackage));
 $phpunit->assertEquals(array(), $result, 'result');

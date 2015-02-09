@@ -14,7 +14,7 @@ $pathtopackagexml = $packageDir . 'package2.xml';
 $pathtobarxml     = $packageDir . 'Bar-1.5.2.tgz';
 $pathtofoobarxml  = $packageDir . 'Foobar-1.5.0a1.tgz';
 
-$dp = &new PEAR_Downloader($fakelog, array(), $config);
+$dp = new PEAR_Downloader($fakelog, array(), $config);
 $result = &$dp->download(array($packageDir . 'simplebar.xml'));
 $installer->setOptions(array());
 $installer->sortPackagesForInstall($result);
@@ -229,7 +229,7 @@ $_test_dep->setPHPVersion('4.3.11');
 $_test_dep->setPEARVersion('1.4.0a1');
 
 $config->set('preferred_state', 'alpha');
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
+$dp = new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 
 $result = &$dp->download(array($pathtopackagexml));

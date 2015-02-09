@@ -47,7 +47,7 @@ class Net_FTP extends PEAR
     function &singleton()
     {
         if (!isset($GLOBALS['_TEST_FTP'])) {
-            $GLOBALS['_TEST_FTP'] = &new Net_FTP(false, false, false);
+            $GLOBALS['_TEST_FTP'] = new Net_FTP(false, false, false);
         }
         return $GLOBALS['_TEST_FTP'];
     }
@@ -181,7 +181,7 @@ class test_PEAR_RemoteInstaller extends PEAR_RemoteInstaller {
     {
         // trickiness: initialize here
         $this->PEAR_Downloader($this->ui, $options, $config);
-        $this->_remote = &new test_PEAR_Remote($config);
+        $this->_remote = new test_PEAR_Remote($config);
         $ret = PEAR_Downloader::download($packages);
         $errors = $this->getErrorMsgs();
         $installpackages = $this->getDownloadedPackages();
@@ -198,7 +198,7 @@ class test_PEAR_RemoteInstaller extends PEAR_RemoteInstaller {
      */
     function &getPackagefileObject(&$c, $d, $dir = null)
     {
-        $a = &new test_PEAR_PackageFile($c, $d, $dir);
+        $a = new test_PEAR_PackageFile($c, $d, $dir);
         return $a;
     }
     

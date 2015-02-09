@@ -23,7 +23,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $php5 = version_compare(phpversion(), '5.0.0', '>=');
 $windows = substr(PHP_OS, 0, 3) == 'WIN';
 
-$common = &new PEAR_Common;
+$common = new PEAR_Common;
 
 ob_start();
 PEAR_Common::downloadHttp('http://test.pear.php.net/testdownload.tgz', $ui, $statedir);

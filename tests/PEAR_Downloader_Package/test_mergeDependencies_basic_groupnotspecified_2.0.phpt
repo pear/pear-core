@@ -261,7 +261,7 @@ release notes
 
 */
 
-$dp = &newDownloaderPackage(array());
+$dp = newDownloaderPackage(array());
 $result = $dp->initialize('main');
 $phpunit->assertNoErrors('after create 1');
 

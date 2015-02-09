@@ -18,7 +18,7 @@ $csize = filesize($pathtochannelxml);
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.0.tgz', $pathtopackagexml);
 $GLOBALS['pearweb']->addHtmlConfig('http://pear.foo.com/channel.xml', $pathtochannelxml);
 
-$dp = &newDownloaderPackage(array());
+$dp = newDownloaderPackage(array());
 $phpunit->assertNoErrors('after create');
 $result = $dp->initialize('pear.foo.com/test');
 

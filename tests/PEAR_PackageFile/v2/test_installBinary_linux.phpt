@@ -167,7 +167,7 @@ $pf->setProvidesExtension('foo');
 
 $phpunit->assertNotFalse($pf->validate(), 'first pf');
 
-$dp = &newFakeDownloaderPackage(array());
+$dp = newFakeDownloaderPackage(array());
 $dp->setPackageFile($pf);
 $b = array(&$dp);
 $a->setDownloadedPackages($b);

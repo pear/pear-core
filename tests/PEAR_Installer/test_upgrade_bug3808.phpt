@@ -23,7 +23,7 @@ $phpunit->assertTrue($reg->addChannel($chan), 'channel setup');
 $p1 = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packages'. DIRECTORY_SEPARATOR . 'bug3808_1.xml';
 $p2 = dirname(__FILE__)  . DIRECTORY_SEPARATOR . 'packages'. DIRECTORY_SEPARATOR . 'bug3808_2.xml';
 
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
+$dp = new test_PEAR_Downloader($fakelog, array(), $config);
 $result = $dp->download(array($p1));
 $installer->setOptions(array());
 $installer->sortPackagesForInstall($result);
@@ -36,7 +36,7 @@ $fakelog->getDownload();
 
 $phpunit->assertFileExists($temp_path . DIRECTORY_SEPARATOR . 'php' . DIRECTORY_SEPARATOR . 'foo.php',
     'old installed file');
-$dp = &new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
+$dp = new test_PEAR_Downloader($fakelog, array('upgrade' => true), $config);
 $phpunit->assertNoErrors('after create');
 $result = $dp->download(array($p2));
 $phpunit->assertEquals(1, count($result), 'return');

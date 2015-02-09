@@ -14,7 +14,7 @@ $pf = new PEAR_PackageFile_v2;
 $pf->setConfig($config);
 chdir($temp_path);
 require_once 'PEAR/Packager.php';
-$packager = &new PEAR_Packager;
+$packager = new PEAR_Packager;
 
 $generator = &$pf->getDefaultGenerator();
 $pf1 = null;

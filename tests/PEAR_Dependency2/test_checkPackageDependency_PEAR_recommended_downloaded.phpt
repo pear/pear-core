@@ -73,11 +73,11 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/r/foo/1.10.xml",
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/foo/deps.1.10.txt", 'a:1:{s:8:"required";a:2:{s:3:"php";a:2:{s:3:"min";s:5:"4.2.0";s:3:"max";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0a1";}}}', 'text/plain');
 
 
-$dep = &new test_PEAR_Dependency2($config, array(),
+$dep = new test_PEAR_Dependency2($config, array(),
         array('channel' => 'pear.php.net', 'package' => 'mine'), PEAR_VALIDATE_DOWNLOADING);
 $phpunit->assertNoErrors('create 1');
 $down = new PEAR_Downloader($fakelog, array(), $config);
-$dp = &new PEAR_Downloader_Package($down);
+$dp = new PEAR_Downloader_Package($down);
 $dp->initialize($packageDir . 'package.xml');
 $params = array(&$dp);
 
@@ -115,7 +115,7 @@ $phpunit->assertNoErrors('recommended works');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'recommended works log');
 $phpunit->assertTrue($result, 'recommended works');
 
-$dp = &new PEAR_Downloader_Package($down);
+$dp = new PEAR_Downloader_Package($down);
 $dp->initialize($packageDir . 'compatpackage.xml');
 
 $parent = new PEAR_PackageFile_v1;
@@ -131,8 +131,8 @@ $parent->addFile('/', 'foo.php', array('role' => 'php'));
 $parent->addMaintainer('lead', 'cellog', 'Greg Beaver', 'cellog@php.net');
 $parent->setConfig($config);
 
-$dl = &new test_PEAR_Downloader($fakelog, array(), $config);
-$dp2 = &new test_PEAR_Downloader_Package($dl);
+$dl = new test_PEAR_Downloader($fakelog, array(), $config);
+$dp2 = new test_PEAR_Downloader_Package($dl);
 $dp2->setPackageFile($parent);
 $params = array(&$dp, &$dp2);
 
@@ -149,7 +149,7 @@ $phpunit->assertNoErrors('compatible local works');
 $phpunit->assertEquals(array(), $fakelog->getLog(), 'compatible local works log');
 $phpunit->assertTrue($result, 'compatible local works');
 
-$dp = &newFakeDownloaderPackage(array());
+$dp = newFakeDownloaderPackage(array());
 $dp->initialize('foo');
 $params = array(&$dp, &$dp2);
 $result = $dep->validatePackageDependency(

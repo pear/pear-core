@@ -236,7 +236,7 @@ $pearc = $reg->getChannel('pear.php.net');
 $pearc->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
 $pearc->setBaseURL('REST1.1', 'http://pear.php.net/rest/');
 $reg->updateChannel($pearc);
-$p = &new test_PEAR_PackageFile($config);
+$p = new test_PEAR_PackageFile($config);
 $pear = &$p->fromTgzFile($mainpackage, PEAR_VALIDATE_DOWNLOADING);
 $reg->addPackage2($pear);
 $pear = &$p->fromTgzFile($archive, PEAR_VALIDATE_DOWNLOADING);
@@ -245,7 +245,7 @@ $pear = &$p->fromTgzFile($console, PEAR_VALIDATE_DOWNLOADING);
 $reg->addPackage2($pear);
 $phpunit->assertTrue($reg->packageExists('PEAR'), 'pear is installed');
 
-$dp = &new test_PEAR_Downloader($fakelog, array(), $config);
+$dp = new test_PEAR_Downloader($fakelog, array(), $config);
 $phpunit->assertNoErrors('after create');
 $_test_dep->setPHPVersion('5.1.3');
 $_test_dep->setPEARVersion('1.4.8');

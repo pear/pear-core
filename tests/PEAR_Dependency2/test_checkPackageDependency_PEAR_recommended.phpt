@@ -10,7 +10,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 require_once 'PEAR/PackageFile/v1.php';
-$dep = &new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
+$dep = new test_PEAR_Dependency2($config, array(), array('channel' => 'pear.php.net',
     'package' => 'mine'), PEAR_VALIDATE_DOWNLOADING);
 $phpunit->assertNoErrors('create 1');
 $package = new PEAR_PackageFile_v2_rw;
@@ -101,8 +101,8 @@ $parent->setNotes('foo');
 $parent->addFile('/', 'foo.php', array('role' => 'php'));
 $parent->addMaintainer('lead', 'cellog', 'Greg Beaver', 'cellog@php.net');
 $parent->setConfig($config);
-$dl = &new test_PEAR_Downloader($fakelog, array(), $config);
-$dp = &new test_PEAR_Downloader_Package($dl);
+$dl = new test_PEAR_Downloader($fakelog, array(), $config);
+$dp = new test_PEAR_Downloader_Package($dl);
 $dp->setPackageFile($parent);
 
 $result = $dep->validatePackageDependency(

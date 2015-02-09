@@ -70,6 +70,6 @@ $files3_new = array(
 mkdir($statedir);
 touch($statedir . DIRECTORY_SEPARATOR . '.pearrc');
 touch($statedir . DIRECTORY_SEPARATOR . 'pear.ini');
-$reg = &new PEAR_Registry($statedir);
-$phpunit = &new PEAR_PHPTest(true);
+$reg = new PEAR_Registry($statedir);
+$phpunit = new PEAR_PHPTest(true);
 ?>

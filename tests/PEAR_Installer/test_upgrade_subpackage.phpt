@@ -40,9 +40,9 @@ $_test_dep->setPHPVersion('4.3.10');
 $_test_dep->setPEARVersion('1.4.0a1');
 $phpunit->assertNoErrors('setup');
 
-$dp1 = &new test_PEAR_Downloader_Package($installer);
+$dp1 = new test_PEAR_Downloader_Package($installer);
 $dp1->setPackageFile($package);
-$dp2 = &new test_PEAR_Downloader_Package($installer);
+$dp2 = new test_PEAR_Downloader_Package($installer);
 $dp2->setPackageFile($subpackage);
 $params = array(&$dp1, &$dp2);
 $installer->setOptions(array());

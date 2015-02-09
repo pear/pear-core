@@ -20,7 +20,7 @@ $pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR .
     DIRECTORY_SEPARATOR . 'bundle.xml');
 
 $generator = &$pf->getDefaultGenerator();
-$packager = &new PEAR_Packager;
+$packager = new PEAR_Packager;
 $null = null;
 mkdir($temp_path . DIRECTORY_SEPARATOR . 'gron');
 $e = $generator->toTgz2($packager, $null, true, $temp_path . DIRECTORY_SEPARATOR . 'gron');
@@ -41,7 +41,7 @@ $phpunit->assertEquals(array (
     1 => 'Analyzing bundled package fakebar-1.9.0.tgz',
   ),
 ), $fakelog->getLog(), 'packaging log');
-$pkg = &new PEAR_PackageFile($config);
+$pkg = new PEAR_PackageFile($config);
 $newpf = &$pkg->fromTgzFile($e, PEAR_VALIDATE_NORMAL);
 $phpunit->assertNoErrors('errors');
 $xml = $newpf->getFileContents('package.xml');
