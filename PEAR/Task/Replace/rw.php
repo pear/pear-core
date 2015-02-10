@@ -30,7 +30,7 @@ require_once 'PEAR/Task/Replace.php';
  */
 class PEAR_Task_Replace_rw extends PEAR_Task_Replace
 {
-    public function PEAR_Task_Replace_rw(&$pkg, &$config, &$logger, $fileXml)
+    public function __construct(&$pkg, &$config, &$logger, $fileXml)
     {
         parent::PEAR_Task_Common($config, $logger, PEAR_TASK_PACKAGE);
         $this->_contents = $fileXml;

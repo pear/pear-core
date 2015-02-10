@@ -88,7 +88,7 @@ class PEAR_Registry extends PEAR
     var $pkginfo_cache = array();
 
     /** Cache of file map.  Structure:
-     * array( '/path/to/file' => 'package', ... )
+     * array('/path/to/file' => 'package', ... )
      * @var array
      */
     var $filemap_cache = array();
@@ -131,10 +131,10 @@ class PEAR_Registry extends PEAR
      *
      * @access public
      */
-    function PEAR_Registry($pear_install_dir = PEAR_INSTALL_DIR, $pear_channel = false,
+    function __construct($pear_install_dir = PEAR_INSTALL_DIR, $pear_channel = false,
                            $pecl_channel = false)
     {
-        parent::PEAR();
+        parent::__construct();
         $this->setInstallDir($pear_install_dir);
         $this->_pearChannel = $pear_channel;
         $this->_peclChannel = $pecl_channel;
@@ -2186,7 +2186,7 @@ class PEAR_Registry extends PEAR
                 if ($components['scheme'] == 'http') {
                     // uri package
                     $param = array('uri' => $param, 'channel' => '__uri');
-                } elseif($components['scheme'] != 'channel') {
+                } elseif ($components['scheme'] != 'channel') {
                     return PEAR::raiseError('parsePackageName(): only channel:// uris may ' .
                         'be downloaded, not "' . $param . '"', 'invalid', null, null, $param);
                 }

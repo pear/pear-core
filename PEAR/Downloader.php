@@ -145,7 +145,7 @@ class PEAR_Downloader extends PEAR_Common
      * @param array
      * @param PEAR_Config
      */
-    function PEAR_Downloader(&$ui, $options, &$config)
+    function __construct(&$ui, $options, &$config)
     {
         parent::PEAR_Common();
         $this->_options = $options;
@@ -1118,7 +1118,7 @@ class PEAR_Downloader extends PEAR_Common
                 $bytes += $params;
                 break;
             case 'start':
-                if($params[1] == -1) {
+                if ($params[1] == -1) {
                     $length = "Unknown size";
                 } else {
                     $length = number_format($params[1], 0, '', ',')." bytes";

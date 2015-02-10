@@ -22,9 +22,9 @@ class PEAR_Start_CLI extends PEAR_Start
      */
     var $php_bin_sapi;
 
-    function PEAR_Start_CLI()
+    function __construct()
     {
-        parent::PEAR_Start();
+        parent::construct();
         ini_set('html_errors', 0);
         define('WIN32GUI', OS_WINDOWS && php_sapi_name() == 'cli' && System::which('cscript'));
         $this->tty = OS_WINDOWS ? @fopen('\con', 'r') : @fopen('/dev/tty', 'r');
@@ -139,7 +139,7 @@ Please, enter the php.exe path.
                 $var = $this->config[(int)$tmp];
                 $desc = $this->configPrompt[$var];
                 $current = $this->$var;
-                if (WIN32GUI && $var != 'pear_conf'){
+                if (WIN32GUI && $var != 'pear_conf') {
                     $tmp = $this->win32BrowseForFolder("Choose a Folder for $desc [$current] :");
                     $tmp.= '\\';
                 } else {
@@ -179,7 +179,7 @@ $desc [$current] : ";
             if (file_exists($tmp . DIRECTORY_SEPARATOR . 'php.exe')) {
                 $tmp = $tmp . DIRECTORY_SEPARATOR . 'php.exe';
                 $this->php_bin_sapi = $this->win32DetectPHPSAPI();
-                if ($this->php_bin_sapi=='cgi'){
+                if ($this->php_bin_sapi=='cgi') {
                     print "
 ******************************************************************************
 NOTICE! We found php.exe under $this->php_bin, it uses a $this->php_bin_sapi SAPI.
@@ -606,7 +606,7 @@ php.ini <$pathIni> include_path updated.
                 '"PHP_PEAR_TEST_DIR"="' . addslashes($this->test_dir) . '"' . $nl;
 
         $fh = fopen($this->prefix . DIRECTORY_SEPARATOR . 'PEAR_ENV.reg', 'wb');
-        if($fh){
+        if ($fh) {
             fwrite($fh, $reg, strlen($reg));
             fclose($fh);
             echo "

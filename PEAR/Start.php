@@ -73,9 +73,9 @@ class PEAR_Start extends PEAR
     var $tarball = array();
     var $ptmp;
 
-    function PEAR_Start()
+    function __construct()
     {
-        parent::PEAR();
+        parent::__construct();
         if (OS_WINDOWS) {
             $this->configPrompt['php_bin'] = 'Path to CLI php.exe';
             $this->config[] = 'php_bin';

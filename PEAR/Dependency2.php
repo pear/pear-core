@@ -82,7 +82,7 @@ class PEAR_Dependency2
      * @param array format of PEAR_Registry::parsedPackageName()
      * @param int installation state (one of PEAR_VALIDATE_*)
      */
-    function PEAR_Dependency2(&$config, $installoptions, $package,
+    function __construct(&$config, $installoptions, $package,
                               $state = PEAR_VALIDATE_INSTALLING)
     {
         $this->_config = &$config;
@@ -220,7 +220,7 @@ class PEAR_Dependency2
                             return $this->raiseError("Cannot install %s on any Unix system");
                         }
 
-                        return $this->warning( "warning: Cannot install %s on any Unix system");
+                        return $this->warning("warning: Cannot install %s on any Unix system");
                     }
                 } else {
                     if (!in_array($this->getSysname(), $unices)) {

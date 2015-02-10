@@ -74,7 +74,7 @@ password from your user configuration.',
      *
      * @access public
      */
-    function PEAR_Command_Auth(&$ui, &$config)
+    function __construct(&$ui, &$config)
     {
         parent::PEAR_Command_Channels($ui, $config);
     }

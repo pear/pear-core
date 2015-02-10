@@ -313,7 +313,7 @@ Run post-installation scripts in package <package>, if any exist.
      *
      * @access public
      */
-    function PEAR_Command_Install(&$ui, &$config)
+    function __construct(&$ui, &$config)
     {
         parent::PEAR_Command_Common($ui, $config);
     }
@@ -649,7 +649,7 @@ Run post-installation scripts in package <package>, if any exist.
         $packages = array_merge($abstractpackages, $otherpackages);
         if (!count($packages)) {
             $c = '';
-            if (isset($options['channel'])){
+            if (isset($options['channel'])) {
                 $c .= ' in channel "' . $options['channel'] . '"';
             }
             $this->ui->outputData('Nothing to ' . $command . $c);

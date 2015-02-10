@@ -83,7 +83,7 @@ class PEAR_RunTest
      * An object that supports the PEAR_Common->log() signature, or null
      * @param PEAR_Common|null
      */
-    function PEAR_RunTest($logger = null, $options = array())
+    function __construct($logger = null, $options = array())
     {
         if (!defined('E_DEPRECATED')) {
             define('E_DEPRECATED', 0);
@@ -316,7 +316,7 @@ class PEAR_RunTest
             if (strpos($section_text['INI'], '{PWD}') !== false) {
                 $section_text['INI'] = str_replace('{PWD}', dirname($file), $section_text['INI']);
             }
-            $ini = preg_split( "/[\n\r]+/", $section_text['INI']);
+            $ini = preg_split("/[\n\r]+/", $section_text['INI']);
             $ini_settings = $this->settings2array($ini, $ini_settings);
         }
         $ini_settings = $this->settings2params($ini_settings);

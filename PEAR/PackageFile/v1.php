@@ -336,7 +336,7 @@ class PEAR_PackageFile_v1
      *
      * - package name
      * - channel name
-     * - dependencies 
+     * - dependencies
      * @var boolean
      * @access private
      */
@@ -346,7 +346,7 @@ class PEAR_PackageFile_v1
      * @param bool determines whether to return a PEAR_Error object, or use the PEAR_ErrorStack
      * @param string Name of Error Stack class to use.
      */
-    function PEAR_PackageFile_v1()
+    function __construct()
     {
         $this->_stack = new PEAR_ErrorStack('PEAR_PackageFile_v1');
         $this->_stack->setErrorMessageTemplate($this->_getErrorMessage());
@@ -1200,14 +1200,14 @@ class PEAR_PackageFile_v1
                         array('file' => $file));
                 }
                 if (isset($fa['install-as']) &&
-                      preg_match('~/\.\.?(/|\\z)|^\.\.?/~', 
+                      preg_match('~/\.\.?(/|\\z)|^\.\.?/~',
                                  str_replace('\\', '/', $fa['install-as']))) {
                     // install-as contains .. parent directory or . cur directory references
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILENAME,
                         array('file' => $file . ' [installed as ' . $fa['install-as'] . ']'));
                 }
                 if (isset($fa['baseinstalldir']) &&
-                      preg_match('~/\.\.?(/|\\z)|^\.\.?/~', 
+                      preg_match('~/\.\.?(/|\\z)|^\.\.?/~',
                                  str_replace('\\', '/', $fa['baseinstalldir']))) {
                     // install-as contains .. parent directory or . cur directory references
                     $this->_validateError(PEAR_PACKAGEFILE_ERROR_INVALID_FILENAME,
@@ -1469,7 +1469,7 @@ class PEAR_PackageFile_v1
                     if (version_compare(zend_version(), '2.0', '<')) {
                         if (in_array(strtolower($data),
                             array('public', 'private', 'protected', 'abstract',
-                                  'interface', 'implements', 'throw') 
+                                  'interface', 'implements', 'throw')
                                  )) {
                             $this->_validateWarning(PEAR_PACKAGEFILE_ERROR_PHP5,
                                 array($file));

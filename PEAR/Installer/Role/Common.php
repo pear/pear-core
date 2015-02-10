@@ -39,7 +39,7 @@ class PEAR_Installer_Role_Common
     /**
      * @param PEAR_Config
      */
-    function PEAR_Installer_Role_Common(&$config)
+    function __construct(&$config)
     {
         $this->config = $config;
     }
@@ -72,7 +72,7 @@ class PEAR_Installer_Role_Common
      */
     function processInstallation($pkg, $atts, $file, $tmp_path, $layer = null)
     {
-        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . 
+        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' .
             ucfirst(str_replace('pear_installer_role_', '', strtolower(get_class($this)))));
         if (PEAR::isError($roleInfo)) {
             return $roleInfo;
@@ -108,7 +108,7 @@ class PEAR_Installer_Role_Common
 
         // Clean up the DIRECTORY_SEPARATOR mess
         $ds2 = DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR;
-        
+
         list($dest_dir, $dest_file, $orig_file) = preg_replace(array('!\\\\+!', '!/!', "!$ds2+!"),
                                                     array(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR,
                                                           DIRECTORY_SEPARATOR),
@@ -122,7 +122,7 @@ class PEAR_Installer_Role_Common
      */
     function getLocationConfig()
     {
-        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . 
+        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' .
             ucfirst(str_replace('pear_installer_role_', '', strtolower(get_class($this)))));
         if (PEAR::isError($roleInfo)) {
             return $roleInfo;
@@ -143,7 +143,7 @@ class PEAR_Installer_Role_Common
 
     function isExecutable()
     {
-        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . 
+        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' .
             ucfirst(str_replace('pear_installer_role_', '', strtolower(get_class($this)))));
         if (PEAR::isError($roleInfo)) {
             return $roleInfo;
@@ -153,7 +153,7 @@ class PEAR_Installer_Role_Common
 
     function isInstallable()
     {
-        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . 
+        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' .
             ucfirst(str_replace('pear_installer_role_', '', strtolower(get_class($this)))));
         if (PEAR::isError($roleInfo)) {
             return $roleInfo;
@@ -163,7 +163,7 @@ class PEAR_Installer_Role_Common
 
     function isExtension()
     {
-        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' . 
+        $roleInfo = PEAR_Installer_Role_Common::getInfo('PEAR_Installer_Role_' .
             ucfirst(str_replace('pear_installer_role_', '', strtolower(get_class($this)))));
         if (PEAR::isError($roleInfo)) {
             return $roleInfo;

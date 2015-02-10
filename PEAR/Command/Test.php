@@ -100,7 +100,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
      *
      * @access public
      */
-    function PEAR_Command_Test(&$ui, &$config)
+    function __construct(&$ui, &$config)
     {
         parent::PEAR_Command_Common($ui, $config);
     }
@@ -238,7 +238,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
         $run = new PEAR_RunTest($log, $options);
         $run->tests_count = $tests_count;
 
-        if (isset($options['coverage']) && extension_loaded('xdebug')){
+        if (isset($options['coverage']) && extension_loaded('xdebug')) {
             $run->xdebug_loaded = true;
         } else {
             $run->xdebug_loaded = false;
