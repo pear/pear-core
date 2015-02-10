@@ -8,7 +8,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
+
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 require_once 'PEAR/ChannelFile.php';
 $reg = new PEAR_Registry($temp_path . DIRECTORY_SEPARATOR . 'php');

@@ -422,6 +422,8 @@ class PEAR_PHPTest
                             print "]";
                         }
                         print ")";
+                    } else if (is_array($v)) {
+                        print " $k=\"Array\"";
                     } else {
                         print " $k=\"$v\"";
                     }

@@ -16,7 +16,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 
 include_once "PEAR.php";
 
-error_reporting(1803);
+
 
 print "mode=die: ";
 $err = new PEAR_Error("test error!!\n", -42, PEAR_ERROR_DIE);

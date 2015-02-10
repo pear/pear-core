@@ -8,7 +8,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
+
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $config = &PEAR_Config::singleton($temp_path . DIRECTORY_SEPARATOR . 'pear.ini');
 $config->set('php_dir', $temp_path . DIRECTORY_SEPARATOR . 'ok');

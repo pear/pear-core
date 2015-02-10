@@ -11,7 +11,6 @@ if (!extension_loaded('zlib')) {
 ?>
 --FILE--
 <?php
-error_reporting(1879);
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 
 $path = dirname(__FILE__)  . DIRECTORY_SEPARATOR;

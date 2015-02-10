@@ -17,7 +17,7 @@ if (PEAR_Registry::apiVersion() != '1.1') {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
+
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $phpunit->assertEquals(array('package' => 'hello', 'channel' => 'pear.php.net'),
  $reg->parsePackageName('hello'), 'hello');

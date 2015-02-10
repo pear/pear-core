@@ -8,7 +8,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
+
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $rest = new test_PEAR_REST($config);
 $rest->saveCache('http://www.example.com/hi', 'hi', array('hi', date('r')));

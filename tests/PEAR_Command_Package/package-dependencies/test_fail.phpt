@@ -8,7 +8,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
+
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 
 $e = $command->run('package-dependencies', array(), array($temp_path . DIRECTORY_SEPARATOR . 'invalid.xml'));

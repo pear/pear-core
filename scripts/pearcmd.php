@@ -460,26 +460,26 @@ function cmdHelp($command)
  */
 function error_handler($errno, $errmsg, $file, $line, $vars)
 {
-    if ((defined('E_STRICT')
-        && $errno & E_STRICT)
-        || (defined('E_DEPRECATED')
-        && $errno & E_DEPRECATED)
+    if ($errno & E_STRICT
+        || $errno & E_DEPRECATED
         || !error_reporting()
     ) {
-        if (defined('E_STRICT') && $errno & E_STRICT) {
+        if ($errno & E_STRICT) {
             return; // E_STRICT
         }
-        if (defined('E_DEPRECATED') && $errno & E_DEPRECATED) {
+        if ($errno & E_DEPRECATED) {
             return; // E_DEPRECATED
         }
-        if ($GLOBALS['config']->get('verbose') < 4) {
+        if (isset($GLOBALS['config']) && $GLOBALS['config']->get('verbose') < 4) {
             return false; // @silenced error, show all if debug is high enough
         }
     }
     $errortype = array (
+        E_DEPRECATED  => 'Deprecated Warning',
         E_ERROR   =>  "Error",
         E_WARNING   =>  "Warning",
         E_PARSE   =>  "Parsing Error",
+        E_STRICT  => 'Strict Warning',
         E_NOTICE   =>  "Notice",
         E_CORE_ERROR  =>  "Core Error",
         E_CORE_WARNING  =>  "Core Warning",

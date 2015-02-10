@@ -8,7 +8,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
+
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $downloader = new test_PEAR_Downloader($fakelog, array(), $config);
 $installer = new test_PEAR_Installer($fakelog);

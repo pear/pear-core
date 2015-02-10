@@ -11,7 +11,7 @@ if (strolower(substr(php_uname('s'), 0, 3)) == 'win') {
 ?>
 --FILE--
 <?php
-error_reporting(1803);
+
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $reg = &$config->getRegistry();
 $c = $reg->getChannel('pear.php.net');

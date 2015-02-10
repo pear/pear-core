@@ -16,7 +16,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 
 include_once "PEAR.php";
 
-error_reporting(1803);
+
 
 function errorhandler($eobj)
 {

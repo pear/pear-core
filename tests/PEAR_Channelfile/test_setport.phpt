@@ -9,7 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 
-error_reporting(1803);
+
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $phpt->assertTrue($chf->setPort(234), 'first time');
 $phpt->assertEquals(234, $chf->getPort(), 'first');
