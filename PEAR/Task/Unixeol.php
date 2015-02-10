@@ -4,14 +4,14 @@
  *
  * PHP versions 4 and 5
  *
- * @category   pear
- * @package    PEAR
- * @author     Greg Beaver <cellog@php.net>
- * @copyright  1997-2009 The Authors
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
- * @link       http://pear.php.net/package/PEAR
- * @since      File available since Release 1.4.0a1
+ * @category  pear
+ * @package   PEAR
+ * @author    Greg Beaver <cellog@php.net>
+ * @copyright 1997-2009 The Authors
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version   CVS: $Id$
+ * @link      http://pear.php.net/package/PEAR
+ * @since     File available since Release 1.4.0a1
  */
 /**
  * Base class
@@ -30,22 +30,24 @@ require_once 'PEAR/Task/Common.php';
  */
 class PEAR_Task_Unixeol extends PEAR_Task_Common
 {
-    var $type = 'simple';
-    var $phase = PEAR_TASK_PACKAGE;
-    var $_replacements;
+    public $type = 'simple';
+    public $phase = PEAR_TASK_PACKAGE;
+    public $_replacements;
 
     /**
      * Validate the raw xml at parsing-time.
-     * @param PEAR_PackageFile_v2
-     * @param array raw, parsed xml
-     * @param PEAR_Config
+     *
+     * @param  PEAR_PackageFile_v2
+     * @param  array raw, parsed xml
+     * @param  PEAR_Config
      * @static
      */
-    function validateXml($pkg, $xml, $config, $fileXml)
+    public function validateXml($pkg, $xml, $config, $fileXml)
     {
         if ($xml != '') {
             return array(PEAR_TASK_ERROR_INVALID, 'no attributes allowed');
         }
+
         return true;
     }
 
@@ -54,7 +56,7 @@ class PEAR_Task_Unixeol extends PEAR_Task_Common
      * @param array raw, parsed xml
      * @param unused
      */
-    function init($xml, $attribs)
+    public function init($xml, $attribs)
     {
     }
 
@@ -62,16 +64,17 @@ class PEAR_Task_Unixeol extends PEAR_Task_Common
      * Replace all line endings with line endings customized for the current OS
      *
      * See validateXml() source for the complete list of allowed fields
-     * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
-     * @param string file contents
-     * @param string the eventual final file location (informational only)
+     *
+     * @param  PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     * @param  string file contents
+     * @param  string the eventual final file location (informational only)
      * @return string|false|PEAR_Error false to skip this file, PEAR_Error to fail
-     *         (use $this->throwError), otherwise return the new contents
+     *                                 (use $this->throwError), otherwise return the new contents
      */
-    function startSession($pkg, $contents, $dest)
+    public function startSession($pkg, $contents, $dest)
     {
         $this->logger->log(3, "replacing all line endings with \\n in $dest");
+
         return preg_replace("/\r\n|\n\r|\r|\n/", "\n", $contents);
     }
 }
-?>
