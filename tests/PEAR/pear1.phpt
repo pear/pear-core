@@ -15,7 +15,7 @@ class TestPEAR extends PEAR {
     function __construct($name) {
         $this->_debug = true;
         $this->name = $name;
-        $this->PEAR();
+        parent::__construct();
     }
     function _TestPEAR() {
         print "This is the TestPEAR($this->name) destructor\n";
