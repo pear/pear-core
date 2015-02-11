@@ -87,6 +87,10 @@ If none is found, all .phpt tests will be tried instead.',
                     'shortopt' => 'x',
                     'doc'      => 'Generate a code coverage report (requires Xdebug 2.0.0+)',
                 ),
+                'showdiff' => array(
+                    'shortopt' => 'd',
+                    'doc' => 'Output diff on test failure',
+                ),
             ),
             'doc' => '[testfile|dir ...]
 Run regression tests with PHP\'s regression testing script (run-tests.php).',
