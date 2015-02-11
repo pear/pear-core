@@ -102,7 +102,7 @@ Run regression tests with PHP\'s regression testing script (run-tests.php).',
      */
     function __construct(&$ui, &$config)
     {
-        parent::PEAR_Command_Common($ui, $config);
+        parent::__construct($ui, $config);
     }
 
     function doRunTests($command, $options, $params)

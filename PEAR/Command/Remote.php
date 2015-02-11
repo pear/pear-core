@@ -157,7 +157,7 @@ parameter.
      */
     function __construct(&$ui, &$config)
     {
-        parent::PEAR_Command_Common($ui, $config);
+        parent::__construct($ui, $config);
     }
 
     function _checkChannelForStatus($channel, $chan)

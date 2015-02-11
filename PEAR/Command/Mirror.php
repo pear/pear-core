@@ -62,7 +62,7 @@ packages within preferred_state ({config preferred_state}) will be downloaded'
      */
     function __construct(&$ui, &$config)
     {
-        parent::PEAR_Command_Common($ui, $config);
+        parent::__construct($ui, $config);
     }
 
     /**
