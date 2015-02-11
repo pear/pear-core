@@ -12,7 +12,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once "PEAR.php";
 
 class TestPEAR extends PEAR {
-    function TestPEAR($name) {
+    function __construct($name) {
         $this->_debug = true;
         $this->name = $name;
         $this->PEAR();
@@ -39,7 +39,7 @@ class Other extends Pear {
     var $a = 'default value';
 
     function Other() {
-        $this->PEAR();
+        $this->__construct();
     }
 
     function _Other() {
