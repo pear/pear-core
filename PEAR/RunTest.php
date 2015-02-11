@@ -637,6 +637,11 @@ class PEAR_RunTest
         $expectf = isset($section_text['EXPECTF']) ? $wanted_re : null;
         $data = $this->generate_diff($wanted, $output, $returns, $expectf);
         $res  = $this->_writeLog($diff_filename, $data);
+        if (isset($this->_options['showdiff'])) {
+            $this->_logger->log(0, "========DIFF========");
+            $this->_logger->log(0, $data);
+            $this->_logger->log(0, "========DONE========");
+        }
         if (PEAR::isError($res)) {
             return $res;
         }
