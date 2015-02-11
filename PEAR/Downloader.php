@@ -147,7 +147,7 @@ class PEAR_Downloader extends PEAR_Common
      */
     function __construct(&$ui, $options, &$config)
     {
-        parent::PEAR_Common();
+        parent::__construct();
         $this->_options = $options;
         $this->config = &$config;
         $this->_preferredState = $this->config->get('preferred_state');
