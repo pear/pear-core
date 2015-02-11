@@ -9,7 +9,7 @@ skip
 include dirname(__FILE__)."/../PEAR/Autoloader.php";
 
 class test1 extends PEAR_Autoloader {
-    function test1() {
+    function __construct() {
 	$this->addAutoload(array(
 	    'testfunc1' => 'testclass1',
 	    'testfunca' => 'testclass1',

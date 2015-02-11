@@ -1,7 +1,7 @@
 <?php
 class PHP_Dump {
     var $_var;
-    function PHP_Dump($var)
+    function __construct($var)
     {
         $this->_var = $var;
     }
