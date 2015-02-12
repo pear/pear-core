@@ -118,7 +118,7 @@ class PEAR_Installer extends PEAR_Downloader
      */
     function __construct(&$ui)
     {
-        parent::__construct($ui);
+        parent::__construct($ui, array(), null);
         $this->setFrontendObject($ui);
         $this->debug = $this->config->get('verbose');
     }
