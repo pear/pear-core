@@ -77,9 +77,9 @@ class Archive_Tar extends PEAR
     *                   boolean value 'true' means 'gz'.
     * @access public
     */
-    function __construct($p_tarname, $p_compress = null)
+    function Archive_Tar($p_tarname, $p_compress = null)
     {
-        parent::construct();
+        $this->PEAR();
         $this->_compress = false;
         $this->_compress_type = 'none';
         if ($p_compress === null) {
@@ -369,7 +369,7 @@ class Archive_Tar extends PEAR
             }
             $this->_close();
         }
-
+        
         if (!$this->_openAppend())
             return false;
 
@@ -504,12 +504,12 @@ class Archive_Tar extends PEAR
     function setAttribute()
     {
         $v_result = true;
-
+        
         // ----- Get the number of variable list of arguments
         if (($v_size = func_num_args()) == 0) {
             return true;
         }
-
+        
         // ----- Get the arguments
         $v_att_list = &func_get_args();
 
@@ -736,7 +736,7 @@ class Archive_Tar extends PEAR
       if (is_resource($this->_file)) {
           if ($p_len === null)
               $p_len = 512;
-
+              
           if ($this->_compress_type == 'gz')
               $v_block = @gzread($this->_file, 512);
           else if ($this->_compress_type == 'bz2')
@@ -1474,7 +1474,7 @@ class Archive_Tar extends PEAR
     {
         if (filesize($this->_tarname) == 0)
           return $this->_openWrite();
-
+          
         if ($this->_compress) {
             $this->_close();
 
@@ -1487,7 +1487,7 @@ class Archive_Tar extends PEAR
                 $v_temp_tar = @gzopen($this->_tarname.".tmp", "rb");
             elseif ($this->_compress_type == 'bz2')
                 $v_temp_tar = @bzopen($this->_tarname.".tmp", "rb");
-
+                
             if ($v_temp_tar == 0) {
                 $this->_error('Unable to open file \''.$this->_tarname.'.tmp\' in binary read mode');
                 @rename($this->_tarname.".tmp", $this->_tarname);
@@ -1550,7 +1550,7 @@ class Archive_Tar extends PEAR
     {
         if (!$this->_openAppend())
             return false;
-
+            
         if ($this->_addList($p_filelist, $p_add_dir, $p_remove_dir))
            $this->_writeFooter();
 
