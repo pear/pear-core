@@ -38,10 +38,6 @@ class Other extends Pear {
 
     var $a = 'default value';
 
-    function __construct() {
-        $this->__construct();
-    }
-
     function _Other() {
         // $a was modified but here misteriously returns to be
         // the original value. That makes the destructor useless
