@@ -38,7 +38,7 @@ class Other extends Pear {
 
     var $a = 'default value';
 
-    function Other() {
+    function __construct() {
         $this->__construct();
     }
 
