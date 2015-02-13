@@ -33,7 +33,7 @@ class PEAR_Task_Windowseol_rw extends PEAR_Task_Windowseol
 {
     public function __construct(&$pkg, &$config, &$logger, $fileXml)
     {
-        parent::PEAR_Task_Common($config, $logger, PEAR_TASK_PACKAGE);
+        parent::__construct($config, $logger, PEAR_TASK_PACKAGE);
         $this->_contents = $fileXml;
         $this->_pkg = &$pkg;
         $this->_params = array();
