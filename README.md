@@ -1,7 +1,8 @@
 PEAR - The PEAR Installer
 =========================
 
-What is the PEAR Installer?  What is PEAR?
+What is the PEAR Installer? What is PEAR?
+------------------------------------------
 
 PEAR is the PHP Extension and Application Repository, found at
 http://pear.php.net.  The PEAR Installer is this software, which
@@ -15,26 +16,28 @@ PhpDocumentor (auto-documentation generator), DB_DataObject
 available packages at http://pear.php.net, the list is constantly
 growing and updating to reflect improvements in the PHP language.
 
-DOCUMENTATION
-=============
+**WARNING: do not run PEAR without installing it** - if you downloaded this
+tarball manually, you MUST install it.  Read the instructions in INSTALL
+prior to use.
+
+
+Documentation
+-------------
 
 Documentation for PEAR can be found at http://pear.php.net/manual/.
 Installation documentation can be found in the INSTALL file included
 in this tarball.
 
-WARNING: DO NOT RUN PEAR WITHOUT INSTALLING IT - if you downloaded this
-tarball manually, you MUST install it.  Read the instructions in INSTALL
-prior to use.
-
-
-Happy PHPing, we hope PEAR will be a great tool for your development work!
-
 
 Tests
-=====
+-----
 
 Run the tests without installation as follows:
 
-  $ ./scripts/pear.sh run-tests -r tests
+```sh
+$ ./scripts/pear.sh run-tests -r tests
+```
 
 You should have the Text_Diff package installed to get nicer error output.
+
+Happy PHPing, we hope PEAR will be a great tool for your development work!
