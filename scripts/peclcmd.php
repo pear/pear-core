@@ -12,7 +12,6 @@
  * @author     Tomas V.V.Cox <cox@idecnet.com>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
  * @link       http://pear.php.net/package/PEAR
  */
 

@@ -15,7 +15,6 @@
 // | Authors: Greg Beaver <cellog@php.net>                                |
 // +----------------------------------------------------------------------+
 //
-// $Id$
 require_once 'PEAR/Exception.php';
 
 /**

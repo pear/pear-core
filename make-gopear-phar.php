@@ -21,7 +21,6 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2005-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
  */
 error_reporting(error_reporting() & ~E_STRICT & ~E_DEPRECATED);
 

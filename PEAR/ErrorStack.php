@@ -23,7 +23,6 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2004-2008 Greg Beaver
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
  * @link       http://pear.php.net/package/PEAR_ErrorStack
  */
 
@@ -137,7 +136,6 @@ define('PEAR_ERRORSTACK_ERR_OBJTOSTRING', 2);
  * @category   Debugging
  * @copyright  2004-2008 Greg Beaver
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
  * @link       http://pear.php.net/package/PEAR_ErrorStack
  */
 class PEAR_ErrorStack {
