@@ -131,10 +131,10 @@ class PEAR_Registry extends PEAR
      *
      * @access public
      */
-    function PEAR_Registry($pear_install_dir = PEAR_INSTALL_DIR, $pear_channel = false,
+    function __construct($pear_install_dir = PEAR_INSTALL_DIR, $pear_channel = false,
                            $pecl_channel = false)
     {
-        parent::PEAR();
+        parent::__construct();
         $this->setInstallDir($pear_install_dir);
         $this->_pearChannel = $pear_channel;
         $this->_peclChannel = $pecl_channel;

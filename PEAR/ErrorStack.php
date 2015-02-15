@@ -194,43 +194,43 @@ class PEAR_ErrorStack {
      * @access protected
      */
     var $_contextCallback = false;
-    
+
     /**
      * If set to a valid callback, this will be called every time an error
      * is pushed onto the stack.  The return value will be used to determine
      * whether to allow an error to be pushed or logged.
-     * 
+     *
      * The return value must be one an PEAR_ERRORSTACK_* constant
      * @see PEAR_ERRORSTACK_PUSHANDLOG, PEAR_ERRORSTACK_PUSH, PEAR_ERRORSTACK_LOG
      * @var false|string|array
      * @access protected
      */
     var $_errorCallback = array();
-    
+
     /**
      * PEAR::Log object for logging errors
      * @var false|Log
      * @access protected
      */
     var $_logger = false;
-    
+
     /**
      * Error messages - designed to be overridden
      * @var array
      * @abstract
      */
     var $_errorMsgs = array();
-    
+
     /**
      * Set up a new error stack
-     * 
+     *
      * @param string   $package name of the package this error stack represents
      * @param callback $msgCallback callback used for error message generation
      * @param callback $contextCallback callback used for context generation,
      *                 defaults to {@link getFileLine()}
      * @param boolean  $throwPEAR_Error
      */
-    function PEAR_ErrorStack($package, $msgCallback = false, $contextCallback = false,
+    function __construct($package, $msgCallback = false, $contextCallback = false,
                          $throwPEAR_Error = false)
     {
         $this->_package = $package;

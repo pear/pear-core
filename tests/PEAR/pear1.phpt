@@ -12,10 +12,10 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once "PEAR.php";
 
 class TestPEAR extends PEAR {
-    function TestPEAR($name) {
+    function __construct($name) {
         $this->_debug = true;
         $this->name = $name;
-        $this->PEAR();
+        parent::__construct();
     }
     function _TestPEAR() {
         print "This is the TestPEAR($this->name) destructor\n";
@@ -37,10 +37,6 @@ class Test3 extends Test2 {
 class Other extends Pear {
 
     var $a = 'default value';
-
-    function Other() {
-        $this->PEAR();
-    }
 
     function _Other() {
         // $a was modified but here misteriously returns to be

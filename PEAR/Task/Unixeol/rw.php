@@ -30,9 +30,9 @@ require_once 'PEAR/Task/Unixeol.php';
  */
 class PEAR_Task_Unixeol_rw extends PEAR_Task_Unixeol
 {
-    public function PEAR_Task_Unixeol_rw(&$pkg, &$config, &$logger, $fileXml)
+    function __construct(&$pkg, &$config, &$logger, $fileXml)
     {
-        parent::PEAR_Task_Common($config, $logger, PEAR_TASK_PACKAGE);
+        parent::__construct($config, $logger, PEAR_TASK_PACKAGE);
         $this->_contents = $fileXml;
         $this->_pkg = &$pkg;
         $this->_params = array();
@@ -53,3 +53,4 @@ class PEAR_Task_Unixeol_rw extends PEAR_Task_Unixeol
         return '';
     }
 }
+?>

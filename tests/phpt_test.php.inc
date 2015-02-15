@@ -12,7 +12,7 @@ class PEAR_PHPTest
 {
     var $_diffonly;
     var $_errors;
-    function PEAR_PHPTest($diffonly = false, $noStackCatch = false)
+    function __construct($diffonly = false, $noStackCatch = false)
     {
         $this->_diffonly = $diffonly;
         $this->_errors = array();
