@@ -948,7 +948,7 @@ class PEAR_Installer extends PEAR_Downloader
                         $this->_dirtree[dirname($data[1])] = true;
                         $this->pkginfo->setDirtree(dirname($data[1]));
 
-                        while (!empty($data[3]) && dirname($data[3]) != $data[3] &&
+                        while(!empty($data[3]) && dirname($data[3]) != $data[3] &&
                                 $data[3] != '/' && $data[3] != '\\') {
                             $this->pkginfo->setDirtree($pp =
                                 $this->_prependPath($data[3], $data[2]));

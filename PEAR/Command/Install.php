@@ -649,7 +649,7 @@ Run post-installation scripts in package <package>, if any exist.
         $packages = array_merge($abstractpackages, $otherpackages);
         if (!count($packages)) {
             $c = '';
-            if (isset($options['channel'])) {
+            if (isset($options['channel'])){
                 $c .= ' in channel "' . $options['channel'] . '"';
             }
             $this->ui->outputData('Nothing to ' . $command . $c);

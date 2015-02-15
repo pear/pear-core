@@ -1122,7 +1122,7 @@ class PEAR_Downloader extends PEAR_Common
                 $bytes += $params;
                 break;
             case 'start':
-                if ($params[1] == -1) {
+                if($params[1] == -1) {
                     $length = "Unknown size";
                 } else {
                     $length = number_format($params[1], 0, '', ',')." bytes";

@@ -316,7 +316,7 @@ class PEAR_RunTest
             if (strpos($section_text['INI'], '{PWD}') !== false) {
                 $section_text['INI'] = str_replace('{PWD}', dirname($file), $section_text['INI']);
             }
-            $ini = preg_split("/[\n\r]+/", $section_text['INI']);
+            $ini = preg_split( "/[\n\r]+/", $section_text['INI']);
             $ini_settings = $this->settings2array($ini, $ini_settings);
         }
         $ini_settings = $this->settings2params($ini_settings);

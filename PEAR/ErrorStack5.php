@@ -540,7 +540,7 @@ class PEAR_ErrorStack {
             }
         }
         if (is_callable($callback)) {
-            switch(call_user_func($callback, $err)) {
+            switch(call_user_func($callback, $err)){
             	case PEAR_ERRORSTACK_IGNORE:
             		return $err;
         		break;

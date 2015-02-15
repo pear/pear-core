@@ -220,7 +220,7 @@ class PEAR_Dependency2
                             return $this->raiseError("Cannot install %s on any Unix system");
                         }
 
-                        return $this->warning("warning: Cannot install %s on any Unix system");
+                        return $this->warning( "warning: Cannot install %s on any Unix system");
                     }
                 } else {
                     if (!in_array($this->getSysname(), $unices)) {

@@ -230,7 +230,7 @@ class PEAR_Builder extends PEAR_Common
      *
      * @return array an array of associative arrays with built files,
      * format:
-     * array(array('file' => '/path/to/ext.so',
+     * array( array( 'file' => '/path/to/ext.so',
      *               'php_api' => YYYYMMDD,
      *               'zend_mod_api' => YYYYMMDD,
      *               'zend_ext_api' => YYYYMMDD ),
