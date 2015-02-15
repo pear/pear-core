@@ -4,14 +4,14 @@
  *
  * PHP versions 4 and 5
  *
- * @category  pear
- * @package   PEAR
- * @author    Greg Beaver <cellog@php.net>
- * @copyright 1997-2009 The Authors
- * @license   http://opensource.org/licenses/bsd-license.php New BSD License
- * @version   CVS: $Id$
- * @link      http://pear.php.net/package/PEAR
- * @since     File available since Release 1.4.0a10
+ * @category   pear
+ * @package    PEAR
+ * @author     Greg Beaver <cellog@php.net>
+ * @copyright  1997-2009 The Authors
+ * @license    http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version    CVS: $Id$
+ * @link       http://pear.php.net/package/PEAR
+ * @since      File available since Release 1.4.0a10
  */
 /**
  * Base class
@@ -30,26 +30,27 @@ require_once 'PEAR/Task/Unixeol.php';
  */
 class PEAR_Task_Unixeol_rw extends PEAR_Task_Unixeol
 {
-    public function PEAR_Task_Unixeol_rw(&$pkg, &$config, &$logger, $fileXml)
+    function __construct(&$pkg, &$config, &$logger, $fileXml)
     {
-        parent::PEAR_Task_Common($config, $logger, PEAR_TASK_PACKAGE);
+        parent::__construct($config, $logger, PEAR_TASK_PACKAGE);
         $this->_contents = $fileXml;
         $this->_pkg = &$pkg;
         $this->_params = array();
     }
 
-    public function validate()
+    function validate()
     {
         return true;
     }
 
-    public function getName()
+    function getName()
     {
         return 'unixeol';
     }
 
-    public function getXml()
+    function getXml()
     {
         return '';
     }
 }
+?>

@@ -56,17 +56,17 @@ set_error_handler("test_error_handler");
 
 class Foo_Error extends PEAR_Error
 {
-    function Foo_Error($message = "unknown error", $code = null,
+    function __construct($message = "unknown error", $code = null,
                        $mode = null, $options = null, $userinfo = null)
     {
-        $this->PEAR_Error($message, $code, $mode, $options, $userinfo);
+        parent::__construct($message, $code, $mode, $options, $userinfo);
         $this->error_message_prefix = 'Foo_Error prefix';
     }
 }
 
 class Test1 extends PEAR {
-    function Test1() {
-        $this->PEAR("Foo_Error");
+    function __construct() {
+        parent::__construct("Foo_Error");
     }
     function runtest() {
         return $this->raiseError("test error");

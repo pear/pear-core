@@ -142,13 +142,13 @@ define('DB_TABLE_DATABASE_ERR_NO_COL_TBL', -224);
 define('DB_TABLE_DATABASE_ERR_SQL_UNDEF', -225);
 
 /**
- * Error in a buildSQL or select* method for a key of $this->sql that is 
+ * Error in a buildSQL or select* method for a key of $this->sql that is
  * not a string
  */
 define('DB_TABLE_DATABASE_ERR_SQL_NOT_STRING', -226);
 
 /**
- * Error in buildFilter due to invalid match type 
+ * Error in buildFilter due to invalid match type
  */
 define('DB_TABLE_DATABASE_ERR_MATCH_TYPE', -227);
 
@@ -203,7 +203,7 @@ define('DB_TABLE_DATABASE_ERR_COL_NOT_UNIQUE', -236);
 define('DB_TABLE_DATABASE_ERR_AMBIG_JOIN', -237);
 
 /**
- * Error in autoJoin for failed construction of join 
+ * Error in autoJoin for failed construction of join
  */
 define('DB_TABLE_DATABASE_ERR_FAIL_JOIN', -238);
 
@@ -234,11 +234,11 @@ require_once 'DB/Table.php';
  */
 require_once 'PEAR.php';
 
-/** 
+/**
  * US-English default error messages. If you want to internationalize, you can
- * set the translated messages via $GLOBALS['_DB_TABLE_DATABASE']['error']. 
+ * set the translated messages via $GLOBALS['_DB_TABLE_DATABASE']['error'].
  * You can also use DB_Table_Database::setErrorMessage(). Examples:
- * 
+ *
  * <code>
  * (1) $GLOBALS['_DB_TABLE_DATABASE']['error'] = array(
  *                                           DB_TABLE_DATABASE_ERR_.. => '...',
@@ -255,7 +255,7 @@ require_once 'PEAR.php';
  *     $obj->setErrorMessage(array(DB_TABLE_DATABASE_ERR_.. => '...');
  *                                 DB_TABLE_DATABASE_ERR_.. => '...');
  * </code>
- * 
+ *
  * For errors that can occur with-in the constructor call (i.e. e.g. creating
  * or altering the database table), only the code from examples (1) to (3)
  * will alter the default error messages early enough. For errors that can
@@ -359,7 +359,7 @@ foreach ($GLOBALS['_DB_TABLE_DATABASE']['default_error'] as $code => $message) {
  *
  * DB_Table_Database is an abstraction class for a relational database.
  * It is a layer built on top of DB_Table, in which each table in a
- * database is represented as an instance of DB_Table. It provides: 
+ * database is represented as an instance of DB_Table. It provides:
  *
  *   - an object-oriented representation of the database schema
  *   - automated construction of SQL commands for simple joins
@@ -367,8 +367,8 @@ foreach ($GLOBALS['_DB_TABLE_DATABASE']['default_error'] as $code => $message) {
  *     to that of DB_Table, with optional emulation of standard SQL
  *     foreign key integrity checks and referential triggered actions
  *     such as cascading deletes.
- *   - Serialization and unserialization of the database schema via 
- *     either php serialization or XML, using the MDB2 XML schema. 
+ *   - Serialization and unserialization of the database schema via
+ *     either php serialization or XML, using the MDB2 XML schema.
  *
  * @category Database
  * @package  DB_Table
@@ -403,8 +403,8 @@ class DB_Table_Database extends DB_Table_Base
     /**
      * Array in which keys are table names, values are DB_Table subclass names.
      *
-     * See the getTableSubclass() method docblock for further details. 
-     * 
+     * See the getTableSubclass() method docblock for further details.
+     *
      * @var    array
      * @access private
      */
@@ -413,8 +413,8 @@ class DB_Table_Database extends DB_Table_Base
     /**
      * Path to directory containing DB_Table subclass declaration files
      *
-     * See the setTableSubclassPath() method docblock for further details. 
-     * 
+     * See the setTableSubclassPath() method docblock for further details.
+     *
      * @var    string
      * @access private
      */
@@ -424,9 +424,9 @@ class DB_Table_Database extends DB_Table_Base
      * Array in which keys are table names, values are primary keys.
      *
      * Each primary key value may be a column name string, a sequential array of
-     * column name strings, or null. 
+     * column name strings, or null.
      *
-     * See the getPrimaryKey() method docblock for details. 
+     * See the getPrimaryKey() method docblock for details.
      *
      * @var    array
      * @access private
@@ -437,8 +437,8 @@ class DB_Table_Database extends DB_Table_Base
      * Associative array that maps column names keys to table names.
      *
      * Each key is the name string of a column in the database. Each value
-     * is a numerical array containing the names of all tables that contain 
-     * a column with that name. 
+     * is a numerical array containing the names of all tables that contain
+     * a column with that name.
      *
      * See the getCol() method docblock for details.
      *
@@ -451,10 +451,10 @@ class DB_Table_Database extends DB_Table_Base
      * Associative array that maps names of foreign key columns to table names
      *
      * Each key is the name string of a foreign key column. Each value is a
-     * sequential array containing the names of all tables that contain a 
-     * foreign key column with that name. 
+     * sequential array containing the names of all tables that contain a
+     * foreign key column with that name.
      *
-     * See the getForeignCol() method docblock for further details. 
+     * See the getForeignCol() method docblock for further details.
      *
      * @var    array
      * @access private
@@ -462,14 +462,14 @@ class DB_Table_Database extends DB_Table_Base
     var $_foreign_col = array();
 
     /**
-     * Two-dimensional associative array of foreign key references. 
+     * Two-dimensional associative array of foreign key references.
      *
      * Keys are pairs of table names (referencing table first, referenced
-     * table second). Each value is an array containing information about 
-     * the referencing and referenced keys, and about any referentially 
-     * triggered actions (e.g., cascading delete). 
+     * table second). Each value is an array containing information about
+     * the referencing and referenced keys, and about any referentially
+     * triggered actions (e.g., cascading delete).
      *
-     * See the getRef() docblock for further details. 
+     * See the getRef() docblock for further details.
      *
      * @var    array
      * @access private
@@ -477,29 +477,29 @@ class DB_Table_Database extends DB_Table_Base
     var $_ref = array();
 
     /**
-     * Array in which each key is the names of a referenced tables, each value 
+     * Array in which each key is the names of a referenced tables, each value
      * an sequential array containing names of referencing tables.
      *
-     * See the docblock for the getRefTo() method for further discussion. 
-     * 
+     * See the docblock for the getRefTo() method for further discussion.
+     *
      * @var    array
      * @access private
      */
     var $_ref_to = array();
 
     /**
-     * Two-dimensional associative array of linking tables. 
+     * Two-dimensional associative array of linking tables.
      *
      * Two-dimensional associative array in which pairs of keys are names
-     * of pairs of tables that are linked by one or more linking/association 
+     * of pairs of tables that are linked by one or more linking/association
      * table. Each value is an array containing the names of all table that
-     * link the tables specified by the pair of keys. A linking table is a 
+     * link the tables specified by the pair of keys. A linking table is a
      * table that creates a many-to-many relationship between two linked
      * tables, via foreign key references from the linking table to the two
-     * linked tables. The $_link property is used by the autoJoin() method 
-     * to join tables that are related only through such a linking table. 
-     * 
-     * See the getLink() method docblock for further details. 
+     * linked tables. The $_link property is used by the autoJoin() method
+     * to join tables that are related only through such a linking table.
+     *
+     * See the getLink() method docblock for further details.
      *
      * @var    array
      * @access private
@@ -508,25 +508,25 @@ class DB_Table_Database extends DB_Table_Base
 
     /**
      * If the column keys in associative array return sets are fixed case
-     * (all upper or lower case) this property should be set true. 
+     * (all upper or lower case) this property should be set true.
      *
-     * The column keys in rows of associative array return sets may either 
+     * The column keys in rows of associative array return sets may either
      * preserve capitalization of the column names or they may be fixed case,
      * depending on the options set in the backend (DB/MDB2) and on phptype.
-     * If these column names are returned with a fixed case (either upper 
+     * If these column names are returned with a fixed case (either upper
      * or lower), $fix_case must be set true in order for php emulation of
      * ON DELETE and ON UPDATE actions to work correctly. Otherwise, the
      * $fix_case property should be false (the default).
      *
      * The choice between mixed or fixed case column keys may be made by using
      * using the setFixCase() method, which resets both the behavior of the
-     * backend and the $fix_case property. It may also be changed by using the 
-     * setOption() method of the DB or MDB2 backend object to directly set the 
-     * DB_PORTABILITY_LOWERCASE or MDB2_PORTABILITY_FIX_CASE bits of the 
+     * backend and the $fix_case property. It may also be changed by using the
+     * setOption() method of the DB or MDB2 backend object to directly set the
+     * DB_PORTABILITY_LOWERCASE or MDB2_PORTABILITY_FIX_CASE bits of the
      * DB/MDB2 'portability' option.
      *
-     * By default, DB returns mixed case and MDB2 returns lower case. 
-     * 
+     * By default, DB returns mixed case and MDB2 returns lower case.
+     *
      * @see DB_Table_Database::setFixCase()
      * @see DB::setOption()
      * @see MDB2::setOption()
@@ -575,14 +575,14 @@ class DB_Table_Database extends DB_Table_Base
      * If an error is encountered during instantiation, the error
      * message is stored in the $this->error property of the resulting
      * object. See $error property docblock for a discussion of error
-     * handling. 
-     * 
+     * handling.
+     *
      * @param  object &$db   DB/MDB2 database connection object
      * @param  string $name the database name
      * @return object DB_Table_Database
      * @access public
      */
-    function DB_Table_Database(&$db, $name)
+    function __construct(&$db, $name)
     {
         // Is $db an DB/MDB2 object or null?
         if (is_a($db, 'db_common')) {
@@ -659,7 +659,7 @@ class DB_Table_Database extends DB_Table_Base
             $this->_act_on_delete = false;
         }
     }
-    
+
     /**
      * Turns on (or off) automatic php emulation of on update actions
      *
@@ -675,7 +675,7 @@ class DB_Table_Database extends DB_Table_Base
             $this->_act_on_update = false;
         }
     }
-    
+
     /**
      * Turns on (or off) validation of foreign key values on insert and update
      *
@@ -695,10 +695,10 @@ class DB_Table_Database extends DB_Table_Base
     /**
      * Sets backend option such that column keys in associative array return
      * sets are converted to fixed case, if true, or mixed case, if false.
-     * 
+     *
      * Sets the DB/MDB2 'portability' option, and sets $this->fix_case = $flag.
      */
-    function setFixCase($flag = false) 
+    function setFixCase($flag = false)
     {
         $flag = (bool) $flag;
         $option = $this->db->getOption('portability');
@@ -712,18 +712,18 @@ class DB_Table_Database extends DB_Table_Base
             if (!$flag) {
                 $option = $option ^ MDB2_PORTABILITY_FIX_CASE;
             }
-        } 
+        }
         $this->db->setOption('portability', $option);
         $this->fix_case = $flag;
     }
-    
+
     /**
      * Return reference to $this->db DB/MDB2 object
      *
      * @return object reference to DB/MDB2 object
      * @access public
      */
-    function &getDBInstance() 
+    function &getDBInstance()
     {
         return $this->db;
     }
@@ -737,17 +737,17 @@ class DB_Table_Database extends DB_Table_Base
      *
      * Returns PEAR_Error with the following DB_TABLE_DATABASE_ERR* codes
      * if:
-     *    - $name is not a string ( _TBL_NOT_STRING )
-     *    - $name is not valid table name ( _NO_TBL )
-     * 
+     *    - $name is not a string (_TBL_NOT_STRING )
+     *    - $name is not valid table name (_NO_TBL )
+     *
      * The $_table property is an associative array in which keys are table
-     * name strings and values are references to DB_Table objects. Each of 
+     * name strings and values are references to DB_Table objects. Each of
      * the referenced objects represents one table in the database.
      *
      * @return mixed $_table property, one element of $_table, or Error
      * @access public
      */
-    function getTable($name = null) 
+    function getTable($name = null)
     {
         if (is_null($name)) {
             return $this->_table;
@@ -774,19 +774,19 @@ class DB_Table_Database extends DB_Table_Base
      *
      * Returns PEAR_Error with the following DB_TABLE_DATABASE_* error
      * codes if:
-     *    - $name is not a string ( _TBL_NOT_STRING )
-     *    - $name is not valid table name ( _NO_TBL )
-     * 
+     *    - $name is not a string (_TBL_NOT_STRING )
+     *    - $name is not valid table name (_NO_TBL )
+     *
      * The $_primary_key property is an associative array in which each key
      * a table name, and each value is the primary key of that table. Each
-     * primary key value may be a column name string, a sequential array of 
+     * primary key value may be a column name string, a sequential array of
      * column name strings (for a multi-column key), or null (if no primary
      * key has been declared).
      *
      * @return mixed $primary_key array or $this->_primary_key[$name]
      * @access public
      */
-    function getPrimaryKey($name = null) 
+    function getPrimaryKey($name = null)
     {
         if (is_null($name)) {
             return $this->_primary_key;
@@ -813,33 +813,33 @@ class DB_Table_Database extends DB_Table_Base
      *
      * Returns PEAR_Error with the following DB_TABLE_DATABASE_* error
      * codes if:
-     *    - $name is not a string ( _TBL_NOT_STRING )
-     *    - $name is not valid table name ( _NO_TBL )
+     *    - $name is not a string (_TBL_NOT_STRING )
+     *    - $name is not valid table name (_NO_TBL )
      *
      * The $_table_subclass property is an associative array in which each key
-     * is a table name string, and each value is the name of the corresponding 
-     * subclass of DB_Table. The value is null if the table is an instance of 
-     * DB_Table itself. 
+     * is a table name string, and each value is the name of the corresponding
+     * subclass of DB_Table. The value is null if the table is an instance of
+     * DB_Table itself.
      *
-     * Subclass names are set within the addTable method by applying the 
-     * built in get_class() function to a DB_Table object. The class names 
+     * Subclass names are set within the addTable method by applying the
+     * built in get_class() function to a DB_Table object. The class names
      * returned by get_class() are stored unmodified. In PHP 4, get_class
-     * converts all class names to lower case. In PHP 5, it preserves the 
-     * capitalization of the name used in the class definition. 
+     * converts all class names to lower case. In PHP 5, it preserves the
+     * capitalization of the name used in the class definition.
      *
      * In the __wakeup() method, for each table $table_name for which
      * $subclass = $this->_table_subclass[$table_name] is not null, but
      * class $subclass is not defined, the method attempts to include a
-     * file named "$subclass.php" in directory $this->table_subclass_path. 
-     * For autoloading to work properly, the base name of each subclass 
+     * file named "$subclass.php" in directory $this->table_subclass_path.
+     * For autoloading to work properly, the base name of each subclass
      * definition file (excluding the .php extension) should thus be a
-     * lower case version of the class name in PHP 4 or identical to the 
-     * class name in PHP 5. 
-     * 
+     * lower case version of the class name in PHP 4 or identical to the
+     * class name in PHP 5.
+     *
      * @return mixed $_table_subclass array or $this->_table_subclass[$name]
      * @access public
      */
-    function getTableSubclass($name = null) 
+    function getTableSubclass($name = null)
     {
         if (is_null($name)) {
             return $this->_table_subclass;
@@ -866,12 +866,12 @@ class DB_Table_Database extends DB_Table_Base
      *
      * Returns a PEAR_Error with the following DB_TABLE_DATABASE_* error
      * codes if:
-     *    - $column_name is not a string ( _COL_NOT_STRING )
-     *    - $column_name is not valid column name ( _NO_COL )
+     *    - $column_name is not a string (_COL_NOT_STRING )
+     *    - $column_name is not valid column name (_NO_COL )
      *
      * The $_col property is an associative array in which each key is the
-     * name of a column in the database, and each value is a numerical array 
-     * containing the names of all tables that contain a column with that 
+     * name of a column in the database, and each value is a numerical array
+     * containing the names of all tables that contain a column with that
      * name.
      *
      * @var    array
@@ -879,7 +879,7 @@ class DB_Table_Database extends DB_Table_Base
      * @return mixed $this->_col property array or $this->_col[$column_name]
      * @access public
      */
-    function getCol($column_name = null) 
+    function getCol($column_name = null)
     {
         if (is_null($column_name)) {
             return $this->_col;
@@ -902,28 +902,28 @@ class DB_Table_Database extends DB_Table_Base
      * Returns all or part of the $_foreign_col property array
      *
      * If $column_name is null, return $this->_foreign_col property array
-     * If $column_name is valid, return $this->_foreign_col[$column_name] 
+     * If $column_name is valid, return $this->_foreign_col[$column_name]
      *
      * Returns a PEAR_Error with the following DB_TABLE_DATABASE_* error
      * codes if:
-     *    - $column_name is not a string ( _COL_NOT_STRING )
-     *    - $column_name is not valid foreign column name ( _NO_FOREIGN_COL )
+     *    - $column_name is not a string (_COL_NOT_STRING )
+     *    - $column_name is not valid foreign column name (_NO_FOREIGN_COL )
      *
-     * The $_foreign_col property is an associative array in which each 
+     * The $_foreign_col property is an associative array in which each
      * key is the name string of a foreign key column, and each value is a
-     * sequential array containing the names of all tables that contain a 
-     * foreign key column with that name. 
+     * sequential array containing the names of all tables that contain a
+     * foreign key column with that name.
      *
-     * If a column $column in a referencing table $ftable is part of the 
+     * If a column $column in a referencing table $ftable is part of the
      * foreign key for references to two or more different referenced tables
-     * tables, the name $ftable will also appear multiple times in the array 
+     * tables, the name $ftable will also appear multiple times in the array
      * $this->_foreign_col[$column].
      *
      * @param  string column name string for foreign key column
      * @return array  $_foreign_col property array
      * @access public
      */
-    function getForeignCol($column_name = null) 
+    function getForeignCol($column_name = null)
     {
         if (is_null($column_name)) {
             return $this->_foreign_col;
@@ -949,35 +949,35 @@ class DB_Table_Database extends DB_Table_Base
      * Returns $this->_ref[$table1] subarray if only $table2 is null.
      * Returns $this->_ref[$table1][$table2] if both parameters are present.
      *
-     * Returns null if $table1 is a table that references no others, or 
-     * if $table1 and $table2 are both valid table names, but there is no 
+     * Returns null if $table1 is a table that references no others, or
+     * if $table1 and $table2 are both valid table names, but there is no
      * reference from $table1 to $table2.
-     * 
+     *
      * Returns a PEAR_Error with the following DB_TABLE_DATABASE_* error
      * codes if:
-     *    - $table1 or $table2 is not a string ( _TBL_NOT_STRING )
-     *    - $table1 or $table2 is not a valid table name ( _NO_TBL )
+     *    - $table1 or $table2 is not a string (_TBL_NOT_STRING )
+     *    - $table1 or $table2 is not a valid table name (_NO_TBL )
      *
      * The $_ref property is a two-dimensional associative array in which
-     * the keys are pairs of table names, each value is an array containing 
+     * the keys are pairs of table names, each value is an array containing
      * information about referenced and referencing keys, and referentially
-     * triggered actions (if any).  An element of the $_ref array is of the 
-     * form $ref[$ftable][$rtable] = $reference, where $ftable is the name 
-     * of a referencing (or foreign key) table and $rtable is the name of 
-     * a corresponding referenced table. The value $reference is an array 
+     * triggered actions (if any).  An element of the $_ref array is of the
+     * form $ref[$ftable][$rtable] = $reference, where $ftable is the name
+     * of a referencing (or foreign key) table and $rtable is the name of
+     * a corresponding referenced table. The value $reference is an array
      * $reference = array($fkey, $rkey, $on_delete, $on_update) in which
-     * $fkey and $rkey are the foreign (or referencing) and referenced 
+     * $fkey and $rkey are the foreign (or referencing) and referenced
      * keys, respectively: Foreign key $fkey of table $ftable references
-     * key $rkey of table $rtable. The values of $fkey and $rkey must either 
-     * both be valid column name strings for columns of the same type, or 
-     * they may both be sequential arrays of column name names, with equal 
-     * numbers of columns of corresponding types, for multi-column keys. The 
-     * $on_delete and $on_update values may be either null or string values 
-     * that indicate actions to be taken upon deletion or updating of a 
+     * key $rkey of table $rtable. The values of $fkey and $rkey must either
+     * both be valid column name strings for columns of the same type, or
+     * they may both be sequential arrays of column name names, with equal
+     * numbers of columns of corresponding types, for multi-column keys. The
+     * $on_delete and $on_update values may be either null or string values
+     * that indicate actions to be taken upon deletion or updating of a
      * referenced row (e.g., cascading deletes). A null value of $on_delete
-     * or $on_update indicates that no referentially triggered action will 
+     * or $on_update indicates that no referentially triggered action will
      * be taken. See addRef() for further details about allowed values of
-     * these action strings. 
+     * these action strings.
      *
      * @var    array
      * @param  string $table1 name of referencing table
@@ -985,7 +985,7 @@ class DB_Table_Database extends DB_Table_Base
      * @return mixed $ref property array, sub-array, or value
      * @access public
      */
-    function getRef($table1 = null, $table2 = null) 
+    function getRef($table1 = null, $table2 = null)
     {
         if (is_null($table1)) {
             return $this->_ref;
@@ -1039,17 +1039,17 @@ class DB_Table_Database extends DB_Table_Base
      *
      * Returns a PEAR_Error with the following DB_TABLE_DATABASE_* error
      * codes if:
-     *    - $table_name is not a string ( _TBL_NOT_STRING )
-     *    - $table_name is not a valid table name ( _NO_TBL )
+     *    - $table_name is not a string (_TBL_NOT_STRING )
+     *    - $table_name is not a valid table name (_NO_TBL )
      *
      * The $_ref_to property is an associative array in which each key
      * is the name of a referenced table, and each value is a sequential
      * array containing the names of all tables that contain foreign keys
      * that reference that table. Each element is thus of the form
      * $_ref_to[$rtable] = array($ftable1, $ftable2,...), where
-     * $ftable1, $ftable2, ... are the names of tables that reference 
+     * $ftable1, $ftable2, ... are the names of tables that reference
      * the table named $rtable.
-     * 
+     *
      * @param string $table_name name of table
      * @return mixed $_ref_to property array or subarray
      * @access public
@@ -1086,38 +1086,38 @@ class DB_Table_Database extends DB_Table_Base
      * Returns $this->_link[$table1] subarray if only $table2 is null.
      * Returns $this->_link[$table1][$table2] if both parameters are present.
      *
-     * Returns null if $table1 is a valid table with links to no others, or 
-     * if $table1 and $table2 are both valid table names but there is no 
+     * Returns null if $table1 is a valid table with links to no others, or
+     * if $table1 and $table2 are both valid table names but there is no
      * link between them.
-     * 
+     *
      * Returns a PEAR_Error with the following DB_TABLE_DATABASE_* error
      * codes if $table1 or $table2 is not null and:
-     *    - $table1 or $table2 is not a string ( _TBL_NOT_STRING )
-     *    - $table1 or $table2 is not a valid table name ( _NO_TBL )
+     *    - $table1 or $table2 is not a string (_TBL_NOT_STRING )
+     *    - $table1 or $table2 is not a valid table name (_NO_TBL )
      *
-     * The $_link property is a two-dimensional associative array with 
-     * elements of the form $this->_link[$table1][$table2] = array($link1, ...), 
-     * in which the value is an array containing the names of all tables 
+     * The $_link property is a two-dimensional associative array with
+     * elements of the form $this->_link[$table1][$table2] = array($link1, ...),
+     * in which the value is an array containing the names of all tables
      * that `link' tables named $table1 and $table2, and thereby create a
-     * many-to-many relationship between these two tables. 
+     * many-to-many relationship between these two tables.
      *
      * The $_link property is used in the autoJoin method to join tables
      * that are related by a many-to-many relationship via a linking table,
      * rather than via a direct foreign key reference. A table that is
-     * declared to be linking table for tables $table1 and $table2 must 
-     * contain foreign keys that reference both of these tables. 
+     * declared to be linking table for tables $table1 and $table2 must
+     * contain foreign keys that reference both of these tables.
      *
      * Each binary link in a database is listed twice in $_link, in
      * $_link[$table1][$table2] and in $_link[$table2][$table1]. If a
      * linking table contains foreign key references to N tables, with
      * N > 2, each of the resulting binary links is listed separately.
-     * For example, a table with references to 3 tables A, B, and C can 
-     * create three binary links (AB, AC, and BC) and six entries in the 
+     * For example, a table with references to 3 tables A, B, and C can
+     * create three binary links (AB, AC, and BC) and six entries in the
      * link property array (i.e., in $_link[A][B], $_link[B][A], ... ).
      *
-     * Linking tables may be added to the $_link property by using the 
-     * addLink method or deleted using the delLink method. Alternatively, 
-     * all possible linking tables can be identified and added to the 
+     * Linking tables may be added to the $_link property by using the
+     * addLink method or deleted using the delLink method. Alternatively,
+     * all possible linking tables can be identified and added to the
      * $_link array at once by the addAllLinks() method.
      *
      * @var    array
@@ -1126,7 +1126,7 @@ class DB_Table_Database extends DB_Table_Base
      * @return mixed $_link property array, sub-array, or value
      * @access public
      */
-    function getLink($table1 = null, $table2 = null) 
+    function getLink($table1 = null, $table2 = null)
     {
         if (is_null($table1)) {
             return $this->_link;
@@ -1175,13 +1175,13 @@ class DB_Table_Database extends DB_Table_Base
      * Sets the path to a the directory containing DB_Table subclass definitions.
      *
      * This method sets the $_table_subclass_path string property. The value of
-     * this property is the path to the directory containing DB_Table subclass 
-     * definitions, without a trailing directory separator. 
-     *  
-     * This path may be used by the __wakeup(), if necessary, in an attempt to 
-     * autoload class definitions when unserializing a DB_Table_Database object 
+     * this property is the path to the directory containing DB_Table subclass
+     * definitions, without a trailing directory separator.
+     *
+     * This path may be used by the __wakeup(), if necessary, in an attempt to
+     * autoload class definitions when unserializing a DB_Table_Database object
      * and its child DB_Table objects. If a DB_Table subclass named $subclass_name
-     * has not been defined when it is needed, within DB_Table_Database::__wakeup(), 
+     * has not been defined when it is needed, within DB_Table_Database::__wakeup(),
      * to unserialize an instance of this class, the __wakeup() method attempts
      * to include a class definition file from this directory, as follows:
      * <code>
@@ -1189,14 +1189,14 @@ class DB_Table_Database extends DB_Table_Base
      *     require_once $dir . '/' . $subclass . '.php';
      * </code>
      * See the getTableSubclass() docblock for a discusion of capitalization
-     * conventions in PHP 4 and 5 for subclass file names. 
-     * 
+     * conventions in PHP 4 and 5 for subclass file names.
+     *
      * @param string $path path to directory containing class definitions
      * @return void
      * @access public
      */
     function setTableSubclassPath($path) {
-        $this->_table_subclass_path = $path; 
+        $this->_table_subclass_path = $path;
     }
 
     /**
@@ -1205,17 +1205,17 @@ class DB_Table_Database extends DB_Table_Base
      * Creates references between $this DB_Table_Database object and
      * the child DB_Table object, by adding a reference to $table_obj
      * to the $this->_table array, and setting $table_obj->database =
-     * $this. 
+     * $this.
      *
      * Adds the primary key to $this->_primary_key array. The relevant
-     * element of $this->_primary_key is set to null if no primary key 
+     * element of $this->_primary_key is set to null if no primary key
      * index is declared. Returns an error if more than one primary key
      * is declared.
      *
      * Returns true on success, and PEAR error on failure. Returns the
      * following DB_TABLE_DATABASE_ERR_* error codes if:
-     *    - $table_obj is not a DB_Table ( _DBTABLE_OBJECT )
-     *    - more than one primary key is defined  ( _ERR_MULT_PKEY )
+     *    - $table_obj is not a DB_Table (_DBTABLE_OBJECT )
+     *    - more than one primary key is defined  (_ERR_MULT_PKEY )
      *
      * @param  object &$table_obj the DB_Table object (reference)
      * @return boolean true on success (PEAR_Error on failure)
@@ -1223,7 +1223,7 @@ class DB_Table_Database extends DB_Table_Base
      */
     function addTable(&$table_obj)
     {
-        // Check that $table_obj is a DB_Table object 
+        // Check that $table_obj is a DB_Table object
         // Identify subclass name, if any
         if (is_subclass_of($table_obj, 'DB_Table')) {
             $subclass = get_class($table_obj);
@@ -1236,8 +1236,8 @@ class DB_Table_Database extends DB_Table_Base
 
         // Identify table name and table object (sub)class name
         $table = $table_obj->table;
-        
-        // Set $this->_primary_key[$table] 
+
+        // Set $this->_primary_key[$table]
         $this->_primary_key[$table] = null;
         foreach ($table_obj->idx as $idx_name => $idx_def) {
             if ($idx_def['type'] == 'primary') {
@@ -1254,7 +1254,7 @@ class DB_Table_Database extends DB_Table_Base
 
         // Add references between $this parent and child table object
         $this->_table[$table] =& $table_obj;
-        $table_obj->setDatabaseInstance($this); 
+        $table_obj->setDatabaseInstance($this);
 
         // Add subclass name (if any) to $this->_table_subclass
         $this->_table_subclass[$table] = $subclass;
@@ -1278,17 +1278,17 @@ class DB_Table_Database extends DB_Table_Base
     /**
      * Deletes a table from $this database object.
      *
-     * Removes all dependencies on $table from the database model. The table 
+     * Removes all dependencies on $table from the database model. The table
      * is removed from $_table and $_primary_key properties. Its columns are
      * removed from the $_col and $_foreign_col properties. References to
      * and from the table are removed from the $_ref, $_ref_to, and $_link
      * properties. Referencing columns are removed from $_foreign_col.
-     * 
+     *
      * @param  string $table name of table to be deleted
      * @return void
      * @access public
      */
-    function deleteTable($table) 
+    function deleteTable($table)
     {
         if (isset($this->_table[$table])) {
             $table_obj =& $this->_table[$table];
@@ -1327,17 +1327,17 @@ class DB_Table_Database extends DB_Table_Base
         }
 
         // Remove all references involving the deleted table.
-        // Corresponding links are removed from $this->_link by deleteRef 
+        // Corresponding links are removed from $this->_link by deleteRef
         // Referencing columns are removed from $this->_foreign_col by deleteRef
         foreach ($this->_ref as $ftable => $referenced) {
             foreach ($referenced as $rtable => $ref) {
                 if ($ftable == $table || $rtable == $table) {
                     $this->deleteRef($ftable, $rtable);
-                } 
-            } 
+                }
+            }
         }
 
-        // Remove table from $this->_table and $this->_primary_key 
+        // Remove table from $this->_table and $this->_primary_key
         unset($this->_table[$table]);
         unset($this->_primary_key[$table]);
     }
@@ -1347,41 +1347,41 @@ class DB_Table_Database extends DB_Table_Base
      *
      * Adds a reference from foreign key $fkey of table $ftable to
      * referenced key $rkey of table named $rtable to the $this->_ref
-     * property. The values of $fkey and $rkey (if not null) may either 
-     * both be column name strings (for single column keys) or they 
-     * may both be numerically indexed arrays of corresponding column 
-     * names (for multi-column keys). If $rkey is null (the default), 
-     * the referenced key taken to be the primary key of $rtable, if 
+     * property. The values of $fkey and $rkey (if not null) may either
+     * both be column name strings (for single column keys) or they
+     * may both be numerically indexed arrays of corresponding column
+     * names (for multi-column keys). If $rkey is null (the default),
+     * the referenced key taken to be the primary key of $rtable, if
      * any.
      *
-     * The $on_delete and $on_update parameters may be either be null, 
-     * or may have string values 'restrict', 'cascade', 'set null', or 
-     * 'set default' that indicate referentially triggered actions to be 
-     * taken deletion or updating of referenced row in $rtable. Each of 
-     * these actions corresponds to a standard SQL action (e.g., cascading 
-     * delete) that may be taken upon referencing rows of table $ftable 
-     * when a referenced row of $rtable is deleted or updated.  A PHP 
+     * The $on_delete and $on_update parameters may be either be null,
+     * or may have string values 'restrict', 'cascade', 'set null', or
+     * 'set default' that indicate referentially triggered actions to be
+     * taken deletion or updating of referenced row in $rtable. Each of
+     * these actions corresponds to a standard SQL action (e.g., cascading
+     * delete) that may be taken upon referencing rows of table $ftable
+     * when a referenced row of $rtable is deleted or updated.  A PHP
      * null value for either parameter (the default) signifies that no
-     * such action will be taken upon deletion or updating. 
+     * such action will be taken upon deletion or updating.
      *
      * There may no more than one reference from a table to another, though
-     * reference may contain multiple columns. 
+     * reference may contain multiple columns.
      *
      * Returns true on success, and PEAR error on failure. Returns the
      * following DB_TABLE_DATABASE_ERR_* error codes if:
-     *   - $ftable does not exist ( _NO_FTABLE )
-     *   - $rtable does not exist ( _NO_RTABLE )
-     *   - $rkey is null and $rtable has no primary key ( _NO_PKEY )
-     *   - $fkey is neither a string nor an array ( _FKEY )
-     *   - $rkey is not a string, $fkey is a string ( _RKEY_NOT_STRING )
-     *   - $rkey is not an array, $fkey is an array ( _RKEY_NOT_ARRAY )
-     *   - A column of $fkey does not exist ( _NO_FCOL )
-     *   - A column of $rkey does not exist ( _NO_RCOL )
-     *   - A column of $fkey and $rkey have different types ( _REF_TYPE )
-     *   - A reference from $ftable to $rtable already exists ( _MULT_REF )
-     * 
+     *   - $ftable does not exist (_NO_FTABLE )
+     *   - $rtable does not exist (_NO_RTABLE )
+     *   - $rkey is null and $rtable has no primary key (_NO_PKEY )
+     *   - $fkey is neither a string nor an array (_FKEY )
+     *   - $rkey is not a string, $fkey is a string (_RKEY_NOT_STRING )
+     *   - $rkey is not an array, $fkey is an array (_RKEY_NOT_ARRAY )
+     *   - A column of $fkey does not exist (_NO_FCOL )
+     *   - A column of $rkey does not exist (_NO_RCOL )
+     *   - A column of $fkey and $rkey have different types (_REF_TYPE )
+     *   - A reference from $ftable to $rtable already exists (_MULT_REF )
+     *
      * @param  string  $ftable    name of foreign/referencing table
-     * @param  mixed   $fkey      foreign key in referencing table 
+     * @param  mixed   $fkey      foreign key in referencing table
      * @param  string  $rtable    name of referenced table
      * @param  mixed   $rkey      referenced key in referenced table
      * @param  string  $on_delete action upon delete of a referenced row.
@@ -1485,7 +1485,7 @@ class DB_Table_Database extends DB_Table_Base
         }
 
         // Check validity of on_delete and on_update actions
-        $valid_actions = 
+        $valid_actions =
                array(null, 'cascade', 'set null', 'set default', 'restrict');
         if (!in_array($on_delete, $valid_actions)) {
             return $this->throwError(
@@ -1500,9 +1500,9 @@ class DB_Table_Database extends DB_Table_Base
 
         // Add reference to $this->_ref;
         $ref = array(
-               'fkey' => $fkey, 
+               'fkey' => $fkey,
                'rkey' => $rkey,
-               'on_delete' => $on_delete, 
+               'on_delete' => $on_delete,
                'on_update' => $on_update);
         if (!isset($this->_ref[$ftable])) {
             $this->_ref[$ftable] = array();
@@ -1541,24 +1541,24 @@ class DB_Table_Database extends DB_Table_Base
         return true;
     }
 
- 
+
     /**
      * Deletes one reference from database model
      *
      * Removes reference from referencing (foreign key) table named
      * $ftable to referenced table named $rtable. Unsets relevant elements
      * of the $ref, $_ref_to, and $_link property arrays, and removes the
-     * foreign key columns of $ftable from the $_foreign_col property. 
+     * foreign key columns of $ftable from the $_foreign_col property.
      *
-     * Does nothing, silently, if no such reference exists, i.e., if 
+     * Does nothing, silently, if no such reference exists, i.e., if
      * $this->_ref[$ftable][$rtable] is not set.
      *
      * @param $ftable name of referencing (foreign key) table
      * @param $rtable name of referenced table
      * @return void
      * @access public
-     */ 
-    function deleteRef($ftable, $rtable) 
+     */
+    function deleteRef($ftable, $rtable)
     {
         // Delete from $_ref property
         if (isset($this->_ref[$ftable])) {
@@ -1578,7 +1578,7 @@ class DB_Table_Database extends DB_Table_Base
             }
             foreach ($fkey as $column) {
                 if (isset($this->_foreign_col[$column])) {
-                    $key = array_search($ftable, 
+                    $key = array_search($ftable,
                                         $this->_foreign_col[$column]);
                     if (is_integer($key)) {
                         unset($this->_foreign_col[$column][$key]);
@@ -1596,7 +1596,7 @@ class DB_Table_Database extends DB_Table_Base
         // Delete from $_ref_to property
         if (isset($this->_ref_to[$rtable])) {
             $key = array_search($ftable, $this->_ref_to[$rtable]);
-            // Unset element 
+            // Unset element
             unset($this->_ref_to[$rtable][$key]);
             if (count($this->_ref_to[$rtable]) == 0) {
                 unset($this->_ref_to[$rtable]);
@@ -1624,22 +1624,22 @@ class DB_Table_Database extends DB_Table_Base
      * from $ftable to $rtable. The parameter action may be one of the action
      * strings 'cascade', 'restrict', 'set null', or 'set default', or it may
      * be php null. A null value of $action indicates that no action should be
-     * taken upon deletion of a referenced row. 
+     * taken upon deletion of a referenced row.
      *
      * Returns true on success, and PEAR error on failure. Returns the error
-     * code DB_TABLE_DATABASE_ERR_REF_TRIG_ACTION if $action is a neither a 
-     * valid action string nor null. Returns true, and does nothing, if 
-     * $this->_ref[$ftable][$rtable] is not set. 
+     * code DB_TABLE_DATABASE_ERR_REF_TRIG_ACTION if $action is a neither a
+     * valid action string nor null. Returns true, and does nothing, if
+     * $this->_ref[$ftable][$rtable] is not set.
      *
      * @param  string $ftable  name of referencing (foreign key) table
      * @param  string $rtable  name of referenced table
      * @param  string $action  on delete action (action string or null)
      * @return boolean true on normal completion (PEAR_Error on failure)
      * @access public
-     */ 
+     */
     function setOnDelete($ftable, $rtable, $action)
     {
-        $valid_actions = 
+        $valid_actions =
              array(null, 'cascade', 'set null', 'set default', 'restrict');
 
         if (isset($this->_ref[$ftable])) {
@@ -1665,10 +1665,10 @@ class DB_Table_Database extends DB_Table_Base
      * @param array  $action  on update action (action string or null)
      * @return boolean true on normal completion (PEAR_Error on failure)
      * @access public
-     */ 
+     */
     function setOnUpdate($ftable, $rtable, $action)
     {
-        $valid_actions = 
+        $valid_actions =
              array(null, 'cascade', 'set null', 'set default', 'restrict');
 
         if (isset($this->_ref[$ftable])) {
@@ -1687,13 +1687,13 @@ class DB_Table_Database extends DB_Table_Base
     /**
      * Identifies a linking/association table that links two others
      *
-     * Adds table name $link to $this->_link[$table1][$table2] and 
+     * Adds table name $link to $this->_link[$table1][$table2] and
      * to $this->_link[$table2][$table1].
      *
      * Returns true on success, and PEAR error on failure. Returns the
      * following DB_TABLE_DATABASE_ERR_* error codes if:
-     *   - $ftable does not exist ( _NO_FTABLE )
-     *   - $rtable does not exist ( _NO_RTABLE )
+     *   - $ftable does not exist (_NO_FTABLE )
+     *   - $rtable does not exist (_NO_RTABLE )
      *
      * @param  string $table1 name of 1st linked table
      * @param  string $table2 name of 2nd linked table
@@ -1758,7 +1758,7 @@ class DB_Table_Database extends DB_Table_Base
         }
         if (!key_exists($table1, $this->_link[$table2])) {
             $this->_link[$table2][$table1] = array();
-        } 
+        }
         $this->_link[$table2][$table1][] = $link;
     }
 
@@ -1766,9 +1766,9 @@ class DB_Table_Database extends DB_Table_Base
      * Adds all possible linking tables to the $_link property array
      *
      * Identifies all potential linking tables in the datbase, and adds
-     * them all to the $_link property.  Table $link is taken to be a 
-     * link between tables $table1 and $table2 if it contains foreign 
-     * key references to both $table1 and $table2. 
+     * them all to the $_link property.  Table $link is taken to be a
+     * link between tables $table1 and $table2 if it contains foreign
+     * key references to both $table1 and $table2.
      *
      * @return void
      * @access public
@@ -1809,7 +1809,7 @@ class DB_Table_Database extends DB_Table_Base
      *
      * If $link is not null, remove table $link from the list of links
      * between $table1 and $table2, if present. If $link is null, delete
-     * all links between $table1 and $table2. 
+     * all links between $table1 and $table2.
      *
      * @param  string $table1 name of 1st linked table
      * @param  string $table2 name of 2nd linked table
@@ -1835,7 +1835,7 @@ class DB_Table_Database extends DB_Table_Base
                             if (count($this->_link[$table2]) == 0) {
                                 unset($this->_link[$table2]);
                             }
-                        } else { 
+                        } else {
                             // Reset remaining indices sequentially from zero
                             $new = array_values($this->_link[$table1][$table2]);
                             $this->_link[$table1][$table2] = $new;
@@ -1862,46 +1862,46 @@ class DB_Table_Database extends DB_Table_Base
      * The parameter $col is a string may be either a column name or
      * a column name qualified by a table name, using the SQL syntax
      * "$table.$column". If $col contains a table name, and is valid,
-     * an array($table, $column) is returned.  If $col is not qualified 
+     * an array($table, $column) is returned.  If $col is not qualified
      * by a column name, an array array($table, $column) is returned,
      * in which $table is either the name of one table, or an array
-     * containing the names of two or more tables containing a column 
-     * named $col. 
+     * containing the names of two or more tables containing a column
+     * named $col.
      *
      * The $from parameter, if present, is a numerical array of
      * names of tables with which $col should be associated, if no
-     * explicit table name is provided, and if possible. If one 
-     * or more of the tables in $from contains a column $col, the 
-     * returned table or set of tables is restricted to those in 
+     * explicit table name is provided, and if possible. If one
+     * or more of the tables in $from contains a column $col, the
+     * returned table or set of tables is restricted to those in
      * array $from.
      *
      * If the table name remains ambiguous after testing for tables in
-     * the $from set, and $col is not a foreign key in one or more of 
-     * the remaining tables, the returned table or set of tables is 
-     * restricted to those in which $col is not a foreign key. 
+     * the $from set, and $col is not a foreign key in one or more of
+     * the remaining tables, the returned table or set of tables is
+     * restricted to those in which $col is not a foreign key.
      *
      * Returns a PEAR_Error with the following DB_TABLE_DATABASE_ERR_* error
      * codes if:
-     *    - column $col does not exist in the database ( _NO_COL_DB )
-     *    - column $col does not exist in the specified table ( _NO_COL_TBL )
-     * 
+     *    - column $col does not exist in the database (_NO_COL_DB )
+     *    - column $col does not exist in the specified table (_NO_COL_TBL )
+     *
      * @param  string $col  column name, optionally qualified by a table name
      * @param  array  $from array of tables from which $col should be chosen,
      *                      if possible.
-     * @return array  array($table, $column), or PEAR_Error 
+     * @return array  array($table, $column), or PEAR_Error
                       $column is a string, $table is a string or array
      * @access public
      */
     function validCol($col, $from = null)
     {
         $col = explode('.',trim($col));
-        if (count($col) == 1) { 
+        if (count($col) == 1) {
             // Parameter $col is a column name with no table name
             $column = $col[0];
             // Does $column exist in database ?
             if (!isset($this->_col[$column])) {
                 return $this->throwError(
-                          DB_TABLE_DATABASE_ERR_NO_COL_DB, 
+                          DB_TABLE_DATABASE_ERR_NO_COL_DB,
                           "$column");
             }
             $table = $this->_col[$column];
@@ -1923,7 +1923,7 @@ class DB_Table_Database extends DB_Table_Base
             if (count($table) == 1) {
                 $table = $table[0];
             }
-        } elseif (count($col) == 2) { 
+        } elseif (count($col) == 2) {
             // parameter $col is qualified by a table name
             $table  = $col[0];
             $column = $col[1];
@@ -1942,7 +1942,7 @@ class DB_Table_Database extends DB_Table_Base
         }
         return array($table, $column);
     }
- 
+
 
     /**
      * Creates all the tables in a database in a RDBMS
@@ -1958,7 +1958,7 @@ class DB_Table_Database extends DB_Table_Base
      *                    applied to each table in the database. It can have
      *                    values:
      *                    - 'safe' to create a table only if it does not exist
-     *                    - 'drop' to drop and recreate any existing table 
+     *                    - 'drop' to drop and recreate any existing table
                              with the same name
      *
      * @see DB_Table::create()
@@ -1982,14 +1982,14 @@ class DB_Table_Database extends DB_Table_Base
      * containing values to be inserted or updated in table $table_name.
      *
      * Returns true if each foreign key in $data matches a row in the
-     * referenced table, or if there are no foreign key columns in $data.  
+     * referenced table, or if there are no foreign key columns in $data.
      * Returns false if any foreign key column in associative array $data
-     * (which may contain a full or partial row of $table_name), does not 
-     * match the the value of the referenced column in any row of the 
+     * (which may contain a full or partial row of $table_name), does not
+     * match the the value of the referenced column in any row of the
      * referenced table.
      *
-     * Returns any PEAR error thrown by the select method, which is called 
-     * to implement the required query, or by the buildFilter method. 
+     * Returns any PEAR error thrown by the select method, which is called
+     * to implement the required query, or by the buildFilter method.
      *
      * @param $table_name name of the referencing table containing $data
      * @param @data       associative array containing all or part of a row
@@ -2027,7 +2027,7 @@ class DB_Table_Database extends DB_Table_Base
                     }
                     // Check for failed foreign key constraint
                     if (count($referenced_rows) == 0) {
-                        return $this->throwError( 
+                        return $this->throwError(
                                DB_TABLE_DATABASE_ERR_FKEY_CONSTRAINT);
                     }
                 }
@@ -2037,7 +2037,7 @@ class DB_Table_Database extends DB_Table_Base
     }
 
     /**
-     * Inserts a single table row 
+     * Inserts a single table row
      *
      * Wrapper for insert method of the corresponding DB_Table object.
      *
@@ -2158,7 +2158,7 @@ class DB_Table_Database extends DB_Table_Base
                 // Check if any column(s) of referenced $rkey are updated
                 $rkey_updated = false;
                 foreach ($data as $key => $value) {
-                    if (is_string($rkey)){
+                    if (is_string($rkey)) {
                         if ($key == $rkey) {
                             $rkey_updated = true;
                             break;
@@ -2259,9 +2259,9 @@ class DB_Table_Database extends DB_Table_Base
                         }
 
                         // Construct filter for rows that reference $update_row
-                        $filter = $this->_buildFKeyFilter($update_row, 
+                        $filter = $this->_buildFKeyFilter($update_row,
                                                           $rkey, $fkey);
-    
+
                         // Apply action to foreign/referencing rows
                         if ($action == 'restrict') {
                             $sql = array('select'=>'*',
@@ -2283,7 +2283,7 @@ class DB_Table_Database extends DB_Table_Base
                             // during update, then restore original value
                             $check_fkey = $this->_check_fkey;
                             $this->_check_fkey = false;
-                            $result = $this->update($ftable_name, $fdata, 
+                            $result = $this->update($ftable_name, $fdata,
                                                     $filter);
                             $this->_check_fkey = $check_fkey;
                             if (PEAR::isError($result)) {
@@ -2378,7 +2378,7 @@ class DB_Table_Database extends DB_Table_Base
                 $action = $ref['on_delete'];
                 if (is_null($action)) {
                    continue;
-                } 
+                }
                 $ftable_obj =& $this->_table[$ftable_name];
                 $rtable_obj =& $this->_table[$table_name];
                 $fkey = $ref['fkey'];
@@ -2436,7 +2436,7 @@ class DB_Table_Database extends DB_Table_Base
                     }
 
                     // Construct filter for referencing rows in $ftable_name
-                    $filter = $this->_buildFKeyFilter($delete_row, 
+                    $filter = $this->_buildFKeyFilter($delete_row,
                                                       $rkey, $fkey);
 
                     // Apply action for one deleted row
@@ -2483,7 +2483,7 @@ class DB_Table_Database extends DB_Table_Base
                 } // end foreach ($delete_rows)
 
             } // end foreach ($this->_ref_to[...] as $ftable_name)
-        } // end if 
+        } // end if
 
     }
 
@@ -2492,10 +2492,10 @@ class DB_Table_Database extends DB_Table_Base
      * Returns array in which keys of $data are replaced by values of $keys.
      *
      * This function is used by the insert() and update() methods to restore
-     * the case of column names in associative arrays that are returned from 
+     * the case of column names in associative arrays that are returned from
      * an automatically generated query "SELECT * FROM $table WHERE ...", when
-     * these column name keys are returned with a fixed case. In this usage, 
-     * $keys is a sequential array of the names of all columns in $table. 
+     * these column name keys are returned with a fixed case. In this usage,
+     * $keys is a sequential array of the names of all columns in $table.
      *
      * @param  array $data associative array
      * @param  array $key  numerical array of replacement key names
@@ -2503,7 +2503,7 @@ class DB_Table_Database extends DB_Table_Base
      *               by the values of array $keys.
      * @access private
      */
-    function _replaceKeys($data, $keys) 
+    function _replaceKeys($data, $keys)
     {
         $new_data = array();
         $i = 0;
@@ -2516,16 +2516,16 @@ class DB_Table_Database extends DB_Table_Base
     }
 
     /**
-     * Builds a select command involving joined tables from 
+     * Builds a select command involving joined tables from
      * a list of column names and/or a list of table names.
      *
      * Returns an query array of the form used in $this->buildSQL,
      * constructed on the basis of a sequential array $cols of
      * column names and/or a sequential array $tables of table
-     * names.  The 'FROM' clause in the resulting SQL contains 
-     * all the table listed in the $tables parameter and all 
+     * names.  The 'FROM' clause in the resulting SQL contains
+     * all the table listed in the $tables parameter and all
      * those containing the columns listed in the $cols array,
-     * as well as any linking tables required to establish 
+     * as well as any linking tables required to establish
      * many to many relationships between these tables. The
      * 'WHERE' clause is constructed so as to create an inner
      * join of these tables.
@@ -2533,17 +2533,17 @@ class DB_Table_Database extends DB_Table_Base
      * The $cols parameter is a sequential array in which the
      * values are column names. Column names may be qualified
      * by a table name, using the SQL table.column syntax, but
-     * need not be qualified if they are unambiguous. The 
-     * values in $cols can only be column names, and may not 
+     * need not be qualified if they are unambiguous. The
+     * values in $cols can only be column names, and may not
      * be functions or more complicated SQL expressions. If
-     * cols is null, the resulting SQL command will start with 
+     * cols is null, the resulting SQL command will start with
      * 'SELECT * FROM ...' .
      *
      * The $tables parameter is a sequential array in which the
      * values are table names. If $tables is null, the FROM
      * clause is constructed from the tables containing the
-     * columns in the $cols. 
-     * 
+     * columns in the $cols.
+     *
      * The $params array is an associative array can have
      * 'filter', and 'order' keys, which are both optional.
      * A value $params['filter'] is an condition string to
@@ -2561,7 +2561,7 @@ class DB_Table_Database extends DB_Table_Base
      *
      * @param  array $cols   sequential array of column names
      * @param  array $tables sequential array of table names
-     * @param  array $filter SQL logical expression to be added 
+     * @param  array $filter SQL logical expression to be added
      *                       (ANDed) to the where clause
      * @return array sql query array for select statement
      * @access public
@@ -2618,8 +2618,8 @@ class DB_Table_Database extends DB_Table_Base
             $link_tables = array();           // list of required linking tables
             $joins       = array();           // list of join conditions
             // Initialize linked list of unjoined tables
-            $next  = array();                  
-            for ( $i=1 ; $i < $n_tables-1 ; $i++) {
+            $next  = array();
+            for ($i=1 ; $i < $n_tables-1 ; $i++) {
                 $next[$tables[$i]]   = $tables[$i+1];
                 $prev[$tables[$i+1]] = $tables[$i];
             }
@@ -2652,7 +2652,7 @@ class DB_Table_Database extends DB_Table_Base
                                     for ($i=0; $i < count($fkey); $i++ ) {
                                         $fcol = $fkey[$i];
                                         $rcol = $rkey[$i];
-                                        $joins[] = 
+                                        $joins[] =
                                                "$table1.$fcol = $table2.$rcol";
                                     }
                                 }
@@ -2680,7 +2680,7 @@ class DB_Table_Database extends DB_Table_Base
                                     for ($i=0; $i < count($fkey); $i++ ) {
                                         $fcol = $fkey[$i];
                                         $rcol = $rkey[$i];
-                                        $joins[] = 
+                                        $joins[] =
                                                "$table2.$fcol = $table1.$rcol";
                                     }
                                 }
@@ -2716,7 +2716,7 @@ class DB_Table_Database extends DB_Table_Base
                                     for ($i=0; $i < count($fkey1); $i++ ) {
                                         $fcol1 = $fkey1[$i];
                                         $rcol1 = $rkey1[$i];
-                                        $joins[] = 
+                                        $joins[] =
                                                "$link.$fcol1 = $table1.$rcol1";
                                     }
                                 }
@@ -2729,7 +2729,7 @@ class DB_Table_Database extends DB_Table_Base
                                     for ($i=0; $i < count($fkey2); $i++ ) {
                                         $fcol2 = $fkey2[$i];
                                         $rcol2 = $rkey2[$i];
-                                        $joins[] = 
+                                        $joins[] =
                                               "$link.$fcol2 = $table2.$rcol2";
                                     }
                                 }
@@ -2767,7 +2767,7 @@ class DB_Table_Database extends DB_Table_Base
 
             }
 
-            // Add any required linking tables to $tables array 
+            // Add any required linking tables to $tables array
             if ($link_tables) {
                 foreach ($link_tables as $link) {
                     if (!in_array($link, $tables)) {
@@ -2787,8 +2787,8 @@ class DB_Table_Database extends DB_Table_Base
         // Add $filter condition, if present
         if ($filter) {
            if (isset($query['where'])) {
-               $query['where'] = '( ' . $query['where'] . " )\n" .
-                           '  AND ( ' . $filter . ')';
+               $query['where'] = '(' . $query['where'] . " )\n" .
+                           '  AND (' . $filter . ')';
            } else {
                $query['where'] = $filter;
            }
@@ -2799,77 +2799,77 @@ class DB_Table_Database extends DB_Table_Base
 
 
     /**
-     * Returns WHERE clause equating values of $data array to database column 
+     * Returns WHERE clause equating values of $data array to database column
      * values
      *
-     * Usage: In the simplest usage of this method, which is obtained when 
-     * both $data_key and $filt_key are null or absent, the method returns an 
+     * Usage: In the simplest usage of this method, which is obtained when
+     * both $data_key and $filt_key are null or absent, the method returns an
      * SQL logical expression that equates the values of $data to the values
-     * of database columns whose names are given by the keys of $data. In 
-     * the general case, function is designed to return an SQL logical 
+     * of database columns whose names are given by the keys of $data. In
+     * the general case, function is designed to return an SQL logical
      * expression that equates the values of a set of foreign key columns in
      * associative array $data, which is a row to be inserted or updated in
-     * one table, to the values of the corresponding columns of a referenced 
+     * one table, to the values of the corresponding columns of a referenced
      * table. In this usage, $data_key is the foreign key (a column name or
      * numerical array of column names), and $filt_key is the corresponding
-     * referenced key. 
-     * 
-     * Parameters: Parameter $data is an associative array containing data to 
+     * referenced key.
+     *
+     * Parameters: Parameter $data is an associative array containing data to
      * be inserted into or used to update one row of a database table, in which
      * array keys are column names. When present, $data_key contains either
      * the name of a single array key of interest, or a numerical array of such
-     * keys. These are usually the names of the columns of a foreign key in 
-     * that table. When, $data_key is null or absent, it is taken to be equal 
+     * keys. These are usually the names of the columns of a foreign key in
+     * that table. When, $data_key is null or absent, it is taken to be equal
      * to an array containing all of the keys of $data. When present, $filt_key
-     * contains either a string or a numerical array of strings that are 
+     * contains either a string or a numerical array of strings that are
      * aliases for the keys in $data_key.  These are usually the names of the
-     * corresponding columns in the referenced table. When $filt_key is null 
-     * or absent, it is equated with $data_key internally.  The function 
-     * returns an SQL logical expression that equates the values in $data 
-     * whose keys are specified by $data_key, to the values of database 
-     * columns whose names are specified in $filt_key. 
+     * corresponding columns in the referenced table. When $filt_key is null
+     * or absent, it is equated with $data_key internally.  The function
+     * returns an SQL logical expression that equates the values in $data
+     * whose keys are specified by $data_key, to the values of database
+     * columns whose names are specified in $filt_key.
      *
      * Simple case: If parameters $data_key and $filt_key are null, and
      * <code>
-     *     $data = array( 'c1' => $v1, 'c2' => $v2, 'c3' => $v3)
+     *     $data = array('c1' => $v1, 'c2' => $v2, 'c3' => $v3)
      * </code>
-     * then buildFilter($data) returns a string 
+     * then buildFilter($data) returns a string
      * <code>
      *     "c1 => $val1 AND c2 => $val2 AND c3 = $v3"
      * </code>
      * in which the values $v1, $v2, $v3 are replaced by SQL literal values,
      * quoted and escaped as appropriate for each data type and the backend
-     * RDBMS. 
+     * RDBMS.
      *
      * General case: Buildfilter returns a SQL logical exprssion that equates
      * the values of $data whose keys are given in $data_key with the values
      * values of database columns with names given in $filt_key. For example,
      * if
      * <code>
-     *    $data = array( 'k1' => $v1, 'k2' => $v2, ... , 'k10' => $v10 );
+     *    $data = array('k1' => $v1, 'k2' => $v2, ... , 'k10' => $v10 );
      *    $data_key = array('k2', 'k5', 'k7');
      *    $filt_key = array('c2', 'c5', 'c7');
      * </code>
      * then buildFilter($data, $data_key, $filt_key) returns a string
      * <code>
-     *    "c2 = $v2 AND c5 = $v5 AND c7 = $v7" 
+     *    "c2 = $v2 AND c5 = $v5 AND c7 = $v7"
      * </code>
-     * in which the values $v2, $v5, $v7 are replaced by properly quoted 
-     * SQL literal values. If, in the above example, $data_key = 'k5' and 
+     * in which the values $v2, $v5, $v7 are replaced by properly quoted
+     * SQL literal values. If, in the above example, $data_key = 'k5' and
      * $filt_key = 'c5', then the function will return
      * <code>
-     *    "c5 = $v5" 
+     *    "c5 = $v5"
      * </code>
-     * where (again) $v5 is replaced by an SQL literal. 
+     * where (again) $v5 is replaced by an SQL literal.
      *
      * Quoting is done by the DB_Table_Database::quote() method, based on
-     * the php type of the values in $array.  The treatment of null values 
+     * the php type of the values in $array.  The treatment of null values
      * in $data depends upon the value of the $match parameter.
      *
-     * Null values: The treatment to null values in $data depends upon 
+     * Null values: The treatment to null values in $data depends upon
      * the value of the $match parameter . If $match == 'simple', an empty
      * string is returned if any $value of $data with a key in $data_key
-     * is null. If $match == 'partial', the returned SQL expression 
+     * is null. If $match == 'partial', the returned SQL expression
      * equates only the relevant non-null values of $data to the values of
      * corresponding database columns. If $match == 'full', the function
      * returns an empty string if all of the relevant values of data are
@@ -2883,11 +2883,11 @@ class DB_Table_Database extends DB_Table_Base
      *                        values are names of a corresponding set of
      *                        database column names.
      * @return string SQL expression equating values in $data, for which keys
-     *                also appear in $data_key, to values of corresponding 
+     *                also appear in $data_key, to values of corresponding
      *                database columns named in $filt_key.
      * @access private
      */
-    function _buildFKeyFilter($data, $data_key = null, $filt_key = null, 
+    function _buildFKeyFilter($data, $data_key = null, $filt_key = null,
                               $match = 'simple')
     {
         // Check $match type value
@@ -2966,15 +2966,15 @@ class DB_Table_Database extends DB_Table_Base
     /**
     * Returns SQL literal string representation of a php value
     *
-    * If $value is: 
+    * If $value is:
     *    - a string, return the string enquoted and escaped
     *    - a number, return cast of number to string, without quotes
     *    - a boolean, return '1' for true and '0' for false
     *    - null, return the string 'NULL'
-    * 
-    * @param  mixed  $value 
+    *
+    * @param  mixed  $value
     * @return string representation of value as an SQL literal
-    * 
+    *
     * @see DB_Common::quoteSmart()
     * @see MDB2::quote()
     * @access public
@@ -2983,7 +2983,7 @@ class DB_Table_Database extends DB_Table_Base
     {
         if (is_bool($value)) {
            return $value ? '1' : '0';
-        } 
+        }
         if ($this->backend == 'mdb2') {
             $value = $this->db->quote($value);
         } else {
@@ -2991,7 +2991,7 @@ class DB_Table_Database extends DB_Table_Base
         }
         return (string) $value;
     }
-    
+
     /**
      * Serializes all table references and sets $db = null, $backend = null
      *
@@ -3015,11 +3015,11 @@ class DB_Table_Database extends DB_Table_Base
     /**
      * Unserializes child DB_Table objects
      *
-     * Immediately after unserialization, a DB_Table_Databse object 
-     * has null $db and $backend properties, and each of its child 
+     * Immediately after unserialization, a DB_Table_Databse object
+     * has null $db and $backend properties, and each of its child
      * DB_Table objects has null $db and $backend properties. The
-     * DB_Table_Database::setDB method should be called immediately 
-     * after unserialization to re-establish the database connection, 
+     * DB_Table_Database::setDB method should be called immediately
+     * after unserialization to re-establish the database connection,
      * like so:
      * <code>
      *    $db_object = unserialize($serialized_db);
@@ -3073,10 +3073,10 @@ class DB_Table_Database extends DB_Table_Base
      * Returns a DB_Table_Database object constructed from an XML string
      *
      * Uses the MDB2 XML schema for a database element, including a new
-     * syntax for foreign key indices. 
+     * syntax for foreign key indices.
      *
      * NOTE: This function requires PHP 5. It throws an error if used
-     * with PHP 4. 
+     * with PHP 4.
      *
      * @param  string XML string representation
      * @return object DB_Table_Database object on success, or error on failure
@@ -3097,21 +3097,21 @@ class DB_Table_Database extends DB_Table_Base
             return $this->throwError(
                    DB_TABLE_DATABASE_ERR_XML_PARSE);
         }
-    
+
         // Instantiate database object
         $database_name = (string) $xml->name;
         $database_obj  = new DB_Table_Database($conn, $database_name);
-   
+
         // Create array of foreign key references
         $ref = array();
-   
+
         // Loop over tables
         foreach ($xml->table as $table) {
             $table_name = (string) $table->name;
-    
+
             // Instantiate table object
             $table_obj = new DB_Table($conn, $table_name);
-        
+
             // Add columns to table object
             $declaration = $table->declaration;
             foreach ($declaration->field as $field) {
@@ -3141,8 +3141,8 @@ class DB_Table_Database extends DB_Table_Base
                 }
                 $table_obj->col[$col_name] = $def;
             }
-        
-            // Add indices 
+
+            // Add indices
             foreach ($declaration->index as $index) {
                 if (isset($index->name)) {
                     $name = (string) $index->name;

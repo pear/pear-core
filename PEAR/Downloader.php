@@ -145,22 +145,26 @@ class PEAR_Downloader extends PEAR_Common
      * @param array
      * @param PEAR_Config
      */
-    function PEAR_Downloader(&$ui, $options, &$config)
+    function __construct($ui = null, $options = array(), $config = null)
     {
-        parent::PEAR_Common();
+        parent::__construct();
         $this->_options = $options;
-        $this->config = &$config;
-        $this->_preferredState = $this->config->get('preferred_state');
+        if ($config !== null) {
+            $this->config = &$config;
+            $this->_preferredState = $this->config->get('preferred_state');
+        }
         $this->ui = &$ui;
         if (!$this->_preferredState) {
             // don't inadvertantly use a non-set preferred_state
             $this->_preferredState = null;
         }
 
-        if (isset($this->_options['installroot'])) {
-            $this->config->setInstallRoot($this->_options['installroot']);
+        if ($config !== null) {
+            if (isset($this->_options['installroot'])) {
+                $this->config->setInstallRoot($this->_options['installroot']);
+            }
+            $this->_registry = &$config->getRegistry();
         }
-        $this->_registry = &$config->getRegistry();
 
         if (isset($this->_options['alldeps']) || isset($this->_options['onlyreqdeps'])) {
             $this->_installed = $this->_registry->listAllPackages();

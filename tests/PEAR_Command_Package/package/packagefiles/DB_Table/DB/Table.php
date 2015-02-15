@@ -2,20 +2,20 @@
 
 /**
  * DB_Table is a database API and data type SQL abstraction class.
- * 
+ *
  * DB_Table provides database API abstraction, data type abstraction,
  * automated SELECT, INSERT, and UPDATE queries, automated table
  * creation, automated validation of inserted/updated column values,
  * and automated creation of QuickForm elements based on the column
  * definitions.
- * 
+ *
  * @category Database
  * @package DB_Table
  * @author Paul M. Jones <pmjones@php.net>
  * @author Mark Wiesemann <wiesemann@php.net>
- * 
+ *
  * @license http://www.gnu.org/copyleft/lesser.html LGPL
- * 
+ *
  * @version $Id: Table.php,v 1.87 2007/06/14 15:07:27 morse Exp $
  */
 
@@ -386,11 +386,11 @@ $GLOBALS['_DB_TABLE']['type'] = array(
 );
 
 
-/** 
+/**
  * US-English default error messages. If you want to internationalize, you can
  * set the translated messages via $GLOBALS['_DB_TABLE']['error']. You can also
  * use DB_Table::setErrorMessage(). Examples:
- * 
+ *
  * <code>
  * (1) $GLOBALS['_DB_TABLE]['error'] = array(DB_TABLE_ERR_PHPTYPE   => '...',
  *                                           DB_TABLE_ERR_SQL_UNDEF => '...');
@@ -405,7 +405,7 @@ $GLOBALS['_DB_TABLE']['type'] = array(
  *     $obj->setErrorMessage(array(DB_TABLE_ERR_PHPTYPE   => '...');
  *                                 DB_TABLE_ERR_SQL_UNDEF => '...');
  * </code>
- * 
+ *
  * For errors that can occur with-in the constructor call (i.e. e.g. creating
  * or altering the database table), only the code from examples (1) to (3)
  * will alter the default error messages early enough. For errors that can
@@ -464,36 +464,36 @@ foreach ($GLOBALS['_DB_TABLE']['default_error'] as $code => $message) {
 
 /**
  * DB_Table is a database API and data type SQL abstraction class.
- * 
+ *
  * DB_Table provides database API abstraction, data type abstraction,
  * automated SELECT, INSERT, and UPDATE queries, automated table
  * creation, automated validation of inserted/updated column values,
  * and automated creation of QuickForm elemnts based on the column
  * definitions.
- * 
+ *
  * @category Database
  * @package DB_Table
  * @author Paul M. Jones <pmjones@php.net>
  * @author Mark Wiesemann <wiesemann@php.net>
- * 
+ *
  * @version @package_version@
  *
  */
 
-class DB_Table extends DB_Table_Base 
+class DB_Table extends DB_Table_Base
 {
-    
+
     /**
      * The table or view in the database to which this object binds.
-     * 
+     *
      * @access public
      * @var string
      */
     var $table = null;
-    
+
     /**
      * DB_Table_Database instance that this table belongs to.
-     * 
+     *
      * @access private
      * @var object
      */
@@ -502,25 +502,25 @@ class DB_Table extends DB_Table_Base
 
     /**
      * Associative array of column definitions.
-     * 
+     *
      * @access public
      * @var array
      */
     var $col = array();
-    
-    
+
+
     /**
      * Associative array of index definitions.
-     * 
+     *
      * @access public
      * @var array
      */
     var $idx = array();
-    
+
     /**
      * Name of an auto-increment column, if any. Null otherwise.
      *
-     * A table can contain at most one auto-increment column. 
+     * A table can contain at most one auto-increment column.
      * Auto-incrementing is implemented in the insert() method,
      * using a sequence accessed by the nextID() method.
      *
@@ -532,7 +532,7 @@ class DB_Table extends DB_Table_Base
 
     /**
      * Boolean flag to turn on (true) or off (false) auto-incrementing.
-     * 
+     *
      * Auto-increment column $auto_inc_col upon insertion only if $_auto_inc is
      * true and the value of that column is null in the data to be inserted.
      *
@@ -544,30 +544,30 @@ class DB_Table extends DB_Table_Base
 
     /**
      * Whether or not to automatically validate data at insert-time.
-     * 
+     *
      * @var bool
      * @access private
      */
     var $_valid_insert = true;
-    
+
     /**
      * Whether or not to automatically validate data at update-time.
-     * 
+     *
      * @var bool
      * @access private
      */
     var $_valid_update = true;
-    
+
 
     /**
      * Whether or not to automatically recast data at insert- and update-time.
-     * 
+     *
      * @var    bool
      * @access private
      */
     var $_auto_recast = true;
-    
-    
+
+
     /**
      * Constructor.
      *
@@ -577,13 +577,13 @@ class DB_Table extends DB_Table_Base
      * or verify that its schema matches that declared in the $col and
      * $idx parameters, depending on the value of the $create parameter.
      *
-     * If there is an error on instantiation, $this->error will be 
+     * If there is an error on instantiation, $this->error will be
      * populated with the PEAR_Error.
-     * 
+     *
      * @param object &$db A PEAR DB/MDB2 object.
-     * 
+     *
      * @param string $table The table name to connect to in the database.
-     * 
+     *
      * @param mixed $create The automatic table creation mode to pursue:
      * - boolean false to not attempt creation
      * - 'safe' to create the table only if it does not exist
@@ -595,11 +595,11 @@ class DB_Table extends DB_Table_Base
      *   exists, a verification for columns existence, the column types, the
      *   indexes existence, and the indexes types will be performed and the
      *   table schema will be modified if needed
-     * 
+     *
      * @return object DB_Table
      * @access public
      */
-    function DB_Table(&$db, $table, $create = false)
+    function __construct(&$db, $table, $create = false)
     {
         // is the first argument a DB/MDB2 object?
         $this->backend = null;
@@ -613,14 +613,14 @@ class DB_Table extends DB_Table_Base
             $this->error =& DB_Table::throwError(DB_TABLE_ERR_NOT_DB_OBJECT);
             return;
         }
-        
+
         // set the class properties
         $this->db =& $db;
         $this->table = $table;
 
         // Identify the class for error handling by parent class
         $this->_primary_subclass = 'DB_TABLE';
-        
+
         // is the RDBMS supported?
         $phptype = $db->phptype;
         $dbsyntax = $db->dbsyntax;
@@ -675,7 +675,7 @@ class DB_Table extends DB_Table_Base
                     $result = $this->verify();
                     break;
             }
-            
+
             if (PEAR::isError($result)) {
                 // problem creating/altering/verifing the table
                 $this->error =& $result;
@@ -683,18 +683,18 @@ class DB_Table extends DB_Table_Base
             }
         }
     }
-    
-    
+
+
     /**
      * Is a particular RDBMS supported by DB_Table?
-     * 
+     *
      * @static
      * @param string $phptype The RDBMS type for PHP.
      * @param string $dbsyntax The chosen database syntax.
      * @return bool  True if supported, false if not.
      * @access public
      */
-    
+
     function supported($phptype, $dbsyntax = '')
     {
         // only Firebird is supported, not its ancestor Interbase
@@ -708,14 +708,14 @@ class DB_Table extends DB_Table_Base
 
     /**
      * Is a creation mode supported for a RDBMS by DB_Table?
-     * 
+     *
      * @param string $mode The chosen creation mode.
      * @param string $phptype The RDBMS type for PHP.
      * @return bool  True if supported, false if not (PEAR_Error on failure)
      *
      * @throws PEAR_Error if
      *     Unknown creation mode is specified (DB_TABLE_ERR_CREATE_FLAG)
-     * 
+     *
      * @access public
      */
     function modeSupported($mode, $phptype)
@@ -755,11 +755,11 @@ class DB_Table extends DB_Table_Base
 
     /**
      * Overwrite one or more error messages, e.g. to internationalize them.
-     * 
+     *
      * @param mixed $code If string, the error message with code $code will
      * be overwritten by $message. If array, the error messages with code
      * of each array key will be overwritten by the key's value.
-     * 
+     *
      * @param string $message Only used if $key is not an array.
      * @return void
      * @access public
@@ -776,9 +776,9 @@ class DB_Table extends DB_Table_Base
 
 
     /**
-     * 
+     *
      * Returns all or part of the $this->col property array.
-     * 
+     *
      * @param mixed $col If null, returns the $this->col property array
      * as it is.  If string, returns that column name from the $this->col
      * array. If an array, returns those columns named as the array
@@ -794,7 +794,7 @@ class DB_Table extends DB_Table_Base
         if (is_null($col)) {
             return $this->col;
         }
-        
+
         // if the param is a string, only return the column definition
         // named by the that string
         if (is_string($col)) {
@@ -804,7 +804,7 @@ class DB_Table extends DB_Table_Base
                 return false;
             }
         }
-        
+
         // if the param is a sequential array of column names,
         // return only those columns named in that array
         if (is_array($col)) {
@@ -812,28 +812,28 @@ class DB_Table extends DB_Table_Base
             foreach ($col as $name) {
                 $set[$name] = $this->getColumns($name);
             }
-            
+
             if (count($set) == 0) {
                 return false;
             } else {
                 return $set;
             }
         }
-        
+
         // param was not null, string, or array
         return false;
     }
-    
-    
+
+
     /**
      * Returns all or part of the $this->idx property array.
-     * 
+     *
      * @param mixed $idx Index name (key in $this->idx), or array of
      *                   index name strings.
-     * 
-     * @return mixed All or part of the $this->idx property array, 
+     *
+     * @return mixed All or part of the $this->idx property array,
      *               or boolean false if $idx is not null but invalid
-     * 
+     *
      * @access public
      */
     function getIndexes($idx = null)
@@ -842,7 +842,7 @@ class DB_Table extends DB_Table_Base
         if (is_null($idx)) {
             return $this->idx;
         }
-        
+
         // if the param is a string, only return the index definition
         // named by the that string
         if (is_string($idx)) {
@@ -852,7 +852,7 @@ class DB_Table extends DB_Table_Base
                 return false;
             }
         }
-        
+
         // if the param is a sequential array of index names,
         // return only those indexes named in that array
         if (is_array($idx)) {
@@ -860,31 +860,31 @@ class DB_Table extends DB_Table_Base
             foreach ($idx as $name) {
                 $set[$name] = $this->getIndexes($name);
             }
-            
+
             if (count($set) == 0) {
                 return false;
             } else {
                 return $set;
             }
         }
-        
+
         // param was not null, string, or array
         return false;
     }
-    
-    
+
+
     /**
      * Connect or disconnect a DB_Table_Database instance to this table
      * instance.
-     * 
+     *
      * Used to re-connect this DB_Table object to a parent DB_Table_Database
-     * object during unserialization. Can also disconnect if the $database 
-     * parameter is null. Use the DB_Table_Database::addTable method instead 
+     * object during unserialization. Can also disconnect if the $database
+     * parameter is null. Use the DB_Table_Database::addTable method instead
      * to add a table to a new DB_Table_Database.
-     * 
+     *
      * @param object &$database DB_Table_Database instance that this table
      *               belongs to (or null to disconnect from instance).
-     * 
+     *
      * @return void
      * @access public
      */
@@ -897,14 +897,14 @@ class DB_Table extends DB_Table_Base
         }
     }
 
-    
+
     /**
      * Inserts a single table row.
      *
      * Inserts data from associative array $data, in which keys are column
      * names and values are column values. All required columns (except an
      * auto-increment column) must be included in the data array. Columns
-     * values that are not set or null are inserted as SQL NULL values. 
+     * values that are not set or null are inserted as SQL NULL values.
      *
      * If an auto-increment column is declared (by setting $this->auto_inc_col),
      * and the value of that column in $data is not set or null, then a new
@@ -917,11 +917,11 @@ class DB_Table extends DB_Table_Base
      * will validates column types with validInsert() before insertion.
      *
      * @access public
-     * 
+     *
      * @param array $data An associative array of key-value pairs where
-     * the key is the column name and the value is the column value. 
-     * This is the data that will be inserted into the table.  
-     * 
+     * the key is the column name and the value is the column value.
+     * This is the data that will be inserted into the table.
+     *
      * @return mixed Void on success (PEAR_Error on failure)
      *
      * @throws PEAR_Error if:
@@ -935,9 +935,9 @@ class DB_Table extends DB_Table_Base
     function insert($data)
     {
         // Auto-increment if enabled and input value is null or not set
-        if ($this->_auto_inc 
-            && !is_null($this->auto_inc_col) 
-            && !isset($data[$this->auto_inc_col]) 
+        if ($this->_auto_inc
+            && !is_null($this->auto_inc_col)
+            && !isset($data[$this->auto_inc_col])
            ) {
             $column = $this->auto_inc_col;
             // check that the auto-increment column exists
@@ -946,7 +946,7 @@ class DB_Table extends DB_Table_Base
                         DB_TABLE_ERR_AUTO_INC_COL,
                         ": $column does not exist");
             }
-            // check that the column is integer 
+            // check that the column is integer
             if (!in_array($this->col[$column]['type'],
                            array('integer','smallint','bigint'))) {
                 return $this->throwError(
@@ -954,8 +954,8 @@ class DB_Table extends DB_Table_Base
                         ": $column is not an integer");
             }
             // check that the column is required
-            // Note: The insert method will replace a null input value 
-            // of $data[$column] with a sequence value. This makes 
+            // Note: The insert method will replace a null input value
+            // of $data[$column] with a sequence value. This makes
             // the column effectively 'not null'. This column must be
             // 'required' for consistency, to make this explicit.
             if (!$this->isRequired($column)) {
@@ -988,7 +988,7 @@ class DB_Table extends DB_Table_Base
         if ($this->_database) {
 
             $_database = $this->_database;
-  
+
             // Validate foreign key values (if enabled)
             if ($_database->_check_fkey) {
                $result = $_database->validForeignKeys($this->table, $data);
@@ -996,9 +996,9 @@ class DB_Table extends DB_Table_Base
                    return $result;
                }
             }
-    
+
         }
-       
+
         // Do insertion
         if ($this->backend == 'mdb2') {
             $result = $this->db->extended->autoExecute($this->table, $data,
@@ -1009,16 +1009,16 @@ class DB_Table extends DB_Table_Base
         }
         return $result;
     }
-    
-    
+
+
     /**
      * Turns on or off auto-incrementing of $auto_inc_col column (if any)
-     * 
+     *
      * For auto-incrementing to work, an $auto_inc_col column must be declared,
      * auto-incrementing must be enabled (by this method), and the value of
      * the $auto_inc_col column must be not set or null in the $data passed to
-     * the insert method. 
-     * 
+     * the insert method.
+     *
      * @param  bool $flag True to turn on auto-increment, false to turn off.
      * @return void
      * @access public
@@ -1031,13 +1031,13 @@ class DB_Table extends DB_Table_Base
             $this->_auto_inc = false;
         }
     }
-    
-    
+
+
     /**
      * Turns on (or off) automatic validation of inserted data.
-     * 
-     * Enables (if $flag is true) or disables (if $flag is false) automatic 
-     * validation of data types prior to actual insertion into the database 
+     *
+     * Enables (if $flag is true) or disables (if $flag is false) automatic
+     * validation of data types prior to actual insertion into the database
      * by the DB_Table::insert() method.
      *
      * @param  bool $flag True to turn on auto-validation, false to turn off.
@@ -1052,16 +1052,16 @@ class DB_Table extends DB_Table_Base
             $this->_valid_insert = false;
         }
     }
-    
-    
+
+
     /**
      * Validates an array for insertion into the table.
-     * 
+     *
      * @param array $data An associative array of key-value pairs where
      * the key is the column name and the value is the column value.  This
      * is the data that will be inserted into the table.  Data is checked
      * against the column data type for validity.
-     * 
+     *
      * @return boolean true on success (PEAR_Error on failure)
      *
      * @throws PEAR_Error if:
@@ -1070,7 +1070,7 @@ class DB_Table extends DB_Table_Base
      *     - Column value doesn't match type  (DB_TABLE_ERR_INS_DATA_INVALID)
      *
      * @access public
-     * 
+     *
      * @see insert()
      */
     function validInsert(&$data)
@@ -1085,13 +1085,13 @@ class DB_Table extends DB_Table_Base
                 );
             }
         }
-        
+
         // loop through each column mapping, and check the data to be
         // inserted into it against the column data type. we loop through
         // column mappings instead of the insert data to make sure that
         // all necessary columns are being inserted.
         foreach ($this->col as $col => $val) {
-            
+
             // is the value allowed to be null?
             if (isset($val['require']) &&
                 $val['require'] == true &&
@@ -1101,7 +1101,7 @@ class DB_Table extends DB_Table_Base
                     "'$col'"
                 );
             }
-            
+
             // does the value to be inserted match the column data type?
             if (isset($data[$col]) &&
                 ! $this->isValid($data[$col], $col)) {
@@ -1111,31 +1111,31 @@ class DB_Table extends DB_Table_Base
                 );
             }
         }
-        
+
         return true;
     }
-    
-    
+
+
     /**
      * Update table row or rows that match a custom WHERE clause
      *
      * Constructs and submits an SQL UPDATE command to update columns whose
      * names are keys in the $data array parameter, in all rows that match
      * the logical condition given by the $where string parameter.
-     * 
+     *
      * If auto-recasting is enabled (if $this->_auto_recast), update() will
      * try, if necessary, to recast $data to proper column types, with recast().
      *
-     * If auto-validation is enabled (if $this->_valid_insert), update() 
+     * If auto-validation is enabled (if $this->_valid_insert), update()
      * validates column types with validUpdate() before insertion.
      *
      * @param array $data An associative array of key-value pairs where the
      * key is the column name and the value is the column value. These are
      * the columns that will be updated with new values.
-     * 
+     *
      * @param string $where An SQL WHERE clause limiting which records are
      * are to be updated.
-     * 
+     *
      * @return mixed Void on success, a PEAR_Error object on failure.
      *
      * @throws PEAR_Error if:
@@ -1143,7 +1143,7 @@ class DB_Table extends DB_Table_Base
      *     - Error thrown by DB/MDB2::autoexecute()
      *
      * @access public
-     * 
+     *
      * @see validUpdate()
      * @see DB::autoExecute()
      * @see MDB2::autoExecute()
@@ -1154,7 +1154,7 @@ class DB_Table extends DB_Table_Base
         if ($this->_auto_recast) {
             $this->recast($data);
         }
-        
+
         // validate the data if auto-validation is turned on
         if ($this->_valid_update) {
             $result = $this->validUpdate($data);
@@ -1165,7 +1165,7 @@ class DB_Table extends DB_Table_Base
 
         // Does a parent DB_Table_Database object exist?
         if ($this->_database) {
-  
+
             $_database =& $this->_database;
 
             // Validate foreign key values (if enabled)
@@ -1173,9 +1173,9 @@ class DB_Table extends DB_Table_Base
                $result = $_database->validForeignKeys($this->table, $data);
                if (PEAR::isError($result)) {
                    return $result;
-               } 
+               }
             }
-    
+
             // Implement any relevant ON UPDATE actions
             $result = $_database->onUpdateAction($this, $data, $where);
             if (PEAR::isError($result)) {
@@ -1183,8 +1183,8 @@ class DB_Table extends DB_Table_Base
             }
 
         }
-       
-        // Submit update command 
+
+        // Submit update command
         if ($this->backend == 'mdb2') {
             $result = $this->db->extended->autoExecute($this->table, $data,
                 MDB2_AUTOQUERY_UPDATE, $where);
@@ -1195,12 +1195,12 @@ class DB_Table extends DB_Table_Base
         return $result;
 
     }
-    
-    
+
+
     /**
      * Turns on (or off) automatic validation of updated data.
-     * 
-     * Enables (if $flag is true) or disables (if $flag is false) automatic 
+     *
+     * Enables (if $flag is true) or disables (if $flag is false) automatic
      * validation of data types prior to updating rows in the database by
      * the {@link update()} method.
      *
@@ -1216,16 +1216,16 @@ class DB_Table extends DB_Table_Base
             $this->_valid_update = false;
         }
     }
-    
-    
+
+
     /**
      * Validates an array for updating the table.
-     * 
+     *
      * @param array $data An associative array of key-value pairs where
      * the key is the column name and the value is the column value.  This
      * is the data that will be inserted into the table.  Data is checked
      * against the column data type for validity.
-     * 
+     *
      * @return mixed Boolean true on success (PEAR_Error object on failure)
      *
      * @throws PEAR_Error if
@@ -1234,7 +1234,7 @@ class DB_Table extends DB_Table_Base
      *     - Column value doesn't match type  (DB_TABLE_ERR_UPD_DATA_INVALID)
      *
      * @access public
-     * 
+     *
      * @see update()
      */
     function validUpdate(&$data)
@@ -1242,7 +1242,7 @@ class DB_Table extends DB_Table_Base
         // loop through each data element, and check the
         // data to be updated against the column data type.
         foreach ($data as $col => $val) {
-            
+
             // does the column exist?
             if (! isset($this->col[$col])) {
                 return $this->throwError(
@@ -1250,10 +1250,10 @@ class DB_Table extends DB_Table_Base
                     "('$col')"
                 );
             }
-            
+
             // the column definition
             $defn = $this->col[$col];
-            
+
             // is it allowed to be null?
             if (isset($defn['require']) &&
                 $defn['require'] == true &&
@@ -1264,7 +1264,7 @@ class DB_Table extends DB_Table_Base
                     $col
                 );
             }
-            
+
             // does the value to be inserted match the column data type?
             if (! $this->isValid($data[$col], $col)) {
                 return $this->throwError(
@@ -1273,22 +1273,22 @@ class DB_Table extends DB_Table_Base
                 );
             }
         }
-        
+
         return true;
     }
-    
-    
+
+
     /**
      * Deletes table rows matching a custom WHERE clause.
-     * 
-     * Constructs and submits and SQL DELETE command with the specified WHERE 
+     *
+     * Constructs and submits and SQL DELETE command with the specified WHERE
      * clause. Command is submitted by DB::query() or MDB2::exec().
      *
      * If a reference to a DB_Table_Database instance exists, carry out any
-     * ON DELETE actions declared in that instance before actual insertion, 
+     * ON DELETE actions declared in that instance before actual insertion,
      * if emulation of ON DELETE actions is enabled in that instance.
      *
-     * @param string $where Logical condition in the WHERE clause of the 
+     * @param string $where Logical condition in the WHERE clause of the
      *                      delete command.
      *
      * @return mixed void on success (PEAR_Error on failure)
@@ -1297,7 +1297,7 @@ class DB_Table extends DB_Table_Base
      *     DB::query() or MDB2::exec() returns error (bubbles up)
      *
      * @access public
-     * 
+     *
      * @see DB::query()
      * @see MDB2::exec()
      */
@@ -1305,7 +1305,7 @@ class DB_Table extends DB_Table_Base
     {
         // Does a parent DB_Table_Database object exist?
         if ($this->_database) {
-  
+
             $_database =& $this->_database;
 
             // Implement any relevant ON DELETE actions
@@ -1315,7 +1315,7 @@ class DB_Table extends DB_Table_Base
             }
 
         }
-       
+
         if ($this->backend == 'mdb2') {
             $result = $this->db->exec("DELETE FROM $this->table WHERE $where");
         } else {
@@ -1323,24 +1323,24 @@ class DB_Table extends DB_Table_Base
         }
         return $result;
     }
-    
-    
+
+
     /**
      *
      * Generates and returns a sequence value.
      *
      * Generates a sequence value by calling the DB or MDB2::nextID() method. The
      * sequence name defaults to the table name, or may be specified explicitly.
-     * 
+     *
      * @param  string  $seq_name The sequence name; defaults to table_id.
-     * 
+     *
      * @return integer The next value in the sequence (PEAR_Error on failure)
      *
      * @throws PEAR_Error if
      *     Sequence name too long (>26 char + _seq) (DB_TABLE_ERR_SEQ_STRLEN)
      *
      * @access public
-     * 
+     *
      * @see DB::nextID()
      * @see MDB2::nextID()
      */
@@ -1351,7 +1351,7 @@ class DB_Table extends DB_Table_Base
         } else {
             $seq_name = "{$this->table}_{$seq_name}";
         }
-        
+
         // the maximum length is 30, but PEAR DB/MDB2 will add "_seq" to the
         // name, so the max length here is less 4 chars. we have to
         // check here because the sequence will be created automatically
@@ -1361,29 +1361,29 @@ class DB_Table extends DB_Table_Base
                 DB_TABLE_ERR_SEQ_STRLEN,
                 " ('$seq_name')"
             );
-            
+
         }
         return $this->db->nextId($seq_name);
     }
-    
-    
+
+
     /**
      * Escapes and enquotes a value for use in an SQL query.
-     * 
-     * Simple wrapper for DB_Common::quoteSmart() or MDB2::quote(), which 
-     * returns the value of one of these functions. Helps makes user input 
+     *
+     * Simple wrapper for DB_Common::quoteSmart() or MDB2::quote(), which
+     * returns the value of one of these functions. Helps makes user input
      * safe against SQL injection attack.
-     * 
+     *
      * @param mixed $val The value to be quoted
      *
-     * @return string The value with quotes escaped, inside single quotes if 
+     * @return string The value with quotes escaped, inside single quotes if
      *                non-numeric.
      *
      * @throws PEAR_Error if
      *     DB_Common::quoteSmart() or MDB2::quote() returns Error (bubbled up)
-     * 
+     *
      * @access public
-     * 
+     *
      * @see DB_Common::quoteSmart()
      * @see MDB2::quote()
      */
@@ -1396,13 +1396,13 @@ class DB_Table extends DB_Table_Base
         }
         return $val;
     }
-    
-    
+
+
     /**
      * Returns a blank row array based on the column map.
-     * 
+     *
      * The array keys are the column names, and all values are set to null.
-     * 
+     *
      * @return array An associative array where keys are column names and
      *               all values are null.
      * @access public
@@ -1410,25 +1410,25 @@ class DB_Table extends DB_Table_Base
     function getBlankRow()
     {
         $row = array();
-        
+
         foreach ($this->col as $key => $val) {
             $row[$key] = null;
         }
-        
+
         $this->recast($row);
-        
+
         return $row;
     }
-    
-    
+
+
     /**
      * Turns on (or off) automatic recasting of insert and update data.
-     * 
-     * Turns on (if $flag is true) or off (if $flag is false) automatic forcible 
-     * recasting of data to the declared data type, if required, prior to inserting 
-     * or updating.  The recasting is done by calling the DB_Table::recast() 
+     *
+     * Turns on (if $flag is true) or off (if $flag is false) automatic forcible
+     * recasting of data to the declared data type, if required, prior to inserting
+     * or updating.  The recasting is done by calling the DB_Table::recast()
      * method from within the DB_Table::insert() and DB_Table::update().
-     * 
+     *
      * @param bool $flag True to automatically recast insert and update data,
      *                   false to not do so.
      * @return void
@@ -1442,44 +1442,44 @@ class DB_Table extends DB_Table_Base
             $this->_auto_recast = false;
         }
     }
-    
-    
+
+
     /**
      * Forces array elements to the proper types for their columns.
-     * 
+     *
      * This will not valiate the data, and will forcibly change the data
      * to match the recast-type.
-     * 
+     *
      * The date, time, and timestamp recasting has special logic for
      * arrays coming from an HTML_QuickForm object so that the arrays
      * are converted into properly-formatted strings.
-     * 
+     *
      * @todo If a column key holds an array of values (say from a multiple
      * select) then this method will not work properly; it will recast the
      * value to the string 'Array'.  Is this bad?
-     * 
+     *
      * @param array   &$data The data array to re-cast.
-     * 
+     *
      * @return void
-     * 
+     *
      * @access public
      */
     function recast(&$data)
     {
         $keys = array_keys($data);
-        
+
         $null_if_blank = array('date', 'time', 'timestamp', 'smallint',
             'integer', 'bigint', 'decimal', 'single', 'double');
-        
+
         foreach ($keys as $key) {
-        
+
             if (! isset($this->col[$key])) {
                 continue;
             }
-            
+
             unset($val);
             $val =& $data[$key];
-            
+
             // convert blanks to null for non-character field types
             $convert = in_array($this->col[$key]['type'], $null_if_blank);
             if (is_array($val)) {  // if one of the given array values is
@@ -1502,25 +1502,25 @@ class DB_Table extends DB_Table_Base
             ) {
                 $val = null;
             }
-            
+
             // skip explicit NULL values
             if (is_null($val)) {
                 continue;
             }
-            
+
             // otherwise, recast to the column type
             switch ($this->col[$key]['type']) {
-            
+
             case 'boolean':
                 $val = ($val) ? 1 : 0;
                 break;
-                
+
             case 'char':
             case 'varchar':
             case 'clob':
                 settype($val, 'string');
                 break;
-                
+
             case 'date':
 
                 // smart handling of non-standard (i.e. Y-m-d) date formats,
@@ -1543,61 +1543,61 @@ class DB_Table extends DB_Table_Base
                     isset($val['Y']) &&
                     isset($val['m']) &&
                     isset($val['d'])) {
-                    
+
                     // the date is in HTML_QuickForm format,
                     // convert into a string
                     $y = (strlen($val['Y']) < 4)
                         ? str_pad($val['Y'], 4, '0', STR_PAD_LEFT)
                         : $val['Y'];
-                    
+
                     $m = (strlen($val['m']) < 2)
                         ? '0'.$val['m'] : $val['m'];
-                        
+
                     $d = (strlen($val['d']) < 2)
                         ? '0'.$val['d'] : $val['d'];
-                        
+
                     $val = "$y-$m-$d";
-                    
+
                 } else {
-                
+
                     // convert using the Date class
                     $tmp =& new DB_Table_Date($val);
                     $val = $tmp->format('%Y-%m-%d');
-                    
+
                 }
-                
+
                 break;
-            
+
             case 'time':
-            
+
                 if (is_array($val) &&
                     isset($val['H']) &&
                     isset($val['i']) &&
                     isset($val['s'])) {
-                    
+
                     // the time is in HTML_QuickForm format,
                     // convert into a string
                     $h = (strlen($val['H']) < 2)
                         ? '0' . $val['H'] : $val['H'];
-                    
+
                     $i = (strlen($val['i']) < 2)
                         ? '0' . $val['i'] : $val['i'];
-                        
+
                     $s = (strlen($val['s']) < 2)
                         ? '0' . $val['s'] : $val['s'];
-                        
-                        
+
+
                     $val = "$h:$i:$s";
-                    
+
                 } else {
                     // date does not matter in this case, so
                     // pre 1970 and post 2040 are not an issue.
                     $tmp = strtotime(date('Y-m-d') . " $val");
                     $val = date('H:i:s', $tmp);
                 }
-                
+
                 break;
-                
+
             case 'timestamp':
 
                 // smart handling of non-standard (i.e. Y-m-d) date formats,
@@ -1623,46 +1623,46 @@ class DB_Table extends DB_Table_Base
                     isset($val['H']) &&
                     isset($val['i']) &&
                     isset($val['s'])) {
-                    
+
                     // timestamp is in HTML_QuickForm format,
                     // convert each element to a string. pad
                     // with zeroes as needed.
-                
+
                     $y = (strlen($val['Y']) < 4)
                         ? str_pad($val['Y'], 4, '0', STR_PAD_LEFT)
                         : $val['Y'];
-                    
+
                     $m = (strlen($val['m']) < 2)
                         ? '0'.$val['m'] : $val['m'];
-                        
+
                     $d = (strlen($val['d']) < 2)
                         ? '0'.$val['d'] : $val['d'];
-                        
+
                     $h = (strlen($val['H']) < 2)
                         ? '0' . $val['H'] : $val['H'];
-                    
+
                     $i = (strlen($val['i']) < 2)
                         ? '0' . $val['i'] : $val['i'];
-                        
+
                     $s = (strlen($val['s']) < 2)
                         ? '0' . $val['s'] : $val['s'];
-                        
+
                     $val = "$y-$m-$d $h:$i:$s";
-                    
+
                 } else {
                     // convert using the Date class
                     $tmp =& new DB_Table_Date($val);
                     $val = $tmp->format('%Y-%m-%d %H:%M:%S');
                 }
-                
+
                 break;
-            
+
             case 'smallint':
             case 'integer':
             case 'bigint':
                 settype($val, 'integer');
                 break;
-            
+
             case 'decimal':
             case 'single':
             case 'double':
@@ -1672,15 +1672,15 @@ class DB_Table extends DB_Table_Base
             }
         }
     }
-    
-    
+
+
     /**
      * Creates the table based on $this->col and $this->idx.
-     * 
+     *
      * @param string $flag The automatic table creation mode to pursue:
      * - 'safe' to create the table only if it does not exist
      * - 'drop' to drop any existing table with the same name and re-create it
-     * 
+     *
      * @return mixed Boolean true if the table was successfully created,
      *               false if there was no need to create the table, or
      *               a PEAR_Error if the attempted creation failed.
@@ -1688,9 +1688,9 @@ class DB_Table extends DB_Table_Base
      * @throws PEAR_Error if
      *     - DB_Table_Manager::tableExists() returns Error (bubbles up)
      *     - DB_Table_Manager::create() returns Error (bubbles up)
-     * 
+     *
      * @access public
-     * 
+     *
      * @see DB_Table_Manager::tableExists()
      * @see DB_Table_Manager::create()
      */
@@ -1700,7 +1700,7 @@ class DB_Table extends DB_Table_Base
 
         // are we OK to create the table?
         $ok = false;
-        
+
         // check the create-flag
         switch ($flag) {
 
@@ -1744,13 +1744,13 @@ class DB_Table extends DB_Table_Base
             $this->db, $this->table, $this->col, $this->idx
         );
     }
-    
-    
+
+
     /**
      * Alters the table to match schema declared in $this->col and $this->idx.
      *
      * If the table does not exist, create it instead.
-     * 
+     *
      * @return boolean true if altering is successful (PEAR_Error on failure)
      *
      * @throws PEAR_Error if
@@ -1767,7 +1767,7 @@ class DB_Table extends DB_Table_Base
     function alter()
     {
         $create = false;
-        
+
         // alter the table columns and indexes if the table exists
         $table_exists = DB_Table_Manager::tableExists($this->db,
                                                       $this->table);
@@ -1790,18 +1790,18 @@ class DB_Table extends DB_Table_Base
             $this->db, $this->table, $this->col, $this->idx
         );
     }
-    
-    
+
+
     /**
      * Verifies the table based on $this->col and $this->idx.
-     * 
+     *
      * @return boolean true if verification succees (PEAR_Error on failure).
      *
      * @throws PEAR_Error if
      *     DB_Table_Manager::verify() returns Error (bubbles up)
      *
      * @access public
-     * 
+     *
      * @see DB_Table_Manager::verify()
      */
     function verify()
@@ -1810,25 +1810,25 @@ class DB_Table extends DB_Table_Base
             $this->db, $this->table, $this->col, $this->idx
         );
     }
-    
-    
+
+
     /**
      * Checks if a value validates against the DB_Table data type for a
      * given column. This only checks that it matches the data type; it
      * does not do extended validation.
-     * 
+     *
      * @param array $val A value to check against the column's DB_Table
      * data type.
-     * 
+     *
      * @param array $col A column name from $this->col.
-     * 
+     *
      * @return boolean True if $val validates against data type, false if not
      *
      * @throws PEAR_Error if
      *     Invalid column type in $this->col (DB_TABLE_ERR_VALIDATE_TYPE)
      *
      * @access public
-     * 
+     *
      * @see DB_Table_Valid
      */
     function isValid($val, $col)
@@ -1844,15 +1844,15 @@ class DB_Table extends DB_Table_Base
                 return true;
             }
         }
-        
+
         // make sure we have the validation class
         include_once 'DB/Table/Valid.php';
-        
+
         // validate values per the column type.  we use sqlite
         // as the single authentic list of allowed column types,
         // regardless of the actual rdbms being used.
         $map = array_keys($GLOBALS['_DB_TABLE']['type']['sqlite']);
-        
+
         // is the column type on the map?
         if (! in_array($this->col[$col]['type'], $map)) {
             return $this->throwError(
@@ -1860,10 +1860,10 @@ class DB_Table extends DB_Table_Base
                 "'$col' ('{$this->col[$col]['type']}')"
             );
         }
-        
+
         // validate for the type
         switch ($this->col[$col]['type']) {
-        
+
         case 'char':
         case 'varchar':
             $result = DB_Table_Valid::isChar(
@@ -1871,7 +1871,7 @@ class DB_Table extends DB_Table_Base
                 $this->col[$col]['size']
             );
             break;
-        
+
         case 'decimal':
             $result = DB_Table_Valid::isDecimal(
                 $val,
@@ -1879,7 +1879,7 @@ class DB_Table extends DB_Table_Base
                 $this->col[$col]['scope']
             );
             break;
-            
+
         default:
             $result = call_user_func(
                 array(
@@ -1891,25 +1891,25 @@ class DB_Table extends DB_Table_Base
             break;
 
         }
-        
+
         // have we passed the check so far, and should we
         // also check for allowed values?
         if ($result && isset($this->col[$col]['qf_vals'])) {
             $keys = array_keys($this->col[$col]['qf_vals']);
-            
+
             $result = in_array(
                 $val,
                 array_keys($this->col[$col]['qf_vals'])
             );
         }
-        
+
         return $result;
     }
-    
-    
+
+
     /**
      * Is a specific column required to be set and non-null?
-     * 
+     *
      * @param mixed $column The column to check against.
      * @return boolean      True if required, false if not.
      * @access public
@@ -1923,10 +1923,10 @@ class DB_Table extends DB_Table_Base
             return false;
         }
     }
-    
-    
+
+
     /**
-     * 
+     *
      * Creates and returns a QuickForm object based on table columns.
      *
      * @param array $columns A sequential array of column names to use in
@@ -1936,27 +1936,27 @@ class DB_Table extends DB_Table_Base
      * of the columns as the names of the form elements.  If you pass
      * $array_name, the column names will become keys in an array named
      * for this parameter.
-     * 
+     *
      * @param array $args An associative array of optional arguments to
      * pass to the QuickForm object.  The keys are...
      *
      * 'formName' : String, name of the form; defaults to the name of this
      * table.
-     * 
+     *
      * 'method' : String, form method; defaults to 'post'.
-     * 
+     *
      * 'action' : String, form action; defaults to
      * $_SERVER['REQUEST_URI'].
-     * 
+     *
      * 'target' : String, form target target; defaults to '_self'
-     * 
+     *
      * 'attributes' : Associative array, extra attributes for <form>
      * tag; the key is the attribute name and the value is attribute
      * value.
-     * 
+     *
      * 'trackSubmit' : Boolean, whether to track if the form was
      * submitted by adding a special hidden field
-     * 
+     *
      * @param string $clientValidate By default, validation will match
      * the 'qf_client' value from the column definition.  However, if
      * you set $clientValidate to true or false, this will override the
@@ -1966,7 +1966,7 @@ class DB_Table extends DB_Table_Base
      * callbacks that will be applied to all form elements.
      *
      * @return object HTML_QuickForm
-     * 
+     *
      * @access public
      *
      * @see HTML_QuickForm
@@ -1981,30 +1981,30 @@ class DB_Table extends DB_Table_Base
             $clientValidate, $formFilters);
         return $form;
     }
-    
-    
+
+
     /**
      * Adds elements and rules to a pre-existing HTML_QuickForm object.
-     * 
-     * By default, the form will use the names of the columns as the names 
-     * of the form elements.  If you pass $array_name, the column names 
+     *
+     * By default, the form will use the names of the columns as the names
+     * of the form elements.  If you pass $array_name, the column names
      * will become keys in an array named for this parameter.
      *
      * @param object &$form      An HTML_QuickForm object.
-     * 
+     *
      * @param array $columns     A sequential array of column names to use in
      *                           the form; if null, uses all columns.
      *
      * @param string $array_name Name of array of column names
      *
      * @param clientValidate
-     * 
+     *
      * @return void
-     * 
+     *
      * @access public
-     * 
+     *
      * @see HTML_QuickForm
-     * 
+     *
      * @see DB_Table_QuickForm
      */
     function addFormElements(&$form, $columns = null, $array_name = null,
@@ -2013,20 +2013,20 @@ class DB_Table extends DB_Table_Base
         include_once 'DB/Table/QuickForm.php';
         $coldefs = $this->_getFormColDefs($columns);
         DB_Table_QuickForm::addElements($form, $coldefs, $array_name);
-        DB_Table_QuickForm::addRules($form, $coldefs, $array_name, 
+        DB_Table_QuickForm::addRules($form, $coldefs, $array_name,
            $clientValidate);
     }
 
 
     /**
-     * Adds static form elements like 'header', 'static', 'submit' or 'reset' 
+     * Adds static form elements like 'header', 'static', 'submit' or 'reset'
      * to a pre-existing HTML_QuickForm object. The form elements needs to be
      * defined in a property called $frm.
-     * 
+     *
      * @param object &$form An HTML_QuickForm object.
      * @return void
      * @access public
-     * 
+     *
      * @see HTML_QuickForm
      * @see DB_Table_QuickForm
      */
@@ -2038,22 +2038,22 @@ class DB_Table extends DB_Table_Base
 
 
     /**
-     * 
+     *
      * Creates and returns an array of QuickForm elements based on an
      * array of DB_Table column names.
-     * 
+     *
      * @param array $columns A sequential array of column names to use in
      * the form; if null, uses all columns.
-     * 
+     *
      * @param string $array_name By default, the form will use the names
      * of the columns as the names of the form elements.  If you pass
      * $array_name, the column names will become keys in an array named
      * for this parameter.
-     * 
+     *
      * @return array An array of HTML_QuickForm_Element objects.
-     * 
+     *
      * @access public
-     * 
+     *
      * @see HTML_QuickForm
      * @see DB_Table_QuickForm
      */
@@ -2064,24 +2064,24 @@ class DB_Table extends DB_Table_Base
         $group =& DB_Table_QuickForm::getGroup($coldefs, $array_name);
         return $group;
     }
-    
-    
+
+
     /**
      * Creates and returns a single QuickForm element based on a DB_Table
      * column name.
-     * 
+     *
      * @param string $column   A DB_Table column name.
      * @param string $elemname The name to use for the generated QuickForm
      *                         element.
-     * 
+     *
      * @return object HTML_QuickForm_Element
-     * 
+     *
      * @access public
-     * 
+     *
      * @see HTML_QuickForm
      * @see DB_Table_QuickForm
      */
-    
+
     function &getFormElement($column, $elemname)
     {
         include_once 'DB/Table/QuickForm.php';
@@ -2095,16 +2095,16 @@ class DB_Table extends DB_Table_Base
     /**
      * Creates and returns an array of QuickForm elements based on a DB_Table
      * column name.
-     * 
+     *
      * @author Ian Eure <ieure@php.net>
-     * 
+     *
      * @param array $cols        Array of DB_Table column names
      * @param string $array_name The name to use for the generated QuickForm
      *                           elements.
      * @return object HTML_QuickForm_Element
-     * 
+     *
      * @access public
-     * 
+     *
      * @see HTML_QuickForm
      * @see DB_Table_QuickForm
      */
@@ -2114,21 +2114,21 @@ class DB_Table extends DB_Table_Base
         $elements =& DB_Table_QuickForm::getElements($cols, $array_name);
         return $elements;
     }
-    
-    
+
+
     /**
      * Creates a column definition array suitable for DB_Table_QuickForm.
-     * 
+     *
      * @param string|array $column_set A string column name, a sequential
      * array of columns names, or an associative array where the key is a
      * column name and the value is the default value for the generated
      * form element.  If null, uses all columns for this class.
-     * 
+     *
      * @return array An array of column definitions suitable for passing
      *               to DB_Table_QuickForm.
      *
      * @access public
-     * 
+     *
      */
     function _getFormColDefs($column_set = null)
     {
@@ -2137,7 +2137,7 @@ class DB_Table extends DB_Table_Base
             // array.
             return $this->getColumns($column_set);
         }
-        
+
         // check to see if the keys are sequential integers.  if so,
         // the $column_set is just a list of columns.
         settype($column_set, 'array');
@@ -2149,24 +2149,24 @@ class DB_Table extends DB_Table_Base
                 break;
             }
         }
-        
+
         if ($all_integer) {
-        
+
             // the column_set is just a list of columns; get back the $this->col
             // array elements matching this list.
             $coldefs = $this->getColumns($column_set);
-            
+
         } else {
-            
+
             // the columns_set is an associative array where the key is a
             // column name and the value is the form element value.
             $coldefs = $this->getColumns($keys);
             foreach ($coldefs as $key => $val) {
                 $coldefs[$key]['qf_setvalue'] = $column_set[$key];
             }
-            
+
         }
-        
+
         return $coldefs;
     }
 
