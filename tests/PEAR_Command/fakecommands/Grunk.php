@@ -16,7 +16,6 @@
 // | Author: Stig Bakken <ssb@php.net>                                    |
 // +----------------------------------------------------------------------+
 //
-// $Id$
 
 require_once "PEAR/Command/Common.php";
 

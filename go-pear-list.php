@@ -3,7 +3,6 @@
  * that will be used to create the PEAR folder
  * in the windows snapshot.
  * See win32/build/mkdist.php for more details
- * $Id$
  */
 $packages  = array(
 // required packages for the installer

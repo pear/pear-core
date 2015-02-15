@@ -1,5 +1,5 @@
 #!/usr/bin/php
-<?php # $Id$
+<?php
 /* piece together a windows pear distro */
 
 if (!$_SERVER['argv'][1]) {
@@ -49,7 +49,7 @@ function extract_file_from_tarball($pkg, $filename, $dest_dir) /* {{{ */
 
 		$hdr['size'] = octdec(trim($hdr['size']));
 		echo "File: $hdr[filename] $hdr[size]\n";
-		
+
 		if ($filename == $hdr['filename']) {
 			echo "Found the file we want\n";
 			$dest = fopen($destfilename, 'wb');
@@ -58,14 +58,14 @@ function extract_file_from_tarball($pkg, $filename, $dest_dir) /* {{{ */
 			echo "Wrote $x bytes into $destfilename\n";
 			break;
 		}
-		
+
 		/* skip body of the file */
 		$size = 512 * ceil((int)$hdr['size'] / 512);
 		echo "Skipping $size bytes\n";
 		gzseek($fp, gztell($fp) + $size);
-		
+
 	} while (!$done);
-	
+
 } /* }}} */
 
 echo "Creating PEAR in $dist_dir\n";
@@ -79,7 +79,7 @@ if (!file_exists($dist_dir)) {
 }
 mkdir("$dist_dir/PEAR");
 mkdir("$dist_dir/PEAR/go-pear-bundle");
-	
+
 /* grab the bootstrap script */
 echo "Downloading go-pear\n";
 copy("http://pear.php.net/go-pear", "$dist_dir/PEAR/go-pear.php");

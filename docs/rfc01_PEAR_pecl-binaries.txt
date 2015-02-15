@@ -1,5 +1,4 @@
 Author:    Tomas V.V.Cox <cox@idecnet.com>
-Revision:  $Id$
 Abstract:  Open discussion on how to handle PECL binary packages
 
 

@@ -1,7 +1,5 @@
 <?php
 
-/* $Id$ */
-
 error_reporting(1803);
 
 if (ini_get('date.timezone') === '' && function_exists('date_default_timezone_set')) {
