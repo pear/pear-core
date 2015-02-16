@@ -94,11 +94,6 @@ class PEAR_XMLParser
             $this->encoding = 'UTF-8';
         }
 
-        if (version_compare(phpversion(), '5.0.0', 'lt') && $this->encoding == 'UTF-8') {
-            $data = utf8_decode($data);
-            $this->encoding = 'ISO-8859-1';
-        }
-
         $xp = xml_parser_create($this->encoding);
         xml_parser_set_option($xp, XML_OPTION_CASE_FOLDING, 0);
         xml_set_object($xp, $this);

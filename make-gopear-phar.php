@@ -177,7 +177,6 @@ $creator->addDir($peardir . DIRECTORY_SEPARATOR . 'PEAR', array(),
     ), false, $peardir);
 
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'PEAR.php', 'PEAR.php');
-$creator->addFile($peardir . DIRECTORY_SEPARATOR . 'PEAR5.php', 'PEAR5.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'System.php', 'System.php');
 $creator->addFile($peardir . DIRECTORY_SEPARATOR . 'OS/Guess.php', 'OS/Guess.php');
 

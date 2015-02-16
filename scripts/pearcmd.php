@@ -34,9 +34,7 @@ if ('@include_path@ ' != '@'.'include_path'.'@ ') {
     $raw = true;
 }
 @ini_set('allow_url_fopen', true);
-if (!ini_get('safe_mode')) {
-    @set_time_limit(0);
-}
+@set_time_limit(0);
 ob_implicit_flush(true);
 @ini_set('track_errors', true);
 @ini_set('html_errors', false);
@@ -79,17 +77,13 @@ $opts = $options[0];
 
 $fetype = 'CLI';
 if ($progname == 'gpear' || $progname == 'pear-gtk') {
-    $fetype = 'Gtk';
+    $fetype = 'Gtk2';
 } else {
     foreach ($opts as $opt) {
         if ($opt[0] == 'G') {
-            $fetype = 'Gtk';
+            $fetype = 'Gtk2';
         }
     }
-}
-//Check if Gtk and PHP >= 5.1.0
-if ($fetype == 'Gtk' && version_compare(phpversion(), '5.1.0', '>=')) {
-    $fetype = 'Gtk2';
 }
 
 $pear_user_config = '';
@@ -134,14 +128,6 @@ if (PEAR::isError($config)) {
 $_PEAR_PHPDIR = $config->get('php_dir');
 $ui->setConfig($config);
 PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array($ui, "displayFatalError"));
-if (ini_get('safe_mode')) {
-    $ui->outputData(
-        'WARNING: running in safe mode requires that all files ' .
-        'created be the same uid as the current script. ' .
-        'PHP reports this script is uid: ' . @getmyuid() .
-        ', and current user is: ' . @get_current_user()
-    );
-}
 
 $verbose = $config->get("verbose");
 $cmdopts = array();
@@ -264,7 +250,7 @@ if (empty($command) && ($store_user_config || $store_system_config)) {
     exit;
 }
 
-if ($fetype == 'Gtk' || $fetype == 'Gtk2') {
+if ($fetype == 'Gtk2') {
     if (!$config->validConfiguration()) {
         PEAR::raiseError(
             "CRITICAL ERROR: no existing valid configuration files found in " .

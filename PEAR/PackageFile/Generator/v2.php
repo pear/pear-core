@@ -868,12 +868,6 @@ http://pear.php.net/dtd/package-2.0.xsd',
         }
 
         if (is_scalar($tag['content']) || is_null($tag['content'])) {
-            if ($this->options['encoding'] == 'UTF-8' &&
-                  version_compare(phpversion(), '5.0.0', 'lt')
-            ) {
-                $tag['content'] = utf8_encode($tag['content']);
-            }
-
             if ($replaceEntities === true) {
                 $replaceEntities = XML_UTIL_ENTITIES_XML;
             }

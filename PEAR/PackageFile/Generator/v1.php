@@ -167,9 +167,6 @@ class PEAR_PackageFile_Generator_v1
      */
     function _fixXmlEncoding($string)
     {
-        if (version_compare(phpversion(), '5.0.0', 'lt')) {
-            $string = utf8_encode($string);
-        }
         return strtr($string, array(
                                           '&'  => '&amp;',
                                           '>'  => '&gt;',
