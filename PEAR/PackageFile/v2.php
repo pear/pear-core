@@ -1176,6 +1176,9 @@ class PEAR_PackageFile_v2
                 $contents['dir']['file'] = array($contents['dir']['file']);
             }
             foreach ($contents['dir']['file'] as $file) {
+                if (!isset($file['attribs']['name'])) {
+                    continue;
+                }
                 $name = $file['attribs']['name'];
                 if (!$preserve) {
                     $file = $file['attribs'];
