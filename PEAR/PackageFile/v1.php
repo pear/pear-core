@@ -1465,15 +1465,6 @@ class PEAR_PackageFile_v1
                     $look_for = $token;
                     continue 2;
                 case T_STRING:
-                    if (version_compare(zend_version(), '2.0', '<')) {
-                        if (in_array(strtolower($data),
-                            array('public', 'private', 'protected', 'abstract',
-                                  'interface', 'implements', 'throw') 
-                                 )) {
-                            $this->_validateWarning(PEAR_PACKAGEFILE_ERROR_PHP5,
-                                array($file));
-                        }
-                    }
                     if ($look_for == T_CLASS) {
                         $current_class = $data;
                         $current_class_level = $brace_level;

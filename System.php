@@ -521,13 +521,11 @@ class System
             $path_elements[] = dirname($program);
             $program = basename($program);
         } else {
-            // Honor safe mode
-            if (!ini_get('safe_mode') || !$path = ini_get('safe_mode_exec_dir')) {
-                $path = getenv('PATH');
-                if (!$path) {
-                    $path = getenv('Path'); // some OSes are just stupid enough to do this
-                }
+            $path = getenv('PATH');
+            if (!$path) {
+                $path = getenv('Path'); // some OSes are just stupid enough to do this
             }
+
             $path_elements = explode(PATH_SEPARATOR, $path);
         }
 
@@ -539,17 +537,14 @@ class System
             if (strpos($program, '.') !== false) {
                 array_unshift($exe_suffixes, '');
             }
-            // is_executable() is not available on windows for PHP4
-            $pear_is_executable = (function_exists('is_executable')) ? 'is_executable' : 'is_file';
         } else {
             $exe_suffixes = array('');
-            $pear_is_executable = 'is_executable';
         }
 
         foreach ($exe_suffixes as $suff) {
             foreach ($path_elements as $dir) {
                 $file = $dir . DIRECTORY_SEPARATOR . $program . $suff;
-                if (@$pear_is_executable($file)) {
+                if (is_executable($file)) {
                     return $file;
                 }
             }

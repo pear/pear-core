@@ -1980,25 +1980,6 @@ class PEAR_PackageFile_v2_Validator
                     $look_for = $token;
                     continue 2;
                 case T_STRING:
-                    if (version_compare(zend_version(), '2.0', '<')) {
-                        if (in_array(strtolower($data),
-                            array('public', 'private', 'protected', 'abstract',
-                                  'interface', 'implements', 'throw')
-                                 )
-                        ) {
-                            if (isset($this->_stack)) {
-                                $this->_stack->push(__FUNCTION__, 'warning', array(
-                                    'file' => $file),
-                                    'Error, PHP5 token encountered in %file%,' .
-                                    ' analysis should be in PHP5');
-                            } else {
-                                PEAR::raiseError('Error: PHP5 token encountered in ' . $file .
-                                    'packaging should be done in PHP 5');
-                                return false;
-                            }
-                        }
-                    }
-
                     if ($look_for == T_CLASS) {
                         $current_class = $data;
                         $current_class_level = $brace_level;

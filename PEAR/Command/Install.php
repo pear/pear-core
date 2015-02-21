@@ -769,18 +769,7 @@ Run post-installation scripts in package <package>, if any exist.
                                 $exttype = 'extension';
                                 $extpath = $pinfo[1]['basename'];
                             } else {
-                                if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-                                    ob_start();
-                                    phpinfo(INFO_GENERAL);
-                                    $info = ob_get_contents();
-                                    ob_end_clean();
-                                    $debug = function_exists('leak') ? '_debug' : '';
-                                    $ts = preg_match('/Thread Safety.+enabled/', $info) ? '_ts' : '';
-                                } else {
-                                    $debug = '';
-                                    $ts = '';
-                                }
-                                $exttype = 'zend_extension' . $debug . $ts;
+                                $exttype = 'zend_extension';
                                 $extpath = $atts['installed_as'];
                             }
                             $extrainfo[] = 'You should add "' . $exttype . '=' .

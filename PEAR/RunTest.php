@@ -59,7 +59,6 @@ class PEAR_RunTest
     var $ini_overwrites = array(
         'output_handler=',
         'open_basedir=',
-        'safe_mode=0',
         'disable_functions=',
         'output_buffering=Off',
         'display_errors=1',
@@ -113,19 +112,11 @@ class PEAR_RunTest
     function system_with_timeout($commandline, $env = null, $stdin = null)
     {
         $data = '';
-        if (version_compare(phpversion(), '5.0.0', '<')) {
-            $proc = proc_open($commandline, array(
-                0 => array('pipe', 'r'),
-                1 => array('pipe', 'w'),
-                2 => array('pipe', 'w')
-                ), $pipes);
-        } else {
-            $proc = proc_open($commandline, array(
-                0 => array('pipe', 'r'),
-                1 => array('pipe', 'w'),
-                2 => array('pipe', 'w')
-                ), $pipes, null, $env, array('suppress_errors' => true));
-        }
+        $proc = proc_open($commandline, array(
+            0 => array('pipe', 'r'),
+            1 => array('pipe', 'w'),
+            2 => array('pipe', 'w')
+        ), $pipes, null, $env, array('suppress_errors' => true));
 
         if (!$proc) {
             return false;
@@ -229,12 +220,7 @@ class PEAR_RunTest
     function _preparePhpBin($php, $file, $ini_settings)
     {
         $file = escapeshellarg($file);
-        // This was fixed in php 5.3 and is not needed after that
-        if (OS_WINDOWS && version_compare(PHP_VERSION, '5.3', '<')) {
-            $cmd = '"'.escapeshellarg($php).' '.$ini_settings.' -f ' . $file .'"';
-        } else {
-            $cmd = $php . $ini_settings . ' -f ' . $file;
-        }
+        $cmd = $php . $ini_settings . ' -f ' . $file;
 
         return $cmd;
     }
