@@ -521,7 +521,8 @@ class PEAR
      * @see PEAR::setErrorHandling
      * @since PHP 4.0.5
      */
-    function &raiseError($message = null,
+    function _raiseError($object,
+                         $message = null,
                          $code = null,
                          $mode = null,
                          $options = null,
@@ -539,10 +540,10 @@ class PEAR
         }
 
         if (
-            isset($this) &&
-            isset($this->_expected_errors) &&
-            count($this->_expected_errors) > 0 &&
-            count($exp = end($this->_expected_errors))
+            $object !== null &&
+            isset($object->_expected_errors) &&
+            count($object->_expected_errors) > 0 &&
+            count($exp = end($object->_expected_errors))
         ) {
             if ($exp[0] == "*" ||
                 (is_int(reset($exp)) && in_array($code, $exp)) ||
@@ -555,9 +556,9 @@ class PEAR
         // No mode given, try global ones
         if ($mode === null) {
             // Class error handler
-            if (isset($this) && isset($this->_default_error_mode)) {
-                $mode    = $this->_default_error_mode;
-                $options = $this->_default_error_options;
+            if ($object !== null && isset($object->_default_error_mode)) {
+                $mode    = $object->_default_error_mode;
+                $options = $object->_default_error_options;
             // Global error handler
             } elseif (isset($GLOBALS['_PEAR_default_error_mode'])) {
                 $mode    = $GLOBALS['_PEAR_default_error_mode'];
@@ -567,8 +568,8 @@ class PEAR
 
         if ($error_class !== null) {
             $ec = $error_class;
-        } elseif (isset($this) && isset($this->_error_class)) {
-            $ec = $this->_error_class;
+        } elseif ($object !== null && isset($object->_error_class)) {
+            $ec = $object->_error_class;
         } else {
             $ec = 'PEAR_Error';
         }
@@ -598,10 +599,10 @@ class PEAR
      * @return object   a PEAR error object
      * @see PEAR::raiseError
      */
-    function &throwError($message = null, $code = null, $userinfo = null)
+    function &_throwError($object, $message = null, $code = null, $userinfo = null)
     {
-        if (isset($this) && is_a($this, 'PEAR')) {
-            $a = &$this->raiseError($message, $code, null, null, $userinfo);
+        if ($object !== null) {
+            $a = &$object->raiseError($message, $code, null, null, $userinfo);
             return $a;
         }
 
@@ -692,20 +693,20 @@ class PEAR
      *
      * @see PEAR::setErrorHandling
      */
-    function pushErrorHandling($mode, $options = null)
+    function _pushErrorHandling($object, $mode, $options = null)
     {
         $stack = &$GLOBALS['_PEAR_error_handler_stack'];
-        if (isset($this) && is_a($this, 'PEAR')) {
-            $def_mode    = &$this->_default_error_mode;
-            $def_options = &$this->_default_error_options;
+        if ($object !== null) {
+            $def_mode    = &$object->_default_error_mode;
+            $def_options = &$object->_default_error_options;
         } else {
             $def_mode    = &$GLOBALS['_PEAR_default_error_mode'];
             $def_options = &$GLOBALS['_PEAR_default_error_options'];
         }
         $stack[] = array($def_mode, $def_options);
 
-        if (isset($this) && is_a($this, 'PEAR')) {
-            $this->setErrorHandling($mode, $options);
+        if ($object !== null) {
+            $object->setErrorHandling($mode, $options);
         } else {
             PEAR::setErrorHandling($mode, $options);
         }
@@ -720,13 +721,13 @@ class PEAR
     *
     * @see PEAR::pushErrorHandling
     */
-    function popErrorHandling()
+    function _popErrorHandling($object)
     {
         $stack = &$GLOBALS['_PEAR_error_handler_stack'];
         array_pop($stack);
         list($mode, $options) = $stack[sizeof($stack) - 1];
         array_pop($stack);
-        if (isset($this) && is_a($this, 'PEAR')) {
+        if ($object !== null) {
             $this->setErrorHandling($mode, $options);
         } else {
             PEAR::setErrorHandling($mode, $options);
