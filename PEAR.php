@@ -171,6 +171,18 @@ class PEAR
     }
 
     /**
+     * Only here for backwards compatibility.
+     * E.g. Archive_Tar calls $this->PEAR() in its constructor.
+     *
+     * @param string $error_class Which class to use for error objects,
+     *                            defaults to PEAR_Error.
+     */
+    public function PEAR($error_class = null)
+    {
+        $this->__construct($error_class);
+    }
+
+    /**
      * Destructor (the emulated type of...).  Does nothing right now,
      * but is included for forward compatibility, so subclass
      * destructors should always call it.
