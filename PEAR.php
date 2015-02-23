@@ -134,6 +134,18 @@ class PEAR
     var $_expected_errors = array();
 
     /**
+     * List of methods that can be called both statically and non-statically.
+     * @var array
+     */
+    protected static $bivalentMethods = array(
+        'setErrorHandling' => true,
+        'raiseError' => true,
+        'throwError' => true,
+        'pushErrorHandling' => true,
+        'popErrorHandling' => true,
+    );
+
+    /**
      * Constructor.  Registers this object in
      * $_PEAR_destructor_object_list for destructor emulation if a
      * destructor object exists.
@@ -197,6 +209,33 @@ class PEAR
         if ($this->_debug) {
             printf("PEAR destructor called, class=%s\n", strtolower(get_class($this)));
         }
+    }
+
+    public function __call($method, $arguments)
+    {
+        if (!isset(self::$bivalentMethods[$method])) {
+            xdebug_print_function_stack();
+            trigger_error(
+                'Call to undefined method PEAR::' . $method . '()', E_USER_ERROR
+            );
+        }
+        return call_user_func_array(
+            array(get_class(), '_' . $method),
+            array_merge(array($this), $arguments)
+        );
+    }
+
+    public static function __callStatic($method, $arguments)
+    {
+        if (!isset(self::$bivalentMethods[$method])) {
+            trigger_error(
+                'Call to undefined method PEAR::' . $method . '()', E_USER_ERROR
+            );
+        }
+        return call_user_func_array(
+            array(get_class(), '_' . $method),
+            array_merge(array(null), $arguments)
+        );
     }
 
     /**
@@ -278,6 +317,9 @@ class PEAR
      * PEAR objects.  If called in an object, setErrorHandling sets
      * the default behaviour for that object.
      *
+     * @param object $object
+     *        Object the method was called on (non-static mode)
+     *
      * @param int $mode
      *        One of PEAR_ERROR_RETURN, PEAR_ERROR_PRINT,
      *        PEAR_ERROR_TRIGGER, PEAR_ERROR_DIE,
@@ -309,11 +351,12 @@ class PEAR
      *
      * @since PHP 4.0.5
      */
-    function setErrorHandling($mode = null, $options = null)
-    {
-        if (isset($this) && is_a($this, 'PEAR')) {
-            $setmode     = &$this->_default_error_mode;
-            $setoptions  = &$this->_default_error_options;
+    protected static function _setErrorHandling(
+        $object, $mode = null, $options = null
+    ) {
+        if ($object !== null) {
+            $setmode     = &$object->_default_error_mode;
+            $setoptions  = &$object->_default_error_options;
         } else {
             $setmode     = &$GLOBALS['_PEAR_default_error_mode'];
             $setoptions  = &$GLOBALS['_PEAR_default_error_options'];
