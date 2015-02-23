@@ -140,6 +140,19 @@ class PEAR_Downloader extends PEAR_Common
     var $_downloadDir;
 
     /**
+     * List of methods that can be called both statically and non-statically.
+     * @var array
+     */
+    protected static $bivalentMethods = array(
+        'setErrorHandling' => true,
+        'raiseError' => true,
+        'throwError' => true,
+        'pushErrorHandling' => true,
+        'popErrorHandling' => true,
+        'downloadHttp' => true,
+    );
+
+    /**
      * @param PEAR_Frontend_*
      * @param array
      * @param PEAR_Config
@@ -1535,9 +1548,10 @@ class PEAR_Downloader extends PEAR_Common
      *
      * @access public
      */
-    function downloadHttp($url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null,
-                          $accept = false, $channel = false)
-    {
+    public static function _downloadHttp(
+        $object, $url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null,
+        $accept = false, $channel = false
+    ) {
         static $redirect = 0;
         // always reset , so we are clean case of error
         $wasredirect = $redirect;
@@ -1559,8 +1573,8 @@ class PEAR_Downloader extends PEAR_Common
         $port = isset($info['port']) ? $info['port'] : null;
         $path = isset($info['path']) ? $info['path'] : null;
 
-        if (isset($this)) {
-            $config = &$this->config;
+        if ($object !== null) {
+            $config = $object->config;
         } else {
             $config = &PEAR_Config::singleton();
         }
