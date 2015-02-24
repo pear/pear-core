@@ -88,9 +88,8 @@ class PEAR_DependencyDB
      * @param PEAR_Config
      * @param string|false full path to the dependency database, or false to use default
      * @return PEAR_DependencyDB|PEAR_Error
-     * @static
      */
-    function &singleton(&$config, $depdb = false)
+    public static function &singleton(&$config, $depdb = false)
     {
         $phpdir = $config->get('php_dir', null, 'pear.php.net');
         if (!isset($GLOBALS['_PEAR_DEPENDENCYDB_INSTANCE'][$phpdir])) {

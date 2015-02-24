@@ -248,12 +248,13 @@ class PEAR_ErrorStack {
      *                 defaults to {@link getFileLine()}
      * @param boolean  $throwPEAR_Error
      * @param string   $stackClass class to instantiate
-     * @static
+     *
      * @return PEAR_ErrorStack
      */
-    function &singleton($package, $msgCallback = false, $contextCallback = false,
-                         $throwPEAR_Error = false, $stackClass = 'PEAR_ErrorStack')
-    {
+    public static function &singleton(
+        $package, $msgCallback = false, $contextCallback = false,
+        $throwPEAR_Error = false, $stackClass = 'PEAR_ErrorStack'
+    ) {
         if (isset($GLOBALS['_PEAR_ERRORSTACK_SINGLETON'][$package])) {
             return $GLOBALS['_PEAR_ERRORSTACK_SINGLETON'][$package];
         }

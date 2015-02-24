@@ -683,11 +683,9 @@ class PEAR_Config extends PEAR
      *
      * @return object an existing or new PEAR_Config instance
      *
-     * @access public
-     *
      * @see PEAR_Config::PEAR_Config
      */
-    function &singleton($user_file = '', $system_file = '', $strict = true)
+    public static function &singleton($user_file = '', $system_file = '', $strict = true)
     {
         if (is_object($GLOBALS['_PEAR_Config_instance'])) {
             return $GLOBALS['_PEAR_Config_instance'];

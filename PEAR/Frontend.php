@@ -47,9 +47,8 @@ class PEAR_Frontend extends PEAR
     /**
      * Retrieve the frontend object
      * @return PEAR_Frontend_CLI|PEAR_Frontend_Web|PEAR_Frontend_Gtk
-     * @static
      */
-    function &singleton($type = null)
+    public static function &singleton($type = null)
     {
         if ($type === null) {
             if (!isset($GLOBALS['_PEAR_FRONTEND_SINGLETON'])) {
@@ -70,9 +69,8 @@ class PEAR_Frontend extends PEAR
      * _ => DIRECTORY_SEPARATOR (PEAR_Frontend_CLI is in PEAR/Frontend/CLI.php)
      * @param string $uiclass full class name
      * @return PEAR_Frontend
-     * @static
      */
-    function &setFrontendClass($uiclass)
+    public static function &setFrontendClass($uiclass)
     {
         if (is_object($GLOBALS['_PEAR_FRONTEND_SINGLETON']) &&
               is_a($GLOBALS['_PEAR_FRONTEND_SINGLETON'], $uiclass)) {
@@ -110,9 +108,8 @@ class PEAR_Frontend extends PEAR
      * Frontends are expected to be a descendant of PEAR_Frontend
      * @param PEAR_Frontend
      * @return PEAR_Frontend
-     * @static
      */
-    function &setFrontendObject($uiobject)
+    public static function &setFrontendObject($uiobject)
     {
         if (is_object($GLOBALS['_PEAR_FRONTEND_SINGLETON']) &&
               is_a($GLOBALS['_PEAR_FRONTEND_SINGLETON'], get_class($uiobject))) {
@@ -133,9 +130,8 @@ class PEAR_Frontend extends PEAR
     /**
      * @param string $path relative or absolute include path
      * @return boolean
-     * @static
      */
-    function isIncludeable($path)
+    public static function isIncludeable($path)
     {
         if (file_exists($path) && is_readable($path)) {
             return true;
