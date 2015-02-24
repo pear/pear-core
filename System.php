@@ -65,7 +65,7 @@ class System
      * @param    string  $long_options   the allowed option long-tags
      * @return   array   the given options and there values
      */
-    protected static function _parseArgs($argv, $short_options, $long_options = null)
+    public static function _parseArgs($argv, $short_options, $long_options = null)
     {
         if (!is_array($argv) && $argv !== null) {
             /*
@@ -442,7 +442,7 @@ class System
      * Remove temporary files created my mkTemp. This function is executed
      * at script shutdown time
      */
-    protected static function _removeTmpFiles()
+    public static function _removeTmpFiles()
     {
         if (count($GLOBALS['_System_temp_files'])) {
             $delete = $GLOBALS['_System_temp_files'];

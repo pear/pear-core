@@ -777,7 +777,7 @@ class test_PEAR_Config extends PEAR_Config
         return $remote;
     }
 
-    function &singleton($user_file = '', $system_file = '')
+    public static function &singleton($user_file = '', $system_file = '')
     {
         if (is_object($GLOBALS['_PEAR_Config_instance'])) {
             return $GLOBALS['_PEAR_Config_instance'];
