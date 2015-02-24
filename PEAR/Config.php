@@ -654,9 +654,8 @@ class PEAR_Config extends PEAR
 
     /**
      * Return the default locations of user and system configuration files
-     * @static
      */
-    function getDefaultConfigFiles()
+    public static function getDefaultConfigFiles()
     {
         $sl = DIRECTORY_SEPARATOR;
         if (OS_WINDOWS) {
@@ -921,9 +920,8 @@ class PEAR_Config extends PEAR
      * @param array
      * @param array
      * @return array
-     * @static
      */
-    function arrayMergeRecursive($arr2, $arr1)
+    public static function arrayMergeRecursive($arr2, $arr1)
     {
         $ret = array();
         foreach ($arr2 as $key => $data) {

@@ -240,11 +240,8 @@ class PEAR_Common extends PEAR
      * @param string $msg    message to write to the log
      *
      * @return void
-     *
-     * @access public
-     * @static
      */
-    function log($level, $msg, $append_crlf = true)
+    public function log($level, $msg, $append_crlf = true)
     {
         if ($this->debug >= $level) {
             if (!class_exists('PEAR_Frontend')) {
@@ -324,9 +321,8 @@ class PEAR_Common extends PEAR
      * Get the valid roles for a PEAR package maintainer
      *
      * @return array
-     * @static
      */
-    function getUserRoles()
+    public static function getUserRoles()
     {
         return $GLOBALS['_PEAR_Common_maintainer_roles'];
     }
@@ -335,9 +331,8 @@ class PEAR_Common extends PEAR
      * Get the valid package release states of packages
      *
      * @return array
-     * @static
      */
-    function getReleaseStates()
+    public static function getReleaseStates()
     {
         return $GLOBALS['_PEAR_Common_release_states'];
     }
@@ -346,9 +341,8 @@ class PEAR_Common extends PEAR
      * Get the implemented dependency types (php, ext, pkg etc.)
      *
      * @return array
-     * @static
      */
-    function getDependencyTypes()
+    public static function getDependencyTypes()
     {
         return $GLOBALS['_PEAR_Common_dependency_types'];
     }
@@ -357,9 +351,8 @@ class PEAR_Common extends PEAR
      * Get the implemented dependency relations (has, lt, ge etc.)
      *
      * @return array
-     * @static
      */
-    function getDependencyRelations()
+    public static function getDependencyRelations()
     {
         return $GLOBALS['_PEAR_Common_dependency_relations'];
     }
@@ -368,9 +361,8 @@ class PEAR_Common extends PEAR
      * Get the implemented file roles
      *
      * @return array
-     * @static
      */
-    function getFileRoles()
+    public static function getFileRoles()
     {
         return $GLOBALS['_PEAR_Common_file_roles'];
     }
@@ -379,9 +371,8 @@ class PEAR_Common extends PEAR
      * Get the implemented file replacement types in
      *
      * @return array
-     * @static
      */
-    function getReplacementTypes()
+    public static function getReplacementTypes()
     {
         return $GLOBALS['_PEAR_Common_replacement_types'];
     }
@@ -390,9 +381,8 @@ class PEAR_Common extends PEAR
      * Get the implemented file replacement types in
      *
      * @return array
-     * @static
      */
-    function getProvideTypes()
+    public static function getProvideTypes()
     {
         return $GLOBALS['_PEAR_Common_provide_types'];
     }
@@ -401,9 +391,8 @@ class PEAR_Common extends PEAR
      * Get the implemented file replacement types in
      *
      * @return array
-     * @static
      */
-    function getScriptPhases()
+    public static function getScriptPhases()
     {
         return $GLOBALS['_PEAR_Common_script_phases'];
     }
@@ -439,9 +428,8 @@ class PEAR_Common extends PEAR
     /**
      * @param string $path relative or absolute include path
      * @return boolean
-     * @static
      */
-    function isIncludeable($path)
+    public static function isIncludeable($path)
     {
         if (file_exists($path) && is_readable($path)) {
             return true;

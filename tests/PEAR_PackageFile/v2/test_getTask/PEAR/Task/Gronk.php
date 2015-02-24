@@ -10,9 +10,8 @@ class PEAR_Task_Gronk extends PEAR_Task_Common
      * @param PEAR_PackageFile_v2
      * @param array raw, parsed xml
      * @param PEAR_Config
-     * @static
      */
-    function validateXml($pkg, $xml, &$config, $fileXml)
+    public static function validateXml($pkg, $xml, &$config, $fileXml)
     {
         if ($xml != array()) {
             return array(PEAR_TASK_ERROR_INVALID);

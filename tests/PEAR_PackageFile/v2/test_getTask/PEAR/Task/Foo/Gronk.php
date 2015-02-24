@@ -12,7 +12,7 @@ class PEAR_Task_Foo_Gronk extends PEAR_Task_Common
      * @param PEAR_Config
      * @static
      */
-    function validateXml($pkg, $xml, &$config, $fileXml)
+    public static function validateXml($pkg, $xml, &$config, $fileXml)
     {
         if ($xml != array()) {
             return array(PEAR_TASK_ERROR_INVALID);

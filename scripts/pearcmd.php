@@ -263,7 +263,7 @@ if ($fetype == 'Gtk2') {
 } else {
     do {
         if ($command == 'help') {
-            usage(null, @$options[1][1]);
+            usage(null, isset($options[1][1]) ? $options[1][1] : null);
         }
 
         if (!$config->validConfiguration()) {
@@ -279,7 +279,7 @@ if ($fetype == 'Gtk2') {
         $cmd = PEAR_Command::factory($command, $config);
         PEAR::popErrorHandling();
         if (PEAR::isError($cmd)) {
-            usage(null, @$options[1][0]);
+            usage(null, isset($options[1][0]) ? $options[1][0] : null);
         }
 
         $short_args = $long_args = null;
@@ -450,12 +450,12 @@ function error_handler($errno, $errmsg, $file, $line, $vars)
         || !error_reporting()
     ) {
         if ($errno & E_STRICT) {
-            return; // E_STRICT
+            //return; // E_STRICT
         }
         if ($errno & E_DEPRECATED) {
-            return; // E_DEPRECATED
+            //return; // E_DEPRECATED
         }
-        if (isset($GLOBALS['config']) && $GLOBALS['config']->get('verbose') < 4) {
+        if (!error_reporting() && isset($GLOBALS['config']) && $GLOBALS['config']->get('verbose') < 4) {
             return false; // @silenced error, show all if debug is high enough
         }
     }
@@ -482,6 +482,7 @@ function error_handler($errno, $errmsg, $file, $line, $vars)
         $file = basename($file);
     }
     print "\n$prefix: $errmsg in $file on line $line\n";
+    exit(100);
     return false;
 }
 

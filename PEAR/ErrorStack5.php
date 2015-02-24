@@ -235,12 +235,13 @@ class PEAR_ErrorStack {
      * @param string   $exceptionClass exception class to instantiate if
      *                 in PHP 5
      * @param string   $stackClass class to instantiate
-     * @static
+     *
      * @return PEAR_ErrorStack
      */
-    static public function singleton($package, $msgCallback = false, $contextCallback = false,
-                              $throwPEAR_Error = false, $stackClass = 'PEAR_ErrorStack')
-    {
+    public static function singleton(
+        $package, $msgCallback = false, $contextCallback = false,
+        $throwPEAR_Error = false, $stackClass = 'PEAR_ErrorStack'
+    ) {
         if (isset(self::$singleton[$package])) {
             return self::$singleton[$package];
         }
@@ -258,9 +259,8 @@ class PEAR_ErrorStack {
     /**
      * Set up a PEAR::Log object for all error stacks that don't have one
      * @param Log $log
-     * @static
      */
-    static public function setDefaultLogger($log)
+    public static function setDefaultLogger($log)
     {
         self::$globallogger = $log;
     }
@@ -590,11 +590,11 @@ class PEAR_ErrorStack {
      * <code>
      * throw ($stack->push(MY_ERROR_CODE, 'error', array('username' => 'grob')));
      * </code>
-     * @static
      */
-    static public function staticPush($package, $code, $level = 'error', $params = array(),
-                        $msg = false, $repackage = false, $backtrace = false)
-    {
+     public static function staticPush(
+         $package, $code, $level = 'error', $params = array(),
+         $msg = false, $repackage = false, $backtrace = false
+     ) {
         $s = PEAR_ErrorStack::singleton($package);
         if ($s->contextCallback) {
             if (!$backtrace) {
@@ -853,10 +853,10 @@ class PEAR_ErrorStack {
      * @param PEAR_ErrorStack
      * @param array
      * @param string|false Pre-generated error message template
-     * @static
+     *
      * @return string
      */
-    public function getErrorMessage(&$stack, $err, $template = false)
+    public static function getErrorMessage(&$stack, $err, $template = false)
     {
         if ($template) {
             $mainmsg = $template;

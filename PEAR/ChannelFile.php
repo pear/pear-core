@@ -305,11 +305,12 @@ class PEAR_ChannelFile
 
     /**
      * @param array
-     * @static
+     *
      * @return PEAR_ChannelFile|false false if invalid
      */
-    function &fromArray($data, $compatibility = false, $stackClass = 'PEAR_ErrorStack')
-    {
+    public static function &fromArray(
+        $data, $compatibility = false, $stackClass = 'PEAR_ErrorStack'
+    ) {
         $a = new PEAR_ChannelFile($compatibility, $stackClass);
         $a->_fromArray($data);
         if (!$a->validate()) {
@@ -321,13 +322,14 @@ class PEAR_ChannelFile
 
     /**
      * Unlike {@link fromArray()} this does not do any validation
+     *
      * @param array
-     * @static
+     *
      * @return PEAR_ChannelFile
      */
-    function &fromArrayWithErrors($data, $compatibility = false,
-                                  $stackClass = 'PEAR_ErrorStack')
-    {
+    public static function &fromArrayWithErrors(
+        $data, $compatibility = false, $stackClass = 'PEAR_ErrorStack'
+    ) {
         $a = new PEAR_ChannelFile($compatibility, $stackClass);
         $a->_fromArray($data);
         return $a;
