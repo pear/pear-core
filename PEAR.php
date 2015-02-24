@@ -516,12 +516,11 @@ class PEAR
      * @param bool $skipmsg If true, raiseError will only pass error codes,
      *                  the error message parameter will be dropped.
      *
-     * @access public
      * @return object   a PEAR error object
      * @see PEAR::setErrorHandling
      * @since PHP 4.0.5
      */
-    function _raiseError($object,
+    protected static function _raiseError($object,
                          $message = null,
                          $code = null,
                          $mode = null,
@@ -595,11 +594,10 @@ class PEAR
      * @param string $userinfo If you need to pass along for example debug
      *                  information, this parameter is meant for that.
      *
-     * @access public
      * @return object   a PEAR error object
      * @see PEAR::raiseError
      */
-    function &_throwError($object, $message = null, $code = null, $userinfo = null)
+    protected static function _throwError($object, $message = null, $code = null, $userinfo = null)
     {
         if ($object !== null) {
             $a = &$object->raiseError($message, $code, null, null, $userinfo);
@@ -693,7 +691,7 @@ class PEAR
      *
      * @see PEAR::setErrorHandling
      */
-    function _pushErrorHandling($object, $mode, $options = null)
+    protected static function _pushErrorHandling($object, $mode, $options = null)
     {
         $stack = &$GLOBALS['_PEAR_error_handler_stack'];
         if ($object !== null) {
@@ -721,14 +719,14 @@ class PEAR
     *
     * @see PEAR::pushErrorHandling
     */
-    function _popErrorHandling($object)
+    protected static function _popErrorHandling($object)
     {
         $stack = &$GLOBALS['_PEAR_error_handler_stack'];
         array_pop($stack);
         list($mode, $options) = $stack[sizeof($stack) - 1];
         array_pop($stack);
         if ($object !== null) {
-            $this->setErrorHandling($mode, $options);
+            $object->setErrorHandling($mode, $options);
         } else {
             PEAR::setErrorHandling($mode, $options);
         }
