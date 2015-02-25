@@ -1348,7 +1348,7 @@ class PEAR_Config extends PEAR
                     if ($key == 'preferred_mirror') {
                         $reg = &$this->getRegistry();
                         if (is_object($reg)) {
-                            $chan = &$reg->getChannel($channel);
+                            $chan = $reg->getChannel($channel);
                             if (PEAR::isError($chan)) {
                                 return $channel;
                             }
