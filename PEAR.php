@@ -267,12 +267,12 @@ class PEAR
     * Use this function to register a shutdown method for static
     * classes.
     *
-    * @access public
     * @param  mixed $func  The function name (or array of class/method) to call
     * @param  mixed $args  The arguments to pass to the function
+    *
     * @return void
     */
-    function registerShutdownFunc($func, $args = array())
+    public static function registerShutdownFunc($func, $args = array())
     {
         // if we are called statically, there is a potential
         // that no shutdown func is registered.  Bug #6445
@@ -607,7 +607,7 @@ class PEAR
         return $a;
     }
 
-    function staticPushErrorHandling($mode, $options = null)
+    public static function staticPushErrorHandling($mode, $options = null)
     {
         $stack       = &$GLOBALS['_PEAR_error_handler_stack'];
         $def_mode    = &$GLOBALS['_PEAR_default_error_mode'];
@@ -642,7 +642,7 @@ class PEAR
         return true;
     }
 
-    function staticPopErrorHandling()
+    public static function staticPopErrorHandling()
     {
         $stack = &$GLOBALS['_PEAR_error_handler_stack'];
         $setmode     = &$GLOBALS['_PEAR_default_error_mode'];
