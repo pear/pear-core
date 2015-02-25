@@ -1020,42 +1020,6 @@ class PEAR_Installer extends PEAR_Downloader
     }
 
     // }}}
-    // {{{ download()
-
-    /**
-     * Download any files and their dependencies, if necessary
-     *
-     * @param array a mixed list of package names, local files, or package.xml
-     * @param PEAR_Config
-     * @param array options from the command line
-     * @param array this is the array that will be populated with packages to
-     *              install.  Format of each entry:
-     *
-     * <code>
-     * array('pkg' => 'package_name', 'file' => '/path/to/local/file',
-     *    'info' => array() // parsed package.xml
-     * );
-     * </code>
-     * @param array this will be populated with any error messages
-     * @param false private recursion variable
-     * @param false private recursion variable
-     * @param false private recursion variable
-     * @deprecated in favor of PEAR_Downloader
-     */
-    function download($packages, $options, &$config, &$installpackages,
-                      &$errors, $installed = false, $willinstall = false, $state = false)
-    {
-        // trickiness: initialize here
-        parent::PEAR_Downloader($this->ui, $options, $config);
-        $ret             = parent::download($packages);
-        $errors          = $this->getErrorMsgs();
-        $installpackages = $this->getDownloadedPackages();
-        trigger_error("PEAR Warning: PEAR_Installer::download() is deprecated " .
-                      "in favor of PEAR_Downloader class", E_USER_WARNING);
-        return $ret;
-    }
-
-    // }}}
     // {{{ _parsePackageXml()
 
     function _parsePackageXml(&$descfile)
