@@ -290,7 +290,7 @@ class PEAR_Downloader extends PEAR_Common
         $channelschecked = array();
         // convert all parameters into PEAR_Downloader_Package objects
         foreach ($params as $i => $param) {
-            $params[$i] = &$this->newDownloaderPackage($this);
+            $params[$i] = $this->newDownloaderPackage($this);
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $err = $params[$i]->initialize($param);
             PEAR::staticPopErrorHandling();
@@ -985,7 +985,7 @@ class PEAR_Downloader extends PEAR_Common
         }
 
         if (isset($dep['uri'])) {
-            $info = &$this->newDownloaderPackage($this);
+            $info = $this->newDownloaderPackage($this);
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $err = $info->initialize($dep);
             PEAR::staticPopErrorHandling();

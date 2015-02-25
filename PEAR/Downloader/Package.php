@@ -1241,7 +1241,7 @@ class PEAR_Downloader_Package
      * @param array $errorparams empty array
      * @return array array of stupid duplicated packages in PEAR_Downloader_Package obejcts
      */
-    function detectStupidDuplicates($params, &$errorparams)
+    public static function detectStupidDuplicates($params, &$errorparams)
     {
         $existing = array();
         foreach ($params as $i => $param) {
