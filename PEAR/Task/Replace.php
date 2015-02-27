@@ -94,8 +94,9 @@ class PEAR_Task_Replace extends PEAR_Task_Common
      * Initialize a task instance with the parameters
      * @param array raw, parsed xml
      * @param unused
+     * @param unused
      */
-    public function init($xml, $attribs)
+    public function init($xml, $attribs, $lastVersion = null)
     {
         $this->_replacements = isset($xml['attribs']) ? array($xml) : $xml;
     }

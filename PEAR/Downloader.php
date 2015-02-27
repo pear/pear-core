@@ -970,7 +970,7 @@ class PEAR_Downloader extends PEAR_Common
                 } while (false);
             }
 
-            $chan = &$this->_registry->getChannel($remotechannel);
+            $chan = $this->_registry->getChannel($remotechannel);
             if (PEAR::isError($chan)) {
                 return $chan;
             }
