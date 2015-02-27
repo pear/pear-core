@@ -880,7 +880,7 @@ used for automated conversion or learning the format.
                         );
                     foreach ($deps as $type => $subd) {
                         $req = ($type == 'required') ? 'Yes' : 'No';
-                        if ($type == 'group') {
+                        if ($type == 'group' && isset($subd['attribs']['name'])) {
                             $group = $subd['attribs']['name'];
                         } else {
                             $group = '';
