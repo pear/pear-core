@@ -331,7 +331,7 @@ class PEAR_Downloader extends PEAR_Common
                             require_once 'System.php';
                         }
 
-                        $curchannel = &$this->_registry->getChannel($params[$i]->getChannel());
+                        $curchannel = $this->_registry->getChannel($params[$i]->getChannel());
                         if (PEAR::isError($curchannel)) {
                             PEAR::staticPopErrorHandling();
                             return $this->raiseError($curchannel);
@@ -822,7 +822,7 @@ class PEAR_Downloader extends PEAR_Common
             } while (false);
         }
 
-        $chan = &$this->_registry->getChannel($parr['channel']);
+        $chan = $this->_registry->getChannel($parr['channel']);
         if (PEAR::isError($chan)) {
             return $chan;
         }
@@ -945,7 +945,7 @@ class PEAR_Downloader extends PEAR_Common
         $curchannel = $this->config->get('default_channel');
         if (isset($dep['uri'])) {
             $xsdversion = '2.0';
-            $chan = &$this->_registry->getChannel('__uri');
+            $chan = $this->_registry->getChannel('__uri');
             if (PEAR::isError($chan)) {
                 return $chan;
             }
