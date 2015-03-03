@@ -318,7 +318,6 @@
    <file name="PEAR/Exception.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file name="PEAR/FixPHP5PEARWarnings.php" role="php" />
    <file name="PEAR/Frontend.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
@@ -400,11 +399,10 @@
    <file name="LICENSE" role="doc" />
    <file name="INSTALL" role="doc" />
    <file name="package.dtd" role="data" />
-   <file name="PEAR5.php" role="php" />
    <file name="PEAR.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file name="README" role="doc" />
+   <file name="README.rst" role="doc" />
    <file name="System.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
