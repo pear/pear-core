@@ -4,7 +4,7 @@ $GLOBALS['pearweb'] = new PEAR_test_mock_pearweb;
 
 require_once 'PEAR/REST.php';
 class test_PEAR_REST extends PEAR_REST {
-    function downloadHttp($url, $lastmodified = null, $accept = false)
+    function downloadHttp($url, $lastmodified = null, $accept = false, $channel = false)
     {
         $info = parse_url($url);
         if (!isset($info['scheme']) || !in_array($info['scheme'], array('http', 'https'))) {
@@ -257,7 +257,7 @@ class test_PEAR_Installer extends PEAR_Installer {
         return $dest_file;
     }
 
-    function log($level, $msg)
+    function log($level, $msg, $append_crlf = true)
     {
         global $fakelog;
         if (isset($fakelog)) {
@@ -482,7 +482,7 @@ class test_PEAR_Downloader extends PEAR_Downloader {
         return 'test_PEAR_Downloader_Package';
     }
 
-    function log($level, $msg)
+    function log($level, $msg, $append_crlf = true)
     {
         global $fakelog;
         if (isset($fakelog)) {
@@ -777,7 +777,7 @@ class test_PEAR_Config extends PEAR_Config
         return $remote;
     }
 
-    public static function &singleton($user_file = '', $system_file = '')
+    public static function &singleton($user_file = '', $system_file = '', $strict = true)
     {
         if (is_object($GLOBALS['_PEAR_Config_instance'])) {
             return $GLOBALS['_PEAR_Config_instance'];
@@ -798,7 +798,8 @@ class fake_log extends PEAR_Frontend
         $GLOBALS['_PEAR_FRONTEND_SINGLETON'] = &$GLOBALS['fakelog'];
     }
 
-    function log($level, $message)
+    //this is nonsense; parameters do not match with parent.
+    function log($level, $message = true)
     {
         $GLOBALS['fakelog']->_log[] = array($level, $message);
     }
@@ -835,7 +836,7 @@ class fake_log extends PEAR_Frontend
         $GLOBALS['fakelog']->_dialogInput[var_export($input, true)] = $output;
     }
 
-    function userDialog()
+    function userDialog($command, $prompts, $types = array(), $defaults = array())
     {
         $input = func_get_args();
         if (isset($GLOBALS['fakelog']->_dialogInput[var_export($input, true)])) {
