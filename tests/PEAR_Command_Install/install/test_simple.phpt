@@ -15,7 +15,8 @@ $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
 $res = $command->run('install', array(), array($pathtopackagexml));
 $phpunit->assertNoErrors('after install');
 $phpunit->assertTrue($res, 'result');
-$dl = &$command->getDownloader(1, array());
+$dummy = null;
+$dl = &$command->getDownloader($dummy, array());
 if (OS_WINDOWS) {
     $phpunit->assertEquals(array (
       0 =>

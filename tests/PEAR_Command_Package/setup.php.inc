@@ -78,14 +78,14 @@ $config = new test_PEAR_Config($temp_path . '/pear.ini', $temp_path . '/pear.con
 require_once 'PEAR/Command/Package.php';
 class test_PEAR_Command_Package extends PEAR_Command_Package
 {
-    function &getPackageFile(&$c, $d = false, $t = null)
+    function &getPackageFile($c, $d = false, $t = null)
     {
         $a = new test_PEAR_PackageFile($c, $d, $t);
         $a->setLogger($GLOBALS['fakelog']);
         return $a;
     }
 
-    function &getInstaller()
+    function &getInstaller(&$ui)
     {
         $a = new test_PEAR_Installer($this->ui, array(), $this->config);
         return $a;

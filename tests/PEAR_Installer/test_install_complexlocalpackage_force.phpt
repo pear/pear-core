@@ -17,7 +17,7 @@ $pathtobarxml     = $packageDir . 'Bar-1.5.0.tgz';
 $pathtofoobarxml  = $packageDir . 'Foobar-1.4.0a1.tgz';
 
 $reg = &$config->getRegistry();
-$chan = &$reg->getChannel('pear.php.net');
+$chan = $reg->getChannel('pear.php.net');
 $chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
 $reg->updateChannel($chan);
 

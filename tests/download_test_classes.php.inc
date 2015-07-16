@@ -127,8 +127,7 @@ class test_PEAR_REST_13 extends PEAR_REST_13 {
 
 require_once 'PEAR/Installer.php';
 class test_PEAR_Installer extends PEAR_Installer {
-    function download($packages, $options, &$config, &$installpackages,
-                      &$errors, $installed = false, $willinstall = false, $state = false)
+    function &download($packages)
     {
         // trickiness: initialize here
         $this->PEAR_Downloader($this->ui, $options, $config);

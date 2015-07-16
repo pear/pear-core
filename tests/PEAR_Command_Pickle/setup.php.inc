@@ -103,9 +103,9 @@ $config = new test_PEAR_Config($temp_path . '/pear.ini', $temp_path . '/pear.con
 require_once 'PEAR/Command/Pickle.php';
 class test_PEAR_Command_Pickle extends PEAR_Command_Pickle
 {
-    function &getPackageFile(&$c, $d = false, $t = null)
+    function &getPackageFile($c, $d = false)
     {
-        $a = new test_PEAR_PackageFile($c, $d, $t);
+        $a = new test_PEAR_PackageFile($c, $d);
         $a->setLogger($GLOBALS['fakelog']);
         return $a;
     }

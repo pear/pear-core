@@ -1386,8 +1386,8 @@ class PEAR_Downloader_Package
                     PEAR::popErrorHandling();
                     return $dir;
                 }
-
-                $e = $obj->_fromFile($a = $dir . DIRECTORY_SEPARATOR . $file);
+                $a = $dir . DIRECTORY_SEPARATOR . $file;
+                $e = $obj->_fromFile($a);
                 PEAR::popErrorHandling();
                 if (PEAR::isError($e)) {
                     if (!isset($options['soft'])) {

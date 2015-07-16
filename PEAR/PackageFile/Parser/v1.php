@@ -90,7 +90,7 @@ class PEAR_PackageFile_Parser_v1
             $code = xml_get_error_code($xp);
             $line = xml_get_current_line_number($xp);
             xml_parser_free($xp);
-            $a = &PEAR::raiseError(sprintf("XML error: %s at line %d",
+            $a = PEAR::raiseError(sprintf("XML error: %s at line %d",
                            $str = xml_error_string($code), $line), 2);
             return $a;
         }

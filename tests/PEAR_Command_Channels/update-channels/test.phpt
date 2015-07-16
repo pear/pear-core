@@ -12,7 +12,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 
 $reg = &$config->getRegistry();
-$c = &$reg->getChannel(strtolower('pear.php.net'));
+$c = $reg->getChannel(strtolower('pear.php.net'));
 $c->setName('zornk.ornk.org');
 $reg->addChannel($c);
 $c->setName('horde.orde.de');

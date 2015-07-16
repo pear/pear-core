@@ -23,7 +23,7 @@ $pf1 = &$v1parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATO
     DIRECTORY_SEPARATOR . 'validv1.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'validv1.xml');
 $v1generator = &$pf1->getDefaultGenerator();
-$pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
+$pf = $parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'phprelease1.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'phprelease1.xml');
 $generator = &$pf->getDefaultGenerator();

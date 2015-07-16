@@ -13,7 +13,7 @@ require_once $dir . 'setup.php.inc';
 $pathtopackagexml = $dir .'test_initialize_downloadurl'. DIRECTORY_SEPARATOR . 'test-1.0.tgz';
 
 $reg = &$config->getRegistry();
-$chan = &$reg->getChannel('pear.php.net');
+$chan = $reg->getChannel('pear.php.net');
 $chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
 $reg->updateChannel($chan);
 

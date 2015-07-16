@@ -26,7 +26,7 @@ $phpunit->assertErrors(array(
 ), 'bad');
 $phpunit->assertIsa('PEAR_Error', $e, 'error');
 
-$pf = &$parser->parse('<?xml version="1.0" encoding="ISO-8859-1" ?>
+$pf = $parser->parse('<?xml version="1.0" encoding="ISO-8859-1" ?>
 <package version="2.0" packagerversion="' . $generator->getPackagerVersion() . '">
  <name>foo</name>
  <channel>pear.php.net</channel>
@@ -107,7 +107,7 @@ rmdir($temp_path . DIRECTORY_SEPARATOR . 'floub' . DIRECTORY_SEPARATOR . 'foo-1.
 chdir($temp_path);
 $phpunit->assertEquals(array(array(1, 'Analyzing foo.php')), $fakelog->getLog(), 'log packaging');
 
-$pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
+$pf = $parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'bundlefail1.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'bundlefail1.xml');
 $generator = &$pf->getDefaultGenerator();
@@ -133,7 +133,7 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'bad bundle 1 log');
 
-$pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
+$pf = $parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'bundlefail2.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'bundlefail2.xml');
 $generator = &$pf->getDefaultGenerator();

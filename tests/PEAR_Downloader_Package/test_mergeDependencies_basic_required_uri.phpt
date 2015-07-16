@@ -14,7 +14,7 @@ $mainpackage     = $packageDir . 'main-1.0.tgz';
 $requiredpackage = $packageDir . 'foo-1.0.tgz';
 
 $reg = &$config->getRegistry();
-$chan = &$reg->getChannel('pear.php.net');
+$chan = $reg->getChannel('pear.php.net');
 $chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
 $reg->updateChannel($chan);
 

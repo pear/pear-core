@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $config = new PEAR_Config($temp_path . DIRECTORY_SEPARATOR . 'pear.ini', $temp_path .
     DIRECTORY_SEPARATOR . 'nofile');
 $reg = $config->getRegistry();
-$ch = &$reg->getChannel('pear.php.net');
+$ch = $reg->getChannel('pear.php.net');
 $ch->addMirror('poo.example.com');
 $ch->setDefaultPEARProtocols('1.0', 'poo.example.com');
 $reg->updateChannel($ch);

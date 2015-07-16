@@ -801,7 +801,7 @@ class PEAR_ErrorStack {
      * Error sorting function, sorts by time
      * @access private
      */
-    function _sortErrors($a, $b)
+    public static function _sortErrors($a, $b)
     {
         if ($a['time'] == $b['time']) {
             return 0;

@@ -22,7 +22,7 @@ $phpunit->assertErrors(array(
 ), 'bad');
 $phpunit->assertIsa('PEAR_Error', $e, 'error');
 
-$pf = &$parser->parse('<?xml version="1.0" encoding="ISO-8859-1" ?>
+$pf = $parser->parse('<?xml version="1.0" encoding="ISO-8859-1" ?>
 <package version="2.0" packagerversion="' . $generator->getPackagerVersion() . '">
  <name>foo</name>
  <channel>pear.php.net</channel>
@@ -89,7 +89,7 @@ $phpunit->assertErrors(array(
 ), 'bad 2');
 $phpunit->assertIsa('PEAR_Error', $e, 'error 2');
 
-$pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
+$pf = $parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'bundlefail1.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'bundlefail1.xml');
 $generator = &$pf->getDefaultGenerator();
@@ -114,7 +114,7 @@ $phpunit->assertEquals(array (
   ),
 ), $fakelog->getLog(), 'bad bundle 1 log');
 
-$pf = &$parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
+$pf = $parser->parse(implode('', file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'bundlefail2.xml')), dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' .
     DIRECTORY_SEPARATOR . 'bundlefail2.xml');
 $generator = &$pf->getDefaultGenerator();

@@ -1374,7 +1374,7 @@ class PEAR_Config extends PEAR
             if ($key == 'preferred_mirror') {
                 $reg = &$this->getRegistry();
                 if (is_object($reg)) {
-                    $chan = &$reg->getChannel($channel);
+                    $chan = $reg->getChannel($channel);
                     if (PEAR::isError($chan)) {
                         return $channel;
                     }
@@ -1425,7 +1425,7 @@ class PEAR_Config extends PEAR
         if ($ret !== null) {
             $reg = &$this->getRegistry($layer);
             if (is_object($reg)) {
-                $chan = &$reg->getChannel($channel);
+                $chan = $reg->getChannel($channel);
                 if (PEAR::isError($chan)) {
                     return $channel;
                 }
@@ -1483,7 +1483,7 @@ class PEAR_Config extends PEAR
 
             $reg = &$this->getRegistry($layer);
             if (is_object($reg)) {
-                $chan = &$reg->getChannel($channel ? $channel : 'pear.php.net');
+                $chan = $reg->getChannel($channel ? $channel : 'pear.php.net');
                 if (PEAR::isError($chan)) {
                     return false;
                 }
