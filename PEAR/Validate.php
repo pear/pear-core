@@ -202,7 +202,8 @@ class PEAR_Validate
                   $this->_packagexml->getExtends()) {
                 $version = $this->_packagexml->getVersion() . '';
                 $name = $this->_packagexml->getPackage();
-                $test = array_shift($a = explode('.', $version));
+                $a = explode('.', $version);
+                $test = array_shift($a);
                 if ($test == '0') {
                     return true;
                 }
