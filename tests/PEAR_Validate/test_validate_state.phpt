@@ -9,7 +9,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 --FILE--
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
-$pf = &$v1parser->parse('<?xml version="1.0" encoding="ISO-8859-1" ?>' .
+$pf = $v1parser->parse('<?xml version="1.0" encoding="ISO-8859-1" ?>' .
     '<package version="1.0"><name>test</name><summary>PEAR test</summary>' . 
     '<description>The test</description><license>PHP License</license>  <maintainers>
     <maintainer>

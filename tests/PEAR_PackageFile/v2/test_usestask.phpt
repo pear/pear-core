@@ -12,7 +12,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'Parser'. DIRECTORY_SEPARATOR .
     'test_basicparse'. DIRECTORY_SEPARATOR . 'package2.xml';
-$pf = &$parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
+$pf = $parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $pfa = &$pf->getRW();
 $pf = &$pfa;
 $pf->flattenFilelist();

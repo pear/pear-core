@@ -12,7 +12,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'Parser'. DIRECTORY_SEPARATOR .
     'test_basicparse'. DIRECTORY_SEPARATOR . 'package.xml';
-$pf = &$v2parser->parse('<?xml version="1.0"?>
+$pf = $v2parser->parse('<?xml version="1.0"?>
 <package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
 http://pear.php.net/dtd/tasks-1.0.xsd
 http://pear.php.net/dtd/package-2.0

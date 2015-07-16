@@ -73,7 +73,7 @@ $fakelog = new fake_log;
 require_once 'PEAR/Config.php';
 $config = &test_PEAR_Config::singleton($temp_path . '/pear.ini');
 $reg = &$config->getRegistry();
-$chan = &$reg->getChannel('pear.php.net');
+$chan = $reg->getChannel('pear.php.net');
 $chan->resetFunctions('rest');
 $reg->updateChannel($chan);
 test_PEAR_Dependency2::singleton($config);
