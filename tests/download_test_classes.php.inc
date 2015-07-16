@@ -607,7 +607,7 @@ class test_PEAR_Dependency2 extends PEAR_Dependency2
             'i686' => 'i386',
             'ppc' => 'powerpc',
         );
-        $parts = split('[[:space:]]+', trim($uname));
+        $parts = preg_split('/[[:space:]]+/', trim($uname));
         $n = count($parts);
 
         $release = $machine = $cpu = '';
