@@ -816,7 +816,7 @@ class PEAR_Common extends PEAR
         if (!class_exists('PEAR_Downloader')) {
             require_once 'PEAR/Downloader.php';
         }
-        return PEAR_Downloader::downloadHttp($url, $ui, $save_dir, $callback);
+        return PEAR_Downloader::_downloadHttp($this, $url, $ui, $save_dir, $callback);
     }
 }
 
