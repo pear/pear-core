@@ -1,6 +1,8 @@
 *************************
 PEAR - The PEAR Installer
 *************************
+.. image:: https://travis-ci.org/pear/pear-core.svg?branch=stable
+    :target: https://travis-ci.org/pear/pear-core
 
 =========================================
 What is the PEAR Installer? What is PEAR?
