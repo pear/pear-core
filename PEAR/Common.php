@@ -801,6 +801,13 @@ class PEAR_Common extends PEAR
      * @param string  $save_dir  (optional) directory to save file in
      * @param mixed   $callback  (optional) function/method to call for status
      *                           updates
+     * @param false|string|array $lastmodified header values to check against
+     *                                         for caching
+     *                                         use false to return the header
+     *                                         values from this download
+     * @param false|array        $accept       Accept headers to send
+     * @param false|string       $channel      Channel to use for retrieving
+     *                                         authentication
      *
      * @return string  Returns the full path of the downloaded file or a PEAR
      *                 error on failure.  If the error is caused by
@@ -809,14 +816,18 @@ class PEAR_Common extends PEAR
      *                 getCode().
      *
      * @access public
-     * @deprecated in favor of PEAR_Downloader::downloadHttp()
      */
-    function downloadHttp($url, &$ui, $save_dir = '.', $callback = null)
-    {
+    function downloadHttp(
+        $url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null,
+        $accept = false, $channel = false
+    ) {
         if (!class_exists('PEAR_Downloader')) {
             require_once 'PEAR/Downloader.php';
         }
-        return PEAR_Downloader::_downloadHttp($this, $url, $ui, $save_dir, $callback);
+        return PEAR_Downloader::_downloadHttp(
+            $this, $url, $ui, $save_dir, $callback, $lastmodified,
+            $accept, $channel
+        );
     }
 }
 
