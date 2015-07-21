@@ -13,4 +13,4 @@ install:
 script:
   - umask 0022
   - sh scripts/pear.sh run-tests -q -d -r tests
-  - pear package package2.xml
+  - sh scripts/pear.sh package package2.xml

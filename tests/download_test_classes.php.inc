@@ -151,8 +151,10 @@ class test_PEAR_Installer extends PEAR_Installer {
         return $a;
     }
 
-    function downloadHttp($url, &$ui, $save_dir = '.', $callback = null)
-    {
+    function downloadHttp(
+        $url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null,
+        $accept = false, $channel = false
+    ) {
 //        return parent::downloadHttp($url, $ui, $save_dir, $callback);
         if ($callback) {
             call_user_func($callback, 'setup', array(&$ui));
@@ -305,8 +307,10 @@ class test_PEAR_Downloader extends PEAR_Downloader {
         return $a;
     }
 
-    function downloadHttp($url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null)
-    {
+    function downloadHttp(
+        $url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null,
+        $accept = false, $channel = false
+    ) {
         if (isset($GLOBALS['return304'])) {
             return false;
         }
