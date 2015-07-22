@@ -56,3 +56,31 @@ Happy PHPing, we hope PEAR will be a great tool for your development work!
 Test dependencies
 =================
 * ``zlib``
+
+
+=========
+Releasing
+=========
+Create a PEAR package as well as phars for pear-less installation::
+
+    $ pear package package2.xml
+    $ cd go-pear-tarballs
+    $ cp ../PEAR-*.tgz .
+    $ gunzip PEAR-*.tgz
+    $ pear download -Z Archive_Tar Console_Getopt Structures_Graph XML_Util
+    $ mkdir src && cd src
+    $ for i in ../*.tar; do tar xvf $i; done
+    $ mv *\/* .
+    $ cd ../../
+    $ php make-gopear-phar.php
+    $ php make-installpear-nozlib-phar.php
+
+(Or simply run ``build-release.sh``).
+
+``go-pear.phar`` is contains the PEAR installer installer that asks questions
+where to install it.
+It is available from http://pear.php.net/go-pear.phar.
+
+``install-pear-nozlib.phar`` installs PEAR automatically without asking
+anything.
+It is shipped with PHP itself.
