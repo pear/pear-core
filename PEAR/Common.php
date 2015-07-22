@@ -809,11 +809,14 @@ class PEAR_Common extends PEAR
      * @param false|string       $channel      Channel to use for retrieving
      *                                         authentication
      *
-     * @return string  Returns the full path of the downloaded file or a PEAR
-     *                 error on failure.  If the error is caused by
-     *                 socket-related errors, the error object will
-     *                 have the fsockopen error code available through
-     *                 getCode().
+     * @return mixed  Returns the full path of the downloaded file or a PEAR
+     *                error on failure.  If the error is caused by
+     *                socket-related errors, the error object will
+     *                have the fsockopen error code available through
+     *                getCode().  If caching is requested, then return the header
+     *                values.
+     *                If $lastmodified was given and the there are no changes,
+     *                boolean false is returned.
      *
      * @access public
      */

@@ -347,7 +347,10 @@ class PEAR_Downloader extends PEAR_Common
                         $a = $this->downloadHttp($url, $this->ui, $dir, null, $curchannel->lastModified());
 
                         PEAR::staticPopErrorHandling();
-                        if (PEAR::isError($a) || !$a) {
+                        if ($a === false) {
+                            //channel.xml not modified
+                            break;
+                        } else if (PEAR::isError($a)) {
                             // Attempt fallback to https automatically
                             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                             $a = $this->downloadHttp('https://' . $mirror .
@@ -1539,12 +1542,14 @@ class PEAR_Downloader extends PEAR_Common
      *                           use false to return the header values from this download
      * @param false|array $accept Accept headers to send
      * @param false|string $channel Channel to use for retrieving authentication
-     * @return string|array  Returns the full path of the downloaded file or a PEAR
-     *                       error on failure.  If the error is caused by
-     *                       socket-related errors, the error object will
-     *                       have the fsockopen error code available through
-     *                       getCode().  If caching is requested, then return the header
-     *                       values.
+     * @return mixed  Returns the full path of the downloaded file or a PEAR
+     *                error on failure.  If the error is caused by
+     *                socket-related errors, the error object will
+     *                have the fsockopen error code available through
+     *                getCode().  If caching is requested, then return the header
+     *                values.
+     *                If $lastmodified was given and the there are no changes,
+     *                boolean false is returned.
      *
      * @access public
      */
