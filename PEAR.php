@@ -214,7 +214,6 @@ class PEAR
     public function __call($method, $arguments)
     {
         if (!isset(self::$bivalentMethods[$method])) {
-            xdebug_print_function_stack();
             trigger_error(
                 'Call to undefined method PEAR::' . $method . '()', E_USER_ERROR
             );
