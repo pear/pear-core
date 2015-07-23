@@ -14,7 +14,7 @@ pear download -Z Archive_Tar Console_Getopt Structures_Graph XML_Util
 
 mkdir src && cd src
 for i in ../*.tar; do tar xvf $i; done
-mv *\/* .
+mv *\/* . || true
 cd ../../
 
 rm go-pear.phar install-pear-nozlib.phar
