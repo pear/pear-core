@@ -24,7 +24,7 @@ class PEAR_Start_CLI extends PEAR_Start
 
     function __construct()
     {
-        parent::construct();
+        parent::__construct();
         ini_set('html_errors', 0);
         define('WIN32GUI', OS_WINDOWS && php_sapi_name() == 'cli' && System::which('cscript'));
         $this->tty = OS_WINDOWS ? @fopen('\con', 'r') : @fopen('/dev/tty', 'r');

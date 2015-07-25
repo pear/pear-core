@@ -18,7 +18,7 @@ $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/mainold-1.1.tgz',  $m
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/required-1.1.tgz', $requiredpackage);
 
 $reg = &$config->getRegistry();
-$chan = &$reg->getChannel('pear.php.net');
+$chan = $reg->getChannel('pear.php.net');
 $chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
 $reg->updateChannel($chan);
 

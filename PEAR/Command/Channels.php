@@ -694,7 +694,7 @@ configuration.',
                 'already aliased to "' . strtolower($params[1]) . '", cannot re-alias');
         }
 
-        $chan = &$reg->getChannel($params[0]);
+        $chan = $reg->getChannel($params[0]);
         if (PEAR::isError($chan)) {
             return $this->raiseError('Corrupt registry?  Error retrieving channel "' . $params[0] .
                 '" information (' . $chan->getMessage() . ')');

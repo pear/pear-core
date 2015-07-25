@@ -1342,7 +1342,8 @@ $config->set('preferred_state', 'alpha');
 test_PEAR_Command_Install::_reset_downloader();
 $res = $command->run('upgrade', array(), array('Auth_HTTP'));
 
-$dl = &$command->getDownloader(1, array());
+$dummy = null;
+$dl = &$command->getDownloader($dummy, array());
 echoFakelog($fakelog);
 echo 'tests done';
 ?>

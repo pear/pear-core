@@ -24,7 +24,7 @@ $package->setNotes('foo');
 $package->addFile('/', 'foo.php', array('role' => 'php'));
 $package->addMaintainer('lead', 'cellog', 'Greg Beaver', 'cellog@php.net');
 $package->addPackageDep('bar', '1.0', 'ge');
-$reg = &$config->getRegistry();
+$reg = $config->getRegistry();
 $reg->addPackage2($package);
 
 $package->resetFilelist();
@@ -39,8 +39,16 @@ $params[] = $reg->getPackage('foo');
 
 $dl = new PEAR_Installer($fakelog);
 $dl->sortPackagesForUninstall($params);
-$phpunit->assertEquals('foo', $params[0]->getPackage(), 'foo');
-$phpunit->assertEquals('bar', $params[1]->getPackage(), 'bar');
+// order is undefined since both packages depend on each other
+// we only know both have to be in the list
+$phpunit->assertTrue(
+    in_array($params[0]->getPackage(), array('foo', 'bar')),
+    'foo'
+);
+$phpunit->assertTrue(
+    in_array($params[1]->getPackage(), array('foo', 'bar')),
+    'bar'
+);
 echo 'tests done';
 ?>
 --CLEAN--

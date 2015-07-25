@@ -396,9 +396,8 @@ class PEAR_Downloader_Package
     /**
      * Remove packages to be downloaded that are already installed
      * @param array of PEAR_Downloader_Package objects
-     * @static
      */
-    function removeInstalled(&$params)
+    public static function removeInstalled(&$params)
     {
         if (!isset($params[0])) {
             return;
@@ -1242,7 +1241,7 @@ class PEAR_Downloader_Package
      * @param array $errorparams empty array
      * @return array array of stupid duplicated packages in PEAR_Downloader_Package obejcts
      */
-    function detectStupidDuplicates($params, &$errorparams)
+    public static function detectStupidDuplicates($params, &$errorparams)
     {
         $existing = array();
         foreach ($params as $i => $param) {
@@ -1280,9 +1279,8 @@ class PEAR_Downloader_Package
     /**
      * @param array
      * @param bool ignore install groups - for final removal of dupe packages
-     * @static
      */
-    function removeDuplicates(&$params, $ignoreGroups = false)
+    public static function removeDuplicates(&$params, $ignoreGroups = false)
     {
         $pnames = array();
         foreach ($params as $i => $param) {
@@ -1344,9 +1342,8 @@ class PEAR_Downloader_Package
     }
 
     /**
-     * @static
      */
-    function mergeDependencies(&$params)
+    public static function mergeDependencies(&$params)
     {
         $bundles = $newparams = array();
         foreach ($params as $i => $param) {
@@ -1389,8 +1386,8 @@ class PEAR_Downloader_Package
                     PEAR::popErrorHandling();
                     return $dir;
                 }
-
-                $e = $obj->_fromFile($a = $dir . DIRECTORY_SEPARATOR . $file);
+                $a = $dir . DIRECTORY_SEPARATOR . $file;
+                $e = $obj->_fromFile($a);
                 PEAR::popErrorHandling();
                 if (PEAR::isError($e)) {
                     if (!isset($options['soft'])) {
@@ -1473,9 +1470,8 @@ class PEAR_Downloader_Package
 
 
     /**
-     * @static
      */
-    function willDownload($param, $params)
+    public static function willDownload($param, $params)
     {
         if (!is_array($params)) {
             return false;

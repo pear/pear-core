@@ -86,7 +86,8 @@ $phpunit->assertErrors(array(
     ),
 ), 'after install');
 
-$dl = &$command->getDownloader(1, array());
+$dummy = null;
+$dl = &$command->getDownloader($dummy, array());
 
 $log = $fakelog->getLog();
 $phpunit->assertEquals(array (

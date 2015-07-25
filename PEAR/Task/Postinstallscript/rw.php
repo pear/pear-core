@@ -157,11 +157,11 @@ class PEAR_Task_Postinstallscript_rw extends PEAR_Task_Postinstallscript
      * @param string $type    Type, defaults to 'string'
      * @param mixed  $default Default value
      *
-     * @static
      * @return array
      */
-    public function getParam($name, $prompt, $type = 'string', $default = null)
-    {
+    public static function getParam(
+        $name, $prompt, $type = 'string', $default = null
+    ) {
         if ($default !== null) {
             return
             array(

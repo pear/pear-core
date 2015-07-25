@@ -116,10 +116,9 @@ class PEAR_Task_Common
      * For PEAR_TASK_ERROR_WRONG_ATTRIB_VALUE, pass the attribute name and
      * an array of legal values in
      *
-     * @static
      * @abstract
      */
-    public function validateXml($pkg, $xml, $config, $fileXml)
+    public static function validateXml($pkg, $xml, $config, $fileXml)
     {
     }
 
@@ -160,27 +159,23 @@ class PEAR_Task_Common
      *
      * @param    array an array of tasks
      * @access   protected
-     * @static
-     * @abstract
      */
-    public function run($tasks)
+    public static function run($tasks)
     {
     }
 
     /**
-     * @static
      * @final
      */
-    public function hasPostinstallTasks()
+    public static function hasPostinstallTasks()
     {
         return isset($GLOBALS['_PEAR_TASK_POSTINSTANCES']);
     }
 
      /**
-      * @static
       * @final
       */
-    public function runPostinstallTasks()
+    public static function runPostinstallTasks()
     {
         foreach ($GLOBALS['_PEAR_TASK_POSTINSTANCES'] as $class => $tasks) {
             $err = call_user_func(

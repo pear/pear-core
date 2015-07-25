@@ -108,11 +108,8 @@ class PEAR_Command
      * @param object $config  Instance of PEAR_Config object
      *
      * @return object the command object or a PEAR error
-     *
-     * @access public
-     * @static
      */
-    function &factory($command, &$config)
+    public static function &factory($command, &$config)
     {
         if (empty($GLOBALS['_PEAR_Command_commandlist'])) {
             PEAR_Command::registerCommands();
@@ -139,7 +136,7 @@ class PEAR_Command
 
     // }}}
     // {{{ & getObject()
-    function &getObject($command)
+    public static function &getObject($command)
     {
         $class = $GLOBALS['_PEAR_Command_commandlist'][$command];
         if (!class_exists($class)) {
@@ -161,9 +158,8 @@ class PEAR_Command
      * Get instance of frontend object.
      *
      * @return object|PEAR_Error
-     * @static
      */
-    function &getFrontendObject()
+    public static function &getFrontendObject()
     {
         $a = &PEAR_Frontend::singleton();
         return $a;
@@ -178,9 +174,8 @@ class PEAR_Command
      * @param string $uiclass Name of class implementing the frontend
      *
      * @return object the frontend object, or a PEAR error
-     * @static
      */
-    function &setFrontendClass($uiclass)
+    public static function &setFrontendClass($uiclass)
     {
         $a = &PEAR_Frontend::setFrontendClass($uiclass);
         return $a;
@@ -195,9 +190,8 @@ class PEAR_Command
      * @param string $uitype Name of the frontend type (for example "CLI")
      *
      * @return object the frontend object, or a PEAR error
-     * @static
      */
-    function setFrontendType($uitype)
+    public static function setFrontendType($uitype)
     {
         $uiclass = 'PEAR_Frontend_' . $uitype;
         return PEAR_Command::setFrontendClass($uiclass);
@@ -220,11 +214,8 @@ class PEAR_Command
      *               included.
      *
      * @return bool TRUE on success, a PEAR error on failure
-     *
-     * @access public
-     * @static
      */
-    function registerCommands($merge = false, $dir = null)
+    public static function registerCommands($merge = false, $dir = null)
     {
         $parser = new PEAR_XMLParser;
         if ($dir === null) {
@@ -304,11 +295,8 @@ class PEAR_Command
      * classes implement them.
      *
      * @return array command => implementing class
-     *
-     * @access public
-     * @static
      */
-    function getCommands()
+    public static function getCommands()
     {
         if (empty($GLOBALS['_PEAR_Command_commandlist'])) {
             PEAR_Command::registerCommands();
@@ -323,11 +311,8 @@ class PEAR_Command
      * Get the list of command shortcuts.
      *
      * @return array shortcut => command
-     *
-     * @access public
-     * @static
      */
-    function getShortcuts()
+    public static function getShortcuts()
     {
         if (empty($GLOBALS['_PEAR_Command_shortcuts'])) {
             PEAR_Command::registerCommands();
@@ -346,11 +331,8 @@ class PEAR_Command
      * @param array  $long_args   (reference) long getopt format
      *
      * @return void
-     *
-     * @access public
-     * @static
      */
-    function getGetoptArgs($command, &$short_args, &$long_args)
+    public static function getGetoptArgs($command, &$short_args, &$long_args)
     {
         if (empty($GLOBALS['_PEAR_Command_commandlist'])) {
             PEAR_Command::registerCommands();
@@ -374,11 +356,8 @@ class PEAR_Command
      * @param  string $command Name of the command
      *
      * @return string command description
-     *
-     * @access public
-     * @static
      */
-    function getDescription($command)
+    public static function getDescription($command)
     {
         if (!isset($GLOBALS['_PEAR_Command_commanddesc'][$command])) {
             return null;
@@ -393,11 +372,8 @@ class PEAR_Command
      * Get help for command.
      *
      * @param string $command Name of the command to return help for
-     *
-     * @access public
-     * @static
      */
-    function getHelp($command)
+    public static function getHelp($command)
     {
         $cmds = PEAR_Command::getCommands();
         if (isset($GLOBALS['_PEAR_Command_shortcuts'][$command])) {

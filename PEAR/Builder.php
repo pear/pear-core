@@ -483,6 +483,6 @@ class PEAR_Builder extends PEAR_Common
             }
             return;
         }
-        return PEAR_Common::log($level, $msg);
+        return parent::log($level, $msg);
     }
 }

@@ -140,6 +140,19 @@ class PEAR_Downloader extends PEAR_Common
     var $_downloadDir;
 
     /**
+     * List of methods that can be called both statically and non-statically.
+     * @var array
+     */
+    protected static $bivalentMethods = array(
+        'setErrorHandling' => true,
+        'raiseError' => true,
+        'throwError' => true,
+        'pushErrorHandling' => true,
+        'popErrorHandling' => true,
+        'downloadHttp' => true,
+    );
+
+    /**
      * @param PEAR_Frontend_*
      * @param array
      * @param PEAR_Config
@@ -277,7 +290,7 @@ class PEAR_Downloader extends PEAR_Common
         $channelschecked = array();
         // convert all parameters into PEAR_Downloader_Package objects
         foreach ($params as $i => $param) {
-            $params[$i] = &$this->newDownloaderPackage($this);
+            $params[$i] = $this->newDownloaderPackage($this);
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $err = $params[$i]->initialize($param);
             PEAR::staticPopErrorHandling();
@@ -318,7 +331,7 @@ class PEAR_Downloader extends PEAR_Common
                             require_once 'System.php';
                         }
 
-                        $curchannel = &$this->_registry->getChannel($params[$i]->getChannel());
+                        $curchannel = $this->_registry->getChannel($params[$i]->getChannel());
                         if (PEAR::isError($curchannel)) {
                             PEAR::staticPopErrorHandling();
                             return $this->raiseError($curchannel);
@@ -334,7 +347,10 @@ class PEAR_Downloader extends PEAR_Common
                         $a = $this->downloadHttp($url, $this->ui, $dir, null, $curchannel->lastModified());
 
                         PEAR::staticPopErrorHandling();
-                        if (PEAR::isError($a) || !$a) {
+                        if ($a === false) {
+                            //channel.xml not modified
+                            break;
+                        } else if (PEAR::isError($a)) {
                             // Attempt fallback to https automatically
                             PEAR::pushErrorHandling(PEAR_ERROR_RETURN);
                             $a = $this->downloadHttp('https://' . $mirror .
@@ -809,7 +825,7 @@ class PEAR_Downloader extends PEAR_Common
             } while (false);
         }
 
-        $chan = &$this->_registry->getChannel($parr['channel']);
+        $chan = $this->_registry->getChannel($parr['channel']);
         if (PEAR::isError($chan)) {
             return $chan;
         }
@@ -932,7 +948,7 @@ class PEAR_Downloader extends PEAR_Common
         $curchannel = $this->config->get('default_channel');
         if (isset($dep['uri'])) {
             $xsdversion = '2.0';
-            $chan = &$this->_registry->getChannel('__uri');
+            $chan = $this->_registry->getChannel('__uri');
             if (PEAR::isError($chan)) {
                 return $chan;
             }
@@ -957,7 +973,7 @@ class PEAR_Downloader extends PEAR_Common
                 } while (false);
             }
 
-            $chan = &$this->_registry->getChannel($remotechannel);
+            $chan = $this->_registry->getChannel($remotechannel);
             if (PEAR::isError($chan)) {
                 return $chan;
             }
@@ -972,7 +988,7 @@ class PEAR_Downloader extends PEAR_Common
         }
 
         if (isset($dep['uri'])) {
-            $info = &$this->newDownloaderPackage($this);
+            $info = $this->newDownloaderPackage($this);
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
             $err = $info->initialize($dep);
             PEAR::staticPopErrorHandling();
@@ -1526,18 +1542,21 @@ class PEAR_Downloader extends PEAR_Common
      *                           use false to return the header values from this download
      * @param false|array $accept Accept headers to send
      * @param false|string $channel Channel to use for retrieving authentication
-     * @return string|array  Returns the full path of the downloaded file or a PEAR
-     *                       error on failure.  If the error is caused by
-     *                       socket-related errors, the error object will
-     *                       have the fsockopen error code available through
-     *                       getCode().  If caching is requested, then return the header
-     *                       values.
+     * @return mixed  Returns the full path of the downloaded file or a PEAR
+     *                error on failure.  If the error is caused by
+     *                socket-related errors, the error object will
+     *                have the fsockopen error code available through
+     *                getCode().  If caching is requested, then return the header
+     *                values.
+     *                If $lastmodified was given and the there are no changes,
+     *                boolean false is returned.
      *
      * @access public
      */
-    function downloadHttp($url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null,
-                          $accept = false, $channel = false)
-    {
+    public static function _downloadHttp(
+        $object, $url, &$ui, $save_dir = '.', $callback = null, $lastmodified = null,
+        $accept = false, $channel = false
+    ) {
         static $redirect = 0;
         // always reset , so we are clean case of error
         $wasredirect = $redirect;
@@ -1559,8 +1578,8 @@ class PEAR_Downloader extends PEAR_Common
         $port = isset($info['port']) ? $info['port'] : null;
         $path = isset($info['path']) ? $info['path'] : null;
 
-        if (isset($this)) {
-            $config = &$this->config;
+        if ($object !== null) {
+            $config = $object->config;
         } else {
             $config = &PEAR_Config::singleton();
         }
@@ -1644,7 +1663,7 @@ class PEAR_Downloader extends PEAR_Common
         $request .= $ifmodifiedsince .
             "User-Agent: PEAR/@package_version@/PHP/" . PHP_VERSION . "\r\n";
 
-        if (isset($this)) { // only pass in authentication for non-static calls
+        if ($object !== null) { // only pass in authentication for non-static calls
             $username = $config->get('username', null, $channel);
             $password = $config->get('password', null, $channel);
             if ($username && $password) {

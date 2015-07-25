@@ -92,7 +92,7 @@ class test_PEAR_Command_Remote extends PEAR_Command_Remote
 }
 class test_PEAR_Command_Mirror extends PEAR_Command_Mirror
 {
-    function &factory()
+    function &factory($a)
     {
         $a = new test_PEAR_Command_Remote($this->ui, $this->config);
         return $a;

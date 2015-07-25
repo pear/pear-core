@@ -135,6 +135,15 @@ class PEAR_PackageFile_v2
     }
 
     /**
+     * PHP 4 style constructor for backwards compatibility.
+     * Used by PEAR_PackageFileManager2
+     */
+    public function PEAR_PackageFile_v2()
+    {
+        $this->__construct();
+    }
+
+    /**
      * To make unit-testing easier
      * @param PEAR_Frontend_*
      * @param array options

@@ -35,10 +35,8 @@ class PEAR_Installer_Role
      *
      * Never call this directly, it is called by the PEAR_Config constructor
      * @param PEAR_Config
-     * @access private
-     * @static
      */
-    function initializeConfig(&$config)
+    public static function initializeConfig(&$config)
     {
         if (!isset($GLOBALS['_PEAR_INSTALLER_ROLES'])) {
             PEAR_Installer_Role::registerRoles();
@@ -58,9 +56,8 @@ class PEAR_Installer_Role
      * @param string role name
      * @param PEAR_Config
      * @return PEAR_Installer_Role_Common
-     * @static
      */
-    function &factory($pkg, $role, &$config)
+    public static function &factory($pkg, $role, &$config)
     {
         if (!isset($GLOBALS['_PEAR_INSTALLER_ROLES'])) {
             PEAR_Installer_Role::registerRoles();
@@ -87,9 +84,8 @@ class PEAR_Installer_Role
      * @param string
      * @param bool clear cache
      * @return array
-     * @static
      */
-    function getValidRoles($release, $clear = false)
+    public static function getValidRoles($release, $clear = false)
     {
         if (!isset($GLOBALS['_PEAR_INSTALLER_ROLES'])) {
             PEAR_Installer_Role::registerRoles();
@@ -122,9 +118,8 @@ class PEAR_Installer_Role
      * roles are actually fully bundled releases of a package
      * @param bool clear cache
      * @return array
-     * @static
      */
-    function getInstallableRoles($clear = false)
+    public static function getInstallableRoles($clear = false)
     {
         if (!isset($GLOBALS['_PEAR_INSTALLER_ROLES'])) {
             PEAR_Installer_Role::registerRoles();
@@ -157,9 +152,8 @@ class PEAR_Installer_Role
      * so a tests file tests/file.phpt is installed into PackageName/tests/filepath.php
      * @param bool clear cache
      * @return array
-     * @static
      */
-    function getBaseinstallRoles($clear = false)
+    public static function getBaseinstallRoles($clear = false)
     {
         if (!isset($GLOBALS['_PEAR_INSTALLER_ROLES'])) {
             PEAR_Installer_Role::registerRoles();
@@ -189,9 +183,8 @@ class PEAR_Installer_Role
      * like the "php" role.
      * @param bool clear cache
      * @return array
-     * @static
      */
-    function getPhpRoles($clear = false)
+    public static function getPhpRoles($clear = false)
     {
         if (!isset($GLOBALS['_PEAR_INSTALLER_ROLES'])) {
             PEAR_Installer_Role::registerRoles();
@@ -225,10 +218,8 @@ class PEAR_Installer_Role
      *               included.
      *
      * @return bool TRUE on success, a PEAR error on failure
-     * @access public
-     * @static
      */
-    function registerRoles($dir = null)
+    public static function registerRoles($dir = null)
     {
         $GLOBALS['_PEAR_INSTALLER_ROLES'] = array();
         $parser = new PEAR_XMLParser;

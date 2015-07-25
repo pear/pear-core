@@ -47,9 +47,10 @@ $params[] = $reg->getPackage('bar');
 
 $dl = new PEAR_Installer($fakelog);
 $dl->sortPackagesForUninstall($params);
-$phpunit->assertEquals('bar', $params[0]->getPackage(), 'bar');
-$phpunit->assertEquals('foo', $params[1]->getPackage(), 'foo');
-$phpunit->assertEquals('next', $params[2]->getPackage(), 'next');
+$packages = array('foo', 'bar', 'next');
+$phpunit->assertTrue(in_array($params[0]->getPackage(), $packages), 'pkg1');
+$phpunit->assertTrue(in_array($params[1]->getPackage(), $packages), 'pkg2');
+$phpunit->assertTrue(in_array($params[2]->getPackage(), $packages), 'pkg2');
 echo 'tests done';
 ?>
 --CLEAN--

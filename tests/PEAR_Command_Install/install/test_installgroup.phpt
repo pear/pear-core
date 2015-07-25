@@ -65,7 +65,7 @@ $pearweb->addHTMLConfig('http://pear.php.net/get/Console_Getopt-1.2.tgz', $cg);
 $_test_dep->setPHPVersion('5.2.1');
 $_test_dep->setPEARVersion('1.5.1');
 $reg = &$config->getRegistry();
-$chan = &$reg->getChannel('pear.php.net');
+$chan = $reg->getChannel('pear.php.net');
 $chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
 $chan->setBaseURL('REST1.1', 'http://pear.php.net/rest/');
 $reg->updateChannel($chan);
@@ -81,7 +81,8 @@ $res = $command->run('install', array(), array($pathtopackagexml . '#test'));
 $phpunit->assertNoErrors('after install');
 $phpunit->assertTrue($res, 'result');
 $phpunit->showAll();
-$dl = &$command->getDownloader(1, array());
+$dummy = null;
+$dl = &$command->getDownloader($dummy, array());
 
 echoFakelog($fakelog);
 echo 'tests done';

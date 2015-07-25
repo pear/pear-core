@@ -37,7 +37,7 @@ $phpunit->assertTrue($config->set('default_channel', 'pear'), 'set pear');
 $phpunit->assertEquals('pear.php.net', $config->get('default_channel'), 'pear default');
 
 $reg = &$config->getRegistry();
-$ch = &$reg->getChannel('__uri');
+$ch = $reg->getChannel('__uri');
 // this is laziness - no require_once/new needed
 $ch->setName('foo');
 $ch->addMirror('foo.example.com');

@@ -1193,7 +1193,7 @@ Run post-installation scripts in package <package>, if any exist.
 
             if (!isset($latestReleases[$channel])) {
                 // fill in cache for this channel
-                $chan = &$reg->getChannel($channel);
+                $chan = $reg->getChannel($channel);
                 if (PEAR::isError($chan)) {
                     return $this->raiseError($chan);
                 }

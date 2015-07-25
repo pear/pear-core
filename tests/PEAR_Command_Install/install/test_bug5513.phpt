@@ -11,7 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $reg = &$config->getRegistry();
-$chan = &$reg->getChannel('pear.php.net');
+$chan = $reg->getChannel('pear.php.net');
 $chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
 $reg->updateChannel($chan);
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/versioncontrol_svn/allreleases.xml", '<?xml version="1.0" encoding="UTF-8" ?>

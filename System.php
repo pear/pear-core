@@ -64,10 +64,8 @@ class System
      * @param    string  $short_options  the allowed option short-tags
      * @param    string  $long_options   the allowed option long-tags
      * @return   array   the given options and there values
-     * @static
-     * @access private
      */
-    function _parseArgs($argv, $short_options, $long_options = null)
+    public static function _parseArgs($argv, $short_options, $long_options = null)
     {
         if (!is_array($argv) && $argv !== null) {
             /*
@@ -107,10 +105,8 @@ class System
      *
      * @param mixed $error a PEAR error or a string with the error message
      * @return bool false
-     * @static
-     * @access private
      */
-    function raiseError($error)
+    protected static function raiseError($error)
     {
         if (PEAR::isError($error)) {
             $error = $error->getMessage();
@@ -141,10 +137,8 @@ class System
      * @param    integer $aktinst    starting deep of the lookup
      * @param    bool    $silent     if true, do not emit errors.
      * @return   array   the structure of the dir
-     * @static
-     * @access   private
      */
-    function _dirToStruct($sPath, $maxinst, $aktinst = 0, $silent = false)
+    protected static function _dirToStruct($sPath, $maxinst, $aktinst = 0, $silent = false)
     {
         $struct = array('dirs' => array(), 'files' => array());
         if (($dir = @opendir($sPath)) === false) {
@@ -187,7 +181,7 @@ class System
      * @static
      * @see System::_dirToStruct()
      */
-    function _multipleToStruct($files)
+    protected static function _multipleToStruct($files)
     {
         $struct = array('dirs' => array(), 'files' => array());
         settype($files, 'array');
@@ -213,7 +207,7 @@ class System
      * @static
      * @access   public
      */
-    function rm($args)
+    public static function rm($args)
     {
         $opts = System::_parseArgs($args, 'rf'); // "f" does nothing but I like it :-)
         if (PEAR::isError($opts)) {
@@ -256,10 +250,8 @@ class System
      * The -p option will create parent directories
      * @param    string  $args    the name of the director(y|ies) to create
      * @return   bool    True for success
-     * @static
-     * @access   public
      */
-    function mkDir($args)
+    public static function mkDir($args)
     {
         $opts = System::_parseArgs($args, 'pm:');
         if (PEAR::isError($opts)) {
@@ -327,10 +319,8 @@ class System
      *
      * @param    string  $args   the arguments
      * @return   boolean true on success
-     * @static
-     * @access   public
      */
-    function &cat($args)
+    public static function &cat($args)
     {
         $ret = null;
         $files = array();
@@ -401,10 +391,8 @@ class System
      * @param   string  $args  The arguments
      * @return  mixed   the full path of the created (file|dir) or false
      * @see System::tmpdir()
-     * @static
-     * @access  public
      */
-    function mktemp($args = null)
+    public static function mktemp($args = null)
     {
         static $first_time = true;
         $opts = System::_parseArgs($args, 't:d');
@@ -453,11 +441,8 @@ class System
     /**
      * Remove temporary files created my mkTemp. This function is executed
      * at script shutdown time
-     *
-     * @static
-     * @access private
      */
-    function _removeTmpFiles()
+    public static function _removeTmpFiles()
     {
         if (count($GLOBALS['_System_temp_files'])) {
             $delete = $GLOBALS['_System_temp_files'];
@@ -473,10 +458,9 @@ class System
      * Note: php.ini-recommended removes the "E" from the variables_order setting,
      * making unavaible the $_ENV array, that s why we do tests with _ENV
      *
-     * @static
      * @return string The temporary directory on the system
      */
-    function tmpdir()
+    public static function tmpdir()
     {
         if (OS_WINDOWS) {
             if ($var = isset($_ENV['TMP']) ? $_ENV['TMP'] : getenv('TMP')) {
@@ -506,10 +490,9 @@ class System
      * @param mixed  $fallback Value to return if $program is not found
      *
      * @return mixed A string with the full path or false if not found
-     * @static
      * @author Stig Bakken <ssb@php.net>
      */
-    function which($program, $fallback = false)
+    public static function which($program, $fallback = false)
     {
         // enforce API
         if (!is_string($program) || '' == $program) {
@@ -573,10 +556,8 @@ class System
      *
      * @param  mixed Either array or string with the command line
      * @return array Array of found files
-     * @static
-     *
      */
-    function find($args)
+    public static function find($args)
     {
         if (!is_array($args)) {
             $args = preg_split('/\s+/', $args, -1, PREG_SPLIT_NO_EMPTY);

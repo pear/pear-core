@@ -1924,12 +1924,12 @@ class PEAR_Registry extends PEAR
      * @param bool whether to strictly return raw channels (no aliases)
      * @return PEAR_ChannelFile|PEAR_Error
      */
-    function &getChannel($channel, $noaliases = false)
+    function getChannel($channel, $noaliases = false)
     {
         if (PEAR::isError($e = $this->_lock(LOCK_SH))) {
             return $e;
         }
-        $ret = &$this->_getChannel($channel, $noaliases);
+        $ret = $this->_getChannel($channel, $noaliases);
         $this->_unlock();
         if (!$ret) {
             return PEAR::raiseError('Unknown channel: ' . $channel);

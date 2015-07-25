@@ -39,9 +39,8 @@ class PEAR_Task_Unixeol extends PEAR_Task_Common
      * @param  PEAR_PackageFile_v2
      * @param  array raw, parsed xml
      * @param  PEAR_Config
-     * @static
      */
-    public function validateXml($pkg, $xml, $config, $fileXml)
+    public static function validateXml($pkg, $xml, $config, $fileXml)
     {
         if ($xml != '') {
             return array(PEAR_TASK_ERROR_INVALID, 'no attributes allowed');
@@ -54,8 +53,9 @@ class PEAR_Task_Unixeol extends PEAR_Task_Common
      * Initialize a task instance with the parameters
      * @param array raw, parsed xml
      * @param unused
+     * @param unused
      */
-    public function init($xml, $attribs)
+    public function init($xml, $attribs, $lastVersion = null)
     {
     }
 

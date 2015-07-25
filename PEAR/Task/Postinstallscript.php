@@ -55,9 +55,8 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
      * @param  array The XML contents of the <postinstallscript> tag
      * @param  PEAR_Config
      * @param  array the entire parsed <file> tag
-     * @static
      */
-    public function validateXml($pkg, $xml, $config, $fileXml)
+    public static function validateXml($pkg, $xml, $config, $fileXml)
     {
         if ($fileXml['role'] != 'php') {
             return array(PEAR_TASK_ERROR_INVALID, 'Post-install script "'.
@@ -343,9 +342,8 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
      * @param  array an array of tasks
      * @param  string install or upgrade
      * @access protected
-     * @static
      */
-    public function run()
+    public static function run()
     {
     }
 }

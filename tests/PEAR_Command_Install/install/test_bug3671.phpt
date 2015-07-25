@@ -14,7 +14,7 @@ $packageDir       = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIREC
 $pathtopackagexml = $packageDir . 'bug3671_1.xml';
 
 $reg  = &$config->getRegistry();
-$chan = &$reg->getChannel('pear.php.net');
+$chan = $reg->getChannel('pear.php.net');
 $chan->setBaseURL('REST1.0', 'http://pear.php.net/rest/');
 $reg->updateChannel($chan);
 

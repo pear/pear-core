@@ -11,7 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $reg = &$config->getRegistry();
-$c = &$reg->getChannel(strtolower('pear.php.net'));
+$c = $reg->getChannel(strtolower('pear.php.net'));
 $pathtochannelxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'files'. DIRECTORY_SEPARATOR . 'pearchannel.xml';
 $GLOBALS['pearweb']->addHtmlConfig('http://pear.php.net/channel.xml', $pathtochannelxml);
