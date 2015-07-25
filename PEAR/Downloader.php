@@ -1663,7 +1663,7 @@ class PEAR_Downloader extends PEAR_Common
         $request .= $ifmodifiedsince .
             "User-Agent: PEAR/@package_version@/PHP/" . PHP_VERSION . "\r\n";
 
-        if (isset($this)) { // only pass in authentication for non-static calls
+        if ($object !== null) { // only pass in authentication for non-static calls
             $username = $config->get('username', null, $channel);
             $password = $config->get('password', null, $channel);
             if ($username && $password) {
