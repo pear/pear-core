@@ -404,13 +404,6 @@ class PEAR_Config extends PEAR
             'prompt' => 'PEAR directory',
             'group' => 'File Locations',
             ),
-        'metadata_dir' => array(
-            'type' => 'directory',
-            'default' => PEAR_CONFIG_DEFAULT_METADATA_DIR,
-            'doc' => 'directory where metadata files are installed (registry, filemap, channels, ...)',
-            'prompt' => 'PEAR metadata directory',
-            'group' => 'File Locations',
-            ),
         'ext_dir' => array(
             'type' => 'directory',
             'default' => PEAR_CONFIG_DEFAULT_EXT_DIR,
@@ -507,6 +500,14 @@ class PEAR_Config extends PEAR
             'default' => '',
             'doc' => 'location of php.ini in which to enable PECL extensions on install',
             'prompt' => 'php.ini location',
+            'group' => 'File Locations (Advanced)',
+            ),
+        'metadata_dir' => array(
+            'type' => 'directory',
+            'default' => PEAR_CONFIG_DEFAULT_METADATA_DIR,
+            'doc' => 'directory where metadata files are installed (registry, filemap, channels, ...)',
+            'prompt' => 'PEAR metadata directory',
+            'group' => 'File Locations',
             'group' => 'File Locations (Advanced)',
             ),
         // Maintainers
