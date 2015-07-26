@@ -17,7 +17,7 @@ $phpunit->assertNoErrors('log errors');
 $log = $fakelog->getLog();
 $log[0]['info']['data']['Internet Access'] = array_slice($log[0]['info']['data']['Internet Access'], 0, 6);
 $log[0]['info']['data']['File Locations'] = array_slice($log[0]['info']['data']['File Locations'], 0, 4);
-$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 11);
+$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 12);
 $log[0]['info']['data']['Advanced'] = array_slice($log[0]['info']['data']['Advanced'], 0, 4);
 $log[0]['info']['data']['Maintainers'] = array_slice($log[0]['info']['data']['Maintainers'], 0, 6);
 $phpunit->assertEquals(array (
@@ -115,6 +115,11 @@ $phpunit->assertEquals(array (
             0 => 'PEAR Installer download directory',
             1 => 'download_dir',
             2 => $temp_path2 . '\\nomake\\pear\\download',
+          ),
+          array (
+            0 => 'PEAR metadata directory',
+            1 => 'metadata_dir',
+            2 => NULL,
           ),
           array (
             0 => 'PHP CLI/CGI binary',
