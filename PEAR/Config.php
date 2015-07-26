@@ -507,7 +507,6 @@ class PEAR_Config extends PEAR
             'default' => PEAR_CONFIG_DEFAULT_METADATA_DIR,
             'doc' => 'directory where metadata files are installed (registry, filemap, channels, ...)',
             'prompt' => 'PEAR metadata directory',
-            'group' => 'File Locations',
             'group' => 'File Locations (Advanced)',
             ),
         // Maintainers
