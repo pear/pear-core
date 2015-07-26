@@ -13,7 +13,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $e = $command->run('config-help', array(), array());
 $phpunit->assertNoErrors('test');
 $log = $fakelog->getLog();
-$log[0]['info']['data'] = array_slice($log[0]['info']['data'], 0, 31);
+$log[0]['info']['data'] = array_slice($log[0]['info']['data'], 0, 32);
 $phpunit->assertEquals(array (
   0 =>
   array (
@@ -143,6 +143,11 @@ Valid set: stable beta alpha devel snapshot',
           0 => 'php_ini',
           1 => 'file',
           2 => 'location of php.ini in which to enable PECL extensions on install',
+        ),
+        array (
+          0 => 'metadata_dir',
+          1 => 'directory',
+          2 => 'directory where metadata files are installed (registry, filemap, channels, ...)',
         ),
         array (
           0 => 'username',
