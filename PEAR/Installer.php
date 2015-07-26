@@ -1128,15 +1128,6 @@ class PEAR_Installer extends PEAR_Downloader
 
         $pkgname = $pkg->getName();
         $channel = $pkg->getChannel();
-        if (isset($this->_options['packagingroot'])) {
-            $regdir = $this->_prependPath(
-                $this->config->get('php_dir', null, 'pear.php.net'),
-                $this->_options['packagingroot']);
-
-            $packrootphp_dir = $this->_prependPath(
-                $this->config->get('php_dir', null, $channel),
-                $this->_options['packagingroot']);
-        }
 
         if (isset($options['installroot'])) {
             $this->config->setInstallRoot($options['installroot']);
@@ -1148,7 +1139,21 @@ class PEAR_Installer extends PEAR_Downloader
             $this->config->setInstallRoot(false);
             $this->_registry = &$this->config->getRegistry();
             if (isset($this->_options['packagingroot'])) {
-                $installregistry = new PEAR_Registry($regdir);
+                $regdir = $this->_prependPath(
+                    $this->config->get('php_dir', null, 'pear.php.net'),
+                    $this->_options['packagingroot']);
+
+                $metadata_dir = $this->config->get('metadata_dir', null, 'pear.php.net');
+                if ($metadata_dir) {
+                    $metadata_dir = $this->_prependPath(
+                        $metadata_dir,
+                        $this->_options['packagingroot']);
+                }
+                $packrootphp_dir = $this->_prependPath(
+                    $this->config->get('php_dir', null, $channel),
+                    $this->_options['packagingroot']);
+
+                $installregistry = new PEAR_Registry($regdir, false, false, $metadata_dir);
                 if (!$installregistry->channelExists($channel, true)) {
                     // we need to fake a channel-discover of this channel
                     $chanobj = $this->_registry->getChannel($channel, true);

@@ -555,7 +555,13 @@ Run post-installation scripts in package <package>, if any exist.
             $packrootphp_dir = $this->installer->_prependPath(
                 $this->config->get('php_dir', null, 'pear.php.net'),
                 $options['packagingroot']);
-            $instreg = new PEAR_Registry($packrootphp_dir); // other instreg!
+            $metadata_dir = $this->config->get('metadata_dir', null, 'pear.php.net');
+            if ($metadata_dir) {
+                $metadata_dir = $this->installer->_prependPath(
+                    $metadata_dir,
+                    $options['packagingroot']);
+            }
+            $instreg = new PEAR_Registry($packrootphp_dir, false, false, $metadata_dir); // other instreg!
 
             if ($this->config->get('verbose') > 2) {
                 $this->ui->outputData('using package root: ' . $options['packagingroot']);
