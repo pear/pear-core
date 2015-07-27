@@ -131,23 +131,26 @@ class PEAR_Registry extends PEAR
      * @access public
      */
     function __construct($pear_install_dir = PEAR_INSTALL_DIR, $pear_channel = false,
-                           $pecl_channel = false)
+                           $pecl_channel = false, $pear_metadata_dir = '')
     {
         parent::__construct();
-        $this->setInstallDir($pear_install_dir);
+        $this->setInstallDir($pear_install_dir, $pear_metadata_dir);
         $this->_pearChannel = $pear_channel;
         $this->_peclChannel = $pecl_channel;
         $this->_config      = false;
     }
 
-    function setInstallDir($pear_install_dir = PEAR_INSTALL_DIR)
+    function setInstallDir($pear_install_dir = PEAR_INSTALL_DIR, $pear_metadata_dir = '')
     {
         $ds = DIRECTORY_SEPARATOR;
         $this->install_dir = $pear_install_dir;
-        $this->channelsdir = $pear_install_dir.$ds.'.channels';
-        $this->statedir    = $pear_install_dir.$ds.'.registry';
-        $this->filemap     = $pear_install_dir.$ds.'.filemap';
-        $this->lockfile    = $pear_install_dir.$ds.'.lock';
+        if (!$pear_metadata_dir) {
+            $pear_metadata_dir = $pear_install_dir;
+        }
+        $this->channelsdir = $pear_metadata_dir.$ds.'.channels';
+        $this->statedir    = $pear_metadata_dir.$ds.'.registry';
+        $this->filemap     = $pear_metadata_dir.$ds.'.filemap';
+        $this->lockfile    = $pear_metadata_dir.$ds.'.lock';
     }
 
     function hasWriteAccess()
@@ -180,7 +183,7 @@ class PEAR_Registry extends PEAR
     {
         $this->_config = &$config;
         if ($resetInstallDir) {
-            $this->setInstallDir($config->get('php_dir'));
+            $this->setInstallDir($config->get('php_dir'), $config->get('metadata_dir'));
         }
     }
 
@@ -327,9 +330,9 @@ class PEAR_Registry extends PEAR
                 $this->_dependencyDB = &PEAR_DependencyDB::singleton($this->_config);
                 if (PEAR::isError($this->_dependencyDB)) {
                     // attempt to recover by removing the dep db
-                    if (file_exists($this->_config->get('php_dir', null, 'pear.php.net') .
+                    if (file_exists($this->_config->get('metadata_dir', null, 'pear.php.net') .
                         DIRECTORY_SEPARATOR . '.depdb')) {
-                        @unlink($this->_config->get('php_dir', null, 'pear.php.net') .
+                        @unlink($this->_config->get('metadata_dir', null, 'pear.php.net') .
                             DIRECTORY_SEPARATOR . '.depdb');
                     }
 

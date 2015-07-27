@@ -38,6 +38,7 @@ $phpunit->assertEquals(array (
   'php_prefix',
   'php_suffix',
   'php_ini',
+  'metadata_dir',
 ), array_slice($config->getGroupKeys('File Locations (Advanced)'), 0, 12), 'File Locations (Advanced)');
 $phpunit->assertEquals(array (
   0 => 'username',

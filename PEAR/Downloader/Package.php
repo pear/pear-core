@@ -413,7 +413,7 @@ class PEAR_Downloader_Package
                 if ($param->_installRegistry->packageExists($package, $channel)) {
                     $packageVersion = $param->_installRegistry->packageInfo($package, 'version', $channel);
                     if (version_compare($packageVersion, $param->getVersion(), '==')) {
-                        if (!isset($options['force'])) {
+                        if (!isset($options['force']) && !isset($options['packagingroot'])) {
                             $info = $param->getParsedPackage();
                             unset($info['version']);
                             unset($info['state']);

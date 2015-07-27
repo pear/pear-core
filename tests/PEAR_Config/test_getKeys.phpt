@@ -33,6 +33,7 @@ $phpunit->assertEquals(array (
   'php_prefix',
   'php_suffix',
   'php_ini',
+  'metadata_dir',
   'username',
   'password',
   'verbose',
@@ -43,7 +44,7 @@ $phpunit->assertEquals(array (
   'sig_bin',
   'sig_keyid',
   'sig_keydir',
-), array_slice($config->getKeys(), 0, 31), 'keys');
+), array_slice($config->getKeys(), 0, 32), 'keys');
 echo 'tests done';
 ?>
 --CLEAN--

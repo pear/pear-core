@@ -120,8 +120,11 @@ class PEAR_DependencyDB
 
         $this->_registry = &$this->_config->getRegistry();
         if (!$depdb) {
-            $this->_depdb = $this->_config->get('php_dir', null, 'pear.php.net') .
-                DIRECTORY_SEPARATOR . '.depdb';
+            $dir = $this->_config->get('metadata_dir', null, 'pear.php.net');
+            if (!$dir) {
+                $dir = $this->_config->get('php_dir', null, 'pear.php.net');
+            }
+            $this->_depdb =  $dir . DIRECTORY_SEPARATOR . '.depdb';
         } else {
             $this->_depdb = $depdb;
         }
