@@ -10,6 +10,7 @@ class PEAR_Start extends PEAR
     var $data_dir;
     var $cfg_dir;
     var $www_dir;
+    var $man_dir;
     var $install_pfc;
     var $corePackages =
         array(
@@ -46,6 +47,7 @@ class PEAR_Start extends PEAR
             'data_dir',
             'cfg_dir',
             'www_dir',
+            'man_dir',
             'test_dir',
             'temp_dir',
             'download_dir',
@@ -64,6 +66,7 @@ class PEAR_Start extends PEAR
             'data_dir' => 'Data directory',
             'cfg_dir' => 'User-modifiable configuration files directory',
             'www_dir' => 'Public Web Files directory',
+            'man_dir' => 'System manual pages directory',
             'test_dir' => 'Tests directory',
             'pear_conf' => 'Name of configuration file',
         );
@@ -105,6 +108,7 @@ class PEAR_Start extends PEAR
             $this->data_dir  = '$prefix' . $slash . 'data';
             $this->test_dir  = '$prefix' . $slash . 'tests';
             $this->www_dir  = '$prefix' . $slash . 'www';
+            $this->man_dir  = '$prefix' . $slash . 'man';
             $this->cfg_dir  = '$prefix' . $slash . 'cfg';
             $this->pear_conf = PEAR_CONFIG_SYSCONFDIR . '\\pear.ini';
             /*
@@ -157,6 +161,7 @@ class PEAR_Start extends PEAR
             $this->cfg_dir   = '$prefix/cfg';
             $this->data_dir  = '$prefix/data';
             $this->test_dir  = '$prefix/tests';
+            $this->man_dir  = '$prefix/man';
             // check if the user has installed PHP with PHP or GNU layout
             if (@is_dir("$this->prefix/lib/php/.registry")) {
                 $this->php_dir = '$prefix/lib/php';

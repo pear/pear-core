@@ -15,11 +15,13 @@ $phpunit->assertEquals(array (
   'data',
   'doc',
   'ext',
+  'man',
   'php',
   'script',
   'src',
   'test',
-), array_slice(PEAR_Installer_Role::getInstallableRoles(), 0, 8), 'test');
+  'www',
+), PEAR_Installer_Role::getInstallableRoles(), 'test');
 echo 'tests done';
 ?>
 --CLEAN--

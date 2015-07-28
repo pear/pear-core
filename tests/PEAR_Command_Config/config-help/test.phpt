@@ -13,7 +13,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $e = $command->run('config-help', array(), array());
 $phpunit->assertNoErrors('test');
 $log = $fakelog->getLog();
-$log[0]['info']['data'] = array_slice($log[0]['info']['data'], 0, 32);
+$log[0]['info']['data'] = array_slice($log[0]['info']['data'], 0, 33);
 $phpunit->assertEquals(array (
   0 =>
   array (
@@ -113,6 +113,11 @@ Valid set: stable beta alpha devel snapshot',
           0 => 'http_proxy',
           1 => 'string',
           2 => 'HTTP proxy (host:port) to use when downloading packages',
+        ),
+        array (
+          0 => 'man_dir',
+          1 => 'directory',
+          2 => 'directory where unix manual pages are installed',
         ),
         array (
           0 => 'temp_dir',

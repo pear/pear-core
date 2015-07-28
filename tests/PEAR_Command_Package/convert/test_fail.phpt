@@ -18,12 +18,12 @@ copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packagefiles' . DIRECTORY_SEPARA
     $temp_path . DIRECTORY_SEPARATOR . 'nosummary.xml');
 $e = $command->run('convert', array(), array($temp_path . DIRECTORY_SEPARATOR . 'invalid.xml'));
 $phpunit->assertErrors(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "validv1.xml" in directory "<dir name="/">" has invalid role "ext", should be one of cfg, data, doc, php, script, src, test, www'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "validv1.xml" in directory "<dir name="/">" has invalid role "ext", should be one of cfg, data, doc, man, php, script, src, test, www'),
 ), 'invalid packagexml 1');
 $phpunit->assertEquals(array (
   0 => 
   array (
-    'info' => 'File "validv1.xml" in directory "<dir name="/">" has invalid role "ext", should be one of cfg, data, doc, php, script, src, test, www',
+    'info' => 'File "validv1.xml" in directory "<dir name="/">" has invalid role "ext", should be one of cfg, data, doc, man, php, script, src, test, www',
     'cmd' => 'no command',
   ),
   1 => 

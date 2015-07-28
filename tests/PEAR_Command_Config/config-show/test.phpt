@@ -18,7 +18,7 @@ $log = $fakelog->getLog();
 
 $log[0]['info']['data']['Internet Access'] = array_slice($log[0]['info']['data']['Internet Access'], 0, 6);
 $log[0]['info']['data']['File Locations'] = array_slice($log[0]['info']['data']['File Locations'], 0, 4);
-$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 11);
+$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 12);
 $log[0]['info']['data']['Advanced'] = array_slice($log[0]['info']['data']['Advanced'], 0, 4);
 $log[0]['info']['data']['Maintainers'] = array_slice($log[0]['info']['data']['Maintainers'], 0, 6);
 $phpunit->assertEquals(array (
@@ -118,6 +118,11 @@ $phpunit->assertEquals(array (
             0 => 'PEAR Installer download directory',
             1 => 'download_dir',
             2 => PEAR_CONFIG_DEFAULT_DOWNLOAD_DIR,
+          ),
+          array (
+            0 => 'Systems manpage files directory',
+            1 => 'man_dir',
+            2 => PEAR_CONFIG_DEFAULT_MAN_DIR,
           ),
           array (
             0 => 'PEAR metadata directory',
@@ -246,7 +251,7 @@ $e = $command->run('config-show', array('channel' => '__uri'), array());
 $log = $fakelog->getLog();
 $log[0]['info']['data']['Internet Access'] = array_slice($log[0]['info']['data']['Internet Access'], 0, 6);
 $log[0]['info']['data']['File Locations'] = array_slice($log[0]['info']['data']['File Locations'], 0, 4);
-$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 11);
+$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 12);
 $log[0]['info']['data']['Advanced'] = array_slice($log[0]['info']['data']['Advanced'], 0, 4);
 $log[0]['info']['data']['Maintainers'] = array_slice($log[0]['info']['data']['Maintainers'], 0, 6);
 $phpunit->assertEquals(array (
@@ -346,6 +351,11 @@ $phpunit->assertEquals(array (
             0 => 'PEAR Installer download directory',
             1 => 'download_dir',
             2 => PEAR_CONFIG_DEFAULT_DOWNLOAD_DIR,
+          ),
+          array (
+            0 => 'Systems manpage files directory',
+            1 => 'man_dir',
+            2 => PEAR_CONFIG_DEFAULT_MAN_DIR,
           ),
           array (
             0 => 'PEAR metadata directory',
@@ -475,7 +485,7 @@ $e = $command->run('config-show', array(), array());
 $log = $fakelog->getLog();
 $log[0]['info']['data']['Internet Access'] = array_slice($log[0]['info']['data']['Internet Access'], 0, 6);
 $log[0]['info']['data']['File Locations'] = array_slice($log[0]['info']['data']['File Locations'], 0, 4);
-$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 11);
+$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 12);
 $log[0]['info']['data']['Advanced'] = array_slice($log[0]['info']['data']['Advanced'], 0, 4);
 $log[0]['info']['data']['Maintainers'] = array_slice($log[0]['info']['data']['Maintainers'], 0, 6);
 $phpunit->assertEquals(array (
@@ -575,6 +585,11 @@ $phpunit->assertEquals(array (
             0 => 'PEAR Installer download directory',
             1 => 'download_dir',
             2 => PEAR_CONFIG_DEFAULT_DOWNLOAD_DIR,
+          ),
+          array (
+            0 => 'Systems manpage files directory',
+            1 => 'man_dir',
+            2 => PEAR_CONFIG_DEFAULT_MAN_DIR,
           ),
           array (
             0 => 'PEAR metadata directory',

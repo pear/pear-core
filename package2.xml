@@ -189,6 +189,10 @@
    <file name="PEAR/Installer/Role/Ext.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
+   <file name="PEAR/Installer/Role/Man.xml" role="php" />
+   <file name="PEAR/Installer/Role/Man.php" role="php">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
    <file name="PEAR/Installer/Role/Php.xml" role="php" />
    <file name="PEAR/Installer/Role/Php.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />

@@ -35,8 +35,8 @@ $pf = $parser->parse(implode('', file($pathtopackagexml)), $pathtopackagexml);
 $phpunit->assertIsa('PEAR_PackageFile_v2', $pf, 'ret');
 $pf->validate();
 $phpunit->assertErrorsF(array(
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "1" in directory "<dir name="/">" has invalid role "src", should be one of cfg, data, doc, php, script, test, www'),
-    array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "6" in directory "<dir name="/">" has invalid role "ext", should be one of cfg, data, doc, php, script, test, www'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "1" in directory "<dir name="/">" has invalid role "src", should be one of cfg, data, doc, man, php, script, test, www'),
+    array('package' => 'PEAR_PackageFile_v2', 'message' => 'File "6" in directory "<dir name="/">" has invalid role "ext", should be one of cfg, data, doc, man, php, script, test, www'),
 ), '3');
 echo 'tests done';
 ?>

@@ -17,7 +17,7 @@ $phpunit->assertNoErrors('log errors');
 $log = $fakelog->getLog();
 $log[0]['info']['data']['Internet Access'] = array_slice($log[0]['info']['data']['Internet Access'], 0, 6);
 $log[0]['info']['data']['File Locations'] = array_slice($log[0]['info']['data']['File Locations'], 0, 4);
-$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 12);
+$log[0]['info']['data']['File Locations (Advanced)'] = array_slice($log[0]['info']['data']['File Locations (Advanced)'], 0, 13);
 $log[0]['info']['data']['Advanced'] = array_slice($log[0]['info']['data']['Advanced'], 0, 4);
 $log[0]['info']['data']['Maintainers'] = array_slice($log[0]['info']['data']['Maintainers'], 0, 6);
 $phpunit->assertEquals(array (
@@ -115,6 +115,11 @@ $phpunit->assertEquals(array (
             0 => 'PEAR Installer download directory',
             1 => 'download_dir',
             2 => $temp_path2 . '\\nomake\\pear\\download',
+          ),
+          array (
+            0 => 'Systems manpage files directory',
+            1 => 'man_dir',
+            2 => $temp_path2 . '\\nomake\\pear\\man',
           ),
           array (
             0 => 'PEAR metadata directory',
@@ -265,6 +270,7 @@ $phpunit->assertEquals(array (
   'download_dir' => $temp_path2 . '\\nomake\\pear\\download',
   'temp_dir' => $temp_path2 . '\\nomake\\pear\\temp',
   'bin_dir' => $temp_path2 . '\\nomake\\pear',
+  'man_dir' => $temp_path2 . '\\nomake\\pear\\man',
 ), $contents, 'ok');
 echo 'tests done';
 ?>

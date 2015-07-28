@@ -354,6 +354,7 @@ and uninstall).
         $config->set('download_dir', $windows ? "$root\\pear\\download" : "$root/pear/download");
         $config->set('temp_dir', $windows ? "$root\\pear\\temp" : "$root/pear/temp");
         $config->set('bin_dir', $windows ? "$root\\pear" : "$root/pear");
+        $config->set('man_dir', $windows ? "$root\\pear\\man" : "$root/pear/man");
         $config->writeConfigFile();
         $this->_showConfig($config);
         $this->ui->outputData('Successfully created default configuration file "' . $params[1] . '"',

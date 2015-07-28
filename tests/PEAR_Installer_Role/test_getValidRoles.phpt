@@ -13,28 +13,31 @@ $phpunit->assertEquals(array (
   'cfg',
   'data',
   'doc',
+  'man',
   'php',
   'script',
   'test',
-), array_slice(PEAR_Installer_Role::getValidRoles('php'), 0, 6), 'php');
+), array_slice(PEAR_Installer_Role::getValidRoles('php'), 0, 7), 'php');
 $phpunit->assertEquals(array (
   'cfg',
   'data',
   'doc',
+  'man',
   'php',
   'script',
   'src',
   'test',
-), array_slice(PEAR_Installer_Role::getValidRoles('extsrc'), 0, 7), 'extsrc');
+), array_slice(PEAR_Installer_Role::getValidRoles('extsrc'), 0, 8), 'extsrc');
 $phpunit->assertEquals(array (
   'cfg',
   'data',
   'doc',
   'ext',
+  'man',
   'php',
   'script',
   'test',
-), array_slice(PEAR_Installer_Role::getValidRoles('extbin'), 0, 7), 'extbin');
+), array_slice(PEAR_Installer_Role::getValidRoles('extbin'), 0, 8), 'extbin');
 $phpunit->assertEquals(array(), PEAR_Installer_Role::getValidRoles('bundle'), 'bundle');
 
 PEAR_Installer_Role::registerRoles(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'sophisticated');

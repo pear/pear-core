@@ -25,6 +25,7 @@ $phpunit->assertEquals(array (
   'data_dir',
   'cfg_dir',
   'www_dir',
+  'man_dir',
   'test_dir',
   'cache_dir',
   'temp_dir',
@@ -44,7 +45,7 @@ $phpunit->assertEquals(array (
   'sig_bin',
   'sig_keyid',
   'sig_keydir',
-), array_slice($config->getKeys(), 0, 32), 'keys');
+), array_slice($config->getKeys(), 0, 33), 'keys');
 echo 'tests done';
 ?>
 --CLEAN--

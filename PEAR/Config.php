@@ -148,6 +148,18 @@ if (getenv('PHP_PEAR_WWW_DIR')) {
            $PEAR_INSTALL_DIR.DIRECTORY_SEPARATOR.'www');
 }
 
+// Default for man_dir
+if (getenv('PHP_PEAR_MAN_DIR')) {
+    define('PEAR_CONFIG_DEFAULT_MAN_DIR', getenv('PHP_PEAR_MAN_DIR'));
+} else {
+    if (defined('PHP_MANDIR')) { // Added in PHP5.3.7
+        define('PEAR_CONFIG_DEFAULT_MAN_DIR', PHP_MANDIR);
+    } else {
+        define('PEAR_CONFIG_DEFAULT_MAN_DIR', PHP_PREFIX . DIRECTORY_SEPARATOR .
+           'local' . DIRECTORY_SEPARATOR .'man');
+    }
+}
+
 // Default for test_dir
 if (getenv('PHP_PEAR_TEST_DIR')) {
     define('PEAR_CONFIG_DEFAULT_TEST_DIR', getenv('PHP_PEAR_TEST_DIR'));
@@ -444,6 +456,13 @@ class PEAR_Config extends PEAR
             'default' => PEAR_CONFIG_DEFAULT_WWW_DIR,
             'doc' => 'directory where www frontend files (html/js) are installed',
             'prompt' => 'PEAR www files directory',
+            'group' => 'File Locations (Advanced)',
+            ),
+        'man_dir' => array(
+            'type' => 'directory',
+            'default' => PEAR_CONFIG_DEFAULT_MAN_DIR,
+            'doc' => 'directory where unix manual pages are installed',
+            'prompt' => 'Systems manpage files directory',
             'group' => 'File Locations (Advanced)',
             ),
         'test_dir' => array(
