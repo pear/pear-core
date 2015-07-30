@@ -425,7 +425,7 @@ class PEAR_Downloader_Package
                             $params[$i] = false;
                         }
                     } elseif (!isset($options['force']) && !isset($options['upgrade']) &&
-                          !isset($options['soft'])) {
+                          !isset($options['soft']) && !isset($options['packagingroot'])) {
                         $info = $param->getParsedPackage();
                         $param->_downloader->log(1, 'Skipping package "' .
                             $param->getShortName() .
