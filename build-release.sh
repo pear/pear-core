@@ -17,6 +17,6 @@ for i in ../*.tar; do tar xvf $i; done
 mv *\/* . || true
 cd ../../
 
-rm go-pear.phar install-pear-nozlib.phar
+rm go-pear.phar install-pear-nozlib.phar || true
 php make-gopear-phar.php
 php make-installpear-nozlib-phar.php

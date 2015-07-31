@@ -87,10 +87,10 @@
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2015-07-25</date>
- <time>13:42:42</time>
+ <date>2015-07-31</date>
+ <time>09:42:42</time>
  <version>
-  <release>1.10.0dev1</release>
+  <release>1.10.0dev2</release>
   <api>1.10.0</api>
  </version>
  <stability>
@@ -99,14 +99,11 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-* Implement #20488: Add support for PHP 7 [cweiske]
-* Drop support for PHP 4 and 5.0 - 5.3 [cweiske]
-* Remove deprecated methods [cweiske]
-* Fix static warnings [cweiske]
-* Fix #17045: avoid overwriting include path [glen]
-* Fix #17399: "pear help" doesn't mention the "version" command [kguest]
-* Add --showdiff to "pear run-tests" to print diff for failed tests [tyrael]
-* Fix channel.xml downloading from https if it did not change [cweiske]
+* Fix #18638 and #18405: Make PEAR::loadExtension static [cweiske]
+* Fix #20319: allow pear to work when cache_dir is not writable [remicollet]
+* Implement #20333: New role=man for man pages [bjori]
+* Implement #20334: add "metadata_dir" configuration option [remicollet]
+* Add long option names to install-pear.php [remicollet]
  </notes>
  <contents>
   <dir name="/">
@@ -1003,6 +1000,27 @@ http://pear.php.net/advisory-20110228.txt
 * Fix #17399: "pear help" doesn't mention the "version" command [kguest]
 * Add --showdiff to "pear run-tests" to print diff for failed tests [tyrael]
 * Fix channel.xml downloading from https if it did not change [cweiske]
+   </notes>
+  </release>
+
+  <release>
+   <date>2015-07-31</date>
+   <time>09:42:42</time>
+   <version>
+    <release>1.10.0dev2</release>
+    <api>1.10.0</api>
+   </version>
+   <stability>
+    <release>devel</release>
+    <api>devel</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+* Fix #18638 and #18405: Make PEAR::loadExtension static [cweiske]
+* Fix #20319: allow pear to work when cache_dir is not writable [remicollet]
+* Implement #20333: New role=man for man pages [bjori]
+* Implement #20334: add "metadata_dir" configuration option [remicollet]
+* Add long option names to install-pear.php [remicollet]
    </notes>
   </release>
 
