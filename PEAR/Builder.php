@@ -22,6 +22,7 @@
  */
 require_once 'PEAR/Common.php';
 require_once 'PEAR/PackageFile.php';
+require_once 'System.php';
 
 /**
  * Class to handle building (compiling) extensions.
@@ -321,6 +322,16 @@ class PEAR_Builder extends PEAR_Common
 
         // {{{ start of interactive part
         $configure_command = "$dir/configure";
+
+        $phpConfigName = $this->config->get('php_prefix')
+            . 'php-config'
+            . $this->config->get('php_suffix');
+        $phpConfigPath = System::which($phpConfigName);
+        if ($phpConfigPath !== false) {
+            $configure_command .= ' --with-php-config='
+                . $phpConfigPath;
+        }
+
         $configure_options = $pkg->getConfigureOptions();
         if ($configure_options) {
             foreach ($configure_options as $o) {
