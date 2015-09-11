@@ -475,7 +475,7 @@ class PEAR_Builder extends PEAR_Common
         return ($exitcode == 0);
     }
 
-    function log($level, $msg)
+    function log($level, $msg, $append_crlf = true)
     {
         if ($this->current_callback) {
             if ($this->debug >= $level) {
@@ -483,6 +483,6 @@ class PEAR_Builder extends PEAR_Common
             }
             return;
         }
-        return parent::log($level, $msg);
+        return parent::log($level, $msg, $append_crlf);
     }
 }
