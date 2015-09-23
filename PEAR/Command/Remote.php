@@ -667,13 +667,13 @@ parameter.
             $preferred_mirror = $this->config->get('preferred_mirror');
             if ($chan->supportsREST($preferred_mirror) &&
                 (
-                   //($base2 = $chan->getBaseURL('REST1.4', $preferred_mirror)) ||
-                   ($base  = $chan->getBaseURL('REST1.0', $preferred_mirror))
+                   ($base2 = $chan->getBaseURL('REST1.3', $preferred_mirror))
+                   || ($base  = $chan->getBaseURL('REST1.0', $preferred_mirror))
                 )
 
             ) {
                 if ($base2) {
-                    $rest = &$this->config->getREST('1.4', array());
+                    $rest = &$this->config->getREST('1.3', array());
                     $base = $base2;
                 } else {
                     $rest = &$this->config->getREST('1.0', array());
