@@ -1,6 +1,7 @@
 #!/bin/sh
 # package up PEAR
 set -e
+set -x
 
 pear package package2.xml
 
@@ -8,6 +9,7 @@ pear package package2.xml
 mkdir go-pear-tarballs
 cd go-pear-tarballs
 
+rm -f PEAR-*
 cp ../PEAR-*.tgz .
 gunzip PEAR-*.tgz
 pear download -Z Archive_Tar Console_Getopt Structures_Graph XML_Util

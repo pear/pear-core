@@ -65,6 +65,7 @@ Create a PEAR package as well as phars for pear-less installation::
 
     $ pear package package2.xml
     $ cd go-pear-tarballs
+    $ rm -f PEAR-*
     $ cp ../PEAR-*.tgz .
     $ gunzip PEAR-*.tgz
     $ pear download -Z Archive_Tar Console_Getopt Structures_Graph XML_Util
