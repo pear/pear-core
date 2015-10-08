@@ -1711,7 +1711,7 @@ class PEAR_Downloader extends PEAR_Common
             }
 
             $redirect = $wasredirect + 1;
-            return $this->downloadHttp($headers['location'],
+            return static::_downloadHttp($object, $headers['location'],
                     $ui, $save_dir, $callback, $lastmodified, $accept);
         }
 
