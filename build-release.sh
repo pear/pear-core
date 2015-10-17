@@ -3,6 +3,7 @@
 set -e
 set -x
 
+rm -f PEAR-*.tgz
 pear package package2.xml
 
 [ -d go-pear-tarballs ] && rm -r go-pear-tarballs

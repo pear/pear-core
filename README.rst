@@ -63,6 +63,7 @@ Releasing
 =========
 Create a PEAR package as well as phars for pear-less installation::
 
+    $ rm -f PEAR-*.tgz
     $ pear package package2.xml
     $ cd go-pear-tarballs
     $ rm -f PEAR-*
