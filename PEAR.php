@@ -191,7 +191,7 @@ class PEAR
      */
     public function PEAR($error_class = null)
     {
-        $this->__construct($error_class);
+        self::__construct($error_class);
     }
 
     /**
