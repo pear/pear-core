@@ -928,6 +928,24 @@ class PEAR_Error
     }
 
     /**
+     * Only here for backwards compatibility.
+     *
+     * Class "Cache_Error" still uses it, among others.
+     *
+     * @param string $message  Message
+     * @param int    $code     Error code
+     * @param int    $mode     Error mode
+     * @param mixed  $options  See __construct()
+     * @param string $userinfo Additional user/debug info
+     */
+    public function PEAR_Error(
+        $message = 'unknown error', $code = null, $mode = null,
+        $options = null, $userinfo = null
+    ) {
+        self::__construct($message, $code, $mode, $options, $userinfo);
+    }
+
+    /**
      * Get the error mode from an error object.
      *
      * @return int error mode
