@@ -274,9 +274,6 @@
    <file name="PEAR/Validator/PECL.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file name="PEAR/Autoloader.php" role="php">
-    <tasks:replace from="@package_version@" to="version" type="package-info" />
-   </file>
    <file name="PEAR/Builder.php" role="php">
     <tasks:replace from="@PEAR-VER@" to="version" type="package-info" />
    </file>
