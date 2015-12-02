@@ -632,8 +632,7 @@ class PEAR_PackageFile_v2
                 if (PEAR::isError($res)) {
                     return $res;
                 }
-                $assign = &$task;
-                $this->_scripts[] = &$assign;
+                $this->_scripts[] = $task;
             }
         }
         if (count($this->_scripts)) {
