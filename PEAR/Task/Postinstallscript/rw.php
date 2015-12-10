@@ -159,7 +159,7 @@ class PEAR_Task_Postinstallscript_rw extends PEAR_Task_Postinstallscript
      *
      * @return array
      */
-    public static function getParam(
+    public function getParam(
         $name, $prompt, $type = 'string', $default = null
     ) {
         if ($default !== null) {
