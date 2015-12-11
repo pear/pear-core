@@ -292,11 +292,12 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
      *
      * @param mixed  $pkg      PEAR_PackageFile_v1|PEAR_PackageFile_v2
      * @param string $contents file name
+     * @param string $dest     the eventual final file location (informational only)
      *
      * @return bool|PEAR_Error false to skip this file, PEAR_Error to fail
      *                         (use $this->throwError)
      */
-    public function startSession($pkg, $contents)
+    public function startSession($pkg, $contents, $dest = null)
     {
         if ($this->installphase != PEAR_TASK_INSTALL) {
             return false;
@@ -343,7 +344,7 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
      * @param  string install or upgrade
      * @access protected
      */
-    public static function run()
+    public static function run($tasks = null)
     {
     }
 }
