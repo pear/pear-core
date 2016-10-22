@@ -1616,6 +1616,46 @@ class PEAR_Downloader extends PEAR_Common
                 return PEAR::raiseError("Connection to `$proxy_host:$proxy_port' failed: $errstr", $errno);
             }
 
+            /* HTTPS is to be used and we have a proxy, use CONNECT verb */
+            if ($scheme === 'https') {
+                fwrite($fp, "CONNECT $host:$port HTTP/1.1\r\n");
+                fwrite($fp, "Host: $host:$port\r\n\r\n");
+
+                while ($line = trim(fgets($fp, 1024))) {
+                    if (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
+                        $code = (int)$matches[1];
+
+                        /* as per RFC 2817 */
+                        if ($code < 200 || $code >= 300) {
+                            return PEAR::raiseError("Establishing a CONNECT tunnel through $proxy_host:$proxy_port failed with response code $code");
+                        }
+                    }
+                }
+
+                // connection was successful -- establish SSL through
+                // the tunnel
+                $crypto_method = STREAM_CRYPTO_METHOD_TLS_CLIENT;
+
+                if (defined('STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT')) {
+                    $crypto_method |= STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
+                    $crypto_method |= STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT;
+                }
+
+                // set the correct hostname for working hostname
+                // verification
+                stream_context_set_option($fp, 'ssl', 'peer_name', $host);
+
+                // blocking socket needed for
+                // stream_socket_enable_crypto()
+                // see
+                // <http://php.net/manual/en/function.stream-socket-enable-crypto.php>
+                stream_set_blocking ($fp, true);
+                $crypto_res = stream_socket_enable_crypto($fp, true, $crypto_method);
+                if (!$crypto_res) {
+                    return PEAR::raiseError("Could not establish SSL connection through proxy $proxy_host:$proxy_port: $crypto_res");
+                }
+            }
+
             if ($lastmodified === false || $lastmodified) {
                 $request  = "GET $url HTTP/1.1\r\n";
                 $request .= "Host: $host\r\n";
