@@ -25,3 +25,4 @@ script:
   - pear list
   - pear upgrade structures_graph xml_util
   - pear list
+  - build-release.sh
