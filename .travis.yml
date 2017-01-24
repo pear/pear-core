@@ -25,4 +25,6 @@ script:
   - pear list
   - pear upgrade structures_graph xml_util
   - pear list
+  - pear install php_archive
+  - pear list
   - ./build-release.sh
