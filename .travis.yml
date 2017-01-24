@@ -16,3 +16,5 @@ script:
   - umask 0022
   - sh scripts/pear.sh run-tests -q -d -r tests
   - sh scripts/pear.sh package package2.xml
+  - sh scripts/pear.sh package-validate PEAR-*.tgz
+  - sh scripts/pear.sh install PEAR-*.tgz
