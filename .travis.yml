@@ -19,3 +19,4 @@ script:
   - sh scripts/pear.sh package package2.xml
   - sh scripts/pear.sh package-validate PEAR-*.tgz
   - sh scripts/pear.sh install --force PEAR-*.tgz
+  - pear list
