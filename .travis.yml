@@ -7,6 +7,7 @@ php:
   - 5.4
 install:
   - pear list
+  - pear channel-update pear
   - pear upgrade console_getopt archive_tar
   - pear install text_diff
   - pear list
