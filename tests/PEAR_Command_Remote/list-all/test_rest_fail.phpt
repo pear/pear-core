@@ -3303,7 +3303,7 @@ However, it still has a very simple set of goals.
    o By using object vars for a template rather than \'assign\', you
      can use phpdoc comments to list what variable you use.
 - Editable in WYSIWYG editors
-   o you can create full featured templates, that doesn't get broken every time you edit with
+   o you can create full featured templates, that doesn\'t get broken every time you edit with
      Dreamweaver(tm) or Mozilla editor
    o Uses namespaced attributes to add looping/conditionals
 - Extremely Fast,
