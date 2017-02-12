@@ -23,7 +23,7 @@ script:
   - pear list
   - pear install --force PEAR-*.tgz
   - pear list
-  - pear upgrade structures_graph xml_util
+  - pear upgrade --force structures_graph xml_util
   - pear list
   - pear install --force php_archive
   - pear list
