@@ -372,7 +372,7 @@ Currently, the following decorators are provided:
 - added Translation2_Admin::updateLang()
 - fixed bug #2890: getLang() raised a NOTICE if setLang() was not called before
 - fixed bug #2972: CacheLiteFunction decorator not handling
-  parameter subtitution as expected
+  parameter substitution as expected
 - updated dataobjectsimple container (alank)
 - some internal minor fixes and tweaks
    </notes>

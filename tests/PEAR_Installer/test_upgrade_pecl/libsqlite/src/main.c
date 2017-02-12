@@ -723,7 +723,7 @@ int sqlite_compile(
   sParse.db = db;
   sqliteRunParser(&sParse, zSql, pzErrMsg);
   if( db->xTrace && !db->init.busy ){
-    /* Trace only the statment that was compiled.
+    /* Trace only the statement that was compiled.
     ** Make a copy of that part of the SQL string since zSQL is const
     ** and we must pass a zero terminated string to the trace function
     ** The copy is unnecessary if the tail pointer is pointing at the

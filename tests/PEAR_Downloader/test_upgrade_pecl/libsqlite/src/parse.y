@@ -128,7 +128,7 @@ id(A) ::= ID(X).         {A = X;}
   TEMP TRIGGER VACUUM VIEW.
 
 // Define operator precedence early so that this is the first occurrence
-// of the operator tokens in the grammer.  Keeping the operators together
+// of the operator tokens in the grammar.  Keeping the operators together
 // causes them to be assigned integer values that are close together,
 // which keeps parser tables smaller.
 //
@@ -143,7 +143,7 @@ id(A) ::= ID(X).         {A = X;}
 %left CONCAT.
 %right UMINUS UPLUS BITNOT.
 
-// And "ids" is an identifer-or-string.
+// And "ids" is an identifier-or-string.
 //
 %type ids {Token}
 ids(A) ::= ID(X).        {A = X;}

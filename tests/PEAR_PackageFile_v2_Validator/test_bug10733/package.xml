@@ -6,7 +6,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <name>PHP_Compat</name>
  <channel>pear.php.net</channel>
  <summary>Provides components to achieve PHP version independance</summary>
- <description>PHP_Compat provides drop-in functions and constants for compatibility with newer versions of PHP, enviroment emulation, and an API to allow for version independent authoring.</description>
+ <description>PHP_Compat provides drop-in functions and constants for compatibility with newer versions of PHP, environment emulation, and an API to allow for version independent authoring.</description>
  <lead>
   <name>Aidan Lister</name>
 

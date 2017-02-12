@@ -1042,7 +1042,7 @@ PHP_METHOD(HttpResponse, getFile)
  *
  * Finally send the entity.
  * 
- * Accepts an optional boolean parameter, specifying wheter the output
+ * Accepts an optional boolean parameter, specifying whether the output
  * buffers should be discarded prior sending.  A successful caching attempt
  * will cause a script termination, and write a log entry if the INI setting
  * http.cache_log is set.

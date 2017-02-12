@@ -74,7 +74,7 @@ looking like: "Wed, 22 Dec 2004 11:34:47 GMT"</p>
 Returns the HTTP date as string.</p>
 <h2 id="http_build_uri">string http_build_uri(string url[, string proto[, string host[, int port]]])</h2>
 <p>Build a complete URI according to the supplied parameters.</p>
-<p>If the url is already abolute but a different proto was supplied,<br />
+<p>If the url is already absolute but a different proto was supplied,<br />
 only the proto part of the URI will be updated.  If url has no<br />
 path specified, the path of the current REQUEST_URI will be taken.<br />
 The host will be taken either from the Host HTTP header of the client<br />
@@ -153,7 +153,7 @@ else FALSE.</p>
 <p>Expects a string parameter containing the ETag to compare.  Optionally<br />
 accepts a bool parameter, which, if set to true, will check the header<br />
 usually used to validate HTTP ranges.</p>
-<p>Retuns TRUE if ETag matches or the header contained the asterisk ("*"),<br />
+<p>Returns TRUE if ETag matches or the header contained the asterisk ("*"),<br />
 else FALSE.</p>
 <h2 id="http_cache_last_modified">bool http_cache_last_modified([int timestamp_or_expires]])</h2>
 <p>Attempts to cache the sent entity by its last modification date.</p>
@@ -206,7 +206,7 @@ You can use one of the following constants for convenience:<br />
 <p>Please see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3<br />
 for which redirect response code to use in which situation.</p>
 <p>To be RFC compliant, "Redirecting to <a>URI</a>." will be displayed,<br />
-if the client doesn't redirect immediatly, and the request method was<br />
+if the client doesn't redirect immediately, and the request method was<br />
 another one than HEAD.</p>
 <p>Returns FALSE on failure, or *exits* on success.</p>
 <p>A log entry will be written to the redirect log, if the INI entry<br />
@@ -220,7 +220,7 @@ another one than HEAD.</p>
 <p>Returns TRUE on success, or FALSE on failure.</p>
 <h2 id="http_send_stream">bool http_send_stream(resource stream)</h2>
 <p>Sends an already opened stream with support for (multiple) range requests.</p>
-<p>Expects a resource parameter referncing the stream to read from.</p>
+<p>Expects a resource parameter referencing the stream to read from.</p>
 <p>Returns TRUE on success, or FALSE on failure.</p>
 <h2 id="http_chunked_decode">string http_chunked_decode(string encoded)</h2>
 <p>Decodes a string that was HTTP-chunked encoded.</p>
@@ -310,7 +310,7 @@ www-form-urlencoded. See http_get() for a full list of available options.</p>
 <p>Returns the HTTP response(s) as string on success, or FALSE on failure.</p>
 <h2 id="http_put_file">string http_put_file(string url, string file[, array options[, array &info]])</h2>
 <p>Performs an HTTP PUT request on the supplied url.</p>
-<p>Expects the second parameter to be a string referncing the file to upload.<br />
+<p>Expects the second parameter to be a string referencing the file to upload.<br />
 See http_get() for a full list of available options.</p>
 <p>Returns the HTTP response(s) as string on success, or FALSE on failure.</p>
 <h2 id="http_put_stream">string http_put_stream(string url, resource stream[, array options[, array &info]])</h2>
@@ -494,7 +494,7 @@ passed to HttpRequest::setOptions(). </p>
 <p>Destroys the HttpRequest object.</p>
 <h3 id="HttpRequest_setOptions">bool HttpRequest::setOptions([array options])</h3>
 <p>Set the request options to use.  See http_get() for a full list of available options.</p>
-<p>Accepts an array as optional parameters, wich values will overwrite the <br />
+<p>Accepts an array as optional parameters, which values will overwrite the <br />
 currently set request options.  If the parameter is empty or mitted,<br />
 the optoions of the HttpRequest object will be reset.</p>
 <p>Returns TRUE on success, or FALSE on failure.</p>
@@ -613,7 +613,7 @@ Affects only POST and custom requests.</p>
 <p>Add a file to the POST request, leaving prefiously set files unchanged.<br />
 Affects only POST and custom requests. Cannot be used with raw post data.</p>
 <p>Expects a string parameter containing the form element name, and a string<br />
-paremeter containing the path to the file which should be uploaded.<br />
+parameter containing the path to the file which should be uploaded.<br />
 Additionally accepts an optional string parameter which could contain<br />
 the content type of the file.</p>
 <p>Returns TRUE on success, or FALSE if the content type seems not to contain a <br />
@@ -648,7 +648,7 @@ references the last received response.</p>
 <p>Accepts an string as optional parameter specifying a certain header to read.<br />
 If the parameter is empty or omitted all response headers will be returned.</p>
 <p>Returns either a string with the value of the header matching name if requested, <br />
-FALSE on failure, or an associative array containing all reponse headers.</p>
+FALSE on failure, or an associative array containing all response headers.</p>
 <p>If redirects were allowed and several responses were received, the data <br />
 references the last received response.</p>
 <h3 id="HttpRequest_getResponseCookie">array HttpRequest::getResponseCookie([string name])</h3>
@@ -728,7 +728,7 @@ HttpMalformedHeaderException, HttpEncodingException.</p>
 <p>Instantiate a new HttpRequestPool object.  An HttpRequestPool is<br />
 able to send several HttpRequests in parallel.</p>
 <p>WARNING: Don't attach/detach HttpRequest objects to the HttpRequestPool<br />
-object while you're using the implemented Interator interface. </p>
+object while you're using the implemented Iterator interface. </p>
 <p>Accepts virtual infinite optional parameters each referencing an<br />
 HttpRequest object.</p>
 <p>Throws HttpRequestException, HttpRequestPoolException, HttpInvalidParamException.</p>
@@ -924,7 +924,7 @@ which the data to send will be read.</p>
 <p>Returns the previously set path to the file to send as string.</p>
 <h3 id="HttpResponse_send">static bool HttpResponse::send([bool clean_ob = true])</h3>
 <p>Finally send the entity.</p>
-<p>Accepts an optional boolean parameter, specifying wheter the output<br />
+<p>Accepts an optional boolean parameter, specifying whether the output<br />
 buffers should be discarded prior sending.  A successful caching attempt<br />
 will cause a script termination, and write a log entry if the INI setting<br />
 http.cache_log is set.</p>

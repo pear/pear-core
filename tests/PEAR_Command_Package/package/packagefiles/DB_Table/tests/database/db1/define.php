@@ -6,7 +6,7 @@
 // Database class
 require_once 'DB/Table/Database.php';
 
-// Create DB/MDB2 connnection
+// Create DB/MDB2 connection
 require 'config.php';
 
 // Construct DB_Table objects

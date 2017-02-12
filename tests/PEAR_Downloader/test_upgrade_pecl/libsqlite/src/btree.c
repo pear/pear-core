@@ -101,7 +101,7 @@ typedef struct FreelistInfo FreelistInfo;
 ** This routine rounds up a number of bytes to the next multiple of 4.
 **
 ** This might need to change for computer architectures that require
-** and 8-byte alignment boundry for structures.
+** and 8-byte alignment boundary for structures.
 */
 #define ROUNDUP(X)  ((X+3) & ~3)
 
@@ -250,7 +250,7 @@ struct Cell {
 /*
 ** Free space on a page is remembered using a linked list of the FreeBlk
 ** structures.  Space on a database page is allocated in increments of
-** at least 4 bytes and is always aligned to a 4-byte boundry.  The
+** at least 4 bytes and is always aligned to a 4-byte boundary.  The
 ** linked list of FreeBlks is always kept in order by address.
 */
 struct FreeBlk {
@@ -1228,7 +1228,7 @@ static int getPayload(BtCursor *pCur, int offset, int amt, char *zBuf){
 
 /*
 ** Read part of the key associated with cursor pCur.  A maximum
-** of "amt" bytes will be transfered into zBuf[].  The transfer
+** of "amt" bytes will be transferred into zBuf[].  The transfer
 ** begins at "offset".  The number of bytes actually read is
 ** returned. 
 **
@@ -1278,7 +1278,7 @@ static int fileBtreeDataSize(BtCursor *pCur, int *pSize){
 
 /*
 ** Read part of the data associated with cursor pCur.  A maximum
-** of "amt" bytes will be transfered into zBuf[].  The transfer
+** of "amt" bytes will be transferred into zBuf[].  The transfer
 ** begins at "offset".  The number of bytes actually read is
 ** returned.  The amount returned will be smaller than the
 ** amount requested if there are not enough bytes in the data
@@ -3536,7 +3536,7 @@ static int fileBtreeCopyFile(Btree *pBtTo, Btree *pBtFrom){
 /*
 ** The following tables contain pointers to all of the interface
 ** routines for this implementation of the B*Tree backend.  To
-** substitute a different implemention of the backend, one has merely
+** substitute a different implementation of the backend, one has merely
 ** to provide pointers to alternative functions in similar tables.
 */
 static BtOps sqliteBtreeOps = {
