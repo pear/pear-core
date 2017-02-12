@@ -362,7 +362,7 @@ Description :
   file/directory present in the archive. 
   The array is not sorted, so it show the position of the file in the
   archive. 
-  The file information are :
+  The file informations are :
     $file[filename] : Name and path of the file/dir.
     $file[mode] : File permissions (result of fileperms())
     $file[uid] : user id
