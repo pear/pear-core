@@ -41,7 +41,7 @@ class Other extends Pear {
     function _Other() {
         // $a was modified but here misteriously returns to be
         // the original value. That makes the destructor useless
-        // The correct value for $a in the destructor shoud be "new value"
+        // The correct value for $a in the destructor should be "new value"
         echo "#bug 14744# Other class destructor: other->a == '" . $this->a ."'\n";
     }
 }

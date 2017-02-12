@@ -83,7 +83,7 @@ zend_function_entry http_requestpool_object_fe[] = {
 	HTTP_REQPOOL_ME(socketPerform, ZEND_ACC_PROTECTED)
 	HTTP_REQPOOL_ME(socketSelect, ZEND_ACC_PROTECTED)
 
-	/* implements Interator */
+	/* implements Iterator */
 	HTTP_REQPOOL_ME(valid, ZEND_ACC_PUBLIC)
 	HTTP_REQPOOL_ME(current, ZEND_ACC_PUBLIC)
 	HTTP_REQPOOL_ME(key, ZEND_ACC_PUBLIC)
@@ -159,7 +159,7 @@ static void _http_requestpool_object_llist2array(zval **req, zval *array TSRMLS_
  * able to send several HttpRequests in parallel.
  * 
  * WARNING: Don't attach/detach HttpRequest objects to the HttpRequestPool
- * object while you're using the implemented Interator interface. 
+ * object while you're using the implemented Iterator interface.
  *
  * Accepts virtual infinite optional parameters each referencing an
  * HttpRequest object.

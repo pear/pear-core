@@ -74,7 +74,7 @@ PHP_FUNCTION(http_date)
  *
  * Build a complete URI according to the supplied parameters.
  * 
- * If the url is already abolute but a different proto was supplied,
+ * If the url is already absolute but a different proto was supplied,
  * only the proto part of the URI will be updated.  If url has no
  * path specified, the path of the current REQUEST_URI will be taken.
  * The host will be taken either from the Host HTTP header of the client
@@ -392,7 +392,7 @@ PHP_FUNCTION(http_match_modified)
  * accepts a bool parameter, which, if set to true, will check the header
  * usually used to validate HTTP ranges.
  * 
- * Retuns TRUE if ETag matches or the header contained the asterisk ("*"),
+ * Returns TRUE if ETag matches or the header contained the asterisk ("*"),
  * else FALSE.
  */
 PHP_FUNCTION(http_match_etag)
@@ -566,7 +566,7 @@ PHP_FUNCTION(http_throttle)
  * for which redirect response code to use in which situation.
  *
  * To be RFC compliant, "Redirecting to <a>URI</a>." will be displayed,
- * if the client doesn't redirect immediatly, and the request method was
+ * if the client doesn't redirect immediately, and the request method was
  * another one than HEAD.
  * 
  * Returns FALSE on failure, or *exits* on success.
@@ -716,7 +716,7 @@ PHP_FUNCTION(http_send_file)
  *
  * Sends an already opened stream with support for (multiple) range requests.
  *
- * Expects a resource parameter referncing the stream to read from.
+ * Expects a resource parameter referencing the stream to read from.
  * 
  * Returns TRUE on success, or FALSE on failure.
  */
@@ -1150,7 +1150,7 @@ PHP_FUNCTION(http_post_fields)
  *
  * Performs an HTTP PUT request on the supplied url.
  * 
- * Expects the second parameter to be a string referncing the file to upload.
+ * Expects the second parameter to be a string referencing the file to upload.
  * See http_get() for a full list of available options.
  * 
  * Returns the HTTP response(s) as string on success, or FALSE on failure.

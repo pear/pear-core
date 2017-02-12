@@ -2207,7 +2207,7 @@ int sqliteSelect(
   }
 
   /* Check to see if this is a subquery that can be "flattened" into its parent.
-  ** If flattening is a possiblity, do so and return immediately.  
+  ** If flattening is a possibility, do so and return immediately.
   */
   if( pParent && pParentAgg &&
       flattenSubquery(pParse, pParent, parentTab, *pParentAgg, isAgg) ){

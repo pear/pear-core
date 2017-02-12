@@ -109,7 +109,7 @@ foreach ($GLOBALS['_DB_TABLE_GENERATOR']['default_error'] as $code => $message) 
  * Here $class_write_path should be the path (without a trailing 
  * separator) to a directory in which all of the code should be 
  * written. If this directory does not exist, it will be created. 
- * If the directory does already exist, exising files will not 
+ * If the directory does already exist, existing files will not
  * be overwritten. If $class_write_path is not set (i.e., if this
  * line is omitted) all the code will be written to the current 
  * directory.  If ->generateDatabaseFile() is called, it must be 

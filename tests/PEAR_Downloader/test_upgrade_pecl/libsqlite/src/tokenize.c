@@ -535,7 +535,7 @@ abort_parse:
 **                 the end of a trigger definition.
 **
 **   (6) END       We've seen the ";END" of the ";END;" that occurs at the end
-**                 of a trigger difinition.
+**                 of a trigger definition.
 **
 ** Transitions between states above are determined by tokens extracted
 ** from the input.  The following tokens are significant:

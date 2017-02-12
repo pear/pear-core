@@ -771,7 +771,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/codegen/info.xml", '<?xml ve
  <c>pear.php.net</c>
  <ca xlink:href="/rest/c/Tools+and+Utilities">Tools and Utilities</ca>
  <l>PHP</l>
- <s>Tool to create Code generaters that operate on XML descriptions</s>
+ <s>Tool to create Code generators that operate on XML descriptions</s>
  <d>This is an \'abstract\' package, it provides the base
 framework for applications like CodeGen_PECL and
 CodeGen_MySqlUDF (not released yet).</d>
@@ -1821,7 +1821,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/db_sqlite_tools/info.xml", '
  <l>BSD License</l>
  <s>DB_Sqlite_Tools is an object oriented interface to effectively manage and backup Sqlite databases.</s>
  <d>DB_Sqlite_Tools is an object oriented interface to effectively manage and backup Sqlite databases.It extends the existing functionality by providing a comprehensive solution for database backup, live
-  replication, export in XML format, performance optmization and other functionalities like the insertion and retrieval of encrypted data from an Sqlite database without any external extension.</d>
+  replication, export in XML format, performance optimization and other functionalities like the insertion and retrieval of encrypted data from an Sqlite database without any external extension.</d>
  <r xlink:href="/rest/r/db_sqlite_tools"/>
 </p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/db_sqlite_tools/allreleases.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
@@ -1943,7 +1943,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/file_archive/info.xml", '<?x
  <ca xlink:href="/rest/c/File+Formats">File Formats</ca>
  <l>LGPL</l>
  <s>File_Archive will let you manipulate easily the tar, gz, tgz, bz2, tbz, zip, ar (or deb) files</s>
- <d>This library is strongly object oriented. It makes it very easy to use, writing simple code, yet the library is very powerfull.
+ <d>This library is strongly object oriented. It makes it very easy to use, writing simple code, yet the library is very powerful.
 It lets you easily read or generate tar, gz, tgz, bz2, tbz, zip, ar (or deb) archives to files, memory, mail or standard output.
 See http://poocl.la-grotte.org for a tutorial</d>
  <r xlink:href="/rest/r/file_archive"/>
@@ -1980,7 +1980,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/file_bittorrent/info.xml", '
  <l>PHP License</l>
  <s>Decode and Encode data in Bittorrent format</s>
  <d>This package consists of three classes which handles the encoding and decoding of data in Bittorrent format.
-    You can also extract useful informations from .torrent files, create .torrent files and query the torrent\'s scrape page to get its statistics.</d>
+    You can also extract useful information from .torrent files, create .torrent files and query the torrent\'s scrape page to get its statistics.</d>
  <r xlink:href="/rest/r/file_bittorrent"/>
 </p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/file_bittorrent/allreleases.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
@@ -2011,7 +2011,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/file_dicom/info.xml", '<?xml
  <s>Package for reading and modifying DICOM files</s>
  <d>File_DICOM allows reading and modifying of DICOM files.
  DICOM stands for Digital Imaging and COmmunications in Medicine, and is a standard
- for creating, storing and transfering digital images (X-rays, tomography) and related information used in medicine.
+ for creating, storing and transferring digital images (X-rays, tomography) and related information used in medicine.
  This package in particular does not support the exchange/transfer of DICOM data, nor any network related functionality.
  More information on the DICOM standard can be found at: http://medical.nema.org/
  Please be aware that any use of the information produced by this package for diagnosing purposes is strongly discouraged by the author. See http://www.gnu.org/licenses/lgpl.html for more information.</d>
@@ -2793,7 +2793,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/html_javascript/info.xml", '
  <d>Provides two classes:
 HTML_Javascript for performing basic JS operations.
 HTML_Javascript_Convert for converting variables
-Allow output data to a file, to the standart output(print), or return</d>
+Allow output data to a file, to the standard output(print), or return</d>
  <r xlink:href="/rest/r/html_javascript"/>
 </p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/html_javascript/allreleases.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
@@ -3303,7 +3303,7 @@ However, it still has a very simple set of goals.
    o By using object vars for a template rather than \'assign\', you
      can use phpdoc comments to list what variable you use.
 - Editable in WYSIWYG editors
-   o you can create full featured templates, that doesnt get broken every time you edit with
+   o you can create full featured templates, that doesn't get broken every time you edit with
      Dreamweaver(tm) or Mozilla editor
    o Uses namespaced attributes to add looping/conditionals
 - Extremely Fast,
@@ -3404,7 +3404,7 @@ Features :
 HTML_Template_ITX :
 With this class you get the full power of the phplib template class.
 You may have one file with blocks in it but you have as well one main file
-and multiple files one for each block. This is quite usefull when you have
+and multiple files one for each block. This is quite useful when you have
 user configurable websites. Using blocks not in the main template allows
 you to modify some parts of your layout easily.</d>
  <r xlink:href="/rest/r/html_template_it"/>
@@ -3889,7 +3889,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/http_upload/info.xml", '<?xm
  <c>pear.php.net</c>
  <ca xlink:href="/rest/c/HTTP">HTTP</ca>
  <l>LGPL</l>
- <s>Easy and secure managment of files submitted via HTML Forms</s>
+ <s>Easy and secure management of files submitted via HTML Forms</s>
  <d>This class provides an advanced file uploader system for file uploads made
 from html forms. Features:
  * Can handle from one file to multiple files.
@@ -4694,7 +4694,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/mail_imap/info.xml", '<?xml 
 Mail_IMAP can be used to retrieve the contents of a mailbox, whereas it may serve as the backend for a webmail application or mailing list manager.  Since Mail_IMAP is an abstracted object, it allows for complete customization of the UI for any application.
 
 ***NOTE***
-Mail_IMAPv2 is currently available. Mail_IMAPv2 is far more extensible, has far fewer bugs than Mail_IMAP 1, and is *not* backward compatible with Mail_IMAP 1. Any new developement should use Mail_IMAPv2.</d>
+Mail_IMAPv2 is currently available. Mail_IMAPv2 is far more extensible, has far fewer bugs than Mail_IMAP 1, and is *not* backward compatible with Mail_IMAP 1. Any new development should use Mail_IMAPv2.</d>
  <r xlink:href="/rest/r/mail_imap"/>
 </p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/mail_imap/allreleases.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
@@ -4802,7 +4802,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/mail_queue/info.xml", '<?xml
  <ca xlink:href="/rest/c/Mail">Mail</ca>
  <l>PHP</l>
  <s>Class for put mails in queue and send them later in background.</s>
- <d>Class to handle mail queue managment.
+ <d>Class to handle mail queue management.
 Wrapper for PEAR::Mail and PEAR::DB (or PEAR::MDB/MDB2).
 It can load, save and send saved mails in background
 and also backup some mails.
@@ -4859,7 +4859,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/math_binaryutils/info.xml", 
  <ca xlink:href="/rest/c/Math">Math</ca>
  <l>LGPL</l>
  <s>Collection of helper methods for easy handling of binary data.</s>
- <d>Collection of helper methods for dealing with binary data (add, subtract, converting functions, endianess functions etc.).</d>
+ <d>Collection of helper methods for dealing with binary data (add, subtract, converting functions, endianness functions etc.).</d>
  <r xlink:href="/rest/r/math_binaryutils"/>
 </p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/math_binaryutils/allreleases.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
@@ -4986,7 +4986,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/math_histogram/info.xml", '<
  <l>PHP</l>
  <s>Classes to calculate histogram distributions</s>
  <d>Classes to calculate histogram distributions and associated
-   statistics. Supports simple and cummulative histograms.
+   statistics. Supports simple and cumulative histograms.
    You can generate regular (2D) histograms, 3D, or 4D histograms
    Data must not have nulls.
 Requires Math_Stats.</d>
@@ -5145,7 +5145,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/math_stats/info.xml", '<?xml
  <s>Classes to calculate statistical parameters</s>
  <d>Package to calculate statistical parameters of numerical arrays
 of data. The data can be in a simple numerical array, or in a
-cummulative numerical array. A cummulative array, has the value
+cumulative numerical array. A cumulative array, has the value
 as the index and the number of repeats as the value for the
 array item, e.g. $data = array(3=&gt;4, 2.3=&gt;5, 1.25=&gt;6, 0.5=&gt;3).
 
@@ -7193,7 +7193,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/payment_dta/info.xml", '<?xm
  <ca xlink:href="/rest/c/Payment">Payment</ca>
  <l>BSD style</l>
  <s>Creates DTA files containing money transaction data (Germany).</s>
- <d>Payment_DTA provides functions to create DTA files used in Germany to exchange informations about money transactions with banks or online banking programs.</d>
+ <d>Payment_DTA provides functions to create DTA files used in Germany to exchange information about money transactions with banks or online banking programs.</d>
  <r xlink:href="/rest/r/payment_dta"/>
 </p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/payment_dta/allreleases.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
@@ -7578,7 +7578,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/phpdoc/info.xml", '<?xml ver
  <ca xlink:href="/rest/c/PHP">PHP</ca>
  <l>PHP</l>
  <s>Tool to generate documentation from the source</s>
- <d>PHPDoc is an attemt to adopt Javadoc to the PHP world.</d>
+ <d>PHPDoc is an attempt to adopt Javadoc to the PHP world.</d>
  <r xlink:href="/rest/r/phpdoc"/>
 </p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/phpdoc/allreleases.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
@@ -8602,7 +8602,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/structures_datagrid/info.xml
  <s>A tabular structure that contains a record set of data for paging and sorting purposes.</s>
  <d>This package offers a toolkit to render out a datagrid in HTML format as well as
 many other formats such as an XML Document, an Excel Spreadsheet, an XUL Document and more.
-It also offers paging and sorting functionallity to limit the data that is presented and processed.
+It also offers paging and sorting functionality to limit the data that is presented and processed.
 This concept is based on the .NET Framework DataGrid control and works very well with database and XML result sets.</d>
  <r xlink:href="/rest/r/structures_datagrid"/>
 </p>', 'text/xml');
@@ -9242,7 +9242,7 @@ Currently XML data can only be read from a file and accessed.
 The package offers a big number of methods to access and manipulate trees.
 For example methods like: getRoot, getChild[ren[Ids]], getParent[s[Ids]], getPath[ById] and many
 more.
-There are two ways of retreiving the data from the place where they are stored,
+There are two ways of retrieving the data from the place where they are stored,
 one is by reading the entire tree into the memory - the Memory way. The other
 is reading the tree nodes as needed (very useful in combination with huge trees
 and the nested set model).
@@ -9342,7 +9342,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/validate_at/info.xml", '<?xm
  <ca xlink:href="/rest/c/Validate">Validate</ca>
  <l>PHP</l>
  <s>Validation class for AT</s>
- <d>Package containes locale validation for AT such as:
+ <d>Package contains locale validation for AT such as:
  * SSN
  *  Postal Code</d>
  <r xlink:href="/rest/r/validate_at"/>
@@ -9378,7 +9378,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/validate_be/info.xml", '<?xm
  <ca xlink:href="/rest/c/Validate">Validate</ca>
  <l>PHP</l>
  <s>Validation class for Belgium</s>
- <d>Package containes locale validation for Belgium such as:
+ <d>Package contains locale validation for Belgium such as:
  * Postal Code
  * Bank Account Number
  * Transfer message (transfer from an bank account to another)
