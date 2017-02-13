@@ -75,7 +75,7 @@ class PEAR_Proxy
 
                 /* as per RFC 2817 */
                 if ($code < 200 || $code >= 300) {
-                    return PEAR::raiseError("Establishing a CONNECT tunnel through $proxy_host:$proxy_port failed with response code $code");
+                    return PEAR::raiseError("Establishing a CONNECT tunnel through proxy failed with response code $code");
                 }
             }
         }
