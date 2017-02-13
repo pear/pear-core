@@ -356,23 +356,13 @@ class PEAR_REST
         $path   = isset($info['path']) ? $info['path'] : null;
         $schema = (isset($info['scheme']) && $info['scheme'] == 'https') ? 'https' : 'http';
 
-        $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
-        if ($this->config->get('http_proxy')&&
-              $proxy = parse_url($this->config->get('http_proxy'))
-        ) {
-            $proxy_host = isset($proxy['host']) ? $proxy['host'] : null;
-
-            $proxy_port   = isset($proxy['port']) ? $proxy['port'] : 8080;
-            $proxy_user   = isset($proxy['user']) ? urldecode($proxy['user']) : null;
-            $proxy_pass   = isset($proxy['pass']) ? urldecode($proxy['pass']) : null;
-            $proxy_schema = (isset($proxy['scheme']) && $proxy['scheme'] == 'https') ? 'https' : 'http';
-        }
+        $proxy = new PEAR_Proxy($this->config);
 
         if (empty($port)) {
             $port = (isset($info['scheme']) && $info['scheme'] == 'https')  ? 443 : 80;
         }
 
-        if (isset($proxy['host']) && $schema === 'http') {
+        if ($proxy->isProxyConfigured() && $schema === 'http') {
             $request = "GET $url HTTP/1.1\r\n";
         } else {
             $request = "GET $path HTTP/1.1\r\n";
@@ -403,9 +393,10 @@ class PEAR_REST
             $request .= "Authorization: Basic $tmp\r\n";
         }
 
-        if ($proxy_host != '' && $proxy_user != '') {
+        $proxyAuth = $proxy->getProxyAuth();
+        if ($proxyAuth) {
             $request .= 'Proxy-Authorization: Basic ' .
-                base64_encode($proxy_user . ':' . $proxy_pass) . "\r\n";
+                $proxyAuth . "\r\n";
         }
 
         if ($accept) {
@@ -416,60 +407,10 @@ class PEAR_REST
         $request .= "Connection: close\r\n";
         $request .= "\r\n";
 
-        if ($proxy_host != '') {
-            $fp = @fsockopen($proxy_host, $proxy_port, $errno, $errstr, 15);
-            if (!$fp) {
-                return PEAR::raiseError("Connection to `$proxy_host:$proxy_port' failed: $errstr", -9276);
-            }
-
-            /* HTTPS is to be used and we have a proxy, use CONNECT verb */
-            if ($schema === 'https') {
-                fwrite($fp, "CONNECT $host:$port HTTP/1.1\r\n");
-                fwrite($fp, "Host: $host:$port\r\n\r\n");
-
-                while ($line = trim(fgets($fp, 1024))) {
-                    if (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
-                        $code = (int)$matches[1];
-
-                        /* as per RFC 2817 */
-                        if ($code < 200 || $code >= 300) {
-                            return PEAR::raiseError("Establishing a CONNECT tunnel through $proxy_host:$proxy_port failed with response code $code");
-                        }
-                    }
-                }
-
-                // connection was successful -- establish SSL through
-                // the tunnel
-                $crypto_method = STREAM_CRYPTO_METHOD_TLS_CLIENT;
-
-                if (defined('STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT')) {
-                    $crypto_method |= STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
-                    $crypto_method |= STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT;
-                }
-
-                // set the correct hostname for working hostname
-                // verification
-                stream_context_set_option($fp, 'ssl', 'peer_name', $host);
-
-                // blocking socket needed for
-                // stream_socket_enable_crypto()
-                // see
-                // <http://php.net/manual/en/function.stream-socket-enable-crypto.php>
-                stream_set_blocking ($fp, true);
-                $crypto_res = stream_socket_enable_crypto($fp, true, $crypto_method);
-                if (!$crypto_res) {
-                    return PEAR::raiseError("Could not establish SSL connection through proxy $proxy_host:$proxy_port: $crypto_res");
-                }
-            }
-        } else {
-            if ($schema === 'https') {
-                $host = 'ssl://' . $host;
-            }
-
-            $fp = @fsockopen($host, $port, $errno, $errstr);
-            if (!$fp) {
-                return PEAR::raiseError("Connection to `$host:$port' failed: $errstr", $errno);
-            }
+        $secure = ($schema == 'https');
+        $fp = $proxy->openSocket($host, $port, $secure);
+        if (PEAR::isError($fp)) {
+            return $fp;
         }
 
         fwrite($fp, $request);
