@@ -1188,7 +1188,7 @@ class DB_Table_Database extends DB_Table_Base
      *     $dir = $this->_table_subclass_path;
      *     require_once $dir . '/' . $subclass . '.php';
      * </code>
-     * See the getTableSubclass() docblock for a discusion of capitalization
+     * See the getTableSubclass() docblock for a discussion of capitalization
      * conventions in PHP 4 and 5 for subclass file names. 
      * 
      * @param string $path path to directory containing class definitions

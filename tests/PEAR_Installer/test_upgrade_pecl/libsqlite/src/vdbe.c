@@ -1954,7 +1954,7 @@ case OP_MakeRecord: {
 ** back in its place.
 **
 ** P3 is a string that is P1 characters long.  Each character is either
-** an 'n' or a 't' to indicates if the argument should be intepreted as
+** an 'n' or a 't' to indicates if the argument should be interpreted as
 ** numeric or text type.  The first character of P3 corresponds to the
 ** lowest element on the stack.  If P3 is NULL then all arguments are
 ** assumed to be of the numeric type.
@@ -1992,7 +1992,7 @@ case OP_MakeRecord: {
 ** back.  The first P1 entries that are popped are strings and the last
 ** entry (the lowest on the stack) is an integer record number.
 **
-** The converstion of the first P1 string entries occurs just like in
+** The conversion of the first P1 string entries occurs just like in
 ** MakeKey.  Each entry is separated from the others by a null.
 ** The entire concatenation is null-terminated.  The lowest entry
 ** in the stack is the first field and the top of the stack becomes the

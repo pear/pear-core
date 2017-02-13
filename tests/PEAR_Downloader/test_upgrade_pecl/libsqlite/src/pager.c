@@ -1842,7 +1842,7 @@ int sqlitepager_write(void *pData){
 
   /* If the checkpoint journal is open and the page is not in it,
   ** then write the current page to the checkpoint journal.  Note that
-  ** the checkpoint journal always uses the simplier format 2 that lacks
+  ** the checkpoint journal always uses the simpler format 2 that lacks
   ** checksums.  The header is also omitted from the checkpoint journal.
   */
   if( pPager->ckptInUse && !pPg->inCkpt && (int)pPg->pgno<=pPager->ckptSize ){

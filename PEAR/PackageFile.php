@@ -289,7 +289,7 @@ class PEAR_PackageFile
     }
 
     /**
-     * Create a PEAR_PackageFile_v* from a compresed Tar or Tgz file.
+     * Create a PEAR_PackageFile_v* from a compressed Tar or Tgz file.
      * @access  public
      * @param string contents of package.xml file
      * @param int package state (one of PEAR_VALIDATE_* constants)

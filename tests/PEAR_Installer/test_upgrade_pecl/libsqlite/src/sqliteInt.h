@@ -1051,7 +1051,7 @@ struct TriggerStep {
  * constructed. When coding nested triggers (triggers fired by other triggers)
  * each nested trigger stores its parent trigger's TriggerStack as the "pNext" 
  * pointer. Once the nested trigger has been coded, the pNext value is restored
- * to the pTriggerStack member of the Parse stucture and coding of the parent
+ * to the pTriggerStack member of the Parse structure and coding of the parent
  * trigger continues.
  *
  * Before a nested trigger is coded, the linked list pointed to by the 

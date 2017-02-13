@@ -206,7 +206,7 @@ int sqlite_changes(sqlite*);
 
 /*
 ** This function returns the number of database rows that were changed
-** by the last INSERT, UPDATE, or DELETE statment executed by sqlite_exec(),
+** by the last INSERT, UPDATE, or DELETE statement executed by sqlite_exec(),
 ** or by the last VM to run to completion. The change count is not updated
 ** by SQL statements other than INSERT, UPDATE or DELETE.
 **
@@ -496,7 +496,7 @@ int sqlite_function_type(
 **
 ** The sqlite_set_result_string() function allocates a buffer to hold the
 ** result and returns a pointer to this buffer.  The calling routine
-** (that is, the implmentation of a user function) can alter the content
+** (that is, the implementation of a user function) can alter the content
 ** of this buffer if desired.
 */
 char *sqlite_set_result_string(sqlite_func*,const char*,int);

@@ -906,7 +906,7 @@ class PEAR_Registry extends PEAR
     }
 
     /**
-     * Determine whether a mirror exists within the deafult channel in the registry
+     * Determine whether a mirror exists within the default channel in the registry
      *
      * @param string Channel name
      * @param string Mirror name

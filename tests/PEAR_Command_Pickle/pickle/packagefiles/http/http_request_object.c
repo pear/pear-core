@@ -768,7 +768,7 @@ PHP_METHOD(HttpRequest, __destruct)
  *
  * Set the request options to use.  See http_get() for a full list of available options.
  * 
- * Accepts an array as optional parameters, wich values will overwrite the 
+ * Accepts an array as optional parameters, which values will overwrite the 
  * currently set request options.  If the parameter is empty or mitted,
  * the optoions of the HttpRequest object will be reset.
  * 
@@ -1411,7 +1411,7 @@ PHP_METHOD(HttpRequest, getRawPostData)
  * Affects only POST and custom requests. Cannot be used with raw post data.
  * 
  * Expects a string parameter containing the form element name, and a string
- * paremeter containing the path to the file which should be uploaded.
+ * parameter containing the path to the file which should be uploaded.
  * Additionally accepts an optional string parameter which could contain
  * the content type of the file.
  * 
@@ -1591,7 +1591,7 @@ PHP_METHOD(HttpRequest, getResponseData)
  * If the parameter is empty or omitted all response headers will be returned.
  * 
  * Returns either a string with the value of the header matching name if requested, 
- * FALSE on failure, or an associative array containing all reponse headers.
+ * FALSE on failure, or an associative array containing all response headers.
  * 
  * If redirects were allowed and several responses were received, the data 
  * references the last received response.

@@ -28,7 +28,7 @@
 ** 1970-01-01 00:00:00 is JD 2440587.5
 ** 2000-01-01 00:00:00 is JD 2451544.5
 **
-** This implemention requires years to be expressed as a 4-digit number
+** This implementation requires years to be expressed as a 4-digit number
 ** which means that only dates between 0000-01-01 and 9999-12-31 can
 ** be represented, even though julian day numbers allow a much wider
 ** range of dates.
@@ -504,7 +504,7 @@ static int parseModifier(const char *zMod, DateTime *p){
       /*
       **    weekday N
       **
-      ** Move the date to the same time on the next occurrance of
+      ** Move the date to the same time on the next occurrence of
       ** weekday N where 0==Sunday, 1==Monday, and so forth.  If the
       ** date is already on the appropriate weekday, this is a no-op.
       */
