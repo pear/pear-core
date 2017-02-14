@@ -316,6 +316,9 @@
    <file name="PEAR/Packager.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
+   <file name="PEAR/Proxy.php" role="php">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
    <file name="PEAR/Registry.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
