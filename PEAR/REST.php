@@ -360,11 +360,7 @@ class PEAR_REST
         if ($this->config->get('http_proxy')&&
               $proxy = parse_url($this->config->get('http_proxy'))
         ) {
-            $proxy_host = isset($proxy['host']) ? $proxy['host'] : null;
-            if ($schema === 'https') {
-                $proxy_host = 'ssl://' . $proxy_host;
-            }
-
+            $proxy_host   = isset($proxy['host']) ? $proxy['host'] : null;
             $proxy_port   = isset($proxy['port']) ? $proxy['port'] : 8080;
             $proxy_user   = isset($proxy['user']) ? urldecode($proxy['user']) : null;
             $proxy_pass   = isset($proxy['pass']) ? urldecode($proxy['pass']) : null;
