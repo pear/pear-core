@@ -297,7 +297,7 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
      * @return bool|PEAR_Error false to skip this file, PEAR_Error to fail
      *                         (use $this->throwError)
      */
-    public function startSession($pkg, $contents, $dest = null)
+    public function startSession($pkg, $contents, $dest)
     {
         if ($this->installphase != PEAR_TASK_INSTALL) {
             return false;
@@ -344,7 +344,7 @@ class PEAR_Task_Postinstallscript extends PEAR_Task_Common
      * @param  string install or upgrade
      * @access protected
      */
-    public static function run($tasks = null)
+    public static function run($tasks)
     {
     }
 }

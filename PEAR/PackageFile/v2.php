@@ -625,7 +625,7 @@ class PEAR_PackageFile_v2
                 $lastversion = isset($this->_packageInfo['_lastversion']) ?
                     $this->_packageInfo['_lastversion'] : null;
                 $task->init($raw, $atts, $lastversion);
-                $res = $task->startSession($this, $atts['installed_as']);
+                $res = $task->startSession($this, $atts['installed_as'], null);
                 if (!$res) {
                     continue; // skip this file
                 }
