@@ -1008,7 +1008,7 @@ class PEAR_Registry extends PEAR
         if ($lastmodified) {
             $info['_lastmodified'] = $lastmodified;
         } else {
-            $info['_lastmodified'] = date('r');
+            $info['_lastmodified'] = time();
         }
 
         fwrite($fp, serialize($info));
