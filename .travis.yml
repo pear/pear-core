@@ -9,7 +9,7 @@ php:
 install:
   - pear list
   - pear channel-update pear
-  - pear upgrade console_getopt archive_tar
+  - pear install -f pear-1.10.1
   - pear install text_diff
   - pear list
   - sh scripts/pear.sh config-set umask 0022
@@ -23,7 +23,7 @@ script:
   - pear list
   - pear install --force PEAR-*.tgz
   - pear list
-  - pear upgrade --force structures_graph xml_util
+  - pear upgrade --force archive_tar console_getopt structures_graph xml_util
   - pear list
   - pear install --force php_archive
   - pear list
