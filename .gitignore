@@ -4,3 +4,8 @@ go-pear.phar
 /install-pear-nozlib.phar
 /*.tgz
 /dist/
+
+# eclipse
+.buildpath
+.project
+.settings
