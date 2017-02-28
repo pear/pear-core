@@ -94,9 +94,9 @@
   <active>no</active>
  </helper>
  <date>2017-02-28</date>
- <time>07:40:00</time>
+ <time>10:15:00</time>
  <version>
-  <release>1.10.2</release>
+  <release>1.10.3</release>
   <api>1.10.1</api>
  </version>
  <stability>
@@ -105,14 +105,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-  * Fix Bug #4426:  PEAR_Autoloader __call() must take only 2 arguments [kna]
-  * Fix Bug #20989: fatal error/bug in the postinstallscript task [kguest]
-  * Fix Bug #20991: Strict Standards: startSession and run methods in PEAR_Task_Postinstallscript [kguest]
-  * Fix Bug #21001: PEAR_ERROR_DIE exit code is 0 [danielc]
-
-  * Pull Request #52: Channel's _lastmodified is an int and not a string [sathieu]
-  * Pull Request #53: Add proper HTTPS proxy support through the CONNECT verb [youknow0]
-  * Pull Request #58: Make method signatures compatible. [yunosh]
+  * Bug #21188: Class 'PEAR_Proxy' not found
  </notes>
  <contents>
   <dir name="/">
@@ -1130,6 +1123,23 @@ http://pear.php.net/advisory-20110228.txt
     * Pull Request #52: Channel's _lastmodified is an int and not a string [sathieu]
     * Pull Request #53: Add proper HTTPS proxy support through the CONNECT verb [youknow0]
     * Pull Request #58: Make method signatures compatible. [yunosh]
+   </notes>
+  </release>
+
+  <release>
+   <date>2017-02-28</date>
+   <time>10:15:00</time>
+   <version>
+    <release>1.10.3</release>
+    <api>1.10.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+    * Bug #21188: Class 'PEAR_Proxy' not found
    </notes>
   </release>
 
