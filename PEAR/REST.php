@@ -18,6 +18,7 @@
  */
 require_once 'PEAR.php';
 require_once 'PEAR/XMLParser.php';
+require_once 'PEAR/Proxy.php';
 
 /**
  * Intelligently retrieve data, following hyperlinks if necessary, and re-directing
