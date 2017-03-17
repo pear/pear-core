@@ -599,7 +599,7 @@ class DB_Table extends DB_Table_Base
      * @return object DB_Table
      * @access public
      */
-    function DB_Table(&$db, $table, $create = false)
+    function __construct(&$db, $table, $create = false)
     {
         // is the first argument a DB/MDB2 object?
         $this->backend = null;
