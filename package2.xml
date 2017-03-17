@@ -222,10 +222,10 @@
     <tasks:replace from="@PEAR-VER@" to="version" type="package-info" />
    </file>
    <file name="PEAR/PackageFile/Parser/v1.php" role="php">
-    <tasks:replace from="@package_version@" to="version" type="package-info" />
+    <tasks:replace from="@PEAR-VER@" to="version" type="package-info" />
    </file>
    <file name="PEAR/PackageFile/Parser/v2.php" role="php">
-    <tasks:replace from="@package_version@" to="version" type="package-info" />
+    <tasks:replace from="@PEAR-VER@" to="version" type="package-info" />
    </file>
    <file name="PEAR/PackageFile/v2/rw.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
