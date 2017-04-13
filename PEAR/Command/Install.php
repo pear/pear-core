@@ -717,8 +717,7 @@ Run post-installation scripts in package <package>, if any exist.
                 $pkg = &$param->getPackageFile();
                 if ($info->getCode() != PEAR_INSTALLER_NOBINARY) {
                     if (!($info = $pkg->installBinary($this->installer))) {
-                        $this->ui->outputData('ERROR: ' .$oldinfo->getMessage());
-                        continue;
+                        return $this->raiseError('ERROR: ' .$oldinfo->getMessage());
                     }
 
                     // we just installed a different package than requested,
