@@ -1668,7 +1668,7 @@ class PEAR_PackageFile_v2
                     if ($dtype == 'pearinstaller' && $nopearinstaller) {
                         continue;
                     }
-                    if (!isset($deps[0])) {
+                    if ((is_array($deps) && !isset($deps[0])) || !is_array($deps)) {
                         $deps = array($deps);
                     }
                     foreach ($deps as $dep) {
