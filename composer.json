@@ -74,7 +74,7 @@
         "pear/pear_frontend_gtk": "For GTK support",
         "pear/pear_frontend_web": "For Web support"
     },
-    "provide": {
+    "replace": {
         "pear/pear-core-minimal": "*"
     },
     "require-dev": {
