@@ -93,9 +93,9 @@
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2017-04-25</date>
+ <date>2017-06-27</date>
  <version>
-  <release>1.10.4</release>
+  <release>1.10.5</release>
   <api>1.10.1</api>
  </version>
  <stability>
@@ -104,9 +104,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-* Bug #18102:  pear install does not fail on error
-
-* PR #67:  fix warning during pecl list-all
+* Bug #21222:  PHP 7.2 compatibility: Upgrade to Archive_Tar 1.4.3 needed
  </notes>
  <contents>
   <dir name="/">
@@ -1141,6 +1139,22 @@ http://pear.php.net/advisory-20110228.txt
    <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
    <notes>
     * Bug #21188: Class 'PEAR_Proxy' not found
+   </notes>
+  </release>
+
+  <release>
+   <date>2017-04-25</date>
+   <version>
+    <release>1.10.4</release>
+    <api>1.10.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+    * Bug #18102:  pear install does not fail on error
    </notes>
   </release>
 
