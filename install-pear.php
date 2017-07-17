@@ -247,7 +247,7 @@ $options['upgrade'] = true;
 $install_root = getenv('INSTALL_ROOT');
 if (!empty($install_root)) {
     $options['packagingroot'] = $install_root;
-    $reg = new PEAR_Registry($options['packagingroot'], false, false, $metadata_dir);
+    $reg = new PEAR_Registry($options['packagingroot'], false, false, $config->get('metadata_dir'));
 } else {
     $reg = $config->getRegistry('default');
 }
