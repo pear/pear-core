@@ -2,11 +2,11 @@
 /**
  * PEAR_Proxy
  *
- * HTTP Proxy handling 
+ * HTTP Proxy handling
  *
  * @category   pear
  * @package    PEAR
- * @author     Nico Boehr 
+ * @author     Nico Boehr
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://pear.php.net/package/PEAR
@@ -67,7 +67,8 @@ class PEAR_Proxy
     function _httpConnect($fp, $host, $port)
     {
         fwrite($fp, "CONNECT $host:$port HTTP/1.1\r\n");
-        fwrite($fp, "Host: $host:$port\r\n\r\n");
+        fwrite($fp, "Host: $host:$port\r\n");
+        fwrite($fp, 'Proxy-Authorization: Basic ' . $this->getProxyAuth() . "\r\n\r\n");
 
         while ($line = trim(fgets($fp, 1024))) {
             if (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
@@ -110,7 +111,7 @@ class PEAR_Proxy
      * get the authorization information for the proxy, encoded to be
      * passed in the Proxy-Authentication HTTP header.
      * @return null|string the encoded authentication information if a
-     *                     proxy and authentication is configured, null 
+     *                     proxy and authentication is configured, null
      *                     otherwise.
      */
     function getProxyAuth()
@@ -155,7 +156,7 @@ class PEAR_Proxy
     {
         if ($this->isProxyConfigured()) {
             $fp = @fsockopen(
-                $this->proxy_host, $this->proxy_port, 
+                $this->proxy_host, $this->proxy_port,
                 $errno, $errstr, 15
             );
 
