@@ -343,7 +343,7 @@ class PEAR_RunTest
 
         // Check if test should be skipped.
         $res  = $this->_runSkipIf($section_text, $temp_skipif, $tested, $ini_settings);
-        if (count($res) != 2) {
+        if ($res == 'SKIPPED' || count($res) != 2) {
             return $res;
         }
         $info = $res['info'];
