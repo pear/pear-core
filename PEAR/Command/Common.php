@@ -143,7 +143,7 @@ class PEAR_Command_Common extends PEAR
         }
 
         reset($this->commands[$command]['options']);
-        while (list($option, $info) = each($this->commands[$command]['options'])) {
+        foreach ($this->commands[$command]['options'] as $option => $info) {
             $larg = $sarg = '';
             if (isset($info['arg'])) {
                 if ($info['arg']{0} == '(') {
