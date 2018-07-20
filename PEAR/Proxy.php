@@ -67,7 +67,11 @@ class PEAR_Proxy
     function _httpConnect($fp, $host, $port)
     {
         fwrite($fp, "CONNECT $host:$port HTTP/1.1\r\n");
-        fwrite($fp, "Host: $host:$port\r\n\r\n");
+        fwrite($fp, "Host: $host:$port\r\n");
+        if ($this->getProxyAuth()) {
+            fwrite($fp, 'Proxy-Authorization: Basic ' . $this->getProxyAuth() . "\r\n");
+        }
+        fwrite($fp, "\r\n");
 
         while ($line = trim(fgets($fp, 1024))) {
             if (preg_match('|^HTTP/1.[01] ([0-9]{3}) |', $line, $matches)) {
