@@ -2046,7 +2046,7 @@ class PEAR_PackageFile_v2
         if (is_array($manip[$tag]) && !empty($manip[$tag]) && isset($manip[$tag][0])) {
             $manip[$tag][] = $contents;
         } else {
-            if (!count($manip[$tag])) {
+            if (is_array($manip[$tag]) && !count($manip[$tag])) {
                 $manip[$tag] = $contents;
             } else {
                 $manip[$tag] = array($manip[$tag]);
