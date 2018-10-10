@@ -1507,7 +1507,7 @@ class PEAR_Downloader_Package
     function _fromFile(&$param)
     {
         $saveparam = $param;
-        if (is_string($param)) {
+        if (is_string($param) && substr($param, 0, 10) !== 'channel://') {
             if (!@file_exists($param)) {
                 $test = explode('#', $param);
                 $group = array_pop($test);
