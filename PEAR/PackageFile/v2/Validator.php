@@ -1930,7 +1930,7 @@ class PEAR_PackageFile_v2_Validator
 
             switch ($token) {
                 case T_WHITESPACE :
-                    break;
+                    continue 2;
                 case ';':
                     if ($interface) {
                         $current_function = '';
