@@ -25,4 +25,4 @@ else
   fi
 fi
 
-exec $PHP -C -n -q $INCARG -d date.timezone=UTC -d output_buffering=1 -d variables_order=EGPCS -d safe_mode=0 -d register_argc_argv="On" $INCDIR/peclcmd.php "$@"
+exec $PHP -C -q $INCARG -d date.timezone=UTC -d output_buffering=1 -d variables_order=EGPCS -d safe_mode=0 -d register_argc_argv="On" $INCDIR/peclcmd.php "$@"
