@@ -27,7 +27,19 @@ $catfile = System::mktemp('tst');
 
 // Concat from url wrapper
 $cat = 'http://www.php.net/ http://pear.php.net/ > ' . $catfile;
-if (!System::cat($cat)) {
+
+$success = false;
+$attempts = 0;
+while ($attempts < 10) {
+    if (!System::cat($cat)) {
+        ++$attempts;
+        sleep(1);
+    } else {
+        $success = true;
+        break;
+    }
+}
+if (!$success) {
     print "System::cat('$cat') failed\n";
 }
 
