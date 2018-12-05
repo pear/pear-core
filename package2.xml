@@ -93,9 +93,9 @@
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2018-08-22</date>
+ <date>2018-12-05</date>
  <version>
-  <release>1.10.6</release>
+  <release>1.10.7</release>
   <api>1.10.1</api>
  </version>
  <stability>
@@ -104,15 +104,9 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-* PR #70:  Fix notice undefined variable metadata_dir
-* PR #71:  fix Warning: count(): Parameter must be an array or an object
-* PR #74:  Bug #23744 Remove is_executable check
-  * Bug #23744:  The is_executable check in the Which method when run on Windows is unnecessary
-* PR #75:  Migrate old while(list() = each()) constructs to foreach
-* PR #76:  Fix PHP Warning: "continue" targeting switch is equivalent to "break"
-* PR #77:  proxy server auth
-  * PR #72:  Correctly authenticate at proxy server
-* PR #78:  array or Countable error in 7.2
+* PR #79:  Prevent Unable to find the wrapper "channel" Warning
+* PR #80:  fix Warning: "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"
+* PR #81:  Add flags to PECL shell script for shared extensions
  </notes>
  <contents>
   <dir name="/">
@@ -1179,6 +1173,48 @@ http://pear.php.net/advisory-20110228.txt
    <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
    <notes>
 * Bug #21222:  PHP 7.2 compatibility: Upgrade to Archive_Tar 1.4.3 needed
+   </notes>
+  </release>
+
+  <release>
+   <date>2018-08-22</date>
+   <version>
+    <release>1.10.6</release>
+    <api>1.10.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+* PR #70:  Fix notice undefined variable metadata_dir
+* PR #71:  fix Warning: count(): Parameter must be an array or an object
+* PR #74:  Bug #23744 Remove is_executable check
+  * Bug #23744:  The is_executable check in the Which method when run on Windows is unnecessary
+* PR #75:  Migrate old while(list() = each()) constructs to foreach
+* PR #76:  Fix PHP Warning: "continue" targeting switch is equivalent to "break"
+* PR #77:  proxy server auth
+  * PR #72:  Correctly authenticate at proxy server
+* PR #78:  array or Countable error in 7.2
+   </notes>
+  </release>
+
+  <release>
+   <date>2018-12-05</date>
+   <version>
+    <release>1.10.7</release>
+    <api>1.10.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+* PR #79:  Prevent Unable to find the wrapper "channel" Warning
+* PR #80:  fix Warning: "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"
+* PR #81:  Add flags to PECL shell script for shared extensions
    </notes>
   </release>
 
