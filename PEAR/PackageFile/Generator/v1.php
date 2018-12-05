@@ -738,8 +738,10 @@ class PEAR_PackageFile_Generator_v1
                             $php = $this->_processPhpDeps($deps['php']);
                         } else {
                             if (!isset($deps['php'][0])) {
-                                list($key, $blah) = each ($deps['php']); // stupid buggy versions
-                                $deps['php'] = array($blah[0]);
+                                // Buggy versions
+                                $key = key($deps['php']);
+                                $info = current($deps['php']);
+                                $deps['php'] = array($info[0]);
                             }
                             $php = $this->_processDep($deps['php'][0]);
                             if (!$php) {
