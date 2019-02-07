@@ -1325,7 +1325,7 @@ class PEAR_Dependency2
      * @param  string Operator
      * @return string Sign equivalent
      */
-    function signOperator($operator)
+    static function signOperator($operator)
     {
         switch($operator) {
             case 'lt': return '<';
