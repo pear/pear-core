@@ -796,7 +796,7 @@ class fake_log extends PEAR_Frontend
 {
     var $_log = array();
     var $_download = array();
-    function fake_log()
+    function __construct()
     {
         $GLOBALS['_PEAR_FRONTEND_SINGLETON'] = &$GLOBALS['fakelog'];
     }
