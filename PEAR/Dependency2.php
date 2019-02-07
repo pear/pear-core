@@ -110,7 +110,7 @@ class PEAR_Dependency2
         $this->_currentPackage = $package;
     }
 
-    function _getExtraString($dep)
+    static function _getExtraString($dep)
     {
         $extra = ' (';
         if (isset($dep['uri'])) {
@@ -337,7 +337,7 @@ class PEAR_Dependency2
         }
 
         $loaded = $this->extension_loaded($dep['name']);
-        $extra  = $this->_getExtraString($dep);
+        $extra  = self::_getExtraString($dep);
         if (isset($dep['exclude'])) {
             if (!is_array($dep['exclude'])) {
                 $dep['exclude'] = array($dep['exclude']);
@@ -486,7 +486,7 @@ class PEAR_Dependency2
         }
 
         $version = $this->phpversion();
-        $extra   = $this->_getExtraString($dep);
+        $extra   = self::_getExtraString($dep);
         if (isset($dep['exclude'])) {
             if (!is_array($dep['exclude'])) {
                 $dep['exclude'] = array($dep['exclude']);
@@ -546,7 +546,7 @@ class PEAR_Dependency2
     function validatePearinstallerDependency($dep)
     {
         $pearversion = $this->getPEARVersion();
-        $extra = $this->_getExtraString($dep);
+        $extra = self::_getExtraString($dep);
         if (isset($dep['exclude'])) {
             if (!is_array($dep['exclude'])) {
                 $dep['exclude'] = array($dep['exclude']);
@@ -700,7 +700,7 @@ class PEAR_Dependency2
             }
         }
 
-        $extra = $this->_getExtraString($dep);
+        $extra = self::_getExtraString($dep);
         if (isset($dep['exclude']) && !is_array($dep['exclude'])) {
             $dep['exclude'] = array($dep['exclude']);
         }
@@ -1098,7 +1098,7 @@ class PEAR_Dependency2
             return true;
         }
 
-        $extra = $this->_getExtraString($dep);
+        $extra = self::_getExtraString($dep);
         if (isset($dep['exclude']) && !is_array($dep['exclude'])) {
             $dep['exclude'] = array($dep['exclude']);
         }
