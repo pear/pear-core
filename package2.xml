@@ -93,9 +93,9 @@
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2018-12-05</date>
+ <date>2019-02-07</date>
  <version>
-  <release>1.10.7</release>
+  <release>1.10.8</release>
   <api>1.10.1</api>
  </version>
  <stability>
@@ -104,9 +104,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-* PR #79:  Prevent Unable to find the wrapper "channel" Warning
-* PR #80:  fix Warning: "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"
-* PR #81:  Add flags to PECL shell script for shared extensions
+* PR #83:  Drop track_errors from options
+* PR #84:  Fix PHP 8 compatibility issues
  </notes>
  <contents>
   <dir name="/">
@@ -1215,6 +1214,23 @@ http://pear.php.net/advisory-20110228.txt
 * PR #79:  Prevent Unable to find the wrapper "channel" Warning
 * PR #80:  fix Warning: "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"
 * PR #81:  Add flags to PECL shell script for shared extensions
+   </notes>
+  </release>
+
+  <release>
+   <date>2019-02-07</date>
+   <version>
+    <release>1.10.8</release>
+    <api>1.10.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+* PR #83:  Drop track_errors from options
+* PR #84:  Fix PHP 8 compatibility issues
    </notes>
   </release>
 
