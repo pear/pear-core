@@ -185,7 +185,7 @@ class PEAR_Downloader extends PEAR_Common
                 if (!count($unused)) {
                     continue;
                 }
-                $strtolower = create_function('$a','return strtolower($a);');
+                $strtolower = function($a) { return strtolower($a); };
                 array_walk($this->_installed[$key], $strtolower);
             }
         }
