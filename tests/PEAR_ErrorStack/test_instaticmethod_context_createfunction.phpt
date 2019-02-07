@@ -14,7 +14,7 @@ $a = function() { $GLOBALS["stack"]->push(3); };
 $testline = __LINE__ - 1;
 class test8
 {
-    function test7()
+    static function test7()
     {
         global $a;
         $a();
