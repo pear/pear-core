@@ -12,7 +12,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $stack = &PEAR_ErrorStack::singleton('test');
 class test3
 {
-    function test34()
+    static function test34()
     {
         global $testline, $stack;
         eval('$stack->push(3);');
