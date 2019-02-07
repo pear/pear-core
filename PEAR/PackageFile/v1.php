@@ -1420,8 +1420,8 @@ class PEAR_PackageFile_v1
                 }
             }
             switch ($token) {
-                case T_WHITESPACE :
-                    continue;
+                case T_WHITESPACE:
+                    break;
                 case ';':
                     if ($interface) {
                         $current_function = '';
