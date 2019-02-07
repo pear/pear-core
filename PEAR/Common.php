@@ -304,7 +304,7 @@ class PEAR_Common extends PEAR
      * @param boolean Determines whether to include $state in the list
      * @return false|array False if $state is not a valid release state
      */
-    function betterStates($state, $include = false)
+    static function betterStates($state, $include = false)
     {
         static $states = array('snapshot', 'devel', 'alpha', 'beta', 'stable');
         $i = array_search($state, $states);
