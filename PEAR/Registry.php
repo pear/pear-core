@@ -2064,7 +2064,7 @@ class PEAR_Registry extends PEAR
                 if (!class_exists('PEAR_Installer_Role')) {
                     require_once 'PEAR/Installer/Role.php';
                 }
-                $notempty = create_function('$a','return !empty($a);');
+                $notempty = function($a) { return !empty($a); };
             }
             $package = is_array($package) ? array(strtolower($package[0]), strtolower($package[1]))
                 : strtolower($package);
