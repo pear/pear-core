@@ -2086,7 +2086,7 @@ class PEAR_Config extends PEAR
         return $a;
     }
 
-    function _prependPath($path, $prepend)
+    static function _prependPath($path, $prepend)
     {
         if (strlen($prepend) > 0) {
             if (OS_WINDOWS && preg_match('/^[a-z]:/i', $path)) {
