@@ -718,7 +718,7 @@ class PEAR_Common extends PEAR
      * @return mixed
      * @access public
      */
-    function analyzeSourceCode($file)
+    static function analyzeSourceCode($file)
     {
         if (!class_exists('PEAR_PackageFile_v2_Validator')) {
             require_once 'PEAR/PackageFile/v2/Validator.php';
