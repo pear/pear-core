@@ -336,7 +336,7 @@ class PEAR_PHPTest
     function assertPackageInfoEquals($control, $test, $message)
     {
         $this->assertNoErrors($message, debug_backtrace());
-        $a = create_function('$a,$b', 'return strcmp($a["name"],$b["name"]);');
+        $a = function($a, $b) { return strcmp($a["name"], $b["name"]); };
         if (isset($control[0])) {
             if (!isset($test[0]) || (count($control) != count($test))) {
                 echo "Invalid packageInfo\n";

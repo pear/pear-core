@@ -66,7 +66,7 @@ class testErrorHandlingStatic {
         echoPEARStack('_PEAR_error_handler_stack', $GLOBALS['_PEAR_error_handler_stack']);
     }
     
-    function fakeHandleError($err)
+    static function fakeHandleError($err)
     {
     }
 }

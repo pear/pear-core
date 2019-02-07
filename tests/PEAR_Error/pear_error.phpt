@@ -22,7 +22,7 @@ if (!defined('E_DEPRECATED')) {
     define('E_DEPRECATED', -1);
 }
 
-function test_error_handler($errno, $errmsg, $file, $line, $vars) {
+function test_error_handler($errno, $errmsg, $file, $line) {
     if ($errno == E_STRICT) {
         return;
     }

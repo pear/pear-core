@@ -193,7 +193,7 @@ class PEAR_Command_Common extends PEAR
             $help = $this->commands[$command]['summary'];
         }
 
-        if (preg_match_all('/{config\s+([^\}]+)}/e', $help, $matches)) {
+        if (preg_match_all('/{config\s+([^\}]+)}/', $help, $matches)) {
             foreach($matches[0] as $k => $v) {
                 $help = preg_replace("/$v/", $config->get($matches[1][$k]), $help);
             }

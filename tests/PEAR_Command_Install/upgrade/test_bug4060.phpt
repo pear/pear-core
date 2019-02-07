@@ -1339,7 +1339,7 @@ $phpunit->assertNoErrors('setup install');
 $fakelog->getDownload();
 $fakelog->getLog();
 $config->set('preferred_state', 'alpha');
-test_PEAR_Command_Install::_reset_downloader();
+$command->_reset_downloader();
 $res = $command->run('upgrade', array(), array('Auth_HTTP'));
 
 $dummy = null;

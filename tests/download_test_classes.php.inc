@@ -525,8 +525,8 @@ class test_PEAR_Dependency2 extends PEAR_Dependency2
     var $_extensions;
     var $_installerVer;
 
-    function &singleton($config = null, $installoptions = null, $package = null,
-                              $state = PEAR_VALIDATE_INSTALLING)
+    static function &singleton($config = null, $installoptions = null, $package = null,
+                               $state = PEAR_VALIDATE_INSTALLING)
     {
         if (!isset($GLOBALS['_test_dep'])) {
             $GLOBALS['_test_dep'] = new test_PEAR_Dependency2($config,
@@ -796,7 +796,7 @@ class fake_log extends PEAR_Frontend
 {
     var $_log = array();
     var $_download = array();
-    function fake_log()
+    function __construct()
     {
         $GLOBALS['_PEAR_FRONTEND_SINGLETON'] = &$GLOBALS['fakelog'];
     }

@@ -304,7 +304,7 @@ class PEAR_Common extends PEAR
      * @param boolean Determines whether to include $state in the list
      * @return false|array False if $state is not a valid release state
      */
-    function betterStates($state, $include = false)
+    static function betterStates($state, $include = false)
     {
         static $states = array('snapshot', 'devel', 'alpha', 'beta', 'stable');
         $i = array_search($state, $states);
@@ -718,7 +718,7 @@ class PEAR_Common extends PEAR
      * @return mixed
      * @access public
      */
-    function analyzeSourceCode($file)
+    static function analyzeSourceCode($file)
     {
         if (!class_exists('PEAR_PackageFile_v2_Validator')) {
             require_once 'PEAR/PackageFile/v2/Validator.php';
