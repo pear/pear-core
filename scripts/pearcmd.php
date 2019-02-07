@@ -438,12 +438,11 @@ function cmdHelp($command)
  * @param mixed $errmsg Message
  * @param mixed $file   Filename
  * @param mixed $line   Line number
- * @param mixed $vars   Variables
  *
  * @access public
  * @return boolean
  */
-function error_handler($errno, $errmsg, $file, $line, $vars)
+function error_handler($errno, $errmsg, $file, $line)
 {
     if ($errno & E_STRICT
         || $errno & E_DEPRECATED
