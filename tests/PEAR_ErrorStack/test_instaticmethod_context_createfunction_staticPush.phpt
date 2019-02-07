@@ -10,7 +10,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $stack = &PEAR_ErrorStack::singleton('test');
-$a = create_function('', 'PEAR_ErrorStack::staticPush("test", 3);');
+$a = function() { PEAR_ErrorStack::staticPush("test", 3); };
 $testline = __LINE__ - 1;
 class test8
 {
@@ -25,7 +25,7 @@ test8::test7();
 $ret = $stack->pop();
 $phpunit->assertEquals(array('file' => __FILE__,
       'line' => $testline,
-      'function' => 'create_function() code',
+      'function' => '{closure}',
 ), $ret['context'], 'context');
 echo 'tests done';
 ?>
