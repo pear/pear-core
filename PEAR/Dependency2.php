@@ -1232,7 +1232,7 @@ class PEAR_Dependency2
             $dep['optional'] = 'no';
         }
 
-        list($newdep, $type) = $this->normalizeDep($dep);
+        list($newdep, $type) = self::normalizeDep($dep);
         if (!$newdep) {
             return $this->raiseError("Invalid Dependency");
         }
@@ -1246,7 +1246,7 @@ class PEAR_Dependency2
     /**
      * Convert a 1.0 dep into a 2.0 dep
      */
-    function normalizeDep($dep)
+    static function normalizeDep($dep)
     {
         $types = array(
             'pkg' => 'Package',
