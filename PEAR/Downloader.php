@@ -1712,7 +1712,8 @@ class PEAR_Downloader extends PEAR_Common
         if (!$wp = @fopen($dest_file, 'wb')) {
             fclose($fp);
             if ($callback) {
-                call_user_func($callback, 'writefailed', array($dest_file, $php_errormsg));
+                call_user_func($callback, 'writefailed',
+                    array($dest_file, error_get_last()["message"]));
             }
             return PEAR::raiseError("could not open $dest_file for writing");
         }
@@ -1732,9 +1733,11 @@ class PEAR_Downloader extends PEAR_Common
             if (!@fwrite($wp, $data)) {
                 fclose($fp);
                 if ($callback) {
-                    call_user_func($callback, 'writefailed', array($dest_file, $php_errormsg));
+                    call_user_func($callback, 'writefailed',
+                        array($dest_file, error_get_last()["message"]));
                 }
-                return PEAR::raiseError("$dest_file: write failed ($php_errormsg)");
+                return PEAR::raiseError(
+                    "$dest_file: write failed (" . error_get_last()["message"] . ")");
             }
         }
 
