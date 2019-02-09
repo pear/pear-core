@@ -283,7 +283,7 @@ class PEAR_PackageFile
      * @param string  $file  name of file or directory
      * @return  void
      */
-    function addTempFile($file)
+    static function addTempFile($file)
     {
         $GLOBALS['_PEAR_Common_tempfiles'][] = $file;
     }

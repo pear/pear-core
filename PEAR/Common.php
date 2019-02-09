@@ -205,7 +205,7 @@ class PEAR_Common extends PEAR
      *
      * @access public
      */
-    function addTempFile($file)
+    static function addTempFile($file)
     {
         if (!class_exists('PEAR_Frontend')) {
             require_once 'PEAR/Frontend.php';
@@ -280,7 +280,7 @@ class PEAR_Common extends PEAR
             return false;
         }
 
-        $this->addTempFile($tmpdir);
+        self::addTempFile($tmpdir);
         return $tmpdir;
     }
 
