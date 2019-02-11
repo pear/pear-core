@@ -444,19 +444,17 @@ function cmdHelp($command)
  */
 function error_handler($errno, $errmsg, $file, $line)
 {
-    if ($errno & E_STRICT
-        || $errno & E_DEPRECATED
-        || !error_reporting()
+    if ($errno & E_STRICT) {
+        return; // E_STRICT
+    }
+    if ($errno & E_DEPRECATED) {
+        return; // E_DEPRECATED
+    }
+    if (!(error_reporting() & $errno) &&
+        isset($GLOBALS['config']) &&
+        $GLOBALS['config']->get('verbose') < 4
     ) {
-        if ($errno & E_STRICT) {
-            return; // E_STRICT
-        }
-        if ($errno & E_DEPRECATED) {
-            return; // E_DEPRECATED
-        }
-        if (!error_reporting() && isset($GLOBALS['config']) && $GLOBALS['config']->get('verbose') < 4) {
-            return false; // @silenced error, show all if debug is high enough
-        }
+        return false; // @silenced error, show all if debug is high enough
     }
     $errortype = array (
         E_DEPRECATED  => 'Deprecated Warning',
