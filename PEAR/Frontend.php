@@ -160,7 +160,7 @@ class PEAR_Frontend extends PEAR
      * needs to be able to sustain a list over many sessions in order to support
      * user interaction with install scripts
      */
-    function addTempFile($file)
+    static function addTempFile($file)
     {
         $GLOBALS['_PEAR_Common_tempfiles'][] = $file;
     }

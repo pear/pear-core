@@ -276,7 +276,7 @@ class PEAR_Builder extends PEAR_Common
             } else {
                 $dir = $pkg->_config->get('temp_dir') . '/' . $pkg->getName();
                 // automatically delete at session end
-                $this->addTempFile($dir);
+                self::addTempFile($dir);
             }
         } else {
             $pf = new PEAR_PackageFile($this->config);
@@ -368,11 +368,11 @@ class PEAR_Builder extends PEAR_Common
             return $this->raiseError("could not create build dir: $build_dir");
         }
 
-        $this->addTempFile($build_dir);
+        self::addTempFile($build_dir);
         if (!System::mkDir(array('-p', $inst_dir))) {
             return $this->raiseError("could not create temporary install dir: $inst_dir");
         }
-        $this->addTempFile($inst_dir);
+        self::addTempFile($inst_dir);
 
         $make_command = getenv('MAKE') ? getenv('MAKE') : 'make';
 
