@@ -307,7 +307,9 @@ class PEAR_Builder extends PEAR_Common
 
         $dir = getcwd();
         $this->log(2, "building in $dir");
-        putenv('PATH=' . $this->config->get('bin_dir') . ':' . getenv('PATH'));
+        if (!preg_match('@(^|:)' . $this->config->get('bin_dir') . '(:|$)@', getenv('PATH'))) {
+            putenv('PATH=' . $this->config->get('bin_dir') . ':' . getenv('PATH'));
+        }
         $err = $this->_runCommand($this->config->get('php_prefix')
                                 . "phpize" .
                                 $this->config->get('php_suffix'),
