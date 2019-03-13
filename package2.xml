@@ -93,9 +93,9 @@
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2019-02-07</date>
+ <date>2019-03-13</date>
  <version>
-  <release>1.10.8</release>
+  <release>1.10.9</release>
   <api>1.10.1</api>
  </version>
  <stability>
@@ -104,8 +104,10 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-* PR #83:  Drop track_errors from options
-* PR #84:  Fix PHP 8 compatibility issues
+* PR #85:  Fixes static calls for PHP 8
+* PR #86:  Adjust silencing check for PHP 8
+* PR #87:  Comparison fixes
+* PR #88:  Only add bin_dir to PATH if not already there (fixes PHP Bug #75852)
  </notes>
  <contents>
   <dir name="/">
@@ -1231,6 +1233,25 @@ http://pear.php.net/advisory-20110228.txt
    <notes>
 * PR #83:  Drop track_errors from options
 * PR #84:  Fix PHP 8 compatibility issues
+   </notes>
+  </release>
+
+  <release>
+   <date>2019-03-13</date>
+   <version>
+    <release>1.10.9</release>
+    <api>1.10.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+* PR #85:  Fixes static calls for PHP 8
+* PR #86:  Adjust silencing check for PHP 8
+* PR #87:  Comparison fixes
+* PR #88:  Only add bin_dir to PATH if not already there (fixes PHP Bug #75852)
    </notes>
   </release>
 
