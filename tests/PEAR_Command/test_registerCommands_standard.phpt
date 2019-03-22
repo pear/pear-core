@@ -115,8 +115,10 @@ $phpunit->assertEquals(array (
   'up' => 'upgrade',
 ), PEAR_Command::getShortcuts(), 'getshortcuts');
 PEAR_Command::getGetoptArgs('build', $s, $l);
-$phpunit->assertEquals('', $s, 'short build');
-$phpunit->assertEquals(array(), $l, 'long build');
+$phpunit->assertEquals('D:', $s, 'short build');
+$phpunit->assertEquals(array(
+  0 => 'configureoptions=',
+), $l, 'long build');
 PEAR_Command::getGetoptArgs('bundle', $s, $l);
 $phpunit->assertEquals('d:f', $s, 'short bundle');
 $phpunit->assertEquals(array('destination=', 'force'), $l, 'long bundle');
@@ -191,7 +193,7 @@ PEAR_Command::getGetoptArgs('info', $s, $l);
 $phpunit->assertEquals('', $s, 'short info');
 $phpunit->assertEquals(array(), $l, 'long info');
 PEAR_Command::getGetoptArgs('install', $s, $l);
-$phpunit->assertEquals('flnrsBZR:P:aoOp', $s, 'short install');
+$phpunit->assertEquals('flnrsBD:ZR:P:aoOp', $s, 'short install');
 $phpunit->assertEquals(array (
   0 => 'force',
   1 => 'loose',
@@ -199,14 +201,15 @@ $phpunit->assertEquals(array (
   3 => 'register-only',
   4 => 'soft',
   5 => 'nobuild',
-  6 => 'nocompress',
-  7 => 'installroot=',
-  8 => 'packagingroot=',
-  9 => 'ignore-errors',
-  10 => 'alldeps',
-  11 => 'onlyreqdeps',
-  12 => 'offline',
-  13 => 'pretend',
+  6 => 'configureoptions=',
+  7 => 'nocompress',
+  8 => 'installroot=',
+  9 => 'packagingroot=',
+  10 => 'ignore-errors',
+  11 => 'alldeps',
+  12 => 'onlyreqdeps',
+  13 => 'offline',
+  14 => 'pretend',
 ), $l, 'long install');
 PEAR_Command::getGetoptArgs('list', $s, $l);
 $phpunit->assertEquals('c:ai', $s, 'short list');

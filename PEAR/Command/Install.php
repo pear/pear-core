@@ -67,6 +67,11 @@ class PEAR_Command_Install extends PEAR_Command_Common
                     'shortopt' => 'B',
                     'doc' => 'don\'t build C extensions',
                     ),
+                'configureoptions' => array(
+                    'shortopt' => 'D',
+                    'arg' => 'OPTION1=VALUE[ OPTION2=VALUE]',
+                    'doc' => 'space-delimited list of configure options',
+                    ),
                 'nocompress' => array(
                     'shortopt' => 'Z',
                     'doc' => 'request uncompressed files when downloading',

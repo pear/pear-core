@@ -41,7 +41,13 @@ class PEAR_Command_Build extends PEAR_Command_Common
             'summary' => 'Build an Extension From C Source',
             'function' => 'doBuild',
             'shortcut' => 'b',
-            'options' => array(),
+            'options' => array(
+                'configureoptions' => array(
+                    'shortopt' => 'D',
+                    'arg' => 'OPTION1=VALUE[ OPTION2=VALUE]',
+                    'doc' => 'space-delimited list of configure options',
+                    ),
+                ),
             'doc' => '[package.xml]
 Builds one or more extensions contained in a package.'
             ),
@@ -64,7 +70,8 @@ Builds one or more extensions contained in a package.'
             $params[0] = 'package.xml';
         }
 
-        $builder = new PEAR_Builder($this->ui);
+        $configureoptions = empty($options['configureoptions']) ? '' : $options['configureoptions'];
+        $builder = new PEAR_Builder($configureoptions, $this->ui);
         $this->debug = $this->config->get('verbose');
         $err = $builder->build($params[0], array(&$this, 'buildCallback'));
         if (PEAR::isError($err)) {
