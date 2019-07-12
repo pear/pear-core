@@ -31,6 +31,7 @@ if ('@include_path@ ' != '@'.'include_path'.'@ ') {
     $raw = false;
 } else {
     // this is a raw, uninstalled pear, either a cvs checkout, or php distro
+    ini_set('include_path', dirname(__DIR__) . PATH_SEPARATOR . get_include_path());
     $raw = true;
 }
 @ini_set('allow_url_fopen', true);

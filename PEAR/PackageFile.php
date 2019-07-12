@@ -315,7 +315,7 @@ class PEAR_PackageFile
         }
 
         if (!is_array($content)) {
-            if (is_string($file) && strlen($file < 255) &&
+            if (is_string($file) && strlen($file) < 255 &&
                   (!file_exists($file) || !@is_file($file))) {
                 $ret = PEAR::raiseError("could not open file \"$file\"");
                 return $ret;
