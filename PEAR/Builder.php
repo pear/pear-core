@@ -392,21 +392,19 @@ class PEAR_Builder extends PEAR_Common
 
         $configure_options = $pkg->getConfigureOptions();
         if ($configure_options) {
-            foreach ($configure_options as $o) {
-                $default = array_key_exists('default', $o) ? $o['default'] : null;
-                if (array_key_exists($o['name'], $this->_parsed_configure_options)) {
-                    $r = $this->_parsed_configure_options[$o['name']];
+            foreach ($configure_options as $option) {
+                $default = array_key_exists('default', $option) ? $option['default'] : null;
+                if (array_key_exists($option['name'], $this->_parsed_configure_options)) {
+                    $response = $this->_parsed_configure_options[$option['name']];
                 } else {
-                    list($r) = $this->ui->userDialog('build',
-                                                     array($o['prompt']),
-                                                     array('text'),
-                                                     array($default));
+                    list($response) = $this->ui->userDialog(
+                            'build', [$option['prompt']], ['text'], [$default]);
                 }
-                if (substr($o['name'], 0, 5) == 'with-' &&
-                    ($r == 'yes' || $r == 'autodetect')) {
-                    $configure_command .= " --$o[name]";
+                if (substr($option['name'], 0, 5) === 'with-' &&
+                    ($response === 'yes' || $response === 'autodetect')) {
+                    $configure_command .= " --{$option[name]}";
                 } else {
-                    $configure_command .= " --$o[name]=".trim($r);
+                    $configure_command .= " --{$option[name]}=".trim($response);
                 }
             }
         }
