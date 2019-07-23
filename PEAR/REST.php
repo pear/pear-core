@@ -172,7 +172,7 @@ class PEAR_REST
 
     function useLocalCache($url, $cacheid = null)
     {
-        if ($cacheid === null) {
+        if (!is_array($cacheid)) {
             $cacheidfile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
                 md5($url) . 'rest.cacheid';
             if (!file_exists($cacheidfile)) {
