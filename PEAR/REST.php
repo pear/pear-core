@@ -173,13 +173,7 @@ class PEAR_REST
     function useLocalCache($url, $cacheid = null)
     {
         if (!is_array($cacheid)) {
-            $cacheidfile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
-                md5($url) . 'rest.cacheid';
-            if (!file_exists($cacheidfile)) {
-                return false;
-            }
-
-            $cacheid = unserialize(implode('', file($cacheidfile)));
+            $cacheid = $this->getCacheId($url);
         }
 
         $cachettl = $this->config->get('cache_ttl');
@@ -191,6 +185,11 @@ class PEAR_REST
         return false;
     }
 
+    /**
+     * @param string $url
+     *
+     * @return bool|mixed
+     */
     function getCacheId($url)
     {
         $cacheidfile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
