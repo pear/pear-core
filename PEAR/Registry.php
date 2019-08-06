@@ -1008,7 +1008,7 @@ class PEAR_Registry extends PEAR
         if ($lastmodified) {
             $info['_lastmodified'] = $lastmodified;
         } else {
-            $info['_lastmodified'] = time();
+            $info['_lastmodified'] = self::getSourceDateEpoch();
         }
 
         fwrite($fp, serialize($info));
@@ -1300,7 +1300,7 @@ class PEAR_Registry extends PEAR
             return false;
         }
 
-        $info['_lastmodified'] = time();
+        $info['_lastmodified'] = self::getSourceDateEpoch();
         fwrite($fp, serialize($info));
         $this->_closePackageFile($fp);
         if (isset($info['filelist'])) {
@@ -1354,7 +1354,7 @@ class PEAR_Registry extends PEAR
             return false;
         }
 
-        $info['_lastmodified'] = time();
+        $info['_lastmodified'] = self::getSourceDateEpoch();
         fwrite($fp, serialize($info));
         $this->_closePackageFile($fp);
         $this->_rebuildFileMap();
@@ -1382,7 +1382,7 @@ class PEAR_Registry extends PEAR
         if (is_object($info)) {
             $info = $info->toArray();
         }
-        $info['_lastmodified'] = time();
+        $info['_lastmodified'] = self::getSourceDateEpoch();
 
         $newinfo = $info;
         if ($merge) {
@@ -1418,7 +1418,7 @@ class PEAR_Registry extends PEAR
 
         $save = $info;
         $info = $save->getArray(true);
-        $info['_lastmodified'] = time();
+        $info['_lastmodified'] = self::getSourceDateEpoch();
         fwrite($fp, serialize($info));
         $this->_closePackageFile($fp);
         $this->_rebuildFileMap();
