@@ -445,7 +445,7 @@ Thanks for using go-pear!
                 if (!strlen($dir)) {
                     continue;
                 }
-                if ($dir{strlen($dir) - 1} != '\\') {
+                if ($dir[strlen($dir) - 1] != '\\') {
                     $dir .= '\\';
                 }
                 $tmp = $dir . $program;

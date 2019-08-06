@@ -904,7 +904,7 @@ class PEAR_PackageFile_Generator_v1
                 if (isset($package['install-as'][$file])) {
                     continue;
                 }
-                if ($platform{0} != '!') {
+                if ($platform[0] != '!') {
                     //o <ignore> tags for <file name=... platform=...>
                     $genericIgnore[] = $file;
                 }
@@ -913,7 +913,7 @@ class PEAR_PackageFile_Generator_v1
                 $oses = $notplatform = $platform = array();
                 foreach ($package['platform'] as $file => $os) {
                     // get a list of oses
-                    if ($os{0} == '!') {
+                    if ($os[0] == '!') {
                         if (isset($oses[substr($os, 1)])) {
                             continue;
                         }
@@ -1010,7 +1010,7 @@ class PEAR_PackageFile_Generator_v1
                             continue;
                         }
                         //o <ignore> tags for <file name=... platform=other platform>
-                        if ($platform{0} != '!' && $platform != $os) {
+                        if ($platform[0] != '!' && $platform != $os) {
                             $release[$releaseNum]['filelist']['ignore'][] =
                                 array(
                                     'attribs' => array(

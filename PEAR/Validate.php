@@ -209,7 +209,7 @@ class PEAR_Validate
                 }
                 $vlen = strlen($test);
                 $majver = substr($name, strlen($name) - $vlen);
-                while ($majver && !is_numeric($majver{0})) {
+                while ($majver && !is_numeric($majver[0])) {
                     $majver = substr($majver, 1);
                 }
                 if ($majver != $test) {
@@ -328,7 +328,7 @@ class PEAR_Validate
                 } else {
                     $vlen = strlen($versioncomponents[0] . '');
                     $majver = substr($name, strlen($name) - $vlen);
-                    while ($majver && !is_numeric($majver{0})) {
+                    while ($majver && !is_numeric($majver[0])) {
                         $majver = substr($majver, 1);
                     }
                     if (($versioncomponents[0] != 0) && $majver != $versioncomponents[0]) {
@@ -398,7 +398,7 @@ class PEAR_Validate
                 if ($this->_packagexml->getExtends()) {
                     $vlen = strlen($versioncomponents[0] . '');
                     $majver = substr($name, strlen($name) - $vlen);
-                    while ($majver && !is_numeric($majver{0})) {
+                    while ($majver && !is_numeric($majver[0])) {
                         $majver = substr($majver, 1);
                     }
                     if (($versioncomponents[0] != 0) && $majver != $versioncomponents[0]) {

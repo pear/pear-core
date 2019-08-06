@@ -215,7 +215,7 @@ class PEAR_Start extends PEAR
 
         $potentials = array();
         while (false !== ($entry = readdir($dp))) {
-            if ($entry{0} == '.' || !in_array(substr($entry, -4), array('.tar', '.tgz'))) {
+            if ($entry[0] == '.' || !in_array(substr($entry, -4), array('.tar', '.tgz'))) {
                 continue;
             }
             $potentials[] = $entry;

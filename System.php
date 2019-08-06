@@ -74,7 +74,7 @@ class System
             $offset = 0;
             foreach ($av as $a) {
                 $b = trim($a[0]);
-                if ($b{0} == '"' || $b{0} == "'") {
+                if ($b[0] == '"' || $b[0] == "'") {
                     continue;
                 }
 
