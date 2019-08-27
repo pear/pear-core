@@ -222,7 +222,7 @@ parameter.
         }
 
         $installed = $reg->packageInfo($info['name'], null, $channel);
-        $info['installed'] = $installed['version'] ? $installed['version'] : '- no -';
+        $info['installed'] = $installed ? $installed['version'] : '- no -';
         if (is_array($info['installed'])) {
             $info['installed'] = $info['installed']['release'];
         }
@@ -351,7 +351,7 @@ parameter.
 
         foreach ($available as $name => $info) {
             $installed = $reg->packageInfo($name, null, $channel);
-            if (is_array($installed['version'])) {
+            if ($installed && is_array($installed['version'])) {
                 $installed['version'] = $installed['version']['release'];
             }
             $desc = $info['summary'];

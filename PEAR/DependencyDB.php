@@ -216,9 +216,11 @@ class PEAR_DependencyDB
         if (is_object($pkg)) {
             $channel = strtolower($pkg->getChannel());
             $package = strtolower($pkg->getPackage());
-        } else {
+        } else if (is_array($pkg)) {
             $channel = strtolower($pkg['channel']);
             $package = strtolower($pkg['package']);
+        } else {
+            return false;
         }
 
         $depend = $this->getDependentPackages($pkg);
