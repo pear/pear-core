@@ -12,6 +12,12 @@ matrix:
   fast_finish: true
   allow_failures:
     - php: 7.3
+  include:
+    - php: 5.4
+      dist: precise
+    - php: 5.5
+      dist: trusty
+    
 install:
   - pear list
   - pear channel-update pear
