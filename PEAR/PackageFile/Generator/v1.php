@@ -889,13 +889,13 @@ class PEAR_PackageFile_Generator_v1
                 }
                 //o <install as=..> tags for <file name=... platform=!... install-as=..>
                 if (isset($package['platform'][$file]) &&
-                      $package['platform'][$file]{0} == '!') {
+                      $package['platform'][$file][0] == '!') {
                     $generic[] = $file;
                     continue;
                 }
                 //o <ignore> tags for <file name=... platform=... install-as=..>
                 if (isset($package['platform'][$file]) &&
-                      $package['platform'][$file]{0} != '!') {
+                      $package['platform'][$file][0] != '!') {
                     $genericIgnore[] = $file;
                     continue;
                 }
@@ -959,7 +959,7 @@ class PEAR_PackageFile_Generator_v1
                         //  <file name=... platform=!other platform install-as=..>
                         if (isset($package['platform'][$file]) &&
                               $package['platform'][$file] != "!$os" &&
-                              $package['platform'][$file]{0} == '!') {
+                              $package['platform'][$file][0] == '!') {
                             $release[$releaseNum]['filelist']['install'][] =
                                 array(
                                     'attribs' => array(
@@ -984,7 +984,7 @@ class PEAR_PackageFile_Generator_v1
                         //o <ignore> tags for
                         //  <file name=... platform=other platform install-as=..>
                         if (isset($package['platform'][$file]) &&
-                              $package['platform'][$file]{0} != '!' &&
+                              $package['platform'][$file][0] != '!' &&
                               $package['platform'][$file] != $os) {
                             $release[$releaseNum]['filelist']['ignore'][] =
                                 array(

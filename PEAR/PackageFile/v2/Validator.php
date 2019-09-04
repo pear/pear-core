@@ -1080,8 +1080,8 @@ class PEAR_PackageFile_v2_Validator
             foreach ($list['file'] as $i => $file)
             {
                 if (isset($file['attribs']) && isset($file['attribs']['name'])) {
-                    if ($file['attribs']['name']{0} == '.' &&
-                          $file['attribs']['name']{1} == '/') {
+                    if ($file['attribs']['name'][0] == '.' &&
+                          $file['attribs']['name'][1] == '/') {
                         // name is something like "./doc/whatever.txt"
                         $this->_invalidFileName($file['attribs']['name'], $dirname);
                     }

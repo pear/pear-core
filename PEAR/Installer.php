@@ -225,7 +225,7 @@ class PEAR_Installer extends PEAR_Downloader
                 $os = new OS_Guess();
             }
 
-            if (strlen($atts['platform']) && $atts['platform']{0} == '!') {
+            if (strlen($atts['platform']) && $atts['platform'][0] == '!') {
                 $negate   = true;
                 $platform = substr($atts['platform'], 1);
             } else {
