@@ -480,7 +480,7 @@ class System
         if ($var = isset($_ENV['TMPDIR']) ? $_ENV['TMPDIR'] : getenv('TMPDIR')) {
             return $var;
         }
-        return realpath(version_compare(PHP_VERSION, '5.2.1', '>=') ? sys_get_temp_dir() : '/tmp');
+        return realpath(function_exists('sys_get_temp_dir') ? sys_get_temp_dir() : '/tmp');
     }
 
     /**
