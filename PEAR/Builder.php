@@ -57,16 +57,71 @@ class PEAR_Builder extends PEAR_Common
     var $_firstline = null;
 
     /**
+     * Parsed --configureoptions.
+     *
+     * @var mixed[]
+     */
+    var $_parsed_configure_options;
+
+    /**
      * PEAR_Builder constructor.
      *
+     * @param mixed[] $configureoptions
      * @param object $ui user interface object (instance of PEAR_Frontend_*)
      *
      * @access public
      */
-    function __construct(&$ui)
+    function __construct($configureoptions, &$ui)
     {
         parent::__construct();
         $this->setFrontendObject($ui);
+        $this->_parseConfigureOptions($configureoptions);
+    }
+
+    /**
+     * Parse --configureoptions string.
+     *
+     * @param string Options, in the form "X=1 Y=2 Z='there\'s always one'"
+     */
+    function _parseConfigureOptions($options)
+    {
+        $data = '<XML><PROPERTIES ' . $options . ' /></XML>';
+        $parser = xml_parser_create('ISO-8859-1');
+        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+        xml_set_element_handler(
+            $parser, array($this, '_parseConfigureOptionsStartElement'),
+            array($this, '_parseConfigureOptionsEndElement'));
+        xml_parse($parser, $data, true);
+        xml_parser_free($parser);
+    }
+
+    /**
+     * Handle element start.
+     *
+     * @see PEAR_Builder::_parseConfigureOptions()
+     *
+     * @param resource $parser
+     * @param string $tagName
+     * @param mixed[] $attribs
+     */
+    function _parseConfigureOptionsStartElement($parser, $tagName, $attribs)
+    {
+        if ($tagName !== 'PROPERTIES') {
+            return;
+        }
+        $this->_parsed_configure_options = $attribs;
+    }
+
+    /**
+     * Handle element end.
+     *
+     * @see PEAR_Builder::_parseConfigureOptions()
+     *
+     * @param resource
+     * @param string $element
+     */
+    function _parseConfigureOptionsEndElement($parser, $element)
+    {
     }
 
     /**
@@ -337,17 +392,19 @@ class PEAR_Builder extends PEAR_Common
 
         $configure_options = $pkg->getConfigureOptions();
         if ($configure_options) {
-            foreach ($configure_options as $o) {
-                $default = array_key_exists('default', $o) ? $o['default'] : null;
-                list($r) = $this->ui->userDialog('build',
-                                                 array($o['prompt']),
-                                                 array('text'),
-                                                 array($default));
-                if (substr($o['name'], 0, 5) == 'with-' &&
-                    ($r == 'yes' || $r == 'autodetect')) {
-                    $configure_command .= " --$o[name]";
+            foreach ($configure_options as $option) {
+                $default = array_key_exists('default', $option) ? $option['default'] : null;
+                if (array_key_exists($option['name'], $this->_parsed_configure_options)) {
+                    $response = $this->_parsed_configure_options[$option['name']];
                 } else {
-                    $configure_command .= " --$o[name]=".trim($r);
+                    list($response) = $this->ui->userDialog(
+                            'build', [$option['prompt']], ['text'], [$default]);
+                }
+                if (substr($option['name'], 0, 5) === 'with-' &&
+                    ($response === 'yes' || $response === 'autodetect')) {
+                    $configure_command .= " --{$option[name]}";
+                } else {
+                    $configure_command .= " --{$option[name]}=".trim($response);
                 }
             }
         }

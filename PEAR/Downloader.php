@@ -62,11 +62,12 @@ class PEAR_Downloader extends PEAR_Common
      * Options from command-line passed to Install.
      *
      * Recognized options:<br />
-     *  - onlyreqdeps   : install all required dependencies as well
-     *  - alldeps       : install all dependencies, including optional
-     *  - installroot   : base relative path to install files in
-     *  - force         : force a download even if warnings would prevent it
-     *  - nocompress    : download uncompressed tarballs
+     *  - onlyreqdeps      : install all required dependencies as well
+     *  - alldeps          : install all dependencies, including optional
+     *  - installroot      : base relative path to install files in
+     *  - force            : force a download even if warnings would prevent it
+     *  - nocompress       : download uncompressed tarballs
+     *  - configureoptions : additional configure options
      * @see PEAR_Command_Install
      * @access private
      * @var array

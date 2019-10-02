@@ -1411,8 +1411,9 @@ class PEAR_Installer extends PEAR_Downloader
 
         // {{{ compile and install source files
         if ($this->source_files > 0 && empty($options['nobuild'])) {
+            $configureoptions = empty($options['configureoptions']) ? '' : $options['configureoptions'];
             if (PEAR::isError($err =
-                  $this->_compileSourceFiles($savechannel, $pkg))) {
+                  $this->_compileSourceFiles($savechannel, $pkg, $configureoptions))) {
                 return $err;
             }
         }
@@ -1509,12 +1510,13 @@ class PEAR_Installer extends PEAR_Downloader
     /**
      * @param string
      * @param PEAR_PackageFile_v1|PEAR_PackageFile_v2
+     * @param mixed[] $configureoptions
      */
-    function _compileSourceFiles($savechannel, &$filelist)
+    function _compileSourceFiles($savechannel, &$filelist, $configureoptions)
     {
         require_once 'PEAR/Builder.php';
         $this->log(1, "$this->source_files source files, building");
-        $bob = new PEAR_Builder($this->ui);
+        $bob = new PEAR_Builder($configureoptions, $this->ui);
         $bob->debug = $this->debug;
         $built = $bob->build($filelist, array(&$this, '_buildCallback'));
         if (PEAR::isError($built)) {
