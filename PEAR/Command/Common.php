@@ -146,7 +146,7 @@ class PEAR_Command_Common extends PEAR
         foreach ($this->commands[$command]['options'] as $option => $info) {
             $larg = $sarg = '';
             if (isset($info['arg'])) {
-                if ($info['arg']{0} == '(') {
+                if ($info['arg'][0] == '(') {
                     $larg = '==';
                     $sarg = '::';
                     $arg = substr($info['arg'], 1, -1);

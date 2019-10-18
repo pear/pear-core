@@ -781,7 +781,7 @@ http://pear.php.net/dtd/package-2.0.xsd',
                     }
                 }
 
-                if (is_string($value) && $value && ($value{strlen($value) - 1} == "\n")) {
+                if (is_string($value) && $value && ($value[strlen($value) - 1] == "\n")) {
                     $value .= str_repeat($this->options['indent'], $this->_tagDepth);
                 }
                 $tmp .= $this->_createXMLTag(array(

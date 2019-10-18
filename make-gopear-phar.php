@@ -40,7 +40,7 @@ if ($dp === false) {
 
 $packages = array();
 foreach ($dp as $entry) {
-    if ($entry{0} == '.' || !in_array(substr($entry, -4), array('.tar'))) {
+    if ($entry[0] == '.' || !in_array(substr($entry, -4), array('.tar'))) {
         continue;
     }
 
