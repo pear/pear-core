@@ -93,9 +93,9 @@
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2019-03-13</date>
+ <date>2019-11-19</date>
  <version>
-  <release>1.10.9</release>
+  <release>1.10.10</release>
   <api>1.10.1</api>
  </version>
  <stability>
@@ -104,10 +104,19 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-* PR #85:  Fixes static calls for PHP 8
-* PR #86:  Adjust silencing check for PHP 8
-* PR #87:  Comparison fixes
-* PR #88:  Only add bin_dir to PATH if not already there (fixes PHP Bug #75852)
+* PR #89:  Fix scripts/* include paths
+* PR #90:  Non-interactive configureoption answers
+* PR #91:  Added missing preg quote
+* PR #92:  handle "lib64" case for glibc detection
+* PR #93:  Fix PHP Notice: Trying to access array offset on value of type bool with 7.4
+* PR #94:  Updated logic in useLocalCache to reuse getCacheId
+* PR #95:  Fix manpage warning
+* PR #96:  Implement the SOURCE_DATE_EPOCH specification
+* PR #97:  Fix PHP 7.4 deprecation: array/string curly braces access
+* PR #98:  Fix use of null/false as array
+* PR #99:  Fix Travis builds on PHP 5.4 and 5.5
+* PR #100: Honor PHP temp directory config
+* PR #101: Fix documentation: the `--force` is required
  </notes>
  <contents>
   <dir name="/">
@@ -1252,6 +1261,34 @@ http://pear.php.net/advisory-20110228.txt
 * PR #86:  Adjust silencing check for PHP 8
 * PR #87:  Comparison fixes
 * PR #88:  Only add bin_dir to PATH if not already there (fixes PHP Bug #75852)
+   </notes>
+  </release>
+
+  <release>
+   <date>2019-11-19</date>
+   <version>
+    <release>1.10.10</release>
+    <api>1.10.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+* PR #89:  Fix scripts/* include paths
+* PR #90:  Non-interactive configureoption answers
+* PR #91:  Added missing preg quote
+* PR #92:  handle "lib64" case for glibc detection
+* PR #93:  Fix PHP Notice: Trying to access array offset on value of type bool with 7.4
+* PR #94:  Updated logic in useLocalCache to reuse getCacheId
+* PR #95:  Fix manpage warning
+* PR #96:  Implement the SOURCE_DATE_EPOCH specification
+* PR #97:  Fix PHP 7.4 deprecation: array/string curly braces access
+* PR #98:  Fix use of null/false as array
+* PR #99:  Fix Travis builds on PHP 5.4 and 5.5
+* PR #100: Honor PHP temp directory config
+* PR #101: Fix documentation: the `--force` is required
    </notes>
   </release>
 
