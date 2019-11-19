@@ -120,7 +120,7 @@ mkdir go-pear-tarballs
 cd go-pear-tarballs
 pear download -Z PEAR-stable Archive_Tar-stable Console_Getopt-stable XML_Util-stable
 cd ../..
-pear install PHP_Archive
+pear install --force PHP_Archive
 php make-installpear-nozlib-phar.php
 php make-gopear-phar.php
 
