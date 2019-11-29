@@ -402,9 +402,9 @@ class PEAR_Builder extends PEAR_Common
                 }
                 if (substr($option['name'], 0, 5) === 'with-' &&
                     ($response === 'yes' || $response === 'autodetect')) {
-                    $configure_command .= " --{$option[name]}";
+                    $configure_command .= " --{$option['name']}";
                 } else {
-                    $configure_command .= " --{$option[name]}=".trim($response);
+                    $configure_command .= " --{$option['name']}=".trim($response);
                 }
             }
         }
