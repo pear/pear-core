@@ -176,10 +176,13 @@ class PEAR_REST
             $cacheid = $this->getCacheId($url);
         }
 
-        $cachettl = $this->config->get('cache_ttl');
-        // If cache is newer than $cachettl seconds, we use the cache!
-        if (time() - $cacheid['age'] < $cachettl) {
-            return $this->getCache($url);
+
+        if (is_array($cacheid)) {
+            $cachettl = $this->config->get('cache_ttl');
+            // If cache is newer than $cachettl seconds, we use the cache!
+            if (time() - $cacheid['age'] < $cachettl) {
+               return $this->getCache($url);
+            }
         }
 
         return false;
