@@ -1245,6 +1245,7 @@ class PEAR_Registry extends PEAR
             $pkglist[] = substr($ent, 0, -4);
         }
         closedir($dp);
+        sort($pkglist);
         return $pkglist;
     }
 
