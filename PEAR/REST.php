@@ -174,9 +174,6 @@ class PEAR_REST
     {
         if (!is_array($cacheid)) {
             $cacheid = $this->getCacheId($url);
-            if (!is_array($cacheid)) {
-                return false;    
-            }
         }
 
         $cachettl = $this->config->get('cache_ttl');
