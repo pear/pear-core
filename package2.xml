@@ -109,6 +109,7 @@
 * PR #105: Sort list of packages
 * PR #106: Update REST.php
 * PR #107: Update .travis.yml to include PHP 7.4
+* PR #108: Remove unneeded code
  </notes>
  <contents>
   <dir name="/">
@@ -1301,6 +1302,7 @@ http://pear.php.net/advisory-20110228.txt
 * PR #105: Sort list of packages
 * PR #106: Update REST.php
 * PR #107: Update .travis.yml to include PHP 7.4
+* PR #108: Remove unneeded code
    </notes>
   </release>
 
