@@ -435,15 +435,16 @@ function cmdHelp($command)
 /**
  * error_handler
  *
- * @param mixed $errno  Error number
- * @param mixed $errmsg Message
- * @param mixed $file   Filename
- * @param mixed $line   Line number
+ * @param int    $errno      Error number
+ * @param string $errmsg     Message
+ * @param string $file       Filename
+ * @param int    $line       Line number
+ * @param array  $errcontext Error context
  *
  * @access public
  * @return boolean
  */
-function error_handler($errno, $errmsg, $file, $line)
+function error_handler($errno, $errmsg, $file, $line, $errcontext = [])
 {
     if ($errno & E_STRICT) {
         return; // E_STRICT
