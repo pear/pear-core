@@ -11,10 +11,10 @@ php:
 jobs:
   fast_finish: true
   include:
-    - php: 5.4
-      dist: precise
     - php: 5.5
       dist: trusty
+    - php: 5.4
+      dist: precise
     
 install:
   - pear list
