@@ -22,7 +22,7 @@ jobs:
 install:
   - pear list
   - pear channel-update pear
-  - pear install -f pear-1.10.1
+  - pear install -f pear-1.10.11
   - pear install text_diff
   - pear list
   - sh scripts/pear.sh config-set umask 0022
