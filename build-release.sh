@@ -23,3 +23,5 @@ cd ../../
 rm go-pear.phar install-pear-nozlib.phar || true
 php make-gopear-phar.php
 php make-installpear-nozlib-phar.php
+
+rm -rf go-pear-tarballs
