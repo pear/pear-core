@@ -61,28 +61,11 @@ Test dependencies
 =========
 Releasing
 =========
-Create a PEAR package as well as phars for pear-less installation::
+Create a PEAR package, as well as phars for pear-less installation,
+simply run ``build-release.sh``).
 
-    $ rm -f PEAR-*.tgz
-    $ pear package package2.xml
-    $ cd go-pear-tarballs
-    $ rm -f PEAR-*
-    $ cp ../PEAR-*.tgz .
-    $ gunzip PEAR-*.tgz
-    $ pear download -Z Archive_Tar Console_Getopt Structures_Graph XML_Util
-    $ mkdir src && cd src
-    $ for i in ../*.tar; do tar xvf $i; done
-    $ mv *\/* .
-    $ cd ../../
-    $ php make-gopear-phar.php
-    $ php make-installpear-nozlib-phar.php
-
-(Or simply run ``build-release.sh``).
-
-``go-pear.phar`` is contains the PEAR installer installer that asks questions
-where to install it.
+``go-pear.phar`` contains the PEAR installer installer that asks where to install it.
 It is available from http://pear.php.net/go-pear.phar.
 
-``install-pear-nozlib.phar`` installs PEAR automatically without asking
-anything.
+``install-pear-nozlib.phar`` installs PEAR automatically without asking anything.
 It is shipped with PHP itself.
