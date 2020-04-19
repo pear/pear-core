@@ -129,7 +129,8 @@ class PEAR_RunTest
         while (true) {
             /* hide errors from interrupted syscalls */
             $r = $pipes;
-            $e = $w = null;
+            unset($r[0]);
+            $e = $w = [];
             $n = @stream_select($r, $w, $e, 60);
 
             if ($n === 0) {

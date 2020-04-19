@@ -1,5 +1,5 @@
 language: php
-sudo: false
+
 php:
   - nightly
   - 7.4
@@ -22,7 +22,12 @@ jobs:
 install:
   - pear list
   - pear channel-update pear
-  - pear install -f pear-1.10.1
+  - |
+      if [[ $TRAVIS_PHP_VERSION = 5* ]]; then
+        pear install -f pear-1.10.1
+      else
+        pear install -f pear-1.10.11
+      fi
   - pear install text_diff
   - pear list
   - sh scripts/pear.sh config-set umask 0022
