@@ -20,6 +20,7 @@ jobs:
       dist: precise
     
 install:
+  - pear version
   - pear list
   - pear channel-update pear
   - |
