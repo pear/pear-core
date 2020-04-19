@@ -1,0 +1,7 @@
+/.* export-ignore
+./build-release.sh export-ignore
+/go-* export-ignore
+/install-* export-ignore
+/make-* export-ignore
+./package2.xml export-ignore
+/tests export-ignore
