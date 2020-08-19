@@ -191,7 +191,7 @@ class PEAR_Builder extends PEAR_Common
 
         // msdev doesn't tell us the output directory :/
         // open the dsp, find /out and use that directory
-        $dsptext = join(file($dsp),'');
+        $dsptext = join('', file($dsp));
 
         // this regex depends on the build platform and type having been
         // correctly identified above.
