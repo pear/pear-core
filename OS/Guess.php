@@ -182,10 +182,8 @@ class OS_Guess
     function _determineIfPowerpc($cpu, $parts)
     {
         $n = count($parts);
-        if ($cpu == 'Macintosh') {
-            if ($parts[$n - 2] == 'Power') {
-                $cpu = 'powerpc';
-            }
+        if ($cpu == 'Macintosh' && $parts[$n - 2] == 'Power') {
+            $cpu = 'powerpc';
         }
         return $cpu;
     }
@@ -199,16 +197,17 @@ class OS_Guess
         $major = $minor = 0;
         include_once "System.php";
 
-        if (@is_link('/lib64/libc.so.6')) {
-            // Let's try reading the libc.so.6 symlink
-            if (preg_match('/^libc-(.*)\.so$/', basename(readlink('/lib64/libc.so.6')), $matches)) {
-                list($major, $minor) = explode('.', $matches[1]);
-            }
-        } else if (@is_link('/lib/libc.so.6')) {
-            // Let's try reading the libc.so.6 symlink
-            if (preg_match('/^libc-(.*)\.so$/', basename(readlink('/lib/libc.so.6')), $matches)) {
-                list($major, $minor) = explode('.', $matches[1]);
-            }
+        // Let's try reading the libc.so.6 symlink
+        if ((@is_link('/lib64/libc.so.6'))
+            && (preg_match('/^libc-(.*)\.so$/', basename(readlink('/lib64/libc.so.6')), $matches))
+        ) {
+            list($major, $minor) = explode('.', $matches[1]);
+
+        // Let's try reading the libc.so.6 symlink
+        } elseif ((@is_link('/lib/libc.so.6'))
+            && (preg_match('/^libc-(.*)\.so$/', basename(readlink('/lib/libc.so.6')), $matches))
+        ) {
+            list($major, $minor) = explode('.', $matches[1]);
         }
         // Use glibc's <features.h> header file to
         // get major and minor version number:
