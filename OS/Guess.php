@@ -4,14 +4,14 @@
  *
  * PHP versions 4 and 5
  *
- * @category   pear
- * @package    PEAR
- * @author     Stig Bakken <ssb@php.net>
- * @author     Gregory Beaver <cellog@php.net>
- * @copyright  1997-2009 The Authors
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @link       http://pear.php.net/package/PEAR
- * @since      File available since PEAR 0.1
+ * @category  pear
+ * @package   PEAR
+ * @author    Stig Bakken <ssb@php.net>
+ * @author    Gregory Beaver <cellog@php.net>
+ * @copyright 1997-2009 The Authors
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @link      http://pear.php.net/package/PEAR
+ * @since     File available since PEAR 0.1
  */
 
 // {{{ uname examples
@@ -80,15 +80,15 @@
  *
  * This class uses php_uname() to grok information about the current OS
  *
- * @category   pear
- * @package    PEAR
- * @author     Stig Bakken <ssb@php.net>
- * @author     Gregory Beaver <cellog@php.net>
- * @copyright  1997-2009 The Authors
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: @package_version@
- * @link       http://pear.php.net/package/PEAR
- * @since      Class available since Release 0.1
+ * @category  pear
+ * @package   PEAR
+ * @author    Stig Bakken <ssb@php.net>
+ * @author    Gregory Beaver <cellog@php.net>
+ * @copyright 1997-2009 The Authors
+ * @license   http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version   Release: @package_version@
+ * @link      http://pear.php.net/package/PEAR
+ * @since     Class available since Release 0.1
  */
 class OS_Guess
 {
@@ -157,18 +157,10 @@ class OS_Guess
                 $sysname = 'darwin';
                 $nodename = $parts[2];
                 $release = $parts[3];
-                if ($cpu == 'Macintosh') {
-                    if ($parts[$n - 2] == 'Power') {
-                        $cpu = 'powerpc';
-                    }
-                }
+                $cpu = _determineIfPowerpc($cpu, $parts);
                 break;
             case 'Darwin' :
-                if ($cpu == 'Macintosh') {
-                    if ($parts[$n - 2] == 'Power') {
-                        $cpu = 'powerpc';
-                    }
-                }
+                $cpu = _determineIfPowerpc($cpu, $parts);
                 $release = preg_replace('/^([0-9]+\.[0-9]+).*/', '\1', $parts[2]);
                 break;
             default:
@@ -185,6 +177,17 @@ class OS_Guess
             $cpu = $cpumap[$cpu];
         }
         return array($sysname, $release, $cpu, $extra, $nodename);
+    }
+
+    function _determineIfPowerpc($cpu, $parts)
+    {
+        $n = count($parts);
+        if ($cpu == 'Macintosh') {
+            if ($parts[$n - 2] == 'Power') {
+                $cpu = 'powerpc';
+            }
+        }
+        return $cpu;
     }
 
     function _detectGlibcVersion()
@@ -209,9 +212,10 @@ class OS_Guess
         }
         // Use glibc's <features.h> header file to
         // get major and minor version number:
-        if (!($major && $minor) &&
-              @file_exists('/usr/include/features.h') &&
-              @is_readable('/usr/include/features.h')) {
+        if (!($major && $minor)
+            && @file_exists('/usr/include/features.h')
+            && @is_readable('/usr/include/features.h')
+        ) {
             if (!@file_exists('/usr/bin/cpp') || !@is_executable('/usr/bin/cpp')) {
                 $features_file = fopen('/usr/include/features.h', 'rb');
                 while (!feof($features_file)) {
@@ -229,7 +233,7 @@ class OS_Guess
                         continue;
                     }
 
-                    if (strpos($line, '__GLIBC_MINOR__'))  {
+                    if (strpos($line, '__GLIBC_MINOR__')) {
                         // got the minor version number
                         // #define __GLIBC_MINOR__ version
                         $line = preg_split('/\s+/', $line);
@@ -244,7 +248,7 @@ class OS_Guess
                 if (!isset($glibc_major) || !isset($glibc_minor)) {
                     return $glibc = '';
                 }
-                return $glibc = 'glibc' . trim($glibc_major) . "." . trim($glibc_minor) ;
+                return $glibc = 'glibc' . trim($glibc_major) . "." . trim($glibc_minor);
             } // no cpp
 
             $tmpfile = System::mktemp("glibctest");
