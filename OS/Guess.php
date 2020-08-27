@@ -138,13 +138,9 @@ class OS_Guess
                 $release = "$parts[3].$parts[2]";
                 break;
             case 'Windows' :
-                switch ($parts[1]) {
-                    case '95/98':
-                        $release = '9x';
-                        break;
-                    default:
-                        $release = $parts[1];
-                        break;
+                $release = $parts[1];
+                if ($release == '95/98') {
+                    $release = '9x';
                 }
                 $cpu = 'i386';
                 break;
@@ -214,62 +210,12 @@ class OS_Guess
 
         // Use glibc's <features.h> header file to
         // get major and minor version number:
-        if (!($major && $minor)
-            && @file_exists('/usr/include/features.h')
-            && @is_readable('/usr/include/features.h')
-        ) {
-            if (!@file_exists('/usr/bin/cpp') || !@is_executable('/usr/bin/cpp')) {
-                $features_file = fopen('/usr/include/features.h', 'rb');
-                while (!feof($features_file)) {
-                    $line = fgets($features_file, 8192);
-                    if (!$line || (strpos($line, '#define') === false)) {
-                        continue;
-                    }
-                    if (strpos($line, '__GLIBC__')) {
-                        // major version number #define __GLIBC__ version
-                        $line = preg_split('/\s+/', $line);
-                        $glibc_major = trim($line[2]);
-                        if (isset($glibc_minor)) {
-                            break;
-                        }
-                        continue;
-                    }
-
-                    if (strpos($line, '__GLIBC_MINOR__')) {
-                        // got the minor version number
-                        // #define __GLIBC_MINOR__ version
-                        $line = preg_split('/\s+/', $line);
-                        $glibc_minor = trim($line[2]);
-                        if (isset($glibc_major)) {
-                            break;
-                        }
-                        continue;
-                    }
-                }
-                fclose($features_file);
-                if (!isset($glibc_major) || !isset($glibc_minor)) {
-                    return $glibc = '';
-                }
-                return $glibc = 'glibc' . trim($glibc_major) . "." . trim($glibc_minor);
-            } // no cpp
-
-            $tmpfile = System::mktemp("glibctest");
-            $fp = fopen($tmpfile, "w");
-            fwrite($fp, "#include <features.h>\n__GLIBC__ __GLIBC_MINOR__\n");
-            fclose($fp);
-            $cpp = popen("/usr/bin/cpp $tmpfile", "r");
-            while ($line = fgets($cpp, 1024)) {
-                if ($line[0] == '#' || trim($line) == '') {
-                    continue;
-                }
-
-                if (list($major, $minor) = explode(' ', trim($line))) {
-                    break;
-                }
-            }
-            pclose($cpp);
-            unlink($tmpfile);
-        } // features.h
+        if (!($major && $minor)) {
+            $versions = $this->_readLibCVersionFromFeaturesHeaderFile();
+        }
+        if (is_array($versions) && $versions != []) {
+            list($major, $minor) = $versions;
+        }
 
         if (!($major && $minor)) {
             return $glibc = '';
@@ -287,6 +233,72 @@ class OS_Guess
             $versions = explode('.', $matches[1]);
         }
         return $versions;
+    }
+
+
+    function _readLibCVersionFromFeaturesHeaderFile()
+    {
+        $features_header_file = '/usr/include/features.h';
+        if ((@file_exists($features_header_file)
+            && @is_readable($features_header_file))
+        ) {
+            return array();
+        }
+        if (!@file_exists('/usr/bin/cpp') || !@is_executable('/usr/bin/cpp')) {
+            $features_file = fopen($features_header_file, 'rb');
+            while (!feof($features_file)) {
+                $line = fgets($features_file, 8192);
+                if (!$line || (strpos($line, '#define') === false)) {
+                    continue;
+                }
+                if (strpos($line, '__GLIBC__')) {
+                    // major version number #define __GLIBC__ version
+                    $line = preg_split('/\s+/', $line);
+                    $glibc_major = trim($line[2]);
+                    if (isset($glibc_minor)) {
+                        break;
+                    }
+                    continue;
+                }
+
+                if (strpos($line, '__GLIBC_MINOR__')) {
+                    // got the minor version number
+                    // #define __GLIBC_MINOR__ version
+                    $line = preg_split('/\s+/', $line);
+                    $glibc_minor = trim($line[2]);
+                    if (isset($glibc_major)) {
+                        break;
+                    }
+                }
+            }
+            fclose($features_file);
+            if (!isset($glibc_major) || !isset($glibc_minor)) {
+                return array();
+            }
+            return array(trim($glibc_major), trim($glibc_minor));
+        } // no cpp
+
+        $tmpfile = System::mktemp("glibctest");
+        $fp = fopen($tmpfile, "w");
+        fwrite($fp, "#include <features.h>\n__GLIBC__ __GLIBC_MINOR__\n");
+        fclose($fp);
+        $cpp = popen("/usr/bin/cpp $tmpfile", "r");
+        $major = null;
+        $minor = null;
+        while ($line = fgets($cpp, 1024)) {
+            if ($line[0] == '#' || trim($line) == '') {
+                continue;
+            }
+
+            if (list($major, $minor) = explode(' ', trim($line))) {
+                break;
+            }
+        }
+        pclose($cpp);
+        unlink($tmpfile);
+        if ($major !== null && $minor !== null) {
+            return [$major, $minor];
+        }
     }
 
     function getSignature()
