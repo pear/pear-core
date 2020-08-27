@@ -197,18 +197,21 @@ class OS_Guess
         $major = $minor = 0;
         include_once "System.php";
 
-        // Let's try reading the libc.so.6 symlink
-        if ((@is_link('/lib64/libc.so.6'))
-            && (preg_match('/^libc-(.*)\.so$/', basename(readlink('/lib64/libc.so.6')), $matches))
-        ) {
-            list($major, $minor) = explode('.', $matches[1]);
-
-        // Let's try reading the libc.so.6 symlink
-        } elseif ((@is_link('/lib/libc.so.6'))
-            && (preg_match('/^libc-(.*)\.so$/', basename(readlink('/lib/libc.so.6')), $matches))
-        ) {
-            list($major, $minor) = explode('.', $matches[1]);
+        // Let's try reading possible libc.so.6 symlinks
+        $libcs = array(
+            '/lib64/libc.so.6',
+            '/lib/libc.so.6',
+            '/lib/i386-linux-gnu/libc.so.6'
+        );
+        $versions = array();
+        foreach ($libcs as $file) {
+            $versions = $this->_readLibCVersionFromSymlink($file);
+            if ($versions != []) {
+                list($major, $minor) = $versions;
+                break;
+            }
         }
+
         // Use glibc's <features.h> header file to
         // get major and minor version number:
         if (!($major && $minor)
@@ -273,6 +276,17 @@ class OS_Guess
         }
 
         return $glibc = "glibc{$major}.{$minor}";
+    }
+
+    function _readLibCVersionFromSymlink($file)
+    {
+        $versions = [];
+        if (@is_link($file)
+            && (preg_match('/^libc-(.*)\.so$/', basename(readlink($file)), $matches))
+        ) {
+            $versions = explode('.', $matches[1]);
+        }
+        return $versions;
     }
 
     function getSignature()
