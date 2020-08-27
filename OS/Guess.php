@@ -226,7 +226,7 @@ class OS_Guess
 
     function _readGlibCVersionFromSymlink($file)
     {
-        $versions = [];
+        $versions = array();
         if (@is_link($file)
             && (preg_match('/^libc-(.*)\.so$/', basename(readlink($file)), $matches))
         ) {
@@ -256,7 +256,7 @@ class OS_Guess
         $features_file = fopen($features_header_file, 'rb');
         while (!feof($features_file)) {
             $line = fgets($features_file, 8192);
-            if (!$line || (strpos($line, '#define') === false)) {
+            if (!$this->_IsADefinition($line)) {
                 continue;
             }
             if (strpos($line, '__GLIBC__')) {
@@ -284,6 +284,14 @@ class OS_Guess
             return array();
         }
         return array(trim($glibc_major), trim($glibc_minor));
+    }
+
+    function _IsADefinition($line)
+    {
+        if ($line === false) {
+            return false;
+        }
+        return strpos(trim($line), '#define') !== false;
     }
 
     function _fromGlibCTest()
@@ -368,12 +376,16 @@ class OS_Guess
     function _matchFragment($fragment, $value)
     {
         if (strcspn($fragment, '*?') < strlen($fragment)) {
-            $reg = '/^' . str_replace(array('*', '?', '/'), array('.*', '.', '\\/'), $fragment) . '\\z/';
+            $expression = str_replace(
+                array('*', '?', '/'),
+                array('.*', '.', '\\/'),
+                $fragment
+            );
+            $reg = '/^' . $expression . '\\z/';
             return preg_match($reg, $value);
         }
         return ($fragment == '*' || !strcasecmp($fragment, $value));
     }
-
 }
 /*
  * Local Variables:
