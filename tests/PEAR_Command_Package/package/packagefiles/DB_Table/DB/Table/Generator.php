@@ -750,13 +750,13 @@ class DB_Table_Generator
                 }
                 $t[] = $indent . "'" . $key . "'" . ' => ' . $value ;
             }
-            $v = $v . implode($t,",\n") . "\n";
+            $v = $v . implode(",\n", $t) . "\n";
             $indent = substr($indent, 0, -4);
             $v = $v . $indent . ")";
             $u[] = $v;
 
         } //end loop over columns
-        $s[] = implode($u,",\n\n") . "\n";
+        $s[] = implode(",\n\n", $u) . "\n";
         $indent = substr($indent, 0, -4);
         $s[] = $indent . ");\n";
 
@@ -778,7 +778,7 @@ class DB_Table_Generator
                     foreach ($cols as $value) {
                         $t[] = $indent . "'{$value}'";
                     }
-                    $v = $v . implode($t,",\n") . "\n";
+                    $v = $v . implode(",\n", $t) . "\n";
                     $indent = substr($indent, 0, -4);
                     $v = $v . $indent . ")\n";
                 } else {
@@ -788,7 +788,7 @@ class DB_Table_Generator
                 $v = $v . $indent . ")";
                 $u[] = $v;
             }
-            $s[] = implode($u,",\n\n") . "\n";
+            $s[] = implode(",\n\n", $u) . "\n";
             $indent = substr($indent, 0, -4);
             $s[] = $indent . ");\n";
         }
@@ -802,7 +802,7 @@ class DB_Table_Generator
         $s[] = $indent . '}';
 
         // Implode and return lines of class definition
-        return implode($s,"\n") . "\n";
+        return implode("\n", $s) . "\n";
         
     }
 
@@ -848,7 +848,7 @@ class DB_Table_Generator
             $s[] = $this->buildTableClass($table) . "\n";
         }
         $s[] = '?>';
-        return implode($s,"\n");
+        return implode("\n", $s);
     }
 
 // }}}
@@ -895,7 +895,7 @@ class DB_Table_Generator
                 $this->getTableDefinition($table);
                 $s[] = $this->buildTableClass($table) ;
                 $s[] = '?>';
-                $out = implode($s,"\n");
+                $out = implode("\n", $s);
                 $file = fopen( $filename, "w");
                 fputs($file, $out);
                 fclose($file);
