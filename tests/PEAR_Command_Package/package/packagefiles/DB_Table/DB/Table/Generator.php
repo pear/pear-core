@@ -750,13 +750,13 @@ class DB_Table_Generator
                 }
                 $t[] = $indent . "'" . $key . "'" . ' => ' . $value ;
             }
-            $v = $v . implode(",\n", $t) . "\n";
+            $v = $v . implode(",\n",$t) . "\n";
             $indent = substr($indent, 0, -4);
             $v = $v . $indent . ")";
             $u[] = $v;
 
         } //end loop over columns
-        $s[] = implode(",\n\n", $u) . "\n";
+        $s[] = implode(",\n\n",$u) . "\n";
         $indent = substr($indent, 0, -4);
         $s[] = $indent . ");\n";
 
@@ -778,7 +778,7 @@ class DB_Table_Generator
                     foreach ($cols as $value) {
                         $t[] = $indent . "'{$value}'";
                     }
-                    $v = $v . implode(",\n", $t) . "\n";
+                    $v = $v . implode(",\n",$t) . "\n";
                     $indent = substr($indent, 0, -4);
                     $v = $v . $indent . ")\n";
                 } else {
@@ -788,7 +788,7 @@ class DB_Table_Generator
                 $v = $v . $indent . ")";
                 $u[] = $v;
             }
-            $s[] = implode(",\n\n", $u) . "\n";
+            $s[] = implode(",\n\n",$u) . "\n";
             $indent = substr($indent, 0, -4);
             $s[] = $indent . ");\n";
         }
@@ -802,7 +802,7 @@ class DB_Table_Generator
         $s[] = $indent . '}';
 
         // Implode and return lines of class definition
-        return implode("\n", $s) . "\n";
+        return implode("\n",$s) . "\n";
         
     }
 
@@ -848,7 +848,7 @@ class DB_Table_Generator
             $s[] = $this->buildTableClass($table) . "\n";
         }
         $s[] = '?>';
-        return implode("\n", $s);
+        return implode("\n",$s);
     }
 
 // }}}
@@ -895,7 +895,7 @@ class DB_Table_Generator
                 $this->getTableDefinition($table);
                 $s[] = $this->buildTableClass($table) ;
                 $s[] = '?>';
-                $out = implode("\n", $s);
+                $out = implode("\n",$s);
                 $file = fopen( $filename, "w");
                 fputs($file, $out);
                 fclose($file);
@@ -1057,7 +1057,7 @@ class DB_Table_Generator
             $filename = "Database.php";
         }
         $file = fopen($filename, "w");
-        $out = implode("\n", $d);
+        $out = implode("\n",$d);
         fputs($file, $out);
         fclose($file);
     }
