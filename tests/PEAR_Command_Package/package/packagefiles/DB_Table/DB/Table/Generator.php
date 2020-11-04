@@ -750,7 +750,7 @@ class DB_Table_Generator
                 }
                 $t[] = $indent . "'" . $key . "'" . ' => ' . $value ;
             }
-            $v = $v . implode($t,",\n") . "\n";
+            $v = $v . implode(",\n",$t) . "\n";
             $indent = substr($indent, 0, -4);
             $v = $v . $indent . ")";
             $u[] = $v;
