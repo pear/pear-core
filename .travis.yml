@@ -8,6 +8,9 @@ php:
   - 7.1
   - 7.0
   - 5.6
+arch:
+  - ppc64le
+  - amd64
 
 jobs:
   fast_finish: true
@@ -18,6 +21,13 @@ jobs:
       dist: trusty
     - php: 5.4
       dist: precise
+  exclude:
+    - php: 5.5
+      dist: trusty
+      arch: ppc64le
+    - php: 5.4
+      dist: precise
+      arch: ppc64le
     
 install:
   - pear version
