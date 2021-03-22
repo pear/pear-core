@@ -2,6 +2,7 @@ language: php
 
 php:
   - nightly
+  - 8.0
   - 7.4
   - 7.3
   - 7.2
@@ -19,15 +20,10 @@ jobs:
   include:
     - php: 5.5
       dist: trusty
+      arch: amd64
     - php: 5.4
       dist: precise
-  exclude:
-    - php: 5.5
-      dist: trusty
-      arch: ppc64le
-    - php: 5.4
-      dist: precise
-      arch: ppc64le
+      arch: amd64
     
 install:
   - pear version
