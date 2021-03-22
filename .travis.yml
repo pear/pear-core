@@ -39,6 +39,8 @@ install:
   - pear list
   - sh scripts/pear.sh config-set umask 0022
   - sh scripts/pear.sh config-set umask 0022 system
+before_script:
+  - phpenv config-rm xdebug.ini
 script:
   - umask 0022
   - sh scripts/pear.sh run-tests -q -d -r tests
