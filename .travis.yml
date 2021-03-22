@@ -10,7 +10,6 @@ php:
   - 7.0
   - 5.6
 arch:
-  - ppc64le
   - amd64
 
 jobs:
