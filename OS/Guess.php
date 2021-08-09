@@ -153,10 +153,10 @@ class OS_Guess
                 $sysname = 'darwin';
                 $nodename = $parts[2];
                 $release = $parts[3];
-                $cpu = _determineIfPowerpc($cpu, $parts);
+                $cpu = $this->_determineIfPowerpc($cpu, $parts);
                 break;
             case 'Darwin' :
-                $cpu = _determineIfPowerpc($cpu, $parts);
+                $cpu = $this->_determineIfPowerpc($cpu, $parts);
                 $release = preg_replace('/^([0-9]+\.[0-9]+).*/', '\1', $parts[2]);
                 break;
             default:
