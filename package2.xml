@@ -61,7 +61,7 @@
   <name>Christian Weiske</name>
   <user>cweiske</user>
   <email>cweiske@php.net</email>
-  <active>yes</active>
+  <active>no</active>
  </lead>
  <lead>
   <name>Chuck Burgess</name>
@@ -93,9 +93,9 @@
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2020-04-19</date>
+ <date>2021-08-10</date>
  <version>
-  <release>1.10.12</release>
+  <release>1.10.13</release>
   <api>1.10.1</api>
  </version>
  <stability>
@@ -104,7 +104,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-* adjust dependencies based on new releases
+* PR #114: unsupported protocol - use --force to continue
+* PR #117: Add $this operator to _determineIfPowerpc calls
  </notes>
  <contents>
   <dir name="/">
@@ -1301,6 +1302,23 @@ http://pear.php.net/advisory-20110228.txt
    <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
    <notes>
 * adjust dependencies based on new releases
+   </notes>
+  </release>
+
+  <release>
+   <date>2021-08-10</date>
+   <version>
+    <release>1.10.13</release>
+    <api>1.10.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+* PR #114: unsupported protocol - use --force to continue
+* PR #117: Add $this operator to _determineIfPowerpc calls
    </notes>
   </release>
 
