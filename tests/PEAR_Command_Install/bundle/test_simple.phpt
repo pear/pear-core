@@ -15,7 +15,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 
 $path = dirname(__FILE__)  . DIRECTORY_SEPARATOR;
 $pathtopackagexml = $path .
-    'packages'. DIRECTORY_SEPARATOR . 'Archive_Tar-1.2.tgz';
+    'packages'. DIRECTORY_SEPARATOR . 'Archive_Tar-1.4.14.tgz';
 $ap = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'Archive_Tar';
 chdir($temp_path);
 $phpunit->assertFileNotExists($temp_path . '/Archive_Tar', 'before');

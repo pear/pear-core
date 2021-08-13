@@ -293,7 +293,7 @@ Sample 2 :
 How it works :
   Simply call the addModify() method with the right parameters.
 
-Method : addString($p_filename, $p_string)
+Method : addString($p_filename, $p_string, $p_datetime, $p_params)
 Description :
   This method add a single string as a file at the
   end of the existing archive. If the archive does not yet exists it
@@ -302,12 +302,26 @@ Arguments :
   $p_filename : A string which contains the full filename path
                 that will be associated with the string.
   $p_string :   The content of the file added in the archive.
+  $p_datetime : (Optional) Timestamp of the file (default = now)
+  $p_params :   (Optional) Various file metadata:
+                    stamp - As above, timestamp of the file
+                    mode - UNIX-style permissions (default 0600)
+                    type - Is this a regular file or link (see TAR
+                           format spec for how to create a hard/symlink)
+                    uid - UNIX-style user ID (default 0 = root)
+                    gid - UNIX-style group ID (default 0 = root)
 Return value :
   true on success, false on error.
 Sample 1 :
   $v_archive = & new Archive_Tar($p_filename);
   $v_archive->setErrorHandling(PEAR_ERROR_PRINT);
   $v_result = $v_archive->addString('data/test.txt', 'This is the text of the string');
+  $v_result = $v_archive->addString(
+                  'data/test.sh',
+                  "#!/bin/sh\necho 'Hello'",
+                  time(),
+                  array( "mode" => 0755, "uid" => 34 )
+              );
 
 
 Method : extract($p_path = "")
