@@ -11,7 +11,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $temp_path2 = str_replace(DIRECTORY_SEPARATOR, '/', $temp_path);
-if ($temp_path2{0} != '/') {
+if ($temp_path2[0] != '/') {
     $temp_path2 = substr($temp_path2, 2);
 }
 $e = $command->run('config-create', array(), array($temp_path2 . '/nomake', $temp_path . DIRECTORY_SEPARATOR
