@@ -104,7 +104,7 @@ class PEAR_Proxy
         stream_set_blocking ($fp, true);
         $crypto_res = stream_socket_enable_crypto($fp, true, $crypto_method);
         if (!$crypto_res) {
-            return PEAR::raiseError("Could not establish SSL connection through proxy $proxy_host:$proxy_port: $crypto_res");
+            return PEAR::raiseError("Could not establish SSL connection through proxy $this->proxy_host:$this->proxy_port: $crypto_res");
         }
 
         return true;
@@ -164,7 +164,7 @@ class PEAR_Proxy
             );
 
             if (!$fp) {
-                return PEAR::raiseError("Connection to `$proxy_host:$proxy_port' failed: $errstr", -9276);
+                return PEAR::raiseError("Connection to `$this->proxy_host:$this->proxy_port' failed: $errstr", -9276);
             }
 
             /* HTTPS is to be used and we have a proxy, use CONNECT verb */
