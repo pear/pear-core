@@ -17,7 +17,7 @@ if test "x$PHP_PEAR_INSTALL_DIR" != "x"; then
   INCARG="-d include_path=$PHP_PEAR_INSTALL_DIR"
 else
   if test "@php_dir@" = '@'php_dir'@'; then
-    INCDIR=`dirname $0`
+    INCDIR=$(dirname "$0")
     INCARG=""
   else
     INCDIR="@php_dir@"
@@ -25,4 +25,4 @@ else
   fi
 fi
 
-exec $PHP -C -q $INCARG -d date.timezone=UTC -d output_buffering=1 -d variables_order=EGPCS -d open_basedir="" -d safe_mode=0 -d register_argc_argv="On" -d auto_prepend_file="" -d auto_append_file="" $INCDIR/pearcmd.php "$@"
+exec $PHP -C -q "$INCARG" -d date.timezone=UTC -d output_buffering=1 -d variables_order=EGPCS -d open_basedir="" -d safe_mode=0 -d register_argc_argv="On" -d auto_prepend_file="" -d auto_append_file="" $INCDIR/pearcmd.php "$@"
