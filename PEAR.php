@@ -859,6 +859,7 @@ class PEAR_Error
     var $message              = '';
     var $userinfo             = '';
     var $backtrace            = null;
+    var $callback             = '';
 
     /**
      * PEAR_Error constructor
