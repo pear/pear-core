@@ -1529,11 +1529,11 @@ class PEAR_Installer extends PEAR_Downloader
         foreach ($built as $ext) {
             $bn = basename($ext['file']);
             list($_ext_name, $_ext_suff) = explode('.', $bn);
-            if ($_ext_suff == '.so' || $_ext_suff == '.dll') {
+            if ($_ext_suff == 'so' || $_ext_suff == 'dll') {
                 if (extension_loaded($_ext_name)) {
-                    $this->raiseError("Extension '$_ext_name' already loaded. " .
-                                      'Please unload it in your php.ini file ' .
-                                      'prior to install or upgrade');
+                    return $this->raiseError("Extension '$_ext_name' already loaded. " .
+                                             'Please unload it in your php.ini file ' .
+                                             'prior to install or upgrade');
                 }
                 $role = 'ext';
             } else {
