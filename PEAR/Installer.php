@@ -1271,7 +1271,7 @@ class PEAR_Installer extends PEAR_Downloader
                 if (count($test)) {
                     $msg = "$channel/$pkgname: conflicting files found:\n";
                     $longest = max(array_map("strlen", array_keys($test)));
-                    $fmt = "%${longest}s (%s)\n";
+                    $fmt = "%{$longest}s (%s)\n";
                     foreach ($test as $file => $info) {
                         if (!is_array($info)) {
                             $info = array('pear.php.net', $info);
