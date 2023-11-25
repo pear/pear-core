@@ -9,6 +9,7 @@
  * @author     Stig Bakken <ssb@php.net>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @link       http://pear.php.net/package/PEAR
+ */
 
 require_once "PEAR/Command/Common.php";
 
