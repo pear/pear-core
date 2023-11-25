@@ -1026,12 +1026,24 @@ class PEAR_Config extends PEAR
 
         $fp = @fopen($file, "w");
         if (!$fp) {
-            return $this->raiseError("PEAR_Config::writeConfigFile fopen('$file','w') failed ($php_errormsg)");
+            $error = error_get_last();
+            if (is_array($error) && array_key_exists('message', $error)) {
+                $error_message = "(" . $error['message'] . ")";
+            } else {
+                $error_message = "";
+            }
+            return $this->raiseError("PEAR_Config::writeConfigFile fopen('$file','w') failed ($error_message)");
         }
 
         $contents = "#PEAR_Config 0.9\n" . serialize($data);
         if (!@fwrite($fp, $contents)) {
-            return $this->raiseError("PEAR_Config::writeConfigFile: fwrite failed ($php_errormsg)");
+            $error = error_get_last();
+            if (is_array($error) && array_key_exists('message', $error)) {
+                $error_message = "(" . $error['message'] . ")";
+            } else {
+                $error_message = "";
+            }
+            return $this->raiseError("PEAR_Config::writeConfigFile: fwrite failed $error_message");
         }
         return true;
     }

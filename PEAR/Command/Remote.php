@@ -769,7 +769,13 @@ parameter.
         }
 
         if (!($dp = @opendir($cache_dir))) {
-            return $this->raiseError("opendir($cache_dir) failed: $php_errormsg");
+            $error = error_get_last();
+            if (is_array($error) && array_key_exists('message', $error)) {
+                $error_message = ": " . $error['message'];
+            } else {
+                $error_message = "";
+            }
+            return $this->raiseError("opendir($cache_dir) failed $error_message");
         }
 
         if ($verbose >= 1) {
@@ -784,7 +790,13 @@ parameter.
                     $ok = @unlink($path);
                 } else {
                     $ok = false;
-                    $php_errormsg = '';
+                }
+
+                $error = error_get_last();
+                if (is_array($error) && array_key_exists('message', $error)) {
+                    $error_message = $error['message'];
+                } else {
+                    $error_message = "";
                 }
 
                 if ($ok) {
@@ -793,7 +805,7 @@ parameter.
                     }
                     $num++;
                 } elseif ($verbose >= 1) {
-                    $output .= "failed to delete $path $php_errormsg\n";
+                    $output .= "failed to delete $path $error_message\n";
                 }
             }
         }

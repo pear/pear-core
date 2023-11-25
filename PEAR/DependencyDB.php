@@ -501,9 +501,13 @@ class PEAR_DependencyDB
         }
 
         if (!is_resource($this->_lockFp)) {
-            $last_errormsg = error_get_last();
-            return PEAR::raiseError("could not create Dependency lock file" .
-                                     (isset($last_errormsg) ? ": " . $last_errormsg : ""));
+            $error = error_get_last();
+            if (is_array($error) && array_key_exists('message', $error)) {
+                $error_message = ": " . $error['message'];
+            } else {
+                $error_message = "";
+            }
+            return PEAR::raiseError("could not create Dependency lock file $error_message ");
         }
 
         if (!(int)flock($this->_lockFp, $mode)) {

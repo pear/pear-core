@@ -780,8 +780,13 @@ class PEAR_Registry extends PEAR
 
         $fp = @fopen($this->filemap, 'r');
         if (!$fp) {
-            $last_errormsg = error_get_last();
-            return $this->raiseError('PEAR_Registry: could not open filemap "' . $this->filemap . '"', PEAR_REGISTRY_ERROR_FILE, null, null, $last_errormsg);
+            $error = error_get_last();
+            if (is_array($error) && array_key_exists('message', $error)) {
+                $error_message = $error['message'];
+            } else {
+                $error_message = "";
+            }
+            return $this->raiseError('PEAR_Registry: could not open filemap "' . $this->filemap . '"', PEAR_REGISTRY_ERROR_FILE, null, null, $error_message);
         }
 
         clearstatcache();
@@ -843,8 +848,13 @@ class PEAR_Registry extends PEAR
 
         if (!is_resource($this->lock_fp)) {
             $this->lock_fp = null;
-            return $this->raiseError("could not create lock file" .
-                                     (isset($php_errormsg) ? ": " . $php_errormsg : ""));
+            $error = error_get_last();
+            if (is_array($error) && array_key_exists($error, 'message')) {
+                $error_message = ":" . $error['message'];
+            } else {
+                $error_message = "";
+            }
+            return $this->raiseError("could not create lock file $error_message");
         }
 
         if (!(int)flock($this->lock_fp, $mode)) {

@@ -272,7 +272,13 @@ class test_PEAR_RemoteInstaller extends PEAR_RemoteInstaller {
         if (!$wp = @fopen($dest_file, 'wb')) {
             fclose($fp);
             if ($callback) {
-                call_user_func($callback, 'writefailed', array($dest_file, $php_errormsg));
+                $error = error_get_last();
+                if (is_array($error) && array_key_exists('message', $error)) {
+                    $error_message = $error['message'];
+                } else {
+                    $error_message = "";
+                }
+                call_user_func($callback, 'writefailed', array($dest_file, $error_message));
             }
             return PEAR::raiseError("could not open $dest_file for writing");
         }
@@ -294,10 +300,16 @@ class test_PEAR_RemoteInstaller extends PEAR_RemoteInstaller {
                 call_user_func($callback, 'bytesread', $bytes);
             }
             if (!@fwrite($wp, $data)) {
-                if ($callback) {
-                    call_user_func($callback, 'writefailed', array($dest_file, $php_errormsg));
+                $error = error_get_last();
+                if (is_array($error) && array_key_exists('message', $error)) {
+                    $error_message = $error['message'];
+                } else {
+                    $error_message = "";
                 }
-                return PEAR::raiseError("$dest_file: write failed ($php_errormsg)");
+                if ($callback) {
+                    call_user_func($callback, 'writefailed', array($dest_file, $error_message));
+                }
+                return PEAR::raiseError("$dest_file: write failed ($error_message)");
             }
         }
         fclose($wp);

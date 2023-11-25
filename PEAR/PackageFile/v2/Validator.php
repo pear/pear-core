@@ -1870,7 +1870,11 @@ class PEAR_PackageFile_v2_Validator
 
         // Silence this function so we can catch PHP Warnings and show our own custom message
         $tokens = @token_get_all($contents);
-        if (isset($php_errormsg)) {
+        $error = error_get_last();
+        if (is_array($error) && array_key_exists('message', $error)) {
+            $error_message = $error['message'];
+        }
+        if (isset($error_message)) {
             if (isset($this->_stack)) {
                 $pn = $this->_pf->getPackage();
                 $this->_stack->push(__FUNCTION__, 'warning',
