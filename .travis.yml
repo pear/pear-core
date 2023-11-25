@@ -38,6 +38,12 @@ install:
   - pear list
   - sh scripts/pear.sh config-set umask 0022
   - sh scripts/pear.sh config-set umask 0022 system
+  - |
+      if [[ $TRAVIS_PHP_VERSION = 5.4 ]]; then
+        echo "Skipping composer install check."
+      else
+        composer install
+      fi
 before_script:
   - phpenv config-rm xdebug.ini
 script:
