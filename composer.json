@@ -49,6 +49,9 @@
     "autoload": {
         "classmap": [
             "./"
+        ],
+	"exclude-from-classmap": [
+            "/tests/"
         ]
     },
     "include-path": [
