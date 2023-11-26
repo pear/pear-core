@@ -66,6 +66,7 @@
     },
     "type": "library",
     "require": {
+        "php": ">=5.4",
         "ext-pcre": "*",
         "ext-xml": "*",
         "pear/archive_tar": "*",
