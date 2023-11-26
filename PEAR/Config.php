@@ -727,7 +727,7 @@ class PEAR_Config extends PEAR
 
         $t_conf = new PEAR_Config($user_file, $system_file, false, $strict);
         if ($t_conf->_errorsFound > 0) {
-             return $t_conf->lastError;
+             return $t_conf->_lastError;
         }
 
         $GLOBALS['_PEAR_Config_instance'] = &$t_conf;
@@ -775,7 +775,7 @@ class PEAR_Config extends PEAR
             }
 
             $this->_errorsFound++;
-            $this->lastError = $data;
+            $this->_lastError = $data;
 
             return $data;
         }
@@ -928,7 +928,7 @@ class PEAR_Config extends PEAR
             }
 
             $this->_errorsFound++;
-            $this->lastError = $data;
+            $this->_lastError = $data;
 
             return $data;
         }
