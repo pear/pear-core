@@ -93,9 +93,9 @@
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2021-08-10</date>
+ <date>2023-11-26</date>
  <version>
-  <release>1.10.13</release>
+  <release>1.10.14</release>
   <api>1.10.1</api>
  </version>
  <stability>
@@ -104,8 +104,16 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-* PR #114: unsupported protocol - use --force to continue
-* PR #117: Add $this operator to _determineIfPowerpc calls
+* PR #112: Put glue and pieces parameters to implode in correct order for PHP 7.4+
+* PR #121: Fix PHP bug 81653: Typo in install-pear-nozlib.phar
+* PR #122: add %S EXPECTF capability
+* PR #124: Fix: Creation of dynamic property PEAR_Error::$callback is deprecated
+* PR #125: Fixed extension loaded check for pecl binaries
+* PR #126: Remove -n option from pecl.bat for shared extensions
+* PR #127: fix Using ${var} in strings is deprecated
+* PR #128: fix lingering license references to PHP license
+* PR #129: Exclude tests from composer classmap
+* PR #131: fix private lastError name
  </notes>
  <contents>
   <dir name="/">
@@ -1322,5 +1330,29 @@ http://pear.php.net/advisory-20110228.txt
    </notes>
   </release>
 
+  <release>
+   <date>2023-11-26</date>
+   <version>
+    <release>1.10.14</release>
+    <api>1.10.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+* PR #112: Put glue and pieces parameters to implode in correct order for PHP 7.4+
+* PR #121: Fix PHP bug 81653: Typo in install-pear-nozlib.phar
+* PR #122: add %S EXPECTF capability
+* PR #124: Fix: Creation of dynamic property PEAR_Error::$callback is deprecated
+* PR #125: Fixed extension loaded check for pecl binaries
+* PR #126: Remove -n option from pecl.bat for shared extensions
+* PR #127: fix Using ${var} in strings is deprecated
+* PR #128: fix lingering license references to PHP license
+* PR #129: Exclude tests from composer classmap
+* PR #131: fix private lastError name
+   </notes>
+  </release>
  </changelog>
 </package>
