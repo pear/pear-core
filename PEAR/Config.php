@@ -79,11 +79,7 @@ if (getenv('PHP_PEAR_HTTP_PROXY')) {
 if (getenv('PHP_PEAR_INSTALL_DIR')) {
     define('PEAR_CONFIG_DEFAULT_PHP_DIR', getenv('PHP_PEAR_INSTALL_DIR'));
 } else {
-    if (@file_exists($PEAR_INSTALL_DIR) && is_dir($PEAR_INSTALL_DIR)) {
-        define('PEAR_CONFIG_DEFAULT_PHP_DIR', $PEAR_INSTALL_DIR);
-    } else {
-        define('PEAR_CONFIG_DEFAULT_PHP_DIR', $PEAR_INSTALL_DIR);
-    }
+    define('PEAR_CONFIG_DEFAULT_PHP_DIR', $PEAR_INSTALL_DIR);
 }
 
 // Default for metadata_dir
