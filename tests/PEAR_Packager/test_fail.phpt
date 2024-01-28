@@ -18,6 +18,7 @@ $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' => 'Cannot package, errors in package file'),
 ), 'ret');
 $phpunit->assertIsa('PEAR_Error', $ret, 'bloob.xml');
+/*
 if (version_compare(phpversion(), '5.0.0', '>=')) {
     if (version_compare(phpversion(), '5.0.3', '>=')) {
         //yeesh, make up your mind, php devs!
@@ -27,6 +28,12 @@ if (version_compare(phpversion(), '5.0.0', '>=')) {
     }
 } else {
     $errmsg = 'XML error: no element found at line 1';
+}
+*/
+// Ubuntu used by Github Actions seems to have the above difference backported, mostly
+$errmsg = 'XML error: Invalid document end at line 1'; // got this on 5.6 and up
+if (version_compare(phpversion(), '5.6.0', '<')) {
+    $errmsg = 'XML error: no element found at line 1'; // got this on 5.5 & 5.4
 }
 $phpunit->assertEquals(array (
   0 => 
