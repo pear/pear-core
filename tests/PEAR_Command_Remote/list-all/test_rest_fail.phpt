@@ -9389,6 +9389,7 @@ $pearweb->addRESTConfig("http://pear.php.net/rest/p/validate_be/info.xml", '<?xm
  <r xlink:href="/rest/r/validate_be"/>
 </p>', 'text/xml');
 $command->run('list-all', array(), array());
+/*
 if (version_compare(phpversion(), '5.0.0', 'lt')) {
     $phpunit->assertErrors(array(
         array('package' => 'PEAR_Error', 'message' => 'The package list could not be fetched from the remote server. Please try again. (Debug info: "Invalid xml downloaded from "http://pear.php.net/rest/p/validate_be/info.xml": XML Error: \'undefined entity\' on line \'17\'")')
@@ -9398,6 +9399,16 @@ if (version_compare(phpversion(), '5.0.0', 'lt')) {
         array('package' => 'PEAR_Error', 'message' => 'The package list could not be fetched from the remote server. Please try again. (Debug info: "Invalid xml downloaded from "http://pear.php.net/rest/p/validate_be/info.xml": XML Error: \'Undeclared entity error\' on line \'17\'")')
     ), 'errors');
 }
+*/
+// Ubuntu used by Github Actions seems to have the above difference backported, mostly
+$message = "XML Error: 'Undeclared entity error' on line '17'";		// got this on 5.6 and up
+if (version_compare(phpversion(), '5.6.0', '<')) {
+    $message = "XML Error: 'undefined entity' on line '17'";		// got this on 5.5. & 5.4
+}
+$phpunit->assertErrors(array(
+    array('package' => 'PEAR_Error', 'message' => 'The package list could not be fetched from the remote server. Please try again. (Debug info: "Invalid xml downloaded from "http://pear.php.net/rest/p/validate_be/info.xml": ' . $message . '")')
+), 'errors');
+
 $phpunit->assertEquals(array (
   0 =>
   array (
