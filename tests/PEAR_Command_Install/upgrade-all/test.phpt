@@ -10232,7 +10232,11 @@ $command->run('upgrade-all', array(), array());
 $phpunit->assertNoErrors('after upgrade');
 
 $log = array_slice($fakelog->getLog(), 0, 5);
-function poop($a, $b) {return strnatcasecmp($a['info']['data'], $b['info']['data']);}
+function poop($a, $b) {
+    if (empty($a['info']['data'])) { $a['info']['data'] = ''; }
+    if (empty($b['info']['data'])) { $b['info']['data'] = ''; }
+    return strnatcasecmp($a['info']['data'], $b['info']['data']);
+}
 usort($log, 'poop');
 
 $phpunit->assertEquals(
