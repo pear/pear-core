@@ -12,6 +12,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 touch($temp_path . DIRECTORY_SEPARATOR . 'bloob.xml');
 $ret = $command->run('package-validate', array(), array($temp_path . DIRECTORY_SEPARATOR . 'bloob.xml'));
+/*
 if (version_compare(phpversion(), '5.0.0', '>=')) {
     if (version_compare(phpversion(), '5.0.3', '>=')) {
         $errmsg = 'XML error: Invalid document end at line 1';
@@ -20,6 +21,12 @@ if (version_compare(phpversion(), '5.0.0', '>=')) {
     }
 } else {
     $errmsg = 'XML error: no element found at line 1';
+}
+*/
+// Ubuntu used by Github Actions seems to have the above difference backported, mostly
+$errmsg = 'XML error: Invalid document end at line 1';	// got this on 5.6 and up
+if (version_compare(phpversion(), '5.6.0', '<')) {
+    $errmsg = 'XML error: no element found at line 1';	// got this on 5.5 & 5.4
 }
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile', 'message' => 'package.xml "' .
