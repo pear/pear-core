@@ -13,9 +13,9 @@ if (!function_exists('token_get_all')) {
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 
+/*
 // 5.2.9 and up has the proper error msg again
 $php5 = (version_compare(phpversion(), '5.0.0', '>=') && version_compare(phpversion(), '5.2.8', '<='));
-
 if ($php5) {
     $message = 'XML error: Empty document at line 1';
 } else {
@@ -26,6 +26,13 @@ if ($php5) {
         $message = 'XML error: Not well-formed (invalid token) at line 1';
     }
 }
+*/
+// Ubuntu used by Github Actions seems to have the above difference backported, mostly
+$message = 'XML error: Not well-formed (invalid token) at line 1';     // got this on 5.6 and up
+if (version_compare(phpversion(), '5.6.0', '<')) {
+    $message = 'XML error: not well-formed (invalid token) at line 1'; // got this on 5.5 & 5.4
+}
+
 
 $ret = $common->infoFromString('\\goober');
 $phpunit->assertErrors(array(
