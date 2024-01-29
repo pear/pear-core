@@ -20,6 +20,7 @@ $phpunit->assertErrors(array(
 ), '1 params');
 touch($temp_path . DIRECTORY_SEPARATOR . 'smong.xml');
 $e = $command->run('info', array(), array($temp_path . DIRECTORY_SEPARATOR . 'smong.xml'));
+/*
 if (version_compare(phpversion(), '5.0.0', '>=')) {
     if (version_compare(phpversion(), '5.0.3', '>=')) {
         $err = 'Invalid document end';
@@ -29,6 +30,13 @@ if (version_compare(phpversion(), '5.0.0', '>=')) {
 } else {
     $err = 'no element found';
 }
+*/
+// Ubuntu used by Github Actions seems to have the above difference backported, mostly
+$err = 'Invalid document end';     			// got this on 5.6 and up
+if (version_compare(phpversion(), '5.6.0', '<')) {
+    $err = 'no element found'; 				// got this on 5.5 & 5.4
+}
+
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_PackageFile', 'message' => 'package.xml "' . $temp_path . DIRECTORY_SEPARATOR . 'smong.xml" has no package.xml <package> version'),
     array('package' => 'PEAR_Error', 'message' => "XML error: $err at line 1"),

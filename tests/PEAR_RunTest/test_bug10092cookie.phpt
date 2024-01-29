@@ -10,7 +10,9 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 cookie1=val1  ; cookie2=val2%20; cookie3=val 3.; cookie 4= value 4 %3B; cookie1=bogus; %20cookie1=ignore;+cookie1=ignore;cookie1;cookie  5=%20 value; cookie%206=�;cookie+7=;$cookie.8;cookie-9=1;;;- & % $cookie 10=10
 --FILE--
 <?php
-if (version_compare(PHP_VERSION, '7.2.34') === -1) {
+//if (version_compare(PHP_VERSION, '7.2.34') === -1) {
+// although behavior is changed only in 7.2.34, test behavior implies that Ubuntu may have backported the cookie fix to 7.1, 7.0, and 5.6
+if (version_compare(PHP_VERSION, '5.6.40') === -1) {
     $expected = array(
         'cookie1'=> 'val1  ',
         'cookie2'=> 'val2 ',

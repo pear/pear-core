@@ -11,12 +11,19 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 $pathtopackagexml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'package.xml';
 $result = &$parser->parse('<xmlbad', PEAR_VALIDATE_NORMAL, $pathtopackagexml);
+/*
 if (version_compare(phpversion(), '5.0.0', '<')) {
     $message = 'XML error: unclosed token at line 1';
 } elseif (version_compare(phpversion(), '5.0.3', '<')) {
     $message = 'XML error: XML_ERR_GT_REQUIRED at line 1';
 } else {
     $message = 'XML error: > required at line 1';
+}
+*/
+// Ubuntu used by Github Actions seems to have the above difference backported, mostly
+$message = 'XML error: > required at line 1'; 		// got this on 5.6 and up
+if (version_compare(phpversion(), '5.6.0', '<')) {
+    $message = 'XML error: unclosed token at line 1'; 	// got this on 5.5 & 5.4
 }
 $phpunit->assertErrors(array(
     'message' => $message,
