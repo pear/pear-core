@@ -80,8 +80,5 @@
     },
     "replace": {
         "pear/pear-core-minimal": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "*"
     }
 }
