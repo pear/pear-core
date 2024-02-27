@@ -41,6 +41,8 @@ jobs:
           pear list
           pear config-set umask 0022
           sudo pear config-set umask 0022 system
+          pear config-show
+          php -m
 
       - name: Run tests
         run: |
