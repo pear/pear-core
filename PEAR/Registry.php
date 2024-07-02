@@ -780,7 +780,7 @@ class PEAR_Registry extends PEAR
 
         $fp = @fopen($this->filemap, 'r');
         if (!$fp) {
-            $last_errormsg = error_get_last();
+            $last_errormsg = error_get_last()["message"];
             return $this->raiseError('PEAR_Registry: could not open filemap "' . $this->filemap . '"', PEAR_REGISTRY_ERROR_FILE, null, null, $last_errormsg);
         }
 
