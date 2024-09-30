@@ -22,7 +22,12 @@
  * @copyright  2005-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  */
-error_reporting(error_reporting() & ~E_STRICT & ~E_DEPRECATED);
+$new_error_reporting = error_reporting() & ~E_DEPRECATED;
+if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 80400) {
+    $new_error_reporting &= ~E_STRICT;
+}
+error_reporting($new_error_reporting);
+unset($new_error_reporting);
 
 function replaceVersion($contents, $path)
 {
