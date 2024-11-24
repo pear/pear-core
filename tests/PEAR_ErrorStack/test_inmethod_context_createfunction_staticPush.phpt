@@ -24,11 +24,12 @@ $z = new test8;
 $z->test7();
 
 $ret = $stack->pop();
-$phpunit->assertEquals(array('file' => __FILE__,
-      'line' => $testline,
-      'function' => '{closure}',
-), $ret['context'], 'context');
-echo 'tests done';
+print_r($ret['context']);
 ?>
---EXPECT--
-tests done
+--EXPECTF--
+Array
+(
+    [file] => %s/test_inmethod_context_createfunction_staticPush.php
+    [line] => 4
+    [function] => {closur%s}
+)
