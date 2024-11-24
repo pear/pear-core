@@ -88,7 +88,11 @@ class PEAR_RunTest
         if (!defined('E_STRICT')) {
             define('E_STRICT', 0);
         }
-        $this->ini_overwrites[] = 'error_reporting=' . (E_ALL & ~(E_DEPRECATED | E_STRICT));
+        $excluded_error_reporting = E_DEPRECATED;
+        if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 80400) {
+            $excluded_error_reporting |= E_STRICT;
+        }
+        $this->ini_overwrites[] = 'error_reporting=' . (E_ALL & ~$excluded_error_reporting);
         if (is_null($logger)) {
             require_once 'PEAR/Common.php';
             $logger = new PEAR_Common;

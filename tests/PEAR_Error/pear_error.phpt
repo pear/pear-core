@@ -15,7 +15,7 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 
 include_once "PEAR.php";
 
-if (!defined('E_STRICT')) {
+if ((!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 80400) && !defined('E_STRICT')) {
     define('E_STRICT', -1);
 }
 if (!defined('E_DEPRECATED')) {
@@ -23,7 +23,7 @@ if (!defined('E_DEPRECATED')) {
 }
 
 function test_error_handler($errno, $errmsg, $file, $line) {
-    if ($errno == E_STRICT) {
+    if ((!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 80400) && $errno == E_STRICT) {
         return;
     }
     if ($errno == E_DEPRECATED) {

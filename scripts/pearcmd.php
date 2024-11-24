@@ -438,7 +438,7 @@ function cmdHelp($command)
  */
 function error_handler($errno, $errmsg, $file, $line)
 {
-    if ($errno & E_STRICT) {
+    if ((!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 80400) && ($errno & E_STRICT)) {
         return; // E_STRICT
     }
     if ($errno & E_DEPRECATED) {
@@ -455,7 +455,6 @@ function error_handler($errno, $errmsg, $file, $line)
         E_ERROR   =>  "Error",
         E_WARNING   =>  "Warning",
         E_PARSE   =>  "Parsing Error",
-        E_STRICT  => 'Strict Warning',
         E_NOTICE   =>  "Notice",
         E_CORE_ERROR  =>  "Core Error",
         E_CORE_WARNING  =>  "Core Warning",
@@ -465,6 +464,9 @@ function error_handler($errno, $errmsg, $file, $line)
         E_USER_WARNING =>  "User Warning",
         E_USER_NOTICE =>  "User Notice"
     );
+    if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 80400) {
+        $errortype[E_STRICT] = 'Strict Warning';
+    }
     $prefix = $errortype[$errno];
     global $_PEAR_PHPDIR;
     if (stristr($file, $_PEAR_PHPDIR)) {
