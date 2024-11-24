@@ -5,7 +5,7 @@ PEAR_RunTest --UPLOAD--
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
-if (version_compare(PHP_VERSION, '8.1.0', '>=')) {
+if (version_compare(PHP_VERSION, '8.1.0', '<')) {
     echo 'skip';
 }
 ?>
@@ -26,8 +26,10 @@ var_dump($a);
 --EXPECTF--
 array(2) {
   ["file1_txt"]=>
-  array(5) {
+  array(6) {
     ["name"]=>
+    string(13) "setup.php.inc"
+    ["full_path"]=>
     string(13) "setup.php.inc"
     ["type"]=>
     string(10) "text/plain"
@@ -39,8 +41,10 @@ array(2) {
     int(%d)
   }
   ["myfile2_txt"]=>
-  array(5) {
+  array(6) {
     ["name"]=>
+    string(17) "test_bug9971.phpt"
+    ["full_path"]=>
     string(17) "test_bug9971.phpt"
     ["type"]=>
     string(10) "text/plain"
