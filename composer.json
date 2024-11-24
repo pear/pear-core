@@ -79,6 +79,7 @@
         "pear/pear_frontend_web": "For Web support"
     },
     "replace": {
-        "pear/pear-core-minimal": "*"
+        "pear/pear-core-minimal": "*",
+        "pear/pear-exception": "*"
     }
 }
