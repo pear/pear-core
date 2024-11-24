@@ -1143,7 +1143,7 @@ class PEAR_Registry extends PEAR
         clearstatcache();
         $this->_closePackageFile($fp);
         $data = file_get_contents($this->_packageFileName($package, $channel));
-        $data = unserialize($data);
+        $data = @unserialize($data);
         if ($key === null) {
             return $data;
         }

@@ -560,7 +560,7 @@ class PEAR_DependencyDB
 
         clearstatcache();
         fclose($fp);
-        $data = unserialize(file_get_contents($this->_depdb));
+        $data = @unserialize(file_get_contents($this->_depdb));
         $this->_cache = $data;
         return $data;
     }

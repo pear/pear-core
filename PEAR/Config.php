@@ -1070,10 +1070,7 @@ class PEAR_Config extends PEAR
         }
 
         if ($version && version_compare("$version", '1', '<')) {
-            // no '@', it is possible that unserialize
-            // raises a notice but it seems to block IO to
-            // STDOUT if a '@' is used and a notice is raise
-            $data = unserialize($contents);
+            $data = @unserialize($contents);
 
             if (!is_array($data) && !$data) {
                 if ($contents == serialize(false)) {

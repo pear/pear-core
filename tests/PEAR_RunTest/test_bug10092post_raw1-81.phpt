@@ -5,7 +5,7 @@ PEAR_RunTest --POST_RAW-- normal
 if (!getenv('PHP_PEAR_RUNTESTS')) {
     echo 'skip';
 }
-if (version_compare(PHP_VERSION, '8.1.0', '>=')) {
+if (version_compare(PHP_VERSION, '8.1.0', '<')) {
     echo 'skip';
 }
 ?>
@@ -34,8 +34,10 @@ var_dump($a);
 --EXPECTF--
 array(1) {
   ["pics"]=>
-  array(5) {
+  array(6) {
     ["name"]=>
+    string(12) "bug37276.txt"
+    ["full_path"]=>
     string(12) "bug37276.txt"
     ["type"]=>
     string(10) "text/plain"
