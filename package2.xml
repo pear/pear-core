@@ -93,9 +93,9 @@
   <email>mj@php.net</email>
   <active>no</active>
  </helper>
- <date>2024-03-09</date>
+ <date>2024-11-24</date>
  <version>
-  <release>1.10.15</release>
+  <release>1.10.16</release>
   <api>1.10.1</api>
  </version>
  <stability>
@@ -104,8 +104,9 @@
  </stability>
  <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-* PR #132: cleanup uneeded test
-* PR #135: Fix PHP Deprecated: Calling get_class() without arguments
+* PR #141: Fix bug #27796: "Array to string" conversion warnings on installs/other actions
+* PR #145: Never reference E_STRICT on PHP 8.4+
+* PR #147: Fix tests 8.1+
  </notes>
  <contents>
   <dir name="/">
@@ -1363,5 +1364,24 @@ http://pear.php.net/advisory-20110228.txt
 * PR #135: Fix PHP Deprecated: Calling get_class() without arguments
    </notes>
   </release>
+
+  <release>
+   <date>2024-11-24</date>
+   <version>
+    <release>1.10.16</release>
+    <api>1.10.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+* PR #141: Fix bug #27796: "Array to string" conversion warnings on installs/other actions
+* PR #145: Never reference E_STRICT on PHP 8.4+
+* PR #147: Fix tests 8.1+
+   </notes>
+  </release>
+
  </changelog>
 </package>
