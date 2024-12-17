@@ -1,0 +1,83 @@
+name: Build Release
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags-ignore:
+      - "**"
+  pull_request:
+    branches:
+      - main
+      - master
+  release:
+    types:
+      - published
+
+env:
+  PHP_VERSION: 5.4
+
+jobs:
+  build-release:
+    name: Build Release
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v4
+        name: Checkout repository
+      -
+        name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          coverage: none
+          ini-values: include_path=/usr/local/php/${{ env.PHP_VERSION }}/share/pear
+      -
+        name: Install PEAR
+        run: |
+          sudo apt-get install --fix-broken
+          sudo apt-get install -qy php-pear
+      -
+        name: Update PEAR
+        run: |
+          pear channel-update pear
+          pear upgrade -f pear
+      -
+        name: Install PEAR dependencies
+        run: |
+          pear upgrade --force archive_tar console_getopt php_archive
+      -
+        name: PEAR config
+        run: pear config-show
+      -
+        name: PEAR list
+        run: pear list
+      -
+        name: PHP modules
+        run: php -m
+      -
+        name: Build release
+        run: ./build-release.sh
+      -
+        run: sha512sum go-pear.phar >go-pear.phar.sha512
+      -
+        run: sha512sum install-pear-nozlib.phar >install-pear-nozlib.phar.sha512
+      -
+        name: Upload artifacts
+        if: github.event_name != 'release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PHAR files
+          path: |
+            ./go-pear.phar
+            ./go-pear.phar.sha512
+            ./install-pear-nozlib.phar
+            ./install-pear-nozlib.phar.sha512
+          if-no-files-found: error
+      -
+        name: Attach release assets
+        if: github.event_name == 'release'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.event.release.tag_name }} go-pear.phar go-pear.phar.sha512 install-pear-nozlib.phar install-pear-nozlib.phar.sha512
