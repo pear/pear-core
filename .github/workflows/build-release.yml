@@ -28,7 +28,7 @@ jobs:
         name: Checkout repository
       -
         name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # v2.31.1 as of 2024-12-18
         with:
           php-version: ${{ env.PHP_VERSION }}
           coverage: none
