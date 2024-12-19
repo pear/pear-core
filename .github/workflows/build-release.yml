@@ -1,0 +1,86 @@
+name: Build Release
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags-ignore:
+      - "**"
+  pull_request:
+    branches:
+      - main
+      - master
+  release:
+    types:
+      - published
+
+env:
+  PHP_VERSION: 5.4
+
+jobs:
+  build-release:
+    name: Build Release
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2 as of 2024-12-19
+        name: Checkout repository
+      -
+        name: Setup PHP
+        uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # v2.31.1 as of 2024-12-18
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          coverage: none
+          ini-values: include_path=/usr/local/php/${{ env.PHP_VERSION }}/share/pear
+      -
+        name: Install PEAR
+        run: |
+          sudo apt-get install --fix-broken
+          sudo apt-get install -qy php-pear
+      -
+        name: Update PEAR
+        run: |
+          pear channel-update pear
+          pear upgrade --force pear-stable
+      -
+        name: Install PEAR dependencies
+        run: |
+          pear upgrade --force archive_tar-stable console_getopt-stable php_archive-stable
+      -
+        name: PEAR config
+        run: pear config-show
+      -
+        name: PEAR list
+        run: pear list
+      -
+        name: PHP modules
+        run: php -m
+      -
+        name: Build release
+        run: ./build-release.sh
+      -
+        run: sha512sum go-pear.phar >go-pear.phar.sha512
+      -
+        run: sha512sum install-pear-nozlib.phar >install-pear-nozlib.phar.sha512
+      -
+        name: Dump SHA-512 checksums
+        run: cat *.phar.sha512
+      -
+        name: Upload artifacts
+        if: github.event_name != 'release'
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0 as of 2024-12-19
+        with:
+          name: PHAR files
+          path: |
+            ./go-pear.phar
+            ./go-pear.phar.sha512
+            ./install-pear-nozlib.phar
+            ./install-pear-nozlib.phar.sha512
+          if-no-files-found: error
+      -
+        name: Attach release assets
+        if: github.event_name == 'release'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.event.release.tag_name }} go-pear.phar go-pear.phar.sha512 install-pear-nozlib.phar install-pear-nozlib.phar.sha512
