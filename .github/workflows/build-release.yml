@@ -42,11 +42,11 @@ jobs:
         name: Update PEAR
         run: |
           pear channel-update pear
-          pear upgrade -f pear
+          pear upgrade --force pear-stable
       -
         name: Install PEAR dependencies
         run: |
-          pear upgrade --force archive_tar console_getopt php_archive
+          pear upgrade --force archive_tar-stable console_getopt-stable php_archive-stable
       -
         name: PEAR config
         run: pear config-show
