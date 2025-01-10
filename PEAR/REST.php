@@ -448,8 +448,19 @@ class PEAR_REST
         $length = isset($headers['content-length']) ? $headers['content-length'] : -1;
 
         $data = '';
-        while ($chunk = @fread($fp, 8192)) {
-            $data .= $chunk;
+        if (isset($headers['transfer-encoding']) && strtolower($headers['transfer-encoding']) === 'chunked') {
+            while (!feof($fp)) {
+                $chunk_size = hexdec(fgets($fp));
+                if ($chunk_size === 0) {
+                    break;
+                }
+                $data .= fread($fp, $chunk_size);
+                fgets($fp); // Skip the trailing CRLF
+            }
+        } else {
+            while ($chunk = @fread($fp, 8192)) {
+                $data .= $chunk;
+            }
         }
         fclose($fp);
 
