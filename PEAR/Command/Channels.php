@@ -542,15 +542,15 @@ configuration.',
             // if force is specified, use a timestamp of "1" to force retrieval
             $lastmodified = isset($options['force']) ? false : $c->lastModified();
             PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-            $contents = $dl->downloadHttp('http://' . $c->getName() . '/channel.xml',
+            $contents = $dl->downloadHttp('https://' . $c->getName() . '/channel.xml',
                 $this->ui, $tmpdir, null, $lastmodified);
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($contents)) {
                 // Attempt to fall back to https
-                $this->ui->outputData("Channel \"$params[0]\" is not responding over http://, failed with message: " . $contents->getMessage());
-                $this->ui->outputData("Trying channel \"$params[0]\" over https:// instead");
+                $this->ui->outputData("Channel \"$params[0]\" is not responding over https://, failed with message: " . $contents->getMessage());
+                $this->ui->outputData("Trying channel \"$params[0]\" over http:// instead");
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
-                $contents = $dl->downloadHttp('https://' . $c->getName() . '/channel.xml',
+                $contents = $dl->downloadHttp('http://' . $c->getName() . '/channel.xml',
                     $this->ui, $tmpdir, null, $lastmodified);
                 PEAR::staticPopErrorHandling();
                 if (PEAR::isError($contents)) {
