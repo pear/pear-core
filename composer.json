@@ -81,5 +81,10 @@
     "replace": {
         "pear/pear-core-minimal": "*",
         "pear/pear_exception": "*"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }
