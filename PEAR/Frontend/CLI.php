@@ -357,7 +357,11 @@ class PEAR_Frontend_CLI extends PEAR_Frontend
 
     function userConfirm($prompt, $default = 'yes')
     {
-        trigger_error("PEAR_Frontend_CLI::userConfirm not yet converted", E_USER_ERROR);
+        if (PHP_VERSION_ID < 70000) {
+            trigger_error("PEAR_Frontend_CLI::userConfirm not yet converted", E_USER_ERROR);
+        } else {
+            throw new Error('PEAR_Frontend_CLI::userConfirm not yet converted');
+        }
         static $positives = array('y', 'yes', 'on', '1');
         static $negatives = array('n', 'no', 'off', '0');
         print "$this->lp$prompt [$default] : ";
