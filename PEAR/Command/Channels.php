@@ -546,7 +546,7 @@ configuration.',
                 $this->ui, $tmpdir, null, $lastmodified);
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($contents)) {
-                // Attempt to fall back to https
+                // Attempt to fall back to http
                 $this->ui->outputData("Channel \"$params[0]\" is not responding over https://, failed with message: " . $contents->getMessage());
                 $this->ui->outputData("Trying channel \"$params[0]\" over http:// instead");
                 PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
