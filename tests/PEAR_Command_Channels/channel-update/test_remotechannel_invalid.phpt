@@ -14,7 +14,7 @@ $reg = &$config->getRegistry();
 $c = $reg->getChannel(strtolower('pear.php.net'));
 $pathtochannelxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'files'. DIRECTORY_SEPARATOR . 'invalidchannel.xml';
-$GLOBALS['pearweb']->addHtmlConfig('http://pear.php.net/channel.xml', $pathtochannelxml);
+$GLOBALS['pearweb']->addHtmlConfig('https://pear.php.net/channel.xml', $pathtochannelxml);
 $e = $command->run('channel-update', array(), array('pear.php.net'));
 $phpunit->assertErrors(array(
     array('package' => 'PEAR_Error', 'message' =>
