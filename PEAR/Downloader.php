@@ -1726,19 +1726,43 @@ class PEAR_Downloader extends PEAR_Common
             call_user_func($callback, 'start', array(basename($dest_file), $length));
         }
 
-        while ($data = fread($fp, 1024)) {
-            $bytes += strlen($data);
-            if ($callback) {
-                call_user_func($callback, 'bytesread', $bytes);
-            }
-            if (!@fwrite($wp, $data)) {
-                fclose($fp);
-                if ($callback) {
-                    call_user_func($callback, 'writefailed',
-                        array($dest_file, error_get_last()["message"]));
+        if (isset($headers['transfer-encoding']) && strtolower($headers['transfer-encoding']) === 'chunked') {
+            while (!feof($fp)) {
+                $chunk_size = hexdec(fgets($fp));
+                if ($chunk_size === 0) {
+                    break;
                 }
-                return PEAR::raiseError(
-                    "$dest_file: write failed (" . error_get_last()["message"] . ")");
+                $data = fread($fp, $chunk_size);
+                $bytes += strlen($data);
+                if ($callback) {
+                    call_user_func($callback, 'bytesread', $bytes);
+                }
+                if (!@fwrite($wp, $data)) {
+                    fclose($fp);
+                    if ($callback) {
+                        call_user_func($callback, 'writefailed',
+                            array($dest_file, error_get_last()["message"]));
+                    }
+                    return PEAR::raiseError(
+                        "$dest_file: write failed (" . error_get_last()["message"] . ")");
+                }
+                fgets($fp); // Skip the trailing CRLF
+            }
+        } else {
+            while ($data = fread($fp, 1024)) {
+                $bytes += strlen($data);
+                if ($callback) {
+                    call_user_func($callback, 'bytesread', $bytes);
+                }
+                if (!@fwrite($wp, $data)) {
+                    fclose($fp);
+                    if ($callback) {
+                        call_user_func($callback, 'writefailed',
+                            array($dest_file, error_get_last()["message"]));
+                    }
+                    return PEAR::raiseError(
+                        "$dest_file: write failed (" . error_get_last()["message"] . ")");
+                }
             }
         }
 
