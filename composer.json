@@ -80,6 +80,6 @@
     },
     "replace": {
         "pear/pear-core-minimal": "*",
-        "pear/pear-exception": "*"
+        "pear/pear_exception": "*"
     }
 }
