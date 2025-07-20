@@ -39,16 +39,17 @@ $phpunit->assertEquals(array (
   ),
   1 =>
   array (
-    'info' => 'Channel "doc.php.net" is not responding over http://, failed with message: File http://doc.php.net:80/channel.xml not valid (received: HTTP/1.1 404 http://doc.php.net/channel.xml Is not valid)',
+    'info' => 'Channel "doc.php.net" is not responding over https://, failed with message: File https://doc.php.net:443/channel.xml not valid (received: HTTP/1.1 404 https://doc.php.net/channel.xml Is not valid)',
     'cmd' => 'no command',
   ),
+  2 =>
   array (
-    'info' => 'Trying channel "doc.php.net" over https:// instead',
+    'info' => 'Trying channel "doc.php.net" over http:// instead',
     'cmd' => 'no command',
   ),
   3 =>
   array (
-    'info' => 'Cannot retrieve channel.xml for channel "doc.php.net" (File https://doc.php.net:443/channel.xml not valid (received: HTTP/1.1 404 https://doc.php.net/channel.xml Is not valid))',
+    'info' => 'Cannot retrieve channel.xml for channel "doc.php.net" (File http://doc.php.net:80/channel.xml not valid (received: HTTP/1.1 404 http://doc.php.net/channel.xml Is not valid))',
     'cmd' => 'update-channels',
   ),
   4 =>
@@ -58,45 +59,75 @@ $phpunit->assertEquals(array (
   ),
   5 =>
   array (
-    'info' => 'Update of Channel "horde.orde.de" succeeded',
+    'info' => 'Channel "horde.orde.de" is not responding over https://, failed with message: File https://horde.orde.de:443/channel.xml not valid (received: HTTP/1.1 404 https://horde.orde.de/channel.xml Is not valid)',
     'cmd' => 'no command',
   ),
   6 =>
   array (
-    'info' => 'Updating channel "pear.php.net"',
-    'cmd' => 'channel-update',
+    'info' => 'Trying channel "horde.orde.de" over http:// instead',
+    'cmd' => 'no command',
   ),
   7 =>
   array (
-    'info' => 'Update of Channel "pear.php.net" succeeded',
+    'info' => 'Update of Channel "horde.orde.de" succeeded',
     'cmd' => 'no command',
   ),
   8 =>
   array (
-    'info' => 'Updating channel "pecl.php.net"',
+    'info' => 'Updating channel "pear.php.net"',
     'cmd' => 'channel-update',
   ),
   9 =>
   array (
-    'info' => 'Channel "pecl.php.net" is not responding over http://, failed with message: File http://pecl.php.net:80/channel.xml not valid (received: HTTP/1.1 404 http://pecl.php.net/channel.xml Is not valid)',
+    'info' => 'Channel "pear.php.net" is not responding over https://, failed with message: File https://pear.php.net:443/channel.xml not valid (received: HTTP/1.1 404 https://pear.php.net/channel.xml Is not valid)',
     'cmd' => 'no command',
   ),
   10 =>
   array (
-    'info' => 'Trying channel "pecl.php.net" over https:// instead',
+    'info' => 'Trying channel "pear.php.net" over http:// instead',
     'cmd' => 'no command',
   ),
   11 =>
   array (
-    'info' => 'Cannot retrieve channel.xml for channel "pecl.php.net" (File https://pecl.php.net:443/channel.xml not valid (received: HTTP/1.1 404 https://pecl.php.net/channel.xml Is not valid))',
-    'cmd' => 'update-channels',
+    'info' => 'Update of Channel "pear.php.net" succeeded',
+    'cmd' => 'no command',
   ),
   12 =>
+  array (
+    'info' => 'Updating channel "pecl.php.net"',
+    'cmd' => 'channel-update',
+  ),
+  13 =>
+  array (
+    'info' => 'Channel "pecl.php.net" is not responding over https://, failed with message: File https://pecl.php.net:443/channel.xml not valid (received: HTTP/1.1 404 https://pecl.php.net/channel.xml Is not valid)',
+    'cmd' => 'no command',
+  ),
+  14 =>
+  array (
+    'info' => 'Trying channel "pecl.php.net" over http:// instead',
+    'cmd' => 'no command',
+  ),
+  15 =>
+  array (
+    'info' => 'Cannot retrieve channel.xml for channel "pecl.php.net" (File http://pecl.php.net:80/channel.xml not valid (received: HTTP/1.1 404 http://pecl.php.net/channel.xml Is not valid))',
+    'cmd' => 'update-channels',
+  ),
+  16 =>
   array (
     'info' => 'Updating channel "zornk.ornk.org"',
     'cmd' => 'channel-update',
   ),
-  13 =>
+  17 =>
+  array (
+    'info' => 'Channel "zornk.ornk.org" is not responding over https://, failed with message: File https://zornk.ornk.org:443/channel.xml not valid (received: HTTP/1.1 404 https://zornk.ornk.org/channel.xml Is not valid)',
+    'cmd' => 'no command',
+  ),
+  18 =>
+  array (
+    'info' => 'Trying channel "zornk.ornk.org" over http:// instead',
+    'cmd' => 'no command',
+  ),
+  19 =>
   array (
     'info' => 'Update of Channel "zornk.ornk.org" succeeded',
     'cmd' => 'no command',
