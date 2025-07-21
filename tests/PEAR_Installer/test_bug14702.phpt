@@ -11,9 +11,9 @@ if (!getenv('PHP_PEAR_RUNTESTS')) {
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'setup.php.inc';
 
 $pathtopackagexml = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'bug14702'. DIRECTORY_SEPARATOR . 'pecl_http-1.6.0.tgz';
-$GLOBALS['pearweb']->addHtmlConfig('http://pecl.php.net/get/pecl_http-1.6.0.tgz', $pathtopackagexml);
+$GLOBALS['pearweb']->addHtmlConfig('https://pecl.php.net/get/pecl_http-1.6.0.tgz', $pathtopackagexml);
 
-$pearweb->addRESTConfig("http://pecl.php.net/rest/r/pecl_http/allreleases.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+$pearweb->addRESTConfig("https://pecl.php.net/rest/r/pecl_http/allreleases.xml", '<?xml version="1.0" encoding="UTF-8" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"     xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
     http://pear.php.net/dtd/rest.allreleases.xsd">
@@ -90,7 +90,7 @@ $pearweb->addRESTConfig("http://pecl.php.net/rest/r/pecl_http/allreleases.xml", 
 </a>', 'text/xml');
 
 
-$pearweb->addRESTConfig("http://pecl.php.net/rest/p/pecl_http/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+$pearweb->addRESTConfig("https://pecl.php.net/rest/p/pecl_http/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
 <p xmlns="http://pear.php.net/dtd/rest.package"    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:xlink="http://www.w3.org/1999/xlink"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
  <n>pecl_http</n>
@@ -111,7 +111,7 @@ support. Parallel requests are available for PHP 5 and greater.</d>
  <r xlink:href="/rest/r/pecl_http"/>
 </p>', 'text/xml');
 
-$pearweb->addRESTConfig("http://pecl.php.net/rest/r/pecl_http/1.6.0.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+$pearweb->addRESTConfig("https://pecl.php.net/rest/r/pecl_http/1.6.0.xml", '<?xml version="1.0" encoding="UTF-8" ?>
 <r xmlns="http://pear.php.net/dtd/rest.release"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -150,11 +150,11 @@ support. Parallel requests are available for PHP 5 and greater.</d>
 * Fixed missing PHP_LIBDIR definition in config.m4 for PHP4
 * Fixed non-standard shell support in config.m4</n>
  <f>172432</f>
- <g>http://pecl.php.net/get/pecl_http-1.6.0</g>
+ <g>https://pecl.php.net/get/pecl_http-1.6.0</g>
  <x xlink:href="package.1.6.0.xml"/>
 </r>', 'text/xml');
 
-$pearweb->addRESTConfig("http://pecl.php.net/rest/r/pecl_http/deps.1.6.0.txt", 'a:2:{s:8:"required";a:2:{s:3:"php";a:3:{s:3:"min";s:3:"4.3";s:3:"max";s:5:"6.0.0";s:7:"exclude";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:5:"1.4.1";}}s:8:"optional";a:1:{s:9:"extension";a:4:{i:0;a:1:{s:4:"name";s:3:"spl";}i:1;a:1:{s:4:"name";s:7:"session";}i:2;a:1:{s:4:"name";s:4:"hash";}i:3;a:1:{s:4:"name";s:5:"iconv";}}}}', 'text/xml');
+$pearweb->addRESTConfig("https://pecl.php.net/rest/r/pecl_http/deps.1.6.0.txt", 'a:2:{s:8:"required";a:2:{s:3:"php";a:3:{s:3:"min";s:3:"4.3";s:3:"max";s:5:"6.0.0";s:7:"exclude";s:5:"6.0.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:5:"1.4.1";}}s:8:"optional";a:1:{s:9:"extension";a:4:{i:0;a:1:{s:4:"name";s:3:"spl";}i:1;a:1:{s:4:"name";s:7:"session";}i:2;a:1:{s:4:"name";s:4:"hash";}i:3;a:1:{s:4:"name";s:5:"iconv";}}}}', 'text/xml');
 
 
 $_test_dep->setPEARVersion('1.6.1');
