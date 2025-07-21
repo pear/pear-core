@@ -89,8 +89,7 @@ class PEAR_test_mock_pearweb
             if (!$ret) {
                 echo '$pearweb->addRESTConfig("' . $address . "\", true, 'text/xml');\n";
             } else {
-                echo '$pearweb->addRESTConfig("' . $address . '", ' . var_export($ret[0], true)
-                    . ", 'text/xml');\n";
+                $this->_continue = true;
             }
             return $ret;
         } else {
