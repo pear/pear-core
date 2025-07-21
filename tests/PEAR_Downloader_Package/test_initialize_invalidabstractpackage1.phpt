@@ -19,7 +19,7 @@ $reg->updateChannel($chan);
 
 $GLOBALS['pearweb']->addHtmlConfig('http://www.example.com/test-1.0.tgz', $pathtopackagexml);
 
-$pearweb->addRESTConfig("http://pecl.php.net/rest/r/test/allreleases.xml", false, false);
+$pearweb->addRESTConfig("https://pecl.php.net/rest/r/test/allreleases.xml", false, false);
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/test/allreleases.xml", false, false);
 
 $dp = newDownloaderPackage(array());
@@ -45,7 +45,7 @@ $phpunit->assertErrors(array(
     ),
     array(
         'package' => 'PEAR_Error',
-        'message' => 'File http://pecl.php.net:80/rest/r/test/allreleases.xml not valid (received: HTTP/1.1 404 http://pecl.php.net/rest/r/test/allreleases.xml Is not valid)',
+        'message' => 'File https://pecl.php.net:443/rest/r/test/allreleases.xml not valid (received: HTTP/1.1 404 https://pecl.php.net/rest/r/test/allreleases.xml Is not valid)',
     ),
 ), 'after initialize');
 

@@ -17,6 +17,7 @@ class test_PEAR_REST extends PEAR_REST {
             $host = @$info['host'];
             $port = @$info['port'];
             $path = @$info['path'];
+            $scheme = @$info['scheme'];
         }
         $proxy_host = $proxy_port = $proxy_user = $proxy_pass = '';
         if ($this->config->get('http_proxy')&&
@@ -81,7 +82,7 @@ class test_PEAR_REST extends PEAR_REST {
                     return false;
                 }
                 if ($matches[1] != 200) {
-                    return PEAR::raiseError("File http://$host:$port$path not valid (received: $line)");
+                    return PEAR::raiseError("File $scheme://$host:$port$path not valid (received: $line)");
                 }
             }
             $line = array_shift($retrieved);

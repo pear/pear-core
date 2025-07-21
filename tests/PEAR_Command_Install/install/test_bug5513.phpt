@@ -335,7 +335,7 @@ segfaults with the simplest of files.  Generation still works great in PHP4
 </r>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/phpdocumentor/deps.1.3.0RC3.txt", 'a:3:{i:1;a:4:{s:4:"type";s:3:"php";s:3:"rel";s:2:"ge";s:7:"version";s:5:"4.1.0";s:8:"optional";s:2:"no";}i:2;a:5:{s:4:"type";s:3:"pkg";s:3:"rel";s:2:"ge";s:7:"version";s:3:"1.1";s:8:"optional";s:2:"no";s:4:"name";s:11:"Archive_Tar";}i:3;a:5:{s:4:"type";s:3:"pkg";s:3:"rel";s:2:"ge";s:7:"version";s:3:"1.1";s:8:"optional";s:3:"yes";s:4:"name";s:14:"XML_Beautifier";}}', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/xdebug/allreleases.xml", false, false);
-$pearweb->addRESTConfig("http://pecl.php.net/rest/r/xdebug/allreleases.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
+$pearweb->addRESTConfig("https://pecl.php.net/rest/r/xdebug/allreleases.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
     http://pear.php.net/dtd/rest.allreleases.xsd">
@@ -352,7 +352,7 @@ $pearweb->addRESTConfig("http://pecl.php.net/rest/r/xdebug/allreleases.xml", '<?
  <r><v>1.3.0rc1</v><s>beta</s></r>
  <r><v>1.2.0</v><s>stable</s></r>
 </a>', 'text/xml');
-$pearweb->addRESTConfig("http://pecl.php.net/rest/r/xdebug/2.0.0beta4.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
+$pearweb->addRESTConfig("https://pecl.php.net/rest/r/xdebug/2.0.0beta4.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
 <r xmlns="http://pear.php.net/dtd/rest.release"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.release
     http://pear.php.net/dtd/rest.release.xsd">
@@ -402,10 +402,10 @@ Xdebug also provides:
 	- Fixed bug #133: PHP scripts exits with 0 on PHP error.
 	- Fixed bug #132: use of eval causes a segmentation fault.</n>
  <f>228343</f>
- <g>http://pecl.php.net/get/xdebug-2.0.0beta4</g>
+ <g>https://pecl.php.net/get/xdebug-2.0.0beta4</g>
  <x xlink:href="package.2.0.0beta4.xml"/>
 </r>', 'text/xml');
-$pearweb->addRESTConfig("http://pecl.php.net/rest/r/xdebug/2.0.0beta4.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
+$pearweb->addRESTConfig("https://pecl.php.net/rest/r/xdebug/2.0.0beta4.xml", '<?xml version="1.0" encoding="iso-8859-1" ?>
 <r xmlns="http://pear.php.net/dtd/rest.release"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.release
     http://pear.php.net/dtd/rest.release.xsd">
@@ -455,10 +455,10 @@ Xdebug also provides:
 	- Fixed bug #133: PHP scripts exits with 0 on PHP error.
 	- Fixed bug #132: use of eval causes a segmentation fault.</n>
  <f>228343</f>
- <g>http://pecl.php.net/get/xdebug-2.0.0beta4</g>
+ <g>https://pecl.php.net/get/xdebug-2.0.0beta4</g>
  <x xlink:href="package.2.0.0beta4.xml"/>
 </r>', 'text/xml');
-$pearweb->addRESTConfig("http://pecl.php.net/rest/r/xdebug/deps.2.0.0beta4.txt", 'a:1:{s:8:"required";a:2:{s:3:"php";a:1:{s:3:"min";s:5:"4.3.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0b1";}}}', 'text/xml');
+$pearweb->addRESTConfig("https://pecl.php.net/rest/r/xdebug/deps.2.0.0beta4.txt", 'a:1:{s:8:"required";a:2:{s:3:"php";a:1:{s:3:"min";s:5:"4.3.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0b1";}}}', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/archive_tar/allreleases.xml", '<?xml version="1.0" encoding="UTF-8" ?>
 <a xmlns="http://pear.php.net/dtd/rest.allreleases"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allreleases
@@ -678,7 +678,7 @@ $ pear install PhpDocumentor
 http://localhost/pear/PhpDocumentor is the web interface</d>
  <r xlink:href="/rest/r/phpdocumentor"/>
 </p>', 'text/xml');
-$pearweb->addRESTConfig("http://pecl.php.net/rest/p/xdebug/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
+$pearweb->addRESTConfig("https://pecl.php.net/rest/p/xdebug/info.xml", '<?xml version="1.0" encoding="UTF-8" ?>
 <p xmlns="http://pear.php.net/dtd/rest.package"    xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
  <n>Xdebug</n>
  <c>pecl.php.net</c>
@@ -747,7 +747,7 @@ The new PEAR_PackageFileManager2 class is not.</d>
 </p>', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/pear_packagefilemanager/deps.1.6.0a3.txt", 'a:1:{s:8:"required";a:2:{s:3:"php";a:1:{s:3:"min";s:5:"4.2.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0b1";}}}', 'text/xml');
 $pearweb->addRESTConfig("http://pear.php.net/rest/r/phing/allreleases.xml", false, false);
-$pearweb->addRESTConfig("http://pecl.php.net/rest/r/phing/allreleases.xml", false, false);
+$pearweb->addRESTConfig("https://pecl.php.net/rest/r/phing/allreleases.xml", false, false);
 $pathtopackagexml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
     'packages'. DIRECTORY_SEPARATOR . 'phing-current.tgz';
 $pathtobarxml = dirname(__FILE__)  . DIRECTORY_SEPARATOR .
