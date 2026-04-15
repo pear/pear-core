@@ -360,6 +360,13 @@ function usage($error = null, $helpsubject = null)
             "Type \"$progname help <command>\" to get the help ".
             "for the specified command.";
     }
+    if (PEAR_RUNTYPE === 'pecl'
+        && version_compare(PHP_VERSION, '8.1') > 0
+        && in_array($helpsubject, array(null, 'download', 'install', 'upgrade', 'upgrade-all'))) {
+        $put .=
+            "\nNotice: PECL is now deprecated. " .
+            "PHP Installer for Extensions (PIE) is the replacement for PECL.";
+    }
     fputs($stdout, "$put\n");
     fclose($stdout);
 
