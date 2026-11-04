@@ -351,7 +351,7 @@ class PEAR_Exception extends Exception
                     elseif (is_array($arg)) $args[] = 'Array';
                     elseif (is_object($arg)) $args[] = 'Object('.get_class($arg).')';
                     elseif (is_bool($arg)) $args[] = $arg ? 'true' : 'false';
-                    elseif (is_int($arg) || is_double($arg)) $args[] = $arg;
+                    elseif (is_int($arg) || is_float($arg)) $args[] = $arg;
                     else {
                         $arg = (string)$arg;
                         $str = htmlspecialchars(substr($arg, 0, 16));

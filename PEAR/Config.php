@@ -1172,7 +1172,7 @@ class PEAR_Config extends PEAR
             }
 
             if ($var['type'] == 'integer') {
-                $var['default'] = (integer) $var['default'];
+                $var['default'] = (int) $var['default'];
             }
 
             if (!isset($var['doc'])) {
